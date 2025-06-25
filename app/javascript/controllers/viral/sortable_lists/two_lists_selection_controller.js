@@ -9,6 +9,8 @@ export default class extends Controller {
     "removeAll",
     "templateSelector",
     "itemTemplate",
+    "checkmarkTemplate",
+    "hiddenCheckmarkTemplate",
   ];
 
   static values = {
@@ -23,13 +25,19 @@ export default class extends Controller {
   #selectedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
 
   connect() {
+    // Get a handle on the available and selected lists
+    this.availableList = document.getElementById(this.availableListValue);
+    this.selectedList = document.getElementById(this.selectedListValue);
+
+    this.selectedList.addEventListener("drop", this.buttonStateListener);
+    this.availableList.addEventListener("drop", this.buttonStateListener);
+
+    this.buttonStateListener = this.#checkStates.bind(this);
+
     this.idempotentConnect();
   }
 
   idempotentConnect() {
-    // Get a handle on the available and selected lists
-    this.availableList = document.getElementById(this.availableListValue);
-    this.selectedList = document.getElementById(this.selectedListValue);
     if (this.availableList && this.selectedList) {
       // Get a handle on the original available list
       this.#originalAvailableList = [
@@ -39,13 +47,6 @@ export default class extends Controller {
       Object.freeze(this.#originalAvailableList);
 
       this.#checkStates();
-
-      this.buttonStateListener = this.#checkStates.bind(this);
-      this.selectedList.addEventListener("drop", this.buttonStateListener);
-      this.availableList.addEventListener("drop", this.buttonStateListener);
-
-      this.windowClickListener = this.#removeSelectedAttributes.bind(this);
-      window.addEventListener("click", this.windowClickListener);
     }
   }
   addAll(event) {
@@ -154,8 +155,6 @@ export default class extends Controller {
   disconnect() {
     this.selectedList.removeEventListener("drop", this.buttonStateListener);
     this.availableList.removeEventListener("drop", this.buttonStateListener);
-
-    window.removeEventListener("click", this.windowClickListener);
   }
 
   /**
@@ -222,45 +221,62 @@ export default class extends Controller {
       if (event.key !== "Tab") event.preventDefault();
       handler.call(this, event);
       this.#checkStates();
+    } else if (event.key == "a" && event.ctrlKey) {
+      this.#selectAll(event);
     }
   }
 
   #getKeyboardHandler(key) {
     const handlers = {
-      " ": this.#handleSelection.bind(this),
-      Enter: this.#handleSelection.bind(this),
-      ArrowRight: this.#handleRightNavigation.bind(this),
-      ArrowLeft: this.#handleLeftNavigation.bind(this),
+      " ": this.handleSelection.bind(this),
+      Enter: this.addSelection.bind(this),
+      Delete: this.removeSelection.bind(this),
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
       ArrowDown: (event) =>
         this.#handleVerticalNavigation(event, "down", "single"),
-      Tab: this.#removeSelectedAttributes.bind(this),
+      // Tab: this.#removeSelectedAttributes.bind(this),
       Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
       End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
     };
     return handlers[key];
   }
 
-  #handleSelection(event) {
-    if (this.#selectedOption === event.target) {
-      this.#removeSelectedAttributes();
+  handleSelection(event) {
+    const option = event.target;
+    if (option.querySelector(`#${option.innerText}_unselected`)) {
+      this.#addSelectedAttributes(event, option);
     } else {
-      if (this.#selectedOption) this.#removeSelectedAttributes();
-      this.#setSelectedOption(event.target);
+      this.#removeSelectedAttributes(event, option);
     }
   }
 
-  #handleRightNavigation(event) {
-    if (event.target.parentNode !== this.availableList) return;
-    const selectedListFirstChild = this.selectedList.firstElementChild;
-
-    this.#navigateListLeftAndRight(this.selectedList, selectedListFirstChild);
+  addSelection(event) {
+    if (
+      event.type == "keydown" &&
+      event.target.parentNode != this.availableList
+    )
+      return;
+    const selectedOptions = this.availableList.querySelectorAll(
+      'li[aria-selected="true"]',
+    );
+    for (let i = 0; i < selectedOptions.length; i++) {
+      this.#removeSelectedAttributes(event, selectedOptions[i]);
+      this.selectedList.appendChild(selectedOptions[i]);
+    }
+    selectedOptions[0].focus();
   }
-  #handleLeftNavigation(event) {
-    if (event.target.parentNode !== this.selectedList) return;
 
-    const availableListFirstChild = this.availableList.firstElementChild;
-    this.#navigateListLeftAndRight(this.availableList, availableListFirstChild);
+  removeSelection(event) {
+    if (event.type == "keydown" && event.target.parentNode != this.selectedList)
+      return;
+    const selectedOptions = this.selectedList.querySelectorAll(
+      'li[aria-selected="true"]',
+    );
+    for (let i = 0; i < selectedOptions.length; i++) {
+      this.#removeSelectedAttributes(event, selectedOptions[i]);
+      this.availableList.appendChild(selectedOptions[i]);
+    }
+    selectedOptions[0].focus();
   }
 
   #handleVerticalNavigation(event, direction, navigateSize) {
@@ -303,18 +319,52 @@ export default class extends Controller {
     }
   }
 
-  #setSelectedOption(option) {
-    this.#selectedOption = option;
-    this.#selectedOption.classList.add(...this.#selectedOptionClasses);
-    this.#selectedOption.setAttribute("aria-selected", "true");
+  #selectAll(event) {
+    event.preventDefault();
+    const listNode = event.target.parentNode;
+    const allOptions = listNode.querySelectorAll("li");
+    const unselectedOptions = listNode.querySelectorAll(
+      'li[aria-selected="false"]',
+    );
+    if (unselectedOptions.length == 0) {
+      for (let i = 0; i < allOptions.length; i++) {
+        this.#removeSelectedAttributes(event, allOptions[i]);
+      }
+    } else {
+      for (let i = 0; i < allOptions.length; i++) {
+        if (allOptions[i].getAttribute("aria-selected") === "false") {
+          this.#addSelectedAttributes(event, allOptions[i]);
+        }
+      }
+    }
   }
 
-  #removeSelectedAttributes() {
-    if (this.#selectedOption) {
-      this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
-      this.#selectedOption.setAttribute("aria-selected", "false");
-      this.#selectedOption = null;
+  #addSelectedAttributes(event, option) {
+    if (event.type === "click") {
+      option = event.target.parentNode;
     }
+    const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
+    checkmark.querySelector("span").id = `${option.innerText}_selected`;
+    option
+      .querySelector(`#${option.innerText}_unselected`)
+      .replaceWith(checkmark);
+    option.setAttribute("aria-selected", "true");
+    console.log(option.parentNode);
+  }
+
+  #removeSelectedAttributes(event, option) {
+    if (event.type === "click") {
+      option = event.target.parentNode;
+    }
+    const hiddenCheckmark =
+      this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
+    hiddenCheckmark.querySelector("span").id = `${option.innerText}_unselected`;
+
+    option
+      .querySelector(`#${option.innerText}_selected`)
+      .replaceWith(hiddenCheckmark);
+
+    option.setAttribute("aria-selected", "false");
   }
 
   // used for dynamic/changing listing values
