@@ -10,7 +10,7 @@
   <li role="menuitem">
     <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
       <% if icon.present? %>
-        <span class="grow-0 mr-2"><%= pathogen_icon(icon, class: "text-slate-500 dark:text-slate-400 size-4") %></span>
+        <span class="grow-0 mr-2"><%= pathogen_icon(icon, size: :sm) %></span>
       <% end %>
       <%= label %>
     <% end %>
@@ -19,7 +19,7 @@
   <li role="menuitem">
     <%= link_to url, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer", **system_arguments do %>
       <% if icon.present? %>
-        <span class="grow-0 mr-2"><%= pathogen_icon(icon, class: "text-slate-500 dark:text-slate-400 size-4") %></span>
+        <span class="grow-0 mr-2"><%= pathogen_icon(icon, size: :sm) %></span>
       <% end %>
       <%= label %>
     <% end %>
