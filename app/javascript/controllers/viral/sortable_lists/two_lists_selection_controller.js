@@ -221,7 +221,7 @@ export default class extends Controller {
       if (event.key !== "Tab") event.preventDefault();
       handler.call(this, event);
       this.#checkStates();
-    } else if (event.key == "a" && event.ctrlKey) {
+    } else if (event.key === "a" && event.ctrlKey) {
       this.#selectAll(event);
     }
   }
@@ -259,11 +259,13 @@ export default class extends Controller {
     const selectedOptions = this.availableList.querySelectorAll(
       'li[aria-selected="true"]',
     );
-    for (let i = 0; i < selectedOptions.length; i++) {
-      this.#removeSelectedAttributes(event, selectedOptions[i]);
-      this.selectedList.appendChild(selectedOptions[i]);
+    if (selectedOptions.length > 0) {
+      for (let i = 0; i < selectedOptions.length; i++) {
+        this.#removeSelectedAttributes(event, selectedOptions[i]);
+        this.selectedList.appendChild(selectedOptions[i]);
+      }
+      selectedOptions[0].focus();
     }
-    selectedOptions[0].focus();
   }
 
   removeSelection(event) {
@@ -272,14 +274,36 @@ export default class extends Controller {
     const selectedOptions = this.selectedList.querySelectorAll(
       'li[aria-selected="true"]',
     );
-    for (let i = 0; i < selectedOptions.length; i++) {
-      this.#removeSelectedAttributes(event, selectedOptions[i]);
-      this.availableList.appendChild(selectedOptions[i]);
+
+    if (selectedOptions.length > 0) {
+      for (let i = 0; i < selectedOptions.length; i++) {
+        this.#removeSelectedAttributes(event, selectedOptions[i]);
+        this.availableList.appendChild(selectedOptions[i]);
+      }
+      selectedOptions[0].focus();
     }
-    selectedOptions[0].focus();
   }
 
   #handleVerticalNavigation(event, direction, navigateSize) {
+    const selectedOptionNodeList = event.target.parentNode.querySelectorAll(
+      'li[aria-selected="true"]',
+    );
+
+    // if 1 selected option exists, move the option with up/down keyboard navigation,
+    // else move focus up and down list without moving any options
+    let selectedOption;
+    if (
+      selectedOptionNodeList.length === 1 &&
+      event.type === "keydown" &&
+      (event.key === "ArrowUp" || event.key === "ArrowDown") &&
+      event.altKey &&
+      event.target.getAttribute("aria-selected") === "true"
+    ) {
+      selectedOption = selectedOptionNodeList[0];
+    } else {
+      selectedOption = null;
+    }
+
     const targetOption =
       navigateSize === "single"
         ? direction === "up"
@@ -291,19 +315,19 @@ export default class extends Controller {
     this.#navigateListUpAndDown(
       direction === "up" ? "up" : "down",
       targetOption,
+      selectedOption,
     );
   }
 
-  #navigateListUpAndDown(direction, targetOption) {
+  #navigateListUpAndDown(direction, targetOption, selectedOption) {
     if (!targetOption) return;
-
-    if (this.#selectedOption) {
-      this.#selectedOption.remove();
+    if (selectedOption) {
+      selectedOption.remove();
       targetOption.insertAdjacentElement(
         direction === "up" ? "beforebegin" : "afterend",
-        this.#selectedOption,
+        selectedOption,
       );
-      this.#selectedOption.focus();
+      selectedOption.focus();
     } else {
       targetOption.focus();
     }
@@ -349,7 +373,6 @@ export default class extends Controller {
       .querySelector(`#${option.innerText}_unselected`)
       .replaceWith(checkmark);
     option.setAttribute("aria-selected", "true");
-    console.log(option.parentNode);
   }
 
   #removeSelectedAttributes(event, option) {
