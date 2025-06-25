@@ -351,7 +351,7 @@
 
 @utility button-default {
   /* High contrast colors for WCAG AAA */
-  @apply border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:border-slate-500 dark:hover:bg-slate-700;
+  @apply border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:border-slate-500 dark:hover:bg-slate-700 dark:hover:text-white;
 
   /* Focus styles with high contrast */
   &:focus-visible {

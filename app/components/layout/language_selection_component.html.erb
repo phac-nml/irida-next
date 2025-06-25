@@ -11,22 +11,13 @@
   <button
     data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
-    class="
-      navbar-button text-slate-600 dark:text-slate-400 border border-slate-300
-      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
-      items-center justify-center min-h-[44px] hover:bg-slate-100
-      dark:hover:bg-slate-700
-    "
+    class="button button-default"
     type="button"
     aria-haspopup="listbox"
     aria-controls="language-selection-dd-menu"
     aria-expanded="false"
   >
-    <%= pathogen_icon(
-      ICON::TRANSLATE,
-      class: "size-4 mr-2 flex-none",
-      "aria-hidden": true,
-    ) %>
+    <%= pathogen_icon(ICON::TRANSLATE, size: :sm, class: "mr-2") %>
     <span class="text-sm" id="language-selection-dd-label">
       <%= I18n.t(:"locales.#{locale}", locale: locale) %>
     </span>
