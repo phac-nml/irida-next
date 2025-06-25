@@ -1,9 +1,9 @@
 <%= render Viral::BaseComponent.new(tag: 'a', href: url, classes: class_names('inline-flex items-center'), **system_arguments) do %>
   <%= label %>
-  <% unless Rails.env.production? %>
-    <span class="grow-0 ml-2 flex items-center" data-test-selector="sort_icon_<%= @ransack_obj.sorts[0].dir %>">
-  <% else %>
+  <% if Rails.env.production? || @ransack_obj.sorts.blank? %>
     <span class="grow-0 ml-2 flex items-center">
+  <% else @ransack_obj.sorts.present? %>
+    <span class="grow-0 ml-2 flex items-center" data-test-selector="sort_icon_<%= @ransack_obj.sorts[0].dir %>">
   <% end %>
     <%= pathogen_icon(icon, size: :sm) %>
   </span>
