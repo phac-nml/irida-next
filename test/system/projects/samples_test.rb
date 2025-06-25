@@ -839,7 +839,7 @@ module Projects
 
       # apply sort
       click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # verify limit is still 10
       assert_selector 'div#limit-component button span', text: '10'
@@ -861,7 +861,7 @@ module Projects
       # sort by name
       click_on I18n.t('samples.table_component.name')
 
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -874,7 +874,7 @@ module Projects
       # change name sort direction
       click_on I18n.t('samples.table_component.name')
 
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_desc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample30.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
@@ -897,7 +897,7 @@ module Projects
       ### actions and VERIFY START ###
       # apply sort
       click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # set limit
       within('div#limit-component') do
@@ -906,7 +906,7 @@ module Projects
       end
 
       # verify sort is still applied
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
@@ -916,7 +916,7 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       # verify sort is still applied
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       ### actions and VERIFY END ###
     end
 
@@ -1050,7 +1050,7 @@ module Projects
 
       # apply sort
       click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # verify table still only contains sample1
       assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -1129,11 +1129,11 @@ module Projects
       ### ACTIONS START ###
       # apply sort
       click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       assert_selector '#samples-table table tbody th:first-child', text: @sample1.puid
       # change sort order from default sorting
       click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_desc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
       ### ACTIONS END ###
 
@@ -1144,7 +1144,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # verify sort is still enabled
-      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_desc"]'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       # verify table ordering is still in sorted state
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
       ### VERIFY END ###
@@ -3531,7 +3531,7 @@ module Projects
       assert_selector 'table thead tr th', count: 7
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
-      assert_selector 'table thead th:nth-child(4) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
 
       within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')

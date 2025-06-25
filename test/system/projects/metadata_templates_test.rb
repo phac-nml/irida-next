@@ -76,7 +76,7 @@ module Projects
 
       strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 2))
       assert_selector 'table tbody tr', count: 2
-      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:first-child svg.arrow-up-icon'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: metadata_template1.name
@@ -85,7 +85,7 @@ module Projects
       end
 
       click_on I18n.t('metadata_templates.table_component.name')
-      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_desc"]'
+      assert_selector 'table thead th:first-child svg.arrow-down-icon'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
@@ -94,7 +94,7 @@ module Projects
       end
 
       click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:nth-child(3) [data-test-selector="sort_icon_asc"]'
+      assert_selector 'table thead th:nth-child(3) svg.arrow-up-icon'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
@@ -103,7 +103,7 @@ module Projects
       end
 
       click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:nth-child(3) [data-test-selector="sort_icon_desc"]'
+      assert_selector 'table thead th:nth-child(3) svg.arrow-down-icon'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: metadata_template1.name

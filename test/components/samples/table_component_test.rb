@@ -34,7 +34,7 @@ module Samples
         assert_selector 'table thead th:first-child', text: I18n.t('samples.table_component.puid')
         assert_selector 'table thead th:nth-child(2)', text: I18n.t('samples.table_component.name')
         assert_selector 'table thead th:nth-child(3)', text: I18n.t('samples.table_component.namespaces.puid')
-        assert_selector 'table thead th:nth-child(3) [data-test-selector="sort_icon_asc"]'
+        assert_selector 'table thead th:nth-child(3) svg.arrow-up-icon'
         assert_selector 'table thead th:nth-child(4)', text: I18n.t('samples.table_component.created_at')
         assert_selector 'table thead th:nth-child(5)', text: I18n.t('samples.table_component.updated_at')
         assert_selector 'table thead th:nth-child(6)',
