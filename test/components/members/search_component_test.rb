@@ -8,8 +8,7 @@ class SearchComponentTest < ViewComponent::TestCase
     search_attribute = :user_email_cont
     placeholder = 'a placeholder'
 
-    render_inline SearchComponent.new(query: Member.ransack, url:, search_attribute:,
-                                      placeholder:)
+    render_inline SearchComponent.new(query: Member.ransack, url:, search_attribute:, placeholder:)
 
     assert_selector "form[action='#{url}']", count: 1
     assert_selector "label[for='q_#{search_attribute}']", count: 1
@@ -17,18 +16,14 @@ class SearchComponentTest < ViewComponent::TestCase
     assert_text placeholder
   end
 
-  test 'Should render a searchbox with a tab' do
+  test 'accessibility' do
     url = '/-/groups/group-1/-/members'
     search_attribute = :user_email_cont
     placeholder = 'a placeholder'
-    tab = 'invited_groups'
 
-    render_inline SearchComponent.new(query: Member.ransack, url:, search_attribute:,
-                                      placeholder:, tab:)
+    render_inline SearchComponent.new(query: Member.ransack, url:, search_attribute:, placeholder:)
 
-    assert_selector "form[action='#{url}']", count: 1
-    assert_selector "label[for='q_#{search_attribute}']", count: 1
-    assert_selector "input[id='q_#{search_attribute}']", count: 1
-    assert_text placeholder
+    assert_selector 'form[role^="search"]', count: 1
+    assert_selector 'input[type^="search"]', count: 1
   end
 end
