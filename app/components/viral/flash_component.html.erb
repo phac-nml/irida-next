@@ -19,7 +19,7 @@
       <%= icon_container_classes %>
     "
   >
-    <%= pathogen_icon(icon_name, class: "size-6") %>
+    <%= pathogen_icon(icon_name, size: :md) %>
     <span class="sr-only"><%= icon_sr_text %></span>
   </div>
   <div class="ms-3 text-sm font-medium text-slate-800 dark:text-slate-300"><%= data %></div>
@@ -34,6 +34,6 @@
     "
     aria-label="<%= t('general.screen_reader.close') %>"
   >
-    <%= pathogen_icon(ICON::X, class: "size-5") %>
+    <%= pathogen_icon(ICON::X, size: :sm) %>
   </button>
 </div>
