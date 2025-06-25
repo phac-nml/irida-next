@@ -48,7 +48,7 @@ module Pathogen
       # @return [Pathogen::Icon] The icon component instance
       renders_one :icon, lambda { |icon: nil|
         @icon = icon
-        Pathogen::Icon.new(icon: icon, classes: 'size-4 mr-1.5')
+        Pathogen::Icon.new(icon, size: :sm, class: 'mr-1.5')
       }
 
       # 🚀 Initialize a new Tab component
