@@ -140,16 +140,25 @@ module Pathogen
       merged_class = merge_icon_classes(base_options[:class], user_options[:class], icon_def[:name])
       final_options[:class] = merged_class if merged_class.present?
 
-      # Warn and remove data attributes (not allowed on SVG)
-      data_keys = final_options.keys.grep(/\Adata[-_]/)
-      unless data_keys.empty?
-        warn "[icon_helper] data attributes (#{data_keys.join(', ')}) are not allowed on SVG and will be ignored"
-        data_keys.each { |k| final_options.delete(k) }
-      end
-
-      # Ensure aria-hidden is true unless explicitly set
-      final_options['aria-hidden'] = true unless final_options.key?('aria-hidden') || final_options.key?(:'aria-hidden')
+      clean_data_attributes!(final_options)
+      ensure_aria_hidden!(final_options)
       final_options
+    end
+
+    # Removes data attributes from options (not allowed on SVG)
+    def clean_data_attributes!(options)
+      data_keys = options.keys.grep(/\Adata[-_]/)
+      return if data_keys.empty?
+
+      warn "[icon_helper] data attributes (#{data_keys.join(', ')}) are not allowed on SVG and will be ignored"
+      data_keys.each { |k| options.delete(k) }
+    end
+
+    # Ensures aria-hidden is set to true unless explicitly provided
+    def ensure_aria_hidden!(options)
+      return if options.key?('aria-hidden') || options.key?(:'aria-hidden')
+
+      options['aria-hidden'] = true
     end
 
     # Extracted: Merge icon options except :class
@@ -159,7 +168,7 @@ module Pathogen
 
     # Extracted: Merge icon classes
     def merge_icon_classes(base_class, user_class, icon_name)
-      class_names(base_class, user_class, "#{icon_name}_icon" => !Rails.env.production?)
+      class_names(base_class, user_class, "#{icon_name}-icon" => !Rails.env.production?)
     end
 
     # Extracted: Build test selector value
