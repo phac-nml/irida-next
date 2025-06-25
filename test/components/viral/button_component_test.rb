@@ -31,7 +31,7 @@ module Viral
 
       assert_selector 'button' do
         assert_text 'Disclosure Button'
-        assert_selector 'svg.icon-chevron_down'
+        assert_selector 'svg.caret-down-icon'
       end
     end
 
@@ -42,7 +42,7 @@ module Viral
 
       assert_selector 'button' do
         assert_text 'Disclosure Button'
-        assert_selector 'svg.icon-chevron_down'
+        assert_selector 'svg.caret-down-icon'
       end
     end
 
@@ -53,7 +53,7 @@ module Viral
 
       assert_selector 'button' do
         assert_text 'Disclosure Button'
-        assert_selector 'svg.icon-chevron_up'
+        assert_selector 'svg.caret-up-icon'
       end
     end
 
@@ -64,7 +64,7 @@ module Viral
 
       assert_selector 'button' do
         assert_text 'Disclosure Button'
-        assert_selector 'svg.icon-chevron_right'
+        assert_selector 'svg.caret-right-icon'
       end
     end
 
