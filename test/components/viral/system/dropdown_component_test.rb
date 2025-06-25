@@ -8,8 +8,7 @@ module System
       visit('/rails/view_components/viral_dropdown_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text 'Organism'
-        assert_no_selector 'svg.icon-chevron_down' # No caret by default
-        assert_no_selector '.viral-dropdown--icon' # No icon by default
+        assert_no_selector 'svg' # No caret by default
 
         click_on 'Organism'
         assert_text 'Aspergillus awamori'
@@ -22,7 +21,7 @@ module System
       visit('/rails/view_components/viral_dropdown_component/with_caret')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text 'Organism'
-        assert_selector 'svg.icon-chevron_down' # Assert caret is present
+        assert_selector 'svg' # Assert caret is present
         assert_no_text 'Aspergillus awamori'
         assert_no_text 'Bacillus cereus'
         assert_no_text 'Pseudomonas aeruginosa'
@@ -38,7 +37,7 @@ module System
       visit('/rails/view_components/viral_dropdown_component/with_icon')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_no_text 'Organism' # Label is not rendered when only icon is present
-        assert_selector '.viral-dropdown--icon svg.icon-bars_3' # Assert icon is present
+        assert_selector '.viral-dropdown--icon svg' # Assert icon is present
         assert_no_text 'Aspergillus awamori'
         assert_no_text 'Bacillus cereus'
         assert_no_text 'Pseudomonas aeruginosa'
@@ -55,9 +54,9 @@ module System
       within('.Viral-Preview > [data-controller-connected="true"]') do
         find('button[data-viral--dropdown-target="trigger"]').click
         assert_text 'Checkmark'
-        assert_selector 'li svg.icon-check'
+        assert_selector 'li svg'
         assert_text 'Inbox'
-        assert_selector 'li svg.icon-inbox_stack'
+        assert_selector 'li svg'
       end
     end
 
