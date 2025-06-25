@@ -1,4 +1,4 @@
-<%= search_form_for @query, url: @url, data: { controller: "selection" }, **@kwargs do |f| %>
+<%= search_form_for @query, url: @url, data: { controller: "selection" }, **@system_arguments do |f| %>
   <%= render Ransack::HiddenSortFieldComponent.new(@query) %>
   <%= f.label @search_attribute, @placeholder, class: "sr-only" %>
   <div class="relative">
