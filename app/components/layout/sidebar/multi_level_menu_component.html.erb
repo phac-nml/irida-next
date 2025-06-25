@@ -35,24 +35,16 @@
     >
       <%= title %>
     </span>
-    <%= pathogen_icon(
-      ICON::CARET_DOWN,
-      size: :sm,
-      color: nil,
-      class:
-        class_names(
-          "transition-transform duration-200 mr-2 flex-shrink-0",
-          { "rotate-180": @selected },
-          (
-            if @selected
-              "text-primary-600 dark:text-primary-400"
-            else
-              "text-slate-400 group-hover/menu:text-slate-600 dark:group-hover/menu:text-slate-300"
-            end
-          ),
-        ),
-      "data-collapsible-target": "icon",
-    ) %>
+    <span
+      data-collapsible-target="icon"
+      class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+    >
+      <%= pathogen_icon(
+        ICON::CARET_DOWN,
+        size: :sm,
+        color: @selected ? "primary" : "default",
+      ) %>
+    </span>
   </button>
   <div
     role="menu"

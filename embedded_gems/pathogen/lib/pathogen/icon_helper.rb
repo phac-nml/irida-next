@@ -76,7 +76,7 @@ module Pathogen
     WORKFLOWS = { name: 'terminal-window', options: {} }.freeze
     DATA_EXPORTS = { name: 'export', options: {} }.freeze
     # Special icons
-    LOADING = { name: 'faded-spinner', options: { library: :animated } }.freeze
+    LOADING = { name: 'spinner-gap', options: { class: 'animate-spin' } }.freeze
 
     # Optional: for backward compatibility, provide a lookup hash
     DEFINITIONS = constants.each_with_object({}) do |const, hash|
@@ -139,12 +139,16 @@ module Pathogen
       final_options = merge_icon_options(base_options, user_options)
       merged_class = merge_icon_classes(base_options[:class], user_options[:class])
       final_options[:class] = merged_class if merged_class.present?
-      final_options['data-test-selector'] = build_test_selector(key) if Rails.env.test?
-      # Ensure aria-hidden is true unless explicitly set
-      unless final_options.key?('aria-hidden') || final_options.key?(:'aria-hidden')
-        final_options['aria-hidden'] =
-          true
+
+      # Warn and remove data attributes (not allowed on SVG)
+      data_keys = final_options.keys.grep(/\Adata[-_]/)
+      unless data_keys.empty?
+        warn "[icon_helper] data attributes (#{data_keys.join(', ')}) are not allowed on SVG and will be ignored"
+        data_keys.each { |k| final_options.delete(k) }
       end
+
+      # Ensure aria-hidden is true unless explicitly set
+      final_options['aria-hidden'] = true unless final_options.key?('aria-hidden') || final_options.key?(:'aria-hidden')
       final_options
     end
 

@@ -35,12 +35,12 @@
               aria-controls="<%= "accordion-collapse-body-samples" %>"
             >
               <span data-infinite-scroll-target="selectionCount"><%= t(".samples") %></span>
-              <%= pathogen_icon(
-                ICON::CARET_DOWN,
-                size: :sm,
-                class: "mr-0 rotate-0",
-                "data-collapsible-target": "icon",
-              ) %>
+              <span
+                data-collapsible-target="icon"
+                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+              >
+                <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, class: "mr-0 rotate-0") %>
+              </span>
             </button>
           </h2>
 
