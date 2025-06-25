@@ -1,6 +1,7 @@
 <li
   data-action="
     keydown->viral--sortable-lists--two-lists-selection#navigateList
+    click->viral--sortable-lists--two-lists-selection#handleSelection
   "
   tabindex="0"
   role="option"
@@ -10,4 +11,8 @@
     block w-full px-4 py-2 border-b cursor-move border-slate-200
     dark:border-slate-600
   "
-><%= list_item %></li>
+><div class="flex">
+    <span id="<%= list_item %>_unselected" aria-hidden="true" class="mx-2"></span>
+    <%= list_item %>
+  </div>
+</li>
