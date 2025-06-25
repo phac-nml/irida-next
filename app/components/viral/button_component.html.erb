@@ -4,14 +4,13 @@
   <% end %>
 
   <% if disclosure.present? %>
-    <% icon_class = "size-4 ml-2" %>
     <% case disclosure %>
     <% when :down %>
-      <%= pathogen_icon(ICON::CARET_DOWN, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, class: "ml-2") %>
     <% when :up %>
-      <%= pathogen_icon(ICON::CARET_UP, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_UP, size: :sm, class: "ml-2") %>
     <% when :right %>
-      <%= pathogen_icon(ICON::CARET_RIGHT, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_RIGHT, size: :sm, class: "ml-2") %>
     <% end %>
   <% end %>
 <% end %>
