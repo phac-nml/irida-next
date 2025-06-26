@@ -10,10 +10,10 @@ module Activities
     end
 
     def highlighted_text(text)
-      content_tag(:span, text, class: highlighted_count_classes)
+      content_tag(:span, text, class: highlighted_text_classes)
     end
 
-    def highlighted_count_classes
+    def highlighted_text_classes
       'text-slate-800 dark:text-slate-300 font-medium'
     end
 
