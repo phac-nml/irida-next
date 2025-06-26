@@ -611,11 +611,13 @@ en:
       info_title: Project Information
       information:
         created_on: Created on
-        no_description: No description provided for this project
         number_of_automated_workflow_executions: Automated pipelines
         number_of_members: Members
         number_of_samples: Samples
+        statistics_title: Project Statistics
+      main_content_label: Project dashboard main content
       samples_title: Samples Recently Updated
+      screen_reader_context: 'Dashboard for project: %{project_name}'
       view_more_activity: View more activity
       view_more_samples: View more samples
     puid:
@@ -1404,6 +1406,7 @@ en:
       success: Profile updated successfully
   project_dashboard:
     samples_component:
+      last_updated_title: 'Last updated: %{time}'
       list_aria_label: List of updated samples
   projects:
     activity:

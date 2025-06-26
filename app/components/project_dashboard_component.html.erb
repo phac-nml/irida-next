@@ -1,72 +1,158 @@
-<div
-  class="
-    items-start grid grid-cols-1 md:grid-cols-2
-    lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_250px] gap-4
-  "
->
-  <%# Information Section - Spans full width on medium screens, third column on large screens %>
-  <section
-    aria-labelledby="project-dashboard-info-title"
-    class="
-      md:col-span-2 lg:col-span-1 order-1 lg:order-3 p-4 bg-white border rounded-lg
-      border-slate-200 dark:border-slate-700 dark:bg-slate-800
-    "
-  >
-    <h2
-      id="project-dashboard-info-title"
-      class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"
-    ><%= t(:"components.project_dashboard.info_title") %></h2>
-    <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
-  </section>
+<%#
+  Project Dashboard - Accessible Multi-Column Layout
+  Optimized for zoom levels up to 400% with no horizontal overflow
+  Progressive layout: single column → two columns → three columns %>
+  <div class="space-y-6">
+    <%# Header with project context (always visible at top) %>
+    <div class="sr-only" aria-live="polite">
+      <%= t(
+        :"components.project_dashboard.screen_reader_context",
+        project_name: @project.name,
+      ) %>
+    </div>
 
-  <%# Activity Section - Second item visually on small screens, first column on medium screens, first column on large screens %>
-  <section
-    aria-labelledby="project-dashboard-activity-title"
-    class="order-2 md:order-2 lg:order-1 lg:col-span-1"
-  >
+    <%# Main dashboard grid - progressively enhances layout %>
     <div
       class="
-        p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
-        dark:bg-slate-800 h-full flex flex-col
+        grid grid-cols-1
+        xl:grid-cols-[minmax(300px,1fr)_minmax(300px,1fr)_minmax(250px,300px)] gap-6
+        min-h-0
       "
+      aria-label="<%= t(:"components.project_dashboard.main_content_label") %>"
     >
-      <div class="flex-grow">
-        <h2
-          id="project-dashboard-activity-title"
-          class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"
-        ><%= t(:"components.project_dashboard.activity_title") %></h2>
-        <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
-      </div>
-      <%= link_to t(:"components.project_dashboard.view_more_activity"),
-      namespace_project_activity_path(@project.namespace.parent, @project),
-      class: "mt-4 button button-default" %>
-    </div>
-  </section>
+      <%# Information Section - First on mobile, third column on large screens %>
+      <section
+        aria-labelledby="project-dashboard-info-title"
+        class="order-1 xl:order-3 min-h-0 flex flex-col"
+      >
+        <div
+          class="
+            p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
+            dark:bg-slate-800 flex flex-col
+          "
+        >
+          <header class="mb-6">
+            <h2
+              id="project-dashboard-info-title"
+              class="
+                text-xl font-semibold text-slate-900 dark:text-white flex items-start gap-3
+              "
+            >
+              <span
+                aria-hidden="true"
+                class="
+                  p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center
+                  justify-center
+                "
+              >
+                <%= helpers.render_icon(
+                  ICONS[:info],
+                  class: "h-5 w-5 text-indigo-600 dark:text-indigo-400",
+                ) %>
+              </span>
+              <%= t(:"components.project_dashboard.info_title") %>
+            </h2>
+          </header>
 
-  <%# Samples Section - Third item visually on small screens, second column on medium screens, second column (fixed width) on large screens %>
-  <section
-    aria-labelledby="project-dashboard-samples-title"
-    class="order-3 md:order-3 lg:order-2 lg:col-span-1"
-  >
-    <div
-      class="
-        p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
-        dark:bg-slate-800 h-full flex flex-col
-      "
-    >
-      <div class="flex-grow">
-        <h2
-          id="project-dashboard-samples-title"
-          class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"
-        ><%= t(:"components.project_dashboard.samples_title") %></h2>
-        <%= render ProjectDashboard::SamplesComponent.new(
-          samples: @samples,
-          project: @project,
-        ) %>
-      </div>
-      <%= link_to t(:"components.project_dashboard.view_more_samples"),
-      namespace_project_samples_path(@project.namespace.parent, @project),
-      class: "mt-4 button button-default" %>
+          <div class="flex-1">
+            <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
+          </div>
+        </div>
+      </section>
+
+      <%# Activity Section - Second on mobile, first column on large screens %>
+      <section
+        aria-labelledby="project-dashboard-activity-title"
+        class="order-2 xl:order-1 min-h-0 flex flex-col"
+      >
+        <div
+          class="
+            p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
+            dark:bg-slate-800 flex flex-col min-h-0
+          "
+        >
+          <header class="mb-6">
+            <h2
+              id="project-dashboard-activity-title"
+              class="
+                text-xl font-semibold text-slate-900 dark:text-white flex items-start gap-3
+              "
+            >
+              <span
+                aria-hidden="true"
+                class="
+                  p-2 rounded-lg bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center
+                "
+              >
+                <%= helpers.render_icon(
+                  ICONS[:clock],
+                  class: "h-5 w-5 text-teal-600 dark:text-teal-400",
+                ) %>
+              </span>
+              <%= t(:"components.project_dashboard.activity_title") %>
+            </h2>
+          </header>
+
+          <div class="flex-1 min-h-0">
+            <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
+          </div>
+
+          <footer class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <%= link_to t(:"components.project_dashboard.view_more_activity"),
+            namespace_project_activity_path(@project.namespace.parent, @project),
+            class:
+              "button bg-teal-100 hover:bg-teal-200 text-teal-800 border border-teal-200 hover:border-teal-300 dark:bg-teal-900/30 dark:hover:bg-teal-900/50 dark:text-teal-200 dark:border-teal-700/50 dark:hover:border-teal-600/50 transition-colors duration-200" %>
+          </footer>
+        </div>
+      </section>
+
+      <%# Samples Section - Third on mobile, second column on large screens %>
+      <section
+        aria-labelledby="project-dashboard-samples-title"
+        class="order-3 xl:order-2 min-h-0 flex flex-col"
+      >
+        <div
+          class="
+            p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
+            dark:bg-slate-800 flex flex-col min-h-0
+          "
+        >
+          <header class="mb-6">
+            <h2
+              id="project-dashboard-samples-title"
+              class="
+                text-xl font-semibold text-slate-900 dark:text-white flex items-start gap-3
+              "
+            >
+              <span
+                aria-hidden="true"
+                class="
+                  p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center
+                "
+              >
+                <%= helpers.render_icon(
+                  ICONS[:flask],
+                  class: "h-5 w-5 text-blue-600 dark:text-blue-400",
+                ) %>
+              </span>
+              <%= t(:"components.project_dashboard.samples_title") %>
+            </h2>
+          </header>
+
+          <div class="flex-1 min-h-0 overflow-hidden">
+            <%= render ProjectDashboard::SamplesComponent.new(
+              samples: @samples,
+              project: @project,
+            ) %>
+          </div>
+
+          <footer class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <%= link_to t(:"components.project_dashboard.view_more_samples"),
+            namespace_project_samples_path(@project.namespace.parent, @project),
+            class:
+              "button bg-blue-100 hover:bg-blue-200 text-blue-800 border border-blue-200 hover:border-blue-300 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-200 dark:border-blue-700/50 dark:hover:border-blue-600/50 transition-colors duration-200" %>
+          </footer>
+        </div>
+      </section>
     </div>
-  </section>
-</div>
+  </div>

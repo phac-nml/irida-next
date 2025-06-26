@@ -1,15 +1,8 @@
 <%= render Viral::PageHeaderComponent.new(
   title: @project.name,
-  id: @project.puid
-) do |header| %>
-  <%= header.icon do %>
-    <%= viral_avatar(
-      name: @project.name,
-      colour_string: "#{@project.name}-#{@project.id}",
-      size: :large,
-    ) %>
-  <% end %>
-<% end %>
+  id: @project.puid,
+  subtitle: @project.description,
+) %>
 
 <%= render ProjectDashboardComponent.new(
   activities: @activities,

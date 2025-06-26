@@ -6,7 +6,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
   # Helper for translated labels
   delegate :t, to: :I18n
 
-  test 'renders default (slate) color scheme with correct icon, label, and count (mobile and desktop)' do
+  test 'renders default (slate) color scheme with correct icon, label, and count' do
     label_key = 'components.project_dashboard.information.number_of_automated_workflow_executions'
     label = t(label_key)
     render_inline(NamespaceStatisticComponent.new(
@@ -17,17 +17,10 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     color_scheme: :default
                   ))
 
-    # Mobile: icon, tooltip, count
-    assert_selector '.md\\:hidden [id^=total-projects-icon-sm]' # icon span
-    assert_selector '.md\\:hidden [id^=total-projects-icon-sm] svg'
-    assert_selector '.md\\:hidden [aria-labelledby^=total-projects-icon-sm]', text: '123'
-    assert_selector '.md\\:hidden [role=tooltip]', visible: :all
-    assert_text label
-
-    # Desktop: icon, label, count
-    assert_selector '.md\\:block [id^=total-projects-icon-lg] svg'
-    assert_selector '.md\\:block [id^=total-projects-label-lg]', text: label
-    assert_selector '.md\\:block [aria-labelledby^="total-projects-icon-lg total-projects-label-lg"]', text: '123'
+    # Icon, label, and count
+    assert_selector 'svg'
+    assert_selector '[id^=statistic-label-]', text: label
+    assert_selector '[aria-describedby^=statistic-label-]', text: '123'
   end
 
   test 'renders blue color scheme with correct Tailwind classes' do
@@ -102,7 +95,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
     assert_selector '[class*="inline-flex"]'
   end
 
-  test 'accessibility: ARIA and roles are present for icon, label, and count' do
+  test 'accessibility: ARIA and roles are present for label and count' do
     render_inline(NamespaceStatisticComponent.new(
                     id_prefix: 'a11y',
                     icon_name: 'user_circle',
@@ -110,11 +103,14 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     count: 7,
                     color_scheme: :blue
                   ))
-    # Icon and label IDs
-    assert_selector '[id^=a11y-icon-lg]'
-    assert_selector '[id^=a11y-label-lg]'
-    # aria-labelledby on count
-    assert_selector '[aria-labelledby^="a11y-icon-lg a11y-label-lg"]'
+    # Label ID
+    assert_selector '[id^=statistic-label-]'
+    # aria-describedby on count
+    assert_selector '[aria-describedby^=statistic-label-]'
+    # Region role
+    assert_selector '[role=region]'
+    # Icon is decorative
+    assert_selector '[aria-hidden=true]'
   end
 
   test 'internationalization: renders translated label' do
@@ -138,7 +134,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     count: 10_000_000,
                     color_scheme: :default
                   ))
-    assert_text '10000000'
+    assert_text '10,000,000'
 
     render_inline(NamespaceStatisticComponent.new(
                     id_prefix: 'zero',
@@ -148,5 +144,22 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     color_scheme: :default
                   ))
     assert_text '0'
+  end
+
+  test 'layout: single responsive layout with icon, label, and count' do
+    render_inline(NamespaceStatisticComponent.new(
+                    id_prefix: 'layout',
+                    icon_name: 'user_circle',
+                    label: 'Layout Test',
+                    count: 999,
+                    color_scheme: :default
+                  ))
+
+    # Single layout with flex
+    assert_selector '.flex'
+    # Icon, label, and count are present
+    assert_selector 'svg'
+    assert_selector 'h3', text: 'Layout Test'
+    assert_text '999'
   end
 end
