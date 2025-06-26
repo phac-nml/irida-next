@@ -3,7 +3,7 @@
 module Activities
   module Projects
     # Component for rendering project namespace transfer activity
-    class TransferActivityComponent < BaseActivityComponent
+    class TransferActivityComponent < Activities::BaseActivityComponent
     end
   end
 end

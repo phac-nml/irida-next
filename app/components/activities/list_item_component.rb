@@ -2,12 +2,8 @@
 
 module Activities
   # Component for rendering an activity list item
-  class ListItemComponent < Component
+  class ListItemComponent < BaseActivityComponent
     attr_accessor :activity
-
-    def initialize(activity: nil)
-      @activity = activity
-    end
 
     def group_link_action
       %w[group_link_create group_link_destroy group_link_update group_link_created group_link_destroyed

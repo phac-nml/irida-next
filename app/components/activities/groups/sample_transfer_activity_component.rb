@@ -3,12 +3,7 @@
 module Activities
   module Groups
     # Component for rendering group sample transfer activity
-    class SampleTransferActivityComponent < Component
-      include PathHelper
-
-      def initialize(activity: nil)
-        @activity = activity
-      end
+    class SampleTransferActivityComponent < Activities::BaseActivityComponent
     end
   end
 end
