@@ -21,21 +21,19 @@ module Profiles
         # change prior to the success flash so that the flash contains the correct translation
         updated = @user.update(update_params)
         if updated
-          I18n.with_locale(current_user.locale) do
-            flash[:success] = t('.success')
-            format.turbo_stream do
-              render status: :ok
-            end
-            format.html do
-              redirect_back_or_to profile_preferences_path
-            end
-          end
-        else
-          flash[:error] = t('.error')
           format.turbo_stream do
-            render status: :unprocessable_entity
+            render status: :ok, locals: { type: 'success', message: t('.success', locale: current_user.locale) }
           end
           format.html do
+            flash[:success] = t('.success', locale: current_user.locale)
+            redirect_back_or_to profile_preferences_path
+          end
+        else
+          format.turbo_stream do
+            render status: :unprocessable_entity, locals: { type: 'error', message: t('.error') }
+          end
+          format.html do
+            flash[:error] = t('.error')
             render :show, status: :unprocessable_entity, locals: { user: @user }
           end
         end
