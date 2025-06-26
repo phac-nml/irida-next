@@ -557,7 +557,7 @@ en:
         link_descriptive_text: View group page for group with persistent unique identifier %{group_puid}
         projects:
           link_descriptive_text: View details page for project with persistent unique identifier %{project_puid}
-      load_more: Load more
+      load_more: Load more activities
       members:
         link_descriptive_text: View members page for %{namespace_type}
       metadata_templates:
