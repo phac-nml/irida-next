@@ -30,6 +30,7 @@ module Pathogen
     CARET_UP = { name: 'caret-up', options: {} }.freeze
     CHECK = { name: 'check', options: {} }.freeze
     CHECK_CIRCLE = { name: 'check-circle', options: {} }.freeze
+    CLOCK = { name: 'clock', options: {} }.freeze
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     DOWNLOAD = { name: 'download-simple', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
