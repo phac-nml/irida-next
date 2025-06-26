@@ -25,7 +25,7 @@ module Pathogen
       icon = args[:icon]
       args.delete(:icon)
       args[:class] = class_names(args[:class], icon_classes)
-      pathogen_icon(icon, color: nil, **args)
+      render_icon(icon, color: nil, **args)
     end
 
     def svg_visual(args, name)
