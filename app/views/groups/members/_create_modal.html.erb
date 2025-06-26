@@ -12,15 +12,16 @@
         <label
           for="<%= form_id %>"
           class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+          data-required="true"
         >
 
-          <%= t("groups.members.new.select_user") %>
+          <%= t("groups.members.new.user_select") %>
         </label>
-        <%= viral_select2(form:, name: :user_id, id: form_id, placeholder: t("groups.members.new.select_user")) do |select| %>
+        <%= viral_select2(form:, name: :user_id, id: form_id) do |select| %>
           <% @available_users.each do |user| %>
             <% select.with_option(
                       value: user.id,
-                      label: user.email,
+                      label: user.email
                     ) do %>
               <span
                 class="
@@ -38,17 +39,25 @@
             <%= t(:"groups.members.new.empty_state") %>
           <% end %>
         <% end %>
+        <p id="<%= form.field_id(:user_id, "hint") %>" class="field-hint">
+          <%= t("groups.members.new.user_hint") %>
+        </p>
       </div>
 
       <% invalid_access_level = @new_member.errors.include?(:access_level) %>
       <div class="form-field <%= 'invalid' if invalid_access_level %>">
-        <%= form.label :access_level %>
+        <%= form.label :access_level, data: { required: true } %>
         <%= form.select :access_level,
                     @access_levels,
-                    { prompt: t(:"groups.members.new.select_access_level") },
-                    required: true %>
+                    required: true,
+                    aria: {
+                      required: true,
+                    } %>
         <%= render "shared/form/field_errors",
         errors: @new_member.errors.full_messages_for(:access_level) %>
+        <p id="<%= form.field_id(:access_level, "hint") %>" class="field-hint">
+          <%= t("groups.members.new.access_level_hint") %>
+        </p>
       </div>
 
       <div

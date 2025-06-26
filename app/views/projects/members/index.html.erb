@@ -16,9 +16,6 @@
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
-      aria: {
-        label: t(:".actions.button_add_aria_label"),
-      },
       class: "button button-default" %>
     <% end %>
     <% if @allowed_to[:create_member] %>
@@ -32,8 +29,7 @@
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
-      class: "button button-primary",
-      "aria-label": t(:".actions.button_add_aria_label") %>
+      class: "button button-primary" %>
     <% end %>
   <% end %>
 <% end %>
