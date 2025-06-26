@@ -156,10 +156,11 @@ class ProfileTest < ApplicationSystemTestCase
     end
 
     assert_current_path profile_preferences_path
+    assert_no_selector "div[data-controller='viral--flash']"
 
     # change user language selection from the profile page preferences section
-    find('input[id=user_locale_en]').click
-    assert_selector 'input[id=user_locale_en]:checked', count: 1
+    find("label[for='user_locale_en']").click
+    assert_selector "input[id='user_locale_en']:checked", count: 1
 
     I18n.with_locale(:en) do
       within %(div[data-controller='viral--flash']) do
