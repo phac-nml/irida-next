@@ -371,7 +371,7 @@
 
 @utility button-primary {
   /* High contrast colors for WCAG AAA */
-  @apply border-primary-700 bg-primary-700 hover:bg-primary-800 hover:border-primary-800 dark:border-primary-600 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:border-primary-700 text-white shadow-sm;
+  @apply border-primary-700 bg-primary-700 hover:bg-primary-800 hover:border-primary-800 dark:border-primary-600 dark:bg-primary-700 dark:hover:bg-primary-700 dark:hover:border-primary-700 text-white shadow-sm;
 
   /* Focus styles with high contrast */
   &:focus-visible {
