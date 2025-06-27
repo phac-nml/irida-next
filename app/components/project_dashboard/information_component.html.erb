@@ -3,11 +3,16 @@
   <h3 class="sr-only"><%= t(:"components.project_dashboard.information.statistics_title") %></h3>
 
   <%# Stacked on small/large screens, side by side on medium screens only %>
-  <div class="flex flex-col space-y-4 md:flex-row md:flex-wrap md:space-y-0 md:space-x-4 xl:flex-col xl:space-x-0 xl:space-y-4 w-full">
+  <div
+    class="
+      flex flex-col space-y-4 md:flex-row md:flex-wrap md:space-y-0 md:space-x-4
+      xl:flex-col xl:space-x-0 xl:space-y-4 w-full
+    "
+  >
     <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "samples",
-        icon_name: :flask,
+        icon_name: ICON::SAMPLES,
         label: t(:"components.project_dashboard.information.number_of_samples"),
         count: @project.samples.count,
         color_scheme: :blue,
@@ -17,7 +22,7 @@
     <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "automated-workflow-executions",
-        icon_name: :terminal_window,
+        icon_name: ICON::TERMINAL_WINDOW,
         label:
           t(
             :"components.project_dashboard.information.number_of_automated_workflow_executions",
@@ -30,7 +35,7 @@
     <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "members",
-        icon_name: :users,
+        icon_name: ICON::USERS,
         label: t(:"components.project_dashboard.information.number_of_members"),
         count: @project.namespace.project_members.without_automation_bots.count,
         color_scheme: :indigo,

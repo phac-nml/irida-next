@@ -57,6 +57,7 @@ module Pathogen
     SLIDERS_HORIZONTAL = { name: 'sliders-horizontal', options: {} }.freeze
     SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
     STACK = { name: :stack, options: {} }.freeze
+    TABLE = { name: 'table', options: {} }.freeze
     TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
     TICKET = { name: :ticket, options: {} }.freeze
     TRANSLATE = { name: 'translate', options: {} }.freeze
