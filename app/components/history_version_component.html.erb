@@ -17,7 +17,7 @@
     <div class="<%= current_version_classes %>"><%= t(:"components.history_version.current_version", version: log_data[:version]) %></div>
   </div>
 
-  <dl
+  <div
     class="
       text-slate-900 dark:text-white divide-y divide-slate-200 dark:divide-slate-700
     "
@@ -60,7 +60,7 @@
             <div
               data-collapsible-target="item"
               id="<%= "accordion-collapse-body-#{index + 1}" %>"
-              class="<%= index == 0 ? "" : "hidden"%>"
+              class="<%= index == 0 ? "" : "hispanen"%>"
               aria-labelledby="<%= "accordion-collapse-heading-#{index + 1}" %>"
             >
               <div
@@ -79,20 +79,20 @@
                       <% if log_data[:version] == 1 %>
                         <% col_span = "col-span-2" %>
                         <div class="col-span-1">
-                          <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></dt>
+                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></span>
                         </div>
                         <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <dd class="text-md p-1 break-words"><%= v %></dd>
+                          <span class="text-md text-slate-500 p-2 break-words"><%= v %></span>
                         </div>
                       <% else %>
                         <div class="col-span-1">
-                          <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></dt>
+                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></span>
                         </div>
                         <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <dd class="text-md p-1"><%= prev_changes_value_hash[k] %></dd>
+                          <span class="text-md text-slate-500 p-2"><%= prev_changes_value_hash[k] %></span>
                         </div>
                         <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <dd class="text-md p-1 break-words"><%= v %></dd>
+                          <span class="text-md text-slate-500 p-2 break-words"><%= v %></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -105,13 +105,13 @@
                       </div>
                       <% keys_no_longer_existent.each do |key_no_longer_existent| %>
                         <div class="col-span-1">
-                          <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key_no_longer_existent %></dt>
+                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key_no_longer_existent %></span>
                         </div>
                         <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <dd class="text-md p-1"><%= prev_changes_value_hash[key_no_longer_existent] %></dd>
+                          <span class="text-md text-slate-500 p-2"><%= prev_changes_value_hash[key_no_longer_existent] %></span>
                         </div>
                         <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <dd class="text-md p-1 break-words"></dd>
+                          <span class="text-md text-slate-500 p-2 break-words"></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -123,21 +123,21 @@
         <% else %>
           <div class="grid grid-cols-3 gap-2 py-2">
             <div class="col-span-1">
-              <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key.to_s %></dt>
+              <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key.to_s %></span>
             </div>
             <% col_span = "col-span-2" %>
             <% if log_data[:version] != 1 %>
               <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                <dd class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></dd>
+                <span class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
               </div>
               <% col_span = "col-span-1" %>
             <% end %>
             <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-              <dd class="text-md p-1 break-words"><%= value %></dd>
+              <span class="text-lg text-slate-600 p-2 break-words"><%= value %></span>
             </div>
           </div>
         <% end %>
       <% end %>
     </div>
-  </dl>
+  </div>
 </div>

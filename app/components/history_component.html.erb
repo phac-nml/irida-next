@@ -3,11 +3,11 @@
   class="relative border-s border-slate-200 dark:border-slate-700"
 >
   <% @data.each_with_index do |changes, index| %>
-    <li class="mb-10 ms-4">
+    <li class="mb-6 ms-4">
       <div
         class="
-          absolute w-3 h-3 bg-slate-200 rounded-full mt-1.5 -start-1.5 border border-white
-          dark:border-slate-700 dark:bg-slate-700
+          absolute w-3 h-3 bg-slate-500 rounded-full mt-1.5 -start-1.5 border border-white
+          dark:border-slate-500 dark:bg-slate-500
         "
       ></div>
       <span
@@ -25,7 +25,7 @@
               turbo_stream: true,
             },
             method: :get,
-            class: "text-slate-800 dark:text-white hover:underline" do %>
+            class: "text-slate-900 min-h-[44px] min-w-[44px] dark:text-white hover:underline cursor-pointer" do %>
             <span class="text-xl font-extrabold dark:text-white">
               <%= t(:"components.history.link_text", version: changes[:version]) %>
             </span>
