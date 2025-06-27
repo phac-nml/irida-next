@@ -183,6 +183,48 @@ module WorkflowExecutions
       end
     end
 
+    test 'cannot launch workflow execution (user launched) without a name' do
+      user = users(:john_doe)
+      login_as user
+
+      project = projects(:project1)
+      sample = samples(:sample1)
+      Project.reset_counters(project.id, :samples_count)
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+
+        click_button I18n.t('workflow_executions.submissions.create.submit')
+
+        assert_text I18n.t('nextflow_component.name.error')
+      end
+    end
+
     test 'should not display a launch pipeline button for project samples as guest' do
       login_as users(:ryan_doe)
 
@@ -712,6 +754,7 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       within '#dialog' do
+        find('input#workflow_execution_name').fill_in with: 'TestExecution'
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -1302,6 +1345,9 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+
+        find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
+
         # check default metadata dropdown selected values
         within('#field-metadata_1') do
           assert_text 'metadata_1'
@@ -1337,7 +1383,8 @@ module WorkflowExecutions
       end
 
       # verify show page
-      assert_selector 'h1', text: 'phac-nml/gasclustering'
+      assert_selector 'h1', text: "WE-#{sample32.name}"
+
       assert_text I18n.t(:'workflow_executions.show.tabs.params')
       # click parameters tab
       click_link I18n.t(:'workflow_executions.show.tabs.params')

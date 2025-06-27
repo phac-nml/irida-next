@@ -249,6 +249,9 @@ fr:
             password_confirmation:
               confirmation: ne correspond pas au mot de passe
         workflow_execution:
+          attributes:
+            name:
+              blank: Ne peut pas être vide
           invalid_namespace: Ne peut être qu’un groupe ou un projet
           invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'
     exceptions:
@@ -690,7 +693,6 @@ fr:
         partial_success: "%{deleted} workflows were successfully deleted"
         success: All selected workflows were successfully deleted
       update:
-        error: Impossible de mettre à jour le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été mis à jour avec succès
   dashboard:
     groups:
@@ -1317,8 +1319,11 @@ fr:
     data_missing_error: 'Les échantillons suivants manquent de données requises : '
     filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
     name:
+      error: Name is required. Please enter a name for the workflow execution.
       helper: Un nom personnalisé facilitera la recherche à l’avenir.
-      label: Nom (facultatif)
+      label:
+        optional: Nom (facultatif)
+        required: Nom
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.

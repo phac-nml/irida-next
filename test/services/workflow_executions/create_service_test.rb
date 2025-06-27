@@ -33,7 +33,8 @@ module WorkflowExecutions
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 2'
       }
 
       workflow_params2 = {
@@ -46,7 +47,8 @@ module WorkflowExecutions
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 3'
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
@@ -176,7 +178,8 @@ module WorkflowExecutions
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 4'
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_4" }',
@@ -212,7 +215,8 @@ module WorkflowExecutions
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 5'
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_5" }',
@@ -250,7 +254,8 @@ module WorkflowExecutions
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 6'
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute

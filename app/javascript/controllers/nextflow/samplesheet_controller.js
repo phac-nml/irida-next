@@ -8,6 +8,8 @@ export default class extends Controller {
     "error",
     "errorMessage",
     "form",
+    "formFieldError",
+    "formFieldErrorMessage",
     "spinner",
     "workflowAttributes",
     "samplesheetProperties",
@@ -33,10 +35,13 @@ export default class extends Controller {
   static values = {
     dataMissingError: { type: String },
     submissionError: { type: String },
+    formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
     processingRequest: { type: String },
     filteringSamples: { type: String },
+    automatedWorkflow: { type: Boolean },
+    nameMissing: { type: String },
   };
 
   #pagination_button_disabled_state = [
@@ -64,6 +69,40 @@ export default class extends Controller {
     "ring-2",
     "ring-primary-500",
     "dark:ring-primary-600",
+  ];
+
+  #form_error_text_css = ["text-red-500"];
+
+  #workflow_execution_name_error_state = [
+    "bg-slate-50",
+    "border",
+    "border-red-500",
+    "text-slate-900",
+    "text-sm",
+    "rounded-lg",
+    "block",
+    "w-full",
+    "p-2.5",
+    "dark:bg-slate-700",
+    "dark:border-slate-600",
+    "dark:placeholder-slate-400",
+    "dark:text-white",
+  ];
+
+  #workflow_execution_name_valid_state = [
+    "bg-slate-50",
+    "border",
+    "border-slate-300",
+    "text-slate-900",
+    "text-sm",
+    "rounded-lg",
+    "block",
+    "w-full",
+    "p-2.5",
+    "dark:bg-slate-700",
+    "dark:border-slate-600",
+    "dark:placeholder-slate-400",
+    "dark:text-white",
   ];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
@@ -169,34 +208,51 @@ export default class extends Controller {
     this.#enableProcessingState(this.processingRequestValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      let missingData = this.#validateData();
-      if (Object.keys(missingData).length > 0) {
-        this.#disableProcessingState();
-        let errorMsg = this.dataMissingErrorValue;
-        for (const sample in missingData) {
-          errorMsg =
-            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+      // By default we set nameValid to true
+      let nameValid = true;
+
+      // If the workflow execution is not an automated workflow execution,
+      // we check to see if the name is valid
+      if (this.automatedWorkflowValue == false) {
+        nameValid = this.#validateWorkflowExecutionName();
+      }
+
+      if (nameValid) {
+        this.#disableFormFieldErrorState();
+
+        let missingData = this.#validateData();
+        if (Object.keys(missingData).length > 0) {
+          this.#disableProcessingState();
+          let errorMsg = this.dataMissingErrorValue;
+          for (const sample in missingData) {
+            errorMsg =
+              errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+          }
+          this.#enableErrorState(errorMsg);
+        } else {
+          this.#disableErrorState();
+          this.#combineFormData();
+
+          this.formTarget.addEventListener(
+            "turbo:before-fetch-request",
+            (event) => {
+              event.detail.fetchOptions.body = JSON.stringify(
+                formDataToJsonParams(this.#compactFormData()),
+              );
+              event.detail.fetchOptions.headers["Content-Type"] =
+                "application/json";
+
+              event.detail.resume();
+            },
+            {
+              once: true,
+            },
+          );
+          this.formTarget.requestSubmit();
         }
-        this.#enableErrorState(errorMsg);
       } else {
-        this.#combineFormData();
-
-        this.formTarget.addEventListener(
-          "turbo:before-fetch-request",
-          (event) => {
-            event.detail.fetchOptions.body = JSON.stringify(
-              formDataToJsonParams(this.#compactFormData()),
-            );
-            event.detail.fetchOptions.headers["Content-Type"] =
-              "application/json";
-
-            event.detail.resume();
-          },
-          {
-            once: true,
-          },
-        );
-        this.formTarget.requestSubmit();
+        this.#disableProcessingState();
+        this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
   }
@@ -241,6 +297,11 @@ export default class extends Controller {
     this.spinnerTarget.classList.add("hidden");
   }
 
+  #disableErrorState() {
+    this.errorTarget.classList.add("hidden");
+    this.errorMessageTarget.innerHTML = "";
+  }
+
   #enableErrorState(message) {
     this.errorTarget.classList.remove("hidden");
     this.errorMessageTarget.innerHTML = message;
@@ -248,6 +309,20 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
+  }
+
+  #enableFormFieldErrorState(message) {
+    this.formFieldErrorTarget.classList.remove("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = message;
+    this.formFieldErrorTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  #disableFormFieldErrorState() {
+    this.formFieldErrorTarget.classList.add("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = "";
   }
 
   #setFormData(inputName, inputValue) {
@@ -748,5 +823,65 @@ export default class extends Controller {
       }
     }
     return compactFormData;
+  }
+
+  #validateWorkflowExecutionName() {
+    let name = document.getElementById("workflow_execution_name");
+    let hasErrors = false;
+
+    if (name.value === "") {
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      this.#addNameFieldErrorState();
+      return false;
+    } else {
+      this.#removeNameFieldErrorState();
+    }
+
+    return true;
+  }
+
+  #addNameFieldErrorState() {
+    let nameError = document.getElementById(
+      "workflow_execution_name_error",
+    ).lastElementChild;
+    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    let name = document.getElementById("workflow_execution_name");
+    let nameHint = document.getElementById("workflow_execution_name_hint");
+    let nameField = document.getElementById("workflow_execution_name_field");
+
+    name.setAttribute("autofocus", true);
+    name.setAttribute("aria-invalid", true);
+    name.setAttribute("aria-describedBy", "workflow_execution_name_error");
+    name.classList.remove(...this.#workflow_execution_name_valid_state);
+    name.classList.add(...this.#workflow_execution_name_error_state);
+    nameError.classList.remove("hidden");
+    nameErrorSpan.innerHTML = this.nameMissingValue;
+    nameErrorSpan.classList.add(...this.#form_error_text_css);
+    nameHint.classList.add("hidden");
+    nameField.classList.add("invalid");
+  }
+
+  #removeNameFieldErrorState() {
+    let nameError = document.getElementById(
+      "workflow_execution_name_error",
+    ).lastElementChild;
+    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    let name = document.getElementById("workflow_execution_name");
+    let nameHint = document.getElementById("workflow_execution_name_hint");
+    let nameField = document.getElementById("workflow_execution_name_field");
+
+    name.removeAttribute("autofocus", false);
+    name.removeAttribute("aria-invalid");
+    name.removeAttribute("aria-describedBy");
+    name.classList.remove(...this.#workflow_execution_name_error_state);
+    name.classList.add(...this.#workflow_execution_name_valid_state);
+    nameError.classList.add("hidden");
+    nameErrorSpan.innerHTML = "";
+    nameErrorSpan.classList.remove(...this.#form_error_text_css);
+    nameHint.classList.remove("hidden");
+    nameField.classList.remove("invalid");
   }
 }
