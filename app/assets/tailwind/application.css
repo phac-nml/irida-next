@@ -267,7 +267,7 @@
 
 @utility invalid {
   &.form-field label {
-    @apply text-red-700 dark:text-red-500;
+    @apply text-red-700 dark:text-red-400;
   }
 
   &.form-field input[type="text"] {

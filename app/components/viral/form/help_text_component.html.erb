@@ -1,6 +1,9 @@
 <%= render Viral::BaseComponent.new(**system_arguments) do %>
   <%- if icon.present? %>
-    <%= render Viral::IconComponent.new(name: icon, classes: "w-4 h-4 mr-1.5") %>
+    <%= render Viral::IconComponent.new(
+      name: icon,
+      classes: "w-4 h-4 mr-1.5 dark:text-red-400",
+    ) %>
   <% end %>
-  <span class="grow"><%= content %></span>
+  <span class="grow dark:text-red-400"><%= content %></span>
 <% end %>

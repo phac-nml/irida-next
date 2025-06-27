@@ -120,7 +120,8 @@ end %>
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
-                      "aria-label" => "Project description, not required",
+                      "aria-label" =>
+                        t(:"projects.create.description.aria_label"),
                       "aria-described-by" =>
                         (
                           if invalid_description

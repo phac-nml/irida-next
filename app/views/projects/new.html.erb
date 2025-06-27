@@ -5,7 +5,7 @@
 
 <div class="@xl:container" data-controller="slugify">
   <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post,
-  data: { controller: "viral--select2" }) do |form| %>
+  data: { controller: "viral--select2" }, html: { novalidate: true }) do |form| %>
     <%= turbo_frame_tag "project_form" do %>
       <div class="grid gap-4">
         <%= form.fields_for :namespace do |builder| %>
