@@ -7,7 +7,7 @@
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
-      <%= pathogen_icon(icon_name, class: class_names(label.present? => "mr-3")) %>
+      <%= pathogen_icon(icon_name, class: class_names(label.present? => "mr-2")) %>
     <% end %>
     <% if label.present? %>
       <span class="text-left truncate grow"><%= label %></span>
