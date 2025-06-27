@@ -21,8 +21,8 @@ export default class extends Controller {
 
   #originalAvailableList;
 
-  #selectedOption;
-  #selectedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
+  #lastInteractedOption;
+  #lastInteractedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
 
   connect() {
     // Get a handle on the available and selected lists
@@ -34,6 +34,7 @@ export default class extends Controller {
 
     this.buttonStateListener = this.#checkStates.bind(this);
 
+    this.#setInitialTabIndex();
     this.idempotentConnect();
   }
 
@@ -49,6 +50,20 @@ export default class extends Controller {
       this.#checkStates();
     }
   }
+
+  #setInitialTabIndex() {
+    const availableListFirstOption = this.availableList.firstElementChild;
+    const selectedListFirstOption = this.selectedList.firstElementChild;
+    if (availableListFirstOption) {
+      availableListFirstOption.tabIndex = 0;
+      availableListFirstOption.setAttribute("data-tabbable", "true");
+    }
+    if (selectedListFirstOption) {
+      selectedListFirstOption.tabIndex = 0;
+      selectedListFirstOption.setAttribute("data-tabbable", "true");
+    }
+  }
+
   addAll(event) {
     event.preventDefault();
     this.availableList.innerHTML = "";
@@ -65,7 +80,7 @@ export default class extends Controller {
 
   #checkStates() {
     this.#checkButtonStates();
-
+    console.l;
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
       this.#cleanupAvailableList();
@@ -221,8 +236,6 @@ export default class extends Controller {
       if (event.key !== "Tab") event.preventDefault();
       handler.call(this, event);
       this.#checkStates();
-    } else if (event.key === "a" && event.ctrlKey) {
-      this.#selectAll(event);
     }
   }
 
@@ -234,15 +247,20 @@ export default class extends Controller {
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
       ArrowDown: (event) =>
         this.#handleVerticalNavigation(event, "down", "single"),
-      // Tab: this.#removeSelectedAttributes.bind(this),
+      Tab: this.#removeFocusClasses.bind(this),
       Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
       End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
+      a: (event) => this.#selectAll(event),
     };
     return handlers[key];
   }
 
   handleSelection(event) {
+    console.log("handle");
     const option = event.target;
+    if (event.shiftKey) {
+      console.log("shift key");
+    }
     if (option.querySelector(`#${option.innerText}_unselected`)) {
       this.#addSelectedAttributes(event, option);
     } else {
@@ -289,7 +307,7 @@ export default class extends Controller {
       'li[aria-selected="true"]',
     );
 
-    // if 1 selected option exists, move the option with up/down keyboard navigation,
+    // if 1 selected option exists and is in Selected list, move the option with up/down keyboard navigation,
     // else move focus up and down list without moving any options
     let selectedOption;
     if (
@@ -297,13 +315,15 @@ export default class extends Controller {
       event.type === "keydown" &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
-      event.target.getAttribute("aria-selected") === "true"
+      event.target.getAttribute("aria-selected") === "true" &&
+      event.target.parentNode === this.selectedList
     ) {
       selectedOption = selectedOptionNodeList[0];
     } else {
       selectedOption = null;
     }
 
+    // navigate up/down one option (ArrowUp/Down) or to the top/bottom of list (Home/End)
     const targetOption =
       navigateSize === "single"
         ? direction === "up"
@@ -320,6 +340,7 @@ export default class extends Controller {
   }
 
   #navigateListUpAndDown(direction, targetOption, selectedOption) {
+    // return if no target option (eg: keyboard ArrowUp when already on the top option)
     if (!targetOption) return;
     if (selectedOption) {
       selectedOption.remove();
@@ -333,23 +354,16 @@ export default class extends Controller {
     }
   }
 
-  #navigateListLeftAndRight(targetList, targetListFirstChild) {
-    if (this.#selectedOption) {
-      this.#selectedOption.remove();
-      targetList.prepend(this.#selectedOption);
-      this.#selectedOption.focus();
-    } else if (targetListFirstChild) {
-      targetListFirstChild.focus();
-    }
-  }
-
   #selectAll(event) {
     event.preventDefault();
+    if (!event.ctrlKey) return;
     const listNode = event.target.parentNode;
     const allOptions = listNode.querySelectorAll("li");
     const unselectedOptions = listNode.querySelectorAll(
       'li[aria-selected="false"]',
     );
+    // if everything is selected, unselect
+    // else select all
     if (unselectedOptions.length == 0) {
       for (let i = 0; i < allOptions.length; i++) {
         this.#removeSelectedAttributes(event, allOptions[i]);
@@ -363,10 +377,8 @@ export default class extends Controller {
     }
   }
 
+  // add checkmark to option
   #addSelectedAttributes(event, option) {
-    if (event.type === "click") {
-      option = event.target.parentNode;
-    }
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
     checkmark.querySelector("span").id = `${option.innerText}_selected`;
     option
@@ -375,10 +387,8 @@ export default class extends Controller {
     option.setAttribute("aria-selected", "true");
   }
 
+  // remove checkmark from option
   #removeSelectedAttributes(event, option) {
-    if (event.type === "click") {
-      option = event.target.parentNode;
-    }
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
     hiddenCheckmark.querySelector("span").id = `${option.innerText}_unselected`;
@@ -436,4 +446,58 @@ export default class extends Controller {
     template.querySelector("li").id = element.replace(/\s+/g, "-");
     list.append(template);
   }
+
+  #setTabIndexes(newOption) {
+    console.log("set tab indexes");
+    console.log(this.#lastInteractedOption);
+    const oldTabbableOptions = newOption.parentNode.querySelectorAll(
+      '[data-tabbable="true"]',
+    );
+
+    if (oldTabbableOptions) {
+      for (let i = 0; i < oldTabbableOptions.length; i++) {
+        oldTabbableOptions[i].tabIndex = "-1";
+        oldTabbableOptions[i].removeAttribute("data-tabbable");
+      }
+    }
+
+    if (newOption.parentNode === this.selectedList) {
+      this.#verifyListHasTabIndex(this.availableList);
+    } else {
+      this.#verifyListHasTabIndex(this.selectedList);
+    }
+    newOption.setAttribute("data-tabbable", "true");
+    newOption.tabIndex = "0";
+  }
+
+  #verifyListHasTabIndex(list) {
+    if (
+      list.firstElementChild &&
+      !list.querySelector('[data-tabbable="true"]')
+    ) {
+      list.firstElementChild.tabIndex = "0";
+      list.firstElementChild.setAttribute("data-tabbable", "true");
+    }
+  }
+
+  setFocus(event) {
+    if (this.#lastInteractedOption) {
+      this.#removeFocusClasses();
+    }
+
+    this.#setTabIndexes(event.target);
+
+    this.#lastInteractedOption = event.target;
+    this.#lastInteractedOption.classList.add(
+      ...this.#lastInteractedOptionClasses,
+    );
+  }
+
+  #removeFocusClasses() {
+    this.#lastInteractedOption.classList.remove(
+      ...this.#lastInteractedOptionClasses,
+    );
+  }
 }
+
+// TODO on tab remove highlighted tabs
