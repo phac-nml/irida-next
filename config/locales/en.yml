@@ -1553,6 +1553,9 @@ en:
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
     create:
+      description_help: Description can have a maximum 255 characters
+      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
+      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       success: Project %{project_name} was successfully created
     destroy:
       success: Project %{project_name} was successfully deleted
@@ -2100,6 +2103,8 @@ en:
     alert:
       list:
         danger: Danger
+    form:
+      required_field: indicates required field
     loading:
       samples_list_skeleton:
         loading: Loading...
