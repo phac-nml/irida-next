@@ -73,7 +73,7 @@
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">
-    <div class="form-field w-6/12 @max-xl:w-auto value">
+    <div class="form-field w-5/12 @max-xl:w-auto value">
       <div data-controller="list-filter" class="list-filter">
         <%= render ListInputComponent.new(
           list_input_form_name:
@@ -84,7 +84,7 @@
     </div>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <div class="form-field w-6/12 @max-xl:w-auto value">
+    <div class="form-field w-5/12 @max-xl:w-auto value">
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
@@ -116,7 +116,7 @@
           <%= grouped_options_for_select(@metadata_fields) %>
         </select>
       </div>
-      <div class="form-field w-1/6 @max-xl:w-auto">
+      <div class="form-field w-1/4 @max-xl:w-auto">
         <select
           aria-label="<%= t(".operator") %>"
           data-action="advanced-search#handleOperatorChange"
@@ -126,7 +126,7 @@
           <%= options_for_select(@operations) %>
         </select>
       </div>
-      <div class="form-field w-6/12 @max-xl:w-auto value invisible @max-xl:hidden">
+      <div class="form-field w-5/12 @max-xl:w-auto value invisible @max-xl:hidden">
         <input
           type="text"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
