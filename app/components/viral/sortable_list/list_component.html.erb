@@ -25,32 +25,44 @@
     <div class="mt-1">
       <% if id == "Available" %>
         <button
-          class="
-            mr-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
-            disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-slate-500
-            disabled:dark:text-slate-400
-          "
+          class="button button-default"
           data-action="
-            click->viral--sortable-lists--two-lists-selection#addAll
+            click->viral--sortable-lists--two-lists-selection#addSelection
           "
-          data-viral--sortable-lists--two-lists-selection-target="addAll"
+          data-viral--sortable-lists--two-lists-selection-target="addButton"
         >
-          <%= t(".add_all") %>
+          <%= t(".add") %>
         </button>
       <% end %>
       <% if id == "Selected" %>
         <button
-          class="
-            ml-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
-            disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-slate-500
-            disabled:dark:text-slate-400
-          "
+          class="button button-default"
           data-action="
-            click->viral--sortable-lists--two-lists-selection#removeAll
+            click->viral--sortable-lists--two-lists-selection#removeSelection
           "
-          data-viral--sortable-lists--two-lists-selection-target="removeAll"
+          data-viral--sortable-lists--two-lists-selection-target="removeButton"
         >
-          <%= t(".remove_all") %>
+          <%= t(".remove") %>
+        </button>
+
+        <button
+          class="button button-default"
+          data-action="
+            click->viral--sortable-lists--two-lists-selection#moveSelection
+          "
+          data-viral--sortable-lists--two-lists-selection-target="upButton"
+        >
+          <%= t(".up") %>
+        </button>
+
+        <button
+          class="button button-default"
+          data-action="
+            click->viral--sortable-lists--two-lists-selection#moveSelection
+          "
+          data-viral--sortable-lists--two-lists-selection-target="downButton"
+        >
+          <%= t(".down") %>
         </button>
       <% end %>
     </div>
