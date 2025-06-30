@@ -5,8 +5,10 @@ export default class extends Controller {
   static targets = [
     "field",
     "submitBtn",
-    "addAll",
-    "removeAll",
+    "addButton",
+    "removeButton",
+    "upButton",
+    "downButton",
     "templateSelector",
     "itemTemplate",
     "checkmarkTemplate",
@@ -35,7 +37,7 @@ export default class extends Controller {
     this.buttonStateListener = this.#checkStates.bind(this);
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
 
-    // this.availableList.addEventListener("keyup", this.boundTest);
+    // sets the first element in each list to be tabbable (ie: tabIndex = 0)
     this.#setInitialTabIndex();
     this.idempotentConnect();
   }
@@ -66,20 +68,6 @@ export default class extends Controller {
     }
   }
 
-  addAll(event) {
-    event.preventDefault();
-    this.availableList.innerHTML = "";
-    this.selectedList.append(...this.#originalAvailableList);
-    this.#checkStates();
-  }
-
-  removeAll(event) {
-    event.preventDefault();
-    this.availableList.append(...this.#originalAvailableList);
-    this.selectedList.innerHTML = "";
-    this.#checkStates();
-  }
-
   #checkStates() {
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
@@ -97,21 +85,40 @@ export default class extends Controller {
   }
 
   #checkButtonStates() {
-    const selected_values = this.selectedList.querySelectorAll("li");
-    const available_values = this.availableList.querySelectorAll("li");
-    if (selected_values.length === 0) {
-      this.#setSubmitButtonDisableState(true);
-      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, true);
-      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false);
-    } else if (available_values.length === 0) {
-      this.#setSubmitButtonDisableState(false);
-      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false);
-      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, true);
-    } else {
-      this.#setSubmitButtonDisableState(false);
-      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false);
-      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false);
-    }
+    const availableListSelectedOptions = this.#getSelectedOptions(
+      this.availableList,
+    );
+    const selectedListSelectedOptions = this.#getSelectedOptions(
+      this.selectedList,
+    );
+
+    // disable add button if no options selected in available list
+    this.#setButtonDisableState(
+      this.addButtonTarget,
+      availableListSelectedOptions.length == 0,
+    );
+
+    // disable remove button if no options selected in selected list
+    this.#setButtonDisableState(
+      this.removeButtonTarget,
+      selectedListSelectedOptions.length == 0,
+    );
+
+    // disable up/down buttons unless exactly 1 option selected in selected list
+    this.#setButtonDisableState(
+      this.upButtonTarget,
+      selectedListSelectedOptions.length != 1,
+    );
+
+    this.#setButtonDisableState(
+      this.downButtonTarget,
+      selectedListSelectedOptions.length != 1,
+    );
+
+    // disable submit if no options in selected list
+    this.#setSubmitButtonDisableState(
+      this.selectedList.querySelectorAll("li").length === 0,
+    );
   }
 
   #checkTemplateSelectorState() {
@@ -147,7 +154,7 @@ export default class extends Controller {
     }
   }
 
-  #setAddOrRemoveButtonDisableState(button, disableState) {
+  #setButtonDisableState(button, disableState) {
     if (disableState && !button.disabled) {
       button.disabled = true;
       button.setAttribute("aria-disabled", "true");
@@ -155,6 +162,10 @@ export default class extends Controller {
       button.disabled = false;
       button.removeAttribute("aria-disabled");
     }
+  }
+
+  #getSelectedOptions(list) {
+    return list.querySelectorAll('li[aria-selected="true"]');
   }
 
   constructParams() {
@@ -224,14 +235,13 @@ export default class extends Controller {
         }
       });
       this.availableList.append(...items);
-
       this.#checkButtonStates();
     } catch (error) {
       console.error("Error setting template:", error);
     }
   }
 
-  navigateList(event) {
+  handleKeyboardInput(event) {
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
       if (event.key !== "Tab") event.preventDefault();
@@ -262,49 +272,20 @@ export default class extends Controller {
     this.#setTabIndexes(option);
   }
 
-  handleClick(event) {
-    const option = event.target;
-    if (event.shiftKey) {
-      this.#handleShiftClick(option);
-    } else {
-      this.#lastClickedOption = option;
-      this.#selectOrUnselectOption(option);
-    }
-    this.#setTabIndexes(option);
-  }
-
-  #handleShiftClick(option) {
-    const listOptions = Array.from(option.parentNode.querySelectorAll("li"));
-    if (
-      this.#lastClickedOption &&
-      this.#lastClickedOption.parentNode === option.parentNode
-    ) {
-      const lastClickedIndex = listOptions.indexOf(this.#lastClickedOption);
-      const currentClickedIndex = listOptions.indexOf(option);
-
-      this.#unselectListOptions(option.parentNode);
-      this.#selectOptionRange(
-        currentClickedIndex,
-        lastClickedIndex,
-        listOptions,
-      );
-    } else {
-      for (let i = 0; i < listOptions.length; i++) {
-        this.#addSelectedAttributes(listOptions[i]);
-
-        if (listOptions[i] === option) {
-          break;
-        }
-      }
-      this.#lastClickedOption = listOptions[0];
-    }
-  }
-
   #selectOrUnselectOption(option) {
     if (option.querySelector(`#${option.innerText}_unselected`)) {
       this.#addSelectedAttributes(option);
     } else {
       this.#removeSelectedAttributes(option);
+    }
+  }
+
+  #selectOptionRange(indexOne, indexTwo, listOptions) {
+    const lowerIndex = indexOne > indexTwo ? indexTwo : indexOne;
+    const higherIndex = indexOne < indexTwo ? indexTwo : indexOne;
+
+    for (let i = lowerIndex; i <= higherIndex; i++) {
+      this.#addSelectedAttributes(listOptions[i]);
     }
   }
 
@@ -314,9 +295,7 @@ export default class extends Controller {
       event.target.parentNode != this.availableList
     )
       return;
-    const selectedOptions = this.availableList.querySelectorAll(
-      'li[aria-selected="true"]',
-    );
+    const selectedOptions = this.#getSelectedOptions(this.availableList);
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
         this.#removeSelectedAttributes(selectedOptions[i]);
@@ -330,9 +309,7 @@ export default class extends Controller {
   removeSelection(event) {
     if (event.type == "keydown" && event.target.parentNode != this.selectedList)
       return;
-    const selectedOptions = this.selectedList.querySelectorAll(
-      'li[aria-selected="true"]',
-    );
+    const selectedOptions = this.#getSelectedOptions(this.selectedList);
 
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
@@ -344,30 +321,26 @@ export default class extends Controller {
     }
   }
 
-  #selectOptionRange(indexOne, indexTwo, listOptions) {
-    const lowerIndex = indexOne > indexTwo ? indexTwo : indexOne;
-    const higherIndex = indexOne < indexTwo ? indexTwo : indexOne;
-
-    for (let i = lowerIndex; i <= higherIndex; i++) {
-      this.#addSelectedAttributes(listOptions[i]);
-    }
-  }
-
+  // handles going up and down list via keyboard (ArrowUp, ArrowDown, Home, End)
   #handleVerticalNavigation(event, direction, navigateSize) {
-    const selectedOptionNodeList = event.target.parentNode.querySelectorAll(
-      'li[aria-selected="true"]',
+    const selectedOptionNodeList = this.#getSelectedOptions(
+      event.target.parentNode,
     );
 
-    // if 1 selected option exists and is in Selected list, move the option with up/down keyboard navigation,
-    // else move focus up and down list without moving any options
+    // check if user is moving an option up and down list, or just navigating
     let selectedOption;
     if (
+      // check the following:
+      // 1. In Selected List (ordering is irrelevant in Available list)
+      // 2. only 1 option selected
+      // 3. user is using ArrowUp/Down (not Home/End)
+      // 4. Alt key is being used
+      // 5. user is on the selected option and not a different option
+      event.target.parentNode === this.selectedList &&
       selectedOptionNodeList.length === 1 &&
-      event.type === "keydown" &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
-      event.target.getAttribute("aria-selected") === "true" &&
-      event.target.parentNode === this.selectedList
+      event.target.getAttribute("aria-selected") === "true"
     ) {
       selectedOption = selectedOptionNodeList[0];
     } else {
@@ -389,35 +362,63 @@ export default class extends Controller {
       selectedOption,
       event,
     );
+    if (targetOption) {
+      this.#setTabIndexes(targetOption);
+    }
   }
 
+  // NavigateListUpAndDown handles all the following use cases:
+  // 1. User is navigating via keyboard with ArrowUp/Down and Home/End
+  // 2. User is selecting options with Shift+ArrowUp/Down
+  // 3. User is moving a selected option up/down list via keyboard input
+  // 4. User is moving a selected option up/down list via Up/Down buttons
+
+  // params:
+  // direction: up/down
+  // targetOption: the option user is navigating towards (ie: if going up 1 stop from option 2, target option is option 1)
+  // selectedOption: option that user is moving up/down list, is null if user is just navigating
   #navigateListUpAndDown(direction, targetOption, selectedOption, event) {
     // return if no target option (eg: keyboard ArrowUp when already on the top option)
     if (!targetOption) return;
+    // user is moving an option up/down list
     if (selectedOption) {
       selectedOption.remove();
       targetOption.insertAdjacentElement(
         direction === "up" ? "beforebegin" : "afterend",
         selectedOption,
       );
-      selectedOption.focus();
+      // if using keyboard, keep focus on the moving option
+      if (event.type === "keydown") {
+        selectedOption.focus();
+      }
     } else {
+      //  user is selecting items by Shift+ArrowUp/Down
       if (event.shiftKey) {
+        // get list, unselect all the options in preparation to re-select options
         const list = event.target.parentNode;
         this.#unselectListOptions(list);
+        // set the list into 'select' mode, where we set which option is the shift selection is based around
+        // and add a listener to the list for when the user releases shift and we can stop the shift-select
         if (!list.hasAttribute("shift-select")) {
           this.#shiftSelectionOption = event.target;
           this.#setListForShiftKeyboardSelection(list);
         }
+        // get index of target option, and add/remove an index point based on direction
+        // as the event.target is 'behind' by an index
+        // eg: we're on option 2 (index 1), and push Shift+ArrowDown, event.target index will return 2 (where we want
+        // index 3), so we add 1 based on ArrowDown
         const listOptions = Array.from(list.querySelectorAll("li"));
         let navigatedSelectionIndex = listOptions.indexOf(event.target);
+        console.log(navigatedSelectionIndex);
         direction === "up"
           ? navigatedSelectionIndex--
           : navigatedSelectionIndex++;
 
+        // index of selection where shift select is centered around
         const startingSelectionIndex = listOptions.indexOf(
           this.#shiftSelectionOption,
         );
+        // make selections based on indexes
         this.#selectOptionRange(
           startingSelectionIndex,
           navigatedSelectionIndex,
@@ -428,17 +429,83 @@ export default class extends Controller {
     }
   }
 
+  // user is shift selecting items by keyboard, we add a listener for when shift is keyup'd
   #setListForShiftKeyboardSelection(list) {
     list.setAttribute("shift-select", "enabled");
     list.addEventListener("keyup", this.boundEndShiftSelect);
   }
 
+  // remove shift select attributes upon shift keyup
   #endShiftSelect(event) {
-    // .addEventListener("blur", this.boundTest);
     if (event.key == "Shift") {
       const list = event.target.parentNode;
       list.removeAttribute("shift-select");
       list.removeEventListener("keyup", this.boundEndShiftSelect);
+      this.#shiftSelectionOption = null;
+    }
+  }
+
+  // handles up and down buttons
+  moveSelection(event) {
+    const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
+    const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
+    const selectedOptionIndex = listOptions.indexOf(selectedOption);
+
+    let targetOption;
+    let direction;
+    if (event.target === this.upButtonTarget) {
+      if (selectedOptionIndex != 0) {
+        targetOption = listOptions[selectedOptionIndex - 1];
+      }
+      direction = "up";
+    } else {
+      if (selectedOptionIndex != listOptions.length - 1) {
+        targetOption = listOptions[selectedOptionIndex + 1];
+      }
+      direction = "down";
+    }
+
+    this.#navigateListUpAndDown(direction, targetOption, selectedOption, event);
+  }
+
+  // handles normal click and shift click events
+  handleClick(event) {
+    const option = event.target;
+    if (event.shiftKey) {
+      this.#handleShiftClick(option);
+    } else {
+      this.#lastClickedOption = option;
+      this.#selectOrUnselectOption(option);
+    }
+    this.#setTabIndexes(option);
+    this.#checkButtonStates();
+  }
+
+  #handleShiftClick(option) {
+    const listOptions = Array.from(option.parentNode.querySelectorAll("li"));
+    // if there was an option clicked, we base the shift click around that option
+    // else shift click from top of list
+    if (
+      this.#lastClickedOption &&
+      this.#lastClickedOption.parentNode === option.parentNode
+    ) {
+      const lastClickedIndex = listOptions.indexOf(this.#lastClickedOption);
+      const currentClickedIndex = listOptions.indexOf(option);
+
+      this.#unselectListOptions(option.parentNode);
+      this.#selectOptionRange(
+        currentClickedIndex,
+        lastClickedIndex,
+        listOptions,
+      );
+    } else {
+      for (let i = 0; i < listOptions.length; i++) {
+        this.#addSelectedAttributes(listOptions[i]);
+        if (listOptions[i] === option) {
+          break;
+        }
+      }
+      this.#lastClickedOption = listOptions[0];
     }
   }
 
@@ -542,6 +609,8 @@ export default class extends Controller {
     list.append(template);
   }
 
+  // ensures that each list contains at least 1 option that is tabbable. important for refreshing after
+  // options have been moved between lists
   #setTabIndexes(currentOption) {
     const oldTabbableOptions = currentOption.parentNode.querySelectorAll(
       '[data-tabbable="true"]',
