@@ -25,9 +25,16 @@
                                ),
                              ),
                              { include_blank: t("advanced_search_component.field") },
-                             { "aria-label": t("advanced_search_component.field") } %>
+                             {
+                               "aria-label": t("advanced_search_component.field"),
+                               "aria-invalid": invalid_field,
+                               "aria-describedby":
+                                 conditions_form.field_id(:field, "error"),
+                               autofocus: invalid_field,
+                             } %>
       <%= render "shared/form/field_errors",
-      errors: @condition.errors.full_messages_for(:field) %>
+      errors: @condition.errors.full_messages_for(:field),
+      id: conditions_form.field_id(:field, "error") %>
     </div>
     <% invalid_operator = @condition.errors.include?(:operator) %>
     <div
@@ -44,11 +51,16 @@
                                include_blank: t("advanced_search_component.operator"),
                              },
                              {
-                               "aria-label": t("advanced_search_component.operator"),
                                "data-action": "advanced-search#handleOperatorChange",
+                               "aria-label": t("advanced_search_component.operator"),
+                               "aria-invalid": invalid_operator,
+                               "aria-describedby":
+                                 conditions_form.field_id(:operator, "error"),
+                               autofocus: invalid_operator,
                              } %>
       <%= render "shared/form/field_errors",
-      errors: @condition.errors.full_messages_for(:operator) %>
+      errors: @condition.errors.full_messages_for(:operator),
+      id: conditions_form.field_id(:operator, "error") %>
     </div>
     <%= render AdvancedSearch::Value.new(
       conditions_form: conditions_form,
