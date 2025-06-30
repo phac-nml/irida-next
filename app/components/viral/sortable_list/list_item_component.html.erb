@@ -1,8 +1,8 @@
 <li
   data-action="
+    click->viral--sortable-lists--two-lists-selection#handleClick
     keydown->viral--sortable-lists--two-lists-selection#navigateList
-    <%# click->viral--sortable-lists--two-lists-selection#handleSelection %>
-    focus->viral--sortable-lists--two-lists-selection#setFocus
+    <%# focus->viral--sortable-lists--two-lists-selection#setFocus %>
   "
   role="option"
   tabindex="-1"
@@ -10,7 +10,7 @@
   id="<%= list_item %>"
   class="
     block w-full px-4 py-2 border-b cursor-move border-slate-200
-    dark:border-slate-600 flex
+    dark:border-slate-600 flex focus:bg-primary-400 focus:dark:bg-primary-500
   "
 >
   <span id="<%= list_item %>_unselected" aria-hidden="true" class="mx-2"></span>

@@ -21,8 +21,8 @@ export default class extends Controller {
 
   #originalAvailableList;
 
-  #lastInteractedOption;
-  #lastInteractedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
+  #lastClickedOption;
+  #shiftSelectionOption;
 
   connect() {
     // Get a handle on the available and selected lists
@@ -33,7 +33,9 @@ export default class extends Controller {
     this.availableList.addEventListener("drop", this.buttonStateListener);
 
     this.buttonStateListener = this.#checkStates.bind(this);
+    this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
 
+    // this.availableList.addEventListener("keyup", this.boundTest);
     this.#setInitialTabIndex();
     this.idempotentConnect();
   }
@@ -80,7 +82,6 @@ export default class extends Controller {
 
   #checkStates() {
     this.#checkButtonStates();
-    console.l;
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
       this.#cleanupAvailableList();
@@ -247,7 +248,6 @@ export default class extends Controller {
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
       ArrowDown: (event) =>
         this.#handleVerticalNavigation(event, "down", "single"),
-      Tab: this.#removeFocusClasses.bind(this),
       Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
       End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
       a: (event) => this.#selectAll(event),
@@ -256,15 +256,55 @@ export default class extends Controller {
   }
 
   handleSelection(event) {
-    console.log("handle");
+    const option = event.target;
+
+    this.#selectOrUnselectOption(option);
+    this.#setTabIndexes(option);
+  }
+
+  handleClick(event) {
     const option = event.target;
     if (event.shiftKey) {
-      console.log("shift key");
-    }
-    if (option.querySelector(`#${option.innerText}_unselected`)) {
-      this.#addSelectedAttributes(event, option);
+      this.#handleShiftClick(option);
     } else {
-      this.#removeSelectedAttributes(event, option);
+      this.#lastClickedOption = option;
+      this.#selectOrUnselectOption(option);
+    }
+    this.#setTabIndexes(option);
+  }
+
+  #handleShiftClick(option) {
+    const listOptions = Array.from(option.parentNode.querySelectorAll("li"));
+    if (
+      this.#lastClickedOption &&
+      this.#lastClickedOption.parentNode === option.parentNode
+    ) {
+      const lastClickedIndex = listOptions.indexOf(this.#lastClickedOption);
+      const currentClickedIndex = listOptions.indexOf(option);
+
+      this.#unselectListOptions(option.parentNode);
+      this.#selectOptionRange(
+        currentClickedIndex,
+        lastClickedIndex,
+        listOptions,
+      );
+    } else {
+      for (let i = 0; i < listOptions.length; i++) {
+        this.#addSelectedAttributes(listOptions[i]);
+
+        if (listOptions[i] === option) {
+          break;
+        }
+      }
+      this.#lastClickedOption = listOptions[0];
+    }
+  }
+
+  #selectOrUnselectOption(option) {
+    if (option.querySelector(`#${option.innerText}_unselected`)) {
+      this.#addSelectedAttributes(option);
+    } else {
+      this.#removeSelectedAttributes(option);
     }
   }
 
@@ -279,10 +319,11 @@ export default class extends Controller {
     );
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
-        this.#removeSelectedAttributes(event, selectedOptions[i]);
+        this.#removeSelectedAttributes(selectedOptions[i]);
         this.selectedList.appendChild(selectedOptions[i]);
       }
       selectedOptions[0].focus();
+      this.#setTabIndexes(selectedOptions[0]);
     }
   }
 
@@ -295,10 +336,20 @@ export default class extends Controller {
 
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
-        this.#removeSelectedAttributes(event, selectedOptions[i]);
+        this.#removeSelectedAttributes(selectedOptions[i]);
         this.availableList.appendChild(selectedOptions[i]);
       }
       selectedOptions[0].focus();
+      this.#setTabIndexes(selectedOptions[0]);
+    }
+  }
+
+  #selectOptionRange(indexOne, indexTwo, listOptions) {
+    const lowerIndex = indexOne > indexTwo ? indexTwo : indexOne;
+    const higherIndex = indexOne < indexTwo ? indexTwo : indexOne;
+
+    for (let i = lowerIndex; i <= higherIndex; i++) {
+      this.#addSelectedAttributes(listOptions[i]);
     }
   }
 
@@ -336,10 +387,11 @@ export default class extends Controller {
       direction === "up" ? "up" : "down",
       targetOption,
       selectedOption,
+      event,
     );
   }
 
-  #navigateListUpAndDown(direction, targetOption, selectedOption) {
+  #navigateListUpAndDown(direction, targetOption, selectedOption, event) {
     // return if no target option (eg: keyboard ArrowUp when already on the top option)
     if (!targetOption) return;
     if (selectedOption) {
@@ -350,7 +402,43 @@ export default class extends Controller {
       );
       selectedOption.focus();
     } else {
+      if (event.shiftKey) {
+        const list = event.target.parentNode;
+        this.#unselectListOptions(list);
+        if (!list.hasAttribute("shift-select")) {
+          this.#shiftSelectionOption = event.target;
+          this.#setListForShiftKeyboardSelection(list);
+        }
+        const listOptions = Array.from(list.querySelectorAll("li"));
+        let navigatedSelectionIndex = listOptions.indexOf(event.target);
+        direction === "up"
+          ? navigatedSelectionIndex--
+          : navigatedSelectionIndex++;
+
+        const startingSelectionIndex = listOptions.indexOf(
+          this.#shiftSelectionOption,
+        );
+        this.#selectOptionRange(
+          startingSelectionIndex,
+          navigatedSelectionIndex,
+          listOptions,
+        );
+      }
       targetOption.focus();
+    }
+  }
+
+  #setListForShiftKeyboardSelection(list) {
+    list.setAttribute("shift-select", "enabled");
+    list.addEventListener("keyup", this.boundEndShiftSelect);
+  }
+
+  #endShiftSelect(event) {
+    // .addEventListener("blur", this.boundTest);
+    if (event.key == "Shift") {
+      const list = event.target.parentNode;
+      list.removeAttribute("shift-select");
+      list.removeEventListener("keyup", this.boundEndShiftSelect);
     }
   }
 
@@ -365,20 +453,27 @@ export default class extends Controller {
     // if everything is selected, unselect
     // else select all
     if (unselectedOptions.length == 0) {
-      for (let i = 0; i < allOptions.length; i++) {
-        this.#removeSelectedAttributes(event, allOptions[i]);
-      }
+      this.#unselectListOptions(listNode);
     } else {
       for (let i = 0; i < allOptions.length; i++) {
         if (allOptions[i].getAttribute("aria-selected") === "false") {
-          this.#addSelectedAttributes(event, allOptions[i]);
+          this.#addSelectedAttributes(allOptions[i]);
         }
       }
     }
   }
 
+  #unselectListOptions(list) {
+    const listOptions = list.querySelectorAll("li");
+    for (let i = 0; i < listOptions.length; i++) {
+      if (listOptions[i].getAttribute("aria-selected") === "true") {
+        this.#removeSelectedAttributes(listOptions[i]);
+      }
+    }
+  }
+
   // add checkmark to option
-  #addSelectedAttributes(event, option) {
+  #addSelectedAttributes(option) {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
     checkmark.querySelector("span").id = `${option.innerText}_selected`;
     option
@@ -388,7 +483,7 @@ export default class extends Controller {
   }
 
   // remove checkmark from option
-  #removeSelectedAttributes(event, option) {
+  #removeSelectedAttributes(option) {
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
     hiddenCheckmark.querySelector("span").id = `${option.innerText}_unselected`;
@@ -447,10 +542,8 @@ export default class extends Controller {
     list.append(template);
   }
 
-  #setTabIndexes(newOption) {
-    console.log("set tab indexes");
-    console.log(this.#lastInteractedOption);
-    const oldTabbableOptions = newOption.parentNode.querySelectorAll(
+  #setTabIndexes(currentOption) {
+    const oldTabbableOptions = currentOption.parentNode.querySelectorAll(
       '[data-tabbable="true"]',
     );
 
@@ -461,13 +554,13 @@ export default class extends Controller {
       }
     }
 
-    if (newOption.parentNode === this.selectedList) {
+    if (currentOption.parentNode === this.selectedList) {
       this.#verifyListHasTabIndex(this.availableList);
     } else {
       this.#verifyListHasTabIndex(this.selectedList);
     }
-    newOption.setAttribute("data-tabbable", "true");
-    newOption.tabIndex = "0";
+    currentOption.setAttribute("data-tabbable", "true");
+    currentOption.tabIndex = "0";
   }
 
   #verifyListHasTabIndex(list) {
@@ -479,25 +572,4 @@ export default class extends Controller {
       list.firstElementChild.setAttribute("data-tabbable", "true");
     }
   }
-
-  setFocus(event) {
-    if (this.#lastInteractedOption) {
-      this.#removeFocusClasses();
-    }
-
-    this.#setTabIndexes(event.target);
-
-    this.#lastInteractedOption = event.target;
-    this.#lastInteractedOption.classList.add(
-      ...this.#lastInteractedOptionClasses,
-    );
-  }
-
-  #removeFocusClasses() {
-    this.#lastInteractedOption.classList.remove(
-      ...this.#lastInteractedOptionClasses,
-    );
-  }
 }
-
-// TODO on tab remove highlighted tabs
