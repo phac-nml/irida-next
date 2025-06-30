@@ -616,6 +616,9 @@ fr:
       information_icon: Icône de renseignements
       success_icon: Icône de vérification
       warning_icon: Icône d’exclamation
+    groups_dashboard:
+      information_component:
+        no_description: No description provided
     history:
       created_by: "%{type} créé par %{user}"
       deleted_by: "%{type} supprimé par %{user}"
@@ -1126,11 +1129,12 @@ fr:
       create_subgroup_button: Nouveau sous-groupe
       information:
         created_on: Created on
-        no_description: No description provided for this group
         number_of_projects: Projects
         number_of_samples: Samples
         number_of_subgroups: Subgroups
         title: Group Information
+      main_content_label: Group dashboard main content
+      screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
         placeholder: Filtrer par PUID ou nom
       shared_namespaces:
