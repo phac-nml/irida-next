@@ -11,7 +11,8 @@
             type="button"
             class="button button-default rounded-e-none border-e-0"
             data-action="advanced-search#idempotentConnect viral--dialog#open"
-            aria-label="<%= t(".title") %>"
+            aria-label="<%= t(".title") %>",
+            autofocus="<%= @status %>"
           >
             <%= t(".title") %>
           </button>
@@ -29,6 +30,7 @@
           data: {
             action: "advanced-search#idempotentConnect viral--dialog#open",
           },
+          autofocus: @status
         ) { t(".title") } %>
       <% end %>
     <% end %>
