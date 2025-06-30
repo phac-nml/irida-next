@@ -7,7 +7,6 @@ module Pathogen
       # @!group Basic Examples
 
       # @label Default Radio Button
-      # @description Basic radio button with label
       def default
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -17,7 +16,6 @@ module Pathogen
       end
 
       # @label Radio Button with Help Text
-      # @description Radio button with descriptive help text
       def with_help_text
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -28,7 +26,6 @@ module Pathogen
       end
 
       # @label Radio Button with Custom Classes
-      # @description Radio button with additional CSS classes
       def with_custom_classes
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -43,7 +40,6 @@ module Pathogen
       # @!group States
 
       # @label Checked State
-      # @description Radio button in checked state
       def checked
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -54,7 +50,6 @@ module Pathogen
       end
 
       # @label Disabled State
-      # @description Radio button in disabled state
       def disabled
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -65,7 +60,6 @@ module Pathogen
       end
 
       # @label Checked and Disabled
-      # @description Radio button that is both checked and disabled
       def checked_and_disabled
         render ::Pathogen::Form::RadioButtonComponent.new(
           attribute: :theme,
@@ -81,7 +75,6 @@ module Pathogen
       # @!group Form Integration
 
       # @label With Form Builder
-      # @description Radio button within a form context
       def with_form_builder
         render_with_template(
           template: 'pathogen/form/radio_button_component_preview/form_builder',
