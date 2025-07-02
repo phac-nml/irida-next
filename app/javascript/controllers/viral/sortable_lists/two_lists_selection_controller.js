@@ -27,23 +27,21 @@ export default class extends Controller {
   #shiftSelectionOption;
 
   connect() {
-    // Get a handle on the available and selected lists
-    this.availableList = document.getElementById(this.availableListValue);
-    this.selectedList = document.getElementById(this.selectedListValue);
-
-    this.selectedList.addEventListener("drop", this.buttonStateListener);
-    this.availableList.addEventListener("drop", this.buttonStateListener);
-
     this.buttonStateListener = this.#checkStates.bind(this);
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
-
-    // sets the first element in each list to be tabbable (ie: tabIndex = 0)
-    this.#setInitialTabIndex();
+    // Get a handle on the available and selected lists
     this.idempotentConnect();
   }
 
   idempotentConnect() {
+    console.log("connect");
+    this.availableList = document.getElementById(this.availableListValue);
+    this.selectedList = document.getElementById(this.selectedListValue);
     if (this.availableList && this.selectedList) {
+      console.log("in if");
+      this.selectedList.addEventListener("drop", this.buttonStateListener);
+      this.availableList.addEventListener("drop", this.buttonStateListener);
+
       // Get a handle on the original available list
       this.#originalAvailableList = [
         ...this.availableList.querySelectorAll("li"),
@@ -51,6 +49,8 @@ export default class extends Controller {
       ];
       Object.freeze(this.#originalAvailableList);
 
+      // sets the first element in each list to be tabbable (ie: tabIndex = 0)
+      this.#setInitialTabIndex();
       this.#checkStates();
     }
   }
@@ -69,6 +69,7 @@ export default class extends Controller {
   }
 
   #checkStates() {
+    console.log("check states");
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
@@ -242,6 +243,7 @@ export default class extends Controller {
   }
 
   handleKeyboardInput(event) {
+    console.log("handle keyboard");
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
       if (event.key !== "Tab") event.preventDefault();
@@ -304,6 +306,8 @@ export default class extends Controller {
       selectedOptions[0].focus();
       this.#setTabIndexes(selectedOptions[0]);
     }
+
+    this.#checkStates();
   }
 
   removeSelection(event) {
@@ -319,6 +323,8 @@ export default class extends Controller {
       selectedOptions[0].focus();
       this.#setTabIndexes(selectedOptions[0]);
     }
+
+    this.#checkStates();
   }
 
   // handles going up and down list via keyboard (ArrowUp, ArrowDown, Home, End)
@@ -604,12 +610,13 @@ export default class extends Controller {
 
   #createListItem(element, list) {
     let template = this.itemTemplateTarget.content.cloneNode(true);
-    template.querySelector("li").innerText = element;
+    template.querySelector("li").firstElementChild.id = `${element}_unselected`;
+    template.querySelector("li").lastElementChild.innerText = element;
     template.querySelector("li").id = element.replace(/\s+/g, "-");
     list.append(template);
   }
 
-  // ensures that each list contains at least 1 option that is tabbable. important for refreshing after
+  // ensures that each list contains only 1 option that is tabbable. important for refreshing after
   // options have been moved between lists
   #setTabIndexes(currentOption) {
     const oldTabbableOptions = currentOption.parentNode.querySelectorAll(
