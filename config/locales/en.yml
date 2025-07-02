@@ -2372,9 +2372,15 @@ en:
         previous_aria_label: Go to previous page
     sortable_list:
       list_component:
+        actions: Actions
         add: Add
         aria_role_description: "%{list} listbox drag and drop"
         down: Down
+        keyboard_shortcuts:
+          add: Enter
+          down: Alt+ArrowDown
+          remove: Delete
+          up: Alt+ArrowUp
         remove: Remove
         up: Up
     sortable_lists_component:
