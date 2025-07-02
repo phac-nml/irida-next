@@ -173,7 +173,11 @@ module Groups
           assert_no_selector 'li'
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -272,7 +276,11 @@ module Groups
           assert_no_selector 'li'
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
 
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -314,7 +322,11 @@ module Groups
           assert_no_selector 'li'
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -358,7 +370,11 @@ module Groups
           assert_no_selector 'li'
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011 New'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
@@ -402,7 +418,11 @@ module Groups
           assert_no_selector 'li'
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'
@@ -418,7 +438,11 @@ module Groups
           assert_selector 'li', count: 3
         end
 
-        click_button I18n.t('viral.sortable_lists_component.remove_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.remove')
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
@@ -483,7 +507,11 @@ module Groups
           assert_selector 'li', count: 3
         end
 
-        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('#metadatafield1').click
+        find('#metadatafield2').click
+        find('li[id="unique.metadata.field"]').click
+
+        click_button I18n.t('viral.sortable_list.list_component.add')
 
         within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'
