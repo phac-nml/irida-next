@@ -14,7 +14,7 @@
         id_prefix: "samples",
         icon_name: ICON::SAMPLES,
         label: t(:"components.project_dashboard.information.number_of_samples"),
-        count: @project.samples.count,
+        value: @project.samples.count || 0,
         color_scheme: :blue,
       ) %>
     </div>
@@ -27,7 +27,7 @@
           t(
             :"components.project_dashboard.information.number_of_automated_workflow_executions",
           ),
-        count: @project.namespace.automated_workflow_executions.count,
+        value: @project.namespace.automated_workflow_executions.count || 0,
         color_scheme: :teal,
       ) %>
     </div>
@@ -37,7 +37,7 @@
         id_prefix: "members",
         icon_name: ICON::USERS,
         label: t(:"components.project_dashboard.information.number_of_members"),
-        count: @project.namespace.project_members.without_automation_bots.count,
+        value: @project.namespace.project_members.without_automation_bots.count || 0,
         color_scheme: :indigo,
       ) %>
     </div>
