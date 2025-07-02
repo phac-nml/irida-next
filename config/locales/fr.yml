@@ -2303,13 +2303,19 @@ fr:
         previous_aria_label: Go to previous page
     sortable_list:
       list_component:
+        actions: Actions
+        add: Ajouter
         aria_role_description: "%{list} listbox drag and drop"
+        down: Down
+        keyboard_shortcuts:
+          add: Enter
+          down: Alt+ArrowDown
+          remove: Delete
+          up: Alt+ArrowUp
+        remove: Supprimer
+        up: Up
     sortable_lists_component:
-      add: Ajouter
-      down: Down
       no_template: Pas de modèle
-      remove: Supprimer
-      up: Up
   workflow_executions:
     create:
       error_message: "Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :"
