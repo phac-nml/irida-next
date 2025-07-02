@@ -1,30 +1,33 @@
 <div
   class="
     p-4 rounded-lg border border-slate-200 dark:border-slate-700
-    <%= tailwind_colors[:bg] %> <%= tailwind_colors[:dark_bg] %>
+    <%= @bg_color || tailwind_colors[:bg] %> <%= @dark_bg_color || tailwind_colors[:dark_bg] %>
+    h-full
   "
   role="region"
   aria-labelledby="<%= label_id_unified %>"
 >
   <div class="flex items-start gap-3">
-    <%# Icon %>
-    <div class="shrink-0">
-      <span
-        class="
-          inline-flex items-center justify-center p-2.5 rounded-lg
-          <%= tailwind_colors(color_scheme)[:icon_bg] %> <%= tailwind_colors(color_scheme)[:dark_icon_bg] %>
-        "
-        aria-hidden="true"
-      >
-        <%= pathogen_icon(
-          icon_name,
-          size: :sm,
-          color: nil,
-          class:
-            "#{tailwind_colors(color_scheme)[:icon_text]} #{tailwind_colors(color_scheme)[:dark_icon_text]}",
-        ) %>
-      </span>
-    </div>
+    <%# Icon (only show if provided) %>
+    <% if @icon_name.present? %>
+      <div class="shrink-0">
+        <span
+          class="
+            inline-flex items-center justify-center p-2.5 rounded-lg
+            <%= tailwind_colors(@color_scheme)[:icon_bg] %> <%= tailwind_colors(@color_scheme)[:dark_icon_bg] %>
+          "
+          aria-hidden="true"
+        >
+          <%= pathogen_icon(
+            @icon_name,
+            size: :sm,
+            color: nil,
+            class:
+              "#{tailwind_colors(@color_scheme)[:icon_text]} #{tailwind_colors(@color_scheme)[:dark_icon_text]}",
+          ) %>
+        </span>
+      </div>
+    <% end %>
 
     <%# Content %>
     <div class="flex-1 min-w-0">
@@ -36,18 +39,29 @@
             text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight break-words
           "
         >
-          <%= label %>
+          <%= @label %>
         </h3>
       </div>
 
-      <%# Count %>
+      <%# Value - handles different types (number, date, text) %>
       <div
         class="
-          text-2xl font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight
+          text-2xl font-medium text-slate-900 dark:text-slate-100
+          <%= 'font-mono tracking-tight' if @value.is_a?(Numeric) %> <%= 'whitespace-nowrap' if @value.respond_to?(:strftime) %>
         "
-        aria-describedby="<%= label_id_unified %>"
+        aria-describedby="statistic-label-<%= object_id %>"
       >
-        <%= number_with_delimiter(count) %>
+        <% if @value.respond_to?(:strftime) %>
+          <time datetime="<%= @value.iso8601 %>" class="inline-flex flex-col sm:block">
+            <span class="block sm:inline">
+              <%= helpers.local_time(@value, "%b %-d, %Y") %>
+            </span>
+          </time>
+        <% elsif @value.is_a?(Numeric) %>
+          <%= number_with_delimiter(@value) %>
+        <% else %>
+          <%= @value.presence || "—" %>
+        <% end %>
       </div>
     </div>
   </div>

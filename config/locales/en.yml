@@ -1129,9 +1129,11 @@ en:
       create_subgroup_button: New subgroup
       information:
         created_on: Created on
+        description: Description
         number_of_projects: Projects
         number_of_samples: Samples
         number_of_subgroups: Subgroups
+        statistics: Statistics
         title: Group Information
       main_content_label: Group dashboard main content
       screen_reader_context: 'Dashboard for group: %{group_name}'

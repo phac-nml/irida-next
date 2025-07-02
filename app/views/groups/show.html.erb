@@ -1,6 +1,6 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid, subtitle: @group.description) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
   <%= component.icon do %>
     <%= viral_avatar(
       name: @group.name,
@@ -20,24 +20,21 @@
   <% end %>
 <% end %>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto">
   <%# Header with group context (always visible at top) %>
   <div class="sr-only" aria-live="polite">
     <%= t(:"groups.show.screen_reader_context", group_name: @group.name) %>
   </div>
 
-  <%# Main dashboard grid - progressively enhances layout %>
+  <%# Main dashboard grid - stacked layout %>
   <div
-    class="
-      grid grid-cols-1 xl:grid-cols-[minmax(300px,2fr)_minmax(250px,300px)] gap-6
-      min-h-0
-    "
+    class="grid grid-cols-1 gap-6 min-h-0"
     aria-label="<%= t(:"groups.show.main_content_label") %>"
   >
-    <%# Information Section - First on mobile, second column on large screens %>
+    <%# Information Section %>
     <section
       aria-labelledby="groups-dashboard-info-title"
-      class="order-1 xl:order-2 min-h-0 flex flex-col"
+      class="min-h-0 flex flex-col"
     >
       <div
         class="
@@ -74,8 +71,8 @@
       </div>
     </section>
 
-    <%# Main Content Section - Second on mobile, first column on large screens %>
-    <section class="order-2 xl:order-1 min-h-0 flex flex-col">
+    <%# Main Content Section %>
+    <section class="min-h-0 flex flex-col">
       <div
         class="
           p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
