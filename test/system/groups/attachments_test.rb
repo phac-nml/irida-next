@@ -383,7 +383,7 @@ module Groups
 
       assert_no_selector 'table'
 
-      within 'section[role="alert"]' do
+      within 'section[role="status"]' do
         assert_text I18n.t('components.viral.pagy.empty_state.title')
         assert_text I18n.t('components.viral.pagy.empty_state.description')
       end

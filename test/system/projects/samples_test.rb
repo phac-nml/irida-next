@@ -3057,7 +3057,7 @@ module Projects
       assert_text I18n.t('samples.deletions.destroy.success', count: 3)
 
       # no remaining samples
-      within 'section[role="alert"]' do
+      within 'section[role="status"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end

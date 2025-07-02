@@ -33,7 +33,7 @@ module Viral
           action_method: :get
         )
       )
-      assert_selector '[role="alert"]'
+      assert_selector '[role="status"]'
       assert_selector '[aria-labelledby]'
       assert_selector '[aria-describedby]'
     end

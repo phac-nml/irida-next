@@ -7,14 +7,13 @@ class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(query:, url:, search_attribute:, placeholder:, value: nil, **system_arguments)
+  def initialize(query:, url:, search_attribute:, placeholder:, value: nil, **kwargs)
     @query = query
     @url = url
     @value = value
     @search_attribute = search_attribute
     @placeholder = placeholder
-    @system_arguments = system_arguments
-    @system_arguments[:html] = (@system_arguments[:html] || {}).merge({ role: :search })
+    @kwargs = kwargs
   end
   # rubocop:enable Metrics/ParameterLists
 end
