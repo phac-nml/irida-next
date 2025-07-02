@@ -271,7 +271,13 @@ export default class extends Controller {
   }
 
   #selectOrUnselectOption(option) {
-    if (option.querySelector(`#${option.innerText}_unselected`)) {
+    console.log(option);
+    console.log(option.innerText);
+    this.#validateIdQuery(option.innerText);
+    console.log(
+      option.querySelector(`span[id="${option.innerText}_unselected"`),
+    );
+    if (option.querySelector(`span[id="${option.innerText}_unselected"`)) {
       this.#addSelectedAttributes(option);
     } else {
       this.#removeSelectedAttributes(option);
@@ -552,7 +558,7 @@ export default class extends Controller {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
     checkmark.querySelector("span").id = `${option.innerText}_selected`;
     option
-      .querySelector(`#${option.innerText}_unselected`)
+      .querySelector(`span[id="${option.innerText}_unselected"`)
       .replaceWith(checkmark);
     option.setAttribute("aria-selected", "true");
   }
@@ -564,7 +570,7 @@ export default class extends Controller {
     hiddenCheckmark.querySelector("span").id = `${option.innerText}_unselected`;
 
     option
-      .querySelector(`#${option.innerText}_selected`)
+      .querySelector(`span[id="${option.innerText}_selected"`)
       .replaceWith(hiddenCheckmark);
 
     option.setAttribute("aria-selected", "false");
@@ -614,7 +620,7 @@ export default class extends Controller {
     let template = this.itemTemplateTarget.content.cloneNode(true);
     template.querySelector("li").firstElementChild.id = `${element}_unselected`;
     template.querySelector("li").lastElementChild.innerText = element;
-    template.querySelector("li").id = element.replace(/\s+/g, "-");
+    template.querySelector("li").id = element;
     list.append(template);
   }
 
@@ -648,6 +654,17 @@ export default class extends Controller {
     ) {
       list.firstElementChild.tabIndex = "0";
       list.firstElementChild.setAttribute("data-tabbable", "true");
+    }
+  }
+
+  #validateIdQuery(id) {
+    let queryString;
+    if (id.includes(" ")) {
+      console.log("space");
+    }
+
+    if (id.includes(".")) {
+      console.log("period");
     }
   }
 }
