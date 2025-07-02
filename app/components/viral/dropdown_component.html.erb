@@ -12,6 +12,9 @@
         classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
       ) %>
     <% end %>
+    <% if prefix.present? %>
+      <span class="sr-only"><%= prefix %>&nbsp;</span>
+    <% end %>
     <% if label.present? %>
       <span class="text-left truncate grow"><%= label %></span>
     <% end %>

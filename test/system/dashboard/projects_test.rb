@@ -267,7 +267,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc'), match: :first
 
       assert_text @project.namespace.name
       assert_equal 2, @project.reload.samples.size

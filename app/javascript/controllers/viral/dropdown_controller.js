@@ -10,7 +10,8 @@ export default class extends Controller {
   };
 
   initialize() {
-    this.boundHandleTriggerFocusOut = this.handleTriggerFocusOut.bind(this);
+    this.boundKeydown = this.keyDown.bind(this);
+    this.boundFocusOut = this.focusOut.bind(this);
   }
 
   connect() {
@@ -19,12 +20,13 @@ export default class extends Controller {
 
   menuTargetConnected(element) {
     element.setAttribute("aria-hidden", "true");
-
-    element.addEventListener("focusout", this.boundHandleTriggerFocusOut);
+    element.addEventListener("keydown", this.boundKeydown);
+    element.addEventListener("focusout", this.boundFocusOut);
   }
 
   menuTargetDisconnected(element) {
-    element.removeEventListener("focusout", this.boundHandleTriggerFocusOut);
+    element.removeEventListener("keydown", this.boundKeydown);
+    element.removeEventListener("focusout", this.boundFocusOut);
   }
 
   triggerTargetConnected(element) {
@@ -47,9 +49,58 @@ export default class extends Controller {
     });
   }
 
-  handleTriggerFocusOut(event) {
+  focusOut(event) {
     if (!this.menuTarget.contains(event.relatedTarget)) {
       this.dropdown.hide();
+    }
+  }
+
+  keyDown(event) {
+    var menuLinks = Array.prototype.slice.call(
+      this.menuTarget.querySelectorAll("a"),
+    );
+    var currentIndex = menuLinks.indexOf(document.activeElement);
+    this.#focusByKey(event, menuLinks, currentIndex);
+  }
+
+  #focusByKey(event, menuLinks, currentIndex) {
+    switch (event.key) {
+      case "Enter":
+        return document.addEventListener(
+          "turbo:morph",
+          () => {
+            this.triggerTarget.focus();
+          },
+          { once: true },
+        );
+      case "Escape":
+        event.preventDefault();
+        this.triggerTarget.focus();
+        break;
+      case "ArrowUp":
+      case "ArrowLeft":
+        event.preventDefault();
+        if (currentIndex > -1) {
+          var prevIndex = Math.max(0, currentIndex - 1);
+          menuLinks[prevIndex].focus();
+        }
+        break;
+      case "ArrowDown":
+      case "ArrowRight":
+        event.preventDefault();
+        if (currentIndex > -1) {
+          var nextIndex = Math.min(menuLinks.length - 1, currentIndex + 1);
+          menuLinks[nextIndex].focus();
+        }
+        break;
+      case "Home":
+        event.preventDefault();
+        menuLinks[0].focus();
+        break;
+      case "End":
+        event.preventDefault();
+        menuLinks[menuLinks.length - 1].focus();
+        break;
     }
   }
 }
