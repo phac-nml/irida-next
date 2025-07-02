@@ -34,11 +34,9 @@ export default class extends Controller {
   }
 
   idempotentConnect() {
-    console.log("connect");
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
     if (this.availableList && this.selectedList) {
-      console.log("in if");
       this.selectedList.addEventListener("drop", this.buttonStateListener);
       this.availableList.addEventListener("drop", this.buttonStateListener);
 
@@ -69,7 +67,6 @@ export default class extends Controller {
   }
 
   #checkStates() {
-    console.log("check states");
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
@@ -243,7 +240,6 @@ export default class extends Controller {
   }
 
   handleKeyboardInput(event) {
-    console.log("handle keyboard");
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
       if (event.key !== "Tab") event.preventDefault();
@@ -415,7 +411,6 @@ export default class extends Controller {
         // index 3), so we add 1 based on ArrowDown
         const listOptions = Array.from(list.querySelectorAll("li"));
         let navigatedSelectionIndex = listOptions.indexOf(event.target);
-        console.log(navigatedSelectionIndex);
         direction === "up"
           ? navigatedSelectionIndex--
           : navigatedSelectionIndex++;
@@ -476,7 +471,14 @@ export default class extends Controller {
 
   // handles normal click and shift click events
   handleClick(event) {
-    const option = event.target;
+    let option;
+    // handles if user clicks on child elements of "li" element, pointer-events: none not behaving as expected in this
+    // use case
+    if (event.target.nodeName === "LI") {
+      option = event.target;
+    } else {
+      option = event.target.closest("li");
+    }
     if (event.shiftKey) {
       this.#handleShiftClick(option);
     } else {
