@@ -654,6 +654,7 @@ fr:
       info_title: Renseignements sur le projet
       information:
         created_on: Créé le
+        description: Description
         number_of_automated_workflow_executions: Pipelines automatisés
         number_of_members: Membres
         number_of_samples: Échantillons

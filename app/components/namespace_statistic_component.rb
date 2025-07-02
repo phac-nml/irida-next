@@ -10,7 +10,8 @@ class NamespaceStatisticComponent < Component
   # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to :slate.
   # @param bg_color [String] Optional custom background color class.
   # @param dark_bg_color [String] Optional custom dark mode background color class.
-  def initialize(id_prefix:, label:, value:, icon_name: nil, color_scheme: :slate, bg_color: nil, dark_bg_color: nil, **args)
+  def initialize(id_prefix:, label:, value:, icon_name: nil, color_scheme: :slate, bg_color: nil, dark_bg_color: nil,
+                 **args)
     @id_prefix = id_prefix.to_s.parameterize
     @icon_name = icon_name
     @label = label
@@ -18,27 +19,27 @@ class NamespaceStatisticComponent < Component
     @color_scheme = color_scheme
     @bg_color = bg_color
     @dark_bg_color = dark_bg_color
-    
+
     # Call super with any remaining arguments
     super(**args)
   end
-  
+
   # For backward compatibility
   def count
     @value.is_a?(Numeric) ? @value : 0
   end
-  
+
   # Needed for the template to generate unique IDs
   def object_id
     @object_id ||= "ns-stat-#{@id_prefix}-#{SecureRandom.hex(4)}"
   end
-  
+
   # Override the tailwind_colors method to handle our color scheme
   def tailwind_colors(color_scheme = nil)
     color_scheme ||= @color_scheme
-    super(color_scheme)
+    super
   end
-  
+
   # Make these methods available to the template
   def template_assigns
     {
