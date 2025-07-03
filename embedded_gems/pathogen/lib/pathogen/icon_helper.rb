@@ -32,6 +32,7 @@ module Pathogen
     CHECK_CIRCLE = { name: 'check-circle', options: {} }.freeze
     CLOCK = { name: 'clock', options: {} }.freeze
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
+    DOTS_THREE_VERTICAL = { name: 'dots-three-vertical', options: {} }.freeze
     DOWNLOAD = { name: 'download-simple', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     EYE = { name: 'eye', options: {} }.freeze
