@@ -53,7 +53,7 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_selector 'span',
+      assert_selector 'a',
                       text: @subgroup.puid
     end
   end

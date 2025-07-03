@@ -1,19 +1,3 @@
 <section>
-  <% if project_exists %>
-    <% href =
-      link_to(
-        @activity[:project_puid],
-        namespace_project_path(@activity[:group], @activity[:project].project),
-        class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-      ) %>
-  <% else %>
-    <% href =
-      content_tag(
-        :span,
-        @activity[:project_puid],
-        class: "text-slate-800 dark:text-slate-300 font-medium",
-      ) %>
-  <% end %>
-
-  <%= t("#{@activity[:key]}", user: @activity[:user], href: href) %>
+  <%= activity_message %>
 </section>
