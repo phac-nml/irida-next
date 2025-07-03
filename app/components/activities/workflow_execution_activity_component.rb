@@ -55,7 +55,7 @@ module Activities
     end
 
     # Both workflow execution and sample exist
-    def workflow_execution_and_sample_exists_activity # rubocop:disable Metrics/AbcSize
+    def workflow_execution_and_sample_exists_activity # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       href = link_to(
         @activity[:workflow_id],
         namespace_project_workflow_execution_path(
@@ -90,7 +90,7 @@ module Activities
     end
 
     # Workflow execution exists but the sample no longer does
-    def workflow_execution_exists_activity
+    def workflow_execution_exists_activity # rubocop:disable Metrics/MethodLength
       href = link_to(
         @activity[:workflow_id],
         namespace_project_workflow_execution_path(
@@ -112,7 +112,7 @@ module Activities
     end
 
     # Workflow execution no longer exists but the sample does
-    def workflow_execution_sample_exists_activity
+    def workflow_execution_sample_exists_activity # rubocop:disable Metrics/MethodLength
       href = highlighted_text(@activity[:workflow_id])
       sample_href = link_to(
         @activity[:sample_puid],
