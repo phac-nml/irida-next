@@ -12,7 +12,8 @@
       'PROJECTS' => ICON::PROJECTS,
       'GROUPS' => ICON::GROUPS,
       'WORKFLOWS' => ICON::WORKFLOWS,
-      'DATA_EXPORTS' => ICON::DATA_EXPORTS
+      'DATA_EXPORTS' => ICON::DATA_EXPORTS,
+      'TOKEN' => ICON::TOKEN
     }.each do |const_name, icon_def| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
         <%= pathogen_icon(icon_def, size: :md) %>

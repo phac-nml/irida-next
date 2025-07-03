@@ -77,6 +77,7 @@ module Pathogen
     GROUPS = { name: 'squares-four', options: {} }.freeze
     WORKFLOWS = { name: 'terminal-window', options: {} }.freeze
     DATA_EXPORTS = { name: 'export', options: {} }.freeze
+    TOKEN = { name: 'poker-chip', options: { variant: :duotone } }.freeze
     # Special icons
     LOADING = { name: 'spinner-gap', options: { class: 'animate-spin' } }.freeze
 
