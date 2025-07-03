@@ -31,7 +31,7 @@ module WorkflowExecutions
       post workflow_executions_submissions_path(format: :turbo_stream, workflow_name: 'phac-nml/iridanextexample',
                                                 workflow_version: '1.0.2', namespace_id: @group.id)
       assert_response :ok
-      assert_equal ['metadatafield1', 'metadatafield2', 'unique.metadata.field'],
+      assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
                    @controller.instance_eval('@fields', __FILE__, __LINE__)
     end
   end
