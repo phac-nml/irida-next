@@ -4,7 +4,7 @@
     <%= tailwind_colors[:bg] %> <%= tailwind_colors[:dark_bg] %>
   "
   role="region"
-  aria-labelledby="statistic-label-<%= object_id %>"
+  aria-labelledby="<%= label_id_unified %>"
 >
   <div class="flex items-start gap-3">
     <%# Icon %>
@@ -16,10 +16,12 @@
         "
         aria-hidden="true"
       >
-        <%= helpers.render_icon(
-          icon_name.to_sym,
+        <%= pathogen_icon(
+          icon_name,
+          size: :sm,
+          color: nil,
           class:
-            "h-5 w-5 #{tailwind_colors(color_scheme)[:icon_text]} #{tailwind_colors(color_scheme)[:dark_icon_text]}",
+            "#{tailwind_colors(color_scheme)[:icon_text]} #{tailwind_colors(color_scheme)[:dark_icon_text]}",
         ) %>
       </span>
     </div>
@@ -29,7 +31,7 @@
       <%# Label %>
       <div class="mb-2">
         <h3
-          id="statistic-label-<%= object_id %>"
+          id="<%= label_id_unified %>"
           class="
             text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight break-words
           "
@@ -43,7 +45,7 @@
         class="
           text-2xl font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight
         "
-        aria-describedby="statistic-label-<%= object_id %>"
+        aria-describedby="<%= label_id_unified %>"
       >
         <%= number_with_delimiter(count) %>
       </div>

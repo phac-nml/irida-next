@@ -239,21 +239,21 @@ module Groups
       end
 
       click_on I18n.t(:'samples.table_component.puid')
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th:first-child svg.arrow-up-icon'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] < puids[n + 1]
       end
 
       click_on I18n.t(:'samples.table_component.puid')
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th:first-child svg.arrow-down-icon'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -262,7 +262,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -271,7 +271,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -306,15 +306,15 @@ module Groups
         assert_no_text @sample2.name
       end
 
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_no_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample1.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
 
       assert_selector 'tbody tr:last-child th', text: @sample1.puid
       assert_selector 'tbody tr:last-child td:nth-child(2)', text: @sample1.name
@@ -344,7 +344,7 @@ module Groups
         assert_no_text @sample2.name
       end
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       within('table tbody') do
         assert_selector 'tr', count: 1
@@ -437,7 +437,7 @@ module Groups
       end
 
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -446,7 +446,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -484,7 +484,7 @@ module Groups
       end
 
       click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -493,7 +493,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -528,7 +528,7 @@ module Groups
       end
 
       click_on 'Last Updated'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -577,13 +577,13 @@ module Groups
       end
 
       click_on 'metadatafield1'
-      assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(7) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
       click_on 'metadatafield2'
-      assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(8) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
@@ -598,7 +598,7 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(5) svg.arrow-down-icon'
       within('tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name

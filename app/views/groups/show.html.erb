@@ -47,7 +47,7 @@
     <div class="flex flex-row lg:flex-col gap-4">
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-samples",
-        icon_name: :samples,
+        icon_name: ICON::SAMPLES,
         label: t(:"groups.show.information.number_of_samples"),
         count: @group.samples_count || 0,
         color_scheme: :blue,
@@ -55,7 +55,7 @@
 
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-projects",
-        icon_name: :projects,
+        icon_name: ICON::PROJECTS,
         label: t(:"groups.show.information.number_of_projects"),
         count: @group.project_namespaces.count,
         color_scheme: :fuchsia,
@@ -63,7 +63,7 @@
 
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-subgroups",
-        icon_name: :groups,
+        icon_name: ICON::GROUPS,
         label: t(:"groups.show.information.number_of_subgroups"),
         count: @group.children.count,
         color_scheme: :amber,

@@ -1,5 +1,5 @@
 <div class="flex flex-wrap grow items-center place-content-start gap-2">
-  <%= viral_icon(name: avatar_icon(), classes: "h-5 w-5 text-slate-400 mr-2") %>
+  <%= avatar_icon %>
   <%= viral_avatar(
     name: @namespace.name,
     size: @icon_size,
@@ -39,8 +39,9 @@
             bg-amber-100 dark:bg-amber-700 text-slate-800 dark:text-slate-200
           "
         >
-          <%= helpers.render_icon ICONS[:groups],
-                              class: "size-4 mr-0.5 text-amber-700 dark:text-amber-200" %>
+          <%= pathogen_icon ICON::GROUPS,
+          size: :sm,
+          class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
           <%= @namespace.children.count %>
         </span>
       <% end %>
@@ -51,9 +52,9 @@
             bg-fuchsia-100 dark:bg-fuchsia-700 text-slate-800 dark:text-slate-200
           "
         >
-          <%= helpers.render_icon ICONS[:projects],
-                              class:
-                                "size-4 mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
+          <%= pathogen_icon ICON::PROJECTS,
+          size: :sm,
+          class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
@@ -66,8 +67,9 @@
             dark:text-slate-200
           "
         >
-          <%= helpers.render_icon ICONS[:samples],
-                              class: "size-4 mr-0.5 text  -blue-700 dark:text-blue-200" %>
+          <%= pathogen_icon ICON::SAMPLES,
+          size: :sm,
+          class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.aggregated_samples_count %>
         </span>
       <% end %>
@@ -82,8 +84,9 @@
             dark:text-slate-200
           "
         >
-          <%= helpers.render_icon ICONS[:samples],
-                              class: "size-4 mr-0.5 text-blue-700 dark:text-blue-200" %>
+          <%= pathogen_icon ICON::SAMPLES,
+          size: :sm,
+          class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.project.samples.size %>
         </span>
       <% end %>

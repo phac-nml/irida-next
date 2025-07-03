@@ -15,7 +15,7 @@
   <li role="menuitem">
     <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
       <% if icon.present? %>
-        <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
+        <span class="grow-0 mr-2"><%= pathogen_icon(icon, size: :sm, color: :subdued) %></span>
       <% end %>
       <% if prefix.present? %>
         <span class="sr-only"><%= prefix %>&nbsp;</span>
@@ -27,7 +27,8 @@
   <li role="menuitem">
     <%= link_to url, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer", **system_arguments do %>
       <% if icon.present? %>
-        <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
+        <span class="grow-0 mr-2 size-4">
+          <%= pathogen_icon(icon, size: :sm, color: :subdued) %></span>
       <% end %>
       <% if prefix.present? %>
         <span class="sr-only"><%= prefix %>&nbsp;</span>

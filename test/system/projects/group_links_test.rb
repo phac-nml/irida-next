@@ -278,7 +278,7 @@ module Projects
 
       assert_text 'Displaying 4 items'
       assert_selector 'table tbody tr', count: 4
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th:first-child svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -317,7 +317,7 @@ module Projects
         click_on 'Access Level'
       end
       wait_for_network_idle
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -337,7 +337,7 @@ module Projects
         click_on 'Expiration'
       end
       wait_for_network_idle
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
         assert_selector 'tr:first-child td:nth-child(5)',

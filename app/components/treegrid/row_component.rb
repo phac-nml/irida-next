@@ -7,7 +7,7 @@ module Treegrid
       <%= tag.div(**@system_arguments) do %>
         <div role="gridcell" aria-colindex="1" style="display: contents;">
           <%= tag.button(**@button_arguments) do %>
-            <%= viral_icon(name: "chevron_right", classes: "size-4") %>
+            <%= pathogen_icon(ICON::CARET_RIGHT, size: :sm) %>
           <% end %>
           <%= content %>
         </div>

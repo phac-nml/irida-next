@@ -22,7 +22,7 @@
             dark:text-red-400
           "
         >
-          <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+          <%= pathogen_icon(ICON::WARNING_CIRCLE, color: nil) %>
           <span class="flex-1 ml-4"><%= t(
               "projects.edit.advanced.transfer.confirm.warning_html",
               project_name: @project.human_name,

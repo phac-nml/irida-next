@@ -16,14 +16,16 @@ module Pathogen
 
     def self.visual_types(name:)
       {
-        icon: ->(**args) { icon_visual(args, name) },
+        icon: ->(**args) { icon_visual(args) },
         svg: ->(**args) { svg_visual(args, name) }
       }
     end
 
-    def icon_visual(args, name)
-      args[:classes] = class_names(args[:class], icon_classes, "#{name}_icon")
-      Pathogen::Icon.new(**args)
+    def icon_visual(args)
+      icon = args[:icon]
+      args.delete(:icon)
+      args[:class] = class_names(args[:class], icon_classes)
+      render_icon(icon, color: nil, **args)
     end
 
     def svg_visual(args, name)

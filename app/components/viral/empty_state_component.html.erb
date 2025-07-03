@@ -17,9 +17,11 @@
       dark:bg-emerald-800 shadow-md mb-6 ring-4 ring-emerald-200 dark:ring-emerald-900
     "
   >
-    <%= viral_icon(
-      name: @icon_name,
-      classes: "w-10 h-10 text-emerald-600 dark:text-emerald-400 drop-shadow-lg",
+    <%= pathogen_icon(
+      @icon_name,
+      size: :xl,
+      color: nil,
+      class: "text-emerald-600 dark:text-emerald-400 drop-shadow-lg",
     ) %>
   </div>
 

@@ -166,7 +166,7 @@ module Viral
         data: data,
         tag: :button,
         type: :button,
-        classes: 'cursor-pointer',
+        classes: 'cursor-pointer px-4 py-2',
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id

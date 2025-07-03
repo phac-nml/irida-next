@@ -35,5 +35,18 @@ module Viral
         'border-slate-300 bg-slate-50 dark:bg-slate-800 dark:border-slate-600'
       end
     end
+
+    def icon_color
+      case type
+      when 'danger'
+        :danger
+      when 'info'
+        :blue
+      when 'success'
+        :success
+      else
+        :subdued
+      end
+    end
   end
 end

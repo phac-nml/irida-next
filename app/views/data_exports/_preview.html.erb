@@ -5,9 +5,9 @@
       <ul class="space-y-3 list-inside list-none mt-3">
         <li>
           <div class="flex text-primary-800 dark:text-primary-400">
-            <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+            <%= pathogen_icon(ICON::FILE_TEXT, size: :sm) %>
             <span class="ml-2 text-sm">
-              <%= t('.manifest_json') %>
+              <%= t(".manifest_json") %>
             </span>
           </div>
         </li>
@@ -15,26 +15,26 @@
           <% @manifest['children'].each do |project| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                <%= pathogen_icon(ICON::FILE_TEXT, size: :sm) %>
                 <span class="ml-2">
                   <%= link_to project["name"],
-                    redirect_data_export_path(identifier: project["name"]),
-                    data: {
-                        turbo: false
-                    },
-                    class: "hover:underline text-sm" %>
+                  redirect_data_export_path(identifier: project["name"]),
+                  data: {
+                    turbo: false,
+                  },
+                  class: "hover:underline text-sm" %>
                 </span>
               </div>
               <% project["children"].each do |sample| %>
                 <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
-                      <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                      <%= pathogen_icon(ICON::FOLDER_OPEN, size: :sm) %>
                       <span class="ml-2">
                         <%= link_to sample["name"],
                         redirect_data_export_path(identifier: sample["name"]),
                         data: {
-                            turbo: false
+                          turbo: false,
                         },
                         class: "hover:underline text-sm" %>
                       </span>
@@ -43,7 +43,7 @@
                       <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                         <li>
                           <div class="flex text-blue-800 dark:text-blue-300">
-                            <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                            <%= pathogen_icon(ICON::FOLDER_OPEN, size: :sm) %>
                             <span class="ml-2 text-sm">
                               <%= attachments["name"] %>
                             </span>
@@ -52,7 +52,7 @@
                             <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                               <li>
                                 <div class="flex text-slate-900 dark:text-white">
-                                  <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                                  <%= pathogen_icon(ICON::FILE_TEXT, size: :sm) %>
                                   <span class="ml-2 text-sm">
                                     <%= attachment["name"] %>
                                   </span>
@@ -72,14 +72,14 @@
           <% @manifest['children'].each do |workflow_execution_id| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                <%= pathogen_icon(ICON::FOLDER_OPEN, class: "size-5 m-0") %>
                 <span class="ml-2">
                   <%= link_to workflow_execution_id["name"],
-                    redirect_data_export_path(identifier: workflow_execution_id["name"]),
-                    data: {
-                        turbo: false
-                    },
-                    class: "hover:underline text-sm" %>
+                  redirect_data_export_path(identifier: workflow_execution_id["name"]),
+                  data: {
+                    turbo: false,
+                  },
+                  class: "hover:underline text-sm" %>
                 </span>
               </div>
               <% workflow_execution_id["children"].each do |child| %>
@@ -87,17 +87,17 @@
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
                       <% if child["type"] == "folder" %>
-                        <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                        <%= pathogen_icon(ICON::FOLDER_OPEN, class: "size-5 m-0") %>
                         <span class="ml-2">
                           <%= link_to child["name"],
                           redirect_data_export_path(identifier: child["name"]),
                           data: {
-                              turbo: false
+                            turbo: false,
                           },
                           class: "hover:underline text-sm" %>
                         </span>
                       <% else %>
-                        <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                        <%= pathogen_icon(ICON::FILE_TEXT, class: "size-5 m-0") %>
                         <span class="ml-2 text-sm">
                           <%= child["name"] %>
                         </span>
@@ -108,7 +108,7 @@
                         <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                           <li>
                             <div class="flex text-blue-800 dark:text-blue-300">
-                              <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                              <%= pathogen_icon(ICON::FILE_TEXT, class: "size -5 m-0") %>
                               <span class="ml-2 text-sm">
                                 <%= attachments["name"] %>
                               </span>

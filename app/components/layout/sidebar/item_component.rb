@@ -93,10 +93,7 @@ module Layout
           }
         )
 
-        # Only set variant for non-selected items to use duotone
-        variant = selected ? nil : :duotone
-
-        helpers.render_icon(@icon, class: icon_classes, variant: variant)
+        pathogen_icon(@icon, size: nil, color: nil, class: icon_classes, variant: :duotone)
       end
     end
   end
