@@ -10,7 +10,7 @@ class NamespaceStatisticComponent < Component
   # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to :slate.
   # @param bg_color [String] Optional custom background color class.
   # @param dark_bg_color [String] Optional custom dark mode background color class.
-  def initialize(id_prefix:, label:, value:, icon_name: nil, color_scheme: :slate, bg_color: nil, dark_bg_color: nil,
+  def initialize(id_prefix:, label:, value:, icon_name: nil, color_scheme: :slate, bg_color: nil, dark_bg_color: nil, # rubocop:disable Metrics/ParameterLists
                  **args)
     @id_prefix = id_prefix.to_s.parameterize
     @icon_name = icon_name
@@ -29,9 +29,9 @@ class NamespaceStatisticComponent < Component
     @value.is_a?(Numeric) ? @value : 0
   end
 
-  # Needed for the template to generate unique IDs
-  def object_id
-    @object_id ||= "ns-stat-#{@id_prefix}-#{SecureRandom.hex(4)}"
+  # Generate a unique ID for this component instance
+  def component_id
+    @component_id ||= "ns-stat-#{@id_prefix}-#{SecureRandom.hex(4)}"
   end
 
   # Override the tailwind_colors method to handle our color scheme

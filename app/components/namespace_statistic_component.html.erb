@@ -5,7 +5,7 @@
     h-full
   "
   role="region"
-  aria-labelledby="<%= label_id_unified %>"
+  aria-labelledby="statistic-label-<%= component_id %>"
 >
   <div class="flex items-start gap-3">
     <%# Icon (only show if provided) %>
@@ -34,7 +34,7 @@
       <%# Label %>
       <div class="mb-2">
         <h3
-          id="<%= label_id_unified %>"
+          id="statistic-label-<%= component_id %>"
           class="
             text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight break-words
           "
@@ -49,7 +49,7 @@
           text-2xl font-medium text-slate-900 dark:text-slate-100
           <%= 'font-mono tracking-tight' if @value.is_a?(Numeric) %> <%= 'whitespace-nowrap' if @value.respond_to?(:strftime) %>
         "
-        aria-describedby="statistic-label-<%= object_id %>"
+        aria-describedby="statistic-label-<%= component_id %>"
       >
         <% if @value.respond_to?(:strftime) %>
           <time datetime="<%= @value.iso8601 %>" class="inline-flex flex-col sm:block">
