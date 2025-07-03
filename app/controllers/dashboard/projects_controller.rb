@@ -11,9 +11,7 @@ module Dashboard
       @has_projects = all_projects.count.positive?
       @q = all_projects.ransack(params[:q])
       set_default_sort
-      results = @q.result
-      @project_search_count = results.count
-      @pagy, @projects = pagy(results)
+      @pagy, @projects = pagy(@q.result)
 
       respond_to do |format|
         format.html
