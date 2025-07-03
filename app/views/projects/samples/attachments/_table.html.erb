@@ -35,6 +35,7 @@
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
               url: namespace_project_sample_path,
+              total_count: @pagy.count,
               data: {
                 controller: "selection",
                 selection_storage_key_value: "files-#{@sample.id}"

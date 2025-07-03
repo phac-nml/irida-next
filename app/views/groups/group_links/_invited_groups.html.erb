@@ -7,6 +7,7 @@
       url: group_group_links_url(**request.query_parameters),
       search_attribute: :group_name_cont,
       placeholder: t("groups.members.index.search.groups.placeholder"),
+      total_count: @pagy.count,
     ) do %>
         <input type="hidden" name="format" value="turbo_stream"/>
       <% end %>

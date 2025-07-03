@@ -20,6 +20,7 @@
         url: dashboard_groups_url,
         search_attribute: :name_or_puid_cont,
         placeholder: t(:".search.placeholder"),
+        total_count: @pagy.count,
         html: {
           "data-turbo-permanent": "true",
         },
