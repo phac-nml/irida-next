@@ -7,7 +7,9 @@ export default class extends Controller {
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
+  }
 
+  messageValueChanged() {
     setTimeout(() => {
       this.element.innerText = this.messageValue;
     }, 1000);
