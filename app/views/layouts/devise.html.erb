@@ -22,7 +22,7 @@
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div class="relative">
               <div class="absolute right-0">
-                <%= viral_dropdown(icon: ICON::TRANSLATE, label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, styles: { button: "button button-default" } ) do |dropdown| %>
+                <%= viral_dropdown(icon: ICON::TRANSLATE, label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}) do |dropdown| %>
                   <%- I18n.available_locales.each do |locale| %>
                     <%= dropdown.with_item(
                       label: t(:"locales.#{locale}", locale: locale),
