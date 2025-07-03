@@ -20,11 +20,12 @@ class SearchComponent < Component
 
   def results_message
     if @total_count.zero?
-      "No results found for '#{params[:q][@search_attribute]}'"
+      I18n.t(:'components.search.results_message.zero', search_term: params[:q][@search_attribute])
     elsif @total_count == 1
-      "1 result found for '#{params[:q][@search_attribute]}'"
+      I18n.t(:'components.search.results_message.singular', search_term: params[:q][@search_attribute])
     else
-      "#{@total_count} results found for '#{params[:q][@search_attribute]}'"
+      I18n.t(:'components.search.results_message.plural', total_count: @total_count,
+                                                          search_term: params[:q][@search_attribute])
     end
   end
 end
