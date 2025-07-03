@@ -664,6 +664,11 @@ en:
     puid:
       title: 'Copy to clipboard value: %{puid}'
     search:
+      advanced:
+        results_message:
+          plural: "%{total_count} results found for advanced search"
+          singular: 1 result found for advanced search
+          zero: No results found for advanced search
       results_message:
         plural: "%{total_count} results found for '%{search_term}'"
         singular: 1 result found for '%{search_term}'
