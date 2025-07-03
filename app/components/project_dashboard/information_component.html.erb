@@ -28,7 +28,7 @@
         id_prefix: "project-created",
         label: t(:"components.project_dashboard.information.created_on"),
         value: @project.created_at,
-        icon_name: :calendar,
+        icon_name: ICON::CALENDAR_DOTS,
         color_scheme: :slate,
         bg_color: "bg-slate-50",
         dark_bg_color: "dark:bg-slate-800/50",
@@ -42,7 +42,6 @@
         id_prefix: "project-samples",
         label: t(:"components.project_dashboard.information.number_of_samples"),
         value: @project.samples.count || 0,
-        icon_name: :flask,
         color_scheme: :blue,
       ) %>
     </div>
@@ -68,7 +67,6 @@
         icon_name: ICON::USERS,
         label: t(:"components.project_dashboard.information.number_of_members"),
         value: @project.namespace.project_members.without_automation_bots.count || 0,
-        icon_name: :users,
         color_scheme: :indigo,
       ) %>
     </div>
