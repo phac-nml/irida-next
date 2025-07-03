@@ -1,13 +1,13 @@
 <div>
   <div class="grid grid-cols-3 gap-2 py-4">
     <% current_version_classes =
-      "col-start-2 col-end-3 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
+      "col-start-2 col-end-3 text-sm font-semibold text-slate-600 dark:text-slate-400" %>
     <% if log_data[:version] != 1 %>
       <% current_version_classes =
-        "col-start-3 col-end-4 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
+        "col-start-3 col-end-4 text-sm font-semibold text-slate-600 dark:text-slate-400" %>
       <div
         class="
-          col-start-2 col-end-3 text-sm font-semibold text-slate-500 dark:text-slate-400
+          col-start-2 col-end-3 text-sm font-semibold text-slate-600 dark:text-slate-400
         "
       ><%= t(
           :"components.history_version.previous_version",
@@ -42,7 +42,7 @@
                 type="button"
                 class="
                   flex items-center justify-between w-full p-5 font-medium rtl:text-right
-                  text-slate-500 border border-slate-200 dark:border-slate-700 dark:text-slate-400
+                  text-slate-600 border border-slate-200 dark:border-slate-700 dark:text-slate-400
                   hover:bg-slate-100 dark:hover:bg-slate-800 gap-3
                 "
                 data-action="collapsible#toggle"
@@ -82,7 +82,7 @@
                           <span
                             data-test-item-selector="key"
                             class="
-                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                              mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
                           ><%= k.to_s %></span>
                         </div>
@@ -92,14 +92,19 @@
                             dark:text-slate-700 p-1
                           "
                         >
-                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
+                          <span
+                            data-test-item-selector="value"
+                            class="
+                              text-md text-slate-600 dark:text-white break-all
+                            "
+                          ><%= v %></span>
                         </div>
                       <% else %>
                         <div class="col-span-1">
                           <span
                             data-test-item-selector="key"
                             class="
-                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                              mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
                           ><%= k.to_s %></span>
                         </div>
@@ -108,7 +113,10 @@
                             col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
                           "
                         >
-                          <span data-test-item-selector="value" class="text-md text-slate-500"><%= prev_changes_value_hash[k] %></span>
+                          <span
+                            data-test-item-selector="value"
+                            class="text-md text-slate-600 dark:text-white"
+                          ><%= prev_changes_value_hash[k] %></span>
                         </div>
                         <div
                           class="
@@ -116,7 +124,12 @@
                             dark:text-slate-700 p-1
                           "
                         >
-                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
+                          <span
+                            data-test-item-selector="value"
+                            class="
+                              text-md text-slate-600 dark:text-white break-all
+                            "
+                          ><%= v %></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -125,7 +138,7 @@
                       prev_changes_value_hash.keys - changes_from_prev_version_hash.keys %>
                     <% if keys_no_longer_existent.length.positive? %>
                       <div class="col-span-3">
-                        <p class="text-red-500 dark:text-red-400"><%= t(:"components.history_version.keys_deleted") %></p>
+                        <p class="text-red-600 dark:text-red-400"><%= t(:"components.history_version.keys_deleted") %></p>
                       </div>
                       <% keys_no_longer_existent.each do |key_no_longer_existent| %>
                         <div
@@ -135,7 +148,7 @@
                           <span
                             data-test-item-selector="key"
                             class="
-                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                              mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
                           ><%= key_no_longer_existent %></span>
                         </div>
@@ -144,7 +157,12 @@
                             col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
                           "
                         >
-                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= prev_changes_value_hash[key_no_longer_existent] %></span>
+                          <span
+                            data-test-item-selector="value"
+                            class="
+                              text-md text-slate-600 dark:text-white break-all
+                            "
+                          ><%= prev_changes_value_hash[key_no_longer_existent] %></span>
                         </div>
                         <div
                           class="
@@ -153,7 +171,9 @@
                         >
                           <span
                             data-test-item-selector="value"
-                            class="text-md text-slate-500 p-2 break-all"
+                            class="
+                              text-md text-slate-600 dark:text-white p-2 break-all
+                            "
                           ></span>
                         </div>
                       <% end %>
@@ -168,7 +188,7 @@
             <div class="col-span-1" id="<%= "metadata-#{key}" %>">
               <span
                 data-test-item-selector="key"
-                class="mb-1 text-slate-500 text-md dark:text-slate-400"
+                class="mb-1 text-slate-600 text-md dark:text-slate-400"
               ><%= key.to_s %></span>
             </div>
             <% col_span = "col-span-2" %>
@@ -186,7 +206,7 @@
             >
               <span
                 data-test-item-selector="value"
-                class="text-lg text-slate-600 p-2 break-words"
+                class="text-lg text-slate-600 dark:text-white p-2 break-words"
               ><%= value %></span>
             </div>
           </div>
