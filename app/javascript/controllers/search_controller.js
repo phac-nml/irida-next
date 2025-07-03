@@ -6,10 +6,6 @@ export default class extends Controller {
   };
 
   connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
     this.element.setAttribute("data-controller-connected", "true");
 
     setTimeout(() => {

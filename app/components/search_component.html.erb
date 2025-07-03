@@ -1,3 +1,12 @@
+<% if defined?(params[:q][@search_attribute]) %>
+  <div
+    role="status"
+    class="sr-only"
+    data-controller="search"
+    data-search-message-value="<%=results_message%>"
+  ></div>
+<% end %>
+
 <%= search_form_for @query, url: @url, data: { controller: "selection" }, **@kwargs do |f| %>
   <%= render Ransack::HiddenSortFieldComponent.new(@query) %>
   <%= f.label @search_attribute, @placeholder, class: "sr-only" %>
