@@ -663,6 +663,11 @@ en:
       view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    search:
+      results_message:
+        plural: "%{total_count} results found for '%{search_term}'"
+        singular: 1 result found for '%{search_term}'
+        zero: No results found for '%{search_term}'
     token:
       copied: Copied!
       copy: Copy to clipboard
