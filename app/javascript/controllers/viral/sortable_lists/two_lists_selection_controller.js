@@ -271,13 +271,11 @@ export default class extends Controller {
   }
 
   #selectOrUnselectOption(option) {
-    console.log(option);
-    console.log(option.innerText);
-    this.#validateIdQuery(option.innerText);
-    console.log(
-      option.querySelector(`span[id="${option.innerText}_unselected"`),
-    );
-    if (option.querySelector(`span[id="${option.innerText}_unselected"`)) {
+    if (
+      option.querySelector(
+        `span[id="${this.#validateId(option.innerText)}_unselected"`,
+      )
+    ) {
       this.#addSelectedAttributes(option);
     } else {
       this.#removeSelectedAttributes(option);
@@ -556,9 +554,12 @@ export default class extends Controller {
   // add checkmark to option
   #addSelectedAttributes(option) {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
-    checkmark.querySelector("span").id = `${option.innerText}_selected`;
+    checkmark.querySelector("span").id =
+      `${this.#validateId(option.innerText)}_selected`;
     option
-      .querySelector(`span[id="${option.innerText}_unselected"`)
+      .querySelector(
+        `span[id="${this.#validateId(option.innerText)}_unselected"`,
+      )
       .replaceWith(checkmark);
     option.setAttribute("aria-selected", "true");
   }
@@ -567,10 +568,11 @@ export default class extends Controller {
   #removeSelectedAttributes(option) {
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
-    hiddenCheckmark.querySelector("span").id = `${option.innerText}_unselected`;
+    hiddenCheckmark.querySelector("span").id =
+      `${this.#validateId(option.innerText)}_unselected`;
 
     option
-      .querySelector(`span[id="${option.innerText}_selected"`)
+      .querySelector(`span[id="${this.#validateId(option.innerText)}_selected"`)
       .replaceWith(hiddenCheckmark);
 
     option.setAttribute("aria-selected", "false");
@@ -618,9 +620,10 @@ export default class extends Controller {
 
   #createListItem(element, list) {
     let template = this.itemTemplateTarget.content.cloneNode(true);
-    template.querySelector("li").firstElementChild.id = `${element}_unselected`;
+    template.querySelector("li").firstElementChild.id =
+      `${this.#validateId(element)}_unselected`;
     template.querySelector("li").lastElementChild.innerText = element;
-    template.querySelector("li").id = element;
+    template.querySelector("li").id = this.#validateId(element);
     list.append(template);
   }
 
@@ -657,14 +660,8 @@ export default class extends Controller {
     }
   }
 
-  #validateIdQuery(id) {
-    let queryString;
-    if (id.includes(" ")) {
-      console.log("space");
-    }
-
-    if (id.includes(".")) {
-      console.log("period");
-    }
+  // replace whitespace with hyphen
+  #validateId(id) {
+    return id.replace(/\s+/g, "-");
   }
 }

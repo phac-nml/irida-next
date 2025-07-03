@@ -163,19 +163,22 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011'
@@ -222,13 +225,15 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
@@ -266,19 +271,22 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
 
@@ -312,19 +320,22 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011'
@@ -360,19 +371,22 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Group Template011 New'
@@ -408,19 +422,22 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
 
@@ -428,6 +445,7 @@ module Groups
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
@@ -435,12 +453,14 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.remove')
 
@@ -448,13 +468,15 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
       end
@@ -496,7 +518,8 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 4
         end
 
         # fields currently in template fixture
@@ -510,6 +533,7 @@ module Groups
         find('#metadatafield1').click
         find('#metadatafield2').click
         find('li[id="unique.metadata.field"]').click
+        find('li[id="metadata-field-with-spaces"]').click
 
         click_button I18n.t('viral.sortable_list.list_component.add')
 
@@ -517,6 +541,7 @@ module Groups
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
+          assert_no_text 'metadata field with spaces'
           assert_no_selector 'li'
         end
 
@@ -527,7 +552,8 @@ module Groups
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
-          assert_selector 'li', count: 6
+          assert_text 'metadata field with spaces'
+          assert_selector 'li', count: 7
         end
 
         fill_in 'Name', with: 'Group Template011'
@@ -547,7 +573,7 @@ module Groups
       assert_text I18n.t('metadata_templates.table_component.spinner_message')
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_equal 6, metadata_template.reload.fields.length
+      assert_equal 7, metadata_template.reload.fields.length
       assert_equal 'Group Template011', metadata_template.name
 
       table_row = find(:table_row, ['Group Template011'])

@@ -6,12 +6,16 @@
   role="option"
   tabindex="-1"
   aria-selected="false"
-  id="<%= list_item %>"
+  id="<%= list_item.gsub(/\s+/, "-") %>"
   class="
     block w-full px-4 py-2 border-b cursor-move border-slate-200
     dark:border-slate-600 flex focus:bg-primary-400 focus:dark:bg-primary-500
   "
 >
-  <span id="<%= list_item %>_unselected" aria-hidden="true" class="mx-2"></span>
+  <span
+    id="<%= list_item.gsub(/\s+/, "-") %>_unselected"
+    aria-hidden="true"
+    class="mx-2"
+  ></span>
   <span><%= list_item %></span>
 </li>
