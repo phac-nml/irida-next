@@ -121,7 +121,7 @@ export default class extends Controller {
         template.querySelector("li").firstElementChild.id =
           `${column}_unselected`;
         template.querySelector("li").lastElementChild.innerText = column;
-        template.querySelector("li").id = column;
+        template.querySelector("li").id = column.replace(/\s+/g, "-");
         this.metadataColumnsTarget.querySelector("#Selected").append(template);
       });
       this.submitButtonTarget.disabled = !columns.length;
