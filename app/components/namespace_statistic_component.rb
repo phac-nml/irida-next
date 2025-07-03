@@ -53,39 +53,4 @@ class NamespaceStatisticComponent < Component
       count: count
     }
   end
-
-  # HTML ID for the small icon 🔍.
-  # For ARIA or styling/scripting.
-  # @return [String] HTML ID (e.g., "user-projects-icon-sm").
-  def icon_id_sm
-    "#{id_prefix}-icon-sm"
-  end
-
-  # HTML ID for the large icon 🔎.
-  # For ARIA or styling/scripting.
-  # @return [String] HTML ID (e.g., "user-projects-icon-lg").
-  def icon_id_lg
-    "#{id_prefix}-icon-lg"
-  end
-
-  # HTML ID for the unified icon 🔍.
-  # For the simplified layout that works at all zoom levels.
-  # @return [String] HTML ID (e.g., "user-projects-icon-unified").
-  def icon_id_unified
-    "#{id_prefix}-icon-unified"
-  end
-
-  # HTML ID for the large label 🏷️.
-  # For ARIA (e.g., `aria-labelledby`) or styling/scripting.
-  # @return [String] HTML ID (e.g., "user-projects-label-lg").
-  def label_id_lg
-    "#{id_prefix}-label-lg"
-  end
-
-  # HTML ID for the unified label 🏷️.
-  # For the simplified layout that works at all zoom levels.
-  # @return [String] HTML ID (e.g., "user-projects-label-unified").
-  def label_id_unified
-    "#{id_prefix}-label-unified"
-  end
 end
