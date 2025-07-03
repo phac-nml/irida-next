@@ -78,21 +78,48 @@
 
                       <% if log_data[:version] == 1 %>
                         <% col_span = "col-span-2" %>
-                        <div class="col-span-1">
-                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></span>
+                        <div class="col-span-1" id="<%= "metadata-#{k}" %>">
+                          <span
+                            data-test-item-selector="key"
+                            class="
+                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                            "
+                          ><%= k.to_s %></span>
                         </div>
-                        <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <span class="text-md text-slate-500 p-2 break-words"><%= v %></span>
+                        <div
+                          class="
+                            <%= col_span %> bg-slate-100 dark:bg-slate-700
+                            dark:text-slate-700 p-1
+                          "
+                          aria-labelledby="<%= "metadata-#{k}" %>"
+                        >
+                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
                         </div>
                       <% else %>
-                        <div class="col-span-1">
-                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></span>
+                        <div class="col-span-1" id="<%= "metadata-#{k}" %>">
+                          <span
+                            data-test-item-selector="key"
+                            class="
+                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                            "
+                          ><%= k.to_s %></span>
                         </div>
-                        <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <span class="text-md text-slate-500 p-2"><%= prev_changes_value_hash[k] %></span>
+                        <div
+                          class="
+                            col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
+                          "
+                          aria-labelledby="<%= "metadata-#{k}" %>"
+                        >
+                          <span data-test-item-selector="value" class="text-md text-slate-500"><%= prev_changes_value_hash[k] %></span>
                         </div>
-                        <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <span class="text-md text-slate-500 p-2 break-words"><%= v %></span>
+                        <div
+                          class="
+                            <%= col_span %> bg-slate-100 dark:bg-slate-700
+                            dark:text-slate-700 p-1
+                          "
+                          aria-labelledby="<%= "metadata-#{k}" %>"
+                        >
+                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -104,14 +131,35 @@
                         <p class="text-red-500 dark:text-red-400"><%= t(:"components.history_version.keys_deleted") %></p>
                       </div>
                       <% keys_no_longer_existent.each do |key_no_longer_existent| %>
-                        <div class="col-span-1">
-                          <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key_no_longer_existent %></span>
+                        <div
+                          class="col-span-1"
+                          id="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
+                        >
+                          <span
+                            data-test-item-selector="key"
+                            class="
+                              mb-1 text-slate-500 text-md dark:text-slate-400 break-all
+                            "
+                          ><%= key_no_longer_existent %></span>
                         </div>
-                        <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <span class="text-md text-slate-500 p-2"><%= prev_changes_value_hash[key_no_longer_existent] %></span>
+                        <div
+                          class="
+                            col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
+                          "
+                          aria-labelledby="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
+                        >
+                          <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= prev_changes_value_hash[key_no_longer_existent] %></span>
                         </div>
-                        <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                          <span class="text-md text-slate-500 p-2 break-words"></span>
+                        <div
+                          class="
+                            col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
+                          "
+                          aria-labelledby="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
+                        >
+                          <span
+                            data-test-item-selector="value"
+                            class="text-md text-slate-500 p-2 break-all"
+                          ></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -122,18 +170,35 @@
           </div>
         <% else %>
           <div class="grid grid-cols-3 gap-2 py-2">
-            <div class="col-span-1">
-              <span class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key.to_s %></span>
+            <div class="col-span-1" id="<%= "metadata-#{key}" %>">
+              <span
+                data-test-item-selector="key"
+                class="mb-1 text-slate-500 text-md dark:text-slate-400"
+              ><%= key.to_s %></span>
             </div>
             <% col_span = "col-span-2" %>
             <% if log_data[:version] != 1 %>
-              <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                <span class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
+              <div
+                class="
+                  col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700
+                "
+                aria-labelledby="<%= "metadata-#{key}" %>"
+              >
+                <span data-test-item-selector="value" class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
               </div>
               <% col_span = "col-span-1" %>
             <% end %>
-            <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-              <span class="text-lg text-slate-600 p-2 break-words"><%= value %></span>
+            <div
+              class="
+                <%= col_span %> bg-slate-100 dark:bg-slate-700
+                dark:text-slate-700
+              "
+              aria-labelledby="<%= "metadata-#{key}" %>"
+            >
+              <span
+                data-test-item-selector="value"
+                class="text-lg text-slate-600 p-2 break-words"
+              ><%= value %></span>
             </div>
           </div>
         <% end %>
