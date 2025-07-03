@@ -32,13 +32,12 @@ class HistoryVersionComponentTest < ViewComponentTestCase
 
     render_inline HistoryVersionComponent.new(log_data: @log_data)
 
-    assert_selector 'dt', count: 1
-    assert_selector 'dd', count: 2
+    assert_selector 'span', count: 3
 
-    assert_selector 'dt', text: 'description'
+    assert_selector 'span', text: 'description'
 
-    assert_selector 'dd', text: 'New description for Project 1'
-    assert_selector 'dd', text: 'Another new description for this project'
+    assert_selector 'span', text: 'New description for Project 1'
+    assert_selector 'span', text: 'Another new description for this project'
   end
 
   test 'display of sample version changes' do
@@ -87,13 +86,12 @@ class HistoryVersionComponentTest < ViewComponentTestCase
 
     assert_text I18n.t(:'components.history_version.keys_deleted')
 
-    assert_selector 'dt', count: 2
-    assert_selector 'dd', count: 4
+    assert_selector 'span', count: 6
 
-    assert_selector 'dt', text: 'field1'
-    assert_selector 'dt', text: 'field2'
+    assert_selector 'span', text: 'field1'
+    assert_selector 'span', text: 'field2'
 
-    assert_selector 'dd', text: 'newvalue2'
-    assert_selector 'dd', text: 'newvalue3'
+    assert_selector 'span', text: 'newvalue2'
+    assert_selector 'span', text: 'newvalue3'
   end
 end

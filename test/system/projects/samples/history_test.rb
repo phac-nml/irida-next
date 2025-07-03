@@ -41,15 +41,15 @@ module Projects
           assert_no_text I18n.t(:'components.history_version.previous_version')
           assert_text I18n.t(:'components.history_version.current_version', version: 1)
 
-          assert_selector 'dt', text: 'name'
-          assert_selector 'dt', text: 'description'
-          assert_selector 'dt', text: 'puid'
-          assert_selector 'dt', text: 'project_id'
+          assert_selector 'span', text: 'name'
+          assert_selector 'span', text: 'description'
+          assert_selector 'span', text: 'puid'
+          assert_selector 'span', text: 'project_id'
 
-          assert_selector 'dd', text: 'Project 1 Sample 1'
-          assert_selector 'dd', text: 'Sample 1 description.'
-          assert_selector 'dd', text: @sample1.puid
-          assert_selector 'dd', text: @sample1.project.id
+          assert_selector 'span', text: 'Project 1 Sample 1'
+          assert_selector 'span', text: 'Sample 1 description.'
+          assert_selector 'span', text: @sample1.puid
+          assert_selector 'span', text: @sample1.project.id
         end
       end
     end
