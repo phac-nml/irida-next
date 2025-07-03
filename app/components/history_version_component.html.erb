@@ -78,7 +78,7 @@
 
                       <% if log_data[:version] == 1 %>
                         <% col_span = "col-span-2" %>
-                        <div class="col-span-1" id="<%= "metadata-#{k}" %>">
+                        <div class="col-span-1">
                           <span
                             data-test-item-selector="key"
                             class="
@@ -91,12 +91,11 @@
                             <%= col_span %> bg-slate-100 dark:bg-slate-700
                             dark:text-slate-700 p-1
                           "
-                          aria-labelledby="<%= "metadata-#{k}" %>"
                         >
                           <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
                         </div>
                       <% else %>
-                        <div class="col-span-1" id="<%= "metadata-#{k}" %>">
+                        <div class="col-span-1">
                           <span
                             data-test-item-selector="key"
                             class="
@@ -108,7 +107,6 @@
                           class="
                             col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
                           "
-                          aria-labelledby="<%= "metadata-#{k}" %>"
                         >
                           <span data-test-item-selector="value" class="text-md text-slate-500"><%= prev_changes_value_hash[k] %></span>
                         </div>
@@ -117,7 +115,6 @@
                             <%= col_span %> bg-slate-100 dark:bg-slate-700
                             dark:text-slate-700 p-1
                           "
-                          aria-labelledby="<%= "metadata-#{k}" %>"
                         >
                           <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= v %></span>
                         </div>
@@ -146,7 +143,6 @@
                           class="
                             col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
                           "
-                          aria-labelledby="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
                         >
                           <span data-test-item-selector="value" class="text-md text-slate-500 break-all"><%= prev_changes_value_hash[key_no_longer_existent] %></span>
                         </div>
@@ -154,7 +150,6 @@
                           class="
                             col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 p-1
                           "
-                          aria-labelledby="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
                         >
                           <span
                             data-test-item-selector="value"
@@ -178,12 +173,7 @@
             </div>
             <% col_span = "col-span-2" %>
             <% if log_data[:version] != 1 %>
-              <div
-                class="
-                  col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700
-                "
-                aria-labelledby="<%= "metadata-#{key}" %>"
-              >
+              <div class=" col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 ">
                 <span data-test-item-selector="value" class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
               </div>
               <% col_span = "col-span-1" %>
@@ -193,7 +183,6 @@
                 <%= col_span %> bg-slate-100 dark:bg-slate-700
                 dark:text-slate-700
               "
-              aria-labelledby="<%= "metadata-#{key}" %>"
             >
               <span
                 data-test-item-selector="value"
