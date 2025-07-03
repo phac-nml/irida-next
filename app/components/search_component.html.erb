@@ -1,4 +1,4 @@
-<% if defined?(params[:q][@search_attribute]) %>
+<% if defined?(params[:q][@search_attribute]) && params[:q][@search_attribute].present? %>
   <div
     role="status"
     class="sr-only"
