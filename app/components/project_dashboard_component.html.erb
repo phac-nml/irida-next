@@ -1,9 +1,6 @@
 <div class="container mx-auto">
 
-  <div
-    class="grid grid-cols-1 gap-6 min-h-0"
-    aria-label="<%= t(:"components.project_dashboard.main_content_label") %>"
-  >
+  <div class="grid grid-cols-1 gap-6 min-h-0">
     <%# Header with project context (always visible at top) %>
     <div class="sr-only" aria-live="polite">
       <%= t(
@@ -56,10 +53,7 @@
     </section>
 
     <%# Main dashboard grid - progressively enhances layout %>
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0"
-      aria-label="<%= t(:"components.project_dashboard.main_content_label") %>"
-    >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
       <%# Activity Section - Second on mobile, first column on large screens %>
       <section
         aria-labelledby="project-dashboard-activity-title"
