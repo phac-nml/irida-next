@@ -13,7 +13,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'total-projects',
                     icon_name: ICON::USER_CIRCLE,
                     label: label,
-                    count: 123,
+                    value: 123,
                     color_scheme: :default
                   ))
 
@@ -28,7 +28,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'blue-stats',
                     icon_name: ICON::USER_CIRCLE,
                     label: t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-                    count: 456,
+                    value: 456,
                     color_scheme: :blue
                   ))
     assert_selector '[class*="bg-blue-100"]'
@@ -42,7 +42,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'teal-stats',
                     icon_name: ICON::USER_CIRCLE,
                     label: t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-                    count: 789,
+                    value: 789,
                     color_scheme: :teal
                   ))
     assert_selector '[class*="bg-teal-100"]'
@@ -72,7 +72,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
           id_prefix: "#{scheme}-stats",
           icon_name: ICON::USER_CIRCLE,
           label: label,
-          count: 101,
+          value: 101,
           color_scheme: scheme
         )
       )
@@ -88,7 +88,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'icon-test',
                     icon_name: ICON::USER_CIRCLE,
                     label: 'Icon Test',
-                    count: 1,
+                    value: 1,
                     color_scheme: :blue
                   ))
     assert_selector 'svg'
@@ -100,7 +100,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'a11y',
                     icon_name: ICON::USER_CIRCLE,
                     label: 'A11y',
-                    count: 7,
+                    value: 7,
                     color_scheme: :blue
                   ))
     # Label ID
@@ -120,7 +120,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'i18n',
                     icon_name: ICON::USER_CIRCLE,
                     label: label,
-                    count: 42,
+                    value: 42,
                     color_scheme: :default
                   ))
     assert_text label
@@ -131,7 +131,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'big',
                     icon_name: ICON::USER_CIRCLE,
                     label: 'Big',
-                    count: 10_000_000,
+                    value: 10_000_000,
                     color_scheme: :default
                   ))
     assert_text '10,000,000'
@@ -140,7 +140,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'zero',
                     icon_name: ICON::USER_CIRCLE,
                     label: 'Zero',
-                    count: 0,
+                    value: 0,
                     color_scheme: :default
                   ))
     assert_text '0'
@@ -151,7 +151,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     id_prefix: 'layout',
                     icon_name: ICON::USER_CIRCLE,
                     label: 'Layout Test',
-                    count: 999,
+                    value: 999,
                     color_scheme: :default
                   ))
 
