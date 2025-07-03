@@ -83,7 +83,12 @@ end %>
       id: builder.field_id(:namespace, "error"),
       errors: @project.namespace.errors.messages.values.flatten %>
     <% end %>
+
+    <p id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
+      <%= t(:"projects.create.namespace_help") %>
+    </p>
   </div>
+
   <% invalid_path = @project.namespace.errors.include?(:path) %>
   <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= builder.label :path, data: { required: true } %>
