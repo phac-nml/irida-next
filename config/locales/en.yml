@@ -184,6 +184,7 @@ en:
     errors:
       messages:
         blank: can't be blank
+        taken: has already been taken
       models:
         activity_extended_detail:
           maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
@@ -216,12 +217,8 @@ en:
           attributes:
             fields:
               taken: already exist in another template with the same ordering
-            name:
-              taken: has already been taken
         namespace:
           attributes:
-            name:
-              taken: has already been taken
             path:
               invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
               reserved_value: "%{value} is a reserved value."
