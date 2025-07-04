@@ -42,7 +42,7 @@
 <template
   data-viral--sortable-lists--two-lists-selection-target="checkmarkTemplate"
 >
-  <span>
+  <span class="pointer-events-none">
     <%= pathogen_icon(ICON::CHECK, size: :sm, color: nil) %>
   </span>
 </template>
@@ -50,5 +50,5 @@
 <template
   data-viral--sortable-lists--two-lists-selection-target="hiddenCheckmarkTemplate"
 >
-  <span aria-hidden="true" class="mx-2"></span>
+  <span aria-hidden="true" class="pointer-events-none mx-2"></span>
 </template>
