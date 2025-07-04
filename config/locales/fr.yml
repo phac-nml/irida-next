@@ -182,6 +182,8 @@ fr:
       track_activity:
         system: Système
     errors:
+      messages:
+        blank: ne peut pas être vide
       models:
         activity_extended_detail:
           maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
@@ -215,13 +217,11 @@ fr:
             fields:
               taken: Existe déjà dans un autre modèle avec le même ordre
             name:
-              blank: Ne peut pas être vide
-              taken: A déjà été pris
+              taken: a déjà été pris
         namespace:
           attributes:
             name:
-              blank: Ne peut pas être vide
-              taken: A déjà été pris
+              taken: a déjà été pris
             path:
               invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
               reserved_value: "%{value} is a reserved value."
