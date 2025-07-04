@@ -13,12 +13,15 @@ export default class extends Controller {
     "itemTemplate",
     "checkmarkTemplate",
     "hiddenCheckmarkTemplate",
+    "ariaLiveUpdate",
   ];
 
   static values = {
     selectedList: String,
     availableList: String,
     fieldName: String,
+    ariaLiveUpdateAdded: String,
+    ariaLiveUpdateRemoved: String,
   };
 
   #originalAvailableList;
@@ -298,45 +301,53 @@ export default class extends Controller {
     )
       return;
 
-    let focusTarget = null;
-
-    if (event.type === "keydown" && event.key === "Enter") {
-      focusTarget = this.#getFocusTargetAfterSelection(this.availableList);
-    }
-    const selectedOptions = this.#getSelectedOptions(this.availableList);
-
-    if (selectedOptions.length > 0) {
-      for (let i = 0; i < selectedOptions.length; i++) {
-        this.#removeSelectedAttributes(selectedOptions[i]);
-        this.selectedList.appendChild(selectedOptions[i]);
-      }
-      if (focusTarget) focusTarget.focus();
-      this.#setTabIndexes(selectedOptions[0]);
-    }
-
-    this.#checkStates();
+    this.#performSelection(
+      event.type === "keydown",
+      this.availableList,
+      this.selectedList,
+    );
   }
 
   removeSelection(event) {
     if (event.type == "keydown" && event.target.parentNode != this.selectedList)
       return;
+    this.#performSelection(
+      event.type === "keydown",
+      this.selectedList,
+      this.availableList,
+    );
+  }
 
+  #performSelection(keydown, sourceList, targetList) {
     let focusTarget = null;
 
-    if (event.type === "keydown" && event.key === "Delete") {
-      focusTarget = this.#getFocusTargetAfterSelection(this.selectedList);
+    if (keydown) {
+      focusTarget = this.#getFocusTargetAfterSelection(sourceList);
     }
+    const selectedOptions = this.#getSelectedOptions(sourceList);
 
-    const selectedOptions = this.#getSelectedOptions(this.selectedList);
-
+    let selectedOptionsText = [];
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
+        selectedOptionsText.push(selectedOptions[i].innerText);
         this.#removeSelectedAttributes(selectedOptions[i]);
-        this.availableList.appendChild(selectedOptions[i]);
+        targetList.appendChild(selectedOptions[i]);
       }
       if (focusTarget) focusTarget.focus();
       this.#setTabIndexes(selectedOptions[0]);
     }
+
+    let ariaLiveUpdateString =
+      sourceList === this.selectedList
+        ? this.ariaLiveUpdateRemovedValue
+        : this.ariaLiveUpdateAddedValue;
+    this.#updateAriaLive(
+      this.ariaLiveUpdateRemovedValue.concat(selectedOptionsText.join(", ")),
+    );
+
+    this.#updateAriaLive(
+      ariaLiveUpdateString.concat(selectedOptionsText.join(", ")),
+    );
 
     this.#checkStates();
   }
@@ -705,5 +716,9 @@ export default class extends Controller {
   // replace whitespace with hyphen
   #validateId(id) {
     return id.replace(/\s+/g, "-");
+  }
+
+  #updateAriaLive(updateString) {
+    this.ariaLiveUpdateTarget.innerText = updateString;
   }
 }
