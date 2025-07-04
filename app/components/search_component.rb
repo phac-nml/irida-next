@@ -28,4 +28,8 @@ class SearchComponent < Component
                                                           search_term: params[:q][@search_attribute])
     end
   end
+
+  def search_term?
+    defined?(params[:q][@search_attribute]) && params[:q][@search_attribute].present?
+  end
 end

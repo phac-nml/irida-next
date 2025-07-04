@@ -1,4 +1,4 @@
-<% if defined?(params[:q][@search_attribute]) && params[:q][@search_attribute].present? %>
+<% if search_term? %>
   <div
     role="status"
     class="sr-only"
@@ -17,7 +17,7 @@
                  class:
                    "t-search-component block w-full min-h-[44px] p-2.5 pl-10 text-slate-900 border border-slate-300 text-sm rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white",
                  placeholder: @placeholder,
-                 autofocus: true %>
+                 autofocus: search_term? %>
     <div
       class="
         absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
