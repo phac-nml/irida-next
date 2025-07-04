@@ -15,101 +15,99 @@
       class: "button button-default" %>
       <%= link_to t(:"groups.show.create_project_button"),
       new_project_path(group_id: @group.id),
-      class: "button button-primary ml-2" %>
+      class: "button button-primary" %>
     <% end %>
   <% end %>
 <% end %>
 
-<div class="flex flex-col lg:flex-row gap-4">
-  <section
-    aria-labelledby="groups-dashboard-info-title"
-    class="
-      lg:self-start p-4 bg-white border rounded-lg border-slate-200
-      dark:border-slate-700 dark:bg-slate-800 order-1 lg:order-2 lg:w-[250px]
-      lg:flex-shrink-0 lg:mt-12
-    "
-  >
-    <h2
-      id="groups-dashboard-info-title"
-      class="mb-2 text-xl font-semibold text-slate-900 dark:text-white"
-    ><%= t(:"groups.show.information.title") %></h2>
+<div class="container mx-auto">
+  <%# Header with group context (always visible at top) %>
+  <div class="sr-only" aria-live="polite">
+    <%= t(:"groups.show.screen_reader_context", group_name: @group.name) %>
+  </div>
 
-    <p class="py-2 dark:text-slate-300 text-sm leading-6">
-      <% if @group.description && !@group.description.blank? %>
-        <%= @group.description %>
-      <% else %>
-        <%= t(:"groups.show.information.no_description") %>
-      <% end %>
-    </p>
+  <%# Main dashboard grid - stacked layout %>
+  <div class="grid grid-cols-1 gap-6 min-h-0">
+    <%# Information Section %>
+    <section
+      aria-labelledby="groups-dashboard-info-title"
+      class="min-h-0 flex flex-col"
+    >
+      <div
+        class="
+          p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
+          dark:bg-slate-800 flex flex-col
+        "
+      >
+        <header class="mb-6">
+          <h2
+            id="groups-dashboard-info-title"
+            class="
+              text-xl font-semibold text-slate-900 dark:text-white flex items-start gap-3
+            "
+          >
+            <span
+              aria-hidden="true"
+              class="
+                p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center
+                justify-center
+              "
+            >
+              <%= pathogen_icon(ICON::INFO, class: "h-5 w-5 text-indigo-600 dark:text-indigo-400") %>
+            </span>
+            <%= t(:"groups.show.information.title") %>
+          </h2>
+        </header>
 
-    <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
+        <div class="flex-1">
+          <%= render GroupsDashboard::InformationComponent.new(group: @group) %>
+        </div>
+      </div>
+    </section>
 
-    <div class="flex flex-row lg:flex-col gap-4">
-      <%= render NamespaceStatisticComponent.new(
-        id_prefix: "group-samples",
-        icon_name: ICON::SAMPLES,
-        label: t(:"groups.show.information.number_of_samples"),
-        count: @group.samples_count || 0,
-        color_scheme: :blue,
-      ) %>
+    <%# Main Content Section %>
+    <section class="min-h-0 flex flex-col">
+      <div
+        class="
+          p-6 bg-white border border-slate-200 rounded-xl dark:border-slate-700
+          dark:bg-slate-800 flex flex-col min-h-0
+        "
+      >
 
-      <%= render NamespaceStatisticComponent.new(
-        id_prefix: "group-projects",
-        icon_name: ICON::PROJECTS,
-        label: t(:"groups.show.information.number_of_projects"),
-        count: @group.project_namespaces.count,
-        color_scheme: :fuchsia,
-      ) %>
+        <div class="flex-1 min-h-0">
+          <%= render Pathogen::TabsPanel.new(id: "groups-show-tabs", label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
+            <% tabs.with_tab(
+              id: "subgroups_and_projects_tab",
+              href: group_path(@group),
+              text: t(:".tabs.subgroups_and_projects"),
+              selected: @tab != "shared_namespaces",
+            ) %>
+            <% tabs.with_tab(
+              id: "shared_namespaces_tab",
+              href: group_path(@group, tab: "shared_namespaces"),
+              text: t(:".tabs.shared_namespaces"),
+              selected: @tab == "shared_namespaces",
+            ) %>
 
-      <%= render NamespaceStatisticComponent.new(
-        id_prefix: "group-subgroups",
-        icon_name: ICON::GROUPS,
-        label: t(:"groups.show.information.number_of_subgroups"),
-        count: @group.children.count,
-        color_scheme: :amber,
-      ) %>
-    </div>
+            <% if @namespaces.present? %>
+              <div class="flex flex-row-reverse mb-2">
+                <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
 
-    <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
-
-    <p class="py-2 dark:text-slate-300 leading-6">
-      <span class="font-semibold"><%= t(:"groups.show.information.created_on") %></span>
-      <span><%= local_time(@group.created_at, :full_date) %></span>
-    </p>
-  </section>
-
-  <section class="order-2 lg:order-1 flex-grow">
-    <%= render Pathogen::TabsPanel.new(id: "groups-show-tabs", label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
-      <% tabs.with_tab(
-        id: "subgroups_and_projects_tab",
-        href: group_path(@group),
-        text: t(:".tabs.subgroups_and_projects"),
-        selected: @tab != "shared_namespaces",
-      ) %>
-      <% tabs.with_tab(
-        id: "shared_namespaces_tab",
-        href: group_path(@group, tab: "shared_namespaces"),
-        text: t(:".tabs.shared_namespaces"),
-        selected: @tab == "shared_namespaces",
-      ) %>
-
-      <% if @namespaces.present? %>
-        <div class="flex flex-row-reverse mb-2">
-          <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
-
-            <% if @tab == "shared_namespaces" %>
-              <input type="hidden" name="tab" value="shared_namespaces">
+                  <% if @tab == "shared_namespaces" %>
+                    <input type="hidden" name="tab" value="shared_namespaces">
+                  <% end %>
+                <% end %>
+              </div>
             <% end %>
+            <% if @tab == "shared_namespaces" %>
+              <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
+            <% else %>
+              <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
+            <% end %>
+
           <% end %>
         </div>
-      <% end %>
-      <% if @tab == "shared_namespaces" %>
-        <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
-      <% else %>
-        <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
-      <% end %>
-
-    <% end %>
-
-  </section>
+      </div>
+    </section>
+  </div>
 </div>

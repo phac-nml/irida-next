@@ -1,0 +1,71 @@
+<%# Group metadata - only description now, created date moved to stats %>
+<div>
+  <% if @group.description.present? %>
+    <div class="mb-6">
+      <dl class="space-y-6">
+        <div>
+          <dt class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">
+            <%= t(:"groups.show.information.description") %>
+          </dt>
+          <dd class="text-slate-800 dark:text-slate-200 break-words">
+            <%= @group.description %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  <% end %>
+
+  <%# Statistics section with improved responsive layout %>
+  <div class="pt-6 border-t border-slate-200 dark:border-slate-700">
+    <%# Responsive grid layout that adapts to different screen sizes %>
+    <div
+      class="
+        grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full
+      "
+    >
+      <%# Created Date - Takes full width on mobile, half on sm, and full on lg %>
+      <div class="col-span-2 sm:col-span-1">
+        <%= render NamespaceStatisticComponent.new(
+          id_prefix: "group-created",
+          label: t(:"groups.show.information.created_on"),
+          value: @group.created_at || Time.zone.now,
+          icon_name: ICON::CALENDAR_DOTS,
+          color_scheme: :slate,
+        ) %>
+      </div>
+
+      <%# Samples Count - Full width on mobile, half on sm and up %>
+      <div class="col-span-2 sm:col-span-1">
+        <%= render NamespaceStatisticComponent.new(
+          id_prefix: "group-samples",
+          label: t(:"groups.show.information.number_of_samples"),
+          value: @group.samples_count || 0,
+          icon_name: ICON::BEAKER,
+          color_scheme: :blue,
+        ) %>
+      </div>
+
+      <%# Projects Count - Full width on mobile, half on sm and up, moves to second row on lg %>
+      <div class="col-span-2 sm:col-span-1 lg:col-span-1">
+        <%= render NamespaceStatisticComponent.new(
+          id_prefix: "group-projects",
+          label: t(:"groups.show.information.number_of_projects"),
+          value: @group.project_namespaces.count || 0,
+          icon_name: ICON::PROJECTS,
+          color_scheme: :fuchsia,
+        ) %>
+      </div>
+
+      <%# Subgroups Count - Full width on mobile, half on sm, moves to second row on lg %>
+      <div class="col-span-2 sm:col-span-1 lg:col-span-1">
+        <%= render NamespaceStatisticComponent.new(
+          id_prefix: "group-subgroups",
+          label: t(:"groups.show.information.number_of_subgroups"),
+          value: @group.children.count || 0,
+          icon_name: ICON::GROUPS,
+          color_scheme: :amber,
+        ) %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -208,7 +208,7 @@ module Groups
                             name: namespace_group_link.namespace.name)
 
       assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
-      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+      assert_selector 'dd', text: namespace_group_link.namespace.description, count: 1
     end
 
     test 'group member of Group B can access Group A as it is shared with group B' do
@@ -222,7 +222,7 @@ module Groups
                             name: namespace_group_link.namespace.name)
 
       assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
-      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+      assert_selector 'dd', text: namespace_group_link.namespace.description, count: 1
     end
 
     test 'group member of Group B cannot access Group C as it is not shared with Group B' do

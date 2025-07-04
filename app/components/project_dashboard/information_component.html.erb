@@ -1,61 +1,72 @@
-<%# Statistics section with improved responsive layout %>
-<div class="mb-6">
+<%# Statistics section with improved responsive layout - matches groups layout %>
+<% if @project.description.present? %>
+  <div class="mb-6">
+    <dl class="space-y-6">
+      <div>
+        <dt class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">
+          <%= t(:"components.project_dashboard.information.description") %>
+        </dt>
+        <dd class="text-slate-800 dark:text-slate-200 break-words">
+          <%= @project.description %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+<% end %>
+
+<div class="pt-6 border-t border-slate-200 dark:border-slate-700">
   <h3 class="sr-only"><%= t(:"components.project_dashboard.information.statistics_title") %></h3>
 
-  <%# Stacked on small/large screens, side by side on medium screens only %>
   <div
     class="
-      flex flex-col space-y-4 md:flex-row md:flex-wrap md:space-y-0 md:space-x-4
-      xl:flex-col xl:space-x-0 xl:space-y-4 w-full
+      grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full
     "
   >
-    <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
+    <%# Created Date - Takes full width on mobile, half on sm, and full on lg %>
+    <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
-        id_prefix: "samples",
+        id_prefix: "project-created",
+        label: t(:"components.project_dashboard.information.created_on"),
+        value: @project.created_at,
+        icon_name: ICON::CALENDAR_DOTS,
+        color_scheme: :slate,
+      ) %>
+    </div>
+
+    <%# Samples Count - Full width on mobile, half on sm and up %>
+    <div class="col-span-2 sm:col-span-1">
+      <%= render NamespaceStatisticComponent.new(
         icon_name: ICON::SAMPLES,
+        id_prefix: "project-samples",
         label: t(:"components.project_dashboard.information.number_of_samples"),
-        count: @project.samples.count,
+        value: @project.samples.count || 0,
         color_scheme: :blue,
       ) %>
     </div>
 
-    <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
+    <%# Workflow Executions - Full width on mobile, half on sm and up, moves to second row on lg %>
+    <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
-        id_prefix: "automated-workflow-executions",
+        id_prefix: "project-workflows",
         icon_name: ICON::TERMINAL_WINDOW,
         label:
           t(
             :"components.project_dashboard.information.number_of_automated_workflow_executions",
           ),
-        count: @project.namespace.automated_workflow_executions.count,
+        value: @project.namespace.automated_workflow_executions.count || 0,
         color_scheme: :teal,
       ) %>
     </div>
 
-    <div class="w-full md:flex-1 flex-shrink-0 min-w-0">
+    <%# Members Count - Full width on mobile, half on sm, moves to second row on lg %>
+    <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
-        id_prefix: "members",
+        id_prefix: "project-members",
         icon_name: ICON::USERS,
         label: t(:"components.project_dashboard.information.number_of_members"),
-        count: @project.namespace.project_members.without_automation_bots.count,
+        value: @project.namespace.project_members.without_automation_bots.count || 0,
         color_scheme: :indigo,
       ) %>
     </div>
   </div>
-</div>
-
-<%# Project metadata %>
-<div class=" pt-6 border-t border-slate-200 dark:border-slate-700 ">
-  <dl class="space-y-3">
-    <div>
-      <dt class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">
-        <%= t(:"components.project_dashboard.information.created_on") %>
-      </dt>
-      <dd class="text-slate-800 dark:text-slate-200 break-words">
-        <time datetime="<%= @project.created_at.iso8601 %>">
-          <%= helpers.local_time(@project.created_at, :full_date) %>
-        </time>
-      </dd>
-    </div>
-  </dl>
 </div>

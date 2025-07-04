@@ -616,6 +616,9 @@ en:
       information_icon: Information icon
       success_icon: Check icon
       warning_icon: Exclamation icon
+    groups_dashboard:
+      information_component:
+        no_description: No description provided
     history:
       created_by: "%{type} created by %{user}"
       deleted_by: "%{type} deleted by %{user}"
@@ -651,11 +654,11 @@ en:
       info_title: Project Information
       information:
         created_on: Created on
+        description: Description
         number_of_automated_workflow_executions: Automated pipelines
         number_of_members: Members
         number_of_samples: Samples
         statistics_title: Project Statistics
-      main_content_label: Project dashboard main content
       samples_title: Samples Recently Updated
       screen_reader_context: 'Dashboard for project: %{project_name}'
       view_more_activity: View more activity
@@ -1126,11 +1129,12 @@ en:
       create_subgroup_button: New subgroup
       information:
         created_on: Created on
-        no_description: No description provided for this group
+        description: Description
         number_of_projects: Projects
         number_of_samples: Samples
         number_of_subgroups: Subgroups
         title: Group Information
+      screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
         placeholder: Filter by PUID or name
       shared_namespaces:
