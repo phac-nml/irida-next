@@ -199,11 +199,13 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test '#metadata_summary' do
-    assert_equal %w[metadatafield1 metadatafield2 unique.metadata.field], @group.metadata_fields
+    assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
+                 @group.metadata_fields
   end
 
   test '#metadata_summary incorporates fields from shared groups' do
-    assert_equal %w[metadatafield1 metadatafield2 unique.metadata.field], groups(:david_doe_group_four).metadata_fields
+    assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
+                 groups(:david_doe_group_four).metadata_fields
   end
 
   test '#metadata_summary incorporates fields from shared projects' do
