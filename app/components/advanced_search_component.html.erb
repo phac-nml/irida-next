@@ -11,7 +11,9 @@
           class="<%= class_names("button button-default", { "rounded-e-none border-e-0": @status }) %>"
           data-action="advanced-search#idempotentConnect viral--dialog#open"
           aria-label="<%= t(".title") %>"
-          autofocus="<%= @status %>"
+          <% if @status %>
+          autofocus
+          <% end %>
         >
           <%= t(".title") %>
         </button>
