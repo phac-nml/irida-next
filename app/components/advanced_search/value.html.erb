@@ -2,6 +2,7 @@
 <% operator_exists =
   @condition.operator.blank? ||
     %w[exists not_exists].include?(@condition.operator) %>
+
 <div
   class="
     form-field w-5/12 @max-xl:w-auto value <%= 'invalid' if invalid_value %>
@@ -18,6 +19,8 @@
         list_input_form_name:
           "q[groups_attributes][#{@group_index}][conditions_attributes][#{@condition_index}][value][]",
         show_description: false,
+        "aria-invalid": invalid_value,
+        "aria-describedby": @conditions_form.field_id(:value, "error"),
       ) %>
     </div>
   <% else %>
