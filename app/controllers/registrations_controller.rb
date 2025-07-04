@@ -12,9 +12,12 @@ class RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super do
+      resource.errors.delete(:'namespace.name') unless resource.persisted?
+      resource.errors.delete(:'namespace.path') unless resource.persisted?
+    end
+  end
 
   # GET /resource/edit
   # def edit

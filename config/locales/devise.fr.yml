@@ -5,6 +5,9 @@ fr:
       new:
         submit_button: Renvoyer les instructions de confirmation
         title: Renvoyer les instructions de confirmation
+    failure:
+      user:
+        invalid: Courriel ou mot de passe invalide.
     layout:
       title: IRIDA Next
     mailer:
@@ -42,6 +45,11 @@ fr:
         title: Changer votre mot de passe
       new:
         submit_button: Envoyez-moi des instructions pour réinitialiser mon mot de passe
+      no_token: Vous ne pouvez pas accéder à cette page si vous n’avez pas été dirigé vers celle-ci à partir d’un courriel de réinitialisation de mot de passe. Si vous tentez d’accéder à cette page à partir d’un courriel de réinitialisation de mot de passe, assurez-vous d’utiliser l’URL fournie au complet.
+      send_instructions: Vous recevrez un courriel d’instructions sur la façon de réinitialiser votre mot de passe dans quelques minutes.
+      send_paranoid_instructions: Si votre adresse électronique existe déjà dans notre base de données, vous recevrez un lien pour la récupération de votre mot de passe à votre adresse électronique dans quelques minutes.
+      updated: Votre mot de passe a été modifié avec succès. Vous êtes maintenant connecté.
+      updated_not_active: Votre mot de passe a été modifié avec succès.
     registrations:
       edit:
         back_link: Précédent
