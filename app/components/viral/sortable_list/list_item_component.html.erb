@@ -6,17 +6,17 @@
   role="option"
   tabindex="-1"
   aria-selected="false"
-  id="<%= list_item.gsub(/\s+/, "-") %>"
+  id="<%= formatted_list_item %>"
   class="
-    block w-full px-4 py-2 border-b cursor-move border-slate-200
-    dark:border-slate-600 flex focus:bg-primary-400 focus:dark:bg-primary-500
-    focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700
+    w-full px-4 py-2 border-b cursor-move border-slate-200 dark:border-slate-600
+    flex focus:bg-primary-400 focus:dark:bg-primary-600
+    focus:dark:hover:bg-primary-700
   "
 >
   <span
-    id="<%= list_item.gsub(/\s+/, "-") %>_unselected"
+    id="<%= formatted_list_item %>_unselected"
     aria-hidden="true"
-    class="mx-2"
+    class="mx-2 pointer-events-none"
   ></span>
-  <span><%= list_item %></span>
+  <span class="pointer-events-none"><%= list_item %></span>
 </li>

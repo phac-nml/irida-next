@@ -524,14 +524,7 @@ export default class extends Controller {
 
   // handles normal click and shift click events
   handleClick(event) {
-    let option;
-    // handles if user clicks on child elements of "li" element, pointer-events: none not behaving as expected in this
-    // use case
-    if (event.target.nodeName === "LI") {
-      option = event.target;
-    } else {
-      option = event.target.closest("li");
-    }
+    const option = event.target;
     if (event.shiftKey) {
       this.#handleShiftClick(option);
     } else {
