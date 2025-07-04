@@ -1,0 +1,17 @@
+en:
+  pathogen:
+    pagination:
+      component:
+        aria_label: "Pagination"
+        navigation_aria_label: "Page navigation"
+        items_per_page: "Items per page"
+        select_page_size: "Select number of items per page"
+        jump_to_page: "Jump to page"
+        jump_to_page_aria_label: "Enter page number"
+        of_pages: "of %{total} pages"
+        previous_page: "Previous page"
+        next_page: "Next page"
+        go_to_page: "Go to page %{page}"
+        page_range: "Showing %{from} to %{to} of %{count} %{item_name}"
+        page_size: "%{size} %{item_name} per page"
+        current_page: "Page %{page} of %{pages}"
