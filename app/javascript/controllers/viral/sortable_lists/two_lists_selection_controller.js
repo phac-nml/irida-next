@@ -297,13 +297,20 @@ export default class extends Controller {
       event.target.parentNode != this.availableList
     )
       return;
+
+    let focusTarget = null;
+
+    if (event.type === "keydown" && event.key === "Enter") {
+      focusTarget = this.#getFocusTargetAfterSelection(this.availableList);
+    }
     const selectedOptions = this.#getSelectedOptions(this.availableList);
+
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
         this.#removeSelectedAttributes(selectedOptions[i]);
         this.selectedList.appendChild(selectedOptions[i]);
       }
-      selectedOptions[0].focus();
+      if (focusTarget) focusTarget.focus();
       this.#setTabIndexes(selectedOptions[0]);
     }
 
@@ -313,6 +320,13 @@ export default class extends Controller {
   removeSelection(event) {
     if (event.type == "keydown" && event.target.parentNode != this.selectedList)
       return;
+
+    let focusTarget = null;
+
+    if (event.type === "keydown" && event.key === "Delete") {
+      focusTarget = this.#getFocusTargetAfterSelection(this.selectedList);
+    }
+
     const selectedOptions = this.#getSelectedOptions(this.selectedList);
 
     if (selectedOptions.length > 0) {
@@ -320,11 +334,46 @@ export default class extends Controller {
         this.#removeSelectedAttributes(selectedOptions[i]);
         this.availableList.appendChild(selectedOptions[i]);
       }
-      selectedOptions[0].focus();
+      if (focusTarget) focusTarget.focus();
       this.#setTabIndexes(selectedOptions[0]);
     }
 
     this.#checkStates();
+  }
+
+  #getFocusTargetAfterSelection(list) {
+    const currentFocusedElement = document.activeElement;
+
+    // if current focus element is a selected element, find next unselected
+    // else if current focus element not selected, just return as we will keep the current focus
+    if (currentFocusedElement.getAttribute("aria-selected") === "true") {
+      let nextUnselected = currentFocusedElement.nextElementSibling;
+
+      // check list 'downwards' if there's an unselected option
+      while (nextUnselected) {
+        if (nextUnselected.getAttribute("aria-selected") === "false") {
+          return nextUnselected;
+        } else {
+          nextUnselected = nextUnselected.nextElementSibling;
+          if (!nextUnselected) break;
+        }
+      }
+
+      // if after going downwards, no unselected options were found, check 'upwards'
+      nextUnselected = currentFocusedElement.previousElementSibling;
+      while (nextUnselected) {
+        if (nextUnselected.getAttribute("aria-selected") === "false") {
+          return nextUnselected;
+        } else {
+          nextUnselected = nextUnselected.previousElementSibling;
+          if (!nextUnselected) break;
+        }
+      }
+      // if no unselected options found, change focus to list
+      list.focus();
+    } else {
+      return null;
+    }
   }
 
   // handles going up and down list via keyboard (ArrowUp, ArrowDown, Home, End)
