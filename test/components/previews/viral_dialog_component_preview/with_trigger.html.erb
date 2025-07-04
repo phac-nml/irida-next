@@ -1,6 +1,6 @@
 <%= viral_dialog do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= viral_button(data: { 'viral--dialog-target': 'trigger', action: "click->viral--dialog#open" }) do %>
+    <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
       Open dialog
     <% end %>
   <% end %>

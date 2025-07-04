@@ -5,17 +5,17 @@
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>
-      <% if @status %>
-        <div class="inline-flex rounded-lg" role="group">
-          <button
-            type="button"
-            class="button button-default rounded-e-none border-e-0"
-            data-action="advanced-search#idempotentConnect viral--dialog#open"
-            aria-label="<%= t(".title") %>",
-            autofocus="<%= @status %>"
-          >
-            <%= t(".title") %>
-          </button>
+      <div class="inline-flex rounded-lg" role="group">
+        <button
+          type="button"
+          class="<%= class_names("button button-default", { "rounded-e-none border-e-0": @status }) %>"
+          data-action="advanced-search#idempotentConnect viral--dialog#open"
+          aria-label="<%= t(".title") %>"
+          autofocus="<%= @status %>"
+        >
+          <%= t(".title") %>
+        </button>
+        <% if @status %>
           <button
             type="button"
             class="button button-default rounded-s-none"
@@ -24,15 +24,8 @@
           >
             <%= pathogen_icon(ICON::X, size: :sm) %>
           </button>
-        </div>
-      <% else %>
-        <%= viral_button(
-          data: {
-            action: "advanced-search#idempotentConnect viral--dialog#open",
-          },
-          autofocus: @status
-        ) { t(".title") } %>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
     <% dialog.with_header(title: t(".title")) %>
     <div class="space-y-4">
