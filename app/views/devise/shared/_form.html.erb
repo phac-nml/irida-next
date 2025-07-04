@@ -2,15 +2,17 @@
 
   <%= render "devise/shared/hidden_locale_input" %>
 
+  <%= render partial: "shared/form/required_field_legend" %>
+
   <input type="hidden" name="local" value="<%=params[:local]%>"/>
 
   <div class="form-field">
-    <%= f.label :email %>
+    <%= f.label :email, data: { required: true } %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
   <div class="form-field">
-    <%= f.label :password %>
+    <%= f.label :password, data: { required: true } %>
     <%= f.password_field :password, autocomplete: "current-password" %>
   </div>
 

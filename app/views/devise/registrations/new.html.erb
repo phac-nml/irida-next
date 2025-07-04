@@ -1,25 +1,27 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }, novalidate: true) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <%= render partial: "shared/form/required_field_legend" %>
+
   <%= render "devise/shared/hidden_locale_input", form: f %>
 
   <div class="form-field">
-    <%= f.label :email %>
+    <%= f.label :email, data: { required: true } %>
     <%= f.email_field :email, autofocus: true, required: true, autocomplete: "email" %>
   </div>
 
   <div class="form-field">
-    <%= f.label :first_name %>
+    <%= f.label :first_name, data: { required: true } %>
     <%= f.text_field :first_name, required: true, autocomplete: "given-name" %>
   </div>
 
   <div class="form-field">
-    <%= f.label :last_name %>
+    <%= f.label :last_name, data: { required: true } %>
     <%= f.text_field :last_name, required: true, autocomplete: "family-name" %>
   </div>
 
   <div class="form-field">
-    <%= f.label :password %>
+    <%= f.label :password, data: { required: true } %>
     <% if @minimum_password_length %>
       <span class="text-sm font-light text-slate-500 dark:text-slate-400"><%= t(".password_hint", minimum_password_length: @minimum_password_length) %></span>
     <% end %>
@@ -27,7 +29,7 @@
   </div>
 
   <div class="form-field">
-    <%= f.label :password_confirmation %>
+    <%= f.label :password_confirmation, data: { required: true } %>
     <%= f.password_field :password_confirmation,
                      required: true,
                      autocomplete: "new-password" %>
