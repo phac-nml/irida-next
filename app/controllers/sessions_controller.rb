@@ -3,6 +3,7 @@
 # Devise sessions controller
 class SessionsController < Devise::SessionsController
   layout 'devise'
+  before_action :page_title
 
   # before_action :configure_sign_in_params, only: [:create]
 
@@ -38,4 +39,8 @@ class SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
+
+  def page_title
+    @title = t(:'devise.sessions.new.login')
+  end
 end
