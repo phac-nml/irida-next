@@ -5,6 +5,9 @@ en:
       new:
         submit_button: Resend confirmation instructions
         title: Resend confirmation instructions
+    failure:
+      user:
+        invalid: Invalid Email or password.
     layout:
       title: IRIDA Next
     mailer:
