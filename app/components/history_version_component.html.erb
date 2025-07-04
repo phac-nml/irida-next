@@ -80,7 +80,7 @@
                         <% col_span = "col-span-2" %>
                         <div class="col-span-1">
                           <span
-                            data-test-item-selector="key"
+                            <% unless Rails.env.production? %>data-test-item-selector="key"<% end %>
                             class="
                               mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
@@ -93,7 +93,7 @@
                           "
                         >
                           <span
-                            data-test-item-selector="value"
+                            <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                             class="
                               text-md text-slate-600 dark:text-white break-all
                             "
@@ -102,7 +102,7 @@
                       <% else %>
                         <div class="col-span-1">
                           <span
-                            data-test-item-selector="key"
+                            <% unless Rails.env.production? %>data-test-item-selector="key"<% end %>
                             class="
                               mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
@@ -114,7 +114,7 @@
                           "
                         >
                           <span
-                            data-test-item-selector="value"
+                            <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                             class="text-md text-slate-600 dark:text-white"
                           ><%= prev_changes_value_hash[k] %></span>
                         </div>
@@ -125,7 +125,7 @@
                           "
                         >
                           <span
-                            data-test-item-selector="value"
+                            <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                             class="
                               text-md text-slate-600 dark:text-white break-all
                             "
@@ -146,7 +146,7 @@
                           id="<%= "metadata-deleted-#{key_no_longer_existent}" %>"
                         >
                           <span
-                            data-test-item-selector="key"
+                            <% unless Rails.env.production? %>data-test-item-selector="key"<% end %>
                             class="
                               mb-1 text-slate-600 text-md dark:text-slate-400 break-all
                             "
@@ -158,7 +158,7 @@
                           "
                         >
                           <span
-                            data-test-item-selector="value"
+                            <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                             class="
                               text-md text-slate-600 dark:text-white break-all
                             "
@@ -170,7 +170,7 @@
                           "
                         >
                           <span
-                            data-test-item-selector="value"
+                            <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                             class="
                               text-md text-slate-600 dark:text-white p-2 break-all
                             "
@@ -187,14 +187,14 @@
           <div class="grid grid-cols-3 gap-2 py-2">
             <div class="col-span-1" id="<%= "metadata-#{key}" %>">
               <span
-                data-test-item-selector="key"
+                <% unless Rails.env.production? %>data-test-item-selector="key"<% end %>
                 class="mb-1 text-slate-600 text-md dark:text-slate-400"
               ><%= key.to_s %></span>
             </div>
             <% col_span = "col-span-2" %>
             <% if log_data[:version] != 1 %>
               <div class=" col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700 ">
-                <span data-test-item-selector="value" class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
+                <span <% unless Rails.env.production? %>data-test-item-selector="value"<% end %> class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
               </div>
               <% col_span = "col-span-1" %>
             <% end %>
@@ -205,7 +205,7 @@
               "
             >
               <span
-                data-test-item-selector="value"
+                <% unless Rails.env.production? %>data-test-item-selector="value"<% end %>
                 class="text-lg text-slate-600 dark:text-white p-2 break-words"
               ><%= value %></span>
             </div>
