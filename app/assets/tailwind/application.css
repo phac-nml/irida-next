@@ -514,7 +514,7 @@
   }
 
   .dialog--section {
-    max-height: calc(80vh - 1.25rem - 2.5rem);
+    max-height: calc(75vh - 1.25rem - 3.5rem);
     @apply overflow-y-auto p-5;
   }
 
