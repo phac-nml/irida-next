@@ -14,19 +14,9 @@
       border-slate-300 p-2.5 dark:bg-slate-700 dark:border-slate-600
     "
   >
-    <div class="flex">
-      <div class="flex items-center me-4">
-        <%= form.radio_button name, "true", checked: value %>
-        <%= form.label "#{name}_true",
-                   "True",
-                   class: "ms-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
-      </div>
-      <div class="flex items-center me-4">
-        <%= form.radio_button name, "false", checked: !value %>
-        <%= form.label "#{name}_false",
-                   "False",
-                   class: "ms-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
-      </div>
+    <div class="flex gap-4 items-center" role="radiogroup">
+      <%= form.radio_button name, "true", label: "True", checked: value %>
+      <%= form.radio_button name, "false", label: "False", checked: !value %>
     </div>
   </div>
 </div>
