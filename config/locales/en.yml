@@ -2283,6 +2283,10 @@ en:
       success:
         ok_button: OK
         success: Success
+    sortable_lists:
+      aria_live_update:
+        added: "The following options have been added: "
+        removed: "The following options have been removed: "
     workflow_executions:
       destroy_confirmation_dialog:
         description: Are you sure you want to delete this workflow execution?
