@@ -4,6 +4,8 @@
 class PasswordsController < Devise::PasswordsController
   layout 'devise'
 
+  before_action :page_title
+
   # GET /resource/password/new
   # def new
   #   super
@@ -34,4 +36,14 @@ class PasswordsController < Devise::PasswordsController
   # def after_sending_reset_password_instructions_path_for(resource_name)
   #   super(resource_name)
   # end
+
+  def page_title
+    case action_name
+
+    when 'new'
+      @title = t(:'devise.passwords.new.forgot_password')
+    when 'edit'
+      @title = t(:'devise.passwords.edit.reset_password')
+    end
+  end
 end
