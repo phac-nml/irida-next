@@ -31,19 +31,7 @@
     data-list-filter-target="tags"
     data-action="click->list-filter#focus"
   >
-    <input
-      type="text"
-      name="<%= list_input_form_name %>"
-      class="bg-transparent border-none grow"
-      autofocus
-      aria-label="<%= t(:'components.list_input.description') %>"
-      data-action='
-        keydown->list-filter#handleInput
-        paste->list-filter#handlePaste
-        turbo:morph-element->list-filter#idempotentConnect
-      '
-      data-list-filter-target="input"
-    />
+    <%= render Viral::BaseComponent.new(**input_arguments) %>
     <button
       type="button"
       class="
