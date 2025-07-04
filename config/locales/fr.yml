@@ -184,6 +184,7 @@ fr:
     errors:
       messages:
         blank: ne peut pas être vide
+        invalid: n'est pas valide
         taken: a déjà été pris
       models:
         activity_extended_detail:
@@ -2222,6 +2223,13 @@ fr:
     no_headers: No headers found in file
     unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
     unknown_file_format: 'Unknown file type: %{extension}'
+  support:
+    array:
+      last_word_connector: " et "
+      sentence_connector: et
+      skip_last_comma: true
+      two_words_connector: " et "
+      words_connector: ", "
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
