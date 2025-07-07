@@ -2226,8 +2226,6 @@ fr:
   support:
     array:
       last_word_connector: " et "
-      sentence_connector: et
-      skip_last_comma: true
       two_words_connector: " et "
       words_connector: ", "
   time:
