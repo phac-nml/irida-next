@@ -37,12 +37,12 @@ module Layout
     test 'renders links correctly with the last item as the current page' do
       render_inline(Layout::BreadcrumbComponent.new(links: @links))
 
-      # Check for linked items - note the double slashes due to root_path + path concatenation
-      assert_selector "a[href='//']", text: 'Home'
-      assert_selector "a[href='//projects']", text: 'Projects'
+      # Check for linked items - note the http://test.host which is the default base url for tests
+      assert_selector "a[href='http://test.host/']", text: 'Home'
+      assert_selector "a[href='http://test.host/projects']", text: 'Projects'
 
       # The last item should be a span, not a link
-      assert_no_selector "a[href='//projects/my-project']"
+      assert_no_selector "a[href='http://test.host/projects/my-project']"
       assert_selector 'span[aria-current="page"]', text: 'My Project'
     end
 

@@ -1,4 +1,4 @@
-// app/javascript/controllers/breadcrumb_controller.js
+// app/javascript/controllers/breacrumb_controller.js
 import { Controller } from "@hotwired/stimulus";
 
 /**
