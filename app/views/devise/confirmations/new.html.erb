@@ -3,6 +3,8 @@
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <%= render "devise/shared/hidden_locale_input" %>
+
   <div class="field">
     <%= f.label :email %><br/>
     <%= f.email_field :email,

@@ -182,6 +182,10 @@ fr:
       track_activity:
         system: Système
     errors:
+      messages:
+        blank: ne peut pas être vide
+        invalid: n'est pas valide
+        taken: a déjà été pris
       models:
         activity_extended_detail:
           maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
@@ -214,14 +218,8 @@ fr:
           attributes:
             fields:
               taken: Existe déjà dans un autre modèle avec le même ordre
-            name:
-              blank: Ne peut pas être vide
-              taken: A déjà été pris
         namespace:
           attributes:
-            name:
-              blank: Ne peut pas être vide
-              taken: A déjà été pris
             path:
               invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
               reserved_value: "%{value} is a reserved value."
@@ -2229,6 +2227,11 @@ fr:
     no_headers: No headers found in file
     unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
     unknown_file_format: 'Unknown file type: %{extension}'
+  support:
+    array:
+      last_word_connector: " et "
+      two_words_connector: " et "
+      words_connector: ", "
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"

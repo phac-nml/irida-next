@@ -159,6 +159,7 @@ ignore_unused:
   - "devise.*"
   - "viral.data_table_component.*"
   - "samples.table_component.namespaces.puid"
+  - "support.array.*"
 # - '{devise,kaminari,will_paginate}.*'
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
