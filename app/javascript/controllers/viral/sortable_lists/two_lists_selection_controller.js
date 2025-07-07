@@ -724,7 +724,10 @@ export default class extends Controller {
   }
 
   #updateAriaActiveDescendant(option, list) {
-    // set activedescendant to null if no options remain in list
-    list.setAttribute("aria-activedescendant", option ? option.id : null);
+    if (option) {
+      list.setAttribute("aria-activedescendant", option.id);
+    } else {
+      list.removeAttribute("aria-activedescendant");
+    }
   }
 }
