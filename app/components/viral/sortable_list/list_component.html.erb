@@ -10,6 +10,8 @@
     role="listbox"
     aria-labelledby="<%= id %>-list-label"
     aria-roledescription="<%= t('.aria_role_description', list: title)%>"
+    aria-activedescendant=""
+    aria-multiselectable="true"
   >
     <%= render Viral::SortableList::ListItemComponent.with_collection(list_items) %>
   </ul>
