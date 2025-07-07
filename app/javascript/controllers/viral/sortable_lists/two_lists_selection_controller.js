@@ -270,7 +270,7 @@ export default class extends Controller {
     const option = event.target;
 
     this.#selectOrUnselectOption(option);
-    this.#setTabIndexes(option);
+    this.#updateListAttributes(option);
   }
 
   #selectOrUnselectOption(option) {
@@ -334,16 +334,13 @@ export default class extends Controller {
         targetList.appendChild(selectedOptions[i]);
       }
       if (focusTarget) focusTarget.focus();
-      this.#setTabIndexes(selectedOptions[0]);
+      this.#updateListAttributes(selectedOptions[0]);
     }
 
     let ariaLiveUpdateString =
       sourceList === this.selectedList
         ? this.ariaLiveUpdateRemovedValue
         : this.ariaLiveUpdateAddedValue;
-    this.#updateAriaLive(
-      this.ariaLiveUpdateRemovedValue.concat(selectedOptionsText.join(", ")),
-    );
 
     this.#updateAriaLive(
       ariaLiveUpdateString.concat(selectedOptionsText.join(", ")),
@@ -429,7 +426,7 @@ export default class extends Controller {
       event,
     );
     if (targetOption) {
-      this.#setTabIndexes(targetOption);
+      this.#updateListAttributes(targetOption);
     }
   }
 
@@ -542,7 +539,7 @@ export default class extends Controller {
       this.#lastClickedOption = option;
       this.#selectOrUnselectOption(option);
     }
-    this.#setTabIndexes(option);
+    this.#updateListAttributes(option);
     this.#checkButtonStates();
   }
 
@@ -680,9 +677,11 @@ export default class extends Controller {
     list.append(template);
   }
 
-  // ensures that each list contains only 1 option that is tabbable. important for refreshing after
+  // Handles 2 things:
+  // 1. ensures that each list contains only 1 option that is tabbable. important for refreshing after
   // options have been moved between lists
-  #setTabIndexes(currentOption) {
+  // 2. Updates aria-activedescendants
+  #updateListAttributes(currentOption) {
     const oldTabbableOptions = currentOption.parentNode.querySelectorAll(
       '[data-tabbable="true"]',
     );
@@ -701,15 +700,17 @@ export default class extends Controller {
     }
     currentOption.setAttribute("data-tabbable", "true");
     currentOption.tabIndex = "0";
+    this.#updateAriaActiveDescendant(currentOption, currentOption.parentNode);
   }
 
   #verifyListHasTabIndex(list) {
-    if (
-      list.firstElementChild &&
-      !list.querySelector('[data-tabbable="true"]')
-    ) {
-      list.firstElementChild.tabIndex = "0";
-      list.firstElementChild.setAttribute("data-tabbable", "true");
+    const firstChild = list.firstElementChild;
+    if (firstChild && !list.querySelector('[data-tabbable="true"]')) {
+      firstChild.tabIndex = "0";
+      firstChild.setAttribute("data-tabbable", "true");
+      this.#updateAriaActiveDescendant(firstChild, list);
+    } else {
+      this.#updateAriaActiveDescendant(firstChild, list);
     }
   }
 
@@ -720,5 +721,10 @@ export default class extends Controller {
 
   #updateAriaLive(updateString) {
     this.ariaLiveUpdateTarget.innerText = updateString;
+  }
+
+  #updateAriaActiveDescendant(option, list) {
+    // set activedescendant to null if no options remain in list
+    list.setAttribute("aria-activedescendant", option ? option.id : null);
   }
 }
