@@ -255,7 +255,7 @@ class ProjectsTest < ApplicationSystemTestCase
       assert_text project.name
     end
 
-    assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
+    assert_text I18n.t('activerecord.errors.messages.taken').downcase
     assert_current_path '/group-1/project-1/-/edit'
   end
 
