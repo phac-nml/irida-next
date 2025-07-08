@@ -3,7 +3,7 @@
 module Viral
   # Base component to be inherited from
   class BaseComponent < Viral::Component
-    SELF_CLOSING_TAGS = %w[br img input].freeze
+    SELF_CLOSING_TAGS = %w[area base br col embed hr img input keygen link meta param source track wbr].freeze
 
     def initialize(tag:, classes: nil, **system_arguments)
       @tag = tag
