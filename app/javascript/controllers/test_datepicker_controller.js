@@ -71,6 +71,7 @@ export default class extends Controller {
   #todaysYear = this.#todaysFullDate.getFullYear();
   #todaysMonthIndex = this.#todaysFullDate.getMonth();
   #todaysDate = this.#todaysFullDate.getDate();
+  #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
 
   #selectedYear = this.#todaysFullDate.getFullYear();
   #selectedMonthIndex = this.#todaysFullDate.getMonth();
@@ -100,17 +101,19 @@ export default class extends Controller {
       this.datepickerInputTarget.getBoundingClientRect();
     // console.log(calendar);
     console.log(this.datepickerInputTarget.getBoundingClientRect());
-    this.calendarComponentTarget.style.left = `${inputWindowPosition.left}px`;
+    // this.calendarComponentTarget.style.left = `${inputWindowPosition.left}px`;
+    this.calendarComponentTarget.style.left = `0px`;
     console.log("height");
     console.log(window.innerHeight);
     console.log(inputWindowPosition.top);
-    if (window.innerHeight / inputWindowPosition.top < 2) {
-      console.log("less than 2");
-      this.calendarComponentTarget.style.top = `${inputWindowPosition.top + 38}px`;
-    } else {
-      console.log("more that 2");
-      this.calendarComponentTarget.style.top = `${inputWindowPosition.top - 150}px`;
-    }
+    // if (window.innerHeight / inputWindowPosition.top < 2) {
+    //   console.log("less than 2");
+    //   this.calendarComponentTarget.style.top = `${inputWindowPosition.top + 38}px`;
+    // } else {
+    //   console.log("more that 2");
+    //   this.calendarComponentTarget.style.top = `${inputWindowPosition.top - 150}px`;
+    // }
+    this.calendarComponentTarget.style.top = `0px`;
     console.log();
     // console.log("offsetY: " + ev.offsetY + " height: " + domRect.height);)
     this.idempotentConnect();
@@ -195,6 +198,7 @@ export default class extends Controller {
     this.#fillCalendarWithDates(fullCalendar);
 
     this.#addStylingToDates();
+    this.#setTabIndex();
     // disable month's 'back' button if we're on first allowable month
     this.#setBackButton();
   }
@@ -284,7 +288,6 @@ export default class extends Controller {
             date,
           ),
         );
-        tableCell.setAttribute("tabindex", "0");
         tableRow.appendChild(inMonthDate);
       } else {
         const outOfMonthDate =
@@ -349,13 +352,13 @@ export default class extends Controller {
   }
 
   #addStylingToDates() {
-    // the already selected date
+    // already selected date (if a date selection already exists)
     const selectedDate = this.calendarTarget.querySelector(
       `[data-date='${this.selectedDateValue}']`,
     );
     // today's date
-    const todaysDate = this.calendarTarget.querySelector(
-      `[data-date='${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}']`,
+    const today = this.calendarTarget.querySelector(
+      `[data-date='${this.#todaysFormattedFullDate}']`,
     );
 
     // minimum date where dates prior will be disabled
@@ -367,9 +370,9 @@ export default class extends Controller {
       this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
     }
 
-    // don't need to add 'todaysDate' styling if todaysDate == selectedDate
-    if (todaysDate && selectedDate != todaysDate) {
-      this.#replaceDateStyling(todaysDate, this.#todaysDateClasses);
+    // don't need to add 'today' styling if today == selectedDate
+    if (today && selectedDate != today) {
+      this.#replaceDateStyling(today, this.#todaysDateClasses);
     }
 
     if (minDate) {
@@ -390,6 +393,55 @@ export default class extends Controller {
       date.classList.remove(...this.#outOfMonthClasses);
     }
     date.classList.add(...classes);
+  }
+
+  // set the tab index to a single date
+  #setTabIndex() {
+    const today = this.calendarTarget.querySelector(
+      `[data-date='${this.#todaysFormattedFullDate}']`,
+    );
+
+    const selectedDate = this.calendarTarget.querySelector(
+      `[data-date='${this.selectedDateValue}']`,
+    );
+
+    const minDate = this.calendarTarget.querySelector(
+      `[data-date='${this.minDateValue}']`,
+    );
+
+    // if minimum date and selected or todays date land on same month/year, check if todays date is selectable based on minDate
+    // and if not, set minDate as tab target
+
+    // else if today (and no minDate), check if today is 'inMonth' and not 'outMonth' (eg: if today is
+    // July 31st and we're on Aug, it's possible July 31st still exists on the calendar, but we'd set Aug 1st as
+    // tabbable)
+
+    // else set the 1st of the month as tab target
+    if (minDate) {
+      if (selectedDate && this.selectedDateValue > this.minDateValue) {
+        selectedDate.tabIndex = 0;
+      } else if (today && this.#todaysFormattedFullDate > this.minDateValue) {
+        today.tabIndex = 0;
+      } else {
+        minDate.tabIndex = 0;
+      }
+    } else if (selectedDate) {
+      selectedDate.tabIndex = 0;
+    } else if (today) {
+      if (
+        today.getAttribute("data-date-within-month-position") === "outOfMonth"
+      ) {
+        this.calendarTarget.querySelector(
+          '[data-date-within-month-position="inMonth"]',
+        ).tabIndex = 0;
+      } else {
+        today.tabIndex = 0;
+      }
+    } else {
+      this.calendarTarget.querySelector(
+        '[data-date-within-month-position="inMonth"]',
+      ).tabIndex = 0;
+    }
   }
 
   previousMonth() {
@@ -442,5 +494,90 @@ export default class extends Controller {
     this.#selectedYear = this.#todaysYear;
     this.#selectedMonthIndex = this.#todaysMonthIndex;
     this.idempotentConnect();
+  }
+
+  navigateCalendar(event) {
+    const handler = this.#getKeyboardHandler(event.key);
+    if (handler) {
+      if (event.key !== "Tab") event.preventDefault();
+      handler.call(this, event);
+    }
+  }
+
+  #getKeyboardHandler(key) {
+    const handlers = {
+      " ": this.#selectDate.bind(this),
+      Enter: this.#selectDate.bind(this),
+      ArrowLeft: (event) => this.#handleHorizontalNavigation(event, "left"),
+      ArrowRight: (event) => this.#handleHorizontalNavigation(event, "right"),
+      ArrowUp: (event) => this.#handleVerticalNavigation(event, "up"),
+      ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
+    };
+    return handlers[key];
+  }
+
+  #selectDate(event) {
+    console.log("select date");
+  }
+
+  #handleHorizontalNavigation(event, direction) {
+    if (direction === "left") {
+      const previousDate = this.calendarTarget.querySelector(
+        `[data-date='${this.#getFormattedStringDate(
+          this.#selectedYear,
+          this.#selectedMonthIndex,
+          parseInt(event.target.innerText) - 1,
+        )}']`,
+      );
+      if (
+        previousDate.getAttribute("data-date-within-month-position") ===
+        "inMonth"
+      ) {
+        this.#focusDate(previousDate);
+      } else {
+        this.previousMonth();
+        const allCalenderInMonthDates = this.calendarTarget.querySelectorAll(
+          '[data-date-within-month-position="inMonth"]',
+        );
+        this.#focusDate(
+          allCalenderInMonthDates[allCalenderInMonthDates.length - 1],
+        );
+      }
+    } else {
+      const nextDate = this.calendarTarget.querySelector(
+        `[data-date='${this.#getFormattedStringDate(
+          this.#selectedYear,
+          this.#selectedMonthIndex,
+          parseInt(event.target.innerText) + 1,
+        )}']`,
+      );
+      if (
+        nextDate.getAttribute("data-date-within-month-position") === "inMonth"
+      ) {
+        this.#focusDate(nextDate);
+      } else {
+        this.nextMonth();
+        this.#focusDate(
+          this.calendarTarget.querySelector(
+            '[data-date-within-month-position="inMonth"]',
+          ),
+        );
+      }
+    }
+  }
+
+  #handleVerticalNavigation(event, direction) {
+    console.log("up down");
+  }
+
+  // #setSpecifiedTabIndex(date) {}
+
+  #focusDate(date) {
+    const currentTabbableDate =
+      this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
+    currentTabbableDate.tabIndex = -1;
+
+    date.tabIndex = 0;
+    date.focus();
   }
 }
