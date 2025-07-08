@@ -32,3 +32,7 @@
 .navbar__logo {
   transform: rotate(12deg);
 }
+
+body:not(.navigation-with-keyboard) *:not(input):focus-visible {
+  outline: auto !important;
+}
