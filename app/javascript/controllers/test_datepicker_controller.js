@@ -382,12 +382,13 @@ export default class extends Controller {
       );
       for (let i = 0; i < allDates.indexOf(minDate); i++) {
         this.#replaceDateStyling(allDates[i], this.#disabledDateClasses);
+        allDates[i].setAttribute("data-date-disabled", true);
       }
     }
   }
 
   #replaceDateStyling(date, classes) {
-    if (date.dataset.dateWithinMonthPosition === "inMonth") {
+    if (this.#verifyDateIsInMonth(date)) {
       date.classList.remove(...this.#inMonthClasses);
     } else {
       date.classList.remove(...this.#outOfMonthClasses);
@@ -529,10 +530,8 @@ export default class extends Controller {
           parseInt(event.target.innerText) - 1,
         )}']`,
       );
-      if (
-        previousDate.getAttribute("data-date-within-month-position") ===
-        "inMonth"
-      ) {
+      if (previousDate.getAttribute("data-date-disabled")) return;
+      if (this.#verifyDateIsInMonth(previousDate)) {
         this.#focusDate(previousDate);
       } else {
         this.previousMonth();
@@ -551,9 +550,7 @@ export default class extends Controller {
           parseInt(event.target.innerText) + 1,
         )}']`,
       );
-      if (
-        nextDate.getAttribute("data-date-within-month-position") === "inMonth"
-      ) {
+      if (this.#verifyDateIsInMonth(nextDate)) {
         this.#focusDate(nextDate);
       } else {
         this.nextMonth();
@@ -567,10 +564,47 @@ export default class extends Controller {
   }
 
   #handleVerticalNavigation(event, direction) {
-    console.log("up down");
-  }
+    const currentWeekNode = event.target.parentNode;
+    const currentDayOfWeekIndex = Array.from(currentWeekNode.children).indexOf(
+      event.target,
+    );
+    if (direction === "up") {
+      let previousWeek = currentWeekNode.previousElementSibling;
 
-  // #setSpecifiedTabIndex(date) {}
+      const targetDate = this.#getFormattedStringDate(
+        this.#selectedYear,
+        this.#selectedMonthIndex,
+        parseInt(event.target.innerText) - 7,
+      );
+      if (this.minDateValue && this.minDateValue > targetDate) return;
+      if (previousWeek) {
+        const targetDay = Array.from(previousWeek.children)[
+          currentDayOfWeekIndex
+        ];
+        if (this.#verifyDateIsInMonth(targetDay)) {
+          this.#focusDate(
+            Array.from(previousWeek.children)[currentDayOfWeekIndex],
+          );
+        } else {
+          this.#focusOnPreviousMonthChange(currentDayOfWeekIndex);
+        }
+      } else {
+        this.#focusOnPreviousMonthChange(currentDayOfWeekIndex);
+      }
+    } else {
+      let nextWeek = currentWeekNode.nextElementSibling;
+      if (nextWeek) {
+        const targetDay = Array.from(nextWeek.children)[currentDayOfWeekIndex];
+        if (this.#verifyDateIsInMonth(targetDay)) {
+          this.#focusDate(Array.from(nextWeek.children)[currentDayOfWeekIndex]);
+        } else {
+          this.#focusOnNextMonthChange(currentDayOfWeekIndex);
+        }
+      } else {
+        this.#focusOnNextMonthChange(currentDayOfWeekIndex);
+      }
+    }
+  }
 
   #focusDate(date) {
     const currentTabbableDate =
@@ -579,5 +613,35 @@ export default class extends Controller {
 
     date.tabIndex = 0;
     date.focus();
+  }
+
+  #focusOnPreviousMonthChange(index) {
+    this.previousMonth();
+    let previousWeek = this.calendarTarget.lastElementChild;
+    while (true) {
+      let targetDay = Array.from(previousWeek.children)[index];
+      if (this.#verifyDateIsInMonth(targetDay)) {
+        this.#focusDate(targetDay);
+        break;
+      }
+      previousWeek = previousWeek.previousElementSibling;
+    }
+  }
+
+  #focusOnNextMonthChange(index) {
+    this.nextMonth();
+    let nextWeek = this.calendarTarget.firstElementChild;
+    while (true) {
+      let targetDay = Array.from(nextWeek.children)[index];
+      if (this.#verifyDateIsInMonth(targetDay)) {
+        this.#focusDate(targetDay);
+        break;
+      }
+      nextWeek = nextWeek.nextElementSibling;
+    }
+  }
+
+  #verifyDateIsInMonth(date) {
+    return date.getAttribute("data-date-within-month-position") === "inMonth";
   }
 }
