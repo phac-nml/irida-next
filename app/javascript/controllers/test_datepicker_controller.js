@@ -527,6 +527,16 @@ export default class extends Controller {
     this.calendarComponentTarget.remove();
   }
 
+  clearSelection() {
+    this.datepickerInputTarget.value = "";
+
+    if (this.autosubmitValue) {
+      this.element.closest("form").requestSubmit();
+    }
+
+    this.calendarComponentTarget.remove();
+  }
+
   #handleHorizontalNavigation(event, direction) {
     if (direction === "left") {
       const previousDate = this.calendarTarget.querySelector(
