@@ -1,37 +1,28 @@
-<div
-  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
->
-  <!-- BEGIN app/components/viral/icon_component.html.erb --><span class="dark:text-slate-400 h-5 text-slate-500 viral-icon w-5">
-    <svg
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.5"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      class="viral-icon__Svg icon-calendar_days"
-      focusable="false"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-      ></path>
-    </svg>
-
-  </span><!-- END app/components/viral/icon_component.html.erb -->
+<div class="relative max-w-sm">
+  <div
+    class="
+      absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+    "
+  >
+    <span>
+      <%= helpers.render_icon(
+        ICONS[:calendar],
+        class: "dark:text-slate-400 h-5 text-slate-500 viral-icon w-5",
+      ) %>
+    </span>
+  </div>
+  <input
+    placeholder="YYYY-MM-DD"
+    autocomplete="off"
+    value="<%= selected_date %>"
+    data-test-datepicker-target="datepickerInput"
+    data-datepicker-dialog="true"
+    type="text"
+    name="<%= input_name %>"
+    id="<%= input_id %>"
+    class="datepicker-input"
+  >
 </div>
-<input
-  placeholder="YYYY-MM-DD"
-  autocomplete="off"
-  value="<%= selected_date %>"
-  data-test-datepicker-target="datepickerInput"
-  data-datepicker-dialog="true"
-  type="text"
-  name="<%= input_name %>"
-  id="<%= input_id %>"
-  class="datepicker-input"
->
 <template data-test-datepicker-target="calenderTemplate">
   <div
     data-test-datepicker-target="calendarComponent"
@@ -67,32 +58,27 @@
             "
             data-action="click->test-datepicker#previousMonth"
             data-test-datepicker-target="backButton"
-          ><svg
-              class="w-4 h-4"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            ><path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 5H1m0 0 4 4M1 5l4-4"
-              ></path></svg></button>
+          >
+            <%= helpers.render_icon(ICONS[:arrow_left]) %>
+          </button>
           <div>
             <select
               data-test-datepicker-target="month"
               data-action="change->test-datepicker#changeMonth"
             >
             </select>
+          </div>
+          <div>
             <input
               data-test-datepicker-target="year"
               data-action="change->test-datepicker#changeYear"
               type="number"
               max="9999"
               min="<%= min_year %>"
-              class="w-22"
+              class="
+                w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
+                dark:bg-slate-800 dark:text-white ml-1
+              "
             >
           </div>
           <button
@@ -104,19 +90,9 @@
               focus:ring-slate-200 next-btn ml-2 cursor-pointer
             "
             data-action="click->test-datepicker#nextMonth"
-          ><svg
-              class="w-4 h-4 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            ><path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              ></path></svg></button>
+          >
+            <%= helpers.render_icon(ICONS[:arrow_right]) %>
+          </button>
         </div>
       </div>
       <div class="datepicker-main p-1 justify-center">
