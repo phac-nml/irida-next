@@ -171,16 +171,7 @@ export default class extends Controller {
   #setBackButton() {
     // if minimum date exists in the calendar, we're on the first allowable month and want to prevent user from
     // going to previous months
-    if (this.minDateValue) {
-      const minDateNode = this.calendarTarget.querySelector(
-        `[data-date='${this.minDateValue}']`,
-      );
-      if (minDateNode) {
-        this.backButtonTarget.disabled = true;
-      } else {
-        this.backButtonTarget.disabled = false;
-      }
-    }
+    this.backButtonTarget.disabled = this.#preventPreviousMonthNavigation();
   }
 
   #loadCalendar() {
@@ -214,7 +205,7 @@ export default class extends Controller {
       let lastDate;
       // check previous month's last date
       if (this.#selectedMonthIndex == 2) {
-        lastDate = this.#checkLeapYear() ? 29 : 28;
+        lastDate = this.#checkLeapYear(this.#selectedYear) ? 29 : 28;
       } else {
         const previousMonthIndex =
           this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
@@ -232,7 +223,7 @@ export default class extends Controller {
 
     // if february, check for leap year
     if (this.#selectedMonthIndex == 1) {
-      thisMonthsLastDate = this.#checkLeapYear() ? 29 : 28;
+      thisMonthsLastDate = this.#checkLeapYear(this.#selectedYear) ? 29 : 28;
     } else {
       thisMonthsLastDate = this.#DAYS_IN_MONTH[this.#selectedMonthIndex];
     }
@@ -323,8 +314,8 @@ export default class extends Controller {
     );
   };
 
-  #checkLeapYear() {
-    return new Date(this.#selectedYear, 1, 29).getDate() === 29;
+  #checkLeapYear(year) {
+    return new Date(year, 1, 29).getDate() === 29;
   }
 
   #getRelativeMonthIndex(relativePosition) {
@@ -513,6 +504,10 @@ export default class extends Controller {
       ArrowRight: (event) => this.#handleHorizontalNavigation(event, "right"),
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up"),
       ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
+      Home: this.#navigateToStart.bind(this),
+      End: this.#navigateToEnd.bind(this),
+      PageUp: this.#navigateByPageUp.bind(this),
+      PageDown: this.#navigateByPageDown.bind(this),
     };
     return handlers[key];
   }
@@ -641,7 +636,81 @@ export default class extends Controller {
     }
   }
 
+  #navigateToStart() {
+    const firstDate = this.calendarTarget.querySelector(
+      '[data-date-within-month-position="inMonth"]',
+    );
+
+    if (firstDate.getAttribute("data-date-disabled")) {
+      const allDisabledDates = Array.from(
+        this.calendarTarget.querySelectorAll('[data-date-disabled="true"]'),
+      );
+      console.log(allDisabledDates);
+      const lastDisabledDate = allDisabledDates[allDisabledDates.length - 1];
+      const targetDate = this.#getFormattedStringDate(
+        this.#selectedYear,
+        this.#selectedMonthIndex,
+        parseInt(lastDisabledDate.innerText) + 1,
+      );
+      this.#focusDate(
+        this.calendarTarget.querySelector(`[data-date='${targetDate}']`),
+      );
+    } else {
+      this.#focusDate(firstDate);
+    }
+  }
+
+  #navigateToEnd() {
+    const allMonthDates = Array.from(
+      this.calendarTarget.querySelectorAll(
+        '[data-date-within-month-position="inMonth"]',
+      ),
+    );
+
+    this.#focusDate(allMonthDates[allMonthDates.length - 1]);
+  }
+
+  #navigateByPageUp() {
+    if (this.#preventPreviousMonthNavigation()) return;
+    this.previousMonth();
+
+    if (this.minDateValue) {
+      const minDateNode = this.calendarTarget.querySelector(
+        `[data-date='${this.minDateValue}']`,
+      );
+
+      if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
+        this.#focusDate(minDateNode);
+      } else {
+        const firstDateNode = this.calendarTarget.querySelector(
+          '[data-date-within-month-position="inMonth"]',
+        );
+        this.#focusDate(firstDateNode);
+      }
+    }
+  }
+
+  #navigateByPageDown() {
+    this.nextMonth();
+    this.#focusDate(
+      this.calendarTarget.querySelector(
+        '[data-date-within-month-position="inMonth"]',
+      ),
+    );
+  }
+
   #verifyDateIsInMonth(date) {
     return date.getAttribute("data-date-within-month-position") === "inMonth";
+  }
+
+  #preventPreviousMonthNavigation() {
+    if (this.minDateValue) {
+      const minDateNode = this.calendarTarget.querySelector(
+        `[data-date='${this.minDateValue}']`,
+      );
+
+      if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) return true;
+    }
+    return false;
   }
 }
