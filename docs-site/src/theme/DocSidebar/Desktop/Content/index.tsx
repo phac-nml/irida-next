@@ -43,7 +43,6 @@ export default function DocSidebarDesktopContent({
   })
 
   const onFocus = (event) => {
-    console.log(event.target.getAttribute('href'));
     setFocusedPath(event.target.getAttribute('href'));
   }
 
