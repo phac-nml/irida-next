@@ -244,7 +244,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metric
 
   export_params = [
     {
-      user: User.find_by(email: 'admin@email.com'),
+      user: User.find_by(email: 'user0@email.com'),
       sample: Sample.find_by(name: "Bacillus anthracis/Outbreak #{current_year - 2} Sample 10")
     },
     {
@@ -338,7 +338,7 @@ if Rails.env.development?
 
   users = [
     {
-      email: 'admin@email.com',
+      email: 'user0@email.com',
       password: 'password1',
       password_confirmation: 'password1',
       first_name: 'ad',
