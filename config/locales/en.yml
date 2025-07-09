@@ -2339,8 +2339,8 @@ en:
       test_datepicker_component:
         clear_selection: Clear Selection
         days_of_week:
-          monday: Mon
           friday: Fri
+          monday: Mon
           saturday: Sat
           sunday: Sun
           thursday: Thu
