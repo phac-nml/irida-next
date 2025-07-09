@@ -117,20 +117,18 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
                 <div
                   data-controller="test-datepicker"
-                  class=""
+                  class="form-field datepicker"
                   data-test-datepicker-min-date-value="<%= Date.today + 1.day %>"
                   data-test-datepicker-selected-date-value="<%= member.expires_at %>"
                   data-test-datepicker-months-value="<%= %w[January February March April May June July August September October November December] %>"
                   data-test-datepicker-autosubmit-value="<%= true %>"
                 >
-                  <div class="relative max-w-sm">
-                    <%= viral_test_datepicker(
-                      input_id: "member-#{member.id}-expiration",
-                      input_name: "member[expires_at]",
-                      min_date: (Date.today + 1.day),
-                      selected_date: member.expires_at,
-                    ) %>
-                  </div>
+                  <%= viral_test_datepicker(
+                    input_id: "member-#{member.id}-expiration",
+                    input_name: "member[expires_at]",
+                    min_date: (Date.today + 1.day),
+                    selected_date: member.expires_at,
+                  ) %>
                 </div>
 
                 <div
