@@ -21,8 +21,8 @@
         search_attribute: :name_or_puid_cont,
         placeholder: t(:".search.placeholder"),
         total_count: @pagy.count,
-        html: {
-          "data-turbo-permanent": "true",
+        data: {
+          turbo_action: "replace",
         },
       ) %>
       <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
@@ -52,10 +52,7 @@
       <% end %>
       <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
         <div class="flex flex-row-reverse">
-          <%= render Viral::Pagy::PaginationComponent.new(
-            @pagy,
-            data_string: "data-turbo='false'",
-          ) %>
+          <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
         </div>
       <% else %>
         <%= viral_empty(
