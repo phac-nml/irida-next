@@ -116,7 +116,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
 
-                <%= viral_test_datepicker(min_date: "2025-07-01", selected_date: "2025-07-20") %>
+                <%= viral_test_datepicker(min_date: "2025-06-29") %>
                 <div
                   class="form-field datepicker"
                   data-controller="datepicker"
