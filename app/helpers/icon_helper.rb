@@ -29,6 +29,10 @@ module ICONS
   # Default library is :phosphor and default variant is :regular unless specified
   DEFINITIONS = {
     # Phosphor Icons (default library)
+    arrow_left: { name: 'arrow-left', options: {} },
+    arrow_right: { name: 'arrow-right', options: {} },
+    bank: { name: :bank, options: {} },
+    calendar: { name: 'calendar-blank', options: {} },
     clipboard: { name: 'clipboard-text', options: {} },
     caret_down: { name: 'caret-down', options: {} },
     caret_up: { name: 'caret-up', options: {} },
@@ -49,7 +53,6 @@ module ICONS
     ticket: { name: :ticket, options: {} },
     user_circle: { name: 'user-circle', options: {} },
     users: { name: :users, options: {} },
-    bank: { name: :bank, options: {} },
 
     # Heroicons
     beaker: { name: :beaker, options: { library: :heroicons } },
