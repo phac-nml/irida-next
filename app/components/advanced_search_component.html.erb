@@ -104,7 +104,7 @@
           aria-label="<%= t(".field") %>"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
         >
-          <option value="" selected><%= t(".field") %></option>
+          <option value="" selected disabled><%= t(".field") %></option>
           <%= options_for_select(@sample_fields) %>
           <%= grouped_options_for_select(@metadata_fields) %>
         </select>
@@ -115,7 +115,7 @@
           data-action="advanced-search#handleOperatorChange"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
         >
-          <option value="" selected><%= t(".operator") %></option>
+          <option value="" selected disabled><%= t(".operator") %></option>
           <%= options_for_select(@operations) %>
         </select>
       </div>

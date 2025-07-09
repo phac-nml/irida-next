@@ -24,7 +24,10 @@
                                  selected_key = @condition.field,
                                ),
                              ),
-                             { include_blank: t("advanced_search_component.field") },
+                             {
+                               prompt: t("advanced_search_component.field"),
+                               disabled: "",
+                             },
                              {
                                "aria-label": t("advanced_search_component.field"),
                                "aria-invalid": invalid_field,
@@ -48,7 +51,8 @@
                                selected = @condition.operator,
                              ),
                              {
-                               include_blank: t("advanced_search_component.operator"),
+                               prompt: t("advanced_search_component.operator"),
+                               disabled: "",
                              },
                              {
                                "data-action": "advanced-search#handleOperatorChange",
