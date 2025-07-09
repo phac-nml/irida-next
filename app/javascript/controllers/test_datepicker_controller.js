@@ -16,8 +16,8 @@ export default class extends Controller {
 
   static values = {
     minDate: String,
-    selectedDate: String,
     months: Array,
+    autosubmit: Boolean,
   };
 
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -66,6 +66,8 @@ export default class extends Controller {
     "text-slate-500",
     "dark:text-slate-600",
   ];
+
+  #selectedDate;
 
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
@@ -136,6 +138,9 @@ export default class extends Controller {
     // set the month and year inputs
     this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
+    console.log(this.datepickerInputTarget.value);
+    this.#selectedDate = this.datepickerInputTarget.value;
+    console.log(this.#selectedDate);
     this.#loadCalendar();
   }
 
@@ -345,7 +350,7 @@ export default class extends Controller {
   #addStylingToDates() {
     // already selected date (if a date selection already exists)
     const selectedDate = this.calendarTarget.querySelector(
-      `[data-date='${this.selectedDateValue}']`,
+      `[data-date='${this.#selectedDate}']`,
     );
     // today's date
     const today = this.calendarTarget.querySelector(
@@ -394,7 +399,7 @@ export default class extends Controller {
     );
 
     const selectedDate = this.calendarTarget.querySelector(
-      `[data-date='${this.selectedDateValue}']`,
+      `[data-date='${this.#selectedDate}']`,
     );
 
     const minDate = this.calendarTarget.querySelector(
@@ -410,7 +415,7 @@ export default class extends Controller {
 
     // else set the 1st of the month as tab target
     if (minDate) {
-      if (selectedDate && this.selectedDateValue > this.minDateValue) {
+      if (selectedDate && this.#selectedDate > this.minDateValue) {
         selectedDate.tabIndex = 0;
       } else if (today && this.#todaysFormattedFullDate > this.minDateValue) {
         today.tabIndex = 0;
@@ -498,8 +503,8 @@ export default class extends Controller {
 
   #getKeyboardHandler(key) {
     const handlers = {
-      " ": this.#selectDate.bind(this),
-      Enter: this.#selectDate.bind(this),
+      " ": this.selectDate.bind(this),
+      Enter: this.selectDate.bind(this),
       ArrowLeft: (event) => this.#handleHorizontalNavigation(event, "left"),
       ArrowRight: (event) => this.#handleHorizontalNavigation(event, "right"),
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up"),
@@ -512,8 +517,14 @@ export default class extends Controller {
     return handlers[key];
   }
 
-  #selectDate(event) {
-    console.log("select date");
+  selectDate(event) {
+    this.datepickerInputTarget.value = event.target.getAttribute("data-date");
+
+    if (this.autosubmitValue) {
+      this.element.closest("form").requestSubmit();
+    }
+
+    this.calendarComponentTarget.remove();
   }
 
   #handleHorizontalNavigation(event, direction) {
