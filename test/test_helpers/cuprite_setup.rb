@@ -22,7 +22,7 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     # Allow running Chrome in a headful mode by setting HEADLESS env
     # var to a falsey value
     headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
-    **(ENV.key?('BROWSERLESS_HOST') ? { url: "http://#{ENV['BROWSERLESS_HOST']}:4000" } : {})
+    **(ENV.key?('BROWSERLESS_HOST') ? { url: "http://#{ENV['BROWSERLESS_HOST']}:3333" } : {})
   )
 end
 

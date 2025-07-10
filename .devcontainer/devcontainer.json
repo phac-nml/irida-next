@@ -21,11 +21,12 @@
     "PARALLEL_WORKERS": "1",
     "BROWSERLESS_HOST": "browserless",
     "DB_HOST": "postgres",
-    "GA4GH_WES_URL": "http://sapporo:1122"
+    "GA4GH_WES_URL": "http://sapporo:1122",
+    "VALIDATOR_HOST": "vnu"
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [1122, 3000, 5432, 6379],
+  "forwardPorts": [1122, 3000, 3333, 5432, 6379],
 
   // Configure tool-specific properties.
   "customizations": {

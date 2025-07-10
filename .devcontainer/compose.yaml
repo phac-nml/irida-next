@@ -21,6 +21,7 @@ services:
       - browserless
       - postgres
       - sapporo
+      - vnu
 
   browserless:
     image: browserless/chrome:latest
@@ -28,8 +29,14 @@ services:
     volumes:
       - ../..:/workspaces:cached
     environment:
-      PORT: 4000
+      PORT: 3333
       TIMEOUT: 600000 # sessions live up to 10 minutes max
+
+  vnu:
+    image: ghcr.io/validator/validator:latest
+    restart: always
+    ports:
+      - "8888:8888"
 
   postgres:
     image: postgres:14.17
