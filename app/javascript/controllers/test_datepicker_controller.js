@@ -4,7 +4,10 @@ export default class extends Controller {
   static targets = [
     "datepickerInput",
     "backButton",
-    "month",
+    "monthsArray",
+    "monthSelect",
+    "monthSelectContainer",
+    "monthSelectTemplate",
     "year",
     "calendar",
     "calendarComponent",
@@ -68,19 +71,28 @@ export default class extends Controller {
   ];
 
   #selectedDate;
+  #months;
 
+  // today's date attributes for quick access
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
   #todaysMonthIndex = this.#todaysFullDate.getMonth();
   #todaysDate = this.#todaysFullDate.getDate();
   #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
 
-  #selectedYear = this.#todaysFullDate.getFullYear();
-  #selectedMonthIndex = this.#todaysFullDate.getMonth();
+  // the currently displayed year/month on datepicker
+  #selectedYear = this.#todaysYear;
+  #selectedMonthIndex = this.#todaysMonthIndex;
 
   initialize() {
     this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
     this.boundRemoveCalender = this.removeCalendar.bind(this);
+
+    // Since datepicker controller call is handled outside of the component, rather than having to add a monthsValue,
+    // every time the datepicker is called, we'll sneak the months array in via HTML within the component,
+    // assign the array to a global var here, and then remove the HTML
+    this.#months = JSON.parse(this.monthsArrayTarget.innerHTML);
+    this.monthsArrayTarget.remove();
   }
 
   connect() {
@@ -88,7 +100,6 @@ export default class extends Controller {
       "focus",
       this.boundAddCalenderTemplate,
     );
-
     // this.datepickerInputTarget.addEventListener(
     //   "focusout",
     //   this.boundRemoveCalender,
@@ -131,16 +142,14 @@ export default class extends Controller {
   }
 
   idempotentConnect() {
-    console.log(document.activeElement);
+    // console.log(document.activeElement);
     this.#clearCalendar();
     // set the months dropdown in case we're in the year of the minimum date
     this.#setMonths();
     // set the month and year inputs
-    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
-    console.log(this.datepickerInputTarget.value);
     this.#selectedDate = this.datepickerInputTarget.value;
-    console.log(this.#selectedDate);
     this.#loadCalendar();
   }
 
@@ -149,33 +158,23 @@ export default class extends Controller {
   }
 
   #setMonths() {
-    this.monthTarget.innerHTML = "";
-    // if 2025 is #selectedYear and minDate = 2025-06-01, we don't want the dropdown to include Jan -> May
-    // else if we're not in minDates year, add all months
+    this.monthSelectContainerTarget.innerHTML = "";
+    const monthSelectTemplate =
+      this.monthSelectTemplateTarget.content.cloneNode(true);
+    const monthSelect = monthSelectTemplate.querySelector("select");
+    // if 2025 is #selectedYear and minDate = 2025-06-01, we remove Jan -> May from select template and append
     if (this.minDateValue && this.minDateValue.includes(this.#selectedYear)) {
       const minDateMonthIndex = new Date(this.minDateValue).getMonth();
-      for (let i = minDateMonthIndex; i < 12; i++) {
-        this.monthTarget.appendChild(
-          this.#createMonthOption(this.monthsValue[i]),
-        );
+      for (let i = 0; i < minDateMonthIndex; i++) {
+        monthSelect.firstElementChild.remove();
       }
-    } else {
-      this.monthsValue.forEach((month) => {
-        this.monthTarget.appendChild(this.#createMonthOption(month));
-      });
     }
-  }
-
-  #createMonthOption(month) {
-    let option = document.createElement("option");
-    option.value = month;
-    option.textContent = month;
-    return option;
+    this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
   #setBackButton() {
-    // if minimum date exists in the calendar, we're on the first allowable month and want to prevent user from
-    // going to previous months
+    // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
+    // we disable the back button so user can't navigate further back
     this.backButtonTarget.disabled = this.#preventPreviousMonthNavigation();
   }
 
@@ -194,15 +193,16 @@ export default class extends Controller {
     this.#fillCalendarWithDates(fullCalendar);
 
     this.#addStylingToDates();
+    // only 1 date is tabbable (either the currently selected date, today's date, or the 1st)
     this.#setTabIndex();
     // disable month's 'back' button if we're on first allowable month
     this.#setBackButton();
   }
 
   #getPreviousMonthsDates() {
-    let firstDayOfMonthIndex = new Date(
-      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
-    ).getDay();
+    let firstDayOfMonthIndex = this.#getDayOfWeek(
+      `${this.#selectedYear}, ${this.#months[this.#selectedMonthIndex]}, 1`,
+    );
     // if first day lands on Sunday, we don't need to backfill dates
     if (firstDayOfMonthIndex === 0) {
       return [];
@@ -210,7 +210,7 @@ export default class extends Controller {
       let lastDate;
       // check previous month's last date
       if (this.#selectedMonthIndex == 2) {
-        lastDate = this.#checkLeapYear(this.#selectedYear) ? 29 : 28;
+        lastDate = this.#getFebLastDate(this.#selectedYear);
       } else {
         const previousMonthIndex =
           this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
@@ -228,7 +228,7 @@ export default class extends Controller {
 
     // if february, check for leap year
     if (this.#selectedMonthIndex == 1) {
-      thisMonthsLastDate = this.#checkLeapYear(this.#selectedYear) ? 29 : 28;
+      thisMonthsLastDate = this.#getFebLastDate(this.#selectedYear);
     } else {
       thisMonthsLastDate = this.#DAYS_IN_MONTH[this.#selectedMonthIndex];
     }
@@ -237,9 +237,9 @@ export default class extends Controller {
   }
 
   #getNextMonthsDates(thisMonthsLastDate) {
-    let lastDayOfMonthDay = new Date(
-      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
-    ).getDay();
+    let lastDayOfMonthDay = this.#getDayOfWeek(
+      `${this.#selectedYear}, ${this.#months[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
+    );
 
     // if lastDay == 6, last day is on a saturday and we don't need to fill out the rest of the week
     if (lastDayOfMonthDay === 6) {
@@ -259,12 +259,10 @@ export default class extends Controller {
     // relativeMonthPosition flips from previous to next based on similar logic to inCurrentMonth, so we know which
     // month to add for the 'data-date' attribute
     let relativeMonthPosition = "previous";
-    // datesAddedCounter incremented each iteration of forEach loop, so every 7 counts (a week), a new tableRow is
-    // created for the calendar table
-    let datesAddedCounter = 1;
     let tableRow = document.createElement("tr");
-    dates.forEach((date) => {
-      if (date === 1) {
+
+    for (let i = 0; i < dates.length; i++) {
+      if (dates[i] === 1) {
         inCurrentMonth = !inCurrentMonth;
         if (!inCurrentMonth) {
           relativeMonthPosition = "next";
@@ -275,13 +273,13 @@ export default class extends Controller {
         const inMonthDate =
           this.inMonthDateTemplateTarget.content.cloneNode(true);
         const tableCell = inMonthDate.querySelector("td");
-        tableCell.innerText = date;
+        tableCell.innerText = dates[i];
         tableCell.setAttribute(
           "data-date",
           this.#getFormattedStringDate(
             this.#selectedYear,
             this.#selectedMonthIndex,
-            date,
+            dates[i],
           ),
         );
         tableRow.appendChild(inMonthDate);
@@ -289,25 +287,24 @@ export default class extends Controller {
         const outOfMonthDate =
           this.outOfMonthDateTemplateTarget.content.cloneNode(true);
         const tableCell = outOfMonthDate.querySelector("td");
-        tableCell.innerText = date;
+        tableCell.innerText = dates[i];
         tableCell.setAttribute(
           "data-date",
           this.#getFormattedStringDate(
             this.#selectedYear,
             this.#getRelativeMonthIndex(relativeMonthPosition),
-            date,
+            dates[i],
           ),
         );
         tableRow.appendChild(outOfMonthDate);
       }
 
-      if (datesAddedCounter % 7 === 0) {
+      // i is offset by 1 so we add 1 to check if we've done a full week
+      if ((i + 1) % 7 === 0) {
         this.calendarTarget.append(tableRow);
         tableRow = document.createElement("tr");
       }
-
-      ++datesAddedCounter;
-    });
+    }
   }
 
   // returns date range
@@ -319,8 +316,9 @@ export default class extends Controller {
     );
   };
 
-  #checkLeapYear(year) {
-    return new Date(year, 1, 29).getDate() === 29;
+  // checks leap year
+  #getFebLastDate(year) {
+    return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
   }
 
   #getRelativeMonthIndex(relativePosition) {
@@ -349,18 +347,12 @@ export default class extends Controller {
 
   #addStylingToDates() {
     // already selected date (if a date selection already exists)
-    const selectedDate = this.calendarTarget.querySelector(
-      `[data-date='${this.#selectedDate}']`,
-    );
+    const selectedDate = this.#getDateNode(this.#selectedDate);
     // today's date
-    const today = this.calendarTarget.querySelector(
-      `[data-date='${this.#todaysFormattedFullDate}']`,
-    );
+    const today = this.#getDateNode(this.#todaysFormattedFullDate);
 
     // minimum date where dates prior will be disabled
-    const minDate = this.calendarTarget.querySelector(
-      `[data-date='${this.minDateValue}']`,
-    );
+    const minDate = this.#getDateNode(this.minDateValue);
 
     if (selectedDate) {
       this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
@@ -394,24 +386,14 @@ export default class extends Controller {
 
   // set the tab index to a single date
   #setTabIndex() {
-    const today = this.calendarTarget.querySelector(
-      `[data-date='${this.#todaysFormattedFullDate}']`,
-    );
+    const today = this.#getDateNode(this.#todaysFormattedFullDate);
+    const selectedDate = this.#getDateNode(this.#selectedDate);
+    const minDate = this.#getDateNode(this.minDateValue);
 
-    const selectedDate = this.calendarTarget.querySelector(
-      `[data-date='${this.#selectedDate}']`,
-    );
+    // if minimum date and selected or todays date land on same month/year,
+    // prioritize selectedDate > todaysDate > minDate as tabbable
 
-    const minDate = this.calendarTarget.querySelector(
-      `[data-date='${this.minDateValue}']`,
-    );
-
-    // if minimum date and selected or todays date land on same month/year, check if todays date is selectable based on minDate
-    // and if not, set minDate as tab target
-
-    // else if today (and no minDate), check if today is 'inMonth' and not 'outMonth' (eg: if today is
-    // July 31st and we're on Aug, it's possible July 31st still exists on the calendar, but we'd set Aug 1st as
-    // tabbable)
+    // else check if selected then todays dates are on the calendar and within the current selected month and year
 
     // else set the 1st of the month as tab target
     if (minDate) {
@@ -422,29 +404,19 @@ export default class extends Controller {
       } else {
         minDate.tabIndex = 0;
       }
-    } else if (selectedDate) {
+    } else if (selectedDate && this.#verifyDateIsInMonth(today)) {
       selectedDate.tabIndex = 0;
-    } else if (today) {
-      if (
-        today.getAttribute("data-date-within-month-position") === "outOfMonth"
-      ) {
-        this.calendarTarget.querySelector(
-          '[data-date-within-month-position="inMonth"]',
-        ).tabIndex = 0;
-      } else {
-        today.tabIndex = 0;
-      }
+    } else if (today && this.#verifyDateIsInMonth(today)) {
+      today.tabIndex = 0;
     } else {
-      this.calendarTarget.querySelector(
-        '[data-date-within-month-position="inMonth"]',
-      ).tabIndex = 0;
+      this.#getFirstOfMonthNode().tabIndex = 0;
     }
   }
 
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -455,7 +427,7 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
@@ -464,8 +436,11 @@ export default class extends Controller {
   }
 
   changeMonth() {
-    this.#selectedMonthIndex = this.monthsValue.indexOf(this.monthTarget.value);
+    this.#selectedMonthIndex = this.#months.indexOf(
+      this.monthSelectTarget.value,
+    );
     this.idempotentConnect();
+    this.monthSelectTarget.focus();
   }
 
   changeYear() {
@@ -474,10 +449,10 @@ export default class extends Controller {
       const minDate = new Date(this.minDateValue);
       const minYear = minDate.getFullYear();
       const minMonth = minDate.getMonth();
-      if (this.yearTarget.value <= minYear) {
+      if (this.yearTarget.value < minYear) {
         this.yearTarget.value = minYear;
-        // if minDate was 2025-06-01 and user was on January 2026 and changes year to 2025, we want to set the month
-        // to June
+        // if minDate was 2025-06-01 and user was on January 2026 and changes year to 2025, since we don't want
+        // January 2025 to be selectable, we want to set the month to June
         if (this.#selectedMonthIndex < minMonth) {
           this.#selectedMonthIndex = minMonth;
         }
@@ -511,8 +486,8 @@ export default class extends Controller {
       ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
       Home: this.#navigateToStart.bind(this),
       End: this.#navigateToEnd.bind(this),
-      PageUp: this.#navigateByPageUp.bind(this),
-      PageDown: this.#navigateByPageDown.bind(this),
+      PageUp: this.#previousMonthByPageUp.bind(this),
+      PageDown: this.#nextMonthByPageDown.bind(this),
     };
     return handlers[key];
   }
@@ -539,42 +514,37 @@ export default class extends Controller {
 
   #handleHorizontalNavigation(event, direction) {
     if (direction === "left") {
-      const previousDate = this.calendarTarget.querySelector(
-        `[data-date='${this.#getFormattedStringDate(
+      const previousDate = this.#getDateNode(
+        this.#getFormattedStringDate(
           this.#selectedYear,
           this.#selectedMonthIndex,
           parseInt(event.target.innerText) - 1,
-        )}']`,
+        ),
       );
+
       if (previousDate.getAttribute("data-date-disabled")) return;
       if (this.#verifyDateIsInMonth(previousDate)) {
         this.#focusDate(previousDate);
       } else {
         this.previousMonth();
-        const allCalenderInMonthDates = this.calendarTarget.querySelectorAll(
-          '[data-date-within-month-position="inMonth"]',
-        );
+        const allCalenderInMonthDates = this.#getAllInMonthDateNodes();
         this.#focusDate(
           allCalenderInMonthDates[allCalenderInMonthDates.length - 1],
         );
       }
     } else {
-      const nextDate = this.calendarTarget.querySelector(
-        `[data-date='${this.#getFormattedStringDate(
+      const nextDate = this.#getDateNode(
+        this.#getFormattedStringDate(
           this.#selectedYear,
           this.#selectedMonthIndex,
           parseInt(event.target.innerText) + 1,
-        )}']`,
+        ),
       );
       if (this.#verifyDateIsInMonth(nextDate)) {
         this.#focusDate(nextDate);
       } else {
         this.nextMonth();
-        this.#focusDate(
-          this.calendarTarget.querySelector(
-            '[data-date-within-month-position="inMonth"]',
-          ),
-        );
+        this.#focusDate(this.#getFirstOfMonthNode());
       }
     }
   }
@@ -658,9 +628,7 @@ export default class extends Controller {
   }
 
   #navigateToStart() {
-    const firstDate = this.calendarTarget.querySelector(
-      '[data-date-within-month-position="inMonth"]',
-    );
+    const firstDate = this.#getFirstOfMonthNode();
 
     if (firstDate.getAttribute("data-date-disabled")) {
       const allDisabledDates = Array.from(
@@ -673,65 +641,72 @@ export default class extends Controller {
         this.#selectedMonthIndex,
         parseInt(lastDisabledDate.innerText) + 1,
       );
-      this.#focusDate(
-        this.calendarTarget.querySelector(`[data-date='${targetDate}']`),
-      );
+      this.#focusDate(this.#getDateNode(targetDate));
     } else {
       this.#focusDate(firstDate);
     }
   }
 
   #navigateToEnd() {
-    const allMonthDates = Array.from(
-      this.calendarTarget.querySelectorAll(
-        '[data-date-within-month-position="inMonth"]',
-      ),
-    );
+    const allInMonthDatesNodes = Array.from(this.#getAllInMonthDateNodes());
 
-    this.#focusDate(allMonthDates[allMonthDates.length - 1]);
+    this.#focusDate(allInMonthDatesNodes[allInMonthDatesNodes.length - 1]);
   }
 
-  #navigateByPageUp() {
+  #previousMonthByPageUp() {
     if (this.#preventPreviousMonthNavigation()) return;
     this.previousMonth();
 
     if (this.minDateValue) {
-      const minDateNode = this.calendarTarget.querySelector(
-        `[data-date='${this.minDateValue}']`,
-      );
+      const minDateNode = this.#getDateNode(this.minDateValue);
 
       if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
         this.#focusDate(minDateNode);
       } else {
-        const firstDateNode = this.calendarTarget.querySelector(
-          '[data-date-within-month-position="inMonth"]',
-        );
-        this.#focusDate(firstDateNode);
+        this.#focusDate(this.#getFirstOfMonthNode());
       }
     }
   }
 
-  #navigateByPageDown() {
+  #nextMonthByPageDown() {
     this.nextMonth();
-    this.#focusDate(
-      this.calendarTarget.querySelector(
-        '[data-date-within-month-position="inMonth"]',
-      ),
-    );
-  }
-
-  #verifyDateIsInMonth(date) {
-    return date.getAttribute("data-date-within-month-position") === "inMonth";
+    this.#focusDate(this.#getFirstOfMonthNode());
   }
 
   #preventPreviousMonthNavigation() {
     if (this.minDateValue) {
-      const minDateNode = this.calendarTarget.querySelector(
-        `[data-date='${this.minDateValue}']`,
-      );
-
-      if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) return true;
+      const minDateNode = this.#getDateNode(this.minDateValue);
+      if (
+        this.#getDateNode(this.minDateValue) &&
+        this.#verifyDateIsInMonth(minDateNode)
+      )
+        return true;
+    } else {
+      return false;
     }
-    return false;
+  }
+
+  #verifyDateIsInMonth(node) {
+    return node.getAttribute("data-date-within-month-position") === "inMonth";
+  }
+
+  #getDayOfWeek(date) {
+    return new Date(date).getDay();
+  }
+
+  #getDateNode(date) {
+    return this.calendarTarget.querySelector(`[data-date='${date}']`);
+  }
+
+  #getFirstOfMonthNode() {
+    return this.calendarTarget.querySelector(
+      '[data-date-within-month-position="inMonth"]',
+    );
+  }
+
+  #getAllInMonthDateNodes() {
+    return this.calendarTarget.querySelectorAll(
+      '[data-date-within-month-position="inMonth"]',
+    );
   }
 }
