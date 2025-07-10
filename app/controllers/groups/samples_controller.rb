@@ -20,6 +20,7 @@ module Groups
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @group.has_samples?
+      @results_message = results_message
     end
 
     def search
@@ -112,6 +113,36 @@ module Groups
                                                      scope_options: { group: @group }).pluck(:id)
 
       @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: @group_project_ids }))
+    end
+
+    def results_message
+      @results_message =
+        if @query.advanced_query?
+          results_message_for_advanced_search
+        elsif @query.name_or_puid_cont
+          results_message_for_quick_search
+        end
+    end
+
+    def results_message_for_advanced_search
+      if @pagy&.count&.zero?
+        I18n.t(:'components.search.advanced.results_message.zero')
+      elsif @pagy&.count == 1
+        I18n.t(:'components.search.advanced.results_message.singular')
+      else
+        I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
+      end
+    end
+
+    def results_message_for_quick_search
+      if @pagy&.count&.zero?
+        I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
+      elsif @pagy&.count == 1
+        I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
+      else
+        I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
+                                                            search_term: @query.name_or_puid_cont)
+      end
     end
 
     def search_params

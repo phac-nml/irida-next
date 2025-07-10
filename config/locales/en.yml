@@ -663,6 +663,16 @@ en:
       view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    search:
+      advanced:
+        results_message:
+          plural: "%{total_count} results found for advanced search"
+          singular: 1 result found for advanced search
+          zero: No results found for advanced search
+      results_message:
+        plural: "%{total_count} results found for '%{search_term}'"
+        singular: 1 result found for '%{search_term}'
+        zero: No results found for '%{search_term}'
     token:
       copied: Copied!
       copy: Copy to clipboard
@@ -736,8 +746,8 @@ en:
     groups:
       index:
         create_group_button: New group
-        no_groups_description: No groups found matching your search
-        no_groups_title: No groups found
+        no_groups_description: You currently have no groups.
+        no_groups_title: No groups
         search:
           placeholder: Filter by PUID or name
         sorting:
@@ -752,7 +762,7 @@ en:
       index:
         all: All
         create_project_button: New project
-        no_projects: No projects found
+        no_projects: No projects
         no_projects_description: You currently have no projects.
         personal: Personal
         row:

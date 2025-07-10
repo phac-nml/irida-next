@@ -6,6 +6,7 @@
               placeholder: t("workflow_executions.files.search.placeholder"),
               url:
                 namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution),
+              total_count: @pagy.count,
               html: {
                 "data-turbo-action": "replace",
               }
