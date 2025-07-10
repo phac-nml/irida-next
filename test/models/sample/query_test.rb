@@ -43,9 +43,9 @@ class QueryTest < ActiveSupport::TestCase
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
     assert query.groups[0].conditions[1].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.blank_error')
+                                                       I18n.t('validators.advanced_search_group_validator.select_blank_error') # rubocop:disable Layout/LineLength
     assert query.groups[0].conditions[1].errors.added? :operator,
-                                                       I18n.t('validators.advanced_search_group_validator.blank_error')
+                                                       I18n.t('validators.advanced_search_group_validator.select_blank_error') # rubocop:disable Layout/LineLength
     assert query.groups[0].conditions[1].errors.added? :value,
                                                        I18n.t('validators.advanced_search_group_validator.blank_error')
   end

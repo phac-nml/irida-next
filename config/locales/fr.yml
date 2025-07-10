@@ -2278,6 +2278,7 @@ fr:
       group_error: Le groupe a des erreurs
       invalid_field_error: Est un champ de métadonnées non valide
       numeric_operator_error: Ne peut être utilisé que sur les numéros
+      select_blank_error: must be a valid option from the list
       uniqueness_error: Doit être unique
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: La propriété '%{property}' doit correspondre au format de fichier attendu de '%{file_format}'
