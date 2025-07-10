@@ -171,6 +171,7 @@ end
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   workflow_execution_basic = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
+    name: 'irida-next-example-basic',
     namespace_id: Sample.first.project.namespace.id,
     workflow_params: { assembler: 'stub' },
     workflow_type: 'NFL',
@@ -199,6 +200,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
 
   workflow_execution_completed = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example-completed', workflow_version: '1.0dev' },
+    name: 'irida-next-example-completed',
     namespace_id: Sample.first.project.namespace.id,
     workflow_params: { assembler: 'stub' },
     workflow_type: 'NFL',
@@ -244,7 +246,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metric
 
   export_params = [
     {
-      user: User.find_by(email: 'admin@email.com'),
+      user: User.find_by(email: 'user0@email.com'),
       sample: Sample.find_by(name: "Bacillus anthracis/Outbreak #{current_year - 2} Sample 10")
     },
     {
@@ -338,7 +340,7 @@ if Rails.env.development?
 
   users = [
     {
-      email: 'admin@email.com',
+      email: 'user0@email.com',
       password: 'password1',
       password_confirmation: 'password1',
       first_name: 'ad',
