@@ -22,6 +22,7 @@
     class="datepicker-input"
   >
 </div>
+<div data-test-datepicker-target="monthsArray" class="hidden"><%= months %></div>
 <template data-test-datepicker-target="calenderTemplate">
   <div
     data-test-datepicker-target="calendarComponent"
@@ -60,12 +61,7 @@
           >
             <%= helpers.render_icon(ICONS[:arrow_left]) %>
           </button>
-          <div>
-            <select
-              data-test-datepicker-target="month"
-              data-action="change->test-datepicker#changeMonth"
-            >
-            </select>
+          <div data-test-datepicker-target="monthSelectContainer">
           </div>
           <div>
             <input
@@ -185,4 +181,24 @@
     data-date-within-month-position="outOfMonth"
     data-action="keydown->test-datepicker#navigateCalendar"
   ></td>
+</template>
+
+<template data-test-datepicker-target="monthSelectTemplate">
+  <select
+    data-test-datepicker-target="monthSelect"
+    data-action="change->test-datepicker#changeMonth"
+  >
+    <option value="<%= t(".months.january")%>"><%= t(".months.january") %></option>
+    <option value="<%= t(".months.february")%>"><%= t(".months.february") %></option>
+    <option value="<%= t(".months.march")%>"><%= t(".months.march") %></option>
+    <option value="<%= t(".months.april")%>"><%= t(".months.april") %></option>
+    <option value="<%= t(".months.may")%>"><%= t(".months.may") %></option>
+    <option value="<%= t(".months.june")%>"><%= t(".months.june") %></option>
+    <option value="<%= t(".months.july")%>"><%= t(".months.july") %></option>
+    <option value="<%= t(".months.august")%>"><%= t(".months.august") %></option>
+    <option value="<%= t(".months.september")%>"><%= t(".months.september") %></option>
+    <option value="<%= t(".months.october")%>"><%= t(".months.october") %></option>
+    <option value="<%= t(".months.november")%>"><%= t(".months.november") %></option>
+    <option value="<%= t(".months.december")%>"><%= t(".months.december") %></option>
+  </select>
 </template>
