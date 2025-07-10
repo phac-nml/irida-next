@@ -14,20 +14,18 @@ module Viral
         @min_date = min_date
         @selected_date = selected_date
         @autosubmit = autosubmit
-        @months = %w[
-          January
-          February
-          March
-          April
-          May
-          June
-          July
-          August
-          September
-          October
-          November
-          December
-        ]
+        @months = [I18n.t('viral.form.test_datepicker_component.months.january'),
+                   I18n.t('viral.form.test_datepicker_component.months.february'),
+                   I18n.t('viral.form.test_datepicker_component.months.march'),
+                   I18n.t('viral.form.test_datepicker_component.months.april'),
+                   I18n.t('viral.form.test_datepicker_component.months.may'),
+                   I18n.t('viral.form.test_datepicker_component.months.june'),
+                   I18n.t('viral.form.test_datepicker_component.months.july'),
+                   I18n.t('viral.form.test_datepicker_component.months.august'),
+                   I18n.t('viral.form.test_datepicker_component.months.september'),
+                   I18n.t('viral.form.test_datepicker_component.months.october'),
+                   I18n.t('viral.form.test_datepicker_component.months.november'),
+                   I18n.t('viral.form.test_datepicker_component.months.december')].to_json
 
         @min_year = min_date.nil? ? '1' : min_date.to_s.split('-')[0]
       end
