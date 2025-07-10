@@ -23,6 +23,7 @@ module Projects
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
       @results_message = results_message
+      @search_term = @query.quick_search? || query.advanced_query?
     end
 
     def search

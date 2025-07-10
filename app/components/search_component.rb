@@ -18,6 +18,14 @@ class SearchComponent < Component
   end
   # rubocop:enable Metrics/ParameterLists
 
+  def kwargs
+    @kwargs.tap do |args|
+      args[:data] ||= {}
+      args[:data][:controller] = 'selection'
+      args[:data]['turbo-action'] = 'replace'
+    end
+  end
+
   def results_message
     if @total_count.zero?
       I18n.t(:'components.search.results_message.zero', search_term: params[:q][@search_attribute])

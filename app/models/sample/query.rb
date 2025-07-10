@@ -53,6 +53,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     assign_attributes(column:, direction:)
   end
 
+  def quick_search?
+    !name_or_puid_cont.nil? || !name_or_puid_in.empty?
+  end
+
   def advanced_query?
     return !groups.all?(&:empty?) if groups
 

@@ -27,7 +27,7 @@ class SearchComponentTest < ViewComponent::TestCase
 
       render_inline SearchComponent.new(query: Member.ransack, url:, search_attribute:, placeholder:, total_count:)
 
-      assert_selector 'div[role^="status"]', count: total_count,
+      assert_selector 'div[role^="status"]', count: 1,
                                              text: I18n.t(:'components.search.results_message.zero',
                                                           search_term:)
     end

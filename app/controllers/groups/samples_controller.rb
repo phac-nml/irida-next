@@ -21,6 +21,7 @@ module Groups
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @group.has_samples?
       @results_message = results_message
+      @search_term = @query.quick_search? || query.advanced_query?
     end
 
     def search
