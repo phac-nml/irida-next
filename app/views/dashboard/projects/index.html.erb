@@ -30,7 +30,7 @@
       ) %>
       <% tabs_panel.with_right_content do %>
         <div class="inline-flex space-x-2">
-          <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder"), total_count: @pagy.count, data: { turbo_action: "replace" }) do %>
+          <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder"), total_count: @pagy.count) do %>
             <% if params[:personal] == 'true' %>
               <input type="hidden" name="personal" value="true">
             <% end %>
@@ -86,6 +86,9 @@
                     nil
                   end
                 ),
+              data: {
+                turbo_action: "replace",
+              },
             ) %>
           <% else %>
             <%= viral_empty(

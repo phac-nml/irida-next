@@ -13,6 +13,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert_not query.advanced_query?
+    assert query.quick_search?
     assert query.valid?
   end
 
@@ -25,6 +26,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert query.valid?
   end
 
@@ -39,6 +41,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
@@ -59,6 +62,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
@@ -75,6 +79,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert query.valid?
   end
 
@@ -90,6 +95,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert query.valid?
   end
 
@@ -104,6 +110,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
@@ -124,6 +131,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
@@ -144,6 +152,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert query.valid?
   end
 
@@ -157,6 +166,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
@@ -174,6 +184,7 @@ class QueryTest < ActiveSupport::TestCase
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
+    assert_not query.quick_search?
     assert_not query.valid?
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
