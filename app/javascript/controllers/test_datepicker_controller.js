@@ -513,83 +513,78 @@ export default class extends Controller {
   }
 
   #handleHorizontalNavigation(event, direction) {
-    if (direction === "left") {
-      const previousDate = this.#getDateNode(
-        this.#getFormattedStringDate(
-          this.#selectedYear,
-          this.#selectedMonthIndex,
-          parseInt(event.target.innerText) - 1,
-        ),
-      );
+    let targetDate;
+    let currentDate = parseInt(event.target.innerText);
 
-      if (previousDate.getAttribute("data-date-disabled")) return;
-      if (this.#verifyDateIsInMonth(previousDate)) {
-        this.#focusDate(previousDate);
-      } else {
-        this.previousMonth();
-        const allCalenderInMonthDates = this.#getAllInMonthDateNodes();
-        this.#focusDate(
-          allCalenderInMonthDates[allCalenderInMonthDates.length - 1],
-        );
-      }
+    if (direction === "left") {
+      targetDate = currentDate - 1;
     } else {
-      const nextDate = this.#getDateNode(
-        this.#getFormattedStringDate(
-          this.#selectedYear,
-          this.#selectedMonthIndex,
-          parseInt(event.target.innerText) + 1,
-        ),
-      );
-      if (this.#verifyDateIsInMonth(nextDate)) {
-        this.#focusDate(nextDate);
-      } else {
-        this.nextMonth();
-        this.#focusDate(this.#getFirstOfMonthNode());
-      }
+      targetDate = currentDate + 1;
     }
+
+    const targetFullDate = this.#getFormattedStringDate(
+      this.#selectedYear,
+      this.#selectedMonthIndex,
+      targetDate,
+    );
+
+    // if navigating 'left', check if the minimum date is higher than the target date to prevent navigation
+    if (
+      direction === "left" &&
+      this.minDateValue &&
+      this.minDateValue > targetFullDate
+    ) {
+      return;
+    }
+
+    // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth,
+    // change the month based on direction and re-assign dateNode
+    let targetDateNode = this.#getDateNode(targetFullDate);
+    if (!this.#verifyDateIsInMonth(targetDateNode)) {
+      direction === "left" ? this.previousMonth() : this.nextMonth();
+      targetDateNode = this.#getDateNode(targetFullDate);
+    }
+    this.#focusDate(targetDateNode);
   }
 
   #handleVerticalNavigation(event, direction) {
-    const currentWeekNode = event.target.parentNode;
-    const currentDayOfWeekIndex = Array.from(currentWeekNode.children).indexOf(
-      event.target,
-    );
-    if (direction === "up") {
-      let previousWeek = currentWeekNode.previousElementSibling;
+    let targetWeek;
+    let targetDate;
+    const currentWeek = event.target.parentNode;
+    let currentDate = parseInt(event.target.innerText);
 
-      const targetDate = this.#getFormattedStringDate(
-        this.#selectedYear,
-        this.#selectedMonthIndex,
-        parseInt(event.target.innerText) - 7,
-      );
-      if (this.minDateValue && this.minDateValue > targetDate) return;
-      if (previousWeek) {
-        const targetDay = Array.from(previousWeek.children)[
-          currentDayOfWeekIndex
-        ];
-        if (this.#verifyDateIsInMonth(targetDay)) {
-          this.#focusDate(
-            Array.from(previousWeek.children)[currentDayOfWeekIndex],
-          );
-        } else {
-          this.#focusOnPreviousMonthChange(currentDayOfWeekIndex);
-        }
-      } else {
-        this.#focusOnPreviousMonthChange(currentDayOfWeekIndex);
-      }
+    if (direction === "up") {
+      targetWeek = currentWeek.previousElementSibling;
+      targetDate = currentDate - 7;
     } else {
-      let nextWeek = currentWeekNode.nextElementSibling;
-      if (nextWeek) {
-        const targetDay = Array.from(nextWeek.children)[currentDayOfWeekIndex];
-        if (this.#verifyDateIsInMonth(targetDay)) {
-          this.#focusDate(Array.from(nextWeek.children)[currentDayOfWeekIndex]);
-        } else {
-          this.#focusOnNextMonthChange(currentDayOfWeekIndex);
-        }
-      } else {
-        this.#focusOnNextMonthChange(currentDayOfWeekIndex);
-      }
+      targetWeek = currentWeek.nextElementSibling;
+      targetDate = currentDate + 7;
     }
+
+    const targetFullDate = this.#getFormattedStringDate(
+      this.#selectedYear,
+      this.#selectedMonthIndex,
+      targetDate,
+    );
+
+    // if navigating 'up', check if the minimum date is higher than the target date to prevent navigation
+    if (
+      direction === "up" &&
+      this.minDateValue &&
+      this.minDateValue > targetFullDate
+    ) {
+      return;
+    }
+
+    // try to retrieve the target date node, and if target week is non-existant (eg: we're going up and we're currently
+    // on the first week), or the dateNode doesn't exist or is not inMonth, change the month based on direction and
+    // re-assign dateNode
+    let targetDateNode = this.#getDateNode(targetFullDate);
+    if (!targetWeek || !this.#verifyDateIsInMonth(targetDateNode)) {
+      direction === "up" ? this.previousMonth() : this.nextMonth();
+      targetDateNode = this.#getDateNode(targetFullDate);
+    }
+    this.#focusDate(targetDateNode);
   }
 
   #focusDate(date) {
@@ -599,32 +594,6 @@ export default class extends Controller {
 
     date.tabIndex = 0;
     date.focus();
-  }
-
-  #focusOnPreviousMonthChange(index) {
-    this.previousMonth();
-    let previousWeek = this.calendarTarget.lastElementChild;
-    while (true) {
-      let targetDay = Array.from(previousWeek.children)[index];
-      if (this.#verifyDateIsInMonth(targetDay)) {
-        this.#focusDate(targetDay);
-        break;
-      }
-      previousWeek = previousWeek.previousElementSibling;
-    }
-  }
-
-  #focusOnNextMonthChange(index) {
-    this.nextMonth();
-    let nextWeek = this.calendarTarget.firstElementChild;
-    while (true) {
-      let targetDay = Array.from(nextWeek.children)[index];
-      if (this.#verifyDateIsInMonth(targetDay)) {
-        this.#focusDate(targetDay);
-        break;
-      }
-      nextWeek = nextWeek.nextElementSibling;
-    }
   }
 
   #navigateToStart() {
