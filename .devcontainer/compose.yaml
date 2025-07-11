@@ -24,13 +24,15 @@ services:
       - vnu
 
   browserless:
-    image: browserless/chrome:latest
-    restart: always
+    image: ghcr.io/browserless/chromium:latest
+    restart: unless-stopped
     volumes:
       - ../..:/workspaces:cached
     environment:
+      HOST: browserless
       PORT: 3333
       TIMEOUT: 600000 # sessions live up to 10 minutes max
+      CONCURRENT: 10
 
   vnu:
     image: ghcr.io/validator/validator:latest
