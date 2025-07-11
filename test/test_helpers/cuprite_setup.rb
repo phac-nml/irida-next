@@ -5,14 +5,17 @@ require 'capybara/cuprite'
 # Then, we need to register our driver to be able to use it later
 # with #driven_by method.
 Capybara.register_driver(:irida_next_cuprite) do |app|
-  options = {}
-  options['no-sandbox'] = nil if ENV['CI']
-  options['disable-smooth-scrolling'] = true
+  remote_options = {}
+  remote_options[:url] =
+    "http://#{ENV.fetch('BROWSERLESS_HOST', nil)}:3333/?launch={\"defaultViewport\":{\"height\":1400,\"width\":1400}}"
+  browser_options = {}
+  browser_options['no-sandbox'] = nil if ENV['CI'] || ENV.key?('BROWSERLESS_HOST')
+  browser_options['disable-smooth-scrolling'] = true
   Capybara::Cuprite::Driver.new(
     app,
     window_size: [1400, 1400],
     # See additional options for Dockerized environment in the respective section of this article
-    browser_options: options,
+    browser_options: browser_options,
     # Increase Chrome startup wait time (required for stable CI builds)
     process_timeout: 60,
     # Page load timeout, default is 5
@@ -21,7 +24,8 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     inspector: ENV.fetch('INSPECTOR', false),
     # Allow running Chrome in a headful mode by setting HEADLESS env
     # var to a falsey value
-    headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
+    headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
+    **remote_options
   )
 end
 
