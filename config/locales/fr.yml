@@ -2090,6 +2090,8 @@ fr:
     alert:
       list:
         danger: Danger
+    form:
+      required_field: indicates required field
     loading:
       samples_list_skeleton:
         loading: Chargement...
