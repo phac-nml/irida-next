@@ -121,7 +121,6 @@ export default class extends Controller {
 
     clone.querySelector(".label").textContent = item;
     input.value = item;
-    input.id = crypto.randomUUID();
 
     return clone;
   }
