@@ -1,4 +1,7 @@
-<div class="grid gap-4">
+<div
+  class="grid gap-4"
+  data-controller="integration-action"
+>
     <%= viral_card(
         title: "Authorization Page",
         subtitle: "This page generates a single use token for another application to access your IRIDA Next data.") do %>
@@ -9,20 +12,8 @@
         type="button"
         class="button button-primary"
         aria-label="<%= "Authorize BDIP Sheets Access" %>"
-        onclick="bdip_function()">
+        data-action="integration-action#authorize">
         <%= "Authorize BDIP Sheets Access" %>
         </button>
     </div>
 </div>
-
-<script>
-  function bdip_function(){
-    <% "Authorize BDIP Sheets Access" %>
-
-    console.log("sending token")
-    window.opener.postMessage("this is my dummy token:", 'http:localhost:8081')
-    window.close()
-  };
-</script>
-
-        <%# onclick="bdip_function(<% @personal_access_token.token %>)"> %>
