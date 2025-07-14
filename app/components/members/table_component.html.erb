@@ -120,7 +120,6 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                   class="form-field datepicker"
                   data-test-datepicker-min-date-value="<%= Date.today + 1.day %>"
                   data-test-datepicker-selected-date-value="<%= member.expires_at %>"
-                  data-test-datepicker-months-value="<%= %w[January February March April May June July August September October November December] %>"
                   data-test-datepicker-autosubmit-value="<%= true %>"
                 >
                   <%= viral_test_datepicker(
