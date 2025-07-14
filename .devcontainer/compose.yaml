@@ -31,7 +31,7 @@ services:
     environment:
       HOST: browserless
       PORT: 3333
-      TIMEOUT: 600000 # sessions live up to 10 minutes max
+      TIMEOUT: 900000 # sessions live up to 15 minutes max
       CONCURRENT: 10
 
   vnu:
