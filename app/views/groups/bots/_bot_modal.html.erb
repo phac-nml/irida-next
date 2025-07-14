@@ -53,7 +53,6 @@
           class="form-field datepicker"
           data-test-datepicker-min-date-value="<%= Date.today + 1.day %>"
           data-test-datepicker-selected-date-value="<%= !bot_params.nil? ? bot_params[:expires_at] : "" %>"
-          data-test-datepicker-months-value="<%= %w[January February March April May June July August September October November December] %>"
           data-test-datepicker-autosubmit-value="<%= false %>"
         >
           <%= viral_test_datepicker(min_date: "2025-06-17", selected_date: "2025-07-04") %>

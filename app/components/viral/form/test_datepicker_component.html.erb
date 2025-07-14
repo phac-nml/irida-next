@@ -16,6 +16,7 @@
     autocomplete="off"
     value="<%= selected_date %>"
     data-test-datepicker-target="datepickerInput"
+    data-action="change->test-datepicker#inputChange"
     type="text"
     name="<%= input_name %>"
     id="<%= input_id %>"
@@ -130,6 +131,10 @@
         </table>
       </div>
       <div class="datepicker-footer">
+
+        <div class="text-sm text-center">
+          Earliest date: 2026-01-01
+        </div>
         <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
           <button
             type="button"

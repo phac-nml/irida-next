@@ -19,7 +19,6 @@ export default class extends Controller {
 
   static values = {
     minDate: String,
-    months: Array,
     autosubmit: Boolean,
   };
 
@@ -100,10 +99,34 @@ export default class extends Controller {
       "focus",
       this.boundAddCalenderTemplate,
     );
-    // this.datepickerInputTarget.addEventListener(
-    //   "focusout",
-    //   this.boundRemoveCalender,
-    // );
+    this.datepickerInputTarget.addEventListener(
+      "blur",
+      this.boundRemoveCalender,
+    );
+  }
+
+  idempotentConnect() {
+    // console.log(document.activeElement);
+    this.#clearCalendar();
+    // set the months dropdown in case we're in the year of the minimum date
+    this.#setMonths();
+    // set the month and year inputs
+    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
+    this.yearTarget.value = this.#selectedYear;
+    this.#selectedDate = this.datepickerInputTarget.value;
+    this.#loadCalendar();
+  }
+
+  disconnect() {
+    this.datepickerInputTarget.removeEventListener(
+      "focus",
+      this.boundAddCalenderTemplate,
+    );
+    this.datepickerInputTarget.removeEventListener(
+      "focusout",
+      this.boundRemoveCalender,
+    );
+    console.log("hi");
   }
 
   addCalenderTemplate() {
@@ -130,27 +153,27 @@ export default class extends Controller {
     console.log();
     // console.log("offsetY: " + ev.offsetY + " height: " + domRect.height);)
     this.idempotentConnect();
-  }
 
-  removeCalendar() {
-    if (
-      !document.activeElement === this.datepickerInputTarget ||
-      !document.activeElement === this.calendarComponentTarget
+    this.calendarComponentTarget.addEventListener(
+      "focusout",
+      this.boundRemoveCalender,
     );
-    console.log(document.activeElement);
-    this.calendarComponentTarget.remove();
   }
 
-  idempotentConnect() {
-    // console.log(document.activeElement);
-    this.#clearCalendar();
-    // set the months dropdown in case we're in the year of the minimum date
-    this.#setMonths();
-    // set the month and year inputs
-    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
-    this.yearTarget.value = this.#selectedYear;
-    this.#selectedDate = this.datepickerInputTarget.value;
-    this.#loadCalendar();
+  removeCalendar(event) {
+    console.log("in remove");
+    console.log(event);
+    console.log(this.element);
+    // console.log(event.target === this.datepickerInput);
+    if (
+      document.activeElement !== this.datepickerInputTarget &&
+      this.calendarComponentTarget &&
+      !this.calendarComponentTarget.contains(event.relatedTarget) &&
+      event.target !== this.monthSelectTarget
+    ) {
+      console.log("in if remove");
+      this.calendarComponentTarget.remove();
+    }
   }
 
   #clearCalendar() {
@@ -496,17 +519,20 @@ export default class extends Controller {
     this.datepickerInputTarget.value = event.target.getAttribute("data-date");
 
     if (this.autosubmitValue) {
-      this.element.closest("form").requestSubmit();
+      this.#submitDate();
     }
-
-    this.calendarComponentTarget.remove();
+    console.log("in select date");
+    if (this.element.contains(this.calendarComponentTarget)) {
+      this.calendarComponentTarget.remove();
+    }
+    console.log("select date remove");
   }
 
   clearSelection() {
     this.datepickerInputTarget.value = "";
 
     if (this.autosubmitValue) {
-      this.element.closest("form").requestSubmit();
+      this.#submitDate();
     }
 
     this.calendarComponentTarget.remove();
@@ -587,37 +613,35 @@ export default class extends Controller {
     this.#focusDate(targetDateNode);
   }
 
-  #focusDate(date) {
+  #focusDate(dateNode) {
+    // find current tabbable node, and remove tabIndex
     const currentTabbableDate =
       this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
     currentTabbableDate.tabIndex = -1;
 
-    date.tabIndex = 0;
-    date.focus();
+    // assign tabindex and focus
+    dateNode.tabIndex = 0;
+    dateNode.focus();
   }
 
   #navigateToStart() {
-    const firstDate = this.#getFirstOfMonthNode();
+    // if firstDateNode is disabled, means minDate is on the current calendar, and we can focus that (the first
+    // node we allow navigation to)
+    const firstDateNode = this.#getFirstOfMonthNode();
 
-    if (firstDate.getAttribute("data-date-disabled")) {
-      const allDisabledDates = Array.from(
-        this.calendarTarget.querySelectorAll('[data-date-disabled="true"]'),
-      );
-      console.log(allDisabledDates);
-      const lastDisabledDate = allDisabledDates[allDisabledDates.length - 1];
-      const targetDate = this.#getFormattedStringDate(
-        this.#selectedYear,
-        this.#selectedMonthIndex,
-        parseInt(lastDisabledDate.innerText) + 1,
-      );
-      this.#focusDate(this.#getDateNode(targetDate));
+    if (firstDateNode.getAttribute("data-date-disabled")) {
+      this.#focusDate(this.#getDateNode(this.minDateValue));
     } else {
-      this.#focusDate(firstDate);
+      this.#focusDate(firstDateNode);
     }
   }
 
   #navigateToEnd() {
-    const allInMonthDatesNodes = Array.from(this.#getAllInMonthDateNodes());
+    const allInMonthDatesNodes = Array.from(
+      this.calendarTarget.querySelectorAll(
+        '[data-date-within-month-position="inMonth"]',
+      ),
+    );
 
     this.#focusDate(allInMonthDatesNodes[allInMonthDatesNodes.length - 1]);
   }
@@ -628,7 +652,8 @@ export default class extends Controller {
 
     if (this.minDateValue) {
       const minDateNode = this.#getDateNode(this.minDateValue);
-
+      // if there's a minimum date and it exists in the calendar, focus that
+      // else focus 1st
       if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
         this.#focusDate(minDateNode);
       } else {
@@ -673,9 +698,13 @@ export default class extends Controller {
     );
   }
 
-  #getAllInMonthDateNodes() {
-    return this.calendarTarget.querySelectorAll(
-      '[data-date-within-month-position="inMonth"]',
-    );
+  inputChange() {
+    if (this.autosubmitValue) {
+      this.#submitDate();
+    }
+  }
+
+  #submitDate() {
+    this.element.closest("form").requestSubmit();
   }
 }
