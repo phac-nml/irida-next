@@ -1,6 +1,16 @@
 <%= form_with(model: project, url: namespace_project_path, method: :patch, class: "grid gap-4", html: { novalidate: true }) do |form| %>
   <%= form.fields_for :namespace, include_id: false do |builder| %>
 
+    <%= if project.namespace.errors.any?
+      viral_alert(
+        type: "alert",
+        message: I18n.t(:"general.form.error_notification"),
+        aria: {
+          live: "assertive",
+        },
+      )
+    end %>
+
     <%= render partial: "shared/form/required_field_legend" %>
 
     <% invalid_name = project.namespace.errors.include?(:name) %>
