@@ -1688,6 +1688,7 @@ en:
       description: Project description, not required
       empty_state: No namespaces are associated with that name or ID
       help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
+      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
       placeholder: Awesome project name
       select_namespace: Select Namespace
       submit: Create project
