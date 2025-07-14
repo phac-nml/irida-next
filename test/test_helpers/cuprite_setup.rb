@@ -5,12 +5,21 @@ require 'capybara/cuprite'
 # Then, we need to register our driver to be able to use it later
 # with #driven_by method.
 Capybara.register_driver(:irida_next_cuprite) do |app|
-  remote_options = {}
-  remote_options[:url] =
-    "http://#{ENV.fetch('BROWSERLESS_HOST', nil)}:3333/?launch={\"defaultViewport\":{\"height\":1400,\"width\":1400}}"
   browser_options = {}
   browser_options['no-sandbox'] = nil if ENV['CI'] || ENV.key?('BROWSERLESS_HOST')
   browser_options['disable-smooth-scrolling'] = true
+
+  remote_options = {}
+  if ENV.key?('BROWSERLESS_HOST')
+    launch_args = { defaultViewport: { height: 1400, width: 1400 },
+                    args: ["--unsafely-treat-insecure-origin-as-secure=http://rails-app:#{Capybara.server_port}"],
+                    env: {
+                      TZ: Time.zone.name
+                    } }.to_json
+    remote_options[:ws_url] =
+      "ws://#{ENV.fetch('BROWSERLESS_HOST', nil)}:3333?launch=#{launch_args}"
+  end
+
   Capybara::Cuprite::Driver.new(
     app,
     window_size: [1400, 1400],
