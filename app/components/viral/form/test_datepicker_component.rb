@@ -4,12 +4,13 @@ module Viral
   module Form
     # Form text input component (numbers, email, text, etc.)
     class TestDatepickerComponent < Viral::Component
-      attr_reader :input_id, :input_name, :id, :min_date, :selected_date, :months, :min_year, :autosubmit
+      attr_reader :input_id, :input_name, :input_label, :id, :min_date, :selected_date, :months, :min_year, :autosubmit
 
-      def initialize(input_id: nil, input_name: '', id: 'datepicker', min_date: nil, selected_date: nil,
+      def initialize(input_id: nil, input_name: '', input_label: nil, id: 'datepicker', min_date: nil, selected_date: nil,
                      autosubmit: false)
         @input_id = input_id
         @input_name = input_name
+        @input_label = input_label
         @id = id
         @min_date = min_date
         @selected_date = selected_date
@@ -25,7 +26,7 @@ module Viral
                    I18n.t('viral.form.test_datepicker_component.months.september'),
                    I18n.t('viral.form.test_datepicker_component.months.october'),
                    I18n.t('viral.form.test_datepicker_component.months.november'),
-                   I18n.t('viral.form.test_datepicker_component.months.december')].to_json
+                   I18n.t('viral.form.test_datepicker_component.months.december')]
 
         @min_year = min_date.nil? ? '1' : min_date.to_s.split('-')[0]
       end
