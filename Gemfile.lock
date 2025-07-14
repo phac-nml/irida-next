@@ -172,9 +172,9 @@ GEM
     css_parser (1.21.0)
       addressable
     csv (3.3.2)
-    cuprite (0.16)
+    cuprite (0.17)
       capybara (~> 3.0)
-      ferrum (~> 0.16.0)
+      ferrum (~> 0.17.0)
     date (3.4.1)
     debug (1.10.0)
       irb (~> 1.10)
@@ -211,7 +211,7 @@ GEM
     faraday-net_http_persistent (2.3.0)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
-    ferrum (0.16)
+    ferrum (0.17.1)
       addressable (~> 2.5)
       base64 (~> 0.2)
       concurrent-ruby (~> 1.1)
@@ -717,7 +717,7 @@ DEPENDENCIES
   capybara
   caxlsx
   csv
-  cuprite (= 0.16)
+  cuprite
   debug
   devise (~> 4.9.4)
   erb-formatter (~> 0.7.2)

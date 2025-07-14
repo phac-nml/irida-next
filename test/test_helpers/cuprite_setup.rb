@@ -18,6 +18,8 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
                     } }.to_json
     remote_options[:ws_url] =
       "ws://#{ENV.fetch('BROWSERLESS_HOST', nil)}:3333?launch=#{launch_args}"
+    # this option fixes and issue with missing browser contexts which appear if the option defaults to true
+    remote_options[:flatten] = false
   end
 
   Capybara::Cuprite::Driver.new(

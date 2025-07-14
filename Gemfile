@@ -180,7 +180,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
-  gem 'cuprite', '0.16'
+  gem 'cuprite'
 
   gem 'simplecov', require: false
   gem 'timecop'
