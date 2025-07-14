@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   end
   # End of the /-/ scope.
 
+  resources :integration_access_token, only: %i[index]
+
   draw :group
 
   draw :api
