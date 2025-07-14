@@ -68,4 +68,6 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = false
 
   config.ignore_w3c_validate_hidden_autocomplete = true
+
+  config.ga4gh_wes_server_endpoint = nil
 end
