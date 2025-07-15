@@ -8,7 +8,7 @@ export default class extends Controller {
   connect() {
     console.log(this.tokenValue)
     setTimeout(() => {
-      window.opener.postMessage(this.tokenValue, 'http:localhost:8081')
+      window.opener.postMessage(this.tokenValue, 'http:localhost:8081') // TODO: make this configurable
       window.close()
     }, 3000)
   }
