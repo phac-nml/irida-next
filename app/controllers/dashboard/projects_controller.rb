@@ -7,13 +7,14 @@ module Dashboard
     before_action :page_title
 
     def index
-      @q = authorized_projects(params).ransack(params[:q])
+      all_projects = authorized_projects(params)
+      @has_projects = all_projects.count.positive?
+      @q = all_projects.ransack(params[:q])
       set_default_sort
+      @pagy, @projects = pagy(@q.result)
+
       respond_to do |format|
-        format.html do
-          @has_projects = @q.result.count.positive?
-          @pagy, @projects = pagy(@q.result)
-        end
+        format.html
       end
     end
 

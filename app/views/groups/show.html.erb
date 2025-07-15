@@ -91,7 +91,7 @@
 
             <% if @namespaces.present? %>
               <div class="flex flex-row-reverse mb-2">
-                <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
+                <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder"), total_count: @pagy.count) do %>
 
                   <% if @tab == "shared_namespaces" %>
                     <input type="hidden" name="tab" value="shared_namespaces">

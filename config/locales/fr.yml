@@ -663,6 +663,16 @@ fr:
       view_more_samples: Voir plus d'échantillons
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    search:
+      advanced:
+        results_message:
+          plural: "%{total_count} results found for advanced search"
+          singular: 1 result found for advanced search
+          zero: No results found for advanced search
+      results_message:
+        plural: "%{total_count} results found for '%{search_term}'"
+        singular: 1 result found for '%{search_term}'
+        zero: No results found for '%{search_term}'
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
@@ -736,8 +746,8 @@ fr:
     groups:
       index:
         create_group_button: Nouveau groupe
-        no_groups_description: Aucun groupe trouvé correspondant à votre recherche
-        no_groups_title: Aucun groupe trouvé
+        no_groups_description: Vous n’avez actuellement aucun groupe.
+        no_groups_title: Aucun groupe
         search:
           placeholder: Filtrer par PUID ou nom
         sorting:
@@ -752,7 +762,7 @@ fr:
       index:
         all: Tous
         create_project_button: Nouveau projet
-        no_projects: Aucun projet trouvé
+        no_projects: Aucun projet
         no_projects_description: Vous n’avez actuellement aucun projet.
         personal: Personnel
         row:
