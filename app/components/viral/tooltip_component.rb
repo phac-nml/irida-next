@@ -3,11 +3,11 @@
 module Viral
   # A component for displaying a tooltip.
   class TooltipComponent < Component
-    attr_reader :title, :button_name
+    attr_reader :title, :title_id
 
-    def initialize(title:, button_name: nil)
+    def initialize(title:, title_id: nil)
       @title = title
-      @button_name = button_name || "tooltip-button-#{SecureRandom.hex(4)}"
+      @title_id = title_id || "tooltip-title-#{SecureRandom.hex(4)}"
     end
   end
 end
