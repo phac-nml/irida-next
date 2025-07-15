@@ -5,8 +5,7 @@
 ) %>
 
 <div class="grid gap-4 grid-cols-1" data-turbo="true">
-  <%= turbo_frame_tag "access-token-string" %>
-  <%= turbo_frame_tag "allowed-host-urls-array" %>
+  <%= turbo_frame_tag "access-token-data-frame" %>
 
   <%= turbo_frame_tag "integration_access_token_form" do %>
     <%= form_with() do |f| %>
