@@ -11,10 +11,13 @@ export default class extends Controller {
     "year",
     "calendar",
     "calendarComponent",
-    "calenderTemplate",
+    "calendarTemplate",
     "inMonthDateTemplate",
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
+    "beforeElement",
+    "afterElement",
+    "datepickerContainer",
   ];
 
   static values = {
@@ -84,12 +87,10 @@ export default class extends Controller {
   #selectedMonthIndex = this.#todaysMonthIndex;
 
   initialize() {
-    this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
+    this.boundAddCalendarTemplate = this.addCalendarTemplate.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
-    this.boundHandleKeydown = this.handleKeydown.bind(this);
-    this.boundHandleDatepickerInputFocusOut =
-      this.handleDatepickerInputFocusOut.bind(this);
-    this.boundHandleCalendarFocusOut = this.handleCalendarFocusOut.bind(this);
+    this.boundHandleEscapeKeydown = this.handleEscapeKeydown.bind(this);
+    this.boundCloseCalendar = this.closeCalendar.bind(this);
     // Since datepicker controller call is handled outside of the component, rather than having to add a monthsValue,
     // every time the datepicker is called, we'll sneak the months array in via HTML within the component,
     // assign the array to a global var here, and then remove the HTML
@@ -103,17 +104,17 @@ export default class extends Controller {
   connect() {
     this.datepickerInputTarget.addEventListener(
       "focus",
-      this.boundAddCalenderTemplate,
+      this.boundAddCalendarTemplate,
     );
     this.datepickerInputTarget.addEventListener(
       "click",
-      this.boundAddCalenderTemplate,
+      this.boundAddCalendarTemplate,
     );
+    this.beforeElementTarget.addEventListener("focus", this.boundCloseCalendar);
+    this.afterElementTarget.addEventListener("focus", this.boundCloseCalendar);
   }
 
   idempotentConnect() {
-    // console.log(document.activeElement);
-    this.#clearCalendar();
     // set the months dropdown in case we're in the year of the minimum date
     this.#setMonths();
     // set the month and year inputs
@@ -126,27 +127,30 @@ export default class extends Controller {
   disconnect() {
     this.datepickerInputTarget.removeEventListener(
       "focus",
-      this.boundAddCalenderTemplate,
+      this.boundAddCalendarTemplate,
     );
     this.datepickerInputTarget.removeEventListener(
       "click",
-      this.boundAddCalenderTemplate,
+      this.boundAddCalendarTemplate,
     );
     this.removeCalendarListeners();
   }
 
-  addCalenderTemplate(event) {
-    console.log(event);
+  addCalendarTemplate(event) {
+    console.log("add calendar");
     // Don't add calendar if it's already open
     if (this.isCalendarOpen) return;
 
     // Add the calendar template to the DOM
-    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
-    this.element.appendChild(calendar);
+    const calendar = this.calendarTemplateTarget.content.cloneNode(true);
+    this.datepickerContainerTarget.appendChild(calendar);
 
     // Position the calendar (implement proper positioning logic here)
     // const inputRect = this.datepickerInputTarget.getBoundingClientRect();
     // this.calendarComponentTarget.style.left = `${inputRect.left}px`;
+
+    this.calendarComponentTarget.style.left = `0px`;
+    this.calendarComponentTarget.style.top = `0px`;
 
     // // Calculate if calendar should appear above or below input
     // const spaceBelow = window.innerHeight - inputRect.bottom;
@@ -166,56 +170,19 @@ export default class extends Controller {
 
     // Add global event listeners for outside clicks and keyboard events
     document.addEventListener("click", this.boundHandleOutsideClick);
-    document.addEventListener("keydown", this.boundHandleKeydown);
+    document.addEventListener("keydown", this.boundHandleEscapeKeydown);
     this.isCalendarOpen = true;
 
     // Set ARIA attributes for accessibility
     this.datepickerInputTarget.setAttribute("aria-expanded", "true");
     this.calendarComponentTarget.setAttribute("aria-hidden", "false");
-
-    this.datepickerInputTarget.addEventListener(
-      "focusout",
-      this.boundHandleDatepickerInputFocusOut,
-    );
-    this.calendarComponentTarget.addEventListener(
-      "focusout",
-      this.boundHandleCalendarFocusOut,
-    );
-  }
-
-  handleDatepickerInputFocusOut(event) {
-    // timeout allows click/keyboard triggers to occur before focus out triggers, otherwise the focus out will
-    // override potential selection triggers
-    setTimeout(() => {
-      if (!this.isCalendarOpen) return;
-      if (
-        this.calendarComponentTarget &&
-        !this.calendarComponentTarget.contains(event.relatedTarget)
-      ) {
-        this.closeCalendar();
-      }
-    }, 50);
-  }
-
-  handleCalendarFocusOut(event) {
-    // timeout allows click/keyboard triggers to occur before focus out triggers, otherwise the focus out will
-    // override potential selection triggers
-    setTimeout(() => {
-      if (!this.isCalendarOpen) return;
-      if (
-        !this.calendarComponentTarget.contains(event.relatedTarget) &&
-        // !this.calendarComponentTarget.contains(event.target) &&
-        !event.target.isEqualNode(this.monthSelectTarget)
-      ) {
-        this.closeCalendar();
-      }
-    }, 50);
   }
 
   // Handle clicks outside the datepicker component
   handleOutsideClick(event) {
-    console.log("handle outside click");
-    const clickedInsideComponent = this.element.contains(event.target);
+    const clickedInsideComponent = this.datepickerContainerTarget.contains(
+      event.target,
+    );
 
     if (!clickedInsideComponent) {
       this.closeCalendar();
@@ -224,7 +191,6 @@ export default class extends Controller {
 
   // Close calendar and clean up listeners
   closeCalendar() {
-    console.log("close calendar");
     if (!this.isCalendarOpen) return;
 
     this.removeCalendarListeners();
@@ -240,19 +206,15 @@ export default class extends Controller {
   // Remove global event listeners
   removeCalendarListeners() {
     document.removeEventListener("click", this.boundHandleOutsideClick);
-    document.removeEventListener("keydown", this.boundHandleKeydown);
+    document.removeEventListener("keydown", this.boundHandleEscapeKeydown);
   }
 
-  // Handle keyboard events (especially Escape)
-  handleKeydown(event) {
+  // Handle Escape
+  handleEscapeKeydown(event) {
     if (event.key === "Escape") {
+      event.preventDefault();
       this.closeCalendar();
-      this.datepickerInputTarget.focus();
     }
-  }
-
-  #clearCalendar() {
-    this.calendarTarget.innerHTML = "";
   }
 
   #setMonths() {
@@ -277,6 +239,7 @@ export default class extends Controller {
   }
 
   #loadCalendar() {
+    this.calendarTarget.innerHTML = "";
     // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
     // first and last week of dates
     let fullCalendar = [];
@@ -502,7 +465,7 @@ export default class extends Controller {
       } else {
         minDate.tabIndex = 0;
       }
-    } else if (selectedDate && this.#verifyDateIsInMonth(today)) {
+    } else if (selectedDate && today && this.#verifyDateIsInMonth(today)) {
       selectedDate.tabIndex = 0;
     } else if (today && this.#verifyDateIsInMonth(today)) {
       today.tabIndex = 0;
@@ -591,18 +554,15 @@ export default class extends Controller {
   }
 
   selectDate(event) {
-    console.log("select date");
-    console.log(event);
-    console.log(event.target);
-    this.datepickerInputTarget.value = event.target.getAttribute("data-date");
-    console.log(event.target.getAttribute("data-date"));
+    const selectedDate = event.target;
+    if (selectedDate.getAttribute("data-date-disabled")) return;
+
+    this.datepickerInputTarget.value = selectedDate.getAttribute("data-date");
     if (this.autosubmitValue) {
       this.#submitDate();
     }
-
     this.closeCalendar();
-
-    this.datepickerInputTarget.focus();
+    this.afterElementTarget.focus();
   }
 
   clearSelection() {
