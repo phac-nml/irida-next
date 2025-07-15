@@ -36,6 +36,7 @@ require 'test_helpers/w3c_validation_helpers'
 module ActiveSupport
   class TestCase
     parallelize_setup do |worker|
+      Capybara.server_port = 43_567 + worker if ENV.key?('BROWSERLESS_HOST')
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end

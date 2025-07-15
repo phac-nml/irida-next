@@ -1,8 +1,8 @@
 {
   "recommendations": [
-    "shopify.ruby-lsp",
+    "elia.erb-formatter",
     "esbenp.prettier-vscode",
-    "streetsidesoftware.code-spell-checker",
-    "elia.erb-formatter"
+    "shopify.ruby-lsp",
+    "streetsidesoftware.code-spell-checker"
   ]
 }
