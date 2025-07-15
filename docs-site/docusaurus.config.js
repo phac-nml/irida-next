@@ -111,7 +111,7 @@ const config = {
       },
       prism: {
         theme: themes.github,
-        darkTheme: themes.vsDark,
+        darkTheme: themes.dracula,
       },
       future: {
         experimental_faster: true,
