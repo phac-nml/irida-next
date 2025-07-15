@@ -4,13 +4,13 @@ module Viral
   module Form
     # Form text input component (numbers, email, text, etc.)
     class TestDatepickerComponent < Viral::Component
-      attr_reader :input_id, :input_name, :input_label, :id, :min_date, :selected_date, :months, :min_year, :autosubmit
+      attr_reader :input_id, :input_name, :label, :id, :min_date, :selected_date, :months, :min_year, :autosubmit
 
-      def initialize(input_id: nil, input_name: '', input_label: nil, id: 'datepicker', min_date: nil, selected_date: nil,
+      def initialize(input_id: nil, input_name: '', label: nil, id: 'datepicker', min_date: nil, selected_date: nil,
                      autosubmit: false)
         @input_id = input_id
         @input_name = input_name
-        @input_label = input_label
+        @label = label
         @id = id
         @min_date = min_date
         @selected_date = selected_date
