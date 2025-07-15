@@ -7,6 +7,8 @@ development:
     - resource: '*'
       headers: any
       methods: [get, post]
+  # Make sure to include trailing /
+  host_allow_list: ['http://localhost:8081/']
 
 test:
   origins: '*'
@@ -14,6 +16,7 @@ test:
     - resource: '*'
       headers: any
       methods: [get, post]
+  host_allow_list: ['http://localhost:8081/']
 
 production:
   # do not use wildcards '*' in production
@@ -21,4 +24,5 @@ production:
   resources:
     - resource:
       headers:
-      methods: []
+      methods:
+  host_allow_list: []

@@ -17,12 +17,15 @@ class IntegrationAccessTokenController < ApplicationController
       personal_access_token_params
     ).execute
 
+    # TODO: verify that requester is on integration_host_allow_list
+
     respond_to do |format|
       if @personal_access_token.persisted?
         format.turbo_stream do
           render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
                            new_personal_access_token: @personal_access_token,
-                           encoded_token: encoded_token }
+                           encoded_token: encoded_token,
+                           host_allow_list: integration_host_allow_list }
         end
       else
         # TODO: properly handle failed creation
@@ -55,5 +58,9 @@ class IntegrationAccessTokenController < ApplicationController
 
   def set_user
     @user = current_user
+  end
+
+  def integration_host_allow_list
+    Rails.configuration.cors_config['host_allow_list']
   end
 end
