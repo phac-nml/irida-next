@@ -129,7 +129,7 @@ body:not(.navigation-with-keyboard) *:not(input):focus-visible {
 [data-theme="light"] {
   --prism-background-color: #f6f8fa; /* Very light grey */
   --prism-color: #2d2d2d; /* Dark grey for plain text */
-  --prism-token-comment: #6c757d; /* Muted grey */
+  --prism-token-comment: #495057; /* Darker grey for better contrast */
   --prism-token-punctuation: #2d2d2d; /* Dark grey */
   --prism-token-property: #b71c1c; /* Deep red */
   --prism-token-selector: #b71c1c; /* Deep red */
