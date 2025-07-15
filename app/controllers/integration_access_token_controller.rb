@@ -11,31 +11,33 @@ class IntegrationAccessTokenController < ApplicationController
     @personal_access_token = PersonalAccessToken.new(scopes: [])
   end
 
-  def create # rubocop:disable Metrics/MethodLength
-    @personal_access_token = PersonalAccessTokens::CreateService.new(
-      current_user,
-      personal_access_token_params
-    ).execute
+  def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    respond_to do |format| # rubocop:disable Metrics/BlockLength
+      if integration_host_allow_list.include? caller_from_request
+        @personal_access_token = PersonalAccessTokens::CreateService.new(
+          current_user,
+          personal_access_token_params
+        ).execute
 
-    # TODO: verify that requester is on integration_host_allow_list
-
-    respond_to do |format|
-      if @personal_access_token.persisted?
-        format.turbo_stream do
-          render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
-                           new_personal_access_token: @personal_access_token,
-                           encoded_token: encoded_token,
-                           host_allow_list: integration_host_allow_list }
+        if @personal_access_token.persisted?
+          format.turbo_stream do
+            render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
+                             new_personal_access_token: @personal_access_token,
+                             encoded_token: encoded_token,
+                             host_allow_list: integration_host_allow_list }
+          end
+        else
+          format.turbo_stream do
+            error = I18n.t('integration_access_tokens.create.error', error: error_message(@personal_access_token))
+            render status: :unprocessable_entity, locals: {
+              new_personal_access_token: nil, message: error
+            }
+          end
         end
-      else
-        # TODO: properly handle failed creation
-        # display error to user to contact administrator
-        # send error message to integration caller
+      else # caller url not in allow list
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
-                                                          new_personal_access_token: nil,
-                                                          encoded_token: nil,
-                                                          message: error_message(@personal_access_token) }
+          render status: :unprocessable_entity, locals: { new_personal_access_token: nil,
+                                                          message: I18n.t('integration_access_tokens.create.denied') }
         end
       end
     end
@@ -62,5 +64,12 @@ class IntegrationAccessTokenController < ApplicationController
 
   def integration_host_allow_list
     Rails.configuration.cors_config['host_allow_list']
+  end
+
+  def caller_from_request
+    p = Rack::Utils.parse_query(URI(request.referer).query)
+    return p['caller'] if p['caller']
+
+    nil
   end
 end
