@@ -1,0 +1,24 @@
+development:
+  # origins 'localhost:3000', '127.0.0.1:3000',
+  #            /\Ahttp:\/\/192\.168\.0\.\d{1,3}(:\d+)?\z/
+  # Regular expressions allowed.
+  origins: '*'
+  resources:
+    - resource: '*'
+      headers: any
+      methods: [get, post]
+
+test:
+  origins: '*'
+  resources:
+    - resource: '*'
+      headers: any
+      methods: [get, post]
+
+production:
+  # do not use wildcards '*' in production
+  origins:
+  resources:
+    - resource:
+      headers:
+      methods: []
