@@ -81,8 +81,8 @@ export default class extends Controller {
   #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
 
   // the currently displayed year/month on datepicker
-  #selectedYear = this.#todaysYear;
-  #selectedMonthIndex = this.#todaysMonthIndex;
+  #selectedYear;
+  #selectedMonthIndex;
 
   initialize() {
     this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
@@ -107,6 +107,9 @@ export default class extends Controller {
       "click",
       this.boundAddCalenderTemplate,
     );
+
+    // the currently selected date will be displayed on the initial calendar
+    this.#setSelectedDate();
   }
 
   idempotentConnect() {
@@ -129,6 +132,15 @@ export default class extends Controller {
       this.boundAddCalenderTemplate,
     );
     this.removeCalendarListeners();
+  }
+
+  #setSelectedDate() {
+    this.#selectedDate = this.datepickerInputTarget.value;
+    if (this.#selectedDate) {
+      const fullSelectedDate = new Date(this.#selectedDate);
+      this.#selectedYear = fullSelectedDate.getFullYear();
+      this.#selectedMonthIndex = fullSelectedDate.getMonth();
+    }
   }
 
   addCalenderTemplate(event) {
@@ -223,6 +235,11 @@ export default class extends Controller {
       const minDateMonthIndex = new Date(this.minDateValue).getMonth();
       for (let i = 0; i < minDateMonthIndex; i++) {
         monthSelect.firstElementChild.remove();
+      }
+      // if minDate was Feb 2026 and our minDate is July 2025, if clicked 'down' on year input to go to Feb 2025,
+      // we need to check that Feb index is less than July index, and if true, set index to July
+      if (this.#selectedMonthIndex < minDateMonthIndex) {
+        this.#selectedMonthIndex = minDateMonthIndex;
       }
     }
     this.monthSelectContainerTarget.appendChild(monthSelect);
@@ -735,6 +752,7 @@ export default class extends Controller {
   inputChange() {
     if (this.autosubmitValue) {
       this.#submitDate();
+      this.closeCalendar();
     }
   }
 
