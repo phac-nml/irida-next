@@ -1,18 +1,18 @@
 <div data-controller="viral--tooltip">
-  <button
-    type="button"
+  <span
     data-viral--tooltip-target="trigger"
-    aria-describedby="<%=button_name%>-content"
+    aria-describedby="<%=title_id%>"
+    tabindex="0"
   >
     <%= content %>
-  </button>
+  </span>
 
   <div
-    id="<%=button_name%>-content"
+    id="<%=title_id%>"
     data-viral--tooltip-target="target"
     role="tooltip"
     class="
-      absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
+      absolute z-10 hidden inline-block px-3 py-2 text-sm font-medium text-white
       bg-slate-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-slate-700
     "
   >
