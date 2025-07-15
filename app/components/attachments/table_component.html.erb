@@ -173,7 +173,7 @@
                       <% if attachment.associated_attachment %>
                         <div>
                           <div class="flex items-center mb-4">
-                            <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
+                            <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm, class: "ml-0 mr-2") %>
                             <span>
                               <%= link_to rails_blob_path(attachment.file),
                               data: {
@@ -190,7 +190,7 @@
                             </span>
                           </div>
                           <div class="flex items-center">
-                            <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
+                            <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm, class: "ml-0 mr-2") %>
                             <span>
                               <%= link_to rails_blob_path(attachment.associated_attachment.file),
                               data: {
