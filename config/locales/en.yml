@@ -1151,6 +1151,8 @@ en:
       create:
         submit: Create Access Token
         success: Personal access token "%{name}" was successfully created.
+        denied: Your integration is not on the approved host url list. Contact your system administrator for support.
+        error: The following error occurred while creating access token. "%{error}" Contact your system administrator for support.
       index:
         subtitle: By creating an Integration Access Token you are allowing the connected application to access your data temporarily.
         title: Integration Access Token

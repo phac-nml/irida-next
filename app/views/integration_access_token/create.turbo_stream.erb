@@ -5,13 +5,8 @@
       data: t("integration_access_tokens.create.success", name: new_personal_access_token.name),
     ) %>
   <% end %>
-  <%= turbo_stream.update "access-token-string" do %>
-    <div data-controller="integration-access-token" data-integration-access-token-token-value="<%= encoded_token %>">
-    </div>
-  <% end %>
-    <%= turbo_stream.update "allowed-host-urls-array" do %>
-    <div data-controller="integration-access-token"
-    data-integration-access-token-urls-value="<%= host_allow_list %>">
+  <%= turbo_stream.update "access-token-data-frame" do %>
+    <div data-controller="integration-access-token" data-integration-access-token-token-value="<%= encoded_token %>" data-integration-access-token-urls-value="<%= host_allow_list %>">
     </div>
   <% end %>
 <% else %>
