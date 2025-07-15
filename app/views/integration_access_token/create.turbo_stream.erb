@@ -6,7 +6,7 @@
     ) %>
   <% end %>
   <%= turbo_stream.update "access-token-string" do %>
-    <div data-controller="integration-access-token" data-integration-access-token-token-value="<%= new_personal_access_token.token %>">
+    <div data-controller="integration-access-token" data-integration-access-token-token-value="<%= encoded_token %>">
     </div>
   <% end %>
 <% else %>
