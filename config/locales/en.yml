@@ -2346,6 +2346,9 @@ en:
           thursday: Thu
           tuesday: Tue
           wednesday: Wed
+        errors:
+          invalid_date_format: Invalid date format.
+          min_date_error: "Earliest allowed date: %{min_date}"
         months:
           april: April
           august: August

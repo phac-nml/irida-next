@@ -1,207 +1,227 @@
-<div class="relative max-w-sm">
-  <div
-    class="
-      absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-    "
-  >
-    <span>
-      <%= pathogen_icon(ICON::CALENDAR_DOTS) %>
-    </span>
-  </div>
-  <input
-    placeholder="YYYY-MM-DD"
-    autocomplete="off"
-    value="<%= selected_date %>"
-    data-test-datepicker-target="datepickerInput"
-    data-action="change->test-datepicker#inputChange"
-    type="text"
-    name="<%= input_name %>"
-    id="<%= input_id %>"
-    class="datepicker-input"
-  >
-</div>
-<div data-test-datepicker-target="monthsArray" class="hidden"><%= months %></div>
-<template data-test-datepicker-target="calenderTemplate">
-  <div
-    data-test-datepicker-target="calendarComponent"
-    class="
-      datepicker datepicker-dropdown dropdown absolute top-0 left-0 z-50 pt-2 active
-      block datepicker-orient-bottom datepicker-orient-left
-    "
-  >
+<div
+  data-controller="test-datepicker"
+  class="form-field datepicker"
+  data-test-datepicker-min-date-value="<%= min_date %>"
+  data-test-datepicker-autosubmit-value="<%= autosubmit %>"
+  data-test-datepicker-months-value="<%= months %>"
+  data-test-datepicker-invalid-date-format-value="<%= t('.errors.invalid_date_format')%>"
+  data-test-datepicker-invalid-min-date-value="<%= t('.errors.min_date_error', min_date:)%>"
+>
+  <% if label %>
+    <label for=<%= input_id %>><%= label %></label>
+  <% end %>
+  <div class="relative max-w-sm">
     <div
       class="
-        datepicker-picker inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg
-        p-4
+        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
       "
     >
-      <div class="datepicker-header">
-        <div
-          class="
-            datepicker-title bg-white dark:bg-slate-700 dark:text-white px-2 py-3
-            text-center font-semibold
-          "
-          style="display: none;"
-        ></div>
-        <div class="datepicker-controls flex justify-between mb-2">
-          <button
-            type="button"
-            class="
-              bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
-              enabled:dark:text-white enabled:hover:bg-slate-100
-              enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
-              enabled:dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-              focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
-              disabled:cursor-not-allowed disabled:text-slate-300
-            "
-            data-action="click->test-datepicker#previousMonth"
-            data-test-datepicker-target="backButton"
-          >
-            <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
-          </button>
-          <div data-test-datepicker-target="monthSelectContainer">
-          </div>
-          <div>
-            <input
-              data-test-datepicker-target="year"
-              data-action="change->test-datepicker#changeYear"
-              type="number"
-              max="9999"
-              min="<%= min_year %>"
-              class="
-                w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
-                dark:bg-slate-800 dark:text-white ml-1
-              "
-            >
-          </div>
-          <button
-            type="button"
-            class="
-              bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
-              hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
-              dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-              focus:ring-slate-200 next-btn ml-2 cursor-pointer
-            "
-            data-action="click->test-datepicker#nextMonth"
-          >
-            <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
-          </button>
-        </div>
-      </div>
-      <div class="datepicker-main p-1 justify-center">
-        <table class="min-w-full table-fixed">
-          <thead class="mb-1">
-            <tr>
-              <th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.sunday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.monday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.tuesday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.wednesday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.thursday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.friday") %></th><th
-                class="
-                  dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                "
-              ><%= t(".days_of_week.saturday") %></th>
-            </tr>
-          </thead>
-          <tbody data-test-datepicker-target="calendar">
-          </tbody>
-        </table>
-      </div>
-      <div class="datepicker-footer">
+      <span>
+        <%= pathogen_icon(ICON::CALENDAR_DOTS) %>
+      </span>
+    </div>
+    <input
+      placeholder="YYYY-MM-DD"
+      autocomplete="off"
+      value="<%= selected_date %>"
+      data-test-datepicker-target="datepickerInput"
+      data-action="change->test-datepicker#directInput"
+      type="text"
+      name="<%= input_name %>"
+      id="<%= input_id %>"
+      class="datepicker-input"
+    >
+  </div>
+  <div
+    data-test-datepicker-target="inputError"
+    class="text-sm hidden text-red-700 dark:text-red-500 mt-1"
+    aria-hidden="true"
+  ></div>
 
-        <div class="text-sm text-center">
-          Earliest date: 2026-01-01
+  <div data-test-datepicker-target="monthsArray" class="hidden"><%= months %></div>
+
+  <template data-test-datepicker-target="calenderTemplate">
+    <div
+      data-test-datepicker-target="calendarComponent"
+      class="
+        datepicker datepicker-dropdown dropdown absolute top-0 left-0 z-50 pt-2 active
+        block datepicker-orient-bottom datepicker-orient-left
+      "
+    >
+      <div
+        class="
+          datepicker-picker inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg
+          p-4
+        "
+      >
+        <div class="datepicker-header">
+          <div
+            class="
+              datepicker-title bg-white dark:bg-slate-700 dark:text-white px-2 py-3
+              text-center font-semibold
+            "
+            style="display: none;"
+          ></div>
+          <div class="datepicker-controls flex justify-between mb-2">
+            <button
+              type="button"
+              class="
+                bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
+                enabled:dark:text-white enabled:hover:bg-slate-100
+                enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
+                enabled:dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
+                focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
+                disabled:cursor-not-allowed disabled:text-slate-300
+              "
+              data-action="click->test-datepicker#previousMonth"
+              data-test-datepicker-target="backButton"
+            >
+              <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
+            </button>
+            <div data-test-datepicker-target="monthSelectContainer">
+            </div>
+            <div>
+              <input
+                data-test-datepicker-target="year"
+                data-action="change->test-datepicker#changeYear"
+                type="number"
+                max="9999"
+                min="<%= min_year %>"
+                class="
+                  w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
+                  dark:bg-slate-800 dark:text-white ml-1
+                "
+              >
+            </div>
+            <button
+              type="button"
+              class="
+                bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
+                hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
+                dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
+                focus:ring-slate-200 next-btn ml-2 cursor-pointer
+              "
+              data-action="click->test-datepicker#nextMonth"
+            >
+              <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
+            </button>
+          </div>
         </div>
-        <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
-          <button
-            type="button"
-            class="
-              button today-btn text-white bg-blue-700 !bg-primary-700 dark:bg-blue-600
-              dark:!bg-primary-600 hover:bg-blue-800 hover:!bg-primary-800
-              dark:hover:bg-blue-700 dark:hover:!bg-primary-700 focus:ring-4
-              focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg text-sm px-5
-              py-2 text-center w-1/2
-            "
-            data-action="click->test-datepicker#showToday"
-          ><%= t(".show_today") %></button><button
-            type="button"
-            class="
-              button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
-              border border-slate-300 dark:border-slate-600 hover:bg-slate-100
-              dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
-              font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
-            "
-            data-action="click->test-datepicker#clearSelection"
-            data-test-datepicker-target="clearButton"
-          ><%= t(".clear_selection") %></button>
+        <div class="datepicker-main p-1 justify-center">
+          <table class="min-w-full table-fixed">
+            <thead class="mb-1">
+              <tr>
+                <th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.sunday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.monday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.tuesday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.wednesday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.thursday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.friday") %></th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                ><%= t(".days_of_week.saturday") %></th>
+              </tr>
+            </thead>
+            <tbody data-test-datepicker-target="calendar">
+            </tbody>
+          </table>
+        </div>
+        <div class="datepicker-footer">
+
+          <div class="text-sm text-center">
+            Earliest date: 2026-01-01
+          </div>
+          <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
+            <button
+              type="button"
+              class="
+                button today-btn text-white bg-blue-700 !bg-primary-700 dark:bg-blue-600
+                dark:!bg-primary-600 hover:bg-blue-800 hover:!bg-primary-800
+                dark:hover:bg-blue-700 dark:hover:!bg-primary-700 focus:ring-4
+                focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg text-sm px-5
+                py-2 text-center w-1/2
+              "
+              data-action="click->test-datepicker#showToday"
+            ><%= t(".show_today") %></button><button
+              type="button"
+              class="
+                button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
+                border border-slate-300 dark:border-slate-600 hover:bg-slate-100
+                dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
+                font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
+              "
+              data-action="click->test-datepicker#clearSelection"
+              data-test-datepicker-target="clearButton"
+            ><%= t(".clear_selection") %></button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</template>
-<template data-test-datepicker-target="inMonthDateTemplate">
-  <td
-    class="
-      hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
-      cursor-pointer text-center text-slate-900 dark:text-white font-semibold text-sm
-      w-8
-    "
-    data-date-within-month-position="inMonth"
-    data-action="
-      keydown->test-datepicker#navigateCalendar
-      click->test-datepicker#selectDate
-    "
-  ></td>
-</template>
+  </template>
+  <template data-test-datepicker-target="inMonthDateTemplate">
+    <td
+      class="
+        hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
+        cursor-pointer text-center text-slate-900 dark:text-white font-semibold text-sm
+        w-8
+      "
+      data-date-within-month-position="inMonth"
+      data-action="
+        keydown->test-datepicker#navigateCalendar
+        click->test-datepicker#selectDate
+      "
+    ></td>
+  </template>
 
-<template data-test-datepicker-target="outOfMonthDateTemplate">
-  <td
-    class="
-      hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
-      cursor-pointer text-center text-slate-500 dark:text-slate-600 font-semibold
-      text-sm w-8
-    "
-    data-date-within-month-position="outOfMonth"
-    data-action="keydown->test-datepicker#navigateCalendar"
-  ></td>
-</template>
+  <template data-test-datepicker-target="outOfMonthDateTemplate">
+    <td
+      class="
+        hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
+        cursor-pointer text-center text-slate-500 dark:text-slate-600 font-semibold
+        text-sm w-8
+      "
+      data-date-within-month-position="outOfMonth"
+      data-action="keydown->test-datepicker#navigateCalendar"
+    ></td>
+  </template>
 
-<template data-test-datepicker-target="monthSelectTemplate">
-  <select
-    data-test-datepicker-target="monthSelect"
-    data-action="change->test-datepicker#changeMonth"
-  >
-    <option value="<%= t(".months.january")%>"><%= t(".months.january") %></option>
-    <option value="<%= t(".months.february")%>"><%= t(".months.february") %></option>
-    <option value="<%= t(".months.march")%>"><%= t(".months.march") %></option>
-    <option value="<%= t(".months.april")%>"><%= t(".months.april") %></option>
-    <option value="<%= t(".months.may")%>"><%= t(".months.may") %></option>
-    <option value="<%= t(".months.june")%>"><%= t(".months.june") %></option>
-    <option value="<%= t(".months.july")%>"><%= t(".months.july") %></option>
-    <option value="<%= t(".months.august")%>"><%= t(".months.august") %></option>
-    <option value="<%= t(".months.september")%>"><%= t(".months.september") %></option>
-    <option value="<%= t(".months.october")%>"><%= t(".months.october") %></option>
-    <option value="<%= t(".months.november")%>"><%= t(".months.november") %></option>
-    <option value="<%= t(".months.december")%>"><%= t(".months.december") %></option>
-  </select>
-</template>
+  <template data-test-datepicker-target="monthSelectTemplate">
+    <select
+      data-test-datepicker-target="monthSelect"
+      data-action="change->test-datepicker#changeMonth"
+    >
+      <option value="<%= t(".months.january")%>"><%= t(".months.january") %></option>
+      <option value="<%= t(".months.february")%>"><%= t(".months.february") %></option>
+      <option value="<%= t(".months.march")%>"><%= t(".months.march") %></option>
+      <option value="<%= t(".months.april")%>"><%= t(".months.april") %></option>
+      <option value="<%= t(".months.may")%>"><%= t(".months.may") %></option>
+      <option value="<%= t(".months.june")%>"><%= t(".months.june") %></option>
+      <option value="<%= t(".months.july")%>"><%= t(".months.july") %></option>
+      <option value="<%= t(".months.august")%>"><%= t(".months.august") %></option>
+      <option value="<%= t(".months.september")%>"><%= t(".months.september") %></option>
+      <option value="<%= t(".months.october")%>"><%= t(".months.october") %></option>
+      <option value="<%= t(".months.november")%>"><%= t(".months.november") %></option>
+      <option value="<%= t(".months.december")%>"><%= t(".months.december") %></option>
+    </select>
+  </template>
+</div>
