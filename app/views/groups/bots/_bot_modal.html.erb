@@ -48,38 +48,13 @@
                           class: "form-control" %>
 
         </div>
-        <div
-          data-controller="test-datepicker"
-          class="form-field datepicker"
-          data-test-datepicker-min-date-value="<%= Date.today + 1.day %>"
-          data-test-datepicker-selected-date-value="<%= !bot_params.nil? ? bot_params[:expires_at] : "" %>"
-          data-test-datepicker-autosubmit-value="<%= false %>"
-        >
-          <%= viral_test_datepicker(min_date: "2025-06-17", selected_date: "2025-07-04") %>
-        </div>
-        <div
-          class="form-field datepicker"
-          data-controller="datepicker"
-          data-datepicker-min-date-value="<%= Date.today + 1.day %>"
-        >
-          <%= form.label :expires_at,
-                     t("groups.bots.index.bot_listing.new_bot_modal.expires_at") %>
-          <div class="relative max-w-sm">
-            <div
-              class="
-                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-              "
-            >
-              <%= pathogen_icon(ICON::CALENDAR_DOTS, size: :sm, color: :subdued) %>
-            </div>
-            <%= form.text_field :expires_at,
-                            placeholder: I18n.t("date.formats.iso"),
-                            autocomplete: "off",
-                            value: !bot_params.nil? ? bot_params[:expires_at] : "",
-                            "data-datepicker-target": "datePicker",
-                            "data-datepicker-dialog": "true" %>
-          </div>
-        </div>
+        <%= viral_test_datepicker(
+          min_date: (Date.today + 1.day),
+          selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
+          label: t("groups.bots.index.bot_listing.new_bot_modal.expires_at"),
+          input_id: "bot_expires_at",
+          input_name: "bot[expires_at]",
+        ) %>
 
         <div class="form-field">
           <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>

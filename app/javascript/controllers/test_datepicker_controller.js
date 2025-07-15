@@ -16,11 +16,15 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
     "clearButton",
+    "inputError",
   ];
 
   static values = {
     minDate: String,
     autosubmit: Boolean,
+    months: Array,
+    invalidDateFormat: String,
+    invalidMinDate: String,
   };
 
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -70,8 +74,7 @@ export default class extends Controller {
     "dark:text-slate-600",
   ];
 
-  #selectedDate;
-  #months;
+  #formattedDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   // today's date attributes for quick access
   #todaysFullDate = new Date();
@@ -81,6 +84,7 @@ export default class extends Controller {
   #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
 
   // the currently displayed year/month on datepicker
+  #selectedDate;
   #selectedYear;
   #selectedMonthIndex;
 
@@ -88,11 +92,6 @@ export default class extends Controller {
     this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
-    // Since datepicker controller call is handled outside of the component, rather than having to add a monthsValue,
-    // every time the datepicker is called, we'll sneak the months array in via HTML within the component,
-    // assign the array to a global var here, and then remove the HTML
-    this.#months = JSON.parse(this.monthsArrayTarget.innerHTML);
-    this.monthsArrayTarget.remove();
 
     // Track calendar open state
     this.isCalendarOpen = false;
@@ -116,7 +115,7 @@ export default class extends Controller {
     // set the months dropdown in case we're in the year of the minimum date
     this.#setMonths();
     // set the month and year inputs
-    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
     this.#selectedDate = this.datepickerInputTarget.value;
     this.#loadCalendar();
@@ -140,6 +139,9 @@ export default class extends Controller {
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getFullYear();
       this.#selectedMonthIndex = fullSelectedDate.getMonth();
+    } else {
+      this.#selectedYear = this.#todaysYear;
+      this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
   }
 
@@ -275,7 +277,7 @@ export default class extends Controller {
 
   #getPreviousMonthsDates() {
     let firstDayOfMonthIndex = this.#getDayOfWeek(
-      `${this.#selectedYear}, ${this.#months[this.#selectedMonthIndex]}, 1`,
+      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
     );
     // if first day lands on Sunday, we don't need to backfill dates
     if (firstDayOfMonthIndex === 0) {
@@ -312,7 +314,7 @@ export default class extends Controller {
 
   #getNextMonthsDates(thisMonthsLastDate) {
     let lastDayOfMonthDay = this.#getDayOfWeek(
-      `${this.#selectedYear}, ${this.#months[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
+      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
     );
 
     // if lastDay == 6, last day is on a saturday and we don't need to fill out the rest of the week
@@ -490,7 +492,7 @@ export default class extends Controller {
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -501,7 +503,7 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthSelectTarget.value = this.#months[this.#selectedMonthIndex];
+    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
@@ -510,7 +512,7 @@ export default class extends Controller {
   }
 
   changeMonth() {
-    this.#selectedMonthIndex = this.#months.indexOf(
+    this.#selectedMonthIndex = this.monthsValue.indexOf(
       this.monthSelectTarget.value,
     );
     this.idempotentConnect();
@@ -749,10 +751,51 @@ export default class extends Controller {
     );
   }
 
-  inputChange() {
+  directInput(event) {
+    const dateInput = event.target.value;
+
+    // check if date input is formatted as YYYY-MM-DD
+    if (!dateInput.match(this.#formattedDateRegex)) {
+      this.#enableInputErrorState(this.invalidDateFormatValue);
+      return;
+    }
+
+    // check if date input is a valid date
+    const date = new Date(dateInput);
+    var dateTime = date.getTime();
+    if (!dateTime && dateTime !== 0) {
+      this.#enableInputErrorState(this.invalidDateFormatValue);
+      return;
+    }
+
+    // if theres a minimum date, check input is after minDate
+    if (this.minDateValue && this.minDateValue > dateInput) {
+      this.#enableInputErrorState(this.invalidMinDateValue);
+      return;
+    }
     if (this.autosubmitValue) {
       this.#submitDate();
       this.closeCalendar();
+    }
+
+    this.#disableInputErrorState();
+  }
+
+  #enableInputErrorState(message) {
+    this.inputErrorTarget.innerText = message;
+    if (this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.remove("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", false);
+    }
+
+    this.datepickerInputTarget.value = "";
+  }
+
+  #disableInputErrorState() {
+    this.inputErrorTarget.innerText = "";
+    if (!this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.add("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", true);
     }
   }
 
