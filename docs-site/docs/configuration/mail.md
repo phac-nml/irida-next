@@ -25,4 +25,4 @@ The default from email address in all mail sent from the application.
 
 Can be used to connect to a specific smtp server to use to send the emails.
 
-See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+For more information see the official Ruby on Rails [Action Mailer Configuration](https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration) documentation.
