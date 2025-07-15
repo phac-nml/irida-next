@@ -115,20 +115,13 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
-                <div
-                  data-controller="test-datepicker"
-                  class="form-field datepicker"
-                  data-test-datepicker-min-date-value="<%= Date.today + 1.day %>"
-                  data-test-datepicker-selected-date-value="<%= member.expires_at %>"
-                  data-test-datepicker-autosubmit-value="<%= true %>"
-                >
-                  <%= viral_test_datepicker(
-                    input_id: "member-#{member.id}-expiration",
-                    input_name: "member[expires_at]",
-                    min_date: (Date.today + 1.day),
-                    selected_date: member.expires_at,
-                  ) %>
-                </div>
+                <%= viral_test_datepicker(
+                  input_id: "member-#{member.id}-expiration",
+                  input_name: "member[expires_at]",
+                  min_date: (Date.today + 1.day),
+                  selected_date: member.expires_at,
+                  autosubmit: true,
+                ) %>
               <% end %>
             <% elsif !member.expires_at.nil? %>
               <%= helpers.local_time(member.expires_at, :full_date) %>
