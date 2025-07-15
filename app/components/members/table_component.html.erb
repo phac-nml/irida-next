@@ -129,32 +129,6 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                     selected_date: member.expires_at,
                   ) %>
                 </div>
-
-                <div
-                  class="form-field datepicker"
-                  data-controller="datepicker"
-                  data-datepicker-min-date-value="<%= Date.today + 1.day %>"
-                >
-                  <div class="relative max-w-sm">
-                    <div
-                      class="
-                        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-                      "
-                    >
-                      <%= pathogen_icon(ICON::CALENDAR_DOTS, size: :md, color: :subdued) %>
-                    </div>
-                    <%= form.text_field :expires_at,
-                                    placeholder: t("date.formats.iso"),
-                                    autocomplete: "off",
-                                    value: member.expires_at,
-                                    id: "member-#{member.id}-expiration",
-                                    "data-datepicker-target": "datePicker",
-                                    "data-datepicker-autosubmit": "true",
-                                    "aria-label": t(".aria_labels.expires_at") %>
-
-                    <input type="hidden" name="format" value="turbo_stream"/>
-                  </div>
-                </div>
               <% end %>
             <% elsif !member.expires_at.nil? %>
               <%= helpers.local_time(member.expires_at, :full_date) %>

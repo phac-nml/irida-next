@@ -5,10 +5,7 @@
     "
   >
     <span>
-      <%= helpers.render_icon(
-        ICONS[:calendar],
-        class: "dark:text-slate-400 h-5 text-slate-500 viral-icon w-5",
-      ) %>
+      <%= pathogen_icon(ICON::CALENDAR_DOTS) %>
     </span>
   </div>
   <input
@@ -60,7 +57,7 @@
             data-action="click->test-datepicker#previousMonth"
             data-test-datepicker-target="backButton"
           >
-            <%= helpers.render_icon(ICONS[:arrow_left]) %>
+            <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
           </button>
           <div data-test-datepicker-target="monthSelectContainer">
           </div>
@@ -87,7 +84,7 @@
             "
             data-action="click->test-datepicker#nextMonth"
           >
-            <%= helpers.render_icon(ICONS[:arrow_right]) %>
+            <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
           </button>
         </div>
       </div>
@@ -155,6 +152,7 @@
               font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
             "
             data-action="click->test-datepicker#clearSelection"
+            data-test-datepicker-target="clearButton"
           ><%= t(".clear_selection") %></button>
         </div>
       </div>
