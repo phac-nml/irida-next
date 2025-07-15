@@ -41,10 +41,10 @@ class IntegrationAccessTokenController < ApplicationController
   private
 
   def personal_access_token_params
-    now = Time.now
+    now = Time.zone.now
     {
-      name: "integration_access_token_#{now.to_s}",
-      scopes: ["api"],
+      name: "integration_access_token_#{now}",
+      scopes: ['api'],
       expires_at: now + 7.days
     }
   end

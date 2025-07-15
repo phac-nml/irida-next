@@ -6,10 +6,17 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log(this.tokenValue)
-    setTimeout(() => {
-      window.opener.postMessage(this.tokenValue, 'http:localhost:8081') // TODO: make this configurable
-      window.close()
-    }, 3000)
+    const referrer = document.referrer
+    const allow_list = ['http://localhost:8081/'] // TODO: make this configurable
+    if (allow_list.includes(referrer)) {
+      setTimeout(() => {
+        window.opener.postMessage(this.tokenValue, referrer)
+        window.close()
+      }, 3000)
+    } else {
+      console.log("Requesting integration referrer is not on approve list")
+      // TODO: make this an error that the user can see
+      // TODO: maybe have this done in the turbo streams
+    }
   }
 }
