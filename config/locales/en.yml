@@ -1147,6 +1147,13 @@ en:
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
+  integration_access_tokens:
+      create:
+        submit: Create Access Token
+        success: Personal access token "%{name}" was successfully created.
+      index:
+        subtitle: By creating an Integration Access Token you are allowing the connected application to access your data temporarily.
+        title: Integration Access Token
   profiles:
     accounts:
       delete:
