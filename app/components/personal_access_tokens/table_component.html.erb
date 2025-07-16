@@ -6,6 +6,9 @@
     <% table.with_column(t("personal_access_tokens.table.header.scopes")) do |row| %>
       <%= row[:scopes].join(", ") %>
     <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.integration_host")) do |row| %>
+      <%= row[:integration_host] %>
+    <% end %>
     <% table.with_column(t("personal_access_tokens.table.header.created_at")) do |row| %>
       <%= helpers.local_date(row[:created_at], :long) %>
     <% end %>
