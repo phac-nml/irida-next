@@ -12,8 +12,9 @@ class IntegrationAccessTokenController < ApplicationController
   end
 
   def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    caller_host = caller_from_request
     respond_to do |format| # rubocop:disable Metrics/BlockLength
-      if integration_host_allow_list.include? caller_from_request
+      if integration_host_allow_list.include? caller_host
         @personal_access_token = PersonalAccessTokens::CreateService.new(
           current_user,
           personal_access_token_params
@@ -24,7 +25,8 @@ class IntegrationAccessTokenController < ApplicationController
             render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
                              new_personal_access_token: @personal_access_token,
                              encoded_token: encoded_token,
-                             host_allow_list: integration_host_allow_list }
+                             host_allow_list: integration_host_allow_list,
+                             target_host: caller_host }
           end
         else
           format.turbo_stream do
@@ -50,7 +52,7 @@ class IntegrationAccessTokenController < ApplicationController
     {
       name: "#{URI(request.url).host}_integration_#{now.strftime('%Y-%m-%d %k:%M:%S')}",
       scopes: ['api'],
-      expires_at: now + 7.days
+      expires_at: now + 1.day
     }
   end
 
