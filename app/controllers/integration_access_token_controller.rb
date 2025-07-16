@@ -25,7 +25,6 @@ class IntegrationAccessTokenController < ApplicationController
             render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
                              new_personal_access_token: @personal_access_token,
                              encoded_token: encoded_token,
-                             host_allow_list: integration_host_allow_list,
                              target_host: caller_host }
           end
         else
