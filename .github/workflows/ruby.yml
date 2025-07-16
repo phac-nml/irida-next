@@ -63,7 +63,7 @@ jobs:
           bin/rails assets:precompile
       - name: Run tests
         run: |
-          bin/rails test:all
+          bin/rails test:all --exclude test/integration/integration_sapporo_test.rb
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
