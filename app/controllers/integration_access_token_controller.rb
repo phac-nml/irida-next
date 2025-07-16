@@ -47,13 +47,12 @@ class IntegrationAccessTokenController < ApplicationController
   private
 
   def personal_access_token_params
-    now = Time.zone.now
     {
       name: SecureRandom.uuid.to_s,
       scopes: ['api'],
-      expires_at: Rails.configuration.cors_config['token_lifespan_hours'].hours.after(now),
+      expires_at: token_lifespan_from_request.days.from_now,
       integration: true,
-      integration_host: URI(request.url).host.to_s
+      integration_host: host_from_request
     }
   end
 
@@ -66,7 +65,7 @@ class IntegrationAccessTokenController < ApplicationController
   end
 
   def integration_host_allow_list
-    Rails.configuration.cors_config['host_allow_list']
+    Rails.configuration.cors_config['allowed_hosts'].pluck(:url)
   end
 
   def caller_from_request
@@ -74,5 +73,16 @@ class IntegrationAccessTokenController < ApplicationController
     return p['caller'] if p['caller']
 
     nil
+  end
+
+  def token_lifespan_from_request
+    caller = caller_from_request
+    Rails.configuration.cors_config['allowed_hosts'].each do |x|
+      return x[:token_lifespan_days] if x[:url] == caller
+    end
+  end
+
+  def host_from_request
+    URI(request.url).host.to_s
   end
 end

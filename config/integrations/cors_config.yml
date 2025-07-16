@@ -8,9 +8,11 @@ development:
       headers: any
       methods: [get, post]
   # Make sure to include trailing /
-  host_allow_list: ['http://localhost:8081/']
-  # Current limitation of IRIDA Next requires this to be minimum of 48 hours
-  token_lifespan_hours: 48
+  allowed_hosts:
+    - url: 'http://localhost:8081/'
+      token_lifespan_days: 1
+    - url: 'http://localhost:8082/'
+      token_lifespan_days: 2
 
 test:
   origins: '*'
@@ -18,8 +20,11 @@ test:
     - resource: '*'
       headers: any
       methods: [get, post]
-  host_allow_list: ['http://localhost:8081/']
-  token_lifespan_hours: 48
+  allowed_hosts:
+    - url: 'http://localhost:8081/'
+      token_lifespan_days: 1
+    - url: 'http://localhost:8082/'
+      token_lifespan_days: 2
 
 production:
   # do not use wildcards '*' in production
@@ -28,5 +33,6 @@ production:
     - resource:
       headers:
       methods:
-  host_allow_list: []
-  token_lifespan_hours: 48
+  allowed_hosts:
+    - url:
+      token_lifespan_days:
