@@ -6,7 +6,7 @@ require 'active_job_test_case'
 class IntegrationSapporoTest < ActiveJobTestCase
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
-    Rails.configuration.ga4gh_wes_server_endpoint = 'http://localhost:1122/'
+    Rails.configuration.ga4gh_wes_server_endpoint = ENV.fetch('GA4GH_WES_URL', 'http://localhost:1122/')
   end
 
   def teardown

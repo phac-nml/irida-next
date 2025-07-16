@@ -81,6 +81,7 @@ services:
       SAPPORO_PORT: 1122
       SAPPORO_RUN_SH: /app/sapporo/run_irida_next.sh
       SAPPORO_RUN_DIR: /opt/sapporo-runs
+      IRIDA_NEXT_PATH: /workspaces/irida-next
 
     ports:
       - "1122:1122"
