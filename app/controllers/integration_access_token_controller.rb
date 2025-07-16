@@ -49,9 +49,11 @@ class IntegrationAccessTokenController < ApplicationController
   def personal_access_token_params
     now = Time.zone.now
     {
-      name: "#{URI(request.url).host}_integration_#{now.strftime('%Y-%m-%d %k:%M:%S')}",
+      name: SecureRandom.uuid.to_s,
       scopes: ['api'],
-      expires_at: now + 1.day
+      expires_at: Rails.configuration.cors_config['token_lifespan_hours'].hours.after(now),
+      integration: true,
+      integration_host: URI(request.url).host.to_s
     }
   end
 
