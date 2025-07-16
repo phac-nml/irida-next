@@ -147,10 +147,11 @@
           </table>
         </div>
         <div class="datepicker-footer">
-
-          <div class="text-sm text-center">
-            Earliest date: 2026-01-01
-          </div>
+          <% if min_date %>
+            <div class="text-sm text-center">
+              <%= t(".errors.min_date_error", min_date:) %>
+            </div>
+          <% end %>
           <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
             <button
               type="button"
