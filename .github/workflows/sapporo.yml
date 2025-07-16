@@ -69,4 +69,4 @@ jobs:
         run: sudo chmod -R 777 ${GITHUB_WORKSPACE}
       - name: Run tests
         run: |
-          bin/rails test test/integration/sapporo.rb
+          bin/rails test test/integration/integration_sapporo_test.rb
