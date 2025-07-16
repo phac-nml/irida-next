@@ -763,7 +763,9 @@ CREATE TABLE public.personal_access_tokens (
     log_data jsonb,
     deleted_at timestamp(6) without time zone,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL
+    user_id uuid NOT NULL,
+    integration boolean DEFAULT false NOT NULL,
+    integration_host character varying
 );
 
 
@@ -2033,6 +2035,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250826161932'),
+('20250716174346'),
 ('20250605171908'),
 ('20250424155356'),
 ('20250416191422'),
