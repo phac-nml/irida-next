@@ -12,9 +12,8 @@ class IntegrationAccessTokenController < ApplicationController
   end
 
   def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    caller_host = caller_from_request
     respond_to do |format| # rubocop:disable Metrics/BlockLength
-      if integration_host_allow_list.include? caller_host
+      if integration_host_allow_list.include? caller
         @personal_access_token = PersonalAccessTokens::CreateService.new(
           current_user,
           personal_access_token_params
@@ -25,7 +24,7 @@ class IntegrationAccessTokenController < ApplicationController
             render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
                              new_personal_access_token: @personal_access_token,
                              encoded_token: encoded_token,
-                             target_host: caller_host }
+                             target_host: caller }
           end
         else
           format.turbo_stream do
@@ -50,9 +49,9 @@ class IntegrationAccessTokenController < ApplicationController
     {
       name: SecureRandom.uuid.to_s,
       scopes: ['api'],
-      expires_at: token_lifespan_from_request.days.from_now,
+      expires_at: token_lifespan.days.from_now,
       integration: true,
-      integration_host: host_from_request
+      integration_host: URI(caller).host.to_s
     }
   end
 
@@ -68,6 +67,10 @@ class IntegrationAccessTokenController < ApplicationController
     Rails.configuration.cors_config['allowed_hosts'].pluck(:url)
   end
 
+  def caller
+    @caller ||= caller_from_request
+  end
+
   def caller_from_request
     p = Rack::Utils.parse_query(URI(request.referer).query)
     return p['caller'] if p['caller']
@@ -75,14 +78,9 @@ class IntegrationAccessTokenController < ApplicationController
     nil
   end
 
-  def token_lifespan_from_request
-    caller = caller_from_request
+  def token_lifespan
     Rails.configuration.cors_config['allowed_hosts'].each do |x|
       return x[:token_lifespan_days] if x[:url] == caller
     end
-  end
-
-  def host_from_request
-    URI(request.url).host.to_s
   end
 end
