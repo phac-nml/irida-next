@@ -21,10 +21,9 @@ test:
       headers: any
       methods: [get, post]
   allowed_hosts:
-    - url: 'http://localhost:8081/'
-      token_lifespan_days: 1
-    - url: 'http://localhost:8082/'
-      token_lifespan_days: 2
+    - url: 'http://testintegration:8081/'
+      token_lifespan_days: 3
+
 
 production:
   # do not use wildcards '*' in production
