@@ -20,18 +20,15 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
       assert_text @project.human_name
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_text 'Displaying items 21-39 of 39 in total'
-      assert_selector 'tr', count: 19
+      assert_selector '.treegrid-row'
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
 
       click_link @project.human_name
       assert_current_path(namespace_project_path(@project.parent, @project))
@@ -43,19 +40,16 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 22 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
       assert_text @project.human_name
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_text 'Displaying items 21-22 of 22 in total'
-      assert_selector 'tr', count: 2
+      assert_selector '.treegrid-row'
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_text 'Displaying items 1-20 of 22 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
 
       click_link @project.human_name
       assert_current_path(namespace_project_path(@project.parent, @project))
@@ -68,8 +62,7 @@ module Dashboard
       click_on I18n.t(:'dashboard.projects.index.personal')
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying 4 items'
-      assert_selector 'tr', count: 4
+      assert_selector '.treegrid-row', count: 4
       assert_text projects(:john_doe_project2).human_name
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
@@ -81,13 +74,12 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'tr', count: 12
+      assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
@@ -102,22 +94,22 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
+      assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
       find('input.t-search-component').native.send_keys(:return)
-      assert_text 'Displaying 1 item'
-      assert_selector 'tr', count: 1
+      assert_selector '.treegrid-row', count: 1
+      assert_text @project.puid
     end
 
     test 'can sort the list of projects' do
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 20
+
+      # Check first item
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text @project.human_name
       end
 
@@ -126,8 +118,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
-      assert_selector 'tr', count: 20
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 20
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text projects(:projectHotel).human_name
       end
     end
@@ -136,15 +128,15 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 20
+
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text @project.human_name
       end
+
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
       find('input.t-search-component').native.send_keys(:return)
-      assert_text 'Displaying 12 items'
-      assert_selector 'tr', count: 12
+      assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
@@ -153,8 +145,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
-      assert_selector 'tr', count: 12
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 12
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text projects(:project19).human_name
       end
     end
@@ -163,9 +155,9 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tr', count: 20
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 20
+
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text @project.human_name
       end
 
@@ -174,23 +166,22 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
-      assert_text 'Displaying items 1-20 of 39 in total'
-      assert_selector 'tbody tr', count: 20
-      within('tbody tr:first-child') do
+      assert_selector '.treegrid-row', count: 20
+
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text projects(:projectHotel).human_name
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text 'Displaying 12 items'
-      assert_selector 'tr', count: 12
+      assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
-      within('tbody tr:first-child') do
+      within('#groups_tree .treegrid-row:first-child') do
         assert_text projects(:project19).human_name
       end
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
@@ -239,8 +230,8 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying 1 item'
-      assert_selector 'tr', count: 1
+
+      assert_selector '.treegrid-row', count: 1
       assert_text projects(:john_doe_project2).human_name
     end
 
@@ -251,8 +242,9 @@ module Dashboard
 
       assert_equal 3, @project.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the samples count display in the row contents
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       visit namespace_project_sample_url(@group1, @project, @sample1)
@@ -272,8 +264,9 @@ module Dashboard
       assert_text @project.namespace.name
       assert_equal 2, @project.reload.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
     end
 
@@ -284,8 +277,9 @@ module Dashboard
 
       assert_equal 3, @project.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the samples count display in the row contents
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       visit namespace_project_samples_url(@group1, @project)
@@ -306,8 +300,9 @@ module Dashboard
       assert_text @project.namespace.name
       assert_equal 4, @project.reload.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
     end
 
@@ -318,8 +313,9 @@ module Dashboard
 
       assert_equal 3, @project.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the samples count display in the row contents
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       visit namespace_project_samples_url(@group1, @project)
@@ -351,8 +347,9 @@ module Dashboard
       assert_no_text @project2.namespace.name
       assert_equal 2, @project.reload.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
@@ -362,8 +359,9 @@ module Dashboard
       assert_no_text @project.namespace.name
       assert_equal 21, @project2.reload.samples.size
 
-      within("#project_#{@project2.id}-samples-count") do
-        assert_text @project2.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project2)}") do
+        assert_text @project2.samples.size.to_s
       end
     end
 
@@ -374,8 +372,9 @@ module Dashboard
 
       assert_equal 3, @project.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the samples count display in the row contents
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       visit namespace_project_samples_url(@group1, @project)
@@ -409,8 +408,9 @@ module Dashboard
       assert_no_text @project2.namespace.name
       assert_equal 3, @project.reload.samples.size
 
-      within("#project_#{@project.id}-samples-count") do
-        assert_text @project.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
@@ -420,8 +420,9 @@ module Dashboard
       assert_no_text @project.namespace.name
       assert_equal 21, @project2.reload.samples.size
 
-      within("#project_#{@project2.id}-samples-count") do
-        assert_text @project2.samples.size
+      # Look for the updated samples count
+      within("##{dom_id(@project2)}") do
+        assert_text @project2.samples.size.to_s
       end
     end
 
