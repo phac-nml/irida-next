@@ -259,7 +259,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     expected_error = [
       'path' => ['metadata'],
-      'message' => "JSON data is not formatted correctly. unexpected character: 'bad formatting'"
+      'message' => "JSON data is not formatted correctly. unexpected character: 'bad' at line 1 column 1"
     ]
     assert_equal expected_error, data['errors']
   end
