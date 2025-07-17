@@ -86,7 +86,8 @@ class ClientTest < ActionDispatch::IntegrationTest
                                           headers: "",
                                           body: "",
                                           request: {
-                                            url_path: "/runs"
+                                            method: 'get',
+                                            url: "/runs"
                                           }})
     end
 
@@ -106,7 +107,8 @@ class ClientTest < ActionDispatch::IntegrationTest
                                             headers: "",
                                             body: "",
                                             request: {
-                                              url_path: "/runs/run-id"
+                                              method: "get",
+                                              url: "/runs/run-id"
                                             }})
     end
 
@@ -126,7 +128,8 @@ class ClientTest < ActionDispatch::IntegrationTest
                                          headers: "",
                                          body: "",
                                          request: {
-                                           url_path: '/runs/run-id'
+                                           method: 'get',
+                                           url: '/runs/run-id'
                                          }})
     end
 
@@ -146,7 +149,8 @@ class ClientTest < ActionDispatch::IntegrationTest
                                            headers: "",
                                            body: "",
                                            request: {
-                                             url_path: "/runs/not-a-run"
+                                             method: 'get',
+                                             url: "/runs/not-a-run"
                                            }})
     end
 
@@ -166,7 +170,8 @@ class ClientTest < ActionDispatch::IntegrationTest
                                       headers: "",
                                       body: "",
                                       request: {
-                                        url_path: "/runs/run-id"
+                                        method: 'get',
+                                        url: "/runs/run-id"
                                       }})
     end
 
