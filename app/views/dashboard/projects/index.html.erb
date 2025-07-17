@@ -60,9 +60,7 @@
         <% end %>
 
         <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
-          <div class="flex flex-row-reverse">
-            <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
-          </div>
+          <%= render Viral::Pagy::FullComponent.new(@pagy, item: "PROJECT") %>
         <% else %>
           <%= viral_empty(
             icon_name: ICON::MAGNIFYING_GLASS,
