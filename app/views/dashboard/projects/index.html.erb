@@ -60,7 +60,7 @@
         <% end %>
 
         <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
-          <%= render Viral::Pagy::FullComponent.new(@pagy, item: "PROJECT") %>
+          <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy_item")) %>
         <% else %>
           <%= viral_empty(
             icon_name: ICON::MAGNIFYING_GLASS,

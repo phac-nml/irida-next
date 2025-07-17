@@ -764,6 +764,7 @@ fr:
         create_project_button: Nouveau projet
         no_projects: Aucun projet
         no_projects_description: Vous n’avez actuellement aucun projet.
+        pagy_item: Projets
         personal: Personnel
         search:
           placeholder: Filtrer par PUID ou nom
