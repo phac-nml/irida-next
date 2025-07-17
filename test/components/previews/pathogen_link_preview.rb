@@ -6,4 +6,12 @@ class PathogenLinkPreview < ViewComponent::Preview
       'This is a link'
     end
   end
+
+  # @label With Tooltip
+  def tooltip
+    render Pathogen::Link.new(href: "#", id: "tooltip-link") do |component|
+      component.with_tooltip(text: 'Tooltip text')
+      'This is a link with tooltip'
+    end
+  end
 end

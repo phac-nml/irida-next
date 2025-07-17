@@ -1,3 +1,9 @@
-<%= render(Pathogen::BaseComponent.new(**@system_arguments)) do %>
+<div data-controller="viral--tooltip">
+  <%= render(Pathogen::BaseComponent.new(**@system_arguments)) do %>
     <%= content %>
-<% end %>
+  <% end %>
+
+  <% if tooltip.present? %>
+    <%= render tooltip %>
+  <% end %>
+</div>
