@@ -6,30 +6,27 @@ module Pathogen
     # @param href [String] The link url (required)
     # @param system_arguments [Hash] additional HTML attributes to be included in the link root element
     def initialize(href: nil, **system_arguments)
-      @system_arguments = system_arguments
+      @link_system_arguments = system_arguments
+      @link_system_arguments[:tag] = :a
+      @link_system_arguments[:href] = href
 
-      @id = @system_arguments[:id] ||= self.class.generate_id
-
-      @system_arguments[:tag] = :a
-      @system_arguments[:href] = href
-
-      @system_arguments[:aria] ||= {}
-      @system_arguments[:aria][:describedby] = @id
-      @system_arguments[:data] ||= {}
-      @system_arguments[:data]['viral--tooltip-target'] = 'trigger'
+      @tooltip_id = Pathogen::Tooltip.generate_id
+      @tooltip_system_arguments = {}
+      @tooltip_system_arguments[:aria] = system_arguments[:aria] || {}
+      @tooltip_system_arguments[:aria][:describedby] = @tooltip_id
+      @tooltip_system_arguments[:data] = system_arguments[:data] || {}
+      @tooltip_system_arguments[:data]['viral--tooltip-target'] = 'trigger'
     end
 
     # The tooltip that appears on mouse hover or keyboard focus over the link. (optional)
     #
-    # @param tooltip_arguments [Hash] HTML attributes to be included in the tooltip root element
-    renders_one :tooltip, lambda { |**tooltip_arguments|
-      raise ArgumentError, 'Links with a tooltip must have a unique `id` set on the `LinkComponent`.' if @id.blank?
-
-      Pathogen::Tooltip.new(id: @id, **tooltip_arguments)
+    # @param system_arguments [Hash] HTML attributes to be included in the tooltip root element
+    renders_one :tooltip, lambda { |**system_arguments|
+      Pathogen::Tooltip.new(id: @tooltip_id, **system_arguments)
     }
 
     def before_render
-      raise ArgumentError, 'href is required' if @system_arguments[:href].nil?
+      raise ArgumentError, 'href is required' if @link_system_arguments[:href].nil?
     end
   end
 end

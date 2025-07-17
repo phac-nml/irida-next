@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # Pathogen::Tooltip renders a tooltip that only appears on mouse hover or keyboard focus.
+  # Pathogen::Tooltip renders a tooltip that is to be used with Pathogen::Link.
   class Tooltip < Pathogen::Component
     attr_reader :text, :id
 
