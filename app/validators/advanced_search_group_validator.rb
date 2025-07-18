@@ -45,12 +45,12 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize
     if condition.field.blank?
       condition.errors.add :field,
-                           I18n.t('validators.advanced_search_group_validator.blank_error')
+                           I18n.t('validators.advanced_search_group_validator.select_blank_error')
     end
 
     if condition.operator.blank?
       condition.errors.add :operator,
-                           I18n.t('validators.advanced_search_group_validator.blank_error')
+                           I18n.t('validators.advanced_search_group_validator.select_blank_error')
     end
 
     return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
