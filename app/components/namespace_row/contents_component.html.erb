@@ -46,7 +46,8 @@
 
   <div class=" flex flex-row gap-x-2 text-slate-500 dark:text-slate-400 ">
     <% if @namespace.group_namespace? %>
-      <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
+      <%= render Pathogen::Link.new(href: namespace_path(@namespace)) do |component| %>
+        <% component.with_tooltip(text: t(:".stats.subnamespaces")) %>
         <span
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
@@ -59,7 +60,8 @@
           <%= @namespace.children.count %>
         </span>
       <% end %>
-      <%= viral_tooltip(title: t(:'.stats.projects')) do %>
+      <%= render Pathogen::Link.new(href: namespace_path(@namespace)) do |component| %>
+        <% component.with_tooltip(text: t(:".stats.projects")) %>
         <span
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
@@ -72,7 +74,8 @@
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
-      <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+      <%= render Pathogen::Link.new(href: group_samples_path(@namespace)) do |component| %>
+        <% component.with_tooltip(text: t(:".stats.samples")) %>
         <span
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
           class="
@@ -89,7 +92,8 @@
       <% end %>
     <% end %>
     <% if @namespace.project_namespace? %>
-      <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+      <%= render Pathogen::Link.new(href: namespace_project_samples_path(@namespace.parent, @namespace.project)) do |component| %>
+        <% component.with_tooltip(text: t(:".stats.samples")) %>
         <span
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
           class="
