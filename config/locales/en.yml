@@ -2211,6 +2211,10 @@ en:
       success:
         ok_button: OK
         success: Success
+    sortable_lists:
+      aria_live_update:
+        added: 'The following options have been added: '
+        removed: 'The following options have been removed: '
     workflow_executions:
       destroy_confirmation_dialog:
         description: Are you sure you want to delete this workflow execution?
@@ -2286,11 +2290,19 @@ en:
         previous_aria_label: Go to previous page
     sortable_list:
       list_component:
+        actions: Actions
+        add: Add
         aria_role_description: "%{list} listbox drag and drop"
+        down: Down
+        keyboard_shortcuts:
+          add: Enter
+          down: Alt+ArrowDown
+          remove: Delete
+          up: Alt+ArrowUp
+        remove: Remove
+        up: Up
     sortable_lists_component:
-      add_all: Add all
       no_template: No template
-      remove_all: Remove all
   workflow_executions:
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
