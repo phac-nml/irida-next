@@ -85,8 +85,11 @@ export default class extends Controller {
   #selectedYear;
   #selectedMonthIndex;
 
+  #nextFocussableElement;
+
   connect() {
-    console.log("calendar connected");
+    this.#nextFocussableElement =
+      this.pathogenDatepickerInputOutlet.findNextFocussableElement();
   }
 
   idempotentConnect() {
@@ -130,7 +133,7 @@ export default class extends Controller {
     this.minDateValue = params["minDate"];
     this.autosubmitValue = params["autosubmit"];
     this.monthsValue = params["months"];
-
+    this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
 
@@ -352,7 +355,6 @@ export default class extends Controller {
     const today = this.#getDateNode(this.#todaysFormattedFullDate);
     const selectedDate = this.#getDateNode(this.#selectedDate);
     const minDate = this.#getDateNode(this.minDateValue);
-
     // if minimum date and selected or todays date land on same month/year,
     // prioritize selectedDate > todaysDate > minDate as tabbable
 
@@ -367,7 +369,7 @@ export default class extends Controller {
       } else {
         minDate.tabIndex = 0;
       }
-    } else if (selectedDate && today && this.#verifyDateIsInMonth(today)) {
+    } else if (selectedDate && this.#verifyDateIsInMonth(selectedDate)) {
       selectedDate.tabIndex = 0;
     } else if (today && this.#verifyDateIsInMonth(today)) {
       today.tabIndex = 0;
@@ -640,5 +642,15 @@ export default class extends Controller {
     return this.calendarTarget.querySelector(
       '[data-date-within-month-position="inMonth"]',
     );
+  }
+
+  getFirstFocussableElement() {
+    return this.backButtonTarget.disabled
+      ? this.monthSelectTarget
+      : this.backButtonTarget;
+  }
+
+  getLastFocussableElement() {
+    return this.clearButtonTarget;
   }
 }
