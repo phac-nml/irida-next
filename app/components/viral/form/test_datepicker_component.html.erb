@@ -5,7 +5,6 @@
   class="relative"
   data-pathogen--datepicker--input-min-date-value="<%= min_date %>"
   data-pathogen--datepicker--input-autosubmit-value="<%= autosubmit %>"
-  data-pathogen--datepicker--input-months-value="<%= months %>"
   data-pathogen--datepicker--input-invalid-date-format-value="<%= t('.errors.invalid_date_format')%>"
   data-pathogen--datepicker--input-invalid-min-date-value="<%= t('.errors.min_date_error', min_date:)%>"
 >
@@ -46,6 +45,7 @@
   <template data-pathogen--datepicker--input-target="calenderTemplate">
     <div
       data-controller="pathogen--datepicker--calendar"
+      data-pathogen--datepicker--calendar-months-value="<%= months %>"
       data-pathogen--datepicker--calendar-pathogen--datepicker--input-outlet="#<%= id %>-input"
       id="<%= id %>-calendar"
       class="hidden absolute top-0 left-0 z-10000 pt-2 active block"

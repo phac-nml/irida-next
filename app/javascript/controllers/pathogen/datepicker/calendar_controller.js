@@ -10,20 +10,14 @@ export default class extends Controller {
     "monthSelectTemplate",
     "year",
     "calendar",
-    "calenderTemplate",
     "inMonthDateTemplate",
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
     "clearButton",
-    "inputError",
   ];
 
   static values = {
-    minDate: String,
-    autosubmit: Boolean,
     months: Array,
-    invalidDateFormat: String,
-    invalidMinDate: String,
   };
 
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -74,7 +68,6 @@ export default class extends Controller {
   ];
 
   // today's date attributes for quick access
-  #todaysFullDate;
   #todaysYear;
   #todaysMonthIndex;
   #todaysDate;
@@ -85,12 +78,8 @@ export default class extends Controller {
   #selectedYear;
   #selectedMonthIndex;
 
-  #nextFocussableElement;
-
-  connect() {
-    this.#nextFocussableElement =
-      this.pathogenDatepickerInputOutlet.findNextFocussableElement();
-  }
+  #minDate;
+  #autosubmit;
 
   idempotentConnect() {
     // set the months dropdown in case we're in the year of the minimum date
@@ -107,8 +96,8 @@ export default class extends Controller {
       this.monthSelectTemplateTarget.content.cloneNode(true);
     const monthSelect = monthSelectTemplate.querySelector("select");
     // if 2025 is #selectedYear and minDate = 2025-06-01, we remove Jan -> May from select template and append
-    if (this.minDateValue && this.minDateValue.includes(this.#selectedYear)) {
-      const minDateMonthIndex = new Date(this.minDateValue).getMonth();
+    if (this.#minDate && this.#minDate.includes(this.#selectedYear)) {
+      const minDateMonthIndex = new Date(this.#minDate).getMonth();
       for (let i = 0; i < minDateMonthIndex; i++) {
         monthSelect.firstElementChild.remove();
       }
@@ -122,7 +111,6 @@ export default class extends Controller {
   }
 
   initializeCalendarByInput(params) {
-    this.#todaysFullDate = params["todaysFullDate"];
     this.#todaysYear = params["todaysYear"];
     this.#todaysMonthIndex = params["todaysMonthIndex"];
     this.#todaysDate = params["todaysDate"];
@@ -130,9 +118,8 @@ export default class extends Controller {
     this.#selectedDate = params["selectedDate"];
     this.#selectedYear = params["selectedYear"];
     this.#selectedMonthIndex = params["selectedMonthIndex"];
-    this.minDateValue = params["minDate"];
-    this.autosubmitValue = params["autosubmit"];
-    this.monthsValue = params["months"];
+    this.#minDate = params["minDate"];
+    this.#autosubmit = params["autosubmit"];
     this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
@@ -318,7 +305,7 @@ export default class extends Controller {
     const today = this.#getDateNode(this.#todaysFormattedFullDate);
 
     // minimum date where dates prior will be disabled
-    const minDate = this.#getDateNode(this.minDateValue);
+    const minDate = this.#getDateNode(this.#minDate);
 
     if (selectedDate) {
       this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
@@ -354,7 +341,7 @@ export default class extends Controller {
   #setTabIndex() {
     const today = this.#getDateNode(this.#todaysFormattedFullDate);
     const selectedDate = this.#getDateNode(this.#selectedDate);
-    const minDate = this.#getDateNode(this.minDateValue);
+    const minDate = this.#getDateNode(this.#minDate);
     // if minimum date and selected or todays date land on same month/year,
     // prioritize selectedDate > todaysDate > minDate as tabbable
 
@@ -362,9 +349,9 @@ export default class extends Controller {
 
     // else set the 1st of the month as tab target
     if (minDate) {
-      if (selectedDate && this.#selectedDate > this.minDateValue) {
+      if (selectedDate && this.#selectedDate > this.#minDate) {
         selectedDate.tabIndex = 0;
-      } else if (today && this.#todaysFormattedFullDate > this.minDateValue) {
+      } else if (today && this.#todaysFormattedFullDate > this.#minDate) {
         today.tabIndex = 0;
       } else {
         minDate.tabIndex = 0;
@@ -410,8 +397,8 @@ export default class extends Controller {
 
   changeYear() {
     // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
-    if (this.minDateValue) {
-      const minDate = new Date(this.minDateValue);
+    if (this.#minDate) {
+      const minDate = new Date(this.#minDate);
       const minYear = minDate.getFullYear();
       const minMonth = minDate.getMonth();
       if (this.yearTarget.value < minYear) {
@@ -465,7 +452,7 @@ export default class extends Controller {
       selectedDate.getAttribute("data-date"),
     );
 
-    if (this.autosubmitValue) {
+    if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
@@ -477,7 +464,7 @@ export default class extends Controller {
       selectedDate.getAttribute(""),
     );
 
-    if (this.autosubmitValue) {
+    if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
@@ -503,8 +490,8 @@ export default class extends Controller {
     // if navigating 'left', check if the minimum date is higher than the target date to prevent navigation
     if (
       direction === "left" &&
-      this.minDateValue &&
-      this.minDateValue > targetFullDate
+      this.#minDate &&
+      this.#minDate > targetFullDate
     ) {
       return;
     }
@@ -540,11 +527,7 @@ export default class extends Controller {
     );
 
     // if navigating 'up', check if the minimum date is higher than the target date to prevent navigation
-    if (
-      direction === "up" &&
-      this.minDateValue &&
-      this.minDateValue > targetFullDate
-    ) {
+    if (direction === "up" && this.#minDate && this.#minDate > targetFullDate) {
       return;
     }
 
@@ -576,7 +559,7 @@ export default class extends Controller {
     const firstDateNode = this.#getFirstOfMonthNode();
 
     if (firstDateNode.getAttribute("data-date-disabled")) {
-      this.#focusDate(this.#getDateNode(this.minDateValue));
+      this.#focusDate(this.#getDateNode(this.#minDate));
     } else {
       this.#focusDate(firstDateNode);
     }
@@ -596,8 +579,8 @@ export default class extends Controller {
     if (this.#preventPreviousMonthNavigation()) return;
     this.previousMonth();
 
-    if (this.minDateValue) {
-      const minDateNode = this.#getDateNode(this.minDateValue);
+    if (this.#minDate) {
+      const minDateNode = this.#getDateNode(this.#minDate);
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
       if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
@@ -614,10 +597,10 @@ export default class extends Controller {
   }
 
   #preventPreviousMonthNavigation() {
-    if (this.minDateValue) {
-      const minDateNode = this.#getDateNode(this.minDateValue);
+    if (this.#minDate) {
+      const minDateNode = this.#getDateNode(this.#minDate);
       if (
-        this.#getDateNode(this.minDateValue) &&
+        this.#getDateNode(this.#minDate) &&
         this.#verifyDateIsInMonth(minDateNode)
       )
         return true;

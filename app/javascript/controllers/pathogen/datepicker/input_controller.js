@@ -7,7 +7,6 @@ export default class extends Controller {
   static values = {
     minDate: String,
     autosubmit: Boolean,
-    months: Array,
     invalidDateFormat: String,
     invalidMinDate: String,
   };
@@ -29,7 +28,6 @@ export default class extends Controller {
   #nextElementAfterInput;
 
   initialize() {
-    this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
     this.boundUnhideCalendar = this.unhideCalendar.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
@@ -66,11 +64,11 @@ export default class extends Controller {
   disconnect() {
     this.datepickerInputTarget.removeEventListener(
       "focus",
-      this.boundAddCalenderTemplate,
+      this.boundUnhideCalendar,
     );
     this.datepickerInputTarget.removeEventListener(
       "click",
-      this.boundAddCalenderTemplate,
+      this.boundUnhideCalendar,
     );
     this.removeCalendarListeners();
   }
@@ -131,19 +129,9 @@ export default class extends Controller {
     return document.body;
   }
 
+  // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
-    this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput({
-      todaysFullDate: this.#todaysFullDate,
-      todaysYear: this.#todaysYear,
-      todaysMonthIndex: this.#todaysMonthIndex,
-      todaysDate: this.#todaysDate,
-      selectedDate: this.#selectedDate,
-      selectedYear: this.#selectedYear,
-      selectedMonthIndex: this.#selectedMonthIndex,
-      minDate: this.minDateValue,
-      autosubmit: this.autosubmitValue,
-      months: this.monthsValue,
-    });
+    this.#initializeCalendar();
   }
 
   unhideCalendar() {
@@ -194,6 +182,7 @@ export default class extends Controller {
   handleGlobalKeydown(event) {
     if (event.key === "Escape") {
       this.closeCalendar();
+      this.setInputValue(this.#selectedDate);
       return;
     }
     if (
@@ -279,16 +268,27 @@ export default class extends Controller {
 
   submitDate() {
     this.element.closest("form").requestSubmit();
-  }
-
-  //   TODO REFACTOR
-  #getFormattedStringDate(year, monthIndex, date) {
-    // new Date will parse monthIndex into correct month (month index == 0 will return january (ie: month 01))
-    // ISOString returns YYYY-MM-DDTHH:mm:ss.sssZ, so we split off T as we only want YYYY-MM-DD
-    return new Date(year, monthIndex, date).toISOString().split("T")[0];
+    this.#setSelectedDate();
+    this.#initializeCalendar();
   }
 
   setInputValue(value) {
     this.datepickerInputTarget.value = value;
+  }
+
+  #initializeCalendar() {
+    const sharedVariables = {
+      todaysYear: this.#todaysYear,
+      todaysMonthIndex: this.#todaysMonthIndex,
+      todaysDate: this.#todaysDate,
+      selectedDate: this.#selectedDate,
+      selectedYear: this.#selectedYear,
+      selectedMonthIndex: this.#selectedMonthIndex,
+      minDate: this.minDateValue,
+      autosubmit: this.autosubmitValue,
+    };
+    this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput(
+      sharedVariables,
+    );
   }
 }
