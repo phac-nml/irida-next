@@ -3,7 +3,5 @@
     <%= content %>
   <% end %>
 
-  <% if tooltip.present? %>
-    <%= render tooltip %>
-  <% end %>
+  <%= tooltip if tooltip? %>
 <% end %>
