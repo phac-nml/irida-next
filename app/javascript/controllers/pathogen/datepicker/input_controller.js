@@ -1,0 +1,267 @@
+import { Controller } from "@hotwired/stimulus";
+
+export default class extends Controller {
+  static outlets = ["pathogen--datepicker--calendar"];
+  static targets = [
+    "datepickerInput",
+    "backButton",
+    "monthsArray",
+    "monthSelect",
+    "monthSelectContainer",
+    "monthSelectTemplate",
+    "year",
+    "calendar",
+    "calendarComponent",
+    "calenderTemplate",
+    "inMonthDateTemplate",
+    "outOfMonthDateTemplate",
+    "disabledDateTemplate",
+    "clearButton",
+    "inputError",
+  ];
+
+  static values = {
+    minDate: String,
+    autosubmit: Boolean,
+    months: Array,
+    invalidDateFormat: String,
+    invalidMinDate: String,
+  };
+
+  #formattedDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+  // today's date attributes for quick access
+  #todaysFullDate = new Date();
+  #todaysYear = this.#todaysFullDate.getFullYear();
+  #todaysMonthIndex = this.#todaysFullDate.getMonth();
+  #todaysDate = this.#todaysFullDate.getDate();
+  #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
+
+  // the currently displayed year/month on datepicker
+  #selectedDate;
+  #selectedYear;
+  #selectedMonthIndex;
+
+  #calendar;
+
+  initialize() {
+    this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
+    this.boundUnhideCalendar = this.unhideCalendar.bind(this);
+    this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
+    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+
+    // Track calendar open state
+    this.isCalendarOpen = false;
+
+    this.addCalenderTemplate();
+  }
+
+  connect() {
+    // the currently selected date will be displayed on the initial calendar
+    this.#setSelectedDate();
+    this.datepickerInputTarget.addEventListener(
+      "focus",
+      this.boundUnhideCalendar,
+    );
+    this.datepickerInputTarget.addEventListener(
+      "click",
+      this.boundUnhideCalendar,
+    );
+  }
+
+  idempotentConnect() {
+    console.log(this.hasCalendarOutlet);
+  }
+
+  disconnect() {
+    this.datepickerInputTarget.removeEventListener(
+      "focus",
+      this.boundAddCalenderTemplate,
+    );
+    this.datepickerInputTarget.removeEventListener(
+      "click",
+      this.boundAddCalenderTemplate,
+    );
+    this.removeCalendarListeners();
+  }
+
+  #setSelectedDate() {
+    this.#selectedDate = this.datepickerInputTarget.value;
+    if (this.#selectedDate) {
+      const fullSelectedDate = new Date(this.#selectedDate);
+      this.#selectedYear = fullSelectedDate.getFullYear();
+      this.#selectedMonthIndex = fullSelectedDate.getMonth();
+    } else {
+      this.#selectedYear = this.#todaysYear;
+      this.#selectedMonthIndex = this.#todaysMonthIndex;
+    }
+  }
+
+  addCalenderTemplate(event) {
+    // Don't add calendar if it's already open
+    if (this.isCalendarOpen) return;
+
+    // Add the calendar template to the DOM
+    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
+    document.body.appendChild(calendar);
+    this.#calendar = document.body.lastElementChild;
+    // this.pathogenDatepickerCalendarOutlet.test("test");
+    // Position the calendar (implement proper positioning logic here)
+    // const inputRect = this.datepickerInputTarget.getBoundingClientRect();
+    // this.calendarComponentTarget.style.left = `${inputRect.left}px`;
+
+    // // Calculate if calendar should appear above or below input
+    // const spaceBelow = window.innerHeight - inputRect.bottom;
+    // const calendarHeight = 300; // Estimate height or calculate from actual rendered element
+    // if (spaceBelow < calendarHeight && inputRect.top > calendarHeight) {
+    //   // Position above the input if there's not enough space below
+    //   this.calendarComponentTarget.style.top = `${inputRect.top - calendarHeight}px`;
+    //   // this.calendarComponentTarget.classList.add("datepicker-orient-top");
+    //   // this.calendarComponentTarget.classList.remove("datepicker-orient-bottom");
+    // } else {
+    //   // Position below the input
+    //   this.calendarComponentTarget.style.top = `${inputRect.bottom}px`;
+    //   // this.calendarComponentTarget.classList.add("datepicker-orient-bottom");
+    //   // this.calendarComponentTarget.classList.remove("datepicker-orient-top");
+    // }
+    // this.idempotentConnect();
+  }
+
+  pathogenDatepickerCalendarOutletConnected() {
+    console.log("pathogenDatepickerCalendarOutletConnected");
+    this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput({
+      todaysFullDate: this.#todaysFullDate,
+      todaysYear: this.#todaysYear,
+      todaysMonthIndex: this.#todaysMonthIndex,
+      todaysDate: this.#todaysDate,
+      todaysFormattedFullDate: this.#todaysFormattedFullDate,
+      selectedDate: this.#selectedDate,
+      selectedYear: this.#selectedYear,
+      selectedMonthIndex: this.#selectedMonthIndex,
+      minDate: this.minDateValue,
+      autosubmit: this.autosubmitValue,
+      months: this.monthsValue,
+    });
+  }
+
+  unhideCalendar() {
+    this.#calendar.classList.remove("hidden");
+    this.isCalendarOpen = true;
+    // Set ARIA attributes for accessibility
+    this.datepickerInputTarget.setAttribute("aria-expanded", "true");
+    this.#calendar.setAttribute("aria-hidden", "false");
+
+    // // Add global event listeners for outside clicks and keyboard events
+    document.addEventListener("click", this.boundHandleOutsideClick);
+    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  // Handle clicks outside the datepicker component
+  handleOutsideClick(event) {
+    console.log("handle outside click");
+    const clickedInsideComponent =
+      this.#calendar.contains(event.target) ||
+      this.datepickerInputTarget.contains(event.target);
+
+    if (!clickedInsideComponent) {
+      this.closeCalendar();
+    }
+  }
+
+  // Close calendar and clean up listeners
+  closeCalendar() {
+    if (!this.isCalendarOpen) return;
+
+    this.removeCalendarListeners();
+
+    if (!this.#calendar.classList.contains("hidden")) {
+      this.#calendar.classList.add("hidden");
+    }
+
+    this.isCalendarOpen = false;
+    this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+  }
+
+  // Remove global event listeners
+  removeCalendarListeners() {
+    document.removeEventListener("click", this.boundHandleOutsideClick);
+    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  // Handle Escape and Tab key actions once calendar is open
+  // other keys are handled in navigateCalendar() and only function when focused within calendar
+  handleGlobalKeydown(event) {
+    if (
+      event.key === "Escape" ||
+      (event.key === "Tab" &&
+        event.target === this.datepickerInputTarget &&
+        event.shiftKey) ||
+      (event.target === this.clearButtonTarget && !event.shiftKey)
+    ) {
+      this.closeCalendar();
+    }
+  }
+
+  directInput(event) {
+    const dateInput = event.target.value;
+
+    // check if date input is formatted as YYYY-MM-DD
+    if (!dateInput.match(this.#formattedDateRegex)) {
+      this.#enableInputErrorState(this.invalidDateFormatValue);
+      return;
+    }
+
+    // check if date input is a valid date
+    const date = new Date(dateInput);
+    var dateTime = date.getTime();
+    if (!dateTime && dateTime !== 0) {
+      this.#enableInputErrorState(this.invalidDateFormatValue);
+      return;
+    }
+
+    // if theres a minimum date, check input is after minDate
+    if (this.minDateValue && this.minDateValue > dateInput) {
+      this.#enableInputErrorState(this.invalidMinDateValue);
+      return;
+    }
+    if (this.autosubmitValue) {
+      this.submitDate();
+      this.closeCalendar();
+    }
+
+    this.#disableInputErrorState();
+  }
+
+  #enableInputErrorState(message) {
+    this.inputErrorTarget.innerText = message;
+    if (this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.remove("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", false);
+    }
+
+    this.setInputValue("");
+  }
+
+  #disableInputErrorState() {
+    this.inputErrorTarget.innerText = "";
+    if (!this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.add("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", true);
+    }
+  }
+
+  submitDate() {
+    this.element.closest("form").requestSubmit();
+  }
+
+  //   TODO REFACTOR
+  #getFormattedStringDate(year, monthIndex, date) {
+    // new Date will parse monthIndex into correct month (month index == 0 will return january (ie: month 01))
+    // ISOString returns YYYY-MM-DDTHH:mm:ss.sssZ, so we split off T as we only want YYYY-MM-DD
+    return new Date(year, monthIndex, date).toISOString().split("T")[0];
+  }
+
+  setInputValue(value) {
+    this.datepickerInputTarget.value = value;
+  }
+}
