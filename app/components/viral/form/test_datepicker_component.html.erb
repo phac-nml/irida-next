@@ -27,7 +27,10 @@
       autocomplete="off"
       value="<%= selected_date %>"
       data-pathogen--datepicker--input-target="datepickerInput"
-      data-action="change->pathogen--datepicker--input#directInput"
+      data-action="
+        change->pathogen--datepicker--input#directInput
+        keydown->pathogen--datepicker--input#handleEnterDirectInput
+      "
       type="text"
       name="<%= input_name %>"
       id="<%= input_id %>"
@@ -45,7 +48,7 @@
       data-controller="pathogen--datepicker--calendar"
       data-pathogen--datepicker--calendar-pathogen--datepicker--input-outlet="#<%= id %>-input"
       id="<%= id %>-calendar"
-      class="hidden absolute top-0 left-0 z-50 pt-2 active block"
+      class="hidden absolute top-0 left-0 z-10000 pt-2 active block"
     >
       <div class=" inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg p-4 ">
         <div>
