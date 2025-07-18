@@ -121,6 +121,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                   min_date: (Date.today + 1.day),
                   selected_date: member.expires_at,
                   autosubmit: true,
+                  id: "member-#{member.id}-datepicker",
                 ) %>
               <% end %>
             <% elsif !member.expires_at.nil? %>
