@@ -29,10 +29,217 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+.theme-doc-markdown a {
+  color: var(--ifm-color-primary-darker);
+  text-decoration: underline;
+}
+
 .navbar__logo {
   transform: rotate(12deg);
 }
 
 body:not(.navigation-with-keyboard) *:not(input):focus-visible {
   outline: auto !important;
+}
+
+.breadcrumbs__item a.breadcrumbs__link:hover {
+  color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme="dark"] .breadcrumbs__item a.breadcrumbs__link:hover {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.breadcrumbs__item.breadcrumbs__item--active .breadcrumbs__link {
+  font-weight: bold;
+  background-color: var(--ifm-color-primary-darkest);
+  color: white;
+}
+
+.navbar__item.navbar__link.navbar__link--active {
+  font-weight: bold;
+  color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme="dark"] .navbar__item.navbar__link.navbar__link--active {
+  color: var(--ifm-color-primary-lightest);
+}
+
+[data-theme="dark"]
+  .breadcrumbs__item.breadcrumbs__item--active
+  .breadcrumbs__link {
+  background-color: var(--ifm-color-primary-lightest);
+  color: black;
+}
+
+.theme-doc-sidebar-item-link .menu__link {
+  font-weight: bold;
+  color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme="dark"] .theme-doc-sidebar-item-link .menu__link {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.theme-doc-sidebar-item-link .menu__link,
+.menu__list-item-collapsible .menu__link {
+  color: var(--ifm-color-primary-darkest);
+}
+[data-theme="dark"] .theme-doc-sidebar-item-link .menu__link,
+[data-theme="dark"] .menu__list-item-collapsible .menu__link {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.menu__link.menu__link--sublist.menu__link--active {
+  font-weight: bold;
+  color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme="dark"] .menu__link.menu__link--sublist.menu__link--active {
+  color: var(--ifm-color-primary-lightest);
+}
+
+/**
+ * ===================================================================
+ * Accessible PrismJS Theme for Docusaurus (High Specificity)
+ * ===================================================================
+ *
+ * Inspired by a11y-dark theme by Eric Bailey
+ * and adapted for Docusaurus's light/dark mode functionality.
+ *
+ * This theme provides high-contrast colors that meet
+ * WCAG AA accessibility standards.
+ *
+ * v2 Update: Selectors have been made more specific to ensure
+ * they override the default Docusaurus Prism theme, regardless of
+ * CSS load order.
+ *
+ * Instructions:
+ * 1. Place this code in your `src/css/custom.css` file.
+ * 2. Ensure your `docusaurus.config.js` specifies a base
+ * light and dark theme for Prism, e.g.,
+ * theme: prismThemes.github,
+ * darkTheme: prismThemes.dracula,
+ */
+
+/*
+  Defines CSS variables for the accessible LIGHT theme.
+  These colors are chosen for high contrast against a light background.
+*/
+[data-theme="light"] {
+  --prism-background-color: #f6f8fa; /* Very light grey */
+  --prism-color: #2d2d2d; /* Dark grey for plain text */
+  --prism-token-comment: #495057; /* Darker grey for better contrast */
+  --prism-token-punctuation: #2d2d2d; /* Dark grey */
+  --prism-token-property: #b71c1c; /* Deep red */
+  --prism-token-selector: #b71c1c; /* Deep red */
+  --prism-token-operator: #795548; /* Brown */
+  --prism-token-keyword: #0d47a1; /* Deep blue */
+  --prism-token-function: #b71c1c; /* Deep red */
+  --prism-token-variable: #0d47a1; /* Deep blue */
+  --prism-token-string: #2e7d32; /* Deep green */
+  --prism-token-number: #6d4c41; /* Dark brown */
+  --prism-token-tag: #0d47a1; /* Deep blue */
+  --prism-token-attr-name: #b71c1c; /* Deep red */
+  --prism-token-boolean: #b71c1c; /* Deep red */
+}
+
+/*
+  Defines CSS variables for the accessible DARK theme.
+  These colors are chosen for high contrast against a dark background.
+*/
+[data-theme="dark"] {
+  --prism-background-color: #2b2b2b; /* Dark grey */
+  --prism-color: #f8f8f2; /* Light grey for plain text */
+  --prism-token-comment: #a0a0a0;
+  --prism-token-punctuation: #f8f8f2;
+  --prism-token-property: #ff6b6b; /* Bright red */
+  --prism-token-selector: #ff6b6b;
+  --prism-token-operator: #f0dea5;
+  --prism-token-keyword: #8be9fd; /* Bright cyan */
+  --prism-token-function: #ff6b6b;
+  --prism-token-variable: #8be9fd;
+  --prism-token-string: #a9e07e; /* Bright green */
+  --prism-token-number: #f0dea5;
+  --prism-token-tag: #8be9fd;
+  --prism-token-attr-name: #ff6b6b;
+  --prism-token-boolean: #ff6b6b;
+}
+
+/*
+  Core Prism styles using the CSS variables defined above.
+  We prepend `div[class*='prism-code']` to increase specificity.
+*/
+pre.prism-code .token.comment,
+pre.prism-code .token.prolog,
+pre.prism-code .token.doctype,
+pre.prism-code .token.cdata {
+  color: var(--prism-token-comment) !important;
+  font-style: italic !important;
+}
+
+pre.prism-code .token.punctuation {
+  color: var(--prism-token-punctuation) !important;
+}
+
+pre.prism-code .token.property,
+pre.prism-code .token.tag .token.class-name,
+pre.prism-code .token.constant,
+pre.prism-code .token.symbol,
+pre.prism-code .token.deleted {
+  color: var(--prism-token-property) !important;
+}
+
+pre.prism-code .token.boolean,
+pre.prism-code .token.number {
+  color: var(--prism-token-boolean) !important;
+}
+
+pre.prism-code .token.selector,
+pre.prism-code .token.attr-name,
+pre.prism-code .token.char,
+pre.prism-code .token.builtin,
+pre.prism-code .token.inserted {
+  color: var(--prism-token-selector) !important;
+}
+
+pre.prism-code .token.operator,
+pre.prism-code .token.entity,
+pre.prism-code .token.url,
+.language-css .token.string,
+.style .token.string {
+  color: var(--prism-token-operator) !important;
+}
+
+pre.prism-code .token.atrule,
+pre.prism-code .token.attr-value,
+pre.prism-code .token.keyword {
+  color: var(--prism-token-keyword) !important;
+}
+
+pre.prism-code .token.function,
+pre.prism-code .token.class-name {
+  color: var(--prism-token-function) !important;
+}
+
+pre.prism-code .token.reg,
+pre.prism-code .token.important,
+pre.prism-code .token.variable {
+  color: var(--prism-token-variable) !important;
+}
+
+/* Override the default background color */
+pre.prism-code {
+  background-color: var(--prism-background-color) !important;
+}
+
+/* Ensure plain text in code blocks uses the correct color */
+pre.prism-code code[class*="language-"],
+pre.prism-code pre[class*="language-"] {
+  color: var(--prism-color) !important;
+}
+
+/* String color */
+pre.prism-code .token.string {
+  color: var(--prism-token-string) !important;
 }
