@@ -9,7 +9,7 @@ module Viral
       STATE_MAPPINGS = {
         default: 'mt-2 text-sm text-slate-500 dark:text-slate-400',
         success: 'mt-2 text-sm text-green-600 dark:text-green-500',
-        error: 'mt-2 text-sm text-red-600 dark:text-red-500'
+        error: 'mt-2 text-sm text-red-600 dark:text-red-400'
       }.freeze
 
       ICON_MAPPINGS = {

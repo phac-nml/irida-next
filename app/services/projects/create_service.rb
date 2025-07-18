@@ -3,6 +3,7 @@
 module Projects
   # Service used to Create Projects
   class CreateService < BaseService
+    ProjectNamespaceCreateError = Class.new(StandardError)
     ProjectCreateError = Class.new(StandardError)
     attr_accessor :namespace_params, :project, :namespace
 
@@ -14,12 +15,15 @@ module Projects
     end
 
     def execute
-      raise ProjectCreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
+      raise ProjectNamespaceCreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
 
       create_associations(project)
       project
     rescue Projects::CreateService::ProjectCreateError => e
-      project.errors.add(:base, e.message)
+      project.namespace.errors.add(:base, e.message)
+      project
+    rescue Projects::CreateService::ProjectNamespaceCreateError => e
+      project.namespace.errors.add(:namespace, e.message)
       project
     end
 
