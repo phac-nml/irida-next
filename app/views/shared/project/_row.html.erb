@@ -47,7 +47,8 @@
   </td>
   <td class="p-4 whitespace-nowrap">
     <div class="flex flex-row-reverse">
-      <%= viral_tooltip(title: t(:"dashboard.projects.index.row.samples")) do %>
+      <%= render Pathogen::Link.new(href: namespace_project_samples_path(project.namespace.parent, project)) do |component| %>
+        <%= component.with_tooltip(text: t(:"dashboard.projects.index.row.samples")) %>
         <span
           id="<%= "#{dom_id(project)}-samples-count" %>"
           class="
