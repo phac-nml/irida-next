@@ -2,23 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
-  static targets = [
-    "datepickerInput",
-    "backButton",
-    "monthsArray",
-    "monthSelect",
-    "monthSelectContainer",
-    "monthSelectTemplate",
-    "year",
-    "calendar",
-    "calendarComponent",
-    "calenderTemplate",
-    "inMonthDateTemplate",
-    "outOfMonthDateTemplate",
-    "disabledDateTemplate",
-    "clearButton",
-    "inputError",
-  ];
+  static targets = ["datepickerInput", "calenderTemplate", "inputError"];
 
   static values = {
     minDate: String,
@@ -35,7 +19,6 @@ export default class extends Controller {
   #todaysYear = this.#todaysFullDate.getFullYear();
   #todaysMonthIndex = this.#todaysFullDate.getMonth();
   #todaysDate = this.#todaysFullDate.getDate();
-  #todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
 
   // the currently displayed year/month on datepicker
   #selectedDate;
@@ -43,6 +26,7 @@ export default class extends Controller {
   #selectedMonthIndex;
 
   #calendar;
+  #nextElementAfterInput;
 
   initialize() {
     this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
@@ -69,8 +53,14 @@ export default class extends Controller {
     );
   }
 
-  idempotentConnect() {
-    console.log(this.hasCalendarOutlet);
+  findNextFocussableElement() {
+    var focussableElements =
+      'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
+    var focussable = Array.from(
+      document.body.querySelectorAll(focussableElements),
+    );
+    var index = focussable.indexOf(this.datepickerInputTarget);
+    this.#nextElementAfterInput = focussable[index + 1];
   }
 
   disconnect() {
@@ -103,8 +93,10 @@ export default class extends Controller {
 
     // Add the calendar template to the DOM
     const calendar = this.calenderTemplateTarget.content.cloneNode(true);
-    document.body.appendChild(calendar);
-    this.#calendar = document.body.lastElementChild;
+    const containerNode = this.#findCalendarContainer();
+    containerNode.appendChild(calendar);
+    this.#calendar = containerNode.lastElementChild;
+
     // this.pathogenDatepickerCalendarOutlet.test("test");
     // Position the calendar (implement proper positioning logic here)
     // const inputRect = this.datepickerInputTarget.getBoundingClientRect();
@@ -127,14 +119,24 @@ export default class extends Controller {
     // this.idempotentConnect();
   }
 
+  // datepicker doesn't work if we're in a dialog but it's appended to the body
+  #findCalendarContainer() {
+    let nextParentElement = this.datepickerInputTarget.parentNode;
+    while (nextParentElement.tagName !== "BODY") {
+      if (nextParentElement.tagName === "DIALOG") {
+        return nextParentElement;
+      }
+      nextParentElement = nextParentElement.parentNode;
+    }
+    return document.body;
+  }
+
   pathogenDatepickerCalendarOutletConnected() {
-    console.log("pathogenDatepickerCalendarOutletConnected");
     this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput({
       todaysFullDate: this.#todaysFullDate,
       todaysYear: this.#todaysYear,
       todaysMonthIndex: this.#todaysMonthIndex,
       todaysDate: this.#todaysDate,
-      todaysFormattedFullDate: this.#todaysFormattedFullDate,
       selectedDate: this.#selectedDate,
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
@@ -158,7 +160,6 @@ export default class extends Controller {
 
   // Handle clicks outside the datepicker component
   handleOutsideClick(event) {
-    console.log("handle outside click");
     const clickedInsideComponent =
       this.#calendar.contains(event.target) ||
       this.datepickerInputTarget.contains(event.target);
@@ -191,18 +192,36 @@ export default class extends Controller {
   // Handle Escape and Tab key actions once calendar is open
   // other keys are handled in navigateCalendar() and only function when focused within calendar
   handleGlobalKeydown(event) {
-    if (
-      event.key === "Escape" ||
-      (event.key === "Tab" &&
-        event.target === this.datepickerInputTarget &&
-        event.shiftKey) ||
-      (event.target === this.clearButtonTarget && !event.shiftKey)
-    ) {
+    if (event.key === "Escape") {
       this.closeCalendar();
+      return;
+    }
+    if (
+      event.key === "Tab" &&
+      event.target ===
+        this.pathogenDatepickerCalendarOutlet.getLastFocussableElement() &&
+      !event.shiftKey
+    ) {
+      event.preventDefault();
+      this.closeCalendar();
+      this.#nextElementAfterInput.focus();
+      return;
+    }
+
+    if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
+      if (event.shiftKey) {
+        this.closeCalendar();
+      } else if (!event.shiftKey) {
+        event.preventDefault();
+        this.pathogenDatepickerCalendarOutlet
+          .getFirstFocussableElement()
+          .focus();
+      }
     }
   }
 
   directInput(event) {
+    event.preventDefault();
     const dateInput = event.target.value;
 
     // check if date input is formatted as YYYY-MM-DD
@@ -224,12 +243,20 @@ export default class extends Controller {
       this.#enableInputErrorState(this.invalidMinDateValue);
       return;
     }
+
     if (this.autosubmitValue) {
       this.submitDate();
       this.closeCalendar();
     }
 
     this.#disableInputErrorState();
+  }
+
+  handleEnterDirectInput(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.directInput(event);
+    }
   }
 
   #enableInputErrorState(message) {
@@ -239,7 +266,7 @@ export default class extends Controller {
       this.inputErrorTarget.setAttribute("aria-hidden", false);
     }
 
-    this.setInputValue("");
+    this.setInputValue(this.#selectedDate);
   }
 
   #disableInputErrorState() {
