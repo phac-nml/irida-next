@@ -97,7 +97,7 @@ export default class extends Controller {
     const monthSelect = monthSelectTemplate.querySelector("select");
     // if 2025 is #selectedYear and minDate = 2025-06-01, we remove Jan -> May from select template and append
     if (this.#minDate && this.#minDate.includes(this.#selectedYear)) {
-      const minDateMonthIndex = new Date(this.#minDate).getMonth();
+      const minDateMonthIndex = new Date(this.#minDate).getUTCMonth();
       for (let i = 0; i < minDateMonthIndex; i++) {
         monthSelect.firstElementChild.remove();
       }
@@ -131,6 +131,7 @@ export default class extends Controller {
   }
 
   #loadCalendar() {
+    console.log(this.#selectedDate);
     this.calendarTarget.innerHTML = "";
     // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
     // first and last week of dates
@@ -153,6 +154,9 @@ export default class extends Controller {
   }
 
   #getPreviousMonthsDates() {
+    console.log("get previous monmths date");
+    console.log(this.monthsValue[this.#selectedMonthIndex]);
+    console.log(this.#selectedMonthIndex);
     let firstDayOfMonthIndex = this.#getDayOfWeek(
       `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
     );
@@ -405,7 +409,7 @@ export default class extends Controller {
     if (this.#minDate) {
       const minDate = new Date(this.#minDate);
       const minYear = minDate.getFullYear();
-      const minMonth = minDate.getMonth();
+      const minMonth = minDate.getUTCMonth();
       if (this.yearTarget.value < minYear) {
         this.yearTarget.value = minYear;
         // if minDate was 2025-06-01 and user was on January 2026 and changes year to 2025, since we don't want
@@ -472,7 +476,7 @@ export default class extends Controller {
     this.pathogenDatepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
-    console.log("select date");
+
     if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
