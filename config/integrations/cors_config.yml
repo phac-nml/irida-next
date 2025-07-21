@@ -5,8 +5,9 @@ development:
   origins: '*'
   resources:
     - resource: '*'
-      headers: :any
-      methods: [:get, :post, :patch, :put]
+      headers: any
+      # methods: [get, post]
+      methods: [get, post, patch, put]
   # Make sure to include trailing '/'
   allowed_hosts:
     - url: 'http://localhost:8081/'
@@ -18,7 +19,7 @@ test:
   origins: '*'
   resources:
     - resource: '*'
-      headers: any
+      headers: :any
       methods: [:get, :post, :patch, :put]
   allowed_hosts:
     - url: 'http://testintegration:8081/'
@@ -31,6 +32,7 @@ production:
     - resource: '*'
       headers: any
       methods: [:get, :post, :patch, :put]
+  # Make sure to include trailing /
   allowed_hosts:
     - url: ''
       token_lifespan_days: 0
