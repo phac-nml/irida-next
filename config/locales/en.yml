@@ -1422,7 +1422,7 @@ en:
         tuesday: Tue
         wednesday: Wed
       errors:
-        invalid_date_format: Invalid date format.
+        invalid_date: Invalid date.
         min_date_error: "Earliest allowed date: %{min_date}"
       months:
         april: April
