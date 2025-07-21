@@ -328,6 +328,7 @@ export default class extends Controller {
     }
   }
 
+  // handles changing the date styling (today, selected and disabled dates)
   #replaceDateStyling(date, classes) {
     if (this.#verifyDateIsInMonth(date)) {
       date.classList.remove(...this.#inMonthClasses);
@@ -365,6 +366,7 @@ export default class extends Controller {
     }
   }
 
+  // navigate to previous month by back button on calendar
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
@@ -376,6 +378,7 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
+  // navigate to next month by next button on calendar
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
@@ -387,6 +390,7 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
+  // change calendar via month select dropdown
   changeMonth() {
     this.#selectedMonthIndex = this.monthsValue.indexOf(
       this.monthSelectTarget.value,
@@ -395,6 +399,7 @@ export default class extends Controller {
     this.monthSelectTarget.focus();
   }
 
+  // change year via year input
   changeYear() {
     // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
     if (this.#minDate) {
@@ -414,12 +419,14 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
+  // show today on calendar via show today button
   showToday() {
     this.#selectedYear = this.#todaysYear;
     this.#selectedMonthIndex = this.#todaysMonthIndex;
     this.idempotentConnect();
   }
 
+  // handles Shift+Tab out of calendar into datepicker input
   tabBackToInput(event) {
     if (event.key !== "Tab" || !event.shiftKey) return;
     if (
@@ -433,6 +440,7 @@ export default class extends Controller {
     }
   }
 
+  // handles keyboard inputs on the calendar
   navigateCalendar(event) {
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
