@@ -5,8 +5,7 @@ development:
   origins: '*'
   resources:
     - resource: '*'
-      headers: any
-      # methods: [get, post]
+      headers: :any
       methods: [:get, :post, :patch, :put]
   # Make sure to include trailing '/'
   allowed_hosts:
@@ -25,7 +24,6 @@ test:
     - url: 'http://testintegration:8081/'
       token_lifespan_days: 3
 
-
 production:
   # do not use wildcards '*' in production
   origins: '*'
@@ -33,7 +31,6 @@ production:
     - resource: '*'
       headers: any
       methods: [:get, :post, :patch, :put]
-  # Make sure to include trailing /
   allowed_hosts:
     - url: ''
       token_lifespan_days: 0
