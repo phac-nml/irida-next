@@ -7,12 +7,13 @@ export default class extends Controller {
   static values = {
     minDate: String,
     autosubmit: Boolean,
-    invalidDateFormat: String,
+    invalidDate: String,
     invalidMinDate: String,
   };
 
   #formattedDateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
+  #focussableElements =
+    'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
   // today's date attributes for quick access
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
@@ -39,8 +40,6 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log("input connect");
-    console.log(this.minDateValue);
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
     this.datepickerInputTarget.addEventListener(
@@ -51,15 +50,17 @@ export default class extends Controller {
       "click",
       this.boundUnhideCalendar,
     );
+
+    this.#findNextFocussableElement();
   }
 
-  findNextFocussableElement() {
-    var focussableElements =
-      'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
-    var focussable = Array.from(
-      document.body.querySelectorAll(focussableElements),
+  //   because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
+  // tabbing through the calendar
+  #findNextFocussableElement() {
+    const focussable = Array.from(
+      document.body.querySelectorAll(this.#focussableElements),
     );
-    var index = focussable.indexOf(this.datepickerInputTarget);
+    let index = focussable.indexOf(this.datepickerInputTarget);
     this.#nextElementAfterInput = focussable[index + 1];
   }
 
@@ -87,7 +88,7 @@ export default class extends Controller {
     }
   }
 
-  addCalenderTemplate(event) {
+  addCalenderTemplate() {
     // Don't add calendar if it's already open
     if (this.isCalendarOpen) return;
 
@@ -96,30 +97,9 @@ export default class extends Controller {
     const containerNode = this.#findCalendarContainer();
     containerNode.appendChild(calendar);
     this.#calendar = containerNode.lastElementChild;
-
-    // this.pathogenDatepickerCalendarOutlet.test("test");
-    // Position the calendar (implement proper positioning logic here)
-    // const inputRect = this.datepickerInputTarget.getBoundingClientRect();
-    // this.calendarComponentTarget.style.left = `${inputRect.left}px`;
-
-    // // Calculate if calendar should appear above or below input
-    // const spaceBelow = window.innerHeight - inputRect.bottom;
-    // const calendarHeight = 300; // Estimate height or calculate from actual rendered element
-    // if (spaceBelow < calendarHeight && inputRect.top > calendarHeight) {
-    //   // Position above the input if there's not enough space below
-    //   this.calendarComponentTarget.style.top = `${inputRect.top - calendarHeight}px`;
-    //   // this.calendarComponentTarget.classList.add("datepicker-orient-top");
-    //   // this.calendarComponentTarget.classList.remove("datepicker-orient-bottom");
-    // } else {
-    //   // Position below the input
-    //   this.calendarComponentTarget.style.top = `${inputRect.bottom}px`;
-    //   // this.calendarComponentTarget.classList.add("datepicker-orient-bottom");
-    //   // this.calendarComponentTarget.classList.remove("datepicker-orient-top");
-    // }
-    // this.idempotentConnect();
   }
 
-  // datepicker doesn't work if we're in a dialog but it's appended to the body
+  // append datepicker to dialog if in dialog, otherwise append to body
   #findCalendarContainer() {
     let nextParentElement = this.datepickerInputTarget.parentNode;
     while (nextParentElement.tagName !== "BODY") {
@@ -133,12 +113,25 @@ export default class extends Controller {
 
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
-    console.log("calednar connected via input");
     this.#initializeCalendar();
   }
 
   unhideCalendar() {
-    console.log("unhide");
+    // Position the calendar (implement proper positioning logic here)
+    const inputRect = this.datepickerInputTarget.getBoundingClientRect();
+    this.#calendar.style.left = `${inputRect.left}px`;
+
+    // // Calculate if calendar should appear above or below input
+    const spaceBelow = window.innerHeight - inputRect.bottom;
+    const calendarHeight = 400; // Estimate height or calculate from actual rendered element
+    if (spaceBelow < calendarHeight && inputRect.top > calendarHeight) {
+      // Position above the input if there's not enough space below
+      this.#calendar.style.top = `${inputRect.top - calendarHeight}px`;
+    } else {
+      // Position below the input
+      this.#calendar.style.top = `${inputRect.bottom}px`;
+    }
+
     this.#calendar.classList.remove("hidden");
     this.isCalendarOpen = true;
     // Set ARIA attributes for accessibility
@@ -157,12 +150,12 @@ export default class extends Controller {
       this.datepickerInputTarget.contains(event.target);
 
     if (!clickedInsideComponent) {
-      this.closeCalendar();
+      this.hideCalendar();
     }
   }
 
   // Close calendar and clean up listeners
-  closeCalendar() {
+  hideCalendar() {
     if (!this.isCalendarOpen) return;
 
     this.removeCalendarListeners();
@@ -185,7 +178,7 @@ export default class extends Controller {
   // other keys are handled in navigateCalendar() and only function when focused within calendar
   handleGlobalKeydown(event) {
     if (event.key === "Escape") {
-      this.closeCalendar();
+      this.hideCalendar();
       this.setInputValue(this.#selectedDate);
       return;
     }
@@ -196,14 +189,14 @@ export default class extends Controller {
       !event.shiftKey
     ) {
       event.preventDefault();
-      this.closeCalendar();
+      this.hideCalendar();
       this.#nextElementAfterInput.focus();
       return;
     }
 
     if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
       if (event.shiftKey) {
-        this.closeCalendar();
+        this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
         this.pathogenDatepickerCalendarOutlet
@@ -216,33 +209,35 @@ export default class extends Controller {
   directInput(event) {
     event.preventDefault();
     const dateInput = event.target.value;
-
-    // check if date input is formatted as YYYY-MM-DD
-    if (!dateInput.match(this.#formattedDateRegex)) {
-      this.#enableInputErrorState(this.invalidDateFormatValue);
-      return;
+    if (this.#validateDateInput(dateInput)) {
+      if (this.minDateValue && this.minDateValue > dateInput) {
+        this.#enableInputErrorState(this.invalidMinDateValue);
+      } else {
+        if (this.autosubmitValue) {
+          this.submitDate();
+        }
+        this.#disableInputErrorState();
+      }
+    } else {
+      this.#enableInputErrorState(this.invalidDateValue);
     }
+    this.hideCalendar();
+  }
 
-    // check if date input is a valid date
-    const date = new Date(dateInput);
-    var dateTime = date.getTime();
-    if (!dateTime && dateTime !== 0) {
-      this.#enableInputErrorState(this.invalidDateFormatValue);
-      return;
+  #validateDateInput(dateInput) {
+    let year, month, day;
+
+    if (dateInput.match(this.#formattedDateRegex)) {
+      [year, month, day] = dateInput.split("-").map(Number);
+      month--;
+      const date = new Date(year, month, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month &&
+        date.getDate() === day
+      );
     }
-
-    // if theres a minimum date, check input is after minDate
-    if (this.minDateValue && this.minDateValue > dateInput) {
-      this.#enableInputErrorState(this.invalidMinDateValue);
-      return;
-    }
-
-    if (this.autosubmitValue) {
-      this.submitDate();
-      this.closeCalendar();
-    }
-
-    this.#disableInputErrorState();
+    return false;
   }
 
   handleEnterDirectInput(event) {
@@ -258,7 +253,6 @@ export default class extends Controller {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
     }
-
     this.setInputValue(this.#selectedDate);
   }
 

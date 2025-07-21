@@ -95,8 +95,8 @@ module Pathogen
       @system_arguments[:data]['pathogen--datepicker--input-pathogen--datepicker--calendar-outlet'] = "##{@calendar_id}"
       @system_arguments[:data]['pathogen--datepicker--input-min-date-value'] = @min_date
       @system_arguments[:data]['pathogen--datepicker--input-autosubmit-value'] = @autosubmit
-      @system_arguments[:data]['pathogen--datepicker--input-invalid-date-format-value'] =
-        I18n.t('pathogen.datepicker.errors.invalid_date_format')
+      @system_arguments[:data]['pathogen--datepicker--input-invalid-date-value'] =
+        I18n.t('pathogen.datepicker.errors.invalid_date')
       @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
         I18n.t('pathogen.datepicker.errors.min_date_error', min_date: @min_date)
     end
