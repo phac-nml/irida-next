@@ -46,7 +46,7 @@ export default class extends Controller {
     "hover:bg-slate-100",
     "dark:hover:bg-slate-600",
     "text-slate-500",
-    "dark:text-slate-600",
+    "dark:text-slate-300",
     "cursor-pointer",
   ];
 
@@ -64,7 +64,7 @@ export default class extends Controller {
     "line-through",
     "cursor-not-allowed",
     "text-slate-500",
-    "dark:text-slate-600",
+    "dark:text-slate-300",
   ];
 
   // today's date attributes for quick access
@@ -472,7 +472,7 @@ export default class extends Controller {
     this.pathogenDatepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
-
+    console.log("select date");
     if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }

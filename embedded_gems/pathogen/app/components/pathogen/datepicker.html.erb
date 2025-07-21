@@ -5,7 +5,7 @@
   <div class="relative max-w-sm">
     <div
       class="
-        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+        absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none
       "
     >
       <span>
@@ -24,7 +24,11 @@
       type="text"
       name="<%= @input_name %>"
       id="<%= @input_id %>"
-      class="datepicker-input"
+      class="
+        ps-10 p-2.5 rounded-lg border-slate-300 text-slate-900 text-sm
+        dark:border-slate-600 dark:bg-slate-800 dark:text-white
+        dark:placeholder-slate-400
+      "
     >
   </div>
   <div
@@ -137,29 +141,18 @@
         </div>
         <div>
           <% if @min_date %>
-            <div class="text-sm text-center">
+            <div class="text-sm text-center text-slate-900 dark:text-white">
               <%= t(".errors.min_date_error", min_date: @min_date) %>
             </div>
           <% end %>
           <div class="flex space-x-2 rtl:space-x-reverse mt-2">
             <button
               type="button"
-              class="
-                button today-btn text-white bg-blue-700 !bg-primary-700 dark:bg-blue-600
-                dark:!bg-primary-600 hover:bg-blue-800 hover:!bg-primary-800
-                dark:hover:bg-blue-700 dark:hover:!bg-primary-700 focus:ring-4
-                focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg text-sm px-5
-                py-2 text-center w-1/2
-              "
+              class="button button-primary w-1/2"
               data-action="click->pathogen--datepicker--calendar#showToday"
             ><%= t(".show_today") %></button><button
               type="button"
-              class="
-                button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
-                border border-slate-300 dark:border-slate-600 hover:bg-slate-100
-                dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
-                font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
-              "
+              class="button button-default w-1/2"
               data-action="
                 click->pathogen--datepicker--calendar#clearSelection
               "
@@ -188,7 +181,7 @@
         <td
           class="
             hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
-            cursor-pointer text-center text-slate-500 dark:text-slate-600 font-semibold
+            cursor-pointer text-center text-slate-500 dark:text-slate-300 font-semibold
             text-sm w-8
           "
           data-date-within-month-position="outOfMonth"
@@ -202,6 +195,10 @@
         <select
           data-pathogen--datepicker--calendar-target="monthSelect"
           data-action="change->pathogen--datepicker--calendar#changeMonth"
+          class="
+            rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
+            dark:bg-slate-800 dark:text-white
+          "
         >
           <option value="<%= t(".months.january")%>"><%= t(".months.january") %></option>
           <option value="<%= t(".months.february")%>"><%= t(".months.february") %></option>
