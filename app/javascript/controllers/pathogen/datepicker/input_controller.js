@@ -211,6 +211,7 @@ export default class extends Controller {
     }
   }
 
+  // handles validating user directly typing in a date
   directInput(event) {
     event.preventDefault();
     const dateInput = event.target.value;
@@ -229,6 +230,7 @@ export default class extends Controller {
     this.hideCalendar();
   }
 
+  // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
   #validateDateInput(dateInput) {
     let year, month, day;
 
@@ -245,6 +247,7 @@ export default class extends Controller {
     return false;
   }
 
+  // without event.preventDefault() on Enter, form is submitted
   handleEnterDirectInput(event) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -252,6 +255,7 @@ export default class extends Controller {
     }
   }
 
+  // adds error message if invalid date or a date prior to minDate was entered
   #enableInputErrorState(message) {
     this.inputErrorTarget.innerText = message;
     if (this.inputErrorTarget.classList.contains("hidden")) {
@@ -261,6 +265,7 @@ export default class extends Controller {
     this.setInputValue(this.#selectedDate);
   }
 
+  // disables the error state once a valid date is entered/selected
   #disableInputErrorState() {
     this.inputErrorTarget.innerText = "";
     if (!this.inputErrorTarget.classList.contains("hidden")) {
@@ -269,16 +274,24 @@ export default class extends Controller {
     }
   }
 
+  // submits the selected date
   submitDate() {
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
     this.#initializeCalendar();
   }
 
+  // handles filling in the date input with the date
+  // use cases:
+  // 1. Add the newly selected date from the datepicker
+  // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
+  // 3. If user entered an invalid date, resets to original value
   setInputValue(value) {
     this.datepickerInputTarget.value = value;
   }
 
+  // passes all shared variables required by the calendar, avoids processing or passing values twice
+  // triggers upon initial connection as well as after submission
   #initializeCalendar() {
     const sharedVariables = {
       todaysYear: this.#todaysYear,
@@ -295,6 +308,7 @@ export default class extends Controller {
     );
   }
 
+  // used by pathogen/datepicker/calendar.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
   }
