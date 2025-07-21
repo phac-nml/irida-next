@@ -1,11 +1,19 @@
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-4", novalidate: true }) do |f| %>
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-4" }) do |f| %>
   <%= render "devise/shared/hidden_locale_input" %>
 
-  <%= render partial: "shared/form/required_field_legend" %>
+  <div class="form-field">
+    <%= render partial: "shared/form/required_field_legend" %>
+  </div>
 
   <div class="form-field">
     <%= f.label :email, data: { required: true } %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email,
+                  autofocus: true,
+                  required: true,
+                  aria: {
+                    required: true,
+                  },
+                  autocomplete: "email" %>
   </div>
 
   <%= f.submit t(".submit_button"), class: "button button-primary w-full" %>

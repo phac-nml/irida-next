@@ -10,7 +10,13 @@
 
     <div class="form-field">
       <%= f.label :password, t(".password_label"), data: { required: true } %>
-      <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+      <%= f.password_field :password,
+                       autofocus: true,
+                       required: true,
+                       aria: {
+                         required: true,
+                       },
+                       autocomplete: "new-password" %>
     </div>
 
     <div class="form-field">
@@ -19,7 +25,12 @@
               data: {
                 required: true,
               } %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+      <%= f.password_field :password_confirmation,
+                       required: true,
+                       aria: {
+                         required: true,
+                       },
+                       autocomplete: "new-password" %>
     </div>
 
     <%= f.submit t(".submit_button"), class: "button button-primary w-full" %>
