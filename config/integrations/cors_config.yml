@@ -27,11 +27,11 @@ test:
 
 production:
   # do not use wildcards '*' in production
-  origins:
+  origins: 'change this'
   resources:
-    - resource:
-      headers:
-      methods: []
+    - resource: 'change this'
+      headers: 'change this'
+      methods: ['change this']
   allowed_hosts:
-    - url:
-      token_lifespan_days:
+    - url: 'change this'
+      token_lifespan_days: 'change this'
