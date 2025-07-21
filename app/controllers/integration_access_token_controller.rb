@@ -2,6 +2,7 @@
 
 # Controller for generating single use user personal access token page
 class IntegrationAccessTokenController < ApplicationController
+  before_action :ensure_enabled
   before_action :set_user
 
   layout 'devise'
@@ -44,6 +45,10 @@ class IntegrationAccessTokenController < ApplicationController
   end
 
   private
+
+  def ensure_enabled
+    not_found unless Flipper.enabled?(:integration_access_token_generation)
+  end
 
   def personal_access_token_params
     {
