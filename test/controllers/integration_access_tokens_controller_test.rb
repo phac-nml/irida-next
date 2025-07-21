@@ -6,6 +6,10 @@ require 'minitest/mock'
 class IntegrationAccessTokensControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  def setup
+    Flipper.enable(:integration_access_token_generation)
+  end
+
   test 'should get index' do
     sign_in users(:john_doe)
 

@@ -62,7 +62,7 @@ Rails.application.routes.draw do
   end
   # End of the /-/ scope.
 
-  resources :integration_access_token, only: %i[index create]
+  resources :integration_access_token, only: %i[index create] if Flipper.enabled?(:integration_access_token_generation)
 
   draw :group
 
