@@ -25,18 +25,20 @@ export default class extends Controller {
   #selectedYear;
   #selectedMonthIndex;
 
+  // calendar DOM element once appended
   #calendar;
-  #nextElementAfterInput;
+  // retrieves next focussable element in DOM after date input
+  #nextFocussableElementAfterInput;
+
+  // tracks calendar open state
+  #isCalendarOpen = false;
 
   initialize() {
     this.boundUnhideCalendar = this.unhideCalendar.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
-    // Track calendar open state
-    this.isCalendarOpen = false;
-
-    this.addCalenderTemplate();
+    this.#addCalenderTemplate();
   }
 
   connect() {
@@ -54,16 +56,6 @@ export default class extends Controller {
     this.#findNextFocussableElement();
   }
 
-  //   because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
-  // tabbing through the calendar
-  #findNextFocussableElement() {
-    const focussable = Array.from(
-      document.body.querySelectorAll(this.#focussableElements),
-    );
-    let index = focussable.indexOf(this.datepickerInputTarget);
-    this.#nextElementAfterInput = focussable[index + 1];
-  }
-
   disconnect() {
     this.datepickerInputTarget.removeEventListener(
       "focus",
@@ -74,6 +66,17 @@ export default class extends Controller {
       this.boundUnhideCalendar,
     );
     this.removeCalendarListeners();
+  }
+
+  #addCalenderTemplate() {
+    // Don't add calendar if it's already open
+    if (this.#isCalendarOpen) return;
+
+    // Add the calendar template to the DOM
+    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
+    const containerNode = this.#findCalendarContainer();
+    containerNode.appendChild(calendar);
+    this.#calendar = containerNode.lastElementChild;
   }
 
   #setSelectedDate() {
@@ -88,15 +91,14 @@ export default class extends Controller {
     }
   }
 
-  addCalenderTemplate() {
-    // Don't add calendar if it's already open
-    if (this.isCalendarOpen) return;
-
-    // Add the calendar template to the DOM
-    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
-    const containerNode = this.#findCalendarContainer();
-    containerNode.appendChild(calendar);
-    this.#calendar = containerNode.lastElementChild;
+  // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
+  // tabbing through the calendar, we'd focus on the next element after the date input
+  #findNextFocussableElement() {
+    const focussable = Array.from(
+      document.body.querySelectorAll(this.#focussableElements),
+    );
+    let index = focussable.indexOf(this.datepickerInputTarget);
+    this.#nextFocussableElementAfterInput = focussable[index + 1];
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
@@ -121,7 +123,7 @@ export default class extends Controller {
     const inputRect = this.datepickerInputTarget.getBoundingClientRect();
     this.#calendar.style.left = `${inputRect.left}px`;
 
-    // // Calculate if calendar should appear above or below input
+    // Calculate if calendar should appear above or below input
     const spaceBelow = window.innerHeight - inputRect.bottom;
     const calendarHeight = 400; // Estimate height or calculate from actual rendered element
     if (spaceBelow < calendarHeight && inputRect.top > calendarHeight) {
@@ -133,7 +135,7 @@ export default class extends Controller {
     }
 
     this.#calendar.classList.remove("hidden");
-    this.isCalendarOpen = true;
+    this.#isCalendarOpen = true;
     // Set ARIA attributes for accessibility
     this.datepickerInputTarget.setAttribute("aria-expanded", "true");
     this.#calendar.setAttribute("aria-hidden", "false");
@@ -143,7 +145,7 @@ export default class extends Controller {
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
   }
 
-  // Handle clicks outside the datepicker component
+  // Handle clicks outside the datepicker and input
   handleOutsideClick(event) {
     const clickedInsideComponent =
       this.#calendar.contains(event.target) ||
@@ -156,16 +158,14 @@ export default class extends Controller {
 
   // Close calendar and clean up listeners
   hideCalendar() {
-    if (!this.isCalendarOpen) return;
+    if (!this.#isCalendarOpen) return;
 
     this.removeCalendarListeners();
 
-    if (!this.#calendar.classList.contains("hidden")) {
-      this.#calendar.classList.add("hidden");
-    }
-
-    this.isCalendarOpen = false;
+    this.#isCalendarOpen = false;
     this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+    this.#calendar.classList.add("hidden");
+    this.#calendar.setAttribute("aria-hidden", "true");
   }
 
   // Remove global event listeners
@@ -175,13 +175,16 @@ export default class extends Controller {
   }
 
   // Handle Escape and Tab key actions once calendar is open
-  // other keys are handled in navigateCalendar() and only function when focused within calendar
   handleGlobalKeydown(event) {
+    // Escape: close calendar
     if (event.key === "Escape") {
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
       return;
     }
+
+    // If we tab off the last datepicker element, we want to force focus onto the next focussable element after
+    // the datepicker input
     if (
       event.key === "Tab" &&
       event.target ===
@@ -190,10 +193,12 @@ export default class extends Controller {
     ) {
       event.preventDefault();
       this.hideCalendar();
-      this.#nextElementAfterInput.focus();
+      this.#nextFocussableElementAfterInput.focus();
       return;
     }
 
+    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
+    // while Tab focuses on the first focussable element within the calendar
     if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
       if (event.shiftKey) {
         this.hideCalendar();
@@ -288,5 +293,9 @@ export default class extends Controller {
     this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput(
       sharedVariables,
     );
+  }
+
+  focusDatepickerInput() {
+    this.datepickerInputTarget.focus();
   }
 }

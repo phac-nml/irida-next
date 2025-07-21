@@ -54,12 +54,20 @@
                 focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
                 disabled:cursor-not-allowed disabled:text-slate-300
               "
-              data-action="click->pathogen--datepicker--calendar#previousMonth"
+              data-action="
+                click->pathogen--datepicker--calendar#previousMonth
+                keydown->pathogen--datepicker--calendar#tabBackToInput
+              "
               data-pathogen--datepicker--calendar-target="backButton"
             >
               <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
             </button>
-            <div data-pathogen--datepicker--calendar-target="monthSelectContainer">
+            <div
+              data-pathogen--datepicker--calendar-target="monthSelectContainer"
+              data-action="
+                keydown->pathogen--datepicker--calendar#tabBackToInput
+              "
+            >
             </div>
             <div>
               <input

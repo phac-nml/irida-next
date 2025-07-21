@@ -420,6 +420,19 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
+  tabBackToInput(event) {
+    if (event.key !== "Tab" || !event.shiftKey) return;
+    if (
+      event.target === this.backButtonTarget ||
+      (event.target === this.monthSelectTarget &&
+        this.backButtonTarget.disabled)
+    ) {
+      event.preventDefault();
+      this.pathogenDatepickerInputOutlet.focusDatepickerInput();
+      this.pathogenDatepickerInputOutlet.hideCalendar();
+    }
+  }
+
   navigateCalendar(event) {
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
@@ -456,7 +469,7 @@ export default class extends Controller {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
-    this.pathogenDatepickerInputOutlet.closeCalendar();
+    this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
   clearSelection() {
@@ -468,7 +481,7 @@ export default class extends Controller {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
-    this.closeCalendar();
+    this.hideCalendar();
   }
 
   #handleHorizontalNavigation(event, direction) {
