@@ -19,8 +19,8 @@ test:
   origins: '*'
   resources:
     - resource: '*'
-      headers: :any
-      methods: [:get, :post, :patch, :put]
+      headers: any
+      methods: [get, post, patch, put]
   allowed_hosts:
     - url: 'http://testintegration:8081/'
       token_lifespan_days: 3
@@ -31,7 +31,7 @@ production:
   resources:
     - resource: '*'
       headers: any
-      methods: [:get, :post, :patch, :put]
+      methods: [get, post, patch, put]
   # Make sure to include trailing /
   allowed_hosts:
     - url: ''
