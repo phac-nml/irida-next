@@ -39,6 +39,8 @@ export default class extends Controller {
   }
 
   connect() {
+    console.log("input connect");
+    console.log(this.minDateValue);
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
     this.datepickerInputTarget.addEventListener(
@@ -131,10 +133,12 @@ export default class extends Controller {
 
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
+    console.log("calednar connected via input");
     this.#initializeCalendar();
   }
 
   unhideCalendar() {
+    console.log("unhide");
     this.#calendar.classList.remove("hidden");
     this.isCalendarOpen = true;
     // Set ARIA attributes for accessibility

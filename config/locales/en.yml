@@ -1410,6 +1410,34 @@ en:
     processing_request: Processing your submission, this may take some time.
     processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.
+  pathogen:
+    datepicker:
+      clear_selection: Clear Selection
+      days_of_week:
+        friday: Fri
+        monday: Mon
+        saturday: Sat
+        sunday: Sun
+        thursday: Thu
+        tuesday: Tue
+        wednesday: Wed
+      errors:
+        invalid_date_format: Invalid date format.
+        min_date_error: "Earliest allowed date: %{min_date}"
+      months:
+        april: April
+        august: August
+        december: December
+        february: February
+        january: January
+        july: July
+        june: June
+        march: March
+        may: May
+        november: November
+        october: October
+        september: September
+      show_today: Show Today
   personal_access_tokens:
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?

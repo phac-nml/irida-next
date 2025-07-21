@@ -81,7 +81,13 @@ export default class extends Controller {
   #minDate;
   #autosubmit;
 
+  connect() {
+    console.log("test calendar connect");
+    console.log(this.hasPathogenDatepickerInputOutlet);
+  }
   idempotentConnect() {
+    console.log(this.#minDate);
+    console.log("calendar connect");
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
     // set the month and year inputs
@@ -306,7 +312,8 @@ export default class extends Controller {
 
     // minimum date where dates prior will be disabled
     const minDate = this.#getDateNode(this.#minDate);
-
+    console.log(this.#minDate);
+    console.log(minDate);
     if (selectedDate) {
       this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
     }
