@@ -431,6 +431,19 @@ CREATE FUNCTION public.logidze_version(v bigint, data jsonb, ts timestamp with t
 $$;
 
 
+--
+-- Name: action_cable_large_payloads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.action_cable_large_payloads_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
