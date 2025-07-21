@@ -3,9 +3,9 @@ require 'test_helper'
 
 module Pathogen
   module Form
-    class RadioButtonComponentTest < ViewComponent::TestCase
+    class RadioButtonTest < ViewComponent::TestCase
       def test_renders_radio_button_with_basic_attributes
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme'
@@ -24,7 +24,7 @@ module Pathogen
           {}
         )
 
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         form: form,
                         attribute: :theme,
                         value: 'dark',
@@ -36,7 +36,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_with_help_text
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
@@ -48,7 +48,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_with_custom_classes
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
@@ -59,7 +59,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_with_checked_state
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
@@ -70,7 +70,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_with_disabled_state
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
@@ -81,7 +81,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_with_aria_attributes
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
@@ -94,7 +94,7 @@ module Pathogen
       end
 
       def test_renders_radio_button_without_label
-        render_inline(RadioButtonComponent.new(
+        render_inline(RadioButton.new(
                         attribute: :theme,
                         value: 'dark'
                       ))

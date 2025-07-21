@@ -1,14 +1,14 @@
-# test/components/previews/pathogen/form/radio_button_component_preview.rb
+# test/components/previews/pathogen/form/radio_button_preview.rb
 # frozen_string_literal: true
 
 module Pathogen
   module Form
-    class RadioButtonComponentPreview < ViewComponent::Preview
+    class RadioButtonPreview < ViewComponent::Preview
       # @!group Basic Examples
 
       # @label Default Radio Button
       def default
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'light',
           label: 'Light Theme'
@@ -17,7 +17,7 @@ module Pathogen
 
       # @label Radio Button with Help Text
       def with_help_text
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -27,7 +27,7 @@ module Pathogen
 
       # @label Radio Button with Custom Classes
       def with_custom_classes
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'system',
           label: 'System Theme',
@@ -41,7 +41,7 @@ module Pathogen
 
       # @label Checked State
       def checked
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -51,7 +51,7 @@ module Pathogen
 
       # @label Disabled State
       def disabled
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -61,7 +61,7 @@ module Pathogen
 
       # @label Checked and Disabled
       def checked_and_disabled
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -77,7 +77,7 @@ module Pathogen
       # @label With Form Builder
       def with_form_builder
         render_with_template(
-          template: 'pathogen/form/radio_button_component_preview/form_builder',
+          template: 'pathogen/form/radio_button_preview/form_builder',
           locals: {
             form: mock_form_builder
           }
@@ -85,10 +85,9 @@ module Pathogen
       end
 
       # @label Form Group
-      # @description Multiple radio buttons in a form group
       def form_group
         render_with_template(
-          template: 'pathogen/form/radio_button_component_preview/form_group',
+          template: 'pathogen/form/radio_button_preview/form_group',
           locals: {
             form: mock_form_builder
           }
@@ -100,9 +99,8 @@ module Pathogen
       # @!group Accessibility
 
       # @label With ARIA Attributes
-      # @description Radio button with ARIA attributes for accessibility
       def with_aria_attributes
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -112,9 +110,8 @@ module Pathogen
       end
 
       # @label With Help Text and ARIA
-      # @description Radio button with help text and ARIA attributes
       def with_help_text_and_aria
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -129,18 +126,16 @@ module Pathogen
       # @!group Edge Cases
 
       # @label Without Label
-      # @description Radio button without a label
       def without_label
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark'
         )
       end
 
       # @label With Long Label
-      # @description Radio button with a very long label text
       def with_long_label
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'This is a very long label that might wrap to multiple lines and should be handled gracefully by the component'
@@ -148,9 +143,8 @@ module Pathogen
       end
 
       # @label With Special Characters
-      # @description Radio button with special characters in label
       def with_special_characters
-        render ::Pathogen::Form::RadioButtonComponent.new(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme (Recommended) ⭐'
@@ -162,10 +156,9 @@ module Pathogen
       # @!group Interactive Examples
 
       # @label Interactive Group
-      # @description Interactive radio button group with different states
       def interactive_group
         render_with_template(
-          template: 'pathogen/form/radio_button_component_preview/interactive_group',
+          template: 'pathogen/form/radio_button_preview/interactive_group',
           locals: {
             form: mock_form_builder
           }

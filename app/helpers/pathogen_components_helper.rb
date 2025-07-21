@@ -16,7 +16,7 @@ module PathogenComponentsHelper
   # @example
   #   <%= p_component(:radio_button, value: "dark", label: "Dark Mode") %>
   def p_component(component, *, **, &)
-    klass = "Pathogen::Form::#{component.to_s.camelize}Component".constantize
+    klass = "Pathogen::Form::#{component.to_s.camelize}".constantize
     render(klass.new(*, **), &)
   end
 

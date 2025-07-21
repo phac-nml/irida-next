@@ -1,24 +1,20 @@
 <div class="space-y-4">
-  <%= render ::Pathogen::Form::RadioButtonComponent.new(
-    form: form,
+  <%= render ::Pathogen::Form::RadioButton.new(
     attribute: :theme,
-    name: "theme",
     value: "light",
     label: "Light Theme",
     checked: true,
   ) %>
-  <%= render ::Pathogen::Form::RadioButtonComponent.new(
-    form: form,
+  <%= render ::Pathogen::Form::RadioButton.new(
     attribute: :theme,
-    name: "theme",
     value: "dark",
     label: "Dark Theme",
+    disabled: true,
   ) %>
-  <%= render ::Pathogen::Form::RadioButtonComponent.new(
-    form: form,
+  <%= render ::Pathogen::Form::RadioButton.new(
     attribute: :theme,
-    name: "theme",
     value: "system",
     label: "System Theme",
+    help_text: "Follows system preferences",
   ) %>
 </div>
