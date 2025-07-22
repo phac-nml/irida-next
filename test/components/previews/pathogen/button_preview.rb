@@ -2,19 +2,21 @@
 
 module Pathogen
   class ButtonPreview < ViewComponent::Preview
+    include Pathogen::ViewHelper
+
     # @param scheme select { choices: [default,primary, danger] } "The color scheme of the button."
     # @param size select { choices: [small, medium] } "The size of the button."
     # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
     # @param block toggle "If true, the button will take up the full width of its container."
     def playground(scheme: :default, size: :medium, disabled: false, block: false)
-      render Pathogen::Button.new(scheme:, size:, disabled:, block:, test_selector: 'playground') do
+      pathogen_button(scheme:, size:, disabled:, block:, test_selector: 'playground') do
         'Button'
       end
     end
 
     # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
     def default(disabled: false)
-      render Pathogen::Button.new(disabled:, test_selector: 'default') do
+      pathogen_button(disabled:, test_selector: 'default') do
         'Button'
       end
     end
@@ -22,7 +24,7 @@ module Pathogen
     # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
     # @param block toggle "If true, the button will take up the full width of its container."
     def primary(disabled: false, block: false)
-      render Pathogen::Button.new(scheme: :primary, disabled:, block:, test_selector: 'primary') do
+      pathogen_button(scheme: :primary, disabled:, block:, test_selector: 'primary') do
         'Button'
       end
     end
@@ -30,7 +32,7 @@ module Pathogen
     # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
     # @param block toggle "If true, the button will take up the full width of its container."
     def danger(disabled: false, block: false)
-      render Pathogen::Button.new(scheme: :danger, disabled:, block:, test_selector: 'danger') do
+      pathogen_button(scheme: :danger, disabled:, block:, test_selector: 'danger') do
         'Button'
       end
     end
@@ -38,7 +40,7 @@ module Pathogen
     def all_schemes; end
 
     def full_width
-      render Pathogen::Button.new(block: true, test_selector: 'full-width') do
+      pathogen_button(block: true, test_selector: 'full-width') do
         'Button'
       end
     end
@@ -47,7 +49,7 @@ module Pathogen
     # @param href text "The URL to link to."
     # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
     def link_as_a_button(scheme: :default, href: '#', disabled: false)
-      render Pathogen::Button.new(scheme:, href:, tag: :a, disabled:, test_selector: 'link-as-a-button') do
+      pathogen_button(scheme:, href:, tag: :a, disabled:, test_selector: 'link-as-a-button') do
         'Button'
       end
     end
