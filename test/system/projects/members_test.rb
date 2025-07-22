@@ -28,21 +28,29 @@ module Projects
 
       assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
-      assert_selector 'tr', count: 20 + header_row_count
+      within('#members') do
+        assert_selector 'tr', count: 20 + header_row_count
+      end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_selector 'tr', count: 6 + header_row_count
+
+      within('#members') do
+        assert_selector 'tr', count: 6 + header_row_count
+      end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_selector 'tr', count: 20 + header_row_count
+
+      within('#members') do
+        assert_selector 'tr', count: 20 + header_row_count
+      end
     end
 
     test 'can see list of project members which are inherited from parent group' do
@@ -334,8 +342,8 @@ module Projects
       visit namespace_project_members_url(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      find("#member-#{project_member.id}-expiration").click.set(expiry_date)
-                                                     .native.send_keys(:return)
+      find("#member-#{project_member.id}-expiration-input").click.set(expiry_date)
+                                                           .native.send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)

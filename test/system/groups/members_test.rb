@@ -27,20 +27,28 @@ module Groups
 
       assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
-      assert_selector 'tr', count: 20 + header_row_count
+      within('#members') do
+        assert_selector 'tr', count: 20 + header_row_count
+      end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_selector 'tr', count: 6 + header_row_count
+
+      within('#members') do
+        assert_selector 'tr', count: 6 + header_row_count
+      end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_selector 'tr', count: 20 + header_row_count
+
+      within('#members') do
+        assert_selector 'tr', count: 20 + header_row_count
+      end
     end
 
     test 'can see list of group members for subgroup which are inherited from parent group' do
@@ -111,7 +119,10 @@ module Groups
 
       assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: (@members_count + 1) + header_row_count
+
+      within('#members') do
+        assert_selector 'tr', count: (@members_count + 1) + header_row_count
+      end
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
     end
 
@@ -228,15 +239,13 @@ module Groups
       within 'div.overflow-x-auto' do |div|
         # scroll to the end of the div
         div.execute_script('this.scrollLeft = this.scrollWidth')
-        find("#member-#{group_member.id}-expiration").click.set(expiry_date)
-                                                     .native.send_keys(:return)
+        find("#member-#{group_member.id}-expiration-input").click.set(expiry_date)
+                                                           .native.send_keys(:return)
       end
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: group_member.user.email)
       end
-
-      group_member_row = find(:table_row, [group_member.user.email])
     end
 
     test 'cannot update member expiration' do

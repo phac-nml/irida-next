@@ -17,6 +17,7 @@ module Pathogen
     # @param id [String] A unique identifier that is manipulated to use on multiple component items. This is required.
     # @param input_name [String] The name attribute for the date input. This is required.
     # @param label [String] A label for the input (optional).
+    # @param input_aria_label [String] Aria label for the input. Necessary for accessibility if no label is passed.
     # @param min_date [String] A minimum date the user can input.
     # @param selected_date [String] The already selected date if it exists.
     # @param autosubmit [Boolean] Submits the date upon selection if true
@@ -26,13 +27,14 @@ module Pathogen
     # @raise [ArgumentError] if input_name is not provided.
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(id:, input_name:, label: nil, min_date: nil, selected_date: nil, autosubmit: false, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: nil, selected_date: nil, autosubmit: false, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
                    calendar_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'input_name is required' if input_name.blank?
 
       @label = label
       @input_name = input_name
+      @input_aria_label = input_aria_label
       @min_date = min_date.to_s
       @selected_date = selected_date
       @autosubmit = autosubmit
@@ -40,18 +42,18 @@ module Pathogen
       @system_arguments = system_arguments
       @calendar_arguments = calendar_arguments
 
-      @months = [I18n.t('viral.form.test_datepicker_component.months.january'),
-                 I18n.t('viral.form.test_datepicker_component.months.february'),
-                 I18n.t('viral.form.test_datepicker_component.months.march'),
-                 I18n.t('viral.form.test_datepicker_component.months.april'),
-                 I18n.t('viral.form.test_datepicker_component.months.may'),
-                 I18n.t('viral.form.test_datepicker_component.months.june'),
-                 I18n.t('viral.form.test_datepicker_component.months.july'),
-                 I18n.t('viral.form.test_datepicker_component.months.august'),
-                 I18n.t('viral.form.test_datepicker_component.months.september'),
-                 I18n.t('viral.form.test_datepicker_component.months.october'),
-                 I18n.t('viral.form.test_datepicker_component.months.november'),
-                 I18n.t('viral.form.test_datepicker_component.months.december')]
+      @months = [I18n.t('pathogen.datepicker.months.january'),
+                 I18n.t('pathogen.datepicker.months.february'),
+                 I18n.t('pathogen.datepicker.months.march'),
+                 I18n.t('pathogen.datepicker.months.april'),
+                 I18n.t('pathogen.datepicker.months.may'),
+                 I18n.t('pathogen.datepicker.months.june'),
+                 I18n.t('pathogen.datepicker.months.july'),
+                 I18n.t('pathogen.datepicker.months.august'),
+                 I18n.t('pathogen.datepicker.months.september'),
+                 I18n.t('pathogen.datepicker.months.october'),
+                 I18n.t('pathogen.datepicker.months.november'),
+                 I18n.t('pathogen.datepicker.months.december')]
 
       @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
 

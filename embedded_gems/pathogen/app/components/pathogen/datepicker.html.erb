@@ -32,6 +32,9 @@
         dark:border-slate-600 dark:bg-slate-800 dark:text-white
         dark:placeholder-slate-400
       "
+      <% if @input_aria_label %>
+      aria-label="<%= @input_aria_label %>"
+      <% end %>
     >
   </div>
   <div
