@@ -67,7 +67,6 @@ module Pathogen
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
-      include FormHelpers
 
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the radio button
