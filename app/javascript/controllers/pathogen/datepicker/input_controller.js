@@ -7,6 +7,7 @@ export default class extends Controller {
   static values = {
     minDate: String,
     autosubmit: Boolean,
+    calendarId: String,
     invalidDate: String,
     invalidMinDate: String,
   };
@@ -40,10 +41,11 @@ export default class extends Controller {
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
+    this.idempotentConnect();
     this.#addCalenderTemplate();
   }
 
-  connect() {
+  idempotentConnect() {
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
     this.datepickerInputTarget.addEventListener(
@@ -78,7 +80,9 @@ export default class extends Controller {
     const calendar = this.calenderTemplateTarget.content.cloneNode(true);
     const containerNode = this.#findCalendarContainer();
     containerNode.appendChild(calendar);
-    this.#calendar = containerNode.lastElementChild;
+    // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
+    // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
+    this.#calendar = document.getElementById(this.calendarIdValue);
   }
 
   #setSelectedDate() {
@@ -124,6 +128,7 @@ export default class extends Controller {
   }
 
   unhideCalendar() {
+    if (this.#isCalendarOpen) return;
     // Position the calendar
     this.#positionCalendar();
 
@@ -327,6 +332,8 @@ export default class extends Controller {
       minDate: this.minDateValue,
       autosubmit: this.autosubmitValue,
     };
+    console.log("iniitlize calendar");
+    console.log(sharedVariables);
     this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput(
       sharedVariables,
     );

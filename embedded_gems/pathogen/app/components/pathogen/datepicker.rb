@@ -70,7 +70,7 @@ module Pathogen
     end
 
     # Configures HTML attributes for the main <div> container.
-    def setup_container_attributes # rubocop:disable Metrics/AbcSize
+    def setup_container_attributes # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @system_arguments[:id] = @container_id
       @system_arguments[:tag] = TAG_DEFAULT
 
@@ -87,6 +87,7 @@ module Pathogen
         I18n.t('pathogen.datepicker.errors.invalid_date')
       @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
         I18n.t('pathogen.datepicker.errors.min_date_error', min_date: @min_date)
+      @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
     end
 
     # Configures HTML attributes for the <div> datepicker calendar.
