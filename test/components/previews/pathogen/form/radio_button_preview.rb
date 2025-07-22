@@ -5,6 +5,8 @@ module Pathogen
   module Form
     class RadioButtonPreview < ViewComponent::Preview
       include Pathogen::FormHelper
+      include Pathogen::ViewHelper
+
       # @!group Basic Examples
 
       # @label Default Radio Button

@@ -3,9 +3,9 @@
 require 'rails/engine'
 require 'view_component'
 require 'view_component/version'
-require 'pathogen/icon_helper'
-require 'pathogen/view_helper'
-require 'pathogen/form_helper'
+require_relative '../icon_helper'
+require_relative '../view_helper'
+require_relative '../form_helper'
 
 module Pathogen
   module ViewComponents
