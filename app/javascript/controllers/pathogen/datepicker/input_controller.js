@@ -41,8 +41,12 @@ export default class extends Controller {
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
-    this.idempotentConnect();
-    this.#addCalenderTemplate();
+    // when a turbo response occurs (such as adding new member/group), this initialize will trigger but the
+    // calendar will already exist and doesn't need to be added, except for the newly added member/group
+    if (!this.#calendar) {
+      this.idempotentConnect();
+      this.#addCalenderTemplate();
+    }
   }
 
   idempotentConnect() {

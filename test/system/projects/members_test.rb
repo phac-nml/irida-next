@@ -124,7 +124,9 @@ module Projects
 
       assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: (@members_count + 1) + header_row_count
+      within('#members') do
+        assert_selector 'tr', count: (@members_count + 1) + header_row_count
+      end
 
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
     end
