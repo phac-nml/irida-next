@@ -131,7 +131,6 @@ export default class extends Controller {
   }
 
   #loadCalendar() {
-    console.log(this.#selectedDate);
     this.calendarTarget.innerHTML = "";
     // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
     // first and last week of dates
@@ -143,7 +142,6 @@ export default class extends Controller {
     fullCalendar.push(
       ...this.#getNextMonthsDates(fullCalendar[fullCalendar.length - 1]),
     );
-
     this.#fillCalendarWithDates(fullCalendar);
 
     this.#addStylingToDates();
