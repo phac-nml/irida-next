@@ -154,9 +154,6 @@ export default class extends Controller {
   }
 
   #getPreviousMonthsDates() {
-    console.log("get previous monmths date");
-    console.log(this.monthsValue[this.#selectedMonthIndex]);
-    console.log(this.#selectedMonthIndex);
     let firstDayOfMonthIndex = this.#getDayOfWeek(
       `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
     );
@@ -245,10 +242,19 @@ export default class extends Controller {
           this.outOfMonthDateTemplateTarget.content.cloneNode(true);
         const tableCell = outOfMonthDate.querySelector("td");
         tableCell.innerText = dates[i];
+        let year = this.#selectedYear;
+        const relativeMonthIndex = this.#getRelativeMonthIndex(
+          relativeMonthPosition,
+        );
+        if (relativeMonthIndex === 0) {
+          year++;
+        } else if (relativeMonthIndex === 11) {
+          year--;
+        }
         tableCell.setAttribute(
           "data-date",
           this.#getFormattedStringDate(
-            this.#selectedYear,
+            year,
             this.#getRelativeMonthIndex(relativeMonthPosition),
             dates[i],
           ),
@@ -485,15 +491,13 @@ export default class extends Controller {
   }
 
   clearSelection() {
-    this.pathogenDatepickerInputOutlet.setInputValue(
-      selectedDate.getAttribute(""),
-    );
+    this.pathogenDatepickerInputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
-    this.hideCalendar();
+    this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
   #handleHorizontalNavigation(event, direction) {
