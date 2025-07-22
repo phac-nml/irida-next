@@ -96,29 +96,14 @@
           <%= t("groups.members.new.access_level_hint") %>
         </p>
       </div>
-
-      <div
-        class="form-field datepicker"
-        data-controller="datepicker"
-        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
-      >
-        <%= form.label :expires_at %>
-        <div class="relative max-w-sm">
-          <div
-            class="
-              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-            "
-          >
-            <%= pathogen_icon(ICON::CALENDAR_DOTS, size: :sm, color: :subdued) %>
-          </div>
-          <%= form.text_field :expires_at,
-                          placeholder: I18n.t("date.formats.iso"),
-                          autocomplete: "off",
-                          "data-datepicker-target": "datePicker",
-                          "data-datepicker-dialog": "true" %>
-        </div>
+      <div class="form-field">
+        <%= render Pathogen::Datepicker.new(
+          id: "member_expires_at",
+          label: t("activerecord.attributes.member.expires_at"),
+          input_name: "member[expires_at]",
+          min_date: (Date.today + 1.day),
+        ) %>
       </div>
-
       <div class="my-4">
         <%= form.submit t(:"groups.members.new.add_member_to_group"),
                     class: "button button-primary mr-1",

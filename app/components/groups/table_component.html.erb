@@ -97,35 +97,13 @@
           <td class="px-6 py-4">
             <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                <div
-                  class="form-field datepicker"
-                  data-controller="datepicker"
-                  data-datepicker-min-date-value="<%= Date.today + 1.day %>"
-                >
-                  <div class="relative max-w-sm">
-                    <div
-                      class="
-                        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-                      "
-                    >
-                      <%= pathogen_icon(
-                        ICON::CALENDAR_DOTS,
-                        class: "size-5 text-slate-500 dark:text-slate-400",
-                      ) %>
-                    </div>
-                    <%= form.text_field :expires_at,
-                                    placeholder: I18n.t("date.formats.iso"),
-                                    autocomplete: "off",
-                                    value: namespace_group_link.expires_at,
-                                    id: "invited-group-#{namespace_group_link.group.id}-expiration",
-                                    "data-datepicker-target": "datePicker",
-                                    "data-datepicker-autosubmit": "true",
-                                    "aria-label":
-                                      t(:"projects.group_links.index.aria_labels.expires_at") %>
-
-                    <input type="hidden" name="format" value="turbo_stream"/>
-                  </div>
-                </div>
+                <%= render Pathogen::Datepicker.new(
+                  id: "invited-group-#{namespace_group_link.group.id}-expiration",
+                  input_name: "namespace_group_link[expires_at]",
+                  min_date: (Date.today + 1.day),
+                  selected_date: namespace_group_link.expires_at,
+                  autosubmit: true,
+                ) %>
               <% end %>
             <% elsif !namespace_group_link.expires_at.nil? %>
               <%= helpers.local_time(namespace_group_link.expires_at, :full_date) %>

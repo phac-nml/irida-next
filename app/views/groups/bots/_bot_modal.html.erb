@@ -48,13 +48,15 @@
                           class: "form-control" %>
 
         </div>
-        <%= render Pathogen::Datepicker.new(
-          id: "bot_expires_at",
-          input_name: "bot[expires_at]",
-          label: t("groups.bots.index.bot_listing.new_bot_modal.expires_at"),
-          min_date: (Date.today + 1.day),
-          selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
-        ) %>
+        <div class="form-field">
+          <%= render Pathogen::Datepicker.new(
+            id: "bot_expires_at",
+            input_name: "bot[expires_at]",
+            label: t("groups.bots.index.bot_listing.new_bot_modal.expires_at"),
+            min_date: (Date.today + 1.day),
+            selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
+          ) %>
+        </div>
         <div class="form-field">
           <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
