@@ -4,14 +4,13 @@
 module Pathogen
   module Form
     class RadioButtonPreview < ViewComponent::Preview
-      include Pathogen::FormHelper
       include Pathogen::ViewHelper
 
       # @!group Basic Examples
 
       # @label Default Radio Button
       def default
-        render pathogen_radio_button(
+        render ::Pathogen::Form::RadioButton.new(
           attribute: :theme,
           value: 'light',
           label: 'Light Theme'
