@@ -1,6 +1,9 @@
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
   <% if @label %>
-    <label for=<%= @input_id %>><%= @label %></label>
+    <label
+      for="<%= @input_id %>"
+      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+    ><%= @label %></label>
   <% end %>
   <div class="relative max-w-sm">
     <div
