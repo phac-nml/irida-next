@@ -877,9 +877,6 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
-  date:
-    formats:
-      iso: AAAA/MM/JJ
   errors:
     messages:
       not_saved:
@@ -1403,6 +1400,7 @@ fr:
         november: novembre
         october: octobre
         september: septembre
+      placeholder: AAAA-MM-JJ
       show_today: Show Today
   personal_access_tokens:
     revoke_confirmation:
@@ -1642,7 +1640,6 @@ fr:
         actions:
           unlink_aria_label: Dissocier l’espace de noms du groupe de boutons %{member}
         aria_labels:
-          expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce projet
