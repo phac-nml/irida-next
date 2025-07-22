@@ -1,4 +1,14 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
+  <%= if resource.errors.any?
+    viral_alert(
+      type: "alert",
+      message: I18n.t(:"general.form.error_notification"),
+      aria: {
+        live: "assertive",
+      },
+    )
+  end %>
+
   <%= render partial: "shared/form/required_field_legend" %>
 
   <%= render "devise/shared/hidden_locale_input", form: f %>

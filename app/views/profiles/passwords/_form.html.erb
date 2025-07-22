@@ -8,6 +8,17 @@
     </p>
   </div>
   <%= form_with(model: user, url: profile_password_path, method: :patch, html: {class: "space-y-4", novalidate: true}) do |form| %>
+
+    <%= if user.errors.any?
+      viral_alert(
+        type: "alert",
+        message: I18n.t(:"general.form.error_notification"),
+        aria: {
+          live: "assertive",
+        },
+      )
+    end %>
+
     <% invalid_current = user.errors.include?(:current_password) %>
     <div class="form-field <%= 'invalid' if invalid_current %>">
       <%= form.label :current_password %>

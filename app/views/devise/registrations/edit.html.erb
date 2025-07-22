@@ -6,8 +6,6 @@
 
   <%= render "devise/shared/hidden_locale_input", form: f %>
 
-  <%= resource.errors.full_messages %>
-
   <div class="form-field">
     <%= f.label :email, data: { required: true } %><br/>
     <%= f.email_field :email,
