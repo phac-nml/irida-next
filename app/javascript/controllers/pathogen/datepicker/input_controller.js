@@ -142,28 +142,27 @@ export default class extends Controller {
     const inputRect = this.datepickerInputTarget.getBoundingClientRect();
 
     let left = inputRect.left;
-    let top = inputRect.top;
+    let top = inputRect.top + 35; // +35 accounts for datepicker element height
     let bottom = inputRect.bottom;
     // Calculate if calendar should appear above or below input
+    const calendarHeight = 410; // rough height of calendar
     const spaceBelow = window.innerHeight - bottom;
-    const calendarHeight = 400; // rough height of calendar
-
     // dialog positioning requires calendar positioning to be relative to the dialog
     if (this.#inDialog) {
       const dialogContainer = this.#calendar.parentNode.getBoundingClientRect();
-
       left = left - dialogContainer.left;
       top = top - dialogContainer.top;
-      bottom = bottom - dialogContainer.bottom;
+      bottom = dialogContainer.bottom - bottom;
     }
 
     this.#calendar.style.left = `${left}px`;
-    if (spaceBelow < calendarHeight && top > calendarHeight) {
+
+    if (spaceBelow < calendarHeight) {
       // Position above the input if there's not enough space below
       this.#calendar.style.top = `${top - calendarHeight}px`;
     } else {
       // Position below the input
-      this.#calendar.style.top = `${bottom}px`;
+      this.#calendar.style.top = `${top}px`;
     }
   }
 
