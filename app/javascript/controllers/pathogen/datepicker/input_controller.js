@@ -32,6 +32,8 @@ export default class extends Controller {
 
   // tracks calendar open state
   #isCalendarOpen = false;
+  // positioning of datepicker pop-up differs in a dialog
+  #inDialog = false;
 
   initialize() {
     this.boundUnhideCalendar = this.unhideCalendar.bind(this);
@@ -108,6 +110,7 @@ export default class extends Controller {
     let nextParentElement = this.datepickerInputTarget.parentNode;
     while (nextParentElement.tagName !== "BODY") {
       if (nextParentElement.tagName === "DIALOG") {
+        this.#inDialog = true;
         return nextParentElement;
       }
       nextParentElement = nextParentElement.parentNode;
@@ -121,20 +124,8 @@ export default class extends Controller {
   }
 
   unhideCalendar() {
-    // Position the calendar (implement proper positioning logic here)
-    const inputRect = this.datepickerInputTarget.getBoundingClientRect();
-    this.#calendar.style.left = `${inputRect.left}px`;
-
-    // Calculate if calendar should appear above or below input
-    const spaceBelow = window.innerHeight - inputRect.bottom;
-    const calendarHeight = 400; // Estimate height or calculate from actual rendered element
-    if (spaceBelow < calendarHeight && inputRect.top > calendarHeight) {
-      // Position above the input if there's not enough space below
-      this.#calendar.style.top = `${inputRect.top - calendarHeight}px`;
-    } else {
-      // Position below the input
-      this.#calendar.style.top = `${inputRect.bottom}px`;
-    }
+    // Position the calendar
+    this.#positionCalendar();
 
     this.#calendar.classList.remove("hidden");
     this.#isCalendarOpen = true;
@@ -145,6 +136,35 @@ export default class extends Controller {
     // // Add global event listeners for outside clicks and keyboard events
     document.addEventListener("click", this.boundHandleOutsideClick);
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  #positionCalendar() {
+    const inputRect = this.datepickerInputTarget.getBoundingClientRect();
+
+    let left = inputRect.left;
+    let top = inputRect.top;
+    let bottom = inputRect.bottom;
+    // Calculate if calendar should appear above or below input
+    const spaceBelow = window.innerHeight - bottom;
+    const calendarHeight = 400; // rough height of calendar
+
+    // dialog positioning requires calendar positioning to be relative to the dialog
+    if (this.#inDialog) {
+      const dialogContainer = this.#calendar.parentNode.getBoundingClientRect();
+
+      left = left - dialogContainer.left;
+      top = top - dialogContainer.top;
+      bottom = bottom - dialogContainer.bottom;
+    }
+
+    this.#calendar.style.left = `${left}px`;
+    if (spaceBelow < calendarHeight && top > calendarHeight) {
+      // Position above the input if there's not enough space below
+      this.#calendar.style.top = `${top - calendarHeight}px`;
+    } else {
+      // Position below the input
+      this.#calendar.style.top = `${bottom}px`;
+    }
   }
 
   // Handle clicks outside the datepicker and input
