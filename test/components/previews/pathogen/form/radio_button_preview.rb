@@ -10,7 +10,7 @@ module Pathogen
 
       # @label Default Radio Button
       def default
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'light',
           label: 'Light Theme'
@@ -19,7 +19,7 @@ module Pathogen
 
       # @label Radio Button with Help Text
       def with_help_text
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -29,7 +29,7 @@ module Pathogen
 
       # @label Radio Button with Custom Classes
       def with_custom_classes
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'system',
           label: 'System Theme',
@@ -43,7 +43,7 @@ module Pathogen
 
       # @label Checked State
       def checked
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -53,7 +53,7 @@ module Pathogen
 
       # @label Disabled State
       def disabled
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -63,7 +63,7 @@ module Pathogen
 
       # @label Checked and Disabled
       def checked_and_disabled
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -102,7 +102,7 @@ module Pathogen
 
       # @label With ARIA Attributes
       def with_aria_attributes
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -113,7 +113,7 @@ module Pathogen
 
       # @label With Help Text and ARIA
       def with_help_text_and_aria
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
@@ -129,7 +129,7 @@ module Pathogen
 
       # @label Without Label
       def without_label
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark'
         )
@@ -137,7 +137,7 @@ module Pathogen
 
       # @label With Long Label
       def with_long_label
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'This is a very long label that might wrap to multiple lines and should be handled gracefully by the component'
@@ -146,7 +146,7 @@ module Pathogen
 
       # @label With Special Characters
       def with_special_characters
-        render ::Pathogen::Form::RadioButton.new(
+        pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme (Recommended) ⭐'
