@@ -67,6 +67,9 @@ export default class extends Controller {
     "dark:text-slate-300",
   ];
 
+  #backButtonDisabledClasses = ["text-slate-400", "dark:text-slate-500"];
+  #backButtonEnabledClasses = ["text-slate-900", "dark:text-slate-100"];
+
   // today's date attributes for quick access
   #todaysYear;
   #todaysMonthIndex;
@@ -125,9 +128,19 @@ export default class extends Controller {
   }
 
   #setBackButton() {
+    const backButton = this.backButtonTarget;
+    const backArrow = backButton.firstElementChild;
     // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
     // we disable the back button so user can't navigate further back
-    this.backButtonTarget.disabled = this.#preventPreviousMonthNavigation();
+    if (this.#preventPreviousMonthNavigation()) {
+      backButton.disabled = true;
+      backArrow.classList.remove(...this.#backButtonEnabledClasses);
+      backArrow.classList.add(...this.#backButtonDisabledClasses);
+    } else {
+      backButton.disabled = false;
+      backArrow.classList.add(...this.#backButtonEnabledClasses);
+      backArrow.classList.remove(...this.#backButtonDisabledClasses);
+    }
   }
 
   #loadCalendar() {
