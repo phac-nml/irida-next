@@ -332,8 +332,6 @@ export default class extends Controller {
       minDate: this.minDateValue,
       autosubmit: this.autosubmitValue,
     };
-    console.log("iniitlize calendar");
-    console.log(sharedVariables);
     this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput(
       sharedVariables,
     );
