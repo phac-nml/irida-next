@@ -8,7 +8,7 @@ module Pathogen
 
       # @label Default Radio Button
       def default
-        render ::Pathogen::Form::RadioButton.new(
+        render pathogen_radio_button(
           attribute: :theme,
           value: 'light',
           label: 'Light Theme'
