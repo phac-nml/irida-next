@@ -104,8 +104,8 @@ export default class extends Controller {
       for (let i = 0; i < minDateMonthIndex; i++) {
         monthSelect.firstElementChild.remove();
       }
-      // if minDate was Feb 2026 and our minDate is July 2025, if clicked 'down' on year input to go to Feb 2025,
-      // we need to check that Feb index is less than July index, and if true, set index to July
+      // if current calendar is Feb 2026 and our minDate is July 2025, if the user clicks 'down' on year input to go to
+      // Feb 2025, we need to check that Feb index is less than July index, and if true, set index to July
       if (this.#selectedMonthIndex < minDateMonthIndex) {
         this.#selectedMonthIndex = minDateMonthIndex;
       }
@@ -113,6 +113,7 @@ export default class extends Controller {
     this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
+  // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
   initializeCalendarByInput(params) {
     this.#todaysYear = params["todaysYear"];
     this.#todaysMonthIndex = params["todaysMonthIndex"];
@@ -127,22 +128,6 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
-  #setBackButton() {
-    const backButton = this.backButtonTarget;
-    const backArrow = backButton.firstElementChild;
-    // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
-    // we disable the back button so user can't navigate further back
-    if (this.#preventPreviousMonthNavigation()) {
-      backButton.disabled = true;
-      backArrow.classList.remove(...this.#backButtonEnabledClasses);
-      backArrow.classList.add(...this.#backButtonDisabledClasses);
-    } else {
-      backButton.disabled = false;
-      backArrow.classList.add(...this.#backButtonEnabledClasses);
-      backArrow.classList.remove(...this.#backButtonDisabledClasses);
-    }
-  }
-
   #loadCalendar() {
     this.calendarTarget.innerHTML = "";
     // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
@@ -151,12 +136,15 @@ export default class extends Controller {
 
     // add last month's dates to fill first week (eg: if the 1st lands on a Tuesday, we'll add Sunday 30th, Monday 31st)
     fullCalendar.push(...this.#getPreviousMonthsDates());
+    // get all of this months dates
     fullCalendar.push(...this.#getThisMonthsDates());
+    // add all next month's dates to fill out last week of calendar
     fullCalendar.push(
       ...this.#getNextMonthsDates(fullCalendar[fullCalendar.length - 1]),
     );
     this.#fillCalendarWithDates(fullCalendar);
 
+    // style date <td> based on if they're inMonth, outOfMonth, today's date, selected date or disabled due to minDate
     this.#addStylingToDates();
     // only 1 date is tabbable (either the currently selected date, today's date, or the 1st)
     this.#setTabIndex();
@@ -187,7 +175,7 @@ export default class extends Controller {
     }
   }
 
-  // return full range of selected month's dates (1 to last date)
+  // return full range of selected month's dates (1st to last date)
   #getThisMonthsDates() {
     let thisMonthsLastDate;
 
@@ -222,7 +210,7 @@ export default class extends Controller {
     // Flip to true at first 1st (inCurrentMonth == true); flip back at next 1st (inCurrentMonth == false)
     let inCurrentMonth = false;
     // relativeMonthPosition flips from previous to next based on similar logic to inCurrentMonth, so we know which
-    // month to add for the 'data-date' attribute
+    // month/year to add for the 'data-date' attribute
     let relativeMonthPosition = "previous";
     let tableRow = document.createElement("tr");
 
@@ -249,10 +237,8 @@ export default class extends Controller {
         );
         tableRow.appendChild(inMonthDate);
       } else {
-        const outOfMonthDate =
-          this.outOfMonthDateTemplateTarget.content.cloneNode(true);
-        const tableCell = outOfMonthDate.querySelector("td");
-        tableCell.innerText = dates[i];
+        // set year to the current selected year. if month is jan (index == 0) or dec (index == 11), we need to set
+        // year back or forward, respectively, dependent on the relativeMonthPosition (before or after)
         let year = this.#selectedYear;
         const relativeMonthIndex = this.#getRelativeMonthIndex(
           relativeMonthPosition,
@@ -262,13 +248,15 @@ export default class extends Controller {
         } else if (relativeMonthIndex === 11) {
           year--;
         }
+
+        const outOfMonthDate =
+          this.outOfMonthDateTemplateTarget.content.cloneNode(true);
+        const tableCell = outOfMonthDate.querySelector("td");
+        tableCell.innerText = dates[i];
+
         tableCell.setAttribute(
           "data-date",
-          this.#getFormattedStringDate(
-            year,
-            this.#getRelativeMonthIndex(relativeMonthPosition),
-            dates[i],
-          ),
+          this.#getFormattedStringDate(year, relativeMonthIndex, dates[i]),
         );
         tableRow.appendChild(outOfMonthDate);
       }
@@ -290,7 +278,7 @@ export default class extends Controller {
     );
   };
 
-  // checks leap year
+  // get February's last date based on leap year
   #getFebLastDate(year) {
     return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
   }
@@ -364,7 +352,7 @@ export default class extends Controller {
     const today = this.#getDateNode(this.#todaysFormattedFullDate);
     const selectedDate = this.#getDateNode(this.#selectedDate);
     const minDate = this.#getDateNode(this.#minDate);
-    // if minimum date and selected or todays date land on same month/year,
+    // if minimum date and selected or todays date land on same calendar (year/month),
     // prioritize selectedDate > todaysDate > minDate as tabbable
 
     // else check if selected then todays dates are on the calendar and within the current selected month and year
@@ -384,6 +372,22 @@ export default class extends Controller {
       today.tabIndex = 0;
     } else {
       this.#getFirstOfMonthNode().tabIndex = 0;
+    }
+  }
+
+  #setBackButton() {
+    const backButton = this.backButtonTarget;
+    const backArrow = backButton.firstElementChild;
+    // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
+    // we disable the back button so user can't navigate further back
+    if (this.#preventPreviousMonthNavigation()) {
+      backButton.disabled = true;
+      backArrow.classList.remove(...this.#backButtonEnabledClasses);
+      backArrow.classList.add(...this.#backButtonDisabledClasses);
+    } else {
+      backButton.disabled = false;
+      backArrow.classList.add(...this.#backButtonEnabledClasses);
+      backArrow.classList.remove(...this.#backButtonDisabledClasses);
     }
   }
 
@@ -450,6 +454,7 @@ export default class extends Controller {
   // handles Shift+Tab out of calendar into datepicker input
   tabBackToInput(event) {
     if (event.key !== "Tab" || !event.shiftKey) return;
+    // if we're on the back button, or on the month select when back button is disabled, tab to the datepicker input
     if (
       event.target === this.backButtonTarget ||
       (event.target === this.monthSelectTarget &&
@@ -486,14 +491,17 @@ export default class extends Controller {
     return handlers[key];
   }
 
+  // select date either by click or Enter/Space
   selectDate(event) {
     const selectedDate = event.target;
-
+    // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("data-date-disabled")) return;
+    // fill date input value to the selected date
     this.pathogenDatepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
 
+    // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
@@ -501,6 +509,7 @@ export default class extends Controller {
     this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
+  // clear selection by clicking clear button
   clearSelection() {
     this.pathogenDatepickerInputOutlet.setInputValue("");
 
@@ -511,6 +520,7 @@ export default class extends Controller {
     this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
+  // handles ArrowLeft/Right keyboard navigation
   #handleHorizontalNavigation(event, direction) {
     let targetDate;
     let currentDate = parseInt(event.target.innerText);
@@ -536,8 +546,8 @@ export default class extends Controller {
       return;
     }
 
-    // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth,
-    // change the month based on direction and re-assign dateNode
+    // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth (eg: we're on the 1st
+    // and navigating back/Arrowleft), change the month based on direction and re-assign dateNode
     let targetDateNode = this.#getDateNode(targetFullDate);
     if (!this.#verifyDateIsInMonth(targetDateNode)) {
       direction === "left" ? this.previousMonth() : this.nextMonth();
@@ -546,12 +556,14 @@ export default class extends Controller {
     this.#focusDate(targetDateNode);
   }
 
+  // handle ArrowUp/Down keyboard navigation
   #handleVerticalNavigation(event, direction) {
     let targetWeek;
     let targetDate;
     const currentWeek = event.target.parentNode;
     let currentDate = parseInt(event.target.innerText);
 
+    // find previous/next week and deduct/add 7 days since we're navigating by week with vertical navigation
     if (direction === "up") {
       targetWeek = currentWeek.previousElementSibling;
       targetDate = currentDate - 7;
@@ -560,6 +572,7 @@ export default class extends Controller {
       targetDate = currentDate + 7;
     }
 
+    // target date is the date we'd like to 'end' on after keypress0
     const targetFullDate = this.#getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
@@ -571,9 +584,9 @@ export default class extends Controller {
       return;
     }
 
-    // try to retrieve the target date node, and if target week is non-existant (eg: we're going up and we're currently
-    // on the first week), or the dateNode doesn't exist or is not inMonth, change the month based on direction and
-    // re-assign dateNode
+    // try to retrieve the target date node, and if target week is non-existant (eg: we're going up and we're already
+    // currently on the first week), or the dateNode doesn't exist or is not inMonth, change the month based on
+    // direction and re-assign dateNode
     let targetDateNode = this.#getDateNode(targetFullDate);
     if (!targetWeek || !this.#verifyDateIsInMonth(targetDateNode)) {
       direction === "up" ? this.previousMonth() : this.nextMonth();
@@ -588,14 +601,15 @@ export default class extends Controller {
       this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
     currentTabbableDate.tabIndex = -1;
 
-    // assign tabindex and focus
+    // assign tabindex and focus to the current target date
     dateNode.tabIndex = 0;
     dateNode.focus();
   }
 
+  // handles Home keypress
   #navigateToStart() {
     // if firstDateNode is disabled, means minDate is on the current calendar, and we can focus that (the first
-    // node we allow navigation to)
+    // node we're allowed to navigate to)
     const firstDateNode = this.#getFirstOfMonthNode();
 
     if (firstDateNode.getAttribute("data-date-disabled")) {
@@ -605,7 +619,9 @@ export default class extends Controller {
     }
   }
 
+  // handles End keypress
   #navigateToEnd() {
+    // get all date nodes that are 'inMonth' and focus the last node
     const allInMonthDatesNodes = Array.from(
       this.calendarTarget.querySelectorAll(
         '[data-date-within-month-position="inMonth"]',
@@ -616,26 +632,32 @@ export default class extends Controller {
   }
 
   #previousMonthByPageUp() {
+    // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
     if (this.#preventPreviousMonthNavigation()) return;
+    // load previous month onto calendar
     this.previousMonth();
 
+    // if minDate exists, check if it's date node is present and focus that, else focus 1st of the month
     if (this.#minDate) {
       const minDateNode = this.#getDateNode(this.#minDate);
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
       if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
         this.#focusDate(minDateNode);
-      } else {
-        this.#focusDate(this.#getFirstOfMonthNode());
+        return;
       }
     }
+    this.#focusDate(this.#getFirstOfMonthNode());
   }
 
+  // load next month and focus 1st of the month
   #nextMonthByPageDown() {
     this.nextMonth();
     this.#focusDate(this.#getFirstOfMonthNode());
   }
 
+  // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
+  // back button click or Home keypress
   #preventPreviousMonthNavigation() {
     if (this.#minDate) {
       const minDateNode = this.#getDateNode(this.#minDate);
@@ -644,11 +666,11 @@ export default class extends Controller {
         this.#verifyDateIsInMonth(minDateNode)
       )
         return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
+  // check if date is inMonth (eg: if calendar is on July but contains June 30, June 30 is 'outOfMonth')
   #verifyDateIsInMonth(node) {
     return node.getAttribute("data-date-within-month-position") === "inMonth";
   }
@@ -667,6 +689,7 @@ export default class extends Controller {
     );
   }
 
+  // getFirst/LastFocussableElement is used by pathogen/datepicker/input_controller.js for Tab logic
   getFirstFocussableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget
