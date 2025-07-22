@@ -85,7 +85,7 @@ export default class extends Controller {
     this.#selectedDate = this.datepickerInputTarget.value;
     if (this.#selectedDate) {
       const fullSelectedDate = new Date(this.#selectedDate);
-      this.#selectedYear = fullSelectedDate.getFullYear();
+      this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
       // 'outOfMonth' date (eg: selected Sept 1st, but August is displayed with Sept 1st at the end of calendar)
       this.#selectedMonthIndex = fullSelectedDate.getUTCMonth();
@@ -308,8 +308,11 @@ export default class extends Controller {
   // 1. Add the newly selected date from the datepicker
   // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
   // 3. If user entered an invalid date, resets to original value
-  setInputValue(value) {
-    this.datepickerInputTarget.value = value;
+  setInputValue(date) {
+    this.datepickerInputTarget.value = date;
+    this.#selectedDate = date;
+    this.#setSelectedDate();
+    this.#initializeCalendar();
   }
 
   // passes all shared variables required by the calendar, avoids processing or passing values twice

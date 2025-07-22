@@ -8,33 +8,14 @@
         <%= render "shared/form/field_errors",
         errors: personal_access_token.errors.full_messages_for(:name) %>
       </div>
-      <% invalid = personal_access_token.errors.include?(:expires_at) %>
-      <div
-        class="form-field datepicker <%= 'invalid' if invalid %>"
-        data-controller="datepicker"
-        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
-      >
-        <%= f.label :expires_at %>
-        <div class="relative max-w-sm">
-          <div
-            class="
-              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-            "
-          >
-            <%= render Viral::IconComponent.new(
-              name: "calendar_days",
-              classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
-            ) %>
-          </div>
-          <%= f.text_field :expires_at,
-                       placeholder: I18n.t("date.formats.iso"),
-                       autocomplete: "off",
-                       "data-datepicker-target": "datePicker" %>
-        </div>
-        <%= render "shared/form/field_errors",
-        errors: personal_access_token.errors.full_messages_for(:expires_at) %>
+      <div class="form-field">
+        <%= render Pathogen::Datepicker.new(
+          id: "personal_access_token_expires_at",
+          label: t("activerecord.attributes.personal_access_token.expires_at"),
+          input_name: "personal_access_token[expires_at]",
+          min_date: (Date.today + 1.day),
+        ) %>
       </div>
-
       <% invalid = personal_access_token.errors.include?(:scopes) %>
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
