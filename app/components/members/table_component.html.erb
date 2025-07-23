@@ -115,7 +115,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
-                <%= render Pathogen::Datepicker.new(
+                <%= pathogen_datepicker(
                   id: "member-#{member.id}-expiration",
                   input_name: "member[expires_at]",
                   min_date: (Date.today + 1.day),
