@@ -1,6 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 import { DAYS_IN_MONTH, STYLE_CLASSES } from "./constants.js";
 
+import {
+  getDayOfWeek,
+  verifyDateIsInMonth,
+  getDateNode,
+  getFirstOfMonthNode,
+} from "./utils.js";
+
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--input"];
   static targets = [
@@ -104,7 +111,7 @@ export default class extends Controller {
   }
 
   #getPreviousMonthsDates() {
-    let firstDayOfMonthIndex = this.#getDayOfWeek(
+    let firstDayOfMonthIndex = getDayOfWeek(
       `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
     );
     // if first day lands on Sunday, we don't need to backfill dates
@@ -141,7 +148,7 @@ export default class extends Controller {
   }
 
   #getNextMonthsDates(thisMonthsLastDate) {
-    let lastDayOfMonthDay = this.#getDayOfWeek(
+    let lastDayOfMonthDay = getDayOfWeek(
       `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
     );
 
@@ -260,12 +267,15 @@ export default class extends Controller {
 
   #addStylingToDates() {
     // already selected date (if a date selection already exists)
-    const selectedDate = this.#getDateNode(this.#selectedDate);
+    const selectedDate = getDateNode(this.calendarTarget, this.#selectedDate);
     // today's date
-    const today = this.#getDateNode(this.#todaysFormattedFullDate);
+    const today = getDateNode(
+      this.calendarTarget,
+      this.#todaysFormattedFullDate,
+    );
 
     // minimum date where dates prior will be disabled
-    const minDate = this.#getDateNode(this.#minDate);
+    const minDate = getDateNode(this.calendarTarget, this.#minDate);
 
     if (selectedDate) {
       this.#replaceDateStyling(
@@ -296,7 +306,7 @@ export default class extends Controller {
 
   // handles changing the date styling (today, selected and disabled dates)
   #replaceDateStyling(date, classes) {
-    if (this.#verifyDateIsInMonth(date)) {
+    if (verifyDateIsInMonth(date)) {
       date.classList.remove(...STYLE_CLASSES["inMonthClasses"]);
     } else {
       date.classList.remove(...STYLE_CLASSES["outOfMonthClasses"]);
@@ -306,9 +316,12 @@ export default class extends Controller {
 
   // set the tab index to a single date
   #setTabIndex() {
-    const today = this.#getDateNode(this.#todaysFormattedFullDate);
-    const selectedDate = this.#getDateNode(this.#selectedDate);
-    const minDate = this.#getDateNode(this.#minDate);
+    const today = getDateNode(
+      this.calendarTarget,
+      this.#todaysFormattedFullDate,
+    );
+    const selectedDate = getDateNode(this.calendarTarget, this.#selectedDate);
+    const minDate = getDateNode(this.calendarTarget, this.#minDate);
     // if minimum date and selected or todays date land on same calendar (year/month),
     // prioritize selectedDate > todaysDate > minDate as tabbable
 
@@ -323,12 +336,12 @@ export default class extends Controller {
       } else {
         minDate.tabIndex = 0;
       }
-    } else if (selectedDate && this.#verifyDateIsInMonth(selectedDate)) {
+    } else if (selectedDate && verifyDateIsInMonth(selectedDate)) {
       selectedDate.tabIndex = 0;
-    } else if (today && this.#verifyDateIsInMonth(today)) {
+    } else if (today && verifyDateIsInMonth(today)) {
       today.tabIndex = 0;
     } else {
-      this.#getFirstOfMonthNode().tabIndex = 0;
+      getFirstOfMonthNode(this.calendarTarget).tabIndex = 0;
     }
   }
 
@@ -505,10 +518,10 @@ export default class extends Controller {
 
     // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth (eg: we're on the 1st
     // and navigating back/Arrowleft), change the month based on direction and re-assign dateNode
-    let targetDateNode = this.#getDateNode(targetFullDate);
-    if (!this.#verifyDateIsInMonth(targetDateNode)) {
+    let targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
+    if (!verifyDateIsInMonth(targetDateNode)) {
       direction === "left" ? this.previousMonth() : this.nextMonth();
-      targetDateNode = this.#getDateNode(targetFullDate);
+      targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
     this.#focusDate(targetDateNode);
   }
@@ -544,10 +557,10 @@ export default class extends Controller {
     // try to retrieve the target date node, and if target week is non-existant (eg: we're going up and we're already
     // currently on the first week), or the dateNode doesn't exist or is not inMonth, change the month based on
     // direction and re-assign dateNode
-    let targetDateNode = this.#getDateNode(targetFullDate);
-    if (!targetWeek || !this.#verifyDateIsInMonth(targetDateNode)) {
+    let targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
+    if (!targetWeek || !verifyDateIsInMonth(targetDateNode)) {
       direction === "up" ? this.previousMonth() : this.nextMonth();
-      targetDateNode = this.#getDateNode(targetFullDate);
+      targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
     this.#focusDate(targetDateNode);
   }
@@ -567,10 +580,10 @@ export default class extends Controller {
   #navigateToStart() {
     // if firstDateNode is disabled, means minDate is on the current calendar, and we can focus that (the first
     // node we're allowed to navigate to)
-    const firstDateNode = this.#getFirstOfMonthNode();
+    const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
 
     if (firstDateNode.getAttribute("data-date-disabled")) {
-      this.#focusDate(this.#getDateNode(this.#minDate));
+      this.#focusDate(getDateNode(this.calendarTarget, this.#minDate));
     } else {
       this.#focusDate(firstDateNode);
     }
@@ -596,54 +609,35 @@ export default class extends Controller {
 
     // if minDate exists, check if it's date node is present and focus that, else focus 1st of the month
     if (this.#minDate) {
-      const minDateNode = this.#getDateNode(this.#minDate);
+      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
-      if (minDateNode && this.#verifyDateIsInMonth(minDateNode)) {
+      if (minDateNode && verifyDateIsInMonth(minDateNode)) {
         this.#focusDate(minDateNode);
         return;
       }
     }
-    this.#focusDate(this.#getFirstOfMonthNode());
+    this.#focusDate(getFirstOfMonthNode(this.calendarTarget));
   }
 
   // load next month and focus 1st of the month
   #nextMonthByPageDown() {
     this.nextMonth();
-    this.#focusDate(this.#getFirstOfMonthNode());
+    this.#focusDate(getFirstOfMonthNode(this.calendarTarget));
   }
 
   // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
   // back button click or Home keypress
   #preventPreviousMonthNavigation() {
     if (this.#minDate) {
-      const minDateNode = this.#getDateNode(this.#minDate);
+      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
       if (
-        this.#getDateNode(this.#minDate) &&
-        this.#verifyDateIsInMonth(minDateNode)
+        getDateNode(this.calendarTarget, this.#minDate) &&
+        verifyDateIsInMonth(minDateNode)
       )
         return true;
     }
     return false;
-  }
-
-  // check if date is inMonth (eg: if calendar is on July but contains June 30, June 30 is 'outOfMonth')
-  #verifyDateIsInMonth(node) {
-    return node.getAttribute("data-date-within-month-position") === "inMonth";
-  }
-
-  #getDayOfWeek(date) {
-    return new Date(date).getDay();
-  }
-
-  #getDateNode(date) {
-    return this.calendarTarget.querySelector(`[data-date='${date}']`);
-  }
-
-  #getFirstOfMonthNode() {
-    return this.calendarTarget.querySelector(
-      '[data-date-within-month-position="inMonth"]',
-    );
   }
 
   // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
