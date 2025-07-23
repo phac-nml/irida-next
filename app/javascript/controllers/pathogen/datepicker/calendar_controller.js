@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { DAYS_IN_MONTH, STYLE_CLASSES } from "./constants.js";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--input"];
@@ -19,56 +20,6 @@ export default class extends Controller {
   static values = {
     months: Array,
   };
-
-  #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  #selectedDateClasses = [
-    "bg-primary-700",
-    "text-white",
-    "hover:bg-primary-800",
-    "dark:text-white",
-    "dark:bg-primary-600",
-    "dark:hover:bg-primary-700",
-    "dark:border-primary-900",
-    "dark:hover:bg-primary-700",
-    "cursor-pointer",
-  ];
-
-  #inMonthClasses = [
-    "text-slate-900",
-    "hover:bg-slate-100",
-    "dark:hover:bg-slate-600",
-    "dark:text-white",
-    "cursor-pointer",
-  ];
-
-  #outOfMonthClasses = [
-    "hover:bg-slate-100",
-    "dark:hover:bg-slate-600",
-    "text-slate-500",
-    "dark:text-slate-300",
-    "cursor-pointer",
-  ];
-
-  #todaysDateClasses = [
-    "text-primary-700",
-    "bg-slate-100",
-    "hover:bg-slate-200",
-    "dark:bg-slate-600",
-    "dark:hover:bg-slate-500",
-    "dark:text-primary-300",
-    "cursor-pointer",
-  ];
-
-  #disabledDateClasses = [
-    "line-through",
-    "cursor-not-allowed",
-    "text-slate-500",
-    "dark:text-slate-300",
-  ];
-
-  #backButtonDisabledClasses = ["text-slate-400", "dark:text-slate-500"];
-  #backButtonEnabledClasses = ["text-slate-900", "dark:text-slate-100"];
 
   // today's date attributes for quick access
   #todaysYear;
@@ -167,7 +118,7 @@ export default class extends Controller {
       } else {
         const previousMonthIndex =
           this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-        lastDate = this.#DAYS_IN_MONTH[previousMonthIndex];
+        lastDate = DAYS_IN_MONTH[previousMonthIndex];
       }
 
       // add 1 to starting date to offset real date vs index
@@ -183,7 +134,7 @@ export default class extends Controller {
     if (this.#selectedMonthIndex == 1) {
       thisMonthsLastDate = this.#getFebLastDate(this.#selectedYear);
     } else {
-      thisMonthsLastDate = this.#DAYS_IN_MONTH[this.#selectedMonthIndex];
+      thisMonthsLastDate = DAYS_IN_MONTH[this.#selectedMonthIndex];
     }
 
     return this.#getDateRange(1, thisMonthsLastDate);
@@ -317,12 +268,15 @@ export default class extends Controller {
     const minDate = this.#getDateNode(this.#minDate);
 
     if (selectedDate) {
-      this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
+      this.#replaceDateStyling(
+        selectedDate,
+        STYLE_CLASSES["selectedDateClasses"],
+      );
     }
 
     // don't need to add 'today' styling if today == selectedDate
     if (today && selectedDate != today) {
-      this.#replaceDateStyling(today, this.#todaysDateClasses);
+      this.#replaceDateStyling(today, STYLE_CLASSES["todaysDateClasses"]);
     }
 
     if (minDate) {
@@ -331,7 +285,10 @@ export default class extends Controller {
         this.calendarTarget.querySelectorAll("[data-date]"),
       );
       for (let i = 0; i < allDates.indexOf(minDate); i++) {
-        this.#replaceDateStyling(allDates[i], this.#disabledDateClasses);
+        this.#replaceDateStyling(
+          allDates[i],
+          STYLE_CLASSES["disabledDateClasses"],
+        );
         allDates[i].setAttribute("data-date-disabled", true);
       }
     }
@@ -340,9 +297,9 @@ export default class extends Controller {
   // handles changing the date styling (today, selected and disabled dates)
   #replaceDateStyling(date, classes) {
     if (this.#verifyDateIsInMonth(date)) {
-      date.classList.remove(...this.#inMonthClasses);
+      date.classList.remove(...STYLE_CLASSES["inMonthClasses"]);
     } else {
-      date.classList.remove(...this.#outOfMonthClasses);
+      date.classList.remove(...STYLE_CLASSES["outOfMonthClasses"]);
     }
     date.classList.add(...classes);
   }
@@ -382,12 +339,12 @@ export default class extends Controller {
     // we disable the back button so user can't navigate further back
     if (this.#preventPreviousMonthNavigation()) {
       backButton.disabled = true;
-      backArrow.classList.remove(...this.#backButtonEnabledClasses);
-      backArrow.classList.add(...this.#backButtonDisabledClasses);
+      backArrow.classList.remove(...STYLE_CLASSES["backButtonEnabledClasses"]);
+      backArrow.classList.add(...STYLE_CLASSES["backButtonDisabledClasses"]);
     } else {
       backButton.disabled = false;
-      backArrow.classList.add(...this.#backButtonEnabledClasses);
-      backArrow.classList.remove(...this.#backButtonDisabledClasses);
+      backArrow.classList.add(...STYLE_CLASSES["backButtonEnabledClasses"]);
+      backArrow.classList.remove(...STYLE_CLASSES["backButtonDisabledClasses"]);
     }
   }
 
@@ -689,14 +646,14 @@ export default class extends Controller {
     );
   }
 
-  // getFirst/LastFocussableElement is used by pathogen/datepicker/input_controller.js for Tab logic
-  getFirstFocussableElement() {
+  // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
+  getFirstFocusableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget
       : this.backButtonTarget;
   }
 
-  getLastFocussableElement() {
+  getLastFocusableElement() {
     return this.clearButtonTarget;
   }
 }
