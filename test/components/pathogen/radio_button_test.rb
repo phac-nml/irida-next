@@ -43,7 +43,7 @@ module Pathogen
                         help_text: 'Follows system preferences'
                       ))
 
-        assert_selector 'p', text: 'Follows system preferences'
+        assert_selector 'span', text: 'Follows system preferences'
         assert_selector 'input[aria-describedby]'
       end
 
