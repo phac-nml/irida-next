@@ -145,7 +145,7 @@ module Pathogen
       # Renders the help text below the label, if present
       def help_html
         if @help_text.present?
-          tag.p(@help_text, id: help_text_id, class: help_text_classes)
+          tag.span(@help_text, id: help_text_id, class: help_text_classes)
         else
           ''.html_safe
         end
