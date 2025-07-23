@@ -24,9 +24,9 @@ module Samples
 
     def execute(broadcast_target = nil)
       begin
-      authorize! @namespace, to: :import_samples_and_metadata?
-      validate_file
-      perform_file_import(broadcast_target)
+        authorize! @namespace, to: :import_samples_and_metadata?
+        validate_file
+        perform_file_import(broadcast_target)
       ensure
         cleanup_files
       end
