@@ -7,7 +7,7 @@ import {
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
-  static targets = ["datepickerInput", "calenderTemplate", "inputError"];
+  static targets = ["datepickerInput", "calendarTemplate", "inputError"];
 
   static values = {
     minDate: String,
@@ -47,7 +47,7 @@ export default class extends Controller {
     // calendar will already exist and doesn't need to be added, except for the newly added member/group
     if (!this.#calendar) {
       this.idempotentConnect();
-      this.#addCalenderTemplate();
+      this.#addCalendarTemplate();
     }
   }
 
@@ -78,17 +78,26 @@ export default class extends Controller {
     this.removeCalendarListeners();
   }
 
-  #addCalenderTemplate() {
-    // Don't add calendar if it's already open
-    if (this.#isCalendarOpen) return;
+  #addCalendarTemplate() {
+    try {
+      // Don't add calendar if already exists
+      if (this.#calendar) return;
 
-    // Add the calendar template to the DOM
-    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
-    const containerNode = this.#findCalendarContainer();
-    containerNode.appendChild(calendar);
-    // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
-    // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
-    this.#calendar = document.getElementById(this.calendarIdValue);
+      // Add the calendar template to the DOM
+      const calendar = this.calendarTemplateTarget.content.cloneNode(true);
+      const containerNode = this.#findCalendarContainer();
+      containerNode.appendChild(calendar);
+
+      // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
+      // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
+      this.#calendar = document.getElementById(this.calendarIdValue);
+
+      if (!this.#calendar) {
+        console.error("Failed to find calendar after appending to DOM");
+      }
+    } catch (error) {
+      console.error("Error adding calendar template:", error);
+    }
   }
 
   #setSelectedDate() {
