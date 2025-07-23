@@ -1,4 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
+import {
+  FOCUSABLE_ELEMENTS,
+  CALENDAR_HEIGHT,
+  CALENDAR_TOP_BUFFER,
+} from "./constants.js";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
@@ -12,8 +17,6 @@ export default class extends Controller {
     invalidMinDate: String,
     dateFormatRegex: String,
   };
-  #focussableElements =
-    'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
   // today's date attributes for quick access
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
@@ -27,8 +30,8 @@ export default class extends Controller {
 
   // calendar DOM element once appended
   #calendar;
-  // retrieves next focussable element in DOM after date input
-  #nextFocussableElementAfterInput;
+  // retrieves next focusable element in DOM after date input
+  #nextFocusableElementAfterInput;
 
   // tracks calendar open state
   #isCalendarOpen = false;
@@ -60,7 +63,7 @@ export default class extends Controller {
       this.boundUnhideCalendar,
     );
 
-    this.#findNextFocussableElement();
+    this.#findNextFocusableElement();
   }
 
   disconnect() {
@@ -107,12 +110,12 @@ export default class extends Controller {
 
   // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
   // tabbing through the calendar, we'd focus on the next element after the date input
-  #findNextFocussableElement() {
-    const focussable = Array.from(
-      document.body.querySelectorAll(this.#focussableElements),
+  #findNextFocusableElement() {
+    const focusable = Array.from(
+      document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
     );
-    let index = focussable.indexOf(this.datepickerInputTarget);
-    this.#nextFocussableElementAfterInput = focussable[index + 1];
+    let index = focusable.indexOf(this.datepickerInputTarget);
+    this.#nextFocusableElementAfterInput = focusable[index + 1];
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
@@ -153,10 +156,9 @@ export default class extends Controller {
     const inputRect = this.datepickerInputTarget.getBoundingClientRect();
 
     let left = inputRect.left;
-    let top = inputRect.top + 35; // +35 accounts for datepicker element height
+    let top = inputRect.top + CALENDAR_TOP_BUFFER; // + CALENDAR_TOP_BUFFER accounts for datepicker element height
     let bottom = inputRect.bottom;
     // Calculate if calendar should appear above or below input
-    const calendarHeight = 445; // rough height of calendar
     const spaceBelow = window.innerHeight - bottom;
     // dialog positioning requires calendar positioning to be relative to the dialog
     if (this.#inDialog) {
@@ -168,9 +170,9 @@ export default class extends Controller {
 
     this.#calendar.style.left = `${left}px`;
 
-    if (spaceBelow < calendarHeight) {
+    if (spaceBelow < CALENDAR_HEIGHT) {
       // Position above the input if there's not enough space below
-      this.#calendar.style.top = `${top - calendarHeight}px`;
+      this.#calendar.style.top = `${top - CALENDAR_HEIGHT}px`;
     } else {
       // Position below the input
       this.#calendar.style.top = `${top}px`;
@@ -215,29 +217,29 @@ export default class extends Controller {
       return;
     }
 
-    // If we tab off the last datepicker element, we want to force focus onto the next focussable element after
+    // If we tab off the last datepicker element, we want to force focus onto the next focusable element after
     // the datepicker input
     if (
       event.key === "Tab" &&
       event.target ===
-        this.pathogenDatepickerCalendarOutlet.getLastFocussableElement() &&
+        this.pathogenDatepickerCalendarOutlet.getLastFocusableElement() &&
       !event.shiftKey
     ) {
       event.preventDefault();
       this.hideCalendar();
-      this.#nextFocussableElementAfterInput.focus();
+      this.#nextFocusableElementAfterInput.focus();
       return;
     }
 
     // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
-    // while Tab focuses on the first focussable element within the calendar
+    // while Tab focuses on the first focusable element within the calendar
     if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
       if (event.shiftKey) {
         this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
         this.pathogenDatepickerCalendarOutlet
-          .getFirstFocussableElement()
+          .getFirstFocusableElement()
           .focus();
       }
     }
