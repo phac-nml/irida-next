@@ -49,7 +49,7 @@
 
         </div>
         <div class="form-field">
-          <%= render Pathogen::Datepicker.new(
+          <%= pathogen_datepicker(
             id: "bot_expires_at",
             input_name: "bot[expires_at]",
             label: t("groups.bots.index.bot_listing.new_bot_modal.expires_at"),

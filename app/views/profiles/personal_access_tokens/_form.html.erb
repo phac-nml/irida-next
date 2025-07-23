@@ -9,7 +9,7 @@
         errors: personal_access_token.errors.full_messages_for(:name) %>
       </div>
       <div class="form-field">
-        <%= render Pathogen::Datepicker.new(
+        <%= pathogen_datepicker(
           id: "personal_access_token_expires_at",
           label: t("activerecord.attributes.personal_access_token.expires_at"),
           input_name: "personal_access_token[expires_at]",
