@@ -10,9 +10,8 @@ export default class extends Controller {
     calendarId: String,
     invalidDate: String,
     invalidMinDate: String,
+    dateFormatRegex: String,
   };
-
-  #formattedDateRegex = /^\d{4}-\d{2}-\d{2}$/;
   #focussableElements =
     'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
   // today's date attributes for quick access
@@ -101,6 +100,9 @@ export default class extends Controller {
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
+    if (this.hasPathogenDatepickerCalendarOutlet) {
+      this.#shareParamsWithCalendar();
+    }
   }
 
   // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
@@ -128,7 +130,7 @@ export default class extends Controller {
 
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
-    this.#initializeCalendar();
+    this.#shareParamsWithCalendar();
   }
 
   unhideCalendar() {
@@ -154,7 +156,7 @@ export default class extends Controller {
     let top = inputRect.top + 35; // +35 accounts for datepicker element height
     let bottom = inputRect.bottom;
     // Calculate if calendar should appear above or below input
-    const calendarHeight = 410; // rough height of calendar
+    const calendarHeight = 445; // rough height of calendar
     const spaceBelow = window.innerHeight - bottom;
     // dialog positioning requires calendar positioning to be relative to the dialog
     if (this.#inDialog) {
@@ -253,6 +255,7 @@ export default class extends Controller {
           this.submitDate();
         }
         this.#disableInputErrorState();
+        this.#setSelectedDate();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
@@ -263,8 +266,7 @@ export default class extends Controller {
   // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
   #validateDateInput(dateInput) {
     let year, month, day;
-
-    if (dateInput.match(this.#formattedDateRegex)) {
+    if (dateInput.match(this.dateFormatRegexValue)) {
       [year, month, day] = dateInput.split("-").map(Number);
       month--;
       const date = new Date(year, month, day);
@@ -308,7 +310,6 @@ export default class extends Controller {
   submitDate() {
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
-    this.#initializeCalendar();
   }
 
   // handles filling in the date input with the date
@@ -320,12 +321,11 @@ export default class extends Controller {
     this.datepickerInputTarget.value = date;
     this.#selectedDate = date;
     this.#setSelectedDate();
-    this.#initializeCalendar();
   }
 
   // passes all shared variables required by the calendar, avoids processing or passing values twice
   // triggers upon initial connection as well as after submission
-  #initializeCalendar() {
+  #shareParamsWithCalendar() {
     const sharedVariables = {
       todaysYear: this.#todaysYear,
       todaysMonthIndex: this.#todaysMonthIndex,
@@ -336,7 +336,7 @@ export default class extends Controller {
       minDate: this.minDateValue,
       autosubmit: this.autosubmitValue,
     };
-    this.pathogenDatepickerCalendarOutlet.initializeCalendarByInput(
+    this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
     );
   }

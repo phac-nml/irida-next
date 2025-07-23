@@ -90,6 +90,8 @@ module Pathogen
       @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
         I18n.t('pathogen.datepicker.errors.min_date_error', min_date: @min_date)
       @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
+      @system_arguments[:data]['pathogen--datepicker--input-date-format-regex-value'] =
+        I18n.t('pathogen.datepicker.date_format_regex')
     end
 
     # Configures HTML attributes for the <div> datepicker calendar.

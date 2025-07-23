@@ -1418,6 +1418,7 @@ fr:
         thursday: jeu
         tuesday: mar
         wednesday: mer
+      date_format_regex: ^\d{4}-\d{2}-\d{2}$
       errors:
         invalid_date: Invalid date.
         min_date_error: "Earliest allowed date: %{min_date}"
