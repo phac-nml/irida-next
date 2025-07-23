@@ -97,7 +97,7 @@
         </p>
       </div>
       <div class="form-field">
-        <%= render Pathogen::Datepicker.new(
+        <%= pathogen_datepicker(
           id: "member_expires_at",
           label: t("activerecord.attributes.member.expires_at"),
           input_name: "member[expires_at]",

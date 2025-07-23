@@ -97,7 +97,7 @@
           <td class="px-6 py-4">
             <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                <%= render Pathogen::Datepicker.new(
+                <%= pathogen_datepicker(
                   id: "invited-group-#{namespace_group_link.group.id}-expiration",
                   input_name: "namespace_group_link[expires_at]",
                   min_date: (Date.today + 1.day),
