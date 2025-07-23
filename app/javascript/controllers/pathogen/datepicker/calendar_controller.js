@@ -114,7 +114,7 @@ export default class extends Controller {
   }
 
   // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
-  initializeCalendarByInput(params) {
+  shareParamsWithCalendarByInput(params) {
     this.#todaysYear = params["todaysYear"];
     this.#todaysMonthIndex = params["todaysMonthIndex"];
     this.#todaysDate = params["todaysDate"];
