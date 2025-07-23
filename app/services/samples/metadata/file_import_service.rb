@@ -14,9 +14,13 @@ module Samples
       end
 
       def execute(broadcast_target = nil)
-        authorize! @namespace, to: :update_sample_metadata?
-        validate_file
-        perform_file_import(broadcast_target)
+        begin
+          authorize! @namespace, to: :update_sample_metadata?
+          validate_file
+          perform_file_import(broadcast_target)
+        ensure
+          cleanup_files
+        end
       rescue FileImportError => e
         @namespace.errors.add(:base, e.message)
         {}
@@ -50,7 +54,6 @@ module Samples
           @namespace.errors.add(:sample, error_message(sample_id))
         end
 
-        cleanup_files
         response
       end
 

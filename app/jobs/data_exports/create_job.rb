@@ -211,7 +211,6 @@ module DataExports
 
     # Analysis export specific functions---------------------------------------------------------------------
     def create_analysis_zip(data_export, temp_export_file)
-      # Tempfile.create(binmode: true).tap do |tempfile|
       temp_export_file.tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
           workflow_executions = workflow_query(data_export.export_parameters['ids'])

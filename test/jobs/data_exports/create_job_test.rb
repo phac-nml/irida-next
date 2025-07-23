@@ -116,8 +116,7 @@ module DataExports
         '      ├─ INXT_ATT_AAAAAAAAAA/',
         '      │  └─ test_file_A.fastq',
         '      └─ INXT_ATT_AAAAAAAAAB/',
-        '         └─ test_file_B.fastq',
-        ''
+        '         └─ test_file_B.fastq'
       ].join("\n")
 
       assert_equal expected_simple_manifest, actual_simple_manifest
@@ -417,8 +416,7 @@ module DataExports
         "└─ #{workflow_execution.id}/ (#{workflow_execution.name})",
         "   ├─ #{workflow_execution.outputs[0].filename}",
         "   └─ #{samples_workflow_execution.samplesheet_params['sample']}/ (Deleted Sample)",
-        "      └─ #{samples_workflow_execution.outputs[0].filename}",
-        ''
+        "      └─ #{samples_workflow_execution.outputs[0].filename}"
       ].join("\n")
 
       assert_equal expected_simple_manifest, actual_simple_manifest

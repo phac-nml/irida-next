@@ -14,7 +14,7 @@ class BaseSpreadsheetImportService < BaseService
     @minimum_additional_data_columns = minimum_additional_data_columns
     @spreadsheet = nil
     @headers = nil
-    @temp_import_file = Tempfile.new
+    @temp_import_file = Tempfile.create(binmode: true)
   end
 
   def execute
@@ -43,7 +43,6 @@ class BaseSpreadsheetImportService < BaseService
 
   def download_batch_import_file(extension) # rubocop:disable Metrics/MethodLength
     begin
-      @temp_import_file.binmode
       @file.download do |chunk|
         @temp_import_file.write(chunk)
       end
@@ -97,6 +96,7 @@ class BaseSpreadsheetImportService < BaseService
   def cleanup_files
     # delete the blob and temporary file as we no longer require them
     @file.purge
-    @temp_import_file.unlink
+    @temp_import_file.close
+    File.unlink(@temp_import_file.path)
   end
 end
