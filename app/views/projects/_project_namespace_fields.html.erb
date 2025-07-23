@@ -35,9 +35,9 @@ end %>
     id: builder.field_id(:name, "error"),
     errors: @project.namespace.errors.full_messages_for(:name) %>
   <% end %>
-  <p id="<%= builder.field_id(:name, "hint") %>" class="field-hint">
+  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint">
     <%== t(:"projects.create.name_help") %>
-  </p>
+  </span>
 </div>
 <div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
   <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
@@ -84,9 +84,9 @@ end %>
       errors: @project.namespace.errors.messages.values.flatten %>
     <% end %>
 
-    <p id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
+    <span id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
       <%= t(:"projects.create.namespace_help") %>
-    </p>
+    </span>
   </div>
 
   <% invalid_path = @project.namespace.errors.include?(:path) %>
@@ -113,9 +113,9 @@ end %>
       <%= render "shared/form/field_errors",
       errors: @project.namespace.errors.full_messages_for(:path) %>
     <% end %>
-    <p id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
+    <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
       <%= t(:"projects.create.path_help") %>
-    </p>
+    </span>
 
   </div>
 </div>
@@ -142,7 +142,7 @@ end %>
     <%= render "shared/form/field_errors",
     errors: @project.namespace.errors.full_messages_for(:description) %>
   <% end %>
-  <p id="<%= builder.field_id(:description, "hint") %>" class="field-hint">
+  <span id="<%= builder.field_id(:description, "hint") %>" class="field-hint">
     <%= t(:"projects.create.description_help") %>
-  </p>
+  </span>
 </div>

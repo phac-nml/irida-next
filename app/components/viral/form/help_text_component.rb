@@ -26,9 +26,9 @@ module Viral
 
       def system_arguments
         @arguments.tap do |args|
-          args[:tag] = 'p'
+          args[:tag] = 'span'
           args[:classes] = class_names(
-            'flex items-start justify-start',
+            'flex items-center',
             STATE_MAPPINGS.key?(@state) ? STATE_MAPPINGS[@state] : STATE_MAPPINGS[:default],
             args[:classes]
           )
