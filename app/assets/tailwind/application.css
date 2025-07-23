@@ -31,13 +31,9 @@ input[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
 
-/* For Firefox */
+/* For Firefox and generic solution */
 input[type="search"] {
   -moz-appearance: none;
-}
-
-/* Generic solution using appearance property */
-input[type="search"] {
   appearance: textfield;
 }
 
