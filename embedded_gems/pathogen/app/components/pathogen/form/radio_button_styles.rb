@@ -43,7 +43,10 @@ module Pathogen
           'dark:border-slate-600 dark:bg-slate-700',
           'dark:checked:bg-primary-600 dark:checked:border-primary-500',
           'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
-          'dark:disabled:checked:bg-slate-600'
+          'dark:disabled:checked:bg-slate-600',
+          'transition-all duration-200 ease-in-out',
+          'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500',
+          'active:scale-95'
         )
       end
 
