@@ -4,6 +4,7 @@ module Pathogen
   # ViewHelper for pathogen component helpers
   module ViewHelper
     PATHOGEN_COMPONENT_HELPERS = {
+      datepicker: 'Pathogen::Datepicker',
       icon: 'Pathogen::Icon'
     }.freeze
 
