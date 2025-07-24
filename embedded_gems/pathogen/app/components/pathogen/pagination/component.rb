@@ -23,6 +23,8 @@ module Pathogen
         @page_sizes = page_sizes
         @item_name = item_name
         @system_arguments = system_arguments
+        @system_arguments[:data] ||= {}
+        @system_arguments[:data][:turbo_action] = 'replace'
       end
 
       # @return [Boolean] Whether the component should render
