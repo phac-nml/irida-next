@@ -20,6 +20,23 @@
   --layout-body-columns: 280px 1fr;
 }
 
+/* Hide search clear button across all browsers */
+/* For Webkit browsers (Chrome, Safari, Edge) */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* For Firefox and generic solution */
+input[type="search"] {
+  -moz-appearance: none;
+  appearance: textfield;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
