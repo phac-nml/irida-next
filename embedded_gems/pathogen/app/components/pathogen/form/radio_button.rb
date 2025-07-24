@@ -150,6 +150,18 @@ module Pathogen
           ''.html_safe
         end
       end
+
+      # Skip re-renders if the input hasn't changed
+      # @api private
+      def should_render?
+        @last_render_args != [@form, @attribute, @value, @options]
+      end
+
+      # Store the current render arguments for comparison in the next render
+      # @api private
+      def before_render
+        @last_render_args = [@form, @attribute, @value, @options.dup]
+      end
     end
   end
 end
