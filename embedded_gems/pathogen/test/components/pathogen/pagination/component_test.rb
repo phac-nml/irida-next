@@ -4,6 +4,9 @@ require 'test_helper'
 
 module Pathogen
   module Pagination
+    # Tests for the Pathogen::Pagination::Component
+    # This test suite covers various scenarios including rendering modes,
+    # page size selection, and edge cases.
     class ComponentTest < ViewComponent::TestCase
       def test_renders_simple_mode
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
