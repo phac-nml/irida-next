@@ -204,7 +204,8 @@ module Pathogen
       render(Pathogen::Pagination::Component.new(
         pagy: pagy,
         item_name: 'items',
-        mode: :full
+        mode: :full,
+        page_sizes: [50, 100, 200, 500, 1000]
       ))
     end
 
