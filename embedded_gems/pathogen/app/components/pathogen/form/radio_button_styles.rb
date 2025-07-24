@@ -21,7 +21,7 @@ module Pathogen
       #   - Smooth transitions
       #   - States: checked, hover, disabled
       #   - Dark mode variants
-      def radio_button_classes(user_class = nil)
+      def radio_button_classes(user_class = nil) # rubocop:disable Metrics/MethodLength
         class_names(
           user_class,
           # Layout & Sizing

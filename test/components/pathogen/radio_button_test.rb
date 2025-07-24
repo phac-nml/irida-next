@@ -1,4 +1,5 @@
-# test/components/pathogen/form/radio_button_component_test.rb
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Pathogen
