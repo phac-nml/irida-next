@@ -40,21 +40,21 @@ module Projects
         assert_no_text I18n.t(:'components.history_version.previous_version')
         assert_text I18n.t(:'components.history_version.current_version', version: 1)
 
-        assert_selector 'dt', text: 'name'
-        assert_selector 'dt', text: 'path'
-        assert_selector 'dt', text: 'type'
-        assert_selector 'dt', text: 'owner_id'
-        assert_selector 'dt', text: 'parent_id'
-        assert_selector 'dt', text: 'description'
-        assert_selector 'dt', text: 'puid'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'name'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'path'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'type'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'owner_id'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'parent_id'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'description'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'puid'
 
-        assert_selector 'dd', text: 'Project 1'
-        assert_selector 'dd', text: 'project-1'
-        assert_selector 'dd', text: 'Project'
-        assert_selector 'dd', text: @project.namespace.owner.id
-        assert_selector 'dd', text: @project.namespace.parent.id
-        assert_selector 'dd', text: 'Project 1 description'
-        assert_selector 'dd', text: @project.puid
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Project 1'
+        assert_selector 'span[data-test-item-selector="value"]', text: 'project-1'
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Project'
+        assert_selector 'span[data-test-item-selector="value"]', text: @project.namespace.owner.id
+        assert_selector 'span[data-test-item-selector="value"]', text: @project.namespace.parent.id
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Project 1 description'
+        assert_selector 'span[data-test-item-selector="value"]', text: @project.puid
       end
     end
   end

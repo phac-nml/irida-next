@@ -40,17 +40,17 @@ module Groups
         assert_no_text I18n.t(:'components.history_version.previous_version')
         assert_text I18n.t(:'components.history_version.current_version', version: 1)
 
-        assert_selector 'dt', text: 'name'
-        assert_selector 'dt', text: 'path'
-        assert_selector 'dt', text: 'type'
-        assert_selector 'dt', text: 'owner_id'
-        assert_selector 'dt', text: 'description'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'name'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'path'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'type'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'owner_id'
+        assert_selector 'span[data-test-item-selector="key"]', text: 'description'
 
-        assert_selector 'dd', text: 'Group 1'
-        assert_selector 'dd', text: 'group-1'
-        assert_selector 'dd', text: 'Group'
-        assert_selector 'dd', text: @group.owner.id
-        assert_selector 'dd', text: 'Group 1 description'
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Group 1'
+        assert_selector 'span[data-test-item-selector="value"]', text: 'group-1'
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Group'
+        assert_selector 'span[data-test-item-selector="value"]', text: @group.owner.id
+        assert_selector 'span[data-test-item-selector="value"]', text: 'Group 1 description'
       end
     end
   end
