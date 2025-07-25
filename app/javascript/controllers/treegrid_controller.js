@@ -20,7 +20,6 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    console.log("keydown");
     if (event.key === "ArrowDown" && !event.ctrlKey && !event.shiftKey) {
       this.#moveByRow(+1);
     } else if (event.key === "ArrowUp" && !event.ctrlKey && !event.shiftKey) {
