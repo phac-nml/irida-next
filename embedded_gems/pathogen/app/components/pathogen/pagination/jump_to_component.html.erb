@@ -1,0 +1,20 @@
+<%# Jump to page component %>
+<div class="flex items-center space-x-2">
+  <label for="jump-to-page" class="<%= info_text_classes %>">
+    <%= t('.jump_to_page') %>
+  </label>
+  <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: true } do %>
+    <%= hidden_field_tag :limit, pagy.vars[:items] %>
+    <%= number_field_tag :page,
+          pagy.page,
+          id: "jump-to-page",
+          min: 1,
+          max: pagy.pages,
+          class: input_classes,
+          onchange: "this.form.requestSubmit()",
+          aria_label: t('.jump_to_page_aria_label') %>
+    <span class="<%= info_text_classes %>">
+      <%= t('.of_pages', total: pagy.pages) %>
+    </span>
+  <% end %>
+</div>

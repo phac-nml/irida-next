@@ -6,134 +6,32 @@
       "aria-label": aria_label,
       "aria-live": aria_live
     ) do %>
-  <div class="flex flex-col items-center space-y-4">
+  <div class="flex flex-col items-center space-y-4 mt-4">
     <%# Navigation and page size selector %>
     <% if pagy.pages > 1 %>
       <div class="flex flex-wrap items-center justify-center gap-4">
-        <%# Pagination bar %>
-        <nav class="pagy nav" aria-label="<%= navigation_aria_label %>">
-          <ul class="inline-flex h-11 text-base">
-            <%# Previous Page Link %>
-            <% if pagy.prev %>
-              <li>
-                <%= link_to t(".previous_page"),
-                url_for(
-                  params:
-                    request.query_parameters.merge(page: pagy.prev, limit: pagy.vars[:items]),
-                ),
-                class:
-                  "flex items-center justify-center rounded-md h-11 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50 mr-2",
-                data: {
-                  turbo_stream: "true",
-                } %>
-              </li>
-            <% end %>
-            <% pagy.series.each_with_index do |item, idx| %>
-              <% is_first = idx == 0 %>
-              <% is_last = idx == pagy.series.size - 1 %>
-              <% next_is_selected =
-                begin
-                  (pagy.series[idx + 1].to_i == pagy.page)
-                rescue StandardError
-                  false
-                end %>
-              <% prev_is_selected =
-                begin
-                  (pagy.series[idx - 1].to_i == pagy.page)
-                rescue StandardError
-                  false
-                end %>
-              <% prev_is_gap =
-                begin
-                  (pagy.series[idx - 1] == :gap)
-                rescue StandardError
-                  false
-                end %>
-              <li>
-                <% if (item.is_a?(Integer) || (item.is_a?(String) && item.to_i == pagy.page)) && item.to_i == pagy.page %>
-                  <span
-                    aria-current="page"
-                    class="<%= pagination_selected_classes(is_first: is_first, is_last: is_last) %>"
-                  >
-                    <%= item %>
-                  </span>
-                <% elsif item.is_a?(Integer) || (item.is_a?(String) && item.to_i != pagy.page) %>
-                  <%= link_to url_for(params: request.query_parameters.merge(page: item, limit: pagy.vars[:items])),
-                        class: pagination_link_classes(is_first: is_first, is_last: is_last, prev_is_gap: prev_is_gap, next_is_selected: next_is_selected),
-                        data: { turbo_stream: 'true' },
-                        aria_label: t('.go_to_page', page: item) do %>
-                    <%= item %>
-                  <% end %>
-                <% elsif item == :gap %>
-                  <% show_left = is_first || !prev_is_selected %>
-                  <% show_right = is_last || !next_is_selected %>
-                  <span
-                    class="<%= pagination_gap_classes(is_first: is_first, is_last: is_last, show_left: show_left, show_right: show_right) %>"
-                  >...</span>
-                <% end %>
-              </li>
-            <% end %>
-            <%# Next Page Link %>
-            <% if pagy.next %>
-              <li>
-                <%= link_to t(".next_page"),
-                url_for(
-                  params:
-                    request.query_parameters.merge(page: pagy.next, limit: pagy.vars[:items]),
-                ),
-                class:
-                  "flex items-center justify-center rounded-md h-11 ml-2 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50",
-                data: {
-                  turbo_stream: "true",
-                } %>
-              </li>
-            <% end %>
-          </ul>
-        </nav>
-
-        <%# Page size selector %>
-        <div class="flex items-center space-x-2">
-          <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: 'true' } do %>
-            <%= hidden_field_tag :page, 1 %>
-            <%= select_tag :limit,
-            options_for_select(page_sizes, pagy.vars[:items]),
-            id: "page-size-selector",
-            class: page_size_select_classes,
-            onchange: "this.form.requestSubmit()",
-            aria_label: t(".select_page_size") %>
-          <% end %>
-        </div>
+        <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+          pagy: pagy,
+          request: request,
+        ) %>
+        <%= render ::Pathogen::Pagination::PageSizeSelectComponent.new(
+          pagy: pagy,
+          page_sizes: page_sizes,
+          request: request,
+        ) %>
       </div>
     <% end %>
 
     <%# Info section %>
     <div class="flex flex-col items-center space-y-2">
-      <%# Page info %>
-      <div class="<%= info_text_classes %>">
-        <%= page_range_text %>
-      </div>
+      <%= render ::Pathogen::Pagination::PageInfoComponent.new(
+        pagy: pagy,
+        item_name: item_name,
+      ) %>
 
       <%# Jump to page (only in full mode) %>
       <% if mode == :full && pagy.pages > 1 %>
-        <div class="flex items-center space-x-2">
-          <label for="jump-to-page" class="<%= info_text_classes %>">
-            <%= t(".jump_to_page") %>
-          </label>
-          <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: 'true' } do %>
-            <%= hidden_field_tag :limit, pagy.vars[:items] %>
-            <%= number_field_tag :page,
-            pagy.page,
-            id: "jump-to-page",
-            min: 1,
-            max: pagy.pages,
-            class: page_number_input_classes,
-            onchange: "this.form.requestSubmit()",
-            aria_label: t(".jump_to_page_aria_label") %>
-            <span class="<%= info_text_classes %>">
-              <%= t(".of_pages", total: pagy.pages) %>
-            </span>
-          <% end %>
-        </div>
+        <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
       <% end %>
     </div>
   </div>

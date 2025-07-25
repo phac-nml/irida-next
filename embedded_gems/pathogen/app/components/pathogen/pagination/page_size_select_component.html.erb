@@ -1,0 +1,12 @@
+<%# Page size selector component %>
+<div class="flex items-center space-x-2">
+  <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: true } do %>
+    <%= hidden_field_tag :page, 1 %>
+    <%= select_tag :limit,
+          options_for_select(page_sizes, pagy.vars[:items]),
+          id: "page-size-selector",
+          class: select_classes,
+          onchange: "this.form.requestSubmit()",
+          aria_label: t('.select_page_size') %>
+  <% end %>
+</div>

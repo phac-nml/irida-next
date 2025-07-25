@@ -1,82 +1,81 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require_relative 'component_test_helper'
 
 module Pathogen
   module Pagination
     # Tests for the Pathogen::Pagination::Component
-    # This test suite covers various scenarios including rendering modes,
-    # page size selection, and edge cases.
+    # This test suite ensures the main component renders correctly with subcomponents
     class ComponentTest < ViewComponent::TestCase
-      def test_renders_simple_mode
-        pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
-        render_inline(Component.new(pagy: pagy, mode: :simple))
+      include ComponentTestHelper
 
-        assert_selector "nav[role='navigation']"
-        assert_selector "select[name='page-size']"
-        assert_selector "button[data-action*='previousPage']"
-        assert_selector "button[data-action*='nextPage']"
-        assert_no_selector "input[name='page']"
-        assert_no_selector "a[data-action*='goToPage']"
+      setup do
+        @request = mock_request
       end
 
-      def test_renders_full_mode
+      test 'renders in simple mode' do
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
-        render_inline(Component.new(pagy: pagy, mode: :full))
-
-        assert_selector "nav[role='navigation']"
-        assert_selector "select[name='page-size']"
-        assert_selector "button[data-action*='previousPage']"
-        assert_selector "button[data-action*='nextPage']"
-        assert_selector "input[name='page']"
-        assert_selector "a[data-action*='goToPage']"
+        
+        render_inline(Component.new(
+          pagy: pagy,
+          mode: :simple,
+          request: @request
+        ))
+        
+        assert_selector("nav[role='navigation']")
+        assert_selector("select[name='limit']")
+        assert_selector("a[data-turbo-stream='true']", text: '1')
+        assert_selector("a[rel='next']", text: 'Next')
+        assert_no_selector("input[name='page']")
       end
 
-      def test_does_not_render_with_zero_items
+      test 'renders in full mode' do
+        pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
+        
+        render_inline(Component.new(
+          pagy: pagy,
+          mode: :full,
+          request: @request
+        ))
+        
+        assert_selector("nav[role='navigation']")
+        assert_selector("select[name='limit']")
+        assert_selector("a[data-turbo-stream='true']", text: '1')
+        assert_selector("a[rel='next']", text: 'Next')
+        assert_selector("input[name='page']")
+      end
+
+      test 'does not render with zero items' do
         pagy = mock_pagy(count: 0, page: 1, pages: 0, items: 10)
-        render_inline(Component.new(pagy: pagy))
-
+        
+        render_inline(Component.new(
+          pagy: pagy,
+          request: @request
+        ))
+        
         assert_no_selector "nav[role='navigation']"
       end
 
-      def test_disables_previous_button_on_first_page
-        pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
-        render_inline(Component.new(pagy: pagy))
-
-        assert_selector "button[data-action*='previousPage'][disabled]"
-        assert_no_selector "button[data-action*='nextPage'][disabled]"
-      end
-
-      def test_disables_next_button_on_last_page
-        pagy = mock_pagy(count: 100, page: 10, pages: 10, items: 10)
-        render_inline(Component.new(pagy: pagy))
-
-        assert_no_selector "button[data-action*='previousPage'][disabled]"
-        assert_selector "button[data-action*='nextPage'][disabled]"
-      end
-
-      def test_renders_custom_page_sizes
+      test 'renders custom page sizes' do
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 20)
-        render_inline(Component.new(pagy: pagy, page_sizes: [20, 40, 60]))
-
-        assert_selector "select[name='page-size'] option", count: 3
-        assert_selector "select[name='page-size'] option[selected]", text: '20'
+        
+        render_inline(Component.new(
+          pagy: pagy,
+          page_sizes: [20, 40, 60],
+          request: @request
+        ))
+        
+        assert_selector("select[name='limit'] option[value='20']")
+        assert_selector("select[name='limit'] option[value='40']")
+        assert_selector("select[name='limit'] option[value='60']")
+        assert_selector("select[name='limit'] option[selected][value='20']")
       end
 
-      private
-
-      def mock_pagy(count:, page:, pages:, items:)
-        pagy = Minitest::Mock.new
-        pagy.expect :count, count
-        pagy.expect :page, page
-        pagy.expect :pages, pages
-        pagy.expect :items, items
-        pagy.expect :from, ((page - 1) * items) + 1
-        pagy.expect :to, [page * items, count].min
-        pagy.expect :prev, page > 1 ? page - 1 : nil
-        pagy.expect :next, page < pages ? page + 1 : nil
-        pagy.expect :series, (1..pages).to_a
-        pagy
+      test 'delegates class methods to PageLinksComponent' do
+        assert_respond_to Component, :pagination_link_classes
+        assert_respond_to Component, :pagination_selected_classes
+        assert_respond_to Component, :pagination_gap_classes
       end
     end
   end

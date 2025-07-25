@@ -1,0 +1,89 @@
+<%# Page links navigation component %>
+<nav class="pagy nav" aria-label="<%= t('.navigation_aria_label') %>">
+  <ul class="inline-flex h-11 text-base">
+    <%# Previous Page Link %>
+    <% if pagy.prev %>
+      <li>
+        <%= link_to t(".previous_page"),
+        page_url(pagy.prev),
+        class:
+          "flex items-center justify-center rounded-md h-11 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50 mr-2 focus:z-50 focus:relative focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+        data: {
+          turbo_stream: true,
+        } %>
+      </li>
+    <% end %>
+
+    <% pagy.series.each_with_index do |item, idx| %>
+      <% is_first = idx == 0 %>
+      <% is_last = idx == pagy.series.size - 1 %>
+      <% next_is_selected =
+        begin
+          (pagy.series[idx + 1].to_i == pagy.page)
+        rescue StandardError
+          false
+        end %>
+      <% prev_is_selected =
+        begin
+          (pagy.series[idx - 1].to_i == pagy.page)
+        rescue StandardError
+          false
+        end %>
+      <% prev_is_gap =
+        begin
+          (pagy.series[idx - 1] == :gap)
+        rescue StandardError
+          false
+        end %>
+
+      <li>
+        <% if (item.is_a?(Integer) || (item.is_a?(String) && item.to_i == pagy.page)) && item.to_i == pagy.page %>
+          <span
+            aria-current="page"
+            class="<%= pagination_selected_classes(is_first: is_first, is_last: is_last) %>"
+          >
+            <%= item %>
+          </span>
+        <% elsif item.is_a?(Integer) || (item.is_a?(String) && item.to_i != pagy.page) %>
+          <%= link_to page_url(item),
+                class: pagination_link_classes(
+                  is_first: is_first,
+                  is_last: is_last,
+                  prev_is_gap: prev_is_gap,
+                  next_is_selected: next_is_selected
+                ),
+                data: { turbo_stream: true },
+                aria_label: t('.go_to_page', page: item) do %>
+            <%= item %>
+          <% end %>
+        <% elsif item == :gap %>
+          <% show_left = is_first || !prev_is_selected %>
+          <% show_right = is_last || !next_is_selected %>
+          <span
+            class="<%= pagination_gap_classes(
+              is_first: is_first,
+              is_last: is_last,
+              show_left: show_left,
+              show_right: show_right
+            ) %>"
+          >
+            ...
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+
+    <%# Next Page Link %>
+    <% if pagy.next %>
+      <li>
+        <%= link_to t(".next_page"),
+        page_url(pagy.next),
+        class:
+          "flex items-center justify-center rounded-md h-11 ml-2 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50 focus:z-50 focus:relative focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+        data: {
+          turbo_stream: true,
+        } %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
