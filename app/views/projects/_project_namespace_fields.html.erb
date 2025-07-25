@@ -39,7 +39,8 @@ end %>
     <%== t(:"projects.create.name_help") %>
   </span>
 </div>
-<div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
+<fieldset class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4 border-0 p-0 m-0">
+  <legend class="sr-only"><%= t(:"projects.create.namespace_and_path") %></legend>
   <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
   <div class="form-field <%= 'invalid' if invalid_namespace %>">
     <% form_id = "namespace-select" %>
@@ -118,7 +119,7 @@ end %>
     </span>
 
   </div>
-</div>
+</fieldset>
 <% invalid_description = @project.namespace.errors.include?(:description) %>
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= builder.label :description %>
