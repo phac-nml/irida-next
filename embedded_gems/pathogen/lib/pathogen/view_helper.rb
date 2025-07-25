@@ -6,7 +6,8 @@ module Pathogen
     PATHOGEN_COMPONENT_HELPERS = {
       button: 'Pathogen::Button',
       icon: 'Pathogen::Icon',
-      radio_button: 'Pathogen::Form::RadioButton'
+      radio_button: 'Pathogen::Form::RadioButton',
+      pagination: 'Pathogen::Pagination::Component'
     }.freeze
 
     # Define helper methods for components

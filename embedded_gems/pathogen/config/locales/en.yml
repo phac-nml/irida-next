@@ -1,0 +1,28 @@
+---
+en:
+  pathogen:
+    pagination:
+      component:
+        aria_label: Pagination
+        current_page: Page %{page} of %{pages}
+      jump_to_component:
+        jump_to_page: Jump to page
+        jump_to_page_aria_label: Enter page number, currently on page %{current} of %{total}
+        jump_to_page_title: Enter a page number between %{min} and %{max}
+        of_pages: of %{total} pages
+        go: Go to page
+        invalid_page_number: Invalid page number. Please enter a number between %{min} and %{max}.
+        navigated_to_page: Navigated to page %{page} of %{total}
+      page_info_component:
+        page_range: Showing %{from} to %{to} of %{count} %{item_name}
+      page_links_component:
+        go_to_page: Go to page %{page}
+        navigation_aria_label: Page navigation
+        next_page: Next page
+        previous_page: Previous page
+      page_size_select_component:
+        select_page_size: Select number of items per page
+        items_per_page: Items per page
+        page_size_selector_aria_label: "%{size} %{item_name} per page"
+        select_page_size_with_context: "Select page size. Currently showing %{current} %{item_name} per page"
+        page_size_description: "Changing this will reload the page with the selected number of items"

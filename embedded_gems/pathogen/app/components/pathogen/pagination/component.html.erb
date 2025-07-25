@@ -1,0 +1,38 @@
+<%# Main pagination container %>
+<%= render Pathogen::BaseComponent.new(
+      tag: :nav,
+      **system_arguments,
+      role: "navigation",
+      "aria-label": aria_label,
+      "aria-live": aria_live
+    ) do %>
+  <div class="flex flex-col items-center space-y-4 mt-4">
+    <%# Navigation and page size selector %>
+    <% if pagy.pages > 1 %>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+          pagy: pagy,
+          request: request,
+        ) %>
+        <%= render ::Pathogen::Pagination::PageSizeSelectComponent.new(
+          pagy: pagy,
+          page_sizes: page_sizes,
+          request: request,
+        ) %>
+      </div>
+    <% end %>
+
+    <%# Info section %>
+    <div class="flex flex-col items-center space-y-2">
+      <%= render ::Pathogen::Pagination::PageInfoComponent.new(
+        pagy: pagy,
+        item_name: item_name,
+      ) %>
+
+      <%# Jump to page (only in full mode) %>
+      <% if mode == :full && pagy.pages > 1 %>
+        <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
