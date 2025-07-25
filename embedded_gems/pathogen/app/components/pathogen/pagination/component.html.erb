@@ -16,13 +16,13 @@
             <%# Previous Page Link %>
             <% if pagy.prev %>
               <li>
-                <%= link_to t(".previous"),
+                <%= link_to t(".previous_page"),
                 url_for(
                   params:
                     request.query_parameters.merge(page: pagy.prev, limit: pagy.vars[:items]),
                 ),
                 class:
-                  "flex items-center justify-center rounded-l-md border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50",
+                  "flex items-center justify-center rounded-md h-11 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50 mr-2",
                 data: {
                   turbo_stream: "true",
                 } %>
@@ -76,13 +76,13 @@
             <%# Next Page Link %>
             <% if pagy.next %>
               <li>
-                <%= link_to t(".next"),
+                <%= link_to t(".next_page"),
                 url_for(
                   params:
                     request.query_parameters.merge(page: pagy.next, limit: pagy.vars[:items]),
                 ),
                 class:
-                  "flex items-center justify-center rounded-r-md border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50",
+                  "flex items-center justify-center rounded-md h-11 ml-2 border border-slate-200 bg-white px-4 py-2 text-slate-600 hover:bg-slate-50",
                 data: {
                   turbo_stream: "true",
                 } %>
