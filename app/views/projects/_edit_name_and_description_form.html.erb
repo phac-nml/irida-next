@@ -12,7 +12,8 @@
                              invalid_name ? builder.field_id(:name, "error") : nil,
                            invalid: invalid_name,
                            required: true,
-                         } %>
+                         },
+                         autofocus: invalid_name ? true : false %>
       <% if invalid_name %>
         <%= render "shared/form/field_errors",
         id: builder.field_id(:name, "error"),
@@ -25,6 +26,7 @@
       <%= builder.text_area :description,
                         {
                           :class => "form-control",
+                          :autofocus => invalid_description ? true : false,
                           "aria-label" => t(:"projects.new.description"),
                           "aria-describedby" =>
                             (
