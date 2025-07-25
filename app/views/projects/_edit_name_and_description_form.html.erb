@@ -1,13 +1,24 @@
-<%= form_with(model: project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
+<%= form_with(model: project, url: namespace_project_path, method: :patch, html: { novalidate: true }, class: "grid gap-4") do |form| %>
+  <%= render partial: "shared/form/required_field_legend" %>
   <%= form.fields_for :namespace, include_id: false do |builder| %>
     <% invalid_name = project.namespace.errors.include?(:name) %>
     <div class="form-field <%= 'invalid' if invalid_name %>">
-      <%= builder.label :name %>
+      <%= builder.label :name, data: { required: true } %>
       <%= builder.text_field :name,
                          required: true,
-                         placeholder: t(:"projects.new.placeholder") %>
-      <%= render "shared/form/field_errors",
-      errors: project.namespace.errors.full_messages_for(:name) %>
+                         placeholder: t(:"projects.new.placeholder"),
+                         aria: {
+                           describedby:
+                             invalid_name ? builder.field_id(:name, "error") : nil,
+                           invalid: invalid_name,
+                           required: true,
+                         },
+                         autofocus: invalid_name ? true : false %>
+      <% if invalid_name %>
+        <%= render "shared/form/field_errors",
+        id: builder.field_id(:name, "error"),
+        errors: project.namespace.errors.full_messages_for(:name) %>
+      <% end %>
     </div>
     <% invalid_description = project.namespace.errors.include?(:description) %>
     <div class="form-field <%= 'invalid' if invalid_description %>">
@@ -15,10 +26,22 @@
       <%= builder.text_area :description,
                         {
                           :class => "form-control",
+                          :autofocus => invalid_description ? true : false,
                           "aria-label" => t(:"projects.new.description"),
+                          "aria-describedby" =>
+                            (
+                              if invalid_description
+                                builder.field_id(:description, "error")
+                              else
+                                nil
+                              end
+                            ),
                         } %>
-      <%= render "shared/form/field_errors",
-      errors: project.namespace.errors.full_messages_for(:description) %>
+      <% if invalid_description %>
+        <%= render "shared/form/field_errors",
+        id: builder.field_id(:description, "error"),
+        errors: project.namespace.errors.full_messages_for(:description) %>
+      <% end %>
     </div>
     <div>
       <%= form.submit t("projects.edit.general.submit"), class: "button button-default" %>
