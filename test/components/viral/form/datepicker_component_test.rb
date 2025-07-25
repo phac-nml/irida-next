@@ -23,7 +23,7 @@ module Viral
         render_preview(:with_help_text)
         assert_no_selector 'label'
         assert_selector 'input[type="text"]', count: 1
-        assert_selector 'p.text-sm', text: 'Select a date in the future'
+        assert_selector 'span.text-sm', text: 'Select a date in the future'
       end
 
       test 'with placeholder' do

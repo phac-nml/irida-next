@@ -17,7 +17,7 @@ module Projects
       visit namespace_project_automated_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       assert_selector 'tr', count: 3 + header_row_count
     end
@@ -27,7 +27,7 @@ module Projects
       visit namespace_project_automated_workflow_executions_path(@namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       assert_selector 'tr', count: 0
 
@@ -42,7 +42,7 @@ module Projects
       visit namespace_project_automated_workflow_executions_path(@namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       assert_selector(
         'button',
@@ -79,7 +79,7 @@ module Projects
     test 'can delete an automated workflow execution for a project' do
       visit namespace_project_automated_workflow_executions_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
         click_button I18n.t(:'projects.automated_workflow_executions.actions.delete_button')
@@ -96,7 +96,7 @@ module Projects
     test 'can edit an automated workflow execution for a project' do
       visit namespace_project_automated_workflow_executions_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
         click_button I18n.t(:'projects.automated_workflow_executions.actions.edit_button')

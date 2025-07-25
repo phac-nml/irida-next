@@ -1553,6 +1553,13 @@ fr:
         subtitle: Configurez des comptes de bot pour pouvoir effectuer des actions en utilisant l’API qui ne peuvent pas être attribuées à un utilisateur individuel.
         title: Comptes de bot
     create:
+      description:
+        aria_label: Project description, optional
+      description_help: Description can have a maximum 255 characters
+      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
+      namespace_and_path: Namespace in which to create project and the path to the project which is used in the URL
+      namespace_help: The namespace in which the project will be created
+      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       success: Le projet %{project_name} a été créé avec succès
     destroy:
       success: Le projet %{project_name} a été supprimé avec succès
@@ -2100,6 +2107,8 @@ fr:
     alert:
       list:
         danger: Danger
+    form:
+      required_field: indicates required field
     loading:
       samples_list_skeleton:
         loading: Chargement...

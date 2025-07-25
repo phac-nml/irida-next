@@ -28,14 +28,14 @@
       <!-- Subtitle -->
       <% if subtitle.present? %>
         <div class="<%= icon? ? 'pl-12' : '' %>">
-          <p
+          <span
             class="
               text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed break-words
             "
             id="page-subtitle"
           >
             <%= subtitle %>
-          </p>
+          </span>
         </div>
       <% end %>
       <!-- PUID (Mobile: Last element, Desktop: After subtitle) -->

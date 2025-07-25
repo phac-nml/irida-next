@@ -8,6 +8,8 @@
   )
 end %>
 
+<%= render partial: "shared/form/required_field_legend" %>
+
 <% invalid_name = group.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= form.label :name, data: { required: true } %>
@@ -35,9 +37,9 @@ end %>
     id: form.field_id(:name, "error"),
     errors: group.errors.full_messages_for(:name)
   end %>
-  <p id="<%= form.field_id(:name, "hint") %>" class="field-hint">
+  <span id="<%= form.field_id(:name, "hint") %>" class="field-hint">
     <%== t(:"groups.create.name_help") %>
-  </p>
+  </span>
 </div>
 
 <% if group.new_record? %>
@@ -95,9 +97,9 @@ end %>
                           required: true,
                         },
                         autofocus: invalid_path %>
-        <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
+        <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
           <%= t(:"groups.create.path_help") %>
-        </p>
+        </span>
         <%= if invalid_path
           render "shared/form/field_errors",
           id: form.field_id(:path, "error"),
@@ -129,9 +131,9 @@ end %>
         id: form.field_id(:path, "error"),
         errors: group.errors.full_messages_for(:path)
       end %>
-      <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
+      <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
         <%= t(:"groups.create.path_help") %>
-      </p>
+      </span>
     </div>
   <% end %>
 <% end %>

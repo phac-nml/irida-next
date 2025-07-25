@@ -28,7 +28,7 @@ module Groups
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       assert_selector '#workflow-executions-table table tbody tr', count: 11
     end
@@ -40,7 +40,7 @@ module Groups
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
       assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
@@ -321,7 +321,8 @@ module Groups
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
       assert_selector 'dt', text: dt_value
 
-      assert_selector 'button', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      assert_selector 'button', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale),
+                                count: 1
       click_button I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
@@ -345,7 +346,7 @@ module Groups
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11

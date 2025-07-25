@@ -17,7 +17,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       within('table thead tr') do
         assert_selector 'th', count: 6
@@ -58,7 +58,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_no_selector 'table'
 
@@ -147,7 +147,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
@@ -202,7 +202,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
@@ -245,7 +245,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
@@ -288,7 +288,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
@@ -376,7 +376,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
@@ -442,7 +442,7 @@ module Groups
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+      assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
       assert_no_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button')
     end

@@ -1,24 +1,55 @@
+<%= if @project.namespace.errors.any?
+  viral_alert(
+    type: "alert",
+    message: I18n.t(:"general.form.error_notification"),
+    aria: {
+      live: "assertive",
+    },
+  )
+end %>
+
+<%= render partial: "shared/form/required_field_legend" %>
+
 <% invalid_name = @project.namespace.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
-  <%= builder.label :name %>
+  <%= builder.label :name, data: { required: true } %>
   <%= builder.text_field :name,
                      data: {
                        "slugify-target": "name",
                        action: "input->slugify#nameChanged",
                      },
                      required: true,
-                     placeholder: t(:"projects.new.placeholder") %>
-  <%= render "shared/form/field_errors",
-  errors: @project.namespace.errors.full_messages_for(:name) %>
+                     placeholder: t(:"projects.new.placeholder"),
+                     aria: {
+                       describedby: [
+                         invalid_name ? builder.field_id(:name, "error") : nil,
+                         builder.field_id(:name, "hint"),
+                       ].join(" "),
+                       invalid: invalid_name,
+                       required: true,
+                     },
+                     autofocus: invalid_name %>
+
+  <% if invalid_name %>
+    <%= render "shared/form/field_errors",
+    id: builder.field_id(:name, "error"),
+    errors: @project.namespace.errors.full_messages_for(:name) %>
+  <% end %>
+  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint">
+    <%== t(:"projects.create.name_help") %>
+  </span>
 </div>
-<div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
-  <div>
+<fieldset class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4 border-0 p-0 m-0">
+  <legend class="sr-only"><%= t(:"projects.create.namespace_and_path") %></legend>
+  <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
+  <div class="form-field <%= 'invalid' if invalid_namespace %>">
     <% form_id = "namespace-select" %>
     <label
       for="<%= form_id %>"
       class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
     >
       <%= t("activerecord.attributes.namespaces/project_namespace.parent_id") %>
+      <span class="text-red-500">*</span>
     </label>
     <div class="flex items-center">
       <% selected_value =
@@ -48,29 +79,71 @@
       <% end %>
       <div class="ml-4 dark:text-slate-200">/</div>
     </div>
+    <% if invalid_namespace %>
+      <%= render "shared/form/field_errors",
+      id: builder.field_id(:namespace, "error"),
+      errors: @project.namespace.errors.messages.values.flatten %>
+    <% end %>
+
+    <span id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
+      <%= t(:"projects.create.namespace_help") %>
+    </span>
   </div>
+
   <% invalid_path = @project.namespace.errors.include?(:path) %>
   <div class="form-field <%= 'invalid' if invalid_path %>">
-    <%= builder.label :path %>
+    <%= builder.label :path, data: { required: true } %>
     <%= builder.text_field :path,
                        data: {
                          "slugify-target": "path",
                        },
                        pattern: Irida::PathRegex::PATH_REGEX_STR,
                        required: true,
-                       title: t(:"projects.new.help") %>
-    <%= render "shared/form/field_errors",
-    errors: @project.namespace.errors.full_messages_for(:path) %>
+                       title: t(:"projects.new.help"),
+                       aria: {
+                         describedby: [
+                           invalid_path ? builder.field_id(:path, "error") : nil,
+                           builder.field_id(:path, "hint"),
+                         ].join(" "),
+                         invalid: invalid_path,
+                         required: true,
+                       },
+                       autofocus: invalid_path %>
+
+    <% if invalid_path %>
+      <%= render "shared/form/field_errors",
+      errors: @project.namespace.errors.full_messages_for(:path) %>
+    <% end %>
+    <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
+      <%= t(:"projects.create.path_help") %>
+    </span>
+
   </div>
-</div>
+</fieldset>
 <% invalid_description = @project.namespace.errors.include?(:description) %>
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= builder.label :description %>
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
-                      "aria-label" => "Project description, not required",
+                      "aria-label" =>
+                        t(:"projects.create.description.aria_label"),
+                      "aria-described-by" =>
+                        (
+                          if invalid_description
+                            builder.field_id(:description, "error")
+                          else
+                            nil
+                          end
+                        ),
+                      "aria-invalid" => invalid_description,
+                      :autofocus => invalid_description,
                     } %>
-  <%= render "shared/form/field_errors",
-  errors: @project.namespace.errors.full_messages_for(:description) %>
+  <% if invalid_description %>
+    <%= render "shared/form/field_errors",
+    errors: @project.namespace.errors.full_messages_for(:description) %>
+  <% end %>
+  <span id="<%= builder.field_id(:description, "hint") %>" class="field-hint">
+    <%= t(:"projects.create.description_help") %>
+  </span>
 </div>

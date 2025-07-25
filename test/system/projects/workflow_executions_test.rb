@@ -30,7 +30,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
     end
@@ -45,7 +45,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
       assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
@@ -134,7 +134,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -165,7 +165,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -182,7 +182,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -197,7 +197,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
       click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
@@ -244,7 +244,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -267,7 +267,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -284,7 +284,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -307,7 +307,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -324,7 +324,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -368,7 +368,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
       click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
@@ -465,7 +465,8 @@ module Projects
       ### VERIFY END ###
 
       ### ACTIONS START ###
-      assert_selector 'button', text: I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      assert_selector 'button', text: I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale),
+                                count: 1
       click_button I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
