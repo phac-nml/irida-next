@@ -131,7 +131,7 @@ module WorkflowExecutions
     end
 
     def samplesheet_file
-      Tempfile.new(['samplesheet', '.csv']).tap do |file|
+      Tempfile.create(['samplesheet', '.csv']).tap do |file|
         CSV.open(file, 'wb') do |csv|
           csv << @samplesheet_headers
 
