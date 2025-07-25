@@ -1,20 +1,68 @@
 <%# Jump to page component %>
-<div class="flex items-center space-x-2">
-  <label for="jump-to-page" class="<%= info_text_classes %>">
-    <%= t('.jump_to_page') %>
-  </label>
-  <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: true } do %>
+<div
+  class="flex items-center space-x-2"
+  role="region"
+  aria-labelledby="jump-to-page-label"
+  data-controller="pathogen--jump-to-page"
+  data-error-message="<%= t('.invalid_page_number', min: 1, max: pagy.pages) %>"
+  data-navigation-message="<%= t('.navigated_to_page', page: '%{page}', total: '%{total}') %>"
+>
+  <%= form_tag request.path, method: :get, class: "inline", data: {
+        turbo_stream: true,
+        action: "turbo:submit-end->pathogen--jump-to-page#announcePageChange"
+      } do %>
     <%= hidden_field_tag :limit, pagy.vars[:items] %>
+
+    <label
+      for="jump-to-page"
+      id="jump-to-page-label"
+      class="<%= info_text_classes %>"
+    >
+      <%= t(".jump_to_page") %>
+    </label>
+
     <%= number_field_tag :page,
-          pagy.page,
-          id: "jump-to-page",
-          min: 1,
-          max: pagy.pages,
-          class: input_classes,
-          onchange: "this.form.requestSubmit()",
-          aria_label: t('.jump_to_page_aria_label') %>
-    <span class="<%= info_text_classes %>">
-      <%= t('.of_pages', total: pagy.pages) %>
+    pagy.page,
+    id: "jump-to-page",
+    min: 1,
+    max: pagy.pages,
+    step: 1,
+    class: input_classes,
+    required: true,
+    "aria-describedby": "jump-to-page-description jump-to-page-error",
+    "aria-label":
+      t(".jump_to_page_aria_label", current: pagy.page, total: pagy.pages),
+    "aria-invalid": "false",
+    "data-pathogen--jump-to-page-target": "input",
+    "data-action":
+      "input->pathogen--jump-to-page#validateInput change->pathogen--jump-to-page#submitForm keydown.enter->pathogen--jump-to-page#submitForm",
+    title: t(".jump_to_page_title", min: 1, max: pagy.pages) %>
+
+    <span id="jump-to-page-description" class="<%= info_text_classes %>">
+      <%= t(".of_pages", total: pagy.pages) %>
     </span>
+    <!-- Error message container -->
+    <div
+      id="jump-to-page-error"
+      class="text-sm text-red-600 dark:text-red-400 hidden"
+      role="alert"
+      aria-live="polite"
+      data-pathogen--jump-to-page-target="error"
+    >
+    </div>
+    <!-- Hidden submit button for accessibility -->
+    <%= submit_tag t(".go"),
+    class: "sr-only",
+    tabindex: "-1",
+    "data-pathogen--jump-to-page-target": "submit" %>
   <% end %>
+  <!-- Live region for page change announcements -->
+  <div
+    aria-live="polite"
+    aria-atomic="true"
+    class="sr-only"
+    id="jump-to-page-announcement"
+    data-pathogen--jump-to-page-target="announcement"
+  >
+  </div>
 </div>

@@ -7,9 +7,13 @@ fr:
         current_page: Page %{page} of %{pages}
         page_size: "%{size} %{item_name} per page"
       jump_to_component:
-        jump_to_page: Jump to page
-        jump_to_page_aria_label: Enter page number
-        of_pages: of %{total} pages
+        jump_to_page: Aller à la page
+        jump_to_page_aria_label: Entrez le numéro de page, actuellement sur la page %{current} de %{total}
+        jump_to_page_title: Entrez un numéro de page entre %{min} et %{max}
+        of_pages: de %{total} pages
+        go: Aller à la page
+        invalid_page_number: Numéro de page invalide. Veuillez entrer un nombre entre %{min} et %{max}.
+        navigated_to_page: Navigué vers la page %{page} de %{total}
       page_info_component:
         page_range: Showing %{from} to %{to} of %{count} %{item_name}
       page_links_component:

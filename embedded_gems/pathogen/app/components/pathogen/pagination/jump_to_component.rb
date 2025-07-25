@@ -35,10 +35,18 @@ module Pathogen
       # @return [String] Classes for the page number input (jump to page)
       def input_classes
         class_names(
-          'w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700',
+          'w-20 rounded-lg border bg-white px-3 py-2 text-sm text-slate-700',
           'focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500',
-          'dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300',
-          'dark:focus:border-primary-500 dark:focus:ring-primary-500'
+          'dark:bg-slate-800 dark:text-slate-300',
+          'dark:focus:border-primary-500 dark:focus:ring-primary-500',
+          'transition-colors duration-200',
+          # Default border colors (will be overridden by JS for validation states)
+          'border-slate-300 dark:border-slate-600',
+          # Invalid state styling (applied by JS)
+          'invalid:border-red-500 invalid:dark:border-red-500',
+          # Focus states for error conditions
+          'aria-[invalid=true]:border-red-500 aria-[invalid=true]:dark:border-red-500',
+          'aria-[invalid=true]:focus:border-red-600 aria-[invalid=true]:focus:ring-red-500'
         )
       end
 

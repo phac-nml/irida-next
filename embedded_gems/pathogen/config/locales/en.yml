@@ -7,8 +7,12 @@ en:
         current_page: Page %{page} of %{pages}
       jump_to_component:
         jump_to_page: Jump to page
-        jump_to_page_aria_label: Enter page number
+        jump_to_page_aria_label: Enter page number, currently on page %{current} of %{total}
+        jump_to_page_title: Enter a page number between %{min} and %{max}
         of_pages: of %{total} pages
+        go: Go to page
+        invalid_page_number: Invalid page number. Please enter a number between %{min} and %{max}.
+        navigated_to_page: Navigated to page %{page} of %{total}
       page_info_component:
         page_range: Showing %{from} to %{to} of %{count} %{item_name}
       page_links_component:
