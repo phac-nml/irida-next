@@ -17,12 +17,14 @@ module Pathogen
       # @param pagy [Pagy] The pagy instance for pagination
       # @param page_sizes [Array<Integer>] Available page sizes
       # @param request [ActionDispatch::Request] The current request object
-      def initialize(pagy:, page_sizes:, request:, **system_arguments)
+      # @param item_name [String] Name of the items being paginated (e.g., "projects", "users")
+      def initialize(pagy:, page_sizes:, request:, item_name: 'items', **system_arguments)
         super(**system_arguments)
 
         @pagy = pagy
         @page_sizes = page_sizes
         @request = request
+        @item_name = item_name
         @system_arguments = system_arguments
       end
 
@@ -33,7 +35,7 @@ module Pathogen
 
       private
 
-      attr_reader :pagy, :page_sizes, :request, :system_arguments
+      attr_reader :pagy, :page_sizes, :request, :item_name, :system_arguments
 
       # @return [String] Classes for the page size select dropdown
       def select_classes

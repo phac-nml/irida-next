@@ -2,11 +2,30 @@
 <div class="flex items-center space-x-2">
   <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: true } do %>
     <%= hidden_field_tag :page, 1 %>
+    <label for="page-size-selector" class="text-sm">
+      <%= t(".items_per_page") %>
+    </label>
     <%= select_tag :limit,
-          options_for_select(page_sizes, pagy.vars[:items]),
-          id: "page-size-selector",
-          class: select_classes,
-          onchange: "this.form.requestSubmit()",
-          aria_label: t('.select_page_size') %>
+    options_for_select(page_sizes.map { |size| [size, size] }, pagy.vars[:items]),
+    id: "page-size-selector",
+    class: select_classes,
+    onchange: "this.form.requestSubmit()",
+    "aria-describedby": "page-size-description",
+    "aria-label":
+      t(
+        ".select_page_size_with_context",
+        current: pagy.vars[:items],
+        item_name: defined?(item_name) ? item_name : "items",
+      ) %>
+    <div id="page-size-description" class="sr-only">
+      <%= t(".page_size_description", current: pagy.vars[:items]) %>
+    </div>
   <% end %>
+  <!-- Live region for announcements -->
+  <div
+    aria-live="polite"
+    aria-atomic="true"
+    class="sr-only"
+    id="page-size-announcement"
+  ></div>
 </div>

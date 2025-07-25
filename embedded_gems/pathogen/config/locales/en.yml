@@ -5,8 +5,6 @@ en:
       component:
         aria_label: Pagination
         current_page: Page %{page} of %{pages}
-        items_per_page: Items per page
-        page_size: "%{size} %{item_name} per page"
       jump_to_component:
         jump_to_page: Jump to page
         jump_to_page_aria_label: Enter page number
@@ -20,3 +18,7 @@ en:
         previous_page: Previous page
       page_size_select_component:
         select_page_size: Select number of items per page
+        items_per_page: Items per page
+        page_size_selector_aria_label: "%{size} %{item_name} per page"
+        select_page_size_with_context: "Select page size. Currently showing %{current} %{item_name} per page"
+        page_size_description: "Changing this will reload the page with the selected number of items"
