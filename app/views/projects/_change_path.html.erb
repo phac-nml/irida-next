@@ -1,15 +1,16 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
   <% card.with_section do %>
-    <%= form_with(model: @project, url: namespace_project_path, method: :patch) do |form| %>
+    <%= form_with(model: @project, url: namespace_project_path, method: :patch, html: {novalidate: true}) do |form| %>
       <%= form.fields_for :namespace, include_id: false do |builder| %>
         <div class="grid gap-4">
           <p class="text-slate-600 dark:text-slate-400">
             <%= t(:"projects.edit.advanced.path.description") %>
           </p>
+          <%= render partial: "shared/form/required_field_legend" %>
           <% invalid_path = @project.namespace.errors.include?(:path) %>
           <div class="form-field prefixed <%= 'invalid' if invalid_path %>">
-            <%= builder.label :path %>
+            <%= builder.label :path, data: { required: true } %>
             <div class="flex whitespace-nowrap items-center">
               <div
                 class="
@@ -29,9 +30,16 @@
                                  pattern: Irida::PathRegex::PATH_REGEX_STR,
                                  required: true,
                                  title: t(:"projects.edit.advanced.path.help"),
-                                 class: "prefixed" %>
+                                 class: "prefixed",
+                                 aria: {
+                                   describedby:
+                                     invalid_path ? builder.field_id(:path, "error") : nil,
+                                   invalid: invalid_path,
+                                   required: true,
+                                 } %>
             </div>
             <%= render "shared/form/field_errors",
+            id: builder.field_id(:path, "error"),
             errors: @project.namespace.errors.full_messages_for(:path) %>
           </div>
           <div>
