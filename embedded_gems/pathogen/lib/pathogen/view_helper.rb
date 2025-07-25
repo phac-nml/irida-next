@@ -4,9 +4,12 @@ module Pathogen
   # ViewHelper for pathogen component helpers
   module ViewHelper
     PATHOGEN_COMPONENT_HELPERS = {
-      icon: 'Pathogen::Icon'
+      button: 'Pathogen::Button',
+      icon: 'Pathogen::Icon',
+      radio_button: 'Pathogen::Form::RadioButton'
     }.freeze
 
+    # Define helper methods for components
     PATHOGEN_COMPONENT_HELPERS.each do |name, component|
       define_method "pathogen_#{name}" do |*args, **kwargs, &block|
         render component.constantize.new(*args, **kwargs), &block

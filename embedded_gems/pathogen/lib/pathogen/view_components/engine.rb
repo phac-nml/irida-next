@@ -3,6 +3,9 @@
 require 'rails/engine'
 require 'view_component'
 require 'view_component/version'
+require_relative '../icon_helper'
+require_relative '../view_helper'
+require_relative '../form_helper'
 
 module Pathogen
   module ViewComponents
@@ -16,31 +19,20 @@ module Pathogen
 
       config.eager_load_paths = %W[
         #{root}/app/components
-        #{root}/app/helpers
         #{root}/app/lib
       ]
 
-      config._view_components = ActiveSupport::OrderedOptions.new
+      # Set options for ViewComponent
+      config.view_component.raise_on_invalid_options = false
+      config.view_component.silence_deprecations = false
+      config.view_component.validate_class_names = !Rails.env.production?
+      config.view_component.raise_on_invalid_aria = !Rails.env.production?
 
-      config._view_components.raise_on_invalid_options = false
-      config._view_components.silence_deprecations = false
-      config._view_components.validate_class_names = !Rails.env.production?
-      config._view_components.raise_on_invalide_aria = false
-
-      initializer '_view_components.assets' do |app|
-        if app.config.respond_to?(:assets)
-          app.config.assets.precompile += %w[
-            _view_components
-          ]
-        end
-      end
-
-      initializer 'pathogen.view_components' do |app|
-        app.config.to_prepare do
-          ActiveSupport.on_load(:action_view) do
-            include Pathogen::IconHelper
-            include Pathogen::ViewHelper
-          end
+      initializer 'pathogen.view_components' do
+        ActiveSupport.on_load(:action_view) do
+          include Pathogen::IconHelper
+          include Pathogen::ViewHelper
+          include Pathogen::FormHelper
         end
       end
     end

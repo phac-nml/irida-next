@@ -2251,6 +2251,14 @@ en:
       last_word_connector: ", and "
       two_words_connector: " and "
       words_connector: ", "
+  theme:
+    announcements:
+      changed: Theme changed to %{theme} mode
+      error: Failed to change theme. Please try again.
+    modes:
+      dark: Dark
+      light: Light
+      system: System
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
