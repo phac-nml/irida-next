@@ -7,14 +7,39 @@
       <%= t :"profiles.passwords.update.subtitle" %>
     </p>
   </div>
-  <%= form_with(model: user, url: profile_password_path, method: :patch) do |form| %>
+  <%= form_with(model: user, url: profile_password_path, method: :patch, html: {class: "space-y-4", novalidate: true}) do |form| %>
+
+    <%= if user.errors.any?
+      viral_alert(
+        type: "alert",
+        message: I18n.t(:"general.form.error_notification"),
+        aria: {
+          live: "assertive",
+        },
+      )
+    end %>
+
     <% invalid_current = user.errors.include?(:current_password) %>
     <div class="form-field <%= 'invalid' if invalid_current %>">
       <%= form.label :current_password %>
       <%= form.password_field :current_password,
                           required: true,
+                          aria: {
+                            describedby: [
+                              (
+                                if invalid_current
+                                  form.field_id(:current_password, "error")
+                                else
+                                  nil
+                                end
+                              ),
+                              form.field_id(:current_password, "hint"),
+                            ].join(" "),
+                            invalid: invalid_current,
+                            required: true,
+                          },
                           autocomplete: "current-password" %>
-      <p class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
+      <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
       <%= render "shared/form/field_errors",
       errors: user.errors.full_messages_for(:current_password) %>
     </div>
@@ -22,7 +47,31 @@
     <% invalid_password = user.errors.include?(:password) %>
     <div class="form-field <%= 'invalid' if invalid_password %>">
       <%= form.label :password %>
-      <%= form.password_field :password, required: true, autocomplete: "new-password" %>
+      <%= form.password_field :password,
+                          required: true,
+                          aria: {
+                            describedby: [
+                              (
+                                if invalid_password
+                                  form.field_id(:password, "error")
+                                else
+                                  nil
+                                end
+                              ),
+                              form.field_id(:password, "hint"),
+                            ].join(" "),
+                            invalid: invalid_password,
+                            required: true,
+                          },
+                          autocomplete: "new-password" %>
+      <% if @minimum_password_length %>
+        <p id="<%= form.field_id(:password, "hint") %>" class="field-hint">
+          <%== t(
+            "devise.passwords.edit.password_hint",
+            minimum_password_length: @minimum_password_length,
+          ) %>
+        </p>
+      <% end %>
       <%= render "shared/form/field_errors",
       errors: user.errors.full_messages_for(:password) %>
     </div>
@@ -32,6 +81,18 @@
       <%= form.label :password_confirmation %>
       <%= form.password_field :password_confirmation,
                           required: true,
+                          aria: {
+                            describedby:
+                              (
+                                if invalid_password_confirmation
+                                  form.field_id(:password_confirmation, "error")
+                                else
+                                  nil
+                                end
+                              ),
+                            invalid: invalid_password_confirmation,
+                            required: true,
+                          },
                           autocomplete: "new-password" %>
       <%= render "shared/form/field_errors",
       errors: user.errors.full_messages_for(:password_confirmation) %>

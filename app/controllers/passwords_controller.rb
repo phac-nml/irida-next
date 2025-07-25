@@ -4,6 +4,8 @@
 class PasswordsController < Devise::PasswordsController
   layout 'devise'
 
+  before_action :page_title
+
   # GET /resource/password/new
   # def new
   #   super
@@ -33,5 +35,15 @@ class PasswordsController < Devise::PasswordsController
   # The path used after sending reset password instructions
   def after_sending_reset_password_instructions_path_for(resource_name)
     new_session_path(resource_name, { locale: params[:locale] || I18n.locale }) if is_navigational_format?
+  end
+
+  def page_title
+    case action_name
+
+    when 'new'
+      @title = t(:'devise.passwords.new.forgot_password')
+    when 'edit'
+      @title = t(:'devise.passwords.edit.reset_password')
+    end
   end
 end

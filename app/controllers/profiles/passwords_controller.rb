@@ -9,6 +9,7 @@ module Profiles
     # Get password page
     def edit
       authorize! @user
+      @minimum_password_length = User.password_length.min
     end
 
     # Update the user's password

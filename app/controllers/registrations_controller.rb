@@ -4,6 +4,7 @@
 class RegistrationsController < Devise::RegistrationsController
   layout 'devise'
 
+  before_action :page_title
   before_action :configure_sign_up_params, :configure_account_update_params
 
   # GET /resource/sign_up
@@ -64,4 +65,8 @@ class RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  def page_title
+    @title = t(:'devise.registrations.new.register')
+  end
 end
