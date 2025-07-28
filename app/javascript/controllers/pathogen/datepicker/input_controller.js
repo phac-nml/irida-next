@@ -107,6 +107,7 @@ export default class extends Controller {
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
       // 'outOfMonth' date (eg: selected Sept 1st, but August is displayed with Sept 1st at the end of calendar)
+      // using UTCMonth alleviates the issue
       this.#selectedMonthIndex = fullSelectedDate.getUTCMonth();
     } else {
       this.#selectedYear = this.#todaysYear;

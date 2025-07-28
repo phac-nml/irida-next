@@ -631,11 +631,7 @@ export default class extends Controller {
   #preventPreviousMonthNavigation() {
     if (this.#minDate) {
       const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
-      if (
-        getDateNode(this.calendarTarget, this.#minDate) &&
-        verifyDateIsInMonth(minDateNode)
-      )
-        return true;
+      if (minDateNode && verifyDateIsInMonth(minDateNode)) return true;
     }
     return false;
   }
