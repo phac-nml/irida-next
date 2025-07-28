@@ -14,3 +14,14 @@ export function getDateNode(calendar, date) {
 export function getFirstOfMonthNode(calendar) {
   return calendar.querySelector('[data-date-within-month-position="inMonth"]');
 }
+
+export function focusDate(dateNode) {
+  // find current tabbable node, and remove tabIndex
+  const currentTabbableDate =
+    this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
+  currentTabbableDate.tabIndex = -1;
+
+  // assign tabindex and focus to the current target date
+  dateNode.tabIndex = 0;
+  dateNode.focus();
+}
