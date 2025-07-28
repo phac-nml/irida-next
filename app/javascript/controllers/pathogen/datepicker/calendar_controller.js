@@ -524,7 +524,7 @@ export default class extends Controller {
       direction === "left" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(targetDateNode);
+    focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handle ArrowUp/Down keyboard navigation
@@ -563,7 +563,7 @@ export default class extends Controller {
       direction === "up" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(targetDateNode);
+    focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handles Home keypress
@@ -573,9 +573,12 @@ export default class extends Controller {
     const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
 
     if (firstDateNode.getAttribute("data-date-disabled")) {
-      focusDate(getDateNode(this.calendarTarget, this.#minDate));
+      focusDate(
+        this.calendarTarget,
+        getDateNode(this.calendarTarget, this.#minDate),
+      );
     } else {
-      focusDate(firstDateNode);
+      focusDate(this.calendarTarget, firstDateNode);
     }
   }
 
@@ -588,7 +591,10 @@ export default class extends Controller {
       ),
     );
 
-    focusDate(allInMonthDatesNodes[allInMonthDatesNodes.length - 1]);
+    focusDate(
+      this.calendarTarget,
+      allInMonthDatesNodes[allInMonthDatesNodes.length - 1],
+    );
   }
 
   #previousMonthByPageUp() {
@@ -603,17 +609,17 @@ export default class extends Controller {
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
       if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-        focusDate(minDateNode);
+        focusDate(this.calendarTarget, minDateNode);
         return;
       }
     }
-    focusDate(getFirstOfMonthNode(this.calendarTarget));
+    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
   }
 
   // load next month and focus 1st of the month
   #nextMonthByPageDown() {
     this.nextMonth();
-    focusDate(getFirstOfMonthNode(this.calendarTarget));
+    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
   }
 
   // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
