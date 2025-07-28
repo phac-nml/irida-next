@@ -5,19 +5,21 @@ require_relative 'component_test_helper'
 
 module Pathogen
   module Pagination
+    # Tests for the Pathogen::Pagination::PageSizeSelectComponent
+    # This test suite ensures the page size select component renders correctly
     class PageSizeSelectComponentTest < ViewComponent::TestCase
       include ComponentTestHelper
 
       test 'renders page size select' do
         pagy = mock_pagy
         request = mock_request
-        
+
         render_inline(PageSizeSelectComponent.new(
-          pagy: pagy,
-          page_sizes: [10, 25, 50],
-          request: request
-        ))
-        
+                        pagy: pagy,
+                        page_sizes: [10, 25, 50],
+                        request: request
+                      ))
+
         assert_selector('select#page-size-selector')
         assert_selector('option[value="10"]')
         assert_selector('option[value="25"]')
@@ -28,13 +30,13 @@ module Pathogen
       test 'does not render when only one page exists' do
         pagy = mock_pagy(count: 5, items: 10, pages: 1)
         request = mock_request
-        
+
         render_inline(PageSizeSelectComponent.new(
-          pagy: pagy,
-          page_sizes: [10, 25, 50],
-          request: request
-        ))
-        
+                        pagy: pagy,
+                        page_sizes: [10, 25, 50],
+                        request: request
+                      ))
+
         assert_no_selector('select')
       end
 
@@ -44,7 +46,7 @@ module Pathogen
           page_sizes: [10, 25, 50],
           request: mock_request
         )
-        
+
         assert_includes(component.send(:select_classes), 'rounded-lg')
         assert_includes(component.send(:select_classes), 'border')
         assert_includes(component.send(:select_classes), 'h-11')
