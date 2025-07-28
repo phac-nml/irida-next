@@ -14,14 +14,14 @@ module Pathogen
         visit('/rails/view_components/pathogen_link/tooltip')
         within('.Viral-Preview > [data-controller-connected="true"]') do
           # Invoke tooltip on hover
-          assert_selector '[data-viral--tooltip-target="target"]', visible: false
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
           find('a', text: @link_text).hover
           assert_text @tooltip_text
-          assert_selector '[data-viral--tooltip-target="target"]', visible: true
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on escape
           find('a', text: @link_text).native.send_keys(:escape)
           assert_no_text  @tooltip_text
-          assert_selector '[data-viral--tooltip-target="target"]', visible: false
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
       end
 
@@ -29,14 +29,14 @@ module Pathogen
         visit('/rails/view_components/pathogen_link/tooltip')
         within('.Viral-Preview > [data-controller-connected="true"]') do
           # Invoke tooltip on focus
-          assert_selector '[data-viral--tooltip-target="target"]', visible: false
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
           find('a', text: @link_text).trigger('focus')
           assert_text @tooltip_text
-          assert_selector '[data-viral--tooltip-target="target"]', visible: true
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on blur
           find('a', text: @link_text).native.send_keys(:tab)
           assert_no_text  @tooltip_text
-          assert_selector '[data-viral--tooltip-target="target"]', visible: false
+          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
       end
     end
