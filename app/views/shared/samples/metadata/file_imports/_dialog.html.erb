@@ -119,14 +119,14 @@
               <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
             </template>
           <% end %>
-          <div class="flex items-center" data-controller="viral--tooltip">
+          <div class="flex items-center" data-controller="pathogen--tooltip">
             <%= form.check_box :ignore_empty_values,
                            {
                              aria: {
                                describedby: "ignore-empty-values-tooltip",
                              },
                              data: {
-                               "viral--tooltip-target": "trigger",
+                               "pathogen--tooltip-target": "trigger",
                              },
                            },
                            true,

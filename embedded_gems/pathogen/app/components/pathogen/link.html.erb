@@ -1,4 +1,4 @@
-<%= render Pathogen::ConditionalWrapper.new(condition: tooltip?, tag: :div, 'data-controller': 'viral--tooltip') do %>
+<%= render Pathogen::ConditionalWrapper.new(condition: tooltip?, tag: :div, 'data-controller': 'pathogen--tooltip') do %>
   <%= render(Pathogen::BaseComponent.new(**@link_system_arguments.merge(tooltip? ? @tooltip_system_arguments : {}))) do %>
     <%= content %>
   <% end %>

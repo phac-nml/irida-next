@@ -15,7 +15,7 @@ module Pathogen
       @tooltip_system_arguments[:aria] = system_arguments[:aria] || {}
       @tooltip_system_arguments[:aria][:describedby] = @tooltip_id
       @tooltip_system_arguments[:data] = system_arguments[:data] || {}
-      @tooltip_system_arguments[:data]['viral--tooltip-target'] = 'trigger'
+      @tooltip_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
     end
 
     # The tooltip that appears on mouse hover or keyboard focus over the link. (optional)
