@@ -45,10 +45,7 @@
       <%= t(".of_pages", total: pagy.pages) %>
     </span>
     <!-- Hidden submit button for accessibility -->
-    <%= submit_tag t(".go"),
-    class: "sr-only",
-    tabindex: "-1",
-    "data-pathogen--jump-to-page-target": "submit" %>
+    <%= submit_tag t(".go"), class: "sr-only", tabindex: "-1" %>
   <% end %>
   <!-- Error message container -->
   <div

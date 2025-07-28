@@ -6,7 +6,7 @@ import { Controller } from "@hotwired/stimulus";
  * and user feedback for page navigation.
  */
 export default class extends Controller {
-  static targets = ["input", "error", "announcement", "submit"];
+  static targets = ["input", "error", "announcement"];
 
   connect() {
     this.minPage = parseInt(this.inputTarget.min);
@@ -55,11 +55,11 @@ export default class extends Controller {
       this.clearError();
       this.setInputValidity(true);
 
+      // Submit form
+      this.inputTarget.form.requestSubmit();
+
       // Announce the navigation attempt
       this.announceNavigation(value);
-
-      // Submit the form
-      this.submitTarget.click();
     } else {
       this.showError();
       this.setInputValidity(false);
