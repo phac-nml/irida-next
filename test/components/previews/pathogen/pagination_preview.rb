@@ -19,10 +19,10 @@ module Pathogen
     def default
       pagy = Pagy.new(count: 250, page: 3, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'samples',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'samples',
+               mode: :full
+             ))
     end
 
     # @label Simple Mode
@@ -34,10 +34,10 @@ module Pathogen
     def simple_mode
       pagy = Pagy.new(count: 150, page: 2, items: 50)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'projects',
-        mode: :simple
-      ))
+               pagy: pagy,
+               item_name: 'projects',
+               mode: :simple
+             ))
     end
 
     # @label Custom Page Sizes
@@ -48,11 +48,11 @@ module Pathogen
     def custom_page_sizes
       pagy = Pagy.new(count: 500, page: 1, items: 20)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'records',
-        mode: :full,
-        page_sizes: [10, 20, 50, 100, 200]
-      ))
+               pagy: pagy,
+               item_name: 'records',
+               mode: :full,
+               page_sizes: [10, 20, 50, 100, 200]
+             ))
     end
 
     # @!endgroup
@@ -67,10 +67,10 @@ module Pathogen
     def first_page
       pagy = Pagy.new(count: 100, page: 1, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @label Last Page
@@ -82,10 +82,10 @@ module Pathogen
     def last_page
       pagy = Pagy.new(count: 100, page: 4, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @label Middle Page
@@ -97,10 +97,10 @@ module Pathogen
     def middle_page
       pagy = Pagy.new(count: 1000, page: 5, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @label Single Page
@@ -111,10 +111,10 @@ module Pathogen
     def single_page
       pagy = Pagy.new(count: 10, page: 1, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @label Empty Results
@@ -125,10 +125,10 @@ module Pathogen
     def empty_results
       pagy = Pagy.new(count: 0, page: 1, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @!endgroup
@@ -142,10 +142,10 @@ module Pathogen
     def samples
       pagy = Pagy.new(count: 75, page: 2, items: 20)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'sample',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'sample',
+               mode: :full
+             ))
     end
 
     # @label Projects
@@ -156,10 +156,10 @@ module Pathogen
     def projects
       pagy = Pagy.new(count: 45, page: 3, items: 15)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'project',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'project',
+               mode: :full
+             ))
     end
 
     # @label Workflow Executions
@@ -170,10 +170,10 @@ module Pathogen
     def workflow_executions
       pagy = Pagy.new(count: 200, page: 5, items: 30)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'workflow execution',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'workflow execution',
+               mode: :full
+             ))
     end
 
     # @!endgroup
@@ -188,10 +188,10 @@ module Pathogen
     def many_pages
       pagy = Pagy.new(count: 5000, page: 50, items: 25)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full
+             ))
     end
 
     # @label Large Page Size
@@ -202,11 +202,11 @@ module Pathogen
     def large_page_size
       pagy = Pagy.new(count: 1000, page: 1, items: 100)
       render(Pathogen::Pagination::Component.new(
-        pagy: pagy,
-        item_name: 'items',
-        mode: :full,
-        page_sizes: [50, 100, 200, 500, 1000]
-      ))
+               pagy: pagy,
+               item_name: 'items',
+               mode: :full,
+               page_sizes: [50, 100, 200, 500, 1000]
+             ))
     end
 
     # @!endgroup
