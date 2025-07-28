@@ -52,7 +52,7 @@
   </div>
 
   <% invalid_last_name = resource.errors.include?(:last_name) %>
-  <div class="form-field <%= 'invalid' if invalid_first_name %>">
+  <div class="form-field <%= 'invalid' if invalid_last_name %>">
     <%= f.label :last_name, data: { required: true } %>
     <%= f.text_field :last_name,
                  required: true,
