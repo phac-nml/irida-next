@@ -54,6 +54,13 @@ module Pathogen
                  I18n.t('pathogen.datepicker.months.october'),
                  I18n.t('pathogen.datepicker.months.november'),
                  I18n.t('pathogen.datepicker.months.december')]
+      @days_of_the_week = [I18n.t('pathogen.datepicker.days_of_week.sunday'),
+                           I18n.t('pathogen.datepicker.days_of_week.monday'),
+                           I18n.t('pathogen.datepicker.days_of_week.tuesday'),
+                           I18n.t('pathogen.datepicker.days_of_week.wednesday'),
+                           I18n.t('pathogen.datepicker.days_of_week.thursday'),
+                           I18n.t('pathogen.datepicker.days_of_week.friday'),
+                           I18n.t('pathogen.datepicker.days_of_week.saturday')]
 
       @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
 

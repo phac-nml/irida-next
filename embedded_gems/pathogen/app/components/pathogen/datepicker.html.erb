@@ -110,35 +110,13 @@
           <table class="min-w-full table-fixed">
             <thead class="mb-1">
               <tr>
-                <th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.sunday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.monday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.tuesday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.wednesday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.thursday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.friday") %></th><th
-                  class="
-                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-                  "
-                ><%= t(".days_of_week.saturday") %></th>
+                <% @days_of_the_week.each do |day| %>
+                  <th
+                    class="
+                      dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                    "
+                  ><%= day %></th>
+                <% end %>
               </tr>
             </thead>
             <tbody data-pathogen--datepicker--calendar-target="calendar">
@@ -207,18 +185,9 @@
             dark:bg-slate-800 dark:text-white
           "
         >
-          <option value="<%= t(".months.january")%>"><%= t(".months.january") %></option>
-          <option value="<%= t(".months.february")%>"><%= t(".months.february") %></option>
-          <option value="<%= t(".months.march")%>"><%= t(".months.march") %></option>
-          <option value="<%= t(".months.april")%>"><%= t(".months.april") %></option>
-          <option value="<%= t(".months.may")%>"><%= t(".months.may") %></option>
-          <option value="<%= t(".months.june")%>"><%= t(".months.june") %></option>
-          <option value="<%= t(".months.july")%>"><%= t(".months.july") %></option>
-          <option value="<%= t(".months.august")%>"><%= t(".months.august") %></option>
-          <option value="<%= t(".months.september")%>"><%= t(".months.september") %></option>
-          <option value="<%= t(".months.october")%>"><%= t(".months.october") %></option>
-          <option value="<%= t(".months.november")%>"><%= t(".months.november") %></option>
-          <option value="<%= t(".months.december")%>"><%= t(".months.december") %></option>
+          <% @months.each do |month| %>
+            <option value="<%= month %>"><%= month %></option>
+          <% end %>
         </select>
       </template>
     <% end %>
