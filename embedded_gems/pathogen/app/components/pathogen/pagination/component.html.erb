@@ -6,33 +6,111 @@
       "aria-label": aria_label,
       "aria-live": aria_live
     ) do %>
-  <div class="flex flex-col items-center space-y-4 mt-4">
-    <%# Navigation and page size selector %>
-    <% if pagy.pages > 1 %>
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+  <div
+    class="
+      py-4 px-4 sm:px-6 bg-white dark:bg-slate-900 border-t border-slate-200
+      dark:border-slate-700
+    "
+  >
+    <%# Desktop layout: horizontal with logical grouping %>
+    <div class="hidden lg:flex lg:items-center lg:justify-between lg:gap-6">
+      <%# Left section: Page info and size selector %>
+      <div class="flex items-center gap-4">
+        <%= render ::Pathogen::Pagination::PageInfoComponent.new(
           pagy: pagy,
-          request: request,
+          item_name: item_name,
         ) %>
+
+        <div class="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
+
         <%= render ::Pathogen::Pagination::PageSizeSelectComponent.new(
           pagy: pagy,
           page_sizes: page_sizes,
           request: request,
         ) %>
       </div>
-    <% end %>
 
-    <%# Info section %>
-    <div class="flex flex-col items-center space-y-2">
-      <%= render ::Pathogen::Pagination::PageInfoComponent.new(
-        pagy: pagy,
-        item_name: item_name,
-      ) %>
-
-      <%# Jump to page (only in full mode) %>
-      <% if mode == :full && pagy.pages > 1 %>
-        <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
+      <%# Center section: Navigation links %>
+      <% if pagy.pages > 1 %>
+        <div class="flex-1 flex justify-center">
+          <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+            pagy: pagy,
+            request: request,
+          ) %>
+        </div>
       <% end %>
+
+      <%# Right section: Jump to page (only in full mode) %>
+      <% if mode == :full && pagy.pages > 1 %>
+        <div class="flex items-center">
+          <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Tablet layout: stacked with smart grouping %>
+    <div class="hidden md:flex md:flex-col md:gap-4 lg:hidden">
+      <%# Top row: Page info and size selector %>
+      <div class="flex items-center justify-between">
+        <%= render ::Pathogen::Pagination::PageInfoComponent.new(
+          pagy: pagy,
+          item_name: item_name,
+        ) %>
+
+        <%= render ::Pathogen::Pagination::PageSizeSelectComponent.new(
+          pagy: pagy,
+          page_sizes: page_sizes,
+          request: request,
+        ) %>
+      </div>
+
+      <%# Bottom row: Navigation and jump to page %>
+      <div class="flex items-center justify-between">
+        <% if pagy.pages > 1 %>
+          <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+            pagy: pagy,
+            request: request,
+          ) %>
+        <% end %>
+
+        <% if mode == :full && pagy.pages > 1 %>
+          <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Mobile layout: vertical stack with clear hierarchy %>
+    <div class="flex flex-col gap-4 md:hidden">
+      <%# Page info at top for context %>
+      <div class="text-center">
+        <%= render ::Pathogen::Pagination::PageInfoComponent.new(
+          pagy: pagy,
+          item_name: item_name,
+        ) %>
+      </div>
+
+      <%# Navigation links centered %>
+      <% if pagy.pages > 1 %>
+        <div class="flex justify-center">
+          <%= render ::Pathogen::Pagination::PageLinksComponent.new(
+            pagy: pagy,
+            request: request,
+          ) %>
+        </div>
+      <% end %>
+
+      <%# Controls at bottom: page size and jump to page %>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <%= render ::Pathogen::Pagination::PageSizeSelectComponent.new(
+          pagy: pagy,
+          page_sizes: page_sizes,
+          request: request,
+        ) %>
+
+        <% if mode == :full && pagy.pages > 1 %>
+          <%= render ::Pathogen::Pagination::JumpToComponent.new(pagy: pagy, request: request) %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

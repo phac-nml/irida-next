@@ -1,8 +1,13 @@
 <%# Page size selector component %>
-<div class="flex items-center space-x-2">
-  <%= form_tag request.path, method: :get, class: "inline", data: { turbo_stream: true } do %>
+<div class="flex items-center gap-2 whitespace-nowrap">
+  <%= form_tag request.path, method: :get, class: "inline-flex items-center gap-2", data: { turbo_stream: true } do %>
     <%= hidden_field_tag :page, 1 %>
-    <label for="page-size-selector" class="text-sm">
+    <label
+      for="page-size-selector"
+      class="
+        text-sm font-medium text-slate-700 dark:text-slate-300 flex-shrink-0
+      "
+    >
       <%= t(".items_per_page") %>
     </label>
     <%= select_tag :limit,

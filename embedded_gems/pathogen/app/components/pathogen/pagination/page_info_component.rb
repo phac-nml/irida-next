@@ -43,7 +43,11 @@ module Pathogen
 
       # @return [String] Classes for the info text
       def info_text_classes
-        class_names('text-sm text-slate-700 dark:text-slate-300')
+        class_names(
+          'text-sm font-medium text-slate-700 dark:text-slate-300',
+          'whitespace-nowrap', # Prevent text wrapping
+          'flex-shrink-0' # Don't shrink in flex containers
+        )
       end
     end
   end
