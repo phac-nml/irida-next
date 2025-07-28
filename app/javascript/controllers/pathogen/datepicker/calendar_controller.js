@@ -304,7 +304,7 @@ export default class extends Controller {
       }
       // if minDate and today are on calendar and today is before the minDate, remove the hover classes
       if (today && this.#minDate > this.#todaysFormattedFullDate) {
-        today.classList.remove("hover:bg-slate-200", "dark:hover:bg-slate-500");
+        today.classList.remove(...STYLE_CLASSES["todaysHoverClasses"]);
       }
     }
   }
