@@ -45,6 +45,7 @@ export const STYLE_CLASSES = {
     "dark:text-primary-300",
     "cursor-pointer",
   ],
+  todaysHoverClasses: ["hover:bg-slate-200", "dark:hover:bg-slate-500"],
   disabledDateClasses: [
     "line-through",
     "cursor-not-allowed",
