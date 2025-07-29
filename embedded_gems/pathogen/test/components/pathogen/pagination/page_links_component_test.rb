@@ -5,15 +5,18 @@ require_relative 'component_test_helper'
 
 module Pathogen
   module Pagination
+    # Tests for the Pathogen::Pagination::PageLinksComponent
+    # This test suite ensures the page links component renders correctly with pagination links
+    # and applies the correct CSS classes.
     class PageLinksComponentTest < ViewComponent::TestCase
       include ComponentTestHelper
 
       test 'renders pagination links' do
         pagy = mock_pagy
         request = mock_request
-        
+
         render_inline(PageLinksComponent.new(pagy: pagy, request: request))
-        
+
         assert_selector('nav.pagy')
         assert_selector('ul.inline-flex')
         assert_selector('a[data-turbo-stream="true"]', text: '1')
@@ -24,9 +27,9 @@ module Pathogen
       test 'does not render when only one page exists' do
         pagy = mock_pagy(count: 5, items: 10, pages: 1)
         request = mock_request
-        
+
         render_inline(PageLinksComponent.new(pagy: pagy, request: request))
-        
+
         assert_no_selector('nav.pagy')
       end
 
@@ -34,7 +37,7 @@ module Pathogen
         pagy = mock_pagy
         request = mock_request
         component = PageLinksComponent.new(pagy: pagy, request: request)
-        
+
         assert_includes(component.send(:page_url, 2), 'page=2')
         assert_includes(component.send(:page_url, 2), 'limit=10')
       end
@@ -47,25 +50,25 @@ module Pathogen
           prev_is_gap: false,
           next_is_selected: false
         )
-        
+
         assert_includes(link_classes, 'rounded-s-lg')
         assert_includes(link_classes, 'dark:bg-slate-800')
-        
+
         selected_classes = PageLinksComponent.pagination_selected_classes(
           is_first: true,
           is_last: false
         )
-        
+
         assert_includes(selected_classes, 'bg-primary-100')
         assert_includes(selected_classes, 'dark:bg-primary-900')
-        
+
         gap_classes = PageLinksComponent.pagination_gap_classes(
           is_first: false,
           is_last: false,
           show_left: true,
           show_right: true
         )
-        
+
         assert_includes(gap_classes, 'border-t')
         assert_includes(gap_classes, 'border-b')
       end
