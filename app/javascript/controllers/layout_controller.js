@@ -8,6 +8,8 @@ export default class extends Controller {
     "content",
     "logo",
     "sidebarOverlay",
+    "header",
+    "mainContent",
   ];
 
   connect() {
@@ -15,6 +17,7 @@ export default class extends Controller {
     if (localStorage.getItem("layout") === "collapsed") {
       this.collapse();
     }
+    this.lastScrollTop = 0;
   }
 
   disconnect() {
@@ -54,6 +57,24 @@ export default class extends Controller {
         this.collapse();
       }
     }
+  }
+
+  handleScroll(event) {
+    const { scrollTop } = event.target;
+
+    if (scrollTop > this.lastScrollTop) {
+      // Scrolling down
+      this.headerTarget.classList.add("-translate-y-full");
+      this.mainContentTarget.classList.remove("top-16");
+      this.mainContentTarget.classList.add("top-0");
+    } else {
+      // Scrolling up
+      this.headerTarget.classList.remove("-translate-y-full");
+      this.mainContentTarget.classList.remove("top-0");
+      this.mainContentTarget.classList.add("top-16");
+    }
+
+    this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   }
 
   #convertRemToPixels(rem) {
