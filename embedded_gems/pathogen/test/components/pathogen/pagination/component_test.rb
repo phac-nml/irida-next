@@ -16,13 +16,13 @@ module Pathogen
 
       test 'renders in simple mode' do
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
-        
+
         render_inline(Component.new(
-          pagy: pagy,
-          mode: :simple,
-          request: @request
-        ))
-        
+                        pagy: pagy,
+                        mode: :simple,
+                        request: @request
+                      ))
+
         assert_selector("nav[role='navigation']")
         assert_selector("select[name='limit']")
         assert_selector("a[data-turbo-stream='true']", text: '1')
@@ -32,13 +32,13 @@ module Pathogen
 
       test 'renders in full mode' do
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 10)
-        
+
         render_inline(Component.new(
-          pagy: pagy,
-          mode: :full,
-          request: @request
-        ))
-        
+                        pagy: pagy,
+                        mode: :full,
+                        request: @request
+                      ))
+
         assert_selector("nav[role='navigation']")
         assert_selector("select[name='limit']")
         assert_selector("a[data-turbo-stream='true']", text: '1')
@@ -48,24 +48,24 @@ module Pathogen
 
       test 'does not render with zero items' do
         pagy = mock_pagy(count: 0, page: 1, pages: 0, items: 10)
-        
+
         render_inline(Component.new(
-          pagy: pagy,
-          request: @request
-        ))
-        
+                        pagy: pagy,
+                        request: @request
+                      ))
+
         assert_no_selector "nav[role='navigation']"
       end
 
       test 'renders custom page sizes' do
         pagy = mock_pagy(count: 100, page: 1, pages: 10, items: 20)
-        
+
         render_inline(Component.new(
-          pagy: pagy,
-          page_sizes: [20, 40, 60],
-          request: @request
-        ))
-        
+                        pagy: pagy,
+                        page_sizes: [20, 40, 60],
+                        request: @request
+                      ))
+
         assert_selector("select[name='limit'] option[value='20']")
         assert_selector("select[name='limit'] option[value='40']")
         assert_selector("select[name='limit'] option[value='60']")
