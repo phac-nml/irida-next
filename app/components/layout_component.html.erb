@@ -21,9 +21,11 @@
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
     <div
+      data-layout-target="header"
       class="
         flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-16
         -outline-offset-1 border-b border-slate-200 dark:border-slate-950
+        transition-transform duration-300
       "
     >
       <div
@@ -53,8 +55,10 @@
       tabindex="0"
       class="
         @container max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 overflow-y-auto
-        top-16
+        top-16 transition-all duration-300
       "
+      data-action="scroll->layout#handleScroll"
+      data-layout-target="mainContent"
     >
       <div class="<%= @layout %>"><%= body %></div>
     </main>
