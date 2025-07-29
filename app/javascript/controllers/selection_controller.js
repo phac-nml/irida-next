@@ -122,6 +122,9 @@ export default class extends Controller {
         (row) => !row.checked,
       );
       this.selectPageTarget.checked = uncheckedBoxes.length === 0;
+      this.selectPageTarget.indeterminate = !(
+        uncheckedBoxes.length === 0 || uncheckedBoxes.length === this.totalValue
+      );
     }
   }
 
