@@ -80,6 +80,7 @@ export default class extends Controller {
       this.itemTarget.classList.remove("hidden");
       this.itemTarget.setAttribute("aria-hidden", "false");
       this.itemTarget.removeAttribute("hidden");
+      this.itemTarget.setAttribute("tabindex", "0");
       this.buttonTarget.setAttribute("aria-expanded", "true");
       this.#updateIcon(false);
 
@@ -90,6 +91,7 @@ export default class extends Controller {
       this.itemTarget.classList.add("hidden");
       this.itemTarget.setAttribute("aria-hidden", "true");
       this.itemTarget.setAttribute("hidden", "");
+      this.itemTarget.removeAttribute("tabindex");
       this.buttonTarget.setAttribute("aria-expanded", "false");
       this.#updateIcon(true);
 
