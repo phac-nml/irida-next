@@ -5,8 +5,9 @@ module NamespaceRow
   class ContentsComponent < Component
     include NamespacePathHelper
 
-    def initialize(namespace:, icon_size: :small, search_params: nil)
+    def initialize(namespace:, full_name: false, icon_size: :small, search_params: nil)
       @namespace = namespace
+      @full_name = full_name
       @icon_size = icon_size
       @search_params = search_params
     end

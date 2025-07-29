@@ -764,9 +764,8 @@ fr:
         create_project_button: Nouveau projet
         no_projects: Aucun projet
         no_projects_description: Vous n’avez actuellement aucun projet.
+        pagy_item: Projets
         personal: Personnel
-        row:
-          samples: Échantillons
         search:
           placeholder: Filtrer par PUID ou nom
         sorting:
@@ -1659,13 +1658,6 @@ fr:
       access_level:
         aria_label: Niveau d’accès
       index:
-        access_level:
-          level_0: Pas d’accès
-          level_10: Invité
-          level_20: Téléchargeur
-          level_30: Analyste
-          level_40: Responsable
-          level_50: Propriétaire
         actions:
           link_leave_project_aria_label: Laisser le lien du projet
           link_remove_aria_label: Supprimer le lien du membre du projet %{member}

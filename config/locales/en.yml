@@ -764,9 +764,8 @@ en:
         create_project_button: New project
         no_projects: No projects
         no_projects_description: You currently have no projects.
+        pagy_item: Projects
         personal: Personal
-        row:
-          samples: Samples
         search:
           placeholder: Filter by PUID or name
         sorting:
@@ -1659,13 +1658,6 @@ en:
       access_level:
         aria_label: Access Level
       index:
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
         actions:
           link_leave_project_aria_label: Leave project link
           link_remove_aria_label: Remove project member %{member} link
