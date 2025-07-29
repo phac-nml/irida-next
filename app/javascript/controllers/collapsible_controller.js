@@ -34,13 +34,23 @@ export default class extends Controller {
    * the icon to match the initial visibility of the collapsible item.
    */
   connect() {
+    // Validate targets
+    if (!this.hasItemTarget) {
+      console.warn("⚠️ Collapsible controller missing item target");
+    }
+
+    if (!this.hasButtonTarget) {
+      console.warn("⚠️ Collapsible controller missing button target");
+    }
+
     // Check if the collapsible item is initially hidden (collapsed)
     const isInitiallyCollapsed = this.itemTarget.classList.contains("hidden");
 
     // 🗣️ Set initial ARIA state for screen readers
-    if (this.hasButtonTarget) {
-      this.buttonTarget.setAttribute("aria-expanded", isInitiallyCollapsed ? "false" : "true");
-    }
+    this.buttonTarget.setAttribute(
+      "aria-expanded",
+      isInitiallyCollapsed ? "false" : "true",
+    );
 
     // 🔄 Ensure the icon reflects the initial state
     this.#updateIcon(isInitiallyCollapsed);
@@ -61,20 +71,18 @@ export default class extends Controller {
       event.stopPropagation();
     }
 
-    const isCollapsed = this.itemTarget.classList.contains("hidden") || 
-                      this.itemTarget.hasAttribute("hidden");
+    const isCollapsed =
+      this.itemTarget.classList.contains("hidden") ||
+      this.itemTarget.hasAttribute("hidden");
 
     if (isCollapsed) {
       // ✨ Expanding the item
       this.itemTarget.classList.remove("hidden");
       this.itemTarget.setAttribute("aria-hidden", "false");
       this.itemTarget.removeAttribute("hidden");
-
-      if (this.hasButtonTarget) {
-        this.buttonTarget.setAttribute("aria-expanded", "true");
-      }
+      this.buttonTarget.setAttribute("aria-expanded", "true");
       this.#updateIcon(false);
-      
+
       // Dispatch event for other controllers to listen to
       this.dispatch("expanded", { target: this.element });
     } else {
@@ -82,12 +90,9 @@ export default class extends Controller {
       this.itemTarget.classList.add("hidden");
       this.itemTarget.setAttribute("aria-hidden", "true");
       this.itemTarget.setAttribute("hidden", "");
-
-      if (this.hasButtonTarget) {
-        this.buttonTarget.setAttribute("aria-expanded", "false");
-      }
+      this.buttonTarget.setAttribute("aria-expanded", "false");
       this.#updateIcon(true);
-      
+
       // Dispatch event for other controllers to listen to
       this.dispatch("collapsed", { target: this.element });
     }
