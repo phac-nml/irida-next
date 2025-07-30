@@ -10,8 +10,8 @@ class WorkflowExecutionCleanupJob < ApplicationJob
                   workflow_execution.canceled? ||
                   workflow_execution.error?
 
-    workflow_execution = WorkflowExecution::CleanupService.new(workflow_execution).execute
+    workflow_execution = WorkflowExecutions::CleanupService.new(workflow_execution).execute
 
-    raise_error('Attempted to clean Workflow Execution that is already cleaned.') if workflow_execution.false?
+    raise_error('Attempted to clean Workflow Execution that is already cleaned.') unless workflow_execution
   end
 end
