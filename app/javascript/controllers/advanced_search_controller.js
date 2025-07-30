@@ -85,6 +85,8 @@ export default class extends Controller {
     });
     if (conditions.length === 0) {
       this.#addConditionToGroup(group);
+    } else {
+      group.children[conditions.length].querySelector("select").focus();
     }
   }
 
@@ -102,6 +104,7 @@ export default class extends Controller {
       .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, 1);
     let group = this.groupsContainerTargets[group_index];
     group.insertAdjacentHTML("afterbegin", newCondition);
+    group.querySelector("select").focus();
     //show 'Remove group' buttons if there's more than one group
     if (this.groupsContainerTargets.length > 1) {
       this.groupsContainerTargets.forEach((group) => {
@@ -136,6 +139,7 @@ export default class extends Controller {
           inputField.name = updatedInputFieldName;
         });
       });
+      this.groupsContainerTargets.at(-1).querySelector("select").focus();
       //hide 'Remove group' button if there's one group left
       if (this.groupsContainerTargets.length === 1) {
         this.groupsContainerTarget
@@ -195,6 +199,7 @@ export default class extends Controller {
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index)
       .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, condition_index + 1);
     group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
+    group.children[condition_index + 1].querySelector("select").focus();
   }
 
   #dirty() {
