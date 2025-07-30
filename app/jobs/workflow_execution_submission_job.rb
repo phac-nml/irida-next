@@ -26,7 +26,8 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
 
-    return if workflow_execution.run_id.nil?
+    raise_error('Workflow Execution was not prepared.') unless workflow_execution
+    raise_error('Workflow Execution did not get a run_id from WES') if workflow_execution.run_id.nil?
 
     WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
   end
