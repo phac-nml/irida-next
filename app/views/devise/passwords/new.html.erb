@@ -9,15 +9,26 @@
 
       <%= render partial: "shared/form/required_field_legend" %>
 
-      <div id="forgot_password_email_field" class="form-field">
+      <div
+        id="forgot_password_email_field"
+        data-email-input-target="emailFieldDiv"
+        class="form-field"
+      >
         <%= f.label :email, data: { required: true } %>
         <%= f.email_field :email,
                       autofocus: true,
                       aria: {
                         required: true,
                       },
-                      autocomplete: "email" %>
-        <div id="forgot_password_email_error" class="mt-2 text-sm">
+                      autocomplete: "email",
+                      data: {
+                        email_input_target: "emailField",
+                      } %>
+        <div
+          id="forgot_password_email_error"
+          data-email-input-target="emailError"
+          class="mt-2 text-sm"
+        >
           <%= viral_help_text(state: :error, classes: "hidden") %>
         </div>
       </div>

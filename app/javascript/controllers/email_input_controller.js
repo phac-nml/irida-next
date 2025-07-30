@@ -1,7 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["form", "submit"];
+  static targets = [
+    "form",
+    "submit",
+    "emailError",
+    "emailFieldDiv",
+    "emailField",
+  ];
   static values = {
     emailMissing: { type: String },
     emailFormat: { type: String },
@@ -59,7 +65,7 @@ export default class extends Controller {
   }
 
   #validateEmail() {
-    let email = document.getElementById("user_email");
+    let email = this.emailFieldTarget;
     let hasErrors = false;
 
     if (email.value === "") {
@@ -83,12 +89,10 @@ export default class extends Controller {
   }
 
   #addEmailFieldErrorState() {
-    let emailError = document.getElementById(
-      "forgot_password_email_error",
-    ).lastElementChild;
+    let emailError = this.emailErrorTarget.lastElementChild;
     let emailErrorSpan = emailError.getElementsByClassName("grow")[0];
-    let email = document.getElementById("user_email");
-    let emailField = document.getElementById("forgot_password_email_field");
+    let email = this.emailFieldTarget;
+    let emailField = this.emailFieldDivTarget;
 
     email.setAttribute("autofocus", true);
     email.setAttribute("aria-invalid", true);
@@ -102,12 +106,10 @@ export default class extends Controller {
   }
 
   #removeEmailFieldErrorState() {
-    let emailError = document.getElementById(
-      "forgot_password_email_error",
-    ).lastElementChild;
+    let emailError = this.emailErrorTarget.lastElementChild;
     let emailErrorSpan = emailError.getElementsByClassName("grow")[0];
-    let email = document.getElementById("user_email");
-    let emailField = document.getElementById("forgot_password_email_field");
+    let email = this.emailFieldTarget;
+    let emailField = this.emailFieldDivTarget;
 
     email.removeAttribute("autofocus", false);
     email.removeAttribute("aria-invalid");
@@ -121,10 +123,23 @@ export default class extends Controller {
   }
 
   #validateEmailFormat(email) {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      );
+    // Basic format check
+    const basicEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!basicEmailRegex.test(email)) {
+      return false;
+    }
+
+    // Additional validation
+    const [localPart, domain] = email.split("@");
+
+    // Reasonable length checks
+    if (localPart.length > 64 || domain.length > 253) {
+      return false;
+    }
+
+    // Domain format check
+    const domainRegex =
+      /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    return domainRegex.test(domain);
   }
 }
