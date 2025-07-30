@@ -1,13 +1,49 @@
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-4", novalidate: true }) do |f| %>
-  <%= render "devise/shared/hidden_locale_input" %>
+<div
+  data-controller="email-input"
+  data-email-input-email-missing-value="<%= t('devise.passwords.new.email.required_error') %>"
+  data-email-input-email-format-value="<%= t('devise.passwords.new.email.format_error') %>"
+>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), data: {email_input_target: "form"}, html: { method: :post, class: "space-y-4" }) do |f| %>
+    <div class="space-y-4">
+      <%= render "devise/shared/hidden_locale_input" %>
 
-  <div class="form-field">
-    <%= f.label :email %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+      <%= render partial: "shared/form/required_field_legend" %>
 
-  <%= f.submit t(".submit_button"), class: "button button-primary w-full" %>
-<% end %>
+      <div
+        id="forgot_password_email_field"
+        data-email-input-target="emailFieldDiv"
+        class="form-field"
+      >
+        <%= f.label :email, data: { required: true } %>
+        <%= f.email_field :email,
+                      autofocus: true,
+                      aria: {
+                        required: true,
+                      },
+                      autocomplete: "email",
+                      data: {
+                        email_input_target: "emailField",
+                      } %>
+        <div
+          id="forgot_password_email_error"
+          data-email-input-target="emailError"
+          class="mt-2 text-sm"
+        >
+          <%= viral_help_text(state: :error, classes: "hidden") %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.submit t(".submit_button"),
+                 class: "button button-primary w-full",
+                 data: {
+                   input_target: "submit",
+                   action: "click->email-input#submit",
+                 } %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <div class="grid gap-2">
   <%= render "devise/shared/links" %>

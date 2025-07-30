@@ -879,6 +879,18 @@ en:
   date:
     formats:
       iso: YYYY-MM-DD
+  devise:
+    passwords:
+      edit:
+        reset_password: Change Password
+      new:
+        forgot_password: Reset Password
+    registrations:
+      new:
+        register: Register
+    sessions:
+      new:
+        login: Login
   errors:
     messages:
       not_saved:
