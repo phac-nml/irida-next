@@ -23,9 +23,13 @@ module Samples
     end
 
     def execute(broadcast_target = nil)
-      authorize! @namespace, to: :import_samples_and_metadata?
-      validate_file
-      perform_file_import(broadcast_target)
+      begin
+        authorize! @namespace, to: :import_samples_and_metadata?
+        validate_file
+        perform_file_import(broadcast_target)
+      ensure
+        cleanup_files
+      end
     rescue FileImportError => e
       @namespace.errors.add(:base, e.message)
       {}
@@ -71,8 +75,6 @@ module Samples
 
         response[sample_name] = process_sample_row(sample_name, project, description, metadata)
       end
-      cleanup_files
-
       create_activities unless @imported_samples_data[:project_data].empty?
 
       response

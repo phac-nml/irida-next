@@ -17,9 +17,11 @@ module DataExports
     def perform(data_export)
       initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
-      export = create_export(data_export)
-
-      attach_export(data_export, export)
+      Tempfile.create(binmode: true) do |temp_export_file|
+        create_export(data_export, temp_export_file)
+        temp_export_file.rewind
+        attach_export(data_export, temp_export_file)
+      end
 
       assign_data_export_attributes(data_export)
 
@@ -27,14 +29,14 @@ module DataExports
     end
 
     # Functions used by all exports (sample, analysis, linelist)-------------------------------------------------
-    def create_export(data_export)
+    def create_export(data_export, temp_export_file)
       case data_export.export_type
       when 'sample'
-        create_sample_zip(data_export)
+        create_sample_zip(data_export, temp_export_file)
       when 'analysis'
-        create_analysis_zip(data_export)
+        create_analysis_zip(data_export, temp_export_file)
       when 'linelist'
-        create_linelist_spreadsheet(data_export)
+        create_linelist_spreadsheet(data_export, temp_export_file)
       end
     end
 
@@ -45,9 +47,7 @@ module DataExports
                    "#{data_export.id}.zip"
                  end
 
-      data_export.file.attach(io: export.open, filename:)
-      export.close
-      export.unlink
+      data_export.file.attach(io: export, filename:)
     end
 
     def assign_data_export_attributes(data_export)
@@ -73,31 +73,17 @@ module DataExports
     end
 
     def write_manifests(zip, data_export_id)
-      write_manifest(zip)
-      write_simple_manifest(data_export_id, zip)
+      # Full manifest
+      zip.write_file('manifest.json') do |manifest_zip_file|
+        manifest_zip_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
+      end
+      # Simple manifest
+      zip.write_file('manifest.txt') do |manifest_zip_file|
+        manifest_zip_file.write(generate_simple_manifest(data_export_id))
+      end
     end
 
-    def write_manifest(zip)
-      manifest_file = Tempfile.new
-      manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
-      zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
-
-      manifest_file.close
-      manifest_file.unlink
-    end
-
-    def write_simple_manifest(data_export_id, zip)
-      output_lines = simple_manifest_begin(data_export_id)
-
-      simple_manifest_file = Tempfile.new
-      File.open(simple_manifest_file, 'a+') { |f| f.puts(output_lines) }
-      zip.write_file('manifest.txt') { |writer_for_file| IO.copy_stream(simple_manifest_file.open, writer_for_file) }
-
-      simple_manifest_file.close
-      simple_manifest_file.unlink
-    end
-
-    def simple_manifest_begin(data_export_id)
+    def generate_simple_manifest(data_export_id)
       output_lines = [
         @manifest['type'],
         @manifest['date'],
@@ -114,7 +100,7 @@ module DataExports
         ))
       end
 
-      output_lines
+      output_lines.join("\n")
     end
 
     def simple_manifest_gen_lines_recursive(cursor:, prefix: '', final_child: false) # rubocop:disable Metrics/MethodLength
@@ -147,8 +133,8 @@ module DataExports
     end
 
     # Sample export specific functions------------------------------------------------------------------
-    def create_sample_zip(data_export)
-      Tempfile.new(binmode: true).tap do |tempfile|
+    def create_sample_zip(data_export, temp_export_file)
+      temp_export_file.tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
           samples = sample_query(data_export.export_parameters['ids'])
           samples.each do |sample|
@@ -224,8 +210,8 @@ module DataExports
     end
 
     # Analysis export specific functions---------------------------------------------------------------------
-    def create_analysis_zip(data_export)
-      Tempfile.new(binmode: true).tap do |tempfile|
+    def create_analysis_zip(data_export, temp_export_file)
+      temp_export_file.tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
           workflow_executions = workflow_query(data_export.export_parameters['ids'])
           workflow_executions.each do |workflow|
@@ -286,17 +272,17 @@ module DataExports
     end
 
     # Linelist export specific functions---------------------------------------------------------------------
-    def create_linelist_spreadsheet(data_export)
+    def create_linelist_spreadsheet(data_export, temp_export_file)
       samples = Sample.includes(project: :namespace).where(id: data_export.export_parameters['ids'])
       if data_export.export_parameters['linelist_format'] == 'csv'
-        write_csv_export(data_export, samples)
+        write_csv_export(data_export, samples, temp_export_file)
       else
-        write_xlsx_export(data_export, samples)
+        write_xlsx_export(data_export, samples, temp_export_file)
       end
     end
 
-    def write_csv_export(data_export, samples)
-      Tempfile.new(binmode: true).tap do |tempfile|
+    def write_csv_export(data_export, samples, temp_export_file)
+      temp_export_file.tap do |tempfile|
         CSV.open(tempfile, 'wb') do |csv|
           csv << write_spreadsheet_header(data_export.export_parameters['metadata_fields'])
           samples.each do |sample|
@@ -306,8 +292,8 @@ module DataExports
       end
     end
 
-    def write_xlsx_export(data_export, samples)
-      Tempfile.new(binmode: true).tap do |tempfile|
+    def write_xlsx_export(data_export, samples, temp_export_file)
+      temp_export_file.tap do |tempfile|
         Axlsx::Package.new do |workbook|
           workbook.workbook.add_worksheet(name: 'linelist') do |sheet|
             sheet.add_row write_spreadsheet_header(data_export.export_parameters['metadata_fields'])
