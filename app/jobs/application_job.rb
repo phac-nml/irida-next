@@ -9,6 +9,6 @@ class ApplicationJob < ActiveJob::Base
   # discard_on ActiveJob::DeserializationError
   def raise_error(error_message)
     Rails.logger.error error_message
-    raise error_message
+    raise StandardError, error_message
   end
 end
