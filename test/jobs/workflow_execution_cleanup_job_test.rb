@@ -59,4 +59,18 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
 
     assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
+
+  test 'failed job on cleaned workflow execution' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    assert workflow_execution.cleaned?
+
+    perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+      WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+    end
+
+    assert workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
+  end
 end
