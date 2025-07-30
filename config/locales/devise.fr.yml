@@ -45,8 +45,8 @@ fr:
         title: Changer votre mot de passe
       new:
         email:
-          format_error: Invalid email format. Pleae enter an email address with the format xxx@yyy.zz
-          required_error: Email is required. Please enter a an email address.
+          format_error: Invalid email format. Please enter an email address with the format xxx@yyy.zzz
+          required_error: Email is required. Please enter a valid email address.
         submit_button: Envoyez-moi des instructions pour réinitialiser mon mot de passe
       no_token: Vous ne pouvez pas accéder à cette page si vous n’avez pas été dirigé vers celle-ci à partir d’un courriel de réinitialisation de mot de passe. Si vous tentez d’accéder à cette page à partir d’un courriel de réinitialisation de mot de passe, assurez-vous d’utiliser l’URL fournie au complet.
       send_instructions: Vous recevrez un courriel d’instructions sur la façon de réinitialiser votre mot de passe dans quelques minutes.
