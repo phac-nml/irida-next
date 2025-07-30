@@ -107,4 +107,57 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     assert_performed_jobs(2, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
+
+  test 'not completing job execution' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post('/runs') do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: workflow_execution.run_id }
+        ]
+      end
+
+      error = assert_raises(Exception) do
+        perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+          WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
+        end
+      end
+
+      assert error.message.include?('Workflow Execution was not prepared.')
+    end
+
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert workflow_execution.reload.submitted?
+  end
+
+  test 'job execution failed because WES returned nil run_id' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post('/runs') do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: nil }
+        ]
+      end
+
+      error = assert_raises(Exception) do
+        perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+          WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+        end
+      end
+
+      assert error.message.include?('Workflow Execution did not get a run_id from WES')
+    end
+
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.reload.submitted?
+  end
 end
