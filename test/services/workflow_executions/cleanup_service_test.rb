@@ -86,7 +86,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      assert ret_value.nil?
+      assert ret_value == false
     end
 
     test 'do not clean if blob_run_directory is nil' do
