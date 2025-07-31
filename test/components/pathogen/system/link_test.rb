@@ -11,7 +11,7 @@ module Pathogen
       end
 
       test 'tooltip appears on hover & disappears on escape' do
-        visit('/rails/view_components/pathogen_link/tooltip')
+        visit('/rails/view_components/pathogen/link/tooltip')
         within('.Viral-Preview > [data-controller-connected="true"]') do
           # Invoke tooltip on hover
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
@@ -26,7 +26,7 @@ module Pathogen
       end
 
       test 'tooltip appears on focus & disappears on blur' do
-        visit('/rails/view_components/pathogen_link/tooltip')
+        visit('/rails/view_components/pathogen/link/tooltip')
         within('.Viral-Preview > [data-controller-connected="true"]') do
           # Invoke tooltip on focus
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
