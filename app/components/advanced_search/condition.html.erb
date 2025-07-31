@@ -11,7 +11,7 @@
     <% invalid_field = @condition.errors.include?(:field) %>
     <div
       class="
-        form-field w-1/3 @max-xl:w-auto <%= 'invalid' if invalid_field %>
+        form-field w-1/3 @max-xl:w-full <%= 'invalid' if invalid_field %>
       "
     >
       <%= conditions_form.select :field,
@@ -39,7 +39,7 @@
     <% invalid_operator = @condition.errors.include?(:operator) %>
     <div
       class="
-        form-field w-1/4 @max-xl:w-auto <%= 'invalid' if invalid_operator %>
+        form-field w-1/4 @max-xl:w-full <%= 'invalid' if invalid_operator %>
       "
     >
       <%= conditions_form.select :operator,
