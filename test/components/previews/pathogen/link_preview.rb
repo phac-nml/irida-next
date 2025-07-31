@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Pathogen
-  class PathogenLinkPreview < ViewComponent::Preview
+  class LinkPreview < ViewComponent::Preview
     include Pathogen::ViewHelper
 
     def default
