@@ -9,6 +9,8 @@ module Pathogen
       @link_system_arguments = system_arguments
       @link_system_arguments[:tag] = :a
       @link_system_arguments[:href] = href
+      @link_system_arguments[:class] =
+        class_names(system_arguments[:class], 'text-grey-900 dark:text-grey-100 font-semibold hover:underline')
 
       @tooltip_id = Pathogen::Tooltip.generate_id
       @tooltip_system_arguments = {}
