@@ -1706,7 +1706,7 @@ fr:
         subtitle: Il s’agit de modèles de métadonnées pour le projet
         title: Modèles de métadonnées
     new:
-      description: Description du projet, non requise
+      description: Description
       empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
       help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       placeholder: Nom du projet génial

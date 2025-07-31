@@ -1706,7 +1706,7 @@ en:
         subtitle: These are metadata templates for the project
         title: Metadata Templates
     new:
-      description: Project description, not required
+      description: Description
       empty_state: No namespaces are associated with that name or ID
       help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
       placeholder: Awesome project name
