@@ -167,7 +167,9 @@
         <% end %>
       </table>
     <% end %>
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+
+    <%= pathogen_pagination(pagy: @pagy, item_name: t(".limit.item")) %>
+
     <% if @abilities[:edit_sample_metadata] %>
       <template data-editable-cell-target="formTemplate">
         <%= form_with(
