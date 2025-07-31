@@ -124,15 +124,10 @@ export default class extends Controller {
     // Announce dismissal to screen readers
     this.announceDismissal();
 
-    // Add dismiss animation
-    this.element.style.transition = 'all 0.3s ease-out';
-    this.element.style.opacity = '0';
-    this.element.style.transform = 'translateX(100%)';
-    this.element.style.maxHeight = '0';
-    this.element.style.marginBottom = '0';
-    this.element.style.padding = '0';
+    // Add dismiss animation class
+    this.element.classList.add("dismissing");
 
-    // Remove element after animation
+    // Remove element after animation completes
     setTimeout(() => {
       this.element.remove();
     }, 300);
