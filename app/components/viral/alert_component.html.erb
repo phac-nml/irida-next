@@ -1,13 +1,53 @@
-<%= render Viral::BaseComponent.new(tag: "div", **system_arguments) do %>
-  <span class="shrink-0 inline">
-    <%= pathogen_icon(ICON::WARNING_CIRCLE, color: icon_color, class: "mr-2 stroke-2") %>
-  </span>
-  <div>
-    <% if message.present? %>
-      <div class="font-medium"><%= message %></div>
-    <% end %>
-    <% if content.present? %>
-      <%= content %>
+<%= render Viral::BaseComponent.new(tag: "div", **system_arguments_with_data) do %>
+  <div class="flex items-start w-full">
+    <!-- Icon Container -->
+    <div class="flex-shrink-0 mr-3 mt-0.5">
+      <%= pathogen_icon(icon_name, color: icon_color, class: "w-5 h-5 stroke-2") %>
+    </div>
+    <!-- Content Container -->
+    <div class="flex-1 min-w-0">
+      <% if message.present? %>
+        <div class="text-sm font-medium leading-5">
+          <%= message %>
+        </div>
+      <% end %>
+
+      <% if content.present? %>
+        <div class="mt-2 text-sm leading-5">
+          <%= content %>
+        </div>
+      <% end %>
+    </div>
+    <!-- Dismiss Button -->
+    <% if dismissible %>
+      <div class="flex-shrink-0 ml-3">
+        <button
+          type="button"
+          id="<%= dismiss_button_id %>"
+          data-action="viral--alert#dismiss"
+          class="
+            inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400
+            hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-500
+            focus:ring-offset-2 transition-colors duration-200 dark:text-slate-500
+            dark:hover:text-slate-400 dark:focus:ring-slate-400
+          "
+          aria-label="<%= t('general.screen_reader.close') %>"
+        >
+          <%= pathogen_icon(ICON::X, size: :sm, class: "w-4 h-4") %>
+          <span class="sr-only"><%= t("general.screen_reader.close") %></span>
+        </button>
+      </div>
     <% end %>
   </div>
+  <!-- Progress Bar for Auto-dismiss -->
+  <% if auto_dismiss %>
+    <div
+      class="
+        absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300
+        ease-out
+      "
+      data-viral--alert-target="progressBar"
+      style="width: 100%;"
+    ></div>
+  <% end %>
 <% end %>
