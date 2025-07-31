@@ -457,6 +457,11 @@ input[type="search"] {
   .alert-component {
     @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm transition-all duration-300 ease-out;
     animation: slideIn 0.3s ease-out;
+    /* Ensure initial state for animation */
+    opacity: 0;
+    transform: translateX(-100%);
+    max-height: 0;
+    animation-fill-mode: forwards;
   }
 
   .alert-component:focus-within {
@@ -479,6 +484,7 @@ input[type="search"] {
   /* Alert dismiss animation */
   .alert-component.dismissing {
     animation: slideOut 0.3s ease-in forwards;
+    animation-fill-mode: forwards;
   }
 
   @keyframes slideOut {
