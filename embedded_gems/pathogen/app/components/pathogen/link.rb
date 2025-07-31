@@ -3,6 +3,11 @@
 module Pathogen
   # Pathogen::Link renders a link with consistent styling across the application. Can be used with or without a tooltip.
   class Link < Pathogen::Component
+    EXTERNAL_LINK_ATTRIBUTES = {
+      target: '_blank',
+      rel: 'noopener noreferrer'
+    }.freeze
+
     # @param href [String] The link url (required)
     # @param system_arguments [Hash] additional HTML attributes to be included in the link root element
     def initialize(href: nil, **system_arguments)
@@ -27,9 +32,21 @@ module Pathogen
     }
 
     def before_render
-      raise ArgumentError, 'href is required' if @link_system_arguments[:href].nil?
+      raise ArgumentError, 'href is required' if @link_system_arguments[:href].blank?
+      raise ArgumentError, "invalid href format: #{@link_system_arguments[:href]}" unless validate_href_format!
 
-      validate_href_format! if @link_system_arguments[:href].present?
+      setup_external_link_attributes if external_link?(@link_system_arguments[:href])
+    end
+
+    def setup_external_link_attributes
+      @link_system_arguments.merge!(EXTERNAL_LINK_ATTRIBUTES)
+      @link_system_arguments[:'aria-label'] ||= "#{content.strip} (opens in new window)"
+    end
+
+    def external_link?(href)
+      URI.parse(href).host != request.host
+    rescue URI::InvalidURIError
+      false
     end
 
     private
@@ -37,7 +54,7 @@ module Pathogen
     def validate_href_format!
       URI.parse(@link_system_arguments[:href])
     rescue URI::InvalidURIError
-      raise ArgumentError, "Invalid href format: #{@link_system_arguments[:href]}"
+      false
     end
   end
 end
