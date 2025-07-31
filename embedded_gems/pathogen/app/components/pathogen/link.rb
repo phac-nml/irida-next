@@ -18,11 +18,10 @@ module Pathogen
     # @param system_arguments [Hash] HTML attributes to be included in the tooltip root element
     renders_one :tooltip, lambda { |**system_arguments|
       @tooltip_id = Pathogen::Tooltip.generate_id
-      @tooltip_system_arguments = {}
-      @tooltip_system_arguments[:aria] = system_arguments[:aria] || {}
-      @tooltip_system_arguments[:aria][:describedby] = @tooltip_id
-      @tooltip_system_arguments[:data] = system_arguments[:data] || {}
-      @tooltip_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
+      @link_system_arguments[:aria] ||= {}
+      @link_system_arguments[:aria][:describedby] = @tooltip_id
+      @link_system_arguments[:data] ||= {}
+      @link_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
 
       Pathogen::Tooltip.new(id: @tooltip_id, **system_arguments)
     }
