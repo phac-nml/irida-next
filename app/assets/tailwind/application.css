@@ -453,6 +453,52 @@ input[type="search"] {
 }
 
 @layer components {
+  /* Alert Component Styles */
+  .alert-component {
+    @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm transition-all duration-300 ease-out;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .alert-component:focus-within {
+    @apply ring-2 ring-slate-500 ring-offset-2 dark:ring-slate-400;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-100%);
+      max-height: 0;
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+      max-height: 200px;
+    }
+  }
+
+  /* Alert dismiss animation */
+  .alert-component.dismissing {
+    animation: slideOut 0.3s ease-in forwards;
+  }
+
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+      max-height: 200px;
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+      max-height: 0;
+    }
+  }
+
+  /* Progress bar animation */
+  .alert-component .progress-bar {
+    @apply absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300 ease-out;
+  }
+
   kbd {
     @apply rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-sm font-semibold text-slate-800 dark:border-slate-500 dark:bg-slate-600 dark:text-slate-100;
   }
