@@ -55,8 +55,7 @@
             <% if namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= pathogen_link(href: namespace_group_link_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
-                },
-                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline") do |component| %>
+                }) do |component| %>
                 <% component.with_tooltip(text: t(:"projects.group_links.index.inherited_from")) %>
                 <%= namespace_group_link_source[:label] %>
               <% end %>
