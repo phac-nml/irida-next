@@ -14,14 +14,13 @@
       action="<%= request.original_url.split('?').first %>"
       class="inline-block"
     >
-      <%# Preserve existing query parameters except limit %>
-      <% request.query_parameters.except('limit').each do |key, value| %>
-        <% if value.is_a?(Array) %>
-          <% value.each do |v| %>
-            <input type="hidden" name="<%= key %>" value="<%= v %>">
+      <%# Preserve existing query parameters except limit, using the same logic as the original component %>
+      <% if request.original_url.include? '?' %>
+        <% request.original_url.split('?')[1].split('&').each do |param| %>
+          <% unless param.include? 'limit=' %>
+            <% key, value = param.split("=", 2) %>
+            <input type="hidden" name="<%= key %>" value="<%= value %>">
           <% end %>
-        <% else %>
-          <input type="hidden" name="<%= key %>" value="<%= value %>">
         <% end %>
       <% end %>
 
