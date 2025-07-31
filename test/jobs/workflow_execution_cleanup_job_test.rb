@@ -59,4 +59,22 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
 
     assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
+
+  test 'failed job on cleaned workflow execution' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    assert workflow_execution.cleaned?
+
+    error = assert_raises(Exception) do
+      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+        WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+      end
+    end
+
+    assert error.message.include?('StandardError: Attempted to clean Workflow Execution that is already cleaned.')
+
+    assert workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
+  end
 end
