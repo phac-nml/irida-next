@@ -19,7 +19,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
       ]
     )
     sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = %w[age country collection_date food subject_type outbreak_code]
+    metadata_fields = %w[age country collection_date food subject_type outbreak_code].sort
 
     render_with_template(locals: {
                            search: search,
@@ -31,7 +31,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
   def empty
     search = Sample::Query.new
     sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = %w[age country collection_date food subject_type outbreak_code]
+    metadata_fields = %w[age country collection_date food subject_type outbreak_code].sort
 
     render_with_template(template: 'advanced_search_component_preview/default', locals: {
                            search: search,
