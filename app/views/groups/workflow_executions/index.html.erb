@@ -26,7 +26,7 @@
   <% end %>
 <% end %>
 <div class="flow-root">
-  <div class="flex mb-2">
+  <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
     <% if @allowed_to[:export_data] %>
       <div class="inline-flex grow space-x-2">
         <%= form_with(
@@ -48,7 +48,7 @@
         <% end %>
       </div>
     <% end %>
-    <div class="grow-0">
+    <div class="flex grow-0">
       <%= render SearchComponent.new(
         query: @q,
         url: group_workflow_executions_path(**request.query_parameters),
