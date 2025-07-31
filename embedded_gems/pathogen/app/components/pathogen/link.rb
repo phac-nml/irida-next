@@ -38,6 +38,8 @@ module Pathogen
       setup_external_link_attributes if external_link?(@link_system_arguments[:href])
     end
 
+    private
+
     def setup_external_link_attributes
       @link_system_arguments.merge!(EXTERNAL_LINK_ATTRIBUTES)
       @link_system_arguments[:'aria-label'] ||= "#{content.strip} (opens in new window)"
@@ -48,8 +50,6 @@ module Pathogen
     rescue URI::InvalidURIError
       false
     end
-
-    private
 
     def validate_href_format!
       URI.parse(@link_system_arguments[:href])
