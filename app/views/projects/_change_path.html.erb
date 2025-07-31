@@ -37,7 +37,7 @@
                                    invalid: invalid_path,
                                    required: true,
                                  },
-                                 autofocus: invalid_path ? true : false %>
+                                 autofocus: invalid_path %>
             </div>
             <%= render "shared/form/field_errors",
             id: builder.field_id(:path, "error"),
