@@ -52,6 +52,11 @@ export default class extends Controller {
       isInitiallyCollapsed ? "false" : "true",
     );
 
+    this.buttonTarget.setAttribute(
+      "aria-controls",
+      this.itemTarget.id || this.itemTarget.dataset.id || "",
+    );
+
     // 🔄 Ensure the icon reflects the initial state
     this.#updateIcon(isInitiallyCollapsed);
   }
