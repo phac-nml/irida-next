@@ -28,6 +28,16 @@ module Pathogen
 
     def before_render
       raise ArgumentError, 'href is required' if @link_system_arguments[:href].nil?
+
+      validate_href_format! if @link_system_arguments[:href].present?
+    end
+
+    private
+
+    def validate_href_format!
+      URI.parse(@link_system_arguments[:href])
+    rescue URI::InvalidURIError
+      raise ArgumentError, "Invalid href format: #{@link_system_arguments[:href]}"
     end
   end
 end
