@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # 🎯 TabsPanel Component
+  # 🎯 TabList Component
   # Renders a navigation panel with tabs, typically used for section navigation within a page.
   # Utilizes Turbo Drive for seamless navigation between sections.
-  class TabsPanel < Pathogen::Component
+  class TabList < Pathogen::Component
     # 🔧 Default HTML tag for the component's root element.
     TAG_DEFAULT = :nav
 
@@ -22,13 +22,13 @@ module Pathogen
     ].join(' ').freeze
 
     # 📝 Defines and renders individual navigation tabs.
-    # Each tab is an instance of `Pathogen::TabsPanel::Tab`.
+    # Each tab is an instance of `Pathogen::TabList::Tab`.
     # @param options [Hash] Configuration options for the tab.
     # @option options [Boolean] :selected (false) Whether the tab is currently selected.
     # @option options [String] :href The URL the tab links to.
-    # @return [Pathogen::TabsPanel::Tab] A new tab instance.
+    # @return [Pathogen::TabList::Tab] A new tab instance.
     renders_many :tabs, lambda { |options = {}|
-      Pathogen::TabsPanel::Tab.new(
+      Pathogen::TabList::Tab.new(
         options.merge(
           selected: options[:selected] || false,
           tab_type: 'underline', # Assumes Tab component handles its specific underline style
@@ -40,7 +40,7 @@ module Pathogen
     # 🎨 Renders optional content aligned to the right of the tabs.
     renders_one :right_content
 
-    # 🚀 Initializes a new TabsPanel component.
+    # 🚀 Initializes a new TabList component.
     # @param id [String] A unique identifier for the tabs panel. This is required.
     # @param label [String] An accessible label for the navigation (aria-label).
     # @param body_arguments [Hash] HTML attributes for the list container (<ul>).
@@ -63,8 +63,6 @@ module Pathogen
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      # id is now guaranteed to be present by the initializer
-      @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
         @system_arguments[:class]
@@ -80,6 +78,9 @@ module Pathogen
       @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
 
       @body_arguments[:id] = "#{@system_arguments[:id]}-list"
+      @body_arguments[:role] = 'tablist'
+      # id is now guaranteed to be present by the initializer
+      @body_arguments[:'aria-label'] = @label if @label.present?
       # Merge data attributes, preserving existing ones.
       @body_arguments[:data] = {
         # Ensure this still works as expected, @system_arguments[:id] is now directly set

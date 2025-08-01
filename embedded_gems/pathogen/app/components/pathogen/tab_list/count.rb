@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Pathogen
-  class TabsPanel
-    # This file defines the Pathogen::TabsPanel::Count component, which handles adding a count to the tab when called
+  class TabList
+    # This file defines the Pathogen::TabList::Count component, which handles adding a count to the tab when called
     class Count < Pathogen::Component
       TAG_DEFAULT = :span
 

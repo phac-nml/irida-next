@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Pathogen
-  class TabsPanelPreview < ViewComponent::Preview
+  class TabListPreview < ViewComponent::Preview
     # @!group Basic Usage
     # @label Default
     # Basic tabs with minimal configuration

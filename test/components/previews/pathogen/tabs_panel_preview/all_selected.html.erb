@@ -1,5 +1,5 @@
 <%# Edge case: All tabs marked as selected (should only show first) %>
-<%= render Pathogen::TabsPanel.new(id: "all-selected-tabs") do |tabs| %>
+<%= pathogen_tab_list(id: "all-selected-tabs") do |tabs| %>
   <% tabs.with_tab(
     id: "tab-1",
     controls: "panel-1",

@@ -75,7 +75,7 @@
       >
 
         <div class="flex-1 min-h-0">
-          <%= render Pathogen::TabsPanel.new(id: "groups-show-tabs", label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
+          <%= pathogen_tab_list(id: "groups-show-tabs", label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
             <% tabs.with_tab(
               id: "subgroups_and_projects_tab",
               href: group_path(@group),

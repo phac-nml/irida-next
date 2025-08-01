@@ -3,9 +3,9 @@
 require 'test_helper'
 
 module Pathogen
-  class TabsPanelTest < ViewComponent::TestCase
+  class TabListTest < ViewComponent::TestCase
     test 'basic navigation panel' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true)
         nav.with_tab(id: 'nav-2', text: 'Profile', href: '/profile')
         nav.with_tab(id: 'nav-3', text: 'Settings', href: '/settings')
@@ -13,12 +13,12 @@ module Pathogen
       render_inline(tabs_component)
 
       # Navigation container
-      assert_selector 'nav[id="test_panel"]'
-      assert_selector 'ul[id="test_panel-list"]'
+      assert_selector 'nav[id="test_tab_list"]'
+      assert_selector 'ul[id="test_tab_list-list"]'
       assert_selector 'li', count: 3
 
       # Selected tab
-      assert_selector 'a[id="nav-1"][href="/home"][aria-current="page"]', text: 'Home'
+      assert_selector 'a[id="nav-1"][href="/home"][aria-selected="true"]', text: 'Home'
       assert_selector 'a[class*="border-primary-800"][class*="text-slate-900"]', text: 'Home'
 
       # Unselected tabs
@@ -28,8 +28,8 @@ module Pathogen
     end
 
     test 'navigation with label' do
-      tabs_component = Pathogen::TabsPanel.new(
-        id: 'test_panel',
+      tabs_component = Pathogen::TabList.new(
+        id: 'test_tab_list',
         label: 'Main Navigation'
       ).tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true)
@@ -37,11 +37,11 @@ module Pathogen
       end
       render_inline(tabs_component)
 
-      assert_selector 'nav[aria-label="Main Navigation"]'
+      assert_selector 'ul[aria-label="Main Navigation"]'
     end
 
     test 'navigation with icons' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true) do |tab|
           tab.with_icon(icon: ICON::BANK)
         end
@@ -57,7 +57,7 @@ module Pathogen
     end
 
     test 'navigation with counts' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true) do |tab|
           tab.with_count(count: 3)
         end
@@ -77,8 +77,8 @@ module Pathogen
     end
 
     test 'navigation with custom body' do
-      tabs_component = Pathogen::TabsPanel.new(
-        id: 'test_panel',
+      tabs_component = Pathogen::TabList.new(
+        id: 'test_tab_list',
         body_arguments: {
           tag: :div,
           classes: 'flex space-x-4'
@@ -97,54 +97,54 @@ module Pathogen
       end
       render_inline(tabs_component)
 
-      assert_selector 'div[id="test_panel-list"][class*="flex space-x-4"]'
+      assert_selector 'div[id="test_tab_list-list"][class*="flex space-x-4"]'
       assert_selector 'div[class*="flex-1"]'
     end
 
     test 'navigation with single item' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true)
       end
       render_inline(tabs_component)
 
       assert_selector 'li', count: 1
-      assert_selector 'a[aria-current="page"]', text: 'Home'
+      assert_selector 'a[aria-selected="true"]', text: 'Home'
     end
 
     test 'navigation without items' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel')
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list')
       render_inline(tabs_component)
 
-      assert_selector 'nav[id="test_panel"]'
-      assert_selector 'ul[id="test_panel-list"]'
+      assert_selector 'nav[id="test_tab_list"]'
+      assert_selector 'ul[id="test_tab_list-list"]'
       assert_no_selector 'li'
     end
 
     test 'validates required parameters' do
       # Test that tab requires text
       assert_raises ArgumentError do
-        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+        Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
           nav.with_tab(id: 'nav-1', href: '/home')
         end
       end
 
       # Test that tab requires href
       assert_raises ArgumentError do
-        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+        Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
           nav.with_tab(id: 'nav-1', text: 'Home')
         end
       end
 
       # Test that tab requires id
       assert_raises ArgumentError do
-        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+        Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
           nav.with_tab(text: 'Home', href: '/home')
         end
       end
     end
 
     test 'navigation with many items' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         5.times do |i|
           nav.with_tab(
             id: "nav-#{i + 1}",
@@ -157,12 +157,12 @@ module Pathogen
       render_inline(tabs_component)
 
       assert_selector 'li', count: 5
-      assert_selector 'a[aria-current="page"]', count: 1
+      assert_selector 'a[aria-selected="true"]', count: 1
       assert_selector 'a[class*="border-transparent"]', count: 4
     end
 
     test 'navigation with long content' do
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+      tabs_component = Pathogen::TabList.new(id: 'test_tab_list').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Long Content', href: '/long', selected: true)
       end
       render_inline(tabs_component)
