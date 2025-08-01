@@ -3,6 +3,11 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["metadataToAdd", "fieldsContainer", "fieldTemplate"];
 
+  static values = {
+    keyMissing: { type: String },
+    valueMissing: { type: String },
+  };
+
   #form_error_text_css = ["text-red-500"];
 
   #field_error_state = [
@@ -127,7 +132,7 @@ export default class extends Controller {
     metadata_field.classList.remove(...this.#field_valid_state);
     metadata_field.classList.add(...this.#field_error_state);
     fieldError.classList.remove("hidden");
-    fieldErrorSpan.innerHTML = "Key cannot be blank";
+    fieldErrorSpan.innerHTML = this.keyMissingValue;
     fieldErrorSpan.classList.add(...this.#form_error_text_css);
     keyField.classList.add("invalid");
   }
@@ -161,7 +166,7 @@ export default class extends Controller {
     value_field.classList.remove(...this.#field_valid_state);
     value_field.classList.add(...this.#field_error_state);
     fieldError.classList.remove("hidden");
-    fieldErrorSpan.innerHTML = "Value cannot be blank";
+    fieldErrorSpan.innerHTML = this.valueMissingValue;
     fieldErrorSpan.classList.add(...this.#form_error_text_css);
     valueField.classList.add("invalid");
   }
