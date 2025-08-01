@@ -685,6 +685,8 @@ fr:
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
+      hide: Hide token
+      show: Show token
       toggle_visible: Basculer la visibilité
     treegrid:
       row:

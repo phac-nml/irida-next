@@ -685,6 +685,8 @@ en:
     token:
       copied: Copied!
       copy: Copy to clipboard
+      hide: Hide token
+      show: Show token
       toggle_visible: Toggle visibility
     treegrid:
       row:

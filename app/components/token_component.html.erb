@@ -1,8 +1,8 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
   controller: "token",
   "token-item-value": value,
-  "token-show-mask-button-value": "Show token",
-  "token-hide-mask-button-value": "Hide token" }) do %>
+  "token-show-mask-button-value": t(:'components.token.show'),
+  "token-hide-mask-button-value": t(:'components.token.hide') }) do %>
   <div class="relative mr-2 grow">
     <input
       type="text"
