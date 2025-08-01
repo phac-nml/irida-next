@@ -72,22 +72,22 @@ module Viral
       end
     end
 
-    # Provides the appropriate screen reader text for the icon based on the flash message type.
-    # This text is internationalized.
+    # Provides the appropriate screen reader text for the flash message type.
+    # This text is internationalized and describes the type of message.
     #
-    # @return [String] The screen reader text for the icon.
-    def icon_sr_text
+    # @return [String] The screen reader text for the message type.
+    def message_type_sr_text
       case type.to_s
       when 'success'
-        t('components.flash.success_icon')
+        t('components.flash.success_message')
       when 'error'
-        t('components.flash.error_icon')
+        t('components.flash.error_message')
       when 'warning'
-        t('components.flash.warning_icon')
+        t('components.flash.warning_message')
       when 'info'
-        t('components.flash.information_icon')
+        t('components.flash.information_message')
       else
-        '' # Default or fallback text
+        t('components.flash.message')
       end
     end
 
