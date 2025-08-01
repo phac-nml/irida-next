@@ -1,15 +1,20 @@
 <%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post) do |form| %>
 
   <div class="grid gap-2" data-controller="projects--samples--metadata--create">
+    <%= render partial: "shared/form/required_field_legend" %>
     <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
     <template data-projects--samples--metadata--create-target="fieldTemplate">
-      <div class="flex mb-4 space-x-2 inputField items-center">
-        <div class="relative z-0 w-full group">
+      <div class="flex space-x-2 inputField items-center">
+        <div
+          id="key[PLACEHOLDER]_key_input"
+          class="
+            relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
+          "
+        >
           <input
             type="text"
             id="key[PLACEHOLDER]"
             name="key[PLACEHOLDER]"
-            required
             class="
               keyInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
               rounded-lg border-1 border-slate-300 appearance-none dark:text-white
@@ -19,6 +24,7 @@
           />
           <label
             for="key[PLACEHOLDER]"
+            data-required="true"
             class="
               keyLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
               transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
@@ -27,14 +33,19 @@
               peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
               rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
             "
-          ><%= t(".key") %></label>
+          ><%= t(".key") %>
+          </label>
         </div>
-        <div class="relative z-0 w-full group">
+        <div
+          id="value[PLACEHOLDER]_value_input"
+          class="
+            relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
+          "
+        >
           <input
             type="text"
             id="value[PLACEHOLDER]"
             name="value[PLACEHOLDER]"
-            required
             class="
               valueInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
               rounded-lg border-1 border-slate-300 appearance-none dark:text-white
@@ -44,6 +55,7 @@
           />
           <label
             for="value[PLACEHOLDER]"
+            data-required="true"
             class="
               valueLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
               transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
@@ -67,6 +79,15 @@
         >
           <%= pathogen_icon(ICON::X, size: :sm) %>
         </button>
+      </div>
+      <div class="flex mb-4" id="key[PLACEHOLDER]_field_errors">
+        <div id="key[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+          <%= viral_help_text(state: :error, classes: "hidden") %>
+        </div>
+        <div id="value[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+          <%= viral_help_text(state: :error, classes: "hidden") %>
+        </div>
+        <div class="w-[55]"></div>
       </div>
     </template>
     <div data-projects--samples--metadata--create-target="fieldsContainer"></div>
