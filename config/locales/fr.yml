@@ -876,9 +876,6 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
-  date:
-    formats:
-      iso: AAAA/MM/JJ
   devise:
     passwords:
       edit:
@@ -1387,6 +1384,36 @@ fr:
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.
+  pathogen:
+    datepicker:
+      clear_selection: Clear Selection
+      date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
+      days_of_week:
+        friday: ven
+        monday: lun
+        saturday: sam
+        sunday: dim
+        thursday: jeu
+        tuesday: mar
+        wednesday: mer
+      errors:
+        invalid_date: Invalid date.
+        min_date_error: 'Earliest allowed date: %{min_date}'
+      months:
+        april: avril
+        august: août
+        december: décembre
+        february: février
+        january: janvier
+        july: juillet
+        june: juin
+        march: mars
+        may: mai
+        november: novembre
+        october: octobre
+        september: septembre
+      placeholder: AAAA-MM-JJ
+      show_today: Show Today
   personal_access_tokens:
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
@@ -1632,7 +1659,6 @@ fr:
         actions:
           unlink_aria_label: Dissocier l’espace de noms du groupe de boutons %{member}
         aria_labels:
-          expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce projet
