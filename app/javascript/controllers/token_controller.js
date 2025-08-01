@@ -1,8 +1,20 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["contents", "initial", "input", "copied", "hide", "view"];
-  static values = { item: String };
+  static targets = [
+    "contents",
+    "initial",
+    "input",
+    "copied",
+    "hide",
+    "view",
+    "maskButton",
+  ];
+  static values = {
+    item: String,
+    hideMaskButton: String,
+    showMaskButton: String,
+  };
 
   connect() {
     this.visible = false;
@@ -24,6 +36,10 @@ export default class extends Controller {
     if (this.visible) {
       this.hideTarget.classList.remove("hidden");
       this.viewTarget.classList.add("hidden");
+      this.maskButtonTarget.setAttribute(
+        "aria-label",
+        this.hideMaskButtonValue,
+      );
       this.inputTarget.value = Array.prototype.join.call(
         { length: this.itemValue.length },
         "*",
@@ -31,6 +47,10 @@ export default class extends Controller {
     } else {
       this.hideTarget.classList.add("hidden");
       this.viewTarget.classList.remove("hidden");
+      this.maskButtonTarget.setAttribute(
+        "aria-label",
+        this.showMaskButtonValue,
+      );
       this.inputTarget.value = this.itemValue;
     }
     this.visible = !this.visible;
