@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Pathogen
-  class TabsPanel
+  class TabList
     # 🎯 Tab Component
     # A navigation link component that supports Turbo Drive integration
     # and dynamic content updates with proper styling and accessibility.
     #
     # @example Basic usage with text
-    #   <%= render Pathogen::TabsPanel::Tab.new(
+    #   <%= render Pathogen::TabList::Tab.new(
     #     id: "nav-1",
     #     text: "Home",
     #     href: "/home",
@@ -15,7 +15,7 @@ module Pathogen
     #   ) %>
     #
     # @example With icon and count badge
-    #   <%= render Pathogen::TabsPanel::Tab.new(
+    #   <%= render Pathogen::TabList::Tab.new(
     #     id: "nav-2",
     #     text: "Notifications",
     #     href: "/notifications"
@@ -33,10 +33,10 @@ module Pathogen
       # 📝 Renders a count badge for the tab
       # @param count [Integer] The count to display
       # @param system_arguments [Hash] Additional arguments for the count component
-      # @return [Pathogen::TabsPanel::Count] The count component instance
+      # @return [Pathogen::TabList::Count] The count component instance
       renders_one :count, lambda { |count: nil, **system_arguments|
         @count = count
-        Pathogen::TabsPanel::Count.new(
+        Pathogen::TabList::Count.new(
           count: count,
           selected: @selected,
           **system_arguments
@@ -106,7 +106,8 @@ module Pathogen
           tag: TAG_DEFAULT,
           id: @id,
           href: @href,
-          'aria-current': @selected ? 'page' : nil,
+          role: 'tab',
+          'aria-selected': @selected,
           data: {
             turbo_action: 'replace',
             tabs_target: 'link'

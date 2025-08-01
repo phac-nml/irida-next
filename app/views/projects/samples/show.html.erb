@@ -34,7 +34,7 @@
 <% end %>
 
 <div>
-  <%= render Pathogen::TabsPanel.new(
+  <%= pathogen_tab_list(
     id: "sample-tabs",
     label: t("projects.samples.show.nav_aria_label")
   ) do |tabs| %>
