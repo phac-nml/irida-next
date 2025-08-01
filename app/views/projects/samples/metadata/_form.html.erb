@@ -1,6 +1,11 @@
 <%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post) do |form| %>
 
-  <div class="grid gap-2" data-controller="projects--samples--metadata--create">
+  <div
+    class="grid gap-2"
+    data-controller="projects--samples--metadata--create"
+    data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key")%>"
+    data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
+  >
     <%= render partial: "shared/form/required_field_legend" %>
     <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
     <template data-projects--samples--metadata--create-target="fieldTemplate">

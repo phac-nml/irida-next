@@ -1802,6 +1802,9 @@ en:
           submit_button: Add
           value: Value
         new_metadata_modal:
+          required_error:
+            key: Metadata key is required
+            value: Metadata value is required
           title: Add Metadata
         table:
           add_metadata: Add Metadata
