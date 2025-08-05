@@ -7,8 +7,4 @@ class ApplicationJob < ActiveJob::Base
 
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
-  def raise_error(error_message)
-    Rails.logger.error error_message
-    raise StandardError, error_message
-  end
 end
