@@ -2,7 +2,29 @@
   data-controller="projects--samples--metadata--create"
   data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key")%>"
   data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
+  data-projects--samples--metadata--create-form-error-value="<%= t("general.form.error_notification") %>"
 >
+
+  <div
+    role="alert"
+    class="
+      flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
+      bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
+    "
+    data-projects--samples--metadata--create-target="formFieldError"
+  >
+    <span class="inline shrink-0">
+      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+    </span>
+    <div>
+      <div
+        class="font-medium whitespace-break-spaces"
+        data-projects--samples--metadata--create-target="formFieldErrorMessage"
+        aria-live="assertive"
+      ></div>
+    </div>
+  </div>
+
   <%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post, data: { "projects--samples--metadata--create-target": "form" }) do |form| %>
     <div class="grid gap-2">
       <%= render partial: "shared/form/required_field_legend" %>
