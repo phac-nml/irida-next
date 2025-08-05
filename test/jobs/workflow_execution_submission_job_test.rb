@@ -121,21 +121,19 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
         ]
       end
 
-      error = assert_raises(Exception) do
-        perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
-          WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
-        end
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
       end
-
-      assert error.message.include?('Workflow Execution was not prepared.')
     end
 
     assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
-    assert workflow_execution.reload.submitted?
+    assert_not workflow_execution.reload.submitted?
+    assert workflow_execution.error?
   end
 
-  test 'job execution failed because WES returned nil run_id' do
+  # This test is a unique case where the error is expected to be caught by the status job at a later point
+  test 'job execution succeeded despite WES returning nil run_id' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 1)
 
     Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
@@ -147,17 +145,14 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
         ]
       end
 
-      error = assert_raises(Exception) do
-        perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
-          WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-        end
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
       end
-
-      assert error.message.include?('Workflow Execution did not get a run_id from WES')
     end
 
-    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
+    assert_not @workflow_execution.error?
   end
 end

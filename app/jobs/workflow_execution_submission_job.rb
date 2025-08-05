@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Creates a wes connection and calls the submission service for the workflow execution
-class WorkflowExecutionSubmissionJob < ApplicationJob
+class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
   queue_as :default
   queue_with_priority 5
 
@@ -21,13 +21,16 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
   end
 
   def perform(workflow_execution)
+    # User signaled to cancel
     return if workflow_execution.canceling? || workflow_execution.canceled?
+
+    # validate workflow_execution object is fit to run jobs on
+    unless validate_initial_state(workflow_execution, [:prepared], validate_run_id: true)
+      return handle_error_state_and_clean(workflow_execution)
+    end
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
-
-    raise_error('Workflow Execution was not prepared.') unless workflow_execution
-    raise_error('Workflow Execution did not get a run_id from WES') if workflow_execution.run_id.nil?
 
     WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
   end
