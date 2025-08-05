@@ -1267,3 +1267,25 @@ workflow_execution_group_shared_canceled:
   state: "canceled"
   cleaned: true
   shared_with_namespace: true
+
+workflow_execution_missing_namespace:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.3" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: "This namespace has been deleted"
+  name: "workflow_execution_valid"
+
+workflow_execution_missing_run_id:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.3" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: Null
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_valid"
