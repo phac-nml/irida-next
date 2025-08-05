@@ -129,16 +129,10 @@ export default class extends Controller {
     if (scrollTop > this.lastScrollTop) {
       // 🙈 Hide the header
       this.headerTarget.classList.add("-translate-y-full");
-      // ⬆️ Move the main content up
-      this.mainContentTarget.classList.remove("top-16");
-      this.mainContentTarget.classList.add("top-0");
     } else {
       // 👆 Scrolling up
       // 🙉 Show the header
       this.headerTarget.classList.remove("-translate-y-full");
-      // ⬇️ Move the main content down
-      this.mainContentTarget.classList.remove("top-0");
-      this.mainContentTarget.classList.add("top-16");
     }
 
     // 💾 Update the last scroll position
