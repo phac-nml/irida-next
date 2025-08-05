@@ -2,9 +2,19 @@ import { Controller } from "@hotwired/stimulus";
 import { createFocusTrap } from "focus-trap";
 
 export default class extends Controller {
-  static targets = ["dialog"];
+  static targets = ["dialog", "trigger"];
   static values = { open: Boolean };
   #focusTrap = null;
+
+  initialize() {
+    document.addEventListener(
+      "turbo:morph",
+      () => {
+        this.triggerTarget.focus();
+      },
+      { once: true },
+    );
+  }
 
   connect() {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {

@@ -3,7 +3,7 @@
 module Viral
   # Base component to be inherited from
   class BaseComponent < Viral::Component
-    attr_reader :tag, :content_tag_args
+    SELF_CLOSING_TAGS = %w[area base br col embed hr img input keygen link meta param source track wbr].freeze
 
     def initialize(tag:, classes: nil, **system_arguments)
       @tag = tag
@@ -12,7 +12,11 @@ module Viral
     end
 
     def call
-      content_tag(tag, content, content_tag_args)
+      if SELF_CLOSING_TAGS.include?(@tag)
+        tag(@tag, @content_tag_args, true)
+      else
+        content_tag(@tag, content, @content_tag_args)
+      end
     end
 
     private

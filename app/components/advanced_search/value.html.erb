@@ -2,9 +2,10 @@
 <% operator_exists =
   @condition.operator.blank? ||
     %w[exists not_exists].include?(@condition.operator) %>
+
 <div
   class="
-    form-field w-6/12 @max-xl:w-auto value <%= 'invalid' if invalid_value %>
+    form-field w-5/12 @max-xl:w-full value <%= 'invalid' if invalid_value %>
     <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
 >
@@ -18,13 +19,20 @@
         list_input_form_name:
           "q[groups_attributes][#{@group_index}][conditions_attributes][#{@condition_index}][value][]",
         show_description: false,
+        "aria-invalid": invalid_value,
+        "aria-describedby": @conditions_form.field_id(:value, "error"),
       ) %>
     </div>
   <% else %>
     <%= @conditions_form.text_field :value,
                                 placeholder: t("advanced_search_component.value"),
-                                "aria-label": t("advanced_search_component.value") %>
+                                "aria-label": t("advanced_search_component.value"),
+                                "aria-invalid": invalid_value,
+                                "aria-describedby":
+                                  @conditions_form.field_id(:value, "error"),
+                                autofocus: invalid_value %>
   <% end %>
   <%= render "shared/form/field_errors",
-  errors: @condition.errors.full_messages_for(:value) %>
+  errors: @condition.errors.full_messages_for(:value),
+  id: @conditions_form.field_id(:value, "error") %>
 </div>
