@@ -6,11 +6,14 @@ export default class extends Controller {
     "fieldsContainer",
     "fieldTemplate",
     "form",
+    "formFieldError",
+    "formFieldErrorMessage",
   ];
 
   static values = {
     keyMissing: { type: String },
     valueMissing: { type: String },
+    formError: { type: String },
   };
 
   #form_error_text_css = ["text-red-500"];
@@ -93,9 +96,9 @@ export default class extends Controller {
     setTimeout(() => {
       for (let input of inputFields) {
         let metadata_field = input.querySelector(".keyInput");
-        let value = input.querySelector(".valueInput");
+        let value_field = input.querySelector(".valueInput");
 
-        if (!metadata_field.value || !value.value) {
+        if (!metadata_field.value || !value_field.value) {
           if (!metadata_field.value) {
             this.#addFieldErrorState(
               metadata_field,
@@ -109,16 +112,16 @@ export default class extends Controller {
             this.#removeFieldErrorState(metadata_field, "key_input");
           }
 
-          if (!value.value) {
+          if (!value_field.value) {
             this.#addFieldErrorState(
-              value,
+              value_field,
               "value_input",
               this.valueMissingValue,
             );
             if (this.#errors.indexOf(metadata_field.id) === -1) {
               this.#errors.push(metadata_field.id);
             }
-          } else if (value.value) {
+          } else if (value_field.value) {
             this.#removeFieldErrorState(value, "value_input");
           }
         } else {
@@ -129,7 +132,7 @@ export default class extends Controller {
               this.valueMissingValue,
             );
             this.#removeFieldErrorState(
-              value,
+              value_field,
               "value_input",
               this.valueMissingValue,
             );
@@ -138,20 +141,37 @@ export default class extends Controller {
             );
           }
 
-          let metadataInput = `<input type='hidden' name="sample[create_fields][${metadata_field.value}]" value="${value.value}">`;
+          let metadataInput = `<input type='hidden' name="sample[create_fields][${metadata_field.value}]" value="${value_field.value}">`;
           this.metadataToAddTarget.insertAdjacentHTML(
             "beforeend",
             metadataInput,
           );
           metadata_field.name = "";
-          value.name = "";
+          value_field.name = "";
         }
       }
 
       if (this.#errors.length == 0) {
+        this.#disableFormFieldErrorState();
         this.formTarget.requestSubmit();
+      } else {
+        this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
+  }
+
+  #disableFormFieldErrorState() {
+    this.formFieldErrorTarget.classList.add("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = "";
+  }
+
+  #enableFormFieldErrorState(message) {
+    this.formFieldErrorTarget.classList.remove("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = message;
+    this.formFieldErrorTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 
   #addFieldErrorState(field, inputDivIdSuffix, errorMessage) {
