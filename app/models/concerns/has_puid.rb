@@ -19,17 +19,19 @@ module HasPuid
     def create_or_update(**options, &)
       return super unless new_record?
 
-      until persisted?
-        begin
+      begin
+        ActiveRecord::Base.transaction(requires_new: true) do
           return super
-        rescue ActiveRecord::RecordNotUnique => e
-          raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
-
-          Rails.logger.info(
-            "PUID conflict encountered for #{self.class}, regenerating PUID and attempting to save again."
-          )
-          generate_puid(force: true)
         end
+      rescue ActiveRecord::RecordNotUnique => e
+        raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
+
+        Rails.logger.info(
+          "PUID conflict encountered for #{self.class}, regenerating PUID and attempting to save again."
+        )
+
+        generate_puid(force: true)
+        retry
       end
     end
   end
