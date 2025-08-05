@@ -37,4 +37,18 @@ class HasPuidTest < ActionDispatch::IntegrationTest
     assert @sample.puid
     assert_nil clone.puid
   end
+
+  test 'puid conflict retry' do
+    puid = @sample.puid
+
+    @sample.generate_puid
+    assert_equal puid, @sample.puid
+
+    sample = Sample.new(name: "#{@sample.name} copy", puid: puid, project_id: @sample.project_id)
+
+    assert_equal puid, sample.puid
+    sample.save
+
+    assert_not_equal puid, sample.puid
+  end
 end
