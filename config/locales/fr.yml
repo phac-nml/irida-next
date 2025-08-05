@@ -2067,6 +2067,7 @@ fr:
       create:
         required:
           access_level: Impossible de créer un compte de bot, car un niveau d’accès doit être sélectionné
+          base: Unable to create bot account
           scopes: Impossible de créer un compte de bot, car la portée de l’API du bot doit être sélectionnée
           token_name: Impossible de créer un compte de bot, car le nom du jeton est requis
     data_exports:

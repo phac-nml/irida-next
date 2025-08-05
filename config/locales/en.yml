@@ -2066,9 +2066,10 @@ en:
     bots:
       create:
         required:
-          access_level: Unable to create bot account as an access level must be selected
-          scopes: Unable to create bot account as the bot API scope must be selected
-          token_name: Unable to create bot account as the token name is required
+          access_level: must be selected
+          base: Unable to create bot account
+          scopes: must be selected
+          token_name: is required
     data_exports:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
