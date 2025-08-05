@@ -111,7 +111,9 @@ module Pathogen
           data: {
             turbo_action: 'replace',
             tabs_target: 'link'
-          }
+          },
+          tabindex: @selected ? '0' : '-1',
+          'data-action': 'keydown->pathogen--tablist#handleKeyboardInput'
         )
       end
 

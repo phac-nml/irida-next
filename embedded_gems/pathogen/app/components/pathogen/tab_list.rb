@@ -46,13 +46,14 @@ module Pathogen
     # @param body_arguments [Hash] HTML attributes for the list container (<ul>).
     # @param system_arguments [Hash] HTML attributes for the main container (<nav>).
     # @raise [ArgumentError] if id is not provided.
-    def initialize(id:, label: '', body_arguments: {}, **system_arguments)
+    def initialize(id:, label: '', current_tab: nil, body_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
 
       @system_arguments = system_arguments
       @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
       @label = label
+      @current_tab = current_tab
 
       setup_container_attributes
       setup_list_attributes
@@ -70,7 +71,7 @@ module Pathogen
     end
 
     # 🏗️ Configures HTML attributes for the <ul> list container.
-    def setup_list_attributes
+    def setup_list_attributes # rubocop:disable Metrics/AbcSize
       @body_arguments[:tag] = @body_arguments[:tag] || BODY_TAG_DEFAULT
 
       # Apply default classes unless custom classes are provided.
@@ -84,7 +85,8 @@ module Pathogen
       # Merge data attributes, preserving existing ones.
       @body_arguments[:data] = {
         # Ensure this still works as expected, @system_arguments[:id] is now directly set
-        tabs_list_id_value: @system_arguments[:id]
+        tabs_list_id_value: @system_arguments[:id],
+        controller: 'pathogen--tablist'
       }.merge(@body_arguments[:data] || {})
     end
   end
