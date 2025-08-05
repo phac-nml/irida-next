@@ -7,6 +7,8 @@ module Samples
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class UpdateService < BaseService
         SampleMetadataFieldsUpdateError = Class.new(StandardError)
+        SampleMetadataKeyValidationError = Class.new(StandardError)
+        SampleMetadataValueValidationError = Class.new(StandardError)
         attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params
 
         def initialize(project, sample, user = nil, params = {})
@@ -31,6 +33,10 @@ module Samples
         rescue Samples::Metadata::Fields::UpdateService::SampleMetadataFieldsUpdateError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
+        rescue Samples::Metadata::Fields::UpdateService::SampleMetadataKeyValidationError => e
+          @sample.reload.errors.add(:key, e.message)
+        rescue Samples::Metadata::Fields::UpdateService::SampleMetadataValueValidationError => e
+          @sample.reload.errors.add(:value, e.message)
         end
 
         private
@@ -45,11 +51,20 @@ module Samples
         end
 
         # Checks if neither key or value were changed
-        def validate_update_fields
+        def validate_update_fields # rubocop:disable Metrics/AbcSize
           if @key_update.keys[0] == @key_update.values[0] && @value_update.keys[0] == @value_update.values[0]
 
             raise SampleMetadataFieldsUpdateError,
                   I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+          end
+
+          if @key_update.values[0].blank?
+            raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
+          end
+
+          if @value_update.values[0].blank?
+            raise SampleMetadataValueValidationError,
+                  I18n.t('services.samples.metadata.update_fields.value_required')
           end
 
           return unless @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'

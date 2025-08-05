@@ -51,8 +51,6 @@ module Samples
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
         @sample.reload.errors.add(:base, e.message)
         { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [] }
-      rescue Samples::Metadata::UpdateService::SampleMetadataKeyValidationError => e
-        @sample.reload.errors.add(:key, e.message)
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.reload.errors.add(:base, e.message)
         @metadata_changes
@@ -82,15 +80,8 @@ module Samples
               I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key:)
       end
 
-      def validate_metadata_key(key)
-        return if key.present?
-
-        raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
-      end
-
       def perform_metadata_update
         @metadata.each do |key, value|
-          validate_metadata_key(key)
           validate_metadata_value(key, value)
 
           key = key.to_s.downcase.strip
