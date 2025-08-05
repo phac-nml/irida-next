@@ -9,16 +9,11 @@
     <label for="pagy-limit-select" class="text-sm font-medium">
       <%= t(".items", items: @item) %>
     </label>
-    <form
-      method="get"
-      action="<%= request.original_url.split('?').first %>"
-      class="inline-block"
-    >
-      <%# Preserve existing query parameters except limit, using the same logic as the original component %>
-      <% if request.original_url.include? '?' %>
-        <% request.original_url.split('?')[1].split('&').each do |param| %>
-          <% unless param.include? 'limit=' %>
-            <% key, value = param.split("=", 2) %>
+    <form method="get" action="<%= request.path %>" class="inline-block">
+      <%# Preserve existing query parameters except limit %>
+      <% if request.query_string.present? %>
+        <% CGI.parse(request.query_string).except('limit').each do |key, values| %>
+          <% values.each do |value| %>
             <input type="hidden" name="<%= key %>" value="<%= value %>">
           <% end %>
         <% end %>
