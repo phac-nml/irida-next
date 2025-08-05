@@ -1,113 +1,113 @@
-<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post) do |form| %>
-
-  <div
-    class="grid gap-2"
-    data-controller="projects--samples--metadata--create"
-    data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key")%>"
-    data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
-  >
-    <%= render partial: "shared/form/required_field_legend" %>
-    <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
-    <template data-projects--samples--metadata--create-target="fieldTemplate">
-      <div class="flex space-x-2 inputField items-center">
-        <div
-          id="key[PLACEHOLDER]_key_input"
-          class="
-            relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
-          "
-        >
-          <input
-            type="text"
-            id="key[PLACEHOLDER]"
-            name="key[PLACEHOLDER]"
+<div
+  data-controller="projects--samples--metadata--create"
+  data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key")%>"
+  data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
+>
+  <%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post, data: { "projects--samples--metadata--create-target": "form" }) do |form| %>
+    <div class="grid gap-2">
+      <%= render partial: "shared/form/required_field_legend" %>
+      <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
+      <template data-projects--samples--metadata--create-target="fieldTemplate">
+        <div class="flex space-x-2 inputField items-center">
+          <div
+            id="key[PLACEHOLDER]_key_input"
             class="
-              keyInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
-              rounded-lg border-1 border-slate-300 appearance-none dark:text-white
-              dark:border-slate-600 peer
+              relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
             "
-            placeholder=""
-          />
-          <label
-            for="key[PLACEHOLDER]"
-            data-required="true"
+          >
+            <input
+              type="text"
+              id="key[PLACEHOLDER]"
+              name="key[PLACEHOLDER]"
+              class="
+                keyInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
+                rounded-lg border-1 border-slate-300 appearance-none dark:text-white
+                dark:border-slate-600 peer
+              "
+              placeholder=""
+            />
+            <label
+              for="key[PLACEHOLDER]"
+              data-required="true"
+              class="
+                keyLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
+                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
+                dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100
+                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
+                peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+                rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
+              "
+            ><%= t(".key") %>
+            </label>
+          </div>
+          <div
+            id="value[PLACEHOLDER]_value_input"
             class="
-              keyLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
-              transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
-              dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100
-              peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-              peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-              rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
+              relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
             "
-          ><%= t(".key") %>
-          </label>
+          >
+            <input
+              type="text"
+              id="value[PLACEHOLDER]"
+              name="value[PLACEHOLDER]"
+              class="
+                valueInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
+                rounded-lg border-1 border-slate-300 appearance-none dark:text-white
+                dark:border-slate-600 peer
+              "
+              placeholder=""
+            />
+            <label
+              for="value[PLACEHOLDER]"
+              data-required="true"
+              class="
+                valueLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
+                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
+                dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100
+                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
+                peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+                rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
+              "
+            ><%= t(".value") %></label>
+          </div>
+          <button
+            type="button"
+            data-action="projects--samples--metadata--create#removeField"
+            class="
+              ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg p-1.5
+              hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8
+              dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
+              dark:hover:bg-slate-700
+            "
+            aria-label="<%= t(".remove_field")%>"
+          >
+            <%= pathogen_icon(ICON::X, size: :sm) %>
+          </button>
         </div>
-        <div
-          id="value[PLACEHOLDER]_value_input"
-          class="
-            relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
-          "
-        >
-          <input
-            type="text"
-            id="value[PLACEHOLDER]"
-            name="value[PLACEHOLDER]"
-            class="
-              valueInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent
-              rounded-lg border-1 border-slate-300 appearance-none dark:text-white
-              dark:border-slate-600 peer
-            "
-            placeholder=""
-          />
-          <label
-            for="value[PLACEHOLDER]"
-            data-required="true"
-            class="
-              valueLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300
-              transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white
-              dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100
-              peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-              peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-              rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
-            "
-          ><%= t(".value") %></label>
+        <div class="flex mb-4" id="key[PLACEHOLDER]_field_errors">
+          <div id="key[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+            <%= viral_help_text(state: :error, classes: "hidden") %>
+          </div>
+          <div id="value[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+            <%= viral_help_text(state: :error, classes: "hidden") %>
+          </div>
+          <div class="w-[55]"></div>
         </div>
-        <button
-          type="button"
-          data-action="projects--samples--metadata--create#removeField"
-          class="
-            ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg p-1.5
-            hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8
-            dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-            dark:hover:bg-slate-700
-          "
-          aria-label="<%= t(".remove_field")%>"
-        >
-          <%= pathogen_icon(ICON::X, size: :sm) %>
-        </button>
+      </template>
+      <div data-projects--samples--metadata--create-target="fieldsContainer"></div>
+      <div class="text-center">
+        <%= form.button t(".create_field_button"),
+                    type: "button",
+                    class:
+                      "text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 hover:text-slate-950 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700",
+                    "data-action": "projects--samples--metadata--create#addField" %>
       </div>
-      <div class="flex mb-4" id="key[PLACEHOLDER]_field_errors">
-        <div id="key[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
-          <%= viral_help_text(state: :error, classes: "hidden") %>
-        </div>
-        <div id="value[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
-          <%= viral_help_text(state: :error, classes: "hidden") %>
-        </div>
-        <div class="w-[55]"></div>
+      <div>
+        <%= form.submit t(".submit_button"),
+                    class:
+                      "text-white border-primary-800 bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:border-primary-900 dark:bg-primary-800 dark:hover:bg-primary-700",
+                    "data-action": "projects--samples--metadata--create#buildMetadata" %>
       </div>
-    </template>
-    <div data-projects--samples--metadata--create-target="fieldsContainer"></div>
-    <div class="text-center">
-      <%= form.button t(".create_field_button"),
-                  type: "button",
-                  class:
-                    "text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 hover:text-slate-950 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700",
-                  "data-action": "projects--samples--metadata--create#addField" %>
     </div>
-    <div>
-      <%= form.submit t(".submit_button"),
-                  class:
-                    "text-white border-primary-800 bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:border-primary-900 dark:bg-primary-800 dark:hover:bg-primary-700",
-                  "data-action": "projects--samples--metadata--create#buildMetadata" %>
-    </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
