@@ -106,7 +106,6 @@ irida_next_example_prepared:
     }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
-  run_id: "my_run_id_4"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "prepared"

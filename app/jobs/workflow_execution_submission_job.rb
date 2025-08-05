@@ -25,7 +25,7 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     return if workflow_execution.canceling? || workflow_execution.canceled?
 
     # validate workflow_execution object is fit to run jobs on
-    unless validate_initial_state(workflow_execution, [:prepared], validate_run_id: true)
+    unless validate_initial_state(workflow_execution, [:prepared], validate_run_id: false)
       return handle_error_state_and_clean(workflow_execution)
     end
 
