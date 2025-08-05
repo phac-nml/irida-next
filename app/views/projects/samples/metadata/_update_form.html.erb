@@ -1,4 +1,4 @@
-<%= if !@sample.errors[:base].any?
+<%= if @sample.errors.any? && !@sample.errors[:base].any?
   viral_alert(
     type: "alert",
     classes: "mb-2",
@@ -46,15 +46,38 @@ end %>
         </div>
       <% end %>
       <%= field.fields_for :value do |metadata_value| %>
-        <div class="form-field">
+        <% invalid_value = @sample.errors.include?(:value) %>
+        <div class="form-field <%= 'invalid' if invalid_value %>">
           <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
+                               data: {
+                                 required: true,
+                               },
                                class:
                                  "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= metadata_value.text_field value,
                                     value: value,
                                     required: true,
+                                    aria: {
+                                      describedby: [
+                                        (
+                                          if invalid_value
+                                            form.field_id(:value, "error")
+                                          else
+                                            nil
+                                          end
+                                        ),
+                                      ].join(" "),
+                                      invalid: invalid_value,
+                                      required: true,
+                                    },
+                                    autofocus: invalid_value,
                                     class:
                                       "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+          <%= if invalid_value
+            render "shared/form/field_errors",
+            id: form.field_id(:value, "error"),
+            errors: @sample.errors[:value]
+          end %>
         </div>
       <% end %>
 
