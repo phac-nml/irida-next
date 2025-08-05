@@ -128,11 +128,11 @@ export default class extends Controller {
     // 👇 Scrolling down
     if (scrollTop > this.lastScrollTop) {
       // 🙈 Hide the header
-      this.headerTarget.classList.add("-translate-y-full");
+      this.headerTarget.classList.add("max-sm:-translate-y-full");
     } else {
       // 👆 Scrolling up
       // 🙉 Show the header
-      this.headerTarget.classList.remove("-translate-y-full");
+      this.headerTarget.classList.remove("max-sm:-translate-y-full");
     }
 
     // 💾 Update the last scroll position
