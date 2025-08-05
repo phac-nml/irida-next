@@ -1,7 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["metadataToAdd", "fieldsContainer", "fieldTemplate"];
+  static targets = [
+    "metadataToAdd",
+    "fieldsContainer",
+    "fieldTemplate",
+    "form",
+  ];
 
   static values = {
     keyMissing: { type: String },
@@ -42,6 +47,8 @@ export default class extends Controller {
     "dark:text-white",
   ];
 
+  #errors = [];
+
   connect() {
     this.addField();
   }
@@ -68,123 +75,116 @@ export default class extends Controller {
     // Remove error messages div if inputField div is removed
     document.getElementById(key_id + "_field_errors").remove();
 
+    this.#errors = this.#errors.filter(
+      (item) => item.toString() !== key_id.toString(),
+    );
+
     // If only one field existed and was deleted, we re-add a new field
     if (document.querySelectorAll(".inputField").length == 0) {
       this.addField();
     }
   }
 
-  // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
-  // we ignore and do not submit those fields.
+  // Metadata is constructed and validated before submission to the backend.
   buildMetadata(event) {
     event.preventDefault();
     const inputFields = document.querySelectorAll(".inputField");
-    let errors = [];
-    for (let input of inputFields) {
-      let metadata_field = input.querySelector(".keyInput");
-      let value = input.querySelector(".valueInput");
 
-      if (metadata_field.value === "" || value.value === "") {
-        if (errors.indexOf(metadata_field.value) === -1) {
-          errors.push(metadata_field.value);
-        }
-        if (metadata_field.value === "") {
-          this.#addKeyFieldErrorState(metadata_field);
-        } else if (metadata_field.value !== "") {
-          this.#removeKeyFieldErrorState(metadata_field);
-        }
+    setTimeout(() => {
+      for (let input of inputFields) {
+        let metadata_field = input.querySelector(".keyInput");
+        let value = input.querySelector(".valueInput");
 
-        if (value.value === "") {
-          this.#addValueFieldErrorState(value);
-        } else if (value.value !== "") {
-          this.#removeValueFieldErrorState(value);
-        }
-      } else {
-        this.#removeKeyFieldErrorState(metadata_field);
-        this.#removeValueFieldErrorState(value);
-        errors.pop(metadata_field.value);
+        if (!metadata_field.value || !value.value) {
+          if (!metadata_field.value) {
+            this.#addFieldErrorState(
+              metadata_field,
+              "key_input",
+              this.keyMissingValue,
+            );
+            if (this.#errors.indexOf(metadata_field.id) === -1) {
+              this.#errors.push(metadata_field.id.toString());
+            }
+          } else if (metadata_field.value) {
+            this.#removeFieldErrorState(metadata_field, "key_input");
+          }
 
-        let metadataInput = `<input type='hidden' name="sample[create_fields][${metadata_field.value}]" value="${value.value}">`;
-        this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataInput);
-        metadata_field.name = "";
-        value.name = "";
+          if (!value.value) {
+            this.#addFieldErrorState(
+              value,
+              "value_input",
+              this.valueMissingValue,
+            );
+            if (this.#errors.indexOf(metadata_field.id) === -1) {
+              this.#errors.push(metadata_field.id);
+            }
+          } else if (value.value) {
+            this.#removeFieldErrorState(value, "value_input");
+          }
+        } else {
+          if (this.#errors.includes(metadata_field.id)) {
+            this.#removeFieldErrorState(
+              metadata_field,
+              "key_input",
+              this.valueMissingValue,
+            );
+            this.#removeFieldErrorState(
+              value,
+              "value_input",
+              this.valueMissingValue,
+            );
+            this.#errors = this.#errors.filter(
+              (item) => item.toString() !== metadata_field.id.toString(),
+            );
+          }
+
+          let metadataInput = `<input type='hidden' name="sample[create_fields][${metadata_field.value}]" value="${value.value}">`;
+          this.metadataToAddTarget.insertAdjacentHTML(
+            "beforeend",
+            metadataInput,
+          );
+          metadata_field.name = "";
+          value.name = "";
+        }
       }
-    }
-    if (errors.length == 0) {
-      this.submit(event);
-    }
+
+      if (this.#errors.length == 0) {
+        this.formTarget.requestSubmit();
+      }
+    }, 50);
   }
 
-  submit(event) {
-    let form = event.target.closest("form");
-    form.requestSubmit();
-  }
-
-  #addKeyFieldErrorState(metadata_field) {
-    let field_id = metadata_field.id;
+  #addFieldErrorState(field, inputDivIdSuffix, errorMessage) {
+    let field_id = field.id;
     let fieldError = document.getElementById(
       field_id + "_error",
     ).lastElementChild;
     let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let keyField = document.getElementById(field_id + "_key_input");
-    metadata_field.setAttribute("aria-invalid", true);
-    metadata_field.setAttribute("aria-describedBy", field_id + "_error");
-    metadata_field.classList.remove(...this.#field_valid_state);
-    metadata_field.classList.add(...this.#field_error_state);
+    let keyField = document.getElementById(field_id + "_" + inputDivIdSuffix);
+    field.setAttribute("aria-invalid", true);
+    field.setAttribute("aria-describedBy", field_id + "_error");
+    field.classList.remove(...this.#field_valid_state);
+    field.classList.add(...this.#field_error_state);
     fieldError.classList.remove("hidden");
-    fieldErrorSpan.innerHTML = this.keyMissingValue;
+    fieldErrorSpan.innerHTML = errorMessage;
     fieldErrorSpan.classList.add(...this.#form_error_text_css);
     keyField.classList.add("invalid");
   }
 
-  #removeKeyFieldErrorState(metadata_field) {
-    let field_id = metadata_field.id;
+  #removeFieldErrorState(field, inputDivIdSuffix) {
+    let field_id = field.id;
     let fieldError = document.getElementById(
       field_id + "_error",
     ).lastElementChild;
     let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let keyField = document.getElementById(field_id + "_key_input");
-    metadata_field.removeAttribute("aria-invalid");
-    metadata_field.removeAttribute("aria-describedBy");
-    metadata_field.classList.add(...this.#field_valid_state);
-    metadata_field.classList.remove(...this.#field_error_state);
+    let keyField = document.getElementById(field_id + "_" + inputDivIdSuffix);
+    field.removeAttribute("aria-invalid");
+    field.removeAttribute("aria-describedBy");
+    field.classList.add(...this.#field_valid_state);
+    field.classList.remove(...this.#field_error_state);
     fieldError.classList.add("hidden");
     fieldErrorSpan.innerHTML = "";
     fieldErrorSpan.classList.remove(...this.#form_error_text_css);
     keyField.classList.remove("invalid");
-  }
-
-  #addValueFieldErrorState(value_field) {
-    let field_id = value_field.id;
-    let fieldError = document.getElementById(
-      field_id + "_error",
-    ).lastElementChild;
-    let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let valueField = document.getElementById(field_id + "_value_input");
-    value_field.setAttribute("aria-invalid", true);
-    value_field.setAttribute("aria-describedBy", field_id + "_error");
-    value_field.classList.remove(...this.#field_valid_state);
-    value_field.classList.add(...this.#field_error_state);
-    fieldError.classList.remove("hidden");
-    fieldErrorSpan.innerHTML = this.valueMissingValue;
-    fieldErrorSpan.classList.add(...this.#form_error_text_css);
-    valueField.classList.add("invalid");
-  }
-
-  #removeValueFieldErrorState(value_field) {
-    let field_id = value_field.id;
-    let fieldError = document.getElementById(
-      field_id + "_error",
-    ).lastElementChild;
-    let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let valueField = document.getElementById(field_id + "_value_input");
-    value_field.removeAttribute("aria-invalid");
-    value_field.removeAttribute("aria-describedBy");
-    value_field.classList.add(...this.#field_valid_state);
-    value_field.classList.remove(...this.#field_error_state);
-    fieldError.classList.add("hidden");
-    fieldErrorSpan.innerHTML = "";
-    fieldErrorSpan.classList.remove(...this.#form_error_text_css);
-    valueField.classList.remove("invalid");
   }
 }
