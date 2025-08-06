@@ -1,4 +1,6 @@
-ActiveSupport.on_load(:action_view) do
+# frozen_string_literal: true
+
+ActiveSupport.on_load(:action_view) do # rubocop:disable Metrics/BlockLength
   # Monkey patch CheckBox to remove autocomplete="off"
   ActionView::Helpers::Tags::CheckBox.class_eval do
     private
@@ -31,7 +33,7 @@ ActiveSupport.on_load(:action_view) do
   ActionView::Helpers::Tags::HiddenField.class_eval do
     remove_possible_method :render
 
-    def render
+    def render # rubocop:disable Lint/UselessMethodDefinition
       super
     end
   end
