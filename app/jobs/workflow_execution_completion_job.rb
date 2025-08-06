@@ -13,7 +13,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
 
     WorkflowExecutions::CompletionService.new(workflow_execution).execute
 
-    # TODO: this job doesn't have any tests.
-    # They should be added when job queuing from CompletionService is refactored into this job.
+    # TODO: this job doesn't have any tests. Only the service has tests.
+    # Tests should be added when job queuing from CompletionService is refactored into this job.
   end
 end
