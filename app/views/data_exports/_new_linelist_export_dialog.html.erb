@@ -89,10 +89,7 @@
           <%= sortable_lists.with_list(
             id: t(".available"),
             title: t(".available"),
-            list_items:
-              @namespace.metadata_fields.sort_by do |metadata_field|
-                metadata_field.downcase
-              end,
+            list_items: @namespace.metadata_fields,
             group: "metadata_selection",
             container_classes: "block mb-1 pr-2 text-sm font-medium",
             list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",

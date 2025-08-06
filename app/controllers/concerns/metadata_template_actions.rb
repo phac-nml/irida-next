@@ -154,7 +154,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
                                else
                                  @metadata_template.nil? ? [] : @metadata_template.fields
                                end
-    @available_metadata_fields = @namespace.metadata_fields.sort_by(&:downcase) - @current_template_fields
+    @available_metadata_fields = @namespace.metadata_fields - @current_template_fields
   end
 
   def render_success(message)

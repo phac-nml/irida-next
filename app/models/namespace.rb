@@ -258,7 +258,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def metadata_fields
-    metadata_summary.keys
+    metadata_summary.keys.sort
   end
 
   def metadata_templates
