@@ -61,8 +61,7 @@ module Pathogen
                            I18n.t('pathogen.datepicker.days_of_week.thursday'),
                            I18n.t('pathogen.datepicker.days_of_week.friday'),
                            I18n.t('pathogen.datepicker.days_of_week.saturday')]
-
-      @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
+      # rubocop:enable Metrics/ParameterLists
 
       setup_ids(id)
       setup_calendar_attributes
@@ -72,6 +71,7 @@ module Pathogen
     # initialize, container attributes are then setup as it requires min_date
     def before_render
       @min_date = datepicker_expiry_default_min_date if @min_date.nil?
+      @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
       setup_container_attributes
     end
 
