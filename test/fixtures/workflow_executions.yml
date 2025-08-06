@@ -79,7 +79,7 @@ irida_next_example:
   cleaned: false
   name: "irida_next_example"
 
-irida_next_example_nonexecutable:
+irida_next_example_non_executable:
   <<: *DEFAULTS
   metadata:
     { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.0" }
@@ -90,7 +90,7 @@ irida_next_example_nonexecutable:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   email_notification: true
   cleaned: false
-  name: "irida_next_example_nonexecutable"
+  name: "irida_next_example_non_executable"
 
 irida_next_example_prepared:
   <<: *DEFAULTS
