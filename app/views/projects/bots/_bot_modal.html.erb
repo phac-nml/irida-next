@@ -37,7 +37,7 @@
                         describedby:
                           (
                             if invalid_access_level
-                              form.field_id(:invalid_access_level, "error")
+                              form.field_id(:access_level, "error")
                             else
                               nil
                             end
@@ -48,7 +48,7 @@
                       autofocus: invalid_access_level,
                     } %>
         <%= render "shared/form/field_errors",
-        id: form.field_id(:invalid_access_level, "error"),
+        id: form.field_id(:access_level, "error"),
         errors: new_bot_account.errors.full_messages_for(:access_level) %>
       </div>
 
@@ -75,7 +75,7 @@
                             describedby:
                               (
                                 if invalid_token_name
-                                  form.field_id(:invalid_token_name, "error")
+                                  form.field_id(:token_name, "error")
                                 else
                                   nil
                                 end
@@ -85,7 +85,7 @@
                           },
                           autofocus: invalid_token_name %>
           <%= render "shared/form/field_errors",
-          id: form.field_id(:invalid_token_name, "error"),
+          id: form.field_id(:token_name, "error"),
           errors: new_bot_account.errors.full_messages_for(:token_name) %>
         </div>
         <div class="form-field">
@@ -103,7 +103,20 @@
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]", scope, id: "bot_scopes_#{scope}" %>
+                  <%= check_box_tag "bot[scopes][]",
+                  scope,
+                  id: "bot_scopes_#{scope}",
+                  aria: {
+                    describedby:
+                      (
+                        if invalid_scopes
+                          form.field_id(:scopes, "error")
+                        else
+                          nil
+                        end
+                      ),
+                    invalid: invalid_scopes,
+                  } %>
                 </div>
                 <div class="text-sm">
                   <%= label_tag "bot_scopes_#{scope}",
@@ -120,7 +133,7 @@
             <% end %>
           <% end %>
           <%= render "shared/form/field_errors",
-          id: form.field_id(:invalid_scopes, "error"),
+          id: form.field_id(:scopes, "error"),
           errors: new_bot_account.errors.full_messages_for(:scopes) %>
         </div>
 
