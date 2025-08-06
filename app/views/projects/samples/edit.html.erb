@@ -17,7 +17,7 @@
       >
         <%= t("projects.samples.edit.form.title") %>
       </h2>
-      <%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), data: {turbo: false}, method: :patch) do |form| %>
+      <%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), data: {turbo: false}, method: :patch, html: { novalidate: true}) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
           <div>
