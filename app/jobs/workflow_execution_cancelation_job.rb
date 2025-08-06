@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Perform actions required to cancel a workflow execution
-class WorkflowExecutionCancelationJob < ApplicationJob
+class WorkflowExecutionCancelationJob < WorkflowExecutionJob
   queue_as :default
   queue_with_priority 5
 
@@ -37,6 +37,11 @@ class WorkflowExecutionCancelationJob < ApplicationJob
   end
 
   def perform(workflow_execution, user)
+    # validate workflow_execution object is fit to run jobs on
+    unless validate_initial_state(workflow_execution, [:canceling], validate_run_id: true)
+      return handle_error_state_and_clean(workflow_execution)
+    end
+
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     WorkflowExecutions::CancelationService.new(workflow_execution, wes_connection, user).execute
   end
