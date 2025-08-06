@@ -4,7 +4,7 @@
 module LocalDatetimeHelper
   # called by pathogen datepicker
   def datepicker_expiry_default_min_date
-    extract_date(helpers.local_date(Date.today + 1.day, '%Y-%m-%d'))
+    extract_date(helpers.local_date(Time.zone.today + 1.day, '%Y-%m-%d'))
   end
 
   private
