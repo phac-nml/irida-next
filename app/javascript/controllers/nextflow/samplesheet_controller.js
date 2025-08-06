@@ -807,7 +807,6 @@ export default class extends Controller {
 
   #createMetadataFormInput(inputValue) {
     const input = document.createElement("input");
-    input.setAttribute("autocomplete", "off");
     input.setAttribute("name", inputValue["name"]);
     input.setAttribute("value", inputValue["value"]);
     input.setAttribute("type", "hidden");
