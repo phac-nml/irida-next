@@ -5,7 +5,7 @@
       class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
     ><%= @label %></label>
   <% end %>
-  <div class="relative max-w-sm">
+  <div class="relative max-w-sm" aria-live="polite">
     <div
       class="
         absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none
@@ -69,6 +69,7 @@
                 keydown->pathogen--datepicker--calendar#tabBackToInput
               "
               data-pathogen--datepicker--calendar-target="backButton"
+              aria-label="<%= t(".aria_label.previous_month_button")%>"
             >
               <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
             </button>
@@ -90,6 +91,7 @@
                   w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
                   dark:bg-slate-800 dark:text-white ml-1
                 "
+                aria-label="<%= t('.aria_label.select_year') %>"
               >
             </div>
             <button
@@ -101,17 +103,23 @@
                 focus:ring-slate-200 next-btn ml-2 cursor-pointer
               "
               data-action="click->pathogen--datepicker--calendar#nextMonth"
+              aria-label="<%= t(".aria_label.next_month_button")%>"
             >
               <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
             </button>
           </div>
         </div>
         <div class="p-1 justify-center">
-          <table class="min-w-full table-fixed">
+          <table
+            class="min-w-full table-fixed"
+            role="grid"
+            aria-label="<%= t('.aria_label.calendar')%>"
+          >
             <thead class="mb-1">
               <tr>
                 <% @days_of_the_week.each do |day| %>
                   <th
+                    scope="col"
                     class="
                       dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
                     "
@@ -134,14 +142,21 @@
               type="button"
               class="button button-primary w-1/2"
               data-action="click->pathogen--datepicker--calendar#showToday"
-            ><%= t(".show_today") %></button><button
+              aria-label="<%= t('.aria_label.show_today') %>"
+            >
+              <%= t(".show_today") %>
+            </button>
+            <button
               type="button"
               class="button button-default w-1/2"
               data-action="
                 click->pathogen--datepicker--calendar#clearSelection
               "
               data-pathogen--datepicker--calendar-target="clearButton"
-            ><%= t(".clear_selection") %></button>
+              aria-label="<%= t('.aria_label.clear_selection') %>"
+            >
+              <%= t(".clear_selection") %>
+            </button>
           </div>
         </div>
       </div>
@@ -184,6 +199,7 @@
             rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
             dark:bg-slate-800 dark:text-white
           "
+          aria-label="<%= t('.aria_label.select_month') %>"
         >
           <% @months.each do |month| %>
             <option value="<%= month %>"><%= month %></option>

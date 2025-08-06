@@ -300,7 +300,7 @@ export default class extends Controller {
           allDates[i],
           STYLE_CLASSES["disabledDateClasses"],
         );
-        allDates[i].setAttribute("data-date-disabled", true);
+        allDates[i].setAttribute("aria-disabled", true);
       }
       // if minDate and today are on calendar and today is before the minDate, remove the hover classes
       if (today && this.#minDate > this.#todaysFormattedFullDate) {
@@ -470,7 +470,7 @@ export default class extends Controller {
   selectDate(event) {
     const selectedDate = event.target;
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
-    if (selectedDate.getAttribute("data-date-disabled")) return;
+    if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
     this.pathogenDatepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
@@ -576,7 +576,7 @@ export default class extends Controller {
     // node we're allowed to navigate to)
     const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
 
-    if (firstDateNode.getAttribute("data-date-disabled")) {
+    if (firstDateNode.getAttribute("aria-disabled")) {
       focusDate(
         this.calendarTarget,
         getDateNode(this.calendarTarget, this.#minDate),
