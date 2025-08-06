@@ -4,6 +4,7 @@ module Pathogen
   # Datepicker Component
   # Renders the date input along with datepicker calendar
   class Datepicker < Pathogen::Component
+    include LocalDatetimeHelper
     # Default HTML tag for components main elements.
     TAG_DEFAULT = :div
 
@@ -35,10 +36,9 @@ module Pathogen
       @label = label
       @input_name = input_name
       @input_aria_label = input_aria_label
-      @min_date = min_date.to_s
       @selected_date = selected_date
       @autosubmit = autosubmit
-
+      @min_date = min_date
       @system_arguments = system_arguments
       @calendar_arguments = calendar_arguments
 
@@ -65,10 +65,15 @@ module Pathogen
       @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
 
       setup_ids(id)
-      setup_container_attributes
       setup_calendar_attributes
     end
-    # rubocop:enable Metrics/ParameterLists
+
+    # min_date default must be performed in before_render since it requires a helper gem which can't be called within
+    # initialize, container attributes are then setup as it requires min_date
+    def before_render
+      @min_date = datepicker_expiry_default_min_date if @min_date.nil?
+      setup_container_attributes
+    end
 
     private
 

@@ -106,7 +106,6 @@
         id: "namespace_group_link_expires_at",
         label: t("groups.group_links.new.label.access_expiration"),
         input_name: "namespace_group_link[expires_at]",
-        min_date: (Date.today + 1.day),
       ) %>
       <div class="my-4">
         <%= form.submit I18n.t("groups.group_links.new.button.submit"),

@@ -54,7 +54,6 @@
             id: "bot_expires_at",
             input_name: "bot[expires_at]",
             label: t("projects.bots.index.bot_listing.new_bot_modal.expires_at"),
-            min_date: (Date.today + 1.day),
             selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
           ) %>
         </div>

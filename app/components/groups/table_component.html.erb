@@ -100,7 +100,6 @@
                 <%= pathogen_datepicker(
                   id: "invited-group-#{namespace_group_link.group.id}-expiration",
                   input_name: "namespace_group_link[expires_at]",
-                  min_date: (Date.today + 1.day),
                   selected_date: namespace_group_link.expires_at,
                   autosubmit: true,
                   input_aria_label: t("groups.group_links.index.aria_labels.expires_at"),
