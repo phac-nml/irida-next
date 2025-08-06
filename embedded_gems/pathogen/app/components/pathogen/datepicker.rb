@@ -28,7 +28,7 @@ module Pathogen
     # @raise [ArgumentError] if input_name is not provided.
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: nil, selected_date: nil, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: nil, selected_date: nil,
                    autosubmit: false, calendar_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -42,25 +42,8 @@ module Pathogen
       @system_arguments = system_arguments
       @calendar_arguments = calendar_arguments
 
-      @months = [I18n.t('pathogen.datepicker.months.january'),
-                 I18n.t('pathogen.datepicker.months.february'),
-                 I18n.t('pathogen.datepicker.months.march'),
-                 I18n.t('pathogen.datepicker.months.april'),
-                 I18n.t('pathogen.datepicker.months.may'),
-                 I18n.t('pathogen.datepicker.months.june'),
-                 I18n.t('pathogen.datepicker.months.july'),
-                 I18n.t('pathogen.datepicker.months.august'),
-                 I18n.t('pathogen.datepicker.months.september'),
-                 I18n.t('pathogen.datepicker.months.october'),
-                 I18n.t('pathogen.datepicker.months.november'),
-                 I18n.t('pathogen.datepicker.months.december')]
-      @days_of_the_week = [I18n.t('pathogen.datepicker.days_of_week.sunday'),
-                           I18n.t('pathogen.datepicker.days_of_week.monday'),
-                           I18n.t('pathogen.datepicker.days_of_week.tuesday'),
-                           I18n.t('pathogen.datepicker.days_of_week.wednesday'),
-                           I18n.t('pathogen.datepicker.days_of_week.thursday'),
-                           I18n.t('pathogen.datepicker.days_of_week.friday'),
-                           I18n.t('pathogen.datepicker.days_of_week.saturday')]
+      @months = load_months
+      @days_of_the_week = load_days_of_week
       # rubocop:enable Metrics/ParameterLists
 
       setup_ids(id)
@@ -71,11 +54,40 @@ module Pathogen
     # initialize, container attributes are then setup as it requires min_date
     def before_render
       @min_date = datepicker_expiry_default_min_date if @min_date.nil?
-      @min_year = @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
+      @min_year = calculate_min_year
       setup_container_attributes
     end
 
     private
+
+    def load_months
+      [I18n.t('pathogen.datepicker.months.january'),
+       I18n.t('pathogen.datepicker.months.february'),
+       I18n.t('pathogen.datepicker.months.march'),
+       I18n.t('pathogen.datepicker.months.april'),
+       I18n.t('pathogen.datepicker.months.may'),
+       I18n.t('pathogen.datepicker.months.june'),
+       I18n.t('pathogen.datepicker.months.july'),
+       I18n.t('pathogen.datepicker.months.august'),
+       I18n.t('pathogen.datepicker.months.september'),
+       I18n.t('pathogen.datepicker.months.october'),
+       I18n.t('pathogen.datepicker.months.november'),
+       I18n.t('pathogen.datepicker.months.december')]
+    end
+
+    def load_days_of_week
+      [I18n.t('pathogen.datepicker.days_of_week.sunday'),
+       I18n.t('pathogen.datepicker.days_of_week.monday'),
+       I18n.t('pathogen.datepicker.days_of_week.tuesday'),
+       I18n.t('pathogen.datepicker.days_of_week.wednesday'),
+       I18n.t('pathogen.datepicker.days_of_week.thursday'),
+       I18n.t('pathogen.datepicker.days_of_week.friday'),
+       I18n.t('pathogen.datepicker.days_of_week.saturday')]
+    end
+
+    def calculate_min_year
+      @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
+    end
 
     def setup_ids(id)
       @container_id = "#{id}-datepicker"
