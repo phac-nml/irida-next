@@ -1,14 +1,15 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.path.title")) %>
   <% card.with_section do %>
-    <%= form_with(model: @group, url: group_path, method: :patch) do |form| %>
+    <%= form_with(model: @group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
       <div class="grid gap-4">
         <p class="text-slate-600 dark:text-slate-400">
           <%= t(:"groups.edit.advanced.path.description") %>
         </p>
+        <%= render partial: "shared/form/required_field_legend" %>
         <% invalid_path = @group.errors.include?(:path) %>
         <div class="form-field prefixed <%= 'invalid' if invalid_path %>">
-          <%= form.label :path %>
+          <%= form.label :path, data: { required: true } %>
           <div class="flex whitespace-nowrap items-center">
             <div
               class="
@@ -28,10 +29,20 @@
                             pattern: Irida::PathRegex::PATH_REGEX_STR,
                             required: true,
                             title: t(:"groups.create.path_help"),
+                            aria: {
+                              describedby: [
+                                invalid_path ? form.field_id(:path, "error") : nil,
+                              ].join(" "),
+                              invalid: invalid_path,
+                              required: true,
+                            },
+                            autofocus: invalid_path,
                             class: "prefixed" %>
           </div>
-          <%= render "shared/form/field_errors",
-          errors: @group.errors.full_messages_for(:path) %>
+          <% if invalid_path %>
+            <%= render "shared/form/field_errors",
+            errors: @group.errors.full_messages_for(:path) %>
+          <% end %>
         </div>
         <div>
           <%= form.submit t(:"groups.edit.advanced.path.submit"),
