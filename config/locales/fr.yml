@@ -142,7 +142,7 @@ fr:
         expires_at: Date d'expiration
         last_used_at: Dernière utilisation
         name: Nom du jeton
-        scopes: Portées
+        scopes_html: Portées <span class="text-red-500 dark:text-red-500 mr-1" aria-hidden="true">*</span>
       sample:
         description: Description
         name: Nom

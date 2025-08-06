@@ -142,7 +142,7 @@ en:
         expires_at: Expiration Date
         last_used_at: Last Used
         name: Token name
-        scopes: Scopes
+        scopes_html: Scopes <span class="text-red-500 dark:text-red-500 mr-1" aria-hidden="true">*</span>
       sample:
         description: Description
         name: Name

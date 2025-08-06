@@ -100,7 +100,7 @@
 
         <% invalid_scopes = new_bot_account.errors.include?(:scopes) %>
         <div class="form-field <%= 'invalid' if invalid_scopes %>">
-          <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
+          <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes_html').html_safe) do %>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
