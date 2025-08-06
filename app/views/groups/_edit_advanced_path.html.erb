@@ -30,9 +30,8 @@
                             required: true,
                             title: t(:"groups.create.path_help"),
                             aria: {
-                              describedby: [
+                              describedby:
                                 invalid_path ? form.field_id(:path, "error") : nil,
-                              ].join(" "),
                               invalid: invalid_path,
                               required: true,
                             },
@@ -41,6 +40,7 @@
           </div>
           <% if invalid_path %>
             <%= render "shared/form/field_errors",
+            id: form.field_id(:path, "error"),
             errors: @group.errors.full_messages_for(:path) %>
           <% end %>
         </div>
