@@ -1,0 +1,7 @@
+<%= render Pathogen::ConditionalWrapper.new(condition: tooltip?, tag: :div, 'data-controller': 'pathogen--tooltip') do %>
+  <%= render(Pathogen::BaseComponent.new(**@link_system_arguments)) do %>
+    <%= content %>
+  <% end %>
+
+  <%= tooltip if tooltip? %>
+<% end %>

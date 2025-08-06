@@ -90,13 +90,11 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% if !member_source.key?(:inherited_namespace_path) %>
               <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
             <% else %>
-              <%= viral_tooltip(title: t(".inherited_from")) do %>
-                <%= link_to member_source[:label],
-                member_source[:inherited_namespace_path],
-                data: {
+              <%= pathogen_link(href: member_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
-                },
-                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                }) do |component| %>
+                <% component.with_tooltip(text: t(".inherited_from")) %>
+                <%= member_source[:label] %>
               <% end %>
             <% end %>
           </td>

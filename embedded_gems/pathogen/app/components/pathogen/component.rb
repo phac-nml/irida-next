@@ -59,6 +59,10 @@ module Pathogen
       raise ArgumentError, help_text if should_raise_aria_error? && aria(key, arguments)
     end
 
+    def self.generate_id(base_name: name.demodulize.underscore.dasherize)
+      "#{base_name}-#{SecureRandom.uuid}"
+    end
+
     private
 
     def unpack_denylist(denylist)

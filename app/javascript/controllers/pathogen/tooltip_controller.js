@@ -5,7 +5,7 @@ export default class extends Controller {
   connect() {
     new Tooltip(this.targetTarget, this.triggerTarget, {
       placement: "top",
-      triggerType: "hover",
+      triggerType: ["hover", "focus"],
     });
 
     this.element.setAttribute("data-controller-connected", "true");
