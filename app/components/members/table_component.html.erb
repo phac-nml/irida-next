@@ -118,7 +118,6 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <%= pathogen_datepicker(
                   id: "member-#{member.id}-expiration",
                   input_name: "member[expires_at]",
-                  min_date: (Date.today + 1.day),
                   selected_date: member.expires_at,
                   autosubmit: true,
                   input_aria_label: t("members.table_component.aria_labels.expires_at"),
