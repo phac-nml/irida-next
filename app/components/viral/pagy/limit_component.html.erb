@@ -5,58 +5,60 @@
     text-slate-500 dark:text-slate-400
   "
 >
-  <div class="inline-flex items-center space-x-2">
+  <form
+    method="get"
+    action="<%= request.path %>"
+    class="inline-flex items-center space-x-2"
+  >
     <label for="pagy-limit-select" class="text-sm font-medium">
       <%= t(".items", items: @item) %>
     </label>
-    <form method="get" action="<%= request.path %>" class="inline-block">
-      <%# Preserve existing query parameters except limit %>
-      <% if request.query_string.present? %>
-        <% CGI.parse(request.query_string).except('limit').each do |key, values| %>
-          <% values.each do |value| %>
-            <input type="hidden" name="<%= key %>" value="<%= value %>">
-          <% end %>
+    <%# Preserve existing query parameters except limit %>
+    <% if request.query_string.present? %>
+      <% CGI.parse(request.query_string).except('limit').each do |key, values| %>
+        <% values.each do |value| %>
+          <input type="hidden" name="<%= key %>" value="<%= value %>">
         <% end %>
       <% end %>
+    <% end %>
 
-      <div class="relative">
-        <select
-          id="pagy-limit-select"
-          name="limit"
-          aria-label="<%= t('.select_items_action') %>"
-          aria-describedby="pagy-limit-description"
-          autocomplete="off"
-          class="
-            bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
-            w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
-            dark:text-white appearance-none bg-no-repeat bg-right pr-8
-            [&::-ms-expand]:hidden
-          "
-          style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none !important;"
-          onchange="this.form.submit()"
-        >
-          <% Pagy::DEFAULT[:limits].each do |limit| %>
-            <option
-              value="<%= limit %>"
-              <%= 'selected' if limit == @pagy.limit %>
-              aria-label="<%= t('.item_aria_label', items: limit) %>"
-            >
-              <%= limit %>
-            </option>
-          <% end %>
-        </select>
-        <div
-          class="
-            absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none
-          "
-        >
-          <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, color: :subdued) %>
-        </div>
-        <div id="pagy-limit-description" class="sr-only">
-          <%= t(".select_items_action") %>
-        </div>
+    <div class="relative">
+      <select
+        id="pagy-limit-select"
+        name="limit"
+        aria-label="<%= t('.select_items_action') %>"
+        aria-describedby="pagy-limit-description"
+        autocomplete="off"
+        class="
+          bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
+          w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+          dark:text-white appearance-none bg-no-repeat bg-right pr-8
+          [&::-ms-expand]:hidden
+        "
+        style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none !important;"
+        onchange="this.form.submit()"
+      >
+        <% Pagy::DEFAULT[:limits].each do |limit| %>
+          <option
+            value="<%= limit %>"
+            <%= 'selected' if limit == @pagy.limit %>
+            aria-label="<%= t('.item_aria_label', items: limit) %>"
+          >
+            <%= limit %>
+          </option>
+        <% end %>
+      </select>
+      <div
+        class="
+          absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none
+        "
+      >
+        <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, color: :subdued) %>
       </div>
-    </form>
-  </div>
+      <div id="pagy-limit-description" class="sr-only">
+        <%= t(".select_items_action") %>
+      </div>
+    </div>
+  </form>
   <span><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
 </div>
