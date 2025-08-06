@@ -19,13 +19,14 @@
   data-turbo-prefetch="false"
 >
   <%= sidebar %>
-  <div class="relative content" data-layout-target="content">
+  <div class="relative content overflow-hidden" data-layout-target="content">
     <div
       data-layout-target="header"
       class="
         flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-16
         -outline-offset-1 border-b border-slate-200 dark:border-slate-950
-        transition-transform duration-300 bg-white dark:bg-slate-800
+        transition-transform duration-300 ease-in-out bg-white dark:bg-slate-800
+        max-xl:transform will-change-transform
       "
     >
       <div
@@ -54,13 +55,14 @@
       id="main-content"
       tabindex="0"
       class="
-        @container max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 overflow-y-auto
-        top-0 transition-all duration-300
+        @container max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 top-16
+        transition-all duration-300 ease-in-out
       "
       data-action="scroll->layout#handleScroll"
       data-layout-target="mainContent"
+      style="overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; padding-right: 10px;"
     >
-      <div class="mt-16 <%= @layout %>"><%= body %></div>
+      <div class="transition-all duration-300 <%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
     <div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">

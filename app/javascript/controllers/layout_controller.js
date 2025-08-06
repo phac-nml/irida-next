@@ -45,6 +45,9 @@ export default class extends Controller {
     }
     // 📜 Initialize last scroll position
     this.lastScrollTop = 0;
+    
+    // Ensure main content position is correctly set on initial load
+    this.mainContentTarget.style.top = "4rem"; // 16px/4rem is the header height
   }
 
   /**
@@ -128,11 +131,15 @@ export default class extends Controller {
     // 👇 Scrolling down
     if (scrollTop > this.lastScrollTop) {
       // 🙈 Hide the header
-      this.headerTarget.classList.add("max-sm:-translate-y-full");
+      this.headerTarget.classList.add("-translate-y-full");
+      // Adjust main content to fill the header space
+      this.mainContentTarget.style.top = "0";
     } else {
       // 👆 Scrolling up
       // 🙉 Show the header
-      this.headerTarget.classList.remove("max-sm:-translate-y-full");
+      this.headerTarget.classList.remove("-translate-y-full");
+      // Reset main content position
+      this.mainContentTarget.style.top = "4rem"; // 16px/4rem is the header height
     }
 
     // 💾 Update the last scroll position
