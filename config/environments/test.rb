@@ -67,7 +67,7 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = false
 
-  config.ignore_w3c_validate_hidden_autocomplete = true
+  config.ignore_w3c_validate_hidden_autocomplete = false
 
   config.ga4gh_wes_server_endpoint = nil
 end
