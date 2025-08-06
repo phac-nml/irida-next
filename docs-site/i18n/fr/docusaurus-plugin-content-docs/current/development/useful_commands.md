@@ -48,3 +48,9 @@ Rake tasks can be prepended with `info`, `debug`, or `verbose` to output the app
 # Example
 rake debug db:seed
 ```
+
+### Format translation files
+
+```bash
+i18n-tasks normalize
+```
