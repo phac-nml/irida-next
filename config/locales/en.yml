@@ -494,6 +494,7 @@ en:
     search_field_component:
       instructions: Press enter to search
       search_button: Search
+      clear_button: Clear search
     activity:
       dialog:
         close: Close

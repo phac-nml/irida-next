@@ -492,8 +492,9 @@ fr:
         never: Jamais
   components:
     search_field_component:
-      instructions: Press enter to search
-      search_button: Search
+      instructions: Appuyez sur Entrée pour rechercher
+      search_button: Rechercher
+      clear_button: Effacer la recherche
     activity:
       dialog:
         close: Close

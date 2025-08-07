@@ -1,22 +1,12 @@
 <div role="status" class="sr-only"><%= @results_message %></div>
 
 <%= form_with model: @query, scope: :q, url: search_group_samples_url, method: :post, data: { turbo_action: 'replace', controller: "filters selection metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-center space-x-2" do |f| %>
-  <%= f.label :name_or_puid_cont, t(".search.placeholder"), class: "sr-only" %>
-  <div class="relative">
-    <%= f.search_field :name_or_puid_cont,
-                   **{ value: @search_params[:name_or_puid_cont] }.compact,
-                   "data-action": "selection#clear",
-                   class:
-                     "t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white",
-                   placeholder: t(".search.placeholder") %>
-    <div
-      class="
-        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-      "
-    >
-      <%= pathogen_icon(ICON::MAGNIFYING_GLASS, size: :sm, color: :subdued) %>
-    </div>
-  </div>
+  <%= render SearchFieldComponent.new(
+    label: t(".search.placeholder"),
+    form: f,
+    field_name: :name_or_puid_cont,
+    has_search_results: @query.name_or_puid_cont.present?,
+  ) %>
   <input type="hidden" name="format" value="turbo_stream"/>
   <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
   <%= render AdvancedSearchComponent.new(
