@@ -1,0 +1,40 @@
+fr:
+  pathogen:
+    datepicker:
+      aria_label:
+        calendar: Calendar
+        clear_selection: Clear date selection
+        previous_month_button: Navigate to previous month
+        next_month_button: Navigate to next month
+        select_month: Select month
+        select_year: Select year
+        show_today: Show today
+      clear_selection: Clear Selection
+      date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
+      date_selection: Date Selection
+      days_of_week:
+        friday: ven
+        monday: lun
+        saturday: sam
+        sunday: dim
+        thursday: jeu
+        tuesday: mar
+        wednesday: mer
+      errors:
+        invalid_date: Invalid date.
+        min_date_error: "Earliest allowed date: %{min_date}"
+      months:
+        april: avril
+        august: août
+        december: décembre
+        february: février
+        january: janvier
+        july: juillet
+        june: juin
+        march: mars
+        may: mai
+        november: novembre
+        october: octobre
+        september: septembre
+      placeholder: AAAA-MM-JJ
+      show_today: Show Today

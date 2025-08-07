@@ -10,7 +10,7 @@
       locals: {
         days_of_the_week:,
       } %>
-      <%= render partial: "pathogen/datepicker/calendar/footer" %>
+      <%= render partial: "pathogen/datepicker/calendar/footer", locals: { min_date: } %>
     </div>
   <% end %>
 </template>
