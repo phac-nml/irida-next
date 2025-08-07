@@ -61,8 +61,9 @@ data:
 # Find translate calls
 search:
   ## Paths or `Find.find` patterns to search in:
-  # paths:
-  #  - app/
+  paths:
+    - app/
+    - embedded_gems/pathogen/app
 
   ## Root directories for relative keys resolution.
   relative_roots:
@@ -71,6 +72,7 @@ search:
     - app/mailers
     - app/views
     - app/components
+    - embedded_gems/pathogen/app/components
 
   ## Directories where method names which should not be part of a relative key resolution.
   # By default, if a relative translation is used inside a method, the name of the method will be considered part of the resolved key.
