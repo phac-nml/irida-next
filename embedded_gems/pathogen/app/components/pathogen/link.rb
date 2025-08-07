@@ -46,7 +46,8 @@ module Pathogen
     end
 
     def external_link?(href)
-      URI.parse(href).host.present? && URI.parse(href).host != request.host
+      host = URI.parse(href).host
+      host.present? && host != request.host
     rescue URI::InvalidURIError
       false
     end
