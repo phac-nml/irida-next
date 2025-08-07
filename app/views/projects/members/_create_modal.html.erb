@@ -5,9 +5,21 @@
       <%= I18n.t("projects.members.new.description", name: @namespace.human_name) %>
     </p>
   </div>
-  <%= form_with(model: @new_member, url: namespace_project_members_path(tab: @tab), data: {controller: "viral--select2"}, method: :post) do |form| %>
+  <%= form_with(model: @new_member, url: namespace_project_members_path(tab: @tab), data: {controller: "viral--select2"}, method: :post,  html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
-      <div class="form-field">
+      <%= if @new_member.errors.any?
+        viral_alert(
+          type: "alert",
+          message: I18n.t(:"general.form.error_notification"),
+          aria: {
+            live: "assertive",
+          },
+        )
+      end %>
+
+      <%= render partial: "shared/form/required_field_legend" %>
+      <% invalid_user_id = @new_member.errors.include?(:user) %>
+      <div class="form-field <%= 'invalid' if invalid_user_id %>">
         <% form_id = "add-user-select2" %>
         <label
           for="<%= form_id %>"
@@ -17,7 +29,7 @@
 
           <%= t("projects.members.new.user_select") %>
         </label>
-        <%= viral_select2(form:, name: :user_id, id: form_id) do |select| %>
+        <%= viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
           <% @available_users.each do |user| %>
             <% select.with_option(
                       value: user.id,
@@ -39,6 +51,11 @@
             <%= t(:"projects.members.new.empty_state") %>
           <% end %>
         <% end %>
+        <% if invalid_user_id %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:user_id, "error"),
+          errors: @new_member.errors.full_messages_for(:user) %>
+        <% end %>
         <p id="<%= form.field_id(:user_id, "hint") %>" class="field-hint">
           <%= t("projects.members.new.user_hint") %>
         </p>
@@ -49,9 +66,25 @@
         <%= form.label :access_level, data: { required: true } %>
         <%= form.select :access_level,
                     @access_levels,
-                    required: true,
-                    aria: {
+                    {},
+                    {
                       required: true,
+                      aria: {
+                        describedby: [
+                          (
+                            if invalid_access_level
+                              form.field_id(:access_level, "error")
+                            else
+                              nil
+                            end
+                          ),
+                          form.field_id(:access_level, "hint"),
+                        ].join(" "),
+                        invalid: invalid_access_level,
+                        required: true,
+                      },
+                      autofocus: invalid_access_level,
+                      value: @new_member.access_level,
                     } %>
         <%= render "shared/form/field_errors",
         errors: @new_member.errors.full_messages_for(:access_level) %>
