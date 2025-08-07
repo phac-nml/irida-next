@@ -1,0 +1,41 @@
+<% if label %>
+  <label
+    for="<%= input_id %>"
+    class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+  ><%= label %></label>
+<% end %>
+<div class="relative max-w-sm" aria-live="polite">
+  <div
+    class="
+      absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none
+    "
+  >
+    <%= pathogen_icon(ICON::CALENDAR_DOTS) %>
+  </div>
+  <input
+    placeholder="<%= t("pathogen.datepicker.placeholder") %>"
+    autocomplete="off"
+    value="<%= selected_date %>"
+    data-pathogen--datepicker--input-target="datepickerInput"
+    data-action="
+      change->pathogen--datepicker--input#directInput
+      keydown->pathogen--datepicker--input#handleEnterDirectInput
+    "
+    type="text"
+    name="<%= input_name %>"
+    id="<%= input_id %>"
+    class="
+      ps-10 p-2.5 rounded-lg border-slate-300 text-slate-900 text-sm
+      dark:border-slate-600 dark:bg-slate-800 dark:text-white
+      dark:placeholder-slate-400
+    "
+    <% if input_aria_label %>
+    aria-label="<%= input_aria_label %>"
+    <% end %>
+  >
+</div>
+<div
+  data-pathogen--datepicker--input-target="inputError"
+  class="text-sm hidden text-red-700 dark:text-red-500 mt-1"
+  aria-hidden="true"
+></div>
