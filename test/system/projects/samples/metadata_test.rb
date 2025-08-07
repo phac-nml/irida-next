@@ -236,6 +236,55 @@ module Projects
         end
       end
 
+      test 'Field required error messages are displayed when field left blank and successfully
+      created once corrected' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
+
+        within %(turbo-frame[id="sample_modal"]) do
+          click_on I18n.t('projects.samples.metadata.form.create_field_button')
+
+          all('input.keyInput')[1].fill_in with: 'metadatafield4'
+          all('input.valueInput')[1].fill_in with: 'value4'
+          click_on I18n.t('projects.samples.metadata.form.submit_button')
+
+          # First row (key and value) are left blank
+          key_id = all('input.keyInput')[0][:id]
+          value_id = all('input.valueInput')[0][:id]
+
+          find(:xpath, %(//*[@id="#{key_id}_error"]/span/span[2]),
+               text: I18n.t('projects.samples.metadata.new_metadata_modal.required_error.key'))
+          find(:xpath, %(//*[@id="#{value_id}_error"]/span/span[2]),
+               text: I18n.t('projects.samples.metadata.new_metadata_modal.required_error.value'))
+
+          # Fill in empty key and value
+          all('input.keyInput')[0].fill_in with: 'metadatafieldnew'
+          all('input.valueInput')[0].fill_in with: 'valueNew'
+
+          click_on I18n.t('projects.samples.metadata.form.submit_button')
+        end
+
+        assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                           keys: %w[metadatafield4 metadatafieldnew].join(', '))
+
+        within '#sample-metadata' do
+          assert_selector 'tr#metadatafieldnew_field'
+          assert_selector 'tr#metadatafield4_field'
+
+          within %(tr#metadatafieldnew_field) do
+            assert_text 'metadatafieldnew'
+            assert_text 'valueNew'
+          end
+
+          within %(tr#metadatafield4_field) do
+            assert_text 'metadatafield4'
+            assert_text 'value4'
+          end
+        end
+      end
+
       test 'add single existing metadata' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
