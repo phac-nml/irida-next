@@ -7,20 +7,12 @@
 >
   <form
     method="get"
-    action="<%= request.path %>"
+    action="<%= current_url_without_limit %>"
     class="inline-flex items-center space-x-2"
   >
     <label for="pagy-limit-select" class="text-sm font-medium">
       <%= t(".items", items: @item) %>
     </label>
-    <%# Preserve existing query parameters except limit %>
-    <% if request.query_string.present? %>
-      <% CGI.parse(request.query_string).except('limit').each do |key, values| %>
-        <% values.each do |value| %>
-          <input type="hidden" name="<%= key %>" value="<%= value %>">
-        <% end %>
-      <% end %>
-    <% end %>
 
     <div class="relative">
       <select
