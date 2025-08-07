@@ -55,7 +55,9 @@
   >
     <% if @namespace.group_namespace? %>
       <%= pathogen_link(href: namespace_path(@namespace)) do |component| %>
-        <% component.with_tooltip(text: t(:".stats.subnamespaces")) %>
+        <% component.with_tooltip(
+          text: t(:".stats.subnamespaces", count: @namespace.children.count),
+        ) %>
         <span
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
@@ -69,7 +71,9 @@
         </span>
       <% end %>
       <%= pathogen_link(href: namespace_path(@namespace)) do |component| %>
-        <% component.with_tooltip(text: t(:".stats.projects")) %>
+        <% component.with_tooltip(
+          text: t(:".stats.projects", count: @namespace.project_namespaces.count),
+        ) %>
         <span
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
@@ -83,7 +87,9 @@
         </span>
       <% end %>
       <%= pathogen_link(href: group_samples_path(@namespace)) do |component| %>
-        <% component.with_tooltip(text: t(:".stats.samples")) %>
+        <% component.with_tooltip(
+          text: t(:".stats.samples", count: @namespace.aggregated_samples_count),
+        ) %>
         <span
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
           class="
@@ -101,7 +107,9 @@
     <% end %>
     <% if @namespace.project_namespace? %>
       <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project)) do |component| %>
-        <% component.with_tooltip(text: t(:".stats.samples")) %>
+        <% component.with_tooltip(
+          text: t(:".stats.samples", count: @namespace.project.samples.size),
+        ) %>
         <span
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
           class="

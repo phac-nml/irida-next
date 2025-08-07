@@ -1378,9 +1378,9 @@ fr:
   namespace_row:
     contents_component:
       stats:
-        projects: Projets
-        samples: Échantillons
-        subnamespaces: Sous-groupes
+        projects: "%{count} projets"
+        samples: "%{count} échantillons"
+        subnamespaces: "%{count} sous-groupes"
   nextflow:
     samplesheet:
       file_cell_component:
