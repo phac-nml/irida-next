@@ -1,17 +1,21 @@
-<%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-  <%= render partial: "pathogen/datepicker/input_field",
-  locals: {
-    label: @label,
-    input_id: @input_id,
-    selected_date: @selected_date,
-    input_name: @input_name,
-    input_aria_label: @input_aria_label,
-  } %>
-  <%= render partial: "pathogen/datepicker/calendar",
-  locals: {
-    calendar_arguments: @calendar_arguments,
-    days_of_the_week: @days_of_the_week,
-    months: @months,
-    min_year: @min_year,
-  } %>
-<% end %>
+<fieldset>
+  <legend class="sr-only"><%= t(".date_selection") %></legend>
+  <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+    <%= render partial: "pathogen/datepicker/input_field",
+    locals: {
+      label: @label,
+      input_id: @input_id,
+      selected_date: @selected_date,
+      input_name: @input_name,
+      input_aria_label: @input_aria_label,
+    } %>
+    <%= render partial: "pathogen/datepicker/calendar",
+    locals: {
+      calendar_arguments: @calendar_arguments,
+      days_of_the_week: @days_of_the_week,
+      months: @months,
+      min_year: @min_year,
+      min_date: @min_date,
+    } %>
+  <% end %>
+</fieldset>
