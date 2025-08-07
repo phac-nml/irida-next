@@ -42,20 +42,21 @@ module Pathogen
       @system_arguments = system_arguments
       @calendar_arguments = calendar_arguments
 
-      @months = load_months
-      @days_of_the_week = load_days_of_week
       # rubocop:enable Metrics/ParameterLists
 
       setup_ids(id)
-      setup_calendar_attributes
     end
 
     # min_date default must be performed in before_render since it requires a helper gem which can't be called within
-    # initialize, container attributes are then setup as it requires min_date
+    # initialize. Due now to now using before_render, we'll also set up months/days_of_the_week here as well,
+    # and then subsequently set up the attributes that require these variables
     def before_render
       @min_date = datepicker_expiry_default_min_date if @min_date.nil?
       @min_year = calculate_min_year
+      @months = load_months
+      @days_of_the_week = load_days_of_week
       setup_container_attributes
+      setup_calendar_attributes
     end
 
     private
