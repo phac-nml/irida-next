@@ -198,34 +198,6 @@ input[type="search"] {
     border-top-left-radius: 0;
     @apply block w-full rounded-r-lg border border-slate-300 bg-white text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
-
-  &.invalid label {
-    @apply text-red-700 dark:text-red-500;
-  }
-
-  &.invalid input[type="text"] {
-    @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
-  }
-
-  &.invalid input[type="file"] {
-    @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
-  }
-
-  &.invalid textarea {
-    @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
-  }
-
-  & textarea {
-    @apply block w-full rounded-lg border border-slate-300 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
-  }
-
-  &.invalid input[type="email"] {
-    @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
-  }
-
-  &.invalid input[type="password"] {
-    @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
-  }
 }
 
 @utility field_with_errors {
@@ -296,23 +268,23 @@ input[type="search"] {
   }
 
   &.form-field input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 
   &.form-field input[type="file"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 
   &.form-field textarea {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 
   &.form-field input[type="email"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 
   &.form-field input[type="password"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 }
 
