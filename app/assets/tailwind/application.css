@@ -602,7 +602,7 @@ input[type="search"] {
 }
 
 div.field_with_errors > :is(select) {
-  @apply border-red-700 text-red-900 placeholder-red-300;
+  @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
 }
 
 .table-container table:not(:has(tbody td)) {
