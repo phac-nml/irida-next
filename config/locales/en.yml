@@ -1409,8 +1409,7 @@ en:
     submission_error: Something went wrong with the submission request.
   pathogen:
     link:
-      setup_external_link_attributes:
-        aria-label: "%{content} (opens in a new window)"
+      aria-label: "%{content} (opens in a new window)"
   personal_access_tokens:
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
