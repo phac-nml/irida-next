@@ -1377,10 +1377,15 @@ fr:
       analysis: Analyse
   namespace_row:
     contents_component:
-      stats:
-        projects: "%{count} projets"
-        samples: "%{count} échantillons"
-        subnamespaces: "%{count} sous-groupes"
+      projects:
+        aria-label: Projets
+        tooltip: "%{count} projets"
+      samples:
+        aria-label: Échantillons
+        tooltip: "%{count} échantillons"
+      subnamespaces:
+        aria-label: Sous-groupes
+        tooltip: "%{count} sous-groupes"
   nextflow:
     samplesheet:
       file_cell_component:

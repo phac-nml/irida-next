@@ -54,9 +54,9 @@
     "
   >
     <% if @namespace.group_namespace? %>
-      <%= pathogen_link(href: namespace_path(@namespace)) do |component| %>
+      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".subnamespaces.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".stats.subnamespaces", count: @namespace.children.count),
+          text: t(:".subnamespaces.tooltip", count: @namespace.children.count),
         ) %>
         <span
           class="
@@ -70,9 +70,9 @@
           <%= @namespace.children.count %>
         </span>
       <% end %>
-      <%= pathogen_link(href: namespace_path(@namespace)) do |component| %>
+      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".projects.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".stats.projects", count: @namespace.project_namespaces.count),
+          text: t(:".projects.tooltip", count: @namespace.project_namespaces.count),
         ) %>
         <span
           class="
@@ -86,9 +86,9 @@
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
-      <%= pathogen_link(href: group_samples_path(@namespace)) do |component| %>
+      <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:".samples.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".stats.samples", count: @namespace.aggregated_samples_count),
+          text: t(:".samples.tooltip", count: @namespace.aggregated_samples_count),
         ) %>
         <span
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
@@ -106,9 +106,9 @@
       <% end %>
     <% end %>
     <% if @namespace.project_namespace? %>
-      <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project)) do |component| %>
+      <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:".samples.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".stats.samples", count: @namespace.project.samples.size),
+          text: t(:".samples.tooltip", count: @namespace.project.samples.size),
         ) %>
         <span
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
