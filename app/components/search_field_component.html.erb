@@ -2,7 +2,8 @@
   <%= @form.label @field_name, @label, class: "sr-only" %>
   <div class="relative">
     <%= @form.search_field @field_name,
-                       "data-action": "selection#clear",
+                       "data-action":
+                         "selection#clear input->search-field#handleInput",
                        "data-search-field-target": "input",
                        "data-test-selector":
                          !Rails.env.production? ? "search-field-input" : nil,
@@ -12,22 +13,34 @@
                          label: t("components.search_field_component.instructions"),
                        },
                        placeholder: @placeholder %>
+    <!-- Clear button (shown only when there are existing search results) -->
     <button
-      type="<%= clear_button? ? 'button' : 'submit' %>"
-      data-action="<%= clear_button? ? 'click->search-field#clear' : '' %>"
+      type="button"
+      data-search-field-target="clearButton"
+      data-action="click->search-field#clear"
       class="
         absolute inset-y-0 right-0 flex items-center justify-center w-12
         pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
         border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
-        dark:hover:bg-slate-600
+        dark:hover:bg-slate-600 <%= clear_button? ? '' : 'hidden' %>
       "
-      aria-label="<%= clear_button? ? t('components.search_field_component.clear_button') : t('components.search_field_component.search_button') %>"
+      aria-label="<%= t('components.search_field_component.clear_button') %>"
     >
-      <% if clear_button? %>
-        <%= pathogen_icon(ICON::X, size: :sm, color: :subdued) %>
-      <% else %>
-        <%= pathogen_icon(ICON::MAGNIFYING_GLASS, size: :sm, color: :subdued) %>
-      <% end %>
+      <%= pathogen_icon(ICON::X, size: :sm, color: :subdued) %>
+    </button>
+    <!-- Submit/search button (hidden while clear button is active) -->
+    <button
+      type="submit"
+      data-search-field-target="submitButton"
+      class="
+        absolute inset-y-0 right-0 flex items-center justify-center w-12
+        pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
+        border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
+        dark:hover:bg-slate-600 <%= clear_button? ? 'hidden' : '' %>
+      "
+      aria-label="<%= t('components.search_field_component.search_button') %>"
+    >
+      <%= pathogen_icon(ICON::MAGNIFYING_GLASS, size: :sm, color: :subdued) %>
     </button>
   </div>
 </div>
