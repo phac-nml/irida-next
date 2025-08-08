@@ -191,13 +191,8 @@
     <% end %>
   <% end %>
 
-  <div
-    class="
-      flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-2
-    "
-  >
-    <%# Left side - Select/Deselect buttons %>
-    <div class="flex flex-wrap items-center gap-2">
+  <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
+    <div class="inline-flex grow space-x-2">
       <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
         <%= form_with(
                   url: select_namespace_project_samples_url,
@@ -219,22 +214,20 @@
         <% end %>
       <% end %>
     </div>
-
-    <%# Right side - Search and metadata dropdown %>
-    <div class="flex flex-col sm:flex-row items-end gap-2">
+    <div id="table-filter" class="flex grow-0">
       <%= render partial: "table_filter" %>
-
-      <%= render partial: "shared/samples/metadata_template_dropdown",
-      locals: {
-        url:
-          list_namespace_project_metadata_templates_url(
-            @project.namespace.parent,
-            @project,
-          ),
-        metadata_template: @metadata_template,
-        pagy: @pagy,
-      } %>
     </div>
+
+    <%= render partial: "shared/samples/metadata_template_dropdown",
+    locals: {
+      url:
+        list_namespace_project_metadata_templates_url(
+          @project.namespace.parent,
+          @project,
+        ),
+      metadata_template: @metadata_template,
+      pagy: @pagy,
+    } %>
   </div>
 
   <%= render partial: "table",
