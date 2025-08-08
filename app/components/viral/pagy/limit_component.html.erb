@@ -9,6 +9,7 @@
     method="get"
     action="<%= current_url_without_limit %>"
     class="inline-flex items-center space-x-2"
+    data-turbo-action="replace"
   >
     <label for="pagy-limit-select" class="text-sm font-medium">
       <%= t(".items", items: @item) %>
@@ -21,6 +22,7 @@
         aria-label="<%= t('.select_items_action') %>"
         aria-describedby="pagy-limit-description"
         autocomplete="off"
+        data-turbo-permanent
         class="
           bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
           w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
@@ -28,7 +30,7 @@
           [&::-ms-expand]:hidden
         "
         style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none !important;"
-        onchange="this.form.submit()"
+        onchange="this.form.requestSubmit()"
       >
         <% Pagy::DEFAULT[:limits].each do |limit| %>
           <option
