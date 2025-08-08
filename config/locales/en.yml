@@ -142,7 +142,7 @@ en:
         expires_at: Expiration Date
         last_used_at: Last Used
         name: Token name
-        scopes: Scopes
+        scopes_html: Scopes <span class="text-red-500 dark:text-red-500 mr-1" aria-hidden="true">*</span>
       sample:
         description: Description
         name: Name
@@ -676,6 +676,8 @@ en:
     token:
       copied: Copied!
       copy: Copy to clipboard
+      hide: Hide token
+      show: Show token
       toggle_visible: Toggle visibility
     treegrid:
       row:
@@ -2018,10 +2020,11 @@ en:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
     bots:
       create:
+        base: Unable to create bot account
         required:
-          access_level: Unable to create bot account as an access level must be selected
-          scopes: Unable to create bot account as the bot API scope must be selected
-          token_name: Unable to create bot account as the token name is required
+          access_level: must be selected
+          scopes: must be selected
+          token_name: is required
     data_exports:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
