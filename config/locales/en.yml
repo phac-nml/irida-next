@@ -673,6 +673,10 @@ en:
         plural: "%{total_count} results found for '%{search_term}'"
         singular: 1 result found for '%{search_term}'
         zero: No results found for '%{search_term}'
+    search_field_component:
+      clear_button: Clear search
+      instructions: Press enter to search
+      search_button: Search
     token:
       copied: Copied!
       copy: Copy to clipboard
@@ -1138,7 +1142,8 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by PUID or name
+          label: Search
+          placeholder: Search by name or PUID
     shared_namespaces:
       index:
         pagy:
@@ -1858,7 +1863,8 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by PUID or name
+          label: Search
+          placeholder: Search by name or PUID
       update:
         success: Sample was successfully updated.
     sidebar:
