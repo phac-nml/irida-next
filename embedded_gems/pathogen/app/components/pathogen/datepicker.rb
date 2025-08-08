@@ -4,7 +4,6 @@ module Pathogen
   # Datepicker Component
   # Renders the date input along with datepicker calendar
   class Datepicker < Pathogen::Component
-    include LocalDatetimeHelper
     # Default HTML tag for components main elements.
     TAG_DEFAULT = :div
 
@@ -28,7 +27,7 @@ module Pathogen
     # @raise [ArgumentError] if input_name is not provided.
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: nil, selected_date: nil,
+    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: (Time.now + 1.day), selected_date: nil,
                    autosubmit: false, calendar_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -41,20 +40,12 @@ module Pathogen
       @min_date = min_date
       @system_arguments = system_arguments
       @calendar_arguments = calendar_arguments
-
-      # rubocop:enable Metrics/ParameterLists
-
-      setup_ids(id)
-    end
-
-    # min_date default must be performed in before_render since it requires a helper gem which can't be called within
-    # initialize. Due now to now using before_render, we'll also set up months/days_of_the_week here as well,
-    # and then subsequently set up the attributes that require these variables
-    def before_render
-      @min_date = datepicker_expiry_default_min_date if @min_date.nil?
       @min_year = calculate_min_year
       @months = load_months
       @days_of_the_week = load_days_of_week
+      # rubocop:enable Metrics/ParameterLists
+
+      setup_ids(id)
       setup_container_attributes
       setup_calendar_attributes
     end
@@ -108,12 +99,11 @@ module Pathogen
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:controller] = 'pathogen--datepicker--input'
       @system_arguments[:data]['pathogen--datepicker--input-pathogen--datepicker--calendar-outlet'] = "##{@calendar_id}"
-      @system_arguments[:data]['pathogen--datepicker--input-min-date-value'] = @min_date
       @system_arguments[:data]['pathogen--datepicker--input-autosubmit-value'] = @autosubmit
       @system_arguments[:data]['pathogen--datepicker--input-invalid-date-value'] =
         I18n.t('pathogen.datepicker.errors.invalid_date')
       @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
-        I18n.t('pathogen.datepicker.errors.min_date_error', min_date: @min_date)
+        I18n.t('pathogen.datepicker.errors.min_date_error')
       @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
       @system_arguments[:data]['pathogen--datepicker--input-date-format-regex-value'] =
         I18n.t('pathogen.datepicker.date_format_regex')

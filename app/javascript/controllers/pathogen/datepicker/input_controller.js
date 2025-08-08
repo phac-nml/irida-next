@@ -7,16 +7,21 @@ import {
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
-  static targets = ["datepickerInput", "calendarTemplate", "inputError"];
+  static targets = [
+    "datepickerInput",
+    "calendarTemplate",
+    "inputError",
+    "minDate",
+  ];
 
   static values = {
-    minDate: String,
     autosubmit: Boolean,
     calendarId: String,
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
   };
+
   // today's date attributes for quick access
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
@@ -38,6 +43,8 @@ export default class extends Controller {
   // positioning of datepicker pop-up differs in a dialog
   #inDialog = false;
 
+  #minDate;
+
   initialize() {
     this.boundUnhideCalendar = this.unhideCalendar.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
@@ -48,6 +55,12 @@ export default class extends Controller {
     if (!this.#calendar) {
       this.idempotentConnect();
       this.#addCalendarTemplate();
+    }
+  }
+
+  connect() {
+    if (this.hasMinDateTarget) {
+      this.#setMinDate();
     }
   }
 
@@ -76,6 +89,12 @@ export default class extends Controller {
       this.boundUnhideCalendar,
     );
     this.removeCalendarListeners();
+  }
+
+  #setMinDate() {
+    this.#minDate = this.minDateTarget.firstElementChild.innerText;
+    this.invalidMinDateValue = this.invalidMinDateValue.concat(this.#minDate);
+    this.minDateTarget.remove();
   }
 
   #addCalendarTemplate() {
@@ -264,7 +283,7 @@ export default class extends Controller {
     event.preventDefault();
     const dateInput = event.target.value;
     if (this.#validateDateInput(dateInput)) {
-      if (this.minDateValue && this.minDateValue > dateInput) {
+      if (this.#minDate && this.#minDate > dateInput) {
         this.#enableInputErrorState(this.invalidMinDateValue);
       } else {
         if (this.autosubmitValue) {
@@ -349,7 +368,8 @@ export default class extends Controller {
       selectedDate: this.#selectedDate,
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
-      minDate: this.minDateValue,
+      minDate: this.#minDate,
+      minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
     };
     this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
