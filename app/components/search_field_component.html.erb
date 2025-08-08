@@ -1,7 +1,5 @@
 <div data-controller="search-field" class="flex flex-col">
-  <%= @form.label @field_name,
-              @label,
-              class: "text-sm font-medium text-slate-500 dark:text-white mb-1" %>
+  <%= @form.label @field_name, @label, class: "sr-only" %>
   <div class="relative">
     <%= @form.search_field @field_name,
                        "data-action": "selection#clear",
@@ -13,8 +11,7 @@
                        aria: {
                          label: t("components.search_field_component.instructions"),
                        },
-                       placeholder:
-                         t("components.search_field_component.placeholder") %>
+                       placeholder: @placeholder %>
     <button
       type="<%= clear_button? ? 'button' : 'submit' %>"
       data-action="<%= clear_button? ? 'click->search-field#clear' : '' %>"
