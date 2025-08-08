@@ -195,6 +195,33 @@ class GroupsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'show errors when group name is left empty when editing' do
+    group_name = ''
+    visit group_url(groups(:group_one))
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
+    fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
+    click_on I18n.t('groups.edit.details.submit')
+
+    assert_text "Group name can't be blank"
+    assert_text 'Group name is too short (minimum is 3 characters)'
+  end
+
+  test 'show errors when group description is too long when editing' do
+    group_descrtiption = 'a' * 300
+    visit group_url(groups(:group_one))
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
+    fill_in I18n.t('activerecord.attributes.group.description'), with: group_descrtiption
+    click_on I18n.t('groups.edit.details.submit')
+
+    assert_text 'Description is too long (maximum is 255 characters)'
+  end
+
   test 'can edit a group path' do
     group1 = groups(:group_one)
     visit group_url(group1)
@@ -207,6 +234,20 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t('groups.update.success', group_name: group1.name)
     assert_current_path '/-/groups/group-1-edited/-/edit'
+  end
+
+  test 'show error when editing a group path and leaving it blank' do
+    group1 = groups(:group_one)
+    visit group_url(group1)
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
+    fill_in I18n.t('activerecord.attributes.group.path'), with: ''
+    click_on I18n.t('groups.edit.advanced.path.submit')
+
+    assert_text "Path can't be blank"
+    assert_text 'Path is too short (minimum is 3 characters)'
   end
 
   test 'show error when editing a group with a short name' do
