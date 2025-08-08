@@ -6,6 +6,8 @@
     <%= @form.search_field @field_name,
                        "data-action": "selection#clear",
                        "data-search-field-target": "input",
+                       "data-test-selector":
+                         !Rails.env.production? ? "search-field-input" : nil,
                        class:
                          "t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white",
                        aria: {
