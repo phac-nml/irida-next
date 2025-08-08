@@ -1,5 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
+import {
+  field_error_state,
+  field_valid_state,
+  form_error_text_css,
+} from "utilities/constants";
 
 export default class extends Controller {
   static targets = [
@@ -69,40 +74,6 @@ export default class extends Controller {
     "ring-2",
     "ring-primary-500",
     "dark:ring-primary-600",
-  ];
-
-  #form_error_text_css = ["text-red-500"];
-
-  #workflow_execution_name_error_state = [
-    "bg-slate-50",
-    "border",
-    "border-red-500",
-    "text-slate-900",
-    "text-sm",
-    "rounded-lg",
-    "block",
-    "w-full",
-    "p-2.5",
-    "dark:bg-slate-700",
-    "dark:border-slate-600",
-    "dark:placeholder-slate-400",
-    "dark:text-white",
-  ];
-
-  #workflow_execution_name_valid_state = [
-    "bg-slate-50",
-    "border",
-    "border-slate-300",
-    "text-slate-900",
-    "text-sm",
-    "rounded-lg",
-    "block",
-    "w-full",
-    "p-2.5",
-    "dark:bg-slate-700",
-    "dark:border-slate-600",
-    "dark:placeholder-slate-400",
-    "dark:text-white",
   ];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
@@ -854,11 +825,11 @@ export default class extends Controller {
     name.setAttribute("autofocus", true);
     name.setAttribute("aria-invalid", true);
     name.setAttribute("aria-describedBy", "workflow_execution_name_error");
-    name.classList.remove(...this.#workflow_execution_name_valid_state);
-    name.classList.add(...this.#workflow_execution_name_error_state);
+    name.classList.remove(...field_valid_state);
+    name.classList.add(...field_error_state);
     nameError.classList.remove("hidden");
     nameErrorSpan.innerHTML = this.nameMissingValue;
-    nameErrorSpan.classList.add(...this.#form_error_text_css);
+    nameErrorSpan.classList.add(...form_error_text_css);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");
   }
@@ -875,11 +846,11 @@ export default class extends Controller {
     name.removeAttribute("autofocus", false);
     name.removeAttribute("aria-invalid");
     name.removeAttribute("aria-describedBy");
-    name.classList.remove(...this.#workflow_execution_name_error_state);
-    name.classList.add(...this.#workflow_execution_name_valid_state);
+    name.classList.remove(...field_error_state);
+    name.classList.add(...field_valid_state);
     nameError.classList.add("hidden");
     nameErrorSpan.innerHTML = "";
-    nameErrorSpan.classList.remove(...this.#form_error_text_css);
+    nameErrorSpan.classList.remove(...form_error_text_css);
     nameHint.classList.remove("hidden");
     nameField.classList.remove("invalid");
   }

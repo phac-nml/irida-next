@@ -153,7 +153,11 @@
           description: t(".no_associated_metadata"),
           action_text: t(".add_metadata"),
           action_path:
-            new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+            new_namespace_project_sample_metadata_path(
+              @project.namespace.parent,
+              @project,
+              @sample,
+            ),
           action_method: :get,
           data: {
             turbo_frame: "sample_modal",

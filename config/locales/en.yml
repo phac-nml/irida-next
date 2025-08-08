@@ -1802,6 +1802,9 @@ en:
           submit_button: Add
           value: Value
         new_metadata_modal:
+          required_error:
+            key: Metadata key is required
+            value: Metadata value is required
           title: Add Metadata
         table:
           add_metadata: Add Metadata
@@ -2087,8 +2090,10 @@ en:
         sample_does_not_belong_to_project: Sample '%{sample_name}' does not belong to project '%{project_name}'
         update_fields:
           key_exists: Sample already contains metadata field '%{key}'.
+          key_required: Metadata key is required
           metadata_was_not_changed: Metadata fields were not changed.
           user_cannot_edit_metadata_key: Metadata key '%{key}' cannot be updated by a user.
+          value_required: Metadata value is required
         user_cannot_update_metadata: Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis.
       transfer:
         empty_new_project_id: Destination project was not selected.
