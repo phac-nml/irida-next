@@ -6,23 +6,17 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
 
-  initialize() {
-    document.addEventListener(
-      "turbo:morph",
-      () => {
-        this.triggerTarget.focus();
-      },
-      { once: true },
-    );
-  }
-
   connect() {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {
       onActivate: () => this.dialogTarget.classList.add("focus-trap"),
       onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
     });
 
-    if (this.openValue) this.open();
+    if (this.openValue) {
+      this.open();
+    } else {
+      this.triggerTarget.focus();
+    }
     this.element.setAttribute("data-controller-connected", "true");
   }
 
