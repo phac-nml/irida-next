@@ -1357,10 +1357,15 @@ fr:
       analysis: Analyse
   namespace_row:
     contents_component:
-      stats:
-        projects: Projets
-        samples: Échantillons
-        subnamespaces: Sous-groupes
+      projects:
+        aria-label: Projets
+        tooltip: "%{count} projets"
+      samples:
+        aria-label: Échantillons
+        tooltip: "%{count} échantillons"
+      subnamespaces:
+        aria-label: Sous-groupes
+        tooltip: "%{count} sous-groupes"
   nextflow:
     samplesheet:
       file_cell_component:
@@ -1387,6 +1392,9 @@ fr:
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.
+  pathogen:
+    link:
+      aria-label: "%{content} (opens in a new window)"
   personal_access_tokens:
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
