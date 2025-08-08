@@ -6,6 +6,7 @@
   "
 >
   <form
+    id="limit-component-form"
     method="get"
     action="<%= current_url_without_limit %>"
     class="inline-flex items-center space-x-2"
@@ -22,7 +23,6 @@
         aria-label="<%= t('.select_items_action') %>"
         aria-describedby="pagy-limit-description"
         autocomplete="off"
-        data-turbo-permanent
         class="
           bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
           w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
