@@ -814,12 +814,11 @@ module Projects
       ### actions and VERIFY START ###
       within('div#limit-component') do
         # set table limit to 10
-        find('button').click
-        click_link '10'
+        select '10', from: 'limit'
       end
 
       # verify limit is set to 10
-      assert_selector 'div#limit-component button span', text: '10'
+      assert_selector 'div#limit-component select option[selected]', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 20,
                                                                            locale: @user.locale))
       within('#samples-table table tbody') do
@@ -835,14 +834,14 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       # verify limit is still 10
-      assert_selector 'div#limit-component button span', text: '10'
+      assert_selector 'div#limit-component select option[selected]', text: '10'
 
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # verify limit is still 10
-      assert_selector 'div#limit-component button span', text: '10'
+      assert_selector 'div#limit-component select option[selected]', text: '10'
       ### actions and VERIFY END ###
     end
 
@@ -901,8 +900,7 @@ module Projects
 
       # set limit
       within('div#limit-component') do
-        find('button').click
-        click_link '10'
+        select '10', from: 'limit'
       end
 
       # verify sort is still applied
@@ -1064,8 +1062,7 @@ module Projects
 
       # set limit
       within('div#limit-component') do
-        find('button').click
-        click_link '10'
+        select '10', from: 'limit'
       end
 
       # verify table still only contains sample1
@@ -2820,8 +2817,7 @@ module Projects
                                                                            locale: @user.locale))
       within('div#limit-component') do
         # set table limit to 10 to split samples table into two pages
-        find('button').click
-        click_link '10'
+        select '10', from: 'limit'
       end
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 10

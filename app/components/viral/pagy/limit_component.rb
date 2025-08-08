@@ -9,19 +9,17 @@ module Viral
         @item = item
       end
 
-      def current_url_with_limit(limit)
-        current_url = request.original_url
-        if current_url.include? '?'
-          split_url = current_url.split('?')
-          base_url = split_url[0]
-          reconstructed_params = "?limit=#{limit}"
-          split_url[1].split('&').each do |param|
-            reconstructed_params << "&#{param}" unless param.include? 'limit='
-          end
-          "#{base_url}#{reconstructed_params}"
-        else
-          "#{current_url}?limit=#{limit}"
+      def current_url_without_limit
+        current_uri = URI.parse(request.original_url)
+
+        if current_uri.query
+          query_params = URI.decode_www_form(current_uri.query).to_h
+          query_params.delete('limit')
+          new_query_string = URI.encode_www_form(query_params)
+          current_uri.query = new_query_string
         end
+
+        current_uri.to_s
       end
     end
   end
