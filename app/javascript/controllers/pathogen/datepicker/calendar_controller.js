@@ -23,6 +23,7 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
     "clearButton",
+    "minDateMessage",
   ];
 
   static values = {
@@ -41,6 +42,7 @@ export default class extends Controller {
   #selectedMonthIndex;
 
   #minDate;
+  #minDateMessage;
   #autosubmit;
 
   idempotentConnect() {
@@ -49,6 +51,10 @@ export default class extends Controller {
     // set the month and year inputs
     this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
+
+    if (this.hasMinDateMessageTarget) {
+      this.minDateMessageTarget.innerText = this.#minDateMessage;
+    }
     this.#loadCalendar();
   }
 
@@ -82,6 +88,7 @@ export default class extends Controller {
     this.#selectedYear = params["selectedYear"];
     this.#selectedMonthIndex = params["selectedMonthIndex"];
     this.#minDate = params["minDate"];
+    this.#minDateMessage = params["minDateMessage"];
     this.#autosubmit = params["autosubmit"];
     this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();

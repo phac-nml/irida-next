@@ -1,7 +1,9 @@
 <div>
-  <% if min_date %>
-    <div class="text-sm text-center text-slate-900 dark:text-white">
-      <%= t("pathogen.datepicker.errors.min_date_error", min_date:) %>
+  <% unless min_date.nil? %>
+    <div
+      class="text-sm text-center text-slate-900 dark:text-white"
+      data-pathogen--datepicker--calendar-target="minDateMessage"
+    >
     </div>
   <% end %>
   <div class="flex space-x-2 rtl:space-x-reverse mt-2">

@@ -2,7 +2,7 @@
 
 class PathogenDatepickerPreview < ViewComponent::Preview
   def default; end
-  def with_min_date; end
+  def with_no_min_date; end
   def with_selected_date; end
-  def with_min_and_selected_dates; end
+  def with_selected_date_and_no_min_date; end
 end
