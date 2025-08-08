@@ -25,6 +25,7 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
+  validate :namespace
   validate :validate_namespace
   validate :validate_workflow_available, if: :initial?
   validates :name, presence: true, if: -> { !submitter.automation_bot? }
@@ -81,6 +82,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def validate_namespace
+    return unless namespace
     return if %w[Group Project].include?(namespace.type)
 
     errors.add(:namespace, I18n.t('activerecord.errors.models.workflow_execution.invalid_namespace'))

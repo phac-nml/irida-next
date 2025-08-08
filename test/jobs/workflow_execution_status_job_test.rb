@@ -126,4 +126,26 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     assert_performed_jobs(2, only: WorkflowExecutionStatusJob)
     assert @workflow_execution.reload.completing?
   end
+
+  test 'execution where namespace is removed before status is run' do
+    workflow_execution = workflow_executions(:workflow_execution_missing_namespace)
+
+    WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert workflow_execution.reload.error?
+  end
+
+  test 'execution where run_id is missing' do
+    workflow_execution = workflow_executions(:workflow_execution_missing_run_id)
+
+    WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert workflow_execution.reload.error?
+  end
 end

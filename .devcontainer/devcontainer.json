@@ -35,7 +35,8 @@
         "shopify.ruby-lsp",
         "elia.erb-formatter",
         "esbenp.prettier-vscode",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens"
       ]
     }
   },
