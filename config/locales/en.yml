@@ -676,7 +676,6 @@ en:
     search_field_component:
       clear_button: Clear search
       instructions: Press enter to search
-      placeholder: Search
       search_button: Search
     token:
       copied: Copied!
@@ -1143,7 +1142,8 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by PUID or name
+          label: Search
+          placeholder: Search by name or PUID
     shared_namespaces:
       index:
         pagy:
@@ -1863,7 +1863,8 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by PUID or name
+          label: Search
+          placeholder: Search by name or PUID
       update:
         success: Sample was successfully updated.
     sidebar:
