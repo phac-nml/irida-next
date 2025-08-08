@@ -10,7 +10,7 @@
         dark:border-slate-700 sm:p-6 dark:bg-slate-800
       "
     >
-      <%= form_with(model: @sample, url: namespace_project_samples_path, data: {turbo: false}, method: :post) do |form| %>
+      <%= form_with(model: @sample, url: namespace_project_samples_path, data: {turbo: false}, method: :post, html: { novalidate: true}) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 

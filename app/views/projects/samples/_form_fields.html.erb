@@ -1,15 +1,56 @@
+<%= if @sample.errors.any?
+  viral_alert(
+    type: "alert",
+    message: I18n.t(:"general.form.error_notification"),
+    aria: {
+      live: "assertive",
+    },
+  )
+end %>
+
+<%= render partial: "shared/form/required_field_legend" %>
+
 <% invalid_name = sample.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
-  <%= form.label :name %>
-  <%= form.text_field :name, required: true, minlength: 3, maxlength: 255 %>
-  <%= render "shared/form/field_errors",
-  errors: sample.errors.full_messages_for(:name) %>
+  <%= form.label :name, data: { required: true } %>
+  <%= form.text_field :name,
+                  required: true,
+                  minlength: 3,
+                  maxlength: 255,
+                  aria: {
+                    describedby:
+                      invalid_name ? form.field_id(:name, "error") : nil,
+                    invalid: invalid_name,
+                    required: true,
+                  } %>
+
+  <% if invalid_name %>
+    <%= render "shared/form/field_errors",
+    id: form.field_id(:name, "error"),
+    errors: sample.errors.full_messages_for(:name) %>
+  <% end %>
 </div>
 
 <% invalid_description = sample.errors.include?(:description) %>
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
-  <%= form.text_area :description, rows: 4 %>
-  <%= render "shared/form/field_errors",
-  errors: sample.errors.full_messages_for(:description) %>
+  <%= form.text_area :description,
+                 rows: 4,
+                 aria: {
+                   describedby:
+                     (
+                       if invalid_description
+                         form.field_id(:description, "error")
+                       else
+                         nil
+                       end
+                     ),
+                   invalid: invalid_description,
+                   required: true,
+                 } %>
+  <% if invalid_description %>
+    <%= render "shared/form/field_errors",
+    id: form.field_id(:description, "error"),
+    errors: sample.errors.full_messages_for(:description) %>
+  <% end %>
 </div>

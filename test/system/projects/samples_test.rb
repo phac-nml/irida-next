@@ -275,6 +275,57 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'create sample with missing name' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # launch dialog
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
+
+      # fill new sample fields
+      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
+      fill_in I18n.t('activerecord.attributes.sample.name'), with: ''
+      click_on I18n.t('projects.samples.new.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text "Name can't be blank"
+      assert_text 'Name is too short (minimum is 3 characters)'
+      ### VERIFY END ###
+    end
+
+    test 'create sample with existing name' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # launch dialog
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
+
+      # fill new sample fields
+      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
+      fill_in I18n.t('activerecord.attributes.sample.name'), with: @sample1.name
+      click_on I18n.t('projects.samples.new.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text 'Name has already been taken'
+      ### VERIFY END ###
+    end
+
     test 'edit sample' do
       ### SETUP START ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
@@ -302,6 +353,57 @@ module Projects
       # verify redirect to sample show page and updated sample state
       assert_selector 'h1', text: 'New Sample Name'
       assert_text 'A new description'
+      ### results end ###
+    end
+
+    test 'edit sample with blank name' do
+      ### SETUP START ###
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      # verify header has loaded to prevent flakes
+      assert_selector 'h1', text: @sample1.name
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # nav to edit sample page
+      click_on I18n.t('projects.samples.show.edit_button')
+
+      # verify current sample doesn't have with new properties that will be used
+      assert_no_text 'A new description'
+      assert_no_text 'New Sample Name'
+      # change current sample properties
+      fill_in 'Description', with: 'A new description'
+      fill_in 'Name', with: ''
+      click_on I18n.t('projects.samples.edit.submit_button')
+      ### ACTIONS END ###
+
+      ### results start ###
+      assert_text "Name can't be blank"
+      assert_text 'Name is too short (minimum is 3 characters)'
+      ### results end ###
+    end
+
+    test 'edit sample to match existing sample' do
+      ### SETUP START ###
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      # verify header has loaded to prevent flakes
+      assert_selector 'h1', text: @sample1.name
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # nav to edit sample page
+      click_on I18n.t('projects.samples.show.edit_button')
+
+      # verify current sample doesn't have with new properties that will be used
+      assert_no_text 'A new description'
+      assert_no_text 'New Sample Name'
+      # change current sample properties
+      fill_in 'Description', with: 'A new description'
+      fill_in 'Name', with: @sample2.name
+      click_on I18n.t('projects.samples.edit.submit_button')
+      ### ACTIONS END ###
+
+      ### results start ###
+      assert_text 'Name has already been taken'
       ### results end ###
     end
 
