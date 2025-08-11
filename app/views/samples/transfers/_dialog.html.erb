@@ -42,6 +42,8 @@
           </div>
         </div>
 
+        <%= render partial: "shared/form/required_field_legend" %>
+
         <%= form_for(:transfer, url: samples_transfer_path(namespace_id: @namespace.id), method: :post,
               data: {
                 controller: "form--json-submission",
@@ -60,6 +62,7 @@
                 class="
                   mb-1 block text-sm font-medium text-slate-900 dark:text-white
                 "
+                data-required="true"
               >
                 <%= t(".new_project_id") %>
               </label>
@@ -74,7 +77,7 @@
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, id: form_id, placeholder: t(".select_project")) do |select| %>
+                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t(".select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
