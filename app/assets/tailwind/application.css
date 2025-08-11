@@ -198,6 +198,10 @@ input[type="search"] {
     border-top-left-radius: 0;
     @apply block w-full rounded-r-lg border border-slate-300 bg-white text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
+
+  & textarea {
+    @apply block w-full rounded-lg border border-slate-300 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+  }
 }
 
 @utility field_with_errors {
