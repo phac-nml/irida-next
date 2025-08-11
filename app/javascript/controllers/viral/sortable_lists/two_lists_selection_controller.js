@@ -254,8 +254,8 @@ export default class extends Controller {
   #getKeyboardHandler(key) {
     const handlers = {
       " ": this.handleSelection.bind(this),
-      Enter: this.addSelection.bind(this),
-      Delete: this.removeSelection.bind(this),
+      Enter: this.#addSelectionByListInput.bind(this),
+      Delete: this.#removeSelectionByListInput.bind(this),
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
       ArrowDown: (event) =>
         this.#handleVerticalNavigation(event, "down", "single"),
@@ -294,34 +294,58 @@ export default class extends Controller {
     }
   }
 
-  addSelection(event) {
-    if (
-      event.type == "keydown" &&
-      event.target.parentNode != this.availableList
-    )
-      return;
-
-    this.#performSelection(
-      event.type === "keydown",
-      this.availableList,
-      this.selectedList,
-    );
+  #addSelectionByListInput(event) {
+    if (event.target.parentNode != this.availableList) return;
+    this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
-  removeSelection(event) {
-    if (event.type == "keydown" && event.target.parentNode != this.selectedList)
-      return;
-    this.#performSelection(
-      event.type === "keydown",
-      this.selectedList,
-      this.availableList,
-    );
+  addButtonByClick() {
+    this.#performSelection(false, false, this.availableList, this.selectedList);
   }
 
-  #performSelection(keydown, sourceList, targetList) {
+  addButtonByKey(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      // prevents firing click event
+      event.preventDefault();
+
+      this.#performSelection(
+        true,
+        false,
+        this.availableList,
+        this.selectedList,
+      );
+    }
+  }
+
+  #removeSelectionByListInput(event) {
+    if (event.target.parentNode != this.selectedList) return;
+    this.#performSelection(true, true, this.selectedList, this.availableList);
+  }
+
+  removeButtonByClick() {
+    this.#performSelection(false, false, this.selectedList, this.availableList);
+  }
+
+  removeButtonByKey(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      // prevents firing click event
+      event.preventDefault();
+      this.#performSelection(
+        true,
+        false,
+        this.selectedList,
+        this.availableList,
+      );
+    }
+  }
+
+  // isKeyDown: is action performed by keyboard
+  // isFromList: is the action performed within the list (ie: from list or from add/remove buttons)
+  #performSelection(isKeyDown, isFromList, sourceList, targetList) {
     let focusTarget = null;
 
-    if (keydown) {
+    // if action is keydown and performed within the list, find list item to focus
+    if (isKeyDown && isFromList) {
       focusTarget = this.#getFocusTargetAfterSelection(sourceList);
     }
     const selectedOptions = this.#getSelectedOptions(sourceList);
@@ -333,7 +357,16 @@ export default class extends Controller {
         this.#removeSelectedAttributes(selectedOptions[i]);
         targetList.appendChild(selectedOptions[i]);
       }
-      if (focusTarget) focusTarget.focus();
+
+      // if action is keydown but not from within the list (ie: keydown on add/remove btn), focus first list element
+      // if it exists, or focus the list
+      if (focusTarget) {
+        focusTarget.focus();
+      } else if (isKeyDown && !isFromList) {
+        sourceList.firstElementChild
+          ? sourceList.firstElementChild.focus()
+          : sourceList.focus();
+      }
       this.#updateListAttributes(selectedOptions[0]);
     }
 
@@ -378,9 +411,7 @@ export default class extends Controller {
         }
       }
       // if no unselected options found, change focus to list
-      list.focus();
-    } else {
-      return null;
+      return list;
     }
   }
 
