@@ -259,28 +259,28 @@ export default class extends Controller {
   }
 
   #getRelativeYearAndMonth(relativePosition) {
+    let year = this.#selectedYear;
+    let month = this.#selectedMonthIndex;
     // if relativePosition === 'previous', check if we're in January to pass back December and previous year
     // else pass previous month and same year
     if (relativePosition === "previous") {
       if (this.#selectedMonthIndex === 0) {
-        return { year: this.#selectedYear - 1, month: 11 };
+        year--;
+        month = 11;
+        // return { year: this.#selectedYear - 1, month: 11 };
       } else {
-        return {
-          year: this.#selectedYear,
-          month: this.#selectedMonthIndex - 1,
-        };
+        month--;
       }
-      //  else, check if we're in December, and pass back January and next year, else pass next month and same year
+      // else, check if we're in December, and pass back January and next year, else pass next month and same year
     } else {
       if (this.#selectedMonthIndex === 11) {
-        return { year: this.#selectedYear + 1, month: 0 };
+        year++;
+        month = 0;
       } else {
-        return {
-          year: this.#selectedYear,
-          month: this.#selectedMonthIndex + 1,
-        };
+        month++;
       }
     }
+    return { year: year, month: month };
   }
 
   #getFormattedStringDate(year, monthIndex, date) {
