@@ -6,7 +6,7 @@
     placeholder: t(".search.placeholder"),
     form: f,
     field_name: :name_or_puid_cont,
-    has_search_results: @query.name_or_puid_cont.present?,
+    value: @query.name_or_puid_cont,
   ) %>
   <input type="hidden" name="format" value="turbo_stream"/>
   <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
@@ -18,4 +18,5 @@
     open: @query.errors.any?,
     status: @query.advanced_query?,
   ) %>
+  <%= f.submit hidden: true %>
 <% end %>
