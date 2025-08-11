@@ -6,9 +6,11 @@
   "
 >
   <form
+    id="limit-component-form"
     method="get"
     action="<%= current_url_without_limit %>"
     class="inline-flex items-center space-x-2"
+    data-turbo-action="replace"
   >
     <label for="pagy-limit-select" class="text-sm font-medium">
       <%= t(".items", items: @item) %>
@@ -28,7 +30,7 @@
           [&::-ms-expand]:hidden
         "
         style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none !important;"
-        onchange="this.form.submit()"
+        onchange="this.form.requestSubmit()"
       >
         <% Pagy::DEFAULT[:limits].each do |limit| %>
           <option

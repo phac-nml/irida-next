@@ -89,6 +89,9 @@ ActiveStorage.start();
 document.addEventListener("turbo:morph", () => {
   LocalTime.config.locale = document.documentElement.lang;
   LocalTime.run();
+
+  // ensure focused element is scrolled into view if out of view
+  document.activeElement.scrollIntoView();
 });
 
 Turbo.config.forms.confirm = (message, element) => {
