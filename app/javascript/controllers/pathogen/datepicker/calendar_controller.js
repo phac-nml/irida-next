@@ -250,6 +250,14 @@ export default class extends Controller {
     return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
   }
 
+  #onLastDate() {
+    if (this.#todaysMonthIndex === 1) {
+      return this.#getFebLastDate(this.#todaysYear) === DAYS_IN_MONTH[1];
+    } else {
+      return this.#todaysDate === DAYS_IN_MONTH[this.#todaysMonthIndex];
+    }
+  }
+
   #getRelativeYearAndMonth(relativePosition) {
     // if relativePosition === 'previous', check if we're in January to pass back December and previous year
     // else pass previous month and same year
@@ -437,7 +445,12 @@ export default class extends Controller {
   // show today on calendar via show today button
   showToday() {
     this.#selectedYear = this.#todaysYear;
-    this.#selectedMonthIndex = this.#todaysMonthIndex;
+    if (this.#onLastDate()) {
+      this.#selectedMonthIndex = this.#todaysMonthIndex + 1;
+    } else {
+      this.#selectedMonthIndex = this.#todaysMonthIndex;
+    }
+
     this.idempotentConnect();
   }
 
