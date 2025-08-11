@@ -6,6 +6,8 @@ module Viral
     class ListComponent < Viral::Component
       attr_reader :id, :group, :title, :list_items, :required
 
+      # rubocop:disable Metrics/ParameterLists
+
       # If creating multiple lists to utilize the same list values, assign them the same group
       def initialize(id: nil, group: nil, title: nil, list_items: [], required: false, **system_arguments)
         @id = id
@@ -21,6 +23,8 @@ module Viral
         @system_arguments[:container_classes] =
           class_names(system_arguments[:container_classes], 'text-slate-900 dark:text-white')
       end
+
+      # rubocop:enable Metrics/ParameterLists
     end
   end
 end
