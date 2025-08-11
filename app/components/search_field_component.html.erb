@@ -12,7 +12,8 @@
                        aria: {
                          label: t("components.search_field_component.instructions"),
                        },
-                       placeholder: @placeholder %>
+                       placeholder: @placeholder,
+                       value: params[:q][@field_name] %>
     <!-- Clear button (shown only when there are existing search results) -->
     <button
       type="button"

@@ -81,9 +81,6 @@ export default class extends Controller {
       hasInputTarget: this.hasInputTarget,
       hasSearchContent: this.hasSearchContent,
     });
-
-    // Initialize button visibility based on presence of pre-existing search term
-    this.updateButtons();
   }
 
   /**

@@ -776,6 +776,7 @@ fr:
         pagy_item: Projets
         personal: Personnel
         search:
+          label: Search by PUID or name
           placeholder: Filtrer par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
