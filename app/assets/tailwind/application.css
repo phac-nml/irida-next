@@ -140,7 +140,7 @@ input[type="search"] {
   }
 
   & input[type="text"].prefixed {
-    @apply rounded-l-none rounded-r-lg;
+    @apply rounded-l-none rounded-r-lg p-2.5;
   }
 
   & input[type="search"].prefixed {
