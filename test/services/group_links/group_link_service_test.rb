@@ -40,7 +40,7 @@ module GroupLinks
 
       assert_difference -> { NamespaceGroupLink.count } => 0 do
         namespace_group_link = GroupLinks::GroupLinkService.new(@user, group, params).execute
-        assert namespace_group_link.errors.full_messages.include? I18n.t('services.groups.share.group_self_reference')
+        assert namespace_group_link.errors[:group].include? I18n.t('services.groups.share.group_self_reference')
       end
 
       assert_enqueued_emails 0
