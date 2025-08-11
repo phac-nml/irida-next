@@ -15,13 +15,20 @@
     "
   >
     <div class="flex flex-row flex-wrap items-center ml-auto space-x-2 font-normal">
-      <%= render SearchComponent.new(
-        query: @q,
-        url: dashboard_groups_url,
-        search_attribute: :name_or_puid_cont,
-        placeholder: t(:".search.placeholder"),
-        total_count: @pagy.count,
-      ) %>
+      <%= form_with model: @q, url:dashboard_groups_url, method: :get, class: "inline-flex", data: {turbo_action: "replace"} do |form| %>
+        <% if params[:personal] == 'true' %>
+          <%= hidden_field_tag :personal, "true" %>
+        <% end %>
+        <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+        <%= render SearchFieldComponent.new(
+          form: form,
+          label: t(".search.label"),
+          placeholder: t(".search.placeholder"),
+          field_name: :name_or_puid_cont,
+          value: @q.name_or_puid_cont,
+        ) %>
+      <% end %>
+
       <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
         <%= render Ransack::SortDropdownComponent.new(
           @q,

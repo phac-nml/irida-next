@@ -758,7 +758,8 @@ fr:
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
         search:
-          placeholder: Filtrer par PUID ou nom
+          label: Search by PUID or name
+          placeholder: Search
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé

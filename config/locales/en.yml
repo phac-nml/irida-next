@@ -758,7 +758,8 @@ en:
         no_groups_description: You currently have no groups.
         no_groups_title: No groups
         search:
-          placeholder: Filter by PUID or name
+          label: Search by PUID or name
+          placeholder: Search
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
