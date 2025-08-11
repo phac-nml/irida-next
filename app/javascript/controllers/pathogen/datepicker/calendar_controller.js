@@ -180,11 +180,20 @@ export default class extends Controller {
     let relativeMonthPosition = "previous";
     let tableRow = document.createElement("tr");
 
+    // relativeYearAndMonth get the previous and next month (and year if in Jan/Dec) relative to the current year/month
+    // for date nodes that fill in previous/next month
+    // ie: In Dec 2025, assign Nov 2025 to previous date nodes and Jan 2026 to next date nodes
+    let relativeYearAndMonth = this.#getRelativeYearAndMonth(
+      relativeMonthPosition,
+    );
     for (let i = 0; i < dates.length; i++) {
       if (dates[i] === 1) {
         inCurrentMonth = !inCurrentMonth;
         if (!inCurrentMonth) {
           relativeMonthPosition = "next";
+          relativeYearAndMonth = this.#getRelativeYearAndMonth(
+            relativeMonthPosition,
+          );
         }
       }
 
@@ -203,18 +212,6 @@ export default class extends Controller {
         );
         tableRow.appendChild(inMonthDate);
       } else {
-        // set year to the current selected year. if month is jan (index == 0) or dec (index == 11), we need to set
-        // year back or forward, respectively, dependent on the relativeMonthPosition (before or after)
-        let year = this.#selectedYear;
-        const relativeMonthIndex = this.#getRelativeMonthIndex(
-          relativeMonthPosition,
-        );
-        if (relativeMonthIndex === 0) {
-          year++;
-        } else if (relativeMonthIndex === 11) {
-          year--;
-        }
-
         const outOfMonthDate =
           this.outOfMonthDateTemplateTarget.content.cloneNode(true);
         const tableCell = outOfMonthDate.querySelector("td");
@@ -222,7 +219,11 @@ export default class extends Controller {
 
         tableCell.setAttribute(
           "data-date",
-          this.#getFormattedStringDate(year, relativeMonthIndex, dates[i]),
+          this.#getFormattedStringDate(
+            relativeYearAndMonth["year"],
+            relativeYearAndMonth["month"],
+            dates[i],
+          ),
         );
         tableRow.appendChild(outOfMonthDate);
       }
@@ -249,20 +250,27 @@ export default class extends Controller {
     return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
   }
 
-  #getRelativeMonthIndex(relativePosition) {
-    // if relativePosition === 'previous', check if we're in January to pass back December, else pass previous month
+  #getRelativeYearAndMonth(relativePosition) {
+    // if relativePosition === 'previous', check if we're in January to pass back December and previous year
+    // else pass previous month and same year
     if (relativePosition === "previous") {
       if (this.#selectedMonthIndex === 0) {
-        return 11;
+        return { year: this.#selectedYear - 1, month: 11 };
       } else {
-        return this.#selectedMonthIndex - 1;
+        return {
+          year: this.#selectedYear,
+          month: this.#selectedMonthIndex - 1,
+        };
       }
-      //  else, check if we're in December, and pass back January, else pass next month
+      //  else, check if we're in December, and pass back January and next year, else pass next month and same year
     } else {
       if (this.#selectedMonthIndex === 11) {
-        return 0;
+        return { year: this.#selectedYear + 1, month: 0 };
       } else {
-        return this.#selectedMonthIndex + 1;
+        return {
+          year: this.#selectedYear,
+          month: this.#selectedMonthIndex + 1,
+        };
       }
     }
   }
