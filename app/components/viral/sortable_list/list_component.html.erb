@@ -17,9 +17,7 @@
     role="listbox"
     aria-labelledby="<%= id %>-list-label"
     aria-roledescription="<%= t('.aria_role_description', list: title)%>"
-    <% if required %>
-    aria-required="true"
-    <% end %>
+    aria-required="<%= required %>"
   >
     <%= render Viral::SortableList::ListItemComponent.with_collection(list_items) %>
   </ul>
