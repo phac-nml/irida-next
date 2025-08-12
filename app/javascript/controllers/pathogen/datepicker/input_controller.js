@@ -67,27 +67,24 @@ export default class extends Controller {
   idempotentConnect() {
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
-    this.datepickerInputTarget.addEventListener(
-      "focus",
-      this.boundUnhideCalendar,
-    );
-    this.datepickerInputTarget.addEventListener(
-      "click",
-      this.boundUnhideCalendar,
-    );
+
+    ["focus", "click"].forEach((event) => {
+      this.datepickerInputTarget.addEventListener(
+        event,
+        this.boundUnhideCalendar,
+      );
+    });
 
     this.#findNextFocusableElement();
   }
 
   disconnect() {
-    this.datepickerInputTarget.removeEventListener(
-      "focus",
-      this.boundUnhideCalendar,
-    );
-    this.datepickerInputTarget.removeEventListener(
-      "click",
-      this.boundUnhideCalendar,
-    );
+    ["focus", "click"].forEach((event) => {
+      this.datepickerInputTarget.removeEventListener(
+        event,
+        this.boundUnhideCalendar,
+      );
+    });
     this.removeCalendarListeners();
   }
 
