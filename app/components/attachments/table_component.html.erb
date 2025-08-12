@@ -250,6 +250,9 @@
                     <%= link_to(
                       t(".preview"),
                       attachment_path(attachment),
+                      aria: {
+                        label: t(".preview_aria_label", name: attachment.file.filename.to_s),
+                      },
                       data: {
                         turbo_stream: true,
                       },
@@ -261,6 +264,24 @@
                     <%= button_to(
                       t(".delete"),
                       destroy_path(attachment.id),
+                      aria: {
+                        label:
+                          t(
+                            ".delete_aria_label",
+                            count: attachment.associated_attachment ? 2 : 1,
+                            name:
+                              (
+                                if attachment.associated_attachment
+                                  [
+                                    attachment.file.filename.to_s,
+                                    attachment.associated_attachment.file.filename.to_s,
+                                  ].to_sentence
+                                else
+                                  attachment.file.filename.to_s
+                                end
+                              ),
+                          ),
+                      },
                       data: {
                         turbo_stream: true,
                       },

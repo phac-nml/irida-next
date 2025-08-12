@@ -82,7 +82,7 @@ module Projects
       assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_button I18n.t(:'projects.automated_workflow_executions.actions.delete_button')
+        click_button I18n.t(:'projects.automated_workflow_executions.actions.delete')
       end
 
       within('#turbo-confirm[open]') do
@@ -99,7 +99,7 @@ module Projects
       assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_button I18n.t(:'projects.automated_workflow_executions.actions.edit_button')
+        click_button I18n.t(:'projects.automated_workflow_executions.actions.edit')
       end
 
       within('dialog[open].dialog--size-xl') do
@@ -125,8 +125,8 @@ module Projects
                         text: disabled_automated_pipeline.id
 
         within("tr[id='#{dom_id(disabled_automated_pipeline)}'] td:last-child") do
-          assert_text I18n.t('projects.automated_workflow_executions.actions.delete_button')
-          assert_no_text I18n.t('projects.automated_workflow_executions.actions.edit_button')
+          assert_text I18n.t('projects.automated_workflow_executions.actions.delete')
+          assert_no_text I18n.t('projects.automated_workflow_executions.actions.edit')
         end
       end
     end

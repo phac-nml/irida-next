@@ -31,7 +31,7 @@
         classes: "flex justify-start"
       ) do |row| %>
       <% unless row.disabled %>
-        <%= button_to t(:"projects.automated_workflow_executions.actions.edit_button"),
+        <%= button_to t(:"projects.automated_workflow_executions.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
           @project.parent,
           @project,
@@ -41,10 +41,17 @@
           turbo_stream: true,
         },
         method: :get,
+        aria: {
+          label:
+            t(
+              :"projects.automated_workflow_executions.actions.edit_aria_label",
+              name: row[:name],
+            ),
+        },
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer mr-2" %>
       <% end %>
-      <%= button_to t(:"projects.automated_workflow_executions.actions.delete_button"),
+      <%= button_to t(:"projects.automated_workflow_executions.actions.delete"),
       namespace_project_automated_workflow_execution_path(
         @project.parent,
         @project,
@@ -56,6 +63,13 @@
           t(:"projects.automated_workflow_executions.actions.delete_confirm"),
       },
       method: :delete,
+      aria: {
+        label:
+          t(
+            :"projects.automated_workflow_executions.actions.delete_aria_label",
+            name: row[:name],
+          ),
+      },
       class:
         "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
     <% end %>

@@ -441,6 +441,9 @@ fr:
         selected: Sélectionné
       created_at: Créé à
       delete: Supprimer
+      delete_aria_label:
+        one: 'Delete file: %{name}'
+        other: 'Delete files: %{name}'
       delete_confirm: Êtes-vous sûr de vouloir supprimer la pièce jointe '%{name}'?
       filename: Nom du fichier
       format: Format
@@ -448,6 +451,7 @@ fr:
       limit:
         item: Pièces jointes
       preview: Aperçu
+      preview_aria_label: 'Preview attachment: %{name}'
       select_page: Sélectionner/Désélectionner les pièces jointes visibles
       type: Type
   auth:
@@ -472,9 +476,9 @@ fr:
           level_50: Propriétaire
         actions:
           destroy: Supprimer
-          destroy_aria_label: Supprimer le compte de bot
+          destroy_aria_label: 'Supprimer le compte de bot : %{name}'
           generate_new_token: Générer un nouveau jeton
-          generate_new_token_aria_label: Générer un nouveau jeton d’accès personnel pour le compte de bot
+          generate_new_token_aria_label: 'Générer un nouveau jeton d’accès personnel pour le compte de bot : %{name}'
         empty_state:
           description: Il n’y a pas de comptes de bot associés.
           title: Aucun compte de bot
@@ -1044,7 +1048,7 @@ fr:
     group_links:
       index:
         actions:
-          unlink_aria_label: Dissocier l’espace de noms du groupe de boutons %{member}
+          unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
         aria_labels:
           expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
@@ -1083,8 +1087,8 @@ fr:
         aria_label: Niveau d’accès
       index:
         actions:
-          link_leave_group_aria_label: Bouton Quitter le groupe
-          link_remove_aria_label: Supprimer le lien %{member} du membre du groupe
+          leave_group_aria_label: Bouton Quitter le groupe
+          remove_aria_label: 'Supprimer le membre du groupe : %{member}'
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
         invited_groups: Invited Groups
@@ -1344,10 +1348,10 @@ fr:
       created_at: Date de création
       created_by_email: Créé par
       description: Description
-      edit_aria_label: Modifier le modèle de métadonnées %{template_name}
+      edit_aria_label: 'Modifier le modèle de métadonnées : %{template_name}'
       edit_button: Modifier
       name: Nom du modèle
-      remove_aria_label: Supprimer le modèle de métadonnées %{template_name}
+      remove_aria_label: 'Supprimer le modèle de métadonnées : %{template_name}'
       remove_button: Supprimer
       remove_confirmation: Êtes-vous sûr de vouloir supprimer le modèle de métadonnées %{template_name}?
       spinner_message: Chargement des modèles de métadonnées...
@@ -1402,6 +1406,7 @@ fr:
         scopes: Portées
       never: Jamais
       revoke: Révoquer
+      revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
   profiles:
     accounts:
@@ -1493,9 +1498,11 @@ fr:
           title: Aucun fichier
     automated_workflow_executions:
       actions:
-        delete_button: Supprimer
+        delete: Supprimer
+        delete_aria_label: 'Delete automated pipeline: %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer ce pipeline automatisé?
-        edit_button: Modifier
+        edit: Modifier
+        edit_aria_label: 'Edit automated pipeline: %{name}'
       create:
         error: Impossible de créer un pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été créé avec succès
@@ -1630,7 +1637,7 @@ fr:
           level_40: Responsable
           level_50: Propriétaire
         actions:
-          unlink_aria_label: Dissocier l’espace de noms du groupe de boutons %{member}
+          unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
         aria_labels:
           expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
@@ -1671,8 +1678,8 @@ fr:
         aria_label: Niveau d’accès
       index:
         actions:
-          link_leave_project_aria_label: Laisser le lien du projet
-          link_remove_aria_label: Supprimer le lien du membre du projet %{member}
+          leave_project_aria_label: Laisser le lien du projet
+          remove_aria_label: 'Supprimer le lien du membre du projet : %{member}'
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
         invited_groups: Invited Groups
@@ -2314,6 +2321,12 @@ fr:
       no_template: Pas de modèle
       remove_all: Supprimer tout
   workflow_executions:
+    actions:
+      cancel: Annuler
+      cancel_aria_label: 'Cancel workflow execution: %{name}'
+      cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
+      delete: Supprimer
+      delete_aria_label: 'Delete workflow execution: %{name}'
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
@@ -2346,10 +2359,6 @@ fr:
       search:
         placeholder: Filtrer par PUID ou nom de fichier
     index:
-      actions:
-        cancel_button: Annuler
-        cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
-        delete_button: Supprimer
       create_export_button: Créer une exportation
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
