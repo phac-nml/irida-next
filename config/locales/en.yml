@@ -955,7 +955,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Filter by PUID or Filename
+          label: Search by PUID or Filename
+          placeholder: Search
         subtitle: These are the files that belong to Group %{group_name}
         title: Files
         upload_files: Upload Files

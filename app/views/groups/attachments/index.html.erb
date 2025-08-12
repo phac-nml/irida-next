@@ -25,25 +25,25 @@
     <div class="flex mb-2">
       <div class="grow"></div>
       <div class="grow-0">
-        <%= render SearchComponent.new(
-        query: @q,
-        search_attribute: :puid_or_file_blob_filename_cont,
-        placeholder: t(:".search.placeholder"),
-        url: group_attachments_path(@group),
-        total_count: @pagy.count,
-      ) do %>
+        <%= search_form_for @q, url: group_attachments_path(@group), data: { turbo_action: 'replace' }, class: "filters flex items-end space-x-2" do |f| %>
+          <%= render SearchFieldComponent.new(
+            label: t(".search.label"),
+            placeholder: t(".search.placeholder"),
+            form: f,
+            field_name: :puid_or_file_blob_filename_cont,
+            value: @q.puid_or_file_blob_filename_cont,
+          ) %>
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>
       </div>
     </div>
+    <%= render partial: "table",
+    locals: {
+      attachments: @attachments,
+      pagy: @pagy,
+      q: @q,
+      namespace: @group,
+      render_individual_attachments: @render_individual_attachments,
+      has_attachments: @has_attachments,
+    } %>
   </div>
-  <%= render partial: "table",
-  locals: {
-    attachments: @attachments,
-    pagy: @pagy,
-    q: @q,
-    namespace: @group,
-    render_individual_attachments: @render_individual_attachments,
-    has_attachments: @has_attachments,
-  } %>
-</div>

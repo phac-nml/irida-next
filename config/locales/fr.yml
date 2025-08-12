@@ -955,7 +955,8 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Filtrer par PUID ou nom de fichier
+          label: Search by PUID or Filename
+          placeholder: Search
         subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
