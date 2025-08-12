@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { DAYS_IN_MONTH, STYLE_CLASSES } from "./constants.js";
+import { DAYS_IN_MONTH, CALENDAR_CLASSES } from "./constants.js";
 
 import {
   getDayOfWeek,
@@ -302,15 +302,12 @@ export default class extends Controller {
     const minDate = getDateNode(this.calendarTarget, this.#minDate);
 
     if (selectedDate) {
-      this.#replaceDateStyling(
-        selectedDate,
-        STYLE_CLASSES["selectedDateClasses"],
-      );
+      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
     }
 
     // don't need to add 'today' styling if today == selectedDate
     if (today && selectedDate != today) {
-      this.#replaceDateStyling(today, STYLE_CLASSES["todaysDateClasses"]);
+      this.#replaceDateStyling(today, CALENDAR_CLASSES["TODAYS_DATE"]);
     }
 
     if (minDate) {
@@ -321,13 +318,13 @@ export default class extends Controller {
       for (let i = 0; i < allDates.indexOf(minDate); i++) {
         this.#replaceDateStyling(
           allDates[i],
-          STYLE_CLASSES["disabledDateClasses"],
+          CALENDAR_CLASSES["DISABLED_DATE"],
         );
         allDates[i].setAttribute("aria-disabled", true);
       }
       // if minDate and today are on calendar and today is before the minDate, remove the hover classes
       if (today && this.#minDate > this.#todaysFormattedFullDate) {
-        today.classList.remove(...STYLE_CLASSES["todaysHoverClasses"]);
+        today.classList.remove(...CALENDAR_CLASSES["TODAYS_HOVER"]);
       }
     }
   }
@@ -335,9 +332,9 @@ export default class extends Controller {
   // handles changing the date styling (today, selected and disabled dates)
   #replaceDateStyling(date, classes) {
     if (verifyDateIsInMonth(date)) {
-      date.classList.remove(...STYLE_CLASSES["inMonthClasses"]);
+      date.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
     } else {
-      date.classList.remove(...STYLE_CLASSES["outOfMonthClasses"]);
+      date.classList.remove(...CALENDAR_CLASSES["OUT_OF_MONTH"]);
     }
     date.classList.add(...classes);
   }
@@ -380,12 +377,12 @@ export default class extends Controller {
     // we disable the back button so user can't navigate further back
     if (this.#preventPreviousMonthNavigation()) {
       backButton.disabled = true;
-      backArrow.classList.remove(...STYLE_CLASSES["backButtonEnabledClasses"]);
-      backArrow.classList.add(...STYLE_CLASSES["backButtonDisabledClasses"]);
+      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
+      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
     } else {
       backButton.disabled = false;
-      backArrow.classList.add(...STYLE_CLASSES["backButtonEnabledClasses"]);
-      backArrow.classList.remove(...STYLE_CLASSES["backButtonDisabledClasses"]);
+      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
+      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
     }
   }
 
