@@ -10,8 +10,8 @@ export const CALENDAR_TOP_BUFFER = 35;
 
 export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-export const STYLE_CLASSES = {
-  selectedDateClasses: [
+export const CALENDAR_CLASSES = {
+  SELECTED_DATE: [
     "bg-primary-700",
     "text-white",
     "hover:bg-primary-800",
@@ -22,21 +22,21 @@ export const STYLE_CLASSES = {
     "dark:hover:bg-primary-700",
     "cursor-pointer",
   ],
-  inMonthClasses: [
+  IN_MONTH: [
     "text-slate-900",
     "hover:bg-slate-100",
     "dark:hover:bg-slate-600",
     "dark:text-white",
     "cursor-pointer",
   ],
-  outOfMonthClasses: [
+  OUT_OF_MONTH: [
     "hover:bg-slate-100",
     "dark:hover:bg-slate-600",
     "text-slate-500",
     "dark:text-slate-300",
     "cursor-pointer",
   ],
-  todaysDateClasses: [
+  TODAYS_DATE: [
     "text-primary-700",
     "bg-slate-100",
     "hover:bg-slate-200",
@@ -45,13 +45,13 @@ export const STYLE_CLASSES = {
     "dark:text-primary-300",
     "cursor-pointer",
   ],
-  todaysHoverClasses: ["hover:bg-slate-200", "dark:hover:bg-slate-500"],
-  disabledDateClasses: [
+  TODAYS_HOVER: ["hover:bg-slate-200", "dark:hover:bg-slate-500"],
+  DISABLED_DATE: [
     "line-through",
     "cursor-not-allowed",
     "text-slate-500",
     "dark:text-slate-300",
   ],
-  backButtonDisabledClasses: ["text-slate-400", "dark:text-slate-500"],
-  backButtonEnabledClasses: ["text-slate-900", "dark:text-slate-100"],
+  BACK_BUTTON_DISABLED: ["text-slate-400", "dark:text-slate-500"],
+  BACK_BUTTON_ENABLED: ["text-slate-900", "dark:text-slate-100"],
 };
