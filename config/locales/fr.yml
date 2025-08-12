@@ -1920,7 +1920,8 @@ fr:
         delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Désélectionner tout
         search:
-          placeholder: Filtrer par ID ou nom
+          label: Search by ID or name
+          placeholder: Search
         select_all_button: Tout sélectionner
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
         title: Exécutions de flux de travail

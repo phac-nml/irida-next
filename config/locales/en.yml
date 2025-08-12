@@ -1920,7 +1920,8 @@ en:
         delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Deselect All
         search:
-          placeholder: Filter by ID or name
+          label: Search by ID or name
+          placeholder: Search
         select_all_button: Select All
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
         title: Workflow Executions
