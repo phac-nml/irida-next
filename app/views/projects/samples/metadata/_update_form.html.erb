@@ -1,30 +1,83 @@
-<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :patch) do |form| %>
-  <%= turbo_frame_tag "update-alert" %>
+<%= if @sample.errors.any?
+  viral_alert(
+    type: "alert",
+    classes: "mb-2",
+    message: I18n.t(:"general.form.error_notification"),
+    aria: {
+      live: "assertive",
+    },
+  )
+end %>
+
+<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :patch, html: { novalidate: true } )do |form| %>
+  <% if @sample.errors[:base].any? %>
+    <%= turbo_frame_tag "update-alert" %>
+  <% end %>
   <div class="grid gap-4">
+    <%= render partial: "shared/form/required_field_legend" %>
     <%= form.fields_for :update_field do |field| %>
       <%= field.fields_for :key do |metadata_key| %>
-        <div class="form-field">
+        <% invalid_key = @sample.errors.include?(:key) %>
+        <div class="form-field <%= 'invalid' if invalid_key %>">
           <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
+                             data: {
+                               required: true,
+                             },
                              class:
                                "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= metadata_key.text_field key,
                                   value: key,
                                   required: true,
-                                  autofocus: true,
+                                  aria: {
+                                    describedby: [
+                                      invalid_key ? form.field_id(:key, "error") : nil,
+                                    ].join(" "),
+                                    invalid: invalid_key,
+                                    required: true,
+                                  },
+                                  autofocus: invalid_key,
                                   class:
                                     "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+          <%= if invalid_key
+            render "shared/form/field_errors",
+            id: form.field_id(:key, "error"),
+            errors: @sample.errors[:key]
+          end %>
         </div>
       <% end %>
       <%= field.fields_for :value do |metadata_value| %>
-        <div class="form-field">
+        <% invalid_value = @sample.errors.include?(:value) %>
+        <div class="form-field <%= 'invalid' if invalid_value %>">
           <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
+                               data: {
+                                 required: true,
+                               },
                                class:
                                  "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= metadata_value.text_field value,
                                     value: value,
                                     required: true,
+                                    aria: {
+                                      describedby: [
+                                        (
+                                          if invalid_value
+                                            form.field_id(:value, "error")
+                                          else
+                                            nil
+                                          end
+                                        ),
+                                      ].join(" "),
+                                      invalid: invalid_value,
+                                      required: true,
+                                    },
+                                    autofocus: invalid_value,
                                     class:
                                       "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+          <%= if invalid_value
+            render "shared/form/field_errors",
+            id: form.field_id(:value, "error"),
+            errors: @sample.errors[:value]
+          end %>
         </div>
       <% end %>
 

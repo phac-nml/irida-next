@@ -1802,6 +1802,9 @@ fr:
           submit_button: Ajouter
           value: Valeur
         new_metadata_modal:
+          required_error:
+            key: Metadata key is required
+            value: Metadata value is required
           title: Add Metadata
         table:
           add_metadata: Add Metadata
@@ -2087,8 +2090,10 @@ fr:
         sample_does_not_belong_to_project: L’exemple '%{sample_name}' n’appartient pas au projet '%{project_name}'
         update_fields:
           key_exists: L’échantillon contient déjà le champ de métadonnées '%{key}'.
+          key_required: Metadata key is required
           metadata_was_not_changed: Les champs de métadonnées n’ont pas été modifiés.
           user_cannot_edit_metadata_key: La clé de métadonnées '%{key}' ne peut pas être mise à jour par un utilisateur.
+          value_required: Metadata value is required
         user_cannot_update_metadata: Les champs de métadonnées '%{metadata_fields}' de l’échantillon '%{sample_name}' ne peuvent pas être écrasés par un utilisateur puisqu’ils ont été précédemment mis à jour avec une analyse.
       transfer:
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
