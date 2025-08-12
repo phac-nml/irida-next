@@ -1700,13 +1700,16 @@ fr:
         search:
           groups:
             placeholder: Filtrer par nom de groupe
-          placeholder: Filtrer par nom d’utilisateur
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Onglets des membres du projet
           groups: Groupes
           members: Membres
         title: Membres
+      member_listing:
+        search:
+          label: Search by username
+          placeholder: Search
       new:
         access_level_hint: Select project access level to assign to user
         add_member_to_project: Ajouter un membre au projet
