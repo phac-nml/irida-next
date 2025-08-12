@@ -9,7 +9,7 @@
       data-controller="attachment-upload"
       data-attachment-upload-button-text-value='<%=t(".uploading") %>'
     >
-
+      <%= render partial: "shared/form/required_field_legend" %>
       <div
         class="form-field"
         data-controller="file-upload"
@@ -19,7 +19,10 @@
         <%= form.label :files,
                    t(".files"),
                    class:
-                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white",
+                   data: {
+                     required: true,
+                   } %>
         <%= form.file_field :files,
                         multiple: true,
                         direct_upload: true,
