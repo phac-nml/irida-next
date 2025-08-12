@@ -2,13 +2,14 @@
   <div class="flex">
     <div class="flex-1"></div>
     <div class="grow-0">
-      <%= render SearchComponent.new(
-      query: @q,
-      url: group_members_url(**request.query_parameters),
-      search_attribute: :user_email_cont,
-      placeholder: t("groups.members.index.search.placeholder"),
-      total_count: @pagy.count
-    ) do %>
+      <%= search_form_for @q, url: group_members_url(**request.query_parameters), data: { turbo_action: 'replace' }, class: "filters flex items-end space-x-2" do |f| %>
+        <%= render SearchFieldComponent.new(
+          label: t(".search.label"),
+          placeholder: t(".search.placeholder"),
+          form: f,
+          field_name: :user_email_cont,
+          value: @q.user_email_cont,
+        ) %>
         <input type="hidden" name="format" value="turbo_stream"/>
       <% end %>
     </div>

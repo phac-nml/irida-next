@@ -1107,13 +1107,16 @@ en:
         search:
           groups:
             placeholder: Filter by group name
-          placeholder: Filter by username
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Group member tabs
           groups: Groups
           members: Members
         title: Members
+      member_listing:
+        search:
+          label: Search by username
+          placeholder: Search
       new:
         access_level_hint: Select group access level to assign to user
         add_member_to_group: Add member to group
