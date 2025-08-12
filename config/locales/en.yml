@@ -1224,7 +1224,8 @@ en:
         create_export_button: Create Export
         deselect_all_button: Deselect All
         search:
-          placeholder: Filter by ID or name
+          label: Search by name or ID
+          placeholder: Search
         select_all_button: Select All
         subtitle: These are the workflow executions that have been shared within this group
         title: Workflow Executions

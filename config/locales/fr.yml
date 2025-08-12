@@ -1224,7 +1224,8 @@ fr:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
         search:
-          placeholder: Filtrer par ID ou nom
+          label: Rechercher par nom ou ID
+          placeholder: Rechercher
         select_all_button: Tout sélectionner
         subtitle: These are the workflow executions that have been shared within this group
         title: Exécutions de flux de travail
