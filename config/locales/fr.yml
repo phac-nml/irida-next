@@ -2387,6 +2387,7 @@ fr:
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
       search:
+        label: Search by ID or name
         placeholder: Filtrer par ID ou nom
       select_all_button: Tout sélectionner
       title: Exécutions de flux de travail
