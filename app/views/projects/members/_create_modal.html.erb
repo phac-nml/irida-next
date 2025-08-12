@@ -86,9 +86,11 @@
                       autofocus: invalid_access_level,
                       value: @new_member.access_level,
                     } %>
-        <%= render "shared/form/field_errors",
-        id: form.field_id(:access_level, "error"),
-        errors: @new_member.errors.full_messages_for(:access_level) %>
+        <% if invalid_access_level %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:access_level, "error"),
+          errors: @new_member.errors.full_messages_for(:access_level) %>
+        <% end %>
         <p id="<%= form.field_id(:access_level, "hint") %>" class="field-hint">
           <%= t("projects.members.new.access_level_hint") %>
         </p>
