@@ -1065,6 +1065,10 @@ en:
           title: No groups
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1104,9 +1108,6 @@ en:
         leave_group: Leave group
         remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the group?
-        search:
-          groups:
-            placeholder: Filter by group name
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Group member tabs
@@ -1660,6 +1661,10 @@ en:
         inherited_from: Inherited from
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1700,9 +1705,6 @@ en:
         leave_project: Leave project
         remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the project?
-        search:
-          groups:
-            placeholder: Filter by group name
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Project members tabs

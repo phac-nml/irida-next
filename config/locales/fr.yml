@@ -1065,6 +1065,10 @@ fr:
           title: Aucun groupe
         unlink: Dissocier
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1104,9 +1108,6 @@ fr:
         leave_group: Quitter le groupe
         remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du groupe?
-        search:
-          groups:
-            placeholder: Filtrer par nom de groupe
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Onglets des membres du groupe
@@ -1660,6 +1661,10 @@ fr:
         inherited_from: Hérité de
         unlink: Dissocier
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le projet %{namespace_name} du groupe %{group_name}?
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1700,9 +1705,6 @@ fr:
         leave_project: Quitter le projet
         remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du projet?
-        search:
-          groups:
-            placeholder: Filtrer par nom de groupe
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Onglets des membres du projet
