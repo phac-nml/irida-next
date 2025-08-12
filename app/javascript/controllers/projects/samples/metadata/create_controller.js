@@ -1,9 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import {
-  field_error_state,
-  field_valid_state,
-  form_error_text_css,
-} from "utilities/constants";
+import { FIELD_CLASSES } from "utilities/styles";
 
 export default class extends Controller {
   static targets = [
@@ -194,11 +190,11 @@ export default class extends Controller {
 
     field.setAttribute("aria-invalid", true);
     field.setAttribute("aria-describedBy", field_id + "_error");
-    field.classList.remove(...field_valid_state);
-    field.classList.add(...field_error_state);
+    field.classList.remove(...FIELD_CLASSES["VALID"]);
+    field.classList.add(...FIELD_CLASSES["ERROR"]);
     fieldError.classList.remove("hidden");
     fieldErrorSpan.innerHTML = errorMessage;
-    fieldErrorSpan.classList.add(...form_error_text_css);
+    fieldErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     keyField.classList.add("invalid");
   }
 
@@ -218,11 +214,11 @@ export default class extends Controller {
 
     field.removeAttribute("aria-invalid");
     field.removeAttribute("aria-describedBy");
-    field.classList.add(...field_valid_state);
-    field.classList.remove(...field_error_state);
+    field.classList.add(...FIELD_CLASSES["VALID"]);
+    field.classList.remove(...FIELD_CLASSES["ERROR"]);
     fieldError.classList.add("hidden");
     fieldErrorSpan.innerHTML = "";
-    fieldErrorSpan.classList.remove(...form_error_text_css);
+    fieldErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
     keyField.classList.remove("invalid");
   }
 }

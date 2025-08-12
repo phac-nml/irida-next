@@ -1,10 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
-import {
-  field_error_state,
-  field_valid_state,
-  form_error_text_css,
-} from "utilities/constants";
+import { FIELD_CLASSES } from "utilities/styles";
 
 export default class extends Controller {
   static targets = [
@@ -825,11 +821,11 @@ export default class extends Controller {
     name.setAttribute("autofocus", true);
     name.setAttribute("aria-invalid", true);
     name.setAttribute("aria-describedBy", "workflow_execution_name_error");
-    name.classList.remove(...field_valid_state);
-    name.classList.add(...field_error_state);
+    name.classList.remove(...FIELD_CLASSES["VALID"]);
+    name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
     nameErrorSpan.innerHTML = this.nameMissingValue;
-    nameErrorSpan.classList.add(...form_error_text_css);
+    nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");
   }
@@ -846,11 +842,11 @@ export default class extends Controller {
     name.removeAttribute("autofocus", false);
     name.removeAttribute("aria-invalid");
     name.removeAttribute("aria-describedBy");
-    name.classList.remove(...field_error_state);
-    name.classList.add(...field_valid_state);
+    name.classList.remove(...FIELD_CLASSES["ERROR"]);
+    name.classList.add(...FIELD_CLASSES["VALID"]);
     nameError.classList.add("hidden");
     nameErrorSpan.innerHTML = "";
-    nameErrorSpan.classList.remove(...form_error_text_css);
+    nameErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.remove("hidden");
     nameField.classList.remove("invalid");
   }

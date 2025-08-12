@@ -1,9 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import {
-  field_error_state,
-  field_valid_state,
-  form_error_text_css,
-} from "utilities/constants";
+import { FIELD_CLASSES } from "utilities/styles";
 
 export default class extends Controller {
   static targets = [
@@ -68,11 +64,11 @@ export default class extends Controller {
     email.setAttribute("autofocus", true);
     email.setAttribute("aria-invalid", true);
     email.setAttribute("aria-describedBy", "forgot_password_email_error");
-    email.classList.remove(...field_valid_state);
-    email.classList.add(...field_error_state);
+    email.classList.remove(...FIELD_CLASSES["VALID"]);
+    email.classList.add(...FIELD_CLASSES["ERROR"]);
     emailError.classList.remove("hidden");
     emailErrorSpan.innerHTML = this.#emailError;
-    emailErrorSpan.classList.add(...form_error_text_css);
+    emailErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     emailField.classList.add("invalid");
   }
 
@@ -85,11 +81,11 @@ export default class extends Controller {
     email.removeAttribute("autofocus", false);
     email.removeAttribute("aria-invalid");
     email.removeAttribute("aria-describedBy");
-    email.classList.remove(...field_error_state);
-    email.classList.add(...field_valid_state);
+    email.classList.remove(...FIELD_CLASSES["ERROR"]);
+    email.classList.add(...FIELD_CLASSES["VALID"]);
     emailError.classList.add("hidden");
     emailErrorSpan.innerHTML = "";
-    emailErrorSpan.classList.remove(...form_error_text_css);
+    emailErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
     emailField.classList.remove("invalid");
   }
 
