@@ -45,7 +45,7 @@
           label:
             t(
               :"projects.automated_workflow_executions.actions.edit_aria_label",
-              name: row[:name],
+              name: (row[:name].nil? ? row[:id] : row[:name]),
             ),
         },
         class:
@@ -67,7 +67,7 @@
         label:
           t(
             :"projects.automated_workflow_executions.actions.delete_aria_label",
-            name: row[:name],
+            name: (row[:name].nil? ? row[:id] : row[:name]),
           ),
       },
       class:
