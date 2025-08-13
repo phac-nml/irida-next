@@ -1,0 +1,50 @@
+<!--
+  ⚠️  WARNING ALERT - Important notices and recommendations
+
+  Warning alerts draw attention to potential issues, important notices, or
+  recommendations that users should be aware of. They use an amber color scheme
+  to convey caution without being alarming.
+
+  Features:
+  - Amber color scheme for warnings
+  - Warning circle icon for attention
+  - Perfect for recommendations and notices
+  - Great for drawing attention to important information
+
+  Usage:
+  viral_alert(message: "Warning message", type: :warning)
+-->
+
+<div class="space-y-6">
+  <!-- Basic Warning Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⚠️  Basic Warning Alert
+    </h3>
+    <%= viral_alert(message: "Your session will expire in 15 minutes. Please save your work.", type: :warning) %>
+  </div>
+
+  <!-- Warning with Recommendation -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      💡 Recommendation
+    </h3>
+    <%= viral_alert(message: "Consider enabling two-factor authentication for enhanced account security.", type: :warning) %>
+  </div>
+
+  <!-- Warning with System Notice -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔧 System Notice
+    </h3>
+    <%= viral_alert(message: "Scheduled maintenance will occur tonight from 2:00 AM to 4:00 AM. Some features may be temporarily unavailable.", type: :warning) %>
+  </div>
+
+  <!-- Warning with Action Required -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📋 Action Required
+    </h3>
+    <%= viral_alert(message: "Please review and update your profile information. Some fields are incomplete or outdated.", type: :warning) %>
+  </div>
+</div>

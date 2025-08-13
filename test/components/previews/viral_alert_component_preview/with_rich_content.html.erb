@@ -1,0 +1,133 @@
+<!--
+  📚 RICH CONTENT ALERTS - Additional context and information
+
+  Rich content alerts use the content block to provide additional information,
+  context, or details that complement the main message. Perfect for complex
+  notifications that need more explanation.
+
+  Features:
+  - Main message with additional content below
+  - Content block for extra details
+  - Flexible content (text, links, lists, etc.)
+  - Maintains clean visual hierarchy
+  - Perfect for detailed explanations
+
+  Usage:
+  viral_alert(message: "Main message") do
+    div "Additional content goes here"
+  end
+-->
+
+<div class="space-y-6">
+  <!-- Basic Rich Content -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📚 Basic Rich Content
+    </h3>
+    <%= viral_alert(message: "System maintenance scheduled") do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">We'll be performing routine maintenance to improve system performance.</p>
+        <p><strong>Duration:</strong> 2 hours<br>
+        <strong>Impact:</strong> Minimal - some features may be slower than usual</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Success with Details -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ✅ Success with Details
+    </h3>
+    <%= viral_alert(message: "Data import completed successfully!", type: :success) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <ul class="list-disc list-inside space-y-1">
+          <li>1,247 records imported</li>
+          <li>3 duplicate records skipped</li>
+          <li>Processing time: 2 minutes 34 seconds</li>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Warning with Instructions -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⚠️  Warning with Instructions
+    </h3>
+    <%= viral_alert(message: "Action required: Review pending changes", type: :warning) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">You have 5 pending changes that require your review:</p>
+        <div class="bg-amber-50 dark:bg-amber-900/20 p-3 rounded border border-amber-200 dark:border-amber-800">
+          <ul class="text-sm space-y-1">
+            <li>• Profile information update</li>
+            <li>• Security settings change</li>
+            <li>• Notification preferences</li>
+            <li>• Privacy policy acceptance</li>
+            <li>• Terms of service update</li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Info with Links -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ℹ️  Info with Links
+    </h3>
+    <%= viral_alert(message: "New features available in your dashboard", type: :info) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">We've added several new features to help you work more efficiently:</p>
+        <div class="space-y-2">
+          <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline block">📊 Enhanced Analytics Dashboard</a>
+          <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline block">🔍 Advanced Search Filters</a>
+          <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline block">📱 Mobile App Updates</a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Error with Solutions -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ❌ Error with Solutions
+    </h3>
+    <%= viral_alert(message: "Unable to process your request", type: :danger) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">The system encountered an error while processing your request. Here are some solutions to try:</p>
+        <div class="bg-red-50 dark:bg-red-900/20 p-3 rounded border border-red-200 dark:border-red-800">
+          <ol class="list-decimal list-inside space-y-1 text-sm">
+            <li>Refresh the page and try again</li>
+            <li>Check your internet connection</li>
+            <li>Clear your browser cache</li>
+            <li>Contact support if the problem persists</li>
+          </ol>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Content Guidelines -->
+  <div class="mt-8 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">📝 Content Guidelines</h4>
+    <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+      <li>• <strong>Keep main message short</strong> - under 60 characters</li>
+      <li>• <strong>Use content block for details</strong> - don't cram everything in the message</li>
+      <li>• <strong>Structure content clearly</strong> - use lists, paragraphs, and visual hierarchy</li>
+      <li>• <strong>Include actionable information</strong> - what should users do next?</li>
+      <li>• <strong>Use appropriate formatting</strong> - links, bold text, and spacing for readability</li>
+    </ul>
+  </div>
+
+  <!-- When to Use Rich Content -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">🎯 Perfect Use Cases</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Complex notifications</strong> - need more context or explanation</li>
+      <li>• <strong>Actionable alerts</strong> - include next steps or instructions</li>
+      <li>• <strong>Detailed confirmations</strong> - show what was accomplished</li>
+      <li>• <strong>System announcements</strong> - provide comprehensive information</li>
+      <li>• <strong>Error explanations</strong> - help users understand and resolve issues</li>
+    </ul>
+  </div>
+</div>

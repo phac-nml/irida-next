@@ -49,8 +49,8 @@ module Viral
     end
 
     test 'alert with content' do
-      render_preview(:with_content)
-      assert_text 'This is content for the alert'
+      render_preview(:with_rich_content)
+      assert_text 'System maintenance scheduled'
     end
 
     test 'dismissible alert has close button' do

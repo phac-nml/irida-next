@@ -1,0 +1,75 @@
+<!--
+  ⏰ AUTO-DISMISS ALERT - Automatic cleanup
+
+  Auto-dismiss alerts automatically disappear after 5 seconds, making them
+  perfect for temporary notifications that don't require user action.
+  They include a progress bar to show the countdown.
+
+  Features:
+  - Automatically disappears after 5 seconds
+  - Progress bar shows countdown
+  - Pauses on hover/focus (user-friendly!)
+  - Never auto-dismisses danger alerts
+  - Perfect for temporary notifications
+
+  Usage:
+  viral_alert(message: "Message", auto_dismiss: true)
+-->
+
+<div class="space-y-6">
+  <!-- Basic Auto-dismiss Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⏰ Basic Auto-dismiss Alert
+    </h3>
+    <%= viral_alert(message: "This alert will automatically disappear in 5 seconds. Watch the progress bar at the bottom!", auto_dismiss: true) %>
+  </div>
+
+  <!-- Auto-dismiss Info Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ℹ️  Auto-dismiss Info Alert
+    </h3>
+    <%= viral_alert(message: "New message received from John Doe. This notification will auto-dismiss shortly.", type: :info, auto_dismiss: true) %>
+  </div>
+
+  <!-- Auto-dismiss Success Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ✅ Auto-dismiss Success Alert
+    </h3>
+    <%= viral_alert(message: "File uploaded successfully! This confirmation will disappear automatically.", type: :success, auto_dismiss: true) %>
+  </div>
+
+  <!-- Auto-dismiss Warning Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⚠️  Auto-dismiss Warning Alert
+    </h3>
+    <%= viral_alert(message: "Your session will expire soon. Please save your work. This reminder will auto-dismiss.", type: :warning, auto_dismiss: true) %>
+  </div>
+
+  <!-- Interactive Demo Note -->
+  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎭 Interactive Features</h4>
+    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+      <li>• <strong>Hover over any alert</strong> to pause the countdown</li>
+      <li>• <strong>Move your mouse away</strong> to resume the countdown</li>
+      <li>• <strong>Focus on any alert</strong> to pause (Tab navigation)</li>
+      <li>• <strong>Progress bar</strong> shows remaining time visually</li>
+      <li>• <strong>Danger alerts never auto-dismiss</strong> (too important!)</li>
+    </ul>
+  </div>
+
+  <!-- Technical Details -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">⚙️  Technical Details</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Duration:</strong> 5 seconds (5000ms)</li>
+      <li>• <strong>Update interval:</strong> 50ms for smooth progress bar</li>
+      <li>• <strong>Pause events:</strong> mouseenter, focusin</li>
+      <li>• <strong>Resume events:</strong> mouseleave, focusout</li>
+      <li>• <strong>Memory management:</strong> Automatic cleanup on disconnect</li>
+    </ul>
+  </div>
+</div>

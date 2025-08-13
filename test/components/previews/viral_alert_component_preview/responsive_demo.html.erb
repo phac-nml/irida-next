@@ -1,0 +1,103 @@
+<!--
+  📱 RESPONSIVE DEMO - Mobile and desktop adaptations
+
+  This preview demonstrates how the alert component adapts to different
+  screen sizes and devices, ensuring a great user experience across
+  all platforms.
+
+  Features:
+  - Responsive design for all screen sizes
+  - Mobile-optimized touch targets
+  - Adaptive layouts and spacing
+  - Consistent behavior across devices
+  - Touch-friendly interactions
+
+  Usage:
+  The component automatically adapts to different screen sizes
+-->
+
+<div class="space-y-6">
+  <!-- Responsive Layout -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📱 Responsive Layout
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "This alert adapts to your screen size automatically", type: :info) %>
+      <%= viral_alert(message: "On mobile, buttons and spacing adjust for touch", type: :success, dismissible: true) %>
+      <%= viral_alert(message: "Content flows naturally on all devices", type: :warning) %>
+    </div>
+  </div>
+
+  <!-- Mobile Touch Targets -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      👆 Mobile Touch Targets
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Close button is sized for easy tapping on mobile", type: :info, dismissible: true) %>
+      <%= viral_alert(message: "Progress bars are touch-friendly", type: :warning, auto_dismiss: true) %>
+      <%= viral_alert(message: "All interactive elements meet accessibility guidelines", type: :success, dismissible: true) %>
+    </div>
+  </div>
+
+  <!-- Adaptive Spacing -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📏 Adaptive Spacing
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Padding and margins adjust for different screen sizes", type: :info) %>
+      <%= viral_alert(message: "Text remains readable on all devices", type: :success) %>
+      <%= viral_alert(message: "Icons scale appropriately for each viewport", type: :warning) %>
+    </div>
+  </div>
+
+  <!-- Cross-Device Behavior -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔄 Cross-Device Behavior
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Same functionality works on desktop and mobile", type: :info, dismissible: true, auto_dismiss: true) %>
+      <%= viral_alert(message: "Keyboard shortcuts work on all platforms", type: :success, dismissible: true) %>
+      <%= viral_alert(message: "Touch and mouse interactions are consistent", type: :warning, dismissible: true) %>
+    </div>
+  </div>
+
+  <!-- Responsive Guidelines -->
+  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">📱 Responsive Design Principles</h4>
+    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+      <li>• <strong>Mobile-first approach</strong> - designed for small screens first</li>
+      <li>• <strong>Touch-friendly targets</strong> - minimum 44px touch targets</li>
+      <li>• <strong>Adaptive spacing</strong> - margins and padding scale with screen size</li>
+      <li>• <strong>Flexible layouts</strong> - content flows naturally on all devices</li>
+      <li>• <strong>Consistent behavior</strong> - same functionality across platforms</li>
+    </ul>
+  </div>
+
+  <!-- Device Testing -->
+  <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">🧪 Device Testing Checklist</h4>
+    <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+      <li>• <strong>Mobile devices</strong> - test on various screen sizes (320px - 768px)</li>
+      <li>• <strong>Tablets</strong> - test landscape and portrait orientations</li>
+      <li>• <strong>Desktop</strong> - test on different monitor sizes and resolutions</li>
+      <li>• <strong>Touch devices</strong> - verify touch interactions work smoothly</li>
+      <li>• <strong>Keyboard navigation</strong> - ensure accessibility on all devices</li>
+    </ul>
+  </div>
+
+  <!-- Performance Considerations -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">⚡ Performance Considerations</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Efficient rendering</strong> - minimal DOM manipulation</li>
+      <li>• <strong>Smooth animations</strong> - 60fps transitions on all devices</li>
+      <li>• <strong>Memory management</strong> - proper cleanup prevents leaks</li>
+      <li>• <strong>Touch responsiveness</strong> - immediate feedback on interactions</li>
+      <li>• <strong>Cross-browser compatibility</strong> - works on all modern browsers</li>
+    </ul>
+  </div>
+</div>

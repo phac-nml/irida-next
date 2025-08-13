@@ -1,0 +1,129 @@
+<!--
+  🎪 MULTIPLE ALERTS - Working together harmoniously
+
+  Multiple alerts can be displayed simultaneously to provide comprehensive
+  information to users. This preview shows how alerts work together and
+  how to manage multiple notifications effectively.
+
+  Features:
+  - Multiple alerts displayed together
+  - Proper spacing and visual hierarchy
+  - Different types and configurations
+  - Shows how alerts complement each other
+  - Demonstrates best practices for multiple alerts
+
+  Usage:
+  Multiple viral_alert components can be rendered in sequence
+-->
+
+<div class="space-y-6">
+  <!-- Multiple Alert Types -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🎨 Multiple Alert Types
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "System maintenance completed successfully!", type: :success) %>
+      <%= viral_alert(message: "New features are now available in your dashboard.", type: :info) %>
+      <%= viral_alert(message: "Please review your recent changes before proceeding.", type: :warning) %>
+    </div>
+  </div>
+
+  <!-- Mixed Configurations -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔧 Mixed Configurations
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Profile updated successfully!", type: :success, dismissible: true) %>
+      <%= viral_alert(message: "This notification will auto-dismiss in 5 seconds.", type: :info, auto_dismiss: true) %>
+      <%= viral_alert(message: "You have 3 unread messages.", type: :warning, dismissible: true, auto_dismiss: true) %>
+    </div>
+  </div>
+
+  <!-- Sequential Information -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📋 Sequential Information
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Step 1: Data validation completed", type: :success) %>
+      <%= viral_alert(message: "Step 2: Processing files...", type: :info) %>
+      <%= viral_alert(message: "Step 3: Uploading to server...", type: :info) %>
+      <%= viral_alert(message: "Step 4: Finalizing...", type: :info) %>
+    </div>
+  </div>
+
+  <!-- Error Recovery Flow -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔄 Error Recovery Flow
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Connection failed. Attempting to reconnect...", type: :danger) %>
+      <%= viral_alert(message: "Reconnection successful! Syncing data...", type: :warning) %>
+      <%= viral_alert(message: "All data synchronized successfully!", type: :success) %>
+    </div>
+  </div>
+
+  <!-- User Action Required -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📋 User Action Required
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Please complete your profile setup", type: :warning, dismissible: true) %>
+      <%= viral_alert(message: "2 of 5 required fields are incomplete", type: :info) %>
+      <%= viral_alert(message: "Profile completion will unlock additional features", type: :success) %>
+    </div>
+  </div>
+
+  <!-- System Status Overview -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📊 System Status Overview
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "✅ Database: Online and healthy", type: :success) %>
+      <%= viral_alert(message: "✅ File Storage: 85% capacity used", type: :warning) %>
+      <%= viral_alert(message: "✅ API Services: All endpoints responding", type: :success) %>
+      <%= viral_alert(message: "⚠️  Backup System: Last backup 23 hours ago", type: :warning) %>
+    </div>
+  </div>
+
+  <!-- Multiple Alerts Best Practices -->
+  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎯 Multiple Alerts Best Practices</h4>
+    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+      <li>• <strong>Limit to 5-7 alerts</strong> - too many can overwhelm users</li>
+      <li>• <strong>Use consistent spacing</strong> - maintain visual rhythm</li>
+      <li>• <strong>Group related alerts</strong> - show logical relationships</li>
+      <li>• <strong>Prioritize by importance</strong> - most critical alerts first</li>
+      <li>• <strong>Consider dismissal behavior</strong> - don't make users dismiss too many</li>
+    </ul>
+  </div>
+
+  <!-- When to Use Multiple Alerts -->
+  <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">💡 Perfect Use Cases</h4>
+    <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+      <li>• <strong>Multi-step processes</strong> - show progress and status</li>
+      <li>• <strong>System overviews</strong> - display multiple status indicators</li>
+      <li>• <strong>User onboarding</strong> - guide through setup steps</li>
+      <li>• <strong>Error recovery flows</strong> - show resolution progress</li>
+      <li>• <strong>Feature announcements</strong> - highlight multiple new capabilities</li>
+    </ul>
+  </div>
+
+  <!-- Accessibility Considerations -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">♿ Accessibility Considerations</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Screen reader order</strong> - alerts are announced in DOM order</li>
+      <li>• <strong>Focus management</strong> - ensure logical tab order</li>
+      <li>• <strong>Dismissal patterns</strong> - consistent behavior across all alerts</li>
+      <li>• <strong>Context awareness</strong> - users need to understand relationships</li>
+      <li>• <strong>Timing coordination</strong> - avoid conflicting auto-dismiss patterns</li>
+    </ul>
+  </div>
+</div>
