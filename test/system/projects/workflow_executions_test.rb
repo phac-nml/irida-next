@@ -109,13 +109,13 @@ module Projects
       assert_selector "tr[id='#{dom_id(workflow_execution1)}']"
       within("tr[id='#{dom_id(workflow_execution1)}'] td:last-child") do
         assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
 
       assert_selector "tr[id='#{dom_id(workflow_execution2)}']"
       within("tr[id='#{dom_id(workflow_execution2)}'] td:last-child") do
         assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 
@@ -172,7 +172,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 
@@ -189,7 +189,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 
@@ -213,8 +213,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
-        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
+        click_button I18n.t(:'workflow_executions.actions.delete')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -251,8 +251,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
+        click_button I18n.t(:'workflow_executions.actions.delete')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -274,7 +274,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 
@@ -291,8 +291,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
+        click_button I18n.t(:'workflow_executions.actions.delete')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -314,7 +314,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 
@@ -331,7 +331,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_link I18n.t(:'workflow_executions.actions.delete')
       end
     end
 

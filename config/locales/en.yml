@@ -441,6 +441,9 @@ en:
         selected: Selected
       created_at: Uploaded
       delete: Delete
+      delete_aria_label:
+        one: 'Delete file: %{name}'
+        other: 'Delete files: %{name}'
       delete_confirm: Are you sure you would like to delete attachment '%{name}'?
       filename: Filename
       format: Format
@@ -448,6 +451,7 @@ en:
       limit:
         item: Attachments
       preview: Preview
+      preview_aria_label: 'Preview attachment: %{name}'
       select_page: Select / Deselect visible attachments
       type: Type
   auth:
@@ -472,9 +476,9 @@ en:
           level_50: Owner
         actions:
           destroy: Delete
-          destroy_aria_label: Delete bot account
+          destroy_aria_label: 'Delete bot account: %{name}'
           generate_new_token: Generate new token
-          generate_new_token_aria_label: Generate a new personal access token for bot account
+          generate_new_token_aria_label: 'Generate a new personal access token for bot account: %{name}'
         empty_state:
           description: There are no associated bot accounts.
           title: No bot accounts
@@ -1044,7 +1048,7 @@ en:
     group_links:
       index:
         actions:
-          unlink_aria_label: Unlink namespace from group %{member} button
+          unlink_aria_label: 'Unlink namespace from group: %{member}'
         aria_labels:
           expires_at: Group access expiration
           group_access_level: Group Access Level
@@ -1083,8 +1087,8 @@ en:
         aria_label: Access Level
       index:
         actions:
-          link_leave_group_aria_label: Leave group button
-          link_remove_aria_label: Remove group member %{member} link
+          leave_group_aria_label: Leave group
+          remove_aria_label: 'Remove group member: %{member}'
         add: Add New Member
         invite_group: Invite Group
         invited_groups: Invited Groups
@@ -1344,10 +1348,10 @@ en:
       created_at: Created Date
       created_by_email: Created By
       description: Description
-      edit_aria_label: Edit metadata template %{template_name}
+      edit_aria_label: 'Edit metadata template: %{template_name}'
       edit_button: Edit
       name: Template Name
-      remove_aria_label: Delete metadata template %{template_name}
+      remove_aria_label: 'Delete metadata template: %{template_name}'
       remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       spinner_message: Loading metadata templates...
@@ -1402,6 +1406,7 @@ en:
         scopes: Scopes
       never: Never
       revoke: Revoke
+      revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
     accounts:
@@ -1493,9 +1498,11 @@ en:
           title: No Files
     automated_workflow_executions:
       actions:
-        delete_button: Delete
+        delete: Delete
+        delete_aria_label: 'Delete automated pipeline: %{name}'
         delete_confirm: Are you sure that you want to delete this automated pipeline?
-        edit_button: Edit
+        edit: Edit
+        edit_aria_label: 'Edit automated pipeline: %{name}'
       create:
         error: Could not create an automated pipeline for %{workflow_name}
         success: Automated pipeline for %{workflow_name} was successfully created
@@ -1630,7 +1637,7 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
-          unlink_aria_label: Unlink namespace from group %{member} button
+          unlink_aria_label: 'Unlink namespace from group: %{member}'
         aria_labels:
           expires_at: Group access expiration
           group_access_level: Group Access Level
@@ -1671,8 +1678,8 @@ en:
         aria_label: Access Level
       index:
         actions:
-          link_leave_project_aria_label: Leave project link
-          link_remove_aria_label: Remove project member %{member} link
+          leave_project_aria_label: Leave project
+          remove_aria_label: 'Remove project member: %{member}'
         add: Add New Member
         invite_group: Invite group
         invited_groups: Invited Groups
@@ -2319,6 +2326,12 @@ en:
       no_template: No template
       remove_all: Remove all
   workflow_executions:
+    actions:
+      cancel: Cancel
+      cancel_aria_label: 'Cancel workflow execution: %{name}'
+      cancel_confirm: Are you sure you want to cancel this workflow execution?
+      delete: Delete
+      delete_aria_label: 'Delete workflow execution: %{name}'
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
@@ -2351,10 +2364,6 @@ en:
       search:
         placeholder: Filter by PUID or Filename
     index:
-      actions:
-        cancel_button: Cancel
-        cancel_confirm: Are you sure you want to cancel this workflow execution?
-        delete_button: Delete
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Deselect All

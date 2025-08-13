@@ -145,23 +145,37 @@
                 <div class="bg-white w-full dark:bg-slate-800 text-right px-3 py-2.5 space-x-2">
                   <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
                     <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                      <%= button_to t(:"workflow_executions.index.actions.cancel_button"),
+                      <%= button_to t(:"workflow_executions.actions.cancel"),
                       cancel_path(workflow_execution),
                       data: {
                         turbo_method: :put,
-                        turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
+                        turbo_confirm: t(:"workflow_executions.actions.cancel_confirm"),
                       },
                       method: :put,
+                      aria: {
+                        label:
+                          t(
+                            :"workflow_executions.actions.cancel_aria_label",
+                            name: workflow_execution.name,
+                          ),
+                      },
                       class:
                         "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
                     <% end %>
                     <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                      <%= button_to t(:"workflow_executions.index.actions.delete_button"),
+                      <%= button_to t(:"workflow_executions.actions.delete"),
                       destroy_confirmation_path(workflow_execution),
                       data: {
                         turbo_stream: :true,
                       },
                       method: :get,
+                      aria: {
+                        label:
+                          t(
+                            :"workflow_executions.actions.delete_aria_label",
+                            name: workflow_execution.name,
+                          ),
+                      },
                       class:
                         "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
                     <% end %>

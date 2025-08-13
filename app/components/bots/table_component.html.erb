@@ -43,7 +43,11 @@
         },
         method: :get,
         aria: {
-          label: t("bots.index.table.actions.generate_new_token_aria_label"),
+          label:
+            t(
+              "bots.index.table.actions.generate_new_token_aria_label",
+              name: row.user.email,
+            ),
         },
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer mr-2" %>
@@ -56,7 +60,7 @@
         },
         method: :get,
         aria: {
-          label: t("bots.index.table.actions.destroy_aria_label"),
+          label: t("bots.index.table.actions.destroy_aria_label", name: row.user.email),
         },
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
