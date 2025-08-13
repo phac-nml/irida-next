@@ -1,0 +1,18 @@
+<%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
+  <div class="space-y-4">
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Builder Example</h3>
+
+    <%= form.checkbox :terms, "1",
+        label: "I agree to the terms and conditions",
+        help_text: "You must agree to continue",
+        required: true %>
+
+    <%= form.checkbox :newsletter, "1",
+        label: "Subscribe to newsletter",
+        help_text: "Get updates about new features" %>
+
+    <%= form.checkbox :marketing, "1",
+        label: "Receive marketing emails",
+        help_text: "Promotional content and offers" %>
+  </div>
+<% end %>

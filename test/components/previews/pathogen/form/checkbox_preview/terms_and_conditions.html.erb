@@ -1,0 +1,53 @@
+<%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
+  <div class="space-y-6">
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Terms and Conditions Example</h3>
+
+    <div class="space-y-4">
+      <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+        <h4 class="font-medium text-slate-900 dark:text-white mb-2">Terms of Service</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          By using our service, you agree to our terms of service, privacy policy, and community guidelines.
+          Please read these documents carefully before proceeding.
+        </p>
+      </div>
+
+      <%= form.checkbox :terms_accepted, "1",
+          label: "I have read and agree to the Terms of Service",
+          help_text: "You must accept the terms to continue",
+          required: true %>
+
+      <%= form.checkbox :privacy_accepted, "1",
+          label: "I have read and agree to the Privacy Policy",
+          help_text: "Understanding how we handle your data is important",
+          required: true %>
+
+      <%= form.checkbox :community_guidelines, "1",
+          label: "I agree to follow the Community Guidelines",
+          help_text: "Help maintain a positive environment for all users",
+          required: true %>
+    </div>
+
+    <div class="space-y-4">
+      <h4 class="font-medium text-slate-700 dark:text-slate-300">Optional Communications</h4>
+
+      <%= form.checkbox :marketing_emails, "1",
+          label: "I would like to receive marketing emails",
+          help_text: "Get updates about new features, promotions, and news" %>
+
+      <%= form.checkbox :third_party_sharing, "1",
+          label: "I consent to sharing my data with trusted partners",
+          help_text: "Help us improve our services through partnerships" %>
+
+      <%= form.checkbox :research_participation, "1",
+          label: "I agree to participate in user research",
+          help_text: "Help improve our products through feedback and testing" %>
+    </div>
+
+    <div class="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+      <p class="text-sm text-amber-800 dark:text-amber-200">
+        <strong>Important:</strong> The first three checkboxes are required to create your account.
+        The optional communications can be changed at any time in your settings.
+      </p>
+    </div>
+  </div>
+<% end %>
