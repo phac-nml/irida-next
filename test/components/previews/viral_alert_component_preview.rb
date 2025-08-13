@@ -64,6 +64,10 @@ class ViralAlertComponentPreview < ViewComponent::Preview
     # Shows how the component adapts to different content lengths
   end
 
+  def custom_styling
+    # 🎨 Custom styling alerts - demonstrate flexible styling options
+  end
+
   def multiple_alerts
     # 🎪 Multiple alerts - demonstrate how multiple alerts work together
     # Shows spacing, stacking, and interaction between alerts
