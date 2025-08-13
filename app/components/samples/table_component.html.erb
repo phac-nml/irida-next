@@ -24,14 +24,18 @@
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@4xl:sticky left-56 z-10': index == 1)
                 ) do %>
                 <% if index.zero? and @abilities[:select_samples] %>
-                  <%= check_box_tag "select-page",
-                  title: t(:".select_page"),
-                  "aria-label": t(:".select_page"),
-                  data: {
-                    action: "input->selection#togglePage",
-                    controller: "filters",
-                    selection_target: "selectPage",
-                  } %>
+                  <%= pathogen_checkbox attribute: "select-page", value: "1",
+                    label: t(:".select_page"),
+                    aria_label: "Select all samples on this page",
+                    controls: "samples-table-body",
+                    aria_live: "polite",
+                    help_text: "Check to select all samples, uncheck to deselect all",
+                    data: {
+                      action: "input->selection#togglePage",
+                      controller: "filters",
+                      selection_target: "selectPage"
+                    }
+                  %>
                 <% end %>
                 <%= render SortComponent.new(
                   sort: @search_params[:sort],
@@ -68,6 +72,7 @@
           </tr>
         </thead>
         <tbody
+          id="samples-table-body"
           class='
             overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
             dark:border-slate-700
@@ -86,11 +91,15 @@
                     sample.id,
                     nil,
                     id: dom_id(sample, :checkbox),
-                    "aria-label": sample.name,
+                    "aria-label": "Select sample #{sample.name}",
+                    "aria-describedby": "#{dom_id(sample, :checkbox)}_description",
                     data: {
                       action: "input->selection#toggle",
                       selection_target: "rowSelection",
                     } %>
+                    <span id="<%= dom_id(sample, :checkbox) %>_description" class="sr-only">
+                      Check to select this sample, uncheck to deselect
+                    </span>
                   <% end %>
                   <% if column == :puid || column == :name %>
                     <%= link_to(

@@ -104,6 +104,9 @@ module Pathogen
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
       @user_class = options.delete(:class)
+      @aria_label = options.delete(:aria_label)
+      @role = options.delete(:role)
+      @aria_live = options.delete(:aria_live)
       @html_options = options # Remaining options (e.g., data-*)
     end
   end
