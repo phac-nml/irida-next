@@ -15,7 +15,7 @@ class TreegridComponent < Component
   def initialize(**system_arguments)
     @system_arguments = system_arguments
 
-    @system_arguments[:class] = class_names(@system_arguments[:classes], 'treegrid-container')
+    @system_arguments[:class] = class_names(@system_arguments[:classes], 'treegrid-container overflow-x-scroll')
     @system_arguments.delete(:classes)
     @system_arguments[:role] = 'treegrid'
     @system_arguments[:aria] ||= {}

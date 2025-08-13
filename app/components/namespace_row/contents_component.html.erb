@@ -1,5 +1,11 @@
-<div class="flex flex-wrap grow items-center place-content-start gap-2">
+<span class="h-8 mr-2 shrink-0 mt-3 inline-block">
   <%= avatar_icon %>
+</span>
+<div
+  class="
+    flex flex-wrap grow items-center place-content-start gap-2 overflow-hidden
+  "
+>
   <%= viral_avatar(
     name: @namespace.name,
     size: @icon_size,
@@ -8,7 +14,7 @@
       turbo: false,
     },
   ) %>
-  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline font-semibold dark:text-white" do %>
+  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name %>
       <span><%= @namespace.parent.full_name %>
         /
@@ -30,9 +36,7 @@
       ) %>
     <% end %>
   <% end %>
-  <div>
-    <%= render PuidComponent.new(puid: @namespace.puid) %>
-  </div>
+  <%= render PuidComponent.new(puid: @namespace.puid) %>
   <div class="grow">
     <%= viral_pill(
       text:
@@ -44,7 +48,11 @@
     ) %>
   </div>
 
-  <div class=" flex flex-row gap-x-2 text-slate-500 dark:text-slate-400 ">
+  <div
+    class="
+      ml-auto flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400
+    "
+  >
     <% if @namespace.group_namespace? %>
       <%= pathogen_link(href: namespace_path(@namespace)) do |component| %>
         <% component.with_tooltip(text: t(:".stats.subnamespaces")) %>
