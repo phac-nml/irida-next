@@ -1,0 +1,61 @@
+<%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
+  <div class="space-y-6">
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">User Preferences Example</h3>
+
+    <fieldset class="space-y-4">
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Notification Settings</legend>
+
+      <%= form.checkbox :email_digest, "1",
+          label: "Daily email digest",
+          help_text: "Receive a summary of daily activity",
+          checked: true %>
+
+      <%= form.checkbox :push_mentions, "1",
+          label: "Push notifications for mentions",
+          help_text: "Get notified when someone mentions you",
+          checked: true %>
+
+      <%= form.checkbox :sms_alerts, "1",
+          label: "SMS alerts for urgent matters",
+          help_text: "Receive text messages for critical updates" %>
+
+      <%= form.checkbox :browser_notifications, "1",
+          label: "Browser notifications",
+          help_text: "Show notifications in your browser" %>
+    </fieldset>
+
+    <fieldset class="space-y-4">
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Privacy & Security</legend>
+
+      <%= form.checkbox :two_factor_auth, "1",
+          label: "Enable two-factor authentication",
+          help_text: "Add an extra layer of security to your account",
+          required: true %>
+
+      <%= form.checkbox :profile_visibility, "1",
+          label: "Make profile visible to everyone",
+          help_text: "Allow other users to see your profile information" %>
+
+      <%= form.checkbox :activity_feed, "1",
+          label: "Show activity in public feed",
+          help_text: "Display your recent activity to other users" %>
+    </fieldset>
+
+    <fieldset class="space-y-4">
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Content Preferences</legend>
+
+      <%= form.checkbox :auto_play_videos, "1",
+          label: "Auto-play videos",
+          help_text: "Automatically start playing video content" %>
+
+      <%= form.checkbox :show_recommendations, "1",
+          label: "Show personalized recommendations",
+          help_text: "Display content based on your interests",
+          checked: true %>
+
+      <%= form.checkbox :dark_mode, "1",
+          label: "Prefer dark mode",
+          help_text: "Use dark theme when available" %>
+    </fieldset>
+  </div>
+<% end %>
