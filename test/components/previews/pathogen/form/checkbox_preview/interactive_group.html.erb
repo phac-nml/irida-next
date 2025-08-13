@@ -35,8 +35,28 @@
 <script>
 function toggleAllCheckboxes(masterCheckbox) {
   const checkboxes = document.querySelectorAll('input[name*="option"]');
+  const checkedCount = masterCheckbox.checked ? checkboxes.length : 0;
+
   checkboxes.forEach(checkbox => {
     checkbox.checked = masterCheckbox.checked;
   });
+
+  // Announce the change to screen readers
+  const announcement = masterCheckbox.checked
+    ? `All ${checkedCount} options selected`
+    : 'All options deselected';
+
+  // Create a live region for announcements
+  let liveRegion = document.getElementById('checkbox-announcement');
+  if (!liveRegion) {
+    liveRegion = document.createElement('div');
+    liveRegion.id = 'checkbox-announcement';
+    liveRegion.setAttribute('aria-live', 'polite');
+    liveRegion.setAttribute('aria-atomic', 'true');
+    liveRegion.className = 'sr-only';
+    document.body.appendChild(liveRegion);
+  }
+
+  liveRegion.textContent = announcement;
 }
 </script>
