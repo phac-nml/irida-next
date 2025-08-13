@@ -233,7 +233,6 @@ export default class extends Controller {
       // 👉 If it's neither prev nor current, it's in the "next" segment.
 
       if (isCurrent) {
-        console.log("is current!", day);
         appendCell(
           row,
           this.inMonthDateTemplateTarget,
@@ -242,7 +241,6 @@ export default class extends Controller {
           day,
         );
       } else if (isPrev) {
-        console.log("is prev!", day);
         appendCell(
           row,
           this.outOfMonthDateTemplateTarget,
@@ -251,7 +249,6 @@ export default class extends Controller {
           day,
         );
       } else {
-        console.log("is next!", day);
         appendCell(
           row,
           this.outOfMonthDateTemplateTarget,
