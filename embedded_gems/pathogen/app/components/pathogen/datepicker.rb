@@ -27,8 +27,8 @@ module Pathogen
     # @raise [ArgumentError] if input_name is not provided.
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: (Time.now + 1.day), selected_date: nil,
-                   autosubmit: false, calendar_arguments: {}, **system_arguments)
+    def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
+                   selected_date: nil, autosubmit: false, calendar_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'input_name is required' if input_name.blank?
 
