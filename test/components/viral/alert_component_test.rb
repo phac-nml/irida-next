@@ -85,16 +85,16 @@ module Viral
     end
 
     test 'alert has proper icon names' do
-      render_inline(Viral::AlertComponent.new(message: 'Success alert', type: 'success'))
+      render_inline(Viral::AlertComponent.new(message: 'Success alert', type: 'success', dismissible: true))
       assert_selector 'svg', count: 2 # Should have check circle icon + close button
 
-      render_inline(Viral::AlertComponent.new(message: 'Danger alert', type: 'danger'))
+      render_inline(Viral::AlertComponent.new(message: 'Danger alert', type: 'danger', dismissible: true))
       assert_selector 'svg', count: 2 # Should have x circle icon + close button
 
-      render_inline(Viral::AlertComponent.new(message: 'Info alert', type: 'info'))
+      render_inline(Viral::AlertComponent.new(message: 'Info alert', type: 'info', dismissible: true))
       assert_selector 'svg', count: 2 # Should have info icon + close button
 
-      render_inline(Viral::AlertComponent.new(message: 'Warning alert', type: 'warning'))
+      render_inline(Viral::AlertComponent.new(message: 'Warning alert', type: 'warning', dismissible: true))
       assert_selector 'svg', count: 2 # Should have warning circle icon + close button
     end
   end

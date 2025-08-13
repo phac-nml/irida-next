@@ -16,7 +16,7 @@ module Viral
       warning: 'warning'
     }.freeze
 
-    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false, **system_arguments)
+    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: false, auto_dismiss: false, **system_arguments)
       @type = TYPE_MAPPINGS[type.to_sym] || TYPE_DEFAULT
       @message = message
       @dismissible = dismissible
