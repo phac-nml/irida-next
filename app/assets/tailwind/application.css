@@ -290,6 +290,10 @@ input[type="search"] {
   &.form-field input[type="password"] {
     @apply border-red-500 dark:border-red-400;
   }
+
+  &.form-field select {
+    @apply border-red-500 dark:border-red-400;
+  }
 }
 
 @utility field-hint {
