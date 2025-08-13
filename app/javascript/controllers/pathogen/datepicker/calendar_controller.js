@@ -170,70 +170,103 @@ export default class extends Controller {
     }
   }
 
+  /**
+   * 🗓️ Fill the calendar grid with table rows and date cells for the given sequence of day numbers.
+   *
+   * Contract
+   * - Input: dates = number[] (length divisible by 7), composed of:
+   *   [tail of previous month], [1..last day of current month], [head of next month]
+   * - Side effects: Appends <tr> elements with <td> date cells into this.calendarTarget.
+   * - Each <td> gets data-date="YYYY-MM-DD" computed against the correct year/month:
+   *   previous month, current month, or next month.
+   *
+   * How it works
+   * - 🔎 Find the first 1 (start of current month) and the next 1 (start of next month, if any).
+   * - 🧭 Classify each day as prev/current/next via indices—no boolean toggling.
+   * - 🧱 Build rows of 7 cells per week to keep the grid predictable and accessible.
+   *
+   * Edge cases
+   * - If the month starts on Sunday, there’s no “previous” tail (first 1 at index 0).
+   * - If the month ends on Saturday, there’s no “next” head (no second 1).
+   *
+   * Accessibility and semantics
+   * - We only construct structure here; styling/ARIA states are applied elsewhere.
+   * - Rows are appended after every 7 cells to mirror the visual week grid.
+   *
+   * Input example
+   * - For May 2025 starting on Thursday:
+   *   dates might look like [27, 28, 29, 30, 1, 2, 3, ..., 31, 1, 2, 3, 4, 5, 6]
+   *   → first 1 marks the start of May; the next 1 marks the start of June.
+   */
   #fillCalendarWithDates(dates) {
-    // inCurrentMonth checks which styling of date to use; false = faded text; true = 'normal' text;
-    // this will flip each time we cross date == 1, so a calendar with 30, 31, 1...30, 1, 2.
-    // Flip to true at first 1st (inCurrentMonth == true); flip back at next 1st (inCurrentMonth == false)
-    let inCurrentMonth = false;
-    // relativeMonthPosition flips from previous to next based on similar logic to inCurrentMonth, so we know which
-    // month/year to add for the 'data-date' attribute
-    let relativeMonthPosition = "previous";
-    let tableRow = document.createElement("tr");
+    // 🎯 Identify boundaries between previous/current/next month segments.
+    const firstCurrentIdx = dates.indexOf(1); // start of the current month
+    const secondOneIdx =
+      firstCurrentIdx === -1 ? -1 : dates.indexOf(1, firstCurrentIdx + 1); // start of the next month (if any)
 
-    // relativeYearAndMonth get the previous and next month (and year if in Jan/Dec) relative to the current year/month
-    // for date nodes that fill in previous/next month
-    // ie: In Dec 2025, assign Nov 2025 to previous date nodes and Jan 2026 to next date nodes
-    let relativeYearAndMonth = this.#getRelativeYearAndMonth(
-      relativeMonthPosition,
-    );
-    for (let i = 0; i < dates.length; i++) {
-      if (dates[i] === 1) {
-        inCurrentMonth = !inCurrentMonth;
-        if (!inCurrentMonth) {
-          relativeMonthPosition = "next";
-          relativeYearAndMonth = this.#getRelativeYearAndMonth(
-            relativeMonthPosition,
-          );
-        }
-      }
+    // 📅 Resolve year/month for out-of-month cells once.
+    const prevYM = this.#getRelativeYearAndMonth("previous");
+    const nextYM = this.#getRelativeYearAndMonth("next");
 
-      if (inCurrentMonth) {
-        const inMonthDate =
-          this.inMonthDateTemplateTarget.content.cloneNode(true);
-        const tableCell = inMonthDate.querySelector("td");
-        tableCell.innerText = dates[i];
-        tableCell.setAttribute(
-          "data-date",
-          this.#getFormattedStringDate(
-            this.#selectedYear,
-            this.#selectedMonthIndex,
-            dates[i],
-          ),
+    // 🛠️ Helper to render and append a date cell from a <template>.
+    const appendCell = (row, templateTarget, year, monthIndex, day) => {
+      const fragment = templateTarget.content.cloneNode(true);
+      const cell = fragment.querySelector("td");
+      cell.innerText = day;
+      cell.setAttribute(
+        "data-date",
+        this.#getFormattedStringDate(year, monthIndex, day),
+      );
+      row.appendChild(fragment);
+    };
+
+    let row = document.createElement("tr");
+
+    dates.forEach((day, i) => {
+      // 🧩 Classify this index into prev/current/next.
+      const isPrev = firstCurrentIdx !== -1 && i < firstCurrentIdx;
+      const isCurrent =
+        firstCurrentIdx !== -1 &&
+        (secondOneIdx === -1
+          ? i >= firstCurrentIdx
+          : i >= firstCurrentIdx && i < secondOneIdx);
+      // 👉 If it's neither prev nor current, it's in the "next" segment.
+
+      if (isCurrent) {
+        console.log("is current!", day);
+        appendCell(
+          row,
+          this.inMonthDateTemplateTarget,
+          this.#selectedYear,
+          this.#selectedMonthIndex,
+          day,
         );
-        tableRow.appendChild(inMonthDate);
+      } else if (isPrev) {
+        console.log("is prev!", day);
+        appendCell(
+          row,
+          this.outOfMonthDateTemplateTarget,
+          prevYM.year,
+          prevYM.month,
+          day,
+        );
       } else {
-        const outOfMonthDate =
-          this.outOfMonthDateTemplateTarget.content.cloneNode(true);
-        const tableCell = outOfMonthDate.querySelector("td");
-        tableCell.innerText = dates[i];
-
-        tableCell.setAttribute(
-          "data-date",
-          this.#getFormattedStringDate(
-            relativeYearAndMonth["year"],
-            relativeYearAndMonth["month"],
-            dates[i],
-          ),
+        console.log("is next!", day);
+        appendCell(
+          row,
+          this.outOfMonthDateTemplateTarget,
+          nextYM.year,
+          nextYM.month,
+          day,
         );
-        tableRow.appendChild(outOfMonthDate);
       }
 
-      // i is offset by 1 so we add 1 to check if we've done a full week
+      // 📆 Commit the row every 7 cells to form a full week.
       if ((i + 1) % 7 === 0) {
-        this.calendarTarget.append(tableRow);
-        tableRow = document.createElement("tr");
+        this.calendarTarget.append(row);
+        row = document.createElement("tr");
       }
-    }
+    });
   }
 
   // returns date range
