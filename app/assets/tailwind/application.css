@@ -455,50 +455,14 @@ input[type="search"] {
 @layer components {
   /* Alert Component Styles */
   .alert-component {
-    @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm transition-all duration-300 ease-out;
-    animation: slideIn 0.3s ease-out;
-    /* Ensure initial state for animation */
-    opacity: 0;
-    transform: translateX(-100%);
-    max-height: 0;
-    animation-fill-mode: forwards;
+    @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm;
   }
 
   .alert-component:focus-within {
     @apply ring-2 ring-slate-500 ring-offset-2 dark:ring-slate-400;
   }
 
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-100%);
-      max-height: 0;
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-      max-height: 200px;
-    }
-  }
-
-  /* Alert dismiss animation */
-  .alert-component.dismissing {
-    animation: slideOut 0.3s ease-in forwards;
-    animation-fill-mode: forwards;
-  }
-
-  @keyframes slideOut {
-    from {
-      opacity: 1;
-      transform: translateX(0);
-      max-height: 200px;
-    }
-    to {
-      opacity: 0;
-      transform: translateX(100%);
-      max-height: 0;
-    }
-  }
+  /* Alert dismiss animation - removed for instant dismissal */
 
   /* Progress bar animation */
   .alert-component .progress-bar {
