@@ -4,33 +4,48 @@
   data-viral--flash-type-value="<%= type %>"
   id="<%= component_id %>"
   class="
-    flex items-center w-full max-w-xs p-4 mb-4 text-slate-700 bg-white rounded-lg
-    shadow-lg dark:text-slate-400 dark:bg-slate-800 transition-opacity duration-300
-    ease-out
+    flex items-start w-full max-w-md p-4 mb-4 text-slate-700 bg-white rounded-xl
+    shadow-lg border border-slate-200 dark:text-slate-300 dark:bg-slate-800
+    dark:border-slate-700 transition-all duration-300 ease-out transform
   "
   role="alert"
   aria-live="assertive"
   aria-atomic="true"
+  aria-describedby="<%= component_id %>-message"
   data-turbo-permanent="true"
+  style="opacity: 0; transform: translateY(-20px) scale(0.95);"
 >
+  <!-- Icon container - hidden from screen readers but visible -->
   <div
     class="
-      inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-lg
-      <%= icon_container_classes %>
+      inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-lg mr-3
+      mt-0.5 <%= icon_container_classes %>
     "
+    aria-hidden="true"
   >
     <%= pathogen_icon(icon_name, size: :md) %>
-    <span class="sr-only"><%= icon_sr_text %></span>
   </div>
-  <div class="ms-3 text-sm font-medium text-slate-800 dark:text-slate-300"><%= data %></div>
+  <!-- Message content -->
+  <div
+    id="<%= component_id %>-message"
+    class="
+      flex-1 min-w-0 text-sm leading-relaxed text-slate-800 dark:text-slate-200
+    "
+  >
+    <span class="sr-only"><%= message_type_sr_text %>:
+    </span>
+    <%= data %>
+  </div>
+  <!-- Close button -->
   <button
     type="button"
     data-action="viral--flash#dismiss"
     class="
-      ms-auto -mx-1.5 -my-1.5 bg-white text-slate-500 hover:text-slate-900 rounded-lg
-      p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-11 w-11
-      dark:text-slate-400 dark:hover:text-white dark:bg-slate-800
-      dark:hover:bg-slate-700 cursor-pointer
+      ml-3 -mr-1 -mt-1 bg-white text-slate-400 hover:text-slate-600 rounded-lg p-1.5
+      hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8
+      transition-colors duration-200 dark:text-slate-500 dark:hover:text-slate-300
+      dark:bg-slate-800 dark:hover:bg-slate-700 focus:outline-none focus:ring-2
+      focus:ring-slate-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 cursor-pointer
     "
     aria-label="<%= t('general.screen_reader.close') %>"
   >

@@ -614,10 +614,11 @@ en:
         at_first_aria_label: You are on the first page
         at_last_aria_label: You are on the last page
     flash:
-      error_icon: X icon
-      information_icon: Information icon
-      success_icon: Check icon
-      warning_icon: Exclamation icon
+      error_message: Error
+      information_message: Information
+      message: Message
+      success_message: Success
+      warning_message: Warning
     groups_dashboard:
       information_component:
         no_description: No description provided
