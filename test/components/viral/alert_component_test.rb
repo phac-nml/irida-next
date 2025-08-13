@@ -232,9 +232,9 @@ module Viral
       render_inline(Viral::AlertComponent.new(message: 'Progress alert', auto_dismiss: true))
 
       assert_selector '[data-viral--alert-target="progressBar"]', count: 1
-      progress_bar = page.find('[data-viral--alert-target="progressBar"]')
       # Check that the progress bar has the correct initial width
       assert_selector '[data-viral--alert-target="progressBar"][style*="width: 100%"]', count: 1
+      assert_selector '[data-viral--alert-target="progressBar"]', count: 1
     end
 
     # 📱 RESPONSIVE BEHAVIOR - How alerts adapt to different screen sizes
