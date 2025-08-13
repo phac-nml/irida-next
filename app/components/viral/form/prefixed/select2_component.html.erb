@@ -1,9 +1,10 @@
-<div class="flex grow">
+<div class="md:flex grow">
   <div
     class="
       inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700
-      bg-slate-100 border border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-700
-      dark:text-slate-300 dark:border-slate-600
+      bg-slate-100 border md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
+      md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
+      mb-1 md:mb-0
     "
   >
     <%= root_url %>
@@ -20,8 +21,8 @@
         autocomplete="off"
         class="
           select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
-          !rounded-l-none block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
-          dark:placeholder-slate-400 dark:text-slate-50
+          rounded-l-lg md:!rounded-l-none block w-full p-2.5 dark:bg-slate-800
+          dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
         "
         value="<%= selected_value %>"
         data-action="input->viral--select2#input"
