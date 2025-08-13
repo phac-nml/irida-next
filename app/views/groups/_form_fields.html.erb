@@ -35,11 +35,12 @@
 <% if group.new_record? %>
   <% if group.parent_id.present? %>
     <div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
-      <div>
+      <div class="form-field">
         <% form_id = "namespace-select" %>
         <label
           for="<%= form_id %>"
           class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+          data-required="true"
         >
           <%= t("activerecord.attributes.group.parent_id") %>
         </label>
