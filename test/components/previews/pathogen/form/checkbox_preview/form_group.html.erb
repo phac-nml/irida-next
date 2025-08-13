@@ -1,0 +1,33 @@
+<%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
+  <div class="space-y-6">
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Group Example</h3>
+
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Communication Preferences</legend>
+
+      <%= form.checkbox :email_notifications, "1",
+          label: "Email notifications",
+          help_text: "Receive important updates via email" %>
+
+      <%= form.checkbox :sms_notifications, "1",
+          label: "SMS notifications",
+          help_text: "Receive urgent alerts via text message" %>
+
+      <%= form.checkbox :push_notifications, "1",
+          label: "Push notifications",
+          help_text: "Get notified in the app" %>
+    </fieldset>
+
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Privacy Settings</legend>
+
+      <%= form.checkbox :profile_public, "1",
+          label: "Make profile public",
+          help_text: "Allow other users to see your profile" %>
+
+      <%= form.checkbox :data_sharing, "1",
+          label: "Allow data sharing",
+          help_text: "Share anonymous usage data for improvements" %>
+    </fieldset>
+  </div>
+<% end %>
