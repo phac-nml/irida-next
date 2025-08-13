@@ -1,12 +1,36 @@
 # frozen_string_literal: true
 
 module Viral
-  # View Component for alert messages (flash messages)
-  # Enhanced with accessibility features, dismiss functionality, and modern design
+  # ViewComponent for accessible alert/flash messages.
+  #
+  # Responsibilities
+  # - Render a contextual alert with consistent, theme-aware styles
+  # - Provide accessible semantics (role, aria-live, aria-atomic)
+  # - Support optional dismiss button and optional auto-dismiss progress bar
+  # - Expose a stable set of data attributes for the Stimulus controller "viral--alert"
+  #
+  # Usage
+  #   render Viral::AlertComponent.new(
+  #     type: :success, message: t('notices.saved'), dismissible: true
+  #   )
+  #   # or with a block for additional content
+  #   render(Viral::AlertComponent.new(type: :warning)) { content_tag(:p, 'Heads up') }
+  #
+  # Notes
+  # - The `type` argument accepts Rails-style flash keys (:notice, :alert) as aliases.
+  # - Helper methods used by the template are private to keep the public API small.
   class AlertComponent < Viral::Component
-    attr_reader :type, :message, :classes, :dismissible, :auto_dismiss
+    # Public, read-only inputs surfaced to the template
+    # @return [String] one of "danger", "info", "success", "warning"
+    attr_reader :type
+    # @return [String, nil]
+    attr_reader :message
+    # @return [Boolean]
+    attr_reader :dismissible, :auto_dismiss
 
+    # Default logical type
     TYPE_DEFAULT = :info
+    # Maps incoming logical types (including Rails flash keys) to canonical UI states
     TYPE_MAPPINGS = {
       alert: 'danger',
       notice: 'info',
@@ -15,9 +39,19 @@ module Viral
       danger: 'danger',
       warning: 'warning'
     }.freeze
+    # Canonical, rendered types
+    TYPE_OPTIONS = TYPE_MAPPINGS.values.uniq.freeze
 
+    # Initialize the Alert component.
+    #
+    # @param type [Symbol, String] logical type or Rails flash key; mapped to {TYPE_OPTIONS}
+    # @param message [String, nil] optional short message; block content renders as body
+    # @param dismissible [Boolean] whether to render a close button
+    # @param auto_dismiss [Boolean] whether to render a progress bar that a Stimulus controller can manage
+    # @param system_arguments [Hash] additional HTML attributes (classes are merged)
     def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false, **system_arguments)
-      @type = TYPE_MAPPINGS[type.to_sym] || TYPE_DEFAULT
+      # Normalize to canonical string type for styling and iconography
+      @type = TYPE_MAPPINGS[type.to_sym] || TYPE_MAPPINGS[TYPE_DEFAULT]
       @message = message
       @dismissible = dismissible
       @auto_dismiss = auto_dismiss
@@ -29,6 +63,17 @@ module Viral
       @system_arguments[:'aria-atomic'] = 'true'
     end
 
+    # Compose safe HTML attributes for the outer wrapper, including Stimulus data attributes.
+    #
+    # @return [Hash] merged attributes suitable for tag helpers
+    def system_arguments_with_data
+      @system_arguments.merge(data_attributes)
+    end
+
+    private
+
+    # Tailwind utility classes for the current alert type.
+    # @return [String]
     def classes_for_alert
       case type
       when 'danger'
@@ -44,44 +89,43 @@ module Viral
       end
     end
 
+    # Icon color token for the current alert type.
+    # @return [Symbol]
     def icon_color
       case type
-      when 'danger'
-        :danger
-      when 'info'
-        :blue
-      when 'success'
-        :success
-      when 'warning'
-        :warning
-      else
-        :subdued
+      when 'danger' then :danger
+      when 'info' then :blue
+      when 'success' then :success
+      when 'warning' then :warning
+      else :subdued
       end
     end
 
+    # Icon name for the current alert type.
+    # @return [String]
     def icon_name
       case type
-      when 'danger'
-        ICON::X_CIRCLE
-      when 'info'
-        ICON::INFO
-      when 'success'
-        ICON::CHECK_CIRCLE
-      when 'warning'
-        ICON::WARNING_CIRCLE
-      else
-        ICON::INFO
+      when 'danger' then ICON::X_CIRCLE
+      when 'success' then ICON::CHECK_CIRCLE
+      when 'warning' then ICON::WARNING_CIRCLE
+      else ICON::INFO
       end
     end
 
+    # Stable ID used to wire the alert element with its dismiss button via data attributes.
+    # @return [String]
     def alert_id
-      "alert-#{type}-#{object_id}"
+      @alert_id ||= "alert-#{type}-#{object_id}"
     end
 
+    # ID for the dismiss button.
+    # @return [String]
     def dismiss_button_id
-      "#{alert_id}-dismiss"
+      @dismiss_button_id ||= "#{alert_id}-dismiss"
     end
 
+    # Data attributes consumed by the Stimulus controller.
+    # @return [Hash]
     def data_attributes
       {
         'data-controller': 'viral--alert',
@@ -91,10 +135,6 @@ module Viral
         'data-viral--alert-alert-id-value': alert_id,
         'data-viral--alert-dismiss-button-id-value': dismiss_button_id
       }
-    end
-
-    def system_arguments_with_data
-      @system_arguments.merge(data_attributes)
     end
   end
 end
