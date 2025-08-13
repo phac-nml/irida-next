@@ -83,6 +83,9 @@ module Pathogen
       #   - :class [String] additional CSS classes
       #   - :onchange [String] JS for onchange event
       #   - :help_text [String] help text rendered below the label
+      #   - :aria_label [String] custom aria-label for screen readers
+      #   - :role [String] ARIA role (e.g., 'checkbox', 'button')
+      #   - :aria_live [String] ARIA live region for announcements
       def initialize(attribute:, value:, form: nil, **options)
         @form = form
         @attribute = attribute
@@ -98,7 +101,7 @@ module Pathogen
             checkbox_html + label_html
           end +
             tag.div(class: 'mt-1 ml-8') do
-              help_html
+              help_html + enhanced_description_html
             end
         end
       end
@@ -106,6 +109,25 @@ module Pathogen
       # Satisfy FormHelpers contract for input_classes
       def input_classes(user_class)
         checkbox_classes(user_class)
+      end
+
+      # Override form_attributes to add enhanced ARIA support
+      def form_attributes
+        base_attributes = super
+        enhanced_aria = base_attributes[:aria] || {}
+
+        # Add custom ARIA attributes if provided
+        enhanced_aria[:label] = @aria_label if @aria_label.present?
+        enhanced_aria[:live] = @aria_live if @aria_live.present?
+        enhanced_aria[:role] = @role if @role.present?
+
+        # For select-all checkboxes, add better controls and describedby
+        if @controls.present?
+          enhanced_aria[:controls] = @controls
+          enhanced_aria[:describedby] = [enhanced_aria[:describedby], "#{input_id}_description"].compact.join(' ')
+        end
+
+        base_attributes.merge(aria: enhanced_aria)
       end
 
       private
@@ -134,6 +156,29 @@ module Pathogen
         else
           ''.html_safe
         end
+      end
+
+      # Renders enhanced description for select-all checkboxes
+      def enhanced_description_html
+        return ''.html_safe unless @controls.present?
+
+        description_text = case @attribute.to_s
+                           when /select.*all|select.*page/
+                             'Selects or deselects all items on this page'
+                           when /select.*row/
+                             'Selects or deselects this specific row'
+                           else
+                             nil
+                           end
+
+        return ''.html_safe unless description_text
+
+        tag.span(
+          description_text,
+          id: "#{input_id}_description",
+          class: 'sr-only',
+          'aria-live': 'polite'
+        )
       end
 
       # Skip re-renders if the input hasn't changed
