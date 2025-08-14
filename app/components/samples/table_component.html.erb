@@ -90,6 +90,7 @@
                   <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_samples] %>
                       <%= pathogen_checkbox attribute: "sample_ids[]",
+                      id: dom_id(sample, :checkbox),
                       value: sample.id,
                       aria_label: "Select sample #{sample.name}",
                       help_text: "Check to select this sample, uncheck to deselect",
