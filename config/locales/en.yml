@@ -2227,6 +2227,9 @@ en:
       namespaces:
         puid: Project
       puid: Sample PUID
+      select_all:
+        aria_label: Select all samples on this page
+        help_text: Check to select all samples, uncheck to deselect all
       select_page: Select / Deselect visible samples
       updated_at: Last Updated
     transfers:

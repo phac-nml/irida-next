@@ -26,12 +26,12 @@
                 <div class="flex items-center gap-3">
                   <% if index.zero? and @abilities[:select_samples] %>
                     <%= pathogen_checkbox attribute: "select-page",
-                    id: "select-page"
+                    id: "select-page",
                     value: "1",
-                    aria_label: "Select all samples on this page",
+                    aria_label: t(".select_all.aria_label"),
                     controls: "samples-table-body",
                     aria_live: "polite",
-                    help_text: "Check to select all samples, uncheck to deselect all",
+                    help_text: t(".select_all.help_text"),
                     data: {
                       action: "input->selection#togglePage",
                       controller: "filters",
