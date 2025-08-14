@@ -22,11 +22,19 @@
 #     value: "1",
 #     label: "Subscribe to newsletter"
 #   ) %>
+#   # Or with aria_label for screen reader only:
+#   <%= render Pathogen::Form::Checkbox.new(
+#     attribute: :select_all,
+#     value: "1",
+#     aria_label: "Select all items on this page",
+#     help_text: "Check to select all items, uncheck to deselect all"
+#   ) %>
 #
 # 🧩 Options:
 #   - :form         📝   (FormBuilder) — Optional. If not provided, input_name is used.
 #   - :input_name   🏷️   (String)     — Optional. Used for input name/id if no form.
-#   - :label        🏷️   (String)     — The label text shown next to the checkbox
+#   - :label        🏷️   (String)     — The label text shown next to the checkbox (required if no aria_label)
+#   - :aria_label   🗣️   (String)     — Screen reader only label (required if no label)
 #   - :checked      ✅   (Boolean)     — Whether this checkbox is selected
 #   - :disabled     🚫   (Boolean)     — Whether this checkbox is disabled
 #   - :described_by 🗣️   (String)     — ID of element describing this input
@@ -42,6 +50,8 @@
 #   - Uses aria-describedby for help text and error messages
 #   - Keyboard and screen reader friendly
 #   - Visible focus and checked states
+#   - WCAG 2.1 AA compliant
+#   - Requires either visible label or aria-label for accessibility
 #
 # 🛠️  How it works:
 #   - Renders a checkbox input and label side-by-side
@@ -61,6 +71,7 @@ module Pathogen
     #
     # This component renders a single checkbox with a label and optional help text.
     # It is designed for accessibility and modern UI using Tailwind CSS.
+    # WCAG 2.1 AA compliant with proper label association.
     #
     # See the top of this file for full usage and options! 🎉
     class Checkbox < ViewComponent::Base
@@ -74,7 +85,8 @@ module Pathogen
       # @param value [String] the value for the checkbox
       # @param options [Hash] additional options:
       #   - :input_name [String] input name/id if no form is provided
-      #   - :label [String] the label text
+      #   - :label [String] the label text (required if no aria_label)
+      #   - :aria_label [String] screen reader only label (required if no label)
       #   - :checked [Boolean] whether the checkbox is checked
       #   - :disabled [Boolean] whether the checkbox is disabled
       #   - :described_by [String] id of element describing this input
@@ -83,7 +95,6 @@ module Pathogen
       #   - :class [String] additional CSS classes
       #   - :onchange [String] JS for onchange event
       #   - :help_text [String] help text rendered below the label
-      #   - :aria_label [String] custom aria-label for screen readers
       #   - :role [String] ARIA role (e.g., 'checkbox', 'button')
       #   - :aria_live [String] ARIA live region for announcements
       def initialize(attribute:, value:, form: nil, **options)
@@ -91,18 +102,16 @@ module Pathogen
         @attribute = attribute
         @value = value
         extract_options!(options)
+        validate_accessibility_requirements!
       end
 
       def call
-        return checkbox_html if @label.blank?
-
-        tag.div(class: 'flex flex-col') do
-          tag.div(class: 'flex items-center gap-3') do
-            checkbox_html + label_html
-          end +
-            tag.div(class: 'mt-1 ml-8') do
-              help_html + enhanced_description_html
-            end
+        if @label.blank?
+          # No visible label - render with aria-label and help_text in sr-only
+          render_aria_only_checkbox
+        else
+          # Has visible label - render standard layout
+          render_labeled_checkbox
         end
       end
 
@@ -132,6 +141,35 @@ module Pathogen
 
       private
 
+      # Validates that accessibility requirements are met
+      def validate_accessibility_requirements!
+        return unless @label.blank? && @aria_label.blank?
+
+        raise ArgumentError, "Checkbox requires either 'label' or 'aria_label' for accessibility compliance"
+      end
+
+      # Renders checkbox with only aria-label (no visible label)
+      def render_aria_only_checkbox
+        tag.div(class: 'flex flex-col') do
+          checkbox_html +
+            tag.div(class: 'mt-1') do
+              help_text_sr_only_html + enhanced_description_html
+            end
+        end
+      end
+
+      # Renders checkbox with visible label
+      def render_labeled_checkbox
+        tag.div(class: 'flex flex-col') do
+          tag.div(class: 'flex items-center gap-3') do
+            checkbox_html + label_html
+          end +
+            tag.div(class: 'mt-1 ml-8') do
+              help_html + enhanced_description_html
+            end
+        end
+      end
+
       # Renders the checkbox input element
       def checkbox_html
         check_box_tag(
@@ -153,6 +191,15 @@ module Pathogen
       def help_html
         if @help_text.present?
           tag.span(@help_text, id: help_text_id, class: help_text_classes)
+        else
+          ''.html_safe
+        end
+      end
+
+      # Renders help text in screen reader only mode when no visible label
+      def help_text_sr_only_html
+        if @help_text.present?
+          tag.span(@help_text, id: help_text_id, class: 'sr-only', 'aria-live': 'polite')
         else
           ''.html_safe
         end
