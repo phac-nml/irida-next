@@ -25,7 +25,7 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
-  validate :namespace
+  validate :namespace, presence: true, if: :initial?
   validate :validate_namespace
   validate :validate_workflow_available, if: :initial?
   validates :name, presence: true, if: -> { !submitter.automation_bot? }
