@@ -805,7 +805,8 @@ en:
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
       search:
-        placeholder: Filter by ID or name
+        label: Search by ID or name
+        placeholder: Search
       table_header:
         action: Action
         created_at: Created

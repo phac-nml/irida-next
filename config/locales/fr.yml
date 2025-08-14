@@ -805,7 +805,8 @@ fr:
       no_data_exports: Aucune exportation de données
       no_data_exports_message: Vous n’avez actuellement aucune exportation de données.
       search:
-        placeholder: Filtrer par ID ou nom
+        label: Search by ID or name
+        placeholder: Search
       table_header:
         action: Mesure
         created_at: Créé
