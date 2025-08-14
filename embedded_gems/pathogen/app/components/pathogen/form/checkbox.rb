@@ -130,8 +130,6 @@ module Pathogen
         # Add custom ARIA attributes if provided
         enhanced_aria[:label] = @aria_label if @aria_label.present?
         enhanced_aria[:live] = @aria_live if @aria_live.present?
-        # NOTE: role is NOT an ARIA attribute. It must be a top-level attribute.
-        # enhanced_aria[:role] = @role if @role.present?  # ❌ remove this
 
         # For select-all checkboxes, add better controls and describedby
         if @controls.present?
