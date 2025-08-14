@@ -22,7 +22,7 @@
       end %>
 
       <%= render partial: "shared/form/required_field_legend" %>
-      <% invalid_group_id = new_group_link.errors.include?(:group) %>
+      <% invalid_group_id = new_group_link.errors.include?(:group_id) %>
       <div class="form-field <%= 'invalid' if invalid_group_id %>">
         <% form_id = "share_group_id_input" %>
         <label
@@ -59,7 +59,7 @@
         <% if invalid_group_id %>
           <%= render "shared/form/field_errors",
           id: form.field_id(:group_id, "error"),
-          errors: new_group_link.errors[:group] %>
+          errors: new_group_link.errors[:group_id] %>
         <% end %>
         <p id="<%= form.field_id(:group_id, "hint") %>" class="field-hint">
           <%= t("projects.group_links.new.group_hint") %>
