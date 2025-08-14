@@ -93,7 +93,7 @@
                       <%= pathogen_checkbox attribute: "sample_ids[]",
                       id: dom_id(sample, :checkbox),
                       value: sample.id,
-                      aria_label: "Select sample #{sample.name}",
+                      aria_label: t(".row.aria_label", name: sample.name),
                       help_text: "Check to select this sample, uncheck to deselect",
                       data: {
                         action: "input->selection#toggle",

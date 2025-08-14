@@ -2227,6 +2227,8 @@ en:
       namespaces:
         puid: Project
       puid: Sample PUID
+      row:
+        aria_label: Select sample %{name}
       select_all:
         aria_label: Select all samples on this page
         help_text: Check to select all samples, uncheck to deselect all
