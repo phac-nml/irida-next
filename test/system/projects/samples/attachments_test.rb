@@ -625,7 +625,7 @@ module Projects
         # apply filter
         fill_in placeholder: I18n.t(:'projects.samples.attachments.table.search.placeholder'),
                 with: attachments(:attachmentPEFWD1).puid
-        find('input.t-search-component').native.send_keys(:return)
+        find('button[data-search-field-target="submitButton"]').click
 
         within 'tbody' do
           assert_selector 'input[name="attachment_ids[]"]', count: 2
@@ -643,8 +643,7 @@ module Projects
         end
 
         # remove filter
-        fill_in placeholder: I18n.t(:'projects.samples.attachments.table.search.placeholder'), with: ' '
-        find('input.t-search-component').native.send_keys(:return)
+        find('button[data-search-field-target="clearButton"]').click
 
         within 'tfoot' do
           assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
