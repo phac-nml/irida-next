@@ -27,6 +27,7 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "editor.rulers": [120],
+  "cSpell.language": "en, en-CA",
   "cSpell.words": [
     "actioncable",
     "activerecord",
@@ -35,7 +36,6 @@
     "Cancelation",
     "caxlsx",
     "checkin",
-    "colour",
     "contenteditable",
     "createuser",
     "datetime",
