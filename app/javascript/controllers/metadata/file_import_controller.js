@@ -118,7 +118,9 @@ export default class extends Controller {
       columns.forEach((column) => {
         const template =
           this.sortableListsItemTemplateTarget.content.cloneNode(true);
-        template.querySelector("li").innerText = column;
+        template.querySelector("li").firstElementChild.id =
+          `${column}_unselected`;
+        template.querySelector("li").lastElementChild.innerText = column;
         template.querySelector("li").id = column.replace(/\s+/g, "-");
         this.metadataColumnsTarget.querySelector("#Selected").append(template);
       });
