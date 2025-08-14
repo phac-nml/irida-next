@@ -2233,6 +2233,7 @@ fr:
       puid: PUID de l’échantillon
       row:
         aria_label: Select sample %{name}
+        help_text: Check to select this sample, uncheck to deselect this sample
       select_all:
         aria_label: Select all samples on this page
         help_text: Check to select all samples, uncheck to deselect all

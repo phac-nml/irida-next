@@ -94,7 +94,7 @@
                       id: dom_id(sample, :checkbox),
                       value: sample.id,
                       aria_label: t(".row.aria_label", name: sample.name),
-                      help_text: "Check to select this sample, uncheck to deselect",
+                      help_text: t(".row.help_text"),
                       data: {
                         action: "input->selection#toggle",
                         selection_target: "rowSelection",
