@@ -79,6 +79,7 @@ module Pathogen
       include ActionView::Helpers::FormTagHelper
       include CheckboxStyles
       include FormHelper
+      include CheckboxAccessibility
 
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the checkbox
@@ -98,6 +99,7 @@ module Pathogen
       #   - :role [String] ARIA role (e.g., 'checkbox', 'button')
       #   - :aria_live [String] ARIA live region for announcements
       def initialize(attribute:, value:, form: nil, **options)
+        super()
         @form = form
         @attribute = attribute
         @value = value
@@ -212,28 +214,7 @@ module Pathogen
         end
       end
 
-      # Renders enhanced description for select-all checkboxes
-      def enhanced_description_html
-        return ''.html_safe unless @controls.present?
-
-        description_text = case @attribute.to_s
-                           when /select.*all|select.*page/
-                             'Selects or deselects all items on this page'
-                           when /select.*row/
-                             'Selects or deselects this specific row'
-                           else
-                             nil
-                           end
-
-        return ''.html_safe unless description_text
-
-        tag.span(
-          description_text,
-          id: "#{input_id}_description",
-          class: 'sr-only',
-          'aria-live': 'polite'
-        )
-      end
+      # enhanced_description_html is provided by CheckboxAccessibility
 
       # Skip re-renders if the input hasn't changed
       # @api private
