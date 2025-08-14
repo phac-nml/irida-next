@@ -15,7 +15,7 @@ module Pathogen
       pathogen_datepicker(
         id: 'test_id',
         input_name: 'test_input_name',
-        selected_date: Date.today + 7.days
+        selected_date: Time.zone.today + 7.days
       )
     end
 
@@ -24,7 +24,7 @@ module Pathogen
         id: 'test_id',
         input_name: 'test_input_name',
         min_date: nil,
-        selected_date: Date.today + 7.days
+        selected_date: Time.zone.today + 7.days
       )
     end
   end
