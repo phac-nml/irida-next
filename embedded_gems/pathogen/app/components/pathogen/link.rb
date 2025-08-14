@@ -42,11 +42,12 @@ module Pathogen
 
     def setup_external_link_attributes
       @link_system_arguments.merge!(EXTERNAL_LINK_ATTRIBUTES)
-      @link_system_arguments[:'aria-label'] ||= "#{content.strip} (opens in new window)"
+      @link_system_arguments[:'aria-label'] ||= t('.aria-label', content: content.strip)
     end
 
     def external_link?(href)
-      URI.parse(href).host != request.host
+      host = URI.parse(href).host
+      host.present? && host != request.host
     rescue URI::InvalidURIError
       false
     end
