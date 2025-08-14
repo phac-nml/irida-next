@@ -8,14 +8,14 @@
         </p>
         <%= render partial: "shared/form/required_field_legend" %>
         <% invalid_path = @group.errors.include?(:path) %>
-        <div class="form-field prefixed <%= 'invalid' if invalid_path %>">
+        <div class="@container form-field <%= 'invalid' if invalid_path %>">
           <%= form.label :path, data: { required: true } %>
-          <div class="flex whitespace-nowrap items-center">
+          <div class="flex flex-row @max-md:flex-col">
             <div
               class="
-                inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
-                border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
-                dark:border-slate-600
+                text-ellipsis overflow-hidden px-4 py-2 text-sm font-medium text-slate-700
+                bg-slate-100 border @md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
+                @md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
               "
             >
               <%= root_url %>
@@ -25,24 +25,27 @@
                 </strong>
               <% end %>
             </div>
-            <%= form.text_field :path,
-                            pattern: Irida::PathRegex::PATH_REGEX_STR,
-                            required: true,
-                            title: t(:"groups.create.path_help"),
-                            aria: {
-                              describedby:
-                                invalid_path ? form.field_id(:path, "error") : nil,
-                              invalid: invalid_path,
+            <div class="flex-grow-1">
+              <%= form.text_field :path,
+                              pattern: Irida::PathRegex::PATH_REGEX_STR,
                               required: true,
-                            },
-                            autofocus: invalid_path,
-                            class: "prefixed" %>
+                              title: t(:"groups.create.path_help"),
+                              class:
+                                "border-slate-300 text-slate-800 sm:text-sm rounded-r-lg @md:!rounded-l-none",
+                              aria: {
+                                describedby:
+                                  invalid_path ? form.field_id(:path, "error") : nil,
+                                invalid: invalid_path,
+                                required: true,
+                              },
+                              autofocus: invalid_path %>
+              <% if invalid_path %>
+                <%= render "shared/form/field_errors",
+                id: form.field_id(:path, "error"),
+                errors: @group.errors.full_messages_for(:path) %>
+              <% end %>
+            </div>
           </div>
-          <% if invalid_path %>
-            <%= render "shared/form/field_errors",
-            id: form.field_id(:path, "error"),
-            errors: @group.errors.full_messages_for(:path) %>
-          <% end %>
         </div>
         <div>
           <%= form.submit t(:"groups.edit.advanced.path.submit"),
