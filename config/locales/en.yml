@@ -2390,7 +2390,8 @@ en:
         description: There are no files associated with this workflow execution.
         title: No Files
       search:
-        placeholder: Filter by PUID or Filename
+        label: Search by PUID or filename
+        placeholder: Search
     index:
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
