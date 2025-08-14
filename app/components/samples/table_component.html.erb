@@ -30,10 +30,13 @@
                     value: "1",
                     aria_label: t(".select_all.aria_label"),
                     controls: "samples-table-body",
-                    aria_live: "polite",
                     help_text: t(".select_all.help_text"),
                     data: {
                       action: "input->selection#togglePage",
+                      # Announce locally to the component’s live region; provide messages
+                      announce_scope: "local",
+                      selected_message: t(".select_all.selected_message"),
+                      deselected_message: t(".select_all.deselected_message"),
                       controller: "filters",
                       selection_target: "selectPage",
                     } %>
@@ -97,6 +100,10 @@
                       help_text: t(".row.help_text"),
                       data: {
                         action: "input->selection#toggle",
+                        # Announce locally to the row checkbox live region
+                        announce_scope: "local",
+                        selected_message: t(".row.selected_message", name: sample.name),
+                        deselected_message: t(".row.deselected_message", name: sample.name),
                         selection_target: "rowSelection",
                       } %>
                     <% end %>

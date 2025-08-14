@@ -54,10 +54,12 @@ export default class extends Controller {
     });
     this.save(newStorageValue);
     this.#updateUI(newStorageValue);
+    this.#announceChange(event.target, event.target.checked);
   }
 
   toggle(event) {
     this.#addOrRemove(event.target.checked, event.target.value);
+    this.#announceChange(event.target, event.target.checked);
   }
 
   remove({ params: { id } }) {
@@ -134,5 +136,61 @@ export default class extends Controller {
     if (this.hasSelectedTarget) {
       this.selectedTarget.innerText = selected;
     }
+  }
+
+  // ===== Announcement helpers =====
+  #announceChange(input, checked) {
+    try {
+      const scope = input.getAttribute("data-announce-scope") || "local"; // "local" | "global"
+      const globalSelector =
+        input.getAttribute("data-global-live-selector") || "#sr-status";
+      const explicitRegionSelector = input.getAttribute("data-region-selector");
+
+      const region =
+        scope === "global"
+          ? document.querySelector(globalSelector)
+          : this.#findLocalRegion(input, explicitRegionSelector) ||
+            document.querySelector(globalSelector);
+
+      if (!region) return;
+
+      const message = this.#buildMessage(input, checked);
+      region.textContent = message;
+    } catch (_) {
+      // no-op: never break UX because of announcer
+    }
+  }
+
+  #buildMessage(input, checked) {
+    const selectedMsg =
+      input.getAttribute("data-selected-message") || "Selected";
+    const deselectedMsg =
+      input.getAttribute("data-deselected-message") || "Deselected";
+    const base = checked ? selectedMsg : deselectedMsg;
+
+    // Use controller knowledge for count rather than DOM queries
+    const count = this.getNumSelected();
+    return `${base}. ${count} selected.`;
+  }
+
+  #findLocalRegion(input, explicitRegionSelector) {
+    if (explicitRegionSelector) {
+      const node = document.querySelector(explicitRegionSelector);
+      if (node) return node;
+    }
+
+    // Prefer enhanced description span if referenced via aria-describedby
+    const describedBy = input.getAttribute("aria-describedby");
+    if (describedBy) {
+      const ids = describedBy.split(/\s+/).filter(Boolean);
+      const preferredId =
+        ids.find((id) => id.endsWith("_description")) || ids.at(-1);
+      const node = preferredId ? document.getElementById(preferredId) : null;
+      if (node) return node;
+    }
+
+    // Fallback to component help text id
+    const helpId = `${input.id}_help`;
+    return document.getElementById(helpId);
   }
 }

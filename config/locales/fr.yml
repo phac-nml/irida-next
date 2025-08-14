@@ -2233,10 +2233,14 @@ fr:
       puid: PUID de l’échantillon
       row:
         aria_label: Select sample %{name}
+        deselected_message: Sample %{name} deselected
         help_text: Check to select this sample, uncheck to deselect this sample
+        selected_message: Sample %{name} selected
       select_all:
         aria_label: Select all samples on this page
+        deselected_message: Selection cleared
         help_text: Check to select all samples, uncheck to deselect all
+        selected_message: All items on this page selected
       select_page: Sélectionner/Désélectionner les échantillons visibles
       updated_at: Dernière mise à jour
     transfers:
