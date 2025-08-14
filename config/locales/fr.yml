@@ -1781,7 +1781,8 @@ fr:
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            placeholder: Filtrer par PUID ou nom de fichier
+            label: Rechercher par PUID ou nom de fichier
+            placeholder: Rechercher
           select_all_button: Tout sélectionner
       create:
         success: L’échantillon a été créé avec succès.
