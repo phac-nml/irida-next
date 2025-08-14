@@ -94,14 +94,39 @@ module Pathogen
         assert_selector "input[aria-controls='controlled-element']"
       end
 
-      def test_renders_checkbox_without_label
+      def test_renders_checkbox_with_aria_label_only
         render_inline(Checkbox.new(
                         attribute: :terms,
-                        value: '1'
+                        value: '1',
+                        aria_label: 'Terms and conditions checkbox'
                       ))
 
         assert_selector "input[type='checkbox']"
+        assert_selector "input[aria-label='Terms and conditions checkbox']"
         assert_no_selector 'label'
+      end
+
+      def test_renders_checkbox_with_aria_label_and_help_text
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        aria_label: 'Terms and conditions checkbox',
+                        help_text: 'You must agree to continue'
+                      ))
+
+        assert_selector "input[type='checkbox']"
+        assert_selector "input[aria-label='Terms and conditions checkbox']"
+        assert_selector 'span.sr-only', text: 'You must agree to continue'
+        assert_no_selector 'label'
+      end
+
+      def test_raises_error_without_label_or_aria_label
+        assert_raises ArgumentError do
+          render_inline(Checkbox.new(
+                          attribute: :terms,
+                          value: '1'
+                        ))
+        end
       end
 
       def test_renders_checkbox_with_onchange_event
