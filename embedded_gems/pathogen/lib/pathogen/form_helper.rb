@@ -51,9 +51,12 @@ module Pathogen
       @attribute.to_s
     end
 
-    # Generates a unique ID for the input element
+    # Generates the ID for the input element
+    # If an explicit id was provided, it takes precedence; otherwise it's computed from the name and value.
     # @return [String] The input ID
     def input_id
+      return @id if @id.present?
+
       base = if @form && @form.object_name.present?
                "#{@form.object_name}_#{@attribute}_#{@value}"
              else
@@ -95,6 +98,7 @@ module Pathogen
     def extract_options!(options)
       @options = options.dup
       @input_name = options.delete(:input_name)
+      @id = options.delete(:id)
       @label = options.delete(:label)
       @checked = options.delete(:checked) { false }
       @disabled = options.delete(:disabled) { false }
