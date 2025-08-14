@@ -87,23 +87,19 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@4xl:sticky z-5 left-56 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
-                  <% if index.zero? && @abilities[:select_samples] %>
-                    <%= check_box_tag "sample_ids[]",
-                    sample.id,
-                    nil,
-                    id: dom_id(sample, :checkbox),
-                    "aria-label": "Select sample #{sample.name}",
-                    "aria-describedby": "#{dom_id(sample, :checkbox)}_description",
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection",
-                    } %>
-                    <span id="<%= dom_id(sample, :checkbox) %>_description" class="sr-only">
-                      Check to select this sample, uncheck to deselect
-                    </span>
-                  <% end %>
-                  <% if column == :puid || column == :name %>
-                    <%= link_to(
+                  <div class="flex items-center gap-3">
+                    <% if index.zero? && @abilities[:select_samples] %>
+                      <%= pathogen_checkbox attribute: "sample_ids[]",
+                      value: sample.id,
+                      aria_label: "Select sample #{sample.name}",
+                      help_text: "Check to select this sample, uncheck to deselect",
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      } %>
+                    <% end %>
+                    <% if column == :puid || column == :name %>
+                      <%= link_to(
                     sample_path(sample),
                     data: { turbo: false },
                     class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
