@@ -41,7 +41,7 @@ module GroupLinks
       @namespace_group_link.errors.add(:base, e.message)
       @namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkGroupError => e
-      @namespace_group_link.errors.add(:group, e.message)
+      @namespace_group_link.errors.add(:group_id, e.message)
       @namespace_group_link
     end
 
