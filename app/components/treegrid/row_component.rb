@@ -42,9 +42,9 @@ module Treegrid
       @button_arguments[:data][:action] = 'click->treegrid#toggleRow'
       @button_arguments[:type] = 'button'
       @button_arguments[:class] = class_names(@button_arguments[:classes],
-                                              'treegrid-row-toggle h-8 w-8 cursor-pointer',
+                                              'treegrid-row-toggle h-8 w-8 mt-2 cursor-pointer',
                                               'hover:bg-slate-100 dark:hover:bg-slate-600',
-                                              'rounded-lg flex items-center justify-center dark:text-white')
+                                              'rounded-lg shrink-0 flex items-center justify-center dark:text-white')
       @button_arguments.delete(:classes)
       @button_arguments[:tabindex] = '-1'
     end
@@ -60,7 +60,7 @@ module Treegrid
       @system_arguments[:data]['treegrid-target'] = 'row'
       @system_arguments[:style] = "--treegrid-level: #{level};"
       @system_arguments[:class] =
-        class_names(@system_arguments[:classes], 'treegrid-row rounded-lg flex items-baseline py-2 px-2')
+        class_names(@system_arguments[:classes], 'treegrid-row rounded-lg flex py-2 px-2 overflow-hidden')
       @system_arguments.delete(:classes)
       @system_arguments[:role] = 'row'
       @system_arguments[:tabindex] = tabindex
