@@ -1173,7 +1173,8 @@ en:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        placeholder: Filter by PUID or name
+        label: Search by PUID or name
+        placeholder: Search
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
