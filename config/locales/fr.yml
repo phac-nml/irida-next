@@ -1923,6 +1923,10 @@ fr:
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
+      files:
+        search:
+          label: Rechercher par PUID ou nom de fichier
+          placeholder: Rechercher
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Delete Workflow Executions

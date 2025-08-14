@@ -1923,6 +1923,10 @@ en:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit automated workflow execution
+      files:
+        search:
+          label: Search by PUID or filename
+          placeholder: Search
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
