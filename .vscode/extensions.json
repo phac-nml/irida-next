@@ -3,7 +3,6 @@
     "elia.erb-formatter",
     "esbenp.prettier-vscode",
     "shopify.ruby-lsp",
-    "streetsidesoftware.code-spell-checker",
-    "streetsidesoftware.code-spell-checker-canadian-english"
+    "streetsidesoftware.code-spell-checker"
   ]
 }
