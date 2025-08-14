@@ -796,6 +796,8 @@ fr:
         title: Projets
   data_exports:
     create:
+      error: Server encountered the following error while trying to create data export '%{message}'
+      malformed: Data export was unable to save due to being malformed.
       success: L’exportation de données '%{name}' a été lancée avec succès.
     destroy:
       error: L’exportation de données '%{name}' n’a pas pu être supprimée.

@@ -15,15 +15,26 @@ module DataExports
     end
 
     def perform(data_export)
-      initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
+      begin
+        initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
-      Tempfile.create(binmode: true) do |temp_export_file|
-        create_export(data_export, temp_export_file)
-        temp_export_file.rewind
-        attach_export(data_export, temp_export_file)
+        Tempfile.create(binmode: true) do |temp_export_file|
+          create_export(data_export, temp_export_file)
+          temp_export_file.rewind
+          attach_export(data_export, temp_export_file)
+        end
+
+        assign_data_export_attributes(data_export)
+
+        data_export.save
+      rescue StandardError => e
+        raise DataExports::CreateService::DataExportCreateError,
+              I18n.t('data_exports.create.error', message: e.message)
       end
 
-      assign_data_export_attributes(data_export)
+      unless data_export.persisted?
+        raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.malformed')
+      end
 
       DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
     end
@@ -40,21 +51,20 @@ module DataExports
       end
     end
 
-    def attach_export(data_export, export)
+    def attach_export(data_export, temp_export_file)
       filename = if data_export.export_type == 'linelist'
                    "#{data_export.id}.#{data_export.export_parameters['linelist_format']}"
                  else
                    "#{data_export.id}.zip"
                  end
 
-      data_export.file.attach(io: export, filename:)
+      data_export.file.attach(io: temp_export_file, filename:)
     end
 
     def assign_data_export_attributes(data_export)
       data_export.manifest = @manifest.to_json unless data_export.export_type == 'linelist'
       data_export.expires_at = ApplicationController.helpers.add_business_days(DateTime.current, 3)
       data_export.status = 'ready'
-      data_export.save
     end
 
     # Functions used by both sample and analysis exports-------------------------------------------------

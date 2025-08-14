@@ -796,6 +796,8 @@ en:
         title: Projects
   data_exports:
     create:
+      error: Server encountered the following error while trying to create data export '%{message}'
+      malformed: Data export was unable to save due to being malformed.
       success: Data export '%{name}' was successfully started.
     destroy:
       error: Data export '%{name}' could not be deleted.
