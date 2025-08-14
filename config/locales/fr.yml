@@ -1222,6 +1222,10 @@ fr:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
+      files:
+        search:
+          label: Search by PUID or Filename
+          placeholder: Search
       index:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
