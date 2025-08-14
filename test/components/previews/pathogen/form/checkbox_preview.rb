@@ -210,7 +210,10 @@ module Pathogen
         pathogen_checkbox(
           attribute: :complex_terms,
           value: '1',
-          label: 'I acknowledge that I have read, understood, and agree to be bound by all the terms and conditions, privacy policy, and any other agreements that may be applicable to my use of this service'
+          label:
+            'I acknowledge that I have read, understood, and agree to be bound by all the terms and ' \
+            'conditions, privacy policy, and any other agreements that may be applicable to my use of ' \
+            'this service'
         )
       end
 

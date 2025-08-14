@@ -314,7 +314,7 @@ module Pathogen
         assert_selector "label[for='#{expected_id}']"
       end
 
-      def test_generates_correct_input_id_with_form
+      def test_generates_correct_input_id_with_form # rubocop:disable Metrics/MethodLength
         template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil)
         form = ActionView::Helpers::FormBuilder.new(
           'user',
