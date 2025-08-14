@@ -81,6 +81,9 @@ export default class extends Controller {
       hasInputTarget: this.hasInputTarget,
       hasSearchContent: this.hasSearchContent,
     });
+
+    // 🧹 Set up form submission listener to clear selection
+    this.#setupFormSubmissionListener();
   }
 
   /**
@@ -128,5 +131,204 @@ export default class extends Controller {
       this.clearButtonTarget.classList.remove("hidden");
     if (this.hasSubmitButtonTarget)
       this.submitButtonTarget.classList.add("hidden");
+  }
+
+  /**
+   * 🚀 Handle form submission and clear current selection
+   *
+   * This method is called when the search form is submitted.
+   * It clears the current selection before the search proceeds.
+   */
+  handleSubmit() {
+    try {
+      console.debug("🚀 SearchFieldController: Form submission started");
+
+      // 🧹 Clear current selection by finding the selection controller
+      this.#clearSelection();
+
+      // 🎯 Update button states
+      this.showClearHideSubmit();
+
+      console.debug(
+        "✅ SearchFieldController: Form submission handled successfully",
+      );
+    } catch (error) {
+      console.error("💥 SearchFieldController: Error handling submit", {
+        error: error.message,
+        stack: error.stack,
+        element: this.element,
+      });
+
+      // 🛡️ Continue with form submission even if clearing selection fails
+      console.warn(
+        "⚠️ SearchFieldController: Continuing with form submission despite error",
+      );
+    }
+  }
+
+  /**
+   * 🧹 Clear current selection by finding the selection controller
+   *
+   * This method looks for a selection controller in the parent form
+   * and calls its clear method to reset the current selection state.
+   */
+  #clearSelection() {
+    try {
+      // 🔍 Find the parent form
+      const form = this.element.closest("form");
+      if (!form) {
+        console.warn("🔍 SearchFieldController: Parent form not found");
+        return;
+      }
+
+      // 🎯 Look for selection controller in the form or its children
+      let selectionController = null;
+
+      // First, try to find selection controller in the form itself
+      if (
+        form.hasAttribute("data-controller") &&
+        form.getAttribute("data-controller").includes("selection")
+      ) {
+        selectionController =
+          this.application.getControllerForElementAndIdentifier(
+            form,
+            "selection",
+          );
+      }
+
+      // If not found, look for selection controller in form children
+      if (!selectionController) {
+        const selectionElement = form.querySelector(
+          "[data-controller*='selection']",
+        );
+        if (selectionElement) {
+          selectionController =
+            this.application.getControllerForElementAndIdentifier(
+              selectionElement,
+              "selection",
+            );
+        }
+      }
+
+      // If still not found, look for any element with selection controller in the document
+      if (!selectionController) {
+        const allSelectionElements = document.querySelectorAll(
+          "[data-controller*='selection']",
+        );
+        for (const element of allSelectionElements) {
+          const controller =
+            this.application.getControllerForElementAndIdentifier(
+              element,
+              "selection",
+            );
+          if (controller && typeof controller.clear === "function") {
+            selectionController = controller;
+            break;
+          }
+        }
+      }
+
+      // 🧹 Clear selection if controller found
+      if (
+        selectionController &&
+        typeof selectionController.clear === "function"
+      ) {
+        selectionController.clear();
+        console.debug(
+          "✅ SearchFieldController: Selection cleared via controller",
+        );
+      } else {
+        console.warn("⚠️ SearchFieldController: No selection controller found");
+      }
+    } catch (error) {
+      console.warn(
+        "⚠️ SearchFieldController: Could not clear selection",
+        error,
+      );
+    }
+  }
+
+  /**
+   * 🧹 Public method to clear current selection
+   *
+   * This method can be called externally to clear the current selection.
+   * Useful for other components that need to clear selection.
+   */
+  clearSelection() {
+    this.#clearSelection();
+  }
+
+  /**
+   * 🔍 Check if selection controller is available
+   *
+   * @returns {boolean} True if a selection controller is found and accessible
+   */
+  hasSelectionController() {
+    try {
+      const form = this.element.closest("form");
+      if (!form) return false;
+
+      // Check if form has selection controller
+      if (
+        form.hasAttribute("data-controller") &&
+        form.getAttribute("data-controller").includes("selection")
+      ) {
+        return true;
+      }
+
+      // Check if any child has selection controller
+      const selectionElement = form.querySelector(
+        "[data-controller*='selection']",
+      );
+      return !!selectionElement;
+    } catch (error) {
+      console.warn(
+        "⚠️ SearchFieldController: Error checking selection controller",
+        error,
+      );
+      return false;
+    }
+  }
+
+  /**
+   * 🎯 Set up form submission listener to ensure selection is cleared
+   *
+   * This ensures that even if the button click handler doesn't fire,
+   * the selection will still be cleared when the form is submitted.
+   */
+  #setupFormSubmissionListener() {
+    try {
+      const form = this.element.closest("form");
+      if (form) {
+        // 🧹 Clear selection on form submit (as a backup)
+        form.addEventListener("submit", (event) => {
+          // Small delay to ensure this runs before Turbo processes the form
+          setTimeout(() => {
+            this.#clearSelection();
+          }, 0);
+        });
+
+        // 🧹 Also listen for Turbo events to ensure selection is cleared
+        document.addEventListener("turbo:submit-start", (event) => {
+          if (event.target === form) {
+            this.#clearSelection();
+          }
+        });
+
+        // 🧹 Listen for form submission events from the search field component
+        this.element.addEventListener("submit", (event) => {
+          this.#clearSelection();
+        });
+
+        console.debug(
+          "✅ SearchFieldController: Form submission listeners added",
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "⚠️ SearchFieldController: Could not set up form listener",
+        error,
+      );
+    }
   }
 }
