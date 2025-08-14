@@ -26,6 +26,7 @@
                 <div class="flex items-center gap-3">
                   <% if index.zero? and @abilities[:select_samples] %>
                     <%= pathogen_checkbox attribute: "select-page",
+                    id: "select-page"
                     value: "1",
                     aria_label: "Select all samples on this page",
                     controls: "samples-table-body",
