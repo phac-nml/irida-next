@@ -20,13 +20,16 @@
 >
   <%= sidebar %>
   <div
-    class="relative content h-screen overflow-y-auto overflow-x-hidden"
+    class="
+      relative content h-screen max-xl:overflow-y-auto xl:overflow-y-hidden
+      overflow-x-hidden
+    "
     data-layout-target="content"
   >
     <div
       class="
-        flex xl:sticky xl:top-0 px-4 z-20 h-16 -outline-offset-1 border-b
-        border-slate-200 dark:border-slate-950 bg-white dark:bg-slate-800
+        flex px-4 z-20 h-16 -outline-offset-1 border-b border-slate-200
+        dark:border-slate-950 bg-white dark:bg-slate-800
       "
     >
       <div
@@ -51,7 +54,14 @@
       </div>
       <%= language_selection %>
     </div>
-    <main id="main-content" tabindex="0" class="@container w-full p-4">
+    <main
+      id="main-content"
+      tabindex="0"
+      class="
+        @container xl:h-(--main-content-height) w-full p-4 xl:overflow-y-scroll
+        xl:overflow-x-hidden
+      "
+    >
       <div class="<%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
