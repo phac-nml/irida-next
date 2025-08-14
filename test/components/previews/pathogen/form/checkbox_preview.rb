@@ -145,13 +145,63 @@ module Pathogen
 
       # @!endgroup
 
+      # @!group WCAG Accessibility Examples
+
+      # @label Select All Checkbox (Common Pattern)
+      def select_all_checkbox
+        pathogen_checkbox(
+          attribute: :select_all,
+          value: '1',
+          aria_label: 'Select all samples on this page',
+          controls: 'samples-table-body',
+          aria_live: 'polite',
+          help_text: 'Check to select all samples, uncheck to deselect all'
+        )
+      end
+
+      # @label Row Selection Checkbox
+      def row_selection_checkbox
+        pathogen_checkbox(
+          attribute: :select_row,
+          value: '1',
+          aria_label: 'Select sample SAMPLE-001',
+          controls: 'sample-details-panel',
+          help_text: 'Check to select this sample, uncheck to deselect'
+        )
+      end
+
+      # @label Form Checkbox with Enhanced ARIA
+      def form_checkbox_with_enhanced_aria
+        pathogen_checkbox(
+          attribute: :accessibility,
+          value: '1',
+          label: 'Enable accessibility features',
+          described_by: 'accessibility-help',
+          controls: 'accessibility-panel',
+          help_text: 'Includes screen reader support and keyboard navigation'
+        )
+      end
+
+      # @!endgroup
+
       # @!group Edge Cases
 
-      # @label Without Label
-      def without_label
+      # @label With Aria Label Only (No Visible Label)
+      def with_aria_label_only
         pathogen_checkbox(
           attribute: :hidden_option,
-          value: '1'
+          value: '1',
+          aria_label: 'Hidden option checkbox for screen readers'
+        )
+      end
+
+      # @label With Aria Label and Help Text (No Visible Label)
+      def with_aria_label_and_help_text
+        pathogen_checkbox(
+          attribute: :select_all,
+          value: '1',
+          aria_label: 'Select all items on this page',
+          help_text: 'Check to select all items, uncheck to deselect all'
         )
       end
 
