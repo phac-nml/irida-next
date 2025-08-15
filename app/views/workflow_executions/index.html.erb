@@ -63,8 +63,8 @@
         query: @q,
         url: workflow_executions_path,
         search_attribute: :name_or_id_cont,
-        placeholder: t(".search.placeholder"),
         label: t(".search.label"),
+        placeholder: t(".search.placeholder"),
         value: @q.name_or_id_cont,
         total_count: @pagy.count,
       ) %>
