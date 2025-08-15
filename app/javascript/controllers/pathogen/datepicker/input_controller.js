@@ -285,8 +285,9 @@ export default class extends Controller {
       } else {
         if (this.autosubmitValue) {
           this.submitDate();
+        } else {
+          this.#disableInputErrorState();
         }
-        this.#disableInputErrorState();
         this.#setSelectedDate();
       }
     } else {
@@ -340,6 +341,7 @@ export default class extends Controller {
 
   // submits the selected date
   submitDate() {
+    this.#disableInputErrorState();
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
   }
