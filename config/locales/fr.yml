@@ -888,9 +888,6 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
-  date:
-    formats:
-      iso: AAAA/MM/JJ
   devise:
     passwords:
       edit:
@@ -1659,7 +1656,6 @@ fr:
         actions:
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
         aria_labels:
-          expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce projet
