@@ -13,7 +13,7 @@ module Pathogen
     # Tailwind color variants for icon text color
     COLORS = {
       default: 'text-slate-900 dark:text-slate-100',
-      subdued: 'text-slate-400 dark:text-slate-500',
+      subdued: 'text-slate-600 dark:text-slate-300',
       primary: 'text-primary-600 dark:text-primary-500',
       success: 'text-green-600 dark:text-green-500',
       warning: 'text-yellow-600 dark:text-yellow-500',
