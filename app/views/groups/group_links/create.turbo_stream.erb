@@ -15,9 +15,7 @@
                         new_group_link: @created_namespace_group_link,
                       } %>
 
-  <% if @created_namespace_group_link.errors.any? %>
-    <%= turbo_stream.update "invite-group-alert", viral_alert(type:, message:) %>
-  <% else %>
+  <% if @created_namespace_group_link.errors.none? %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(type:, data: message) %>
     <% end %>

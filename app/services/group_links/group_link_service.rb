@@ -4,6 +4,7 @@ module GroupLinks
   # Service used to Create NamespaceGroupLinks
   class GroupLinkService < BaseService
     NamespaceGroupLinkError = Class.new(StandardError)
+    NamespaceGroupLinkGroupError = Class.new(StandardError)
     attr_accessor :group_id, :namespace, :namespace_group_link
 
     def initialize(user, namespace, params)
@@ -21,13 +22,15 @@ module GroupLinks
       authorize! namespace, to: :link_namespace_with_group?
 
       if group_id == namespace.id
-        raise NamespaceGroupLinkError,
+        raise NamespaceGroupLinkGroupError,
               I18n.t('services.groups.share.group_self_reference', group_id:)
       end
 
+      raise NamespaceGroupLinkGroupError, I18n.t('services.groups.share.group_required') if group_id.blank?
+
       group = Group.find_by(id: group_id)
 
-      raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
+      raise NamespaceGroupLinkGroupError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
 
       namespace_group_link.save
 
@@ -36,6 +39,9 @@ module GroupLinks
       namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e
       @namespace_group_link.errors.add(:base, e.message)
+      @namespace_group_link
+    rescue GroupLinks::GroupLinkService::NamespaceGroupLinkGroupError => e
+      @namespace_group_link.errors.add(:group_id, e.message)
       @namespace_group_link
     end
 

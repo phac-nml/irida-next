@@ -1,6 +1,5 @@
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>
   <% dialog.with_header(title: I18n.t("projects.group_links.new.title")) %>
-  <%= turbo_frame_tag("invite-group-alert") %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
       <%= I18n.t(
@@ -10,9 +9,21 @@
     </p>
   </div>
 
-  <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2"}) do |form| %>
+  <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2"}, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
-      <div class="form-field">
+      <%= if new_group_link.errors.any?
+        viral_alert(
+          type: "alert",
+          message: I18n.t(:"general.form.error_notification"),
+          aria: {
+            live: "assertive",
+          },
+        )
+      end %>
+
+      <%= render partial: "shared/form/required_field_legend" %>
+      <% invalid_group_id = new_group_link.errors.include?(:group_id) %>
+      <div class="form-field <%= 'invalid' if invalid_group_id %>">
         <% form_id = "share_group_id_input" %>
         <label
           for="<%= form_id %>"
@@ -22,7 +33,7 @@
 
           <%= t("projects.group_links.new.label.shared_group") %>
         </label>
-        <%= viral_select2(form:, name: :group_id, id: form_id) do |select| %>
+        <%= viral_select2(form:, name: :group_id, id: form_id, selected_value: new_group_link.group_id, aria_invalid: invalid_group_id, field_hint: true) do |select| %>
           <% @namespace_linkable_groups.each do |group| %>
             <% select.with_option(
                       value: group.id,
@@ -45,11 +56,17 @@
             <%= t(:"projects.group_links.new.empty_state") %>
           <% end %>
         <% end %>
+        <% if invalid_group_id %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:group_id, "error"),
+          errors: new_group_link.errors[:group_id] %>
+        <% end %>
         <p id="<%= form.field_id(:group_id, "hint") %>" class="field-hint">
           <%= t("projects.group_links.new.group_hint") %>
         </p>
       </div>
-      <div class="form-field">
+      <% invalid_group_access_level = new_group_link.errors.include?(:group_access_level) %>
+      <div class="form-field <%= 'invalid' if invalid_group_access_level %>">
         <%= form.label I18n.t("projects.group_links.new.label.group_access_level"),
                    data: {
                      required: true,
@@ -59,12 +76,31 @@
                       @access_levels,
                       new_group_link.group_access_level,
                     ),
-                    required: true,
-                    aria: {
-                      label:
-                        t(:"projects.group_links.index.aria_labels.group_access_level"),
+                    {},
+                    {
                       required: true,
+                      aria: {
+                        describedby: [
+                          (
+                            if invalid_group_access_level
+                              form.field_id(:group_access_level, "error")
+                            else
+                              nil
+                            end
+                          ),
+                          form.field_id(:group_access_level, "hint"),
+                        ].join(" "),
+                        invalid: invalid_group_access_level,
+                        required: true,
+                      },
+                      autofocus: invalid_group_access_level,
+                      value: new_group_link.group_access_level,
                     } %>
+        <% if invalid_group_access_level %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:group_access_level, "error"),
+          errors: new_group_link.errors.full_messages_for(:group_access_level) %>
+        <% end %>
         <p id="<%= form.field_id(:group_access_level, "hint") %>" class="field-hint">
           <%= t("projects.group_links.new.access_level_hint") %>
         </p>
