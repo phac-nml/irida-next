@@ -30,7 +30,7 @@
         <% end %>
         <div class="flex items-center space-x-2 ml-auto">
           <% if Flipper.enabled?(:sample_attachments_searching) %>
-            <%= form_with model: @q, url:namespace_project_sample_path, method: :get, class: "inline-flex", data: {turbo_action: "replace"} do |form| %>
+            <%= form_with model: @q, url:namespace_project_sample_path, method: :get, class: "inline-flex", data: {turbo_action: "replace", controller: "selection", selection_storage_key_value: "files-#{@sample.id}" } do |form| %>
             <%= render SearchFieldComponent.new(
               form: form,
               field_name: :puid_or_file_blob_filename_cont,

@@ -2,8 +2,6 @@
   <%= @form.label @field_name, @label, class: "sr-only" %>
   <div class="relative">
     <%= @form.search_field @field_name,
-                       "data-action":
-                         "selection#clear input->search-field#handleInput",
                        "data-search-field-target": "input",
                        "data-test-selector":
                          !Rails.env.production? ? "search-field-input" : nil,
@@ -18,7 +16,7 @@
     <button
       type="button"
       data-search-field-target="clearButton"
-      data-action="click->search-field#clear"
+      data-action="click->search-field#clear click->selection#clear"
       class="
         absolute inset-y-0 right-0 flex items-center justify-center w-12
         pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
@@ -33,7 +31,7 @@
     <button
       type="submit"
       data-search-field-target="submitButton"
-      data-action="click->search-field#handleSubmit click->selection#clear"
+      data-action="click->selection#clear"
       class="
         absolute inset-y-0 right-0 flex items-center justify-center w-12
         pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
