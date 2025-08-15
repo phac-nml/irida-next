@@ -6,7 +6,7 @@
     placeholder: t(".search.placeholder"),
     form: f,
     field_name: :name_or_puid_cont,
-    value: @query.name_or_puid_cont,
+    value: @search_params[:name_or_puid_cont],
   ) %>
   <input type="hidden" name="format" value="turbo_stream"/>
   <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
