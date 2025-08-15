@@ -77,7 +77,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    [("focus", "click")].forEach((event) => {
+    ["focus", "click"].forEach((event) => {
       this.datepickerInputTarget.removeEventListener(
         event,
         this.boundUnhideCalendar,
