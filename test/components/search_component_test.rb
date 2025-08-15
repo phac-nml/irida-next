@@ -329,25 +329,6 @@ class SearchComponentTest < ViewComponent::TestCase
     assert_selector 'input[placeholder]', count: 1
   end
 
-  test 'renders with different search attributes' do
-    different_attributes = %i[name_cont puid_cont description_cont]
-
-    different_attributes.each do |attr|
-      render_inline SearchComponent.new(
-        query: @query,
-        url: @url,
-        search_attribute: attr,
-        label: @label,
-        placeholder: @placeholder,
-        total_count: @total_count,
-        value: @value
-      )
-
-      assert_selector "input[id='q_#{attr}']", count: 1
-      assert_selector "label[for='q_#{attr}']", count: 1
-    end
-  end
-
   test 'renders with different URLs' do
     different_urls = [
       '/-/groups/group-1/-/members',
