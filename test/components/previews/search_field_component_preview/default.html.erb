@@ -1,0 +1,9 @@
+<%= form_with url: "#", method: :get, local: true do |f| %>
+  <%= render SearchFieldComponent.new(
+    label: label,
+    placeholder: placeholder,
+    form: f,
+    field_name: field_name,
+    value: value
+  ) %>
+<% end %>

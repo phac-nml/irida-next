@@ -19,8 +19,10 @@
         query: @q,
         url: dashboard_groups_url,
         search_attribute: :name_or_puid_cont,
+        label: t(:".search.label"),
         placeholder: t(:".search.placeholder"),
         total_count: @pagy.count,
+        value: @q.name_or_puid_cont,
       ) %>
       <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
         <%= render Ransack::SortDropdownComponent.new(

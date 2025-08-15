@@ -28,9 +28,11 @@
         <%= render SearchComponent.new(
         query: @q,
         search_attribute: :puid_or_file_blob_filename_cont,
+        label: t(:".search.label"),
         placeholder: t(:".search.placeholder"),
         url: group_attachments_path(@group),
         total_count: @pagy.count,
+        value: @q.puid_or_file_blob_filename_cont,
       ) do %>
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>

@@ -678,6 +678,10 @@ fr:
         plural: "%{total_count} results found for '%{search_term}'"
         singular: 1 result found for '%{search_term}'
         zero: No results found for '%{search_term}'
+    search_field_component:
+      clear_button: Clear search
+      instructions: Appuyez sur Entrée pour rechercher
+      search_button: Rechercher
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
@@ -754,7 +758,8 @@ fr:
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
         search:
-          placeholder: Filtrer par PUID ou nom
+          label: Search by PUID or name
+          placeholder: Search
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -772,6 +777,7 @@ fr:
         pagy_item: Projets
         personal: Personnel
         search:
+          label: Search by PUID or name
           placeholder: Filtrer par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
@@ -799,7 +805,8 @@ fr:
       no_data_exports: Aucune exportation de données
       no_data_exports_message: Vous n’avez actuellement aucune exportation de données.
       search:
-        placeholder: Filtrer par ID ou nom
+        label: Search by ID or name
+        placeholder: Search
       table_header:
         action: Mesure
         created_at: Créé
@@ -949,7 +956,8 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Filtrer par PUID ou nom de fichier
+          label: Search by PUID or Filename
+          placeholder: Search
         subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1058,6 +1066,10 @@ fr:
           title: Aucun groupe
         unlink: Dissocier
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1097,16 +1109,16 @@ fr:
         leave_group: Quitter le groupe
         remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du groupe?
-        search:
-          groups:
-            placeholder: Filtrer par nom de groupe
-          placeholder: Filtrer par nom d’utilisateur
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Onglets des membres du groupe
           groups: Groupes
           members: Membres
         title: Membres
+      member_listing:
+        search:
+          label: Search by username
+          placeholder: Search
       new:
         access_level_hint: Select group access level to assign to user
         add_member_to_group: Ajouter un membre au groupe
@@ -1143,7 +1155,8 @@ fr:
       table_filter:
         loading: Chargement des résultats de recherche...
         search:
-          placeholder: Filtrer par PUID ou nom
+          label: Search
+          placeholder: Search by name or PUID
     shared_namespaces:
       index:
         pagy:
@@ -1160,7 +1173,8 @@ fr:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        placeholder: Filtrer par PUID ou nom
+        label: Rechercher par nom ou PUID
+        placeholder: Rechercher
       shared_namespaces:
         no_shared:
           description: Les groupes et les projets peuvent être partagés avec d’autres groupes par l’intermédiaire de leur page de membres.
@@ -1208,11 +1222,16 @@ fr:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
+      files:
+        search:
+          label: Search by PUID or Filename
+          placeholder: Search
       index:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
         search:
-          placeholder: Filtrer par ID ou nom
+          label: Rechercher par nom ou ID
+          placeholder: Rechercher
         select_all_button: Tout sélectionner
         subtitle: These are the workflow executions that have been shared within this group
         title: Exécutions de flux de travail
@@ -1489,7 +1508,8 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Filtrer par PUID ou nom de fichier
+          label: Search by PUID or Filename
+          placeholder: Search
         subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1648,6 +1668,10 @@ fr:
         inherited_from: Hérité de
         unlink: Dissocier
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le projet %{namespace_name} du groupe %{group_name}?
+      invited_groups:
+        search:
+          label: Search by group name
+          placeholder: Search
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1688,16 +1712,16 @@ fr:
         leave_project: Quitter le projet
         remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du projet?
-        search:
-          groups:
-            placeholder: Filtrer par nom de groupe
-          placeholder: Filtrer par nom d’utilisateur
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
           aria_label: Onglets des membres du projet
           groups: Groupes
           members: Membres
         title: Membres
+      member_listing:
+        search:
+          label: Search by username
+          placeholder: Search
       new:
         access_level_hint: Select project access level to assign to user
         add_member_to_project: Ajouter un membre au projet
@@ -1762,7 +1786,8 @@ fr:
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            placeholder: Filtrer par PUID ou nom de fichier
+            label: Rechercher par PUID ou nom de fichier
+            placeholder: Rechercher
           select_all_button: Tout sélectionner
       create:
         success: L’échantillon a été créé avec succès.
@@ -1869,7 +1894,8 @@ fr:
       table_filter:
         loading: Recherche en cours...
         search:
-          placeholder: Filtrer par PUID ou nom
+          label: Search
+          placeholder: Search by name or PUID
       update:
         success: L’échantillon a été mis à jour avec succès.
     sidebar:
@@ -1897,12 +1923,17 @@ fr:
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
+      files:
+        search:
+          label: Rechercher par PUID ou nom de fichier
+          placeholder: Rechercher
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Désélectionner tout
         search:
-          placeholder: Filtrer par ID ou nom
+          label: Search by ID or name
+          placeholder: Search
         select_all_button: Tout sélectionner
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
         title: Exécutions de flux de travail
@@ -2363,12 +2394,14 @@ fr:
         description: There are no files associated with this workflow execution.
         title: Aucun fichier
       search:
-        placeholder: Filtrer par PUID ou nom de fichier
+        label: Rechercher par PUID ou nom de fichier
+        placeholder: Rechercher
     index:
       create_export_button: Créer une exportation
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
       search:
+        label: Search by ID or name
         placeholder: Filtrer par ID ou nom
       select_all_button: Tout sélectionner
       title: Exécutions de flux de travail
