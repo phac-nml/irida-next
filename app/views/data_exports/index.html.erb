@@ -6,15 +6,13 @@
 
 <div class="flow-root">
   <div class="flex flex-row-reverse items-center mb-2">
-    <%= form_with model: @q, url:data_exports_url, method: :get, class: "inline-flex", data: {turbo_action: "replace"} do |form| %>
-      <%= render SearchFieldComponent.new(
-        form: form,
-        label: t(".search.label"),
-        placeholder: t(".search.placeholder"),
-        field_name: :id_or_name_cont,
-        value: @q.id_or_name_cont,
-      ) %>
-    <% end %>
+    <%= render SearchComponent.new(
+      query: @q,
+      url: data_exports_url,
+      search_attribute: :id_or_name_cont,
+      placeholder: t(:".search.placeholder"),
+      total_count: @pagy.count,
+    ) %>
   </div>
 </div>
 
