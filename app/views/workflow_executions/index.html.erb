@@ -59,15 +59,13 @@
       <% end %>
     </div>
     <div class="flex grow-0">
-      <%= search_form_for @q, url: workflow_executions_path, data: { turbo_action: 'replace' } do |f| %>
-        <%= render SearchFieldComponent.new(
-          label: t(".search.label"),
-          placeholder: t(".search.placeholder"),
-          form: f,
-          field_name: :name_or_id_cont,
-          value: @q.name_or_id_cont,
-        ) %>
-      <% end %>
+      <%= render SearchComponent.new(
+        query: @q,
+        url: workflow_executions_path,
+        search_attribute: :name_or_id_cont,
+        placeholder: t(".search.placeholder"),
+        total_count: @pagy.count,
+      ) %>
     </div>
   </div>
 </div>
