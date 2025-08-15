@@ -45,7 +45,11 @@ export default class extends Controller {
 
   #minDate;
 
-  initialize() {
+  connect() {
+    if (this.hasMinDateTarget) {
+      this.#setMinDate();
+    }
+
     this.boundUnhideCalendar = this.unhideCalendar.bind(this);
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
@@ -55,12 +59,6 @@ export default class extends Controller {
     if (!this.#calendar) {
       this.idempotentConnect();
       this.#addCalendarTemplate();
-    }
-  }
-
-  connect() {
-    if (this.hasMinDateTarget) {
-      this.#setMinDate();
     }
   }
 
@@ -79,13 +77,21 @@ export default class extends Controller {
   }
 
   disconnect() {
-    ["focus", "click"].forEach((event) => {
+    [("focus", "click")].forEach((event) => {
       this.datepickerInputTarget.removeEventListener(
         event,
         this.boundUnhideCalendar,
       );
     });
     this.removeCalendarListeners();
+    // turbo actions (such as table sorting) triggers disconnect, but then the listeners above removed do not
+    // get re-added as expected in connect(), due to the calendar still being present already in the DOM.
+    // simplest way around this is to .remove() the calendar, assign this.#calendar to null (sometimes DOM change
+    // doesn't process fast enough to where this.#calendar is still set to the removed element before connect()
+    // triggers). this allows this.idempotentConnect() and this.#addCalendarTemplate() to trigger in connect(),
+    // which re-adds the calendar for expected functionality
+    this.#calendar.remove();
+    this.#calendar = null;
   }
 
   #setMinDate() {
