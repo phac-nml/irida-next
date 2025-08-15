@@ -2024,6 +2024,16 @@ en:
       namespaces:
         puid: Project
       puid: Sample PUID
+      row:
+        aria_label: Select sample %{name}
+        deselected_message: Sample %{name} deselected
+        help_text: Click to select sample, uncheck to deselect sample
+        selected_message: Sample %{name} selected
+      select_all:
+        aria_label: Select all samples on this page
+        deselected_message: Selected samples on this page deselected
+        help_text: Click to select all samples on this page, uncheck to deselect all
+        selected_message: All items on this page selected
       select_page: Select / Deselect visible samples
       updated_at: Last Updated
     transfers:
