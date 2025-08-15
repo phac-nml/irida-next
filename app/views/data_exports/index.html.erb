@@ -10,8 +10,10 @@
       query: @q,
       url: data_exports_url,
       search_attribute: :id_or_name_cont,
+      label: t(:".search.label"),
       placeholder: t(:".search.placeholder"),
       total_count: @pagy.count,
+      value: @q.id_or_name_cont,
     ) %>
   </div>
 </div>
