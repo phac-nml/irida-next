@@ -84,7 +84,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-      assert_selector "tr:nth-child(3) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
+      assert_selector "tr:nth-child(4) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
     end
 

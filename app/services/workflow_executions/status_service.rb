@@ -11,7 +11,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false if @workflow_execution.run_id.nil?
+      return false if @workflow_execution.run_id.nil? # TODO: returning false needs rework
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
 
