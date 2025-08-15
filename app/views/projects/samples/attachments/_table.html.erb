@@ -30,14 +30,17 @@
         <% end %>
         <div class="flex items-center space-x-2 ml-auto">
           <% if Flipper.enabled?(:sample_attachments_searching) %>
-            <%= form_with model: @q, url:namespace_project_sample_path, method: :get, class: "inline-flex", data: {turbo_action: "replace", controller: "selection", selection_storage_key_value: "files-#{@sample.id}" } do |form| %>
-            <%= render SearchFieldComponent.new(
-              form: form,
-              field_name: :puid_or_file_blob_filename_cont,
-              label: t(:".search.label"),
+            <%= render SearchComponent.new(
+              query: @q,
+              search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
-              value: @q.puid_or_file_blob_filename_cont,
-            ) %>
+              url: namespace_project_sample_path,
+              total_count: @pagy.count,
+              data: {
+                controller: "selection",
+                selection_storage_key_value: "files-#{@sample.id}"
+              }
+              ) do %>
               <%= hidden_field_tag :limit, @pagy.limit %>
             <% end %>
           <% end %>
