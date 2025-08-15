@@ -91,14 +91,8 @@
 
             <% if @namespaces.present? %>
               <div class="flex flex-row-reverse mb-2">
-                <%= form_with model: @q, url:group_path(@group), method: :get, class: "inline-flex", data: {turbo_action: "replace"} do |form| %>
-                  <%= render SearchFieldComponent.new(
-                    form: form,
-                    field_name: :name_or_puid_cont,
-                    label: t(".search.label"),
-                    placeholder: t(".search.placeholder"),
-                    value: @q.name_or_puid_cont,
-                  ) %>
+                <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder"), total_count: @pagy.count) do %>
+
                   <% if @tab == "shared_namespaces" %>
                     <input type="hidden" name="tab" value="shared_namespaces">
                   <% end %>
