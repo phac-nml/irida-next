@@ -1,1 +1,50 @@
-<%= viral_alert(message: 'This is an alert alert', type: :danger) %>
+<!--
+  🚨 DANGER ALERT - Critical information and errors
+
+  Danger alerts are used for critical information that needs immediate attention,
+  such as errors, failures, or critical warnings. They use a red color scheme
+  to convey urgency and importance.
+
+  Features:
+  - Red color scheme for critical information
+  - X circle icon for errors and failures
+  - Never auto-dismiss (too important!)
+  - Perfect for critical errors and failures
+
+  Usage:
+  viral_alert(message: "Error message", type: :danger)
+-->
+
+<div class="space-y-6">
+  <!-- Basic Danger Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🚨 Basic Danger Alert
+    </h3>
+    <%= viral_alert(message: "Failed to save your changes. Please check your connection and try again.", type: :danger) %>
+  </div>
+
+  <!-- Danger with Error Details -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ❌ Error Details
+    </h3>
+    <%= viral_alert(message: "Database connection failed. Error code: DB_CONN_001. Contact system administrator immediately.", type: :danger) %>
+  </div>
+
+  <!-- Danger with Security Warning -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔒 Security Warning
+    </h3>
+    <%= viral_alert(message: "Multiple failed login attempts detected. Your account has been temporarily locked for security.", type: :danger) %>
+  </div>
+
+  <!-- Danger with System Failure -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      💥 System Failure
+    </h3>
+    <%= viral_alert(message: "Critical system error detected. Some services may be unavailable. Engineers have been notified.", type: :danger) %>
+  </div>
+</div>

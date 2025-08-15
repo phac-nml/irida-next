@@ -1,0 +1,95 @@
+<!--
+  📖 LONG MESSAGE ALERTS - Readable, balanced, and accessible
+
+  Long message alerts demonstrate how the component handles larger bodies of
+  text while preserving readability, hierarchy, and accessibility.
+
+  Features:
+  - Optimized typography and spacing for multi-sentence messages
+  - Works across all alert types (info, success, warning, danger)
+  - Optional dismiss button and optional supporting content block
+  - Maintains semantic structure and ARIA attributes
+
+  Usage:
+  viral_alert(message: "A long, multi-sentence message that wraps cleanly…")
+-->
+
+<div class="space-y-6">
+  <!-- Very Long Info Message -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📋 Very Long Info Message
+    </h3>
+    <%= viral_alert(message: "We have updated several parts of the system to improve stability, visibility, and performance. These enhancements include faster page loads, clearer navigation labels, and more reliable background processing. You do not need to take any action—these improvements are being rolled out automatically over the next few days.", type: :info) %>
+  </div>
+
+  <!-- Long Success Message -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ✅ Long Success Message
+    </h3>
+    <%= viral_alert(message: "Your dataset has finished processing successfully. All records were validated, normalized, and published to the workspace. You can now proceed with downstream analyses or export the results for sharing with collaborators.", type: :success) %>
+  </div>
+
+  <!-- Long Warning Message (Dismissible) -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⚠️  Long Warning (Dismissible)
+    </h3>
+    <%= viral_alert(message: "You are approaching your storage limit. Large uploads may fail or be queued during peak hours. Consider archiving old attachments or upgrading your plan to ensure uninterrupted processing.", type: :warning, dismissible: true) %>
+  </div>
+
+  <!-- Long Error Message with Helpful Details -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ❌ Long Error with Helpful Details
+    </h3>
+    <%= viral_alert(message: "We couldn’t complete your request due to a transient network error. This may be caused by a temporary outage or an unstable connection.", type: :danger) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">Try the following steps:</p>
+        <ul class="list-disc list-inside space-y-1 text-sm">
+          <li>Refresh the page and retry the action</li>
+          <li>Verify your internet connection is stable</li>
+          <li>Check our status page for ongoing incidents</li>
+          <li>Contact support if the issue persists</li>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Long Message with Supplemental Context -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🧩 Long Message with Supplemental Context
+    </h3>
+    <%= viral_alert(message: "New analysis presets are available. They provide more consistent results across larger datasets and reduce manual tuning.", type: :info) do %>
+      <div class="text-slate-600 dark:text-slate-400">
+        <p class="mb-2">What’s included:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+          <div class="bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800 p-3">
+            <strong class="block mb-1">Balanced</strong>
+            <span>Optimized defaults for most datasets, focusing on accuracy and speed.</span>
+          </div>
+          <div class="bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800 p-3">
+            <strong class="block mb-1">High Sensitivity</strong>
+            <span>Increases detection at the cost of runtime; best for small datasets.</span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Readability Guidelines -->
+  <div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">📝 Writing for Long Alerts</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Lead with the headline</strong> — state the outcome or key point first</li>
+      <li>• <strong>Keep sentences short</strong> — improve scanability, especially on mobile</li>
+      <li>• <strong>Use supporting content</strong> — details belong below the main message</li>
+      <li>• <strong>Avoid jargon</strong> — prefer clear, concrete language</li>
+      <li>• <strong>Offer next steps</strong> — tell users what they can do now</li>
+    </ul>
+  </div>
+</div>
+
+

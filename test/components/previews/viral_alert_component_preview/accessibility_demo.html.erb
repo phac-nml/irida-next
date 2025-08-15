@@ -1,0 +1,149 @@
+<!--
+  ♿ ACCESSIBILITY DEMO - Screen reader and keyboard support
+
+  This preview demonstrates the comprehensive accessibility features built into
+  the alert component, including screen reader support, keyboard navigation,
+  and ARIA attributes.
+
+  Features:
+  - Screen reader announcements
+  - Keyboard navigation support
+  - ARIA attributes and roles
+  - Focus management
+  - Semantic HTML structure
+
+  Usage:
+  All accessibility features are automatically enabled - no additional setup required!
+-->
+
+<div class="space-y-6">
+  <!-- Screen Reader Support -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📢 Screen Reader Support
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "This alert is announced to screen readers with 'aria-live' and 'aria-atomic'", type: :info) %>
+      <%= viral_alert(message: "When dismissed, screen readers announce 'Alert dismissed'", type: :success, dismissible: true) %>
+      <%= viral_alert(message: "Progress bars are announced as they update during auto-dismiss", type: :warning, auto_dismiss: true) %>
+    </div>
+  </div>
+
+  <!-- Keyboard Navigation -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⌨️  Keyboard Navigation
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Press Tab to focus this alert, then Enter or Space to dismiss", dismissible: true) %>
+      <%= viral_alert(message: "Press Escape anywhere to dismiss dismissible alerts", type: :info, dismissible: true) %>
+      <%= viral_alert(message: "Use Tab to navigate between multiple alerts", type: :warning, dismissible: true) %>
+    </div>
+  </div>
+
+  <!-- ARIA Attributes -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🏷️  ARIA Attributes
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "This alert has role='alert' for screen readers", type: :info) %>
+      <%= viral_alert(message: "aria-live='assertive' ensures immediate announcement", type: :warning) %>
+      <%= viral_alert(message: "aria-atomic='true' announces the entire alert content", type: :success) %>
+    </div>
+  </div>
+
+  <!-- Focus Management -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🎯 Focus Management
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Dismissible alerts are focusable with tabindex='-1'", dismissible: true) %>
+      <%= viral_alert(message: "Close button has proper focus indicators", type: :info, dismissible: true) %>
+      <%= viral_alert(message: "Focus moves logically through the interface", type: :warning, dismissible: true) %>
+    </div>
+  </div>
+
+  <!-- Semantic Structure -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🏗️  Semantic Structure
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Proper heading hierarchy and landmark roles", type: :info) %>
+      <%= viral_alert(message: "Meaningful button labels and descriptions", type: :success, dismissible: true) %>
+      <%= viral_alert(message: "Logical content flow for assistive technology", type: :warning) %>
+    </div>
+  </div>
+
+  <!-- Interactive Accessibility -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🎮 Interactive Accessibility
+    </h3>
+    <div class="space-y-3">
+      <%= viral_alert(message: "Hover and focus states are clearly visible", type: :info, dismissible: true) %>
+      <%= viral_alert(message: "Progress bars update smoothly for all users", type: :warning, auto_dismiss: true) %>
+      <%= viral_alert(message: "All interactive elements are keyboard accessible", type: :success, dismissible: true) %>
+    </div>
+  </div>
+
+  <!-- Accessibility Features Overview -->
+  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">♿ Built-in Accessibility Features</h4>
+    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+      <li>• <strong>ARIA Live Regions</strong> - automatic screen reader announcements</li>
+      <li>• <strong>Role Attributes</strong> - proper semantic meaning for assistive technology</li>
+      <li>• <strong>Keyboard Navigation</strong> - full keyboard accessibility</li>
+      <li>• <strong>Focus Management</strong> - logical tab order and focus indicators</li>
+      <li>• <strong>Screen Reader Support</strong> - comprehensive announcements and descriptions</li>
+    </ul>
+  </div>
+
+  <!-- Keyboard Shortcuts -->
+  <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">⌨️  Keyboard Shortcuts</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-700 dark:text-green-300">
+      <div>
+        <h5 class="font-semibold mb-2">Navigation</h5>
+        <ul class="space-y-1">
+          <li>• <kbd class="px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-xs">Tab</kbd> - Navigate between alerts</li>
+          <li>• <kbd class="px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-xs">Shift+Tab</kbd> - Navigate backwards</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-2">Actions</h5>
+        <ul class="space-y-1">
+          <li>• <kbd class="px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-xs">Escape</kbd> - Dismiss alert</li>
+          <li>• <kbd class="px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-xs">Enter</kbd> - Activate focused element</li>
+          <li>• <kbd class="px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-xs">Space</kbd> - Activate focused element</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testing Accessibility -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">🧪 Testing Accessibility</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Screen Reader Testing</strong> - Test with NVDA, JAWS, or VoiceOver</li>
+      <li>• <strong>Keyboard Navigation</strong> - Navigate using only Tab, Enter, and Space</li>
+      <li>• <strong>Focus Indicators</strong> - Ensure focus is clearly visible</li>
+      <li>• <strong>Color Contrast</strong> - Verify text meets WCAG AA standards</li>
+      <li>• <strong>Semantic Structure</strong> - Use browser developer tools to inspect ARIA</li>
+    </ul>
+  </div>
+
+  <!-- WCAG Compliance -->
+  <div class="mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+    <h4 class="font-semibold text-purple-900 dark:text-purple-100 mb-2">✅ WCAG 2.1 AA Compliance</h4>
+    <ul class="text-sm text-purple-700 dark:text-purple-300 space-y-1">
+      <li>• <strong>1.3.1 Info and Relationships</strong> - Proper semantic structure</li>
+      <li>• <strong>2.1.1 Keyboard</strong> - Full keyboard accessibility</li>
+      <li>• <strong>2.4.3 Focus Order</strong> - Logical tab navigation</li>
+      <li>• <strong>4.1.2 Name, Role, Value</strong> - Proper ARIA implementation</li>
+      <li>• <strong>4.1.3 Status Messages</strong> - Live region announcements</li>
+    </ul>
+  </div>
+</div>
