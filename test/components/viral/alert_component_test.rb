@@ -142,7 +142,7 @@ module Viral
     end
 
     test 'alert with actions renders interactive elements in content block' do
-      render_inline(Viral::AlertComponent.new(message: 'Action required')) do
+      render_inline(Viral::AlertComponent.new(message: 'Action required', dismissible: false)) do
         '<button class="btn btn-primary">Action</button>'.html_safe
       end
 

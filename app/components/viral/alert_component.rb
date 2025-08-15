@@ -49,7 +49,7 @@ module Viral
     # @param dismissible [Boolean] whether to render a close button
     # @param auto_dismiss [Boolean] whether to render a progress bar that a Stimulus controller can manage
     # @param system_arguments [Hash] additional HTML attributes (classes are merged)
-    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false, **system_arguments)
+    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: false, auto_dismiss: false, **system_arguments)
       # Normalize to canonical string type for styling and iconography
       @type = TYPE_MAPPINGS[type.to_sym] || TYPE_MAPPINGS[TYPE_DEFAULT]
       @message = message
