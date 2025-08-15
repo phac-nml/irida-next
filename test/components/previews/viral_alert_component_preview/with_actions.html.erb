@@ -29,10 +29,10 @@
     </h3>
     <%= viral_alert(message: "Do you want to save your changes?", type: :info) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
           💾 Save Changes
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
           ❌ Discard
         </button>
       </div>
@@ -46,10 +46,10 @@
     </h3>
     <%= viral_alert(message: "Your profile has been updated successfully!", type: :success) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
           👁️  View Profile
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
           ✏️  Edit More
         </button>
       </div>
@@ -63,10 +63,10 @@
     </h3>
     <%= viral_alert(message: "You have unsaved changes. What would you like to do?", type: :warning) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors">
           💾 Save & Continue
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+        <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
           ⏸️  Save Later
         </button>
         <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
@@ -87,13 +87,13 @@
           <p class="mb-2">The file upload failed. Here are your options:</p>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+          <button class="px-4 cursor-pointer py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
             🔄 Try Again
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
             📁 Choose Different File
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
             🆘 Get Help
           </button>
         </div>
@@ -112,24 +112,24 @@
           <p>We've added several new features to improve your workflow:</p>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button class="px-3 cursor-pointer py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
             📊 Analytics
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button class="px-3 cursor-pointer py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
             🔍 Search
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button class="px-3 cursor-pointer py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
             📱 Mobile
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button class="px-3 cursor-pointer py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
             ⚙️  Settings
           </button>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
             📖 Read More
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button class="px-4 cursor-pointer py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
             ⏰ Remind Later
           </button>
         </div>
