@@ -24,14 +24,13 @@
   <div class="flex mb-2">
     <div class="grow"></div>
     <div class="grow-0">
-      <%= search_form_for @q, url: namespace_project_attachments_path(@project.parent, @project), data: { turbo_action: 'replace' }, class: "filters flex items-end space-x-2" do |f| %>
-        <%= render SearchFieldComponent.new(
-          label: t(".search.label"),
-          placeholder: t(".search.placeholder"),
-          form: f,
-          field_name: :puid_or_file_blob_filename_cont,
-          value: @q.puid_or_file_blob_filename_cont,
-        ) %>
+      <%= render SearchComponent.new(
+        query: @q,
+        search_attribute: :puid_or_file_blob_filename_cont,
+        placeholder: t(:".search.placeholder"),
+        url: namespace_project_attachments_path(@project.parent, @project),
+        total_count: @pagy.count,
+      ) do %>
         <%= hidden_field_tag :limit, @pagy.limit %>
       <% end %>
     </div>
