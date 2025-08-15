@@ -21,7 +21,7 @@ class SearchComponent < Component
   def kwargs
     @kwargs.tap do |args|
       args[:data] ||= {}
-      args[:data][:controller] = 'selection'
+      args[:data][:controller] = ['search-field', 'selection', args[:data][:controller]].compact.join(' ')
       args[:data]['turbo-action'] = 'replace'
     end
   end
