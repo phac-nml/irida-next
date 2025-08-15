@@ -14,7 +14,7 @@ module DataExports
       end
     end
 
-    def perform(data_export)
+    def perform(data_export) # rubocop:disable Metrics/MethodLength
       begin
         initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
