@@ -64,6 +64,8 @@
         url: workflow_executions_path,
         search_attribute: :name_or_id_cont,
         placeholder: t(".search.placeholder"),
+        label: t(".search.label"),
+        value: @q.name_or_id_cont,
         total_count: @pagy.count,
       ) %>
     </div>
