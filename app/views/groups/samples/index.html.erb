@@ -81,7 +81,7 @@
                 label: t("shared.samples.actions_dropdown.import"),
                 section_header: true,
               ) %>
-              <% if @allowed_to[:update_sample_metadata] && @has_samples %>sea
+              <% if @allowed_to[:update_sample_metadata] && @has_samples %>
                 <% dropdown.with_item(
                   label: t("shared.samples.actions_dropdown.import_metadata"),
                   url: new_group_samples_file_import_path,
