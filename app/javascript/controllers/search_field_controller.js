@@ -22,7 +22,7 @@ export default class extends Controller {
       this.inputTarget.value = "";
 
       // 🎨 Add visual feedback (optional)
-      this.inputTarget.focus();
+      this.updateFocus();
 
       // 🔄 Find the parent form
       const form = this.element.closest("form");
@@ -128,5 +128,12 @@ export default class extends Controller {
       this.clearButtonTarget.classList.remove("hidden");
     if (this.hasSubmitButtonTarget)
       this.submitButtonTarget.classList.add("hidden");
+  }
+
+  /**
+   * 🔍 Update focus to the search field
+   */
+  updateFocus() {
+    if (this.hasInputTarget) this.inputTarget.focus();
   }
 }
