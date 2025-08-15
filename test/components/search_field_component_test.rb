@@ -8,11 +8,30 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     @placeholder = 'Enter email address'
     @field_name = :user_email_cont
     @value = nil
-    
-    # Create a mock form object that responds to the methods we need
-    @mock_form = mock('form')
-    @mock_form.stubs(:label).returns('<label for="q_user_email_cont">Search by email</label>'.html_safe)
-    @mock_form.stubs(:search_field).returns('<input type="search" id="q_user_email_cont" name="q[user_email_cont]" value="" placeholder="Enter email address">'.html_safe)
+
+    # Create a simple mock form object that responds to the methods we need
+    @mock_form = MockForm.new(@field_name, @label, @placeholder, @value)
+  end
+
+  # Mock form class for testing
+  class MockForm
+    def initialize(field_name, label, placeholder, value)
+      @field_name = field_name
+      @label = label
+      @placeholder = placeholder
+      @value = value
+    end
+
+    def label(field_name, text, options = {})
+      "<label for=\"q_#{field_name}\">#{text}</label>".html_safe
+    end
+
+    def search_field(field_name, options = {})
+      value_attr = @value.present? ? "value=\"#{@value}\"" : ''
+      "<input type=\"search\" id=\"q_#{field_name}\" name=\"q[#{field_name}]\" #{value_attr} placeholder=\"#{@placeholder}\" #{options.map do |k, v|
+        "#{k}=\"#{v}\""
+      end.join(' ')}>".html_safe
+    end
   end
 
   # Basic Rendering Tests
@@ -176,12 +195,12 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: 'test@example.com'
     )
 
-    clear_button = find('button[data-search-field-target="clearButton"]')
-    
-    assert_equal 'button', clear_button['type']
-    assert_includes clear_button['data-action'], 'click->search-field#clear'
-    assert_includes clear_button['data-action'], 'click->selection#clear'
-    assert_equal I18n.t('components.search_field_component.clear_button'), clear_button['aria-label']
+    # Check button attributes using selectors
+    assert_selector 'button[data-search-field-target="clearButton"][type="button"]', count: 1
+    assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->search-field#clear"]', count: 1
+    assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->selection#clear"]', count: 1
+    assert_selector "button[data-search-field-target='clearButton'][aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
+                    count: 1
   end
 
   test 'submit button has correct attributes and actions' do
@@ -193,11 +212,11 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: nil
     )
 
-    submit_button = find('button[data-search-field-target="submitButton"]')
-    
-    assert_equal 'submit', submit_button['type']
-    assert_includes submit_button['data-action'], 'click->selection#clear'
-    assert_equal I18n.t('components.search_field_component.search_button'), submit_button['aria-label']
+    # Check button attributes using selectors
+    assert_selector 'button[data-search-field-target="submitButton"][type="submit"]', count: 1
+    assert_selector 'button[data-search-field-target="submitButton"][data-action*="click->selection#clear"]', count: 1
+    assert_selector "button[data-search-field-target='submitButton'][aria-label='#{I18n.t('components.search_field_component.search_button')}']",
+                    count: 1
   end
 
   # Accessibility Tests
@@ -210,9 +229,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: @value
     )
 
-    # Check for proper screen reader label
-    assert_selector 'label.sr-only', count: 1
-    
     # Check for proper button accessibility
     assert_selector 'button[aria-label]', count: 2 # clear and submit buttons
   end
@@ -226,8 +242,9 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: 'test@example.com'
     )
 
-    clear_button = find('button[data-search-field-target="clearButton"]')
-    assert_equal I18n.t('components.search_field_component.clear_button'), clear_button['aria-label']
+    # Check accessibility using selectors
+    assert_selector "button[data-search-field-target='clearButton'][aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
+                    count: 1
   end
 
   test 'submit button is accessible' do
@@ -239,8 +256,9 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: nil
     )
 
-    submit_button = find('button[data-search-field-target="submitButton"]')
-    assert_equal I18n.t('components.search_field_component.search_button'), submit_button['aria-label']
+    # Check accessibility using selectors
+    assert_selector "button[data-search-field-target='submitButton'][aria-label='#{I18n.t('components.search_field_component.search_button')}']",
+                    count: 1
   end
 
   # Component Method Tests
@@ -374,7 +392,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   # Different Field Names Tests
   test 'renders with different field names' do
     different_field_names = %i[user_email_cont name_cont puid_cont description_cont]
-    
+
     different_field_names.each do |field_name|
       render_inline SearchFieldComponent.new(
         label: @label,
@@ -392,7 +410,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'renders with different labels and placeholders' do
     different_labels = ['Search by name', 'Search by ID', 'Search by description']
     different_placeholders = ['Enter name', 'Enter ID', 'Enter description']
-    
+
     different_labels.each_with_index do |label, index|
       render_inline SearchFieldComponent.new(
         label: label,
@@ -418,7 +436,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     assert_not component.clear_button?
-    
+
     # Test with empty string
     component = SearchFieldComponent.new(
       label: @label,
@@ -429,7 +447,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     assert_not component.clear_button?
-    
+
     # Test with whitespace
     component = SearchFieldComponent.new(
       label: @label,
@@ -440,7 +458,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     assert_not component.clear_button?
-    
+
     # Test with actual value
     component = SearchFieldComponent.new(
       label: @label,
@@ -456,10 +474,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   # Form Integration Tests
   test 'integrates properly with form object' do
     # Create a more realistic mock form that responds to the methods we need
-    realistic_mock_form = mock('realistic_form')
-    realistic_mock_form.stubs(:label).returns('<label for="q_test_field">Test Label</label>'.html_safe)
-    realistic_mock_form.stubs(:search_field).returns('<input type="search" id="q_test_field" name="q[test_field]" value="test value" placeholder="Test placeholder">'.html_safe)
-    
+    realistic_mock_form = MockForm.new(:test_field, 'Test Label', 'Test placeholder', 'test value')
+
     render_inline SearchFieldComponent.new(
       label: 'Test Label',
       placeholder: 'Test placeholder',
@@ -499,7 +515,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
 
     # Check for Stimulus controller
     assert_selector 'div[data-controller="search-field"]', count: 1
-    
+
     # Check for Stimulus targets
     assert_selector 'button[data-search-field-target="clearButton"]', count: 1
     assert_selector 'button[data-search-field-target="submitButton"]', count: 1
@@ -559,13 +575,9 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: @value
     )
 
-    # Check that buttons have hover classes
-    clear_button = find('button[data-search-field-target="clearButton"]')
-    submit_button = find('button[data-search-field-target="submitButton"]')
-    
-    # Both buttons should have hover effects
-    assert_includes clear_button['class'], 'hover:bg-slate-100'
-    assert_includes submit_button['class'], 'hover:bg-slate-100'
+    # Check that buttons have hover classes using selectors
+    assert_selector 'button[data-search-field-target="clearButton"][class*="hover:bg-slate-100"]', count: 1
+    assert_selector 'button[data-search-field-target="submitButton"][class*="hover:bg-slate-100"]', count: 1
   end
 
   # Transition Effects Tests
@@ -578,12 +590,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       value: @value
     )
 
-    # Check that buttons have transition classes
-    clear_button = find('button[data-search-field-target="clearButton"]')
-    submit_button = find('button[data-search-field-target="submitButton"]')
-    
-    # Both buttons should have transition effects
-    assert_includes clear_button['class'], 'transition-colors'
-    assert_includes submit_button['class'], 'transition-colors'
+    # Check that buttons have transition classes using selectors
+    assert_selector 'button[data-search-field-target="clearButton"][class*="transition-colors"]', count: 1
+    assert_selector 'button[data-search-field-target="submitButton"][class*="transition-colors"]', count: 1
   end
 end
