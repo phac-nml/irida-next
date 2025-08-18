@@ -758,8 +758,8 @@ en:
         no_groups_description: You currently have no groups.
         no_groups_title: No groups
         search:
-          label: Search by PUID or name
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -777,8 +777,8 @@ en:
         pagy_item: Projects
         personal: Personal
         search:
-          label: Search by PUID or name
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -805,8 +805,8 @@ en:
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
       search:
-        label: Search by ID or name
-        placeholder: Search
+        label: Search
+        placeholder: Search by ID or name
       table_header:
         action: Action
         created_at: Created
@@ -956,8 +956,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          label: Search by PUID or Filename
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or Filename
         subtitle: These are the files that belong to Group %{group_name}
         title: Files
         upload_files: Upload Files
@@ -1067,8 +1067,8 @@ en:
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
       invited_groups:
         search:
-          label: Search by group name
-          placeholder: Search
+          label: Search
+          placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1116,8 +1116,8 @@ en:
         title: Members
       member_listing:
         search:
-          label: Search by username
-          placeholder: Search
+          label: Search
+          placeholder: Search by username
       new:
         access_level_hint: Select group access level to assign to user
         add_member_to_group: Add member to group
@@ -1172,8 +1172,8 @@ en:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        label: Search by PUID or name
-        placeholder: Search
+        label: Search
+        placeholder: Search by PUID or name
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
@@ -1223,14 +1223,14 @@ en:
         title: Edit workflow execution
       files:
         search:
-          label: Search by PUID or Filename
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or Filename
       index:
         create_export_button: Create Export
         deselect_all_button: Deselect All
         search:
-          label: Search by name or ID
-          placeholder: Search
+          label: Search
+          placeholder: Search by name or ID
         select_all_button: Select All
         subtitle: These are the workflow executions that have been shared within this group
         title: Workflow Executions
@@ -1507,8 +1507,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          label: Search by PUID or Filename
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or Filename
         subtitle: These are the files that belong to Project %{project_name}
         title: Files
         upload_files: Upload Files
@@ -1669,8 +1669,8 @@ en:
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
       invited_groups:
         search:
-          label: Search by group name
-          placeholder: Search
+          label: Search
+          placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1719,8 +1719,8 @@ en:
         title: Members
       member_listing:
         search:
-          label: Search by username
-          placeholder: Search
+          label: Search
+          placeholder: Search by username
       new:
         access_level_hint: Select project access level to assign to user
         add_member_to_project: Add member to project
@@ -1785,8 +1785,8 @@ en:
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            label: Search by PUID or Filename
-            placeholder: Search
+            label: Search
+            placeholder: Search by PUID or Filename
           select_all_button: Select all
       create:
         success: Sample was successfully created.
@@ -1924,15 +1924,15 @@ en:
         title: Edit automated workflow execution
       files:
         search:
-          label: Search by PUID or filename
-          placeholder: Search
+          label: Search
+          placeholder: Search by PUID or filename
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Deselect All
         search:
-          label: Search by ID or name
-          placeholder: Search
+          label: Search
+          placeholder: Search by ID or name
         select_all_button: Select All
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
         title: Workflow Executions
@@ -2394,15 +2394,15 @@ en:
         description: There are no files associated with this workflow execution.
         title: No Files
       search:
-        label: Search by PUID or filename
-        placeholder: Search
+        label: Search
+        placeholder: Search by PUID or filename
     index:
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Deselect All
       search:
-        label: Search by ID or name
-        placeholder: Search
+        label: Search
+        placeholder: Search by ID or name
       select_all_button: Select All
       title: Workflow Executions
     samples:
