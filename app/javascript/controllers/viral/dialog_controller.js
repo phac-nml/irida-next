@@ -6,16 +6,6 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
 
-  initialize() {
-    document.addEventListener(
-      "turbo:morph",
-      () => {
-        this.triggerTarget.focus();
-      },
-      { once: true },
-    );
-  }
-
   connect() {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {
       onActivate: () => this.dialogTarget.classList.add("focus-trap"),
@@ -44,5 +34,14 @@ export default class extends Controller {
 
   handleEsc(event) {
     event.preventDefault();
+  }
+
+  refocus(event) {
+    console.log(event.target);
+    console.log(event.detail);
+    if (event.target === this.dialogTarget) {
+      console.log(event.target.hasAttribute("open"));
+      console.log(event.detail.newElement.open);
+    }
   }
 }
