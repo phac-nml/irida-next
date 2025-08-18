@@ -1,67 +1,71 @@
-<div class="md:flex grow">
-  <div
-    class="
-      inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700
-      bg-slate-100 border md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
-      md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
-      mb-1 md:mb-0
-    "
-  >
-    <%= root_url %>
-  </div>
-  <div class="flex-1">
-    <div data-action="keydown->viral--select2#keydown" class="select2">
-      <input
-        type="text"
-        id="<%= id %>"
-        name="<%= id %>"
-        data-viral--select2-target="input"
-        placeholder="<%= placeholder %>"
-        <%= "required" if required %>
-        autocomplete="off"
-        class="
-          select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
-          rounded-l-lg md:!rounded-l-none block w-full p-2.5 dark:bg-slate-800
-          dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
-        "
-        value="<%= selected_value %>"
-        data-action="input->viral--select2#input"
-      >
-      <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
-
-      <div
-        data-viral--select2-target="dropdown"
-        class="
-          absolute z-10 hidden w-full bg-white border border-slate-300 rounded-lg
-          shadow-lg dark:bg-slate-800 dark:border-slate-700
-        "
-      >
-        <ul
-          data-viral--select2-target="scroller"
-          role="listbox"
+<div class="@container">
+  <div class="flex flex-row @max-md:flex-col">
+    <div
+      class="
+        grow-0 text-ellipsis overflow-hidden px-4 py-2.5 text-sm font-medium
+        text-slate-700 bg-slate-100 border @md:border-r-0 border-slate-300 rounded-l-lg
+        rounded-r-lg @md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300
+        dark:border-slate-600 @min-md:max-w-60
+      "
+      title="<%= root_url %>"
+    >
+      <%= root_url %>
+    </div>
+    <div class="grow">
+      <div data-action="keydown->viral--select2#keydown" class="select2">
+        <input
+          type="text"
+          id="<%= id %>"
+          name="<%= id %>"
+          data-viral--select2-target="input"
+          placeholder="<%= placeholder %>"
+          <%= "required" if required %>
+          autocomplete="off"
           class="
-            max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
-            dark:divide-slate-800
+            select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
+            rounded-l-lg @min-md:!rounded-l-none block w-full p-2.5 dark:bg-slate-800
+            dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
+            text-ellipsis overflow-hidden
+          "
+          value="<%= selected_value %>"
+          data-action="input->viral--select2#input"
+        >
+        <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+
+        <div
+          data-viral--select2-target="dropdown"
+          class="
+            absolute z-10 hidden w-full bg-white border border-slate-300 rounded-lg
+            shadow-lg dark:bg-slate-800 dark:border-slate-700
           "
         >
-          <% options.each do |option| %>
-            <%= option %>
-          <% end %>
-          <% if empty_state? %>
-            <li
-              role="option"
-              aria-disabled="true"
-              aria-selected="false"
-              class="
-                hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
-                dark:text-blue-400 dark:border-blue-800 pointer-events-none
-              "
-              data-viral--select2-target="empty"
-            >
-              <%= empty_state %>
-            </li>
-          <% end %>
-        </ul>
+          <ul
+            data-viral--select2-target="scroller"
+            role="listbox"
+            class="
+              max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
+              dark:divide-slate-800 break-words
+            "
+          >
+            <% options.each do |option| %>
+              <%= option %>
+            <% end %>
+            <% if empty_state? %>
+              <li
+                role="option"
+                aria-disabled="true"
+                aria-selected="false"
+                class="
+                  hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
+                  dark:text-blue-400 dark:border-blue-800 pointer-events-none
+                "
+                data-viral--select2-target="empty"
+              >
+                <%= empty_state %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
