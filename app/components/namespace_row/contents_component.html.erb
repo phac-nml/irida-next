@@ -56,7 +56,12 @@
     <% if @namespace.group_namespace? %>
       <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".subnamespaces.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".subnamespaces.tooltip", count: @namespace.children.count),
+          text:
+            t(
+              :".subnamespaces.tooltip",
+              count: @namespace.children.count,
+              namespace_name: @namespace.human_name,
+            ),
         ) %>
         <span
           class="
@@ -72,7 +77,12 @@
       <% end %>
       <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".projects.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".projects.tooltip", count: @namespace.project_namespaces.count),
+          text:
+            t(
+              :".projects.tooltip",
+              count: @namespace.project_namespaces.count,
+              namespace_name: @namespace.human_name,
+            ),
         ) %>
         <span
           class="
@@ -88,7 +98,12 @@
       <% end %>
       <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:".samples.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".samples.tooltip", count: @namespace.aggregated_samples_count),
+          text:
+            t(
+              :".samples.tooltip",
+              count: @namespace.aggregated_samples_count,
+              namespace_name: @namespace.human_name,
+            ),
         ) %>
         <span
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
@@ -108,7 +123,12 @@
     <% if @namespace.project_namespace? %>
       <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:".samples.aria-label")) do |component| %>
         <% component.with_tooltip(
-          text: t(:".samples.tooltip", count: @namespace.project.samples.size),
+          text:
+            t(
+              :".samples.tooltip",
+              count: @namespace.project.samples.size,
+              namespace_name: @namespace.project.name,
+            ),
         ) %>
         <span
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"

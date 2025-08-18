@@ -1379,13 +1379,13 @@ fr:
     contents_component:
       projects:
         aria-label: Projets
-        tooltip: "%{count} projets"
+        tooltip: "%{count} projets dans %{namespace_name}"
       samples:
         aria-label: Échantillons
-        tooltip: "%{count} échantillons"
+        tooltip: "%{count} échantillons dans %{namespace_name}"
       subnamespaces:
         aria-label: Sous-groupes
-        tooltip: "%{count} sous-groupes"
+        tooltip: "%{count} sous-groupes dans %{namespace_name}"
   nextflow:
     samplesheet:
       file_cell_component:
