@@ -2065,7 +2065,6 @@ en:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
     bots:
       create:
-        base: Unable to create bot account
         required:
           access_level: must be selected
           scopes: must be selected

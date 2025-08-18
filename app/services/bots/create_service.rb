@@ -52,8 +52,6 @@ module Bots
         @bot_user_account.errors.add :access_level, I18n.t('services.bots.create.required.access_level')
       end
 
-      @bot_user_account.errors.add :base, I18n.t('services.bots.create.base') if @bot_user_account.errors.any?
-
       @bot_user_account.errors.none?
     end
 

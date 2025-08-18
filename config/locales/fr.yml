@@ -2065,7 +2065,6 @@ fr:
         does_not_belong_to_attachable: Cette pièce jointe n’appartient pas à cet échantillon.
     bots:
       create:
-        base: Unable to create bot account
         required:
           access_level: Impossible de créer un compte de bot, car un niveau d’accès doit être sélectionné
           scopes: Impossible de créer un compte de bot, car la portée de l’API du bot doit être sélectionnée
