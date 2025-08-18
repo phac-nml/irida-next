@@ -272,7 +272,7 @@ input[type="search"] {
   }
 
   &.form-field select {
-    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 dark:border-red-400;
   }
 
   &.form-field input[type="text"] {
