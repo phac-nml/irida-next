@@ -54,12 +54,8 @@ export default class extends Controller {
     this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
-    // when a turbo response occurs (such as adding new member/group), this initialize will trigger but the
-    // calendar will already exist and doesn't need to be added, except for the newly added member/group
-    if (!this.#calendar) {
-      this.idempotentConnect();
-      this.#addCalendarTemplate();
-    }
+    this.idempotentConnect();
+    this.#addCalendarTemplate();
   }
 
   idempotentConnect() {
@@ -84,12 +80,12 @@ export default class extends Controller {
       );
     });
     this.removeCalendarListeners();
-    // turbo actions (such as table sorting) triggers disconnect, but then the listeners above removed do not
+    // some controller actions will trigger disconnect, but then the listeners removed above do not
     // get re-added as expected in connect(), due to the calendar still being present already in the DOM.
     // simplest way around this is to .remove() the calendar, assign this.#calendar to null (sometimes DOM change
     // doesn't process fast enough to where this.#calendar is still set to the removed element before connect()
-    // triggers). this allows this.idempotentConnect() and this.#addCalendarTemplate() to trigger in connect(),
-    // which re-adds the calendar for expected functionality
+    // triggers). this allows this.idempotentConnect() and this.#addCalendarTemplate() to re-add the calendar and
+    // eventlisteners for expected functionality
     this.#calendar.remove();
     this.#calendar = null;
   }
