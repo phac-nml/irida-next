@@ -1245,7 +1245,7 @@ module WorkflowExecutions
         find('input#samplesheet-filter').fill_in with: 'INXT_SAM_AAAAAAAAAC'
         find('button[data-nextflow--samplesheet-target="filterSearchButton"]').click
 
-        # verify no samples in samplesheet
+        # verify only specified sample in samplesheet
         within('table tbody') do
           assert_selector 'tr', count: 1
           assert_text 'INXT_SAM_AAAAAAAAAC'
@@ -1264,7 +1264,7 @@ module WorkflowExecutions
         assert_no_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
         assert_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
 
-        # clear filter with clear button
+        # click clear button to remove filter
         find('button[data-nextflow--samplesheet-target="filterClearButton"]').click
 
         # verify pagination buttons
