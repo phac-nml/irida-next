@@ -113,7 +113,7 @@
                 <% end %>
               <% else %>
                 <div>
-                  <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
+                  <%= fields.label name, :id => "#{fields.field_id(name)}_label" ,:class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                     <%= text_for(property[:description]) %>
                     <% if property[:required] %>
                       <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
