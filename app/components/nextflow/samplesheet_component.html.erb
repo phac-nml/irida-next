@@ -5,29 +5,52 @@
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
+
   <div class="flex justify-between mb-2">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
     <div class="relative">
-      <label class="sr-only" for="samplesheet-filter"><%= t(".filter_placeholder") %></label>
+      <label class="sr-only" for="samplesheet-filter"><%= t(".placeholder") %></label>
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
         data-action="keydown.enter->nextflow--samplesheet#filter"
-        class="
-          t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border
-          border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
-          placeholder-slate-900 dark:placeholder-slate-300 dark:text-white
-        "
-        placeholder="<%= t('.filter_placeholder')%>"
         type="search"
-      />
-      <div
+        placeholder="<%= t('.placeholder')%>"
         class="
-          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+          t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border
+          border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
+          dark:placeholder-slate-300 dark:text-white
+        "
+      />
+      <!-- Clear button (shown only when there are existing search results)
+      -->
+      <button
+        data-nextflow--samplesheet-target="filterClearButton"
+        data-action="click->nextflow--samplesheet#clearFilter"
+        type="button"
+        class="
+          absolute inset-y-0 right-0 flex items-center justify-center w-12
+          pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
+          border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
+          dark:hover:bg-slate-600 hidden
+        "
+      >
+        <%= pathogen_icon(ICON::X, size: :sm, color: :subdued) %>
+      </button>
+      <!-- Submit/search button (hidden while clear button is active) -->
+      <button
+        data-nextflow--samplesheet-target="filterSearchButton"
+        data-action="click->nextflow--samplesheet#filter"
+        type="button"
+        class="
+          absolute inset-y-0 right-0 flex items-center justify-center w-12
+          pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
+          border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
+          dark:hover:bg-slate-600
         "
       >
         <%= pathogen_icon(ICON::MAGNIFYING_GLASS, size: :sm, color: :subdued) %>
-      </div>
+      </button>
     </div>
   </div>
   <div

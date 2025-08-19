@@ -31,6 +31,8 @@ export default class extends Controller {
     "paginationContainer",
     "emptyState",
     "metadataHeaderForm",
+    "filterClearButton",
+    "filterSearchButton",
   ];
 
   static values = {
@@ -95,6 +97,9 @@ export default class extends Controller {
 
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
   #samplesheetAttributes;
+
+  // tracks filter state of search/clear buttons on filter
+  #filterEnabled = false;
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
@@ -650,6 +655,7 @@ export default class extends Controller {
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
     setTimeout(() => {
       if (this.filterTarget.value) {
+        this.#filterEnabled = true;
         this.#currentSampleIndexes = [];
         for (let i = 0; i < this.#totalSamples; i++) {
           for (let j = 0; j < this.#filterableColumns.length; j++) {
@@ -666,6 +672,7 @@ export default class extends Controller {
           }
         }
       } else {
+        this.#filterEnabled = false;
         // reset table to include all samples if filter is empty
         this.#setCurrentSampleIndexesToAll();
       }
@@ -673,9 +680,25 @@ export default class extends Controller {
       this.#disableProcessingState();
       this.#setPagination();
       this.#updatePageData();
+      this.#updateFilterButtons();
+      this.filterTarget.focus();
     }, 50);
   }
 
+  clearFilter() {
+    this.filterTarget.value = "";
+    this.filter();
+  }
+
+  #updateFilterButtons() {
+    if (this.#filterEnabled) {
+      this.filterClearButtonTarget.classList.remove("hidden");
+      this.filterSearchButtonTarget.classList.add("hidden");
+    } else {
+      this.filterClearButtonTarget.classList.add("hidden");
+      this.filterSearchButtonTarget.classList.remove("hidden");
+    }
+  }
   // check samplesheet properties for sample and sample_name and add them as filterable if present
   #setFilterableColumns() {
     if (this.#samplesheetProperties.hasOwnProperty("sample")) {
