@@ -108,13 +108,13 @@
               </div>
             <% end %>
             <% if @tab == "shared_namespaces" %>
-              <%= render "groups/shared_namespaces/index",
+              <%= render "groups/shared_namespaces",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,
               } %>
             <% else %>
-              <%= render "groups/subgroups/index",
+              <%= render "groups/subgroups_and_projects",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,
