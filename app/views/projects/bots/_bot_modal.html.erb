@@ -105,6 +105,13 @@
                 <div class="flex items-center h-5">
                   <%= check_box_tag "bot[scopes][]",
                   scope,
+                  (
+                    if !bot_params.nil? && bot_params[:scopes]
+                      bot_params[:scopes].include?(scope.to_s)
+                    else
+                      nil
+                    end
+                  ),
                   id: "bot_scopes_#{scope}",
                   aria: {
                     describedby:
