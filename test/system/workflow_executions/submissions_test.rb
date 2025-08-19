@@ -1198,6 +1198,99 @@ module WorkflowExecutions
       ### VERIFY END ###
     end
 
+    test 'samplesheet filter search and clear buttons' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      within '#dialog' do
+        # verify pagination buttons
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+        # verify current samples listed
+        within('table tbody') do
+          assert_selector 'tr', count: 5
+        end
+
+        # search button exists and clear button does not
+        assert_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+        assert_no_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
+        # enter filter and click search button
+        find('input#samplesheet-filter').fill_in with: 'INXT_SAM_AAAAAAAAAC'
+        find('button[data-nextflow--samplesheet-target="filterSearchButton"]').click
+
+        # verify no samples in samplesheet
+        within('table tbody') do
+          assert_selector 'tr', count: 1
+          assert_text 'INXT_SAM_AAAAAAAAAC'
+        end
+
+        # verify pagination is removed
+        assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                           text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                           text: I18n.t('nextflow.samplesheet_component.next')
+
+        # clear button exists and search button does not
+        assert_no_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+        assert_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
+
+        # clear filter with clear button
+        find('button[data-nextflow--samplesheet-target="filterClearButton"]').click
+
+        # verify pagination buttons
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+        # verify current samples listed
+        within('table tbody') do
+          assert_selector 'tr', count: 5
+        end
+
+        # search button exists and clear button does not
+        assert_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+        assert_no_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
     test 'samplesheet metadata selection changes samplesheet values' do
       ### SETUP START ###
       user = users(:john_doe)
