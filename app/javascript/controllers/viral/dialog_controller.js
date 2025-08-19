@@ -45,7 +45,6 @@ export default class extends Controller {
 
   close() {
     this.openValue = false;
-    this.dialogTarget.close();
     this.#focusTrap.deactivate();
     this.dialogTarget.close();
     if (this.hasTriggerTarget) {
