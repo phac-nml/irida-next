@@ -60,7 +60,6 @@ export default class extends Controller {
 
   restoreFocusState() {
     const state = savedDialogStates.get(this.dialogTarget.id);
-    console.log(state);
     if (state && state.refocusTrigger) {
       this.triggerTarget.focus();
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
