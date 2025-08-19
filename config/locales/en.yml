@@ -1377,10 +1377,15 @@ en:
       analysis: Analysis
   namespace_row:
     contents_component:
-      stats:
-        projects: Projects
-        samples: Samples
-        subnamespaces: Subgroups
+      projects:
+        aria-label: Projects
+        tooltip: "%{count} projects in %{namespace_name}"
+      samples:
+        aria-label: Samples
+        tooltip: "%{count} samples in %{namespace_name}"
+      subnamespaces:
+        aria-label: Subgroups
+        tooltip: "%{count} subgroups in %{namespace_name}"
   nextflow:
     samplesheet:
       file_cell_component:
@@ -1407,6 +1412,9 @@ en:
     processing_request: Processing your submission, this may take some time.
     processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.
+  pathogen:
+    link:
+      aria-label: "%{content} (opens in a new window)"
   personal_access_tokens:
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?

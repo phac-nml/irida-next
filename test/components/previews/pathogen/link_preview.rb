@@ -10,6 +10,12 @@ module Pathogen
       end
     end
 
+    def external_link
+      pathogen_link(href: 'http://google.com') do
+        'This is an external link'
+      end
+    end
+
     # @label With Tooltip
     def tooltip
       pathogen_link(href: '#') do |component|
