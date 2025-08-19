@@ -20,39 +20,47 @@
                     text-ellipsis overflow-hidden px-4 py-2 text-sm font-medium text-slate-700
                     bg-slate-100 border @md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
                     @md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
+                    whitespace-nowrap max-w-96
                   "
-                ><%= root_url %>
+                  title="<%= "#{root_url}#{@project&.parent&.full_path}" %>"
+                >
+
                   <% if @project.parent %>
-
-                    <strong>
+                    <%= root_url %>
+                    <span class="font-bold">
                       <%= @project.parent.full_path + "/" %>
-                    </strong>
-
+                    </span>
+                  <% else %>
+                    <%= root_url %>
                   <% end %>
                 </div>
-                <div class="flex-grow-1">
-
+                <div class="grow">
                   <%= builder.text_field :path,
                                      pattern: Irida::PathRegex::PATH_REGEX_STR,
                                      required: true,
-                                     title: t(:"projects.edit.advanced.path.help"),
+                                     title: @project.path,
                                      class:
                                        "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg @md:!rounded-l-none",
                                      aria: {
-                                       describedby:
+                                       describedby: [
                                          invalid_path ? form.field_id(:path, "error") : nil,
+                                         form.field_id(:path, "hint"),
+                                       ].join(" "),
                                        invalid: invalid_path,
                                        required: true,
                                      },
                                      autofocus: invalid_path %>
 
-                  <% if invalid_path %>
-                    <%= render "shared/form/field_errors",
-                    id: builder.field_id(:path, "error"),
-                    errors: @project.namespace.errors.full_messages_for(:path) %>
-                  <% end %>
                 </div>
               </div>
+              <% if invalid_path %>
+                <%= render "shared/form/field_errors",
+                id: builder.field_id(:path, "error"),
+                errors: @project.namespace.errors.full_messages_for(:path) %>
+              <% end %>
+              <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
+                <%== t(:"projects.edit.advanced.path.help") %>
+              </span>
             </div>
           </div>
 
