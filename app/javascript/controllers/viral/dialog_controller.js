@@ -27,9 +27,11 @@ export default class extends Controller {
     this.#focusTrap.deactivate();
     if (this.openValue) {
       this.close();
-      // re-add refocusTrigger on save
-      // (this is so that turbo page loads that replace the open dialog with a closed one will refocus the trigger)
-      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+      if (this.hasTriggerTarget) {
+        // re-add refocusTrigger on save
+        // (this is so that turbo page loads that replace the open dialog with a closed one will refocus the trigger)
+        savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+      }
     }
   }
 
