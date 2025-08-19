@@ -623,8 +623,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'div.treegrid-row', count: 0
 
-    assert_text I18n.t('groups.show.subgroups.no_subgroups.title')
-    assert_text I18n.t('groups.show.subgroups.no_subgroups.description')
+    assert_text I18n.t('components.viral.pagy.empty_state.title')
+    assert_text I18n.t('components.viral.pagy.empty_state.description')
   end
 
   test 'displays empty state result after filtering shared namespaces' do
@@ -643,8 +643,8 @@ class GroupsTest < ApplicationSystemTestCase
     input_field.native.send_keys(:return)
 
     assert_selector 'div.treegrid-row', count: 0
-    assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
-    assert_text I18n.t('groups.show.shared_namespaces.no_shared.description')
+    assert_text I18n.t('components.viral.pagy.empty_state.title')
+    assert_text I18n.t('components.viral.pagy.empty_state.description')
   end
 
   test 'should display a samples count that includes samples from shared groups and projects' do
