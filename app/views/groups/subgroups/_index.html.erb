@@ -19,6 +19,12 @@
       <% end %>
     <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
+  <% elsif @has_namespaces %>
+    <%= viral_empty(
+      icon_name: ICON::MAGNIFYING_GLASS,
+      title: t("components.viral.pagy.empty_state.title"),
+      description: t("components.viral.pagy.empty_state.description"),
+    ) %>
   <% else %>
     <%= viral_empty(
       title: t(:"groups.show.subgroups.no_subgroups.title"),

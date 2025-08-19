@@ -89,7 +89,7 @@
               selected: @tab == "shared_namespaces",
             ) %>
 
-            <% if @namespaces.present? %>
+            <% if @has_namespaces %>
               <div class="flex flex-row-reverse mb-2">
                 <%= render SearchComponent.new(
                   query: @q,
@@ -108,9 +108,17 @@
               </div>
             <% end %>
             <% if @tab == "shared_namespaces" %>
-              <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
+              <%= render "groups/shared_namespaces/index",
+              locals: {
+                namespaces: @namespaces,
+                has_namespaces: @has_namespaces,
+              } %>
             <% else %>
-              <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
+              <%= render "groups/subgroups/index",
+              locals: {
+                namespaces: @namespaces,
+                has_namespaces: @has_namespaces,
+              } %>
             <% end %>
 
           <% end %>
