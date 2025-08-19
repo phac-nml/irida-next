@@ -3,7 +3,7 @@ import {
   FOCUSABLE_ELEMENTS,
   CALENDAR_HEIGHT,
   CALENDAR_TOP_BUFFER,
-} from "./constants";
+} from "controllers/pathogen/datepicker/constants";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
