@@ -5,8 +5,7 @@
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
-
-  <div class="flex justify-between mb-2">
+  <div class="flex justify-between mb-2 @max-2xl:flex-col">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
     <div class="relative">
       <label class="sr-only" for="samplesheet-filter"><%= t(".filter_placeholder") %></label>
