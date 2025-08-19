@@ -1392,11 +1392,11 @@ fr:
         default: "%{label} (par défaut)"
         required: Obligatoire
     samplesheet_component:
+      filter_placeholder: Rechercher par PUID ou nom
       label: Échantillons
       next: Suivant
       page_selection:
         aria_label: Sélecteur de page de pagination
-      placeholder: Rechercher par PUID ou nom
       previous: Précédent
   nextflow_component:
     data_missing_error: 'Les échantillons suivants manquent de données requises : '

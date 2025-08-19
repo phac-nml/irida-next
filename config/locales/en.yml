@@ -1392,11 +1392,11 @@ en:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
+      filter_placeholder: Search by PUID or name
       label: Samples
       next: Next
       page_selection:
         aria_label: Pagination page selector
-      placeholder: Search by PUID or name
       previous: Previous
   nextflow_component:
     data_missing_error: 'The following samples are missing required data: '

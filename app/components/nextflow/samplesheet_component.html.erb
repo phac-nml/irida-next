@@ -9,13 +9,13 @@
   <div class="flex justify-between mb-2">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
     <div class="relative">
-      <label class="sr-only" for="samplesheet-filter"><%= t(".placeholder") %></label>
+      <label class="sr-only" for="samplesheet-filter"><%= t(".filter_placeholder") %></label>
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
         data-action="keydown.enter->nextflow--samplesheet#filter"
         type="search"
-        placeholder="<%= t('.placeholder')%>"
+        placeholder="<%= t('.filter_placeholder')%>"
         class="
           t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border
           border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
