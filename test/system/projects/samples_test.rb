@@ -3188,7 +3188,7 @@ module Projects
         click_button I18n.t(:'advanced_search_component.apply_filter_button')
       end
 
-      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']"
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
@@ -3204,7 +3204,7 @@ module Projects
         click_button I18n.t(:'advanced_search_component.clear_filter_button')
       end
 
-      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']"
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3

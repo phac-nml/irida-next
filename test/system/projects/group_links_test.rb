@@ -157,8 +157,8 @@ module Projects
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
 
-        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                          .send_keys(:return)
+        find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
+                                                                                .send_keys(:return)
 
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -185,8 +185,8 @@ module Projects
 
       namespace_group_link.destroy
 
-      find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                        .send_keys(:return)
+      find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
+                                                                              .send_keys(:return)
 
       assert_text 'Resource not found'
     end
