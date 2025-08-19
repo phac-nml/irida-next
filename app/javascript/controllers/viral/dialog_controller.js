@@ -1,6 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 import { createFocusTrap } from "focus-trap";
 
+// persistent dialog state between connect/disconnects
+const savedDialogStates = new Map();
+
 export default class extends Controller {
   static targets = ["dialog", "trigger"];
   static values = { open: Boolean };
@@ -12,36 +15,56 @@ export default class extends Controller {
       onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
     });
 
-    if (this.openValue) this.open();
+    if (this.openValue) {
+      this.open();
+    } else {
+      this.restoreFocusState();
+    }
     this.element.setAttribute("data-controller-connected", "true");
   }
 
   disconnect() {
-    this.close();
+    this.#focusTrap.deactivate();
+    if (this.openValue) {
+      this.close();
+      if (this.hasTriggerTarget) {
+        // re-add refocusTrigger on save
+        // (this is so that turbo page loads that replace the open dialog with a closed one will refocus the trigger)
+        savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+      }
+    }
   }
 
   open() {
     this.openValue = true;
+    if (this.hasTriggerTarget) {
+      // once a dialog has been opened we need to save it to the state to refocus the trigger if the controller is disconnected before close
+      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+    }
     this.dialogTarget.showModal();
     this.#focusTrap.activate();
   }
 
   close() {
     this.openValue = false;
-    this.dialogTarget.close();
     this.#focusTrap.deactivate();
+    this.dialogTarget.close();
+    if (this.hasTriggerTarget) {
+      // close will refocus the trigger so we don't need to save it to refocus on next connect
+      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
+      this.triggerTarget.focus();
+    }
   }
 
   handleEsc(event) {
     event.preventDefault();
   }
 
-  refocus(event) {
-    console.log(event.target);
-    console.log(event.detail);
-    if (event.target === this.dialogTarget) {
-      console.log(event.target.hasAttribute("open"));
-      console.log(event.detail.newElement.open);
+  restoreFocusState() {
+    const state = savedDialogStates.get(this.dialogTarget.id);
+    if (state && state.refocusTrigger) {
+      this.triggerTarget.focus();
+      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
     }
   }
 }
