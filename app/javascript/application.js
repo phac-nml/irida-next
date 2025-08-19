@@ -86,12 +86,29 @@ LocalTime.config.i18n["fr"] = {
 LocalTime.start();
 ActiveStorage.start();
 
+function isElementInViewport(el) {
+  var rect = el.getBoundingClientRect();
+
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight ||
+        document.documentElement.clientHeight) /* or $(window).height() */ &&
+    rect.right <=
+      (window.innerWidth ||
+        document.documentElement.clientWidth) /* or $(window).width() */
+  );
+}
+
 document.addEventListener("turbo:morph", () => {
   LocalTime.config.locale = document.documentElement.lang;
   LocalTime.run();
 
   // ensure focused element is scrolled into view if out of view
-  document.activeElement.scrollIntoView();
+  if (!isElementInViewport(document.activeElement)) {
+    document.activeElement.scrollIntoView();
+  }
 });
 
 Turbo.config.forms.confirm = (message, element) => {
