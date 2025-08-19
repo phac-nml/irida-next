@@ -1392,7 +1392,11 @@ fr:
         default: "%{label} (par défaut)"
         required: Obligatoire
     samplesheet_component:
-      filter_placeholder: Rechercher par PUID ou nom
+      filter:
+        clear: Clear search
+        placeholder: Rechercher par PUID ou nom
+        search: Rechercher
+      filter_placeholder:
       label: Échantillons
       next: Suivant
       page_selection:
