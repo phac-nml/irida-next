@@ -20,13 +20,15 @@
       'projects--samples--attachments--selected-attachments-field-name-value':"concatenation[attachment_ids]",
       "projects--samples--attachments--selected-attachments-storage-key-value": "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
-    }, method: :post) do |form| %>
+    }, method: :post, html: { novalidate: true }) do |form| %>
     <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
     <div class="grid gap-4">
+      <%= render partial: "shared/form/required_field_legend" %>
+
       <% invalid_basename = @sample.errors.include?(:basename) %>
       <div class="form-field <%= 'invalid' if invalid_basename%>">
-        <%= form.label :basename, t(".basename") %>
+        <%= form.label :basename, t(".basename"), data: { required: true } %>
         <%= form.text_field :basename,
                         required: true,
                         pattern: /^[[a-zA-Z0-9_\-\.]]*$/,
@@ -34,9 +36,23 @@
                           t(
                             :"projects.samples.attachments.concatenations.create.basename_help",
                           ),
+                        aria: {
+                          describedby: [
+                            invalid_basename ? form.field_id(:basename, "error") : nil,
+                            form.field_id(:basename, "hint"),
+                          ].join(" "),
+                          invalid: invalid_basename,
+                          required: true,
+                        },
                         class: "form-control" %>
-        <%= render "shared/form/field_errors",
-        errors: @sample.errors.full_messages_for(:basename) %>
+        <% if invalid_basename %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:basename, "error"),
+          errors: @sample.errors[:basename] %>
+        <% end %>
+        <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
+          <%== t(:"projects.samples.attachments.concatenations.create.basename_help") %>
+        </span>
       </div>
 
       <div class="flex items-center">
