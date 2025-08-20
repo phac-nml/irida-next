@@ -1,5 +1,8 @@
 <%= form_with url: '#' do |form| %>
   <%= viral_prefixed_boolean(form: form, name: "prefixed", value: false) do |checkbox| %>
+    <%= checkbox.with_legend do %>
+      This is the group legend
+    <% end %>
     <%= checkbox.with_prefix do %>
       --prefix
     <% end %>
