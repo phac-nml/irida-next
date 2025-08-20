@@ -1156,9 +1156,8 @@ en:
           label: Search
           placeholder: Search by name or PUID
     shared_namespaces:
-      index:
-        pagy:
-          item: Shared groups and projects
+      pagy:
+        item: Shared groups and projects
     show:
       create_project_button: New project
       create_subgroup_button: New subgroup
@@ -1198,10 +1197,9 @@ en:
       samples: Samples
       settings: Settings
       workflow_executions: Workflow Executions
-    subgroups:
-      index:
-        pagy:
-          item: Subgroups and projects
+    subgroups_and_projects:
+      pagy:
+        item: Subgroups and projects
     table_component:
       action: Action
       expires_at: Expiration

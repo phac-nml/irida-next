@@ -1,5 +1,4 @@
 <div class="space-y-2">
-
   <% if @namespaces.length > 0 %>
     <%= render TreegridComponent.new do |component| %>
       <% @namespaces.each_with_index do |namespace, namespace_index| %>
@@ -14,12 +13,19 @@
         ) do %>
           <%= render NamespaceRow::ContentsComponent.new(
             namespace: namespace,
+            full_name: true,
             icon_size: :medium,
           ) %>
         <% end %>
       <% end %>
     <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
+  <% elsif @has_namespaces %>
+    <%= viral_empty(
+      icon_name: ICON::MAGNIFYING_GLASS,
+      title: t("components.viral.pagy.empty_state.title"),
+      description: t("components.viral.pagy.empty_state.description"),
+    ) %>
   <% else %>
     <%= viral_empty(
       title: t(:"groups.show.shared_namespaces.no_shared.title"),

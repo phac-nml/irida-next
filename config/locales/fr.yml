@@ -1156,9 +1156,8 @@ fr:
           label: Rechercher
           placeholder: Rechercher par nom ou PUID
     shared_namespaces:
-      index:
-        pagy:
-          item: Groupes et projets partagés
+      pagy:
+        item: Groupes et projets partagés
     show:
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
@@ -1198,10 +1197,9 @@ fr:
       samples: Échantillons
       settings: Paramètres
       workflow_executions: Exécutions de flux de travail
-    subgroups:
-      index:
-        pagy:
-          item: Sous-groupes et projets
+    subgroups_and_projects:
+      pagy:
+        item: Sous-groupes et projets
     table_component:
       action: Mesure
       expires_at: Expiration

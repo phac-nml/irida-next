@@ -49,6 +49,7 @@ module Pathogen
     def initialize(id:, label: '', body_arguments: {}, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
 
+      @id = id
       @system_arguments = system_arguments
       @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
