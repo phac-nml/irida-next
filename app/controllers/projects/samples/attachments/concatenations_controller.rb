@@ -26,10 +26,14 @@ module Projects
 
           if @sample.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
+          elsif @sample.errors[:basename].any?
+            render status: :unprocessable_entity, locals: { type: :danger,
+                                                            message: t(:'general.form.error_notification') }
           else
             @errors = error_message(@sample)
             render status: :unprocessable_entity, locals: { type: :danger,
                                                             message: @errors }
+
           end
         end
 

@@ -4,6 +4,7 @@ module Attachments
   # Service used to Concatenate Attachments
   class ConcatenationService < BaseService # rubocop:disable Metrics/ClassLength
     AttachmentConcatenationError = Class.new(StandardError)
+    AttachmentConcatenationFilenameError = Class.new(StandardError)
 
     attr_accessor :attachable, :attachments, :concatenation_params
 
@@ -47,6 +48,9 @@ module Attachments
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       attachable.errors.add(:base, e.message)
       []
+    rescue Attachments::ConcatenationService::AttachmentConcatenationFilenameError => e
+      attachable.errors.add(:basename, e.message)
+      []
     end
 
     private
@@ -59,12 +63,12 @@ module Attachments
       end
 
       if !concatenation_params.key?(:basename) || concatenation_params[:basename].empty?
-        raise AttachmentConcatenationError,
+        raise AttachmentConcatenationFilenameError,
               I18n.t('services.attachments.concatenation.filename_missing')
       end
 
       if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-\.]]*$/)
-        raise AttachmentConcatenationError,
+        raise AttachmentConcatenationFilenameError,
               I18n.t('services.attachments.concatenation.incorrect_basename')
       end
 
@@ -109,10 +113,7 @@ module Attachments
     # Validates that the paired end files are all the same type
     def validate_paired_end_files(attachments)
       attachments.each do |attachment|
-        if attachment.metadata.key?('type') && (attachments.first.metadata['type'] == 'illumina_pe' ||
-          attachments.first.metadata['type'] == 'pe')
-          next
-        end
+        next if attachment.metadata.key?('type') && %w[illumina_pe pe].include?(attachments.first.metadata['type'])
 
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_file_types')
