@@ -393,34 +393,6 @@ input[type="search"] {
   }
 }
 
-@utility dialog--size-sm {
-  @apply sm:max-w-md;
-}
-
-@utility dialog--size-md {
-  @apply sm:max-w-xl;
-}
-
-@utility dialog--size-lg {
-  @apply sm:max-w-3xl;
-}
-
-@utility dialog--size-xl {
-  @apply sm:max-w-7xl;
-}
-
-@utility dialog--title {
-  @apply text-xl font-semibold text-slate-900 dark:text-white;
-}
-
-@utility dialog--close {
-  @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 dark:hover:bg-slate-600 dark:hover:text-white;
-}
-
-@utility dialog--section {
-  @apply p-5;
-}
-
 @utility avatar {
   @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-lg text-slate-800 dark:text-white;
   --tw-avatar-bg-lightness: 35%;
@@ -506,25 +478,35 @@ input[type="search"] {
 
   /* VIRAL DIALOG */
   dialog {
-    @apply max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -ms-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
+    @apply max-w-screen -translate-1/2 backdrop-blur-xs left-1/2 top-1/2 max-h-screen w-full rounded-lg bg-white p-0 shadow-sm backdrop:bg-slate-200/40 max-sm:overflow-y-auto sm:overflow-y-hidden dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
   }
 
-  dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-200/40;
+  .dialog--size-sm {
+    @apply sm:max-w-md;
   }
 
-  .dark dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-600/40;
+  .dialog--size-md {
+    @apply sm:max-w-xl;
+  }
+
+  .dialog--size-lg {
+    @apply sm:max-w-3xl;
+  }
+
+  .dialog--size-xl {
+    @apply sm:max-w-7xl;
+  }
+
+  .dialog--title {
+    @apply text-xl font-semibold text-slate-900 dark:text-white;
+  }
+
+  .dialog--close {
+    @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 dark:hover:bg-slate-600 dark:hover:text-white;
   }
 
   .dialog--section {
-    @apply sm:max-h-(--dialog-section-max-height) p-5 sm:overflow-y-auto;
+    @apply sm:max-h-(--dialog-section-max-height) wrap-break-word p-5 sm:overflow-y-auto;
   }
 
   strong {
