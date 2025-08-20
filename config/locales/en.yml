@@ -1394,7 +1394,10 @@ en:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
-      filter_placeholder: Filter by PUID or name
+      filter:
+        clear: Clear search
+        placeholder: Search by PUID or name
+        search: Search
       label: Samples
       next: Next
       page_selection:
