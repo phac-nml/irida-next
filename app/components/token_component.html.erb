@@ -1,6 +1,8 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
   controller: "token",
-  "token-item-value": value }) do %>
+  "token-item-value": value,
+  "token-show-mask-button-value": t(:'components.token.show'),
+  "token-hide-mask-button-value": t(:'components.token.hide') }) do %>
   <div class="relative mr-2 grow">
     <input
       type="text"
@@ -16,6 +18,7 @@
     >
     <button
       type="button"
+      data-token-target="maskButton"
       class="absolute inset-y-0 bottom-0 right-0 p-2 rounded-r-lg"
       data-action="click->token#toggleVisibility"
       aria-label="<%= t(:'components.token.toggle_visible') %>"
@@ -24,7 +27,12 @@
         <%= pathogen_icon(ICON::EYE, color: :subdued, size: :sm, class: "cursor-pointer") %>
       </span>
       <span data-token-target="view" class="flex items-center hidden">
-        <%= pathogen_icon(ICON::EYE_SLASH, color: :subdued, size: :sm, class: "cursor-pointer") %>
+        <%= pathogen_icon(
+          ICON::EYE_SLASH,
+          color: :subdued,
+          size: :sm,
+          class: "cursor-pointer",
+        ) %>
       </span>
     </button>
   </div>

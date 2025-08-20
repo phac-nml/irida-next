@@ -12,12 +12,16 @@
     <%= turbo_frame_tag("new_bot_account-error-alert") %>
   </div>
 
-  <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
+  <%= form_for(:bot, url: namespace_project_bots_path, method: :post, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
-
-      <div class="form-field">
+      <%= render partial: "shared/form/required_field_legend" %>
+      <% invalid_access_level = new_bot_account.errors.include?(:access_level) %>
+      <div class="form-field <%= 'invalid' if invalid_access_level %>">
         <%= form.label :access_level,
-                   t("projects.bots.index.bot_listing.new_bot_modal.access_level") %>
+                   t("projects.bots.index.bot_listing.new_bot_modal.access_level"),
+                   data: {
+                     required: true,
+                   } %>
         <%= form.select :access_level,
                     @access_levels,
                     {
@@ -27,8 +31,24 @@
                         ),
                       selected: !bot_params.nil? ? bot_params[:access_level] : nil,
                     },
-                    required: true %>
+                    {
+                      required: true,
+                      aria: {
+                        describedby:
+                          (
+                            if invalid_access_level
+                              form.field_id(:access_level, "error")
+                            else
+                              nil
+                            end
+                          ),
+                        invalid: invalid_access_level,
+                        required: true,
+                      },
+                      autofocus: invalid_access_level,
+                    } %>
         <%= render "shared/form/field_errors",
+        id: form.field_id(:access_level, "error"),
         errors: new_bot_account.errors.full_messages_for(:access_level) %>
       </div>
 
@@ -40,14 +60,33 @@
       >
         <p class="font-semibold dark:text-white"><%= t("projects.bots.index.bot_listing.new_bot_modal.token_details") %></p>
 
-        <div class="form-field">
+        <% invalid_token_name = new_bot_account.errors.include?(:token_name) %>
+        <div class="form-field <%= 'invalid' if invalid_token_name %>">
           <%= form.label :token_name,
-                     t("projects.bots.index.bot_listing.new_bot_modal.token_name") %>
+                     t("projects.bots.index.bot_listing.new_bot_modal.token_name"),
+                     data: {
+                       required: true,
+                     } %>
           <%= form.text_field :token_name,
                           required: true,
                           value: !bot_params.nil? ? bot_params[:token_name] : "",
-                          class: "form-control" %>
-
+                          class: "form-control",
+                          aria: {
+                            describedby:
+                              (
+                                if invalid_token_name
+                                  form.field_id(:token_name, "error")
+                                else
+                                  nil
+                                end
+                              ),
+                            invalid: invalid_token_name,
+                            required: true,
+                          },
+                          autofocus: invalid_token_name %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:token_name, "error"),
+          errors: new_bot_account.errors.full_messages_for(:token_name) %>
         </div>
         <div class="form-field">
           <%= pathogen_datepicker(
@@ -57,12 +96,35 @@
             selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
           ) %>
         </div>
-        <div class="form-field">
-          <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
+
+        <% invalid_scopes = new_bot_account.errors.include?(:scopes) %>
+        <div class="form-field <%= 'invalid' if invalid_scopes %>">
+          <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes_html').html_safe) do %>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]", scope, id: "bot_scopes_#{scope}" %>
+                  <%= check_box_tag "bot[scopes][]",
+                  scope,
+                  (
+                    if !bot_params.nil? && bot_params[:scopes]
+                      bot_params[:scopes].include?(scope.to_s)
+                    else
+                      nil
+                    end
+                  ),
+                  id: "bot_scopes_#{scope}",
+                  aria: {
+                    describedby:
+                      (
+                        if invalid_scopes
+                          form.field_id(:scopes, "error")
+                        else
+                          nil
+                        end
+                      ),
+                    invalid: invalid_scopes,
+                  },
+                  autofocus: invalid_scopes %>
                 </div>
                 <div class="text-sm">
                   <%= label_tag "bot_scopes_#{scope}",
@@ -78,6 +140,9 @@
               </div>
             <% end %>
           <% end %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:scopes, "error"),
+          errors: new_bot_account.errors.full_messages_for(:scopes) %>
         </div>
 
       </div>

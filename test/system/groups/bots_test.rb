@@ -148,8 +148,9 @@ module Groups
         ### VERIFY START ###
         assert_selector '#new_bot_account-error-alert'
         within('#new_bot_account-error-alert') do
-          assert_text I18n.t(:'services.bots.create.required.scopes')
+          assert_text I18n.t(:'general.form.error_notification')
         end
+        assert_text I18n.t(:'services.bots.create.required.scopes')
       end
       ### VERIFY END ###
     end

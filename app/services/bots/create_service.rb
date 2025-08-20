@@ -3,7 +3,6 @@
 module Bots
   # Service used to Create Bot Accounts
   class CreateService < BaseService
-    BotAccountCreateError = Class.new(StandardError)
     attr_accessor :namespace, :bot_user_account
 
     def initialize(user = nil, namespace = nil, bot_type = nil, params = {}) # rubocop:disable Metrics/ParameterLists
@@ -30,7 +29,7 @@ module Bots
     def execute
       authorize! namespace, to: :create_bot_accounts?
 
-      validate_params
+      return { bot_user_account: @bot_user_account, personal_access_token: nil, member: nil } unless validate_params
 
       bot_user_account = create_bot_account
 
@@ -39,24 +38,21 @@ module Bots
       member = add_bot_to_namespace_members(bot_user_account)
 
       { bot_user_account:, personal_access_token:, member: }
-    rescue Bots::CreateService::BotAccountCreateError => e
-      @bot_user_account.errors.add(:base, e.message)
-      { bot_user_account: @bot_user_account, personal_access_token: nil, member: nil }
     end
 
-    def validate_params
+    def validate_params # rubocop:disable Metrics/AbcSize
       unless @is_automation_bot
-        raise BotAccountCreateError, I18n.t('services.bots.create.required.token_name') if params[:token_name].blank?
-
-        raise BotAccountCreateError, I18n.t('services.bots.create.required.scopes') if params[:scopes].blank?
+        if params[:token_name].blank?
+          @bot_user_account.errors.add :token_name, I18n.t('services.bots.create.required.token_name')
+        end
+        @bot_user_account.errors.add :scopes, I18n.t('services.bots.create.required.scopes') if params[:scopes].blank?
       end
 
       if params[:access_level].blank?
-        raise BotAccountCreateError,
-              I18n.t('services.bots.create.required.access_level')
+        @bot_user_account.errors.add :access_level, I18n.t('services.bots.create.required.access_level')
       end
 
-      true
+      @bot_user_account.errors.none?
     end
 
     def create_bot_account
