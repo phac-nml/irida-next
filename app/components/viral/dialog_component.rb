@@ -33,9 +33,11 @@ module Viral
       @system_arguments = system_arguments
 
       @system_arguments[:classes] = class_names(
-        'overflow-visible',
+        'max-sm:overflow-y-auto',
         @system_arguments[:classes],
-        dialog_size
+        dialog_size,
+        'max-sm:w-screen',
+        'max-sm:h-screen'
       )
 
       @system_arguments[:data] = if @system_arguments.key?(:data)

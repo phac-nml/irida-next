@@ -18,6 +18,7 @@
   --color-primary-950: #052e16;
   --color-primary: #16a34a;
   --layout-body-columns: 280px 1fr;
+  --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
 }
 
 /* Hide search clear button across all browsers */
@@ -392,24 +393,20 @@ input[type="search"] {
   }
 }
 
-@utility dialog--size {
-  @apply relative max-h-full w-full;
-}
-
 @utility dialog--size-sm {
-  @apply max-w-md;
+  @apply sm:max-w-md;
 }
 
 @utility dialog--size-md {
-  @apply max-w-xl;
+  @apply sm:max-w-xl;
 }
 
 @utility dialog--size-lg {
-  @apply max-w-3xl;
+  @apply sm:max-w-3xl;
 }
 
 @utility dialog--size-xl {
-  @apply max-w-7xl;
+  @apply sm:max-w-7xl;
 }
 
 @utility dialog--title {
@@ -527,8 +524,7 @@ input[type="search"] {
   }
 
   .dialog--section {
-    max-height: calc(75vh - 1.25rem - 3.5rem);
-    @apply overflow-y-auto p-5;
+    @apply sm:max-h-(--dialog-section-max-height) p-5 sm:overflow-y-auto;
   }
 
   strong {
