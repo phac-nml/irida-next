@@ -33,7 +33,6 @@ module Viral
       @system_arguments = system_arguments
 
       @system_arguments[:classes] = class_names(
-        'overflow-visible',
         @system_arguments[:classes],
         dialog_size
       )
