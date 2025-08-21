@@ -588,16 +588,20 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
-      assert_text I18n.t('samples.transfers.create.success')
-      click_button I18n.t('shared.samples.success.ok_button')
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Samples::TransferJob]
+        # flash msg
+        assert_text I18n.t('samples.transfers.create.success')
+        click_button I18n.t('shared.samples.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
 
@@ -645,14 +649,21 @@ module Projects
         click_on I18n.t('samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
+      end
 
-        ### VERIFY START ###
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
-        # close button hidden during transfer
+
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::TransferJob]
-        ### VERIFY END ###
+        # flash msg
+        assert_text I18n.t('samples.transfers.create.success')
+        click_button I18n.t('shared.samples.success.ok_button')
       end
+
+      assert_no_selector 'dialog[open]'
+      ### VERIFY END ###
     end
 
     test 'should not transfer samples with session storage cleared' do
@@ -684,12 +695,15 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('samples.transfers.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
-        ### ACTIONS END ###
 
-        ### VERIFY START ###
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
         # error msg displayed in dialog
@@ -740,20 +754,25 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{project25.id}']").click
         click_on I18n.t('samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Samples::TransferJob]
+
         # error messages in dialog
         assert_text I18n.t('samples.transfers.create.error')
         # colon is removed from translation in UI
         assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
                                                                       sample_name: @sample30.name).gsub(':', '')
+
+        click_button I18n.t('shared.samples.errors.ok_button')
       end
+
+      assert_no_selector 'dialog[open]'
 
       # verify sample1 and 2 transferred, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
@@ -844,13 +863,20 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Samples::TransferJob]
+
+        click_button I18n.t('shared.samples.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 2"
@@ -1296,13 +1322,17 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+        # success msg
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       # metadatafield3 added to header
       within('#samples-table table thead tr') do
@@ -1385,12 +1415,16 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+        # success msg
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       # metadatafield3 added to header
       within('#samples-table table thead tr') do
@@ -1476,12 +1510,16 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+        # success msg
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       within('#samples-table table thead tr') do
         # metadatafield3 and 4 added to header
@@ -1565,12 +1603,17 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
         ### ACTIONS END ###
       end
-      ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       # metadatafield3 and 4 added to header
       within('#samples-table table thead tr') do
@@ -1608,12 +1651,17 @@ module Projects
 
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
         assert_text I18n.t('shared.progress_bar.in_progress')
         # dialog button hidden while importing
         assert_no_selector 'button.dialog--close'
       end
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      ### VERIFY END ###
     end
 
     test 'should not import metadata via invalid file type' do
@@ -1680,15 +1728,15 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      ### VERIFY START ###
-      within('#dialog') do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
-      ### VERIFY END ###
+
+      assert_no_selector 'dialog[open]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
         # unchanged value
@@ -1741,11 +1789,15 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
         # value is deleted for metadatafield1
@@ -1784,11 +1836,13 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # error msg
-      assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
+        # error msg
+        assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
+      end
       ### VERIFY END ###
     end
 
@@ -1822,11 +1876,13 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # error msg
-      assert_text I18n.t('services.spreadsheet_import.missing_data_row')
+        # error msg
+        assert_text I18n.t('services.spreadsheet_import.missing_data_row')
+      end
       ### VERIFY END ###
     end
 
@@ -1900,13 +1956,17 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      # sample 3 does not exist in current project
-      assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
-                         sample_puid: 'Project 2 Sample 3')
-      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+        # sample 3 does not exist in current project
+        assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
+                           sample_puid: 'Project 2 Sample 3')
+        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       # metadata still imported
       assert_selector '#samples-table table thead tr th', count: 8
@@ -1968,12 +2028,17 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
-      assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                         sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
-      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+        assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                           sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
+        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
       # metadatafield3 still added
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table') do
@@ -2043,13 +2108,17 @@ module Projects
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_no_text I18n.t('shared.progress_bar.in_progress')
+
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+
+      assert_no_selector 'dialog[open]'
 
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table') do
@@ -2085,12 +2154,16 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+        # success msg
+        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       within('#samples-table table tbody') do
         # added 2 new samples
@@ -2128,20 +2201,24 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-      # problem message
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.problems')
-      # problem table
-      within('#problems_table table tbody') do
-        # has 1 problem
-        assert_selector 'tr', count: 1
-        assert_text 'm sample name is too short (minimum is 3 characters)'
+        # success msg
+        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+        # problem message
+        assert_text I18n.t('shared.samples.spreadsheet_imports.success.problems')
+        # problem table
+        within('#problems_table table tbody') do
+          # has 1 problem
+          assert_selector 'tr', count: 1
+          assert_text 'm sample name is too short (minimum is 3 characters)'
+        end
+        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
       end
-      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      assert_no_selector 'dialog[open]'
 
       within('#samples-table table tbody') do
         # added 1 new sample
@@ -2177,12 +2254,16 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
 
-      # error msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.errors.description')
-      click_on I18n.t('shared.samples.spreadsheet_imports.errors.ok_button')
+        # error msg
+        assert_text I18n.t('shared.samples.spreadsheet_imports.errors.description')
+        click_on I18n.t('shared.samples.spreadsheet_imports.errors.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       within('#samples-table table tbody') do
         # added 0 new sample
@@ -2383,13 +2464,17 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
 
-      # success msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+        # success msg
+        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
 
-      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
 
       # refresh to see new samples
       visit namespace_project_samples_url(@namespace, @project)
@@ -2543,15 +2628,22 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::CloneJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
-      assert_text I18n.t('samples.clones.create.success')
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Samples::CloneJob]
+
+        # flash msg
+        assert_text I18n.t('samples.clones.create.success')
+        click_button I18n.t('shared.samples.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
       # samples still exist within samples table of originating project
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
@@ -2604,15 +2696,17 @@ module Projects
         click_on I18n.t('samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
+      end
 
-        ### VERIFY START ###
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
+
         # close button hidden during cloning
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::CloneJob]
-
-        ### VERIFY END ###
       end
+      ### VERIFY END ###
     end
 
     test 'should not clone samples with session storage cleared' do
@@ -2642,20 +2736,24 @@ module Projects
         assert_text I18n.t('samples.clones.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
+
         click_on I18n.t('samples.clones.dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
-        ### ACTIONS END ###
 
-        ### VERIFY START ###
         # sample listing should not be in error dialog
         assert_no_selector '#list_selections'
         # error msg
         assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
         assert_text I18n.t('services.samples.clone.empty_sample_ids')
-        ### VERIFY END ###
       end
+      ### VERIFY END ###
     end
 
     test 'should not clone some samples' do
@@ -2702,18 +2800,22 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{project25.id}']").click
         click_on I18n.t('samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::CloneJob]
         ### ACTIONS END ###
+      end
 
-        ### VERIFY START ###
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::CloneJob]
+
         # errors that a sample with the same name as sample30 already exists in project25
         assert_text I18n.t('samples.clones.create.error')
         assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample30.puid,
                                                                    sample_name: @sample30.name).gsub(':', '')
         click_on I18n.t('shared.samples.errors.ok_button')
       end
+
+      assert_no_selector 'dialog[open]'
 
       visit namespace_project_samples_url(namespace, project25)
       # verify samples table has loaded to prevent flakes
@@ -2829,15 +2931,21 @@ module Projects
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::CloneJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
-      assert_text I18n.t('samples.clones.create.success')
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Samples::CloneJob]
+        # flash msg
+        assert_text I18n.t('samples.clones.create.success')
+        click_button I18n.t('shared.samples.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
