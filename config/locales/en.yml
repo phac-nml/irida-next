@@ -2343,6 +2343,11 @@ en:
     data_table_component:
       header:
         action: Action
+    form:
+      prefixed:
+        boolean_component:
+          'false': 'False'
+          'true': 'True'
     pagy:
       limit_component:
         item_aria_label: Show %{items} items per page
