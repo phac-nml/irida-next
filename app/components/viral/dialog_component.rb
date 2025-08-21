@@ -23,7 +23,7 @@ module Viral
 
     renders_one :trigger
 
-    def initialize(id: 'dialog', title: '', size: SIZE_DEFAULT, open: false, closable: true, header_system_arguments: {}, **system_arguments) # rubocop:disable Metrics/ParameterLists,Layout/LineLength,Metrics/MethodLength
+    def initialize(id: 'dialog', title: '', size: SIZE_DEFAULT, open: false, closable: true, header_system_arguments: {}, **system_arguments) # rubocop:disable Metrics/ParameterLists,Layout/LineLength
       @id = id
       @title = title
       @open = open
@@ -34,20 +34,13 @@ module Viral
 
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
-        dialog_size
+        'dialog--contents'
       )
-
-      @system_arguments[:data] = if @system_arguments.key?(:data)
-                                   @system_arguments[:data].merge({ 'viral--dialog-target' => 'dialog' })
-                                 else
-                                   { 'viral--dialog-target' => 'dialog' }
-                                 end
 
       return if closable
 
-      @system_arguments[:data].merge!({
-                                        action: 'keydown.esc->viral--dialog#handleEsc'
-                                      })
+      @system_arguments[:data] ||= {}
+      @system_arguments[:data].merge!({ action: 'keydown.esc->viral--dialog#handleEsc' })
     end
 
     def render_footer?
