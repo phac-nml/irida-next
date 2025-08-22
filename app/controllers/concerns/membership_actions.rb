@@ -33,9 +33,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       format.html do
         render status: :ok
       end
-      format.turbo_stream do
-        render status: :ok
-      end
     end
   end
 
