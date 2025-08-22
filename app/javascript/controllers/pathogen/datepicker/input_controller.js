@@ -45,6 +45,7 @@ export default class extends Controller {
 
     this.boundHandleDatepickerInputFocus =
       this.handleDatepickerInputFocus.bind(this);
+    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
@@ -96,12 +97,20 @@ export default class extends Controller {
           onShow: () => {
             this.datepickerInputTarget.setAttribute("aria-expanded", "true");
             document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+            this.#calendar.addEventListener(
+              "focusin",
+              this.boundHandleCalendarFocus,
+            );
           },
           onHide: () => {
             this.datepickerInputTarget.setAttribute("aria-expanded", "false");
             document.removeEventListener(
               "keydown",
               this.boundHandleGlobalKeydown,
+            );
+            this.#calendar.removeEventListener(
+              "focusin",
+              this.boundHandleCalendarFocus,
             );
           },
         },
@@ -187,6 +196,18 @@ export default class extends Controller {
   handleDatepickerInputFocus() {
     if (!this.#dropdown.isVisible()) {
       this.#dropdown.show();
+    }
+  }
+
+  handleCalendarFocus(event) {
+    const parentElement = this.#calendar.parentElement;
+    if (parentElement.tagName === "DIALOG") {
+      const rect = event.target.getBoundingClientRect();
+
+      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
+        const dialogContents = parentElement.querySelector(".dialog--contents");
+        dialogContents.scrollTo(0, rect.top);
+      }
     }
   }
 
