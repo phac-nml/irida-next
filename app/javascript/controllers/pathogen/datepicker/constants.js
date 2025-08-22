@@ -2,12 +2,6 @@
 export const FOCUSABLE_ELEMENTS =
   'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
 
-// height of the datepicker dialog
-export const CALENDAR_HEIGHT = 445;
-
-// adds a buffer based on the datepicker input for datepicker positioning
-export const CALENDAR_TOP_BUFFER = 35;
-
 export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 export const CALENDAR_CLASSES = {
