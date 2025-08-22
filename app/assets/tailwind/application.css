@@ -115,7 +115,8 @@ input[type="search"] {
   /*
     content separated by / tells the screenreader that the content is blank so that the asterisk is not read out
   */
-  & label[data-required]::after {
+  & label[data-required]::after,
+  legend[data-required]::after {
     content: " *" / "";
     @apply text-red-500;
   }

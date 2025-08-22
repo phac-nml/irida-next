@@ -48,9 +48,11 @@
                       },
                       autofocus: invalid_access_level,
                     } %>
-        <%= render "shared/form/field_errors",
-        id: form.field_id(:access_level, "error"),
-        errors: new_bot_account.errors.full_messages_for(:access_level) %>
+        <% if invalid_access_level %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:access_level, "error"),
+          errors: new_bot_account.errors.full_messages_for(:access_level) %>
+        <% end %>
       </div>
 
       <div
@@ -84,9 +86,11 @@
                             required: true,
                           },
                           autofocus: invalid_token_name %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:token_name, "error"),
-          errors: new_bot_account.errors.full_messages_for(:token_name) %>
+          <% if invalid_token_name %>
+            <%= render "shared/form/field_errors",
+            id: form.field_id(:token_name, "error"),
+            errors: new_bot_account.errors.full_messages_for(:token_name) %>
+          <% end %>
         </div>
         <div class="form-field">
           <%= pathogen_datepicker(
@@ -99,7 +103,8 @@
 
         <% invalid_scopes = new_bot_account.errors.include?(:scopes) %>
         <div class="form-field <%= 'invalid' if invalid_scopes %>">
-          <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes_html').html_safe) do %>
+          <fieldset>
+            <legend data-aria-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
@@ -139,10 +144,13 @@
                 </div>
               </div>
             <% end %>
+
+          </fieldset>
+          <% if invalid_scopes %>
+            <%= render "shared/form/field_errors",
+            id: form.field_id(:scopes, "error"),
+            errors: new_bot_account.errors.full_messages_for(:scopes) %>
           <% end %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:scopes, "error"),
-          errors: new_bot_account.errors.full_messages_for(:scopes) %>
         </div>
 
       </div>

@@ -18,15 +18,39 @@
     <%= turbo_frame_tag("personal-access-token-error-alert") %>
   </div>
 
-  <%= form_for(:personal_access_token, url: namespace_project_bot_personal_access_tokens_path, method: :post) do |form| %>
+  <%= form_for(:personal_access_token, url: namespace_project_bot_personal_access_tokens_path, method: :post,  html: { novalidate: true}) do |form| %>
     <div class="grid gap-4">
-      <div class="form-field">
+      <%= render partial: "shared/form/required_field_legend" %>
+      <% invalid_token_name = personal_access_token&.errors&.include?(:name) %>
+      <div class="form-field <%= 'invalid' if invalid_token_name %>">
         <%= form.label :name,
                    t(
                      "projects.bots.index.bot_listing.generate_personal_access_token_modal.name",
-                   ) %>
-        <%= form.text_field :name, required: true, class: "form-control" %>
-
+                   ),
+                   data: {
+                     required: true,
+                   } %>
+        <%= form.text_field :name,
+                        required: true,
+                        class: "form-control",
+                        aria: {
+                          describedby:
+                            (
+                              if invalid_token_name
+                                form.field_id(:name, "error")
+                              else
+                                nil
+                              end
+                            ),
+                          invalid: invalid_token_name,
+                          required: true,
+                        },
+                        autofocus: invalid_token_name %>
+        <% if invalid_token_name %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:name, "error"),
+          errors: personal_access_token.errors[:name] %>
+        <% end %>
       </div>
       <div class="form-field">
         <%= pathogen_datepicker(
@@ -38,14 +62,35 @@
             ),
         ) %>
       </div>
-      <div class="form-field">
-        <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
+      <% invalid_scopes = personal_access_token&.errors&.include?(:scopes) %>
+      <div class="form-field <%= 'invalid' if invalid_scopes %>">
+        <fieldset>
+          <legend data-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
           <% Irida::Auth.all_available_scopes.each do |scope| %>
             <div class="flex">
               <div class="flex items-center h-5">
                 <%= check_box_tag "personal_access_token[scopes][]",
                 scope,
-                id: "personal_access_token_scopes_#{scope}" %>
+                (
+                  if !personal_access_token.nil?
+                    personal_access_token.scopes.include?(scope.to_s)
+                  else
+                    nil
+                  end
+                ),
+                id: "personal_access_token_scopes_#{scope}",
+                aria: {
+                  describedby:
+                    (
+                      if invalid_scopes
+                        form.field_id(:scopes, "error")
+                      else
+                        nil
+                      end
+                    ),
+                  invalid: invalid_scopes,
+                },
+                autofocus: invalid_scopes %>
               </div>
               <div class="ml-2 text-sm">
                 <%= label_tag "personal_access_token_scopes_#{scope}",
@@ -60,6 +105,11 @@
               </div>
             </div>
           <% end %>
+        </fieldset>
+        <% if invalid_scopes %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:scopes, "error"),
+          errors: personal_access_token.errors[:scopes] %>
         <% end %>
       </div>
 

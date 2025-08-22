@@ -44,10 +44,14 @@ module BotPersonalAccessTokenActions
             personal_access_token: @personal_access_token
           }
         else
+          error_msg = if @personal_access_token.errors[:base].any?
+                        error_message(@personal_access_token)
+                      else
+                        t(:'general.form.error_notification')
+                      end
+
           render status: :unprocessable_entity,
-                 locals:
-                { type: 'alert',
-                  message: error_message(@personal_access_token) }
+                 locals: { type: 'alert', message: error_msg }
 
         end
       end
