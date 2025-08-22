@@ -1613,6 +1613,8 @@ module Groups
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
 
+      assert_no_selector 'html[aria-busy="true"]'
+
       # verifies navigation to page
       assert_selector 'h1', text: I18n.t('groups.samples.index.title')
 

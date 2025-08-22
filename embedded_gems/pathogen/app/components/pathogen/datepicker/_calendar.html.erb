@@ -2,7 +2,7 @@
   <%= render Pathogen::BaseComponent.new(**calendar_arguments) do %>
     <div
       class="
-        inline-block rounded-lg bg-white dark:bg-slate-700 shadow-sm @max-sm:p-1 @sm:p-4
+        inline-block rounded-lg bg-white dark:bg-slate-700 shadow-sm max-[384px]:p-1 p-4
       "
     >
       <%= render partial: "pathogen/datepicker/calendar/header",
