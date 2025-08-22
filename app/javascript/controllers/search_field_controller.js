@@ -143,7 +143,6 @@ export default class extends Controller {
    */
   onFocusin(event) {
     if (!this.element.contains(event.relatedTarget)) {
-      console.log("focusin");
       this.inputTarget.setAttribute("data-turbo-permanent", "");
     }
   }
@@ -153,7 +152,6 @@ export default class extends Controller {
    */
   onFocusout(event) {
     if (!this.element.contains(event.relatedTarget)) {
-      console.log("focusout");
       this.inputTarget.removeAttribute("data-turbo-permanent");
     }
   }
