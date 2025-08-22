@@ -3,7 +3,6 @@
 module PersonalAccessTokens
   # Service used to create personal access tokens
   class CreateService < BaseService
-    PersonalAccessTokenCreateError = Class.new(StandardError)
     attr_accessor :namespace, :bot_user, :personal_access_token
 
     def initialize(user, params, namespace = nil, bot_user = nil)
@@ -18,26 +17,24 @@ module PersonalAccessTokens
       authorize! current_user, to: :generate_bot_personal_access_token? if bot_user.nil?
       authorize! namespace, to: :generate_bot_personal_access_token? unless bot_user.nil?
 
-      validate_params
+      return @personal_access_token unless validate_params
 
       personal_access_token.save
 
-      personal_access_token
-    rescue PersonalAccessTokens::CreateService::PersonalAccessTokenCreateError => e
-      personal_access_token.errors.add(:base, e.message)
       personal_access_token
     end
 
     def validate_params
       if params[:name].blank?
-        raise PersonalAccessTokenCreateError,
-              I18n.t('services.personal_access_tokens.create.required.token_name')
+        @personal_access_token.errors.add :name, I18n.t('services.personal_access_tokens.create.required.token_name')
       end
 
-      return if params[:scopes].present?
+      if params[:scopes].blank?
+        @personal_access_token.errors.add :scopes,
+                                          I18n.t('services.personal_access_tokens.create.required.scopes')
+      end
 
-      raise PersonalAccessTokenCreateError,
-            I18n.t('services.personal_access_tokens.create.required.scopes')
+      @personal_access_token.errors.none?
     end
   end
 end

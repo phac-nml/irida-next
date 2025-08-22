@@ -24,9 +24,14 @@ module Profiles
           end
         else
           format.turbo_stream do
+            error_msg = if @personal_access_token.errors[:base].any?
+                          error_message(@personal_access_token)
+                        else
+                          t(:'general.form.error_notification')
+                        end
             render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
                                                             new_personal_access_token: nil,
-                                                            message: error_message(@personal_access_token) }
+                                                            message: error_msg }
           end
         end
       end
