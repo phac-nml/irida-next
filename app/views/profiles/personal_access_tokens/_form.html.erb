@@ -12,6 +12,8 @@
         )
       end %>
 
+      <%= render partial: "shared/form/required_field_legend" %>
+
       <% invalid_token_name = personal_access_token.errors.include?(:name) %>
       <div class="form-field <%= 'invalid' if invalid_token_name %>">
         <%= f.label :name, data: { required: true } %>
