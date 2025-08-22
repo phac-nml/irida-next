@@ -482,7 +482,13 @@ input[type="search"] {
 
   /* VIRAL DIALOG */
   dialog {
-    @apply max-w-screen -translate-1/2 backdrop-blur-xs left-1/2 top-1/2 max-h-screen w-full rounded-lg bg-white p-0 shadow-sm backdrop:bg-slate-200/40 max-sm:overflow-y-auto sm:overflow-y-hidden dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
+    @apply -translate-1/2 backdrop-blur-xs max-w-screen left-1/2 top-1/2 max-h-screen w-full rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
+  }
+
+  dialog div.dialog--contents {
+    @apply max-sm:overflow-y-auto sm:overflow-y-hidden;
+    max-height: inherit;
+    max-width: inherit;
   }
 
   .dialog--size-sm {

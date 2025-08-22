@@ -8,31 +8,33 @@
     <%= trigger %>
   <% end %>
   <div class="contents">
-    <%= render Viral::BaseComponent.new(tag: :dialog, id: id, classes: [dialog_size], **system_arguments) do %>
-      <% if header.present? %>
-        <%= header %>
-      <% end %>
+    <%= render Viral::BaseComponent.new(tag: :dialog, classes: ["overflow-visible", @dialog_size], data: { 'viral--dialog-target': 'dialog'}) do %>
+      <%= render Viral::BaseComponent.new(tag: :div, id: id, **system_arguments) do %>
+        <% if header.present? %>
+          <%= header %>
+        <% end %>
 
-      <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
-        <%= content %>
-      </div>
-
-      <% if render_footer? %>
-        <div
-          class="
-            flex items-center p-5 space-x-2 border-t rounded-b-lg border-slate-200
-            dark:border-slate-600
-          "
-        >
-          <% if primary_action? %>
-            <%= primary_action %>
-          <% end %>
-          <% if secondary_actions? %>
-            <% secondary_actions.each do |action| %>
-              <%= action %>
-            <% end %>
-          <% end %>
+        <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
+          <%= content %>
         </div>
+
+        <% if render_footer? %>
+          <div
+            class="
+              flex items-center p-5 space-x-2 border-t rounded-b-lg border-slate-200
+              dark:border-slate-600
+            "
+          >
+            <% if primary_action? %>
+              <%= primary_action %>
+            <% end %>
+            <% if secondary_actions? %>
+              <% secondary_actions.each do |action| %>
+                <%= action %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>

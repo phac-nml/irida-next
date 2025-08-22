@@ -1169,6 +1169,9 @@ module Groups
 
       assert_no_selector 'dialog[open]'
 
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
+
       assert_selector '#samples-table table thead tr th', count: 10
       ### VERIFY END ###
     end
@@ -1273,6 +1276,9 @@ module Groups
       end
 
       assert_no_selector 'dialog[open]'
+
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
 
       assert_selector '#samples-table table thead tr th', count: 10
       within('#samples-table table') do
@@ -2009,6 +2015,9 @@ module Groups
 
       assert_no_selector 'dialog[open]'
 
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
+
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
                                                                            locale: @user.locale))
 
@@ -2194,6 +2203,9 @@ module Groups
       end
 
       assert_no_selector 'dialog[open]'
+
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
 
       # verify sample1 and 2 transferred, sample 28, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
@@ -2423,6 +2435,9 @@ module Groups
 
       assert_no_selector 'dialog[open]'
 
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
+
       # samples table now contains both original and cloned samples
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                            locale: @user.locale))
@@ -2581,6 +2596,9 @@ module Groups
       # verify dialog is closed
       assert_no_selector 'dialog[open]'
 
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
+
       # verify samples table updates with cloned samples
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 47,
                                                                            locale: @user.locale))
@@ -2666,6 +2684,9 @@ module Groups
       end
 
       assert_no_selector 'dialog[open]'
+
+      # verify page has finished loading
+      assert_no_selector 'html[aria-busy="true"]'
 
       # verify no samples selected anymore
       within 'tfoot' do

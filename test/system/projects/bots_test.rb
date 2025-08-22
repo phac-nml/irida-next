@@ -454,12 +454,14 @@ module Projects
       end
 
       # confirm destroy bot
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('bots.destroy_confirmation.description', bot_name: @project_bot.user.email)
         click_button I18n.t('bots.destroy_confirmation.submit_button')
       end
       ### ACTIONS END ###
+
+      assert_no_selector 'dialog[open]'
 
       ### VERIFY START ###
       # confirm bot destroyed

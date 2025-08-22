@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module Dashboard
   class ProjectsTest < ApplicationSystemTestCase
+    include ActionView::Helpers::SanitizeHelper
+
     def setup
       @user = users(:john_doe)
       login_as @user
@@ -77,8 +79,10 @@ module Dashboard
       assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      find('input.t-search-component').native.send_keys(:return)
+      click_button I18n.t(:'dashboard.projects.index.search.label')
 
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
+                                                                           locale: @user.locale))
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
@@ -97,7 +101,10 @@ module Dashboard
       assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
-      find('input.t-search-component').native.send_keys(:return)
+      click_button I18n.t(:'dashboard.projects.index.search.label')
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '.treegrid-row', count: 1
       assert_text @project.puid
     end
