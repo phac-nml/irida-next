@@ -486,7 +486,9 @@ input[type="search"] {
   }
 
   dialog div.dialog--contents {
-    @apply h-full w-full max-sm:overflow-y-auto sm:overflow-y-hidden;
+    @apply max-sm:overflow-y-auto sm:overflow-y-hidden;
+    max-height: inherit;
+    max-width: inherit;
   }
 
   .dialog--size-sm {
