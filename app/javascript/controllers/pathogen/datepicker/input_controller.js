@@ -339,7 +339,10 @@ export default class extends Controller {
 
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
-    console.error(`Select2Controller error in ${source}:`, error);
+    console.error(
+      `Pathogen--Datepicker--InputController error in ${source}:`,
+      error,
+    );
   }
 
   // used by pathogen/datepicker/calendar.js
