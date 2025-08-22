@@ -169,14 +169,15 @@ export default class extends Controller {
 
   // append datepicker to dialog if in dialog, otherwise append to body
   #findCalendarContainer() {
-    let nextParentElement = this.datepickerInputTarget.parentNode;
-    while (nextParentElement.tagName !== "BODY") {
+    let nextParentElement = this.datepickerInputTarget.parentElement;
+    while (nextParentElement.tagName !== "MAIN") {
+      console.log(nextParentElement);
       if (nextParentElement.tagName === "DIALOG") {
         return nextParentElement;
       }
-      nextParentElement = nextParentElement.parentNode;
+      nextParentElement = nextParentElement.parentElement;
     }
-    return document.body;
+    return nextParentElement;
   }
 
   // once the calendar controller connects, share values used by both controllers
