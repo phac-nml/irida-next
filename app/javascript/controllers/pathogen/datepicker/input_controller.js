@@ -171,7 +171,6 @@ export default class extends Controller {
   #findCalendarContainer() {
     let nextParentElement = this.datepickerInputTarget.parentElement;
     while (nextParentElement.tagName !== "MAIN") {
-      console.log(nextParentElement);
       if (nextParentElement.tagName === "DIALOG") {
         return nextParentElement;
       }
