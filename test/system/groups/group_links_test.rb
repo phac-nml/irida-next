@@ -36,6 +36,8 @@ module Groups
         click_button I18n.t(:'groups.group_links.new.button.submit')
       end
 
+      assert_no_selector 'dialog[open]'
+
       assert_selector 'tr', count: (@group_links_count + 1) + header_row_count
     end
 

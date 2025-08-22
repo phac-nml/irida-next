@@ -1959,6 +1959,7 @@ module Projects
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_no_text I18n.t('shared.progress_bar.in_progress')
 
         # sample 3 does not exist in current project
         assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
