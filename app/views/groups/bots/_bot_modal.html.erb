@@ -104,7 +104,7 @@
         <% invalid_scopes = new_bot_account.errors.include?(:scopes) %>
         <div class="form-field <%= 'invalid' if invalid_scopes %>">
           <fieldset>
-            <legend data-aria-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
+            <legend data-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
