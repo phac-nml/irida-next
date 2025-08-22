@@ -136,4 +136,25 @@ export default class extends Controller {
   updateFocus() {
     if (this.hasInputTarget) this.inputTarget.focus();
   }
+
+  /**
+   * Add data-turbo-permanent attribute to inputTarget on focusin.
+   * Prevents background page refresh from clearing inputTarget during interaction.
+   */
+  onFocusin(event) {
+    if (!this.element.contains(event.relatedTarget)) {
+      console.log("focusin");
+      this.inputTarget.setAttribute("data-turbo-permanent", "");
+    }
+  }
+
+  /**
+   * Remove data-turbo-permanent attribute from inputTarget on focusin
+   */
+  onFocusout(event) {
+    if (!this.element.contains(event.relatedTarget)) {
+      console.log("focusout");
+      this.inputTarget.removeAttribute("data-turbo-permanent");
+    }
+  }
 }

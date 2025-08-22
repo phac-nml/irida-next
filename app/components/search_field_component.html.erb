@@ -1,4 +1,11 @@
-<div data-controller="search-field" class="flex flex-col">
+<div
+  data-controller="search-field"
+  class="flex flex-col"
+  data-action="
+    focusin->search-field#onFocusin
+    focusout->search-field#onFocusout
+  "
+>
   <%= @form.label @field_name, @label, class: "sr-only" %>
   <div class="relative">
     <%= @form.search_field @field_name,
