@@ -1,123 +1,16 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <% dialog.with_header(title: t(:"projects.members.new.title")) %>
-  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
-    <p class="dark:text-slate-400">
-      <%= I18n.t("projects.members.new.description", name: @namespace.human_name) %>
-    </p>
-  </div>
-  <%= form_with(model: @new_member, url: namespace_project_members_path(tab: @tab), data: {controller: "viral--select2"}, method: :post,  html: { novalidate: true }) do |form| %>
-    <div class="grid gap-4">
-      <%= if @new_member.errors.any?
-        viral_alert(
-          type: "alert",
-          message: I18n.t(:"general.form.error_notification"),
-          aria: {
-            live: "assertive",
-          },
-        )
-      end %>
-
-      <%= render partial: "shared/form/required_field_legend" %>
-      <% invalid_user_id = @new_member.errors.include?(:user) %>
-      <div class="form-field <%= 'invalid' if invalid_user_id %>">
-        <% form_id = "add-user-select2" %>
-        <label
-          for="<%= form_id %>"
-          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-          data-required="true"
-        >
-
-          <%= t("projects.members.new.user_select") %>
-        </label>
-        <%= viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
-          <% @available_users.each do |user| %>
-            <% select.with_option(
-                      value: user.id,
-                      label: user.full_name,
-                    ) do %>
-              <span
-                class="
-                  text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                "
-              >
-                <%= user.email %>
-              </span>
-              <span class="text-slate-600 dark:text-white block pointer-events-none">
-                <%= user.full_name %>
-              </span>
-            <% end %>
-          <% end %>
-          <%= select.with_empty_state do %>
-            <%= t(:"projects.members.new.empty_state") %>
-          <% end %>
-        <% end %>
-        <% if invalid_user_id %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:user_id, "error"),
-          errors: @new_member.errors.full_messages_for(:user) %>
-        <% end %>
-        <p id="<%= form.field_id(:user_id, "hint") %>" class="field-hint">
-          <%= t("projects.members.new.user_hint") %>
-        </p>
-      </div>
-
-      <% invalid_access_level = @new_member.errors.include?(:access_level) %>
-      <div class="form-field <%= 'invalid' if invalid_access_level %>">
-        <%= form.label :access_level, data: { required: true } %>
-        <%= form.select :access_level,
-                    @access_levels,
-                    {},
-                    {
-                      required: true,
-                      aria: {
-                        describedby: [
-                          (
-                            if invalid_access_level
-                              form.field_id(:access_level, "error")
-                            else
-                              nil
-                            end
-                          ),
-                          form.field_id(:access_level, "hint"),
-                        ].join(" "),
-                        invalid: invalid_access_level,
-                        required: true,
-                      },
-                      autofocus: invalid_access_level,
-                      value: @new_member.access_level,
-                    } %>
-        <% if invalid_access_level %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:access_level, "error"),
-          errors: @new_member.errors.full_messages_for(:access_level) %>
-        <% end %>
-        <p id="<%= form.field_id(:access_level, "hint") %>" class="field-hint">
-          <%= t("projects.members.new.access_level_hint") %>
-        </p>
-      </div>
-      <div class="form-field">
-        <%= pathogen_datepicker(
-          id: "member_expires_at",
-          input_name: "member[expires_at]",
-          label: t("activerecord.attributes.member.expires_at"),
-        ) %>
-      </div>
-      <div class="my-4">
-        <%= form.submit t(:"projects.members.new.add_member_to_project"),
-                    class: "button button-primary mr-1",
-                    disabled: true,
-                    data: {
-                      "viral--select2-target": "submitButton",
-                    } %>
-
-        <button
-          type="button"
-          class="button button-default"
-          data-action="click->viral--dialog#close"
-        >
-          <%= I18n.t(:"projects.members.new.button.cancel") %>
-        </button>
-      </div>
-    </div>
+  <% dialog.with_trigger do %>
+    <button class="button button-primary" data-action="viral--dialog#open">
+      <%= I18n.t("projects.members.index.add") %>
+    </button>
+  <% end %>
+  <% if defined? @new_member %>
+    <%= render partial: "form" %>
+  <% else %>
+    <%= turbo_frame_tag "new_member_dialog_content", src: new_namespace_project_member_path(@namespace.parent, @namespace.project), loading: :lazy do %>
+      <%# TODO: Create a form skeleton? %>
+      <%= render partial: "shared/loading/samples_list_skeleton" %>
+    <% end %>
   <% end %>
 <% end %>
