@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= viral_dialog(id: 'new-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: I18n.t("projects.group_links.new.title")) %>
   <% dialog.with_trigger do %>
     <button class="button button-default" data-action="viral--dialog#open">
@@ -6,9 +6,9 @@
     </button>
   <% end %>
   <% if defined? new_group_link %>
-    <%= render partial: "form" %>
+    <%= render partial: "form", locals: { new_group_link: new_group_link } %>
   <% else %>
-    <%= turbo_frame_tag "new_group_link_dialog_content", src:  new_namespace_project_group_link_path(@namespace.parent, @namespace.project), loading: :lazy do %>
+    <%= turbo_frame_tag "new_group_link_dialog_content", src:  new_namespace_project_group_link_path(@namespace.parent, @namespace.project, {tab: @tab}), loading: :lazy do %>
       <%# TODO: Create a form skeleton? %>
       <%= render partial: "shared/loading/samples_list_skeleton" %>
     <% end %>
