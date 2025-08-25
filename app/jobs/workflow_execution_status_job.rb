@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Queues the workflow execution status job
-class WorkflowExecutionStatusJob < ApplicationJob
+class WorkflowExecutionStatusJob < WorkflowExecutionJob
   queue_as :default
   queue_with_priority 5
 
@@ -23,6 +23,11 @@ class WorkflowExecutionStatusJob < ApplicationJob
   def perform(workflow_execution)
     # User signaled to cancel
     return if workflow_execution.canceling? || workflow_execution.canceled?
+
+    # validate workflow_execution object is fit to run jobs on
+    unless validate_initial_state(workflow_execution, nil, validate_run_id: true)
+      return handle_error_state_and_clean(workflow_execution)
+    end
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute

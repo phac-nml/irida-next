@@ -8,6 +8,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
     @workflow_execution_invalid_workflow = workflow_executions(:workflow_execution_invalid_workflow)
     @workflow_execution_invalid_namespace = workflow_executions(:workflow_execution_invalid_namespace)
+    @workflow_execution_missing_namespace = workflow_executions(:workflow_execution_missing_namespace)
   end
 
   test 'workflow execution has a namespace_id' do
@@ -20,6 +21,13 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     assert_not_nil @workflow_execution_invalid_namespace.errors[:namespace]
     assert_includes @workflow_execution_invalid_namespace.errors[:namespace],
                     I18n.t('activerecord.errors.models.workflow_execution.invalid_namespace')
+  end
+
+  test 'workflow execution with an missing namespace' do
+    assert_not @workflow_execution_missing_namespace.valid?
+    assert_not_nil @workflow_execution_missing_namespace.errors[:namespace]
+    assert_includes @workflow_execution_missing_namespace.errors[:namespace],
+                    I18n.t('activerecord.errors.models.workflow_execution.missing_namespace')
   end
 
   test 'valid workflow execution' do

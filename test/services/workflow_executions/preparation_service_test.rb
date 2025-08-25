@@ -8,7 +8,7 @@ module WorkflowExecutions
     def setup
       @user = users(:john_doe)
       @workflow_execution = workflow_executions(:irida_next_example)
-      @workflow_execution_nonexecutable = workflow_executions(:irida_next_example_nonexecutable)
+      @workflow_execution_non_executable = workflow_executions(:irida_next_example_non_executable)
     end
 
     test 'prepare workflow_execution with valid params' do
@@ -53,14 +53,14 @@ module WorkflowExecutions
     end
 
     test 'should return false since chosen pipeline is not executable' do
-      assert @workflow_execution_nonexecutable.initial?
+      assert @workflow_execution_non_executable.initial?
 
       assert_no_difference -> { ActiveStorage::Attachment.count } do
-        WorkflowExecutions::PreparationService.new(@workflow_execution_nonexecutable, @user, {}).execute
+        WorkflowExecutions::PreparationService.new(@workflow_execution_non_executable, @user, {}).execute
       end
 
-      assert_equal 'error', @workflow_execution_nonexecutable.state
-      assert @workflow_execution_nonexecutable.cleaned
+      assert_equal 'error', @workflow_execution_non_executable.state
+      assert @workflow_execution_non_executable.cleaned
     end
   end
 end

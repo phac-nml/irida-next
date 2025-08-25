@@ -107,4 +107,52 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     assert_performed_jobs(2, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
+
+  test 'not completing job execution' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post('/runs') do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: workflow_execution.run_id }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
+      end
+    end
+
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert_not workflow_execution.reload.submitted?
+    assert workflow_execution.error?
+  end
+
+  # This test is a unique case where the error is expected to be caught by the status job at a later point
+  test 'job execution succeeded despite WES returning nil run_id' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post('/runs') do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: nil }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+      end
+    end
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.reload.submitted?
+    assert_not @workflow_execution.error?
+  end
 end

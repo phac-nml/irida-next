@@ -167,3 +167,10 @@ subgroup_sample_actions_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAW
+
+steve_doe_namespace:
+  name: steve.doe@localhost
+  path: steve.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAX

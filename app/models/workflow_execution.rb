@@ -81,7 +81,12 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def validate_namespace
-    return if %w[Group Project].include?(namespace.type)
+    unless namespace
+      errors.add(:namespace, I18n.t('activerecord.errors.models.workflow_execution.missing_namespace'))
+      return
+    end
+
+    return if %w[Group Project].include?(namespace&.type)
 
     errors.add(:namespace, I18n.t('activerecord.errors.models.workflow_execution.invalid_namespace'))
   end
