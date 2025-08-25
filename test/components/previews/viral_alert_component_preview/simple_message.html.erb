@@ -1,0 +1,82 @@
+<!--
+  💬 SIMPLE MESSAGE ALERTS - Clean and straightforward
+
+  Simple message alerts are perfect for short notifications, status updates,
+  or any message that doesn't need additional context or actions.
+
+  Features:
+  - Clean, minimal design
+  - Single line of text
+  - No additional content or actions
+  - Perfect for quick notifications
+  - Responsive and accessible
+
+  Usage:
+  viral_alert(message: "Your simple message here")
+-->
+
+<div class="space-y-6">
+  <!-- Basic Simple Message -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      💬 Basic Simple Message
+    </h3>
+    <%= viral_alert(message: "Your profile has been updated.") %>
+  </div>
+
+  <!-- Short Status Update -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      📊 Status Update
+    </h3>
+    <%= viral_alert(message: "Processing complete.", type: :success) %>
+  </div>
+
+  <!-- Quick Notification -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🔔 Quick Notification
+    </h3>
+    <%= viral_alert(message: "New message received.", type: :info) %>
+  </div>
+
+  <!-- Simple Warning -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⚠️  Simple Warning
+    </h3>
+    <%= viral_alert(message: "Please save your work.", type: :warning) %>
+  </div>
+
+  <!-- Error Message -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ❌ Error Message
+    </h3>
+    <%= viral_alert(message: "Connection failed.", type: :danger) %>
+  </div>
+
+  <!-- Design Principles -->
+  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎨 Design Principles</h4>
+    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+      <li>• <strong>Keep it short</strong> - one line, under 60 characters</li>
+      <li>• <strong>Be specific</strong> - what happened, not how it happened</li>
+      <li>• <strong>Use active voice</strong> - "Updated" not "Has been updated"</li>
+      <li>• <strong>Match the tone</strong> - success should feel positive, errors should be clear</li>
+      <li>• <strong>Consider context</strong> - what does the user need to know?</li>
+    </ul>
+  </div>
+
+  <!-- Best Practices -->
+  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">💡 Best Practices</h4>
+    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+      <li>• <strong>Use for:</strong> confirmations, status updates, quick notifications</li>
+      <li>• <strong>Avoid for:</strong> complex instructions, detailed explanations, user actions</li>
+      <li>• <strong>Test length:</strong> ensure messages fit on mobile devices</li>
+      <li>• <strong>Be consistent:</strong> use similar language patterns across your app</li>
+      <li>• <strong>Consider timing:</strong> when should this message appear/disappear?</li>
+    </ul>
+  </div>
+</div>

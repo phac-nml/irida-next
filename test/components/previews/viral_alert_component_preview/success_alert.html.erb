@@ -1,1 +1,50 @@
-<%= viral_alert(message: 'This is an success alert', type: :success) %>
+<!--
+  ✅ SUCCESS ALERT - Positive feedback and confirmations
+
+  Success alerts are used to celebrate achievements, confirm successful operations,
+  and provide positive feedback to users. They use a green color scheme to
+  convey success and accomplishment.
+
+  Features:
+  - Green color scheme for success
+  - Check circle icon for positive reinforcement
+  - Perfect for confirming user actions
+  - Great for celebrating achievements
+
+  Usage:
+  viral_alert(message: "Success message", type: :success)
+-->
+
+<div class="space-y-6">
+  <!-- Basic Success Alert -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🎉 Basic Success Alert
+    </h3>
+    <%= viral_alert(message: "Your changes have been saved successfully!", type: :success) %>
+  </div>
+
+  <!-- Success with Achievement -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      🏆 Achievement Unlocked
+    </h3>
+    <%= viral_alert(message: "Congratulations! You've completed all the required training modules.", type: :success) %>
+  </div>
+
+  <!-- Success with Action Confirmation -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ✅ Action Confirmed
+    </h3>
+    <%= viral_alert(message: "Sample uploaded successfully. 1,247 records were processed and imported into the database.", type: :success) %>
+  </div>
+
+  <!-- Success with Time Information -->
+  <div>
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+      ⏱️  Process Completed
+    </h3>
+    <%= viral_alert(message: "Backup completed in 2 minutes 34 seconds. All data has been securely stored.", type: :success) %>
+  </div>
+</div>
