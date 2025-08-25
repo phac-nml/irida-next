@@ -288,7 +288,6 @@ export default class extends Controller {
       this.#todaysMonthIndex === 1
         ? this.#getFebLastDate(this.#todaysYear)
         : DAYS_IN_MONTH[this.#todaysMonthIndex];
-    console.log(this.#todaysDate === lastDate);
     return this.#todaysDate === lastDate;
   }
 
