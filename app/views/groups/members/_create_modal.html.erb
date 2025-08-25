@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= viral_dialog(id: 'new-member-dialog', open: open) do |dialog| %>
   <% dialog.with_trigger do %>
     <button class="button button-primary" data-action="viral--dialog#open">
       <%= I18n.t("groups.members.index.add") %>
@@ -8,7 +8,7 @@
   <% if defined? member %>
     <%= render partial: "form" %>
   <% else %>
-    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path, loading: :lazy do %>
+    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path({tab: @tab}), loading: :lazy do %>
       <%# TODO: Create a form skeleton? %>
       <%= render partial: "shared/loading/samples_list_skeleton" %>
     <% end %>
