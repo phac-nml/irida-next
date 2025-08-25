@@ -14,7 +14,8 @@ module Projects
           render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
-                                                     open: true
+                                                     open: true,
+                                                     concatenation_params: nil
                                                    }), status: :ok
         end
 
@@ -26,13 +27,16 @@ module Projects
 
           if @sample.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
-          elsif @sample.errors[:basename].any?
-            render status: :unprocessable_entity, locals: { type: :danger,
-                                                            message: t(:'general.form.error_notification') }
           else
-            @errors = error_message(@sample)
+            error_msg = if @sample.errors[:basename].any?
+                          t(:'general.form.error_notification')
+                        else
+                          @errors
+                        end
+
             render status: :unprocessable_entity, locals: { type: :danger,
-                                                            message: @errors }
+                                                            message: error_msg,
+                                                            concatenation_params: }
 
           end
         end
