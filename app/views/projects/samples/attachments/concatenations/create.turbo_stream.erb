@@ -3,6 +3,7 @@
   partial: "modal",
   locals: {
     open: @sample.errors.any?,
+    concatenation_params: @sample.errors.any? ? concatenation_params : nil,
   },
 ) %>
 
