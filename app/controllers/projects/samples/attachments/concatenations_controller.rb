@@ -31,7 +31,7 @@ module Projects
             error_msg = if @sample.errors[:basename].any?
                           t(:'general.form.error_notification')
                         else
-                          @errors
+                          error_message(@sample)
                         end
 
             render status: :unprocessable_entity, locals: { type: :danger,
