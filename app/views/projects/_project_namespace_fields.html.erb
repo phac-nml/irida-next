@@ -51,7 +51,7 @@ end %>
       <%= t("activerecord.attributes.namespaces/project_namespace.parent_id") %>
       <span class="text-red-500">*</span>
     </label>
-    <div class="flex items-center">
+    <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
       <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace")) do |select| %>
@@ -77,7 +77,6 @@ end %>
           <%= t(:"projects.new.empty_state") %>
         <% end %>
       <% end %>
-      <div class="ml-4 dark:text-slate-200">/</div>
     </div>
     <% if invalid_namespace %>
       <%= render "shared/form/field_errors",

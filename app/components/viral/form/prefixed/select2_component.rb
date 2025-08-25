@@ -5,19 +5,22 @@ module Viral
     module Prefixed
       # Select2 component with a prefix
       class Select2Component < ViewComponent::Base
-        attr_reader :form, :id, :name, :selected_value, :placeholder, :required
+        attr_reader :form, :id, :name, :selected_value, :placeholder, :required, :path_separator
 
         renders_many :options, Viral::Select2OptionComponent
         renders_one :empty_state
 
-        def initialize(form:, id:, name:, selected_value: false, **options)
+        # rubocop:disable Metrics/ParameterLists
+        def initialize(form:, id:, name:, selected_value: false, path_separator: true, **options)
           @form = form
           @name = name
           @id = id
           @selected_value = selected_value
           @placeholder = options[:placeholder]
           @required = options[:required]
+          @path_separator = path_separator
         end
+        # rubocop:enable Metrics/ParameterLists
       end
     end
   end
