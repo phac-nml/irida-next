@@ -284,11 +284,11 @@ export default class extends Controller {
   }
 
   #onLastDate() {
-    if (this.#todaysMonthIndex === 1) {
-      return this.#getFebLastDate(this.#todaysYear) === DAYS_IN_MONTH[1];
-    } else {
-      return this.#todaysDate === DAYS_IN_MONTH[this.#todaysMonthIndex];
-    }
+    const lastDate =
+      this.#todaysMonthIndex === 1
+        ? this.#getFebLastDate(this.#todaysYear)
+        : DAYS_IN_MONTH[this.#todaysMonthIndex];
+    return this.#todaysDate === lastDate;
   }
 
   #getRelativeYearAndMonth(relativePosition) {
@@ -540,6 +540,7 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
+    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
@@ -551,6 +552,7 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
+    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
