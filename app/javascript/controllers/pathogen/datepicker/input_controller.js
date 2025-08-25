@@ -1,9 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import {
-  FOCUSABLE_ELEMENTS,
-  CALENDAR_HEIGHT,
-  CALENDAR_TOP_BUFFER,
-} from "controllers/pathogen/datepicker/constants";
+import { FOCUSABLE_ELEMENTS } from "controllers/pathogen/datepicker/constants";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
@@ -38,10 +34,7 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
-  // tracks calendar open state
-  #isCalendarOpen = false;
-  // positioning of datepicker pop-up differs in a dialog
-  #inDialog = false;
+  #dropdown;
 
   #minDate;
 
@@ -50,44 +43,81 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
-    this.boundUnhideCalendar = this.unhideCalendar.bind(this);
-    this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);
+    this.boundHandleDatepickerInputFocus =
+      this.handleDatepickerInputFocus.bind(this);
+    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
-    this.#addCalendarTemplate();
   }
 
   idempotentConnect() {
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
 
-    ["focus", "click"].forEach((event) => {
-      this.datepickerInputTarget.addEventListener(
-        event,
-        this.boundUnhideCalendar,
-      );
-    });
+    this.#addCalendarTemplate();
+
+    // Position the calendar
+    this.#initializeDropdown();
+
+    this.datepickerInputTarget.addEventListener(
+      "focus",
+      this.boundHandleDatepickerInputFocus,
+    );
 
     this.#findNextFocusableElement();
   }
 
   disconnect() {
-    ["focus", "click"].forEach((event) => {
-      this.datepickerInputTarget.removeEventListener(
-        event,
-        this.boundUnhideCalendar,
-      );
-    });
-    this.removeCalendarListeners();
-    // some controller actions will trigger disconnect, but then the listeners removed above do not
-    // get re-added as expected in connect(), due to the calendar still being present already in the DOM.
-    // simplest way around this is to .remove() the calendar, assign this.#calendar to null (sometimes DOM change
-    // doesn't process fast enough to where this.#calendar is still set to the removed element before connect()
-    // triggers). this allows this.idempotentConnect() and this.#addCalendarTemplate() to re-add the calendar and
-    // eventlisteners for expected functionality
+    this.datepickerInputTarget.removeEventListener(
+      "focus",
+      this.boundHandleDatepickerInputFocus,
+    );
+
     this.#calendar.remove();
     this.#calendar = null;
+  }
+
+  #initializeDropdown() {
+    try {
+      if (typeof Dropdown !== "function") {
+        throw new Error(
+          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
+        );
+      }
+      this.#dropdown = new Dropdown(
+        this.#calendar,
+        this.datepickerInputTarget,
+        {
+          placement: "top",
+          triggerType: "none", // handle via handleDatepickerInputFocus instead
+          offsetSkidding: 0,
+          offsetDistance: 10,
+          delay: 300,
+          onShow: () => {
+            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
+            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+            this.#calendar.addEventListener(
+              "focusin",
+              this.boundHandleCalendarFocus,
+            );
+          },
+          onHide: () => {
+            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+            document.removeEventListener(
+              "keydown",
+              this.boundHandleGlobalKeydown,
+            );
+            this.#calendar.removeEventListener(
+              "focusin",
+              this.boundHandleCalendarFocus,
+            );
+          },
+        },
+      );
+    } catch (error) {
+      this.#handleError(error, "initializeDropdown");
+    }
   }
 
   #setMinDate() {
@@ -148,15 +178,14 @@ export default class extends Controller {
 
   // append datepicker to dialog if in dialog, otherwise append to body
   #findCalendarContainer() {
-    let nextParentElement = this.datepickerInputTarget.parentNode;
-    while (nextParentElement.tagName !== "BODY") {
+    let nextParentElement = this.datepickerInputTarget.parentElement;
+    while (nextParentElement.tagName !== "MAIN") {
       if (nextParentElement.tagName === "DIALOG") {
-        this.#inDialog = true;
         return nextParentElement;
       }
-      nextParentElement = nextParentElement.parentNode;
+      nextParentElement = nextParentElement.parentElement;
     }
-    return document.body;
+    return nextParentElement;
   }
 
   // once the calendar controller connects, share values used by both controllers
@@ -164,80 +193,31 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  unhideCalendar() {
-    if (this.#isCalendarOpen) return;
-    // Position the calendar
-    this.#positionCalendar();
-
-    this.#calendar.classList.remove("hidden");
-    this.#isCalendarOpen = true;
-    // Set ARIA attributes for accessibility
-    this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-    this.#calendar.setAttribute("aria-hidden", "false");
-
-    // // Add global event listeners for outside clicks and keyboard events
-    document.addEventListener("click", this.boundHandleOutsideClick);
-    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-  }
-
-  #positionCalendar() {
-    const inputRect = this.datepickerInputTarget.getBoundingClientRect();
-    const position = this.#calculateOptimalPosition(inputRect);
-    this.#applyPositionToCalendar(position);
-  }
-
-  #calculateOptimalPosition(inputRect) {
-    let left = inputRect.left;
-    let top = inputRect.top + CALENDAR_TOP_BUFFER; // + CALENDAR_TOP_BUFFER accounts for datepicker element height
-
-    // dialog positioning requires calendar positioning to be relative to the dialog
-    if (this.#inDialog) {
-      const dialogContainer = this.#calendar.parentNode.getBoundingClientRect();
-      left = left - dialogContainer.left;
-      top = top - dialogContainer.top;
-    }
-
-    // Adjust top positioning based on where input is positioned
-    const spaceBelow = window.innerHeight - inputRect.bottom;
-    // if not enough space below input, orientate calendar above the input
-    if (spaceBelow < CALENDAR_HEIGHT) {
-      top = top - CALENDAR_HEIGHT;
-    }
-    return { left, top };
-  }
-
-  #applyPositionToCalendar({ left, top }) {
-    this.#calendar.style.left = `${left}px`;
-    this.#calendar.style.top = `${top}px`;
-  }
-
-  // Handle clicks outside the datepicker and input
-  handleOutsideClick(event) {
-    const clickedInsideComponent =
-      this.#calendar.contains(event.target) ||
-      this.datepickerInputTarget.contains(event.target);
-
-    if (!clickedInsideComponent) {
-      this.hideCalendar();
+  handleDatepickerInputFocus() {
+    if (!this.#dropdown.isVisible()) {
+      this.#dropdown.show();
     }
   }
 
-  // Close calendar and clean up listeners
+  handleCalendarFocus(event) {
+    const parentElement = this.#calendar.parentElement;
+    if (parentElement.tagName === "DIALOG") {
+      const rect = event.target.getBoundingClientRect();
+
+      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
+        const dialogContents = parentElement.querySelector(".dialog--contents");
+        dialogContents.scrollTo(0, rect.top);
+      }
+    }
+  }
+
+  // Hide calendar
   hideCalendar() {
-    if (!this.#isCalendarOpen) return;
-
-    this.removeCalendarListeners();
-
-    this.#isCalendarOpen = false;
-    this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-    this.#calendar.classList.add("hidden");
-    this.#calendar.setAttribute("aria-hidden", "true");
-  }
-
-  // Remove global event listeners
-  removeCalendarListeners() {
-    document.removeEventListener("click", this.boundHandleOutsideClick);
-    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+    try {
+      if (this.#dropdown) this.#dropdown.hide();
+    } catch (error) {
+      this.#handleError(error, "hideDropdown");
+    }
   }
 
   // Handle Escape and Tab key actions once calendar is open
@@ -375,6 +355,14 @@ export default class extends Controller {
     };
     this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
+    );
+  }
+
+  #handleError(error, source) {
+    // In production, consider reporting errors to a logging service
+    console.error(
+      `Pathogen--Datepicker--InputController error in ${source}:`,
+      error,
     );
   }
 
