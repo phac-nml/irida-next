@@ -206,7 +206,7 @@ export default class extends Controller {
 
       if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
         const dialogContents = parentElement.querySelector(".dialog--contents");
-        dialogContents.scrollTo(0, rect.top);
+        dialogContents.scrollBy(0, rect.top);
       }
     }
   }
