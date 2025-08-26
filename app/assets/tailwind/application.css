@@ -554,6 +554,25 @@ input[type="search"] {
     content: "›";
     @apply mx-2 select-none text-slate-400;
   }
+
+  /* Main content link accessibility button */
+  #main-content-link {
+    @apply pointer-events-none rounded-lg opacity-0 transition-all duration-200 ease-in-out;
+
+    /* Ensure focus ring has proper spacing */
+    &:focus-visible {
+      @apply outline-none ring-2 ring-offset-4 ring-offset-white dark:ring-offset-slate-800;
+      /* Use primary color for focus ring to match button background */
+      @apply ring-primary-600 dark:ring-primary-500;
+      /* Ensure the button is fully visible when focused */
+      @apply pointer-events-auto translate-y-0 transform opacity-100;
+    }
+
+    /* Hover state */
+    &:hover {
+      @apply bg-primary-800 dark:bg-primary-600;
+    }
+  }
 }
 
 .pagy-nav.pagination {
