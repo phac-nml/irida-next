@@ -73,11 +73,6 @@ class ViralAlertComponentPreview < ViewComponent::Preview
     # Shows spacing, stacking, and interaction between alerts
   end
 
-  def custom_styling
-    # 🎨 Custom styling - demonstrate how to override default styles
-    # Shows the flexibility of the component system
-  end
-
   # 🔧 ACCESSIBILITY FEATURES - Screen reader and keyboard support
 
   def accessibility_demo
