@@ -271,6 +271,7 @@ export default class extends Controller {
           this.#disableInputErrorState();
         }
         this.#setSelectedDate();
+        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
