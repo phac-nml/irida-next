@@ -38,6 +38,10 @@ input[type="search"] {
   appearance: textfield;
 }
 
+*:focus-visible {
+  @apply ring-primary-600 dark:ring-primary-500 z-10 outline-none ring-2 ring-offset-2 dark:ring-offset-slate-800;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
