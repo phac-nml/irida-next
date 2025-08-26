@@ -11,7 +11,14 @@ module SessionlessAuthentication
     @token = user.personal_access_tokens.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
     return unless @token&.active?
 
-    @token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
+    # Only update token last_used_at if it is not currently being updated
+    begin
+      @token.with_lock('FOR UPDATE NOWAIT') do
+        @token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
+      end
+    rescue ActiveRecord::LockWaitTimeout
+      Rails.logger.info "Unable to lock PersonalAccessToken (#{@token.id}) for updating last_used_at"
+    end
 
     sessionless_sign_in(user)
   end
