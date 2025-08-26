@@ -34,15 +34,13 @@
               data-action="collapsible#toggle"
             >
               <span data-infinite-scroll-target="selectionCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
-            <span
-              data-collapsible-target="icon"
-              class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
-            >
-              <%= pathogen_icon(
-                ICON::CARET_DOWN,
-                size: :sm
-              ) %>
-            </span>
+              <span
+                data-collapsible-target="icon"
+                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+              >
+                <%= pathogen_icon(ICON::CARET_DOWN, size: :sm) %>
+              </span>
+            </button>
           </h2>
 
           <div
@@ -76,6 +74,9 @@
             </div>
           </div>
         </div>
+
+        <%= render partial: "shared/form/required_field_legend" %>
+
         <%= viral_sortable_lists(
             title: t(".metadata"),
             description: t(".metadata_description",
@@ -99,6 +100,7 @@
             group: "metadata_selection",
             container_classes: "block mb-1 text-sm font-medium",
             list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+            required: true,
           ) %>
         <% end %>
 
@@ -119,7 +121,7 @@
             ) do |form| %>
           <div class="grid gap-4">
             <div class="mt-1 form-field">
-              <%= form.label :name, t(".format") %>
+              <%= form.label :name, t(".format"), data: { required: true } %>
               <div class="flex">
                 <div class="flex items-center">
                   <input

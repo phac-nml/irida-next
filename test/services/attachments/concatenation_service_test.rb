@@ -50,7 +50,7 @@ module Attachments
           Attachments::ConcatenationService.new(@user, sample, params).execute
         end
 
-        assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
+        assert sample.errors[:basename].include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
 
         assert_equal sample.reload.attachments_updated_at, prev_timestamp
       end
@@ -110,7 +110,7 @@ module Attachments
           Attachments::ConcatenationService.new(@user, sample, params).execute
         end
 
-        assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
+        assert sample.errors[:basename].include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
 
         assert_equal sample.reload.attachments_updated_at, prev_timestamp
       end
@@ -368,7 +368,7 @@ module Attachments
           Attachments::ConcatenationService.new(@user, @sample, params).execute
         end
 
-        assert @sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.filename_missing'))
+        assert @sample.errors[:basename].include?(I18n.t('services.attachments.concatenation.filename_missing'))
 
         assert_equal @sample.reload.attachments_updated_at, prev_timestamp
       end

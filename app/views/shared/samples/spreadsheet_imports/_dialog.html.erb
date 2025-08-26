@@ -37,11 +37,17 @@
               <%= t(".namespace.project.description_html") %>
             <% end %>
           </p>
+
+          <%= render partial: "shared/form/required_field_legend" %>
+
           <div class="form-field">
             <%= form.label :file,
                        t(".file"),
                        class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white",
+                       data: {
+                         required: true,
+                       } %>
             <%= form.file_field :file,
                             required: true,
                             direct_upload: true,
@@ -52,6 +58,9 @@
                               action: "change->spreadsheet-import#readFile",
                               "attachment-upload-target": "attachmentsInput",
                             },
+                            aria: {
+                              required: true,
+                            },
                             class:
                               "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:placeholder-slate-400" %>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
@@ -60,7 +69,10 @@
             <%= form.label :sample_name_column,
                        t(".sample_name_column"),
                        class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white",
+                       data: {
+                         required: true,
+                       } %>
             <%= form.select :sample_name_column,
                         {},
                         { prompt: t(".select_sample_name_column") },
@@ -68,6 +80,9 @@
                         data: {
                           "spreadsheet-import-target": "sampleNameColumn",
                           action: "change->spreadsheet-import#changeInputValue",
+                        },
+                        aria: {
+                          required: true,
                         },
                         disabled: true,
                         class:
@@ -92,59 +107,63 @@
           </div>
           <% if @namespace.group_namespace? %>
             <div class="form-field">
-              <div class="mb-2">
-                <p class="font-sm font-medium text-slate-900 dark:text-white"><%= t(".project_selection") %></p>
-                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t(".project_selection_description") %></p>
-              </div>
-              <%= form.label :project_puid_column,
-                         t(".project_puid_column"),
-                         class:
-                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-              <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t(".project_puid_column_description") %></p>
-              <%= form.select :project_puid_column,
-                          {},
-                          { prompt: t(".select_project_puid_column") },
-                          required: false,
-                          data: {
-                            "spreadsheet-import-target": "projectPUIDColumn",
-                            action: "change->spreadsheet-import#changeInputValue",
-                          },
-                          disabled: true,
-                          class:
-                            "mb-2 disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
-              <% form_id = "static-project-select" %>
-              <label
-                for="<%= form_id %>"
-                class="
-                  block mb-2 text-sm font-medium text-slate-900 dark:text-white
-                "
-              ><%= t(".static_project") %></label>
-              <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t(".static_project_description") %></p>
+              <fieldset>
+                <legend
+                  data-required="true"
+                  class="font-sm font-medium text-slate-900 dark:text-white"
+                ><%= t(".project_selection") %></legend>
+                <div class="mb-2">
+                  <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t(".project_selection_description") %></p>
+                </div>
+                <%= form.label :project_puid_column,
+                           t(".project_puid_column"),
+                           class:
+                             "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t(".project_puid_column_description") %></p>
+                <%= form.select :project_puid_column,
+                            {},
+                            { prompt: t(".select_project_puid_column") },
+                            required: false,
+                            data: {
+                              "spreadsheet-import-target": "projectPUIDColumn",
+                              action: "change->spreadsheet-import#changeInputValue",
+                            },
+                            disabled: true,
+                            class:
+                              "mb-2 disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+                <% form_id = "static-project-select" %>
+                <label
+                  for="<%= form_id %>"
+                  class="
+                    block mb-2 text-sm font-medium text-slate-900 dark:text-white
+                  "
+                ><%= t(".static_project") %></label>
+                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t(".static_project_description") %></p>
 
-              <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project"), required: false) do |select| %>
-                <% @group_projects.each do |project| %>
-                  <% select.with_option(
-                      value: project.id,
-                      label: project.namespace.full_path,
-                    ) do %>
-                    <span
-                      class="
-                        text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                      "
-                    >
-                      <%= project.namespace.name %>
-                      <%= render PuidComponent.new(puid: project.namespace.puid, show_clipboard: false) %>
-                    </span>
-                    <span class="text-slate-600 dark:text-white block pointer-events-none">
-                      <%= project.namespace.full_path %>
-                    </span>
+                <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project"), required: false) do |select| %>
+                  <% @group_projects.each do |project| %>
+                    <% select.with_option(
+                        value: project.id,
+                        label: project.namespace.full_path,
+                      ) do %>
+                      <span
+                        class="
+                          text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                        "
+                      >
+                        <%= project.namespace.name %>
+                        <%= render PuidComponent.new(puid: project.namespace.puid, show_clipboard: false) %>
+                      </span>
+                      <span class="text-slate-600 dark:text-white block pointer-events-none">
+                        <%= project.namespace.full_path %>
+                      </span>
+                    <% end %>
+                  <% end %>
+                  <%= select.with_empty_state do %>
+                    <%= t(".static_project_empty_state") %>
                   <% end %>
                 <% end %>
-                <%= select.with_empty_state do %>
-                  <%= t(".static_project_empty_state") %>
-                <% end %>
-              <% end %>
-
+              </fieldset>
             </div>
           <% end %>
           <template
