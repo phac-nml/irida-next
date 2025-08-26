@@ -20,9 +20,6 @@ import { Controller } from "@hotwired/stimulus";
  *   <button data-action="viral--alert#dismiss">Close</button>
  * </div>
  *
- * @author Your Team
- * @version 2.0.0
- * @since 2024
  */
 export default class extends Controller {
   /**
