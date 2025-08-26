@@ -4,16 +4,14 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <% component.with_buttons do %>
-
-    <% if @allowed_to[:create_member] %>
-      <%= turbo_frame_tag "new_member_dialog" do %>
-        <%= render partial: "create_modal", locals: { open: false } %>
-      <% end %>
-    <% end %>
-
     <% if @allowed_to[:link_namespace_with_group] %>
       <%= turbo_frame_tag "new_group_link_dialog" do %>
         <%= render partial: "groups/group_links/invite_group_modal", locals: { open: false } %>
+      <% end %>
+    <% end %>
+    <% if @allowed_to[:create_member] %>
+      <%= turbo_frame_tag "new_member_dialog" do %>
+        <%= render partial: "create_modal", locals: { open: false } %>
       <% end %>
     <% end %>
   <% end %>
