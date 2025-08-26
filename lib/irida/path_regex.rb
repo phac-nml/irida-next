@@ -28,6 +28,7 @@ module Irida
       resume_historical_location
       refresh_historical_location
       robots.txt
+      up
       users
     ].freeze
 
