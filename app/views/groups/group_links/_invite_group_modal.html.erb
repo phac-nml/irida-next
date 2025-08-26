@@ -9,8 +9,7 @@
     <%= render partial: "form", locals: { new_group_link: new_group_link } %>
   <% else %>
     <%= turbo_frame_tag "new_group_link_dialog_content", src: new_group_group_link_path({tab: @tab}), loading: :lazy do %>
-      <%# TODO: Create a form skeleton? %>
-      <%= render partial: "shared/loading/samples_list_skeleton" %>
+      <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>
 <% end %>
