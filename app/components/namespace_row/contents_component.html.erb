@@ -50,11 +50,11 @@
 
   <div
     class="
-      ml-auto flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400
+      ml-auto flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400 mr-2
     "
   >
     <% if @namespace.group_namespace? %>
-      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".subnamespaces.aria-label")) do |component| %>
+      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".subnamespaces.aria-label"), class: "group pill-focus-reset") do |component| %>
         <% component.with_tooltip(
           text:
             t(
@@ -67,6 +67,9 @@
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
             bg-amber-100 dark:bg-amber-700 text-slate-800 dark:text-slate-200
+            group-focus-visible:ring-2 group-focus-visible:ring-primary-600
+            dark:group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2
+            dark:group-focus-visible:ring-offset-slate-800
           "
         >
           <%= pathogen_icon ICON::GROUPS,
@@ -75,7 +78,7 @@
           <%= @namespace.children.count %>
         </span>
       <% end %>
-      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".projects.aria-label")) do |component| %>
+      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:".projects.aria-label"), class: "group pill-focus-reset") do |component| %>
         <% component.with_tooltip(
           text:
             t(
@@ -88,6 +91,9 @@
           class="
             items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
             bg-fuchsia-100 dark:bg-fuchsia-700 text-slate-800 dark:text-slate-200
+            group-focus-visible:ring-2 group-focus-visible:ring-primary-600
+            dark:group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2
+            dark:group-focus-visible:ring-offset-slate-800
           "
         >
           <%= pathogen_icon ICON::PROJECTS,
@@ -96,7 +102,7 @@
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
-      <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:".samples.aria-label")) do |component| %>
+      <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:".samples.aria-label"), class: "group pill-focus-reset") do |component| %>
         <% component.with_tooltip(
           text:
             t(
@@ -110,7 +116,9 @@
           class="
             items-center text-sm samples-count inline-flex justify-center p-2 py-1
             rounded-full font-mono bg-blue-100 dark:bg-blue-700 text-slate-800
-            dark:text-slate-200
+            dark:text-slate-200 group-focus-visible:ring-2
+            group-focus-visible:ring-primary-600 dark:group-focus-visible:ring-primary-500
+            group-focus-visible:ring-offset-2 dark:group-focus-visible:ring-offset-slate-800
           "
         >
           <%= pathogen_icon ICON::SAMPLES,
@@ -121,7 +129,7 @@
       <% end %>
     <% end %>
     <% if @namespace.project_namespace? %>
-      <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:".samples.aria-label")) do |component| %>
+      <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:".samples.aria-label"), class: "group pill-focus-reset") do |component| %>
         <% component.with_tooltip(
           text:
             t(
@@ -135,7 +143,9 @@
           class="
             items-center text-sm samples-count inline-flex justify-center p-2 py-1
             rounded-full font-mono bg-blue-100 dark:bg-blue-700 text-slate-800
-            dark:text-slate-200
+            dark:text-slate-200 group-focus-visible:ring-2
+            group-focus-visible:ring-primary-600 dark:group-focus-visible:ring-primary-500
+            group-focus-visible:ring-offset-2 dark:group-focus-visible:ring-offset-slate-800
           "
         >
           <%= pathogen_icon ICON::SAMPLES,

@@ -38,7 +38,7 @@ input[type="search"] {
   appearance: textfield;
 }
 
-*:focus-visible {
+:not(.pill-focus-reset):focus-visible {
   @apply ring-primary-600 dark:ring-primary-500 z-10 outline-none ring-2 ring-offset-2 dark:ring-offset-slate-800;
 }
 
@@ -630,4 +630,15 @@ input[type="checkbox"] {
 
 input[type="radio"] {
   @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600;
+}
+
+/* Suppress global focus ring for specific anchors; keep pill span ring only */
+a.pill-focus-reset:focus,
+a.pill-focus-reset:focus-visible {
+  outline: none !important;
+  box-shadow: none !important; /* neutralize tailwind ring composition */
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
 }
