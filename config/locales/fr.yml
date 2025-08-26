@@ -2170,6 +2170,8 @@ fr:
     form:
       required_field: indicates required field
     loading:
+      form:
+        loading: Chargement...
       samples_list_skeleton:
         loading: Chargement...
     progress_bar:

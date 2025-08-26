@@ -1,0 +1,19 @@
+<div role="status" class="animate-pulse">
+  <% widths = [24, 32, 40, 48, 64] %>
+  <% 4.times do %>
+    <div class="mb-6">
+      <div
+        class="
+          h-3 bg-slate-200 dark:bg-slate-700 rounded-sm
+          w-<%=widths.sample%> mb-2
+        "
+      ></div>
+      <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded-sm w-full"></div>
+    </div>
+  <% end %>
+  <div class="flex items-center mt-8">
+    <div class="w-36 h-10 bg-slate-200 dark:bg-slate-700 rounded-sm me-3"></div>
+    <div class="w-28 h-10 bg-slate-200 dark:bg-slate-700 rounded-sm"></div>
+  </div>
+  <span class="sr-only"><%= t(:".loading") %></span>
+</div>

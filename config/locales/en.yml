@@ -2170,6 +2170,8 @@ en:
     form:
       required_field: indicates required field
     loading:
+      form:
+        loading: Loading...
       samples_list_skeleton:
         loading: Loading...
     progress_bar:

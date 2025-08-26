@@ -9,8 +9,7 @@
     <%= render partial: "form" %>
   <% else %>
     <%= turbo_frame_tag "new_member_dialog_content", src: new_namespace_project_member_path(@namespace.parent, @namespace.project, {tab: @tab}), loading: :lazy do %>
-      <%# TODO: Create a form skeleton? %>
-      <%= render partial: "shared/loading/samples_list_skeleton" %>
+      <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>
 <% end %>
