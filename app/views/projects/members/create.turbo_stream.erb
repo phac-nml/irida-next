@@ -2,6 +2,7 @@
                     partial: "create_modal",
                     locals: {
                       open: member.errors.any? ? true : false,
+                      tab: @tab,
                     } %>
 
 <% if @new_member.persisted? %>

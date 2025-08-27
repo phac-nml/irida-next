@@ -5,3 +5,17 @@
   <%= turbo_stream.update "members_pagination", method: "morph", partial: "pagination" %>
 
 <% end %>
+
+<%= turbo_stream.update "new_group_link_dialog",
+                    partial: "projects/group_links/invite_group_modal",
+                    locals: {
+                      open: false,
+                      tab: @tab,
+                    } %>
+
+<%= turbo_stream.update "new_member_dialog",
+                    partial: "create_modal",
+                    locals: {
+                      open: false,
+                      tab: @tab,
+                    } %>

@@ -9,12 +9,13 @@
         <%= render partial: "projects/group_links/invite_group_modal",
         locals: {
           open: false,
+          tab: @tab,
         } %>
       <% end %>
     <% end %>
     <% if @allowed_to[:link_namespace_with_group] %>
       <%= turbo_frame_tag "new_member_dialog" do %>
-        <%= render partial: "create_modal", locals: { open: false } %>
+        <%= render partial: "create_modal", locals: { open: false, tab: @tab } %>
       <% end %>
     <% end %>
   <% end %>
