@@ -8,7 +8,7 @@
   <% if @new_member&.invalid? %>
     <%= render partial: "form" %>
   <% else %>
-    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path({tab: @tab}), loading: :lazy do %>
+    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path(tab: @tab), loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>

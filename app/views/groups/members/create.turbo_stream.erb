@@ -3,6 +3,7 @@
                     locals: {
                       open: member.errors.any? ? true : false,
                       member: member,
+                      tab: @tab,
                     } %>
 
 <% if @new_member.persisted? %>
