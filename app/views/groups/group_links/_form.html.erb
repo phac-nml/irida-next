@@ -61,7 +61,8 @@
     </div>
     <% invalid_group_access_level = new_group_link.errors.include?(:group_access_level) %>
     <div class="form-field <%= 'invalid' if invalid_group_access_level %>">
-      <%= form.label I18n.t("groups.group_links.new.label.group_access_level"),
+      <%= form.label :group_access_level,
+                 I18n.t("groups.group_links.new.label.group_access_level"),
                  data: {
                    required: true,
                  } %>
