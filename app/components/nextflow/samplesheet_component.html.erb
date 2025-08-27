@@ -54,24 +54,32 @@
       </button>
     </div>
   </div>
+
   <div
     role="alert"
-    class="
-      flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
-      bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
-    "
+    aria-live="assertive"
+    aria-atomic="true"
     data-nextflow--samplesheet-target="error"
+    class="
+      hidden alert-component bg-red-50 border-red-300 dark:bg-red-900/20
+      dark:border-red-800/50 dark:text-red-400 text-red-800 mb-2
+    "
   >
-    <span class="inline shrink-0">
-      <%= pathogen_icon(ICON::WARNING_CIRCLE, size: :sm, class: "mr-3 stroke-2") %>
-    </span>
-    <div>
-      <div
-        class="font-medium whitespace-break-spaces"
-        data-nextflow--samplesheet-target="errorMessage"
-      ></div>
+    <div class="flex items-start w-full">
+      <div class="flex-shrink-0 mr-3 mt-0.5">
+        <%= pathogen_icon ICON::WARNING_CIRCLE,
+        class: "text-red-600 dark:text-red-500 size-6 w-5 h-5 stroke-2" %>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div
+          class="text-sm font-medium leading-5"
+          data-nextflow--samplesheet-target="errorMessage"
+        >
+        </div>
+      </div>
     </div>
   </div>
+
   <div
     class="
       @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
