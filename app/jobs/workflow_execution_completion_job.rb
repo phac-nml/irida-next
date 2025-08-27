@@ -17,8 +17,5 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end
-
-    # TODO: this job doesn't have any tests. Only the service has tests.
-    # Tests should be added when job queuing from CompletionService is refactored into this job.
   end
 end
