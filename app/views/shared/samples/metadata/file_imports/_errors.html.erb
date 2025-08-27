@@ -5,7 +5,7 @@
   <p class="mb-4 dark:text-white"><%= t(".description") %></p>
 
   <% errors.each do |error| %>
-    <%= viral_alert(type:, message: error, classes: "mb-4") %>
+    <%= viral_alert(type:, message: error, classes: "mb-4", dismissible: false) %>
   <% end %>
 
   <div>
