@@ -5,7 +5,7 @@
     </button>
   <% end %>
   <% dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
-  <% if defined? new_group_link %>
+  <% if defined?(new_group_link) && new_group_link&.invalid? %>
     <%= render partial: "form", locals: { new_group_link: new_group_link } %>
   <% else %>
     <%= turbo_frame_tag "new_group_link_dialog_content", src: new_group_group_link_path({tab: @tab}), loading: :lazy do %>

@@ -5,7 +5,7 @@
     </button>
   <% end %>
   <% dialog.with_header(title: t(:"groups.members.new.title")) %>
-  <% if defined? member %>
+  <% if @new_member&.invalid? %>
     <%= render partial: "form" %>
   <% else %>
     <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path({tab: @tab}), loading: :lazy do %>

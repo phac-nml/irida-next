@@ -5,7 +5,7 @@
       <%= I18n.t("projects.members.index.invite_group") %>
     </button>
   <% end %>
-  <% if defined? new_group_link %>
+  <% if defined?(new_group_link) && new_group_link&.invalid? %>
     <%= render partial: "form", locals: { new_group_link: new_group_link } %>
   <% else %>
     <%= turbo_frame_tag "new_group_link_dialog_content", src:  new_namespace_project_group_link_path(@namespace.parent, @namespace.project, {tab: @tab}), loading: :lazy do %>

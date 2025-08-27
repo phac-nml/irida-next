@@ -1,6 +1,5 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= turbo_frame_tag "new_member_modal" %>
 <%= turbo_frame_tag "member-update-alert" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
