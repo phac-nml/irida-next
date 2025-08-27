@@ -1,11 +1,11 @@
 <%= render Viral::BaseComponent.new(tag: "div", **system_arguments_with_data) do %>
   <div class="flex items-start w-full">
     <!-- Icon Container -->
-    <div class="flex-shrink-0 mr-3 mt-0.5">
+    <div class="flex-shrink-0 mr-3">
       <%= pathogen_icon(icon_name, color: icon_color, class: "w-5 h-5 stroke-2") %>
     </div>
     <!-- Content Container -->
-    <div class="flex-1 min-w-0">
+    <div class="flex-1 min-w-0 mt-0.5">
       <% if message.present? %>
         <div class="text-sm font-medium leading-5">
           <%= message %>
