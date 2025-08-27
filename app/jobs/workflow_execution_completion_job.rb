@@ -11,7 +11,12 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
       return handle_error_state_and_clean(workflow_execution)
     end
 
-    WorkflowExecutions::CompletionService.new(workflow_execution).execute
+    result = WorkflowExecutions::CompletionService.new(workflow_execution).execute
+    if result
+      WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+    else
+      handle_unable_to_process_job(workflow_execution, self.class.name)
+    end
 
     # TODO: this job doesn't have any tests. Only the service has tests.
     # Tests should be added when job queuing from CompletionService is refactored into this job.

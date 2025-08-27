@@ -32,6 +32,14 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
+    if workflow_execution
+      queue_next_job(workflow_execution)
+    else
+      handle_unable_to_process_job(workflow_execution, self.class.name)
+    end
+  end
+
+  def queue_next_job(workflow_execution)
     case workflow_execution.state.to_sym
     when :canceled, :error
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)

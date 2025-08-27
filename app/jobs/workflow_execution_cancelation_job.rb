@@ -43,6 +43,12 @@ class WorkflowExecutionCancelationJob < WorkflowExecutionJob
     end
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
-    WorkflowExecutions::CancelationService.new(workflow_execution, wes_connection, user).execute
+    result = WorkflowExecutions::CancelationService.new(workflow_execution, wes_connection, user).execute
+
+    if result
+      WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+    else
+      handle_unable_to_process_job(workflow_execution, self.class.name) unless result
+    end
   end
 end

@@ -10,7 +10,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.prepared? # TODO: returning false needs rework
+      return false unless @workflow_execution.prepared?
 
       run = @wes_client.run_workflow(**@workflow_execution.as_wes_params)
 

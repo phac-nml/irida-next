@@ -148,6 +148,7 @@ en:
           attributes:
             name:
               blank: can't be blank
+          invalid_job_state: Workflow Execution job is unable to be processed by Job type '{job_name}'
           invalid_namespace: can only be Group or Project
           invalid_workflow: unable to find workflow with id '%{pipeline_id}' and version '%{workflow_version}'
           missing_namespace: does not have a namespace

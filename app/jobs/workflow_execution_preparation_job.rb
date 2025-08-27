@@ -14,16 +14,12 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
       return handle_error_state_and_clean(workflow_execution)
     end
 
-    # TODO: the service returning false is actually used correctly here
-    # When the other jobs/services early returns are refactored this should also be included.
     result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
 
     if result
       WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
     else
-      @workflow_execution.state = :error
-      @workflow_execution.cleaned = true
-      @workflow_execution.save
+      handle_unable_to_process_job(workflow_execution, self.class.name)
     end
 
     # TODO: this job doesn't have any tests. Only the service has tests.
