@@ -1,10 +1,12 @@
-<%= render MetadataTemplates::TableComponent.new(
-  @metadata_templates,
-  @namespace,
-  @pagy,
-  @q,
-  {
-    update_metadata_templates: @allowed_to[:update_metadata_templates],
-    destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
-  },
-) %>
+<turbo-frame id="metadata-templates-table">
+  <%= render MetadataTemplates::TableComponent.new(
+    @metadata_templates,
+    @namespace,
+    @pagy,
+    @q,
+    {
+      update_metadata_templates: @allowed_to[:update_metadata_templates],
+      destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
+    },
+  ) %>
+</turbo-frame>
