@@ -5,7 +5,7 @@
       <%= I18n.t("projects.members.index.add") %>
     </button>
   <% end %>
-  <% if defined? @new_member %>
+  <% if @new_member&.invalid? %>
     <%= render partial: "form" %>
   <% else %>
     <%= turbo_frame_tag "new_member_dialog_content", src: new_namespace_project_member_path(@namespace.parent, @namespace.project, {tab: @tab}), loading: :lazy do %>
