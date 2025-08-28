@@ -1,7 +1,4 @@
-<div
-  class="flex items-center wrap-anywhere"
-  data-controller="clipboard"
->
+<div class="flex items-center wrap-anywhere" data-controller="clipboard">
   <span id="<%= button_name %>-content">
     <% if content.present? %>
       <%= content %>
@@ -18,7 +15,7 @@
     aria-label="<%= title %>"
     aria-describedby="<%= button_name %>-content"
     data-clipboard-target="button"
-    class="<%= button_classes %> focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-transparent"
+    class="<%= button_classes %>"
     value="<%= value %>"
   >
     <%= pathogen_icon ICON::CLIPBOARD, size: nil, class: "size-3 pointer-events-none" %>
