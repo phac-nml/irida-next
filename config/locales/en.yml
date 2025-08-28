@@ -694,9 +694,9 @@ en:
         collapse: Collapse
         expand: Expand
         group:
-          aria_label: "%{name}, persistent unique id: %{puid}, role: %{role}, subgroups: %{subgroups_count}, projects: %{group_projects_count}, samples: %{samples_count}"
+          aria_label: "%{name}, puid: %{puid}, role: %{role}, subgroups: %{subgroups_count}, projects: %{group_projects_count}, samples: %{samples_count}"
         project:
-          aria_label: "%{name}, persistent unique id: %{puid}, role: %{role}, samples: %{samples_count}"
+          aria_label: "%{name}, puid: %{puid}, role: %{role}, samples: %{samples_count}"
     viral:
       pagy:
         empty_state:
