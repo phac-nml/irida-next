@@ -8,20 +8,22 @@ export default class extends Controller {
 
   connect() {
     this.element.addEventListener("direct-upload:initialize", (event) =>
-      this.uploadInitialize(event)
+      this.uploadInitialize(event),
     );
     this.element.addEventListener("direct-upload:start", (event) =>
-      this.uploadStart(event)
+      this.uploadStart(event),
     );
     this.element.addEventListener("direct-upload:progress", (event) =>
-      this.uploadProgress(event)
+      this.uploadProgress(event),
     );
     this.element.addEventListener("direct-upload:error", (event) =>
-      this.uploadError(event)
+      this.uploadError(event),
     );
     this.element.addEventListener("direct-upload:end", (event) =>
-      this.uploadEnd(event)
+      this.uploadEnd(event),
     );
+    this.attachmentsInputTarget.setAttribute("aria-required", true);
+    this.submitButtonTarget.disabled = true;
   }
 
   uploadInitialize(event) {
@@ -39,12 +41,13 @@ export default class extends Controller {
                     <div class="bg-primary-600 h-2.5 rounded-full" style="width: 0" id="direct-upload-progress-${id}"></div>
                 </div>
             </div>
-            `
+            `,
     );
 
     target.previousElementSibling.querySelector(
-      `.direct-upload__filename`
-    ).innerHTML = `<span class="text-sm text-gray-500 dark:text-gray-400">${file.name}</span>
+      `.direct-upload__filename`,
+    ).innerHTML =
+      `<span class="text-sm text-gray-500 dark:text-gray-400">${file.name}</span>
             <span class="text-sm text-gray-500 dark:text-gray-400" id="upload-progress-${id}">0%</span>`;
 
     this.attachmentsInputTarget.classList.add("hidden");
@@ -61,11 +64,11 @@ export default class extends Controller {
   uploadProgress(event) {
     const { id, progress } = event.detail;
     const progressElement = document.getElementById(
-      `direct-upload-progress-${id}`
+      `direct-upload-progress-${id}`,
     );
     progressElement.style.width = `${progress}%`;
     document.getElementById(`upload-progress-${id}`).innerText = `${Math.round(
-      progress
+      progress,
     )}%`;
   }
 
@@ -84,19 +87,19 @@ export default class extends Controller {
   }
   disconnect() {
     this.element.removeEventListener("direct-upload:initialize", (event) =>
-      this.uploadInitialize(event)
+      this.uploadInitialize(event),
     );
     this.element.removeEventListener("direct-upload:start", (event) =>
-      this.uploadStart(event)
+      this.uploadStart(event),
     );
     this.element.removeEventListener("direct-upload:progress", (event) =>
-      this.uploadStart(event)
+      this.uploadStart(event),
     );
     this.element.removeEventListener("direct-upload:error", (event) =>
-      this.uploadProgress(event)
+      this.uploadProgress(event),
     );
     this.element.removeEventListener("direct-upload:end", (event) =>
-      this.uploadEnd(event)
+      this.uploadEnd(event),
     );
   }
 }

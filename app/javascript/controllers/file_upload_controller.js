@@ -14,6 +14,9 @@ export default class extends Controller {
   }
 
   handleFileChange(event) {
+    let submitButton = document.querySelectorAll(
+      "input[type='submit'][data-attachment-upload-target]",
+    )[0];
     const files = Array.from(event.target.files);
     const dt = new DataTransfer();
     const ignoreFiles = [];
@@ -30,7 +33,13 @@ export default class extends Controller {
     if (ignoreFiles.length > 0 && this.hasAlertTarget) {
       this.errorTarget.innerHTML = this.createBulletList(ignoreFiles);
       this.alertTarget.classList.remove("hidden");
+      if (dt.files.length > 0) {
+        submitButton.disabled = false;
+      } else {
+        submitButton.disabled = true;
+      }
     } else {
+      submitButton.disabled = false;
       this.alertTarget.classList.add("hidden");
     }
   }
