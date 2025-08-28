@@ -69,6 +69,7 @@ export default class extends Controller {
 
   #updateAriaForDragAndDrop() {
     let ariaLiveParams;
+    let movedOption;
     // get the current list options to compare with the lists' previous states
     let currentAvailableOptions = this.#extractOptionsIntoArray(
       document.getElementById(this.availableListValue),
@@ -111,20 +112,26 @@ export default class extends Controller {
         currentSelectedOptions.length >
         this.#savedOptionsState["selected"].length
       ) {
+        movedOption = this.#verifyOptionsDifference(
+          currentSelectedOptions,
+          this.#savedOptionsState["selected"],
+        );
         ariaLiveParams = {
           action: "added",
-          currentOptions: currentSelectedOptions,
-          savedOptions: this.#savedOptionsState["selected"],
+          movedOption: movedOption,
         };
       } else if (
         // option was added (removed) to available list
         currentAvailableOptions.length >
         this.#savedOptionsState["available"].length
       ) {
+        movedOption = this.#verifyOptionsDifference(
+          currentAvailableOptions,
+          this.#savedOptionsState["available"],
+        );
         ariaLiveParams = {
           action: "removed",
-          currentOptions: currentAvailableOptions,
-          savedOptions: this.#savedOptionsState["available"],
+          movedOption: movedOption,
         };
       }
     }
@@ -132,6 +139,16 @@ export default class extends Controller {
     if (ariaLiveParams) {
       const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
       this.#updateAriaLive(ariaLiveText);
+    }
+
+    // option was moved between lists; remove selected attributes (checkmark)
+    if (movedOption) {
+      const movedOptionElement = document.getElementById(
+        this.#validateId(movedOption),
+      );
+      if (movedOptionElement.getAttribute("aria-selected") === "true") {
+        this.#removeSelectedAttributes(movedOptionElement);
+      }
     }
     this.#checkStates();
   }
@@ -144,12 +161,7 @@ export default class extends Controller {
         .replace(/LIST_PLACEHOLDER/g, params["listName"])
         .concat(params["options"].join(", "));
     } else {
-      return ariaLiveString.concat(
-        this.#verifyOptionsDifference(
-          params["currentOptions"],
-          params["savedOptions"],
-        ),
-      );
+      return ariaLiveString.concat(params["movedOption"]);
     }
   }
 
