@@ -29,7 +29,7 @@ export default class extends Controller {
 
   #ariaLiveTranslations;
 
-  #currentListOptions;
+  #savedOptionsState;
 
   connect() {
     this.dragAndDropListener = this.#updateAriaForDragAndDrop.bind(this);
@@ -68,8 +68,7 @@ export default class extends Controller {
   }
 
   #updateAriaForDragAndDrop() {
-    let ariaLiveText = null;
-
+    let ariaLiveParams;
     // get the current list options to compare with the lists' previous states
     let currentAvailableOptions = this.#extractOptionsIntoArray(
       document.getElementById(this.availableListValue),
@@ -81,58 +80,77 @@ export default class extends Controller {
     // if length is equal, means only ordering could have changed
     if (
       currentSelectedOptions.length ===
-      this.#currentListOptions["selected"].length
+      this.#savedOptionsState["selected"].length
     ) {
       // stringify options arrays and verify any differences. If a difference exists, ordering has been changed
       if (
         // check selected list
         JSON.stringify(currentSelectedOptions) !==
-        JSON.stringify(this.#currentListOptions["selected"])
+        JSON.stringify(this.#savedOptionsState["selected"])
       ) {
-        ariaLiveText = this.#ariaLiveTranslations["list_order_changed"]
-          .replace(/LIST_PLACEHOLDER/g, this.selectedListValue)
-          .concat(currentSelectedOptions.join(", "));
+        ariaLiveParams = {
+          action: "list_order_changed",
+          listName: this.selectedListValue,
+          options: currentSelectedOptions,
+        };
       } else if (
         // check available list
         JSON.stringify(currentAvailableOptions) !==
-        JSON.stringify(this.#currentListOptions["available"])
+        JSON.stringify(this.#savedOptionsState["available"])
       ) {
-        ariaLiveText = this.#ariaLiveTranslations["list_order_changed"]
-          .replace(/LIST_PLACEHOLDER/g, this.availableListValue)
-          .concat(currentAvailableOptions.join(", "));
+        ariaLiveParams = {
+          action: "list_order_changed",
+          listName: this.availableListValue,
+          options: currentAvailableOptions,
+        };
       }
       // lengths are not equal, therefore an option was added/removed
     } else {
       if (
         // option was added to selected list
         currentSelectedOptions.length >
-        this.#currentListOptions["selected"].length
+        this.#savedOptionsState["selected"].length
       ) {
-        ariaLiveText = this.#ariaLiveTranslations["added"].concat(
-          this.#verifyOptionsDifference(
-            currentSelectedOptions,
-            this.#currentListOptions["selected"],
-          ),
-        );
+        ariaLiveParams = {
+          action: "added",
+          currentOptions: currentSelectedOptions,
+          savedOptions: this.#savedOptionsState["selected"],
+        };
       } else if (
         // option was added (removed) to available list
         currentAvailableOptions.length >
-        this.#currentListOptions["available"].length
+        this.#savedOptionsState["available"].length
       ) {
-        ariaLiveText = this.#ariaLiveTranslations["removed"].concat(
-          this.#verifyOptionsDifference(
-            currentAvailableOptions,
-            this.#currentListOptions["available"],
-          ),
-        );
+        ariaLiveParams = {
+          action: "removed",
+          currentOptions: currentAvailableOptions,
+          savedOptions: this.#savedOptionsState["available"],
+        };
       }
     }
-
     // if user drag+drop option into same place, ariaLiveText is not updated and doesn't need to be added to aria-live
-    if (ariaLiveText) {
+    if (ariaLiveParams) {
+      const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
       this.#updateAriaLive(ariaLiveText);
     }
     this.#checkStates();
+  }
+
+  #generateAriaLiveText(params) {
+    const action = params["action"];
+    let ariaLiveString = this.#ariaLiveTranslations[action];
+    if (action === "list_order_changed") {
+      return ariaLiveString
+        .replace(/LIST_PLACEHOLDER/g, params["listName"])
+        .concat(params["options"].join(", "));
+    } else {
+      return ariaLiveString.concat(
+        this.#verifyOptionsDifference(
+          params["currentOptions"],
+          params["savedOptions"],
+        ),
+      );
+    }
   }
 
   #setInitialTabIndex() {
@@ -838,12 +856,12 @@ export default class extends Controller {
 
   // updates and retains the options lists to compare for aria-live updating
   #updateListStates() {
-    this.#currentListOptions = {};
+    this.#savedOptionsState = {};
 
-    this.#currentListOptions["available"] = this.#extractOptionsIntoArray(
+    this.#savedOptionsState["available"] = this.#extractOptionsIntoArray(
       this.availableList,
     );
-    this.#currentListOptions["selected"] = this.#extractOptionsIntoArray(
+    this.#savedOptionsState["selected"] = this.#extractOptionsIntoArray(
       this.selectedList,
     );
   }
@@ -864,7 +882,6 @@ export default class extends Controller {
   // eg: receives [1, 2, 3] and [1, 2, 3, 4] and returns 4
   #verifyOptionsDifference(listOne, listTwo) {
     let difference = listOne.filter((x) => !listTwo.includes(x));
-
     return difference[0];
   }
 
