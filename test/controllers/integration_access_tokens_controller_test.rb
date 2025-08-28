@@ -23,7 +23,7 @@ class IntegrationAccessTokensControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     assert_difference(-> { users(:john_doe).personal_access_tokens.count } => 1) do
-      post integration_access_token_index_path(format: :turbo_stream), headers: { 'HTTP_REFERER' => 'http://localhost:3000/integration_access_token?caller=http://testintegration:8081/' }
+      post integration_access_token_index_path(format: :turbo_stream), headers: { 'HTTP_REFERER' => 'http://localhost:3000/integration_access_token?caller=test_integration_identifier' }
     end
 
     assert_response :success
@@ -32,14 +32,14 @@ class IntegrationAccessTokensControllerTest < ActionDispatch::IntegrationTest
     assert_equal ['api'], token.scopes
     assert_equal users(:john_doe).id, token.user_id
     assert token.integration
-    assert_equal 'testintegration', token.integration_host
+    assert_equal 'test_integration_identifier', token.integration_host
   end
 
   test 'should not create integration access token when caller is not allowed' do
     sign_in users(:john_doe)
 
     assert_no_difference(-> { users(:john_doe).personal_access_tokens.count }) do
-      post integration_access_token_index_path(format: :turbo_stream), headers: { 'HTTP_REFERER' => 'http://localhost:3000/integration_access_token?caller=http://not_a_valid_caller:8081/' }
+      post integration_access_token_index_path(format: :turbo_stream), headers: { 'HTTP_REFERER' => 'http://localhost:3000/integration_access_token?caller=not_a_valid_identifier' }
     end
 
     assert_response :unprocessable_entity
