@@ -595,7 +595,7 @@ module DataExports
         DataExports::CreateJob.perform_now(DataExportStub.new)
       end
 
-      assert_match I18n.t('data_exports.create.malformed'), error.message
+      assert_match I18n.t('data_exports.create.error'), error.message
     end
   end
 end
