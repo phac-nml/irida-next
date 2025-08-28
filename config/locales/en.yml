@@ -1281,6 +1281,8 @@ en:
       title: Create subgroup
     samples:
       index:
+        select_all_tooltip: Select all samples in this group
+        deselect_all_tooltip: Deselect all samples in this group
         deselect_all_button: Deselect All
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
@@ -2004,9 +2006,11 @@ en:
         title: Edit sample
       index:
         deselect_all_button: Deselect All
+        deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         select_all_button: Select All
+        select_all_tooltip: Select all samples in this project
         title: Samples
         workflows:
           button_sr: Launch workflow

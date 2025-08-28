@@ -195,14 +195,16 @@
     <div class="inline-flex grow space-x-2">
       <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
         <%= form_with(
-                  url: select_namespace_project_samples_url,
-                  method: :get,
-                  id: "select-all-form",
-                ) do |f| %>
+            url: select_namespace_project_samples_url,
+            method: :get,
+            id: "select-all-form",
+          ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
-          <%= f.submit t(".select_all_button"), class: "button button-default" %>
+          <%= f.submit t(".select_all_button"),
+                   class: "button button-default",
+                   title: t(".select_all_tooltip") %>
         <% end %>
         <%= form_with(
                   url: select_namespace_project_samples_url,
@@ -210,7 +212,9 @@
                   id: "deselect-all-form" ,
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
+          <%= f.submit t(".deselect_all_button"),
+                   class: "button button-default",
+                   title: t(".deselect_all_tooltip") %>
         <% end %>
       <% end %>
     </div>

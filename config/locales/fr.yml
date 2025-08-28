@@ -2008,9 +2008,11 @@ fr:
         title: Modifier l’échantillon
       index:
         deselect_all_button: Désélectionner tout
+        deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
         select_all_button: Tout sélectionner
+        select_all_tooltip: Select all samples in this project
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
