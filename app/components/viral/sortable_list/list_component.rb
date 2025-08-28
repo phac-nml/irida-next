@@ -17,11 +17,10 @@ module Viral
         @required = required
         @system_arguments = system_arguments
         @system_arguments[:list_classes] =
-          class_names(system_arguments[:list_classes],
-                      'border border-slate-300 rounded-lg block
-                      dark:bg-slate-800 dark:border-slate-600 max-h-[225px] min-h-[225px]')
+          class_names('border border-slate-300 rounded-lg block dark:bg-slate-800 dark:border-slate-600 max-h-[225px]
+          min-h-[225px] overflow-y-auto')
         @system_arguments[:container_classes] =
-          class_names(system_arguments[:container_classes], 'text-slate-900 dark:text-white')
+          class_names('text-slate-900 dark:text-white grow block mb-1 text-sm font-medium')
       end
 
       # rubocop:enable Metrics/ParameterLists

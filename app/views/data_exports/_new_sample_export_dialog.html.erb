@@ -85,16 +85,12 @@
             id: t(".available"),
             title: t(".available"),
             group: "format_selection",
-            container_classes: "block mb-1 pr-2 text-sm font-medium",
-            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
           ) %>
           <%= sortable_lists.with_list(
             id: t(".selected"),
             title: t(".selected"),
             list_items: formats,
             group: "format_selection",
-            container_classes: "block mb-1 text-sm font-medium",
-            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
             required: true,
           ) %>
         <% end %>
