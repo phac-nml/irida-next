@@ -33,6 +33,7 @@ export default class extends Controller {
     if (ignoreFiles.length > 0 && this.hasAlertTarget) {
       this.errorTarget.innerHTML = this.createBulletList(ignoreFiles);
       this.alertTarget.classList.remove("hidden");
+      event.target.setAttribute("aria-invalid", true);
       if (dt.files.length > 0) {
         submitButton.disabled = false;
       } else {
@@ -40,6 +41,7 @@ export default class extends Controller {
       }
     } else {
       submitButton.disabled = false;
+      event.target.setAttribute("aria-invalid", false);
       this.alertTarget.classList.add("hidden");
     }
   }
