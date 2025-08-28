@@ -1001,7 +1001,7 @@ fr:
         title: Comptes de bot
     create:
       cancel: Annuler
-      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="text-slate-800 dark:text-slate-300 font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
+      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="text-slate-800 dark:text-slate-200 font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
       name_placeholder: Nom de groupe génial
       path_help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       submit: Créer un groupe
@@ -1603,7 +1603,7 @@ fr:
       description:
         aria_label: Project description, optional
       description_help: Description can have a maximum 255 characters
-      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-slate-800 dark:text-slate-300 font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
+      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-slate-800 dark:text-slate-200 font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
       namespace_and_path: Namespace in which to create project and the path to the project which is used in the URL
       namespace_help: The namespace in which the project will be created
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
