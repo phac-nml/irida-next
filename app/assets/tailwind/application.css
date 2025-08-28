@@ -39,7 +39,7 @@ input[type="search"] {
 }
 
 :not(.pill-focus-reset):focus-visible {
-  @apply ring-primary-600 dark:ring-primary-500 z-10 outline-none ring-2 ring-offset-2 dark:ring-offset-slate-800;
+  @apply ring-3 z-10 outline-none ring-black ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-slate-900;
 }
 
 /*
@@ -561,9 +561,6 @@ input[type="search"] {
 
     /* Ensure focus ring has proper spacing */
     &:focus-visible {
-      @apply outline-none ring-2 ring-offset-4 ring-offset-white dark:ring-offset-slate-800;
-      /* Use primary color for focus ring to match button background */
-      @apply ring-primary-600 dark:ring-primary-500;
       /* Ensure the button is fully visible when focused */
       @apply pointer-events-auto translate-y-0 transform opacity-100;
     }
