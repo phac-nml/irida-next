@@ -10,8 +10,10 @@ development:
   # Make sure to include trailing '/'
   allowed_hosts:
     - url: 'http://localhost:8081/'
+      identifier: bdip_sheets
       token_lifespan_days: 1
     - url: 'http://localhost:8082/'
+      identifier: bdip_drop
       token_lifespan_days: 2
 
 test:
@@ -22,6 +24,7 @@ test:
       methods: [get, post]
   allowed_hosts:
     - url: 'http://testintegration:8081/'
+      identifier: test_integration_identifier
       token_lifespan_days: 3
 
 production:
@@ -33,4 +36,5 @@ production:
       methods: []
   allowed_hosts:
     - url: ''
+      identifier: nil
       token_lifespan_days: 0
