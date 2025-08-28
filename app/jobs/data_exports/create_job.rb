@@ -14,7 +14,7 @@ module DataExports
       end
     end
 
-    def perform(data_export) # rubocop:disable Metrics/MethodLength
+    def perform(data_export) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       begin
         initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
@@ -28,12 +28,13 @@ module DataExports
 
         data_export.save
       rescue StandardError => e
-        raise DataExports::CreateService::DataExportCreateError,
-              I18n.t('data_exports.create.error', message: e.message)
+        Rails.logger.error "Server encountered the following error while trying to create data export '#{e.message}'"
+        raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.error')
       end
 
       unless data_export.persisted?
-        raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.malformed')
+        Rails.logger.error 'Data export was unable to save (persisted) due to being malformed.'
+        raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.error')
       end
 
       DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
