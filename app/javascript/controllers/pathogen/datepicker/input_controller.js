@@ -239,7 +239,7 @@ export default class extends Controller {
     ) {
       event.preventDefault();
       this.hideCalendar();
-      this.#nextFocusableElementAfterInput.focus();
+      this.focusNextFocusableElement();
       return;
     }
 
@@ -271,6 +271,7 @@ export default class extends Controller {
           this.#disableInputErrorState();
         }
         this.#setSelectedDate();
+        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
@@ -369,5 +370,9 @@ export default class extends Controller {
   // used by pathogen/datepicker/calendar.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
+  }
+
+  focusNextFocusableElement() {
+    this.#nextFocusableElementAfterInput.focus();
   }
 }
