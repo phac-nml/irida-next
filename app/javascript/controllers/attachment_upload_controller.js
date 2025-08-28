@@ -23,6 +23,7 @@ export default class extends Controller {
       this.uploadEnd(event),
     );
     this.attachmentsInputTarget.setAttribute("aria-required", true);
+    this.attachmentsInputTarget.setAttribute("aria-invalid", false);
     this.submitButtonTarget.disabled = true;
   }
 
