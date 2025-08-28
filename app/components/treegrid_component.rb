@@ -2,6 +2,8 @@
 
 # Treegrid component
 class TreegridComponent < Component
+  include NamespaceRowHelper
+
   erb_template <<-ERB
     <%= tag.div(**@system_arguments) do %>
       <% rows.each do |row| %>
