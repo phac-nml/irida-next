@@ -35,10 +35,6 @@ export default class extends Controller {
     this.dragAndDropListener = this.#updateAriaForDragAndDrop.bind(this);
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
 
-    this.#ariaLiveTranslations = JSON.parse(
-      this.ariaLiveUpdateTarget.getAttribute("data-translations"),
-    );
-
     // Get a handle on the available and selected lists
     this.idempotentConnect();
   }
@@ -46,6 +42,14 @@ export default class extends Controller {
   idempotentConnect() {
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
+
+    // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
+    if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
+      this.#ariaLiveTranslations = JSON.parse(
+        this.ariaLiveUpdateTarget.getAttribute("data-translations"),
+      );
+    }
+
     if (this.availableList && this.selectedList) {
       this.selectedList.addEventListener("drop", this.dragAndDropListener);
       this.availableList.addEventListener("drop", this.dragAndDropListener);
