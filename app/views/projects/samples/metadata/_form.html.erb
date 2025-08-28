@@ -4,24 +4,27 @@
   data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
   data-projects--samples--metadata--create-form-error-value="<%= t("general.form.error_notification") %>"
 >
-
   <div
     role="alert"
-    class="
-      flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
-      bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
-    "
+    aria-live="assertive"
+    aria-atomic="true"
     data-projects--samples--metadata--create-target="formFieldError"
+    class="
+      hidden alert-component bg-red-50 border-red-300 dark:bg-red-900/20
+      dark:border-red-800/50 dark:text-red-400 text-red-800 mb-2
+    "
   >
-    <span class="inline shrink-0">
-      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
-    </span>
-    <div>
-      <div
-        class="font-medium whitespace-break-spaces"
-        data-projects--samples--metadata--create-target="formFieldErrorMessage"
-        aria-live="assertive"
-      ></div>
+    <div class="flex items-start w-full">
+      <div class="flex-shrink-0 mr-3">
+        <%= pathogen_icon ICON::X_CIRCLE, color: :red %>
+      </div>
+      <div class="flex-1 min-w-0 mt-0.5">
+        <div
+          class="text-sm font-medium leading-5"
+          data-projects--samples--metadata--create-target="formFieldErrorMessage"
+        >
+        </div>
+      </div>
     </div>
   </div>
 
