@@ -682,6 +682,12 @@ en:
       view_more_samples: View more samples
     puid:
       title: "Copy to clipboard value: %{puid}"
+    samples:
+      table_component:
+        counts:
+          status:
+            one: "%{selected} of %{total} sample selected"
+            other: "%{selected} of %{total} samples selected"
     search:
       advanced:
         results_message:
@@ -1281,10 +1287,10 @@ en:
       title: Create subgroup
     samples:
       index:
-        select_all_tooltip: Select all samples in this group
-        deselect_all_tooltip: Deselect all samples in this group
         deselect_all_button: Deselect All
+        deselect_all_tooltip: Deselect all samples in this group
         select_all_button: Select All
+        select_all_tooltip: Select all samples in this group
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
         workflows:

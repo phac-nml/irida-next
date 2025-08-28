@@ -6,7 +6,7 @@ export default class extends Controller {
   #storageKey = null;
   #numSelected = 0;
 
-  static targets = ["rowSelection", "selectPage", "selected"];
+  static targets = ["rowSelection", "selectPage", "selected", "status"];
   static outlets = ["action-button"];
 
   static values = {
@@ -14,6 +14,8 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
+    countMessageOne: String,
+    countMessageOther: String,
   };
 
   connect() {
@@ -54,12 +56,10 @@ export default class extends Controller {
     });
     this.save(newStorageValue);
     this.#updateUI(newStorageValue);
-    this.#announceChange(event.target, event.target.checked);
   }
 
   toggle(event) {
     this.#addOrRemove(event.target.checked, event.target.value);
-    this.#announceChange(event.target, event.target.checked);
   }
 
   remove({ params: { id } }) {
@@ -136,28 +136,37 @@ export default class extends Controller {
     if (this.hasSelectedTarget) {
       this.selectedTarget.innerText = selected;
     }
+    this.#announceSelectionStatus(selected);
   }
 
-  // ===== Announcement helpers =====
-  #announceChange(input, checked) {
-    try {
-      const scope = input.getAttribute("data-announce-scope") || "local"; // "local" | "global"
-      const globalSelector =
-        input.getAttribute("data-global-live-selector") || "#sr-status";
-      const explicitRegionSelector = input.getAttribute("data-region-selector");
+  /**
+   * 🔊 Announce current selection status to an aria-live region.
+   *
+   * - 🧮 Builds a localized message using one/other templates: "X of Y selected".
+   * - 🧩 Reads values from data attributes (`countMessageOneValue`, `countMessageOtherValue`).
+   * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
+   *
+   * @param {number} selected - Current number of selected items.
+   * @private
+   */
+  #announceSelectionStatus(selected) {
+    // 🧮 Choose the correct i18n template based on count
+    const messageTemplate =
+      selected === 1
+        ? this.countMessageOneValue || "%{selected} of %{total} selected"
+        : this.countMessageOtherValue || "%{selected} of %{total} selected";
 
-      const region =
-        scope === "global"
-          ? document.querySelector(globalSelector)
-          : this.#findLocalRegion(input, explicitRegionSelector) ||
-            document.querySelector(globalSelector);
+    // 🔁 Interpolate counts into the template
+    const message = messageTemplate
+      .replace("%{selected}", String(selected))
+      .replace("%{total}", String(this.totalValue || 0));
 
-      if (!region) return;
-
-      const message = this.#buildMessage(input, checked);
-      region.textContent = message;
-    } catch (_) {
-      // no-op: never break UX because of announcer
+    // 📣 Update local status region or fallback global live region
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = message;
+    } else {
+      const globalStatus = document.querySelector("#sr-status");
+      if (globalStatus) globalStatus.textContent = message;
     }
   }
 

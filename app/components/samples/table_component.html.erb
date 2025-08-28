@@ -161,6 +161,12 @@
                 "
                 colspan="3"
               >
+                <span
+                  data-selection-target="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  class="sr-only"
+                ></span>
                 <span>
                   <%= t(".counts.samples") %>:
                   <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
