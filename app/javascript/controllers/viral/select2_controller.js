@@ -248,6 +248,7 @@ export default class Select2Controller extends Controller {
       return; // Prevent updating with invalid data
     }
     this.inputTarget.value = label;
+    this.inputTarget.title = label;
     this.#cachedInputValue = value; // Cache the *value*, not the label
     this.hiddenTarget.value = value;
     this.#updateAriaSelected(label); // Update ARIA state based on the new selection
@@ -368,7 +369,7 @@ export default class Select2Controller extends Controller {
         offsetDistance: 10,
         delay: 300,
         onShow: () => {
-          this.dropdownTarget.style.width = `${this.inputTarget.offsetWidth}px`;
+          this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
           this.inputTarget.setAttribute("aria-expanded", "true");
         },
         onHide: () => {
