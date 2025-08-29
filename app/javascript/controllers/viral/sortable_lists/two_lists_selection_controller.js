@@ -98,7 +98,6 @@ export default class extends Controller {
     if (ariaLiveParams) {
       // update aria-live text
       const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
-      console.log(ariaLiveText);
       this.#updateAriaLive(ariaLiveText);
 
       // option was moved between lists; remove selected attributes (checkmark)
