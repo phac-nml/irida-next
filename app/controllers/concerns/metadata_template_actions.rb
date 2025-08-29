@@ -7,7 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action proc { namespace }
-    before_action proc { metadata_template }, only: %i[destroy edit show update]
+    before_action proc { metadata_template }, only: %i[create destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
     before_action proc { metadata_templates_ancestral }, only: %i[list]
     before_action proc { view_authorizations }, only: %i[index]
@@ -71,12 +71,12 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def destroy
     MetadataTemplates::DestroyService.new(current_user, @metadata_template).execute
+
     respond_to do |format|
       format.turbo_stream do
         if @metadata_template.deleted?
-          flash[:success] =
-            I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
-          redirect_to metadata_templates_path
+          render_success(I18n.t('concerns.metadata_template_actions.destroy.success',
+                                template_name: @metadata_template.name))
         else
           render_error(error_message(@new_template))
         end
