@@ -21,9 +21,9 @@
       data-action="viral--sortable-lists--two-lists-selection#setTemplate"
       data-viral--sortable-lists--two-lists-selection-target="templateSelector"
       class="
-        ￼ bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg ￼ block
-        w-full p-2.5 ￼ dark:bg-slate-700 dark:border-slate-600
-        dark:placeholder-slate-400 ￼ dark:text-white
+        bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
+        w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+        dark:text-white
       "
     >
       <option value="none"><%= t("viral.sortable_lists_component.no_template") %></option>
@@ -33,32 +33,30 @@
     </select>
   </div>
 <% end %>
-<div class="flex">
+<div class="grid sm:grid-cols-2 max-sm:grid-cols-1 gap-2">
   <% lists.each do |list| %>
     <%= list %>
   <% end %>
 </div>
-<div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
-  <button
-    class="
-      mr-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
-      disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-slate-500
-      disabled:dark:text-slate-400
-    "
-    data-action="click->viral--sortable-lists--two-lists-selection#addAll"
-    data-viral--sortable-lists--two-lists-selection-target="addAll"
-  >
-    <%= t(".add_all") %>
-  </button>
-  <button
-    class="
-      ml-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
-      disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-slate-500
-      disabled:dark:text-slate-400
-    "
-    data-action="click->viral--sortable-lists--two-lists-selection#removeAll"
-    data-viral--sortable-lists--two-lists-selection-target="removeAll"
-  >
-    <%= t(".remove_all") %>
-  </button>
+
+<div
+  class="sr-only"
+  aria-live="polite"
+  data-viral--sortable-lists--two-lists-selection-target="ariaLiveUpdate"
+  data-translations="<%= aria_live_translations %>"
+>
 </div>
+
+<template
+  data-viral--sortable-lists--two-lists-selection-target="checkmarkTemplate"
+>
+  <span class="pointer-events-none">
+    <%= pathogen_icon(ICON::CHECK, size: :sm, color: nil) %>
+  </span>
+</template>
+
+<template
+  data-viral--sortable-lists--two-lists-selection-target="hiddenCheckmarkTemplate"
+>
+  <span aria-hidden="true" class="pointer-events-none mx-2"></span>
+</template>
