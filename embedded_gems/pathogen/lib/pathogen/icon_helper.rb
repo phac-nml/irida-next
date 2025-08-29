@@ -117,7 +117,7 @@ module Pathogen
       return nil unless icon_def
 
       icon_name = icon_def[:name]
-      final_options = prepare_icon_options(icon_def, options, key)
+      final_options = prepare_icon_options(icon_def, options)
       icon(icon_name, **final_options)
     end
 
@@ -136,9 +136,8 @@ module Pathogen
     #
     # @param icon_def [Hash] The icon definition
     # @param user_options [Hash] User-provided options
-    # @param key [Symbol, Hash] The original key for test selector
     # @return [Hash] The final options hash
-    def prepare_icon_options(icon_def, user_options, key)
+    def prepare_icon_options(icon_def, user_options)
       base_options = icon_def[:options] || {}
       final_options = merge_icon_options(base_options, user_options)
       merged_class = merge_icon_classes(base_options[:class], user_options[:class], icon_def[:name])
