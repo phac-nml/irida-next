@@ -30,7 +30,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
-    get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
+    get new_namespace_project_member_path(namespace, project)
 
     assert_response :success
   end
