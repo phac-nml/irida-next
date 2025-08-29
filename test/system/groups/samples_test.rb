@@ -6,7 +6,7 @@ module Groups
   class SamplesTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
-    def setup # rubocop:disable Metrics/MethodLength
+    def setup # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       Flipper.enable(:metadata_import_field_selection)
       Flipper.enable(:batch_sample_spreadsheet_import)
 
