@@ -1,20 +1,69 @@
-<%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
-  <% invalidemail = user.errors.include?(:email) %>
-  <% invalidfn = user.errors.include?(:first_name) %>
-  <% invalidln = user.errors.include?(:last_name) %>
-  <div class="form-field <%= 'invalid' if invalidemail %>">
-    <%= f.label :email, t(:"profiles.show.email_address") %>
-    <%= f.email_field :email, required: true, autocomplete: "email" %>
+<%= form_with(model: user, url: profile_path, method: :patch, html: { novalidate: true }) do |f| %>
+
+  <%= if user.errors.any?
+    viral_alert(
+      type: "alert",
+      message: I18n.t(:"general.form.error_notification"),
+      aria: {
+        live: "assertive",
+      },
+    )
+  end %>
+
+  <%= render partial: "shared/form/required_field_legend" %>
+
+  <% invalid_email = user.errors.include?(:email) %>
+  <div class="form-field <%= 'invalid' if invalid_email %> mt-2">
+    <%= f.label :email, t(:"profiles.show.email_address"), data: { required: true } %>
+    <%= f.email_field :email,
+                  required: true,
+                  autocomplete: "email",
+                  aria: {
+                    describedby: invalid_email ? f.field_id(:email, "error") : nil,
+                    invalid: invalid_email,
+                    required: true,
+                  } %>
+    <%= if invalid_email
+      render "shared/form/field_errors",
+      id: f.field_id(:email, "error"),
+      errors: user.errors.full_messages_for(:email)
+    end %>
   </div>
   <br/>
-  <div class="form-field <%= 'invalid' if invalidfn %>">
-    <%= f.label :first_name, t(:"profiles.show.first_name") %>
-    <%= f.text_field :first_name, required: true, autocomplete: "given-name" %>
+  <% invalid_fn = user.errors.include?(:first_name) %>
+  <div class="form-field <%= 'invalid' if invalid_fn %>">
+    <%= f.label :first_name, t(:"profiles.show.first_name"), data: { required: true } %>
+    <%= f.text_field :first_name,
+                 required: true,
+                 autocomplete: "given-name",
+                 aria: {
+                   describedby: invalid_fn ? f.field_id(:first_name, "error") : nil,
+                   invalid: invalid_fn,
+                   required: true,
+                 } %>
+    <%= if invalid_fn
+      render "shared/form/field_errors",
+      id: f.field_id(:first_name, "error"),
+      errors: user.errors.full_messages_for(:first_name)
+    end %>
   </div>
   <br/>
-  <div class="form-field <%= 'invalid' if invalidln %>">
-    <%= f.label :last_name, t(:"profiles.show.last_name") %>
-    <%= f.text_field :last_name, required: true, autocomplete: "family-name" %>
+  <% invalid_ln = user.errors.include?(:last_name) %>
+  <div class="form-field <%= 'invalid' if invalid_ln %>">
+    <%= f.label :last_name, t(:"profiles.show.last_name"), data: { required: true } %>
+    <%= f.text_field :last_name,
+                 required: true,
+                 autocomplete: "family-name",
+                 aria: {
+                   describedby: invalid_ln ? f.field_id(:last_name, "error") : nil,
+                   invalid: invalid_ln,
+                   required: true,
+                 } %>
+    <%= if invalid_ln
+      render "shared/form/field_errors",
+      id: f.field_id(:last_name, "error"),
+      errors: user.errors.full_messages_for(:last_name)
+    end %>
   </div>
   <br/>
   <div class="my-2">
