@@ -12,9 +12,9 @@ module Pathogen
 
         description_text = case @attribute.to_s
                            when /select.*all|select.*page/
-                             'Selects or deselects all items on this page'
+                             t('pathogen.form.checkbox_accessibility.select_page')
                            when /select.*row/
-                             'Selects or deselects this specific row'
+                             t('pathogen.form.checkbox_accessibility.select_row')
                            end
 
         return ''.html_safe unless description_text
