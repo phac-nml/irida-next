@@ -24,14 +24,16 @@ module WorkflowExecutions
     private
 
     def file_selector_params
-      params.require(:file_selector).permit(
-        :attachable_id,
-        :attachable_type,
-        :index,
-        :property,
-        :selected_id,
-        :pattern,
-        required_properties: []
+      params.expect(
+        file_selector: [
+          :attachable_id,
+          :attachable_type,
+          :index,
+          :property,
+          :selected_id,
+          :pattern,
+          { required_properties: [] }
+        ]
       )
     end
 
