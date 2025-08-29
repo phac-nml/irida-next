@@ -28,11 +28,7 @@ class ProfilesController < Profiles::ApplicationController
   private
 
   def update_params
-    params.require(:user).permit(
-      :email,
-      :first_name,
-      :last_name
-    )
+    params.expect(user: %i[email first_name last_name])
   end
 
   def current_page
