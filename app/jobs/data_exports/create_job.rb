@@ -28,12 +28,12 @@ module DataExports
 
         data_export.save
       rescue StandardError => e
-        Rails.logger.error "Server encountered the following error while trying to create data export '#{e.message}'"
+        Rails.logger.error "While trying to create data export '#{data_export.id}', the following error occurred '#{e.message}'" # rubocop:disable Layout/LineLength
         raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.error')
       end
 
       unless data_export.persisted?
-        Rails.logger.error 'Data export was unable to save (persisted) due to being malformed.'
+        Rails.logger.error "Data export '#{data_export.id}' was unable to save (persisted) due to being malformed."
         raise DataExports::CreateService::DataExportCreateError, I18n.t('data_exports.create.error')
       end
 
