@@ -1290,7 +1290,9 @@ fr:
     samples:
       index:
         deselect_all_button: Désélectionner tout
+        deselect_all_tooltip: Désélectionner tout
         select_all_button: Tout sélectionner
+        select_all_tooltip: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
         workflows:
