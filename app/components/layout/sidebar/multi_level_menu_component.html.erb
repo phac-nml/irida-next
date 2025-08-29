@@ -46,18 +46,14 @@
       ) %>
     </span>
   </button>
-  <div
-    role="menu"
+  <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    aria-labelledby="<%= control_id %>-button"
-    aria-hidden="<%= @selected ? 'false' : 'true' %>"
-    aria-label="<%= title %> submenu"
     <%= 'hidden' if !@selected %>
     class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
-      <div role="none" class="Layout-Sidebar-MultiLevelMenu__Item">
+      <li class="Layout-Sidebar-MultiLevelMenu__Item list-none p-1 pr-2">
         <a
           href="<%= menu_item.url %>"
           class="
@@ -67,8 +63,6 @@
               'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "
-          role="menuitem"
-          tabindex="-1"
           <%= tag.attributes(aria: { current: ('page' if menu_item.selected) }) %>
         >
           <span class="grow">
@@ -76,7 +70,7 @@
           </span>
           <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
         </a>
-      </div>
+      </li>
     <% end %>
-  </div>
+  </ul>
 </li>
