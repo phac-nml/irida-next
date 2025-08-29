@@ -92,7 +92,7 @@ class LayoutHelperTest < ActionView::TestCase
 
     # Track if output_buffer= was called
     output_buffer_set = false
-    helper_instance.define_singleton_method(:output_buffer=) do |value|
+    helper_instance.define_singleton_method(:output_buffer=) do |_value|
       output_buffer_set = true
       # In a real scenario, this would be set to the new buffer
     end
