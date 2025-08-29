@@ -9,6 +9,7 @@ module Pathogen
       attr_reader :count
 
       def initialize(count: nil, selected: false, **system_arguments)
+        super()
         @count = count
         @selected = selected
         @system_arguments = system_arguments
