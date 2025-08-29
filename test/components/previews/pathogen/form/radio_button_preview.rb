@@ -140,7 +140,8 @@ module Pathogen
         pathogen_radio_button(
           attribute: :theme,
           value: 'dark',
-          label: 'This is a very long label that might wrap to multiple lines and should be handled gracefully by the component'
+          label: 'This is a very long label that might wrap to multiple lines and should be\n' \
+                 'handled gracefully by the component'
         )
       end
 
