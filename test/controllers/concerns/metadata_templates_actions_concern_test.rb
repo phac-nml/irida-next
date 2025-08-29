@@ -131,7 +131,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group metadata templates destroy' do
     delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'group metadata templates destroy unauthorized' do
@@ -307,7 +307,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       format: :turbo_stream
     )
 
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'project metadata templates destroy unauthorized' do

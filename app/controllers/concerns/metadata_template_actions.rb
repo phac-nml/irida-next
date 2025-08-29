@@ -71,12 +71,12 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def destroy
     MetadataTemplates::DestroyService.new(current_user, @metadata_template).execute
+
     respond_to do |format|
       format.turbo_stream do
         if @metadata_template.deleted?
-          flash[:success] =
-            I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
-          redirect_to metadata_templates_path
+          render_success(I18n.t('concerns.metadata_template_actions.destroy.success',
+                                template_name: @metadata_template.name))
         else
           render_error(error_message(@new_template))
         end
