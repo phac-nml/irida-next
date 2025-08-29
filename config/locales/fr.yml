@@ -236,6 +236,15 @@ fr:
               taken: L’espace de noms a déjà été partagé avec ce groupe
             namespace_type:
               inclusion: Ne peut être qu’un groupe ou un projet
+        namespaces/project_namespace:
+          attributes:
+            description:
+              too_long: est trop long (maximum est de 255 caractères)
+            name:
+              blank: ne peut pas être vide
+              too_short: est trop court (minimum est de 3 caractères)
+            path:
+              too_short: est trop court (minimum est de 3 caractères)
         personal_access_token:
           attributes:
             scopes:
@@ -638,7 +647,7 @@ fr:
     layout:
       language_selection:
         title: Language Selection
-      main_content_link: Skip to content
+      main_content_link: Aller au contenu
     list_filter:
       apply: Appliquer un filtre
       title: Filtrer par nom d’échantillon ou identifiant
@@ -2164,7 +2173,7 @@ fr:
       list:
         danger: Danger
     form:
-      required_field: indicates required field
+      required_field: indique un champ obligatoire
     loading:
       samples_list_skeleton:
         loading: Chargement...
