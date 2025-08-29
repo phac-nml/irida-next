@@ -2343,6 +2343,11 @@ fr:
     data_table_component:
       header:
         action: Mesure
+    form:
+      prefixed:
+        boolean_component:
+          'false': Faux
+          'true': Vrai
     pagy:
       limit_component:
         item_aria_label: Show %{items} items per page

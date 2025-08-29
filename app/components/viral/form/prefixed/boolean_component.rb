@@ -8,6 +8,9 @@ module Viral
         attr_reader :form, :name, :value
 
         renders_one :prefix
+        renders_one :legend, lambda { |classes: nil, &block|
+          content_tag :legend, class: classes, &block
+        }
 
         def initialize(form:, name:, value:)
           @form = form

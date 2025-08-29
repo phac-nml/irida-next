@@ -8,6 +8,7 @@ module Viral
       class BooleanComponentTest < ViewComponentTestCase
         test 'default' do
           render_preview(:default)
+          assert_selector 'fieldset > legend', text: 'This is the group legend', count: 1
           assert_selector 'span.font-mono', text: '--prefix', count: 1
           assert_selector 'input[type="radio"]', count: 2
           assert_selector 'input[type="radio"][value="true"][checked="checked"]', count: 1
@@ -16,6 +17,7 @@ module Viral
 
         test 'with_icon' do
           render_preview(:with_icon)
+          assert_selector 'fieldset > legend', text: 'This is the group legend', count: 1
           assert_selector 'svg.warning-circle-icon', count: 1
           assert_selector 'input[type="radio"]', count: 2
           assert_selector 'input[type="radio"][value="true"][checked="checked"]', count: 1
@@ -24,6 +26,7 @@ module Viral
 
         test 'with_false_value' do
           render_preview(:with_false_value)
+          assert_selector 'fieldset > legend', text: 'This is the group legend', count: 1
           assert_selector 'span.font-mono', text: '--prefix', count: 1
           assert_selector 'input[type="radio"]', count: 2
           assert_no_selector 'input[type="radio"][value="true"][checked="checked"]'
