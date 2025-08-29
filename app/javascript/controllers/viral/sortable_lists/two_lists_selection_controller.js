@@ -32,7 +32,7 @@ export default class extends Controller {
   #savedOptionsState;
 
   connect() {
-    this.dragAndDropListener = this.#updateAriaForDragAndDrop.bind(this);
+    this.DnDListener = this.#updateAriaByDnD.bind(this);
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
 
     // Get a handle on the available and selected lists
@@ -51,8 +51,8 @@ export default class extends Controller {
     }
 
     if (this.availableList && this.selectedList) {
-      this.selectedList.addEventListener("drop", this.dragAndDropListener);
-      this.availableList.addEventListener("drop", this.dragAndDropListener);
+      this.selectedList.addEventListener("drop", this.DnDListener);
+      this.availableList.addEventListener("drop", this.DnDListener);
 
       // Get a handle on the original available list
       this.#originalAvailableList = [
@@ -67,9 +67,8 @@ export default class extends Controller {
     }
   }
 
-  #updateAriaForDragAndDrop() {
+  #updateAriaByDnD() {
     let ariaLiveParams;
-    let movedOption;
     // get the current list options to compare with the lists' previous states
     let currentAvailableOptions = this.#extractOptionsIntoArray(
       document.getElementById(this.availableListValue),
@@ -83,74 +82,96 @@ export default class extends Controller {
       currentSelectedOptions.length ===
       this.#savedOptionsState["selected"].length
     ) {
-      // stringify options arrays and verify any differences. If a difference exists, ordering has been changed
-      if (
-        // check selected list
-        JSON.stringify(currentSelectedOptions) !==
-        JSON.stringify(this.#savedOptionsState["selected"])
-      ) {
-        ariaLiveParams = {
-          action: "list_order_changed",
-          listName: this.selectedListValue,
-          options: currentSelectedOptions,
-        };
-      } else if (
-        // check available list
-        JSON.stringify(currentAvailableOptions) !==
-        JSON.stringify(this.#savedOptionsState["available"])
-      ) {
-        ariaLiveParams = {
-          action: "list_order_changed",
-          listName: this.availableListValue,
-          options: currentAvailableOptions,
-        };
-      }
+      ariaLiveParams = this.#verifyDnDOrderChange(
+        currentSelectedOptions,
+        currentAvailableOptions,
+      );
+
       // lengths are not equal, therefore an option was added/removed
     } else {
-      if (
-        // option was added to selected list
-        currentSelectedOptions.length >
-        this.#savedOptionsState["selected"].length
-      ) {
-        movedOption = this.#verifyOptionsDifference(
-          currentSelectedOptions,
-          this.#savedOptionsState["selected"],
-        );
-        ariaLiveParams = {
-          action: "added",
-          movedOption: movedOption,
-        };
-      } else if (
-        // option was added (removed) to available list
-        currentAvailableOptions.length >
-        this.#savedOptionsState["available"].length
-      ) {
-        movedOption = this.#verifyOptionsDifference(
-          currentAvailableOptions,
-          this.#savedOptionsState["available"],
-        );
-        ariaLiveParams = {
-          action: "removed",
-          movedOption: movedOption,
-        };
-      }
-    }
-    // if user drag+drop option into same place, ariaLiveText is not updated and doesn't need to be added to aria-live
-    if (ariaLiveParams) {
-      const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
-      this.#updateAriaLive(ariaLiveText);
+      ariaLiveParams = this.#verifyDnDAddOrRemoveChange(
+        currentSelectedOptions,
+        currentAvailableOptions,
+      );
     }
 
-    // option was moved between lists; remove selected attributes (checkmark)
-    if (movedOption) {
-      const movedOptionElement = document.getElementById(
-        this.#validateId(movedOption),
-      );
-      if (movedOptionElement.getAttribute("aria-selected") === "true") {
-        this.#removeSelectedAttributes(movedOptionElement);
+    if (ariaLiveParams) {
+      // update aria-live text
+      const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
+      console.log(ariaLiveText);
+      this.#updateAriaLive(ariaLiveText);
+
+      // option was moved between lists; remove selected attributes (checkmark)
+      if (ariaLiveParams.hasOwnProperty("movedOption")) {
+        const movedOption = ariaLiveParams.movedOption;
+        const movedOptionElement = document.getElementById(
+          this.#validateId(movedOption),
+        );
+        if (movedOptionElement.getAttribute("aria-selected") === "true") {
+          this.#removeSelectedAttributes(movedOptionElement);
+        }
       }
     }
     this.#checkStates();
+  }
+
+  #verifyDnDOrderChange(currentSelectedOptions, currentAvailableOptions) {
+    let params;
+    // stringify options arrays and verify any differences. If a difference exists, ordering has been changed
+    if (
+      // check selected list
+      JSON.stringify(currentSelectedOptions) !==
+      JSON.stringify(this.#savedOptionsState["selected"])
+    ) {
+      params = {
+        action: "list_order_changed",
+        listName: this.selectedListValue,
+        options: currentSelectedOptions,
+      };
+    } else if (
+      // check available list
+      JSON.stringify(currentAvailableOptions) !==
+      JSON.stringify(this.#savedOptionsState["available"])
+    ) {
+      params = {
+        action: "list_order_changed",
+        listName: this.availableListValue,
+        options: currentAvailableOptions,
+      };
+    }
+    return params;
+  }
+
+  #verifyDnDAddOrRemoveChange(currentSelectedOptions, currentAvailableOptions) {
+    let movedOption;
+    let params;
+    if (
+      // option was added to selected list
+      currentSelectedOptions.length > this.#savedOptionsState["selected"].length
+    ) {
+      movedOption = this.#verifyOptionsDifference(
+        currentSelectedOptions,
+        this.#savedOptionsState["selected"],
+      );
+      params = {
+        action: "added",
+        movedOption: movedOption,
+      };
+    } else if (
+      // option was added (removed) to available list
+      currentAvailableOptions.length >
+      this.#savedOptionsState["available"].length
+    ) {
+      movedOption = this.#verifyOptionsDifference(
+        currentAvailableOptions,
+        this.#savedOptionsState["available"],
+      );
+      params = {
+        action: "removed",
+        movedOption: movedOption,
+      };
+    }
+    return params;
   }
 
   #generateAriaLiveText(params) {
@@ -291,8 +312,8 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.selectedList.removeEventListener("drop", this.dragAndDropListener);
-    this.availableList.removeEventListener("drop", this.dragAndDropListener);
+    this.selectedList.removeEventListener("drop", this.DnDListener);
+    this.availableList.removeEventListener("drop", this.DnDListener);
   }
 
   /**
@@ -898,6 +919,7 @@ export default class extends Controller {
   }
 
   #updateAriaLive(updateString) {
+    this.ariaLiveUpdateTarget.innerText = "";
     this.ariaLiveUpdateTarget.innerText = updateString;
   }
 
