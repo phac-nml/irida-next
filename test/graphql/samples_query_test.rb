@@ -134,7 +134,7 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
     assert_equal 'You are not authorized to perform this action',
-                  result['errors'].first['message']
+                 result['errors'].first['message']
 
     data = result['data']['samples']
 
