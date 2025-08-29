@@ -9,7 +9,7 @@ permissions:
 jobs:
   rubocop:
     name: runner / rubocop
-    timeout-minutes: 10
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
       BUNDLE_ONLY: rubocop
