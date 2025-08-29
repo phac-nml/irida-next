@@ -85,7 +85,11 @@ export default class extends Controller {
       this.itemTarget.classList.remove("hidden");
       this.itemTarget.setAttribute("aria-hidden", "false");
       this.itemTarget.removeAttribute("hidden");
-      this.itemTarget.setAttribute("tabindex", "0");
+      if (this.itemTarget.hasAttribute("data-collapsible-focusable")) {
+        this.itemTarget.setAttribute("tabindex", "0");
+      } else {
+        this.itemTarget.removeAttribute("tabindex");
+      }
       this.buttonTarget.setAttribute("aria-expanded", "true");
       this.#updateIcon(false);
 
