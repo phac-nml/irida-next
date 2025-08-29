@@ -2,12 +2,11 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
-  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
+  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity
     return unless record.instance_of?(Sample)
 
-    if record.project&.namespace&.parent&.user_namespace? && record.project&.namespace&.parent&.owner == user
-      @access_level = Member::AccessLevel::OWNER
-    end
+    parent_namespace = record.project&.namespace&.parent
+    @access_level = Member::AccessLevel::OWNER if parent_namespace&.user_namespace? && parent_namespace&.owner == user
 
     @access_level ||= Member.effective_access_level(record.project.namespace, user)
     @access_level
