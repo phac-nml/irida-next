@@ -150,9 +150,7 @@ export default class extends Controller {
   #announceSelectionStatus(selected) {
     // 🧮 Choose the correct i18n template based on count
     const messageTemplate =
-      selected === 1
-        ? this.countMessageOneValue || "%{selected} of %{total} selected"
-        : this.countMessageOtherValue || "%{selected} of %{total} selected";
+      selected === 1 ? this.countMessageOneValue : this.countMessageOtherValue;
 
     // 🔁 Interpolate counts into the template
     const message = messageTemplate
