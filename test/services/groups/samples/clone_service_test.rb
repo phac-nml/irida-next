@@ -127,8 +127,12 @@ module Groups
 
       test 'clone samples with permission' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
-        cloned_sample_ids = Groups::Samples::CloneService.new(@group, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                         clone_samples_params[:sample_ids])
+        cloned_sample_ids = Groups::Samples::CloneService
+                            .new(@group, @john_doe)
+                            .execute(
+                              clone_samples_params[:new_project_id],
+                              clone_samples_params[:sample_ids]
+                            )
         cloned_sample_ids.each do |sample_id, clone_id|
           sample = Sample.find_by(id: sample_id)
           clone = Sample.find_by(id: clone_id)
@@ -149,8 +153,12 @@ module Groups
         assert_equal({}, @new_project.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 633, 'metadatafield2' => 106 }, @group.metadata_summary)
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample30.id] }
-        cloned_sample_ids = Groups::Samples::CloneService.new(@group, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                         clone_samples_params[:sample_ids])
+        cloned_sample_ids = Groups::Samples::CloneService
+                            .new(@group, @john_doe)
+                            .execute(
+                              clone_samples_params[:new_project_id],
+                              clone_samples_params[:sample_ids]
+                            )
         cloned_sample_ids.each do |sample_id, clone_id|
           sample = Sample.find_by(id: sample_id)
           clone = Sample.find_by(id: clone_id)
@@ -173,8 +181,12 @@ module Groups
       test 'not clone samples with same sample name' do
         new_project = projects(:project34)
         clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample2.id] }
-        cloned_sample_ids = Groups::Samples::CloneService.new(@group, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                         clone_samples_params[:sample_ids])
+        cloned_sample_ids = Groups::Samples::CloneService
+                            .new(@group, @john_doe)
+                            .execute(
+                              clone_samples_params[:new_project_id],
+                              clone_samples_params[:sample_ids]
+                            )
         assert_empty cloned_sample_ids
         assert @group.errors.messages_for(:samples).include?(
           I18n.t('services.samples.clone.sample_exists',
