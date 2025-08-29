@@ -56,7 +56,8 @@ module WorkflowExecutions
       assert @workflow_execution_non_executable.initial?
 
       assert_no_difference -> { ActiveStorage::Attachment.count } do
-        WorkflowExecutions::PreparationService.new(@workflow_execution_non_executable, @user, {}).execute
+        result = WorkflowExecutions::PreparationService.new(@workflow_execution_non_executable, @user, {}).execute
+        assert_not result
       end
 
       assert_equal 'error', @workflow_execution_non_executable.state
