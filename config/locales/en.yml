@@ -1001,7 +1001,7 @@ en:
         title: Bot Accounts
     create:
       cancel: Cancel
-      name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
+      name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-blue-600 hover:underline dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
       name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
@@ -1603,7 +1603,7 @@ en:
       description:
         aria_label: Project description, optional
       description_help: Description can have a maximum 255 characters
-      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
+      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-blue-600 hover:underline dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
       namespace_and_path: Namespace in which to create project and the path to the project which is used in the URL
       namespace_help: The namespace in which the project will be created
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
