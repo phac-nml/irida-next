@@ -62,7 +62,7 @@ export default class extends Controller {
       Object.freeze(this.#originalAvailableList);
 
       // sets the first element in each list to be tabbable (ie: tabIndex = 0)
-      this.#setInitialTabIndex();
+      this.#initializeLists();
       this.#checkStates();
     }
   }
@@ -103,9 +103,8 @@ export default class extends Controller {
       // option was moved between lists; remove selected attributes (checkmark)
       if (ariaLiveParams.hasOwnProperty("movedOption")) {
         const movedOption = ariaLiveParams.movedOption;
-        const movedOptionElement = document.getElementById(
-          this.#validateId(movedOption),
-        );
+        const movedOptionElement = this.#getOptionNode(movedOption);
+
         if (movedOptionElement.getAttribute("aria-selected") === "true") {
           this.#removeSelectedAttributes(movedOptionElement);
         }
@@ -170,6 +169,8 @@ export default class extends Controller {
         movedOption: movedOption,
       };
     }
+    // fix tabindexing after option moved via drag and drop
+    this.#updateListAttributes(this.#getOptionNode(params.movedOption));
     return params;
   }
 
@@ -185,17 +186,27 @@ export default class extends Controller {
     }
   }
 
-  #setInitialTabIndex() {
+  #initializeLists() {
     const availableListFirstOption = this.availableList.firstElementChild;
     const selectedListFirstOption = this.selectedList.firstElementChild;
     if (availableListFirstOption) {
-      availableListFirstOption.tabIndex = 0;
-      availableListFirstOption.setAttribute("data-tabbable", "true");
+      this.#initializeActiveListElement(
+        this.availableList,
+        availableListFirstOption,
+      );
     }
     if (selectedListFirstOption) {
-      selectedListFirstOption.tabIndex = 0;
-      selectedListFirstOption.setAttribute("data-tabbable", "true");
+      this.#initializeActiveListElement(
+        this.selectedList,
+        selectedListFirstOption,
+      );
     }
+  }
+
+  #initializeActiveListElement(list, option) {
+    option.tabIndex = 0;
+    option.setAttribute("data-tabbable", "true");
+    list.setAttribute("aria-activedescendant", option.id);
   }
 
   #checkStates() {
@@ -915,6 +926,11 @@ export default class extends Controller {
   #verifyOptionsDifference(listOne, listTwo) {
     let difference = listOne.filter((x) => !listTwo.includes(x));
     return difference[0];
+  }
+
+  // receives OPTION_NAME and returns <li id="OPTION_NAME">OPTION_NAME</li>
+  #getOptionNode(option) {
+    return document.getElementById(this.#validateId(option));
   }
 
   #updateAriaLive(updateString) {
