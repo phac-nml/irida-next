@@ -11,14 +11,18 @@ jobs:
     name: runner / rubocop
     timeout-minutes: 5
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ONLY: rubocop
     steps:
       - name: Check out code
         uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: rubocop
         uses: reviewdog/action-rubocop@v2
         with:
-          rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-graphql:gemfile
           reporter: github-pr-check
+          skip_install: true
+          use_bundler: true
