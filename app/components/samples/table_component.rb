@@ -48,12 +48,10 @@ module Samples
           args[:data][:'selection-action-button-outlet'] = '.action-button'
           # i18n-driven live region messages
           args[:data][:'selection-count-message-one-value'] = I18n.t(
-            'components.samples.table_component.counts.status.one',
-            default: '%<selected>s of %<total>s selected'
+            'components.samples.table_component.counts.status.one'
           )
           args[:data][:'selection-count-message-other-value'] = I18n.t(
-            'components.samples.table_component.counts.status.other',
-            default: '%<selected>s of %<total>s selected'
+            'components.samples.table_component.counts.status.other'
           )
         end
       end
