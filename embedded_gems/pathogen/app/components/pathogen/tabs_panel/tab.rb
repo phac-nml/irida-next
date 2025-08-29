@@ -61,6 +61,7 @@ module Pathogen
       # @option options [Hash] :system_arguments Additional system arguments
       # @raise [ArgumentError] If required options are missing
       def initialize(options = {})
+        super()
         @id = options[:id]
         @selected = options[:selected] || false
         @text = options[:text].to_s
