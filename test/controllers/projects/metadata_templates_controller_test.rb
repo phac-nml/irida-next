@@ -90,7 +90,7 @@ module Projects
       delete namespace_project_metadata_template_path(@namespace.parent, @namespace.project,
                                                       @metadata_template, format: :turbo_stream)
 
-      assert_response :redirect
+      assert_response :success
     end
 
     test 'delete metadata template unauthorized' do
