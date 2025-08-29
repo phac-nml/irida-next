@@ -1153,7 +1153,7 @@ fr:
         action: Mesure
         created_at: Créé
         expires_at: Date d'expiration
-        integration_host: Integration Host Url
+        integration_host: Integration ID
         last_used_at: Dernière utilisation
         name: Nom du jeton
         scopes: Portées

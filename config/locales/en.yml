@@ -1149,7 +1149,7 @@ en:
         action: Action
         created_at: Created
         expires_at: Expiration Date
-        integration_host: Integration Host Url
+        integration_host: Integration ID
         last_used_at: Last Used
         name: Token name
         scopes: Scopes
