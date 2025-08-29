@@ -23,7 +23,7 @@ fr:
         wednesday: mer
       errors:
         invalid_date: Invalid date.
-        min_date_error: 'Earliest allowed date: '
+        min_date_error: "Earliest allowed date: "
       months:
         april: avril
         august: août
@@ -39,3 +39,7 @@ fr:
         september: septembre
       placeholder: AAAA-MM-JJ
       show_today: Show Today
+    form:
+      checkbox_accessibility:
+        select_page: Sélectionne ou désélectionne tous les éléments de cette page
+        select_row: Sélectionne ou désélectionne cette ligne spécifique
