@@ -21,6 +21,7 @@ module Pathogen
     # @param disabled [Boolean] Whether the button should be disabled
     # @param system_arguments [Hash] Additional arguments to be passed to the component
     def initialize(tag: DEFAULT_TAG, type: DEFAULT_TYPE, disabled: false, **system_arguments)
+      super()
       @system_arguments = system_arguments
 
       # Set the tag and type
