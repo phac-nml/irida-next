@@ -62,11 +62,23 @@
 # 📚 See also:
 #   - Pathogen::Form::CheckboxStyles for style helpers
 #   - Pathogen::Form::FormHelpers for common form functionality
-#
-# ✨ Enjoy accessible, beautiful forms!
 
 module Pathogen
   module Form
+    # Internal helpers for checkbox component, kept outside the class to reduce class length
+    module CheckboxInternalHelpers
+      def assign_if_present(hash, key, value)
+        return hash if value.blank?
+
+        hash[key] = value
+        hash
+      end
+
+      def join_describedby(current)
+        [current, "#{input_id}_description"].compact.join(' ')
+      end
+    end
+
     # 🟢 Pathogen::Form::Checkbox 🟢
     #
     # This component renders a single checkbox with a label and optional help text.
@@ -80,6 +92,7 @@ module Pathogen
       include CheckboxStyles
       include FormHelper
       include CheckboxAccessibility
+      include CheckboxInternalHelpers
 
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the checkbox
@@ -124,29 +137,26 @@ module Pathogen
 
       # Override form_attributes to add enhanced ARIA support
       def form_attributes
-        base_attributes = super
-        enhanced_aria = base_attributes[:aria] || {}
-
-        # Add custom ARIA attributes if provided
-        enhanced_aria[:label] = @aria_label if @aria_label.present?
-        enhanced_aria[:live] = @aria_live if @aria_live.present?
-
-        # For select-all checkboxes, add better controls and describedby
-        if @controls.present?
-          enhanced_aria[:controls] = @controls
-          enhanced_aria[:describedby] = [enhanced_aria[:describedby], "#{input_id}_description"].compact.join(' ')
-        end
-
-        # Merge ARIA back
-        base_attributes = base_attributes.merge(aria: enhanced_aria)
-
-        # Promote role to top-level attribute so it renders as role="…"
-        base_attributes[:role] = @role if @role.present?
-
-        base_attributes
+        attributes = super
+        attributes[:aria] = merged_aria(attributes[:aria])
+        attributes[:role] = @role if @role.present?
+        attributes
       end
 
       private
+
+      def merged_aria(existing_aria)
+        aria = existing_aria ? existing_aria.dup : {}
+        assign_if_present(aria, :label, @aria_label)
+        assign_if_present(aria, :live, @aria_live)
+
+        if @controls.present?
+          aria[:controls] = @controls
+          aria[:describedby] = join_describedby(aria[:describedby])
+        end
+
+        aria
+      end
 
       # Validates that accessibility requirements are met
       def validate_accessibility_requirements!
