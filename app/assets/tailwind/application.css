@@ -80,7 +80,6 @@ input[type="search"] {
   grid-template-areas: "navigation" "collapse";
   grid-template-rows: 1fr 40px;
   overflow-x: hidden;
-  width: 280px;
 }
 
 @utility navbar-button {
