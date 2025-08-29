@@ -9,6 +9,7 @@ Rails:
 
 AllCops:
   Exclude:
+    - "vendor/**/*"
     - "**/bin/**/**"
     - "**/db/schema.rb"
     - "**/db/jobs_schema.rb"
