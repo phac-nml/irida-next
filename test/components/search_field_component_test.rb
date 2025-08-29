@@ -22,15 +22,18 @@ class SearchFieldComponentTest < ViewComponent::TestCase
       @value = value
     end
 
-    def label(field_name, text, options = {})
-      "<label for=\"q_#{field_name}\">#{text}</label>".html_safe
+    def label(field_name, text, _options = {})
+      ActionController::Base.helpers.tag.label(text, for: "q_#{field_name}")
     end
 
     def search_field(field_name, options = {})
-      value_attr = @value.present? ? "value=\"#{@value}\"" : ''
-      "<input type=\"search\" id=\"q_#{field_name}\" name=\"q[#{field_name}]\" #{value_attr} placeholder=\"#{@placeholder}\" #{options.map do |k, v|
-        "#{k}=\"#{v}\""
-      end.join(' ')}>".html_safe
+      ActionController::Base.helpers.tag.input(
+        { type: 'search',
+          id: "q_#{field_name}",
+          name: "q[#{field_name}]",
+          placeholder: @placeholder,
+          value: @value.presence }.merge(options)
+      )
     end
   end
 
@@ -199,7 +202,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     assert_selector 'button[data-search-field-target="clearButton"][type="button"]', count: 1
     assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->search-field#clear"]', count: 1
     assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->selection#clear"]', count: 1
-    assert_selector "button[data-search-field-target='clearButton'][aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
+    assert_selector "button[data-search-field-target='clearButton']" \
+                    "[aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
                     count: 1
   end
 
@@ -215,7 +219,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Check button attributes using selectors
     assert_selector 'button[data-search-field-target="submitButton"][type="submit"]', count: 1
     assert_selector 'button[data-search-field-target="submitButton"][data-action*="click->selection#clear"]', count: 1
-    assert_selector "button[data-search-field-target='submitButton'][aria-label='#{I18n.t('components.search_field_component.search_button')}']",
+    assert_selector "button[data-search-field-target='submitButton']" \
+                    "[aria-label='#{I18n.t('components.search_field_component.search_button')}']",
                     count: 1
   end
 
@@ -243,7 +248,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     # Check accessibility using selectors
-    assert_selector "button[data-search-field-target='clearButton'][aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
+    assert_selector "button[data-search-field-target='clearButton']" \
+                    "[aria-label='#{I18n.t('components.search_field_component.clear_button')}']",
                     count: 1
   end
 
@@ -257,7 +263,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     # Check accessibility using selectors
-    assert_selector "button[data-search-field-target='submitButton'][aria-label='#{I18n.t('components.search_field_component.search_button')}']",
+    assert_selector "button[data-search-field-target='submitButton']" \
+                    "[aria-label='#{I18n.t('components.search_field_component.search_button')}']",
                     count: 1
   end
 
