@@ -8,6 +8,7 @@ module Pathogen
                            wbr].freeze
 
     def initialize(tag:, classes: nil, **system_arguments)
+      super()
       @tag = tag
       @system_arguments = system_arguments
 

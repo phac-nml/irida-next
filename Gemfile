@@ -80,11 +80,6 @@ gem 'search_syntax'
 gem 'graphiql-rails'
 gem 'graphql'
 
-# rubocop
-gem 'rubocop', require: false
-gem 'rubocop-graphql', require: false
-gem 'rubocop-rails', require: false
-
 # postgresql
 gem 'actioncable-enhanced-postgresql-adapter'
 gem 'pg'
@@ -150,6 +145,13 @@ gem 'opentelemetry-sdk'
 flipper_version = '~> 1.3.2'
 gem 'flipper-active_record', flipper_version
 gem 'flipper-ui', flipper_version
+
+group :development, :rubocop do
+  # rubocop
+  gem 'rubocop', require: false
+  gem 'rubocop-graphql', require: false
+  gem 'rubocop-rails', require: false
+end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

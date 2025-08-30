@@ -47,6 +47,7 @@ module Pathogen
     # @param system_arguments [Hash] HTML attributes for the main container (<nav>).
     # @raise [ArgumentError] if id is not provided.
     def initialize(id:, label: '', body_arguments: {}, **system_arguments)
+      super()
       raise ArgumentError, 'id is required' if id.blank?
 
       @id = id

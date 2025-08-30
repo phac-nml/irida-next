@@ -6,7 +6,7 @@ class GraphqlPolicy < ApplicationPolicy
   authorize :token, allow_nil: true
 
   def query? # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    return true if token&.active? && token&.scopes&.to_set&.intersect?(%w[api read_api].to_set)
+    return true if token&.active? && token&.scopes&.to_set&.intersect?(%w[api read_api].to_set) # rubocop:disable Style/SafeNavigationChainLength
     return true if token.nil? && !user.nil? # allow users with a session to query the api
 
     false
