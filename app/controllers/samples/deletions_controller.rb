@@ -56,8 +56,8 @@ module Samples
     def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
       flash[:success] = t('samples.deletions.destroy.partial_success',
                           deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-      flash[:error] = t('samples.deletions.destroy.partial_error',
-                        not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
+      flash.now[:error] = t('samples.deletions.destroy.partial_error',
+                            not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
     end
 
     def destroy_service
