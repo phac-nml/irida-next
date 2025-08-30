@@ -13,24 +13,20 @@ module Samples
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def destroy # rubocop:disable Metrics/AbcSize
       samples_to_delete_count = destroy_params['sample_ids'].count
 
       deleted_samples_count = destroy_service
 
       # No selected samples deleted
       if deleted_samples_count.zero?
-        flash.now[:error] = t('.no_deleted_samples')
+        flash[:error] = t('.no_deleted_samples')
       # Partial sample deletion
       elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        flash[:success] = t(
-          '.partial_success',
-          deleted: "#{deleted_samples_count}/#{samples_to_delete_count}"
-        )
-        flash.now[:error] = t(
-          '.partial_error',
-          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}"
-        )
+        flash[:success] = t('.partial_success',
+                            deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+        flash[:error] = t('.partial_error',
+                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       # All samples deleted successfully
       else
         flash[:success] = t('.success', count: deleted_samples_count)
@@ -58,14 +54,10 @@ module Samples
     end
 
     def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-      flash[:success] = t(
-        'samples.deletions.destroy.partial_success',
-        deleted: "#{deleted_samples_count}/#{samples_to_delete_count}"
-      )
-      flash.now[:error] = t(
-        'samples.deletions.destroy.partial_error',
-        not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}"
-      )
+      flash[:success] = t('samples.deletions.destroy.partial_success',
+                          deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+      flash[:error] = t('samples.deletions.destroy.partial_error',
+                        not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
     end
 
     def destroy_service
