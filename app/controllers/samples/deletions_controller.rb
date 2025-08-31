@@ -57,7 +57,8 @@ module Samples
       flash[:success] = t('samples.deletions.destroy.partial_success',
                           deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
       flash.now[:error] = t('samples.deletions.destroy.partial_error',
-                            not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
+                            not_deleted:
+                            "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
     end
 
     def destroy_service
