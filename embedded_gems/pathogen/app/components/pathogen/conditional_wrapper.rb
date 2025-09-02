@@ -9,7 +9,6 @@ module Pathogen
     # @param component [Class] The component class to use as a wrapper.
     # @param base_component_arguments [Hash] The arguments to pass to the component.
     def initialize(condition:, component: Pathogen::BaseComponent, **base_component_arguments)
-      super()
       raise ArgumentError, 'condition must be a boolean' unless [true, false].include?(condition)
       raise ArgumentError, 'component must be a Class' unless component.is_a?(Class)
       raise ArgumentError, 'component must inherit from Pathogen::Component' unless component < Pathogen::Component

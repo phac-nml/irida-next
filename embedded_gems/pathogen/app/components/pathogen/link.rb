@@ -11,7 +11,6 @@ module Pathogen
     # @param href [String] The link url (required)
     # @param system_arguments [Hash] additional HTML attributes to be included in the link root element
     def initialize(href: nil, **system_arguments)
-      super()
       @link_system_arguments = system_arguments
       @link_system_arguments[:tag] = :a
       @link_system_arguments[:href] = href

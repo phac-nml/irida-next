@@ -6,7 +6,6 @@ module Pathogen
     attr_reader :text, :id
 
     def initialize(text:, id:)
-      super()
       @text = text
       @id = id
     end

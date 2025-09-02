@@ -19,7 +19,6 @@ module Pathogen
     # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
                    disabled: false, **system_arguments)
-      super()
       @base_button_class = base_button_class
       @scheme = scheme
       @size = size

@@ -83,7 +83,6 @@ module Pathogen
       #   - :onchange [String] JS for onchange event
       #   - :help_text [String] help text rendered below the label
       def initialize(attribute:, value:, form: nil, **options)
-        super()
         @form = form
         @attribute = attribute
         @value = value
