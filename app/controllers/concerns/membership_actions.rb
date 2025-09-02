@@ -30,7 +30,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
-      format.turbo_stream do
+      format.html do
         render status: :ok
       end
     end

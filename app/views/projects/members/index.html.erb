@@ -1,35 +1,22 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= turbo_frame_tag "new_member_modal" %>
 <%= turbo_frame_tag "member-update-alert" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <% component.with_buttons do %>
-    <% if @allowed_to[:link_namespace_with_group] %>
-      <%= button_to I18n.t("projects.members.index.invite_group"),
-      new_namespace_project_group_link_path(@namespace.parent, @namespace.project),
-      params: {
-        tab: @tab,
-      },
-      method: :get,
-      data: {
-        "turbo-frame" => "new_member_modal",
-        :turbo_stream => true,
-      },
-      class: "button button-default" %>
-    <% end %>
     <% if @allowed_to[:create_member] %>
-      <%= button_to t(:".add"),
-      new_namespace_project_member_path(@namespace.parent, @namespace.project),
-      params: {
-        tab: @tab,
-      },
-      method: :get,
-      data: {
-        "turbo-frame" => "new_member_modal",
-        :turbo_stream => true,
-      },
-      class: "button button-primary" %>
+      <%= turbo_frame_tag "new_group_link_dialog" do %>
+        <%= render partial: "projects/group_links/invite_group_modal",
+        locals: {
+          open: false,
+          tab: @tab,
+        } %>
+      <% end %>
+    <% end %>
+    <% if @allowed_to[:link_namespace_with_group] %>
+      <%= turbo_frame_tag "new_member_dialog" do %>
+        <%= render partial: "create_modal", locals: { open: false, tab: @tab } %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

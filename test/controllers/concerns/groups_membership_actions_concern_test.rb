@@ -28,7 +28,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    get new_group_member_path(group, format: :turbo_stream)
+    get new_group_member_path(group)
 
     assert_response :success
     assert_equal 5, group.group_members.count
