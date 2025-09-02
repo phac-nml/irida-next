@@ -186,38 +186,6 @@ export default class extends Controller {
     }
   }
 
-  #initializeLists() {
-    const availableListFirstOption = this.availableList.firstElementChild;
-    const selectedListFirstOption = this.selectedList.firstElementChild;
-    if (availableListFirstOption) {
-      this.#initializeActiveListElement(
-        this.availableList,
-        availableListFirstOption,
-      );
-    }
-    if (selectedListFirstOption) {
-      this.#initializeActiveListElement(
-        this.selectedList,
-        selectedListFirstOption,
-      );
-    }
-  }
-
-  #initializeActiveListElement(list, option) {
-    option.tabIndex = 0;
-    option.setAttribute("data-tabbable", "true");
-    list.setAttribute("aria-activedescendant", option.id);
-  }
-
-  #checkStates() {
-    this.#updateListStates();
-    this.#checkButtonStates();
-    if (this.hasTemplateSelectorTarget) {
-      this.#checkTemplateSelectorState();
-      this.#cleanupAvailableList();
-    }
-  }
-
   #cleanupAvailableList() {
     const itemsToRemove = Array.from(
       this.availableList.querySelectorAll("li"),
@@ -357,7 +325,7 @@ export default class extends Controller {
 
       // Handle "none" template selection by removing all items
       if (templateId === "none") {
-        this.#updateListStates();
+        this.#reinitializeLists();
         return;
       }
 
@@ -378,11 +346,18 @@ export default class extends Controller {
         }
       });
       this.availableList.append(...items);
-      this.#checkButtonStates();
-      this.#updateListStates();
+      this.#reinitializeLists();
     } catch (error) {
       console.error("Error setting template:", error);
     }
+  }
+
+  #reinitializeLists() {
+    this.#removeTabIndexFromList(this.availableList);
+    this.#removeTabIndexFromList(this.selectedList);
+    this.#initializeLists();
+    this.#checkButtonStates();
+    this.#saveListStates();
   }
 
   handleKeyboardInput(event) {
@@ -560,9 +535,8 @@ export default class extends Controller {
 
   // handles going up and down list via keyboard (ArrowUp, ArrowDown, Home, End)
   #handleVerticalNavigation(event, direction, navigateSize) {
-    const selectedOptionNodeList = this.#getSelectedOptions(
-      event.target.parentNode,
-    );
+    const currentList = event.target.parentNode;
+    const selectedOptionNodeList = this.#getSelectedOptions(currentList);
 
     // check if user is moving an option up and down list, or just navigating
     let selectedOption;
@@ -573,7 +547,7 @@ export default class extends Controller {
       // 3. user is using ArrowUp/Down (not Home/End)
       // 4. Alt key is being used
       // 5. user is on the selected option and not a different option
-      event.target.parentNode === this.selectedList &&
+      currentList === this.selectedList &&
       selectedOptionNodeList.length === 1 &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
@@ -591,20 +565,17 @@ export default class extends Controller {
           ? event.target.previousElementSibling
           : event.target.nextElementSibling
         : direction === "up"
-          ? event.target.parentNode.firstElementChild
-          : event.target.parentNode.lastElementChild;
-    this.#navigateListUpAndDown(
+          ? currentList.firstElementChild
+          : currentList.lastElementChild;
+    this.#navigateListHorizontally(
       direction === "up" ? "up" : "down",
       targetOption,
       selectedOption,
       event,
     );
-    if (targetOption) {
-      this.#updateListAttributes(targetOption);
-    }
   }
 
-  // NavigateListUpAndDown handles all the following use cases:
+  // navigateListHorizontally handles all the following use cases:
   // 1. User is navigating via keyboard with ArrowUp/Down and Home/End
   // 2. User is selecting options with Shift+ArrowUp/Down
   // 3. User is moving a selected option up/down list via keyboard input
@@ -614,59 +585,70 @@ export default class extends Controller {
   // direction: up/down
   // targetOption: the option user is navigating towards (ie: if going up 1 stop from option 2, target option is option 1)
   // selectedOption: option that user is moving up/down list, is null if user is just navigating
-  #navigateListUpAndDown(direction, targetOption, selectedOption, event) {
+  #navigateListHorizontally(direction, targetOption, selectedOption, event) {
     // return if no target option (eg: keyboard ArrowUp when already on the top option)
     if (!targetOption) return;
     // user is moving an option up/down list
     if (selectedOption) {
-      selectedOption.remove();
-      targetOption.insertAdjacentElement(
-        direction === "up" ? "beforebegin" : "afterend",
+      this.#moveOptionHorizontally(
         selectedOption,
+        targetOption,
+        direction,
+        event,
       );
-      // if using keyboard, keep focus on the moving option
-      if (event.type === "keydown") {
-        selectedOption.focus();
-      }
-      const ariaLiveText = this.#ariaLiveTranslations[
-        direction === "up" ? "move_up" : "move_down"
-      ].replace(/OPTION_PLACEHOLDER/g, selectedOption.innerText);
-      this.#updateAriaLive(ariaLiveText);
     } else {
+      const currentList = event.target.parentNode;
       //  user is selecting items by Shift+ArrowUp/Down
       if (event.shiftKey) {
-        // get list, unselect all the options in preparation to re-select options
-        const list = event.target.parentNode;
-        this.#unselectListOptions(list);
-        // set the list into 'select' mode, where we set which option is the shift selection is based around
-        // and add a listener to the list for when the user releases shift and we can stop the shift-select
-        if (!list.hasAttribute("shift-select")) {
-          this.#shiftSelectionOption = event.target;
-          this.#setListForShiftKeyboardSelection(list);
-        }
-        // get index of target option, and add/remove an index point based on direction
-        // as the event.target is 'behind' by an index
-        // eg: we're on option 2 (index 1), and push Shift+ArrowDown, event.target index will return 2 (where we want
-        // index 3), so we add 1 based on ArrowDown
-        const listOptions = Array.from(list.querySelectorAll("li"));
-        let navigatedSelectionIndex = listOptions.indexOf(event.target);
-        direction === "up"
-          ? navigatedSelectionIndex--
-          : navigatedSelectionIndex++;
-
-        // index of selection where shift select is centered around
-        const startingSelectionIndex = listOptions.indexOf(
-          this.#shiftSelectionOption,
-        );
-        // make selections based on indexes
-        this.#selectOptionRange(
-          startingSelectionIndex,
-          navigatedSelectionIndex,
-          listOptions,
-        );
+        this.#selectMultipleOptions(event.target, currentList, direction);
       }
+      this.#removeTabIndexFromList(currentList);
+      this.#setActiveListElement(currentList, targetOption);
       targetOption.focus();
     }
+  }
+
+  #moveOptionHorizontally(selectedOption, targetOption, direction, event) {
+    selectedOption.remove();
+    targetOption.insertAdjacentElement(
+      direction === "up" ? "beforebegin" : "afterend",
+      selectedOption,
+    );
+    selectedOption.focus();
+
+    const ariaLiveText = this.#ariaLiveTranslations[
+      direction === "up" ? "move_up" : "move_down"
+    ].replace(/OPTION_PLACEHOLDER/g, selectedOption.innerText);
+    this.#updateAriaLive(ariaLiveText);
+  }
+
+  #selectMultipleOptions(target, list, direction) {
+    // get list, unselect all the options in preparation to re-select options
+    this.#unselectListOptions(list);
+    // set the list into 'select' mode, where we set which option is the shift selection is based around
+    // and add a listener to the list for when the user releases shift and we can stop the shift-select
+    if (!list.hasAttribute("shift-select")) {
+      this.#shiftSelectionOption = target;
+      this.#setListForShiftKeyboardSelection(list);
+    }
+    // get index of target option, and add/remove an index point based on direction
+    // as the event.target is 'behind' by an index
+    // eg: we're on option 2 (index 1), and push Shift+ArrowDown, event.target index will return 2 (where we want
+    // index 3), so we add 1 based on ArrowDown
+    const listOptions = Array.from(list.querySelectorAll("li"));
+    let navigatedSelectionIndex = listOptions.indexOf(target);
+    direction === "up" ? navigatedSelectionIndex-- : navigatedSelectionIndex++;
+
+    // index of selection where shift select is centered around
+    const startingSelectionIndex = listOptions.indexOf(
+      this.#shiftSelectionOption,
+    );
+    // make selections based on indexes
+    this.#selectOptionRange(
+      startingSelectionIndex,
+      navigatedSelectionIndex,
+      listOptions,
+    );
   }
 
   // user is shift selecting items by keyboard, we add a listener for when shift is keyup'd
@@ -705,7 +687,12 @@ export default class extends Controller {
       direction = "down";
     }
 
-    this.#navigateListUpAndDown(direction, targetOption, selectedOption, event);
+    this.#navigateListHorizontally(
+      direction,
+      targetOption,
+      selectedOption,
+      event,
+    );
   }
 
   // handles normal click and shift click events
@@ -855,50 +842,13 @@ export default class extends Controller {
     list.append(template);
   }
 
-  // Handles 2 things:
-  // 1. ensures that each list contains only 1 option that is tabbable. important for refreshing after
-  // options have been moved between lists
-  // 2. Updates aria-activedescendants
-  #updateListAttributes(currentOption) {
-    const oldTabbableOptions = currentOption.parentNode.querySelectorAll(
-      '[data-tabbable="true"]',
-    );
-
-    if (oldTabbableOptions) {
-      for (let i = 0; i < oldTabbableOptions.length; i++) {
-        oldTabbableOptions[i].tabIndex = "-1";
-        oldTabbableOptions[i].removeAttribute("data-tabbable");
-      }
-    }
-
-    if (currentOption.parentNode === this.selectedList) {
-      this.#verifyListHasTabIndex(this.availableList);
-    } else {
-      this.#verifyListHasTabIndex(this.selectedList);
-    }
-    currentOption.setAttribute("data-tabbable", "true");
-    currentOption.tabIndex = "0";
-    this.#updateAriaActiveDescendant(currentOption, currentOption.parentNode);
-  }
-
-  #verifyListHasTabIndex(list) {
-    const firstChild = list.firstElementChild;
-    if (firstChild && !list.querySelector('[data-tabbable="true"]')) {
-      firstChild.tabIndex = "0";
-      firstChild.setAttribute("data-tabbable", "true");
-      this.#updateAriaActiveDescendant(firstChild, list);
-    } else {
-      this.#updateAriaActiveDescendant(firstChild, list);
-    }
-  }
-
   // replace whitespace with hyphen
   #validateId(id) {
     return id.replace(/\s+/g, "-");
   }
 
   // updates and retains the options lists to compare for aria-live updating
-  #updateListStates() {
+  #saveListStates() {
     this.#savedOptionsState = {};
 
     this.#savedOptionsState["available"] = this.#extractOptionsIntoArray(
@@ -938,11 +888,69 @@ export default class extends Controller {
     this.ariaLiveUpdateTarget.innerText = updateString;
   }
 
-  #updateAriaActiveDescendant(option, list) {
-    if (option) {
-      list.setAttribute("aria-activedescendant", option.id);
+  #initializeLists() {
+    const availableListFirstOption = this.availableList.firstElementChild;
+    const selectedListFirstOption = this.selectedList.firstElementChild;
+    if (availableListFirstOption) {
+      this.#setActiveListElement(this.availableList, availableListFirstOption);
+    }
+    if (selectedListFirstOption) {
+      this.#setActiveListElement(this.selectedList, selectedListFirstOption);
+    }
+  }
+
+  #setActiveListElement(list, option) {
+    option.tabIndex = 0;
+    option.setAttribute("data-tabbable", "true");
+    list.setAttribute("aria-activedescendant", option.id);
+  }
+
+  #checkStates() {
+    this.#saveListStates();
+    this.#checkButtonStates();
+    if (this.hasTemplateSelectorTarget) {
+      this.#checkTemplateSelectorState();
+      this.#cleanupAvailableList();
+    }
+  }
+
+  // Handles 2 things:
+  // 1. ensures that each list contains only 1 option that is tabbable. important for refreshing after
+  // options have been moved between lists
+  // 2. Updates active option
+  #updateListAttributes(currentOption) {
+    const targetList = currentOption.parentNode;
+    this.#removeTabIndexFromList(targetList);
+
+    if (targetList === this.selectedList) {
+      this.#verifyListHasTabIndex(this.availableList);
     } else {
+      this.#verifyListHasTabIndex(this.selectedList);
+    }
+    this.#setActiveListElement(targetList, currentOption);
+  }
+
+  #verifyListHasTabIndex(list) {
+    const firstChild = list.firstElementChild;
+    // if no options within list, remove aria-activedescendant from list
+    if (!firstChild) {
       list.removeAttribute("aria-activedescendant");
+      // else if list doesn't contain a tabbable option (eg: previous tabbable option moved to other list), set first
+      // option to tabbable/active
+    } else if (!list.querySelector('[data-tabbable="true"]')) {
+      this.#setActiveListElement(list, firstChild);
+    }
+  }
+
+  // remove tabindex from options within list
+  #removeTabIndexFromList(list) {
+    const tababbleOptions = list.querySelectorAll('[data-tabbable="true"]');
+
+    if (tababbleOptions) {
+      for (let i = 0; i < tababbleOptions.length; i++) {
+        tababbleOptions[i].tabIndex = "-1";
+        tababbleOptions[i].removeAttribute("data-tabbable");
+      }
     }
   }
 }
