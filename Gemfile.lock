@@ -378,6 +378,8 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     minitest (5.25.5)
+    minitest-retry (0.2.5)
+      minitest (>= 5.0)
     msgpack (1.8.0)
     multi_json (1.15.0)
     multi_xml (0.7.2)
@@ -745,6 +747,7 @@ DEPENDENCIES
   logidze
   lookbook (~> 2.1, >= 2.1.1)
   minitest (~> 5.25, >= 5.25.5)
+  minitest-retry
   omniauth
   omniauth-entra-id
   omniauth-rails_csrf_protection

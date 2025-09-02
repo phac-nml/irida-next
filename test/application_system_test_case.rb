@@ -8,6 +8,7 @@ require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 require 'test_helpers/html5_helpers'
 require 'action_dispatch/system_test_case'
+require 'minitest/retry'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :irida_next_cuprite
@@ -18,4 +19,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include HTML5Helpers
   include Warden::Test::Helpers
   Warden.test_mode!
+
+  Minitest::Retry.use!
 end

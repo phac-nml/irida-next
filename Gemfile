@@ -182,6 +182,8 @@ group :test do
   gem 'capybara'
   gem 'cuprite'
 
+  gem 'minitest-retry', require: false
+
   gem 'simplecov', require: false
   gem 'timecop'
 

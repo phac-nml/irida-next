@@ -2,8 +2,8 @@
   id="main-content-link"
   href="#main-content"
   class="
-    absolute left-0 top-0 bg-primary-700 text-white py-2 px-4 z-50 transform
-    -translate-y-full focus:translate-y-0 hover:underline
+    absolute left-0 top-0 bg-primary-700 text-white py-2 sm:px-4 max-sm:px-2 z-50
+    transform -translate-y-full focus:translate-y-0 hover:underline
   "
   data-turbo="false"
 >
@@ -28,14 +28,13 @@
   >
     <div
       class="
-        flex px-4 z-20 h-16 -outline-offset-1 border-b border-slate-200
+        flex sm:px-4 max-sm:px-2 z-20 h-16 -outline-offset-1 border-b border-slate-200
         dark:border-slate-950 bg-white dark:bg-slate-800 xl:absolute xl:top-0 w-full
+        gap-2
       "
     >
       <div
-        class="
-          inline-flex items-center space-x-1 max-xl:visible xl:hidden mr-2
-        "
+        class="inline-flex items-center max-xl:visible xl:hidden"
         data-layout-target="expandButtonContainer"
       >
         <button
@@ -58,8 +57,8 @@
       id="main-content"
       tabindex="0"
       class="
-        @container w-full p-4 xl:overflow-y-auto
-        xl:overflow-x-hidden xl:absolute xl:top-16 xl:bottom-0
+        @container w-full sm:p-4 max-sm:p-2 xl:overflow-y-auto xl:overflow-x-hidden
+        xl:absolute xl:top-16 xl:bottom-0
       "
     >
       <div class="<%= @layout %>"><%= body %></div>

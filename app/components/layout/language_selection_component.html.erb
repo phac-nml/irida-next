@@ -11,7 +11,7 @@
   <button
     data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
-    class="button button-default"
+    class="button button-default px-3"
     type="button"
     aria-haspopup="listbox"
     aria-controls="language-selection-dd-menu"
@@ -19,7 +19,13 @@
     aria-labelledby="language_selection_dropdown"
   >
     <%= pathogen_icon(ICON::TRANSLATE, size: :sm, class: "mr-2") %>
-    <span class="text-sm" id="language-selection-dd-label">
+    <abbr
+      class="text-sm sm:hidden"
+      title="<%= I18n.t(:"locales.#{locale}", locale: locale) %>"
+    >
+      <%= locale.upcase %>
+    </abbr>
+    <span class="text-sm max-sm:hidden" id="language-selection-dd-label">
       <%= I18n.t(:"locales.#{locale}", locale: locale) %>
     </span>
   </button>
