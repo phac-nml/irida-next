@@ -9,6 +9,7 @@ Rails:
 
 AllCops:
   Exclude:
+    - "vendor/**/*"
     - "**/bin/**/**"
     - "**/db/schema.rb"
     - "**/db/jobs_schema.rb"
@@ -55,7 +56,7 @@ Style/RedundantConstantBase:
 
 Lint/MissingSuper:
   Exclude:
-    - "app/components/**/*.rb"
+    - "**/app/components/**/*.rb"
 
 Style/Documentation:
   Exclude:

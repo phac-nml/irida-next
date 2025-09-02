@@ -399,9 +399,9 @@ class AttachFilesToGroupTest < ActiveSupport::TestCase
     blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     group = IridaSchema.execute(ATTACH_FILES_TO_GROUP_BY_GROUP_ID_MUTATION,
-                                  context: { current_user: @user, token: @api_scope_token },
-                                  variables: { files: [blob_file.signed_id],
-                                               groupId: 'this is not a valid group id' })
+                                context: { current_user: @user, token: @api_scope_token },
+                                variables: { files: [blob_file.signed_id],
+                                             groupId: 'this is not a valid group id' })
     expected_error = { 'message' => 'this is not a valid group id is not a valid IRIDA Next ID.',
                        'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToGroup'] }
     assert_equal expected_error, group['errors'][0]

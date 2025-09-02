@@ -2,12 +2,11 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
-  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity
     return unless record.instance_of?(Project)
 
-    if record&.namespace&.parent&.user_namespace? && record&.namespace&.parent&.owner == user
-      @access_level = Member::AccessLevel::OWNER
-    end
+    parent_namespace = record&.namespace&.parent
+    @access_level = Member::AccessLevel::OWNER if parent_namespace&.user_namespace? && parent_namespace&.owner == user
 
     @access_level ||= Member.effective_access_level(record.namespace, user)
     @access_level

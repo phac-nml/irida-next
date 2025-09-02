@@ -1,16 +1,17 @@
-require:
+plugins:
   - rubocop-rails
+
+Rails:
+  Enabled: true
 
 AllCops:
   NewCops: enable
 
 Lint/MissingSuper:
   Exclude:
-   - "app/components/**/*.rb"
+    - "app/components/**/*.rb"
 
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsmethodlength
 Metrics/MethodLength:
   CountComments: false
   Max: 15
-
-

@@ -279,8 +279,12 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
 
   test 'project metadata templates update with invalid params' do
     metadata_template_params = { metadata_template: { name: '', fields: [] } }
-    put namespace_project_metadata_template_path(@project_namespace.parent, @project, @project_metadata_template, format: :turbo_stream),
-        params: metadata_template_params
+    put namespace_project_metadata_template_path(
+      @project_namespace.parent,
+      @project,
+      @project_metadata_template,
+      format: :turbo_stream
+    ), params: metadata_template_params
 
     assert_response :unprocessable_entity
   end
