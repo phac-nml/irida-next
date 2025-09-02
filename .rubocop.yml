@@ -56,7 +56,7 @@ Style/RedundantConstantBase:
 
 Lint/MissingSuper:
   Exclude:
-    - "app/components/**/*.rb"
+    - "**/app/components/**/*.rb"
 
 Style/Documentation:
   Exclude:
