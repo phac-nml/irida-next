@@ -6,7 +6,7 @@
     level: @level,
     posinset: @posinset,
     setsize: @setsize,
-    aria: { label: @group.name },
+    aria: { label: namespace_row_aria_label(@group) },
     id: dom_id(@group)
   ) do %>
     <%= render NamespaceRow::ContentsComponent.new(
@@ -21,7 +21,7 @@
       level: @level + 1,
       posinset: namespace_index + 1,
       setsize: @children.size,
-      aria: { label: namespace.name },
+      aria: { label: namespace_row_aria_label(namespace) },
       button_arguments: {data: {"toggle-url": public_send("group_subgroups_url", { group_id: @group.full_path, parent_id: namespace.id, collapse: false, level: @level + 1, posinset: namespace_index + 1, setsize: @children.size })}},
       id: dom_id(namespace)
     ) do %>

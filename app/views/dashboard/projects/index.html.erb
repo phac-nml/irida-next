@@ -57,7 +57,7 @@
 
         <%= render TreegridComponent.new do | component | %>
           <% @projects.each_with_index do |project, project_index| %>
-            <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: @projects.size, aria: { label: project.name }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: @projects.size }) } }, id: dom_id(project)) do %>
+            <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: @projects.size, aria: { label: namespace_row_aria_label(project.namespace) }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: @projects.size }) } }, id: dom_id(project)) do %>
               <%= render NamespaceRow::ContentsComponent.new(
                 namespace: project.namespace,
                 full_name: true,
