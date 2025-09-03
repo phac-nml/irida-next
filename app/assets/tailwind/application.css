@@ -38,7 +38,7 @@ input[type="search"] {
   appearance: textfield;
 }
 
-:not(.pill-focus-reset):focus-visible {
+:not(.pill-focus-reset):not(#main-content-link):focus-visible {
   @apply ring-3 z-10 outline-none ring-black ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-slate-900;
 }
 
@@ -465,8 +465,6 @@ input[type="search"] {
     @apply ring-2 ring-slate-500 ring-offset-2 dark:ring-slate-400;
   }
 
-  /* Alert dismiss animation - removed for instant dismissal */
-
   /* Progress bar animation */
   .alert-component .progress-bar {
     @apply absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300 ease-out;
@@ -495,14 +493,14 @@ input[type="search"] {
   input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 5;
+    width: 5;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' /%3E%3C/svg%3E%0A");
   }
 
   /* VIRAL DIALOG */
   dialog {
-    @apply -translate-1/2 backdrop-blur-xs max-w-screen left-1/2 top-1/2 max-h-screen w-full rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
+    @apply max-w-screen backdrop-blur-xs left-1/2 top-1/2 max-h-screen w-full -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
   }
 
   dialog div.dialog--contents {
@@ -536,7 +534,7 @@ input[type="search"] {
   }
 
   .dialog--section {
-    @apply sm:max-h-(--dialog-section-max-height) wrap-break-word p-5 sm:overflow-y-auto;
+    @apply break-words p-5 sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
   }
 
   strong {
@@ -557,18 +555,16 @@ input[type="search"] {
 
   /* Main content link accessibility button */
   #main-content-link {
-    @apply pointer-events-none rounded-lg opacity-0 transition-all duration-200 ease-in-out;
+    @apply bg-primary-700 ease absolute left-3 top-3 z-[9999] -translate-y-[150%] transform rounded-lg px-5 py-3 font-semibold text-white no-underline shadow-lg transition-transform duration-300;
+  }
 
-    /* Ensure focus ring has proper spacing */
-    &:focus-visible {
-      /* Ensure the button is fully visible when focused */
-      @apply pointer-events-auto translate-y-0 transform opacity-100;
-    }
+  #main-content-link:focus,
+  #main-content-link:focus-visible {
+    @apply translate-y-0;
+  }
 
-    /* Hover state */
-    &:hover {
-      @apply bg-primary-800 dark:bg-primary-600;
-    }
+  #main-content-link:hover {
+    @apply bg-primary-800 underline;
   }
 }
 
