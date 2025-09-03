@@ -1,7 +1,10 @@
 <%= render partial: "shared/metadata_templates/create",
 locals: {
-  create_path: namespace_project_metadata_templates_path,
   index_path: namespace_project_metadata_templates_path,
+  create_path: namespace_project_metadata_templates_path,
+  new_path: new_namespace_project_metadata_template_path,
+  new_template_button_text:
+    I18n.t("projects.metadata_templates.index.new_button"),
   type: type,
   message: message,
 } %>
