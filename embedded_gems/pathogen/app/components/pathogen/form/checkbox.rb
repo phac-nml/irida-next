@@ -194,15 +194,6 @@ module Pathogen
 
       # Renders the checkbox input element
       def checkbox_html
-        # Set default messages from translations if not provided
-        selected_message = @selected_message || t('pathogen.form.checkbox_accessibility.selected_message')
-        deselected_message = @deselected_message || t('pathogen.form.checkbox_accessibility.deselected_message')
-
-        # Add data attributes for selected/deselected messages
-        attributes = form_attributes.merge(id: input_id)
-        attributes['data-selected-message'] = selected_message if selected_message.present?
-        attributes['data-deselected-message'] = deselected_message if deselected_message.present?
-
         check_box_tag(
           input_name,
           @value,
