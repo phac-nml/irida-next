@@ -1,14 +1,14 @@
 <%= render Viral::PageHeaderComponent.new(title: title, subtitle: subtitle) do |component| %>
   <% component.with_buttons do %>
     <% if namespace.metadata_fields.length.positive? && @allowed_to[:create_metadata_templates] %>
-      <%= button_to new_template_button_text,
-      new_template_url,
-      data: {
-        "turbo-frame" => "metadata_template_modal",
-        :turbo_stream => true,
-      },
-      method: :get,
-      class: "button button-primary" %>
+      <%= turbo_frame_tag "metadata_template_dialog" do %>
+        <%= render partial: "shared/metadata_templates/new_template_dialog",
+        locals: {
+          open: false,
+          new_path:,
+          new_template_button_text:,
+        } %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
