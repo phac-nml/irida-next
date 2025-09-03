@@ -375,6 +375,31 @@ module Pathogen
       def help_text_id_for(attribute, value)
         "#{attribute}_#{value}_help"
       end
+
+      def test_renders_checkbox_with_message_data_attributes
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        label: 'I agree to the terms',
+                        selected_message: 'Custom selected message',
+                        deselected_message: 'Custom deselected message'
+                      ))
+
+        assert_selector "input[data-selected-message='Custom selected message']"
+        assert_selector "input[data-deselected-message='Custom deselected message']"
+      end
+
+      def test_renders_checkbox_with_default_message_data_attributes
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        label: 'I agree to the terms'
+                      ))
+
+        # Should get defaults from translation
+        assert_selector "input[data-selected-message='Item selected']"
+        assert_selector "input[data-deselected-message='Item deselected']"
+      end
     end
   end
 end
