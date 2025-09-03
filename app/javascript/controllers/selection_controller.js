@@ -166,35 +166,4 @@ export default class extends Controller {
       if (globalStatus) globalStatus.textContent = message;
     }
   }
-
-  #buildMessage(input, checked) {
-    const selectedMsg = input.getAttribute("data-selected-message");
-    const deselectedMsg = input.getAttribute("data-deselected-message");
-    const base = checked ? selectedMsg : deselectedMsg;
-
-    // Use controller knowledge for count rather than DOM queries
-    const count = this.getNumSelected();
-    return `${base}. ${count} selected.`;
-  }
-
-  #findLocalRegion(input, explicitRegionSelector) {
-    if (explicitRegionSelector) {
-      const node = document.querySelector(explicitRegionSelector);
-      if (node) return node;
-    }
-
-    // Prefer enhanced description span if referenced via aria-describedby
-    const describedBy = input.getAttribute("aria-describedby");
-    if (describedBy) {
-      const ids = describedBy.split(/\s+/).filter(Boolean);
-      const preferredId =
-        ids.find((id) => id.endsWith("_description")) || ids.at(-1);
-      const node = preferredId ? document.getElementById(preferredId) : null;
-      if (node) return node;
-    }
-
-    // Fallback to component help text id
-    const helpId = `${input.id}_help`;
-    return document.getElementById(helpId);
-  }
 }
