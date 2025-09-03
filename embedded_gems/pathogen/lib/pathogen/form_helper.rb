@@ -124,6 +124,8 @@ module Pathogen
       @aria_label = options.delete(:aria_label)
       @role = options.delete(:role)
       @aria_live = options.delete(:aria_live)
+      @selected_message = options.delete(:selected_message)
+      @deselected_message = options.delete(:deselected_message)
     end
   end
 end

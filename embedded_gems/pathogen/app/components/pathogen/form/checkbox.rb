@@ -44,6 +44,8 @@
 #   - :onchange     🔄   (String)     — JS for onchange event
 #   - :help_text    💡   (String)     — Help text below the label (ARIA described)
 #   - :error_text   🚨   (String)     — Error text to display when invalid
+#   - :selected_message   💬   (String)     — Message shown when checkbox is selected (defaults from translation)
+#   - :deselected_message 💬   (String)     — Message shown when checkbox is deselected (defaults from translation)
 #
 # ♿ Accessibility:
 #   - Associates label and input for screen readers
@@ -89,6 +91,7 @@ module Pathogen
     class Checkbox < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
+      include ActionView::Helpers::TranslationHelper
       include CheckboxStyles
       include FormHelper
       include CheckboxAccessibility
@@ -111,6 +114,8 @@ module Pathogen
       #   - :help_text [String] help text rendered below the label
       #   - :role [String] ARIA role (e.g., 'checkbox', 'button')
       #   - :aria_live [String] ARIA live region for announcements
+      #   - :selected_message [String] message announced when checkbox is selected
+      #   - :deselected_message [String] message announced when checkbox is deselected
       def initialize(attribute:, value:, form: nil, **options)
         super()
         @form = form
@@ -189,11 +194,20 @@ module Pathogen
 
       # Renders the checkbox input element
       def checkbox_html
+        # Set default messages from translations if not provided
+        selected_message = @selected_message || t('pathogen.form.checkbox_accessibility.selected_message')
+        deselected_message = @deselected_message || t('pathogen.form.checkbox_accessibility.deselected_message')
+
+        # Add data attributes for selected/deselected messages
+        attributes = form_attributes.merge(id: input_id)
+        attributes['data-selected-message'] = selected_message if selected_message.present?
+        attributes['data-deselected-message'] = deselected_message if deselected_message.present?
+
         check_box_tag(
           input_name,
           @value,
           @checked,
-          form_attributes.merge(id: input_id).merge(@html_options)
+          attributes.merge(@html_options)
         )
       end
 

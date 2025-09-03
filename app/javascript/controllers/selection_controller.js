@@ -168,10 +168,8 @@ export default class extends Controller {
   }
 
   #buildMessage(input, checked) {
-    const selectedMsg =
-      input.getAttribute("data-selected-message") || "Selected";
-    const deselectedMsg =
-      input.getAttribute("data-deselected-message") || "Deselected";
+    const selectedMsg = input.getAttribute("data-selected-message");
+    const deselectedMsg = input.getAttribute("data-deselected-message");
     const base = checked ? selectedMsg : deselectedMsg;
 
     // Use controller knowledge for count rather than DOM queries
