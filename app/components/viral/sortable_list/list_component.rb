@@ -4,7 +4,7 @@ module Viral
   module SortableList
     # This component creates the individual lists for the sortable_lists_component.
     class ListComponent < Viral::Component
-      attr_reader :id, :group, :title, :list_items, :required
+      attr_reader :id, :group, :title, :list_items, :required, :available_list, :selected_list
 
       # rubocop:disable Metrics/ParameterLists
 
@@ -21,6 +21,8 @@ module Viral
           min-h-[225px] overflow-y-auto')
         @system_arguments[:container_classes] =
           class_names('text-slate-900 dark:text-white grow block mb-1 text-sm font-medium')
+        @available_list = id == 'Available'
+        @selected_list = id == 'Selected'
       end
 
       # rubocop:enable Metrics/ParameterLists

@@ -21,60 +21,58 @@
   >
     <%= render Viral::SortableList::ListItemComponent.with_collection(list_items) %>
   </ul>
-  <% if id == "Available" || id == "Selected" %>
-    <div class="mt-1" aria-label="<%= t(".actions")%>">
-      <% if id == "Available" %>
-        <button
-          type="button"
-          class="button button-default"
-          data-action="
-            click->viral--sortable-lists--two-lists-selection#addButtonByClick
-            keydown->viral--sortable-lists--two-lists-selection#addButtonByKey
-          "
-          data-viral--sortable-lists--two-lists-selection-target="addButton"
-          aria-keyshortcuts="<%= t(".keyboard_shortcuts.add")%>"
-        >
-          <%= t(".add") %>
-        </button>
-      <% end %>
-      <% if id == "Selected" %>
-        <button
-          type="button"
-          class="button button-default"
-          data-action="
-            click->viral--sortable-lists--two-lists-selection#removeButtonByClick
-            keydown->viral--sortable-lists--two-lists-selection#removeButtonByKey
-          "
-          data-viral--sortable-lists--two-lists-selection-target="removeButton"
-          aria-keyshortcuts="<%= t(".keyboard_shortcuts.remove")%>"
-        >
-          <%= t(".remove") %>
-        </button>
+  <div class="mt-1" aria-label="<%= t(".actions")%>">
+    <% if available_list %>
+      <button
+        type="button"
+        class="button button-default"
+        data-action="
+          click->viral--sortable-lists--two-lists-selection#addButtonByClick
+          keydown->viral--sortable-lists--two-lists-selection#addButtonByKey
+        "
+        data-viral--sortable-lists--two-lists-selection-target="addButton"
+        aria-keyshortcuts="<%= t(".keyboard_shortcuts.add")%>"
+      >
+        <%= t(".add") %>
+      </button>
+    <% end %>
+    <% if selected_list %>
+      <button
+        type="button"
+        class="button button-default"
+        data-action="
+          click->viral--sortable-lists--two-lists-selection#removeButtonByClick
+          keydown->viral--sortable-lists--two-lists-selection#removeButtonByKey
+        "
+        data-viral--sortable-lists--two-lists-selection-target="removeButton"
+        aria-keyshortcuts="<%= t(".keyboard_shortcuts.remove")%>"
+      >
+        <%= t(".remove") %>
+      </button>
 
-        <button
-          type="button"
-          class="button button-default"
-          data-action="
-            click->viral--sortable-lists--two-lists-selection#moveSelection
-          "
-          data-viral--sortable-lists--two-lists-selection-target="upButton"
-          aria-keyshortcuts="<%= t(".keyboard_shortcuts.up")%>"
-        >
-          <%= t(".up") %>
-        </button>
+      <button
+        type="button"
+        class="button button-default"
+        data-action="
+          click->viral--sortable-lists--two-lists-selection#moveSelection
+        "
+        data-viral--sortable-lists--two-lists-selection-target="upButton"
+        aria-keyshortcuts="<%= t(".keyboard_shortcuts.up")%>"
+      >
+        <%= t(".up") %>
+      </button>
 
-        <button
-          type="button"
-          class="button button-default"
-          data-action="
-            click->viral--sortable-lists--two-lists-selection#moveSelection
-          "
-          data-viral--sortable-lists--two-lists-selection-target="downButton"
-          aria-keyshortcuts="<%= t(".keyboard_shortcuts.down")%>"
-        >
-          <%= t(".down") %>
-        </button>
-      <% end %>
-    </div>
-  <% end %>
+      <button
+        type="button"
+        class="button button-default"
+        data-action="
+          click->viral--sortable-lists--two-lists-selection#moveSelection
+        "
+        data-viral--sortable-lists--two-lists-selection-target="downButton"
+        aria-keyshortcuts="<%= t(".keyboard_shortcuts.down")%>"
+      >
+        <%= t(".down") %>
+      </button>
+    <% end %>
+  </div>
 </div>
