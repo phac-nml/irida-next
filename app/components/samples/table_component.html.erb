@@ -129,7 +129,7 @@
                 <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
-                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3'), ) do %>
+                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3')) do %>
                     <%= sample.metadata[field] %>
                   <% end %>
                 <% end %>
