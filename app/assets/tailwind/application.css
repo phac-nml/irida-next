@@ -39,7 +39,7 @@ input[type="search"] {
 }
 
 :not(.pill-focus-reset):not(#main-content-link):focus-visible {
-  @apply ring-3 outline-none ring-black ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-slate-900;
+  @apply outline-3 outline-offset-2 outline-black dark:outline-white;
 }
 
 /*
@@ -83,7 +83,6 @@ input[type="search"] {
 @utility sidebar {
   grid-template-areas: "navigation" "collapse";
   grid-template-rows: 1fr 40px;
-  overflow-x: hidden;
 }
 
 @utility navbar-button {

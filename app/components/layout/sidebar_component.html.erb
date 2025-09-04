@@ -8,7 +8,7 @@
   "
   aria-label="<%= t(:'general.default_sidebar.aria_label') %>"
 >
-  <div class="flex flex-col h-full sm:overflow-hidden max-sm:overflow-y-auto">
+  <div class="flex flex-col h-full sm:overflow-y-hidden max-sm:overflow-y-auto">
     <div class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
@@ -120,23 +120,23 @@
               dashboard_projects_path,
               role: "menuitem",
               class:
-                "px-4 py-2 relative focus:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                "px-4 py-2 relative focus-visible:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
             </li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.groups"),
               groups_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block focus:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.workflows"),
               workflow_executions_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block focus:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.data_exports"),
               data_exports_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block focus:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
           </ul>
         </div>
       </div>
