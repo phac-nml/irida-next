@@ -1,13 +1,3 @@
-<%= turbo_stream.update "dialog_edit_#{dom_id(@metadata_template)}",
-                    partial: "shared/metadata_templates/edit_template_dialog",
-                    locals: {
-                      open: @metadata_template.errors.any? ? true : false,
-                      edit_path: edit_path,
-                      update_path: update_path,
-                      edit_template_button_text: edit_template_button_text,
-                      template: @metadata_template,
-                    } %>
-
 <% if !@metadata_template.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
