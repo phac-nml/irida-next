@@ -881,7 +881,6 @@ fr:
         user_select: Utilisateur
     metadata_templates:
       index:
-        new_button: Ajouter un nouveau modèle
         subtitle: Il s’agit de modèles de métadonnées pour le groupe
         title: Modèles de métadonnées
     new_subgroup:
@@ -1115,6 +1114,7 @@ fr:
       available: Disponible
       description: Sélectionnez les champs de métadonnées du nouveau modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
+      new_button: Ajouter un nouveau modèle
       selected: Sélectionné
       submit_button: Envoyer
       title: Nouveau modèle de métadonnées
@@ -1511,7 +1511,6 @@ fr:
         user_select: User
     metadata_templates:
       index:
-        new_button: Ajouter un nouveau modèle
         subtitle: Il s’agit de modèles de métadonnées pour le projet
         title: Modèles de métadonnées
     new:

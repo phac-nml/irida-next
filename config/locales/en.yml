@@ -879,7 +879,6 @@ en:
         user_select: User
     metadata_templates:
       index:
-        new_button: Add New Template
         subtitle: These are metadata templates for the group
         title: Metadata Templates
     new_subgroup:
@@ -1111,6 +1110,7 @@ en:
       available: Available
       description: Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list.
       metadata: Metadata
+      new_button: Add New Template
       selected: Selected
       submit_button: Submit
       title: New Metadata Template
@@ -1507,7 +1507,6 @@ en:
         user_select: User
     metadata_templates:
       index:
-        new_button: Add New Template
         subtitle: These are metadata templates for the project
         title: Metadata Templates
     new:
