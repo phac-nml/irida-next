@@ -1,64 +1,23 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
-  <%= turbo_frame_tag "metadata_template_error_alert" %>
-  <%= turbo_frame_tag "metadata_template_dialog_content" do %>
-    <div
-      data-controller="viral--sortable-lists--two-lists-selection"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%=  t("metadata_templates.edit_template_dialog.selected") %>"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("metadata_templates.edit_template_dialog.available") %>"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
-      class="font-normal text-slate-500 dark:text-slate-400"
+  <% dialog.with_trigger do %>
+    <button
+      class="
+        font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline
+        cursor-pointer
+      "
+      data-action="viral--dialog#open"
+      aria-label="<%= t(:"metadata_templates.table_component.edit_aria_label", template_name: template.name)%>"
     >
-      <%= form_for(@metadata_template, url: update_path, method: :patch
-            ) do |form| %>
-        <div class="grid gap-4">
-          <div class="mt-2 form-field">
-            <%= form.label :name %>
-            <%= form.text_field :name,
-                            class: "form-control",
-                            required: true,
-                            value: @metadata_template.name %>
-          </div>
-          <div class="mt-2 form-field">
-            <%= form.label :description %>
-            <%= form.text_area :description,
-                           class: "form-control",
-                           value: @metadata_template.description %>
-          </div>
-          <div
-            class="hidden"
-            data-viral--sortable-lists--two-lists-selection-target="field"
-          ></div>
-          <%= viral_sortable_lists(
-                  title: t("metadata_templates.edit_template_dialog.metadata"),
-                  description: t("metadata_templates.edit_template_dialog.description"),
-                  ) do |sortable_lists| %>
-            <%= sortable_lists.with_list(
-              id: t("metadata_templates.edit_template_dialog.available"),
-              title: t("metadata_templates.edit_template_dialog.available"),
-              list_items: @available_metadata_fields,
-              group: "metadata_selection",
-            ) %>
-            <%= sortable_lists.with_list(
-              id: t("metadata_templates.edit_template_dialog.selected"),
-              title: t("metadata_templates.edit_template_dialog.selected"),
-              list_items: @current_template_fields,
-              group: "metadata_selection",
-            ) %>
-          <% end %>
-          <div class="mt-4">
-            <%= form.submit t("metadata_templates.edit_template_dialog.update_button"),
-                        data: {
-                          turbo_frame: "_top",
-                          action:
-                            "click->viral--sortable-lists--two-lists-selection#constructParams",
-                          "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-                        },
-                        class: "button button-primary",
-                        disabled: true %>
-          </div>
-        </div>
-      <% end %>
-    </div>
+      <%= edit_template_button_text %>
+    </button>
+  <% end %>
+  <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
+  <%= turbo_frame_tag "alert_edit_#{dom_id(template)}" %>
+  <% if template&.invalid? %>
+    <%= render partial: "shared/metadata_templates/edit_form", locals: { update_path: } %>
+  <% else %>
+    <%= turbo_frame_tag "dialog_content_edit_#{dom_id(template)}", src: edit_path, loading: :lazy do %>
+      <%= render partial: "shared/loading/form" %>
+    <% end %>
   <% end %>
 <% end %>
