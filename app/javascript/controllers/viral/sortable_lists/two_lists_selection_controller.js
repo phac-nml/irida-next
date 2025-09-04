@@ -442,19 +442,6 @@ export default class extends Controller {
     }
   }
 
-  removeButtonByKey(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      // prevents firing click event
-      event.preventDefault();
-      this.#performSelection(
-        true,
-        false,
-        this.selectedList,
-        this.availableList,
-      );
-    }
-  }
-
   // isKeyDown: is action performed by keyboard
   // isFromList: is the action performed within the list (ie: from list or from add/remove buttons)
   #performSelection(isKeyDown, isFromList, sourceList, targetList) {
