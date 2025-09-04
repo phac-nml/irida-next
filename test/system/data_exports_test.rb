@@ -937,14 +937,14 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
     click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_selector 'button[disabled]',
+    assert_selector 'button[aria-disabled="true"]',
                     text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button[disabled]',
+    assert_no_selector 'button[aria-disabled="true"]',
                        text: I18n.t('shared.samples.actions_dropdown.linelist_export')
     click_button I18n.t('shared.samples.actions_dropdown.label')
     click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
@@ -959,13 +959,13 @@ class DataExportsTest < ApplicationSystemTestCase
                          selected: I18n.t('data_exports.new_linelist_export_dialog.selected').downcase)
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')

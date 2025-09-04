@@ -1172,7 +1172,7 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      assert_selector '#samples-table table thead tr th', count: 10
+      assert_selector '#samples-table table thead tr th', count: 11
       ### VERIFY END ###
     end
 
