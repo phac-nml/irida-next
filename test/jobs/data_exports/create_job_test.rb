@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'minitest/mock'
 require 'test_helper'
 module DataExports
   class CreateJobTest < ActiveJob::TestCase
@@ -568,6 +569,33 @@ module DataExports
       assert_turbo_stream_broadcasts [user, :data_exports], count: 3 do
         DataExports::CreateJob.perform_now(@data_export2)
       end
+    end
+
+    test 'tempfile raises exception' do
+      assert @data_export2.status = 'processing'
+      assert_not @data_export2.file.valid?
+      # class Tempfile; def create; end end
+
+      Tempfile.stub :create, ->(_args) { raise(Errno::ENOSPC) } do
+        error = assert_raises DataExports::CreateService::DataExportCreateError do
+          DataExports::CreateJob.perform_now(@data_export2)
+        end
+
+        assert_match I18n.t('data_exports.create.error', message: 'No space left on device'), error.message
+      end
+
+      assert @data_export2.status = 'processing'
+      assert_not @data_export2.file.valid?
+    end
+
+    test 'invalid starting export object raises exception' do
+      class DataExportStub < DataExport; def persisted? = false end # rubocop:disable Lint/ConstantDefinitionInBlock
+
+      error = assert_raises DataExports::CreateService::DataExportCreateError do
+        DataExports::CreateJob.perform_now(DataExportStub.new)
+      end
+
+      assert_match I18n.t('data_exports.create.error'), error.message
     end
   end
 end

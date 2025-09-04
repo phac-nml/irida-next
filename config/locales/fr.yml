@@ -796,6 +796,7 @@ fr:
         title: Projets
   data_exports:
     create:
+      error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'
       success: L’exportation de données '%{name}' a été lancée avec succès.
     destroy:
       error: L’exportation de données '%{name}' n’a pas pu être supprimée.
