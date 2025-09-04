@@ -415,8 +415,8 @@ export default class extends Controller {
     this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
-  addSelectionByAddButton(event) {
-    if (event.target.getAttribute("aria-disabled") === "false") {
+  addSelectionByAddButton() {
+    if (this.addButtonTarget.getAttribute("aria-disabled") === "false") {
       this.#performSelection(
         false,
         false,
@@ -431,8 +431,8 @@ export default class extends Controller {
     this.#performSelection(true, true, this.selectedList, this.availableList);
   }
 
-  removeSelectionByRemoveButton(event) {
-    if (event.target.getAttribute("aria-disabled") === "false") {
+  removeSelectionByRemoveButton() {
+    if (this.removeButtonTarget.getAttribute("aria-disabled") === "false") {
       this.#performSelection(
         false,
         false,
