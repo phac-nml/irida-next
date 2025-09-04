@@ -1038,25 +1038,25 @@ class DataExportsTest < ApplicationSystemTestCase
       # submit button disabled
       assert_selector 'input[disabled]'
       # all buttons disabled
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
 
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       find('li#metadatafield1').click
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_no_selector 'button[disabled]',
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.add')
       find('li#metadatafield2').click
       click_button I18n.t('viral.sortable_list.list_component.add')
@@ -1077,33 +1077,41 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_no_selector 'input[disabled]'
 
       # all buttons disabled again
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       find('li#metadatafield1').click
-      # after 1 selection, remove, up, and down buttons enabled; add still disabled
-      assert_no_selector 'button[disabled]',
+      # after 1 selection, remove, and down buttons enabled; add and up still disabled (up disabled because top option
+      # is selected)
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_no_selector 'button[disabled]',
-                         text: I18n.t('viral.sortable_list.list_component.up')
-      assert_no_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
+                      text: I18n.t('viral.sortable_list.list_component.up')
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
+
+      # click down button to move selected option to bottom, verify up is now enabled and down is disabled
+      click_button I18n.t('viral.sortable_list.list_component.down')
+      assert_no_selector 'button[aria-disabled="true"]',
+                         text: I18n.t('viral.sortable_list.list_component.up')
+      assert_selector 'button[aria-disabled="true"]',
+                      text: I18n.t('viral.sortable_list.list_component.down')
       find('li#metadatafield2').click
       # after 2 selections, up and down are now disabled
-      assert_no_selector 'button[disabled]',
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       click_button I18n.t('viral.sortable_list.list_component.remove')
 
@@ -1215,33 +1223,33 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       # all buttons disabled again
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       find('li#csv').click
-      # after 1 selection, remove, up, and down buttons enabled; add still disabled
-      assert_no_selector 'button[disabled]',
+      # after 1 selection, remove and down buttons enabled; add and up (first option, can't move up) still disabled
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_no_selector 'button[disabled]',
-                         text: I18n.t('viral.sortable_list.list_component.up')
-      assert_no_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
+                      text: I18n.t('viral.sortable_list.list_component.up')
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       find('li#json').click
       # after 2 selections, up and down are now disabled
-      assert_no_selector 'button[disabled]',
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       click_button I18n.t('viral.sortable_list.list_component.remove')
 
@@ -1253,25 +1261,25 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       # all buttons disabled
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
 
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.add')
       find('li#json').click
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.remove')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.up')
-      assert_selector 'button[disabled]',
+      assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('viral.sortable_list.list_component.down')
-      assert_no_selector 'button[disabled]',
+      assert_no_selector 'button[aria-disabled="true"]',
                          text: I18n.t('viral.sortable_list.list_component.add')
       find('li#csv').click
       click_button I18n.t('viral.sortable_list.list_component.add')
