@@ -460,10 +460,6 @@ input[type="search"] {
     @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm;
   }
 
-  .alert-component:focus-within {
-    @apply ring-2 ring-slate-500 ring-offset-2 dark:ring-slate-400;
-  }
-
   /* Progress bar animation */
   .alert-component .progress-bar {
     @apply absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300 ease-out;
