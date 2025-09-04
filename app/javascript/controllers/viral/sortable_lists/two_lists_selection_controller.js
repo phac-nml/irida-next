@@ -674,6 +674,8 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
+    if (event.target.getAttribute("aria-disabled") === "true") return;
+
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
     const selectedOptionIndex = listOptions.indexOf(selectedOption);
