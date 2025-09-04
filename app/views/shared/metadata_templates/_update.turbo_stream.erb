@@ -12,12 +12,15 @@
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-  <%= turbo_stream.replace "metadata-templates-table" do %>
-    <%= turbo_frame_tag "metadata-templates-table", src: index_path do %>
-      <%= render SpinnerComponent.new(
-        message: t("metadata_templates.table_component.spinner_message"),
-      ) %>
-    <% end %>
+  <%= turbo_stream.replace @metadata_template do %>
+    <%= render MetadataTemplates::RowComponent.new(
+      @metadata_template,
+      @namespace,
+      {
+        update_metadata_templates: @allowed_to[:update_metadata_templates],
+        destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
+      },
+    ) %>
   <% end %>
 <% else %>
   <%= turbo_stream.update "alert_edit_#{dom_id(@metadata_template)}",
