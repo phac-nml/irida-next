@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: title, subtitle: subtitle) do |component| %>
   <% component.with_buttons do %>
     <% if namespace.metadata_fields.length.positive? && @allowed_to[:create_metadata_templates] %>
-      <%= turbo_frame_tag "metadata_template_dialog" do %>
+      <%= turbo_frame_tag "new_metadata_template_dialog" do %>
         <%= render partial: "shared/metadata_templates/new_template_dialog",
         locals: {
           open: false,

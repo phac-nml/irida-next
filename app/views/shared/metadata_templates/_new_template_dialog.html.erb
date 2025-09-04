@@ -9,7 +9,7 @@
   <% if @new_template&.invalid? %>
     <%= render partial: "shared/metadata_templates/new_form", locals: { create_path: } %>
   <% else %>
-    <%= turbo_frame_tag "metadata_template_dialog_content", src: new_path, loading: :lazy do %>
+    <%= turbo_frame_tag "new_metadata_template_dialog_content", src: new_path, loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>
