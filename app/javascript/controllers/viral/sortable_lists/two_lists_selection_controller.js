@@ -202,6 +202,30 @@ export default class extends Controller {
       this.selectedList,
     );
 
+    // check if up/down button should be disabled based on selected option position
+    const verifySelectedOptionPosition = (direction) => {
+      // if selected list contains 1 selected option
+      if (selectedListSelectedOptions.length === 1) {
+        let comparison;
+        // if up, enable up button if the selected option is not the first option
+        if (direction === "up") {
+          comparison =
+            selectedListSelectedOptions[0] !==
+            this.selectedList.firstElementChild;
+          // if down, enable down button if the selected option is not the last option
+        } else {
+          comparison =
+            selectedListSelectedOptions[
+              selectedListSelectedOptions.length - 1
+            ] !== this.selectedList.lastElementChild;
+        }
+        if (comparison) {
+          return false;
+        }
+      }
+      return true;
+    };
+
     // disable add button if no options selected in available list
     this.#setButtonDisableState(
       this.addButtonTarget,
@@ -217,12 +241,12 @@ export default class extends Controller {
     // disable up/down buttons unless exactly 1 option selected in selected list
     this.#setButtonDisableState(
       this.upButtonTarget,
-      selectedListSelectedOptions.length != 1,
+      verifySelectedOptionPosition("up"),
     );
 
     this.#setButtonDisableState(
       this.downButtonTarget,
-      selectedListSelectedOptions.length != 1,
+      verifySelectedOptionPosition("down"),
     );
 
     // disable submit if no options in selected list
@@ -586,6 +610,8 @@ export default class extends Controller {
       this.#setActiveListElement(currentList, targetOption);
       targetOption.focus();
     }
+
+    this.#checkStates();
   }
 
   #moveOptionHorizontally(selectedOption, targetOption, direction) {
