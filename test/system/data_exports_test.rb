@@ -937,14 +937,14 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
     click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_selector 'button[aria-disabled="true"]',
+    assert_selector 'button[disabled]',
                     text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button[aria-disabled="true"]',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('shared.samples.actions_dropdown.linelist_export')
     click_button I18n.t('shared.samples.actions_dropdown.label')
     click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
