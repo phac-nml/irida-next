@@ -4,7 +4,6 @@
                       open: @new_template.errors.any? ? true : false,
                       create_path:,
                       new_path:,
-                      new_template_button_text:,
                     } %>
 
 <% if @new_template.persisted? %>
@@ -19,6 +18,6 @@
     <% end %>
   <% end %>
 <% else %>
-  <%= turbo_stream.update "metadata_template_error_alert",
+  <%= turbo_stream.update "new_metadata_template_alert",
                       viral_alert(type:, message:, classes: "mb-4") %>
 <% end %>
