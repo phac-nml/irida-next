@@ -13,7 +13,7 @@ module Pathogen
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
     # rubocop:disable Layout/LineLength
-    DEFAULT_CLASSES = 'relative cursor-pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
+    DEFAULT_CLASSES = 'relative cursor-pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus-visible:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
     # rubocop:enable Layout/LineLength
 
     # rubocop:disable Metrics/ParameterLists
