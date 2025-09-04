@@ -75,24 +75,17 @@
                 classes: 'flex space-x-2 px-3 py-3 justify-end'
               ) do %>
                 <% if @row_actions.key?(:update_metadata_templates) %>
-                  <%= button_to t(:"metadata_templates.table_component.edit_button"),
-                  edit_path(metadata_template),
-                  data: {
-                    turbo_frame: "metadata_template_modal",
-                    turbo_stream: true,
-                  },
-                  method: :get,
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"metadata_templates.table_component.edit_aria_label",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                  <turbo-frame id="<%="dialog_edit_#{dom_id(metadata_template)}"%>">
+                    <%= render partial: "shared/metadata_templates/edit_template_dialog",
+                    locals: {
+                      open: false,
+                      edit_path: edit_path(metadata_template),
+                      update_path: individual_path(metadata_template),
+                      edit_template_button_text:
+                        t(:"metadata_templates.table_component.edit_button"),
+                      template: metadata_template,
+                    } %>
+                  </turbo-frame>
                 <% end %>
                 <% if @row_actions.key?(:destroy_metadata_templates) %>
                   <%= button_to t(:"metadata_templates.table_component.remove_button"),
