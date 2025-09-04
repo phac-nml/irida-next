@@ -265,12 +265,10 @@ export default class extends Controller {
   }
 
   #setButtonDisableState(button, disableState) {
-    if (disableState && !button.disabled) {
-      button.disabled = true;
+    if (disableState) {
       button.setAttribute("aria-disabled", "true");
-    } else if (!disableState && button.disabled) {
-      button.disabled = false;
-      button.removeAttribute("aria-disabled");
+    } else {
+      button.setAttribute("aria-disabled", "false");
     }
   }
 
@@ -417,17 +415,10 @@ export default class extends Controller {
     this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
-  addButtonByClick() {
-    this.#performSelection(false, false, this.availableList, this.selectedList);
-  }
-
-  addButtonByKey(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      // prevents firing click event
-      event.preventDefault();
-
+  addSelectionByAddButton(event) {
+    if (event.target.getAttribute("aria-disabled") === "false") {
       this.#performSelection(
-        true,
+        false,
         false,
         this.availableList,
         this.selectedList,
@@ -440,8 +431,15 @@ export default class extends Controller {
     this.#performSelection(true, true, this.selectedList, this.availableList);
   }
 
-  removeButtonByClick() {
-    this.#performSelection(false, false, this.selectedList, this.availableList);
+  removeSelectionByRemoveButton(event) {
+    if (event.target.getAttribute("aria-disabled") === "false") {
+      this.#performSelection(
+        false,
+        false,
+        this.selectedList,
+        this.availableList,
+      );
+    }
   }
 
   removeButtonByKey(event) {
@@ -590,12 +588,7 @@ export default class extends Controller {
     if (!targetOption) return;
     // user is moving an option up/down list
     if (selectedOption) {
-      this.#moveOptionHorizontally(
-        selectedOption,
-        targetOption,
-        direction,
-        event,
-      );
+      this.#moveOptionHorizontally(selectedOption, targetOption, direction);
     } else {
       const currentList = event.target.parentNode;
       //  user is selecting items by Shift+ArrowUp/Down
@@ -608,13 +601,12 @@ export default class extends Controller {
     }
   }
 
-  #moveOptionHorizontally(selectedOption, targetOption, direction, event) {
-    selectedOption.remove();
-    targetOption.insertAdjacentElement(
-      direction === "up" ? "beforebegin" : "afterend",
-      selectedOption,
+  #moveOptionHorizontally(selectedOption, targetOption, direction) {
+    targetOption.remove();
+    selectedOption.insertAdjacentElement(
+      direction === "up" ? "afterend" : "beforebegin",
+      targetOption,
     );
-    selectedOption.focus();
 
     const ariaLiveText = this.#ariaLiveTranslations[
       direction === "up" ? "move_up" : "move_down"

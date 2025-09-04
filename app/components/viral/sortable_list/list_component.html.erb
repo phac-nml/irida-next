@@ -27,8 +27,7 @@
         type="button"
         class="button button-default"
         data-action="
-          click->viral--sortable-lists--two-lists-selection#addButtonByClick
-          keydown->viral--sortable-lists--two-lists-selection#addButtonByKey
+          click->viral--sortable-lists--two-lists-selection#addSelectionByAddButton
         "
         data-viral--sortable-lists--two-lists-selection-target="addButton"
         aria-keyshortcuts="<%= t(".keyboard_shortcuts.add")%>"
@@ -41,8 +40,7 @@
         type="button"
         class="button button-default"
         data-action="
-          click->viral--sortable-lists--two-lists-selection#removeButtonByClick
-          keydown->viral--sortable-lists--two-lists-selection#removeButtonByKey
+          click->viral--sortable-lists--two-lists-selection#removeSelectionByRemoveButton
         "
         data-viral--sortable-lists--two-lists-selection-target="removeButton"
         aria-keyshortcuts="<%= t(".keyboard_shortcuts.remove")%>"
