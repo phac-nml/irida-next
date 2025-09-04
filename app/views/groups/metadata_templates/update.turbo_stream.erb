@@ -1,5 +1,6 @@
 <%= render partial: "shared/metadata_templates/update",
 locals: {
+  edit_path: edit_group_metadata_template_path(@namespace, @metadata_template),
   update_path: group_metadata_template_path(@namespace, @metadata_template),
   index_path: group_metadata_templates_path,
   type: type,
