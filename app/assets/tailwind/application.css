@@ -59,10 +59,10 @@ input[type="search"] {
     border-color: var(--color-slate-200, currentColor);
   }
   td[contenteditable="true"]:focus-visible {
-    outline-offset: -2px;
+    @apply -outline-offset-3!;
   }
-  button.file-selector:focus-visible {
-    outline-offset: -2px;
+  td button.file-selector:focus-visible {
+    @apply -outline-offset-3!;
   }
 }
 
