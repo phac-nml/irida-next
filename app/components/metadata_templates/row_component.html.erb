@@ -26,15 +26,13 @@
                 classes: 'flex space-x-2 px-3 py-3 justify-end'
               ) do %>
       <% if @row_actions.key?(:update_metadata_templates) %>
-        <turbo-frame id="<%="dialog_edit_#{dom_id(@metadata_template)}"%>">
-          <%= render partial: "shared/metadata_templates/edit_template_dialog",
-          locals: {
-            open: false,
-            edit_path: edit_path,
-            update_path: individual_path,
-            template: @metadata_template,
-          } %>
-        </turbo-frame>
+        <%= render partial: "shared/metadata_templates/edit_template_dialog",
+        locals: {
+          open: false,
+          edit_path: edit_path,
+          update_path: individual_path,
+          template: @metadata_template,
+        } %>
       <% end %>
       <% if @row_actions.key?(:destroy_metadata_templates) %>
         <%= button_to t(:"metadata_templates.table_component.remove_button"),

@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(id: "dialog_edit_#{dom_id(template)}", open: open, size: :large) do |dialog| %>
   <% dialog.with_trigger do %>
     <button
       class="
