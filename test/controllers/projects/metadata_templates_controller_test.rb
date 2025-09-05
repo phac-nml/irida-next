@@ -116,7 +116,7 @@ module Projects
 
     test 'edit metadata template' do
       get edit_namespace_project_metadata_template_path(@namespace.parent, @namespace.project,
-                                                        @metadata_template, format: :turbo_stream)
+                                                        @metadata_template)
 
       assert_response :success
     end
@@ -124,7 +124,7 @@ module Projects
     test 'edit metadata template unauthorized' do
       sign_in users(:ryan_doe)
       get edit_namespace_project_metadata_template_path(@namespace.parent, @namespace.project,
-                                                        @metadata_template, format: :turbo_stream)
+                                                        @metadata_template)
 
       assert_response :unauthorized
     end

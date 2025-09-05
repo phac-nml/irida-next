@@ -23,27 +23,27 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'group metadata templates new' do
-    get new_group_metadata_template_path(@group, format: :turbo_stream)
+    get new_group_metadata_template_path(@group)
 
     assert_response :success
   end
 
   test 'group metadata templates new unauthorized' do
     sign_in users(:ryan_doe)
-    get new_group_metadata_template_path(@group, format: :turbo_stream)
+    get new_group_metadata_template_path(@group)
 
     assert_response :unauthorized
   end
 
   test 'group metadata templates edit' do
-    get edit_group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+    get edit_group_metadata_template_path(@group, @group_metadata_template)
 
     assert_response :success
   end
 
   test 'group metadata templates edit unauthorized' do
     sign_in users(:ryan_doe)
-    get edit_group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+    get edit_group_metadata_template_path(@group, @group_metadata_template)
 
     assert_response :unauthorized
   end
@@ -150,22 +150,21 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'project metadata templates new' do
-    get new_namespace_project_metadata_template_path(@project_namespace.parent, @project, format: :turbo_stream)
+    get new_namespace_project_metadata_template_path(@project_namespace.parent, @project)
 
     assert_response :success
   end
 
   test 'project metadata templates new unauthorized' do
     sign_in users(:ryan_doe)
-    get new_namespace_project_metadata_template_path(@project_namespace.parent, @project, format: :turbo_stream)
+    get new_namespace_project_metadata_template_path(@project_namespace.parent, @project)
 
     assert_response :unauthorized
   end
 
   test 'project metadata templates edit' do
     get edit_namespace_project_metadata_template_path(@project_namespace.parent,
-                                                      @project, @project_metadata_template,
-                                                      format: :turbo_stream)
+                                                      @project, @project_metadata_template)
 
     assert_response :success
   end
@@ -173,8 +172,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   test 'project metadata templates edit unauthorized' do
     sign_in users(:ryan_doe)
     get edit_namespace_project_metadata_template_path(@project_namespace.parent,
-                                                      @project, @project_metadata_template,
-                                                      format: :turbo_stream)
+                                                      @project, @project_metadata_template)
 
     assert_response :unauthorized
   end
