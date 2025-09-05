@@ -51,9 +51,12 @@ module Pathogen
       @attribute.to_s
     end
 
-    # Generates a unique ID for the input element
+    # Generates the ID for the input element
+    # If an explicit id was provided, it takes precedence; otherwise it's computed from the name and value.
     # @return [String] The input ID
     def input_id
+      return @id if @id.present?
+
       base = if @form && @form.object_name.present?
                "#{@form.object_name}_#{@attribute}_#{@value}"
              else
@@ -94,8 +97,23 @@ module Pathogen
     # @param options [Hash] Options to extract
     def extract_options!(options)
       @options = options.dup
+      extract_naming_options!(options)
+      extract_state_and_accessibility_options!(options)
+      @html_options = options # Remaining options (e.g., data-*)
+    end
+
+    private
+
+    # Extracts naming- and id-related options
+    def extract_naming_options!(options)
       @input_name = options.delete(:input_name)
+      @id = options.delete(:id)
       @label = options.delete(:label)
+      @user_class = options.delete(:class)
+    end
+
+    # Extracts state and accessibility-related options
+    def extract_state_and_accessibility_options!(options)
       @checked = options.delete(:checked) { false }
       @disabled = options.delete(:disabled) { false }
       @described_by = options.delete(:described_by)
@@ -103,8 +121,11 @@ module Pathogen
       @lang = options.delete(:lang)
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
-      @user_class = options.delete(:class)
-      @html_options = options # Remaining options (e.g., data-*)
+      @aria_label = options.delete(:aria_label)
+      @role = options.delete(:role)
+      @aria_live = options.delete(:aria_live)
+      @selected_message = options.delete(:selected_message)
+      @deselected_message = options.delete(:deselected_message)
     end
   end
 end

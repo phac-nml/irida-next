@@ -188,7 +188,9 @@
             <input type="hidden" name="format" value="turbo_stream"/>
             <input type="hidden" name="select" value="on"/>
             <%= render "shared/samples/timestamp_input" %>
-            <%= f.submit t(".select_all_button"), class: "button button-default" %>
+            <%= f.submit t(".select_all_button"),
+                     class: "button button-default",
+                     title: t(".select_all_tooltip") %>
           <% end %>
           <%= form_with(
                   url: select_group_samples_url,
@@ -197,7 +199,9 @@
                   class: "filters align-middle"
                 ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
-            <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
+            <%= f.submit t(".deselect_all_button"),
+                     class: "button button-default",
+                     title: t(".deselect_all_tooltip") %>
           <% end %>
         <% end %>
       </div>

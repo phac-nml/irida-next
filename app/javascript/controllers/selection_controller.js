@@ -6,7 +6,7 @@ export default class extends Controller {
   #storageKey = null;
   #numSelected = 0;
 
-  static targets = ["rowSelection", "selectPage", "selected"];
+  static targets = ["rowSelection", "selectPage", "selected", "status"];
   static outlets = ["action-button"];
 
   static values = {
@@ -14,6 +14,8 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
+    countMessageOne: String,
+    countMessageOther: String,
   };
 
   connect() {
@@ -124,8 +126,7 @@ export default class extends Controller {
       this.selectPageTarget.checked = uncheckedBoxes.length === 0;
       this.selectPageTarget.indeterminate = !(
         uncheckedBoxes.length === 0 ||
-        uncheckedBoxes.length === this.totalValue ||
-        this.rowSelectionTargets.length - uncheckedBoxes.length === 0
+        uncheckedBoxes.length === this.rowSelectionTargets.length
       );
     }
   }
@@ -133,6 +134,36 @@ export default class extends Controller {
   #updateCounts(selected) {
     if (this.hasSelectedTarget) {
       this.selectedTarget.innerText = selected;
+    }
+    this.#announceSelectionStatus(selected);
+  }
+
+  /**
+   * 🔊 Announce current selection status to an aria-live region.
+   *
+   * - 🧮 Builds a localized message using one/other templates: "X of Y selected".
+   * - 🧩 Reads values from data attributes (`countMessageOneValue`, `countMessageOtherValue`).
+   * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
+   *
+   * @param {number} selected - Current number of selected items.
+   * @private
+   */
+  #announceSelectionStatus(selected) {
+    // 🧮 Choose the correct i18n template based on count
+    const messageTemplate =
+      selected === 1 ? this.countMessageOneValue : this.countMessageOtherValue;
+
+    // 🔁 Interpolate counts into the template
+    const message = messageTemplate
+      .replace("%{selected}", String(selected))
+      .replace("%{total}", String(this.totalValue || 0));
+
+    // 📣 Update local status region or fallback global live region
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = message;
+    } else {
+      const globalStatus = document.querySelector("#sr-status");
+      if (globalStatus) globalStatus.textContent = message;
     }
   }
 }
