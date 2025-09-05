@@ -62,7 +62,7 @@ module Samples
             raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
           end
 
-          if @value_update.values[0].blank?
+          if @value_update.values[0].nil?
             raise SampleMetadataValueValidationError,
                   I18n.t('services.samples.metadata.update_fields.value_required')
           end
