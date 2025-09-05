@@ -17,10 +17,16 @@ export default class extends Controller {
   }
 
   editableCellTargetConnected(element) {
-    this.#originalCellContent[this.#elementId(element)] = element.innerText;
+    element.id = this.#elementId(element);
+
+    this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
     element.setAttribute("contenteditable", true);
+
+    if (element.hasAttribute("data-refocus")) {
+      element.focus();
+    }
   }
 
   editableCellTargetDisconnected(element) {
@@ -37,7 +43,6 @@ export default class extends Controller {
     let field = element
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
-    element.id = this.#elementId(element);
 
     // Get the parent DOM ID to extract the item ID
     // Use a regular expression to match the part after the last underscore
@@ -143,6 +148,10 @@ export default class extends Controller {
   }
 
   #elementId(element) {
-    return `${element.cellIndex}_${element.parentNode.rowIndex}`;
+    const field = element
+      .closest("table")
+      .querySelector(`th:nth-child(${element.cellIndex + 1})`)
+      .dataset.fieldId.replaceAll(" ", "SPACE");
+    return `${field}_${element.parentNode.rowIndex}`;
   }
 }

@@ -191,7 +191,7 @@ module Samples
       @timestamp = @sample.updated_at + 1.second
       render turbo_stream: [
         turbo_stream.replace(
-          cell_id, Samples::EditableCell.new(field: @field, sample: @sample)
+          cell_id, Samples::EditableCell.new(field: @field, sample: @sample, data: { refocus: 'true' })
         ),
         turbo_stream.append(
           'flashes',
