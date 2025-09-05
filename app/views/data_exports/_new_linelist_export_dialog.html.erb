@@ -91,15 +91,11 @@
             title: t(".available"),
             list_items: @namespace.metadata_fields,
             group: "metadata_selection",
-            container_classes: "block mb-1 pr-2 text-sm font-medium",
-            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
           ) %>
           <%= sortable_lists.with_list(
             id: t(".selected"),
             title: t(".selected"),
             group: "metadata_selection",
-            container_classes: "block mb-1 text-sm font-medium",
-            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
             required: true,
           ) %>
         <% end %>

@@ -365,6 +365,11 @@ input[type="search"] {
   &:focus-visible {
     @apply outline-2 outline-offset-2;
   }
+
+  /* Disabled state for button */
+  &[aria-disabled="true"] {
+    @apply pointer-events-none cursor-not-allowed opacity-50;
+  }
 }
 
 @utility button-default {

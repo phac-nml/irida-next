@@ -1,13 +1,22 @@
 <li
   data-action="
-    keydown->viral--sortable-lists--two-lists-selection#navigateList
+    click->viral--sortable-lists--two-lists-selection#handleClick
+    keydown->viral--sortable-lists--two-lists-selection#handleKeyboardInput
   "
-  tabindex="0"
   role="option"
+  tabindex="-1"
   aria-selected="false"
-  id="<%= list_item %>"
+  id="<%= formatted_list_item %>"
   class="
-    block w-full px-4 py-2 border-b cursor-move border-slate-200
-    dark:border-slate-600
+    w-full px-4 py-2 border-b cursor-move border-slate-200 dark:border-slate-600
+    flex focus:bg-primary-400 focus:dark:bg-primary-600
+    focus:dark:hover:bg-primary-700 focus-visible:-outline-offset-2!
   "
-><%= list_item %></li>
+>
+  <span
+    id="<%= formatted_list_item %>_unselected"
+    aria-hidden="true"
+    class="mx-2 pointer-events-none"
+  ></span>
+  <span class="pointer-events-none"><%= list_item %></span>
+</li>

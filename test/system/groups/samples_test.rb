@@ -417,7 +417,7 @@ module Groups
       end
 
       within('table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
       assert_selector 'div#limit-component select option[selected]', text: '10'
     end
@@ -537,16 +537,16 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
 
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_no_selector 'td:nth-child(7)[contenteditable="true"]'
-        assert_selector 'td:nth-child(7)', text: 'value1'
         assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
-        assert_selector 'td:nth-child(8)', text: 'value2'
-        assert_selector 'td:nth-child(9)[contenteditable="true"]', text: ''
+        assert_selector 'td:nth-child(8)', text: 'value1'
+        assert_no_selector 'td:nth-child(9)[contenteditable="true"]'
+        assert_selector 'td:nth-child(9)', text: 'value2'
+        assert_selector 'td:nth-child(10)[contenteditable="true"]', text: ''
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
@@ -573,17 +573,17 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
 
       click_on 'metadatafield1'
-      assert_selector 'table thead th:nth-child(7) svg.arrow-up-icon'
+      assert_selector 'table thead th:nth-child(8) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
       click_on 'metadatafield2'
-      assert_selector 'table thead th:nth-child(8) svg.arrow-up-icon'
+      assert_selector 'table thead th:nth-child(9) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
@@ -1136,7 +1136,7 @@ module Groups
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples-table table thead tr th', count: 10
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
@@ -1172,7 +1172,7 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      assert_selector '#samples-table table thead tr th', count: 10
+      assert_selector '#samples-table table thead tr th', count: 11
       ### VERIFY END ###
     end
 
@@ -1236,7 +1236,7 @@ module Groups
 
       # description and project_puid metadata headers do not exist
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
       within('#samples-table table thead') do
         assert_text 'METADATAFIELD1'
@@ -1280,7 +1280,7 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      assert_selector '#samples-table table thead tr th', count: 10
+      assert_selector '#samples-table table thead tr th', count: 11
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -1334,7 +1334,7 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
 
       within '.table-container' do |div|
@@ -1378,7 +1378,7 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 10
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
@@ -1684,7 +1684,11 @@ module Groups
         end
 
         # move all metadata to available list
-        click_button I18n.t('viral.sortable_lists_component.remove_all')
+        find('#metadata1').click
+        find('#metadata2').click
+        find('#description').click
+
+        click_button I18n.t('viral.sortable_list.list_component.remove')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -1785,7 +1789,10 @@ module Groups
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
 
         # make metadata selections so one metadata field is in available and one is in selected
-        click_button I18n.t('viral.sortable_lists_component.remove_all')
+        find('#metadata1').click
+        find('#metadata2').click
+
+        click_button I18n.t('viral.sortable_list.list_component.remove')
 
         select 'metadata1',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
@@ -1834,16 +1841,16 @@ module Groups
 
       # only metadata1 imported and not metadata2
       within('table thead tr') do
-        assert_selector 'th', count: 10
-        assert_selector 'th:nth-child(7)', text: 'METADATA1'
+        assert_selector 'th', count: 11
+        assert_selector 'th:nth-child(8)', text: 'METADATA1'
         assert_no_text 'METADATA2'
       end
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
-        assert_selector 'tr:first-child td:nth-child(7)', text: 'c'
+        assert_selector 'tr:first-child td:nth-child(8)', text: 'c'
 
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-        assert_selector 'tr:nth-child(2) td:nth-child(7)', text: 'a'
+        assert_selector 'tr:nth-child(2) td:nth-child(8)', text: 'a'
       end
     end
 
