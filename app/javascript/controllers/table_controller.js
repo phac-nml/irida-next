@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import _ from "lodash";
 
 /**
  * TableController
@@ -57,13 +58,12 @@ export default class TableController extends Controller {
     return 8;
   }
 
-  // � Performance and state tracking - Private field declarations
+  // 🎯 Performance and state tracking - Private field declarations
   #lastFocusedCell = null;
   #scrollerCache = new WeakMap();
   #stickyElementsCache = new WeakMap();
   #prefersReducedMotion = false;
   #debouncedHandleFocus = null;
-  #debounceTimer = null;
 
   /**
    * Stimulus lifecycle: Initialize controller
@@ -76,8 +76,8 @@ export default class TableController extends Controller {
         window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ??
         false;
 
-      // 🎯 Create debounced focus handler
-      this.#debouncedHandleFocus = this.#createDebounce(
+      // 🎯 Create debounced focus handler using lodash
+      this.#debouncedHandleFocus = _.debounce(
         this.#handleCellFocusInternal.bind(this),
         this.debounceDelayValue,
       );
@@ -95,29 +95,12 @@ export default class TableController extends Controller {
   disconnect() {
     try {
       this.#clearCaches();
-      if (this.#debounceTimer) {
-        clearTimeout(this.#debounceTimer);
-        this.#debounceTimer = null;
+      if (this.#debouncedHandleFocus) {
+        this.#debouncedHandleFocus.cancel();
       }
     } catch (error) {
       this.#handleError("Error during TableController disconnect", error);
     }
-  }
-
-  /**
-   * Create a debounce function
-   * @param {Function} func - Function to debounce
-   * @param {number} delay - Delay in milliseconds
-   * @returns {Function} Debounced function
-   * @private
-   */
-  #createDebounce(func, delay) {
-    return (...args) => {
-      if (this.#debounceTimer) {
-        clearTimeout(this.#debounceTimer);
-      }
-      this.#debounceTimer = setTimeout(() => func(...args), delay);
-    };
   }
 
   /**
@@ -178,7 +161,7 @@ export default class TableController extends Controller {
       // 🔝 Ensure the cell is generally visible within its containers
       this.#scrollIntoView(cell, scrollOptions);
 
-      // � Additional check to ensure cell is fully visible vertically within the scroller
+      // 📏 Additional check to ensure cell is fully visible vertically within the scroller
       this.#ensureVerticalVisibility(cell, scroller);
 
       // 🔒 Skip horizontal scrolling for sticky cells
@@ -255,7 +238,7 @@ export default class TableController extends Controller {
 
       if (!cellRect || !scrollerRect) return;
 
-      // � Find sticky overlay heights at top and bottom (with caching)
+      // 📏 Find sticky overlay heights at top and bottom (with caching)
       const stickyHeaderHeight = this.#getStickyOverlayHeight(
         cell,
         scroller,
@@ -267,7 +250,7 @@ export default class TableController extends Controller {
         "bottom",
       );
 
-      // � Calculate effective boundaries accounting for sticky overlays
+      // 📏 Calculate effective boundaries accounting for sticky overlays
       const effectiveTop = scrollerRect.top + stickyHeaderHeight;
       const effectiveBottom = scrollerRect.bottom - stickyFooterHeight;
 
@@ -278,13 +261,13 @@ export default class TableController extends Controller {
       const topPadding = isFirstRow ? 0 : verticalPadding;
       const bottomPadding = isLastRow ? 0 : verticalPadding;
 
-      // � Check if cell is blocked by sticky footer or needs more breathing room at bottom
+      // 📏 Check if cell is blocked by sticky footer or needs more breathing room at bottom
       const overflowBottom = cellRect.bottom - effectiveBottom + bottomPadding;
       if (overflowBottom > 0) {
         scroller.scrollTop += overflowBottom;
       }
 
-      // � Check if cell is blocked by sticky header or needs more breathing room at top
+      // 📏 Check if cell is blocked by sticky header or needs more breathing room at top
       const overflowTop = effectiveTop - cellRect.top + topPadding;
       if (overflowTop > 0) {
         scroller.scrollTop -= overflowTop;
@@ -468,7 +451,7 @@ export default class TableController extends Controller {
         return this.#scrollerCache.get(tbody)[cacheKey] === row;
       }
 
-      // � Find all visible rows in the tbody (not hidden by display:none or similar)
+      // 📏 Find all visible rows in the tbody (not hidden by display:none or similar)
       const allRows = Array.from(tbody.querySelectorAll("tr")).filter((tr) => {
         const style = getComputedStyle(tr);
         return (
@@ -478,7 +461,7 @@ export default class TableController extends Controller {
         );
       });
 
-      // � Cache the first row for performance
+      // 📏 Cache the first row for performance
       if (!this.#scrollerCache.has(tbody)) {
         this.#scrollerCache.set(tbody, {});
       }
@@ -512,7 +495,7 @@ export default class TableController extends Controller {
 
       if (!tbody || !row) return false;
 
-      // � Use cached result if available
+      // 📏 Use cached result if available
       const cacheKey = `lastRow_${tbody.id || tbody.dataset.cacheKey || "default"}`;
       if (
         this.#scrollerCache.has(tbody) &&
@@ -531,7 +514,7 @@ export default class TableController extends Controller {
         );
       });
 
-      // � Cache the last row for performance
+      // 📏 Cache the last row for performance
       if (!this.#scrollerCache.has(tbody)) {
         this.#scrollerCache.set(tbody, {});
       }
@@ -564,7 +547,7 @@ export default class TableController extends Controller {
       const table = cell.closest("table");
       if (!table) return 0;
 
-      // � Check cache first
+      // 📏 Check cache first
       const cacheKey = `stickyHeight_${position}_${table.id || "default"}`;
       if (this.#stickyElementsCache.has(table)) {
         const cached = this.#stickyElementsCache.get(table)[cacheKey];
@@ -588,7 +571,7 @@ export default class TableController extends Controller {
               "[style*='position: sticky'][style*='bottom']",
             ];
 
-      // � Check for sticky elements
+      // 📏 Check for sticky elements
       const stickyElements = [
         ...table.querySelectorAll(selectors[0]),
         ...scroller.querySelectorAll(selectors[1]),
