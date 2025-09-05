@@ -12,13 +12,13 @@ import { Controller } from "@hotwired/stimulus";
  *   <tbody data-controller="table" data-action="focusin->table#handleCellFocus">
  *
  * @example With Custom Configuration
- *   <tbody data-controller="table" 
+ *   <tbody data-controller="table"
  *         data-table-vertical-padding-value="20"
  *         data-table-debounce-delay-value="150"
  *         data-action="focusin->table#handleCellFocus">
  *
  * @example With Accessibility Features
- *   <tbody data-controller="table" 
+ *   <tbody data-controller="table"
  *         data-table-announce-navigation-value="true"
  *         data-action="focusin->table#handleCellFocus">
  *
@@ -34,18 +34,28 @@ export default class TableController extends Controller {
   static values = {
     verticalPadding: { type: Number, default: 16 },
     debounceDelay: { type: Number, default: 100 },
-    announceNavigation: { type: Boolean, default: false }
+    announceNavigation: { type: Boolean, default: false },
   };
 
   // 🎯 Stimulus targets for accessibility
   static targets = ["announcer"];
 
   // 🔒 Private constants
-  static get #MIN_PADDING() { return 0; }
-  static get #MAX_PADDING() { return 100; }
-  static get #MIN_DEBOUNCE() { return 50; }
-  static get #MAX_DEBOUNCE() { return 500; }
-  static get #STICKY_PADDING() { return 8; }
+  static get #MIN_PADDING() {
+    return 0;
+  }
+  static get #MAX_PADDING() {
+    return 100;
+  }
+  static get #MIN_DEBOUNCE() {
+    return 50;
+  }
+  static get #MAX_DEBOUNCE() {
+    return 500;
+  }
+  static get #STICKY_PADDING() {
+    return 8;
+  }
 
   // � Performance and state tracking - Private field declarations
   #lastFocusedCell = null;
@@ -62,18 +72,20 @@ export default class TableController extends Controller {
   initialize() {
     try {
       // 🎭 Check for reduced motion preference
-      this.#prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
-      
+      this.#prefersReducedMotion =
+        window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ??
+        false;
+
       // 🎯 Create debounced focus handler
       this.#debouncedHandleFocus = this.#createDebounce(
-        this.#handleCellFocusInternal.bind(this), 
-        this.debounceDelayValue
+        this.#handleCellFocusInternal.bind(this),
+        this.debounceDelayValue,
       );
-      
+
       // 🔊 Create accessibility announcer if not present
       this.#ensureAnnouncerExists();
     } catch (error) {
-      this.#handleError('Failed to initialize TableController', error);
+      this.#handleError("Failed to initialize TableController", error);
     }
   }
 
@@ -88,7 +100,7 @@ export default class TableController extends Controller {
         this.#debounceTimer = null;
       }
     } catch (error) {
-      this.#handleError('Error during TableController disconnect', error);
+      this.#handleError("Error during TableController disconnect", error);
     }
   }
 
@@ -110,7 +122,7 @@ export default class TableController extends Controller {
 
   /**
    * Public handler for focus events - validates input and delegates to debounced internal handler
-   * 
+   *
    * @param {FocusEvent} event - The focus event from a table cell
    * @throws {Error} If event is invalid or target is not within a table cell
    * @public
@@ -119,17 +131,17 @@ export default class TableController extends Controller {
     try {
       // 🔍 Validate input parameters
       if (!event || !(event instanceof FocusEvent)) {
-        throw new Error('Invalid event: expected FocusEvent');
+        throw new Error("Invalid event: expected FocusEvent");
       }
 
       if (!event.target || !event.target.closest) {
-        throw new Error('Invalid event target: expected DOM element');
+        throw new Error("Invalid event target: expected DOM element");
       }
 
       // 🎯 Delegate to debounced internal handler
       this.#debouncedHandleFocus(event);
     } catch (error) {
-      this.#handleError('Error in handleCellFocus', error, { event });
+      this.#handleError("Error in handleCellFocus", error, { event });
     }
   }
 
@@ -176,15 +188,16 @@ export default class TableController extends Controller {
 
       // 📏 Handle horizontal scrolling for non-sticky cells
       this.#handleHorizontalScrolling(cell, scroller);
-
     } catch (error) {
-      this.#handleError('Error in internal cell focus handler', error, { cell: event.target });
+      this.#handleError("Error in internal cell focus handler", error, {
+        cell: event.target,
+      });
     }
   }
 
   /**
    * Handle horizontal scrolling logic for non-sticky cells
-   * 
+   *
    * @param {HTMLElement} cell - The focused cell
    * @param {HTMLElement} scroller - The scrollable container
    * @private
@@ -197,7 +210,7 @@ export default class TableController extends Controller {
 
       const scrollerRect = this.#getBoundingClientRectSafe(scroller);
       const cellRect = this.#getBoundingClientRectSafe(cell);
-      
+
       if (!scrollerRect || !cellRect) return;
 
       const stickyRightViewport = scrollerRect.left + stickyRight;
@@ -215,7 +228,10 @@ export default class TableController extends Controller {
         this.#scrollBy(scroller, overflowRight);
       }
     } catch (error) {
-      this.#handleError('Error in horizontal scrolling', error, { cell, scroller });
+      this.#handleError("Error in horizontal scrolling", error, {
+        cell,
+        scroller,
+      });
     }
   }
 
@@ -231,17 +247,25 @@ export default class TableController extends Controller {
   #ensureVerticalVisibility(cell, scroller) {
     try {
       if (!this.#isValidElement(cell) || !this.#isValidElement(scroller)) {
-        throw new Error('Invalid cell or scroller element');
+        throw new Error("Invalid cell or scroller element");
       }
 
       const cellRect = this.#getBoundingClientRectSafe(cell);
       const scrollerRect = this.#getBoundingClientRectSafe(scroller);
-      
+
       if (!cellRect || !scrollerRect) return;
 
       // � Find sticky overlay heights at top and bottom (with caching)
-      const stickyHeaderHeight = this.#getStickyOverlayHeight(cell, scroller, 'top');
-      const stickyFooterHeight = this.#getStickyOverlayHeight(cell, scroller, 'bottom');
+      const stickyHeaderHeight = this.#getStickyOverlayHeight(
+        cell,
+        scroller,
+        "top",
+      );
+      const stickyFooterHeight = this.#getStickyOverlayHeight(
+        cell,
+        scroller,
+        "bottom",
+      );
 
       // � Calculate effective boundaries accounting for sticky overlays
       const effectiveTop = scrollerRect.top + stickyHeaderHeight;
@@ -265,9 +289,11 @@ export default class TableController extends Controller {
       if (overflowTop > 0) {
         scroller.scrollTop -= overflowTop;
       }
-
     } catch (error) {
-      this.#handleError('Error ensuring vertical visibility', error, { cell, scroller });
+      this.#handleError("Error ensuring vertical visibility", error, {
+        cell,
+        scroller,
+      });
     }
   }
 
@@ -280,9 +306,9 @@ export default class TableController extends Controller {
    */
   #getScrollOptions() {
     return {
-      behavior: this.#prefersReducedMotion ? 'auto' : 'smooth',
-      block: 'nearest',
-      inline: 'nearest'
+      behavior: this.#prefersReducedMotion ? "auto" : "smooth",
+      block: "nearest",
+      inline: "nearest",
     };
   }
 
@@ -293,24 +319,25 @@ export default class TableController extends Controller {
    */
   #announceNavigation(cell) {
     if (!this.announceNavigationValue || !this.hasAnnouncerTarget) return;
-    
+
     try {
-      const row = cell.closest('tr');
-      const table = cell.closest('table');
-      const rowIndex = Array.from(table?.querySelectorAll('tr') || []).indexOf(row) + 1;
+      const row = cell.closest("tr");
+      const table = cell.closest("table");
+      const rowIndex =
+        Array.from(table?.querySelectorAll("tr") || []).indexOf(row) + 1;
       const cellIndex = Array.from(row?.children || []).indexOf(cell) + 1;
-      
+
       const announcement = `Moved to row ${rowIndex}, column ${cellIndex}`;
       this.announcerTarget.textContent = announcement;
-      
+
       // Clear announcement after a brief delay
       setTimeout(() => {
         if (this.hasAnnouncerTarget) {
-          this.announcerTarget.textContent = '';
+          this.announcerTarget.textContent = "";
         }
       }, 1000);
     } catch (error) {
-      this.#handleError('Error announcing navigation', error, { cell });
+      this.#handleError("Error announcing navigation", error, { cell });
     }
   }
 
@@ -320,12 +347,13 @@ export default class TableController extends Controller {
    */
   #ensureAnnouncerExists() {
     if (this.hasAnnouncerTarget) return;
-    
-    const announcer = document.createElement('div');
-    announcer.setAttribute('aria-live', 'polite');
-    announcer.setAttribute('aria-atomic', 'true');
-    announcer.setAttribute('data-table-target', 'announcer');
-    announcer.className = 'sr-only absolute -left-[10000px] w-px h-px overflow-hidden';
+
+    const announcer = document.createElement("div");
+    announcer.setAttribute("aria-live", "polite");
+    announcer.setAttribute("aria-atomic", "true");
+    announcer.setAttribute("data-table-target", "announcer");
+    announcer.className =
+      "sr-only absolute -left-[10000px] w-px h-px overflow-hidden";
     this.element.appendChild(announcer);
   }
 
@@ -336,10 +364,13 @@ export default class TableController extends Controller {
    */
   #getValidatedVerticalPadding() {
     const value = this.verticalPaddingValue;
-    if (typeof value !== 'number' || isNaN(value)) {
+    if (typeof value !== "number" || isNaN(value)) {
       return 16;
     }
-    return Math.max(TableController.#MIN_PADDING, Math.min(TableController.#MAX_PADDING, value));
+    return Math.max(
+      TableController.#MIN_PADDING,
+      Math.min(TableController.#MAX_PADDING, value),
+    );
   }
 
   /**
@@ -353,7 +384,9 @@ export default class TableController extends Controller {
       if (!this.#isValidElement(element)) return null;
       return element.getBoundingClientRect();
     } catch (error) {
-      this.#handleError('Error getting bounding client rect', error, { element });
+      this.#handleError("Error getting bounding client rect", error, {
+        element,
+      });
       return null;
     }
   }
@@ -365,10 +398,12 @@ export default class TableController extends Controller {
    * @private
    */
   #isValidElement(element) {
-    return element && 
-           element instanceof Element && 
-           element.isConnected && 
-           typeof element.getBoundingClientRect === 'function';
+    return (
+      element &&
+      element instanceof Element &&
+      element.isConnected &&
+      typeof element.getBoundingClientRect === "function"
+    );
   }
 
   /**
@@ -385,11 +420,11 @@ export default class TableController extends Controller {
       stack: error?.stack,
       context,
       timestamp: new Date().toISOString(),
-      controller: 'TableController'
+      controller: "TableController",
     };
 
     // In development, we might want to throw, in production log silently
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.warn(`TableController: ${message}`, errorInfo);
     }
   }
@@ -416,7 +451,7 @@ export default class TableController extends Controller {
   #isFirstRow(cell) {
     try {
       if (!this.#isValidElement(cell)) {
-        throw new Error('Invalid cell element');
+        throw new Error("Invalid cell element");
       }
 
       const row = cell.closest("tr");
@@ -425,17 +460,22 @@ export default class TableController extends Controller {
       if (!tbody || !row) return false;
 
       // 📋 Use cached result if available
-      const cacheKey = `firstRow_${tbody.id || tbody.dataset.cacheKey || 'default'}`;
-      if (this.#scrollerCache.has(tbody) && this.#scrollerCache.get(tbody)[cacheKey]) {
+      const cacheKey = `firstRow_${tbody.id || tbody.dataset.cacheKey || "default"}`;
+      if (
+        this.#scrollerCache.has(tbody) &&
+        this.#scrollerCache.get(tbody)[cacheKey]
+      ) {
         return this.#scrollerCache.get(tbody)[cacheKey] === row;
       }
 
       // � Find all visible rows in the tbody (not hidden by display:none or similar)
       const allRows = Array.from(tbody.querySelectorAll("tr")).filter((tr) => {
         const style = getComputedStyle(tr);
-        return style.display !== "none" && 
-               style.visibility !== "hidden" && 
-               style.opacity !== "0";
+        return (
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          style.opacity !== "0"
+        );
       });
 
       // � Cache the first row for performance
@@ -447,7 +487,7 @@ export default class TableController extends Controller {
       // ✅ Check if this is the first visible row
       return allRows.length > 0 && allRows[0] === row;
     } catch (error) {
-      this.#handleError('Error checking if first row', error, { cell });
+      this.#handleError("Error checking if first row", error, { cell });
       return false;
     }
   }
@@ -464,7 +504,7 @@ export default class TableController extends Controller {
   #isLastRow(cell) {
     try {
       if (!this.#isValidElement(cell)) {
-        throw new Error('Invalid cell element');
+        throw new Error("Invalid cell element");
       }
 
       const row = cell.closest("tr");
@@ -473,36 +513,42 @@ export default class TableController extends Controller {
       if (!tbody || !row) return false;
 
       // � Use cached result if available
-      const cacheKey = `lastRow_${tbody.id || tbody.dataset.cacheKey || 'default'}`;
-      if (this.#scrollerCache.has(tbody) && this.#scrollerCache.get(tbody)[cacheKey]) {
+      const cacheKey = `lastRow_${tbody.id || tbody.dataset.cacheKey || "default"}`;
+      if (
+        this.#scrollerCache.has(tbody) &&
+        this.#scrollerCache.get(tbody)[cacheKey]
+      ) {
         return this.#scrollerCache.get(tbody)[cacheKey] === row;
       }
 
       // 🔍 Find all visible rows in the tbody (not hidden by display:none or similar)
       const allRows = Array.from(tbody.querySelectorAll("tr")).filter((tr) => {
         const style = getComputedStyle(tr);
-        return style.display !== "none" && 
-               style.visibility !== "hidden" && 
-               style.opacity !== "0";
+        return (
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          style.opacity !== "0"
+        );
       });
 
       // � Cache the last row for performance
       if (!this.#scrollerCache.has(tbody)) {
         this.#scrollerCache.set(tbody, {});
       }
-      this.#scrollerCache.get(tbody)[cacheKey] = allRows[allRows.length - 1] || null;
+      this.#scrollerCache.get(tbody)[cacheKey] =
+        allRows[allRows.length - 1] || null;
 
       // ✅ Check if this is the last visible row
       return allRows.length > 0 && allRows[allRows.length - 1] === row;
     } catch (error) {
-      this.#handleError('Error checking if last row', error, { cell });
+      this.#handleError("Error checking if last row", error, { cell });
       return false;
     }
   }
 
   /**
    * Unified method to compute sticky overlay heights with caching and error handling
-   * 
+   *
    * @param {HTMLElement} cell - The focused cell
    * @param {HTMLElement} scroller - The scrollable container
    * @param {'top'|'bottom'} position - Whether to check top or bottom sticky elements
@@ -519,24 +565,34 @@ export default class TableController extends Controller {
       if (!table) return 0;
 
       // � Check cache first
-      const cacheKey = `stickyHeight_${position}_${table.id || 'default'}`;
+      const cacheKey = `stickyHeight_${position}_${table.id || "default"}`;
       if (this.#stickyElementsCache.has(table)) {
         const cached = this.#stickyElementsCache.get(table)[cacheKey];
-        if (cached && Date.now() - cached.timestamp < 5000) { // 5 second cache
+        if (cached && Date.now() - cached.timestamp < 5000) {
+          // 5 second cache
           return cached.value;
         }
       }
 
       let maxHeight = 0;
-      const selectors = position === 'top' 
-        ? ['thead', "[class*='sticky'][class*='top']", "[style*='position: sticky'][style*='top']"]
-        : ['tfoot', "[class*='sticky'][class*='bottom']", "[style*='position: sticky'][style*='bottom']"];
+      const selectors =
+        position === "top"
+          ? [
+              "thead",
+              "[class*='sticky'][class*='top']",
+              "[style*='position: sticky'][style*='top']",
+            ]
+          : [
+              "tfoot",
+              "[class*='sticky'][class*='bottom']",
+              "[style*='position: sticky'][style*='bottom']",
+            ];
 
       // � Check for sticky elements
       const stickyElements = [
         ...table.querySelectorAll(selectors[0]),
         ...scroller.querySelectorAll(selectors[1]),
-        ...scroller.querySelectorAll(selectors[2])
+        ...scroller.querySelectorAll(selectors[2]),
       ];
 
       for (const element of stickyElements) {
@@ -545,7 +601,7 @@ export default class TableController extends Controller {
         const style = getComputedStyle(element);
         if (style.position === "sticky") {
           const positionValue = parseFloat(style[position]);
-          
+
           if (Number.isFinite(positionValue)) {
             const rect = this.#getBoundingClientRectSafe(element);
             if (rect) {
@@ -561,12 +617,16 @@ export default class TableController extends Controller {
       }
       this.#stickyElementsCache.get(table)[cacheKey] = {
         value: maxHeight,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       return maxHeight;
     } catch (error) {
-      this.#handleError(`Error computing ${position} sticky overlay height`, error, { cell, scroller, position });
+      this.#handleError(
+        `Error computing ${position} sticky overlay height`,
+        error,
+        { cell, scroller, position },
+      );
       return 0;
     }
   }
@@ -582,13 +642,13 @@ export default class TableController extends Controller {
   #isStickyCell(cell) {
     try {
       if (!this.#isValidElement(cell)) {
-        throw new Error('Invalid cell element');
+        throw new Error("Invalid cell element");
       }
-      
+
       const style = getComputedStyle(cell);
       return style.position === "sticky";
     } catch (error) {
-      this.#handleError('Error checking if cell is sticky', error, { cell });
+      this.#handleError("Error checking if cell is sticky", error, { cell });
       return false;
     }
   }
@@ -596,7 +656,7 @@ export default class TableController extends Controller {
   /**
    * Find the nearest horizontally scrollable ancestor with enhanced error handling and caching.
    * Returns null if none found (we intentionally do not default to the document scroller).
-   * 
+   *
    * @param {Element} el - The element to find scroller for
    * @returns {HTMLElement|null} The scrollable container or null
    * @throws {Error} If element is invalid
@@ -605,7 +665,7 @@ export default class TableController extends Controller {
   #findHorizontalScroller(el) {
     try {
       if (!this.#isValidElement(el)) {
-        throw new Error('Invalid element for scroller search');
+        throw new Error("Invalid element for scroller search");
       }
 
       // 💾 Check cache first
@@ -622,7 +682,7 @@ export default class TableController extends Controller {
         const canScrollX =
           node.scrollWidth > node.clientWidth &&
           /(auto|scroll|overlay)/.test(style.overflowX || style.overflow);
-        
+
         if (canScrollX) {
           // 💾 Cache the result
           this.#scrollerCache.set(el, node);
@@ -635,7 +695,7 @@ export default class TableController extends Controller {
       this.#scrollerCache.set(el, null);
       return null;
     } catch (error) {
-      this.#handleError('Error finding horizontal scroller', error, { el });
+      this.#handleError("Error finding horizontal scroller", error, { el });
       return null;
     }
   }
@@ -643,7 +703,7 @@ export default class TableController extends Controller {
   /**
    * Compute the rightmost x (px from scroller's left edge) covered by left-pinned sticky cells in this row.
    * Enhanced with better error handling and performance optimizations.
-   * 
+   *
    * @param {HTMLElement} cell - The cell to analyze
    * @returns {number} The rightmost x position of sticky cells
    * @throws {Error} If cell is invalid
@@ -652,17 +712,18 @@ export default class TableController extends Controller {
   #leftStickyOverlayRight(cell) {
     try {
       if (!this.#isValidElement(cell)) {
-        throw new Error('Invalid cell element');
+        throw new Error("Invalid cell element");
       }
 
       const row = cell.closest("tr");
       if (!row) return 0;
 
       // 💾 Check cache first
-      const cacheKey = `stickyOverlay_${row.id || 'default'}`;
+      const cacheKey = `stickyOverlay_${row.id || "default"}`;
       if (this.#scrollerCache.has(row)) {
         const cached = this.#scrollerCache.get(row)[cacheKey];
-        if (cached && Date.now() - cached.timestamp < 1000) { // 1 second cache
+        if (cached && Date.now() - cached.timestamp < 1000) {
+          // 1 second cache
           return cached.value;
         }
       }
@@ -689,19 +750,19 @@ export default class TableController extends Controller {
       }
       this.#scrollerCache.get(row)[cacheKey] = {
         value: maxRight,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       return maxRight;
     } catch (error) {
-      this.#handleError('Error computing left sticky overlay', error, { cell });
+      this.#handleError("Error computing left sticky overlay", error, { cell });
       return 0;
     }
   }
 
   /**
    * Scroll a target element into view with enhanced options and error handling.
-   * 
+   *
    * @param {Element} el - The element to scroll into view
    * @param {Object} options - Scroll options (optional)
    * @throws {Error} If element is invalid
@@ -710,25 +771,28 @@ export default class TableController extends Controller {
   #scrollIntoView(el, options = {}) {
     try {
       if (!this.#isValidElement(el)) {
-        throw new Error('Invalid element for scrollIntoView');
+        throw new Error("Invalid element for scrollIntoView");
       }
 
       const scrollOptions = {
         block: "nearest",
         inline: "nearest",
-        behavior: this.#prefersReducedMotion ? 'auto' : 'smooth',
-        ...options
+        behavior: this.#prefersReducedMotion ? "auto" : "smooth",
+        ...options,
       };
 
       el.scrollIntoView(scrollOptions);
     } catch (error) {
-      this.#handleError('Error scrolling element into view', error, { el, options });
+      this.#handleError("Error scrolling element into view", error, {
+        el,
+        options,
+      });
     }
   }
 
   /**
    * Scroll a container horizontally by a delta with enhanced error handling and validation.
-   * 
+   *
    * @param {HTMLElement} scroller - The scrollable container
    * @param {number} dx - Positive scrolls right, negative left (LTR semantics)
    * @throws {Error} If scroller is invalid or dx is not a number
@@ -737,11 +801,11 @@ export default class TableController extends Controller {
   #scrollBy(scroller, dx) {
     try {
       if (!this.#isValidElement(scroller)) {
-        throw new Error('Invalid scroller element');
+        throw new Error("Invalid scroller element");
       }
 
-      if (typeof dx !== 'number' || isNaN(dx)) {
-        throw new Error('Invalid scroll delta: must be a number');
+      if (typeof dx !== "number" || isNaN(dx)) {
+        throw new Error("Invalid scroll delta: must be a number");
       }
 
       if (dx === 0) return;
@@ -755,13 +819,13 @@ export default class TableController extends Controller {
       if (this.#prefersReducedMotion) {
         scroller.scrollLeft = next;
       } else {
-        scroller.scrollTo({ 
-          left: next, 
-          behavior: 'smooth' 
+        scroller.scrollTo({
+          left: next,
+          behavior: "smooth",
         });
       }
     } catch (error) {
-      this.#handleError('Error scrolling container', error, { scroller, dx });
+      this.#handleError("Error scrolling container", error, { scroller, dx });
     }
   }
 }
