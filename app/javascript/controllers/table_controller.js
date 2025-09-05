@@ -49,6 +49,9 @@ export default class TableController extends Controller {
     // 🚀 Additional check to ensure cell is fully visible vertically within the scroller
     this.#ensureVerticalVisibility(cell, scroller);
 
+    // 🔒 Skip horizontal scrolling for sticky cells
+    if (this.#isStickyCell(cell)) return;
+
     // Compute the right edge (in px, relative to scroller's left edge) of left sticky columns.
     const stickyRight = this.#leftStickyOverlayRight(cell);
     if (!(stickyRight > 0)) return;
@@ -233,6 +236,17 @@ export default class TableController extends Controller {
     }
 
     return maxHeight;
+  }
+
+  /**
+   * Check if a cell has sticky positioning.
+   *
+   * @param {HTMLElement} cell - The cell to check
+   * @returns {boolean} True if the cell is sticky positioned
+   */
+  #isStickyCell(cell) {
+    const style = getComputedStyle(cell);
+    return style.position === "sticky";
   }
 
   /**
