@@ -149,9 +149,9 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -211,9 +211,9 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -256,9 +256,9 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -306,9 +306,9 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -359,7 +359,7 @@ module Groups
         assert_text 'Group Template011'
       end
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -408,9 +408,9 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
@@ -490,7 +490,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_no_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button')
+      assert_no_selector 'a', text: I18n.t('metadata_templates.new_template_dialog.new_button')
     end
 
     test 'should edit metadata template associated with the group' do
@@ -509,7 +509,7 @@ module Groups
         click_button I18n.t(:'metadata_templates.table_component.edit_button')
       end
 
-      assert_selector '#dialog'
+      assert_selector "#dialog_edit_#{dom_id(metadata_template)}"
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
