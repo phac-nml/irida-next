@@ -6,56 +6,28 @@ import _ from "lodash";
  *
  * Ensures a focused table cell is visible within a horizontally scrollable
  * container, accounting for left-side sticky columns that can overlay content.
- * Provides enhanced accessibility features including screen reader announcements
- * and respects user motion preferences.
+ * Provides enhanced accessibility features and respects user motion preferences.
  *
  * @example Basic Usage
  *   <tbody data-controller="table" data-action="focusin->table#handleCellFocus">
- *
- * @example With Custom Configuration
- *   <tbody data-controller="table"
- *         data-table-vertical-padding-value="20"
- *         data-table-debounce-delay-value="150"
- *         data-action="focusin->table#handleCellFocus">
- *
- * @example With Accessibility Features
- *   <tbody data-controller="table"
- *         data-table-announce-navigation-value="true"
- *         data-action="focusin->table#handleCellFocus">
  *
  * @notes
  * - Behavior respects user's reduced motion preferences
  * - Includes comprehensive error handling and logging
  * - Performance optimized with debouncing and caching
- * - Fully accessible with ARIA announcements
+ * - Accessible with semantic HTML and keyboard navigation
  * - No horizontal scrolling occurs for sticky cells
  */
 export default class TableController extends Controller {
-  // 🎯 Stimulus values for configuration
-  static values = {
-    verticalPadding: { type: Number, default: 16 },
-    debounceDelay: { type: Number, default: 100 },
-    announceNavigation: { type: Boolean, default: false },
-  };
-
-  // 🎯 Stimulus targets for accessibility
-  static targets = ["announcer"];
-
   // 🔒 Private constants
-  static get #MIN_PADDING() {
-    return 0;
-  }
-  static get #MAX_PADDING() {
-    return 100;
-  }
-  static get #MIN_DEBOUNCE() {
-    return 50;
-  }
-  static get #MAX_DEBOUNCE() {
-    return 500;
-  }
   static get #STICKY_PADDING() {
     return 8;
+  }
+  static get #DEBOUNCE_DELAY() {
+    return 100;
+  }
+  static get #VERTICAL_PADDING() {
+    return 16;
   }
 
   // 🎯 Performance and state tracking - Private field declarations
@@ -79,11 +51,8 @@ export default class TableController extends Controller {
       // 🎯 Create debounced focus handler using lodash
       this.#debouncedHandleFocus = _.debounce(
         this.#handleCellFocusInternal.bind(this),
-        this.debounceDelayValue,
+        TableController.#DEBOUNCE_DELAY,
       );
-
-      // 🔊 Create accessibility announcer if not present
-      this.#ensureAnnouncerExists();
     } catch (error) {
       this.#handleError("Failed to initialize TableController", error);
     }
@@ -155,10 +124,7 @@ export default class TableController extends Controller {
       // 🎭 Respect reduced motion preferences
       const scrollOptions = this.#getScrollOptions();
 
-      // 📢 Announce navigation if enabled
-      this.#announceNavigation(cell);
-
-      // 🔝 Ensure the cell is generally visible within its containers
+      //  Ensure the cell is generally visible within its containers
       this.#scrollIntoView(cell, scrollOptions);
 
       // 📏 Additional check to ensure cell is fully visible vertically within the scroller
@@ -296,64 +262,12 @@ export default class TableController extends Controller {
   }
 
   /**
-   * Announce navigation to screen readers if enabled
-   * @param {HTMLElement} cell - The focused cell
-   * @private
-   */
-  #announceNavigation(cell) {
-    if (!this.announceNavigationValue || !this.hasAnnouncerTarget) return;
-
-    try {
-      const row = cell.closest("tr");
-      const table = cell.closest("table");
-      const rowIndex =
-        Array.from(table?.querySelectorAll("tr") || []).indexOf(row) + 1;
-      const cellIndex = Array.from(row?.children || []).indexOf(cell) + 1;
-
-      const announcement = `Moved to row ${rowIndex}, column ${cellIndex}`;
-      this.announcerTarget.textContent = announcement;
-
-      // Clear announcement after a brief delay
-      setTimeout(() => {
-        if (this.hasAnnouncerTarget) {
-          this.announcerTarget.textContent = "";
-        }
-      }, 1000);
-    } catch (error) {
-      this.#handleError("Error announcing navigation", error, { cell });
-    }
-  }
-
-  /**
-   * Ensure accessibility announcer element exists
-   * @private
-   */
-  #ensureAnnouncerExists() {
-    if (this.hasAnnouncerTarget) return;
-
-    const announcer = document.createElement("div");
-    announcer.setAttribute("aria-live", "polite");
-    announcer.setAttribute("aria-atomic", "true");
-    announcer.setAttribute("data-table-target", "announcer");
-    announcer.className =
-      "sr-only absolute -left-[10000px] w-px h-px overflow-hidden";
-    this.element.appendChild(announcer);
-  }
-
-  /**
    * Get validated vertical padding value
    * @returns {number} Validated padding value
    * @private
    */
   #getValidatedVerticalPadding() {
-    const value = this.verticalPaddingValue;
-    if (typeof value !== "number" || isNaN(value)) {
-      return 16;
-    }
-    return Math.max(
-      TableController.#MIN_PADDING,
-      Math.min(TableController.#MAX_PADDING, value),
-    );
+    return TableController.#VERTICAL_PADDING;
   }
 
   /**
