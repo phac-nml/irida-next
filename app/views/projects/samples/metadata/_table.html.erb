@@ -2,39 +2,40 @@
 
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
-    <div class="relative overflow-x-auto table-wrapper">
-      <% if @allowed_to[:update_sample] %>
-        <div class="flex justify-end items-center mb-4">
-          <div class="flex items-center space-x-2">
-            <%= button_to t(".add_metadata"),
-            new_namespace_project_sample_metadata_path(
-              @project.namespace.parent,
-              @project,
-              @sample,
-            ),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: true,
-            },
-            class: "button button-default" %>
-            <%= button_to t(".delete_metadata_button"),
-            new_namespace_project_sample_metadata_deletion_path(
-              @project.namespace.parent,
-              @project,
-              @sample,
-            ),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-button",
-              action_button_required_value: 1,
-            },
-            class: "button button-default action-button" %>
-          </div>
+    <% if @allowed_to[:update_sample] %>
+      <div class="flex justify-end items-center mb-4">
+        <div class="flex items-center space-x-2">
+          <%= button_to t(".add_metadata"),
+          new_namespace_project_sample_metadata_path(
+            @project.namespace.parent,
+            @project,
+            @sample,
+          ),
+          method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true,
+          },
+          class: "button button-default" %>
+          <%= button_to t(".delete_metadata_button"),
+          new_namespace_project_sample_metadata_deletion_path(
+            @project.namespace.parent,
+            @project,
+            @sample,
+          ),
+          method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-button",
+            action_button_required_value: 1,
+          },
+          class: "button button-default action-button" %>
         </div>
-      <% end %>
+      </div>
+    <% end %>
+
+    <div class="relative overflow-x-auto table-wrapper">
       <table
         class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400

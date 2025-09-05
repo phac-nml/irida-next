@@ -28,7 +28,7 @@
     </li>
     <!-- Dynamic breadcrumb items -->
     <% @links.each_with_index do |link, index| %>
-      <li class="whitespace-nowrap" data-breadcrumb-target="crumb">
+      <li class="whitespace-nowrap m-2" data-breadcrumb-target="crumb">
         <% if index == @links.length - 1 %>
           <!-- Current page (last item) -->
           <span

@@ -211,15 +211,6 @@ module Viral
       assert_selector '[aria-atomic="true"]', count: 1
     end
 
-    test 'dismissible alerts have proper focus management' do
-      render_inline(Viral::AlertComponent.new(message: 'Focusable alert', dismissible: true))
-
-      # NOTE: tabindex is set by JavaScript, not in the initial render
-      assert_selector 'button[data-action="viral--alert#dismiss"]', count: 1
-      # Close button should have proper focus indicators
-      assert_selector 'button.focus\\:outline-none.focus\\:ring-2.focus\\:ring-slate-500', count: 1
-    end
-
     test 'close button has proper accessibility attributes' do
       render_inline(Viral::AlertComponent.new(message: 'Accessible close button', dismissible: true))
 

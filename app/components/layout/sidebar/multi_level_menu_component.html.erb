@@ -7,7 +7,8 @@
     type="button"
     class="
       flex items-center text-left p-2.5 m-1 rounded-lg transition-colors duration-200
-      cursor-pointer w-full <%= class_names({
+      relative focus-visible:z-10 cursor-pointer w-full
+      <%= class_names({
         'bg-primary-100 text-primary-800 dark:bg-slate-800 dark:text-primary-400 font-medium': selected,
         'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !selected
       }) %>
@@ -46,29 +47,24 @@
       ) %>
     </span>
   </button>
-  <div
-    role="menu"
+  <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    aria-labelledby="<%= control_id %>-button"
-    aria-hidden="<%= @selected ? 'false' : 'true' %>"
-    aria-label="<%= title %> submenu"
     <%= 'hidden' if !@selected %>
     class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
-      <div role="none" class="Layout-Sidebar-MultiLevelMenu__Item">
+      <li class="Layout-Sidebar-MultiLevelMenu__Item list-none p-1 pr-2">
         <a
           href="<%= menu_item.url %>"
           class="
             flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
-            rounded-lg group min-h-[44px] pl-10 <%= class_names({
+            focus-:z-10 rounded-lg group min-h-[44px] pl-10
+            <%= class_names({
               'bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-50': menu_item.selected,
               'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "
-          role="menuitem"
-          tabindex="-1"
           <%= tag.attributes(aria: { current: ('page' if menu_item.selected) }) %>
         >
           <span class="grow">
@@ -76,7 +72,7 @@
           </span>
           <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
         </a>
-      </div>
+      </li>
     <% end %>
-  </div>
+  </ul>
 </li>

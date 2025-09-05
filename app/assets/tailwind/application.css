@@ -38,6 +38,10 @@ input[type="search"] {
   appearance: textfield;
 }
 
+:not(.pill-focus-reset):not(#main-content-link):focus-visible {
+  @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -55,10 +59,10 @@ input[type="search"] {
     border-color: var(--color-slate-200, currentColor);
   }
   td[contenteditable="true"]:focus-visible {
-    outline-offset: -2px;
+    @apply -outline-offset-3!;
   }
-  button.file-selector:focus-visible {
-    outline-offset: -2px;
+  td button.file-selector:focus-visible {
+    @apply -outline-offset-3!;
   }
 }
 
@@ -79,7 +83,6 @@ input[type="search"] {
 @utility sidebar {
   grid-template-areas: "navigation" "collapse";
   grid-template-rows: 1fr 40px;
-  overflow-x: hidden;
 }
 
 @utility navbar-button {
@@ -354,7 +357,7 @@ input[type="search"] {
 }
 
 @utility viral-dropdown--button {
-  @apply hover:text-primary-700 flex min-h-11 min-w-11 items-center rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply hover:text-primary-700 flex min-h-11 min-w-11 items-center rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus-visible:z-10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 @utility button {
@@ -462,12 +465,6 @@ input[type="search"] {
     @apply relative flex w-full items-start rounded-lg border-l-4 p-4 shadow-sm;
   }
 
-  .alert-component:focus-within {
-    @apply ring-2 ring-slate-500 ring-offset-2 dark:ring-slate-400;
-  }
-
-  /* Alert dismiss animation - removed for instant dismissal */
-
   /* Progress bar animation */
   .alert-component .progress-bar {
     @apply absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300 ease-out;
@@ -496,14 +493,14 @@ input[type="search"] {
   input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 5;
+    width: 5;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' /%3E%3C/svg%3E%0A");
   }
 
   /* VIRAL DIALOG */
   dialog {
-    @apply -translate-1/2 backdrop-blur-xs max-w-screen left-1/2 top-1/2 max-h-screen w-full rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
+    @apply max-w-screen backdrop-blur-xs left-1/2 top-1/2 max-h-screen w-full -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
   }
 
   dialog div.dialog--contents {
@@ -537,7 +534,7 @@ input[type="search"] {
   }
 
   .dialog--section {
-    @apply sm:max-h-(--dialog-section-max-height) wrap-break-word p-5 sm:overflow-y-auto;
+    @apply break-words p-5 sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
   }
 
   strong {
@@ -554,6 +551,20 @@ input[type="search"] {
     > *::before {
     content: "›";
     @apply mx-2 select-none text-slate-400;
+  }
+
+  /* Main content link accessibility button */
+  #main-content-link {
+    @apply bg-primary-700 absolute left-3 top-3 z-[9999] -translate-y-[150%] transform rounded-lg px-5 py-3 font-semibold text-white no-underline shadow-lg transition-transform duration-300 ease-in-out;
+  }
+
+  #main-content-link:focus,
+  #main-content-link:focus-visible {
+    @apply translate-y-0;
+  }
+
+  #main-content-link:hover {
+    @apply bg-primary-800 underline;
   }
 }
 
@@ -612,4 +623,15 @@ input[type="checkbox"] {
 
 input[type="radio"] {
   @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600;
+}
+
+/* Suppress global focus ring for specific anchors; keep pill span ring only */
+a.pill-focus-reset:focus,
+a.pill-focus-reset:focus-visible {
+  outline: none !important;
+  box-shadow: none !important; /* neutralize tailwind ring composition */
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
 }

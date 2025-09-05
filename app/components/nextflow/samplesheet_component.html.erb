@@ -84,12 +84,14 @@
       @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
     "
   >
-    <div class="overflow-auto relative">
+    <div class="overflow-x-auto relative">
       <table
         class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
         "
+        data-controller="table"
+        data-action="focusin->table#handleCellFocus"
       >
         <thead class="@2xl:sticky @2xl:top-0 z-10 text-xs uppercase">
           <% properties.each do |header, property| %>
@@ -163,7 +165,7 @@
     data-turbo-stream="true"
     class="
       block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit
-      text-inherit focus:relative
+      text-inherit focus-visible:-outline-offset-2!
     "
   ></a>
 </template>
@@ -179,7 +181,7 @@
   <input
     class="
       block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
-      focus:relative
+      focus-visible:relative focus-visible:z-15 focus-visible:-outline-offset-2!
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
@@ -194,7 +196,8 @@
           class="
             flex items-center justify-center h-10 px-4 leading-tight border cursor-default
             ms-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-700
-            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300 focus:relative
+            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300
+            focus-visible:relative
           "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
@@ -209,7 +212,7 @@
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
             cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white focus:relative
+            dark:hover:bg-slate-700 dark:hover:text-white focus-visible:relative
           "
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
@@ -221,7 +224,8 @@
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
             border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg focus:relative
+            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
+            focus-visible:relative
           "
           type="button"
           data-nextflow--samplesheet-target="nextBtn"

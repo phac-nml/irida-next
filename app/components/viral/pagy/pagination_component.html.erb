@@ -9,7 +9,7 @@
           @pagy.prev,
           t(".previous"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 border-e-0 rounded-s-lg",
+            "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 border-e-0 rounded-s-lg",
           aria_label: t(".previous_aria_label"),
         ) %>
       <% else %>
@@ -29,7 +29,7 @@
           <%== a.(
             item,
             classes:
-              "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100",
+              "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100",
             aria_label: t(".item_aria_label", number: item),
           ) %>
         <% elsif item.is_a?(String) %>
@@ -37,9 +37,9 @@
             href="javascript:void(0);"
             aria-current="page"
             class="
-              flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-              border-primary-600 bg-primary-600 text-white dark:border-primary-600 dark:text-white
-              font-medium text-sm cursor-default
+              flex items-center relative focus-visible:z-10 justify-center px-4 h-11 ms-0
+              leading-tight border border-primary-600 bg-primary-600 text-white
+              dark:border-primary-600 dark:text-white font-medium text-sm cursor-default
             "
           ><%= item %></a>
         <% elsif item == :gap %>
@@ -60,7 +60,7 @@
           @pagy.next,
           t(".next"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
+            "flex items-center relative focus-visible:z-10 justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
           aria_label: t(".next_aria_label"),
         ) %>
       <% else %>

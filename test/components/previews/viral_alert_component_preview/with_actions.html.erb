@@ -1,26 +1,12 @@
-<!--
-  🔘 ALERTS WITH ACTIONS - Interactive elements within alerts
-
-  Action alerts include interactive elements like buttons, links, or forms
-  within the alert content. Perfect for alerts that require user decisions
-  or immediate actions.
-
-  Features:
-  - Interactive elements within the alert
-  - Buttons, links, forms, or other controls
-  - Maintains alert styling and behavior
-  - Perfect for user decisions and actions
-  - Can combine with dismissible/auto-dismiss
-
-  Usage:
-  viral_alert(message: "Message") do
-    div class: "flex gap-2 mt-3" do
-      button "Action", class: "btn btn-primary"
-      button "Cancel", class: "btn btn-secondary"
-    end
-  end
--->
-
+<!-- 🔘 ALERTS WITH ACTIONS - Interactive elements within alerts Action alerts
+include interactive elements like buttons, links, or forms within the alert
+content. Perfect for alerts that require user decisions or immediate actions.
+Features: - Interactive elements within the alert - Buttons, links, forms, or
+other controls - Maintains alert styling and behavior - Perfect for user
+decisions and actions - Can combine with dismissible/auto-dismiss Usage:
+viral_alert(message: "Message") do div class: "flex gap-2 mt-3" do button
+"Action", class: "btn btn-primary" button "Cancel", class: "btn btn-secondary"
+end end -->
 <div class="space-y-6">
   <!-- Basic Action Buttons -->
   <div>
@@ -29,16 +15,24 @@
     </h3>
     <%= viral_alert(message: "Do you want to save your changes?", type: :info) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+        <button
+          class="
+            px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+          "
+        >
           💾 Save Changes
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+        <button
+          class="
+            px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+            transition-colors
+          "
+        >
           ❌ Discard
         </button>
       </div>
     <% end %>
   </div>
-
   <!-- Success with Action -->
   <div>
     <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
@@ -46,36 +40,58 @@
     </h3>
     <%= viral_alert(message: "Your profile has been updated successfully!", type: :success) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
-          👁️  View Profile
+        <button
+          class="
+            px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700
+            transition-colors
+          "
+        >
+          👁️ View Profile
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
-          ✏️  Edit More
+        <button
+          class="
+            px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+            transition-colors
+          "
+        >
+          ✏️ Edit More
         </button>
       </div>
     <% end %>
   </div>
-
   <!-- Warning with Decision -->
   <div>
     <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ⚠️  Warning with Decision
+      ⚠️ Warning with Decision
     </h3>
     <%= viral_alert(message: "You have unsaved changes. What would you like to do?", type: :warning) do %>
       <div class="flex gap-2 mt-3">
-        <button class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors">
+        <button
+          class="
+            px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700
+            transition-colors
+          "
+        >
           💾 Save & Continue
         </button>
-        <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
-          ⏸️  Save Later
+        <button
+          class="
+            px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+            transition-colors
+          "
+        >
+          ⏸️ Save Later
         </button>
-        <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+        <button
+          class="
+            px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors
+          "
+        >
           ❌ Discard Changes
         </button>
       </div>
     <% end %>
   </div>
-
   <!-- Error with Recovery Actions -->
   <div>
     <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
@@ -87,24 +103,37 @@
           <p class="mb-2">The file upload failed. Here are your options:</p>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+          <button
+            class="
+              px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors
+            "
+          >
             🔄 Try Again
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button
+            class="
+              px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+              transition-colors
+            "
+          >
             📁 Choose Different File
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button
+            class="
+              px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+              transition-colors
+            "
+          >
             🆘 Get Help
           </button>
         </div>
       </div>
     <% end %>
   </div>
-
   <!-- Info with Multiple Actions -->
   <div>
     <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ℹ️  Info with Multiple Actions
+      ℹ️ Info with Multiple Actions
     </h3>
     <%= viral_alert(message: "New features are available! Explore what's new:", type: :info) do %>
       <div class="space-y-3 mt-3">
@@ -112,52 +141,110 @@
           <p>We've added several new features to improve your workflow:</p>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button
+            class="
+              px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+              text-sm
+            "
+          >
             📊 Analytics
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button
+            class="
+              px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+              text-sm
+            "
+          >
             🔍 Search
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+          <button
+            class="
+              px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+              text-sm
+            "
+          >
             📱 Mobile
           </button>
-          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
-            ⚙️  Settings
+          <button
+            class="
+              px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+              text-sm
+            "
+          >
+            ⚙️ Settings
           </button>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button
+            class="
+              px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+              transition-colors
+            "
+          >
             📖 Read More
           </button>
-          <button class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors">
+          <button
+            class="
+              px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300
+              transition-colors
+            "
+          >
             ⏰ Remind Later
           </button>
         </div>
       </div>
     <% end %>
   </div>
-
   <!-- Action Guidelines -->
-  <div class="mt-8 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+  <div
+    class="
+      mt-8 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200
+      dark:border-purple-800
+    "
+  >
     <h4 class="font-semibold text-purple-900 dark:text-purple-100 mb-2">🎯 Action Design Guidelines</h4>
     <ul class="text-sm text-purple-700 dark:text-purple-300 space-y-1">
-      <li>• <strong>Primary action first</strong> - most important button should be most prominent</li>
-      <li>• <strong>Limit to 3-4 actions</strong> - too many choices can overwhelm users</li>
-      <li>• <strong>Use clear button text</strong> - "Save Changes" not "OK"</li>
-      <li>• <strong>Consider button hierarchy</strong> - primary, secondary, and destructive actions</li>
-      <li>• <strong>Group related actions</strong> - use visual grouping for better organization</li>
+      <li>•
+        <strong>Primary action first</strong>
+        - most important button should be most prominent</li>
+      <li>•
+        <strong>Limit to 3-4 actions</strong>
+        - too many choices can overwhelm users</li>
+      <li>•
+        <strong>Use clear button text</strong>
+        - "Save Changes" not "OK"</li>
+      <li>•
+        <strong>Consider button hierarchy</strong>
+        - primary, secondary, and destructive actions</li>
+      <li>•
+        <strong>Group related actions</strong>
+        - use visual grouping for better organization</li>
     </ul>
   </div>
-
   <!-- Best Practices -->
-  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+  <div
+    class="
+      mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200
+      dark:border-slate-700
+    "
+  >
     <h4 class="font-semibold text-slate-900 dark:text-white mb-2">💡 Best Practices</h4>
     <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-      <li>• <strong>Use for:</strong> user decisions, immediate actions, multi-step processes</li>
-      <li>• <strong>Avoid for:</strong> simple notifications, status updates, read-only information</li>
-      <li>• <strong>Keep actions relevant</strong> - only include actions that make sense in context</li>
-      <li>• <strong>Consider mobile</strong> - ensure buttons are large enough to tap easily</li>
-      <li>• <strong>Test user flow</strong> - make sure the actions lead to logical next steps</li>
+      <li>•
+        <strong>Use for:</strong>
+        user decisions, immediate actions, multi-step processes</li>
+      <li>•
+        <strong>Avoid for:</strong>
+        simple notifications, status updates, read-only information</li>
+      <li>•
+        <strong>Keep actions relevant</strong>
+        - only include actions that make sense in context</li>
+      <li>•
+        <strong>Consider mobile</strong>
+        - ensure buttons are large enough to tap easily</li>
+      <li>•
+        <strong>Test user flow</strong>
+        - make sure the actions lead to logical next steps</li>
     </ul>
   </div>
 </div>

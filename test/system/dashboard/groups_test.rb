@@ -259,7 +259,7 @@ module Dashboard
       visit dashboard_groups_url
 
       assert_css '#main-content-link', visible: false
-      find('#main-content-link').trigger('focus')
+      find('body').send_keys(:tab)
       assert_css '#main-content-link', visible: true
       find('#main-content-link').trigger('click')
       assert_css '#main-content', focused: true

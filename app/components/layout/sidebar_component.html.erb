@@ -8,7 +8,7 @@
   "
   aria-label="<%= t(:'general.default_sidebar.aria_label') %>"
 >
-  <div class="flex flex-col h-full sm:overflow-hidden max-sm:overflow-y-auto">
+  <div class="flex flex-col h-full sm:overflow-y-hidden max-sm:overflow-y-auto">
     <div class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
@@ -18,9 +18,7 @@
       >
         <a
           href="<%= root_path %>"
-          class="
-            whitespace-nowrap py-2.5 focus:outline-offset-2 inline-flex items-center
-          "
+          class="whitespace-nowrap py-2.5 inline-flex items-center"
           data-layout-target="logo"
         >
           <%= pathogen_icon ICON::IRIDA_LOGO, size: :lg, color: :primary, class: "rotate-12" %>
@@ -36,8 +34,7 @@
             class="
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2
-              focus-visible:ring-primary-500
+              dark:hover:text-slate-200
             "
             aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
           >
@@ -47,8 +44,7 @@
           <%= viral_dropdown(icon: ICON::PLUS, styles: { button: "
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2
-              focus-visible:ring-primary-500
+              dark:hover:text-slate-200
             " }, title: t(:'general.navbar.new_dropdown.title'), aria: { label: t(:'general.navbar.new_dropdown.aria_label') }) do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.new_dropdown.project"),
@@ -63,8 +59,7 @@
           <%= viral_dropdown(icon: "user_circle", styles: { button: "
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2
-              focus-visible:ring-primary-500
+              dark:hover:text-slate-200
             "}, title: t(:'general.navbar.account_dropdown.title'), aria: { label: t(:'general.navbar.account_dropdown.aria_label') }) do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.account_dropdown.profile"),
@@ -125,23 +120,23 @@
               dashboard_projects_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                "px-4 py-2 relative focus-visible:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
             </li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.groups"),
               groups_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.workflows"),
               workflow_executions_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
             <li role="presentation"><%= link_to t(:"general.default_sidebar.data_exports"),
               data_exports_path,
               role: "menuitem",
               class:
-                "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
           </ul>
         </div>
       </div>
@@ -175,8 +170,7 @@
         class="
           flex items-center justify-center w-full px-4 py-2 text-sm font-medium
           text-slate-700 rounded-lg dark:text-slate-200 hover:bg-slate-100
-          dark:hover:bg-slate-700 min-h-[44px] focus:outline-none focus-visible:ring-2
-          focus-visible:ring-primary-500 focus-visible:ring-offset-2
+          dark:hover:bg-slate-700 min-h-[44px]
         "
         aria-label="<%= t('general.help') %> - <%= t('general.opens_in_new_tab') %>"
       >
