@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "dialog_content_edit_#{dom_id(@metadata_template)}" do %>
+  <%= render partial: "shared/metadata_templates/edit_form",
+  locals: {
+    update_path: group_metadata_template_path,
+  } %>
+<% end %>
