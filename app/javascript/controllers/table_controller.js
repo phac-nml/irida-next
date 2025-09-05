@@ -21,6 +21,11 @@ export default class TableController extends Controller {
     return 8;
   }
 
+  // 💡 Additional vertical padding for better visual spacing
+  static get VERTICAL_PADDING() {
+    return 16;
+  }
+
   /**
    * Handle focus events from descendant cells and ensure visibility.
    *
@@ -40,6 +45,9 @@ export default class TableController extends Controller {
 
     // Ensure the cell is generally visible within its containers.
     this.#scrollIntoView(cell);
+
+    // 🚀 Additional check to ensure cell is fully visible vertically within the scroller
+    this.#ensureVerticalVisibility(cell, scroller);
 
     // Compute the right edge (in px, relative to scroller's left edge) of left sticky columns.
     const stickyRight = this.#leftStickyOverlayRight(cell);
@@ -62,6 +70,169 @@ export default class TableController extends Controller {
     if (overflowRight > 0) {
       this.#scrollBy(scroller, overflowRight);
     }
+  }
+
+  /**
+   * Ensure the cell is fully visible vertically within the scroller.
+   * This handles cases where tabbing to bottom rows doesn't bring them fully into view
+   * and accounts for sticky footers and headers that may block visibility.
+   *
+   * @param {HTMLElement} cell - The focused cell
+   * @param {HTMLElement} scroller - The scrollable container
+   */
+  #ensureVerticalVisibility(cell, scroller) {
+    const cellRect = cell.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+
+    // 💡 Find sticky overlay heights at top and bottom
+    const stickyHeaderHeight = this.#topStickyOverlayHeight(cell, scroller);
+    const stickyFooterHeight = this.#bottomStickyOverlayHeight(cell, scroller);
+
+    // 📝 Calculate effective boundaries accounting for sticky overlays
+    const effectiveTop = scrollerRect.top + stickyHeaderHeight;
+    const effectiveBottom = scrollerRect.bottom - stickyFooterHeight;
+
+    // 🚀 Check if this is the first or last row to adjust padding accordingly
+    const isFirstRow = this.#isFirstRow(cell);
+    const isLastRow = this.#isLastRow(cell);
+    const topPadding = isFirstRow ? 0 : TableController.VERTICAL_PADDING;
+    const bottomPadding = isLastRow ? 0 : TableController.VERTICAL_PADDING;
+
+    // 💡 Check if cell is blocked by sticky footer or needs more breathing room at bottom
+    const overflowBottom = cellRect.bottom - effectiveBottom + bottomPadding;
+    if (overflowBottom > 0) {
+      scroller.scrollTop += overflowBottom;
+    }
+
+    // 💡 Check if cell is blocked by sticky header or needs more breathing room at top
+    const overflowTop = effectiveTop - cellRect.top + topPadding;
+    if (overflowTop > 0) {
+      scroller.scrollTop -= overflowTop;
+    }
+  }
+
+  /**
+   * Determine if the given cell is in the first row of its table body.
+   *
+   * @param {HTMLElement} cell - The focused cell
+   * @returns {boolean} True if the cell is in the first row
+   */
+  #isFirstRow(cell) {
+    const row = cell.closest("tr");
+    const tbody = row?.closest("tbody");
+
+    if (!tbody || !row) return false;
+
+    // 📝 Find all visible rows in the tbody (not hidden by display:none or similar)
+    const allRows = Array.from(tbody.querySelectorAll("tr")).filter((tr) => {
+      const style = getComputedStyle(tr);
+      return style.display !== "none" && style.visibility !== "hidden";
+    });
+
+    // 🚀 Check if this is the first visible row
+    return allRows.length > 0 && allRows[0] === row;
+  }
+
+  /**
+   * Determine if the given cell is in the last row of its table body.
+   *
+   * @param {HTMLElement} cell - The focused cell
+   * @returns {boolean} True if the cell is in the last row
+   */
+  #isLastRow(cell) {
+    const row = cell.closest("tr");
+    const tbody = row?.closest("tbody");
+
+    if (!tbody || !row) return false;
+
+    // 📝 Find all visible rows in the tbody (not hidden by display:none or similar)
+    const allRows = Array.from(tbody.querySelectorAll("tr")).filter((tr) => {
+      const style = getComputedStyle(tr);
+      return style.display !== "none" && style.visibility !== "hidden";
+    });
+
+    // 🚀 Check if this is the last visible row
+    return allRows.length > 0 && allRows[allRows.length - 1] === row;
+  }
+
+  /**
+   * Compute the height (px) of top-pinned sticky elements that could overlay the cell.
+   * This includes table headers, filter controls, or other sticky top elements.
+   *
+   * @param {HTMLElement} cell - The focused cell
+   * @param {HTMLElement} scroller - The scrollable container
+   * @returns {number} Height in pixels of sticky top overlay
+   */
+  #topStickyOverlayHeight(cell, scroller) {
+    const table = cell.closest("table");
+    if (!table) return 0;
+
+    let maxHeight = 0;
+
+    // 📝 Check for sticky table header elements (thead, filter controls, etc.)
+    const stickyElements = [
+      ...table.querySelectorAll("thead"),
+      ...scroller.querySelectorAll("[class*='sticky'][class*='top']"),
+      ...scroller.querySelectorAll("[style*='position: sticky'][style*='top']"),
+    ];
+
+    for (const element of stickyElements) {
+      const style = getComputedStyle(element);
+
+      // 💡 Check if element is sticky positioned at top
+      if (style.position === "sticky") {
+        const top = parseFloat(style.top);
+
+        // 🚀 If top is set (not auto), this is likely a sticky top element
+        if (Number.isFinite(top)) {
+          const height = element.getBoundingClientRect().height;
+          maxHeight = Math.max(maxHeight, height);
+        }
+      }
+    }
+
+    return maxHeight;
+  }
+
+  /**
+   * Compute the height (px) of bottom-pinned sticky elements that could overlay the cell.
+   * This includes table footers, pagination controls, or other sticky bottom elements.
+   *
+   * @param {HTMLElement} cell - The focused cell
+   * @param {HTMLElement} scroller - The scrollable container
+   * @returns {number} Height in pixels of sticky bottom overlay
+   */
+  #bottomStickyOverlayHeight(cell, scroller) {
+    const table = cell.closest("table");
+    if (!table) return 0;
+
+    let maxHeight = 0;
+
+    // 📝 Check for sticky table footer elements (tfoot, pagination, etc.)
+    const stickyElements = [
+      ...table.querySelectorAll("tfoot"),
+      ...scroller.querySelectorAll("[class*='sticky'][class*='bottom']"),
+      ...scroller.querySelectorAll(
+        "[style*='position: sticky'][style*='bottom']",
+      ),
+    ];
+
+    for (const element of stickyElements) {
+      const style = getComputedStyle(element);
+
+      // 💡 Check if element is sticky positioned at bottom
+      if (style.position === "sticky") {
+        const bottom = parseFloat(style.bottom);
+
+        // 🚀 If bottom is set (not auto), this is likely a sticky bottom element
+        if (Number.isFinite(bottom)) {
+          const height = element.getBoundingClientRect().height;
+          maxHeight = Math.max(maxHeight, height);
+        }
+      }
+    }
+
+    return maxHeight;
   }
 
   /**
