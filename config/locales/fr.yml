@@ -118,6 +118,26 @@ fr:
         read?: Vous n’êtes pas autorisé à afficher l’exécution du flux de travail %{id}
         update?: Vous n’êtes pas autorisé à mettre à jour l’exécution du flux de travail %{id}
     unauthorized: Vous n’êtes pas autorisé à effectuer cette action
+  activemodel:
+    attributes:
+      sample/query:
+        group: Groupe
+      sample/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      sample/search_group:
+        condition: Condition
+    errors:
+      models:
+        sample/search_condition:
+          attributes:
+            field:
+              not_a_metadata: est un champ de métadonnées non valide
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
   activerecord:
     attributes:
       attachment:
@@ -380,8 +400,7 @@ fr:
     condition: Condition %{index}
     confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
     description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
-    field: Champ
-    group: Group %{index}
+    group: Groupe %{index}
     operation:
       contains: contains
       equals: "="
@@ -393,12 +412,10 @@ fr:
       not_equals: "!="
       not_exists: not exists
       not_in: not in
-    operator: Opérateur
     remove_condition_aria_label: Supprimer la condition
     remove_group_button: Supprimer le groupe
     rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
     title: Recherche avancée
-    value: Valeur
   application:
     errors:
       access_denied: Accès refusé.
@@ -2365,17 +2382,6 @@ fr:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   validators:
-    advanced_search_group_validator:
-      between_error: Peut utiliser '>=' et '<=' une fois seulement
-      blank_error: Ne peut pas être vide
-      condition_error: La condition comporte des erreurs
-      date_format_error: Doit être formaté AAAA-MM-JJ
-      date_operator_error: Ne peut pas être utilisé sur les dates
-      group_error: Le groupe a des erreurs
-      invalid_field_error: Est un champ de métadonnées non valide
-      numeric_operator_error: Ne peut être utilisé que sur les numéros
-      select_blank_error: must be a valid option from the list
-      uniqueness_error: Doit être unique
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: La propriété '%{property}' doit correspondre au format de fichier attendu de '%{file_format}'
       attachment_gid_error: La propriété '%{property}' doit être une pièce jointe GID valide

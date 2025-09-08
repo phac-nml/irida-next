@@ -153,6 +153,7 @@ ignore_missing:
 ## Consider these keys used:
 ignore_unused:
   - "action_policy.*"
+  - "activemodel.*"
   - "activerecord.*"
   - "errors.*"
   - "*.sorting.*"

@@ -40,14 +40,11 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[1].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.select_blank_error') # rubocop:disable Layout/LineLength
-    assert query.groups[0].conditions[1].errors.added? :operator,
-                                                       I18n.t('validators.advanced_search_group_validator.select_blank_error') # rubocop:disable Layout/LineLength
-    assert query.groups[0].conditions[1].errors.added? :value,
-                                                       I18n.t('validators.advanced_search_group_validator.blank_error')
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[1].errors.added? :field, :blank
+    assert query.groups[0].conditions[1].errors.added? :operator, :blank
+    assert query.groups[0].conditions[1].errors.added? :value, :blank
   end
 
   test 'invalid advanced query with invalid date' do
@@ -60,10 +57,9 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[0].errors.added? :value,
-                                                       I18n.t('validators.advanced_search_group_validator.date_format_error') # rubocop:disable Layout/LineLength
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[0].errors.added? :value, :not_a_date
   end
 
   test 'valid advanced query with date' do
@@ -105,12 +101,9 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[0].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
-    assert query.groups[0].conditions[1].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[1].errors.added? :operator, :taken
   end
 
   test 'invalid advanced query with non unique fields using between operator' do
@@ -125,12 +118,9 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[0].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.between_error') # rubocop:disable Layout/LineLength
-    assert query.groups[0].conditions[1].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[1].errors.added? :operator, :taken
   end
 
   test 'valid advanced query with non unique fields using between operator' do
@@ -158,10 +148,9 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[0].errors.added? :operator,
-                                                       I18n.t('validators.advanced_search_group_validator.numeric_operator_error') # rubocop:disable Layout/LineLength
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[0].errors.added? :value, :not_a_number
   end
 
   test 'invalid advanced query using invalid operator on date' do
@@ -175,9 +164,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
-    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
-    assert query.groups[0].conditions[0].errors.added? :operator,
-                                                       I18n.t('validators.advanced_search_group_validator.date_operator_error') # rubocop:disable Layout/LineLength
+    assert query.errors.added? :groups, :invalid
+    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.groups[0].conditions[0].errors.added? :operator, :not_a_date_operator
   end
 end

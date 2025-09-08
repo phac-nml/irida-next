@@ -24,9 +24,17 @@
                                  selected_key = @condition.field,
                                ),
                              ),
-                             { include_blank: t("advanced_search_component.field") },
                              {
-                               "aria-label": t("advanced_search_component.field"),
+                               include_blank:
+                                 t(
+                                   "activemodel.attributes.sample/search_condition.field",
+                                 ),
+                             },
+                             {
+                               "aria-label":
+                                 t(
+                                   "activemodel.attributes.sample/search_condition.field",
+                                 ),
                                "aria-invalid": invalid_field,
                                "aria-describedby":
                                  conditions_form.field_id(:field, "error"),
@@ -48,11 +56,17 @@
                                selected = @condition.operator,
                              ),
                              {
-                               include_blank: t("advanced_search_component.operator"),
+                               include_blank:
+                                 t(
+                                   "activemodel.attributes.sample/search_condition.operator",
+                                 ),
                              },
                              {
                                "data-action": "advanced-search#handleOperatorChange",
-                               "aria-label": t("advanced_search_component.operator"),
+                               "aria-label":
+                                 t(
+                                   "activemodel.attributes.sample/search_condition.operator",
+                                 ),
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
                                  conditions_form.field_id(:operator, "error"),

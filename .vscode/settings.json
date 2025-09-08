@@ -30,6 +30,7 @@
   "cSpell.language": "en, en-CA",
   "cSpell.words": [
     "actioncable",
+    "activemodel",
     "activerecord",
     "attachables",
     "binmode",

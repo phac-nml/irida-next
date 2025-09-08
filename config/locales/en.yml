@@ -118,6 +118,26 @@ en:
         read?: You are not authorized to view workflow execution %{id}
         update?: You are not authorized to update workflow execution %{id}
     unauthorized: You are not authorized to perform this action
+  activemodel:
+    attributes:
+      sample/query:
+        group: Group
+      sample/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      sample/search_group:
+        condition: Condition
+    errors:
+      models:
+        sample/search_condition:
+          attributes:
+            field:
+              not_a_metadata: is an invalid metadata field
+            operator:
+              not_a_date_operator: cannot be used on dates
+            value:
+              not_a_date: must be formatted YYYY-MM-DD
   activerecord:
     attributes:
       attachment:
@@ -380,7 +400,6 @@ en:
     condition: Condition %{index}
     confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
     description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
-    field: Field
     group: Group %{index}
     operation:
       contains: contains
@@ -393,12 +412,10 @@ en:
       not_equals: "!="
       not_exists: not exists
       not_in: not in
-    operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group
     rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
     title: Advanced search
-    value: Value
   application:
     errors:
       access_denied: Access Denied.
@@ -2365,17 +2382,6 @@ en:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   validators:
-    advanced_search_group_validator:
-      between_error: can use '>=' and '<=' only once
-      blank_error: cannot be blank
-      condition_error: There condition has errors
-      date_format_error: must be formatted YYYY-MM-DD
-      date_operator_error: cannot be used on dates
-      group_error: There group has errors
-      invalid_field_error: is an invalid metadata field
-      numeric_operator_error: can only be used on numbers
-      select_blank_error: must be a valid option from the list
-      uniqueness_error: must be unique
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'
       attachment_gid_error: property '%{property}' must be a valid Attachment GID
