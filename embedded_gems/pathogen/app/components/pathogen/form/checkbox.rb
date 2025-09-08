@@ -79,6 +79,51 @@ module Pathogen
       def join_describedby(current)
         [current, "#{input_id}_description"].compact.join(' ')
       end
+
+      # Helper methods for input naming and IDs
+      def input_id
+        @input_id ||= if @form
+                        "#{@form.object_name}_#{@attribute}"
+                      else
+                        @input_name || @attribute.to_s
+                      end
+      end
+
+      def input_name
+        @input_name ||= if @form
+                          "#{@form.object_name}[#{@attribute}]"
+                        else
+                          @attribute.to_s
+                        end
+      end
+
+      def help_text_id
+        "#{input_id}_help"
+      end
+
+      # Rendering helper methods
+      def checkbox_html
+        check_box_tag(
+          input_name,
+          @value,
+          @checked,
+          attributes.merge(@html_options)
+        )
+      end
+
+      def label_html
+        return if @label.blank?
+
+        tag.label(@label, for: input_id, class: label_classes)
+      end
+
+      def help_html
+        if @help_text.present?
+          tag.span(@help_text, id: help_text_id, class: help_text_classes)
+        else
+          ''.html_safe
+        end
+      end
     end
 
     # 🟢 Pathogen::Form::Checkbox 🟢
@@ -116,46 +161,12 @@ module Pathogen
         base_attrs.merge(@html_options || {})
       end
 
-      # Add this method to extract options from the constructor
+      # Extract options from the constructor
       def extract_options!(options)
-        @input_name = options.delete(:input_name)
-        @label = options.delete(:label)
-        @aria_label = options.delete(:aria_label)
-        @checked = options.delete(:checked) || false
-        @disabled = options.delete(:disabled) || false
-        @described_by = options.delete(:described_by)
-        @controls = options.delete(:controls)
-        @lang = options.delete(:lang)
-        @class = options.delete(:class)
-        @onchange = options.delete(:onchange)
-        @help_text = options.delete(:help_text)
-        @error_text = options.delete(:error_text)
-        @role = options.delete(:role)
-        @aria_live = options.delete(:aria_live)
-        @selected_message = options.delete(:selected_message)
-        @deselected_message = options.delete(:deselected_message)
+        extract_basic_options(options)
+        extract_accessibility_options(options)
+        extract_behavior_options(options)
         @html_options = options # Store remaining options
-      end
-
-      # Add these helper methods that are likely missing
-      def input_id
-        @input_id ||= if @form
-                        "#{@form.object_name}_#{@attribute}"
-                      else
-                        @input_name || @attribute.to_s
-                      end
-      end
-
-      def input_name
-        @input_name ||= if @form
-                          "#{@form.object_name}[#{@attribute}]"
-                        else
-                          @attribute.to_s
-                        end
-      end
-
-      def help_text_id
-        "#{input_id}_help"
       end
 
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
@@ -188,10 +199,8 @@ module Pathogen
 
       def call
         if @label.blank?
-          # No visible label - render with aria-label and help_text in sr-only
           render_aria_only_checkbox
         else
-          # Has visible label - render standard layout
           render_labeled_checkbox
         end
       end
@@ -211,6 +220,31 @@ module Pathogen
 
       private
 
+      def extract_basic_options(options)
+        @input_name = options.delete(:input_name)
+        @label = options.delete(:label)
+        @checked = options.delete(:checked) || false
+        @disabled = options.delete(:disabled) || false
+        @class = options.delete(:class)
+        @help_text = options.delete(:help_text)
+        @error_text = options.delete(:error_text)
+      end
+
+      def extract_accessibility_options(options)
+        @aria_label = options.delete(:aria_label)
+        @described_by = options.delete(:described_by)
+        @controls = options.delete(:controls)
+        @role = options.delete(:role)
+        @aria_live = options.delete(:aria_live)
+      end
+
+      def extract_behavior_options(options)
+        @lang = options.delete(:lang)
+        @onchange = options.delete(:onchange)
+        @selected_message = options.delete(:selected_message)
+        @deselected_message = options.delete(:deselected_message)
+      end
+
       def merged_aria(existing_aria)
         aria = existing_aria ? existing_aria.dup : {}
         assign_if_present(aria, :label, @aria_label)
@@ -223,72 +257,6 @@ module Pathogen
 
         aria
       end
-
-      # Validates that accessibility requirements are met
-      def validate_accessibility_requirements!
-        return unless @label.blank? && @aria_label.blank?
-
-        raise ArgumentError, "Checkbox requires either 'label' or 'aria_label' for accessibility compliance"
-      end
-
-      # Renders checkbox with only aria-label (no visible label)
-      def render_aria_only_checkbox
-        tag.div(class: 'flex flex-col') do
-          checkbox_html +
-            tag.div(class: 'mt-1') do
-              help_text_sr_only_html + enhanced_description_html
-            end
-        end
-      end
-
-      # Renders checkbox with visible label
-      def render_labeled_checkbox
-        tag.div(class: 'flex flex-col') do
-          tag.div(class: 'flex items-center gap-3') do
-            checkbox_html + label_html
-          end +
-            tag.div(class: 'mt-1 ml-8') do
-              help_html + enhanced_description_html
-            end
-        end
-      end
-
-      # Renders the checkbox input element
-      def checkbox_html
-        check_box_tag(
-          input_name,
-          @value,
-          @checked,
-          attributes.merge(@html_options)
-        )
-      end
-
-      # Renders the label for the checkbox
-      def label_html
-        return if @label.blank?
-
-        tag.label(@label, for: input_id, class: label_classes)
-      end
-
-      # Renders the help text below the label, if present
-      def help_html
-        if @help_text.present?
-          tag.span(@help_text, id: help_text_id, class: help_text_classes)
-        else
-          ''.html_safe
-        end
-      end
-
-      # Renders help text in screen reader only mode when no visible label
-      def help_text_sr_only_html
-        if @help_text.present?
-          tag.span(@help_text, id: help_text_id, class: 'sr-only', 'aria-live': 'polite')
-        else
-          ''.html_safe
-        end
-      end
-
-      # enhanced_description_html is provided by CheckboxAccessibility
 
       # Skip re-renders if the input hasn't changed
       # @api private
