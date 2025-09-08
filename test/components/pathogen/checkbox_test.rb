@@ -252,7 +252,8 @@ module Pathogen
 
       def test_raises_error_without_label_or_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
+                      'accessibility compliance' do
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1'
@@ -262,7 +263,8 @@ module Pathogen
 
       def test_raises_error_with_empty_label_and_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
+                      'accessibility compliance' do
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1',
@@ -274,7 +276,8 @@ module Pathogen
 
       def test_raises_error_with_empty_label_aria_label_and_aria_labelledby
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
+                      'accessibility compliance' do
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1',
