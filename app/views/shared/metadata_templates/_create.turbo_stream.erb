@@ -1,12 +1,12 @@
 <%= turbo_stream.update "new_metadata_template_dialog",
                     partial: "shared/metadata_templates/new_template_dialog",
                     locals: {
-                      open: @new_template.errors.any? ? true : false,
+                      open: @metadata_template.errors.any? ? true : false,
                       create_path:,
                       new_path:,
                     } %>
 
-<% if @new_template.persisted? %>
+<% if @metadata_template.persisted? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
