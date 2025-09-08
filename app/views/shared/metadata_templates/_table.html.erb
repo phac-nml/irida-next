@@ -1,4 +1,4 @@
-<turbo-frame id="metadata-templates-table">
+<%= turbo_frame_tag "metadata-templates-table" do %>
   <%= render MetadataTemplates::TableComponent.new(
     @metadata_templates,
     @namespace,
@@ -9,4 +9,4 @@
       destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
     },
   ) %>
-</turbo-frame>
+<% end %>
