@@ -147,14 +147,14 @@ search:
 ## Do not consider these keys missing:
 ignore_missing:
   - "action_policy.*"
-  - "activerecord.*"
-# - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
+# - "activerecord.*"
 # - '{devise,simple_form}.*'
 
 ## Consider these keys used:
 ignore_unused:
   - "action_policy.*"
   - "activerecord.*"
+  - "errors.*"
   - "*.sorting.*"
   - "time.formats.full_date"
   - "activity.*"
@@ -175,7 +175,9 @@ ignore_unused:
 #     - common.brand
 
 ## Exclude these keys from the `i18n-tasks check-consistent-interpolations` report:
-# ignore_inconsistent_interpolations:
+ignore_inconsistent_interpolations:
+  fr:
+    - 'errors.messages.{too_long,too_short,wrong_length}.one'
 # - 'activerecord.attributes.*'
 
 ## Ignore these keys completely:
