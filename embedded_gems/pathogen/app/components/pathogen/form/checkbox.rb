@@ -97,6 +97,67 @@ module Pathogen
       include CheckboxAccessibility
       include CheckboxInternalHelpers
 
+      # Add this method to define the base attributes
+      def attributes
+        base_attrs = {
+          type: 'checkbox',
+          id: input_id,
+          name: input_name,
+          value: @value,
+          checked: @checked,
+          disabled: @disabled,
+          class: input_classes(@class)
+        }
+
+        # Add describedby for help text
+        base_attrs[:aria] = { describedby: help_text_id } if @help_text.present?
+
+        # Add any additional HTML options
+        base_attrs.merge(@html_options || {})
+      end
+
+      # Add this method to extract options from the constructor
+      def extract_options!(options)
+        @input_name = options.delete(:input_name)
+        @label = options.delete(:label)
+        @aria_label = options.delete(:aria_label)
+        @checked = options.delete(:checked) || false
+        @disabled = options.delete(:disabled) || false
+        @described_by = options.delete(:described_by)
+        @controls = options.delete(:controls)
+        @lang = options.delete(:lang)
+        @class = options.delete(:class)
+        @onchange = options.delete(:onchange)
+        @help_text = options.delete(:help_text)
+        @error_text = options.delete(:error_text)
+        @role = options.delete(:role)
+        @aria_live = options.delete(:aria_live)
+        @selected_message = options.delete(:selected_message)
+        @deselected_message = options.delete(:deselected_message)
+        @html_options = options # Store remaining options
+      end
+
+      # Add these helper methods that are likely missing
+      def input_id
+        @input_id ||= if @form
+                        "#{@form.object_name}_#{@attribute}"
+                      else
+                        @input_name || @attribute.to_s
+                      end
+      end
+
+      def input_name
+        @input_name ||= if @form
+                          "#{@form.object_name}[#{@attribute}]"
+                        else
+                          @attribute.to_s
+                        end
+      end
+
+      def help_text_id
+        "#{input_id}_help"
+      end
+
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the checkbox
       # @param value [String] the value for the checkbox
