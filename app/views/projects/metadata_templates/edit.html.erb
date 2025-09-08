@@ -1,6 +1,9 @@
 <%= turbo_frame_tag "dialog_content_edit_#{dom_id(@metadata_template)}" do %>
-  <%= render partial: "shared/metadata_templates/edit_form",
+  <%= render partial: "shared/metadata_templates/form",
   locals: {
-    update_path: namespace_project_metadata_template_path,
+    template_path: namespace_project_metadata_template_path,
+    method: :patch,
+    submit_button_text:
+      t("metadata_templates.edit_template_dialog.update_button"),
   } %>
 <% end %>

@@ -7,7 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action proc { namespace }
-    before_action proc { metadata_template }, only: %i[create destroy edit show update]
+    before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
     before_action proc { metadata_templates_ancestral }, only: %i[list]
     before_action proc { view_authorizations }, only: %i[index update]
@@ -23,7 +23,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def new
     authorize! @namespace, to: :create_metadata_templates?
-    @new_template = MetadataTemplate.new(namespace_id: @namespace.id)
+    @metadata_template = MetadataTemplate.new(namespace_id: @namespace.id)
 
     respond_to do |format|
       format.html do
@@ -53,17 +53,17 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def create
-    @new_template = MetadataTemplates::CreateService.new(
+    @metadata_template = MetadataTemplates::CreateService.new(
       current_user, @namespace, metadata_template_params
     ).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @new_template.persisted?
+        if @metadata_template.persisted?
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
-                                template_name: @new_template.name))
+                                template_name: @metadata_template.name))
         else
-          render_error(error_message(@new_template))
+          render_error(error_message(@metadata_template))
         end
       end
     end
@@ -78,7 +78,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
           render_success(I18n.t('concerns.metadata_template_actions.destroy.success',
                                 template_name: @metadata_template.name))
         else
-          render_error(error_message(@new_template))
+          render_error(error_message(@metadata_template))
         end
       end
     end

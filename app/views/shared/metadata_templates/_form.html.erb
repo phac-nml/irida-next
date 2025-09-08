@@ -1,12 +1,11 @@
 <div
   data-controller="viral--sortable-lists--two-lists-selection"
-  data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t("metadata_templates.edit_template_dialog.selected") %>"
-  data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("metadata_templates.edit_template_dialog.available") %>"
+  data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t("metadata_templates.form.selected") %>"
+  data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("metadata_templates.form.available") %>"
   data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
   class="font-normal text-slate-500 dark:text-slate-400"
 >
-  <%= form_for(@metadata_template, url: update_path, method: :patch
-            ) do |form| %>
+  <%= form_for(@metadata_template, url: template_path, method:) do |form| %>
     <div class="grid gap-4">
       <div class="mt-2 form-field">
         <%= form.label :name %>
@@ -26,24 +25,24 @@
         data-viral--sortable-lists--two-lists-selection-target="field"
       ></div>
       <%= viral_sortable_lists(
-                  title: t("metadata_templates.edit_template_dialog.metadata"),
-                  description: t("metadata_templates.edit_template_dialog.description"),
+                  title: t("metadata_templates.form.metadata"),
+                  description: t("metadata_templates.form.description"),
                   ) do |sortable_lists| %>
         <%= sortable_lists.with_list(
-          id: t("metadata_templates.edit_template_dialog.available"),
-          title: t("metadata_templates.edit_template_dialog.available"),
+          id: t("metadata_templates.form.available"),
+          title: t("metadata_templates.form.available"),
           list_items: @available_metadata_fields,
           group: "metadata_selection",
         ) %>
         <%= sortable_lists.with_list(
-          id: t("metadata_templates.edit_template_dialog.selected"),
-          title: t("metadata_templates.edit_template_dialog.selected"),
+          id: t("metadata_templates.form.selected"),
+          title: t("metadata_templates.form.selected"),
           list_items: @current_template_fields,
           group: "metadata_selection",
         ) %>
       <% end %>
       <div class="mt-4">
-        <%= form.submit t("metadata_templates.edit_template_dialog.update_button"),
+        <%= form.submit submit_button_text,
                     data: {
                       turbo_frame: "_top",
                       action:

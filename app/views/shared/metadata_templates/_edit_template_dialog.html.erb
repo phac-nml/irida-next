@@ -15,7 +15,13 @@
   <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
   <%= turbo_frame_tag "alert_edit_#{dom_id(template)}" %>
   <% if template&.invalid? %>
-    <%= render partial: "shared/metadata_templates/edit_form", locals: { update_path: } %>
+    <%= render partial: "shared/metadata_templates/form",
+    locals: {
+      template_path: update_path,
+      method: :patch,
+      submit_button_text:
+        t("metadata_templates.edit_template_dialog.update_button"),
+    } %>
   <% else %>
     <%= turbo_frame_tag "dialog_content_edit_#{dom_id(template)}", src: edit_path, loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>
