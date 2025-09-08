@@ -41,6 +41,5 @@ fr:
       show_today: Show Today
     form:
       checkbox_accessibility:
-        deselected_message: Élément désélectionné
         select_page: Sélectionne ou désélectionne tous les éléments de cette page
         select_row: Sélectionne ou désélectionne cet élément
