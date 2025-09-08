@@ -34,6 +34,10 @@ export default class extends Controller {
       this.errorTarget.innerHTML = this.createBulletList(ignoreFiles);
       this.alertTarget.classList.remove("hidden");
       event.target.setAttribute("aria-invalid", true);
+      if (!this.alertTarget.hasAttribute("tabindex")) {
+        this.alertTarget.setAttribute("tabindex", "-1");
+      }
+      this.alertTarget.focus();
       if (dt.files.length > 0) {
         submitButton.disabled = false;
       } else {
