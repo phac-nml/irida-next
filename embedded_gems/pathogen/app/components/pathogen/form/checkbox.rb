@@ -1,28 +1,30 @@
 # frozen_string_literal: true
 
-# 🟢 Pathogen::Form::Checkbox 🟢
+# Accessible checkbox component for Rails forms with WCAG AAA compliance.
 #
-# 🎯 Purpose:
-#   This file defines a custom, accessible, and beautifully styled checkbox component for Rails forms.
-#   - Designed for maximum accessibility (ARIA, labels, help text)
-#   - Uses Tailwind CSS for modern, responsive styling
-#   - Easy to use and extend in your Rails app
+# This ViewComponent renders a fully accessible checkbox input with proper
+# label association, ARIA attributes, and TailwindCSS styling. It supports
+# both standalone usage and integration with Rails form builders.
 #
-# 🚀 Usage Example:
+# @example Basic usage with visible label
 #   <%= render Pathogen::Form::Checkbox.new(
-#     attribute: :terms,               # 🏷️  The model attribute (used for name/id if no form)
-#     value: "1",                     # 💾 The value for this checkbox
-#     label: "I agree to the terms",  # 🏷️  The label shown to users
-#     help_text: "You must agree to continue." # 💡 Optional help text
-#   ) %>
-#   # Or with a form builder:
-#   <%= render Pathogen::Form::Checkbox.new(
-#     form: form,                      # 📝 Your form builder
-#     attribute: :newsletter,
+#     attribute: :terms,
 #     value: "1",
-#     label: "Subscribe to newsletter"
+#     label: "I agree to the terms",
+#     help_text: "You must agree to continue."
 #   ) %>
-#   # Or with aria_label for screen reader only:
+#
+# @example With Rails form builder
+#   <%= form_with model: @user do |form| %>
+#     <%= render Pathogen::Form::Checkbox.new(
+#       form: form,
+#       attribute: :newsletter,
+#       value: "1",
+#       label: "Subscribe to newsletter"
+#     ) %>
+#   <% end %>
+#
+# @example Screen reader only label (aria-label)
 #   <%= render Pathogen::Form::Checkbox.new(
 #     attribute: :select_all,
 #     value: "1",
@@ -30,45 +32,32 @@
 #     help_text: "Check to select all items, uncheck to deselect all"
 #   ) %>
 #
-# 🧩 Options:
-#   - :form         📝   (FormBuilder) — Optional. If not provided, input_name is used.
-#   - :input_name   🏷️   (String)     — Optional. Used for input name/id if no form.
-#   - :label        🏷️   (String)     — The label text shown next to the checkbox (required if no aria_label)
-#   - :aria_label   🗣️   (String)     — Screen reader only label (required if no label)
-#   - :checked      ✅   (Boolean)     — Whether this checkbox is selected
-#   - :disabled     🚫   (Boolean)     — Whether this checkbox is disabled
-#   - :described_by 🗣️   (String)     — ID of element describing this input
-#   - :controls     🎛️   (String)     — ID of element controlled by this input
-#   - :lang         🌐   (String)     — Language code
-#   - :class        🎨   (String)     — Extra CSS classes
-#   - :onchange     🔄   (String)     — JS for onchange event
-#   - :help_text    💡   (String)     — Help text below the label (ARIA described)
-#   - :error_text   🚨   (String)     — Error text to display when invalid
-#   - :selected_message   💬   (String)     — Message shown when checkbox is selected (defaults from translation)
-#   - :deselected_message 💬   (String)     — Message shown when checkbox is deselected (defaults from translation)
+# @note This component requires either a `label` or `aria_label` parameter
+#   for accessibility compliance.
 #
-# ♿ Accessibility:
-#   - Associates label and input for screen readers
-#   - Uses aria-describedby for help text and error messages
-#   - Keyboard and screen reader friendly
-#   - Visible focus and checked states
-#   - WCAG 2.1 AA compliant
-#   - Requires either visible label or aria-label for accessibility
-#
-# 🛠️  How it works:
-#   - Renders a checkbox input and label side-by-side
-#   - Optionally renders help text and error messages below the label
-#   - All ARIA and accessibility attributes are set automatically
-#   - Styles are applied using Tailwind CSS utility classes
-#
-# 📚 See also:
-#   - Pathogen::Form::CheckboxStyles for style helpers
-#   - Pathogen::Form::FormHelpers for common form functionality
+# @see Pathogen::Form::CheckboxStyles for styling utilities
+# @see Pathogen::Form::CheckboxAccessibility for accessibility helpers
+# @see Pathogen::Form::FormHelper for common form functionality
 
 module Pathogen
   module Form
-    # Internal helpers for checkbox component, kept outside the class to reduce class length
+    # Internal helper methods for the Checkbox component.
+    #
+    # These methods are extracted to a separate module to keep the main
+    # Checkbox class focused and maintain single responsibility principle.
+    # They handle internal operations like attribute assignment, ID generation,
+    # and HTML rendering that don't need to be part of the public API.
+    #
+    # @api private
+    # @since 1.0.0
     module CheckboxInternalHelpers
+      # Assigns a value to a hash if the value is present (not blank).
+      #
+      # @param hash [Hash] the hash to modify
+      # @param key [Symbol, String] the key to set
+      # @param value [Object] the value to assign if present
+      # @return [Hash] the modified hash
+      # @api private
       def assign_if_present(hash, key, value)
         return hash if value.blank?
 
@@ -76,11 +65,22 @@ module Pathogen
         hash
       end
 
+      # Joins the current aria-describedby value with the description ID.
+      #
+      # @param current [String, nil] existing aria-describedby value
+      # @return [String] space-separated list of IDs
+      # @api private
       def join_describedby(current)
         [current, "#{input_id}_description"].compact.join(' ')
       end
 
-      # Helper methods for input naming and IDs
+      # Generates the HTML ID for the checkbox input.
+      #
+      # Uses form object name and attribute when form is present,
+      # otherwise falls back to input_name or attribute.
+      #
+      # @return [String] the HTML ID for the input
+      # @api private
       def input_id
         @input_id ||= if @form
                         "#{@form.object_name}_#{@attribute}"
@@ -89,6 +89,13 @@ module Pathogen
                       end
       end
 
+      # Generates the HTML name attribute for the checkbox input.
+      #
+      # Uses Rails form naming convention when form is present,
+      # otherwise uses the attribute name directly.
+      #
+      # @return [String] the HTML name attribute for the input
+      # @api private
       def input_name
         @input_name ||= if @form
                           "#{@form.object_name}[#{@attribute}]"
@@ -97,11 +104,20 @@ module Pathogen
                         end
       end
 
+      # Generates the ID for the help text element.
+      #
+      # @return [String] the HTML ID for the help text span
+      # @api private
       def help_text_id
         "#{input_id}_help"
       end
 
-      # Rendering helper methods
+      # Renders the checkbox input HTML element.
+      #
+      # Uses Rails check_box_tag helper with proper attributes and options.
+      #
+      # @return [ActiveSupport::SafeBuffer] the checkbox input HTML
+      # @api private
       def checkbox_html
         check_box_tag(
           input_name,
@@ -111,12 +127,20 @@ module Pathogen
         )
       end
 
+      # Renders the label HTML element if label text is present.
+      #
+      # @return [ActiveSupport::SafeBuffer, nil] the label HTML or nil
+      # @api private
       def label_html
         return if @label.blank?
 
         tag.label(@label, for: input_id, class: label_classes)
       end
 
+      # Renders the help text HTML element if help text is present.
+      #
+      # @return [ActiveSupport::SafeBuffer] the help text HTML or empty safe string
+      # @api private
       def help_html
         if @help_text.present?
           tag.span(@help_text, id: help_text_id, class: help_text_classes)
@@ -126,13 +150,46 @@ module Pathogen
       end
     end
 
-    # 🟢 Pathogen::Form::Checkbox 🟢
+    # Accessible checkbox component for Rails forms.
     #
-    # This component renders a single checkbox with a label and optional help text.
-    # It is designed for accessibility and modern UI using Tailwind CSS.
-    # WCAG 2.1 AA compliant with proper label association.
+    # This ViewComponent renders a single checkbox input with proper label association,
+    # help text, error handling, and WCAG AAA compliance. It supports both standalone
+    # usage and integration with Rails form builders.
     #
-    # See the top of this file for full usage and options! 🎉
+    # @example Basic checkbox with visible label
+    #   <%= render Pathogen::Form::Checkbox.new(
+    #     attribute: :terms,
+    #     value: "1",
+    #     label: "I agree to the terms and conditions"
+    #   ) %>
+    #
+    # @example With form builder and help text
+    #   <%= form_with model: @user do |form| %>
+    #     <%= render Pathogen::Form::Checkbox.new(
+    #       form: form,
+    #       attribute: :newsletter,
+    #       value: "1",
+    #       label: "Subscribe to newsletter",
+    #       help_text: "We'll send you updates about new features"
+    #     ) %>
+    #   <% end %>
+    #
+    # @example Screen reader accessible (no visible label)
+    #   <%= render Pathogen::Form::Checkbox.new(
+    #     attribute: :select_all,
+    #     value: "1",
+    #     aria_label: "Select all items in the table",
+    #     help_text: "Toggle to select or deselect all items"
+    #   ) %>
+    #
+    # @note Requires either `label` or `aria_label` for accessibility compliance.
+    #
+    # @see CheckboxStyles for styling methods
+    # @see CheckboxAccessibility for accessibility helpers
+    # @see FormHelper for form integration utilities
+    #
+    # @since 1.0.0
+    # @version 2.0.0
     class Checkbox < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
@@ -142,7 +199,13 @@ module Pathogen
       include CheckboxAccessibility
       include CheckboxInternalHelpers
 
-      # Add this method to define the base attributes
+      # Builds the base HTML attributes for the checkbox input.
+      #
+      # Combines standard input attributes with ARIA attributes for accessibility.
+      # Includes id, name, value, checked state, disabled state, and CSS classes.
+      #
+      # @return [Hash] hash of HTML attributes for the checkbox input
+      # @api private
       def attributes
         base_attrs = {
           type: 'checkbox',
@@ -161,7 +224,14 @@ module Pathogen
         base_attrs.merge(@html_options || {})
       end
 
-      # Extract options from the constructor
+      # Extracts and processes options from the constructor parameters.
+      #
+      # Separates standard options from HTML attributes and processes
+      # accessibility, behavior, and styling options.
+      #
+      # @param options [Hash] the options hash from constructor
+      # @return [void]
+      # @api private
       def extract_options!(options)
         extract_basic_options(options)
         extract_accessibility_options(options)
@@ -169,25 +239,45 @@ module Pathogen
         @html_options = options # Store remaining options
       end
 
-      # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
-      # @param attribute [Symbol] the attribute for the checkbox
-      # @param value [String] the value for the checkbox
-      # @param options [Hash] additional options:
-      #   - :input_name [String] input name/id if no form is provided
-      #   - :label [String] the label text (required if no aria_label)
-      #   - :aria_label [String] screen reader only label (required if no label)
-      #   - :checked [Boolean] whether the checkbox is checked
-      #   - :disabled [Boolean] whether the checkbox is disabled
-      #   - :described_by [String] id of element describing this input
-      #   - :controls [String] id of element controlled by this input
-      #   - :lang [String] language code
-      #   - :class [String] additional CSS classes
-      #   - :onchange [String] JS for onchange event
-      #   - :help_text [String] help text rendered below the label
-      #   - :role [String] ARIA role (e.g., 'checkbox', 'button')
-      #   - :aria_live [String] ARIA live region for announcements
-      #   - :selected_message [String] message announced when checkbox is selected
-      #   - :deselected_message [String] message announced when checkbox is deselected
+      # Initializes a new Checkbox component.
+      #
+      # @param attribute [Symbol] the model attribute name for the checkbox
+      # @param value [String] the value to submit when checkbox is checked
+      # @param form [ActionView::Helpers::FormBuilder, nil] optional form builder
+      # @param input_name [String, nil] custom input name (used when no form provided)
+      # @param label [String, nil] visible label text (required if no aria_label)
+      # @param aria_label [String, nil] screen reader label (required if no label)
+      # @param checked [Boolean] whether the checkbox is initially checked (default: false)
+      # @param disabled [Boolean] whether the checkbox is disabled (default: false)
+      # @param described_by [String, nil] ID of element describing this input
+      # @param controls [String, nil] ID of element controlled by this input
+      # @param lang [String, nil] language code for the input
+      # @param class [String, nil] additional CSS classes
+      # @param onchange [String, nil] JavaScript for onchange event
+      # @param help_text [String, nil] help text displayed below the label
+      # @param error_text [String, nil] error text to display when invalid
+      # @param role [String, nil] ARIA role (e.g., 'checkbox', 'button')
+      # @param aria_live [String, nil] ARIA live region for announcements
+      # @param selected_message [String, nil] message announced when selected
+      # @param deselected_message [String, nil] message announced when deselected
+      #
+      # @raise [ArgumentError] if neither label nor aria_label is provided
+      #
+      # @example Basic usage
+      #   Pathogen::Form::Checkbox.new(
+      #     attribute: :terms,
+      #     value: "1",
+      #     label: "I agree to the terms"
+      #   )
+      #
+      # @example With form builder
+      #   Pathogen::Form::Checkbox.new(
+      #     form: form_builder,
+      #     attribute: :newsletter,
+      #     value: "1",
+      #     label: "Subscribe to newsletter",
+      #     help_text: "We'll send monthly updates"
+      #   )
       def initialize(attribute:, value:, form: nil, **options)
         super()
         @form = form
@@ -197,6 +287,12 @@ module Pathogen
         validate_accessibility_requirements!
       end
 
+      # Renders the checkbox component HTML.
+      #
+      # Determines the rendering strategy based on whether a visible label
+      # is provided. Uses different templates for labeled vs aria-labeled checkboxes.
+      #
+      # @return [ActiveSupport::SafeBuffer] the rendered HTML
       def call
         if @label.blank?
           render_aria_only_checkbox
@@ -205,12 +301,23 @@ module Pathogen
         end
       end
 
-      # Satisfy FormHelpers contract for input_classes
+      # Provides CSS classes for the checkbox input element.
+      #
+      # Satisfies the FormHelper contract for input_classes method.
+      # Delegates to the CheckboxStyles module for consistent styling.
+      #
+      # @param user_class [String, nil] additional CSS classes from user
+      # @return [String] complete CSS class string for the input
       def input_classes(user_class)
         checkbox_classes(user_class)
       end
 
-      # Override form_attributes to add enhanced ARIA support
+      # Merges form attributes with enhanced ARIA support.
+      #
+      # Overrides the base FormHelper method to add checkbox-specific
+      # ARIA attributes and role information.
+      #
+      # @return [Hash] enhanced form attributes with ARIA support
       def form_attributes
         attributes = super
         attributes[:aria] = merged_aria(attributes[:aria])
@@ -220,6 +327,14 @@ module Pathogen
 
       private
 
+      # Extracts basic options from the constructor parameters.
+      #
+      # Processes fundamental checkbox options like input name, label,
+      # checked state, disabled state, CSS classes, and text content.
+      #
+      # @param options [Hash] the options hash to process
+      # @return [void]
+      # @api private
       def extract_basic_options(options)
         @input_name = options.delete(:input_name)
         @label = options.delete(:label)
@@ -230,6 +345,14 @@ module Pathogen
         @error_text = options.delete(:error_text)
       end
 
+      # Extracts accessibility-related options from constructor parameters.
+      #
+      # Processes ARIA attributes, roles, and accessibility-specific
+      # configuration options for screen readers and assistive technology.
+      #
+      # @param options [Hash] the options hash to process
+      # @return [void]
+      # @api private
       def extract_accessibility_options(options)
         @aria_label = options.delete(:aria_label)
         @described_by = options.delete(:described_by)
@@ -238,6 +361,14 @@ module Pathogen
         @aria_live = options.delete(:aria_live)
       end
 
+      # Extracts behavior and interaction options from constructor parameters.
+      #
+      # Processes language settings, event handlers, and user feedback
+      # messages for checkbox state changes.
+      #
+      # @param options [Hash] the options hash to process
+      # @return [void]
+      # @api private
       def extract_behavior_options(options)
         @lang = options.delete(:lang)
         @onchange = options.delete(:onchange)
@@ -245,6 +376,14 @@ module Pathogen
         @deselected_message = options.delete(:deselected_message)
       end
 
+      # Merges ARIA attributes with existing attributes.
+      #
+      # Combines provided ARIA attributes with component-specific ones,
+      # handling describedby relationships and control associations.
+      #
+      # @param existing_aria [Hash, nil] existing ARIA attributes
+      # @return [Hash] merged ARIA attributes
+      # @api private
       def merged_aria(existing_aria)
         aria = existing_aria ? existing_aria.dup : {}
         assign_if_present(aria, :label, @aria_label)
@@ -258,13 +397,23 @@ module Pathogen
         aria
       end
 
-      # Skip re-renders if the input hasn't changed
+      # Determines if the component should re-render based on argument changes.
+      #
+      # Implements basic memoization to skip unnecessary re-renders when
+      # the component arguments haven't changed since the last render.
+      #
+      # @return [Boolean] true if component should render, false to skip
       # @api private
       def should_render?
         @last_render_args != [@form, @attribute, @value, @options]
       end
 
-      # Store the current render arguments for comparison in the next render
+      # Stores current render arguments for comparison in next render cycle.
+      #
+      # Called before rendering to capture the current state for
+      # comparison in future render cycles to enable memoization.
+      #
+      # @return [void]
       # @api private
       def before_render
         @last_render_args = [@form, @attribute, @value, @options.dup]
