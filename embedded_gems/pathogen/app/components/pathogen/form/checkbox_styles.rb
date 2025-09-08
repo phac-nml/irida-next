@@ -17,7 +17,6 @@ module Pathogen
       #   - Layout & dimensions (5x5 with margin)
       #   - Square shape with border
       #   - Colors and backgrounds
-      #   - Focus ring effects
       #   - Smooth transitions
       #   - States: checked, hover, disabled
       #   - Dark mode variants
@@ -45,7 +44,6 @@ module Pathogen
           'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
           'dark:disabled:checked:bg-slate-600',
           'transition-all duration-200 ease-in-out',
-          'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500',
           'active:scale-95'
         )
       end
