@@ -23,7 +23,7 @@ en:
         wednesday: Wed
       errors:
         invalid_date: Invalid date.
-        min_date_error: "Earliest allowed date: "
+        min_date_error: 'Earliest allowed date: '
       months:
         april: April
         august: August
@@ -43,3 +43,4 @@ en:
       checkbox_accessibility:
         deselected_message: Item deselected
         select_page: Selects or deselects all items on this page
+        select_row: Selects or deselects this item
