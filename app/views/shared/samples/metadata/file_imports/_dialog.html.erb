@@ -15,7 +15,7 @@
       <% else %>
       data-controller="attachment-upload metadata--file-import"
       <% end %>
-      data-attachment-upload-button-text-value='<%=t(".uploading") %>'
+      data-attachment-upload-uploading-text-value='<%=t(".uploading") %>'
       id="import-metadata-dialog-content"
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>

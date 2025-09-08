@@ -1902,7 +1902,6 @@ en:
           metadata: Metadata
         upload: Upload
         upload_files: Upload Files
-        uploading: Uploading
       table_filter:
         loading: Loading search results...
         search:
