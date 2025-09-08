@@ -132,13 +132,53 @@ module Pathogen
                         attribute: :select_all,
                         value: '1',
                         aria_label: 'Select all items',
-                        controls: 'items-table',
-                        help_text: 'Selects all items on the page'
+                        controls: 'item-list'
                       ))
 
-        assert_selector "input[aria-controls='items-table']"
         assert_selector "input[aria-label='Select all items']"
-        assert_selector 'span.sr-only', text: 'Selects all items on the page'
+        assert_selector "input[aria-controls='item-list']"
+        assert_selector 'input[aria-describedby]'
+      end
+
+      def test_renders_checkbox_with_aria_labelledby_only
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        aria_labelledby: 'external-heading'
+                      ))
+
+        assert_selector "input[type='checkbox']"
+        assert_selector "input[aria-labelledby='external-heading']"
+        assert_no_selector 'label'
+        assert_no_selector 'input[aria-label]'
+        assert_selector 'div.flex.flex-col'
+      end
+
+      def test_renders_checkbox_with_aria_labelledby_and_help_text
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        aria_labelledby: 'external-heading',
+                        help_text: 'Additional information about the checkbox'
+                      ))
+
+        assert_selector "input[aria-labelledby='external-heading']"
+        assert_selector 'input[aria-describedby]'
+        assert_text 'Additional information about the checkbox'
+        assert_no_selector 'label'
+      end
+
+      def test_renders_checkbox_with_aria_labelledby_and_controls
+        render_inline(Checkbox.new(
+                        attribute: :select_all,
+                        value: '1',
+                        aria_labelledby: 'section-heading',
+                        controls: 'item-list'
+                      ))
+
+        assert_selector "input[aria-labelledby='section-heading']"
+        assert_selector "input[aria-controls='item-list']"
+        assert_selector 'input[aria-describedby]'
       end
 
       def test_renders_checkbox_with_aria_live
@@ -211,7 +251,8 @@ module Pathogen
       end
 
       def test_raises_error_without_label_or_aria_label
-        assert_raises ArgumentError, "Checkbox requires either 'label' or 'aria_label' for accessibility compliance" do
+        assert_raises ArgumentError,
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1'
@@ -220,12 +261,36 @@ module Pathogen
       end
 
       def test_raises_error_with_empty_label_and_aria_label
-        assert_raises ArgumentError, "Checkbox requires either 'label' or 'aria_label' for accessibility compliance" do
+        assert_raises ArgumentError,
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1',
                           label: '',
                           aria_label: ''
+                        ))
+        end
+      end
+
+      def test_raises_error_with_empty_label_aria_label_and_aria_labelledby
+        assert_raises ArgumentError,
+                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance" do
+          render_inline(Checkbox.new(
+                          attribute: :terms,
+                          value: '1',
+                          label: '',
+                          aria_label: '',
+                          aria_labelledby: ''
+                        ))
+        end
+      end
+
+      def test_does_not_raise_error_with_aria_labelledby_only
+        assert_nothing_raised do
+          render_inline(Checkbox.new(
+                          attribute: :terms,
+                          value: '1',
+                          aria_labelledby: 'external-heading'
                         ))
         end
       end

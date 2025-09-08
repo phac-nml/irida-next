@@ -143,6 +143,13 @@ module Pathogen
         )
       end
 
+      # @label With ARIA Labelledby
+      def with_aria_labelledby
+        render(
+          template: 'pathogen/form/checkbox_preview/with_aria_labelledby'
+        )
+      end
+
       # @!endgroup
 
       # @!group WCAG Accessibility Examples

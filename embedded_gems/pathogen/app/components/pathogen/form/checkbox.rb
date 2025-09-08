@@ -32,7 +32,16 @@
 #     help_text: "Check to select all items, uncheck to deselect all"
 #   ) %>
 #
-# @note This component requires either a `label` or `aria_label` parameter
+# @example Using aria-labelledby for external labeling
+#   <h3 id="bulk-actions-heading">Bulk Actions</h3>
+#   <%= render Pathogen::Form::Checkbox.new(
+#     attribute: :select_all,
+#     value: "1",
+#     aria_labelledby: "bulk-actions-heading",
+#     help_text: "Select all items for bulk operations"
+#   ) %>
+#
+# @note This component requires either a `label`, `aria_label`, or `aria_labelledby` parameter
 #   for accessibility compliance.
 #
 # @see Pathogen::Form::CheckboxStyles for styling utilities
@@ -78,14 +87,16 @@ module Pathogen
       #
       # Uses form object name and attribute when form is present,
       # otherwise falls back to input_name or attribute.
+      # Includes the value to ensure unique IDs for multiple checkboxes.
       #
       # @return [String] the HTML ID for the input
       # @api private
       def input_id
         @input_id ||= if @form
-                        "#{@form.object_name}_#{@attribute}"
+                        "#{@form.object_name}_#{@attribute}_#{@value}"
                       else
-                        @input_name || @attribute.to_s
+                        base_name = @input_name || @attribute.to_s
+                        "#{base_name}_#{@value}"
                       end
       end
 
@@ -182,7 +193,16 @@ module Pathogen
     #     help_text: "Toggle to select or deselect all items"
     #   ) %>
     #
-    # @note Requires either `label` or `aria_label` for accessibility compliance.
+    # @example Using aria-labelledby to reference external label
+    #   <h3 id="notification-settings">Notification Settings</h3>
+    #   <%= render Pathogen::Form::Checkbox.new(
+    #     attribute: :email_notifications,
+    #     value: "1",
+    #     aria_labelledby: "notification-settings",
+    #     help_text: "Receive email notifications for important updates"
+    #   ) %>
+    #
+    # @note Requires either `label`, `aria_label`, or `aria_labelledby` for accessibility compliance.
     #
     # @see CheckboxStyles for styling methods
     # @see CheckboxAccessibility for accessibility helpers
@@ -217,8 +237,36 @@ module Pathogen
           class: input_classes(@class)
         }
 
+        # Build ARIA attributes
+        aria_attrs = {}
+        assign_if_present(aria_attrs, :label, @aria_label)
+        assign_if_present(aria_attrs, :labelledby, @aria_labelledby)
+        assign_if_present(aria_attrs, :live, @aria_live)
+        assign_if_present(aria_attrs, :controls, @controls)
+
         # Add describedby for help text
-        base_attrs[:aria] = { describedby: help_text_id } if @help_text.present?
+        aria_attrs[:describedby] = help_text_id if @help_text.present?
+
+        # Add existing described_by if present
+        if @described_by.present?
+          existing_describedby = aria_attrs[:describedby]
+          aria_attrs[:describedby] = [existing_describedby, @described_by].compact.join(' ')
+        end
+
+        # Add controls describedby if controls are present
+        if @controls.present?
+          existing_describedby = aria_attrs[:describedby]
+          aria_attrs[:describedby] = join_describedby(existing_describedby)
+        end
+
+        # Add ARIA attributes if any exist
+        base_attrs[:aria] = aria_attrs unless aria_attrs.empty?
+
+        # Add role if present
+        base_attrs[:role] = @role if @role.present?
+
+        # Add onchange if present
+        base_attrs[:onchange] = @onchange if @onchange.present?
 
         # Add any additional HTML options
         base_attrs.merge(@html_options || {})
@@ -250,6 +298,7 @@ module Pathogen
       # @param checked [Boolean] whether the checkbox is initially checked (default: false)
       # @param disabled [Boolean] whether the checkbox is disabled (default: false)
       # @param described_by [String, nil] ID of element describing this input
+      # @param aria_labelledby [String, nil] ID of element that labels this input
       # @param controls [String, nil] ID of element controlled by this input
       # @param lang [String, nil] language code for the input
       # @param class [String, nil] additional CSS classes
@@ -261,7 +310,7 @@ module Pathogen
       # @param selected_message [String, nil] message announced when selected
       # @param deselected_message [String, nil] message announced when deselected
       #
-      # @raise [ArgumentError] if neither label nor aria_label is provided
+      # @raise [ArgumentError] if none of label, aria_label, or aria_labelledby is provided
       #
       # @example Basic usage
       #   Pathogen::Form::Checkbox.new(
@@ -356,6 +405,7 @@ module Pathogen
       def extract_accessibility_options(options)
         @aria_label = options.delete(:aria_label)
         @described_by = options.delete(:described_by)
+        @aria_labelledby = options.delete(:aria_labelledby)
         @controls = options.delete(:controls)
         @role = options.delete(:role)
         @aria_live = options.delete(:aria_live)
@@ -387,6 +437,7 @@ module Pathogen
       def merged_aria(existing_aria)
         aria = existing_aria ? existing_aria.dup : {}
         assign_if_present(aria, :label, @aria_label)
+        assign_if_present(aria, :labelledby, @aria_labelledby)
         assign_if_present(aria, :live, @aria_live)
 
         if @controls.present?

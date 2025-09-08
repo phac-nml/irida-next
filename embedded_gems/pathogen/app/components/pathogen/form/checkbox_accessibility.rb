@@ -29,9 +29,10 @@ module Pathogen
 
       # Validates that accessibility requirements are met
       def validate_accessibility_requirements!
-        return unless @label.blank? && @aria_label.blank?
+        return unless @label.blank? && @aria_label.blank? && @aria_labelledby.blank?
 
-        raise ArgumentError, "Checkbox requires either 'label' or 'aria_label' for accessibility compliance"
+        raise ArgumentError,
+              "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance"
       end
 
       # Renders checkbox with only aria-label (no visible label)
