@@ -353,7 +353,6 @@ en:
       destroy:
         success: Successfully deleted metadata template %{template_name}
       update:
-        error: Error updating metadata template %{template_name}
         success: Successfully update metadata template %{template_name}
     share_actions:
       create:

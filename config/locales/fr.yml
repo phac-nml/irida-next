@@ -353,7 +353,6 @@ fr:
       destroy:
         success: Modèle de métadonnées %{template_name} supprimé avec succès
       update:
-        error: Erreur lors de la mise à jour du modèle de métadonnées %{template_name}
         success: Modèle de métadonnées %{template_name} mis à jour avec succès
     share_actions:
       create:

@@ -52,7 +52,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def create
+  def create # rubocop:disable Metrics/MethodLength
     @metadata_template = MetadataTemplates::CreateService.new(
       current_user, @namespace, metadata_template_params
     ).execute
@@ -63,7 +63,12 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
                                 template_name: @metadata_template.name))
         else
-          render_error(error_message(@metadata_template))
+          error_msg = if @metadata_template.errors.size == 1 && @metadata_template.errors[:fields].any?
+                        error_message(@metadata_template)
+                      else
+                        t(:'general.form.error_notification')
+                      end
+          render_error(error_msg)
         end
       end
     end
@@ -94,14 +99,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
                                 template_name: @metadata_template.name))
         end
       else
-        msg = if @metadata_template.errors.any?
-                @metadata_template.errors.full_messages.to_sentence
-              else
-                I18n.t('concerns.metadata_template_actions.update.error',
-                       template_name: @metadata_template.name)
-              end
+        error_msg = if @metadata_template.errors.size == 1 && @metadata_template.errors[:fields].any?
+                      error_message(@metadata_template)
+                    else
+                      t(:'general.form.error_notification')
+                    end
         format.turbo_stream do
-          render_error(msg)
+          render_error(error_msg)
         end
       end
     end
