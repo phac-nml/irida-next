@@ -909,18 +909,6 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
-  devise:
-    passwords:
-      edit:
-        reset_password: Change Password
-      new:
-        forgot_password: Reset Password
-    registrations:
-      new:
-        register: Register
-    sessions:
-      new:
-        login: Login
   errors:
     format: "%{attribute} %{message}"
     messages:
