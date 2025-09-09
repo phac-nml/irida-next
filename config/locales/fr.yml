@@ -686,7 +686,7 @@ fr:
       table_component:
         counts:
           status:
-            one: "1 sample selected of %{total} samples"
+            one: "1 sample selected"
             other: "%{selected} sur %{total} échantillons sélectionnés"
     search:
       advanced:
