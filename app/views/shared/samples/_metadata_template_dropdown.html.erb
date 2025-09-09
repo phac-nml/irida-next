@@ -28,11 +28,13 @@
       hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
     "
-    aria-labelledby="metadata-template-dd-trigger"
-    tabindex="-1"
   >
-    <ul id="metadata_templates_dropdown" role="listbox">
-      <li role="option">
+    <ul
+      id="metadata_templates_dropdown"
+      aria-labelledby="metadata-template-dd-trigger"
+      tabindex="-1"
+    >
+      <li>
         <%= render SpinnerComponent.new(
           message: t("shared.samples.metadata_templates.loading"),
         ) %>
