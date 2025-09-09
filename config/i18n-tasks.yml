@@ -152,7 +152,7 @@ ignore_missing:
 
 ## Consider these keys used:
 ignore_unused:
-  - "{action_policy,activemodel,activerecord,devise,errors,number,support,time}.*"
+  - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,number,support,time}.*"
   - "*.sorting.*"
   - "activity.*"
   - "viral.data_table_component.*"
@@ -169,6 +169,7 @@ ignore_unused:
 ignore_inconsistent_interpolations:
   fr:
     - 'errors.messages.{too_long,too_short,wrong_length}.one'
+    - '{date,datetime}.*'
 # - 'activerecord.attributes.*'
 
 ## Ignore these keys completely:
