@@ -2240,6 +2240,7 @@ fr:
         loading: Chargement des modèles de métadonnées...
         templates:
           label: Modèles de métadonnées
+          selected: Sélectionné
         tooltip: Paramètres d’affichage des métadonnées
       spreadsheet_imports:
         dialog:
