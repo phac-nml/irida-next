@@ -1902,7 +1902,6 @@ fr:
           metadata: Metadata
         upload: Télécharger
         upload_files: Télécharger des fichiers
-        uploading: Téléchargement
       table_filter:
         loading: Recherche en cours...
         search:
