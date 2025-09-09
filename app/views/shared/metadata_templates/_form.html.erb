@@ -12,7 +12,6 @@
       <div class="mt-2 form-field <%= 'invalid' if invalid_name %>">
         <%= form.label :name, data: { required: true } %>
         <%= form.text_field :name,
-                        value: @metadata_template.name,
                         required: true,
                         class: "form-control",
                         aria: {
@@ -38,7 +37,6 @@
       <div class="mt-2 form-field <%= 'invalid' if invalid_description %>">
         <%= form.label :description %>
         <%= form.text_area :description,
-                       value: @metadata_template.description,
                        class: "form-control",
                        aria: {
                          describedby:
