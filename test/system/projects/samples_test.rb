@@ -255,7 +255,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -292,7 +292,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: ''
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -318,7 +318,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: @sample1.name
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###

@@ -1390,6 +1390,13 @@ en:
         empty:
           description: There are no workflow executions associated with this group.
           title: No workflow executions.
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
   layouts:
     application:
       browser_page_titles:
@@ -2044,7 +2051,6 @@ en:
           no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Cancel
-        submit_button: Create sample
         subtitle: Create a new sample in the current Project
         title: Create sample
       show:

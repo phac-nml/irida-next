@@ -147,12 +147,13 @@ search:
 ## Do not consider these keys missing:
 ignore_missing:
   - "action_policy.*"
+  - "helpers.submit.*.{create,submit,update}"
 # - "activerecord.*"
 # - '{devise,simple_form}.*'
 
 ## Consider these keys used:
 ignore_unused:
-  - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,number,support,time}.*"
+  - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,helpers,number,support,time}.*"
   - "*.sorting.*"
   - "activity.*"
   - "viral.data_table_component.*"

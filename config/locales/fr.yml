@@ -1392,6 +1392,15 @@ fr:
         empty:
           description: There are no workflow executions associated with this group.
           title: No workflow executions.
+  helpers:
+    select:
+      prompt: Veuillez sélectionner
+    submit:
+      create: Créer un(e) %{model}
+      sample:
+        create: Créer un %{model}
+      submit: Enregistrer ce(tte) %{model}
+      update: Modifier ce(tte) %{model}
   layouts:
     application:
       browser_page_titles:
@@ -2046,7 +2055,6 @@ fr:
           no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Annuler
-        submit_button: Créer un échantillon
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
