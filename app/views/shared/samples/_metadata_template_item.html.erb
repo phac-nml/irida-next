@@ -3,21 +3,27 @@
     w-full border-b border-slate-200 dark:border-slate-600 hover:bg-slate-100
     dark:hover:bg-slate-600
   "
-  role="menuitemcheckbox"
-  aria-checked="<%= selected %>"
-  aria-label="<%= label %>"
+  role="none"
 >
   <button
     type="submit"
     value="<%= value %>"
     name="q[metadata_template]"
-    class="w-full flex py-2.5 px-3 cursor-pointer"
+    class="w-full flex items-center py-2.5 px-3 cursor-pointer text-left"
+    role="menuitemcheckbox"
+    aria-checked="<%= selected %>"
   >
-    <span class="size-5 mr-2">
+    <span class="size-5 mr-2 flex items-center justify-center" aria-hidden="true">
       <% if selected %>
         <%= pathogen_icon(ICON::CHECK, size: :sm) %>
       <% end %>
     </span>
-    <%= label %>
+    <span class="flex-1">
+      <%= label %>
+      <%# Screen reader only indicator of selection state (visual already has icon) %>
+      <% if selected %>
+        <span class="sr-only"><%= t("shared.samples.metadata_templates.templates.selected") %></span>
+      <% end %>
+    </span>
   </button>
 </li>

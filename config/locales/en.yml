@@ -2241,6 +2241,7 @@ en:
         loading: Loading metadata templates...
         templates:
           label: Metadata Templates
+          selected: Selected
         tooltip: Metadata display settings
       spreadsheet_imports:
         dialog:
