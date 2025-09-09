@@ -6,7 +6,7 @@
   >
     <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
       <%= viral_pill(
-        text: helpers.local_time(activity[:created_at], :long),
+        text: helpers.local_date(activity[:created_at], :long),
         color: :green,
       ) %>
 

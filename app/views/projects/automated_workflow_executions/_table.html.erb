@@ -15,7 +15,7 @@
       <%= row.metadata["workflow_version"] %>
     <% end %>
     <% table.with_column(t(".headers.created_at")) do |row| %>
-      <%= local_time(row[:created_at], :full_date) %>
+      <%= local_date(row[:created_at], :long) %>
     <% end %>
     <% table.with_column(t(".headers.updated_at")) do |row| %>
       <%= local_time_ago(row[:updated_at]) %>

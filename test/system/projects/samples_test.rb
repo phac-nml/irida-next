@@ -52,7 +52,7 @@ module Projects
           within("tr[id='#{dom_id(@sample1)}']") do
             assert_selector 'th:first-child', text: @sample1.puid
             assert_selector 'td:nth-child(2)', text: @sample1.name
-            assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.localtime, format: :full_date)
+            assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.to_date, format: :long)
             assert_selector 'td:nth-child(4)', text: '3 hours ago'
             assert_selector 'td:nth-child(5)', text: '2 hours ago'
             # actions tested by role in separate test

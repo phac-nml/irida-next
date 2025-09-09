@@ -47,7 +47,7 @@
                   text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap
                 "
                 datetime="<%= sample.updated_at.iso8601 %>"
-                title="<%= t('.last_updated_title', time: helpers.local_time(sample.updated_at, :full_date)) %>"
+                title="<%= t('.last_updated_title', time: helpers.local_date(sample.updated_at, :long)) %>"
               >
                 <%= helpers.local_time(sample.updated_at, :short_no_year) %>
               </time>

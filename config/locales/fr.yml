@@ -2517,10 +2517,12 @@ fr:
       light: Light
       system: System
   time:
+    am: am
     formats:
-      abbreviated: "%a %b%e %Y %H:%M"
-      default: "%Y-%m-%d %H:%M:%S"
-      full_date: "%B %d, %Y"
+      default: "%d %B %Y %H h %M min %S s"
+      long: "%A %d %B %Y %H h %M"
+      short: "%d %b %H h %M"
+    pm: pm
   validators:
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: La propriété '%{property}' doit correspondre au format de fichier attendu de '%{file_format}'

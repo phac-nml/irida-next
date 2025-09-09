@@ -30,7 +30,7 @@
     <% end %>
   <% end %>
   <% table.with_column("date") do |row| %>
-    <%= local_time(row[:date], :full_date) %>
+    <%= local_date(row[:date], :long) %>
   <% end %>
   <% table.with_column("time ago") do |row| %>
     <%= local_time_ago(row[:time_ago_date]) %>

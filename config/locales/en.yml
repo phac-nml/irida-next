@@ -2515,10 +2515,12 @@ en:
       light: Light
       system: System
   time:
+    am: am
     formats:
-      abbreviated: "%a %b%e %Y %H:%M"
-      default: "%Y-%m-%d %H:%M:%S"
-      full_date: "%B %d, %Y"
+      default: "%a, %d %b %Y %I:%M:%S %p %Z"
+      long: "%B %d, %Y %I:%M %p"
+      short: "%d %b %I:%M %p"
+    pm: pm
   validators:
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'

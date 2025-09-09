@@ -9,12 +9,10 @@ module History
 
     reload_log_data.data['h'].each do |change_log|
       version = change_log['v'].to_i
-      datetime_format = I18n.t('time.formats.abbreviated')
       responsible = responsible_user_for_version(change_log)
 
       log_data << { version: change_log['v'], user: responsible,
-                    updated_at: DateTime.parse(Time.zone.at(0, change_log['ts'], :millisecond).to_s)
-                                        .strftime(datetime_format),
+                    updated_at: DateTime.parse(Time.zone.at(0, change_log['ts'], :millisecond).to_s),
                     restored: record_restored?(change_log, version),
                     deleted: record_deleted?(change_log, version),
                     transferred: record_transferred?(change_log, version) }

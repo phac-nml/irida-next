@@ -218,20 +218,11 @@ module Groups
           token = @group_bot_active_tokens.first
 
           within "tr[id='#{dom_id(token)}']" do
-            assert_equal 'Valid PAT0', token.name
-            assert_equal 'read_api, api', token.scopes.join(', ')
+            assert_selector 'th[scope="row"]', text: 'Valid PAT0'
+            assert_selector 'td:nth-child(2)', text: 'read_api, api'
 
-            assert_equal Time.zone.now.strftime(
-              I18n.t('time.formats.full_date')
-            ), token.created_at.strftime(
-              I18n.t('time.formats.full_date')
-            )
-
-            assert_equal 10.days.from_now.to_date.strftime(
-              I18n.t('time.formats.full_date')
-            ), token.expires_at.strftime(
-              I18n.t('time.formats.full_date')
-            )
+            assert_selector 'td:nth-child(3)', text: I18n.l(Time.zone.now.to_date, format: :long)
+            assert_selector 'td:nth-child(5)', text: I18n.l(10.days.from_now.to_date, format: :long)
           end
         end
       end
