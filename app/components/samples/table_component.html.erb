@@ -28,9 +28,10 @@
                     <%= pathogen_checkbox attribute: "select-page",
                     id: "select-page",
                     value: "1",
-                    aria_label: t(".select_all.aria_label"),
+                    aria: {
+                      label: t(".select_all.aria_label"),
+                    },
                     controls: "samples-table-body",
-                    title: t(".select_all.help_text"),
                     data: {
                       action: "input->selection#togglePage",
                       selected_message: t(".select_all.selected_message"),
@@ -94,7 +95,9 @@
                       <%= pathogen_checkbox attribute: "sample_ids[]",
                       id: dom_id(sample, :checkbox),
                       value: sample.id,
-                      aria_label: t(".row.aria_label", name: sample.name),
+                      aria: {
+                        label: t(".row.aria_label", name: sample.name),
+                      },
                       help_text: t(".row.help_text"),
                       data: {
                         action: "input->selection#toggle",
