@@ -1,30 +1,32 @@
-<%= viral_dialog(id: "dialog_edit_#{dom_id(template)}", open: open, size: :large) do |dialog| %>
-  <% dialog.with_trigger do %>
-    <button
-      class="
-        font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline
-        cursor-pointer
-      "
-      data-viral--dialog-target="trigger"
-      data-action="viral--dialog#open"
-      aria-label="<%= t(:"metadata_templates.table_component.edit_aria_label", template_name: template.name)%>"
-    >
-      <%= t("metadata_templates.table_component.edit_button") %>
-    </button>
-  <% end %>
-  <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
-  <%= turbo_frame_tag "alert_edit_#{dom_id(template)}" %>
-  <% if template&.invalid? %>
-    <%= render partial: "shared/metadata_templates/form",
-    locals: {
-      template_path: update_path,
-      method: :patch,
-      submit_button_text:
-        t("metadata_templates.edit_template_dialog.update_button"),
-    } %>
-  <% else %>
-    <%= turbo_frame_tag "dialog_content_edit_#{dom_id(template)}", src: edit_path, loading: :lazy do %>
-      <%= render partial: "shared/loading/form" %>
+<div data-controller="content">
+  <%= viral_dialog(id: "dialog_edit_#{dom_id(template)}", open: open, size: :large, header_system_arguments: { close_action: "content#reload" }) do |dialog| %>
+    <% dialog.with_trigger do %>
+      <button
+        class="
+          font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline
+          cursor-pointer
+        "
+        data-viral--dialog-target="trigger"
+        data-action="viral--dialog#open"
+        aria-label="<%= t(:"metadata_templates.table_component.edit_aria_label", template_name: template.name)%>"
+      >
+        <%= t("metadata_templates.table_component.edit_button") %>
+      </button>
+    <% end %>
+    <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
+    <%= turbo_frame_tag "alert_edit_#{dom_id(template)}" %>
+    <% if template&.invalid? %>
+      <%= render partial: "shared/metadata_templates/form",
+      locals: {
+        template_path: update_path,
+        method: :patch,
+        submit_button_text:
+          t("metadata_templates.edit_template_dialog.update_button"),
+      } %>
+    <% else %>
+      <%= turbo_frame_tag "dialog_content_edit_#{dom_id(template)}", src: edit_path, loading: :lazy, "data-content-target": "frame" do %>
+        <%= render partial: "shared/loading/form" %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
+</div>

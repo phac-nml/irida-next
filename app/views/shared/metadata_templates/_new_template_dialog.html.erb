@@ -1,21 +1,23 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_trigger do %>
-    <button class="button button-primary" data-action="viral--dialog#open">
-      <%= t("metadata_templates.new_template_dialog.new_button") %>
-    </button>
-  <% end %>
-  <% dialog.with_header(title: t("metadata_templates.new_template_dialog.title")) %>
-  <%= turbo_frame_tag "new_metadata_template_alert" %>
-  <% if @metadata_template&.invalid? %>
-    <%= render partial: "shared/metadata_templates/form",
-    locals: {
-      template_path: create_path,
-      method: :post,
-      submit_button_text: t("metadata_templates.new_template_dialog.submit_button"),
-    } %>
-  <% else %>
-    <%= turbo_frame_tag "new_metadata_template_dialog_content", src: new_path, loading: :lazy do %>
-      <%= render partial: "shared/loading/form" %>
+<div data-controller="content">
+  <%= viral_dialog(open: open, size: :large, header_system_arguments: { close_action: "content#reload" }) do |dialog| %>
+    <% dialog.with_trigger do %>
+      <button class="button button-primary" data-action="viral--dialog#open">
+        <%= t("metadata_templates.new_template_dialog.new_button") %>
+      </button>
+    <% end %>
+    <% dialog.with_header(title: t("metadata_templates.new_template_dialog.title")) %>
+    <%= turbo_frame_tag "new_metadata_template_alert" %>
+    <% if @metadata_template&.invalid? %>
+      <%= render partial: "shared/metadata_templates/form",
+      locals: {
+        template_path: create_path,
+        method: :post,
+        submit_button_text: t("metadata_templates.new_template_dialog.submit_button"),
+      } %>
+    <% else %>
+      <%= turbo_frame_tag "new_metadata_template_dialog_content", src: new_path, loading: :lazy, "data-content-target": "frame" do %>
+        <%= render partial: "shared/loading/form" %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
+</div>

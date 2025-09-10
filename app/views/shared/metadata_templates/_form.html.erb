@@ -56,7 +56,6 @@
           errors: @metadata_template.errors.full_messages_for(:description) %>
         <% end %>
       </div>
-      <% invalid_fields = @metadata_template.errors&.include?(:fields) %>
       <div
         class="hidden"
         data-viral--sortable-lists--two-lists-selection-target="field"
