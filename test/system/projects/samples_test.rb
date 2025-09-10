@@ -52,7 +52,7 @@ module Projects
           within("tr[id='#{dom_id(@sample1)}']") do
             assert_selector 'th:first-child', text: @sample1.puid
             assert_selector 'td:nth-child(2)', text: @sample1.name
-            assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.localtime, format: :full_date)
+            assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.to_date, format: :long)
             assert_selector 'td:nth-child(4)', text: '3 hours ago'
             assert_selector 'td:nth-child(5)', text: '2 hours ago'
             # actions tested by role in separate test
@@ -255,7 +255,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -292,7 +292,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: ''
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -318,7 +318,7 @@ module Projects
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: @sample1.name
-      click_on I18n.t('projects.samples.new.submit_button')
+      click_on I18n.t('helpers.submit.sample.create', model: Sample.model_name.human, default: :'helpers.submit.create')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -3614,8 +3614,7 @@ module Projects
           end
         end
         click_button I18n.t(:'advanced_search_component.apply_filter_button')
-        assert_text I18n.t(:'validators.advanced_search_group_validator.uniqueness_error',
-                           unique_field: 'metadata.metadatafield1')
+        assert_text I18n.t(:'errors.messages.taken')
       end
       ### actions and VERIFY END ###
     end

@@ -295,7 +295,8 @@ module Dashboard
       click_button I18n.t('shared.samples.actions_dropdown.new_sample')
 
       find('input#sample_name').fill_in with: 'Test Sample'
-      click_button I18n.t('projects.samples.new.submit_button')
+      click_button I18n.t('helpers.submit.sample.create', model: Sample.model_name.human,
+                                                          default: :'helpers.submit.create')
 
       visit dashboard_projects_url
 

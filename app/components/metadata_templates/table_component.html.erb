@@ -65,7 +65,7 @@
                 <% elsif column == :created_by_email %>
                   <%= metadata_template.created_by.email %>
                 <% elsif column == :created_at %>
-                  <%= helpers.local_time(metadata_template.created_at, :full_date) %>
+                  <%= helpers.local_date(metadata_template.created_at, :long) %>
                 <% elsif column == :updated_at %>
                   <%= helpers.local_time_ago(metadata_template.updated_at) %>
                 <% end %>

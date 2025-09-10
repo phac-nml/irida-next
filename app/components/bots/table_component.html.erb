@@ -27,7 +27,7 @@
     <% end %>
     <% table.with_column(t("bots.index.table.header.expiration")) do |row| %>
       <% if !row.membership&.expires_at.nil? %>
-        <%= helpers.local_time(row.membership.expires_at, :full_date) %>
+        <%= helpers.local_date(row.membership.expires_at, :long) %>
       <% else %>
         <%= t("bots.index.table.never") %>
       <% end %>

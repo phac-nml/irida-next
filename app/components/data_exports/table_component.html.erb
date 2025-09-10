@@ -80,11 +80,11 @@
                 <% end %>
               </td>
               <td class="px-3 py-3">
-                <%= helpers.local_time(data_export.created_at, :full_date) %>
+                <%= helpers.local_date(data_export.created_at, :long) %>
               </td>
               <td class="px-3 py-3">
                 <% unless data_export.expires_at.nil? %>
-                  <%= helpers.local_time(data_export.expires_at, :full_date) %>
+                  <%= helpers.local_date(data_export.expires_at, :long) %>
                 <% end %>
               </td>
               <td class="px-3 py-3 space-x-2">

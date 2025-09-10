@@ -126,7 +126,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 ) %>
               <% end %>
             <% elsif !member.expires_at.nil? %>
-              <%= helpers.local_time(member.expires_at, :full_date) %>
+              <%= helpers.local_date(member.expires_at, :long) %>
             <% end %>
           </td>
           <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>

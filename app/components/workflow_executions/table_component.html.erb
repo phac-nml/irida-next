@@ -120,7 +120,7 @@
                 <% elsif column == :workflow_name || column == :workflow_version %>
                   <%= workflow_execution.metadata[column.to_s] %>
                 <% elsif column == :created_at %>
-                  <%= helpers.local_time(workflow_execution[column], :full_date) %>
+                  <%= helpers.local_date(workflow_execution[column], :long) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
                   <% if workflow_execution[column].present? %>
                     <%= helpers.local_time_ago(workflow_execution[column]) %>

@@ -7,12 +7,11 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
     record.groups.each do |group|
       validate_fields(group)
-      validate_unique_fields(group)
     end
 
     return unless record.groups.any? { |group| group.errors.any? }
 
-    record.errors.add :base, I18n.t('validators.advanced_search_group_validator.group_error')
+    record.errors.add :groups, :invalid
   end
 
   private
@@ -24,97 +23,84 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_fields(group)
-    group.conditions.each do |condition|
+    group.conditions.each_with_index do |condition, condition_index|
       validate_key(condition)
       validate_blank_field(condition)
       validate_date_and_numeric_field(condition)
+
+      validate_unique_condition(group, condition, condition_index)
     end
 
     return unless group.conditions.any? { |condition| condition.errors.any? }
 
-    group.errors.add :base, I18n.t('validators.advanced_search_group_validator.condition_error')
+    group.errors.add :conditions, :invalid
   end
 
   def validate_key(condition)
     return if %w[name puid created_at updated_at
                  attachments_updated_at].include?(condition.field) || /^metadata\..+$/ =~ condition.field
 
-    condition.errors.add :field, I18n.t('validators.advanced_search_group_validator.invalid_field_error')
+    condition.errors.add :field, :not_a_metadata
   end
 
-  def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize
-    if condition.field.blank?
-      condition.errors.add :field,
-                           I18n.t('validators.advanced_search_group_validator.select_blank_error')
-    end
+  def validate_blank_field(condition)
+    condition.errors.add :field, :blank if condition.field.blank?
 
-    if condition.operator.blank?
-      condition.errors.add :operator,
-                           I18n.t('validators.advanced_search_group_validator.select_blank_error')
-    end
+    condition.errors.add :operator, :blank if condition.operator.blank?
 
     return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
                   (%w[exists not_exists].exclude?(condition.operator) && condition.value.blank?)
 
-    condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.blank_error')
+    condition.errors.add :value, :blank
   end
 
   def validate_date_and_numeric_field(condition)
     if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
-      validate_date_field(condition)
+      validate_date_field_condition(condition)
     elsif %w[>= <=].include?(condition.operator)
-      unless Float(condition.value, exception: false)
-        condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.numeric_operator_error')
-      end
+      condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
     end
   end
 
-  def validate_date_field(condition)
-    if %w[contains in not_not].include?(condition.operator)
-      condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.date_operator_error')
+  def validate_date_field_condition(condition)
+    if %w[contains in not_in].include?(condition.operator)
+      condition.errors.add :operator, :not_a_date_operator
     elsif %w[exists not_exists].exclude?(condition.operator)
       begin
         DateTime.strptime(condition.value, '%Y-%m-%d')
       rescue StandardError
-        condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.date_format_error')
+        condition.errors.add :value, :not_a_date
       end
     end
   end
 
-  def validate_unique_fields(group)
-    unique_fields = group.conditions.map(&:field).uniq
-    unique_fields.each do |unique_field|
-      validate_unique_field(group, unique_field)
-    end
-  end
-
-  def validate_unique_field(group, unique_field)
-    unique_field_conditions = group.conditions.find_all { |condition| condition.field == unique_field }
-
-    unique_field_conditions.each do |unique_field_condition|
-      case unique_field_condition.operator
-      when '>=', '<='
-        validate_between(unique_field_condition, unique_field_conditions)
-      else
-        validate_uniqueness(unique_field_condition, unique_field_conditions)
-      end
+  def validate_unique_condition(group, condition, condition_index)
+    common_field_conditions = group.conditions[0..condition_index].find_all do |group_condition|
+      group_condition.field == condition.field
     end
 
-    return unless unique_field_conditions.any? { |condition| condition.errors.any? }
+    case condition.operator
+    when '>=', '<='
+      validate_between(condition, common_field_conditions)
+    else
+      validate_uniqueness(condition, common_field_conditions)
+    end
 
-    group.errors.add :base, I18n.t('validators.advanced_search_group_validator.condition_error')
+    return unless condition.errors.any?
+
+    group.errors.add :conditions, :invalid
   end
 
-  def validate_uniqueness(unique_field_condition, unique_field_conditions)
-    return if unique_field_conditions.count == 1
+  def validate_uniqueness(unique_field_condition, common_field_conditions)
+    return if common_field_conditions.count == 1
 
-    unique_field_condition.errors.add :field, I18n.t('validators.advanced_search_group_validator.uniqueness_error')
+    unique_field_condition.errors.add :operator, :taken
   end
 
-  def validate_between(unique_field_condition, unique_field_conditions)
-    unless unique_field_conditions.count == 1 || (unique_field_conditions.count == 2 &&
-      unique_field_conditions.collect(&:operator).sort == %w[>= <=].sort)
-      unique_field_condition.errors.add :field, I18n.t('validators.advanced_search_group_validator.between_error')
+  def validate_between(unique_field_condition, common_field_conditions)
+    unless common_field_conditions.count == 1 || (common_field_conditions.count == 2 &&
+      common_field_conditions.collect(&:operator).sort == %w[>= <=].sort)
+      unique_field_condition.errors.add :operator, :taken
     end
   end
 end

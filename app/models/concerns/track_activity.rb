@@ -33,12 +33,12 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def project_activity(activity) # rubocop:disable Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
       id: activity.id,
-      created_at: format_created_at(activity.created_at),
+      created_at: activity.created_at,
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       current_project: activity_trackable,
@@ -62,7 +62,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     base_params = {
       id: activity.id,
-      created_at: format_created_at(activity.created_at),
+      created_at: activity.created_at,
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       group: activity_trackable,
@@ -89,7 +89,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     base_params = {
       id: activity.id,
-      created_at: format_created_at(activity.created_at),
+      created_at: activity.created_at,
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       namespace: activity_trackable,
@@ -281,10 +281,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params.merge(
       samples_deleted_count: activity.parameters[:samples_deleted_count]
     )
-  end
-
-  def format_created_at(created_at)
-    created_at.strftime(I18n.t('time.formats.abbreviated'))
   end
 
   def additional_group_activity_params(params, activity) # rubocop:disable Metrics/AbcSize

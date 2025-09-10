@@ -81,8 +81,8 @@
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
-        placeholder="<%= t(".value") %>"
-        aria-label="<%= t(".value") %>"
+        placeholder="<%= t("activemodel.attributes.sample/search_condition.value") %>"
+        aria-label="<%= t("activemodel.attributes.sample/search_condition.value") %>"
       />
     </div>
   </template>
@@ -101,21 +101,21 @@
         ) %></legend>
       <div class="form-field w-1/3 @max-xl:w-full">
         <select
-          aria-label="<%= t(".field") %>"
+          aria-label="<%= t("activemodel.attributes.sample/search_condition.field") %>"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
         >
-          <option value="" selected><%= t(".field") %></option>
+          <option value="" selected><%= t("activemodel.attributes.sample/search_condition.field") %></option>
           <%= options_for_select(@sample_fields) %>
           <%= grouped_options_for_select(@metadata_fields) %>
         </select>
       </div>
       <div class="form-field w-1/4 @max-xl:w-full">
         <select
-          aria-label="<%= t(".operator") %>"
+          aria-label="<%= t("activemodel.attributes.sample/search_condition.operator") %>"
           data-action="advanced-search#handleOperatorChange"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
         >
-          <option value="" selected><%= t(".operator") %></option>
+          <option value="" selected><%= t("activemodel.attributes.sample/search_condition.operator") %></option>
           <%= options_for_select(@operations) %>
         </select>
       </div>
@@ -123,8 +123,8 @@
         <input
           type="text"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
-          placeholder="<%= t(".value") %>"
-          aria-label="<%= t(".value") %>"
+          placeholder="<%= t("activemodel.attributes.sample/search_condition.value") %>"
+          aria-label="<%= t("activemodel.attributes.sample/search_condition.value") %>"
         />
       </div>
       <button

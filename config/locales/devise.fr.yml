@@ -41,12 +41,14 @@ fr:
         password_confirmation_label: Confirmez votre nouveau mot de passe
         password_hint: "(%{minimum_password_length} caractères minimums)"
         password_label: Nouveau mot de passe
+        reset_password: Changer le mot de passe
         submit_button: Changer mon mot de passe
         title: Changer votre mot de passe
       new:
         email:
           format_error: Invalid email format. Please enter an email address with the format xxx@yyy.zzz
           required_error: Email is required. Please enter a valid email address.
+        forgot_password: Mot de passe oublié
         submit_button: Envoyez-moi des instructions pour réinitialiser mon mot de passe
       no_token: Vous ne pouvez pas accéder à cette page si vous n’avez pas été dirigé vers celle-ci à partir d’un courriel de réinitialisation de mot de passe. Si vous tentez d’accéder à cette page à partir d’un courriel de réinitialisation de mot de passe, assurez-vous d’utiliser l’URL fournie au complet.
       send_instructions: Vous recevrez un courriel d’instructions sur la façon de réinitialiser votre mot de passe dans quelques minutes.
@@ -68,6 +70,7 @@ fr:
         unhappy: Pas content ?
       new:
         password_hint: "(%{minimum_password_length} caractères minimums)"
+        register: Registre
         signed_up: Vous êtes déjà connecté?
         submit_button: Inscription
       signed_up: Bienvenue ! Vous vous êtes enregistré(e) avec succès.
@@ -79,6 +82,8 @@ fr:
       updated_but_not_signed_in: Votre compte a été mis à jour avec succès. Vous devez vous reconnecter car votre mot de passe a été modifié.
     sessions:
       already_signed_out: Fermeture de session réussie.
+      new:
+        login: Se connecter
       new_with_providers:
         local_button: Connectez-vous avec un compte local
         omniauth: Connectez-vous avec %{provider}

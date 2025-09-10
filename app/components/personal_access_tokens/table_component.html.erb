@@ -7,18 +7,18 @@
       <%= row[:scopes].join(", ") %>
     <% end %>
     <% table.with_column(t("personal_access_tokens.table.header.created_at")) do |row| %>
-      <%= helpers.local_time(row[:created_at], :full_date) %>
+      <%= helpers.local_date(row[:created_at], :long) %>
     <% end %>
     <% table.with_column(t("personal_access_tokens.table.header.last_used_at")) do |row| %>
       <% if row[:last_used_at].present? %>
-        <%= helpers.local_time(row[:last_used_at], :full_date) %>
+        <%= helpers.local_date(row[:last_used_at], :long) %>
       <% else %>
         <%= t("personal_access_tokens.table.never") %>
       <% end %>
     <% end %>
     <% table.with_column(t("personal_access_tokens.table.header.expires_at")) do |row| %>
       <% if row[:expires_at].present? %>
-        <%= helpers.local_time(row[:expires_at], :full_date) %>
+        <%= helpers.local_date(row[:expires_at], :long) %>
       <% else %>
         <%= t("personal_access_tokens.table.never") %>
       <% end %>

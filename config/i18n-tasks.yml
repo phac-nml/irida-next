@@ -147,25 +147,17 @@ search:
 ## Do not consider these keys missing:
 ignore_missing:
   - "action_policy.*"
-  - "activerecord.*"
-# - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
+  - "helpers.submit.*.{create,submit,update}"
+# - "activerecord.*"
 # - '{devise,simple_form}.*'
 
 ## Consider these keys used:
 ignore_unused:
-  - "action_policy.*"
-  - "activerecord.*"
+  - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,helpers,number,support,time}.*"
   - "*.sorting.*"
-  - "time.formats.full_date"
   - "activity.*"
-  - "devise.*"
   - "viral.data_table_component.*"
   - "samples.table_component.namespaces.puid"
-  - "support.array.*"
-# - '{devise,kaminari,will_paginate}.*'
-# - 'simple_form.{yes,no}'
-# - 'simple_form.{placeholders,hints,labels}.*'
-# - 'simple_form.{error_notification,required}.:'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
@@ -175,7 +167,10 @@ ignore_unused:
 #     - common.brand
 
 ## Exclude these keys from the `i18n-tasks check-consistent-interpolations` report:
-# ignore_inconsistent_interpolations:
+ignore_inconsistent_interpolations:
+  fr:
+    - 'errors.messages.{too_long,too_short,wrong_length}.one'
+    - '{date,datetime}.*'
 # - 'activerecord.attributes.*'
 
 ## Ignore these keys completely:

@@ -15,7 +15,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
 
     current_ts = DateTime.now.strftime('%Q').to_i
     updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-                         .strftime('%a %b%e %Y %H:%M')
 
     expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
                          deleted: false, transferred: false }]
@@ -94,7 +93,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
 
     current_ts = DateTime.now.strftime('%Q').to_i
     updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-                         .strftime('%a %b%e %Y %H:%M')
 
     expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
                          deleted: false, transferred: false }]
@@ -117,7 +115,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
 
     current_ts = DateTime.now.strftime('%Q').to_i
     updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-                         .strftime('%a %b%e %Y %H:%M')
 
     expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
                          deleted: false, transferred: false }]

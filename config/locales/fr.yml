@@ -118,6 +118,26 @@ fr:
         read?: Vous n’êtes pas autorisé à afficher l’exécution du flux de travail %{id}
         update?: Vous n’êtes pas autorisé à mettre à jour l’exécution du flux de travail %{id}
     unauthorized: Vous n’êtes pas autorisé à effectuer cette action
+  activemodel:
+    attributes:
+      sample/query:
+        group: Groupe
+      sample/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      sample/search_group:
+        condition: Condition
+    errors:
+      models:
+        sample/search_condition:
+          attributes:
+            field:
+              not_a_metadata: est un champ de métadonnées non valide
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
   activerecord:
     attributes:
       attachment:
@@ -182,10 +202,6 @@ fr:
       track_activity:
         system: Système
     errors:
-      messages:
-        blank: ne peut pas être vide
-        invalid: n'est pas valide
-        taken: a déjà été pris
       models:
         activity_extended_detail:
           maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
@@ -384,8 +400,7 @@ fr:
     condition: Condition %{index}
     confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
     description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
-    field: Champ
-    group: Group %{index}
+    group: Groupe %{index}
     operation:
       contains: contains
       equals: "="
@@ -397,12 +412,10 @@ fr:
       not_equals: "!="
       not_exists: not exists
       not_in: not in
-    operator: Opérateur
     remove_condition_aria_label: Supprimer la condition
     remove_group_button: Supprimer le groupe
     rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
     title: Recherche avancée
-    value: Valeur
   application:
     errors:
       access_denied: Accès refusé.
@@ -896,23 +909,146 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
-  devise:
-    passwords:
-      edit:
-        reset_password: Change Password
-      new:
-        forgot_password: Reset Password
-    registrations:
-      new:
-        register: Register
-    sessions:
-      new:
-        login: Login
+  date:
+    abbr_day_names:
+    - dim
+    - lun
+    - mar
+    - mer
+    - jeu
+    - ven
+    - sam
+    abbr_month_names:
+    -
+    - jan.
+    - fév.
+    - mars
+    - avr.
+    - mai
+    - juin
+    - juil.
+    - août
+    - sept.
+    - oct.
+    - nov.
+    - déc.
+    day_names:
+    - dimanche
+    - lundi
+    - mardi
+    - mercredi
+    - jeudi
+    - vendredi
+    - samedi
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%y-%m-%d"
+    month_names:
+    -
+    - janvier
+    - février
+    - mars
+    - avril
+    - mai
+    - juin
+    - juillet
+    - août
+    - septembre
+    - octobre
+    - novembre
+    - décembre
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: environ une heure
+        other: environ %{count} heures
+      about_x_months:
+        one: environ un mois
+        other: environ %{count} mois
+      about_x_years:
+        one: environ un an
+        other: environ %{count} ans
+      almost_x_years:
+        one: presque un an
+        other: presque %{count} ans
+      half_a_minute: une demi-minute
+      less_than_x_minutes:
+        one: moins d'une minute
+        other: moins de %{count} minutes
+        zero: moins d'une minute
+      less_than_x_seconds:
+        one: moins d'une seconde
+        other: moins de %{count} secondes
+        zero: moins d'une seconde
+      over_x_years:
+        one: plus d'un an
+        other: plus de %{count} ans
+      x_days:
+        one: "%{count} jour"
+        other: "%{count} jours"
+      x_minutes:
+        one: "%{count} minute"
+        other: "%{count} minutes"
+      x_months:
+        one: "%{count} mois"
+        other: "%{count} mois"
+      x_seconds:
+        one: "%{count} seconde"
+        other: "%{count} secondes"
+      x_years:
+        one: "%{count} an"
+        other: "%{count} ans"
+    prompts:
+      day: Jour
+      hour: Heure
+      minute: Minute
+      month: Mois
+      second: Seconde
+      year: Année
   errors:
+    format: "%{attribute} %{message}"
     messages:
-      not_saved:
-        one: '1 erreur a empêché cette %{resource} d’être sauvegardée :'
-        other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
+      accepted: doit être accepté(e)
+      blank: doit être rempli(e)
+      confirmation: ne concorde pas avec %{attribute}
+      empty: doit être rempli(e)
+      equal_to: doit être égal à %{count}
+      even: doit être pair
+      exclusion: n'est pas disponible
+      greater_than: doit être supérieur à %{count}
+      greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      in: doit être dans l'intervalle %{count}
+      inclusion: n'est pas inclus(e) dans la liste
+      invalid: n'est pas valide
+      less_than: doit être inférieur à %{count}
+      less_than_or_equal_to: doit être inférieur ou égal à %{count}
+      model_invalid: 'Validation échouée : %{errors}'
+      not_a_number: n'est pas un nombre
+      not_an_integer: doit être un nombre entier
+      odd: doit être impair
+      other_than: doit être différent de %{count}
+      present: doit être vide
+      required: doit exister
+      taken: n'est pas disponible
+      too_long:
+        one: est trop long (pas plus d'un caractère)
+        other: est trop long (pas plus de %{count} caractères)
+      too_short:
+        one: est trop court (au moins un caractère)
+        other: est trop court (au moins %{count} caractères)
+      wrong_length:
+        one: ne fait pas la bonne longueur (doit comporter un seul caractère)
+        other: ne fait pas la bonne longueur (doit comporter %{count} caractères)
+    template:
+      body: 'Veuillez vérifier les champs suivants : '
+      header:
+        one: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreur'
+        other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
   general:
     default_sidebar:
       aria_label: Main sidebar
@@ -1256,6 +1392,15 @@ fr:
         empty:
           description: There are no workflow executions associated with this group.
           title: No workflow executions.
+  helpers:
+    select:
+      prompt: Veuillez sélectionner
+    submit:
+      create: Créer un(e) %{model}
+      sample:
+        create: Créer un %{model}
+      submit: Enregistrer ce(tte) %{model}
+      update: Modifier ce(tte) %{model}
   layouts:
     application:
       browser_page_titles:
@@ -1421,6 +1566,57 @@ fr:
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: " "
+      precision: 3
+      round_mode: default
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: milliard
+          million: million
+          quadrillion: million de milliards
+          thousand: millier
+          trillion: billion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: octet
+            other: octets
+          eb: Eo
+          gb: Go
+          kb: ko
+          mb: Mo
+          pb: Po
+          tb: To
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
   pathogen:
     link:
       aria-label: "%{content} (opens in a new window)"
@@ -1859,7 +2055,6 @@ fr:
           no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Annuler
-        submit_button: Créer un échantillon
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
@@ -2330,22 +2525,13 @@ fr:
       light: Light
       system: System
   time:
+    am: am
     formats:
-      abbreviated: "%a %b%e %Y %H:%M"
-      default: "%Y-%m-%d %H:%M:%S"
-      full_date: "%B %d, %Y"
+      default: "%d %B %Y %H h %M min %S s"
+      long: "%A %d %B %Y %H h %M"
+      short: "%d %b %H h %M"
+    pm: pm
   validators:
-    advanced_search_group_validator:
-      between_error: Peut utiliser '>=' et '<=' une fois seulement
-      blank_error: Ne peut pas être vide
-      condition_error: La condition comporte des erreurs
-      date_format_error: Doit être formaté AAAA-MM-JJ
-      date_operator_error: Ne peut pas être utilisé sur les dates
-      group_error: Le groupe a des erreurs
-      invalid_field_error: Est un champ de métadonnées non valide
-      numeric_operator_error: Ne peut être utilisé que sur les numéros
-      select_blank_error: must be a valid option from the list
-      uniqueness_error: Doit être unique
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: La propriété '%{property}' doit correspondre au format de fichier attendu de '%{file_format}'
       attachment_gid_error: La propriété '%{property}' doit être une pièce jointe GID valide

@@ -53,7 +53,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export1.status}")
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(6)",
-                      text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
 
       assert_selector "tr[id='#{dom_id(@data_export2)}'] td:first-child", text: @data_export2.id
       assert find("tr[id='#{dom_id(@data_export2)}'] td:nth-child(2)").text.blank?
@@ -78,7 +78,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export7.status}")
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(6)",
-                      text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
     end
   end
 
@@ -176,9 +176,9 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
     assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
     assert_selector 'div:nth-child(5) dd',
-                    text: I18n.l(@data_export1.created_at.localtime, format: :full_date)
+                    text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
-                    text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
+                    text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
   end
 
   test 'name is not shown on data export page if data_export.name is nil' do
@@ -872,9 +872,9 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
     assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
     assert_selector 'div:nth-child(5) dd',
-                    text: I18n.l(@data_export7.created_at.localtime, format: :full_date)
+                    text: I18n.l(@data_export7.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
-                    text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
+                    text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
   end
 
   test 'zip file contents in preview tab for workflow execution data export' do
@@ -1806,27 +1806,27 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
     within('table tbody') do
       assert_selector 'tr:first-child td:nth-child(5)',
-                      text: I18n.l(@data_export1.created_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
       assert_selector 'tr:nth-child(2) td:nth-child(5)',
-                      text: I18n.l(@data_export2.created_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export2.created_at.localtime.to_date, format: :long)
     end
 
     click_on 'Created'
     assert_selector 'table thead th:nth-child(5) svg.arrow-down-icon'
     within('table tbody') do
       assert_selector 'tr:first-child td:nth-child(5)',
-                      text: I18n.l(@data_export10.created_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export10.created_at.localtime.to_date, format: :long)
       assert_selector 'tr:nth-child(2) td:nth-child(5)',
-                      text: I18n.l(@data_export9.created_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export9.created_at.localtime.to_date, format: :long)
     end
 
     click_on 'Expires'
     assert_selector 'table thead th:nth-child(6) svg.arrow-up-icon'
     within('table tbody') do
       assert_selector 'tr:first-child td:nth-child(6)',
-                      text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
       assert_selector 'tr:nth-child(2) td:nth-child(6)',
-                      text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
+                      text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
     end
 
     click_on 'Expires'

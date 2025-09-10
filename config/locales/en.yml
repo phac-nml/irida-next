@@ -118,6 +118,26 @@ en:
         read?: You are not authorized to view workflow execution %{id}
         update?: You are not authorized to update workflow execution %{id}
     unauthorized: You are not authorized to perform this action
+  activemodel:
+    attributes:
+      sample/query:
+        group: Group
+      sample/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      sample/search_group:
+        condition: Condition
+    errors:
+      models:
+        sample/search_condition:
+          attributes:
+            field:
+              not_a_metadata: is an invalid metadata field
+            operator:
+              not_a_date_operator: cannot be used on dates
+            value:
+              not_a_date: must be formatted YYYY-MM-DD
   activerecord:
     attributes:
       attachment:
@@ -182,10 +202,6 @@ en:
       track_activity:
         system: System
     errors:
-      messages:
-        blank: can't be blank
-        invalid: is invalid
-        taken: has already been taken
       models:
         activity_extended_detail:
           maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
@@ -384,7 +400,6 @@ en:
     condition: Condition %{index}
     confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
     description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
-    field: Field
     group: Group %{index}
     operation:
       contains: contains
@@ -397,12 +412,10 @@ en:
       not_equals: "!="
       not_exists: not exists
       not_in: not in
-    operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group
     rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
     title: Advanced search
-    value: Value
   application:
     errors:
       access_denied: Access Denied.
@@ -896,23 +909,144 @@ en:
       analysis: ANALYSIS
       linelist: LINELIST
       sample: SAMPLE
-  devise:
-    passwords:
-      edit:
-        reset_password: Change Password
-      new:
-        forgot_password: Reset Password
-    registrations:
-      new:
-        register: Register
-    sessions:
-      new:
-        login: Login
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    abbr_month_names:
+    -
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: "%Y-%m-%d"
+      long: "%B %d, %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about %{count} hour
+        other: about %{count} hours
+      about_x_months:
+        one: about %{count} month
+        other: about %{count} months
+      about_x_years:
+        one: about %{count} year
+        other: about %{count} years
+      almost_x_years:
+        one: almost %{count} year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than %{count} second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over %{count} year
+        other: over %{count} years
+      x_days:
+        one: "%{count} day"
+        other: "%{count} days"
+      x_minutes:
+        one: "%{count} minute"
+        other: "%{count} minutes"
+      x_months:
+        one: "%{count} month"
+        other: "%{count} months"
+      x_seconds:
+        one: "%{count} second"
+        other: "%{count} seconds"
+      x_years:
+        one: "%{count} year"
+        other: "%{count} years"
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Second
+      year: Year
   errors:
+    format: "%{attribute} %{message}"
     messages:
-      not_saved:
-        one: '1 error prohibited this %{resource} from being saved:'
-        other: "%{count} errors prohibited this %{resource} from being saved:"
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match %{attribute}
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      in: must be in %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: 'Validation failed: %{errors}'
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      other_than: must be other than %{count}
+      present: must be blank
+      required: must exist
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is %{count} character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is %{count} character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be %{count} character)
+        other: is the wrong length (should be %{count} characters)
+    template:
+      body: 'There were problems with the following fields:'
+      header:
+        one: "%{count} error prohibited this %{model} from being saved"
+        other: "%{count} errors prohibited this %{model} from being saved"
   general:
     default_sidebar:
       aria_label: Main sidebar
@@ -1256,6 +1390,13 @@ en:
         empty:
           description: There are no workflow executions associated with this group.
           title: No workflow executions.
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
   layouts:
     application:
       browser_page_titles:
@@ -1421,6 +1562,57 @@ en:
     processing_request: Processing your submission, this may take some time.
     processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      round_mode: default
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Billion
+          million: Million
+          quadrillion: Quadrillion
+          thousand: Thousand
+          trillion: Trillion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
   pathogen:
     link:
       aria-label: "%{content} (opens in a new window)"
@@ -1859,7 +2051,6 @@ en:
           no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Cancel
-        submit_button: Create sample
         subtitle: Create a new sample in the current Project
         title: Create sample
       show:
@@ -2330,22 +2521,13 @@ en:
       light: Light
       system: System
   time:
+    am: am
     formats:
-      abbreviated: "%a %b%e %Y %H:%M"
-      default: "%Y-%m-%d %H:%M:%S"
-      full_date: "%B %d, %Y"
+      default: "%a, %d %b %Y %I:%M:%S %p %Z"
+      long: "%B %d, %Y %I:%M %p"
+      short: "%d %b %I:%M %p"
+    pm: pm
   validators:
-    advanced_search_group_validator:
-      between_error: can use '>=' and '<=' only once
-      blank_error: cannot be blank
-      condition_error: There condition has errors
-      date_format_error: must be formatted YYYY-MM-DD
-      date_operator_error: cannot be used on dates
-      group_error: There group has errors
-      invalid_field_error: is an invalid metadata field
-      numeric_operator_error: can only be used on numbers
-      select_blank_error: must be a valid option from the list
-      uniqueness_error: must be unique
     workflow_execution_samplesheet_params_validator:
       attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'
       attachment_gid_error: property '%{property}' must be a valid Attachment GID

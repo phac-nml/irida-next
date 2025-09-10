@@ -15,8 +15,7 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
           <div class="flex">
-            <%= form.submit t("projects.samples.new.submit_button"),
-                        class: "button button-primary mr-2" %>
+            <%= form.submit class: "button button-primary mr-2" %>
             <%= link_to t("projects.samples.new.cancel_button"),
             namespace_project_samples_path,
             class: "button button-default" %>
