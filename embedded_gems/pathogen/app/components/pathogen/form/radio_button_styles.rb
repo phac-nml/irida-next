@@ -9,6 +9,7 @@ module Pathogen
   module Form
     # Provides Tailwind CSS styling helpers for Pathogen radio button components.
     module RadioButtonStyles
+      include FormStyles
       # Generates classes for the radio button input element 🔘
       #
       # @param user_class [String, nil] Additional classes to merge
@@ -21,63 +22,19 @@ module Pathogen
       #   - Smooth transitions
       #   - States: checked, hover, disabled
       #   - Dark mode variants
-      def radio_button_classes(user_class = nil) # rubocop:disable Metrics/MethodLength
+      def radio_button_classes(user_class = nil)
         class_names(
           user_class,
-          # Layout & Sizing
-          'h-5 w-5 shrink-0 mt-0.5',
-          # Shape & Border
-          'rounded-full border-2',
-          # Colors & Background
-          'text-primary-600 bg-white',
-          # Cursor & Interaction
-          'cursor-pointer transition-colors duration-200 ease-in-out',
-          # Checked State
-          'checked:border-primary-500 checked:bg-primary-500',
-          # Hover State
-          'hover:border-primary-500',
-          # Disabled State
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          'disabled:border-slate-200 disabled:bg-slate-100',
-          # Dark Mode
-          'dark:border-slate-600 dark:bg-slate-700',
-          'dark:checked:bg-primary-600 dark:checked:border-primary-500',
-          'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
-          'dark:disabled:checked:bg-slate-600',
-          'transition-all duration-200 ease-in-out',
-          'active:scale-95'
+          # Circular shape
+          'rounded-full',
+          # Shared base control classes
+          *control_base_classes
         )
       end
 
-      # Generates classes for the radio button label 🏷️
-      #
-      # @return [String] Space-separated Tailwind CSS classes
-      # @note Includes styles for:
-      #   - Typography (small, medium weight)
-      #   - Cursor interaction
-      #   - Disabled state
-      #   - Dark mode support
-      def label_classes
-        class_names(
-          # Typography
-          'text-sm font-medium text-slate-900',
-          # Cursor
-          'cursor-pointer',
-          # Disabled State
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          # Dark Mode
-          'dark:text-slate-100'
-        )
-      end
+      # label_classes provided by FormStyles
 
-      # Generates classes for the help text below radio buttons ℹ️
-      #
-      # @return [String] Space-separated Tailwind CSS classes
-      # @note Provides subtle, smaller text with appropriate spacing
-      #       and dark mode support
-      def help_text_classes
-        'text-sm leading-relaxed text-slate-500 mt-1 dark:text-slate-400'
-      end
+      # help_text_classes provided by FormStyles
     end
   end
 end
