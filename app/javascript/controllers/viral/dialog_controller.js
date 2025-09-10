@@ -36,6 +36,7 @@ export default class extends Controller {
   }
 
   open() {
+    this.element.setAttribute("data-turbo-permanent", "");
     this.openValue = true;
     if (this.hasTriggerTarget) {
       // once a dialog has been opened we need to save it to the state to refocus the trigger if the controller is disconnected before close
@@ -46,6 +47,7 @@ export default class extends Controller {
   }
 
   close() {
+    this.element.removeAttribute("data-turbo-permanent");
     this.openValue = false;
     this.#focusTrap.deactivate();
     this.dialogTarget.close();
