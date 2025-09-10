@@ -116,8 +116,10 @@ module Pathogen
           attribute: :accessibility,
           value: '1',
           label: 'Enable accessibility features',
-          described_by: 'accessibility-help',
-          controls: 'accessibility-panel'
+          aria: {
+            describedby: 'accessibility-help',
+            controls: 'accessibility-panel'
+          }
         )
       end
 
@@ -128,8 +130,10 @@ module Pathogen
           value: '1',
           label: 'Enable accessibility features',
           help_text: 'Includes screen reader support and keyboard navigation',
-          described_by: 'accessibility-help',
-          controls: 'accessibility-panel'
+          aria: {
+            describedby: 'accessibility-help',
+            controls: 'accessibility-panel'
+          }
         )
       end
 
@@ -159,9 +163,11 @@ module Pathogen
         pathogen_checkbox(
           attribute: :select_all,
           value: '1',
-          aria_label: 'Select all samples on this page',
-          controls: 'samples-table-body',
-          aria_live: 'polite',
+          aria: {
+            label: 'Select all samples on this page',
+            controls: 'samples-table-body',
+            live: 'polite'
+          },
           help_text: 'Check to select all samples, uncheck to deselect all'
         )
       end
@@ -171,8 +177,10 @@ module Pathogen
         pathogen_checkbox(
           attribute: :select_row,
           value: '1',
-          aria_label: 'Select sample SAMPLE-001',
-          controls: 'sample-details-panel',
+          aria: {
+            label: 'Select sample SAMPLE-001',
+            controls: 'sample-details-panel'
+          },
           help_text: 'Check to select this sample, uncheck to deselect'
         )
       end
@@ -183,8 +191,10 @@ module Pathogen
           attribute: :accessibility,
           value: '1',
           label: 'Enable accessibility features',
-          described_by: 'accessibility-help',
-          controls: 'accessibility-panel',
+          aria: {
+            describedby: 'accessibility-help',
+            controls: 'accessibility-panel'
+          },
           help_text: 'Includes screen reader support and keyboard navigation'
         )
       end
@@ -198,7 +208,9 @@ module Pathogen
         pathogen_checkbox(
           attribute: :hidden_option,
           value: '1',
-          aria_label: 'Hidden option checkbox for screen readers'
+          aria: {
+            label: 'Hidden option checkbox for screen readers'
+          }
         )
       end
 
@@ -207,7 +219,9 @@ module Pathogen
         pathogen_checkbox(
           attribute: :select_all,
           value: '1',
-          aria_label: 'Select all items on this page',
+          aria: {
+            label: 'Select all items on this page'
+          },
           help_text: 'Check to select all items, uncheck to deselect all'
         )
       end
