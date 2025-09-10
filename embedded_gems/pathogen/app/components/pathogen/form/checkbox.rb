@@ -24,24 +24,24 @@
 #     ) %>
 #   <% end %>
 #
-# @example Screen reader only label (aria-label)
+# @example Screen reader only label (aria.label)
 #   <%= render Pathogen::Form::Checkbox.new(
 #     attribute: :select_all,
 #     value: "1",
-#     aria_label: "Select all items on this page",
+#     aria: { label: "Select all items on this page" },
 #     help_text: "Check to select all items, uncheck to deselect all"
 #   ) %>
 #
-# @example Using aria-labelledby for external labeling
+# @example Using aria.labelledby for external labeling
 #   <h3 id="bulk-actions-heading">Bulk Actions</h3>
 #   <%= render Pathogen::Form::Checkbox.new(
 #     attribute: :select_all,
 #     value: "1",
-#     aria_labelledby: "bulk-actions-heading",
+#     aria: { labelledby: "bulk-actions-heading" },
 #     help_text: "Select all items for bulk operations"
 #   ) %>
 #
-# @note This component requires either a `label`, `aria_label`, or `aria_labelledby` parameter
+# @note This component requires either a `label`, `aria: { label: ... }`, or `aria: { labelledby: ... }` parameter
 #   for accessibility compliance.
 #
 # @see Pathogen::Form::CheckboxStyles for styling utilities
@@ -189,20 +189,21 @@ module Pathogen
     #   <%= render Pathogen::Form::Checkbox.new(
     #     attribute: :select_all,
     #     value: "1",
-    #     aria_label: "Select all items in the table",
+    #     aria: { label: "Select all items in the table" },
     #     help_text: "Toggle to select or deselect all items"
     #   ) %>
     #
-    # @example Using aria-labelledby to reference external label
+    # @example Using aria.labelledby to reference external label
     #   <h3 id="notification-settings">Notification Settings</h3>
     #   <%= render Pathogen::Form::Checkbox.new(
     #     attribute: :email_notifications,
     #     value: "1",
-    #     aria_labelledby: "notification-settings",
+    #     aria: { labelledby: "notification-settings" },
     #     help_text: "Receive email notifications for important updates"
     #   ) %>
     #
-    # @note Requires either `label`, `aria_label`, or `aria_labelledby` for accessibility compliance.
+    # @note Requires either `label`, `aria: { label: ... }`, or
+    #   `aria: { labelledby: ... }` for accessibility compliance.
     #
     # @see CheckboxStyles for styling methods
     # @see CheckboxAccessibility for accessibility helpers
@@ -228,12 +229,11 @@ module Pathogen
       # @param value [String] the value to submit when checkbox is checked
       # @param form [ActionView::Helpers::FormBuilder, nil] optional form builder
       # @param input_name [String, nil] custom input name (used when no form provided)
-      # @param label [String, nil] visible label text (required if no aria_label)
-      # @param aria_label [String, nil] screen reader label (required if no label)
+      # @param label [String, nil] visible label text (required if no aria label)
+      # @param aria [Hash, nil] ARIA attributes (e.g., { label:, labelledby:, describedby:, controls:, live: })
       # @param checked [Boolean] whether the checkbox is initially checked (default: false)
       # @param disabled [Boolean] whether the checkbox is disabled (default: false)
       # @param described_by [String, nil] ID of element describing this input
-      # @param aria_labelledby [String, nil] ID of element that labels this input
       # @param controls [String, nil] ID of element controlled by this input
       # @param lang [String, nil] language code for the input
       # @param class [String, nil] additional CSS classes
@@ -241,11 +241,10 @@ module Pathogen
       # @param help_text [String, nil] help text displayed below the label
       # @param error_text [String, nil] error text to display when invalid
       # @param role [String, nil] ARIA role (e.g., 'checkbox', 'button')
-      # @param aria_live [String, nil] ARIA live region for announcements
       # @param selected_message [String, nil] message announced when selected
       # @param deselected_message [String, nil] message announced when deselected
       #
-      # @raise [ArgumentError] if none of label, aria_label, or aria_labelledby is provided
+      # @raise [ArgumentError] if none of label, aria.label, or aria.labelledby is provided
       #
       # @example Basic usage
       #   Pathogen::Form::Checkbox.new(

@@ -103,7 +103,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria_label: 'Terms and conditions checkbox'
+                        aria: { label: 'Terms and conditions checkbox' }
                       ))
 
         assert_selector "input[type='checkbox']"
@@ -116,7 +116,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria_label: 'Terms and conditions checkbox',
+                        aria: { label: 'Terms and conditions checkbox' },
                         help_text: 'You must agree to continue'
                       ))
 
@@ -131,7 +131,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_label: 'Select all items',
+                        aria: { label: 'Select all items' },
                         controls: 'item-list'
                       ))
 
@@ -144,7 +144,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria_labelledby: 'external-heading'
+                        aria: { labelledby: 'external-heading' }
                       ))
 
         assert_selector "input[type='checkbox']"
@@ -158,7 +158,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria_labelledby: 'external-heading',
+                        aria: { labelledby: 'external-heading' },
                         help_text: 'Additional information about the checkbox'
                       ))
 
@@ -172,7 +172,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_labelledby: 'section-heading',
+                        aria: { labelledby: 'section-heading' },
                         controls: 'item-list'
                       ))
 
@@ -185,8 +185,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_label: 'Select all items',
-                        aria_live: 'polite'
+                        aria: { label: 'Select all items', live: 'polite' }
                       ))
 
         assert_selector "input[aria-live='polite']"
@@ -196,7 +195,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_label: 'Select all items',
+                        aria: { label: 'Select all items' },
                         role: 'button'
                       ))
 
@@ -252,39 +251,47 @@ module Pathogen
 
       def test_raises_error_without_label_or_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
-                      'accessibility compliance' do
-          render_inline(Checkbox.new(
-                          attribute: :terms,
-                          value: '1'
-                        ))
+                      "Checkbox requires either 'label', " \
+                      "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
+                      'for accessibility compliance' do
+          render_inline(
+            Checkbox.new(
+              attribute: :terms,
+              value: '1'
+            )
+          )
         end
       end
 
       def test_raises_error_with_empty_label_and_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
-                      'accessibility compliance' do
-          render_inline(Checkbox.new(
-                          attribute: :terms,
-                          value: '1',
-                          label: '',
-                          aria_label: ''
-                        ))
+                      "Checkbox requires either 'label', " \
+                      "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
+                      'for accessibility compliance' do
+          render_inline(
+            Checkbox.new(
+              attribute: :terms,
+              value: '1',
+              label: '',
+              aria: { label: '' }
+            )
+          )
         end
       end
 
       def test_raises_error_with_empty_label_aria_label_and_aria_labelledby
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for " \
-                      'accessibility compliance' do
-          render_inline(Checkbox.new(
-                          attribute: :terms,
-                          value: '1',
-                          label: '',
-                          aria_label: '',
-                          aria_labelledby: ''
-                        ))
+                      "Checkbox requires either 'label', " \
+                      "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
+                      'for accessibility compliance' do
+          render_inline(
+            Checkbox.new(
+              attribute: :terms,
+              value: '1',
+              label: '',
+              aria: { label: '', labelledby: '' }
+            )
+          )
         end
       end
 
@@ -293,7 +300,7 @@ module Pathogen
           render_inline(Checkbox.new(
                           attribute: :terms,
                           value: '1',
-                          aria_labelledby: 'external-heading'
+                          aria: { labelledby: 'external-heading' }
                         ))
         end
       end
@@ -302,7 +309,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_label: 'Select all items',
+                        aria: { label: 'Select all items' },
                         controls: 'items-table'
                       ))
 
@@ -314,7 +321,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_page,
                         value: '1',
-                        aria_label: 'Select page items',
+                        aria: { label: 'Select page items' },
                         controls: 'items-table'
                       ))
 
@@ -326,7 +333,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_row,
                         value: '1',
-                        aria_label: 'Select row item',
+                        aria: { label: 'Select row item' },
                         controls: 'items-table'
                       ))
 
@@ -338,7 +345,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria_label: 'Terms checkbox',
+                        aria: { label: 'Terms checkbox' },
                         controls: 'terms-panel'
                       ))
 
@@ -361,7 +368,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria_label: 'Select all items'
+                        aria: { label: 'Select all items' }
                       ))
 
         assert_selector 'div.flex.flex-col'
@@ -420,7 +427,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: 'sample_ids[]',
                         value: '1',
-                        aria_label: 'Select sample'
+                        aria: { label: 'Select sample' }
                       ))
 
         assert_selector "input[name='sample_ids[]']"
@@ -431,7 +438,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: 'user[preferences][newsletter]',
                         value: '1',
-                        aria_label: 'Newsletter preference'
+                        aria: { label: 'Newsletter preference' }
                       ))
 
         assert_selector "input[name='user[preferences][newsletter]']"
@@ -480,12 +487,6 @@ module Pathogen
         assert_selector "input[aria-labelledby='external-id']"
       end
 
-      private
-
-      def help_text_id_for(attribute, value)
-        "#{attribute}_#{value}_help"
-      end
-
       def test_renders_checkbox_with_message_data_attributes
         render_inline(Checkbox.new(
                         attribute: :terms,
@@ -502,6 +503,12 @@ module Pathogen
                         value: '1',
                         label: 'I agree to the terms'
                       ))
+      end
+
+      private
+
+      def help_text_id_for(attribute, value)
+        "#{attribute}_#{value}_help"
       end
     end
   end

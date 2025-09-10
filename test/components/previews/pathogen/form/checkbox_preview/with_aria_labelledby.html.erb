@@ -11,7 +11,9 @@
   <%= render Pathogen::Form::Checkbox.new(
     attribute: :email_notifications,
     value: "1",
-    aria_labelledby: "notification-settings",
+    aria: {
+      labelledby: "notification-settings",
+    },
     help_text:
       "Receive email notifications for important updates and announcements",
   ) %>
@@ -25,7 +27,9 @@
   <%= render Pathogen::Form::Checkbox.new(
     attribute: :select_all,
     value: "1",
-    aria_labelledby: "bulk-actions",
+    aria: {
+      labelledby: "bulk-actions",
+    },
     help_text: "Select all items in the table for bulk operations",
     controls: "data-table",
   ) %>

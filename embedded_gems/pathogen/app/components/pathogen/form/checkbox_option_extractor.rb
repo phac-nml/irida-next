@@ -52,15 +52,15 @@ module Pathogen
       # @param options [Hash] the options hash to process
       # @return [void]
       def extract_accessibility_options(options)
-        @aria_label = options.delete(:aria_label)
         @described_by = options.delete(:described_by)
-        @aria_labelledby = options.delete(:aria_labelledby)
         @controls = options.delete(:controls)
         @role = options.delete(:role)
-        @aria_live = options.delete(:aria_live)
 
         # Support Rails-style nested ARIA hash e.g., aria: { describedby: 'id' }
         process_nested_aria(options.delete(:aria))
+
+        # 🚫 Remove unsupported top-level aria_* options to avoid leaking invalid attributes
+        strip_disallowed_aria_options!(options)
       end
 
       # Normalizes and applies Rails-style nested ARIA options
@@ -113,6 +113,20 @@ module Pathogen
         @onchange = options.delete(:onchange)
         @selected_message = options.delete(:selected_message)
         @deselected_message = options.delete(:deselected_message)
+      end
+
+      # Removes any unsupported aria_* style options from remaining HTML options.
+      # We only support nested ARIA via `aria: { ... }`.
+      # @param options [Hash]
+      # @return [void]
+      def strip_disallowed_aria_options!(options)
+        return if options.blank?
+
+        # Remove common top-level aria_* keys
+        disallowed_keys = options.keys.select do |k|
+          k.to_s.start_with?('aria_') || %w[aria-label aria-labelledby aria-live].include?(k.to_s)
+        end
+        disallowed_keys.each { |k| options.delete(k) }
       end
     end
   end

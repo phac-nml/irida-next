@@ -121,11 +121,23 @@ module Pathogen
       @lang = options.delete(:lang)
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
-      @aria_label = options.delete(:aria_label)
       @role = options.delete(:role)
-      @aria_live = options.delete(:aria_live)
       @selected_message = options.delete(:selected_message)
       @deselected_message = options.delete(:deselected_message)
+
+      # 🚫 Disallow top-level aria_* options; require nested aria: {}
+      strip_disallowed_aria_options!(options)
+    end
+
+    # Removes unsupported aria_* keys or hyphenated ARIA attributes from the options hash.
+    # Consumers must pass ARIA via nested `aria: { ... }` only.
+    def strip_disallowed_aria_options!(options)
+      return if options.blank?
+
+      disallowed = options.keys.select do |k|
+        k.to_s.start_with?('aria_') || %w[aria-label aria-labelledby aria-live].include?(k.to_s)
+      end
+      disallowed.each { |k| options.delete(k) }
     end
   end
 end

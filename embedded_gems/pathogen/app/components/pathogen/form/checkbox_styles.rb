@@ -3,7 +3,7 @@
 # Module containing styling for checkbox components 🎨
 #
 # This module provides consistent styling for checkboxes, labels and help text
-# using Tailwind CSS classes. It handles different states (hover, focus, disabled)
+# using Tailwind CSS classes. It handles different states (hover, disabled)
 # and supports both light and dark modes.
 module Pathogen
   module Form

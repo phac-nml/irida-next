@@ -32,7 +32,9 @@ module Pathogen
         return unless @label.blank? && @aria_label.blank? && @aria_labelledby.blank?
 
         raise ArgumentError,
-              "Checkbox requires either 'label', 'aria_label', or 'aria_labelledby' for accessibility compliance"
+              "Checkbox requires either 'label', " \
+              "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
+              'for accessibility compliance'
       end
 
       # Renders checkbox with only aria-label (no visible label)
