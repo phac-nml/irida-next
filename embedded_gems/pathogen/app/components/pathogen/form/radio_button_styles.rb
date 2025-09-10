@@ -31,10 +31,6 @@ module Pathogen
           *control_base_classes
         )
       end
-
-      # label_classes provided by FormStyles
-
-      # help_text_classes provided by FormStyles
     end
   end
 end
