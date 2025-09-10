@@ -5,9 +5,13 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
-<%= turbo_stream_from @project %>
-
-<div class="fixed-table-component">
+<div class="fixed-table-component" data-controller="refresh">
+  <%= turbo_stream_from @project, data: { "refresh-target": "source" } %>
+  <%= viral_alert(message: "Page has updated", data: { "refresh-target": "notice" }, classes: "hidden", aria: {
+            live: "assertive",
+          }) do %>
+    <%= link_to "refresh" %>
+  <% end %>
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
