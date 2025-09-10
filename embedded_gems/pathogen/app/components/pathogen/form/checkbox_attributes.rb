@@ -71,7 +71,8 @@ module Pathogen
       #
       # @return [Hash] hash of ARIA attributes
       def build_aria_attributes
-        aria_attrs = {}
+        # Start with any user-provided ARIA (Rails-style aria: { ... })
+        aria_attrs = @aria_user&.dup || {}
 
         build_basic_aria_attributes(aria_attrs)
         build_describedby_attributes(aria_attrs)
@@ -114,7 +115,8 @@ module Pathogen
       def add_help_text_describedby(aria_attrs)
         return if @help_text.blank?
 
-        aria_attrs[:describedby] = help_text_id
+        existing = aria_attrs[:describedby]
+        aria_attrs[:describedby] = [existing, help_text_id].compact.join(' ')
       end
 
       # Adds existing described_by value to aria-describedby.

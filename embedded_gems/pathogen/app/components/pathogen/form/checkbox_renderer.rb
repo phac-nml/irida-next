@@ -34,7 +34,10 @@ module Pathogen
       # @param existing_aria [Hash, nil] existing ARIA attributes
       # @return [Hash] merged ARIA attributes
       def merged_aria(existing_aria)
+        # Merge precedence: existing_aria (from callers) <- @aria_user (nested) <- component vars
         aria = existing_aria ? existing_aria.dup : {}
+        aria = aria.merge(@aria_user) if @aria_user.is_a?(Hash)
+
         assign_if_present(aria, :label, @aria_label)
         assign_if_present(aria, :labelledby, @aria_labelledby)
         assign_if_present(aria, :live, @aria_live)

@@ -438,6 +438,48 @@ module Pathogen
         assert_selector "input[aria-label='Newsletter preference']"
       end
 
+      def test_accepts_rails_style_aria_hash
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        label: 'Terms',
+                        aria: { describedby: 'extra-desc', controls: 'panel-1' }
+                      ))
+
+        # includes user-provided aria-describedby
+        assert_selector "input[aria-describedby*='extra-desc']"
+        # includes controls from nested aria
+        assert_selector "input[aria-controls='panel-1']"
+      end
+
+      def test_merges_aria_hash_with_help_text_and_explicit_described_by
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        label: 'Terms',
+                        help_text: 'More info',
+                        described_by: 'explicit-desc',
+                        aria: { describedby: 'user-desc' }
+                      ))
+
+        id = help_text_id_for(:terms, '1')
+        # describedby should contain all three: user-desc, explicit-desc, and help text id
+        assert_selector "input[aria-describedby*='user-desc']"
+        assert_selector "input[aria-describedby*='explicit-desc']"
+        assert_selector "input[aria-describedby*='#{id}']"
+      end
+
+      def test_aria_hash_keys_label_and_labelledby_take_effect
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        aria: { label: 'SR Label', labelledby: 'external-id' }
+                      ))
+
+        assert_selector "input[aria-label='SR Label']"
+        assert_selector "input[aria-labelledby='external-id']"
+      end
+
       private
 
       def help_text_id_for(attribute, value)

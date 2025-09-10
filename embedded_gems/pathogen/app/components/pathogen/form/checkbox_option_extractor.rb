@@ -58,6 +58,47 @@ module Pathogen
         @controls = options.delete(:controls)
         @role = options.delete(:role)
         @aria_live = options.delete(:aria_live)
+
+        # Support Rails-style nested ARIA hash e.g., aria: { describedby: 'id' }
+        process_nested_aria(options.delete(:aria))
+      end
+
+      # Normalizes and applies Rails-style nested ARIA options
+      # @param user_aria [Hash, nil]
+      def process_nested_aria(user_aria)
+        @aria_user = nil
+        return unless user_aria.is_a?(Hash)
+
+        aria = normalize_user_aria(user_aria)
+        @aria_user = aria
+        apply_nested_aria_values(aria)
+        add_user_describedby(aria)
+      end
+
+      # Symbolize keys for the provided aria hash
+      # @param user_aria [Hash]
+      # @return [Hash]
+      def normalize_user_aria(user_aria)
+        user_aria.transform_keys(&:to_sym)
+      end
+
+      # Apply precedence for supported nested aria keys
+      # @param aria [Hash]
+      # @return [void]
+      def apply_nested_aria_values(aria)
+        @aria_label = aria[:label] if aria.key?(:label)
+        @aria_labelledby = aria[:labelledby] if aria.key?(:labelledby)
+        @aria_live = aria[:live] if aria.key?(:live)
+        @controls = aria[:controls] if aria.key?(:controls)
+      end
+
+      # Merge user-provided describedby with top-level described_by
+      # @param aria [Hash]
+      # @return [void]
+      def add_user_describedby(aria)
+        return if (user_describedby = aria[:describedby]).blank?
+
+        @described_by = [@described_by, user_describedby].compact.join(' ')
       end
 
       # Extracts behavior and interaction options from constructor parameters.
