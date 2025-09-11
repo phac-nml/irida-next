@@ -6,21 +6,25 @@
 >
   <% if @allowed_to[:update_sample] %>
     <td class="px-6 py-4">
-      <%= check_box_tag "attachment_ids[]",
-      (
-        if attachment.associated_attachment
-          [attachment.id, attachment.associated_attachment.id].to_s
-        else
-          attachment.id
-        end
-      ),
-      nil,
-      id: dom_id(attachment.file, :file),
-      "aria-label": attachment.file.filename,
-      data: {
-        selection_target: "rowSelection",
-        action: "input->selection#toggle",
-      } %>
+      <%= pathogen_checkbox(
+        attribute: "attachment_ids[]",
+        value: (
+          if attachment.associated_attachment
+            [attachment.id, attachment.associated_attachment.id].to_s
+          else
+            attachment.id
+          end
+        ),
+        checked: false,
+        id: dom_id(attachment.file, :file),
+        aria: {
+          label: attachment.file.filename
+        },
+        data: {
+          selection_target: "rowSelection",
+          action: "input->selection#toggle"
+        }
+      ) %>
     </td>
   <% end %>
   <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
