@@ -51,7 +51,7 @@ module Pathogen
       #
       # @return [String] CSS classes for aria-only help container
       def checkbox_aria_help_container_classes
-        'mt-1 mb-2'
+        'sr-only'
       end
 
       # CSS classes for enhanced description text.

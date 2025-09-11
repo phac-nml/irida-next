@@ -149,7 +149,7 @@ module Pathogen
 
       # @label With ARIA Labelledby
       def with_aria_labelledby
-        render(
+        render_with_template(
           template: 'pathogen/form/checkbox_preview/with_aria_labelledby'
         )
       end

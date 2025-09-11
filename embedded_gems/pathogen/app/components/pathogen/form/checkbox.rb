@@ -114,12 +114,20 @@ module Pathogen
       #
       # @return [ActiveSupport::SafeBuffer] the labeled checkbox HTML
       def render_labeled_layout
-        tag.div(class: checkbox_input_container_classes) do
+        content = tag.div(class: checkbox_input_container_classes) do
           checkbox_input_html + label_html
-        end +
-          tag.div(class: checkbox_help_container_classes) do
-            help_text_html + description_html
+        end
+
+        help_content = help_text_html
+        description_content = description_html
+
+        unless help_content.blank? && description_content.blank?
+          content += tag.div(class: checkbox_help_container_classes) do
+            help_content + description_content
           end
+        end
+
+        content
       end
 
       # Renders layout for aria-only checkboxes (no visible label).
