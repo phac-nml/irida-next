@@ -70,16 +70,17 @@
           <% Irida::Auth.all_available_scopes.each do |scope| %>
             <div class="flex">
               <div class="flex items-center h-5">
-                <%= check_box_tag "personal_access_token[scopes][]",
-                scope,
-                (
-                  if !personal_access_token.nil?
-                    personal_access_token.scopes.include?(scope.to_s)
-                  else
-                    nil
-                  end
-                ),
+                <%= pathogen_checkbox attribute: "personal_access_token[scopes][]",
                 id: "personal_access_token_scopes_#{scope}",
+                value: scope,
+                checked:
+                  (
+                    if !personal_access_token.nil?
+                      personal_access_token.scopes.include?(scope.to_s)
+                    else
+                      false
+                    end
+                  ),
                 aria: {
                   describedby:
                     (
@@ -90,12 +91,14 @@
                       end
                     ),
                   invalid: invalid_scopes,
+                  labelledby: "personal_access_token_scopes_#{scope}_label",
                 },
                 autofocus: invalid_scopes %>
               </div>
               <div class="ml-2 text-sm">
                 <%= label_tag "personal_access_token_scopes_#{scope}",
                 scope,
+                id: "personal_access_token_scopes_#{scope}_label",
                 class: "font-medium text-slate-900 dark:text-slate-300" %>
                 <p
                   id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
