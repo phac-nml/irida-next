@@ -29,8 +29,7 @@ module Pathogen
       # @option options [Boolean] :checked Whether the radio button should be checked
       # @option options [Boolean] :disabled Whether the radio button is disabled
       # @option options [Boolean] :required Whether the radio button is required
-      # @option options [String] :described_by ID of the element that describes this radio button
-      # @option options [String] :controls ID of the element this radio button controls
+      # Pass ARIA attributes via `aria: { describedby:, controls: }`
       # @option options [String] :lang Language code for the label
       # @option options [String] :class Additional CSS classes
       # @option options [Boolean] :raw_input If true, only renders the input without wrapper or label
@@ -47,8 +46,7 @@ module Pathogen
           checked: options.delete(:checked) { false },
           disabled: options.delete(:disabled) { false },
           required: options.delete(:required) { false },
-          described_by: options.delete(:described_by),
-          controls: options.delete(:controls),
+          # described_by and controls must be provided via nested :aria
           lang: options.delete(:lang),
           class: options.delete(:class)
         }.merge(options)
@@ -66,8 +64,7 @@ module Pathogen
       # @option options [Boolean] :checked Whether the checkbox should be checked
       # @option options [Boolean] :disabled Whether the checkbox is disabled
       # @option options [Boolean] :required Whether the checkbox is required
-      # @option options [String] :described_by ID of the element that describes this checkbox
-      # @option options [String] :controls ID of the element this checkbox controls
+      # Pass ARIA attributes via `aria: { describedby:, controls: }`
       # @option options [String] :lang Language code for the label
       # @option options [String] :class Additional CSS classes
       # @option options [String] :help_text Help text displayed below the label
@@ -82,7 +79,7 @@ module Pathogen
 
       private
 
-      def build_checkbox_options(attribute_name, value, options) # rubocop:disable Metrics/MethodLength
+      def build_checkbox_options(attribute_name, value, options)
         {
           form: self,
           attribute: attribute_name,
@@ -91,8 +88,7 @@ module Pathogen
           checked: options.delete(:checked) { false },
           disabled: options.delete(:disabled) { false },
           required: options.delete(:required) { false },
-          described_by: options.delete(:described_by),
-          controls: options.delete(:controls),
+          # described_by and controls must be provided via nested :aria
           lang: options.delete(:lang),
           class: options.delete(:class),
           help_text: options.delete(:help_text),

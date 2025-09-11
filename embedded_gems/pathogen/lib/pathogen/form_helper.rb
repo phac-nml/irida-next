@@ -70,7 +70,6 @@ module Pathogen
     # @return [Hash] Form attributes hash
     def form_attributes
       describedby = [
-        @described_by,
         (@help_text.present? ? help_text_id : nil)
       ].compact.join(' ')
 
@@ -87,9 +86,7 @@ module Pathogen
     # @return [Hash] ARIA attributes hash
     def aria_attributes
       {
-        disabled: @disabled.to_s,
-        describedby: @described_by,
-        controls: @controls
+        disabled: @disabled.to_s
       }.compact
     end
 
@@ -116,8 +113,7 @@ module Pathogen
     def extract_state_and_accessibility_options!(options)
       @checked = options.delete(:checked) { false }
       @disabled = options.delete(:disabled) { false }
-      @described_by = options.delete(:described_by)
-      @controls = options.delete(:controls)
+      # described_by and controls must be passed via nested aria hash only
       @lang = options.delete(:lang)
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)

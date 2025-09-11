@@ -86,11 +86,10 @@ module Pathogen
                         attribute: :theme,
                         value: 'dark',
                         label: 'Dark Theme',
-                        described_by: 'help-text',
-                        controls: 'controlled-element'
+                        aria: { describedby: 'help-text', controls: 'controlled-element' }
                       ))
 
-        assert_selector "input[aria-describedby='help-text']"
+        assert_selector "input[aria-describedby*='help-text']"
         assert_selector "input[aria-controls='controlled-element']"
       end
 

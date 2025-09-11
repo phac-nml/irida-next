@@ -52,8 +52,6 @@ module Pathogen
       # @param options [Hash] the options hash to process
       # @return [void]
       def extract_accessibility_options(options)
-        @described_by = options.delete(:described_by)
-        @controls = options.delete(:controls)
         @role = options.delete(:role)
 
         # Support Rails-style nested ARIA hash e.g., aria: { describedby: 'id' }

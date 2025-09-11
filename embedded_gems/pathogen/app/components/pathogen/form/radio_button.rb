@@ -76,8 +76,7 @@ module Pathogen
       #   - :label [String] the label text
       #   - :checked [Boolean] whether the radio is checked
       #   - :disabled [Boolean] whether the radio is disabled
-      #   - :described_by [String] id of element describing this input
-      #   - :controls [String] id of element controlled by this input
+      #   - Pass ARIA via aria: { describedby:, controls:, label:, labelledby: }
       #   - :lang [String] language code
       #   - :class [String] additional CSS classes
       #   - :onchange [String] JS for onchange event
@@ -116,8 +115,7 @@ module Pathogen
         @label = options.delete(:label)
         @checked = options.delete(:checked) { false }
         @disabled = options.delete(:disabled) { false }
-        @described_by = options.delete(:described_by)
-        @controls = options.delete(:controls)
+        # described_by and controls must be provided via nested :aria
         @lang = options.delete(:lang)
         @onchange = options.delete(:onchange)
         @help_text = options.delete(:help_text)

@@ -106,8 +106,7 @@ module Pathogen
           attribute: :theme,
           value: 'dark',
           label: 'Dark Theme',
-          described_by: 'theme-help',
-          controls: 'theme-panel'
+          aria: { describedby: 'theme-help', controls: 'theme-panel' }
         )
       end
 
@@ -118,8 +117,7 @@ module Pathogen
           value: 'dark',
           label: 'Dark Theme',
           help_text: 'Follows system preferences',
-          described_by: 'theme-help',
-          controls: 'theme-panel'
+          aria: { describedby: 'theme-help', controls: 'theme-panel' }
         )
       end
 

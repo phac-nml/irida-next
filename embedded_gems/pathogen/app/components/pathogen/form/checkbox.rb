@@ -233,8 +233,6 @@ module Pathogen
       # @param aria [Hash, nil] ARIA attributes (e.g., { label:, labelledby:, describedby:, controls:, live: })
       # @param checked [Boolean] whether the checkbox is initially checked (default: false)
       # @param disabled [Boolean] whether the checkbox is disabled (default: false)
-      # @param described_by [String, nil] ID of element describing this input
-      # @param controls [String, nil] ID of element controlled by this input
       # @param lang [String, nil] language code for the input
       # @param class [String, nil] additional CSS classes
       # @param onchange [String, nil] JavaScript for onchange event

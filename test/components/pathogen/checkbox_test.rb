@@ -91,8 +91,7 @@ module Pathogen
                         attribute: :terms,
                         value: '1',
                         label: 'I agree to the terms',
-                        described_by: 'help-text',
-                        controls: 'controlled-element'
+                        aria: { describedby: 'help-text', controls: 'controlled-element' }
                       ))
 
         assert_selector "input[aria-describedby*='help-text']"
@@ -131,8 +130,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { label: 'Select all items' },
-                        controls: 'item-list'
+                        aria: { label: 'Select all items', controls: 'item-list' }
                       ))
 
         assert_selector "input[aria-label='Select all items']"
@@ -172,8 +170,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { labelledby: 'section-heading' },
-                        controls: 'item-list'
+                        aria: { labelledby: 'section-heading', controls: 'item-list' }
                       ))
 
         assert_selector "input[aria-labelledby='section-heading']"
@@ -309,8 +306,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { label: 'Select all items' },
-                        controls: 'items-table'
+                        aria: { label: 'Select all items', controls: 'items-table' }
                       ))
 
         assert_selector 'span#select_all_1_description.sr-only'
@@ -321,8 +317,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_page,
                         value: '1',
-                        aria: { label: 'Select page items' },
-                        controls: 'items-table'
+                        aria: { label: 'Select page items', controls: 'items-table' }
                       ))
 
         assert_selector 'span#select_page_1_description.sr-only'
@@ -333,8 +328,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_row,
                         value: '1',
-                        aria: { label: 'Select row item' },
-                        controls: 'items-table'
+                        aria: { label: 'Select row item', controls: 'items-table' }
                       ))
 
         assert_selector 'span#select_row_1_description.sr-only'
@@ -345,8 +339,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria: { label: 'Terms checkbox' },
-                        controls: 'terms-panel'
+                        aria: { label: 'Terms checkbox', controls: 'terms-panel' }
                       ))
 
         assert_no_selector 'span#terms_1_description'
@@ -465,8 +458,7 @@ module Pathogen
                         value: '1',
                         label: 'Terms',
                         help_text: 'More info',
-                        described_by: 'explicit-desc',
-                        aria: { describedby: 'user-desc' }
+                        aria: { describedby: 'user-desc explicit-desc' }
                       ))
 
         id = help_text_id_for(:terms, '1')
