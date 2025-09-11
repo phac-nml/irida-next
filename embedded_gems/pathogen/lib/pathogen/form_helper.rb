@@ -70,6 +70,7 @@ module Pathogen
     # @return [Hash] Form attributes hash
     def form_attributes
       describedby = [
+        @described_by,
         (@help_text.present? ? help_text_id : nil)
       ].compact.join(' ')
 
@@ -86,7 +87,8 @@ module Pathogen
     # @return [Hash] ARIA attributes hash
     def aria_attributes
       {
-        disabled: @disabled.to_s
+        disabled: @disabled.to_s,
+        describedby: @described_by
       }.compact
     end
 
@@ -114,6 +116,7 @@ module Pathogen
       @checked = options.delete(:checked) { false }
       @disabled = options.delete(:disabled) { false }
       # described_by and controls must be passed via nested aria hash only
+      process_nested_aria!(options)
       @lang = options.delete(:lang)
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
@@ -134,6 +137,18 @@ module Pathogen
         k.to_s.start_with?('aria_') || %w[aria-label aria-labelledby aria-live].include?(k.to_s)
       end
       disallowed.each { |k| options.delete(k) }
+    end
+
+    # Handles nested ARIA options provided via options[:aria]
+    # Extracts supported values and normalizes keys
+    def process_nested_aria!(options)
+      aria = options.delete(:aria)
+      return unless aria.is_a?(Hash)
+
+      aria = aria.transform_keys(&:to_sym)
+      @described_by = aria[:describedby]
+      # Explicitly ignore controls at this layer
+      @controls = nil
     end
   end
 end
