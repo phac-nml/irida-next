@@ -53,7 +53,7 @@
         >
           <tr>
             <% if @allowed_to[:update_sample] %>
-              <th aria-hidden="true" class="px-6 py-3"></th>
+              <th aria-hidden="true" class="px-3 py-3"></th>
             <% end %>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.key") %></th>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
@@ -73,7 +73,7 @@
               "
             >
               <% if @allowed_to[:update_sample] %>
-                <td class="px-6 py-4">
+                <td class="px-3 py-3">
                   <%= pathogen_checkbox(
                     attribute: "metadata_keys[]",
                     value: metadata[:key],
