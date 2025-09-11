@@ -682,6 +682,12 @@ en:
       view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    samples:
+      table_component:
+        counts:
+          status:
+            one: 1 sample selected
+            other: "%{selected} of %{total} samples selected"
     search:
       advanced:
         results_message:
@@ -1282,7 +1288,9 @@ en:
     samples:
       index:
         deselect_all_button: Deselect All
+        deselect_all_tooltip: Deselect all samples in this group
         select_all_button: Select All
+        select_all_tooltip: Select all samples in this group
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
         workflows:
@@ -2004,9 +2012,11 @@ en:
         title: Edit sample
       index:
         deselect_all_button: Deselect All
+        deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         select_all_button: Select All
+        select_all_tooltip: Select all samples in this project
         title: Samples
         workflows:
           button_sr: Launch workflow
@@ -2227,6 +2237,15 @@ en:
       namespaces:
         puid: Project
       puid: Sample PUID
+      row:
+        aria_label: Select sample %{name}
+        deselected_message: Sample %{name} deselected
+        help_text: Click to select sample, uncheck to deselect sample
+        selected_message: Sample %{name} selected
+      select_all:
+        aria_label: Select all samples on this page
+        deselected_message: Selected samples on this page deselected
+        selected_message: All items on this page selected
       select_page: Select / Deselect visible samples
       updated_at: Last Updated
     transfers:

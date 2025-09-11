@@ -1,82 +1,48 @@
 # frozen_string_literal: true
 
-# Module containing styling for radio button components 🎨
-#
-# This module provides consistent styling for radio buttons, labels and help text
-# using Tailwind CSS classes. It handles different states (hover, focus, disabled)
-# and supports both light and dark modes.
 module Pathogen
   module Form
-    # Provides Tailwind CSS styling helpers for Pathogen radio button components.
+    # Styling module specifically for radio button components.
+    #
+    # Provides comprehensive Tailwind CSS styling for radio button inputs,
+    # labels, help text, and container elements with full accessibility
+    # and responsive design support.
+    #
+    # @since 2.0.0
     module RadioButtonStyles
-      # Generates classes for the radio button input element 🔘
+      include FormStyles
+
+      # Generates CSS classes for the radio button input element.
       #
-      # @param user_class [String, nil] Additional classes to merge
-      # @return [String] Space-separated Tailwind CSS classes
-      # @note Includes styles for:
-      #   - Layout & dimensions (5x5 with margin)
-      #   - Circular shape with border
-      #   - Colors and backgrounds
-      #   - Focus ring effects
-      #   - Smooth transitions
-      #   - States: checked, hover, disabled
-      #   - Dark mode variants
-      def radio_button_classes(user_class = nil) # rubocop:disable Metrics/MethodLength
+      # @param user_class [String, nil] additional user-provided classes
+      # @return [String] space-separated Tailwind CSS classes
+      def radio_button_classes(user_class = nil)
         class_names(
           user_class,
-          # Layout & Sizing
-          'h-5 w-5 shrink-0 mt-0.5',
-          # Shape & Border
-          'rounded-full border-2',
-          # Colors & Background
-          'text-primary-600 bg-white',
-          # Cursor & Interaction
-          'cursor-pointer transition-colors duration-200 ease-in-out',
-          # Checked State
-          'checked:border-primary-500 checked:bg-primary-500',
-          # Hover State
-          'hover:border-primary-500',
-          # Disabled State
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          'disabled:border-slate-200 disabled:bg-slate-100',
-          # Dark Mode
-          'dark:border-slate-600 dark:bg-slate-700',
-          'dark:checked:bg-primary-600 dark:checked:border-primary-500',
-          'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
-          'dark:disabled:checked:bg-slate-600',
-          'transition-all duration-200 ease-in-out',
-          'active:scale-95'
+          'rounded-full', # Circular shape
+          *control_base_classes
         )
       end
 
-      # Generates classes for the radio button label 🏷️
+      # Container classes for radio button layouts.
       #
-      # @return [String] Space-separated Tailwind CSS classes
-      # @note Includes styles for:
-      #   - Typography (small, medium weight)
-      #   - Cursor interaction
-      #   - Disabled state
-      #   - Dark mode support
-      def label_classes
-        class_names(
-          # Typography
-          'text-sm font-medium text-slate-900',
-          # Cursor
-          'cursor-pointer',
-          # Disabled State
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          # Dark Mode
-          'dark:text-slate-100'
-        )
+      # @return [String] CSS classes for the main container
+      def radio_button_container_classes
+        'flex flex-col'
       end
 
-      # Generates classes for the help text below radio buttons ℹ️
+      # Container classes for radio button and label grouping.
       #
-      # @return [String] Space-separated Tailwind CSS classes
-      # @note Provides subtle, smaller text with appropriate spacing
-      #       and dark mode support
-      def help_text_classes
-        'text-sm leading-relaxed text-slate-500 mt-1 dark:text-slate-400'
+      # @return [String] CSS classes for input/label container
+      def radio_button_input_container_classes
+        'flex items-center gap-3'
+      end
+
+      # Container classes for help text and descriptions.
+      #
+      # @return [String] CSS classes for help text container
+      def radio_button_help_container_classes
+        'mt-1 ml-8'
       end
     end
   end

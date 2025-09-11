@@ -70,7 +70,7 @@ module Pathogen
         form: @form,
         attribute: :email,
         disabled: true,
-        described_by: 'desc',
+        aria: { describedby: 'desc' },
         help_text: 'Help text',
         class: 'custom-class',
         onchange: 'handleChange()'
@@ -90,15 +90,14 @@ module Pathogen
         form: @form,
         attribute: :email,
         disabled: true,
-        described_by: 'desc',
-        controls: 'controls'
+        aria: { describedby: 'desc', controls: 'controls' }
       )
 
       attributes = component.aria_attributes
 
       assert_equal 'true', attributes[:disabled]
       assert_equal 'desc', attributes[:describedby]
-      assert_equal 'controls', attributes[:controls]
+      assert_nil attributes[:controls]
     end
 
     def test_extract_options_assigns_all_options_correctly
@@ -107,8 +106,7 @@ module Pathogen
         label: 'Email',
         checked: true,
         disabled: true,
-        described_by: 'desc',
-        controls: 'controls',
+        aria: { describedby: 'desc', controls: 'controls' },
         lang: 'en',
         onchange: 'handleChange()',
         help_text: 'Help text',
@@ -136,8 +134,9 @@ module Pathogen
     end
 
     def assert_aria_options(component)
+      # described_by and controls are drawn from nested aria now
       assert_equal 'desc', component.instance_variable_get(:@described_by)
-      assert_equal 'controls', component.instance_variable_get(:@controls)
+      assert_nil component.instance_variable_get(:@controls)
       assert_equal 'en', component.instance_variable_get(:@lang)
     end
 

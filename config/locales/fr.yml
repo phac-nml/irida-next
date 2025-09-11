@@ -682,6 +682,12 @@ fr:
       view_more_samples: Voir plus d'échantillons
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    samples:
+      table_component:
+        counts:
+          status:
+            one: 1 sample selected
+            other: "%{selected} sur %{total} échantillons sélectionnés"
     search:
       advanced:
         results_message:
@@ -1284,7 +1290,9 @@ fr:
     samples:
       index:
         deselect_all_button: Désélectionner tout
+        deselect_all_tooltip: Désélectionner tout
         select_all_button: Tout sélectionner
+        select_all_tooltip: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
         workflows:
@@ -2008,9 +2016,11 @@ fr:
         title: Modifier l’échantillon
       index:
         deselect_all_button: Désélectionner tout
+        deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
         select_all_button: Tout sélectionner
+        select_all_tooltip: Select all samples in this project
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
@@ -2231,6 +2241,15 @@ fr:
       namespaces:
         puid: Projet
       puid: PUID de l’échantillon
+      row:
+        aria_label: Select sample %{name}
+        deselected_message: Sample %{name} deselected
+        help_text: Check to select this sample, uncheck to deselect this sample
+        selected_message: Sample %{name} selected
+      select_all:
+        aria_label: Select all samples on this page
+        deselected_message: Selection cleared
+        selected_message: All items on this page selected
       select_page: Sélectionner/Désélectionner les échantillons visibles
       updated_at: Dernière mise à jour
     transfers:

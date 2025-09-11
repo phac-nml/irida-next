@@ -23,25 +23,32 @@
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@4xl:sticky left-56 z-10': index == 1)
                 ) do %>
-                <% if index.zero? and @abilities[:select_samples] %>
-                  <%= check_box_tag "select-page",
-                  title: t(:".select_page"),
-                  "aria-label": t(:".select_page"),
-                  data: {
-                    action: "input->selection#togglePage",
-                    controller: "filters",
-                    selection_target: "selectPage",
-                  } %>
-                <% end %>
-                <%= render SortComponent.new(
-                  sort: @search_params[:sort],
-                  label: t(".#{column}"),
-                  url: sort_url(column),
-                  field: column,
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
+                <div class="flex items-center gap-3">
+                  <% if index.zero? and @abilities[:select_samples] %>
+                    <%= pathogen_checkbox attribute: "select-page",
+                    id: "select-page",
+                    value: "1",
+                    aria: {
+                      label: t(".select_all.aria_label"),
+                    },
+                    data: {
+                      action: "input->selection#togglePage",
+                      selected_message: t(".select_all.selected_message"),
+                      deselected_message: t(".select_all.deselected_message"),
+                      controller: "filters",
+                      selection_target: "selectPage",
+                    } %>
+                  <% end %>
+                  <%= render SortComponent.new(
+                    sort: @search_params[:sort],
+                    label: t(".#{column}"),
+                    url: sort_url(column),
+                    field: column,
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                </div>
               <% end %>
             <% end %>
             <% @metadata_fields.each do |field| %>
@@ -68,6 +75,7 @@
           </tr>
         </thead>
         <tbody
+          id="samples-table-body"
           class='
             overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
             dark:border-slate-700
@@ -81,19 +89,24 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@4xl:sticky z-5 left-56 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
-                  <% if index.zero? && @abilities[:select_samples] %>
-                    <%= check_box_tag "sample_ids[]",
-                    sample.id,
-                    nil,
-                    id: dom_id(sample, :checkbox),
-                    "aria-label": sample.name,
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection",
-                    } %>
-                  <% end %>
-                  <% if column == :puid || column == :name %>
-                    <%= link_to(
+                  <div class="flex items-center gap-3">
+                    <% if index.zero? && @abilities[:select_samples] %>
+                      <%= pathogen_checkbox attribute: "sample_ids[]",
+                      id: dom_id(sample, :checkbox),
+                      value: sample.id,
+                      aria: {
+                        label: t(".row.aria_label", name: sample.name),
+                      },
+                      help_text: t(".row.help_text"),
+                      data: {
+                        action: "input->selection#toggle",
+                        selected_message: t(".row.selected_message", name: sample.name),
+                        deselected_message: t(".row.deselected_message", name: sample.name),
+                        selection_target: "rowSelection",
+                      } %>
+                    <% end %>
+                    <% if column == :puid || column == :name %>
+                      <%= link_to(
                     sample_path(sample),
                     data: { turbo: false },
                     class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
@@ -123,6 +136,7 @@
                   <% else %>
                     <%= sample[column.to_sym] %>
                   <% end %>
+                  </div>
                 <% end %>
               <% end %>
               <% @metadata_fields.each do |field| %>
@@ -146,6 +160,12 @@
                 "
                 colspan="3"
               >
+                <span
+                  data-selection-target="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  class="sr-only"
+                ></span>
                 <span>
                   <%= t(".counts.samples") %>:
                   <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>

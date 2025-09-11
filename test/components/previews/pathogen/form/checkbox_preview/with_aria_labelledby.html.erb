@@ -1,0 +1,43 @@
+<div class="p-6 space-y-4 max-w-md">
+  <h3 id="notification-settings" class="text-lg font-semibold">
+    Notification Settings
+  </h3>
+
+  <p class="text-gray-600 text-sm">
+    Configure your notification preferences below. The checkbox is labeled by
+    the heading above.
+  </p>
+
+  <%= render Pathogen::Form::Checkbox.new(
+    attribute: :email_notifications,
+    value: "1",
+    aria: {
+      labelledby: "notification-settings",
+    },
+    help_text:
+      "Receive email notifications for important updates and announcements",
+  ) %>
+
+  <hr class="my-4">
+
+  <h4 id="bulk-actions" class="text-md font-medium">
+    Bulk Actions
+  </h4>
+
+  <%= render Pathogen::Form::Checkbox.new(
+    attribute: :select_all,
+    value: "1",
+    aria: {
+      labelledby: "bulk-actions",
+    },
+    help_text: "Select all items in the table for bulk operations",
+    controls: "data-table",
+  ) %>
+
+  <div id="data-table" class="mt-2 p-3 border rounded bg-gray-50">
+    <p class="text-sm text-gray-600">
+      This simulates a data table that would be controlled by the checkbox
+      above.
+    </p>
+  </div>
+</div>

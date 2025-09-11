@@ -37,17 +37,35 @@ module Samples
     end
     # rubocop:enable Metrics/ParameterLists
 
+    # 📝 Returns the merged system arguments for the table wrapper.
+    #
+    # @return [Hash] system arguments for the table container
     def system_arguments
-      { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
-        args[:id] = 'samples-table'
-        args[:classes] = class_names(args[:classes], 'overflow-auto relative')
-        if @abilities[:select_samples]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
-        end
-      end
+      base_args = { tag: 'div' }.deep_merge(@system_arguments)
+      base_args[:id] = 'samples-table'
+      base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
+      apply_selection_data!(base_args) if @abilities[:select_samples]
+      base_args
+    end
+
+    # 🚀 Applies selection-related data attributes for interactive selection.
+    # Adds accessibility and i18n-driven live region messages.
+    #
+    # @param args [Hash] arguments to mutate
+    # @return [void]
+    def apply_selection_data!(args)
+      args[:data] ||= {}
+      args[:data][:controller] = 'selection'
+      args[:data][:'selection-total-value'] = @pagy.count
+      args[:data][:'selection-action-button-outlet'] = '.action-button'
+      # i18n-driven live region messages
+      # i18n-tasks-use t('components.samples.table_component.counts.status')
+      args[:data][:'selection-count-message-one-value'] = I18n.t(
+        'components.samples.table_component.counts.status.one'
+      )
+      args[:data][:'selection-count-message-other-value'] = I18n.t(
+        'components.samples.table_component.counts.status.other'
+      )
     end
 
     def wrapper_arguments

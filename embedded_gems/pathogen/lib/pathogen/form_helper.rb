@@ -51,9 +51,12 @@ module Pathogen
       @attribute.to_s
     end
 
-    # Generates a unique ID for the input element
+    # Generates the ID for the input element
+    # If an explicit id was provided, it takes precedence; otherwise it's computed from the name and value.
     # @return [String] The input ID
     def input_id
+      return @id if @id.present?
+
       base = if @form && @form.object_name.present?
                "#{@form.object_name}_#{@attribute}_#{@value}"
              else
@@ -85,8 +88,7 @@ module Pathogen
     def aria_attributes
       {
         disabled: @disabled.to_s,
-        describedby: @described_by,
-        controls: @controls
+        describedby: @described_by
       }.compact
     end
 
@@ -94,17 +96,59 @@ module Pathogen
     # @param options [Hash] Options to extract
     def extract_options!(options)
       @options = options.dup
+      extract_naming_options!(options)
+      extract_state_and_accessibility_options!(options)
+      @html_options = options # Remaining options (e.g., data-*)
+    end
+
+    private
+
+    # Extracts naming- and id-related options
+    def extract_naming_options!(options)
       @input_name = options.delete(:input_name)
+      @id = options.delete(:id)
       @label = options.delete(:label)
+      @user_class = options.delete(:class)
+    end
+
+    # Extracts state and accessibility-related options
+    def extract_state_and_accessibility_options!(options)
       @checked = options.delete(:checked) { false }
       @disabled = options.delete(:disabled) { false }
-      @described_by = options.delete(:described_by)
-      @controls = options.delete(:controls)
+      # described_by and controls must be passed via nested aria hash only
+      process_nested_aria!(options)
       @lang = options.delete(:lang)
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
-      @user_class = options.delete(:class)
-      @html_options = options # Remaining options (e.g., data-*)
+      @role = options.delete(:role)
+      @selected_message = options.delete(:selected_message)
+      @deselected_message = options.delete(:deselected_message)
+
+      # 🚫 Disallow top-level aria_* options; require nested aria: {}
+      strip_disallowed_aria_options!(options)
+    end
+
+    # Removes unsupported aria_* keys or hyphenated ARIA attributes from the options hash.
+    # Consumers must pass ARIA via nested `aria: { ... }` only.
+    def strip_disallowed_aria_options!(options)
+      return if options.blank?
+
+      disallowed = options.keys.select do |k|
+        k.to_s.start_with?('aria_') || %w[aria-label aria-labelledby aria-live].include?(k.to_s)
+      end
+      disallowed.each { |k| options.delete(k) }
+    end
+
+    # Handles nested ARIA options provided via options[:aria]
+    # Extracts supported values and normalizes keys
+    def process_nested_aria!(options)
+      aria = options.delete(:aria)
+      return unless aria.is_a?(Hash)
+
+      aria = aria.transform_keys(&:to_sym)
+      @described_by = aria[:describedby]
+      # Explicitly ignore controls at this layer
+      @controls = nil
     end
   end
 end
