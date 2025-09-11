@@ -3,8 +3,9 @@
   <%= form.text_field :name, class: "form-control" %>
 </div>
 <div class="flex items-center h-5">
-  <%= form.check_box :email_notification, { checked: false }, true, false %>
-  <%= form.label :email_notification,
-             t(:"data_exports.new.email_label"),
-             class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+  <%= form.checkbox :email_notification,
+    label: t(:"data_exports.new.email_label"),
+    checked: false,
+    value: "1",
+  ) %>
 </div>

@@ -108,16 +108,17 @@
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]",
-                  scope,
-                  (
-                    if !bot_params.nil? && bot_params[:scopes]
-                      bot_params[:scopes].include?(scope.to_s)
-                    else
-                      nil
-                    end
-                  ),
+                  <%= pathogen_checkbox attribute: "bot[scopes][]",
                   id: "bot_scopes_#{scope}",
+                  value: scope,
+                  checked:
+                    (
+                      if !bot_params.nil? && bot_params[:scopes]
+                        bot_params[:scopes].include?(scope.to_s)
+                      else
+                        false
+                      end
+                    ),
                   aria: {
                     describedby:
                       (
@@ -128,12 +129,14 @@
                         end
                       ),
                     invalid: invalid_scopes,
+                    labelledby: "bot_scopes_#{scope}_label",
                   },
                   autofocus: invalid_scopes %>
                 </div>
                 <div class="ml-2 text-sm">
                   <%= label_tag "bot_scopes_#{scope}",
                   scope,
+                  id: "bot_scopes_#{scope}_label",
                   class: "font-medium text-slate-900 dark:text-slate-300" %>
                   <p
                     id="<%= "bot_scopes_#{scope}_help-text" %>"
