@@ -129,25 +129,13 @@
               <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
             </template>
           <% end %>
-          <div data-controller="pathogen--tooltip">
-            <%= pathogen_checkbox(
-              form: form,
-              attribute: :ignore_empty_values,
-              value: true,
-              checked: false,
-              label: t(".ignore_empty_values"),
-              aria: {
-                describedby: "ignore-empty-values-tooltip"
-              },
+            <%= form.checkbox :ignore_empty_values, true,
+              label: t(".ignore_empty_values.label"),
+              help_text: t(:".ignore_empty_values.description"),
               data: {
                 "pathogen--tooltip-target": "trigger"
               }
-            ) %>
-            <%= render Pathogen::Tooltip.new(
-              id: "ignore-empty-values-tooltip",
-              text: t(:".ignore_empty_values.description"),
-            ) %>
-          </div>
+            %>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button-primary",
