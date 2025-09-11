@@ -167,6 +167,8 @@ module Pathogen
       # @raise [ArgumentError] if no accessible label is provided
       # @return [void]
       def validate_accessibility_requirements!
+        # Radio buttons don't require labels if they're part of a fieldset
+        return if input_type == 'radio' && @label.blank?
         return unless @label.blank? && @aria_label.blank? && @aria_labelledby.blank?
 
         raise ArgumentError,
