@@ -91,11 +91,10 @@ module Pathogen
                         attribute: :terms,
                         value: '1',
                         label: 'I agree to the terms',
-                        aria: { describedby: 'help-text', controls: 'controlled-element' }
+                        aria: { describedby: 'help-text' }
                       ))
 
         assert_selector "input[aria-describedby*='help-text']"
-        assert_selector "input[aria-controls='controlled-element']"
       end
 
       def test_renders_checkbox_with_aria_label_only
@@ -126,15 +125,15 @@ module Pathogen
         assert_selector 'div.flex.flex-col'
       end
 
-      def test_renders_checkbox_with_aria_label_and_controls
+      def test_renders_checkbox_with_aria_label
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { label: 'Select all items', controls: 'item-list' }
+                        aria: { label: 'Select all items' },
+                        controls: 'bulk-table'
                       ))
 
         assert_selector "input[aria-label='Select all items']"
-        assert_selector "input[aria-controls='item-list']"
         assert_selector 'input[aria-describedby]'
       end
 
@@ -166,16 +165,14 @@ module Pathogen
         assert_no_selector 'label'
       end
 
-      def test_renders_checkbox_with_aria_labelledby_and_controls
+      def test_renders_checkbox_with_aria_labelledby
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { labelledby: 'section-heading', controls: 'item-list' }
+                        aria: { labelledby: 'section-heading' }
                       ))
 
         assert_selector "input[aria-labelledby='section-heading']"
-        assert_selector "input[aria-controls='item-list']"
-        assert_selector 'input[aria-describedby]'
       end
 
       def test_renders_checkbox_with_aria_live
@@ -248,7 +245,7 @@ module Pathogen
 
       def test_raises_error_without_label_or_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', " \
+                      "Form component requires either 'label', " \
                       "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
                       'for accessibility compliance' do
           render_inline(
@@ -262,7 +259,7 @@ module Pathogen
 
       def test_raises_error_with_empty_label_and_aria_label
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', " \
+                      "Form component requires either 'label', " \
                       "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
                       'for accessibility compliance' do
           render_inline(
@@ -278,7 +275,7 @@ module Pathogen
 
       def test_raises_error_with_empty_label_aria_label_and_aria_labelledby
         assert_raises ArgumentError,
-                      "Checkbox requires either 'label', " \
+                      "Form component requires either 'label', " \
                       "'aria: { label: ... }', or 'aria: { labelledby: ... }' " \
                       'for accessibility compliance' do
           render_inline(
@@ -306,7 +303,8 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_all,
                         value: '1',
-                        aria: { label: 'Select all items', controls: 'items-table' }
+                        aria: { label: 'Select all items' },
+                        controls: 'bulk-table'
                       ))
 
         assert_selector 'span#select_all_1_description.sr-only'
@@ -317,7 +315,8 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_page,
                         value: '1',
-                        aria: { label: 'Select page items', controls: 'items-table' }
+                        aria: { label: 'Select page items', live: 'polite' },
+                        controls: 'bulk-table'
                       ))
 
         assert_selector 'span#select_page_1_description.sr-only'
@@ -328,7 +327,8 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :select_row,
                         value: '1',
-                        aria: { label: 'Select row item', controls: 'items-table' }
+                        aria: { label: 'Select row item' },
+                        controls: 'bulk-table'
                       ))
 
         assert_selector 'span#select_row_1_description.sr-only'
@@ -339,7 +339,7 @@ module Pathogen
         render_inline(Checkbox.new(
                         attribute: :terms,
                         value: '1',
-                        aria: { label: 'Terms checkbox', controls: 'terms-panel' }
+                        aria: { label: 'Terms checkbox' }
                       ))
 
         assert_no_selector 'span#terms_1_description'
@@ -354,6 +354,21 @@ module Pathogen
 
         assert_selector 'div.flex.flex-col'
         assert_selector 'div.flex.items-center.gap-3'
+        # Help container should not be rendered when there's no help text or description
+        assert_no_selector 'div.mt-1.mb-2.pl-7'
+      end
+
+      def test_renders_labeled_checkbox_layout_with_help_container
+        render_inline(Checkbox.new(
+                        attribute: :terms,
+                        value: '1',
+                        label: 'I agree to the terms',
+                        help_text: 'This is help text'
+                      ))
+
+        assert_selector 'div.flex.flex-col'
+        assert_selector 'div.flex.items-center.gap-3'
+        # Help container should be rendered when there's help text
         assert_selector 'div.mt-1.mb-2.pl-7'
       end
 
@@ -365,7 +380,7 @@ module Pathogen
                       ))
 
         assert_selector 'div.flex.flex-col'
-        assert_selector 'div.mt-1.mb-2'
+        assert_selector 'div.sr-only'
         assert_no_selector 'div.flex.items-center.gap-3'
         assert_no_selector 'div.mt-1.mb-2.pl-7'
       end
@@ -443,13 +458,11 @@ module Pathogen
                         attribute: :terms,
                         value: '1',
                         label: 'Terms',
-                        aria: { describedby: 'extra-desc', controls: 'panel-1' }
+                        aria: { describedby: 'extra-desc' }
                       ))
 
         # includes user-provided aria-describedby
         assert_selector "input[aria-describedby*='extra-desc']"
-        # includes controls from nested aria
-        assert_selector "input[aria-controls='panel-1']"
       end
 
       def test_merges_aria_hash_with_help_text_and_explicit_described_by
@@ -487,6 +500,9 @@ module Pathogen
                         selected_message: 'Custom selected message',
                         deselected_message: 'Custom deselected message'
                       ))
+
+        assert_selector "input[type='checkbox'][name='terms'][value='1']"
+        assert_selector 'label', text: 'I agree to the terms'
       end
 
       def test_renders_checkbox_with_default_message_data_attributes
@@ -495,6 +511,9 @@ module Pathogen
                         value: '1',
                         label: 'I agree to the terms'
                       ))
+
+        assert_selector "input[type='checkbox'][name='terms'][value='1']"
+        assert_selector 'label', text: 'I agree to the terms'
       end
 
       private
