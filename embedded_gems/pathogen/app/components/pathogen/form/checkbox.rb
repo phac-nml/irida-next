@@ -83,49 +83,9 @@ module Pathogen
         [current, "#{input_id}_description"].compact.join(' ')
       end
 
-      # Generates the HTML ID for the checkbox input.
-      #
-      # Uses form object name and attribute when form is present,
-      # otherwise falls back to input_name or attribute.
-      # Includes the value to ensure unique IDs for multiple checkboxes.
-      #
-      # @return [String] the HTML ID for the input
-      # @api private
-      def input_id
-        @input_id ||= if @form
-                        "#{@form.object_name}_#{@attribute}_#{@value}"
-                      else
-                        base_name = @input_name || @attribute.to_s
-                        "#{base_name}_#{@value}"
-                      end
-      end
-
-      # Generates the HTML name attribute for the checkbox input.
-      #
-      # Uses Rails form naming convention when form is present,
-      # otherwise uses the attribute name directly.
-      #
-      # @return [String] the HTML name attribute for the input
-      # @api private
-      def input_name
-        @input_name ||= if @form
-                          "#{@form.object_name}[#{@attribute}]"
-                        else
-                          @attribute.to_s
-                        end
-      end
-
-      # Generates the ID for the help text element.
-      #
-      # @return [String] the HTML ID for the help text span
-      # @api private
-      def help_text_id
-        "#{input_id}_help"
-      end
-
       # Renders the checkbox input HTML element.
       #
-      # Uses Rails check_box_tag helper with proper attributes and options.
+      # Uses Rails check_box_tag helper with shared form_attributes pipeline.
       #
       # @return [ActiveSupport::SafeBuffer] the checkbox input HTML
       # @api private
@@ -134,7 +94,7 @@ module Pathogen
           input_name,
           @value,
           @checked,
-          attributes.merge(@html_options)
+          form_attributes.merge(id: input_id).merge(@html_options || {})
         )
       end
 
@@ -216,12 +176,11 @@ module Pathogen
       include ActionView::Helpers::FormTagHelper
       include ActionView::Helpers::TranslationHelper
       include CheckboxStyles
-      include FormHelper
       include CheckboxAccessibility
       include CheckboxInternalHelpers
-      include CheckboxAttributes
       include CheckboxOptionExtractor
       include CheckboxRenderer
+      include FormHelper
 
       # Initializes a new Checkbox component.
       #

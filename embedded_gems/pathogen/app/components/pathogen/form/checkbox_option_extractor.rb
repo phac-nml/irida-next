@@ -112,20 +112,6 @@ module Pathogen
         @selected_message = options.delete(:selected_message)
         @deselected_message = options.delete(:deselected_message)
       end
-
-      # Removes any unsupported aria_* style options from remaining HTML options.
-      # We only support nested ARIA via `aria: { ... }`.
-      # @param options [Hash]
-      # @return [void]
-      def strip_disallowed_aria_options!(options)
-        return if options.blank?
-
-        # Remove common top-level aria_* keys
-        disallowed_keys = options.keys.select do |k|
-          k.to_s.start_with?('aria_') || %w[aria-label aria-labelledby aria-live].include?(k.to_s)
-        end
-        disallowed_keys.each { |k| options.delete(k) }
-      end
     end
   end
 end
