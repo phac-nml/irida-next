@@ -30,10 +30,11 @@
   <% if devise_mapping.rememberable? %>
     <div class="form-field flex items-start">
       <div class="flex items-center h-5">
-        <%= f.check_box :remember_me %>
-      </div>
-      <div class="ml-2 text-sm">
-        <%= f.label :remember_me %>
+        <%= f.checkbox :remember_me,
+          label: f.label :remember_me,
+          checked: true,
+          value: "1",
+        %>
       </div>
     </div>
   <% end %>
