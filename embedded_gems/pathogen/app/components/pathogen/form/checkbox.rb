@@ -48,7 +48,6 @@
 # @version 2.0.0
 module Pathogen
   module Form
-
     # Accessible checkbox component for Rails forms.
     #
     # A clean, maintainable checkbox component that extends BaseFormComponent
