@@ -12,7 +12,17 @@ class Sample < ApplicationRecord
 
   belongs_to :project, counter_cache: true
 
-  broadcasts_refreshes_to :project
+  after_commit do
+    projects = [project]
+    projects << Project.find(previous_changes['project_id'][0]) if previous_changes.key? 'project_id'
+
+    projects.each do |project|
+      broadcast_refresh_later_to project, :samples
+      project.namespace.parent.self_and_ancestors.each do |ancestor|
+        broadcast_refresh_later_to ancestor, :samples
+      end
+    end
+  end
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
