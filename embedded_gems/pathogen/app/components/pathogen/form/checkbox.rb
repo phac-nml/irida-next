@@ -120,7 +120,7 @@ module Pathogen
 
         help_content = help_text_html
         description_content = description_html
-        
+
         # Only render help container if there's actual content to display
         if help_content || description_content
           content += tag.div(class: checkbox_help_container_classes) do
