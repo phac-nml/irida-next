@@ -353,8 +353,8 @@ module Pathogen
                       ))
 
         assert_selector 'div.flex.flex-col'
-        assert_selector 'div.flex.items-center.gap-3'
-        assert_selector 'div.mt-1.ml-8'
+        assert_selector 'div.flex.items-start.gap-3'
+        assert_selector 'div.mt-1.mb-2.pl-7'
       end
 
       def test_renders_aria_only_checkbox_layout
@@ -365,9 +365,9 @@ module Pathogen
                       ))
 
         assert_selector 'div.flex.flex-col'
-        assert_selector 'div.mt-1'
-        assert_no_selector 'div.flex.items-center.gap-3'
-        assert_no_selector 'div.mt-1.ml-8'
+        assert_selector 'div.mt-1.mb-2'
+        assert_no_selector 'div.flex.items-start.gap-3'
+        assert_no_selector 'div.mt-1.mb-2.pl-7'
       end
 
       def test_generates_correct_input_id
