@@ -35,7 +35,7 @@ module Pathogen
       #
       # @return [String] CSS classes for input/label container
       def checkbox_input_container_classes
-        'flex items-start gap-3'
+        'flex items-center gap-3'
       end
 
       # Container classes for help text and descriptions.
