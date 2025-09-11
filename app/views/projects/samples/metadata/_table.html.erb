@@ -74,15 +74,19 @@
             >
               <% if @allowed_to[:update_sample] %>
                 <td class="px-6 py-4">
-                  <%= check_box_tag "metadata_keys[]",
-                  metadata[:key],
-                  nil,
-                  id: metadata[:key],
-                  "aria-label": metadata[:key],
-                  data: {
-                    selection_target: "rowSelection",
-                    action: "input->selection#toggle",
-                  } %>
+                  <%= pathogen_checkbox(
+                    attribute: "metadata_keys[]",
+                    value: metadata[:key],
+                    checked: false,
+                    id: metadata[:key],
+                    aria: {
+                      label: metadata[:key]
+                    },
+                    data: {
+                      selection_target: "rowSelection",
+                      action: "input->selection#toggle"
+                    }
+                  ) %>
                 </td>
               <% end %>
               <td class="px-6 py-4"><%= metadata[:key] %></td>
