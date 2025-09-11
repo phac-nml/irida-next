@@ -308,6 +308,31 @@ input[type="search"] {
   &.form-field select {
     @apply border-red-500 dark:border-red-400;
   }
+
+  /* Focus styles for any input within an invalid form field */
+  &.form-field
+    :is(
+      input[type="text"],
+      input[type="search"],
+      input[type="password"],
+      input[type="email"],
+      input[type="file"],
+      input[type="number"],
+      input[type="url"],
+      input[type="tel"],
+      input[type="date"],
+      input[type="time"],
+      input[type="datetime-local"],
+      textarea,
+      select
+    ):focus-visible {
+    @apply outline-red-700 dark:outline-red-400;
+  }
+
+  /* Ensure toggles also get a clear red focus ring when invalid */
+  &.form-field :is(input[type="checkbox"], input[type="radio"]):focus-visible {
+    @apply outline-2 outline-offset-2 outline-red-700 dark:outline-red-400;
+  }
 }
 
 @utility field-hint {
@@ -595,6 +620,11 @@ input[type="search"] {
 
 div.field_with_errors > :is(select) {
   @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
+}
+
+/* Ensure the global focus ring switches to red for any field_with_errors control */
+div.field_with_errors :is(input, select, textarea):focus-visible {
+  @apply outline-red-700 dark:outline-red-400;
 }
 
 .table-container table:not(:has(tbody td)) {
