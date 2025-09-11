@@ -749,7 +749,6 @@ en:
       destroy:
         success: Successfully deleted metadata template %{template_name}
       update:
-        error: Error updating metadata template %{template_name}
         success: Successfully update metadata template %{template_name}
     share_actions:
       create:
@@ -1275,7 +1274,6 @@ en:
         user_select: User
     metadata_templates:
       index:
-        new_button: Add New Template
         subtitle: These are metadata templates for the group
         title: Metadata Templates
     new_subgroup:
@@ -1497,17 +1495,15 @@ en:
       user_email: Username
   metadata_templates:
     edit_template_dialog:
+      title: Edit Metadata Template
+      update_button: Update
+    form:
       available: Available
       description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
       metadata: Metadata
       selected: Selected
-      title: Edit Metadata Template
-      update_button: Update
     new_template_dialog:
-      available: Available
-      description: Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list.
-      metadata: Metadata
-      selected: Selected
+      new_button: Add New Template
       submit_button: Submit
       title: New Metadata Template
     table:
@@ -1946,7 +1942,6 @@ en:
         user_select: User
     metadata_templates:
       index:
-        new_button: Add New Template
         subtitle: These are metadata templates for the project
         title: Metadata Templates
     new:

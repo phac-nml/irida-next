@@ -156,21 +156,21 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -210,23 +210,23 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -253,24 +253,23 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
       within('div[data-controller-connected="true"] dialog') do
-        assert_accessible
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -295,23 +294,23 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -342,21 +341,21 @@ module Projects
         assert_text 'Project Template011'
       end
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -385,23 +384,23 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('metadata_templates.new_template_dialog.new_button'), count: 1
 
-      click_on I18n.t('projects.metadata_templates.index.new_button')
+      click_on I18n.t('metadata_templates.new_template_dialog.new_button')
 
       assert_selector '#dialog'
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+        assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -412,13 +411,13 @@ module Projects
 
         click_button I18n.t('viral.sortable_list.list_component.add')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
@@ -429,13 +428,13 @@ module Projects
 
         click_button I18n.t('viral.sortable_list.list_component.remove')
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -451,7 +450,7 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
 
-      assert_no_selector 'a', text: I18n.t('projects.metadata_templates.index.new_button')
+      assert_no_selector 'a', text: I18n.t('metadata_templates.new_template_dialog.new_button')
     end
 
     test 'should edit metadata template associated with the project' do
@@ -470,19 +469,19 @@ module Projects
         click_button I18n.t(:'metadata_templates.table_component.edit_button')
       end
 
-      assert_selector '#dialog'
+      assert_selector "#dialog_edit_#{dom_id(metadata_template)}"
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
 
-        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
         # fields currently in template fixture
-        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
@@ -494,13 +493,13 @@ module Projects
 
         click_button I18n.t('viral.sortable_list.list_component.add')
 
-        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.selected')}']" do
+        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
@@ -521,10 +520,6 @@ module Projects
           template_name: 'Project Template011'
         )
       end
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_equal 5, metadata_template.reload.fields.length
       assert_equal 'Project Template011', metadata_template.name

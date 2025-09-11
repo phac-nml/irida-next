@@ -749,7 +749,6 @@ fr:
       destroy:
         success: Modèle de métadonnées %{template_name} supprimé avec succès
       update:
-        error: Erreur lors de la mise à jour du modèle de métadonnées %{template_name}
         success: Modèle de métadonnées %{template_name} mis à jour avec succès
     share_actions:
       create:
@@ -1277,7 +1276,6 @@ fr:
         user_select: Utilisateur
     metadata_templates:
       index:
-        new_button: Ajouter un nouveau modèle
         subtitle: Il s’agit de modèles de métadonnées pour le groupe
         title: Modèles de métadonnées
     new_subgroup:
@@ -1501,17 +1499,15 @@ fr:
       user_email: Nom d’utilisateur
   metadata_templates:
     edit_template_dialog:
+      title: Modifier le modèle de métadonnées
+      update_button: Mise à jour
+    form:
       available: Disponible
       description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
       selected: Sélectionné
-      title: Modifier le modèle de métadonnées
-      update_button: Mise à jour
     new_template_dialog:
-      available: Disponible
-      description: Sélectionnez les champs de métadonnées du nouveau modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
-      metadata: Métadonnées
-      selected: Sélectionné
+      new_button: Ajouter un nouveau modèle
       submit_button: Envoyer
       title: Nouveau modèle de métadonnées
     table:
@@ -1950,7 +1946,6 @@ fr:
         user_select: User
     metadata_templates:
       index:
-        new_button: Ajouter un nouveau modèle
         subtitle: Il s’agit de modèles de métadonnées pour le projet
         title: Modèles de métadonnées
     new:

@@ -81,7 +81,7 @@ module Groups
     test 'delete metadata template' do
       delete group_metadata_template_path(@group, @metadata_template, format: :turbo_stream)
 
-      assert_response :redirect
+      assert_response :success
     end
 
     test 'delete metadata template unauthorized' do
@@ -107,14 +107,14 @@ module Groups
     end
 
     test 'edit metadata template' do
-      get edit_group_metadata_template_path(@group, @metadata_template, format: :turbo_stream)
+      get edit_group_metadata_template_path(@group, @metadata_template)
 
       assert_response :success
     end
 
     test 'edit metadata template unauthorized' do
       sign_in users(:ryan_doe)
-      get edit_group_metadata_template_path(@group, @metadata_template, format: :turbo_stream)
+      get edit_group_metadata_template_path(@group, @metadata_template)
 
       assert_response :unauthorized
     end
