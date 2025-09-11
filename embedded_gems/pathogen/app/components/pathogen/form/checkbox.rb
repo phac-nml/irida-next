@@ -120,10 +120,11 @@ module Pathogen
 
         help_content = help_text_html
         description_content = description_html
-
-        unless help_content.blank? && description_content.blank?
+        
+        # Only render help container if there's actual content to display
+        if help_content || description_content
           content += tag.div(class: checkbox_help_container_classes) do
-            help_content + description_content
+            (help_content || ''.html_safe) + (description_content || ''.html_safe)
           end
         end
 
@@ -136,7 +137,7 @@ module Pathogen
       def render_aria_only_layout
         checkbox_input_html +
           tag.div(class: checkbox_aria_help_container_classes) do
-            help_text_sr_only_html + description_html
+            (help_text_sr_only_html || ''.html_safe) + (description_html || ''.html_safe)
           end
       end
 
@@ -163,18 +164,18 @@ module Pathogen
 
       # Renders visible help text.
       #
-      # @return [ActiveSupport::SafeBuffer] the help text HTML or empty string
+      # @return [ActiveSupport::SafeBuffer, nil] the help text HTML or nil
       def help_text_html
-        return ''.html_safe if @help_text.blank?
+        return nil if @help_text.blank?
 
         tag.span(@help_text, id: help_text_id, class: help_text_classes)
       end
 
       # Renders screen reader only help text.
       #
-      # @return [ActiveSupport::SafeBuffer] the sr-only help text HTML
+      # @return [ActiveSupport::SafeBuffer, nil] the sr-only help text HTML or nil
       def help_text_sr_only_html
-        return ''.html_safe if @help_text.blank?
+        return nil if @help_text.blank?
 
         tag.span(
           @help_text,
@@ -186,9 +187,9 @@ module Pathogen
 
       # Renders enhanced description for special checkbox types.
       #
-      # @return [ActiveSupport::SafeBuffer] the description HTML
+      # @return [ActiveSupport::SafeBuffer, nil] the description HTML or nil
       def description_html
-        return ''.html_safe if @controls.blank?
+        return nil if @controls.blank?
 
         description_text = case @attribute.to_s
                            when /select.*all|select.*page/
@@ -197,7 +198,7 @@ module Pathogen
                              t('pathogen.form.checkbox_accessibility.select_row')
                            end
 
-        return ''.html_safe unless description_text
+        return nil unless description_text
 
         tag.span(
           description_text,
@@ -205,6 +206,15 @@ module Pathogen
           class: description_classes,
           'aria-live': 'polite'
         )
+      end
+
+      # Checks if this checkbox should have an enhanced description.
+      #
+      # @return [Boolean] true if enhanced description should be rendered
+      def enhanced_description?
+        return false if @controls.blank?
+
+        @attribute.to_s.match?(/select.*all|select.*page|select.*row/)
       end
     end
   end
