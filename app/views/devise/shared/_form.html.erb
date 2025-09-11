@@ -28,15 +28,9 @@
   </div>
 
   <% if devise_mapping.rememberable? %>
-    <div class="form-field flex items-start">
-      <div class="flex items-center h-5">
-        <%= f.checkbox :remember_me,
-          label: f.label :remember_me,
-          checked: true,
-          value: "1",
-        %>
-      </div>
-    </div>
+    <%= f.checkbox :remember_me, "1",
+      label: t("activerecord.attributes.user.remember_me"),
+      checked: false %>
   <% end %>
 
   <div class="flow-root">
