@@ -72,7 +72,6 @@ module Pathogen
         @aria_labelledby = aria[:labelledby]
         @aria_describedby = aria[:describedby]
         @aria_live = aria[:live]
-        @controls = aria[:controls]
       end
 
       # Validates that accessibility requirements are met.
