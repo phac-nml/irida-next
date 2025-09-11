@@ -56,7 +56,7 @@ class IntegrationAccessTokenController < ApplicationController
       scopes: ['api'],
       expires_at: token_lifespan.days.from_now,
       integration: true,
-      integration_host: caller_identifier # TODO: is this correct?
+      integration_host: caller_identifier
     }
   end
 
