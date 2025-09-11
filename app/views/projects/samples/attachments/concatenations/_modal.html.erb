@@ -63,24 +63,20 @@
         </span>
       </div>
 
-      <div class="flex items-center">
-        <%= form.check_box :delete_originals,
-                       {
-                         checked:
-                           (
-                             if !concatenation_params.nil? &&
-                                  concatenation_params[:delete_originals]
-                               true
-                             else
-                               false
-                             end
-                           ),
-                       },
-                       true,
-                       false %>
-        <%= form.label :delete_originals,
-                   class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
-      </div>
+        <%= pathogen_checkbox attribute: "concatenation[delete_originals]",
+          id: form.field_id(:delete_originals),
+          label: form.label(:delete_originals),
+          value: "1",
+          checked: (
+            if !concatenation_params.nil? && concatenation_params[:delete_originals]
+              true
+            else
+              false
+            end
+          ),
+          aria: {
+            labelledby: form.field_id(:delete_originals, "label"),
+          } %>
 
       <div>
         <%= form.submit t(".submit_button"), class: "button button-primary" %>
