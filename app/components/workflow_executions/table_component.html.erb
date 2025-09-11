@@ -22,16 +22,20 @@
               scope: 'col',
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', '@2xl:sticky left-0 z-10': index.zero?)
             ) do %>
-              <% if index.zero? and @abilities[:select_workflow_executions] %>
-                <%= check_box_tag "select-page",
-                title: t(:".select_page"),
-                "aria-label": t(:".select_page"),
-                data: {
-                  action: "input->selection#togglePage",
-                  controller: "filters",
-                  selection_target: "selectPage",
-                } %>
-              <% end %>
+              <div class="flex items-center gap-3">
+                <% if index.zero? and @abilities[:select_workflow_executions] %>
+                  <%= pathogen_checkbox attribute: "select-page",
+                  id: "select-page",
+                  value: "1",
+                  aria: {
+                    label: t(:".select_page"),
+                  },
+                  data: {
+                    action: "input->selection#togglePage",
+                    controller: "filters",
+                    selection_target: "selectPage",
+                  } %>
+                <% end %>
               <% if column == :workflow_name || column == :workflow_version %>
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
@@ -56,7 +60,8 @@
                     turbo_action: "replace",
                   },
                 ) %>
-              <% end %>
+              </div>
+            <% end %>
             <% end %>
           <% end %>
           <% if @renders_row_actions %>
@@ -83,17 +88,19 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
-                <% if index.zero? && @abilities[:select_workflow_executions] %>
-                  <%= check_box_tag "workflow_execution_ids[]",
-                  workflow_execution.id,
-                  nil,
-                  id: dom_id(workflow_execution, "checkbox"),
-                  "aria-label": workflow_execution.name || workflow_execution.id,
-                  data: {
-                    action: "input->selection#toggle",
-                    selection_target: "rowSelection",
-                  } %>
-                <% end %>
+                <div class="flex items-center gap-3">
+                  <% if index.zero? && @abilities[:select_workflow_executions] %>
+                    <%= pathogen_checkbox attribute: "workflow_execution_ids[]",
+                    id: dom_id(workflow_execution, "checkbox"),
+                    value: workflow_execution.id,
+                    aria: {
+                      label: workflow_execution.name || workflow_execution.id,
+                    },
+                    data: {
+                      action: "input->selection#toggle",
+                      selection_target: "rowSelection",
+                    } %>
+                  <% end %>
                 <% if column == :id %>
                   <%= link_to(
                     individual_path(workflow_execution),
@@ -137,6 +144,7 @@
                 <% else %>
                   <%= workflow_execution[column.to_sym] %>
                 <% end %>
+                </div>
               <% end %>
             <% end %>
             <% if @renders_row_actions %>
