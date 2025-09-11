@@ -24,7 +24,7 @@ data:
   # Locale files or `Dir.glob` patterns where translations are read from:
   read:
     - config/locales/%{locale}.yml
-    - config/locales/devise.%{locale}.yml
+    - config/locales/*.%{locale}.yml
     - app/components/**/*.%{locale}.yml
     - embedded_gems/pathogen/config/locales/%{locale}.yml
 
@@ -146,10 +146,8 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
-  - "action_policy.*"
-  - "helpers.submit.*.{create,submit,update}"
-# - "activerecord.*"
-# - '{devise,simple_form}.*'
+  en:
+    - "helpers.submit.*.create"
 
 ## Consider these keys used:
 ignore_unused:
