@@ -5,13 +5,7 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
-<div class="fixed-table-component" data-controller="refresh">
-  <%= turbo_stream_from @project, data: { "refresh-target": "source" } %>
-  <%= viral_alert(message: "Page has updated", data: { "refresh-target": "notice" }, classes: "hidden", aria: {
-            live: "assertive",
-          }) do %>
-    <%= link_to "refresh" %>
-  <% end %>
+<div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
@@ -187,6 +181,8 @@
     <% end %>
   <% end %>
 
+  <%= render "shared/samples/refresh_alert", resource: @project %>
+
   <% if @has_samples %>
     <div class="flex flex-wrap gap-2 mb-4">
       <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
@@ -214,6 +210,9 @@
                    class: "button button-default w-full",
                    title: t(".deselect_all_tooltip") %>
         <% end %>
+      <% end %>
+    </div>
+  <% end %>
       <% end %>
       <div class="sm:grow max-sm:hidden" role="presentation"></div>
       <div id="table-filter" role="presentation" class="contents">
