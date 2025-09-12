@@ -28,8 +28,9 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('samples.table_component.created_at')
           assert_text I18n.t('samples.table_component.updated_at')
           assert_text I18n.t('samples.table_component.attachments_updated_at')
-          assert_selector "optgroup[label='#{I18n.t('components.advanced_search_component.operation.metadata_fields')}']",
-                          count: 1
+          assert_selector "optgroup[label='#{
+              I18n.t('components.advanced_search_component.operation.metadata_fields')
+            }']", count: 1
         end
 
         # verify the operator list is localized
