@@ -2,17 +2,38 @@
   <div class="space-y-4">
     <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Builder Example</h3>
 
-    <%= form.checkbox :terms, "1",
+    <%= pathogen_checkbox(
+      :terms,
+      {
         label: "I agree to the terms and conditions",
         help_text: "You must agree to continue",
-        required: true %>
+        required: true,
+      },
+      "1",
+      "0",
+      form: form,
+    ) %>
 
-    <%= form.checkbox :newsletter, "1",
+    <%= pathogen_checkbox(
+      :newsletter,
+      {
         label: "Subscribe to newsletter",
-        help_text: "Get updates about new features" %>
+        help_text: "Get updates about new features",
+      },
+      "1",
+      "0",
+      form: form,
+    ) %>
 
-    <%= form.checkbox :marketing, "1",
+    <%= pathogen_checkbox(
+      :marketing,
+      {
         label: "Receive marketing emails",
-        help_text: "Promotional content and offers" %>
+        help_text: "Promotional content and offers",
+      },
+      "1",
+      "0",
+      form: form,
+    ) %>
   </div>
 <% end %>

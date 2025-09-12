@@ -6,46 +6,98 @@
       <div class="space-y-3">
         <h4 class="font-medium text-slate-700 dark:text-slate-300">Basic Options</h4>
 
-        <%= form.checkbox :basic_1, "1", label: "Basic option 1" %>
-        <%= form.checkbox :basic_2, "1", label: "Basic option 2" %>
-        <%= form.checkbox :basic_3, "1", label: "Basic option 3" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :basic_1,
+          { label: "Basic option 1" },
+          "1",
+          "0",
+          form: form,
+        ) %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :basic_2,
+          { label: "Basic option 2" },
+          "1",
+          "0",
+          form: form,
+        ) %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :basic_3,
+          { label: "Basic option 3" },
+          "1",
+          "0",
+          form: form,
+        ) %>
       </div>
 
       <div class="space-y-3">
         <h4 class="font-medium text-slate-700 dark:text-slate-300">With Help Text</h4>
 
-        <%= form.checkbox :help_1, "1",
+        <%= render Pathogen::Form::Checkbox.new(
+          :help_1,
+          {
             label: "Help option 1",
-            help_text: "This option includes helpful information" %>
+            help_text: "This option includes helpful information",
+          },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :help_2, "1",
+        <%= render Pathogen::Form::Checkbox.new(
+          :help_2,
+          {
             label: "Help option 2",
-            help_text: "Another option with additional context" %>
+            help_text: "Another option with additional context",
+          },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :help_3, "1",
-            label: "Help option 3",
-            help_text: "Third option with guidance" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :help_3,
+          { label: "Help option 3", help_text: "Third option with guidance" },
+          "1",
+          "0",
+          form: form,
+        ) %>
       </div>
     </div>
 
     <div class="space-y-3">
       <h4 class="font-medium text-slate-700 dark:text-slate-300">Mixed States</h4>
 
-      <%= form.checkbox :mixed_1, "1",
-          label: "Default state" %>
+      <%= render Pathogen::Form::Checkbox.new(
+        :mixed_1,
+        { label: "Default state" },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :mixed_2, "1",
-          label: "Checked state",
-          checked: true %>
+      <%= render Pathogen::Form::Checkbox.new(
+        :mixed_2,
+        { label: "Checked state", checked: true },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :mixed_3, "1",
-          label: "Disabled state",
-          disabled: true %>
+      <%= render Pathogen::Form::Checkbox.new(
+        :mixed_3,
+        { label: "Disabled state", disabled: true },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :mixed_4, "1",
-          label: "Checked and disabled",
-          checked: true,
-          disabled: true %>
+      <%= render Pathogen::Form::Checkbox.new(
+        :mixed_4,
+        { label: "Checked and disabled", checked: true, disabled: true },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </div>
   </div>
 <% end %>

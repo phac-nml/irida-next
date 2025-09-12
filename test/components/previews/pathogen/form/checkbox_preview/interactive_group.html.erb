@@ -3,30 +3,51 @@
     <h3 class="text-lg font-medium text-slate-900 dark:text-white">Interactive Group Example</h3>
 
     <div class="space-y-3">
-      <%= form.checkbox :select_all, "1",
+      <%= render Pathogen::Form::Checkbox.new(
+        :select_all,
+        {
           label: "Select all options",
           help_text: "Check this to select all options below",
-          onchange: "toggleAllCheckboxes(this)" %>
+          onchange: "toggleAllCheckboxes(this)",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
       <div class="ml-6 space-y-2">
-        <%= form.checkbox :option_1, "1",
-            label: "Option 1",
-            help_text: "First option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :option_1,
+          { label: "Option 1", help_text: "First option description" },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :option_2, "1",
-            label: "Option 2",
-            help_text: "Second option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :option_2,
+          { label: "Option 2", help_text: "Second option description" },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :option_3, "1",
-            label: "Option 3",
-            help_text: "Third option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :option_3,
+          { label: "Option 3", help_text: "Third option description" },
+          "1",
+          "0",
+          form: form,
+        ) %>
       </div>
     </div>
 
     <div class="mt-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
       <p class="text-sm text-slate-600 dark:text-slate-400">
-        <strong>Note:</strong> This demonstrates how checkboxes can be grouped and controlled programmatically.
-        The "Select all" checkbox would typically use JavaScript to control the state of the other checkboxes.
+        <strong>Note:</strong>
+        This demonstrates how checkboxes can be grouped and controlled
+        programmatically. The "Select all" checkbox would typically use
+        JavaScript to control the state of the other checkboxes.
       </p>
     </div>
   </div>
