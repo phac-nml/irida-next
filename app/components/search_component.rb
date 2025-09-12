@@ -7,7 +7,8 @@ class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil, **kwargs)
+  def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil,
+                 search_field_arguments: {}, **kwargs)
     @query = query
     @url = url
     @search_attribute = search_attribute
@@ -16,13 +17,13 @@ class SearchComponent < Component
     @total_count = total_count
     @value = value
     @kwargs = kwargs
+    @search_field_arguments = search_field_arguments
   end
   # rubocop:enable Metrics/ParameterLists
 
   def kwargs
     @kwargs.tap do |args|
       args[:data] ||= {}
-      args[:data][:controller] = ['search-field', 'selection', args[:data][:controller]].compact.join(' ')
       args[:data]['turbo-action'] = 'replace'
     end
   end
