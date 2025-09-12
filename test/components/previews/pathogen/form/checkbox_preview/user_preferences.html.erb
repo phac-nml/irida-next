@@ -5,57 +5,124 @@
     <fieldset class="space-y-4">
       <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Notification Settings</legend>
 
-      <%= form.checkbox :email_digest, "1",
+      <%= pathogen_checkbox(
+        :email_digest,
+        {
           label: "Daily email digest",
           help_text: "Receive a summary of daily activity",
-          checked: true %>
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :push_mentions, "1",
+      <%= pathogen_checkbox(
+        :push_mentions,
+        {
           label: "Push notifications for mentions",
           help_text: "Get notified when someone mentions you",
-          checked: true %>
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :sms_alerts, "1",
+      <%= pathogen_checkbox(
+        :sms_alerts,
+        {
           label: "SMS alerts for urgent matters",
-          help_text: "Receive text messages for critical updates" %>
+          help_text: "Receive text messages for critical updates",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :browser_notifications, "1",
+      <%= pathogen_checkbox(
+        :browser_notifications,
+        {
           label: "Browser notifications",
-          help_text: "Show notifications in your browser" %>
+          help_text: "Show notifications in your browser",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
 
     <fieldset class="space-y-4">
       <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Privacy & Security</legend>
 
-      <%= form.checkbox :two_factor_auth, "1",
+      <%= pathogen_checkbox(
+        :two_factor_auth,
+        {
           label: "Enable two-factor authentication",
           help_text: "Add an extra layer of security to your account",
-          required: true %>
+          required: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :profile_visibility, "1",
+      <%= pathogen_checkbox(
+        :profile_visibility,
+        {
           label: "Make profile visible to everyone",
-          help_text: "Allow other users to see your profile information" %>
+          help_text: "Allow other users to see your profile information",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :activity_feed, "1",
+      <%= pathogen_checkbox(
+        :activity_feed,
+        {
           label: "Show activity in public feed",
-          help_text: "Display your recent activity to other users" %>
+          help_text: "Display your recent activity to other users",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
 
     <fieldset class="space-y-4">
       <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Content Preferences</legend>
 
-      <%= form.checkbox :auto_play_videos, "1",
+      <%= pathogen_checkbox(
+        :auto_play_videos,
+        {
           label: "Auto-play videos",
-          help_text: "Automatically start playing video content" %>
+          help_text: "Automatically start playing video content",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :show_recommendations, "1",
+      <%= pathogen_checkbox(
+        :show_recommendations,
+        {
           label: "Show personalized recommendations",
           help_text: "Display content based on your interests",
-          checked: true %>
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :dark_mode, "1",
-          label: "Prefer dark mode",
-          help_text: "Use dark theme when available" %>
+      <%= pathogen_checkbox(
+        :dark_mode,
+        { label: "Prefer dark mode", help_text: "Use dark theme when available" },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
   </div>
 <% end %>

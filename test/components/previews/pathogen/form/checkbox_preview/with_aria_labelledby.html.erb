@@ -8,14 +8,18 @@
     the heading above.
   </p>
 
-  <%= render Pathogen::Form::Checkbox.new(
-    attribute: :email_notifications,
-    value: "1",
-    aria: {
-      labelledby: "notification-settings",
+  <%= pathogen_checkbox(
+    "preview_object",
+    :email_notifications,
+    {
+      aria: {
+        labelledby: "notification-settings",
+      },
+      help_text:
+        "Receive email notifications for important updates and announcements",
     },
-    help_text:
-      "Receive email notifications for important updates and announcements",
+    "1",
+    "0",
   ) %>
 
   <hr class="my-4">
@@ -24,14 +28,18 @@
     Bulk Actions
   </h4>
 
-  <%= render Pathogen::Form::Checkbox.new(
-    attribute: :select_all,
-    value: "1",
-    aria: {
-      labelledby: "bulk-actions",
+  <%= pathogen_checkbox(
+    "preview_object",
+    :select_all,
+    {
+      aria: {
+        labelledby: "bulk-actions",
+      },
+      help_text: "Select all items in the table for bulk operations",
+      controls: "data-table",
     },
-    help_text: "Select all items in the table for bulk operations",
-    controls: "data-table",
+    "1",
+    "0",
   ) %>
 
   <div id="data-table" class="mt-2 p-3 border rounded bg-gray-50">
