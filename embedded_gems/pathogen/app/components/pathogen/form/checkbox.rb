@@ -104,6 +104,11 @@ module Pathogen
           @unchecked_value = unchecked_value.to_s
         end
 
+        # For field name patterns, the "method" is actually the value
+        if @object_name.present? && field_name_pattern_at_init?
+          @checked_value = @method.to_s
+        end
+
         # Extract accessibility options from options hash
         label = options.delete(:label)
         help_text = options.delete(:help_text)
@@ -192,7 +197,7 @@ module Pathogen
       # @return [ActiveSupport::SafeBuffer] the checkbox input HTML
       def checkbox_input_html
         return render_form_builder_checkbox if @form.present?
-        return render_rails_helper_checkbox if @object_name.present?
+        return render_rails_helper_checkbox if @object_name.present? && !field_name_pattern?
 
         render_fallback_checkbox
       end
@@ -259,6 +264,43 @@ module Pathogen
         return false if @controls.blank?
 
         @attribute.to_s.match?(/select.*all|select.*page|select.*row/)
+      end
+
+      # Checks if the object_name is actually a field name pattern.
+      #
+      # Field names like "sample_ids[]", "select-page", etc. should use check_box_tag
+      # rather than the Rails check_box helper which expects model object names.
+      #
+      # @return [Boolean] true if this appears to be a field name rather than object name
+      def field_name_pattern?
+        return false if @object_name.blank?
+
+        # Detect array field patterns like "sample_ids[]", "attachment_ids[]"
+        # or direct field names like "select-page"
+        @object_name.to_s.match?(/\[\]$|^[\w-]+$/)
+      end
+
+      # Override input_name for field name patterns.
+      #
+      # When using field name patterns like "sample_ids[]", the object_name
+      # IS the field name, not a model object name that needs construction.
+      #
+      # @return [String] the input name
+      def input_name
+        return @input_name if @input_name.present?
+        return "#{@form.object_name}[#{@attribute}]" if @form&.object_name.present?
+        return @object_name.to_s if field_name_pattern?
+
+        @attribute.to_s
+      end
+
+      # Checks field name pattern during initialization (before @attribute is set).
+      #
+      # @return [Boolean] true if this appears to be a field name rather than object name
+      def field_name_pattern_at_init?
+        return false if @object_name.blank?
+
+        @object_name.to_s.match?(/\[\]$|^[\w-]+$/)
       end
 
       # Renders checkbox using Rails form builder.

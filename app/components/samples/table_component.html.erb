@@ -25,7 +25,7 @@
                 ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? and @abilities[:select_samples] %>
-                    <%= pathogen_checkbox nil, "select-page", {
+                    <%= pathogen_checkbox "select-page", "1", {
                       id: "select-page",
                       aria: {
                         label: t(".select_all.aria_label"),
@@ -91,7 +91,7 @@
               ) do %>
                   <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_samples] %>
-                      <%= pathogen_checkbox nil, "sample_ids[]", {
+                      <%= pathogen_checkbox "sample_ids[]", sample.id, {
                         id: dom_id(sample, :checkbox),
                         aria: {
                           label: t(".row.aria_label", name: sample.name),
