@@ -6,40 +6,36 @@
 # label association, ARIA attributes, and TailwindCSS styling. It supports
 # both standalone usage and integration with Rails form builders.
 #
-# @example Basic usage with visible label
-#   <%= render Pathogen::Form::Checkbox.new(
-#     attribute: :terms,
-#     value: "1",
-#     label: "I agree to the terms",
-#     help_text: "You must agree to continue."
-#   ) %>
+# @example Basic usage exactly like Rails check_box helper
+#   <%= render Pathogen::Form::Checkbox.new("post", "validated") %>
+#   # Same as: check_box("post", "validated")
 #
-# @example With Rails form builder
+# @example With custom values like Rails check_box
+#   <%= render Pathogen::Form::Checkbox.new("puppy", "gooddog", {}, "yes", "no") %>
+#   # Same as: check_box("puppy", "gooddog", {}, "yes", "no")
+#
+# @example With HTML options like Rails check_box
+#   <%= render Pathogen::Form::Checkbox.new("eula", "accepted", { class: 'eula_check' }, "yes", "no") %>
+#   # Same as: check_box("eula", "accepted", { class: 'eula_check' }, "yes", "no")
+#
+# @example With Rails form builder exactly like f.check_box
 #   <%= form_with model: @user do |form| %>
-#     <%= render Pathogen::Form::Checkbox.new(
-#       form: form,
-#       attribute: :newsletter,
-#       value: "1",
-#       label: "Subscribe to newsletter"
-#     ) %>
+#     <%= render Pathogen::Form::Checkbox.new(:newsletter, {}, "1", "0", form: form) %>
+#     # Same as: form.check_box(:newsletter)
 #   <% end %>
 #
-# @example Screen reader only label (aria.label)
-#   <%= render Pathogen::Form::Checkbox.new(
-#     attribute: :select_all,
-#     value: "1",
-#     aria: { label: "Select all items on this page" },
-#     help_text: "Check to select all items, uncheck to deselect all"
-#   ) %>
+# @example With form builder and custom values
+#   <%= form_with model: @user do |form| %>
+#     <%= render Pathogen::Form::Checkbox.new(:active, { class: 'status-check' }, "yes", "no", form: form) %>
+#     # Same as: form.check_box(:active, { class: 'status-check' }, "yes", "no")
+#   <% end %>
 #
-# @example Using aria.labelledby for external labeling
-#   <h3 id="bulk-actions-heading">Bulk Actions</h3>
-#   <%= render Pathogen::Form::Checkbox.new(
-#     attribute: :select_all,
-#     value: "1",
-#     aria: { labelledby: "bulk-actions-heading" },
-#     help_text: "Select all items for bulk operations"
-#   ) %>
+# @example With accessibility features (pathogen enhancement)
+#   <%= render Pathogen::Form::Checkbox.new("select", "all", {
+#     label: "Select all items",
+#     aria: { label: "Select all items on this page" },
+#     help_text: "Check to select all items"
+#   }) %>
 #
 # @note This component requires either a `label`, `aria: { label: ... }`, or `aria: { labelledby: ... }` parameter
 #   for accessibility compliance.
@@ -54,36 +50,86 @@ module Pathogen
     # with checkbox-specific rendering and styling. Supports both labeled and
     # aria-only configurations with full accessibility compliance.
     #
-    # @example Basic checkbox with visible label
-    #   <%= render Pathogen::Form::Checkbox.new(
-    #     attribute: :terms,
-    #     value: "1",
-    #     label: "I agree to the terms and conditions"
-    #   ) %>
+    # @example Basic checkbox exactly like Rails check_box helper
+    #   <%= render Pathogen::Form::Checkbox.new("post", "validated") %>
     #
-    # @example With form builder and help text
+    # @example With form builder exactly like f.check_box
     #   <%= form_with model: @user do |form| %>
-    #     <%= render Pathogen::Form::Checkbox.new(
-    #       form: form,
-    #       attribute: :newsletter,
-    #       value: "1",
+    #     <%= render Pathogen::Form::Checkbox.new(:newsletter, {
     #       label: "Subscribe to newsletter",
     #       help_text: "We'll send you updates about new features"
-    #     ) %>
+    #     }, "1", "0", form: form) %>
     #   <% end %>
     #
-    # @example Screen reader accessible (no visible label)
-    #   <%= render Pathogen::Form::Checkbox.new(
-    #     attribute: :select_all,
-    #     value: "1",
+    # @example Screen reader accessible (pathogen enhancement)
+    #   <%= render Pathogen::Form::Checkbox.new("select", "all", {
     #     aria: { label: "Select all items in the table" },
     #     help_text: "Toggle to select or deselect all items"
-    #   ) %>
+    #   }) %>
     #
     # @since 1.0.0
     # @version 2.0.0
+    # rubocop:disable Metrics/ClassLength
     class Checkbox < BaseFormComponent
       include CheckboxStyles
+
+      # Initialize checkbox component to exactly match Rails check_box helper signature
+      #
+      # Supports these calling patterns:
+      # 1. check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
+      # 2. form.check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
+      #
+      # @param object_name_or_method [Symbol, String] object name (standalone) or method name (form builder)
+      # @param method_or_options [Symbol, String, Hash] method name (standalone) or options (form builder)
+      # @param options_or_checked_value [Hash, String] options hash (standalone) or checked_value (form builder)
+      # @param checked_value_or_unchecked_value [String] checked_value (standalone) or unchecked_value (form builder)
+      # @param unchecked_value [String] unchecked_value (standalone only)
+      # @param form [ActionView::Helpers::FormBuilder, nil] form builder for form.check_box pattern
+      # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize
+      def initialize(object_name_or_method, method_or_options = {}, options_or_checked_value = {},
+                     checked_value_or_unchecked_value = '1', unchecked_value = '0', form: nil, **)
+        if form.present?
+          # Form builder pattern: form.check_box(method, options, checked_value, unchecked_value)
+          @method = object_name_or_method
+          @object_name = nil
+          options = method_or_options || {}
+          @checked_value = options_or_checked_value.is_a?(Hash) ? '1' : options_or_checked_value.to_s
+          @unchecked_value = checked_value_or_unchecked_value.is_a?(Hash) ? '0' : checked_value_or_unchecked_value.to_s
+        else
+          # Standalone pattern: check_box(object_name, method, options, checked_value, unchecked_value)
+          @object_name = object_name_or_method
+          @method = method_or_options
+          options = options_or_checked_value || {}
+          @checked_value = checked_value_or_unchecked_value.to_s
+          @unchecked_value = unchecked_value.to_s
+        end
+
+        # Extract accessibility options from options hash
+        label = options.delete(:label)
+        help_text = options.delete(:help_text)
+        aria = options.delete(:aria) || {}
+
+        # Extract Rails-specific options
+        checked = options.delete(:checked)
+        @include_hidden = options.delete(:include_hidden) { true }
+
+        # Store HTML options separately since parent will extract them
+        @stored_html_options = options
+
+        # Call parent with transformed parameters - BaseFormComponent expects keyword arguments
+        super(
+          attribute: @method,
+          value: @checked_value,
+          form: form,
+          label: label,
+          help_text: help_text,
+          aria: aria,
+          checked: checked,
+          include_hidden: @include_hidden,
+          **options # Pass HTML options directly to parent for extraction
+        )
+      end
+      # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize
 
       protected
 
@@ -145,12 +191,10 @@ module Pathogen
       #
       # @return [ActiveSupport::SafeBuffer] the checkbox input HTML
       def checkbox_input_html
-        check_box_tag(
-          input_name,
-          @value,
-          @checked,
-          form_attributes.merge(@html_options || {})
-        )
+        return render_form_builder_checkbox if @form.present?
+        return render_rails_helper_checkbox if @object_name.present?
+
+        render_fallback_checkbox
       end
 
       # Renders the label element if label text is present.
@@ -216,6 +260,65 @@ module Pathogen
 
         @attribute.to_s.match?(/select.*all|select.*page|select.*row/)
       end
+
+      # Renders checkbox using Rails form builder.
+      #
+      # @return [ActiveSupport::SafeBuffer] the checkbox HTML
+      def render_form_builder_checkbox
+        @form.check_box(@method, @html_options || {}, @checked_value, @unchecked_value)
+      end
+
+      # Renders checkbox using Rails form helper with proper naming.
+      #
+      # @return [ActiveSupport::SafeBuffer] the checkbox HTML
+      def render_rails_helper_checkbox
+        user_class = @stored_html_options[:class] if @stored_html_options
+        rails_options = build_rails_options(user_class)
+        check_box(@object_name, @method, rails_options, @checked_value, @unchecked_value)
+      end
+
+      # Renders checkbox using check_box_tag as fallback.
+      #
+      # @return [ActiveSupport::SafeBuffer] the checkbox HTML
+      def render_fallback_checkbox
+        html = ''.html_safe
+        html += render_hidden_field if @include_hidden != false
+        html += render_checkbox_tag
+        html
+      end
+
+      # Builds options hash for Rails check_box helper.
+      #
+      # @param user_class [String, nil] additional CSS classes from user
+      # @return [Hash] merged options for Rails helper
+      def build_rails_options(user_class)
+        rails_options = {
+          id: input_id,
+          class: input_classes(user_class)
+        }
+        remaining_options = (@html_options || {}).except(:class)
+        rails_options.merge(remaining_options)
+      end
+
+      # Renders the hidden field for unchecked value.
+      #
+      # @return [ActiveSupport::SafeBuffer] the hidden field HTML
+      def render_hidden_field
+        hidden_field_tag(input_name, @unchecked_value, id: nil)
+      end
+
+      # Renders the checkbox tag.
+      #
+      # @return [ActiveSupport::SafeBuffer] the checkbox tag HTML
+      def render_checkbox_tag
+        check_box_tag(
+          input_name,
+          @checked_value,
+          @checked,
+          form_attributes.merge(@html_options || {})
+        )
+      end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

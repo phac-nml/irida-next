@@ -25,17 +25,17 @@
               ) do %>
                 <div class="flex items-center gap-3">
                 <% if index.zero? and @abilities[:select_attachments] %>
-                  <%= pathogen_checkbox attribute: "select-page",
-                  id: "select-page",
-                  value: "1",
-                  aria: {
-                    label: t("components.attachments.table_component.select_page"),
-                  },
-                  data: {
-                    action: "input->selection#togglePage",
-                    controller: "filters",
-                    selection_target: "selectPage",
-                  } %>
+                  <%= pathogen_checkbox nil, "select-page", {
+                    id: "select-page",
+                    aria: {
+                      label: t("components.attachments.table_component.select_page"),
+                    },
+                    data: {
+                      action: "input->selection#togglePage",
+                      controller: "filters",
+                      selection_target: "selectPage",
+                    }
+                  }, "1", "0" %>
                 <% end %>
                 <% if column == :id %>
                   <%= render Ransack::SortComponent.new(
@@ -129,22 +129,22 @@
                 ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? && @abilities[:select_attachments] %>
-                    <%= pathogen_checkbox attribute: "attachment_ids[]",
-                    id: dom_id(attachment, "checkbox"),
-                    value: (
+                    <%= pathogen_checkbox nil, "attachment_ids[]", {
+                      id: dom_id(attachment, "checkbox"),
+                      aria: {
+                        label: attachment.file.filename.to_s,
+                      },
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      }
+                    }, (
                       if attachment.associated_attachment
                         [attachment.id, attachment.associated_attachment.id].to_s
                       else
                         attachment.id
                       end
-                    ),
-                    aria: {
-                      label: attachment.file.filename.to_s,
-                    },
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection",
-                    } %>
+                    ), "0" %>
                   <% end %>
                   <% if column == :id %>
                     <%= highlight(
