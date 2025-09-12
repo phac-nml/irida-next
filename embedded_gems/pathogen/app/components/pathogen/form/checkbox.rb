@@ -128,7 +128,6 @@ module Pathogen
           help_text: help_text,
           aria: aria,
           checked: checked,
-          include_hidden: @include_hidden,
           **options # Pass HTML options directly to parent for extraction
         )
       end
