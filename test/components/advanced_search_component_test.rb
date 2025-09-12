@@ -6,13 +6,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
   test 'default' do
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
@@ -28,20 +28,21 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('samples.table_component.created_at')
           assert_text I18n.t('samples.table_component.updated_at')
           assert_text I18n.t('samples.table_component.attachments_updated_at')
-          assert_selector "optgroup[label='#{I18n.t('advanced_search_component.operation.metadata_fields')}']", count: 1
+          assert_selector "optgroup[label='#{I18n.t('components.advanced_search_component.operation.metadata_fields')}']",
+                          count: 1
         end
 
         # verify the operator list is localized
         within first("select[name$='[operator]']") do
-          assert_text I18n.t('advanced_search_component.operation.equals')
-          assert_text I18n.t('advanced_search_component.operation.not_equals')
-          assert_text I18n.t('advanced_search_component.operation.less_than')
-          assert_text I18n.t('advanced_search_component.operation.greater_than')
-          assert_text I18n.t('advanced_search_component.operation.contains')
-          assert_text I18n.t('advanced_search_component.operation.exists')
-          assert_text I18n.t('advanced_search_component.operation.not_exists')
-          assert_text I18n.t('advanced_search_component.operation.in')
-          assert_text I18n.t('advanced_search_component.operation.not_in')
+          assert_text I18n.t('components.advanced_search_component.operation.equals')
+          assert_text I18n.t('components.advanced_search_component.operation.not_equals')
+          assert_text I18n.t('components.advanced_search_component.operation.less_than')
+          assert_text I18n.t('components.advanced_search_component.operation.greater_than')
+          assert_text I18n.t('components.advanced_search_component.operation.contains')
+          assert_text I18n.t('components.advanced_search_component.operation.exists')
+          assert_text I18n.t('components.advanced_search_component.operation.not_exists')
+          assert_text I18n.t('components.advanced_search_component.operation.in')
+          assert_text I18n.t('components.advanced_search_component.operation.not_in')
         end
 
         # verify removing a condition
@@ -54,23 +55,23 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify removing a group
         within all("fieldset[data-advanced-search-target='groupsContainer']")[1] do
-          click_button I18n.t(:'advanced_search_component.remove_group_button')
+          click_button I18n.t(:'components.advanced_search_component.remove_group_button')
         end
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
 
         # verify adding a group
-        click_button I18n.t(:'advanced_search_component.add_group_button')
+        click_button I18n.t(:'components.advanced_search_component.add_group_button')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
 
         # verify adding a condition
         within all("fieldset[data-advanced-search-target='groupsContainer']")[1] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
-          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
         end
 
         # verify clearing the form
-        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -82,13 +83,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
   test 'close dialog prompts for confirmation if filters have not been applied' do
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -99,16 +100,16 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify that the dialog closes without a confirm dialog if no unapplied filters
         click_button I18n.t('components.dialog.close')
-        assert_no_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -130,7 +131,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         text = dismiss_confirm do
           click_button I18n.t('components.dialog.close')
         end
-        assert_includes text, I18n.t(:'advanced_search_component.confirm_close_text')
+        assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
 
         # verify that dismissing the confirm keeps the unapplied filters and dialog open
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
@@ -145,17 +146,17 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         text = accept_confirm do
           click_button I18n.t('components.dialog.close')
         end
-        assert_includes text, I18n.t(:'advanced_search_component.confirm_close_text')
-        assert_no_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
+        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -175,7 +176,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         text = dismiss_confirm do
           click_button I18n.t('components.dialog.close')
         end
-        assert_includes text, I18n.t(:'advanced_search_component.confirm_close_text')
+        assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
 
         # verify that dismissing the confirm keeps the unapplied filters and dialog open
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
@@ -188,8 +189,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         text = accept_confirm do
           click_button I18n.t('components.dialog.close')
         end
-        assert_includes text, I18n.t(:'advanced_search_component.confirm_close_text')
-        assert_no_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
+        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
       end
     end
   end

@@ -13,14 +13,14 @@
     data-turbo-action="replace"
   >
     <label for="pagy-limit-select" class="text-sm font-medium">
-      <%= t(".items", items: @item) %>
+      <%= t("components.viral.pagy.limit_component.items", items: @item) %>
     </label>
 
     <div class="relative">
       <select
         id="pagy-limit-select"
         name="limit"
-        aria-label="<%= t('.select_items_action') %>"
+        aria-label="<%= t('components.viral.pagy.limit_component.select_items_action') %>"
         aria-describedby="pagy-limit-description"
         autocomplete="off"
         class="
@@ -36,7 +36,7 @@
           <option
             value="<%= limit %>"
             <%= 'selected' if limit == @pagy.limit %>
-            aria-label="<%= t('.item_aria_label', items: limit) %>"
+            aria-label="<%= t('components.viral.pagy.limit_component.item_aria_label', items: limit) %>"
           >
             <%= limit %>
           </option>
@@ -50,9 +50,14 @@
         <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, color: :subdued) %>
       </div>
       <div id="pagy-limit-description" class="sr-only">
-        <%= t(".select_items_action") %>
+        <%= t("components.viral.pagy.limit_component.select_items_action") %>
       </div>
     </div>
   </form>
-  <span><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
+  <span><%== t(
+      "components.viral.pagy.limit_component.summary",
+      to: @pagy.to,
+      from: @pagy.from,
+      count: @pagy.count,
+    ) %></span>
 </div>

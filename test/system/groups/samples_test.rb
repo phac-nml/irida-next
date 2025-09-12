@@ -44,21 +44,21 @@ module Groups
       visit group_samples_url(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample3).name
-      assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
-                      text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
+                      text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 6
-      click_on I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample3).name
@@ -72,23 +72,23 @@ module Groups
       visit group_samples_url(group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample1).name
       assert_text samples(:sample3).name
-      assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
-                      text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
+                      text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 6
       assert_text samples(:sample28).name
-      click_on I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample1).name
@@ -101,13 +101,13 @@ module Groups
 
       visit group_samples_url(group)
 
-      assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
-                      text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
+                      text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                                      locale: @user.locale))
 
       click_link samples(:sample28).name
       assert_selector 'h1', text: samples(:sample28).name
@@ -116,8 +116,8 @@ module Groups
     test 'User with role >= Analyst does not see workflow executions button' do
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       assert_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
@@ -126,8 +126,8 @@ module Groups
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
@@ -135,8 +135,8 @@ module Groups
     test 'User with role >= Analyst sees sample actions dropdown' do
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
     end
 
@@ -144,16 +144,16 @@ module Groups
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_no_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
     end
 
     test 'User with role >= Maintainer sees copy samples button' do
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.clone')
@@ -164,8 +164,8 @@ module Groups
       login_as user
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: user.locale))
 
       assert_no_selector 'a', text: I18n.t('shared.samples.actions_dropdown.clone')
     end
@@ -181,8 +181,8 @@ module Groups
     test 'User with role == Owner sees delete samples button' do
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
@@ -193,8 +193,8 @@ module Groups
       login_as user
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label', locale: user.locale)
       assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples', locale: user.locale)
@@ -203,8 +203,8 @@ module Groups
     test 'can search the list of samples by name' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
         assert_text @sample1.name
@@ -229,8 +229,8 @@ module Groups
     test 'can sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
@@ -283,8 +283,8 @@ module Groups
     test 'can filter by name and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -323,8 +323,8 @@ module Groups
     test 'can filter by puid and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -336,8 +336,8 @@ module Groups
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 1
         assert_text @sample1.name
@@ -361,8 +361,8 @@ module Groups
       end
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 10
         assert_text @sample1.puid
@@ -375,8 +375,8 @@ module Groups
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 1
         assert_text @sample1.name
@@ -393,8 +393,8 @@ module Groups
       end
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 10
       end
@@ -409,8 +409,8 @@ module Groups
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                                      locale: @user.locale))
 
       within('table tbody') do
         assert_selector 'tr', count: 10
@@ -425,8 +425,8 @@ module Groups
     test 'can sort and then filter the list of samples by name' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -471,8 +471,8 @@ module Groups
     test 'can sort and then filter the list of samples by puid' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -507,8 +507,8 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 1
 
@@ -521,8 +521,8 @@ module Groups
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table thead tr') do
         assert_selector 'th', count: 6
       end
@@ -560,8 +560,8 @@ module Groups
 
     test 'can sort samples by metadata column' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table thead tr') do
         assert_selector 'th', count: 6
       end
@@ -609,8 +609,8 @@ module Groups
 
     test 'filter samples with advanced search' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -618,9 +618,9 @@ module Groups
         assert_selector "tr[id='#{dom_id(@sample9)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='puid']").select_option
@@ -628,10 +628,10 @@ module Groups
             find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
           end
         end
-        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
-      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
@@ -641,13 +641,13 @@ module Groups
         assert_no_selector "tr[id='#{dom_id(@sample9)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
-      assert_selector "button[aria-label='#{I18n.t(:'advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -658,8 +658,8 @@ module Groups
 
     test 'filter samples with advanced search using metadata fields names with extra periods' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -667,9 +667,9 @@ module Groups
         assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
@@ -678,7 +678,7 @@ module Groups
           end
         end
 
-        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
       within '#samples-table table tbody' do
@@ -690,10 +690,10 @@ module Groups
         assert_selector "tr[id='#{dom_id(@sample28)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
       within '#samples-table table tbody' do
@@ -705,8 +705,8 @@ module Groups
 
     test 'filter samples with advanced search using exists operator' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -714,16 +714,16 @@ module Groups
         assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
             find("select[name$='[operator]']").find("option[value='exists']").select_option
           end
         end
-        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
       within '#samples-table table tbody' do
@@ -735,10 +735,10 @@ module Groups
         assert_selector "tr[id='#{dom_id(@sample28)}']"
       end
 
-      click_button I18n.t(:'advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
       within '#samples-table table tbody' do
@@ -750,8 +750,8 @@ module Groups
 
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -793,8 +793,8 @@ module Groups
 
     test 'selecting / deselecting a page of samples' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -836,8 +836,8 @@ module Groups
 
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -1400,8 +1400,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
         assert_no_text 'my new sample 1'
@@ -1434,8 +1434,8 @@ module Groups
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         # added 2 new samples
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
@@ -1451,8 +1451,8 @@ module Groups
       project2 = projects(:project2)
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
         assert_no_text 'my new sample 1'
@@ -1490,8 +1490,8 @@ module Groups
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         # sample 2 with blank spreadsheet project puid added to static project
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
@@ -1507,8 +1507,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
         assert_no_text 'my new sample 1'
@@ -1543,8 +1543,8 @@ module Groups
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         # sample 1 with valid spreadsheet project puid added to said project
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 1'
@@ -1560,8 +1560,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
@@ -1608,10 +1608,10 @@ module Groups
         end
       end
 
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
 
       assert_no_selector 'html[aria-busy="true"]'
 
@@ -1650,8 +1650,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -1688,7 +1688,7 @@ module Groups
         find('#metadata2').click
         find('#description').click
 
-        click_button I18n.t('viral.sortable_list.list_component.remove')
+        click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -1729,8 +1729,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -1771,8 +1771,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
@@ -1792,7 +1792,7 @@ module Groups
         find('#metadata1').click
         find('#metadata2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.remove')
+        click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
         select 'metadata1',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
@@ -1827,8 +1827,8 @@ module Groups
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                                      locale: @user.locale))
       within('table thead tr') do
         assert_selector 'th', count: 6
       end
@@ -1877,8 +1877,8 @@ module Groups
 
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       ### SETUP END ###
 
@@ -1912,8 +1912,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1941,8 +1941,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1972,16 +1972,16 @@ module Groups
       samples.flatten!
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       # target project has 3 samples prior to transfer
       visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       ### SETUP END ###
 
@@ -2027,13 +2027,13 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                                      locale: @user.locale))
 
       # destination project received transferred samples
       visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                                      locale: @user.locale))
       within '#samples-table table tbody' do
         assert_text samples[0][0]
         assert_text samples[0][1]
@@ -2052,8 +2052,8 @@ module Groups
       samples.flatten!
       # originating project has 3 samples prior to transfer
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2094,8 +2094,8 @@ module Groups
       ### SETUP START ###
       project4 = projects(:project4)
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2155,16 +2155,16 @@ module Groups
       samples.flatten!
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       # target project has 3 samples prior to transfer
       visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       ### ACTIONS START ###
       click_button I18n.t(:'groups.samples.index.select_all_button')
@@ -2217,8 +2217,8 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify sample1 and 2 transferred, sample 28, sample 30 did not
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                                      locale: @user.locale))
       assert_no_selector "tr[id='#{dom_id(sample1)}']"
       assert_no_selector "tr[id='#{dom_id(sample2)}']"
       assert_selector "tr[id='#{dom_id(sample30)}']"
@@ -2226,8 +2226,8 @@ module Groups
 
       # destination project
       visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                                      locale: @user.locale))
 
       click_on I18n.t(:'samples.table_component.puid')
 
@@ -2248,8 +2248,8 @@ module Groups
 
       visit group_samples_url(group_three)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2283,8 +2283,8 @@ module Groups
       group_three = groups(:group_three)
       visit group_samples_url(group_three)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2317,8 +2317,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2340,8 +2340,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2370,8 +2370,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2404,8 +2404,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2448,8 +2448,8 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # samples table now contains both original and cloned samples
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                                      locale: @user.locale))
       # duplicated sample names
       within('#samples-table table tbody') do
         assert_text @sample1.name, count: 2
@@ -2459,8 +2459,8 @@ module Groups
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@group, @project2)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
+                                                                                      locale: @user.locale))
       within('#samples-table table tbody') do
         assert_text @sample1.name
         assert_text @sample2.name
@@ -2472,8 +2472,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2515,8 +2515,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2561,8 +2561,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2609,8 +2609,8 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify samples table updates with cloned samples
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 47,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 47,
+                                                                                      locale: @user.locale))
       ### VERIFY END ###
     end
 
@@ -2618,8 +2618,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ####
@@ -2648,8 +2648,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2709,8 +2709,8 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
@@ -2744,8 +2744,8 @@ module Groups
 
       ### VERIFY START ###
       assert_text I18n.t('samples.deletions.destroy.success', count: 2)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 24,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 24,
+                                                                                      locale: @user.locale))
       ### VERIFY END ###
     end
 
@@ -2755,15 +2755,15 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2795,8 +2795,8 @@ module Groups
       ### VERIFY START ###
       assert_text I18n.t('samples.deletions.destroy.partial_success', deleted: '1/2')
       assert_text I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/2')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                                      locale: @user.locale))
       ### VERIFY END ###
     end
 
@@ -2805,15 +2805,15 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
-                                                                           locale: @user.locale))
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2840,8 +2840,8 @@ module Groups
 
       ### VERIFY START ###
       assert_text I18n.t('samples.deletions.destroy.no_deleted_samples', deleted: '1/2')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### VERIFY END ###
     end
   end

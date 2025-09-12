@@ -42,16 +42,16 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
-    assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+    assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     assert_no_selector 'a',
-                       exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-    click_on I18n.t(:'viral.pagy.pagination_component.next')
+                       exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
+    click_on I18n.t(:'components.viral.pagy.pagination_component.next')
     assert_selector '#workflow-executions-table table tbody tr', count: 5
 
-    assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+    assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
     assert_no_selector 'a',
-                       exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-    click_on I18n.t(:'viral.pagy.pagination_component.previous')
+                       exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+    click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 

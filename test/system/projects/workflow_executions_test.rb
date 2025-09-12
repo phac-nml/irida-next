@@ -511,7 +511,7 @@ module Projects
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('attachments.table_component.preview')
+        assert_text I18n.t('components.attachments.table_component.preview')
       end
     end
 
@@ -534,7 +534,7 @@ module Projects
       within 'tbody' do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('attachments.table_component.preview')
+        assert_text I18n.t('components.attachments.table_component.preview')
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.puid
@@ -543,7 +543,7 @@ module Projects
       within 'tbody' do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('attachments.table_component.preview')
+        assert_text I18n.t('components.attachments.table_component.preview')
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.file.filename.to_s
@@ -552,7 +552,7 @@ module Projects
       within 'tbody' do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('attachments.table_component.preview')
+        assert_text I18n.t('components.attachments.table_component.preview')
       end
     end
 

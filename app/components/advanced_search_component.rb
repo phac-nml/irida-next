@@ -25,21 +25,21 @@ class AdvancedSearchComponent < Component
       [metadata_field, "metadata.#{metadata_field}"]
     end
     {
-      I18n.t('advanced_search_component.operation.metadata_fields') => metadata_field_options
+      I18n.t('components.advanced_search_component.operation.metadata_fields') => metadata_field_options
     }
   end
 
   def operation_options
     {
-      I18n.t('advanced_search_component.operation.equals') => '=',
-      I18n.t('advanced_search_component.operation.not_equals') => '!=',
-      I18n.t('advanced_search_component.operation.less_than') => '<=',
-      I18n.t('advanced_search_component.operation.greater_than') => '>=',
-      I18n.t('advanced_search_component.operation.contains') => 'contains',
-      I18n.t('advanced_search_component.operation.exists') => 'exists',
-      I18n.t('advanced_search_component.operation.not_exists') => 'not_exists',
-      I18n.t('advanced_search_component.operation.in') => 'in',
-      I18n.t('advanced_search_component.operation.not_in') => 'not_in'
+      I18n.t('components.advanced_search_component.operation.equals') => '=',
+      I18n.t('components.advanced_search_component.operation.not_equals') => '!=',
+      I18n.t('components.advanced_search_component.operation.less_than') => '<=',
+      I18n.t('components.advanced_search_component.operation.greater_than') => '>=',
+      I18n.t('components.advanced_search_component.operation.contains') => 'contains',
+      I18n.t('components.advanced_search_component.operation.exists') => 'exists',
+      I18n.t('components.advanced_search_component.operation.not_exists') => 'not_exists',
+      I18n.t('components.advanced_search_component.operation.in') => 'in',
+      I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
     }
   end
 end

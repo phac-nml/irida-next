@@ -32,6 +32,9 @@ data:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
     - ["devise.*", "config/locales/devise.%{locale}.yml", "embedded_gems/pathogen/config/locales/devise.%{locale}.yml"]
+    - ["pathogen.*", "embedded_gems/pathogen/config/locales/%{locale}.yml"]
+    - ["components.*", "config/locales/components.%{locale}.yml"]
+    - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
     # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
     # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
     # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']
@@ -154,7 +157,7 @@ ignore_unused:
   - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,helpers,number,support,time}.*"
   - "*.sorting.*"
   - "activity.*"
-  - "viral.data_table_component.*"
+  - "components.viral.data_table_component.*"
   - "samples.table_component.namespaces.puid"
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
