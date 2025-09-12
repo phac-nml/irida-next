@@ -1,22 +1,21 @@
 <div class="p-6 space-y-4 max-w-md">
-  <h3 id="notification-settings" class="text-lg font-semibold">
-    Notification Settings
+  <h3 id="assembly-outputs" class="text-lg font-semibold">
+    Assembly Output Selection
   </h3>
 
   <p class="text-gray-600 text-sm">
-    Configure your notification preferences below. The checkbox is labeled by
-    the heading above.
+    Choose whether to include specific assembly-derived outputs. The checkbox
+    is labeled by the heading above via aria-labelledby.
   </p>
 
   <%= pathogen_checkbox(
     "preview_object",
-    :email_notifications,
+    :include_gff,
     {
       aria: {
-        labelledby: "notification-settings",
+        labelledby: "assembly-outputs",
       },
-      help_text:
-        "Receive email notifications for important updates and announcements",
+      help_text: "Export annotated GFF file along with assembly contigs",
     },
     "1",
     "0",
@@ -24,18 +23,18 @@
 
   <hr class="my-4">
 
-  <h4 id="bulk-actions" class="text-md font-medium">
-    Bulk Actions
+  <h4 id="batch-processing" class="text-md font-medium">
+    Batch Processing Control
   </h4>
 
   <%= pathogen_checkbox(
     "preview_object",
-    :select_all,
+    :enable_batch_qc,
     {
       aria: {
-        labelledby: "bulk-actions",
+        labelledby: "batch-processing",
       },
-      help_text: "Select all items in the table for bulk operations",
+      help_text: "Apply identical QC thresholds to all listed samples",
       controls: "data-table",
     },
     "1",
@@ -44,8 +43,8 @@
 
   <div id="data-table" class="mt-2 p-3 border rounded bg-gray-50">
     <p class="text-sm text-gray-600">
-      This simulates a data table that would be controlled by the checkbox
-      above.
+      This simulates a list of samples that would have standardized QC
+      thresholds applied when batch processing is enabled.
     </p>
   </div>
 </div>
