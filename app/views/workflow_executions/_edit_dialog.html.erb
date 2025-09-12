@@ -25,15 +25,12 @@
     </div>
 
     <% if Flipper.enabled?(:workflow_execution_sharing) %>
-      <%= pathogen_checkbox(
-        form: form,
-        attribute: :shared_with_namespace,
-        value: true,
+      <%= pathogen_checkbox :shared_with_namespace, {
         checked: @workflow_execution["shared_with_namespace"],
         label: t(
           :"workflow_executions.edit_dialog.shared_with_namespace.#{@workflow_execution.namespace.type.downcase}"
         )
-      ) %>
+      }, true, false, form: form %>
     <% end %>
 
     <div class="mt-4 space-x-2">

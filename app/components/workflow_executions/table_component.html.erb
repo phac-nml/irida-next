@@ -24,17 +24,17 @@
             ) do %>
               <div class="flex items-center gap-3">
                 <% if index.zero? and @abilities[:select_workflow_executions] %>
-                  <%= pathogen_checkbox attribute: "select-page",
-                  id: "select-page",
-                  value: "1",
-                  aria: {
-                    label: t(:".select_page"),
-                  },
-                  data: {
-                    action: "input->selection#togglePage",
-                    controller: "filters",
-                    selection_target: "selectPage",
-                  } %>
+                  <%= pathogen_checkbox nil, "select-page", {
+                    id: "select-page",
+                    aria: {
+                      label: t(:".select_page"),
+                    },
+                    data: {
+                      action: "input->selection#togglePage",
+                      controller: "filters",
+                      selection_target: "selectPage",
+                    }
+                  }, "1", "0" %>
                 <% end %>
                 <% if column == :workflow_name || column == :workflow_version %>
                   <%= render Ransack::SortComponent.new(
@@ -90,16 +90,16 @@
               ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? && @abilities[:select_workflow_executions] %>
-                    <%= pathogen_checkbox attribute: "workflow_execution_ids[]",
-                    id: dom_id(workflow_execution, "checkbox"),
-                    value: workflow_execution.id,
-                    aria: {
-                      label: workflow_execution.name || workflow_execution.id,
-                    },
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection",
-                    } %>
+                    <%= pathogen_checkbox nil, "workflow_execution_ids[]", {
+                      id: dom_id(workflow_execution, "checkbox"),
+                      aria: {
+                        label: workflow_execution.name || workflow_execution.id,
+                      },
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      }
+                    }, workflow_execution.id, "0" %>
                   <% end %>
                   <% if column == :id %>
                     <%= link_to(
