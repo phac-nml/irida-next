@@ -1,33 +1,65 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Group Example</h3>
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Sequencing Output & Data Sharing Example</h3>
 
     <fieldset class="space-y-3">
-      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Communication Preferences</legend>
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Primary Processing Outputs</legend>
 
-      <%= form.checkbox :email_notifications, "1",
-          label: "Email notifications",
-          help_text: "Receive important updates via email" %>
+      <%= pathogen_checkbox(
+        :generate_fastqc,
+        {
+          label: "Generate FastQC report",
+          help_text: "Produce standard per-sample quality metrics",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :sms_notifications, "1",
-          label: "SMS notifications",
-          help_text: "Receive urgent alerts via text message" %>
+      <%= pathogen_checkbox(
+        :perform_assembly,
+        {
+          label: "Perform de novo assembly",
+          help_text: "Run SPAdes-based assembly on reads",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :push_notifications, "1",
-          label: "Push notifications",
-          help_text: "Get notified in the app" %>
+      <%= pathogen_checkbox(
+        :annotate_genome,
+        { label: "Annotate genome", help_text: "Run Prokka annotation workflow" },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
 
     <fieldset class="space-y-3">
-      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Privacy Settings</legend>
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Data Governance & Sharing</legend>
 
-      <%= form.checkbox :profile_public, "1",
-          label: "Make profile public",
-          help_text: "Allow other users to see your profile" %>
+      <%= pathogen_checkbox(
+        :share_consensus_sequences,
+        {
+          label: "Share consensus assemblies",
+          help_text: "Allow downstream users to view assembled contigs",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :data_sharing, "1",
-          label: "Allow data sharing",
-          help_text: "Share anonymous usage data for improvements" %>
+      <%= pathogen_checkbox(
+        :allow_public_health_export,
+        {
+          label: "Permit public health export",
+          help_text: "Enable export of derived metrics to surveillance feeds",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
   </div>
 <% end %>

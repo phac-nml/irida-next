@@ -8,7 +8,9 @@ export default class extends Controller {
         const body = document.getElementById("metadata-table-body");
 
         for (let row of body.rows) {
-            const isChecked = row.cells[0].children[0].checked;
+            const isChecked = row.querySelector(
+              "input[type='checkbox']",
+            ).checked;
 
             if (isChecked) {
                 const newRow = this.tableBodyTarget.insertRow(-1);

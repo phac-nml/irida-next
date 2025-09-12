@@ -42,14 +42,16 @@ module Pathogen
       #
       # @return [String] CSS classes for help text container
       def checkbox_help_container_classes
-        'mt-1 ml-8'
+        # Align help text with label (checkbox width 1rem + gap-3 0.75rem = 1.75rem)
+        # and add a little extra space below to separate stacked checkboxes.
+        'mt-1 mb-2 pl-7'
       end
 
       # Container classes for aria-only checkboxes (no visible label).
       #
       # @return [String] CSS classes for aria-only help container
       def checkbox_aria_help_container_classes
-        'mt-1'
+        'sr-only'
       end
 
       # CSS classes for enhanced description text.
