@@ -1723,7 +1723,7 @@ module Projects
           assert_selector 'li', count: 3
         end
         # enable ignore empty values
-        find('input#file_import_ignore_empty_values_true').click
+        find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1784,7 +1784,7 @@ module Projects
           assert_selector 'li', count: 3
         end
         # leave ignore empty values disabled
-        assert_not find('input#file_import_ignore_empty_values_true').checked?
+        assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
