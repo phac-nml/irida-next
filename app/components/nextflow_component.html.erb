@@ -162,27 +162,36 @@
 
       <% if @allowed_to_update_samples %>
         <div class="flex items-center h-5 mb-4">
-          <%= workflow.checkbox :update_samples, "1",
-            label: t(:"components.nextflow.update_samples"),
-            checked: instance.present? && instance["update_samples"]
-           %>
+          <%= workflow.check_box :update_samples,
+                             { checked: instance.present? && instance["update_samples"] } %>
+          <%= workflow.label :update_samples,
+                         t(:"components.nextflow.update_samples"),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
       <% end %>
       <div class="flex items-center h-5 mb-4">
-        <%= workflow.checkbox :email_notification, "1",
-          label: t(:"components.nextflow.email_notification"),
-          checked: instance.present? && instance["email_notification"]
-        %>
+        <%= workflow.check_box :email_notification,
+                           {
+                             checked:
+                               instance.present? && instance["email_notification"],
+                           } %>
+        <%= workflow.label :email_notification,
+                       t(:"components.nextflow.email_notification"),
+                       class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <%# do not render checkbox for an automated workflow execution %>
       <% if Flipper.enabled?(:workflow_execution_sharing) && @namespace_type && !@samples.empty? %>
         <div class="flex items-center h-5 mb-4">
-          <%= workflow.checkbox :shared_with_namespace, "1",
-            label: t(
-              :"components.nextflow.shared_with.#{@namespace_type.downcase}",
-            ),
-            checked: instance.present? && instance["shared_with_namespace"]
-          %>
+          <%= workflow.check_box :shared_with_namespace,
+                             {
+                               checked:
+                                 instance.present? && instance["shared_with_namespace"],
+                             } %>
+          <%= workflow.label :shared_with_namespace,
+                         t(
+                           :"components.nextflow.shared_with.#{@namespace_type.downcase}",
+                         ),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
       <% end %>
     <% end %>
