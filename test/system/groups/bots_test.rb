@@ -26,19 +26,19 @@ module Groups
       assert_selector 'tr', count: 20 + header_row_count
 
       # pagy
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
       # second page of table
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_selector 'tr', count: 1 + header_row_count
 
       # pagy updated
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
 
       # pagy previous works
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector 'tr', count: 20 + header_row_count
     end
 
@@ -50,8 +50,8 @@ module Groups
 
       assert_selector 'tr', count: 0
 
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
       within('div.empty_state_message') do
         assert_text I18n.t(:'bots.index.table.empty_state.title')
@@ -160,8 +160,8 @@ module Groups
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -179,11 +179,11 @@ module Groups
       # success message
       assert_text I18n.t(:'concerns.bot_actions.destroy.success')
       # bot number decreased by 1
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                                      locale: @user.locale))
       # no pagy next/previous buttons since only 1 page for table
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       ### VERIFY END ###
     end
 
@@ -193,8 +193,8 @@ module Groups
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -236,8 +236,8 @@ module Groups
       # verify page and table loaded
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -280,8 +280,8 @@ module Groups
       # verify page rendered
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -331,8 +331,8 @@ module Groups
     test 'PAT panel removed after personal access token revoke' do
       ### SETUP START ###
       visit group_bots_path(@namespace)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       # PAT turbo frame present with no content
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'
@@ -399,8 +399,8 @@ module Groups
     test 'PAT panel removed after bot destroy' do
       ### SETUP START ###
       visit group_bots_path(@namespace)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
       # PAT turbo frame present with no content
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'
@@ -449,8 +449,8 @@ module Groups
 
       ### VERIFY START ###
       # confirm bot destroyed
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                                      locale: @user.locale))
       # PAT panel no longer contains content
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'

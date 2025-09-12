@@ -24,12 +24,12 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector '.treegrid-row', count: 20
       assert_text @project.human_name
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_selector '.treegrid-row'
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector '.treegrid-row', count: 20
 
       click_link @project.human_name
@@ -44,13 +44,13 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector '.treegrid-row', count: 20
       assert_text @project.human_name
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_selector '.treegrid-row'
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector '.treegrid-row', count: 20
 
       click_link @project.human_name
@@ -67,9 +67,9 @@ module Dashboard
       assert_selector '.treegrid-row', count: 4
       assert_text projects(:john_doe_project2).human_name
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     end
 
     test 'can search the list of projects by name' do
@@ -81,13 +81,13 @@ module Dashboard
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
       click_button I18n.t(:'dashboard.projects.index.search.label')
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
+                                                                                      locale: @user.locale))
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
 
       assert_selector %(input.t-search-component) do |input|
         assert_equal @project.name, input['value']
@@ -103,8 +103,8 @@ module Dashboard
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
       click_button I18n.t(:'dashboard.projects.index.search.label')
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                                      locale: @user.locale))
       assert_selector '.treegrid-row', count: 1
       assert_text @project.puid
     end
@@ -145,7 +145,7 @@ module Dashboard
       find('input.t-search-component').native.send_keys(:return)
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
@@ -184,9 +184,9 @@ module Dashboard
 
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
 
       within('#groups_tree .treegrid-row:first-child') do
         assert_text projects(:project19).human_name

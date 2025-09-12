@@ -24,9 +24,9 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_selector 'nav.pagy ul li a[aria-current="page"]', text: '2'
-      assert_text I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_text I18n.t(:'components.viral.pagy.pagination_component.previous')
       within 'div.treegrid-container' do
         assert_selector 'div.treegrid-row', count: 6
         [*('f'..'a')].each do |letter|
@@ -34,7 +34,7 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector 'nav.pagy ul li a[aria-current="page"]', text: '1'
       within 'div.treegrid-container' do
         assert_selector 'div.treegrid-row', count: 20

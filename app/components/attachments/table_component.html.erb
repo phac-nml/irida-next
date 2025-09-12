@@ -25,8 +25,8 @@
               ) do %>
                 <% if index.zero? and @abilities[:select_attachments] %>
                   <%= check_box_tag "select-page",
-                  title: t(:".select_page"),
-                  "aria-label": t(:".select_page"),
+                  title: t(:"components.attachments.table_component.select_page"),
+                  "aria-label": t(:"components.attachments.table_component.select_page"),
                   data: {
                     action: "input->selection#togglePage",
                     controller: "filters",
@@ -36,7 +36,7 @@
                 <% if column == :id %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: t(".#{column}"),
+                    label: t("components.attachments.table_component.#{column}"),
                     url: helpers.sorting_url(@q, "puid"),
                     field: "puid",
                     **(
@@ -50,7 +50,7 @@
                 <% elsif column == :byte_size || column == :filename %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: t(".#{column}"),
+                    label: t("components.attachments.table_component.#{column}"),
                     url: helpers.sorting_url(@q, "file_blob_#{column}"),
                     field: "file_blob_#{column}",
                     **(
@@ -64,7 +64,7 @@
                 <% elsif column == :format || column == :type %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: t(".#{column}"),
+                    label: t("components.attachments.table_component.#{column}"),
                     url:
                       helpers.sorting_url(
                         @q,
@@ -82,7 +82,7 @@
                 <% else %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: t(".#{column}"),
+                    label: t("components.attachments.table_component.#{column}"),
                     url: helpers.sorting_url(@q, column),
                     field: column,
                     **(
@@ -102,7 +102,7 @@
                 scope: 'col',
                 classes: class_names('px-3 py-3')
               ) do %>
-                <%= t(".actions") %>
+                <%= t("components.attachments.table_component.actions") %>
               <% end %>
             <% end %>
           </tr>
@@ -250,10 +250,14 @@
                 ) do %>
                   <% if @row_actions[:preview] && attachment.previewable? %>
                     <%= link_to(
-                      t(".preview"),
+                      t("components.attachments.table_component.preview"),
                       attachment_path(attachment),
                       aria: {
-                        label: t(".preview_aria_label", name: attachment.file.filename.to_s),
+                        label:
+                          t(
+                            "components.attachments.table_component.preview_aria_label",
+                            name: attachment.file.filename.to_s,
+                          ),
                       },
                       data: {
                         turbo_stream: true,
@@ -264,12 +268,12 @@
                   <% end %>
                   <% if @row_actions[:destroy] %>
                     <%= button_to(
-                      t(".delete"),
+                      t("components.attachments.table_component.delete"),
                       destroy_path(attachment.id),
                       aria: {
                         label:
                           t(
-                            ".delete_aria_label",
+                            "components.attachments.table_component.delete_aria_label",
                             count: attachment.associated_attachment ? 2 : 1,
                             name:
                               (
@@ -312,11 +316,11 @@
                 colspan="3"
               >
                 <span>
-                  <%= t(".counts.attachments") %>:
+                  <%= t("components.attachments.table_component.counts.attachments") %>:
                   <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
                 </span>
                 <span>
-                  <%= t(".counts.selected") %>:
+                  <%= t("components.attachments.table_component.counts.selected") %>:
                   <strong
                     data-selection-target="selected"
                     data-action="
@@ -334,7 +338,10 @@
         <% end %>
       </table>
     <% end %>
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+    <%= render Viral::Pagy::FullComponent.new(
+      @pagy,
+      item: t("components.attachments.table_component.limit.item"),
+    ) %>
 
   <% end %>
 <% else %>

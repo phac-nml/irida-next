@@ -1,5 +1,7 @@
 <%= viral_dialog(open: @open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(
+    title: t("components.attachments.dialogs.delete_attachment_component.title"),
+  ) %>
   <%= helpers.turbo_frame_tag("deletion-alert") %>
 
   <div
@@ -10,21 +12,23 @@
     <p class="mb-4">
       <% if @attachment.associated_attachment %>
         <%= t(
-          ".description.paired_end",
+          "components.attachments.dialogs.delete_attachment_component.description.paired_end",
           filenames:
             "'#{@attachment.file.filename.to_s}', '#{@attachment.associated_attachment.file.filename.to_s}'",
           attachable_type: @namespace.type.downcase,
         ) %>
       <% else %>
         <%= t(
-          ".description.single",
+          "components.attachments.dialogs.delete_attachment_component.description.single",
           filename: @attachment.file.filename.to_s,
           attachable_type: @namespace.type.downcase,
         ) %>
       <% end %>
     </p>
     <%= form_for(:deletion, url: destroy_path, method: :delete) do |form| %>
-      <%= form.submit t(".submit_button"),
+      <%= form.submit t(
+                    "components.attachments.dialogs.delete_attachment_component.submit_button",
+                  ),
                   class:
                     "inline-flex items-center justify-center w-1/2 border rounded-lg cursor-pointer sm:w-auto focus-visible:z-10 text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 hover:bg-red-800 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
                   data: {

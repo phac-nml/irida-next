@@ -1,155 +1,5 @@
 ---
 en:
-  activity:
-    group:
-      attachment:
-        create_html: "%{user} attached files to group"
-        destroy_html: "%{user} removed files from group"
-      create_html: "%{user} created group"
-      destroy_html: "%{user} removed group"
-      import_samples:
-        create_html: "%{user} imported %{href} samples to projects within this group"
-      member:
-        create_html: "%{user} added member %{href} to group"
-        destroy_html: "%{user} removed member %{href} from group"
-        destroy_self_html: "%{href} removed themself from group"
-        update_html: "%{user} updated group member %{href} attributes"
-      metadata_template:
-        create_html: "%{user} created metadata template %{href}"
-        destroy_html: "%{user} removed metadata template %{href}"
-        update_html: "%{user} updated metadata template %{href}"
-      namespace_group_link:
-        create_html: "%{user} shared group with group %{href}"
-        created_html: "%{user} shared %{namespace_type} %{href} with group"
-        destroy_html: "%{user} unshared group with group %{href}"
-        destroyed_html: "%{user} unshared %{namespace_type} %{href} with group"
-        update_html: "%{user} updated share attributes between group and group %{href}"
-        updated_html: "%{user} updated share attributes between %{namespace_type} %{href} and group"
-      projects:
-        create_html: "%{user} created project %{href} within group"
-        destroy_html: "%{user} removed project %{href} from group"
-        transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
-        transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
-      samples:
-        clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
-        destroy_html: "%{user} removed %{href} samples from group"
-        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
-      subgroups:
-        create_html: "%{user} created subgroup %{href}"
-        destroy_html: "%{user} removed descendant group %{href}"
-      transfer_in_html: "%{user} transferred group %{href} into group %{new_namespace} from %{old_namespace}"
-      transfer_in_no_exisiting_namespace_html: "%{user} transferred group %{href} into group %{new_namespace}"
-      transfer_out_html: "%{user} transferred group %{transferred_group_puid} into group %{new_namespace}"
-      update_html: "%{user} updated group attributes"
-    namespaces_project_namespace:
-      attachment:
-        create_html: "%{user} attached files to project"
-        destroy_html: "%{user} removed files from project"
-      create_html: "%{user} created project"
-      destroy_html: "%{user} removed project"
-      import_samples:
-        create_html: "%{user} imported %{href} samples to project"
-      member:
-        create_html: "%{user} added member %{href} to project"
-        destroy_html: "%{user} removed member %{href} from project"
-        destroy_self_html: "%{href} removed themself from project"
-        update_html: "%{user} updated project member %{href} attributes"
-      metadata_template:
-        create_html: "%{user} created metadata template %{href}"
-        destroy_html: "%{user} removed metadata template %{href}"
-        update_html: "%{user} updated metadata template %{href}"
-      namespace_group_link:
-        create_html: "%{user} shared project with group %{href}"
-        destroy_html: "%{user} unshared project with group %{href}"
-        update_html: "%{user} updated share attributes between project and group %{href}"
-      samples:
-        attachment:
-          create_html: "%{user} attached files to sample %{href}"
-          destroy_html: "%{user} removed files from sample %{href}"
-        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
-        cloned_from_html: "%{user} copied %{cloned_samples_count} samples from project %{href}"
-        create_html: "%{user} created sample %{href}"
-        destroy_html: "%{user} removed sample %{href}"
-        destroy_multiple_html: "%{user} removed %{href} samples from project"
-        metadata:
-          update_html: "%{user} updated sample %{href} metadata"
-        transfer_html: "%{user} transferred %{transferred_samples_count} samples to project %{href}"
-        transferred_from_html: "%{user} transferred %{transferred_samples_count} samples from project %{href}"
-        update_html: "%{user} updated sample %{href} attributes"
-      transfer_html: "%{user} transferred project from namespace %{old_namespace} to %{new_namespace}"
-      update_html: "%{user} updated project attributes"
-      workflow_executions:
-        destroy_html: "%{user} removed %{href} workflow executions from project"
-    workflow_execution:
-      automated_workflow:
-        create_html: "%{user} setup automated pipeline %{href} for the project"
-        destroy_html: "%{user} removed automated pipeline %{href} for the project"
-        launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
-      automated_workflow_completion:
-        metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
-        outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
-        outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
-  advanced_search_component:
-    add_condition_button: Add Condition
-    add_group_button: Add Group
-    apply_filter_button: Apply filter
-    clear_aria_label: Clear Advanced Search
-    clear_filter_button: Clear filter
-    condition: Condition %{index}
-    confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
-    description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
-    group: Group %{index}
-    operation:
-      contains: contains
-      equals: "="
-      exists: exists
-      greater_than: ">="
-      in: in
-      less_than: "<="
-      metadata_fields: Metadata fields
-      not_equals: "!="
-      not_exists: not exists
-      not_in: not in
-    remove_condition_aria_label: Remove condition
-    remove_group_button: Remove group
-    rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
-    title: Advanced search
-  attachments:
-    dialogs:
-      delete_attachment_component:
-        description:
-          paired_end: Are you sure that you want to delete files %{filenames} from the %{attachable_type}?
-          single: Are you sure that you want to delete file '%{filename}' from the %{attachable_type}?
-        submit_button: Confirm
-        title: Delete File
-      new_attachment_component:
-        files: Files
-        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
-        upload: Upload
-        upload_files: Upload Files
-        uploading: Uploading
-    table_component:
-      action: Action
-      actions: Actions
-      byte_size: Size
-      counts:
-        attachments: Attachments
-        selected: Selected
-      created_at: Uploaded
-      delete: Delete
-      delete_aria_label:
-        one: 'Delete file: %{name}'
-        other: 'Delete files: %{name}'
-      delete_confirm: Are you sure you would like to delete attachment '%{name}'?
-      filename: Filename
-      format: Format
-      id: PUID
-      limit:
-        item: Attachments
-      preview: Preview
-      preview_aria_label: 'Preview attachment: %{name}'
-      select_page: Select / Deselect visible attachments
-      type: Type
   components:
     activity:
       dialog:
@@ -257,6 +107,67 @@ en:
           link_descriptive_text: View workflow executions listing for project
         show:
           link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
+    advanced_search_component:
+      add_condition_button: Add Condition
+      add_group_button: Add Group
+      apply_filter_button: Apply filter
+      clear_aria_label: Clear Advanced Search
+      clear_filter_button: Clear filter
+      condition: Condition %{index}
+      confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
+      description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
+      group: Group %{index}
+      operation:
+        contains: contains
+        equals: "="
+        exists: exists
+        greater_than: ">="
+        in: in
+        less_than: "<="
+        metadata_fields: Metadata fields
+        not_equals: "!="
+        not_exists: not exists
+        not_in: not in
+      remove_condition_aria_label: Remove condition
+      remove_group_button: Remove group
+      rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
+      title: Advanced search
+    attachments:
+      dialogs:
+        delete_attachment_component:
+          description:
+            paired_end: Are you sure that you want to delete files %{filenames} from the %{attachable_type}?
+            single: Are you sure that you want to delete file '%{filename}' from the %{attachable_type}?
+          submit_button: Confirm
+          title: Delete File
+        new_attachment_component:
+          files: Files
+          files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+          upload: Upload
+          upload_files: Upload Files
+          uploading: Uploading
+      table_component:
+        action: Action
+        actions: Actions
+        byte_size: Size
+        counts:
+          attachments: Attachments
+          selected: Selected
+        created_at: Uploaded
+        delete: Delete
+        delete_aria_label:
+          one: 'Delete file: %{name}'
+          other: 'Delete files: %{name}'
+        delete_confirm: Are you sure you would like to delete attachment '%{name}'?
+        filename: Filename
+        format: Format
+        id: PUID
+        limit:
+          item: Attachments
+        preview: Preview
+        preview_aria_label: 'Preview attachment: %{name}'
+        select_page: Select / Deselect visible attachments
+        type: Type
     breadcrumb:
       dropdown:
         aria_label: Breadcrumb dropdown
@@ -305,13 +216,52 @@ en:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
+    namespace_row:
+      contents_component:
+        projects:
+          aria-label: Projects
+          tooltip: "%{count} projects in %{namespace_name}"
+        samples:
+          aria-label: Samples
+          tooltip: "%{count} samples in %{namespace_name}"
+        subnamespaces:
+          aria-label: Subgroups
+          tooltip: "%{count} subgroups in %{namespace_name}"
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
+      samplesheet:
+        file_cell_component:
+          no_selected_file: No selected file
+        header_component:
+          default: "%{label} (default)"
+          required: Required
+      samplesheet_component:
+        filter:
+          clear: Clear search
+          placeholder: Search by PUID or name
+          search: Search
+        label: Samples
+        next: Next
+        page_selection:
+          aria_label: Pagination page selector
+        previous: Previous
       shared_with:
         group: Share results with group members?
         project: Share results with project members?
       update_samples: Update samples with analysis results
+    nextflow_component:
+      data_missing_error: 'The following samples are missing required data: '
+      filtering_samples: Filtering samples, this may take some time.
+      name:
+        error: Name is required. Please enter a name for the workflow execution.
+        helper: A custom name will make it easier to search for this in the future.
+        label:
+          optional: Name (Optional)
+          required: Name
+      processing_request: Processing your submission, this may take some time.
+      processing_samplesheet: Processing samplesheet, this may take some time.
+      submission_error: Something went wrong with the submission request.
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information
@@ -328,6 +278,18 @@ en:
       view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
+    ransack:
+      sort_dropdown_component:
+        prefix: Sort by
+        sorting:
+          created_at_asc: Oldest created
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          updated_at_desc: Updated At
     samples:
       table_component:
         counts:
@@ -363,98 +325,44 @@ en:
         project:
           aria_label: "%{name}, puid: %{puid}, role: %{role}, samples: %{samples_count}"
     viral:
+      data_table_component:
+        header:
+          action: Action
+      form:
+        prefixed:
+          boolean_component:
+            'false': 'False'
+            'true': 'True'
       pagy:
         empty_state:
           description: No items found matching your search
           title: No items found
-  namespace_row:
-    contents_component:
-      projects:
-        aria-label: Projects
-        tooltip: "%{count} projects in %{namespace_name}"
-      samples:
-        aria-label: Samples
-        tooltip: "%{count} samples in %{namespace_name}"
-      subnamespaces:
-        aria-label: Subgroups
-        tooltip: "%{count} subgroups in %{namespace_name}"
-  nextflow:
-    samplesheet:
-      file_cell_component:
-        no_selected_file: No selected file
-      header_component:
-        default: "%{label} (default)"
-        required: Required
-    samplesheet_component:
-      filter:
-        clear: Clear search
-        placeholder: Search by PUID or name
-        search: Search
-      label: Samples
-      next: Next
-      page_selection:
-        aria_label: Pagination page selector
-      previous: Previous
-  nextflow_component:
-    data_missing_error: 'The following samples are missing required data: '
-    filtering_samples: Filtering samples, this may take some time.
-    name:
-      error: Name is required. Please enter a name for the workflow execution.
-      helper: A custom name will make it easier to search for this in the future.
-      label:
-        optional: Name (Optional)
-        required: Name
-    processing_request: Processing your submission, this may take some time.
-    processing_samplesheet: Processing samplesheet, this may take some time.
-    submission_error: Something went wrong with the submission request.
-  ransack:
-    sort_dropdown_component:
-      prefix: Sort by
-      sorting:
-        created_at_asc: Oldest created
-        created_at_desc: Last created
-        name_asc: Name
-        name_desc: Name, descending
-        namespace_name_asc: Name
-        namespace_name_desc: Name, descending
-        updated_at_asc: Oldest updated
-        updated_at_desc: Updated At
-  viral:
-    data_table_component:
-      header:
-        action: Action
-    form:
-      prefixed:
-        boolean_component:
-          'false': 'False'
-          'true': 'True'
-    pagy:
-      limit_component:
-        item_aria_label: Show %{items} items per page
-        items: "%{items} per page:"
-        select_items_action: select the number of items to display
-        summary:
-          one: Displaying <span class='font-bold'>%{count}</span> item
-          other: Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items
-      pagination_component:
-        aria_label: Pagination Navigation
-        item_aria_label: Go to Page %{number}
-        next: Next
-        next_aria_label: Go to next page
-        previous: Previous
-        previous_aria_label: Go to previous page
-    sortable_list:
-      list_component:
-        actions: Actions
-        add: Add
-        aria_role_description: "%{list} listbox drag and drop"
-        down: Down
-        keyboard_shortcuts:
-          add: Enter
-          down: Alt+ArrowDown
-          remove: Delete
-          up: Alt+ArrowUp
-        remove: Remove
-        up: Up
-    sortable_lists_component:
-      no_template: No template
+        limit_component:
+          item_aria_label: Show %{items} items per page
+          items: "%{items} per page:"
+          select_items_action: select the number of items to display
+          summary:
+            one: Displaying <span class='font-bold'>%{count}</span> item
+            other: Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items
+        pagination_component:
+          aria_label: Pagination Navigation
+          item_aria_label: Go to Page %{number}
+          next: Next
+          next_aria_label: Go to next page
+          previous: Previous
+          previous_aria_label: Go to previous page
+      sortable_list:
+        list_component:
+          actions: Actions
+          add: Add
+          aria_role_description: "%{list} listbox drag and drop"
+          down: Down
+          keyboard_shortcuts:
+            add: Enter
+            down: Alt+ArrowDown
+            remove: Delete
+            up: Alt+ArrowUp
+          remove: Remove
+          up: Up
+      sortable_lists_component:
+        no_template: No template

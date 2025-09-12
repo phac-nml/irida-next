@@ -8,8 +8,8 @@ module Viral
       render_preview(:default)
 
       assert_selector 'nav.pagy.nav'
-      assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
-      assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
+      assert_selector 'li span.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
+      assert_selector 'li > a', text: I18n.t('components.viral.pagy.pagination_component.next')
       assert_selector 'li a[aria-current="page"]', text: '1', count: 1
       assert_selector 'li > a:not([aria-disabled="true"])', count: 6
     end
@@ -24,8 +24,8 @@ module Viral
       render_preview(:many_pages)
 
       assert_selector 'nav.pagy.nav'
-      assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.previous')
-      assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
+      assert_selector 'li > a', text: I18n.t('components.viral.pagy.pagination_component.previous')
+      assert_selector 'li > a', text: I18n.t('components.viral.pagy.pagination_component.next')
       assert_selector 'li a[aria-current="page"]', text: '5', count: 1
       assert_selector 'li > a:not([aria-disabled="true"])', count: 7
       assert_selector 'li span.cursor-default', text: '...', count: 2

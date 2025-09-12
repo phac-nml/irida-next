@@ -184,6 +184,95 @@ fr:
   activities:
     show:
       error: Unable to open dialog
+  activity:
+    group:
+      attachment:
+        create_html: "%{user} attached files to group"
+        destroy_html: "%{user} removed files from group"
+      create_html: "%{user} a créé le groupe"
+      destroy_html: "%{user} a supprimé le groupe"
+      import_samples:
+        create_html: "%{user} imported %{href} samples to projects within this group"
+      member:
+        create_html: "%{user} a ajouté le membre %{href} au groupe"
+        destroy_html: "%{user} a supprimé le membre %{href} du groupe"
+        destroy_self_html: "%{href} s’est retiré du groupe"
+        update_html: "%{user} a mis à jour les attributs %{href} des membres du groupe"
+      metadata_template:
+        create_html: "%{user} a créé le modèle de métadonnées %{href}"
+        destroy_html: "%{user} a retiré le modèle de métadonnées %{href}"
+        update_html: "%{user} a mis à jour le modèle de métadonnées %{href}"
+      namespace_group_link:
+        create_html: "%{user} a partagé le groupe avec le groupe %{href}"
+        created_html: "%{user} a partagé %{namespace_type} %{href} avec le groupe"
+        destroy_html: "%{user} a annulé le partage du groupe avec le groupe %{href}"
+        destroyed_html: "%{user} a annulé le partage de %{namespace_type} %{href} avec le groupe"
+        update_html: "%{user} a mis à jour des attributs de partage entre le groupe et le groupe %{href}"
+        updated_html: "%{user} a mis à jour des attributs de partage entre %{namespace_type} %{href} et le groupe"
+      projects:
+        create_html: "%{user} a créé le projet %{href} dans le groupe"
+        destroy_html: "%{user} a supprimé le projet %{href} du groupe"
+        transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
+        transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+      samples:
+        clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
+        destroy_html: "%{user} removed %{href} samples from group"
+        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
+      subgroups:
+        create_html: "%{user} a créé le sous-groupe %{href}"
+        destroy_html: "%{user} a supprimé le groupe descendant %{href}"
+      transfer_in_html: "%{user} a transféré le groupe %{href} dans le groupe %{new_namespace} de %{old_namespace}"
+      transfer_in_no_exisiting_namespace_html: "%{user} a transféré le groupe %{href} dans le groupe %{new_namespace}"
+      transfer_out_html: "%{user} a transféré le groupe %{transferred_group_puid} dans le groupe %{new_namespace}"
+      update_html: "%{user} a mis à jour les attributs de groupe"
+    namespaces_project_namespace:
+      attachment:
+        create_html: "%{user} attached files to project"
+        destroy_html: "%{user} removed files from project"
+      create_html: "%{user} a créé le projet"
+      destroy_html: "%{user} a supprimé le projet"
+      import_samples:
+        create_html: "%{user} imported %{href} samples to project"
+      member:
+        create_html: "%{user} a ajouté le membre %{href} au projet"
+        destroy_html: "%{user} a supprimé le membre %{href} du projet"
+        destroy_self_html: "%{href} s’est retiré du projet"
+        update_html: "%{user} a mis à jour les attributs %{href} des membres du projet"
+      metadata_template:
+        create_html: "%{user} a créé le modèle de métadonnées %{href}"
+        destroy_html: "%{user} a retiré le modèle de métadonnées %{href}"
+        update_html: "%{user} a mis à jour le modèle de métadonnées %{href}"
+      namespace_group_link:
+        create_html: "%{user} a partagé le projet avec le groupe %{href}"
+        destroy_html: "%{user} a annulé le partage du projet avec le groupe %{href}"
+        update_html: "%{user} a mis à jour des attributs de partage entre le projet et le groupe %{href}"
+      samples:
+        attachment:
+          create_html: "%{user} a joint des fichiers à l’échantillon %{href}"
+          destroy_html: "%{user} a supprimé des fichiers de l’échantillon %{href}"
+        clone_html: "%{user} a copié les échantillons %{cloned_samples_count} dans le projet %{href}"
+        cloned_from_html: "%{user} a copié les échantillons %{cloned_samples_count} du projet %{href}"
+        create_html: "%{user} a créé l’échantillon %{href}"
+        destroy_html: "%{user} a supprimé l’échantillon %{href}"
+        destroy_multiple_html: "%{user} a supprimé les échantillons %{href} du projet"
+        metadata:
+          update_html: "%{user} a mis à jour les métadonnées de l’échantillon %{href}"
+        transfer_html: "%{user} a transféré les échantillons %{transferred_samples_count} au projet %{href}"
+        transferred_from_html: "%{user} a transféré les échantillons %{transferred_samples_count} du projet %{href}"
+        update_html: "%{user} a mis à jour les attributs de l’échantillon %{href}"
+      transfer_html: "%{user} a transféré le projet de l’espace de noms %{old_namespace} vers %{new_namespace}"
+      update_html: "%{user} a mis à jour les attributs de projet"
+      workflow_executions:
+        destroy_html: "%{user} removed %{href} workflow executions from project"
+    workflow_execution:
+      automated_workflow:
+        create_html: "%{user} a mis en place le pipeline automatisé %{href} pour le projet"
+        destroy_html: "%{user} a supprimé le pipeline automatisé %{href} pour le projet"
+        launch_html: Le bot d’automatisation de projet a lancé le pipeline %{href} sur l’échantillon %{sample_href}
+      automated_workflow_completion:
+        metadata_written_html: Le bot d’automatisation de projet a écrit les métadonnées du pipeline %{href} dans l’échantillon %{sample_href}
+        outputs_and_metadata_written_html: Le bot d’automatisation de projet a attaché les sorties du pipeline %{href} et a écrit les métadonnées dans l’échantillon %{sample_href}
+        outputs_written_html: Le bot d’automatisation de projet a attaché les sorties du pipeline %{href} dans l’échantillon %{sample_href}
   application:
     errors:
       access_denied: Accès refusé.
@@ -1100,9 +1189,6 @@ fr:
     precision:
       format:
         delimiter: ''
-  pathogen:
-    link:
-      aria-label: "%{content} (opens in a new window)"
   personal_access_tokens:
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
