@@ -25,7 +25,7 @@
               ) do %>
                 <div class="flex items-center gap-3">
                 <% if index.zero? and @abilities[:select_attachments] %>
-                  <%= pathogen_checkbox nil, "select-page", {
+                  <%= pathogen_checkbox "select-page", "1", {
                     id: "select-page",
                     aria: {
                       label: t("components.attachments.table_component.select_page"),
@@ -129,7 +129,13 @@
                 ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? && @abilities[:select_attachments] %>
-                    <%= pathogen_checkbox nil, "attachment_ids[]", {
+                    <%= pathogen_checkbox "attachment_ids[]", (
+                      if attachment.associated_attachment
+                        [attachment.id, attachment.associated_attachment.id].to_s
+                      else
+                        attachment.id
+                      end
+                    ), {
                       id: dom_id(attachment, "checkbox"),
                       aria: {
                         label: attachment.file.filename.to_s,
