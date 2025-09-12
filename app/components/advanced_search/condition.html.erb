@@ -6,7 +6,7 @@
     dark:text-slate-400
   "
 >
-  <legend><%= t("advanced_search_component.condition", index: @condition_index + 1) %></legend>
+  <legend><%= t("components.advanced_search_component.condition", index: @condition_index + 1) %></legend>
   <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
     <div
@@ -86,7 +86,7 @@
   <button
     type="button"
     class="mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white"
-    aria-label="<%=t("advanced_search_component.remove_condition_aria_label")%>"
+    aria-label="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
     data-action="advanced-search#removeCondition"
   >
     <%= pathogen_icon(ICON::X, size: :sm) %>

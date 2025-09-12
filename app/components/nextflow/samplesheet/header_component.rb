@@ -24,7 +24,7 @@ module Nextflow
 
       def metadata_fields_for_field(field)
         options = @metadata_fields.include?(field) ? @metadata_fields : [field].concat(@metadata_fields)
-        label = t('.default', label: field)
+        label = t('components.nextflow.samplesheet.header_component.default', label: field)
         options.map { |f| [f.eql?(field) ? label : f, f] }
       end
     end

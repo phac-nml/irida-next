@@ -34,7 +34,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       table.assert_selector 'tbody tr', count: 2
       table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
       table.assert_selector 'tbody tr:first-of-type td:last-of-type a',
-                            text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+                            text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
     end
   end
 

@@ -27,21 +27,21 @@ module Projects
         assert_selector 'tr', count: 20
       end
 
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
 
       within('table tbody') do
         assert_selector 'tr', count: 3
       end
 
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
 
       within('table tbody') do
         assert_selector 'tr', count: 20
@@ -74,7 +74,7 @@ module Projects
 
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
-      strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 2))
+      strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 2))
       assert_selector 'table tbody tr', count: 2
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
 
@@ -179,7 +179,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Project Template011'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -235,7 +235,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
 
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -320,7 +320,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Project Template011'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
@@ -365,7 +365,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
         find('input#metadata_template_name').fill_in with: 'Project Template011 New'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
@@ -410,7 +410,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'
@@ -427,7 +427,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.remove')
+        click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
         within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
@@ -492,7 +492,7 @@ module Projects
         find('#metadatafield1').click
         find('#metadatafield2').click
 
-        click_button I18n.t('viral.sortable_list.list_component.add')
+        click_button I18n.t('components.viral.sortable_list.list_component.add')
 
         within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'

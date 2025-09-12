@@ -43,3 +43,5 @@ en:
       checkbox_accessibility:
         select_page: Selects or deselects all items on this page
         select_row: Selects or deselects this item
+    link:
+      aria-label: "%{content} (opens in a new window)"

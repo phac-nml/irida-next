@@ -7,9 +7,9 @@ class PagyFullComponentPreviewTest < ApplicationSystemTestCase
     visit('/rails/view_components/viral_pagy_full_component/default')
 
     assert_selector 'nav.pagy.nav'
-    assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
-    assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
-    assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_selector 'li span.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
+    assert_selector 'li > a', text: I18n.t('components.viral.pagy.pagination_component.next')
+    assert_selector 'li span.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
     assert_selector 'li a[aria-current="page"]', text: '1', count: 1
     assert_selector 'li > a', count: '6'
   end

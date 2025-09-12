@@ -25,14 +25,16 @@
       <div class="flex gap-4 items-center">
         <%= form.radio_button name,
                           "true",
-                          label: t(".true"),
+                          label:
+                            t("components.viral.form.prefixed.boolean_component.true"),
                           checked: value,
                           aria: {
                             describedby: "#{name}-prefix",
                           } %>
         <%= form.radio_button name,
                           "false",
-                          label: t(".false"),
+                          label:
+                            t("components.viral.form.prefixed.boolean_component.false"),
                           checked: !value,
                           aria: {
                             describedby: "#{name}-prefix",

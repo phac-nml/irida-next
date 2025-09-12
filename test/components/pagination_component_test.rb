@@ -10,8 +10,8 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>1-20</b> of <b>114</b> in total</span>'
     )
 
-    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
-    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.next')
+    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
+    assert_selector 'a', text: I18n.t('components.viral.pagy.pagination_component.next')
   end
 
   test 'renders previous link only' do
@@ -21,8 +21,8 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>101-114</b> of <b>114</b> in total</span>'
     )
 
-    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.previous')
-    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.next')
+    assert_selector 'a', text: I18n.t('components.viral.pagy.pagination_component.previous')
+    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.next')
   end
 
   test 'renders both links' do
@@ -32,8 +32,8 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>101-114</b> of <b>114</b> in total</span>'
     )
 
-    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.previous')
-    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.next')
+    assert_selector 'a', text: I18n.t('components.viral.pagy.pagination_component.previous')
+    assert_selector 'a', text: I18n.t('components.viral.pagy.pagination_component.next')
   end
 
   test 'renders disabled previous link' do
@@ -43,6 +43,6 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>1-20</b> of <b>114</b> in total</span>'
     )
     assert_no_selector 'a',
-                       exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+                       exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
   end
 end
