@@ -85,7 +85,7 @@ module Pathogen
       # @param checked_value_or_unchecked_value [String] checked_value (standalone) or unchecked_value (form builder)
       # @param unchecked_value [String] unchecked_value (standalone only)
       # @param form [ActionView::Helpers::FormBuilder, nil] form builder for form.check_box pattern
-      # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def initialize(object_name_or_method, method_or_options = {}, options_or_checked_value = {},
                      checked_value_or_unchecked_value = '1', unchecked_value = '0', form: nil, **)
         if form.present?
@@ -105,9 +105,7 @@ module Pathogen
         end
 
         # For field name patterns, the "method" is actually the value
-        if @object_name.present? && field_name_pattern_at_init?
-          @checked_value = @method.to_s
-        end
+        @checked_value = @method.to_s if @object_name.present? && field_name_pattern_at_init?
 
         # Extract accessibility options from options hash
         label = options.delete(:label)
@@ -134,7 +132,7 @@ module Pathogen
           **options # Pass HTML options directly to parent for extraction
         )
       end
-      # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       protected
 

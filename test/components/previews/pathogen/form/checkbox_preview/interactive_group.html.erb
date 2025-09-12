@@ -1,6 +1,6 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-4">
-  <h3 class="text-lg font-medium text-slate-900 dark:text-white">Interactive Analysis Selection Example</h3>
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Interactive Analysis Selection Example</h3>
 
     <div class="space-y-3">
       <%= render Pathogen::Form::Checkbox.new(
@@ -18,7 +18,10 @@
       <div class="ml-6 space-y-2">
         <%= render Pathogen::Form::Checkbox.new(
           :analysis_amr,
-          { label: "AMR detection", help_text: "Identify antimicrobial resistance genes" },
+          {
+            label: "AMR detection",
+            help_text: "Identify antimicrobial resistance genes",
+          },
           "1",
           "0",
           form: form,
@@ -34,7 +37,10 @@
 
         <%= render Pathogen::Form::Checkbox.new(
           :analysis_serotype,
-          { label: "Serotype prediction", help_text: "Predict serotype from genomic markers" },
+          {
+            label: "Serotype prediction",
+            help_text: "Predict serotype from genomic markers",
+          },
           "1",
           "0",
           form: form,
@@ -45,8 +51,8 @@
     <div class="mt-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
       <p class="text-sm text-slate-600 dark:text-slate-400">
         <strong>Note:</strong>
-  This demonstrates grouping of analysis modules under a master control.
-  The "Select all analyses" checkbox toggles individual analysis states.
+        This demonstrates grouping of analysis modules under a master control.
+        The "Select all analyses" checkbox toggles individual analysis states.
       </p>
     </div>
   </div>
