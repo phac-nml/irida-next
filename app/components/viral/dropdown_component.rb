@@ -179,7 +179,6 @@ module Viral
       return data unless @action_link
 
       data.merge(
-        action: 'turbo:morph-element->action-button#idempotentConnect',
         turbo_stream: true,
         controller: 'action-button',
         action_link_required_value: @action_link_value

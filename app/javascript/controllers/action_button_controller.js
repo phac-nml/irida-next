@@ -18,14 +18,6 @@ export default class extends Controller {
 
   #primary_colours = ["bg-primary-200", "text-slate-400", "border-primary-200"];
 
-  connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
-    this.setDisabled();
-  }
-
   setDisabled(count = 0) {
     if (this.requiredValue > count) {
       this.element.disabled = true;

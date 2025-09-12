@@ -317,16 +317,11 @@
               >
                 <span>
                   <%= t("components.attachments.table_component.counts.attachments") %>:
-                  <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
+                  <strong><%= @pagy.count %></strong>
                 </span>
                 <span>
                   <%= t("components.attachments.table_component.counts.selected") %>:
-                  <strong
-                    data-selection-target="selected"
-                    data-action="
-                      turbo:morph-element->selection#idempotentConnect
-                    "
-                  >0</strong>
+                  <strong data-selection-target="selected">0</strong>
                 </span>
               </td>
               <td
