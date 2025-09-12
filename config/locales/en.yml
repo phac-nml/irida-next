@@ -2417,6 +2417,8 @@ en:
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
             file: File
             file_help: CSV, TSV, XLS or XLSX.
+            ignore_empty_values:
+              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this is not selected, any samples with the metadata key and empty value will be deleted.
             metadata_columns: Metadata Columns
             namespace:
               description: The spreadsheet is required to have a column that contains a sample identifier.
