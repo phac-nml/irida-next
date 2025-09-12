@@ -1,28 +1,28 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Multiple Checkboxes Example</h3>
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Multiple Genomic Options Example</h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="space-y-3">
-        <h4 class="font-medium text-slate-700 dark:text-slate-300">Basic Options</h4>
+        <h4 class="font-medium text-slate-700 dark:text-slate-300">Core Analyses</h4>
 
-        <%= render Pathogen::Form::Checkbox.new(
-          :basic_1,
-          { label: "Basic option 1" },
+        <%= pathogen_checkbox(
+          :qc_metrics,
+          { label: "Generate QC metrics" },
           "1",
           "0",
           form: form,
         ) %>
-        <%= render Pathogen::Form::Checkbox.new(
-          :basic_2,
-          { label: "Basic option 2" },
+        <%= pathogen_checkbox(
+          :genome_assembly,
+          { label: "Perform genome assembly" },
           "1",
           "0",
           form: form,
         ) %>
-        <%= render Pathogen::Form::Checkbox.new(
-          :basic_3,
-          { label: "Basic option 3" },
+        <%= pathogen_checkbox(
+          :mlst_typing,
+          { label: "Run MLST typing" },
           "1",
           "0",
           form: form,
@@ -30,33 +30,33 @@
       </div>
 
       <div class="space-y-3">
-        <h4 class="font-medium text-slate-700 dark:text-slate-300">With Help Text</h4>
+        <h4 class="font-medium text-slate-700 dark:text-slate-300">Extended Analyses (with details)</h4>
 
-        <%= render Pathogen::Form::Checkbox.new(
-          :help_1,
+        <%= pathogen_checkbox(
+          :amr_detection,
           {
-            label: "Help option 1",
-            help_text: "This option includes helpful information",
+            label: "Antimicrobial resistance detection",
+            help_text: "Screen for known AMR markers (ResFinder / CARD)",
           },
           "1",
           "0",
           form: form,
         ) %>
 
-        <%= render Pathogen::Form::Checkbox.new(
-          :help_2,
+        <%= pathogen_checkbox(
+          :virulence_factors,
           {
-            label: "Help option 2",
-            help_text: "Another option with additional context",
+            label: "Identify virulence factors",
+            help_text: "Detect presence of curated virulence genes",
           },
           "1",
           "0",
           form: form,
         ) %>
 
-        <%= render Pathogen::Form::Checkbox.new(
-          :help_3,
-          { label: "Help option 3", help_text: "Third option with guidance" },
+        <%= pathogen_checkbox(
+          :phylogenetic_tree,
+          { label: "Build phylogenetic tree", help_text: "Generate SNP-based tree" },
           "1",
           "0",
           form: form,
@@ -65,35 +65,35 @@
     </div>
 
     <div class="space-y-3">
-      <h4 class="font-medium text-slate-700 dark:text-slate-300">Mixed States</h4>
+      <h4 class="font-medium text-slate-700 dark:text-slate-300">Mixed States (Status Examples)</h4>
 
-      <%= render Pathogen::Form::Checkbox.new(
-        :mixed_1,
-        { label: "Default state" },
+      <%= pathogen_checkbox(
+        :plasmid_detection,
+        { label: "Plasmid detection" },
         "1",
         "0",
         form: form,
       ) %>
 
-      <%= render Pathogen::Form::Checkbox.new(
-        :mixed_2,
-        { label: "Checked state", checked: true },
+      <%= pathogen_checkbox(
+        :serotype_prediction,
+        { label: "Serotype prediction", checked: true },
         "1",
         "0",
         form: form,
       ) %>
 
-      <%= render Pathogen::Form::Checkbox.new(
-        :mixed_3,
-        { label: "Disabled state", disabled: true },
+      <%= pathogen_checkbox(
+        :wgmlst_typing,
+        { label: "wgMLST typing (beta)", disabled: true },
         "1",
         "0",
         form: form,
       ) %>
 
-      <%= render Pathogen::Form::Checkbox.new(
-        :mixed_4,
-        { label: "Checked and disabled", checked: true, disabled: true },
+      <%= pathogen_checkbox(
+        :lineage_assignment,
+        { label: "Lineage assignment (coming soon)", checked: true, disabled: true },
         "1",
         "0",
         form: form,

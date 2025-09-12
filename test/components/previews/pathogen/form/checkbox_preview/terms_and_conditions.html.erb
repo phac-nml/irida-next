@@ -1,22 +1,23 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Terms and Conditions Example</h3>
+  <h3 class="text-lg font-medium text-slate-900 dark:text-white">Data Use & Ethical Compliance Example</h3>
 
     <div class="space-y-4">
       <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
-        <h4 class="font-medium text-slate-900 dark:text-white mb-2">Terms of Service</h4>
+        <h4 class="font-medium text-slate-900 dark:text-white mb-2">Data Use & Ethics</h4>
         <p class="text-sm text-slate-600 dark:text-slate-400">
-          By using our service, you agree to our terms of service, privacy
-          policy, and community guidelines. Please read these documents
-          carefully before proceeding.
+          Before submitting genomic data you must confirm compliance with
+          jurisdictional data governance, appropriate de-identification, and
+          permitted secondary use. Review institutional policies and consent
+          documentation prior to proceeding.
         </p>
       </div>
 
       <%= pathogen_checkbox(
-        :terms_accepted,
+        :confirm_data_deidentified,
         {
-          label: "I have read and agree to the Terms of Service",
-          help_text: "You must accept the terms to continue",
+          label: "Data are de-identified per policy",
+          help_text: "All direct identifiers removed / coded prior to upload",
           required: true,
         },
         "1",
@@ -25,10 +26,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :privacy_accepted,
+        :consent_verified,
         {
-          label: "I have read and agree to the Privacy Policy",
-          help_text: "Understanding how we handle your data is important",
+          label: "Consent scope verified",
+          help_text: "Submission aligns with participant or program consent",
           required: true,
         },
         "1",
@@ -37,10 +38,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :community_guidelines,
+        :legal_transfer_permitted,
         {
-          label: "I agree to follow the Community Guidelines",
-          help_text: "Help maintain a positive environment for all users",
+          label: "Cross-border transfer permitted (if applicable)",
+          help_text: "Regulatory or data sharing agreement allows transfer",
           required: true,
         },
         "1",
@@ -50,13 +51,13 @@
     </div>
 
     <div class="space-y-4">
-      <h4 class="font-medium text-slate-700 dark:text-slate-300">Optional Communications</h4>
+  <h4 class="font-medium text-slate-700 dark:text-slate-300">Optional Analyses & Data Use</h4>
 
       <%= pathogen_checkbox(
-        :marketing_emails,
+        :enable_amr_detection,
         {
-          label: "I would like to receive marketing emails",
-          help_text: "Get updates about new features, promotions, and news",
+          label: "Run AMR gene detection",
+          help_text: "Screen assemblies for antimicrobial resistance markers",
         },
         "1",
         "0",
@@ -64,10 +65,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :third_party_sharing,
+        :allow_reference_integration,
         {
-          label: "I consent to sharing my data with trusted partners",
-          help_text: "Help us improve our services through partnerships",
+          label: "Integrate with public reference databases",
+          help_text: "Permit matching to curated reference panels",
         },
         "1",
         "0",
@@ -75,10 +76,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :research_participation,
+        :permit_secondary_analysis,
         {
-          label: "I agree to participate in user research",
-          help_text: "Help improve our products through feedback and testing",
+          label: "Permit de-identified secondary analysis",
+          help_text: "Allow aggregate use for method validation / benchmarking",
         },
         "1",
         "0",
@@ -93,9 +94,10 @@
       "
     >
       <p class="text-sm text-amber-800 dark:text-amber-200">
-        <strong>Important:</strong>
-        The first three checkboxes are required to create your account. The
-        optional communications can be changed at any time in your settings.
+  <strong>Important:</strong>
+  The first three confirmations are mandatory prior to data upload.
+  Optional analyses and secondary use preferences can be modified later
+  in project settings.
       </p>
     </div>
   </div>

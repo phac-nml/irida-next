@@ -1,12 +1,12 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Builder Example</h3>
+  <h3 class="text-lg font-medium text-slate-900 dark:text-white">Basic Submission Configuration</h3>
 
     <%= pathogen_checkbox(
-      :terms,
+      :confirm_deidentification,
       {
-        label: "I agree to the terms and conditions",
-        help_text: "You must agree to continue",
+        label: "Data are properly de-identified",
+        help_text: "Required: no direct personal identifiers present",
         required: true,
       },
       "1",
@@ -15,10 +15,10 @@
     ) %>
 
     <%= pathogen_checkbox(
-      :newsletter,
+      :enable_amr_detection,
       {
-        label: "Subscribe to newsletter",
-        help_text: "Get updates about new features",
+        label: "Enable AMR detection",
+        help_text: "Screen sequences for antimicrobial resistance genes",
       },
       "1",
       "0",
@@ -26,10 +26,10 @@
     ) %>
 
     <%= pathogen_checkbox(
-      :marketing,
+      :enable_virulence_scan,
       {
-        label: "Receive marketing emails",
-        help_text: "Promotional content and offers",
+        label: "Enable virulence factor scan",
+        help_text: "Identify presence of curated virulence genes",
       },
       "1",
       "0",

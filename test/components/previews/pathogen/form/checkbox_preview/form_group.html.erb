@@ -1,15 +1,15 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Form Group Example</h3>
+  <h3 class="text-lg font-medium text-slate-900 dark:text-white">Sequencing Output & Data Sharing Example</h3>
 
     <fieldset class="space-y-3">
-      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Communication Preferences</legend>
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Primary Processing Outputs</legend>
 
       <%= pathogen_checkbox(
-        :email_notifications,
+        :generate_fastqc,
         {
-          label: "Email notifications",
-          help_text: "Receive important updates via email",
+          label: "Generate FastQC report",
+          help_text: "Produce standard per-sample quality metrics",
         },
         "1",
         "0",
@@ -17,10 +17,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :sms_notifications,
+        :perform_assembly,
         {
-          label: "SMS notifications",
-          help_text: "Receive urgent alerts via text message",
+          label: "Perform de novo assembly",
+          help_text: "Run SPAdes-based assembly on reads",
         },
         "1",
         "0",
@@ -28,8 +28,8 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :push_notifications,
-        { label: "Push notifications", help_text: "Get notified in the app" },
+        :annotate_genome,
+        { label: "Annotate genome", help_text: "Run Prokka annotation workflow" },
         "1",
         "0",
         form: form,
@@ -37,13 +37,13 @@
     </fieldset>
 
     <fieldset class="space-y-3">
-      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Privacy Settings</legend>
+      <legend class="text-sm font-medium text-slate-700 dark:text-slate-300">Data Governance & Sharing</legend>
 
       <%= pathogen_checkbox(
-        :profile_public,
+        :share_consensus_sequences,
         {
-          label: "Make profile public",
-          help_text: "Allow other users to see your profile",
+          label: "Share consensus assemblies",
+          help_text: "Allow downstream users to view assembled contigs",
         },
         "1",
         "0",
@@ -51,10 +51,10 @@
       ) %>
 
       <%= pathogen_checkbox(
-        :data_sharing,
+        :allow_public_health_export,
         {
-          label: "Allow data sharing",
-          help_text: "Share anonymous usage data for improvements",
+          label: "Permit public health export",
+          help_text: "Enable export of derived metrics to surveillance feeds",
         },
         "1",
         "0",
