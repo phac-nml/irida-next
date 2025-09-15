@@ -38,8 +38,14 @@ input[type="search"] {
   appearance: textfield;
 }
 
-:not(.pill-focus-reset):not(#main-content-link):focus-visible {
+:focus-visible {
+  /* Universal custom focus ring (keyboard + high contrast)
+     Note: Removed :not(.pill-focus-reset) for simpler, faster matching.
+     The reset for .pill-focus-reset remains defined later and will override this. */
   @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+  /* Remove default UA focus visuals (e.g., WebKit blue glow, Firefox inner focus ring) */
+  box-shadow: none !important;
+  outline-style: solid; /* ensure we fully override outline:auto */
 }
 
 /*
@@ -302,6 +308,31 @@ input[type="search"] {
   &.form-field select {
     @apply border-red-500 dark:border-red-400;
   }
+
+  /* Focus styles for any input within an invalid form field */
+  &.form-field
+    :is(
+      input[type="text"],
+      input[type="search"],
+      input[type="password"],
+      input[type="email"],
+      input[type="file"],
+      input[type="number"],
+      input[type="url"],
+      input[type="tel"],
+      input[type="date"],
+      input[type="time"],
+      input[type="datetime-local"],
+      textarea,
+      select
+    ):focus-visible {
+    @apply outline-red-700 dark:outline-red-400;
+  }
+
+  /* Ensure toggles also get a clear red focus ring when invalid */
+  &.form-field :is(input[type="checkbox"], input[type="radio"]):focus-visible {
+    @apply outline-2 outline-offset-2 outline-red-700 dark:outline-red-400;
+  }
 }
 
 @utility field-hint {
@@ -552,20 +583,6 @@ input[type="search"] {
     content: "›";
     @apply mx-2 select-none text-slate-400;
   }
-
-  /* Main content link accessibility button */
-  #main-content-link {
-    @apply bg-primary-700 absolute left-3 top-3 z-[9999] -translate-y-[150%] transform rounded-lg px-5 py-3 font-semibold text-white no-underline shadow-lg transition-transform duration-300 ease-in-out;
-  }
-
-  #main-content-link:focus,
-  #main-content-link:focus-visible {
-    @apply translate-y-0;
-  }
-
-  #main-content-link:hover {
-    @apply bg-primary-800 underline;
-  }
 }
 
 .pagy-nav.pagination {
@@ -603,6 +620,11 @@ input[type="search"] {
 
 div.field_with_errors > :is(select) {
   @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
+}
+
+/* Ensure the global focus ring switches to red for any field_with_errors control */
+div.field_with_errors :is(input, select, textarea):focus-visible {
+  @apply outline-red-700 dark:outline-red-400;
 }
 
 .table-container table:not(:has(tbody td)) {
