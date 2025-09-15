@@ -22,7 +22,7 @@ export default class extends Controller {
 
   connect() {
     this.allIds = this.selectionOutlet.getOrCreateStoredItems();
-    this.numSelected = this.selectionOutlet.getNumSelected();
+    this.numSelected = this.allIds.length;
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
     if (this.hasSelectionCountTarget) {

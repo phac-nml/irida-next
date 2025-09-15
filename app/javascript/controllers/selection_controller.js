@@ -1,10 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  // # indicates private attribute or method
-  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
-  #numSelected = 0;
-
   static targets = ["rowSelection", "selectPage", "selected", "status"];
   static outlets = ["action-button"];
 
@@ -18,6 +14,8 @@ export default class extends Controller {
   };
 
   connect() {
+    this.element.setAttribute("data-controller-connected", "true");
+
     this.boundOnMorph = this.onMorph.bind(this);
 
     this.update(this.getOrCreateStoredItems(), false);
@@ -60,22 +58,16 @@ export default class extends Controller {
   }
 
   clear() {
-    console.log("inside clear");
     this.update([]);
   }
 
   update(ids, announce = true) {
-    sessionStorage.setItem(this.#getStorageKey, JSON.stringify(ids));
-    this.#numSelected = ids.length;
+    sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
     this.#updateUI(ids, announce);
   }
 
-  getNumSelected() {
-    return this.#numSelected;
-  }
-
   getOrCreateStoredItems() {
-    let storedItems = JSON.parse(sessionStorage.getItem(this.#getStorageKey));
+    let storedItems = JSON.parse(sessionStorage.getItem(this.#getStorageKey()));
 
     if (storedItems === null) {
       this.update([], false);
@@ -98,7 +90,7 @@ export default class extends Controller {
     this.update(newStorageValue);
   }
 
-  #updateUI(ids, announce, update) {
+  #updateUI(ids, announce) {
     this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
     });
@@ -165,7 +157,9 @@ export default class extends Controller {
   }
 
   #getStorageKey() {
-    this.storageKeyValue ||
-      `${location.protocol}//${location.host}${location.pathname}`;
+    return (
+      this.storageKeyValue ||
+      `${location.protocol}//${location.host}${location.pathname}`
+    );
   }
 }

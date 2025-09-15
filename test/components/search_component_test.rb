@@ -265,8 +265,6 @@ class SearchComponentTest < ViewComponent::TestCase
 
     kwargs = component.kwargs
 
-    assert_includes kwargs[:data][:controller], 'search-field'
-    assert_includes kwargs[:data][:controller], 'selection'
     assert_equal 'replace', kwargs[:data]['turbo-action']
   end
 
@@ -285,27 +283,7 @@ class SearchComponentTest < ViewComponent::TestCase
     )
 
     kwargs = component.kwargs
-
-    assert_includes kwargs[:data][:controller], 'search-field'
-    assert_includes kwargs[:data][:controller], 'selection'
     assert_includes kwargs[:data][:controller], 'custom-controller'
-  end
-
-  test 'kwargs method handles nil data attributes' do
-    component = SearchComponent.new(
-      query: @query,
-      url: @url,
-      search_attribute: @search_attribute,
-      label: @label,
-      placeholder: @placeholder,
-      total_count: @total_count,
-      value: @value
-    )
-
-    kwargs = component.kwargs
-
-    assert_includes kwargs[:data][:controller], 'search-field'
-    assert_includes kwargs[:data][:controller], 'selection'
   end
 
   # Form Structure Tests

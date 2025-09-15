@@ -30,7 +30,7 @@ export default class extends Controller {
   }
 
   onMorph() {
-    this.setDisabled;
+    this.setDisabled();
   }
 
   setDisabled(count = 0) {
