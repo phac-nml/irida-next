@@ -1,7 +1,11 @@
 <div data-controller="content">
   <%= viral_dialog(open: open, size: :large, header_system_arguments: { close_action: "content#reload" }) do |dialog| %>
     <% dialog.with_trigger do %>
-      <button class="button button-primary" data-action="viral--dialog#open">
+      <button
+        class="button button-primary"
+        data-viral--dialog-target="trigger"
+        data-action="viral--dialog#open"
+      >
         <%= t("metadata_templates.new_template_dialog.new_button") %>
       </button>
     <% end %>
