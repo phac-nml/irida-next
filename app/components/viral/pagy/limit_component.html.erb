@@ -1,50 +1,62 @@
 <div
   id="limit-component"
   class="
-    @md:flex @max-md:flex @max-md:flex-col items-center @md:space-x-2 text-slate-500
-    dark:text-slate-400 w-full
+    @max-md:flex @max-md:flex-col text-slate-500 dark:text-slate-400 w-full
   "
 >
   <form
     id="limit-component-form"
     method="get"
     action="<%= current_url_without_limit %>"
-    class="
-      @max-md:flex @max-md:flex-col @max-md:space-y-3 @md:flex @md:items-center
-      @md:space-x-2 w-full
-    "
+    class="@max-md:space-y-4"
     data-turbo-action="replace"
   >
-    <label for="pagy-limit-select" class="text-sm font-medium">
-      <%= t(".items", items: @item) %>
-    </label>
-
-    <select
-      id="pagy-limit-select"
-      name="limit"
-      aria-label="<%= t('.select_items_action') %>"
-      aria-describedby="pagy-limit-description"
-      autocomplete="off"
+    <div
       class="
-        bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
-        @md:w-20 @max-md:w-auto p-2.5 dark:bg-slate-700 dark:border-slate-600
-        dark:placeholder-slate-400 dark:text-white pr-8 flex-shrink-0
+        @max-md:flex @max-md:flex-col @max-md:space-y-4 @md:@max-xl:space-y-2 @2xl:flex
+        @2xl:items-center @2xl:space-x-2
       "
-      onchange="this.form.requestSubmit()"
     >
-      <% Pagy::DEFAULT[:limits].each do |limit| %>
-        <option
-          value="<%= limit %>"
-          <%= 'selected' if limit == @pagy.limit %>
-          aria-label="<%= t('.item_aria_label', items: limit) %>"
+      <div
+        class="
+          @md:@max-xl:flex @md:@max-xl:items-center @md:@max-xl:space-x-2 @2xl:flex
+          @2xl:items-center @2xl:space-x-2
+        "
+      >
+        <label for="pagy-limit-select" class="text-sm font-medium flex-shrink-0">
+          <%= t(".items", items: @item) %>
+        </label>
+
+        <select
+          id="pagy-limit-select"
+          name="limit"
+          aria-label="<%= t('.select_items_action') %>"
+          aria-describedby="pagy-limit-description"
+          autocomplete="off"
+          class="
+            bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
+            @md:w-20 @max-md:w-full p-2.5 dark:bg-slate-700 dark:border-slate-600
+            dark:placeholder-slate-400 dark:text-white pr-8
+          "
+          onchange="this.form.requestSubmit()"
         >
-          <%= limit %>
-        </option>
-      <% end %>
-    </select>
+          <% Pagy::DEFAULT[:limits].each do |limit| %>
+            <option
+              value="<%= limit %>"
+              <%= 'selected' if limit == @pagy.limit %>
+              aria-label="<%= t('.item_aria_label', items: limit) %>"
+            >
+              <%= limit %>
+            </option>
+          <% end %>
+        </select>
+      </div>
+
+      <span class="@2xl:flex-1 text-sm"><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
+    </div>
+
     <div id="pagy-limit-description" class="sr-only">
       <%= t(".select_items_action") %>
     </div>
-    <span class="flex-1"><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
   </form>
 </div>

@@ -1,7 +1,8 @@
 <%# filepath: /home/josh/Development/irida-next/app/components/viral/pagy/pagination_component.html.erb %>
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
 <nav class="pagy nav flex-none" aria-label="<%= t(".aria_label") %>">
-  <ul class="inline-flex h-11 -space-x-px text-base">
+  <%# Large screen layout with numbered buttons %>
+  <ul class="@max-lg:hidden @lg:inline-flex h-11 -space-x-px text-base">
     <%# Previous page link %>
     <li>
       <% if @pagy.prev %>
@@ -74,4 +75,71 @@
       <% end %>
     </li>
   </ul>
+
+  <%# Small screen layout with dropdown %>
+  <div class="@lg:hidden @max-lg:flex items-center space-x-2 h-11">
+    <%# Previous page link for small screens %>
+    <% if @pagy.prev %>
+      <%== a.(
+        @pagy.prev,
+        t(".previous"),
+        classes:
+          "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 hover:text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:hover:text-white",
+        aria_label: t(".previous_aria_label"),
+      ) %>
+    <% else %>
+      <span
+        class="
+          flex items-center justify-center px-3 py-2 text-sm font-medium border
+          border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
+          dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-lg
+        "
+      ><%= t(".previous") %></span>
+    <% end %>
+
+    <%# Page dropdown %>
+    <select
+      class="
+        bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg px-2 py-2
+        dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+        dark:text-white flex-1 min-w-0 pr-8
+      "
+      aria-label="<%= t(".select_page_aria_label") %>"
+      onchange="window.location.href = this.options[this.selectedIndex].dataset.url"
+    >
+      <% (1..@pagy.pages).each do |page_num| %>
+        <option
+          value="<%= page_num %>"
+          <%= 'selected' if page_num == @pagy.page %>
+          data-url="<%= helpers.pagy_url_for(@pagy, page_num) %>"
+          aria-label="<%= page_num == @pagy.page ? t('.current_page_aria_label', number: page_num) : t('.item_aria_label', number: page_num) %>"
+        >
+          <%= if page_num == @pagy.page
+            t(".current_page", number: page_num)
+          else
+            t(".page_number", number: page_num)
+          end %>
+        </option>
+      <% end %>
+    </select>
+
+    <%# Next page link for small screens %>
+    <% if @pagy.next %>
+      <%== a.(
+        @pagy.next,
+        t(".next"),
+        classes:
+          "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 hover:text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:hover:text-white",
+        aria_label: t(".next_aria_label"),
+      ) %>
+    <% else %>
+      <span
+        class="
+          flex items-center justify-center px-3 py-2 text-sm font-medium border
+          border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
+          dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-lg
+        "
+      ><%= t(".next") %></span>
+    <% end %>
+  </div>
 </nav>
