@@ -8,149 +8,131 @@
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
     <% component.with_buttons do %>
-      <div class="flex items-center space-x-2">
-        <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
-          <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
+      <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
+        <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button-default action-button" do %>
-            <%= pathogen_icon(ICON::ROCKET_LAUNCH, size: :sm) %>
-            <span class="ml-2"><%= t(".workflows.button_sr") %></span>
-          <% end %>
+                  class: "button button-default action-button w-full" do %>
+          <%= pathogen_icon(ICON::ROCKET_LAUNCH, size: :sm) %>
+          <span class="ml-2"><%= t(".workflows.button_sr") %></span>
         <% end %>
-        <% if @group_project_ids.count.positive? && @render_sample_actions %>
-          <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, styles: { button: "button button-default" }) do |dropdown| %>
-            <% if @allowed_to[:clone_sample] && Flipper.enabled?(:group_samples_clone) %>
+      <% end %>
+      <% if @group_project_ids.count.positive? && @render_sample_actions %>
+        <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, styles: { button: "button button-default" }) do |dropdown| %>
+          <% if @allowed_to[:clone_sample] && Flipper.enabled?(:group_samples_clone) %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.clone"),
+              url: new_samples_clone_path,
+              params: {
+                namespace_id: @group.id,
+              },
+              disableable: true,
+              data: {
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+            ) %>
+          <% end %>
+
+          <% if Flipper.enabled?(:group_samples_transfer) && @allowed_to[:transfer_sample] %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.transfer"),
+              url: new_samples_transfer_path,
+              params: {
+                namespace_id: @group.id,
+              },
+              disableable: true,
+              data: {
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+            ) %>
+          <% end %>
+
+          <% if @allowed_to[:destroy_sample] && Flipper.enabled?(:group_samples_destroy) %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.delete_samples"),
+              url: new_samples_deletions_path,
+              params: {
+                namespace_id: @group.id,
+                deletion_type: "multiple",
+              },
+              disableable: true,
+              data: {
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
+            ) %>
+          <% end %>
+          <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.import"),
+              section_header: true,
+            ) %>
+            <% if @allowed_to[:update_sample_metadata] && @has_samples %>
               <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.clone"),
-                url: new_samples_clone_path,
-                params: {
-                  namespace_id: @group.id,
-                },
+                label: t("shared.samples.actions_dropdown.import_metadata"),
+                url: new_group_samples_file_import_path,
                 disableable: true,
                 data: {
                   turbo_stream: true,
-                  controller: "action-button",
-                  action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
               ) %>
             <% end %>
 
-            <% if Flipper.enabled?(:group_samples_transfer) && @allowed_to[:transfer_sample] %>
+            <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && @allowed_to[:import_samples_and_metadata] %>
               <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.transfer"),
-                url: new_samples_transfer_path,
-                params: {
-                  namespace_id: @group.id,
-                },
+                label: t("shared.samples.actions_dropdown.import_samples"),
+                url: new_group_samples_spreadsheet_import_path,
                 disableable: true,
                 data: {
                   turbo_stream: true,
-                  controller: "action-button",
-                  action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
               ) %>
             <% end %>
+          <% end %>
 
-            <% if @allowed_to[:destroy_sample] && Flipper.enabled?(:group_samples_destroy) %>
-              <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.delete_samples"),
-                url: new_samples_deletions_path,
-                params: {
-                  namespace_id: @group.id,
-                  deletion_type: "multiple",
-                },
-                disableable: true,
-                data: {
-                  turbo_stream: true,
-                  controller: "action-button",
-                  action_button_required_value: 1,
-                },
-                class:
-                  "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
-              ) %>
-            <% end %>
-            <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
-              <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.import"),
-                section_header: true,
-              ) %>
-              <% if @allowed_to[:update_sample_metadata] && @has_samples %>
-                <% dropdown.with_item(
-                  label: t("shared.samples.actions_dropdown.import_metadata"),
-                  url: new_group_samples_file_import_path,
-                  disableable: true,
-                  data: {
-                    turbo_stream: true,
-                  },
-                  class:
-                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
-                ) %>
-              <% end %>
+          <% if @allowed_to[:export_data] %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.export"),
+              section_header: true,
+            ) %>
 
-              <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && @allowed_to[:import_samples_and_metadata] %>
-                <% dropdown.with_item(
-                  label: t("shared.samples.actions_dropdown.import_samples"),
-                  url: new_group_samples_spreadsheet_import_path,
-                  disableable: true,
-                  data: {
-                    turbo_stream: true,
-                  },
-                  class:
-                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
-                ) %>
-              <% end %>
-            <% end %>
-
-            <% if @allowed_to[:export_data] %>
+            <% if @group.metadata_fields.empty? %>
               <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.export"),
-                section_header: true,
-              ) %>
-
-              <% if @group.metadata_fields.empty? %>
-                <% dropdown.with_item(
-                  label: t("shared.samples.actions_dropdown.linelist_export"),
-                  url: new_data_export_path,
-                  params: {
-                    export_type: "linelist",
-                    namespace_id: @group.id,
-                  },
-                  disableable: true,
-                  data: {
-                    turbo_stream: true,
-                    controller: "action-button",
-                    action_button_required_value: 1,
-                  },
-                  class:
-                    "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
-                ) %>
-              <% else %>
-                <% dropdown.with_item(
-                  label: t("shared.samples.actions_dropdown.linelist_export"),
-                  url: new_data_export_path,
-                  params: {
-                    export_type: "linelist",
-                    namespace_id: @group.id,
-                  },
-                  disableable: true,
-                  data: {
-                    turbo_stream: true,
-                    controller: "action-button",
-                    action_button_required_value: 1,
-                  },
-                  class:
-                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
-                ) %>
-              <% end %>
-              <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.sample_export"),
+                label: t("shared.samples.actions_dropdown.linelist_export"),
                 url: new_data_export_path,
                 params: {
-                  export_type: "sample",
+                  export_type: "linelist",
+                  namespace_id: @group.id,
+                },
+                disableable: true,
+                data: {
+                  turbo_stream: true,
+                  controller: "action-button",
+                  action_button_required_value: 1,
+                },
+                class:
+                  "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+              ) %>
+            <% else %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.linelist_export"),
+                url: new_data_export_path,
+                params: {
+                  export_type: "linelist",
                   namespace_id: @group.id,
                 },
                 disableable: true,
@@ -163,9 +145,25 @@
                   "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
               ) %>
             <% end %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.sample_export"),
+              url: new_data_export_path,
+              params: {
+                export_type: "sample",
+                namespace_id: @group.id,
+              },
+              disableable: true,
+              data: {
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+            ) %>
           <% end %>
         <% end %>
-      </div>
+      <% end %>
     <% end %>
   <% end %>
 
@@ -187,7 +185,7 @@
             <input type="hidden" name="select" value="on"/>
             <%= render "shared/samples/timestamp_input" %>
             <%= f.submit t(".select_all_button"),
-                     class: "button button-default",
+                     class: "button button-default w-full",
                      title: t(".select_all_tooltip") %>
           <% end %>
           <%= form_with(
@@ -198,7 +196,7 @@
                 ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
             <%= f.submit t(".deselect_all_button"),
-                     class: "button button-default",
+                     class: "button button-default w-full",
                      title: t(".deselect_all_tooltip") %>
           <% end %>
         <% end %>
