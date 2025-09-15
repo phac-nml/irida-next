@@ -1,11 +1,16 @@
 <% if pagy.vars[:size].positive? && pagy.count.positive? %>
   <div
     class="
-      flex items-center justify-between @max-3xl:flex-col @max-3xl:space-y-2 mt-2
+      flex items-center justify-between max-[920px]:flex-col max-[920px]:space-y-4
+      mt-2
     "
   >
-    <%= render Viral::Pagy::LimitComponent.new(pagy, item: item) %>
-    <%= render Viral::Pagy::PaginationComponent.new(pagy) %>
+    <div class="min-[921px]:flex-1 min-[921px]:mr-4">
+      <%= render Viral::Pagy::LimitComponent.new(pagy, item: item) %>
+    </div>
+    <div class="min-[921px]:flex-shrink-0">
+      <%= render Viral::Pagy::PaginationComponent.new(pagy) %>
+    </div>
   </div>
 <% else %>
   <%= render Viral::EmptyStateComponent.new(
