@@ -23,15 +23,19 @@
                 scope: 'col',
                 classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
               ) do %>
+                <div class="flex items-center gap-3">
                 <% if index.zero? and @abilities[:select_attachments] %>
-                  <%= check_box_tag "select-page",
-                  title: t(:"components.attachments.table_component.select_page"),
-                  "aria-label": t(:"components.attachments.table_component.select_page"),
-                  data: {
-                    action: "input->selection#togglePage",
-                    controller: "filters",
-                    selection_target: "selectPage",
-                  } %>
+                  <%= pathogen_checkbox "select-page", "1", {
+                    id: "select-page",
+                    aria: {
+                      label: t("components.attachments.table_component.select_page"),
+                    },
+                    data: {
+                      action: "input->selection#togglePage",
+                      controller: "filters",
+                      selection_target: "selectPage",
+                    }
+                  }, "1", "0" %>
                 <% end %>
                 <% if column == :id %>
                   <%= render Ransack::SortComponent.new(
@@ -94,6 +98,7 @@
                     ),
                   ) %>
                 <% end %>
+                </div>
               <% end %>
             <% end %>
             <% if @renders_row_actions %>
@@ -122,20 +127,30 @@
                   scope: index.zero? ? 'row' : nil,
                   classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900 truncate': index == 1)
                 ) do %>
+                <div class="flex items-center gap-3">
                   <% if index.zero? && @abilities[:select_attachments] %>
-                    <%= check_box_tag "attachment_ids[]",
-                    if attachment.associated_attachment
-                      [attachment.id, attachment.associated_attachment.id].to_s
-                    else
-                      attachment.id
-                    end,
-                    nil,
-                    id: dom_id(attachment, "checkbox"),
-                    "aria-label": attachment.file.filename.to_s,
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection",
-                    } %>
+                    <%= pathogen_checkbox "attachment_ids[]", (
+                      if attachment.associated_attachment
+                        [attachment.id, attachment.associated_attachment.id].to_s
+                      else
+                        attachment.id
+                      end
+                    ), {
+                      id: dom_id(attachment, "checkbox"),
+                      aria: {
+                        label: attachment.file.filename.to_s,
+                      },
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      }
+                    }, (
+                      if attachment.associated_attachment
+                        [attachment.id, attachment.associated_attachment.id].to_s
+                      else
+                        attachment.id
+                      end
+                    ), "0" %>
                   <% end %>
                   <% if column == :id %>
                     <%= highlight(
@@ -241,6 +256,7 @@
                   <% elsif column == :created_at %>
                     <%= helpers.local_time_ago(attachment.created_at) %>
                   <% end %>
+                  </div>
                 <% end %>
               <% end %>
               <% if @renders_row_actions %>

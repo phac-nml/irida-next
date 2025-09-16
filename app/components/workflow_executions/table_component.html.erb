@@ -22,41 +22,48 @@
               scope: 'col',
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', '@2xl:sticky left-0 z-10': index.zero?)
             ) do %>
-              <% if index.zero? and @abilities[:select_workflow_executions] %>
-                <%= check_box_tag "select-page",
-                title: t(:".select_page"),
-                "aria-label": t(:".select_page"),
-                data: {
-                  action: "input->selection#togglePage",
-                  controller: "filters",
-                  selection_target: "selectPage",
-                } %>
-              <% end %>
-              <% if column == :workflow_name || column == :workflow_version %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{column}"),
-                  url:
-                    helpers.sorting_url(
-                      @q,
-                      URI.encode_www_form_component("metadata_#{column}"),
-                    ),
-                  field: "metadata_#{column}",
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
-              <% else %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, column),
-                  field: column,
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
-              <% end %>
+              <div class="flex items-center gap-3">
+                <% if index.zero? and @abilities[:select_workflow_executions] %>
+                  <%= pathogen_checkbox "select-page",
+                  "1",
+                  {
+                    id: "select-page",
+                    aria: {
+                      label: t(:".select_page"),
+                    },
+                    data: {
+                      action: "input->selection#togglePage",
+                      controller: "filters",
+                      selection_target: "selectPage",
+                    },
+                  } %>
+                <% end %>
+                <% if column == :workflow_name || column == :workflow_version %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url:
+                      helpers.sorting_url(
+                        @q,
+                        URI.encode_www_form_component("metadata_#{column}"),
+                      ),
+                    field: "metadata_#{column}",
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                <% else %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url: helpers.sorting_url(@q, column),
+                    field: column,
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                <% end %>
+              </div>
             <% end %>
           <% end %>
           <% if @renders_row_actions %>
@@ -83,60 +90,66 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
-                <% if index.zero? && @abilities[:select_workflow_executions] %>
-                  <%= check_box_tag "workflow_execution_ids[]",
-                  workflow_execution.id,
-                  nil,
-                  id: dom_id(workflow_execution, "checkbox"),
-                  "aria-label": workflow_execution.name || workflow_execution.id,
-                  data: {
-                    action: "input->selection#toggle",
-                    selection_target: "rowSelection",
-                  } %>
-                <% end %>
-                <% if column == :id %>
-                  <%= link_to(
+                <div class="flex items-center gap-3">
+                  <% if index.zero? && @abilities[:select_workflow_executions] %>
+                    <%= pathogen_checkbox "workflow_execution_ids[]",
+                    workflow_execution.id,
+                    {
+                      id: dom_id(workflow_execution, "checkbox"),
+                      aria: {
+                        label: workflow_execution.name || workflow_execution.id,
+                      },
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      },
+                    },
+                    workflow_execution.id %>
+                  <% end %>
+                  <% if column == :id %>
+                    <%= link_to(
                     individual_path(workflow_execution),
                     data: {
                       turbo: false,
                     },
                     class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
                   ) do %>
+                      <span class="font-semibold">
+                        <%= highlight(
+                          workflow_execution.id,
+                          defined?(@search_params[:name_or_id_cont]) &&
+                            @search_params[:name_or_id_cont],
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      </span>
+                    <% end %>
+                  <% elsif column == :state %>
+                    <%= viral_pill(
+                      text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
+                      color: helpers.find_pill_color_for_state(workflow_execution[column]),
+                      border: true,
+                    ) %>
+                  <% elsif column == :workflow_name || column == :workflow_version %>
+                    <%= workflow_execution.metadata[column.to_s] %>
+                  <% elsif column == :created_at %>
+                    <%= helpers.local_date(workflow_execution[column], :long) %>
+                  <% elsif column == :updated_at || column == :attachments_updated_at %>
+                    <% if workflow_execution[column].present? %>
+                      <%= helpers.local_time_ago(workflow_execution[column]) %>
+                    <% end %>
+                  <% elsif column == :name %>
                     <span class="font-semibold">
                       <%= highlight(
-                        workflow_execution.id,
+                        workflow_execution.name,
                         defined?(@search_params[:name_or_id_cont]) &&
                           @search_params[:name_or_id_cont],
                         highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                       ) %>
                     </span>
+                  <% else %>
+                    <%= workflow_execution[column.to_sym] %>
                   <% end %>
-                <% elsif column == :state %>
-                  <%= viral_pill(
-                    text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
-                    color: helpers.find_pill_color_for_state(workflow_execution[column]),
-                    border: true,
-                  ) %>
-                <% elsif column == :workflow_name || column == :workflow_version %>
-                  <%= workflow_execution.metadata[column.to_s] %>
-                <% elsif column == :created_at %>
-                  <%= helpers.local_date(workflow_execution[column], :long) %>
-                <% elsif column == :updated_at || column == :attachments_updated_at %>
-                  <% if workflow_execution[column].present? %>
-                    <%= helpers.local_time_ago(workflow_execution[column]) %>
-                  <% end %>
-                <% elsif column == :name %>
-                  <span class="font-semibold">
-                    <%= highlight(
-                      workflow_execution.name,
-                      defined?(@search_params[:name_or_id_cont]) &&
-                        @search_params[:name_or_id_cont],
-                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                    ) %>
-                  </span>
-                <% else %>
-                  <%= workflow_execution[column.to_sym] %>
-                <% end %>
+                </div>
               <% end %>
             <% end %>
             <% if @renders_row_actions %>

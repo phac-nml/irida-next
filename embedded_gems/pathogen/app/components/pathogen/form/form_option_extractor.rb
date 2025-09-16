@@ -37,6 +37,7 @@ module Pathogen
         @class = options.delete(:class)
         @help_text = options.delete(:help_text)
         @error_text = options.delete(:error_text)
+        @controls = options.delete(:controls)
       end
 
       # Extracts accessibility-related options.
@@ -72,7 +73,7 @@ module Pathogen
         @aria_labelledby = aria[:labelledby]
         @aria_describedby = aria[:describedby]
         @aria_live = aria[:live]
-        @controls = aria[:controls]
+        @controls = aria[:controls] if aria[:controls].present?
       end
 
       # Validates that accessibility requirements are met.

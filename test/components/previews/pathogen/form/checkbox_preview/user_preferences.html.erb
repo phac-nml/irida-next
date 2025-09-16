@@ -1,61 +1,128 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">User Preferences Example</h3>
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Workflow Configuration Example</h3>
 
     <fieldset class="space-y-4">
-      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Notification Settings</legend>
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Quality Control Settings</legend>
 
-      <%= form.checkbox :email_digest, "1",
-          label: "Daily email digest",
-          help_text: "Receive a summary of daily activity",
-          checked: true %>
+      <%= pathogen_checkbox(
+        :enable_adapter_trimming,
+        {
+          label: "Enable adapter trimming",
+          help_text: "Remove sequencing adapters prior to downstream steps",
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :push_mentions, "1",
-          label: "Push notifications for mentions",
-          help_text: "Get notified when someone mentions you",
-          checked: true %>
+      <%= pathogen_checkbox(
+        :filter_low_quality_reads,
+        {
+          label: "Filter low-quality reads",
+          help_text: "Discard reads below Phred score threshold",
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :sms_alerts, "1",
-          label: "SMS alerts for urgent matters",
-          help_text: "Receive text messages for critical updates" %>
+      <%= pathogen_checkbox(
+        :detect_contamination,
+        {
+          label: "Run contamination screen",
+          help_text: "Flag possible cross-sample contamination",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :browser_notifications, "1",
-          label: "Browser notifications",
-          help_text: "Show notifications in your browser" %>
+      <%= pathogen_checkbox(
+        :store_intermediate_qc,
+        {
+          label: "Store intermediate QC files",
+          help_text: "Retain trimmed & filtered FASTQ outputs",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
 
     <fieldset class="space-y-4">
-      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Privacy & Security</legend>
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Data Governance</legend>
 
-      <%= form.checkbox :two_factor_auth, "1",
-          label: "Enable two-factor authentication",
-          help_text: "Add an extra layer of security to your account",
-          required: true %>
+      <%= pathogen_checkbox(
+        :metadata_schema_validation,
+        {
+          label: "Enforce metadata schema validation",
+          help_text: "Reject uploads missing required fields",
+          required: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :profile_visibility, "1",
-          label: "Make profile visible to everyone",
-          help_text: "Allow other users to see your profile information" %>
+      <%= pathogen_checkbox(
+        :restrict_external_export,
+        {
+          label: "Restrict external export",
+          help_text: "Disallow automated sharing to third-party systems",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :activity_feed, "1",
-          label: "Show activity in public feed",
-          help_text: "Display your recent activity to other users" %>
+      <%= pathogen_checkbox(
+        :audit_retention_extended,
+        {
+          label: "Extend audit log retention",
+          help_text: "Keep provenance & access logs longer",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
 
     <fieldset class="space-y-4">
-      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Content Preferences</legend>
+      <legend class="text-base font-medium text-slate-700 dark:text-slate-300">Analysis Preferences</legend>
 
-      <%= form.checkbox :auto_play_videos, "1",
-          label: "Auto-play videos",
-          help_text: "Automatically start playing video content" %>
+      <%= pathogen_checkbox(
+        :enable_amr_detection,
+        {
+          label: "AMR gene detection",
+          help_text: "Identify known antimicrobial resistance markers",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :show_recommendations, "1",
-          label: "Show personalized recommendations",
-          help_text: "Display content based on your interests",
-          checked: true %>
+      <%= pathogen_checkbox(
+        :enable_virulence_scan,
+        {
+          label: "Virulence factor scan",
+          help_text: "Detect presence of curated virulence genes",
+          checked: true,
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
-      <%= form.checkbox :dark_mode, "1",
-          label: "Prefer dark mode",
-          help_text: "Use dark theme when available" %>
+      <%= pathogen_checkbox(
+        :enable_phylogeny,
+        { label: "Phylogenetic tree", help_text: "Generate SNP or core genome tree" },
+        "1",
+        "0",
+        form: form,
+      ) %>
     </fieldset>
   </div>
 <% end %>

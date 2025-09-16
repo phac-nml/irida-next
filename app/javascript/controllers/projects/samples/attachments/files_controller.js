@@ -11,7 +11,7 @@ export default class extends Controller {
     newTable.classList = table.classList;
 
     for (let row of body.rows) {
-      const isChecked = row.cells[0].children[0].checked;
+      const isChecked = row.querySelector("input[type='checkbox']").checked;
 
       if (isChecked) {
         const newRow = newTable.insertRow(-1);

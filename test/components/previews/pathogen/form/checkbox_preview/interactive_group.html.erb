@@ -1,32 +1,58 @@
 <%= form_with(url: "#", builder: Pathogen::FormBuilders::PathogenFormBuilder, local: true) do |form| %>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Interactive Group Example</h3>
+    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Interactive Analysis Selection Example</h3>
 
     <div class="space-y-3">
-      <%= form.checkbox :select_all, "1",
-          label: "Select all options",
-          help_text: "Check this to select all options below",
-          onchange: "toggleAllCheckboxes(this)" %>
+      <%= render Pathogen::Form::Checkbox.new(
+        :select_all_analyses,
+        {
+          label: "Select all analyses",
+          help_text: "Enable all downstream analysis modules",
+          onchange: "toggleAllCheckboxes(this)",
+        },
+        "1",
+        "0",
+        form: form,
+      ) %>
 
       <div class="ml-6 space-y-2">
-        <%= form.checkbox :option_1, "1",
-            label: "Option 1",
-            help_text: "First option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :analysis_amr,
+          {
+            label: "AMR detection",
+            help_text: "Identify antimicrobial resistance genes",
+          },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :option_2, "1",
-            label: "Option 2",
-            help_text: "Second option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :analysis_mlst,
+          { label: "MLST typing", help_text: "Assign multilocus sequence type" },
+          "1",
+          "0",
+          form: form,
+        ) %>
 
-        <%= form.checkbox :option_3, "1",
-            label: "Option 3",
-            help_text: "Third option description" %>
+        <%= render Pathogen::Form::Checkbox.new(
+          :analysis_serotype,
+          {
+            label: "Serotype prediction",
+            help_text: "Predict serotype from genomic markers",
+          },
+          "1",
+          "0",
+          form: form,
+        ) %>
       </div>
     </div>
 
     <div class="mt-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
       <p class="text-sm text-slate-600 dark:text-slate-400">
-        <strong>Note:</strong> This demonstrates how checkboxes can be grouped and controlled programmatically.
-        The "Select all" checkbox would typically use JavaScript to control the state of the other checkboxes.
+        <strong>Note:</strong>
+        This demonstrates grouping of analysis modules under a master control.
+        The "Select all analyses" checkbox toggles individual analysis states.
       </p>
     </div>
   </div>
@@ -34,7 +60,7 @@
 
 <script>
 function toggleAllCheckboxes(masterCheckbox) {
-  const checkboxes = document.querySelectorAll('input[name*="option"]');
+  const checkboxes = document.querySelectorAll('input[name*="analysis_"]');
   const checkedCount = masterCheckbox.checked ? checkboxes.length : 0;
 
   checkboxes.forEach(checkbox => {
@@ -43,8 +69,8 @@ function toggleAllCheckboxes(masterCheckbox) {
 
   // Announce the change to screen readers
   const announcement = masterCheckbox.checked
-    ? `All ${checkedCount} options selected`
-    : 'All options deselected';
+  ? `All ${checkedCount} analyses selected`
+  : 'All analyses deselected';
 
   // Create a live region for announcements
   let liveRegion = document.getElementById('checkbox-announcement');

@@ -11,29 +11,39 @@ module Pathogen
       # @label Default Checkbox
       def default
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions'
+          'preview',
+          :terms,
+          { label: 'I agree to the terms and conditions' },
+          '1',
+          '0'
         )
       end
 
       # @label Checkbox with Help Text
       def with_help_text
         pathogen_checkbox(
-          attribute: :newsletter,
-          value: '1',
-          label: 'Subscribe to newsletter',
-          help_text: 'Get updates about new features and announcements'
+          'preview',
+          :newsletter,
+          {
+            label: 'Subscribe to newsletter',
+            help_text: 'Get updates about new features and announcements'
+          },
+          '1',
+          '0'
         )
       end
 
       # @label Checkbox with Custom Classes
       def with_custom_classes
         pathogen_checkbox(
-          attribute: :marketing,
-          value: '1',
-          label: 'Receive marketing emails',
-          class: 'custom-checkbox'
+          'preview',
+          :marketing,
+          {
+            label: 'Receive marketing emails',
+            class: 'custom-checkbox'
+          },
+          '1',
+          '0'
         )
       end
 
@@ -44,41 +54,57 @@ module Pathogen
       # @label Checked State
       def checked
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions',
-          checked: true
+          'preview',
+          :terms,
+          {
+            label: 'I agree to the terms and conditions',
+            checked: true
+          },
+          '1',
+          '0'
         )
       end
 
       # @label Disabled State
       def disabled
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions',
-          disabled: true
+          'preview',
+          :terms,
+          {
+            label: 'I agree to the terms and conditions',
+            disabled: true
+          },
+          '1',
+          '0'
         )
       end
 
       # @label Checked and Disabled
       def checked_and_disabled
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions',
-          checked: true,
-          disabled: true
+          'preview',
+          :terms,
+          {
+            label: 'I agree to the terms and conditions',
+            checked: true,
+            disabled: true
+          },
+          '1',
+          '0'
         )
       end
 
       # @label Required State
       def required
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions *',
-          required: true
+          'preview',
+          :terms,
+          {
+            label: 'I agree to the terms and conditions *',
+            required: true
+          },
+          '1',
+          '0'
         )
       end
 
@@ -113,43 +139,52 @@ module Pathogen
       # @label With ARIA Attributes
       def with_aria_attributes
         pathogen_checkbox(
-          attribute: :accessibility,
-          value: '1',
-          label: 'Enable accessibility features',
-          aria: {
-            describedby: 'accessibility-help',
-            controls: 'accessibility-panel'
-          }
+          'preview',
+          :accessibility,
+          {
+            label: 'Enable accessibility features',
+            aria: {
+              describedby: 'accessibility-help',
+              controls: 'accessibility-panel'
+            }
+          },
+          '1',
+          '0'
         )
       end
 
       # @label With Help Text and ARIA
       def with_help_text_and_aria
         pathogen_checkbox(
-          attribute: :accessibility,
-          value: '1',
-          label: 'Enable accessibility features',
-          help_text: 'Includes screen reader support and keyboard navigation',
-          aria: {
-            describedby: 'accessibility-help',
-            controls: 'accessibility-panel'
-          }
+          'preview',
+          :accessibility,
+          {
+            label: 'Enable accessibility features',
+            help_text: 'Includes screen reader support and keyboard navigation',
+            aria: {
+              describedby: 'accessibility-help',
+              controls: 'accessibility-panel'
+            }
+          },
+          '1',
+          '0'
         )
       end
 
       # @label With Language Attribute
       def with_language
         pathogen_checkbox(
-          attribute: :language,
-          value: 'fr',
-          label: 'Français',
-          lang: 'fr'
+          'preview',
+          :language,
+          { label: 'Français', lang: 'fr' },
+          'fr',
+          '0'
         )
       end
 
       # @label With ARIA Labelledby
       def with_aria_labelledby
-        render(
+        render_with_template(
           template: 'pathogen/form/checkbox_preview/with_aria_labelledby'
         )
       end
@@ -161,41 +196,53 @@ module Pathogen
       # @label Select All Checkbox (Common Pattern)
       def select_all_checkbox
         pathogen_checkbox(
-          attribute: :select_all,
-          value: '1',
-          aria: {
-            label: 'Select all samples on this page',
-            controls: 'samples-table-body',
-            live: 'polite'
+          'preview',
+          :select_all,
+          {
+            aria: {
+              label: 'Select all samples on this page',
+              controls: 'samples-table-body',
+              live: 'polite'
+            },
+            help_text: 'Check to select all samples, uncheck to deselect all'
           },
-          help_text: 'Check to select all samples, uncheck to deselect all'
+          '1',
+          '0'
         )
       end
 
       # @label Row Selection Checkbox
       def row_selection_checkbox
         pathogen_checkbox(
-          attribute: :select_row,
-          value: '1',
-          aria: {
-            label: 'Select sample SAMPLE-001',
-            controls: 'sample-details-panel'
+          'preview',
+          :select_row,
+          {
+            aria: {
+              label: 'Select sample SAMPLE-001',
+              controls: 'sample-details-panel'
+            },
+            help_text: 'Check to select this sample, uncheck to deselect'
           },
-          help_text: 'Check to select this sample, uncheck to deselect'
+          '1',
+          '0'
         )
       end
 
       # @label Form Checkbox with Enhanced ARIA
       def form_checkbox_with_enhanced_aria
         pathogen_checkbox(
-          attribute: :accessibility,
-          value: '1',
-          label: 'Enable accessibility features',
-          aria: {
-            describedby: 'accessibility-help',
-            controls: 'accessibility-panel'
+          'preview',
+          :accessibility,
+          {
+            label: 'Enable accessibility features',
+            aria: {
+              describedby: 'accessibility-help',
+              controls: 'accessibility-panel'
+            },
+            help_text: 'Includes screen reader support and keyboard navigation'
           },
-          help_text: 'Includes screen reader support and keyboard navigation'
+          '1',
+          '0'
         )
       end
 
@@ -206,54 +253,72 @@ module Pathogen
       # @label With Aria Label Only (No Visible Label)
       def with_aria_label_only
         pathogen_checkbox(
-          attribute: :hidden_option,
-          value: '1',
-          aria: {
-            label: 'Hidden option checkbox for screen readers'
-          }
+          'preview',
+          :hidden_option,
+          {
+            aria: {
+              label: 'Hidden option checkbox for screen readers'
+            }
+          },
+          '1',
+          '0'
         )
       end
 
       # @label With Aria Label and Help Text (No Visible Label)
       def with_aria_label_and_help_text
         pathogen_checkbox(
-          attribute: :select_all,
-          value: '1',
-          aria: {
-            label: 'Select all items on this page'
+          'preview',
+          :select_all,
+          {
+            aria: {
+              label: 'Select all items on this page'
+            },
+            help_text: 'Check to select all items, uncheck to deselect all'
           },
-          help_text: 'Check to select all items, uncheck to deselect all'
+          '1',
+          '0'
         )
       end
 
       # @label With Long Label
       def with_long_label
         pathogen_checkbox(
-          attribute: :complex_terms,
-          value: '1',
-          label:
-            'I acknowledge that I have read, understood, and agree to be bound by all the terms and ' \
-            'conditions, privacy policy, and any other agreements that may be applicable to my use of ' \
-            'this service'
+          'preview',
+          :complex_terms,
+          {
+            label:
+              'I acknowledge that I have read, understood, and agree to be bound by all the terms and ' \
+              'conditions, privacy policy, and any other agreements that may be applicable to my use of ' \
+              'this service'
+          },
+          '1',
+          '0'
         )
       end
 
       # @label With Special Characters
       def with_special_characters
         pathogen_checkbox(
-          attribute: :special_option,
-          value: '1',
-          label: 'Special Option (Recommended) ⭐ 🚀'
+          'preview',
+          :special_option,
+          { label: 'Special Option (Recommended) ⭐ 🚀' },
+          '1',
+          '0'
         )
       end
 
       # @label With Error Text
       def with_error_text
         pathogen_checkbox(
-          attribute: :terms,
-          value: '1',
-          label: 'I agree to the terms and conditions',
-          error_text: 'You must agree to the terms to continue'
+          'preview',
+          :terms,
+          {
+            label: 'I agree to the terms and conditions',
+            error_text: 'You must agree to the terms to continue'
+          },
+          '1',
+          '0'
         )
       end
 
