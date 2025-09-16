@@ -72,26 +72,20 @@ export default class extends Controller {
   }
 
   getOrCreateStoredItems() {
-    const storedItems = this.#getStoredItems();
-
-    if (storedItems === null) {
-      this.update([], false);
-      return [];
-    } else {
-      return storedItems;
-    }
-  }
-
-  #getStoredItems() {
     try {
       const storedItems = JSON.parse(
         sessionStorage.getItem(this.#getStorageKey()),
       );
-      return storedItems;
+      if (Array.isArray(storedItems)) {
+        return storedItems;
+      }
     } catch (error) {
       console.warn("Failed to parse stored selection items:", error);
-      return null;
     }
+
+    // create default empty array
+    this.update([], false);
+    return [];
   }
 
   #addOrRemove(add, storageValue) {
