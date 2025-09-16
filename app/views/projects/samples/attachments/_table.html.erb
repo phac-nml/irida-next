@@ -2,11 +2,12 @@
   <% if @allowed_to[:update_sample] && @has_attachments %>
     <div
       class="
-        flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
+        flex flex-col-reverse @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2
+        mb-2
       "
     >
       <% if Flipper.enabled?(:sample_attachments_searching) %>
-        <div class="inline-flex grow @xl:grow-0 space-x-2">
+        <div class="inline-flex grow @xl:grow-0 space-x-2 mt-2 @lg:mt-0">
           <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
