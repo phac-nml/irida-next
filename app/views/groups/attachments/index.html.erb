@@ -33,6 +33,11 @@
         url: group_attachments_path(@group),
         total_count: @pagy.count,
         value: @q.puid_or_file_blob_filename_cont,
+        search_field_arguments: {
+          data: {
+            'search-field-selection-outlet': '#attachments-table'
+          }
+        }
       ) do %>
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>

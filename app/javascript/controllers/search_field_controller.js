@@ -1,7 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static outlets = ["selection"];
   static targets = ["input", "clearButton", "submitButton"];
+
+  /**
+   * 🎯 Initialize controller
+   *
+   * Sets up any initial state or event listeners
+   */
+  connect() {
+    console.debug("🔗 SearchFieldController: Connected", {
+      hasInputTarget: this.hasInputTarget,
+      hasSearchContent: this.hasSearchContent,
+    });
+  }
+
+  /**
+   * 🚪 Cleanup when controller disconnects
+   */
+  disconnect() {
+    console.debug("🔌 SearchFieldController: Disconnected");
+  }
 
   /**
    * 🧹 Clear search field and refresh results
@@ -34,6 +54,8 @@ export default class extends Controller {
       // ♻️ Toggle buttons: hide clear, show submit
       this.showSubmitHideClear();
 
+      this.clearSelection();
+
       // 🚀 Trigger form submission to refresh results (so user sees cleared state)
       form.requestSubmit();
 
@@ -62,6 +84,12 @@ export default class extends Controller {
     }
   }
 
+  clearSelection() {
+    if (this.hasSelectionOutlet) {
+      this.selectionOutlet.clear();
+    }
+  }
+
   /**
    * 🔍 Check if search field has content
    *
@@ -69,25 +97,6 @@ export default class extends Controller {
    */
   get hasSearchContent() {
     return this.hasInputTarget && this.inputTarget.value.trim().length > 0;
-  }
-
-  /**
-   * 🎯 Initialize controller
-   *
-   * Sets up any initial state or event listeners
-   */
-  connect() {
-    console.debug("🔗 SearchFieldController: Connected", {
-      hasInputTarget: this.hasInputTarget,
-      hasSearchContent: this.hasSearchContent,
-    });
-  }
-
-  /**
-   * 🚪 Cleanup when controller disconnects
-   */
-  disconnect() {
-    console.debug("🔌 SearchFieldController: Disconnected");
   }
 
   /**

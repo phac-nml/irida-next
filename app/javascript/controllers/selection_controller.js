@@ -1,11 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  // # indicates private attribute or method
-  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
-  #storageKey = null;
-  #numSelected = 0;
-
   static targets = ["rowSelection", "selectPage", "selected", "status"];
   static outlets = ["action-button"];
 
@@ -19,28 +14,25 @@ export default class extends Controller {
   };
 
   connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
-    this.#storageKey =
-      this.storageKeyValue ||
-      `${location.protocol}//${location.host}${location.pathname}`;
-
     this.element.setAttribute("data-controller-connected", "true");
 
-    const storageValue = this.getStoredItems();
+    this.boundOnMorph = this.onMorph.bind(this);
 
-    if (storageValue) {
-      this.#numSelected = storageValue.length;
-      this.#updateUI(storageValue);
-    } else {
-      this.save([]);
-    }
+    this.update(this.getOrCreateStoredItems(), false);
+
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  onMorph() {
+    this.update(this.getOrCreateStoredItems(), false);
   }
 
   togglePage(event) {
-    const newStorageValue = this.getStoredItems();
+    const newStorageValue = this.getOrCreateStoredItems();
     this.rowSelectionTargets.map((row) => {
       if (row.checked !== event.target.checked) {
         row.checked = event.target.checked;
@@ -54,8 +46,7 @@ export default class extends Controller {
         }
       }
     });
-    this.save(newStorageValue);
-    this.#updateUI(newStorageValue);
+    this.update(newStorageValue);
   }
 
   toggle(event) {
@@ -67,30 +58,38 @@ export default class extends Controller {
   }
 
   clear() {
-    sessionStorage.removeItem(this.#storageKey);
-    this.#updateUI([]);
+    this.update([]);
   }
 
-  save(storageValue) {
-    sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
-    this.#numSelected = storageValue.length;
+  update(ids, announce = true) {
+    if (!Array.isArray(ids)) {
+      console.warn("SelectionController: ids must be an array");
+      return;
+    }
+
+    sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
+    this.#updateUI(ids, announce);
   }
 
-  update(ids) {
-    this.save(ids);
-    this.#updateUI(ids);
-  }
+  getOrCreateStoredItems() {
+    try {
+      const storedItems = JSON.parse(
+        sessionStorage.getItem(this.#getStorageKey()),
+      );
+      if (Array.isArray(storedItems)) {
+        return storedItems;
+      }
+    } catch (error) {
+      console.warn("Failed to parse stored selection items:", error);
+    }
 
-  getNumSelected() {
-    return this.#numSelected;
-  }
-
-  getStoredItems() {
-    return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
+    // create default empty array
+    this.update([], false);
+    return [];
   }
 
   #addOrRemove(add, storageValue) {
-    const newStorageValue = this.getStoredItems();
+    const newStorageValue = this.getOrCreateStoredItems();
     if (add) {
       newStorageValue.push(storageValue);
     } else {
@@ -99,17 +98,20 @@ export default class extends Controller {
         newStorageValue.splice(index, 1);
       }
     }
-    this.save(newStorageValue);
-    this.#updateUI(newStorageValue);
+    this.update(newStorageValue);
   }
 
-  #updateUI(ids) {
-    this.rowSelectionTargets.map((row) => {
-      row.checked = ids.indexOf(row.value) > -1;
-    });
-    this.#updateActionButtons(ids.length);
-    this.#updateCounts(ids.length);
-    this.#setSelectPageCheckboxValue();
+  #updateUI(ids, announce) {
+    try {
+      this.rowSelectionTargets.map((row) => {
+        row.checked = ids.indexOf(row.value) > -1;
+      });
+      this.#updateActionButtons(ids.length);
+      this.#updateCounts(ids.length, announce);
+      this.#setSelectPageCheckboxValue();
+    } catch (error) {
+      console.error("selectionController: Failed to update UI", error);
+    }
   }
 
   #updateActionButtons(count) {
@@ -131,11 +133,13 @@ export default class extends Controller {
     }
   }
 
-  #updateCounts(selected) {
+  #updateCounts(selected, announce) {
     if (this.hasSelectedTarget) {
       this.selectedTarget.innerText = selected;
     }
-    this.#announceSelectionStatus(selected);
+    if (announce) {
+      this.#announceSelectionStatus(selected);
+    }
   }
 
   /**
@@ -165,5 +169,12 @@ export default class extends Controller {
       const globalStatus = document.querySelector("#sr-status");
       if (globalStatus) globalStatus.textContent = message;
     }
+  }
+
+  #getStorageKey() {
+    return (
+      this.storageKeyValue ||
+      `${location.protocol}//${location.host}${location.pathname}`
+    );
   }
 }

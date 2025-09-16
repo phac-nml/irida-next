@@ -7,9 +7,6 @@
               placeholder: t(".search.placeholder"),
               url: group_workflow_execution_path(@namespace, @workflow_execution),
               total_count: @pagy.count,
-              html: {
-                "data-turbo-action": "replace",
-              },
               value: @q.puid_or_file_blob_filename_cont,
             ) do %>
       <%= hidden_field_tag :limit, @pagy.limit %>

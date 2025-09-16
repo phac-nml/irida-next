@@ -21,8 +21,8 @@ export default class extends Controller {
   #page = 1;
 
   connect() {
-    this.allIds = this.selectionOutlet.getStoredItems();
-    this.numSelected = this.selectionOutlet.getNumSelected();
+    this.allIds = this.selectionOutlet.getOrCreateStoredItems();
+    this.numSelected = this.allIds.length;
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
     if (this.hasSelectionCountTarget) {

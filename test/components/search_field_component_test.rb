@@ -200,7 +200,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Check button attributes using selectors
     assert_selector 'button[data-search-field-target="clearButton"][type="button"]', count: 1
     assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->search-field#clear"]', count: 1
-    assert_selector 'button[data-search-field-target="clearButton"][data-action*="click->selection#clear"]', count: 1
     clear_aria = I18n.t('components.search_field_component.clear_button')
     clear_selector = format("button[data-search-field-target='clearButton'][aria-label='%s']", clear_aria)
     assert_selector clear_selector, count: 1
@@ -217,7 +216,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
 
     # Check button attributes using selectors
     assert_selector 'button[data-search-field-target="submitButton"][type="submit"]', count: 1
-    assert_selector 'button[data-search-field-target="submitButton"][data-action*="click->selection#clear"]', count: 1
     search_aria = I18n.t('components.search_field_component.search_button')
     submit_selector = format("button[data-search-field-target='submitButton'][aria-label='%s']", search_aria)
     assert_selector submit_selector, count: 1

@@ -77,7 +77,10 @@ export default class extends Controller {
     spinner.classList.remove("hidden");
     // Update the text inside spinner dialog
     spinner.innerHTML = spinner.innerHTML
-      .replace("COUNT_PLACEHOLDER", this.selectionOutlet.getNumSelected())
+      .replace(
+        "COUNT_PLACEHOLDER",
+        this.selectionOutlet.getOrCreateStoredItems().length,
+      )
       .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
       .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
 
@@ -91,7 +94,7 @@ export default class extends Controller {
     normalizeParams(
       params,
       this.fieldNameValue,
-      this.selectionOutlet.getStoredItems(),
+      this.selectionOutlet.getOrCreateStoredItems(),
       0,
     );
 

@@ -3,17 +3,11 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
+    class AttachmentsController < Projects::Samples::ApplicationController
       include SampleAttachment
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
-      before_action :view_authorizations, only: %i[index destroy create select]
-
-      def index
-        authorize! @sample.project, to: :read_sample?
-
-        list_sample_attachments
-      end
+      before_action :view_authorizations, only: %i[destroy create select]
 
       def new
         authorize! @project, to: :update_sample?

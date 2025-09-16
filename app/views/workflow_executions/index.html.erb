@@ -17,7 +17,6 @@
     },
     method: :get,
     data: {
-      action: "turbo:morph-element->action-button#idempotentConnect ",
       turbo_stream: true,
       controller: "action-button",
       action_button_required_value: 1,
@@ -28,7 +27,6 @@
       destroy_multiple_confirmation_workflow_executions_path,
       method: :get,
       data: {
-        action: "turbo:morph-element->action-button#idempotentConnect",
         turbo_stream: true,
         controller: "action-button",
         action_button_required_value: 1,
@@ -67,6 +65,11 @@
         placeholder: t(".search.placeholder"),
         value: @q.name_or_id_cont,
         total_count: @pagy.count,
+        search_field_arguments: {
+          data: {
+            "search-field-selection-outlet": "#workflow-executions-table",
+          },
+        },
       ) %>
     </div>
   </div>

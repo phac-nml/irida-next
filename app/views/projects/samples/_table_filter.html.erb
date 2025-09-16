@@ -1,12 +1,15 @@
 <div role="status" class="sr-only"><%= @results_message %></div>
 
-<%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters selection metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-end space-x-2" do |f| %>
+<%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-end space-x-2" do |f| %>
   <%= render SearchFieldComponent.new(
     label: t(".search.label"),
     placeholder: t(".search.placeholder"),
     form: f,
     field_name: :name_or_puid_cont,
     value: @search_params[:name_or_puid_cont],
+    data: {
+      "search-field-selection-outlet": "#samples-table",
+    },
   ) %>
   <input type="hidden" name="format" value="turbo_stream"/>
   <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>

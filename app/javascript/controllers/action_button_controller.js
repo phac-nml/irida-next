@@ -19,10 +19,17 @@ export default class extends Controller {
   #primary_colours = ["bg-primary-200", "text-slate-400", "border-primary-200"];
 
   connect() {
-    this.idempotentConnect();
+    this.boundOnMorph = this.onMorph.bind(this);
+    this.setDisabled();
+
+    document.addEventListener("turbo:morph", this.boundOnMorph);
   }
 
-  idempotentConnect() {
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  onMorph() {
     this.setDisabled();
   }
 

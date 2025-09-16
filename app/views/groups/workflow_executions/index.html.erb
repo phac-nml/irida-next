@@ -17,7 +17,6 @@
     },
     method: :get,
     data: {
-      action: "turbo:morph-element->action-button#idempotentConnect ",
       turbo_stream: true,
       controller: "action-button",
       action_button_required_value: 1,
@@ -57,6 +56,9 @@
         placeholder: t(".search.placeholder"),
         total_count: @pagy.count,
         value: @q.name_or_id_cont,
+        data: {
+          "search-field-selection-outlet": "#workflow-executions-table",
+        },
       ) %>
     </div>
   </div>

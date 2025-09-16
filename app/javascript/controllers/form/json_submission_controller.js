@@ -56,7 +56,7 @@ export default class extends Controller {
       normalizeParams(
         params,
         this.fieldNameValue,
-        this.selectionOutlet.getStoredItems(),
+        this.selectionOutlet.getOrCreateStoredItems(),
         0,
       );
     }
