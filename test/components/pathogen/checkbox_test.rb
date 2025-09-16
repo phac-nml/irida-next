@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'ostruct'
 
 module Pathogen
   module Form
@@ -26,9 +25,10 @@ module Pathogen
       def test_renders_checkbox_with_form_builder
         template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil)
         # Provide an object with a #newsletter attribute to satisfy FormBuilder
+        user_object = Struct.new(:newsletter).new(false)
         form = ActionView::Helpers::FormBuilder.new(
           'user',
-          OpenStruct.new(newsletter: false),
+          user_object,
           template,
           {}
         )
@@ -300,9 +300,10 @@ module Pathogen
 
       def test_generates_correct_input_id_with_form
         template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil)
+        user_object = Struct.new(:newsletter).new(false)
         form = ActionView::Helpers::FormBuilder.new(
           'user',
-          OpenStruct.new(newsletter: false),
+          user_object,
           template,
           {}
         )
