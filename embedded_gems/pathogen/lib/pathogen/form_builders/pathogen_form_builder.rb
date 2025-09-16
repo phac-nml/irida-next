@@ -55,46 +55,20 @@ module Pathogen
         @template.render(Pathogen::Form::RadioButton.new(**component_options))
       end
 
-      # Renders a checkbox with consistent styling and accessibility features
+      # Renders a checkbox with consistent styling using standard Rails signature
       #
-      # @param attribute_name [Symbol] The attribute name for the checkbox
-      # @param value [String, Symbol, Boolean] The value for this checkbox
+      # @param method [Symbol] The method name for the checkbox
       # @param options [Hash] Options for the checkbox
-      # @option options [String] :label Custom label text (defaults to humanized attribute name)
-      # @option options [Boolean] :checked Whether the checkbox should be checked
-      # @option options [Boolean] :disabled Whether the checkbox is disabled
-      # @option options [Boolean] :required Whether the checkbox is required
-      # Pass ARIA attributes via `aria: { describedby:, controls: }`
-      # @option options [String] :lang Language code for the label
-      # @option options [String] :class Additional CSS classes
-      # @option options [String] :help_text Help text displayed below the label
-      # @option options [String] :error_text Error text to display when invalid
-      # @option options [String] :onchange JavaScript for onchange event
+      # @param checked_value [String] Value when checked (default: "1")
+      # @param unchecked_value [String] Value when unchecked (default: "0")
       # @return [String] HTML for the checkbox
-      def checkbox(attribute_name, value, options = {})
+      def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
         options = add_test_selector(options)
-        component_options = build_checkbox_options(attribute_name, value, options)
-        @template.render(Pathogen::Form::Checkbox.new(**component_options))
-      end
 
-      private
-
-      def build_checkbox_options(attribute_name, value, options)
-        {
-          form: self,
-          attribute: attribute_name,
-          value: value,
-          label: options.delete(:label),
-          checked: options.delete(:checked) { false },
-          disabled: options.delete(:disabled) { false },
-          required: options.delete(:required) { false },
-          # described_by and controls must be provided via nested :aria
-          lang: options.delete(:lang),
-          class: options.delete(:class),
-          help_text: options.delete(:help_text),
-          error_text: options.delete(:error_text),
-          onchange: options.delete(:onchange)
-        }.merge(options)
+        # Render using the Pathogen component with Rails signature
+        Pathogen::Form::Checkbox.new(
+          method, options, checked_value, unchecked_value, form: self
+        ).call
       end
     end
   end

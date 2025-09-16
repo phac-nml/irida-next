@@ -25,7 +25,9 @@
                 ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? and @abilities[:select_samples] %>
-                    <%= pathogen_checkbox "select-page", "1", {
+                    <%= check_box_tag "select-page",
+                    "1",
+                    {
                       id: "select-page",
                       aria: {
                         label: t(".select_all.aria_label"),
@@ -36,8 +38,8 @@
                         deselected_message: t(".select_all.deselected_message"),
                         controller: "filters",
                         selection_target: "selectPage",
-                      }
-                    }, "1", "0" %>
+                      },
+                    } %>
                   <% end %>
                   <%= render SortComponent.new(
                     sort: @search_params[:sort],
@@ -91,19 +93,21 @@
               ) do %>
                   <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_samples] %>
-                      <%= pathogen_checkbox "sample_ids[]", sample.id, {
+                      <%= check_box_tag "sample_ids[]",
+                      sample.id,
+                      false,
+                      {
                         id: dom_id(sample, :checkbox),
                         aria: {
                           label: t(".row.aria_label", name: sample.name),
                         },
-                        help_text: t(".row.help_text"),
                         data: {
                           action: "input->selection#toggle",
                           selected_message: t(".row.selected_message", name: sample.name),
                           deselected_message: t(".row.deselected_message", name: sample.name),
                           selection_target: "rowSelection",
-                        }
-                      }, sample.id, "0" %>
+                        },
+                      } %>
                     <% end %>
                     <% if column == :puid || column == :name %>
                       <%= link_to(

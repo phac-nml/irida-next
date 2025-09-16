@@ -24,8 +24,9 @@
             ) do %>
               <div class="flex items-center gap-3">
                 <% if index.zero? and @abilities[:select_workflow_executions] %>
-                  <%= pathogen_checkbox "select-page",
+                  <%= check_box_tag "select-page",
                   "1",
+                  false,
                   {
                     id: "select-page",
                     aria: {
@@ -92,8 +93,9 @@
               ) do %>
                 <div class="flex items-center gap-3">
                   <% if index.zero? && @abilities[:select_workflow_executions] %>
-                    <%= pathogen_checkbox "workflow_execution_ids[]",
+                    <%= check_box_tag "workflow_execution_ids[]",
                     workflow_execution.id,
+                    false,
                     {
                       id: dom_id(workflow_execution, "checkbox"),
                       aria: {
@@ -103,8 +105,7 @@
                         action: "input->selection#toggle",
                         selection_target: "rowSelection",
                       },
-                    },
-                    workflow_execution.id %>
+                    } %>
                   <% end %>
                   <% if column == :id %>
                     <%= link_to(

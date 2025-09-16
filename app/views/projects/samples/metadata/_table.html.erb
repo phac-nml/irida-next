@@ -74,10 +74,10 @@
             >
               <% if @allowed_to[:update_sample] %>
                 <td class="px-3 py-3">
-                  <%= pathogen_checkbox "metadata_keys[]",
+                  <%= check_box_tag "metadata_keys[]",
                   metadata[:key],
+                  false,
                   {
-                    checked: false,
                     id: metadata[:key],
                     aria: {
                       label: metadata[:key],
@@ -86,9 +86,7 @@
                       selection_target: "rowSelection",
                       action: "input->selection#toggle",
                     },
-                  },
-                  metadata[:key],
-                  "0" %>
+                  } %>
                 </td>
               <% end %>
               <td class="px-6 py-4"><%= metadata[:key] %></td>
