@@ -4,11 +4,13 @@
       <%= button_to new_template_button_text,
       new_template_url,
       data: {
+        :controller => "viral--dialog-trigger",
+        :action => "click->viral--dialog-trigger#open",
         "turbo-frame" => "metadata_template_modal",
         :turbo_stream => true,
       },
       method: :get,
-      class: "button button-primary" %>
+      class: "button button-primary dialog-trigger" %>
     <% end %>
   <% end %>
 <% end %>

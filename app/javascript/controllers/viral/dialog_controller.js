@@ -5,6 +5,7 @@ import { createFocusTrap } from "focus-trap";
 const savedDialogStates = new Map();
 
 export default class extends Controller {
+  static outlets = ["viral--dialog-trigger"];
   static targets = ["dialog", "trigger"];
   static values = { open: Boolean };
   #focusTrap = null;
@@ -54,7 +55,20 @@ export default class extends Controller {
     if (this.hasTriggerTarget) {
       // close will refocus the trigger so we don't need to save it to refocus on next connect
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
-      this.triggerTarget.focus();
+      // this.triggerTarget.focus();
+    }
+    console.log("close");
+    if (this.hasViralDialogTriggerOutlet) {
+      const filtered = this.viralDialogTriggerOutlets.filter(
+        (item) => item.triggeredTimestamp !== undefined,
+      );
+
+      const triggered = filtered.reduce((latest, current) => {
+        return latest.triggeredTimestamp > current.triggeredTimestamp
+          ? latest
+          : current;
+      });
+      triggered.element.focus();
     }
   }
 
