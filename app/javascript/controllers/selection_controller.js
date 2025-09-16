@@ -62,18 +62,35 @@ export default class extends Controller {
   }
 
   update(ids, announce = true) {
+    if (!Array.isArray(ids)) {
+      console.warn("SelectionController: ids must be an array");
+      return;
+    }
+
     sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
     this.#updateUI(ids, announce);
   }
 
   getOrCreateStoredItems() {
-    let storedItems = JSON.parse(sessionStorage.getItem(this.#getStorageKey()));
+    const storedItems = this.#getStoredItems();
 
     if (storedItems === null) {
       this.update([], false);
       return [];
     } else {
       return storedItems;
+    }
+  }
+
+  #getStoredItems() {
+    try {
+      const storedItems = JSON.parse(
+        sessionStorage.getItem(this.#getStorageKey()),
+      );
+      return storedItems;
+    } catch (error) {
+      console.warn("Failed to parse stored selection items:", error);
+      return null;
     }
   }
 
@@ -91,12 +108,16 @@ export default class extends Controller {
   }
 
   #updateUI(ids, announce) {
-    this.rowSelectionTargets.map((row) => {
-      row.checked = ids.indexOf(row.value) > -1;
-    });
-    this.#updateActionButtons(ids.length);
-    this.#updateCounts(ids.length, announce);
-    this.#setSelectPageCheckboxValue();
+    try {
+      this.rowSelectionTargets.map((row) => {
+        row.checked = ids.indexOf(row.value) > -1;
+      });
+      this.#updateActionButtons(ids.length);
+      this.#updateCounts(ids.length, announce);
+      this.#setSelectPageCheckboxValue();
+    } catch (error) {
+      console.error("selectionController: Failed to update UI", error);
+    }
   }
 
   #updateActionButtons(count) {
