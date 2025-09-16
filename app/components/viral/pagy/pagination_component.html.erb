@@ -1,10 +1,11 @@
 <%# filepath: /home/josh/Development/irida-next/app/components/viral/pagy/pagination_component.html.erb %>
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
 <nav
-  class="pagy nav"
+  class="pagy nav flex-none"
   aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
 >
-  <ul class="inline-flex h-11 -space-x-px text-base">
+  <%# Large screen layout with numbered buttons %>
+  <ul class="@max-lg:hidden @lg:inline-flex h-11 -space-x-px text-base">
     <%# Previous page link %>
     <li>
       <% if @pagy.prev %>
@@ -68,7 +69,7 @@
           @pagy.next,
           t("components.viral.pagy.pagination_component.next"),
           classes:
-            "flex items-center relative focus-visible:z-10 justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
+            "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
           aria_label: t("components.viral.pagy.pagination_component.next_aria_label"),
         ) %>
       <% else %>
@@ -92,7 +93,8 @@
         t("components.viral.pagy.pagination_component.previous"),
         classes:
           "flex items-center justify-center relative focus-visible:z-10 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 border border-slate-300 dark:border-slate-600 rounded-l-lg",
-        aria_label: t("components.viral.pagy.pagination_component.previous_aria_label"),
+        aria_label:
+          t("components.viral.pagy.pagination_component.previous_aria_label"),
       ) %>
     <% else %>
       <span
