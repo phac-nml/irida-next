@@ -1,0 +1,120 @@
+---
+fr:
+  action_policy:
+    policy:
+      create?: Vous n’êtes pas autorisé à créer cette ressource sur ce serveur.
+      data_export:
+        destroy?: Vous n’êtes pas autorisé à supprimer cette exportation de données sur ce serveur.
+      destroy?: Vous n’êtes pas autorisé à supprimer la ressource demandée de ce serveur.
+      edit?: Vous n’êtes pas autorisé à mettre à jour cette ressource sur ce serveur.
+      group:
+        clone_sample?: You are not authorized to copy samples from group %{name} on this server.
+        create?: Vous n’êtes pas autorisé à créer un projet sous le groupe %{name} sur ce serveur.
+        create_attachment?: Vous n’êtes pas autorisé à créer des pièces jointes pour le groupe %{name} sur ce serveur.
+        create_bot_accounts?: Vous n’êtes pas autorisé à créer des comptes de bots pour le groupe %{name} sur ce serveur.
+        create_member?: Vous n’êtes pas autorisé à créer des membres sous le groupe %{name} sur ce serveur.
+        create_metadata_templates?: Vous n’êtes pas autorisé à créer un modèle de métadonnées sous le groupe %{name} sur ce serveur.
+        create_subgroup?: Vous n’êtes pas autorisé à créer un sous-groupe au sein du groupe %{name} sur ce serveur.
+        destroy?: Vous n’êtes pas autorisé à supprimer le groupe %{name} de ce serveur.
+        destroy_attachment?: Vous n’êtes pas autorisé à détruire des pièces jointes pour le groupe %{name} sur ce serveur.
+        destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le groupe %{name} sur ce serveur.
+        destroy_member?: Vous n’êtes pas autorisé à supprimer des membres sous le groupe %{name} sur ce serveur.
+        destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        destroy_sample?: You are not authorized to remove samples from group %{name} on this server.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
+        edit?: Vous n’êtes pas autorisé à modifier le groupe %{name} de ce serveur.
+        export_data?: Vous n’êtes pas autorisé à exporter des données du projet %{name} sur ce serveur.
+        import_samples_and_metadata?: Vous n’êtes pas autorisé à importer des échantillons et des métadonnées pour le groupe %{name} sur ce serveur.
+        link_namespace_with_group?: Vous n’êtes pas autorisé à lier le groupe %{name} à d’autres groupes sur ce serveur.
+        member_listing?: Vous n’êtes pas autorisé à afficher les membres sous le groupe %{name} sur ce serveur.
+        new?: Vous n’êtes pas autorisé à créer un projet sous le groupe %{name} sur ce serveur.
+        read?: Vous n’êtes pas autorisé à afficher le groupe %{name} de ce serveur.
+        sample_listing?: Vous n’êtes pas autorisé à afficher des échantillons pour le groupe %{name} sur ce serveur.
+        submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du groupe %{name} sur ce serveur.
+        transfer?: Vous n’êtes pas autorisé à transférer le groupe %{name} de ce serveur.
+        transfer_into_namespace?: Vous n’êtes pas autorisé à transférer vers l’espace de noms de groupe %{name} sur ce serveur.
+        transfer_sample?: You are not authorized to transfer samples for group %{name} on this server.
+        unlink_namespace_with_group?: Vous n’êtes pas autorisé à dissocier le groupe %{name} d’autres groupes sur ce serveur.
+        update?: Vous n’êtes pas autorisé à mettre à jour le groupe %{name} sur ce serveur.
+        update_member?: Vous n’êtes pas autorisé à mettre à jour les membres du groupe %{name} sur ce serveur.
+        update_metadata_templates?: Vous n’êtes pas autorisé à mettre à jour les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        update_namespace_with_group_link?: Vous n’êtes pas autorisé à mettre à jour les liens du groupe %{name} avec d’autres groupes sur ce serveur.
+        update_sample_metadata?: Vous n’êtes pas autorisé à mettre à jour les exemples de métadonnées pour le groupe %{name} sur ce serveur.
+        view_metadata_templates?: Vous n’êtes pas autorisé à afficher les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+      index?: Vous n’êtes pas autorisé à consulter la liste des ressources sur ce serveur.
+      metadata_templates:
+        destroy_metadata_template?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        update_metadata_template?: Vous n’êtes pas autorisé à mettre à jour les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+      namespaces/project_namespace:
+        create_automated_workflow_executions?: Vous n’êtes pas autorisé à créer des pipelines automatisés pour le projet %{name}
+        create_bot_accounts?: Vous n’êtes pas autorisé à créer des comptes de bots pour le projet %{name} sur ce serveur.
+        create_member?: Vous n’êtes pas autorisé à créer des membres pour l’espace de noms du projet %{name} sur ce serveur.
+        create_metadata_templates?: Vous n’êtes pas autorisé à créer un modèle de métadonnées pour le projet %{name} sur ce serveur.
+        destroy_automated_workflow_executions?: Vous n’êtes pas autorisé à détruire des pipelines automatisés pour le projet %{name}
+        destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le projet %{name} sur ce serveur.
+        destroy_member?: Vous n’êtes pas autorisé à supprimer des membres de l’espace de noms du projet %{name} sur ce serveur.
+        destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le projet %{name} sur ce serveur.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for project %{name} on this server.
+        export_data?: You are not authorized to export data from project %{name} on this server.
+        import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
+        link_namespace_with_group?: Vous n’êtes pas autorisé à lier le projet %{name} à d’autres groupes sur ce serveur.
+        member_listing?: Vous n’êtes pas autorisé à afficher des membres pour l’espace de noms du projet %{name} sur ce serveur.
+        submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du projet %{name} sur ce serveur.
+        unlink_namespace_with_group?: Vous n’êtes pas autorisé à dissocier le projet %{name} d’autres groupes sur ce serveur.
+        update?: Vous n’êtes pas autorisé à mettre à jour l’espace de noms du projet %{name} sur ce serveur.
+        update_automated_workflow_executions?: Vous n’êtes pas autorisé à mettre à jour les pipelines automatisés pour le projet %{name}
+        update_member?: Vous n’êtes pas autorisé à mettre à jour des membres pour l’espace de noms du projet %{name} sur ce serveur.
+        update_metadata_templates?: Vous n’êtes pas autorisé à mettre à jour les modèles de métadonnées pour le projet %{name} sur ce serveur.
+        update_namespace_with_group_link?: Vous n’êtes pas autorisé à mettre à jour les liens du projet %{name} avec d’autres groupes sur ce serveur.
+        update_sample_metadata?: Vous n’êtes pas autorisé à mettre à jour les exemples de métadonnées pour le projet %{name} sur ce serveur.
+        view_automated_workflow_executions?: Vous n’êtes pas autorisé à afficher les pipelines automatisés pour le projet %{name}
+        view_metadata_templates?: Vous n’êtes pas autorisé à afficher les modèles de métadonnées pour le projet %{name} sur ce serveur.
+        view_workflow_executions?: Vous n’êtes pas autorisé à afficher les exécutions de pipeline pour le projet %{name} sur ce serveur.
+      namespaces/user_namespace:
+        create?: Vous n’êtes pas autorisé à créer un projet sous l’espace de noms %{name}
+        transfer_into_namespace?: Vous n’êtes pas autorisé à transférer vers l’espace de noms %{name} utilisateur
+      new?: Vous n’êtes pas autorisé à créer cette ressource sur ce serveur.
+      project:
+        activity?: Vous n’êtes pas autorisé à afficher l’activité pour le projet %{name} sur ce serveur.
+        clone_sample?: Vous n’êtes pas autorisé à copier des échantillons du projet %{name} sur ce serveur.
+        clone_sample_into_project?: Vous n’êtes pas autorisé à copier des échantillons dans le projet %{name} sur ce serveur.
+        create_attachment?: Vous n’êtes pas autorisé à créer des pièces jointes pour le projet %{name} sur ce serveur.
+        create_sample?: Vous n’êtes pas autorisé à créer des échantillons pour le projet %{name} sur ce serveur.
+        destroy?: Vous n’êtes pas autorisé à supprimer le projet %{name} de ce serveur.
+        destroy_attachment?: Vous n’êtes pas autorisé à détruire des pièces jointes pour le projet %{name} sur ce serveur.
+        destroy_sample?: Vous n’êtes pas autorisé à supprimer des échantillons du projet %{name} sur ce serveur.
+        edit?: Vous n’êtes pas autorisé à modifier le projet %{name} de ce serveur.
+        new?: Vous n’êtes pas autorisé à créer un projet sous l’espace de noms %{name} sur ce serveur.
+        read?: Vous n’êtes pas autorisé à afficher le projet %{name} sur ce serveur.
+        read_sample?: Vous n’êtes pas autorisé à afficher cet échantillon pour le projet %{name} sur ce serveur.
+        sample_listing?: Vous n’êtes pas autorisé à afficher des échantillons pour le projet %{name} sur ce serveur.
+        submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du projet %{name} sur ce serveur.
+        transfer?: Vous n’êtes pas autorisé à transférer le projet %{name} sur ce serveur.
+        transfer_sample?: Vous n’êtes pas autorisé à transférer des échantillons pour le projet %{name} sur ce serveur.
+        transfer_sample_into_project?: Vous n’êtes pas autorisé à transférer des échantillons dans le projet %{name} sur ce serveur.
+        update?: Vous n’êtes pas autorisé à mettre à jour le projet %{name} sur ce serveur.
+        update_sample?: Vous n’êtes pas autorisé à mettre à jour des échantillons pour le projet %{name} sur ce serveur.
+      read?: Vous n’êtes pas autorisé à afficher cette ressource sur ce serveur.
+      sample:
+        destroy_attachment?: Vous n’êtes pas autorisé à supprimer les pièces jointes appartenant à l’échantillon %{name}.
+      transfer?: Vous n’êtes pas autorisé à transférer la ressource demandée.
+      transfer_into_namespace?: Vous n’êtes pas autorisé à transférer vers l’espace de noms demandé.
+      update?: Vous n’êtes pas autorisé à mettre à jour cette ressource sur ce serveur.
+      user:
+        create?: Vous n’êtes pas autorisé à créer un utilisateur sur ce serveur.
+        destroy?: Vous n’êtes pas autorisé à supprimer l’utilisateur %{name} de ce serveur.
+        edit?: Vous n’êtes pas autorisé à mettre à jour l’utilisateur %{name} sur ce serveur.
+        index?: Vous n’êtes pas autorisé à consulter la liste des utilisateurs sur ce serveur.
+        new?: Vous n’êtes pas autorisé à créer un utilisateur sur ce serveur.
+        read?: Vous n’êtes pas autorisé à afficher les profils des utilisateurs %{name} sur ce serveur.
+        revoke?: Vous n’êtes pas autorisé à révoquer les jetons d’accès personnels de l’utilisateur %{name} sur ce serveur.
+        update?: Vous n’êtes pas autorisé à mettre à jour l’utilisateur %{name} sur ce serveur.
+      workflow_execution:
+        cancel?: Vous n’êtes pas autorisé à annuler les exécutions de flux de travail pour %{namespace_type} %{name}
+        create?: Vous n’êtes pas autorisé à soumettre des exécutions de flux de travail pour %{namespace_type} %{name}
+        destroy?: Vous n’êtes pas autorisé à détruire les exécutions de flux de travail pour %{namespace_type} %{name}
+        edit?: Vous n’êtes pas autorisé à modifier l’exécution du flux de travail %{id}
+        index?: Vous n’êtes pas autorisé à afficher les exécutions de flux de travail pour %{namespace_type} %{name}
+        read?: Vous n’êtes pas autorisé à afficher l’exécution du flux de travail %{id}
+        update?: Vous n’êtes pas autorisé à mettre à jour l’exécution du flux de travail %{id}
+    unauthorized: Vous n’êtes pas autorisé à effectuer cette action

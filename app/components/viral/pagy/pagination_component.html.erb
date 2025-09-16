@@ -1,6 +1,9 @@
 <%# filepath: /home/josh/Development/irida-next/app/components/viral/pagy/pagination_component.html.erb %>
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
-<nav class="pagy nav flex-none" aria-label="<%= t(".aria_label") %>">
+<nav
+  class="pagy nav flex-none"
+  aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
+>
   <%# Large screen layout with numbered buttons %>
   <ul class="@max-lg:hidden @lg:inline-flex h-11 -space-x-px text-base">
     <%# Previous page link %>
@@ -8,10 +11,11 @@
       <% if @pagy.prev %>
         <%== a.(
           @pagy.prev,
-          t(".previous"),
+          t("components.viral.pagy.pagination_component.previous"),
           classes:
             "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 border-e-0 rounded-s-lg",
-          aria_label: t(".previous_aria_label"),
+          aria_label:
+            t("components.viral.pagy.pagination_component.previous_aria_label"),
         ) %>
       <% else %>
         <span
@@ -20,7 +24,7 @@
             border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
             dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-s-lg
           "
-        ><%= t(".previous") %></span>
+        ><%= t("components.viral.pagy.pagination_component.previous") %></span>
       <% end %>
     </li>
     <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
@@ -31,7 +35,11 @@
             item,
             classes:
               "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100",
-            aria_label: t(".item_aria_label", number: item),
+            aria_label:
+              t(
+                "components.viral.pagy.pagination_component.item_aria_label",
+                number: item,
+              ),
           ) %>
         <% elsif item.is_a?(String) %>
           <a
@@ -59,10 +67,10 @@
       <% if @pagy.next %>
         <%== a.(
           @pagy.next,
-          t(".next"),
+          t("components.viral.pagy.pagination_component.next"),
           classes:
             "flex items-center justify-center relative focus-visible:z-10 text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
-          aria_label: t(".next_aria_label"),
+          aria_label: t("components.viral.pagy.pagination_component.next_aria_label"),
         ) %>
       <% else %>
         <span
@@ -71,7 +79,7 @@
             border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
             dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-e-lg
           "
-        ><%= t(".next") %></span>
+        ><%= t("components.viral.pagy.pagination_component.next") %></span>
       <% end %>
     </li>
   </ul>
@@ -82,10 +90,11 @@
     <% if @pagy.prev %>
       <%== a.(
         @pagy.prev,
-        t(".previous"),
+        t("components.viral.pagy.pagination_component.previous"),
         classes:
           "flex items-center justify-center relative focus-visible:z-10 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 border border-slate-300 dark:border-slate-600 rounded-l-lg",
-        aria_label: t(".previous_aria_label"),
+        aria_label:
+          t("components.viral.pagy.pagination_component.previous_aria_label"),
       ) %>
     <% else %>
       <span
@@ -94,7 +103,7 @@
           bg-slate-100 dark:bg-slate-800 dark:text-slate-400 cursor-not-allowed border
           border-slate-300 dark:border-slate-600 rounded-l-lg
         "
-      ><%= t(".previous") %></span>
+      ><%= t("components.viral.pagy.pagination_component.previous") %></span>
     <% end %>
 
     <%# Page dropdown %>
@@ -104,7 +113,7 @@
         px-2 py-2 dark:bg-slate-700 dark:text-white flex-1 min-w-0 pr-8 focus:z-10
         relative border-l-0 border-r-0
       "
-      aria-label="<%= t(".select_page_aria_label") %>"
+      aria-label="<%= t("components.viral.pagy.pagination_component.select_page_aria_label") %>"
       onchange="window.location.href = this.options[this.selectedIndex].dataset.url"
     >
       <% (1..@pagy.pages).each do |page_num| %>
@@ -112,12 +121,12 @@
           value="<%= page_num %>"
           <%= 'selected' if page_num == @pagy.page %>
           data-url="<%= helpers.pagy_url_for(@pagy, page_num) %>"
-          aria-label="<%= page_num == @pagy.page ? t('.current_page_aria_label', number: page_num) : t('.item_aria_label', number: page_num) %>"
+          aria-label="<%= page_num == @pagy.page ? t('components.viral.pagy.pagination_component.current_page_aria_label', number: page_num) : t('components.viral.pagy.pagination_component.item_aria_label', number: page_num) %>"
         >
           <%= if page_num == @pagy.page
-            t(".current_page", number: page_num)
+            t("components.viral.pagy.pagination_component.current_page", number: page_num)
           else
-            t(".page_number", number: page_num)
+            t("components.viral.pagy.pagination_component.page_number", number: page_num)
           end %>
         </option>
       <% end %>
@@ -127,10 +136,10 @@
     <% if @pagy.next %>
       <%== a.(
         @pagy.next,
-        t(".next"),
+        t("components.viral.pagy.pagination_component.next"),
         classes:
           "flex items-center justify-center relative focus-visible:z-10 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 border border-slate-300 dark:border-slate-600 rounded-r-lg",
-        aria_label: t(".next_aria_label"),
+        aria_label: t("components.viral.pagy.pagination_component.next_aria_label"),
       ) %>
     <% else %>
       <span
@@ -139,7 +148,7 @@
           bg-slate-100 dark:bg-slate-800 dark:text-slate-400 cursor-not-allowed border
           border-slate-300 dark:border-slate-600 rounded-r-lg
         "
-      ><%= t(".next") %></span>
+      ><%= t("components.viral.pagy.pagination_component.next") %></span>
     <% end %>
   </div>
 </nav>

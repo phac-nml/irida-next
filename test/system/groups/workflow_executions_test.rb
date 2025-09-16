@@ -196,7 +196,7 @@ module Groups
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('attachments.table_component.preview', locale: user.locale)
+        assert_text I18n.t('components.attachments.table_component.preview', locale: user.locale)
       end
 
       within %(nav[id="workflow-executions-tabs"]) do

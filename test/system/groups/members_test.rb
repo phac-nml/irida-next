@@ -31,20 +31,20 @@ module Groups
         assert_selector 'tr', count: 20 + header_row_count
       end
 
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      click_on I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
 
       within('#members') do
         assert_selector 'tr', count: 6 + header_row_count
       end
 
-      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
-                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
 
-      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
 
       within('#members') do
         assert_selector 'tr', count: 20 + header_row_count

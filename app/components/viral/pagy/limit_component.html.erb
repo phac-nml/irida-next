@@ -24,13 +24,13 @@
         "
       >
         <label for="pagy-limit-select" class="text-sm font-medium flex-shrink-0">
-          <%= t(".items", items: @item) %>
+          <%= t("components.viral.pagy.limit_component.items", items: @item) %>
         </label>
 
         <select
           id="pagy-limit-select"
           name="limit"
-          aria-label="<%= t('.select_items_action') %>"
+          aria-label="<%= t('components.viral.pagy.limit_component.select_items_action') %>"
           aria-describedby="pagy-limit-description"
           autocomplete="off"
           class="
@@ -44,7 +44,7 @@
             <option
               value="<%= limit %>"
               <%= 'selected' if limit == @pagy.limit %>
-              aria-label="<%= t('.item_aria_label', items: limit) %>"
+              aria-label="<%= t('components.viral.pagy.limit_component.item_aria_label', items: limit) %>"
             >
               <%= limit %>
             </option>
@@ -52,11 +52,16 @@
         </select>
       </div>
 
-      <span class="@2xl:flex-1 text-sm"><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
+      <span class="@2xl:flex-1 text-sm"><%== t(
+          "components.viral.pagy.limit_component.summary",
+          to: @pagy.to,
+          from: @pagy.from,
+          count: @pagy.count,
+        ) %></span>
     </div>
 
     <div id="pagy-limit-description" class="sr-only">
-      <%= t(".select_items_action") %>
+      <%= t("components.viral.pagy.limit_component.select_items_action") %>
     </div>
   </form>
 </div>

@@ -551,8 +551,8 @@ module Projects
         namespace = namespaces_user_namespaces(:jeff_doe_namespace)
 
         visit namespace_project_sample_url(namespace, project, sample)
-        assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
-                                                                             locale: @user.locale))
+        assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
+                                                                                        locale: @user.locale))
 
         # no attachments selected/checked
         within 'tbody' do
@@ -560,7 +560,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
         # attachments selected
@@ -569,7 +569,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '6'
         end
         # unselect single attachment
@@ -577,7 +577,7 @@ module Projects
           first('input[name="attachment_ids[]"]').click
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '5'
         end
         # select all again
@@ -587,7 +587,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '6'
         end
         # deselect all
@@ -597,7 +597,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
       end
@@ -609,8 +609,8 @@ module Projects
         namespace = namespaces_user_namespaces(:jeff_doe_namespace)
 
         visit namespace_project_sample_url(namespace, project, sample)
-        assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
-                                                                             locale: @user.locale))
+        assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
+                                                                                        locale: @user.locale))
 
         # no attachments selected/checked
         within 'tbody' do
@@ -618,7 +618,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
         end
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
 
@@ -646,7 +646,7 @@ module Projects
         find('button[data-search-field-target="clearButton"]').click
 
         within 'tfoot' do
-          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
       end

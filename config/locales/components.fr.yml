@@ -1,0 +1,372 @@
+---
+fr:
+  components:
+    activity:
+      dialog:
+        close: Close
+        group_sample_transfer:
+          description:
+            one: "%{user} transferred 1 sample between projects"
+            other: "%{user} transferred %{count} samples between projects"
+          sample_name: Sample Name
+          title: Transferred Samples
+          transferred_from: Transferred From
+          transferred_to: Transferred To
+        import_samples:
+          description:
+            group: "%{user} imported %{count} samples to group"
+            project: "%{user} imported %{count} samples to project"
+          project: Project
+          sample: Sample
+          title: Imported Samples
+        pagination:
+          aria_label: Pagination
+          at_first_aria_label: You are on the first page
+          at_last_aria_label: You are on the last page
+          next: Suivant
+          next_aria_label: Go to next page
+          previous: Précédent
+          previous_aria_label: Go to previous page
+        sample_clone:
+          copied_from: Copied From
+          copied_to: Copied To
+          group:
+            target_project_description:
+              one: "%{user} copied 1 sample to another project"
+              other: "%{user} copied %{count} samples to other projects"
+          project:
+            source_project_description:
+              one: "%{user} copied 1 sample from project %{source_project_puid}"
+              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project_from: Project From
+          project_to: Project To
+          title: Copied Samples
+        sample_destroy:
+          description:
+            group:
+              one: "%{user} removed 1 sample from the group"
+              other: "%{user} removed %{count} samples from the group"
+            project:
+              one: "%{user} removed 1 sample from the project"
+              other: "%{user} removed %{count} samples from the project"
+          project: Project
+          sample: Sample
+          title: Deleted Samples
+        sample_transfer:
+          source_project_description:
+            one: "%{user} transferred 1 sample from project %{source_project_puid}"
+            other: "%{user} transferred %{count} samples from project %{source_project_puid}"
+          target_project_description:
+            one: "%{user} transferred 1 sample to project %{target_project_puid}"
+            other: "%{user} transferred %{count} samples to project %{target_project_puid}"
+          title: Transferred Samples
+        workflow_execution_destroy:
+          description: "%{user} removed %{count} workflow executions from the project"
+          id: id
+          name: name
+          title: Deleted Workflow Executions
+      groups:
+        link_descriptive_text: View group page for group with persistent unique identifier %{group_puid}
+        projects:
+          link_descriptive_text: View details page for project with persistent unique identifier %{project_puid}
+      load_more: Load more activities
+      members:
+        link_descriptive_text: View members page for %{namespace_type}
+      metadata_templates:
+        group:
+          link_descriptive_text: View metadata templates for group
+        project:
+          link_descriptive_text: View metadata templates for project
+      more_details: More details
+      samples:
+        clone:
+          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          more_details:
+            button_descriptive_text: View more details for copied samples
+        destroy:
+          more_details:
+            button_descriptive_text: View more details about deleted samples
+        import:
+          more_details:
+            button_descriptive_text: View more details about imported samples
+        link_descriptive_text: View sample details for sample with persistent unique identifier %{sample_puid}
+        transfer:
+          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          more_details:
+            button_descriptive_text: View more details for transferred samples
+      subgroups:
+        link_descriptive_text: View subgroup page for subgroup with persistent unique identifier %{subgroup_puid}
+      workflow_executions:
+        destroy:
+          more_details:
+            button_descriptive_text: View more details about deleted workflow executions
+        index:
+          link_descriptive_text: View workflow executions listing for project
+        show:
+          link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
+    advanced_search_component:
+      add_condition_button: Ajouter une condition
+      add_group_button: Ajouter un groupe
+      apply_filter_button: Appliquer un filtre
+      clear_aria_label: Terminer la recherche avancée
+      clear_filter_button: Effacer le filtre
+      condition: Condition %{index}
+      confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
+      description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
+      group: Groupe %{index}
+      operation:
+        contains: contains
+        equals: "="
+        exists: exists
+        greater_than: ">="
+        in: in
+        less_than: "<="
+        metadata_fields: Metadata fields
+        not_equals: "!="
+        not_exists: not exists
+        not_in: not in
+      remove_condition_aria_label: Supprimer la condition
+      remove_group_button: Supprimer le groupe
+      rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+      title: Recherche avancée
+    attachments:
+      dialogs:
+        delete_attachment_component:
+          description:
+            paired_end: Êtes-vous sûr de vouloir supprimer les fichiers %{filenames} du %{attachable_type}?
+            single: Êtes-vous sûr de vouloir supprimer le fichier '%{filename}' du %{attachable_type}?
+          submit_button: Confirmer
+          title: Supprimer un fichier
+        new_attachment_component:
+          files: Fichiers
+          files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
+          upload: Télécharger
+          upload_files: Télécharger des fichiers
+          uploading: Téléchargement
+      table_component:
+        action: Mesure
+        actions: Mesures
+        byte_size: Taille
+        counts:
+          attachments: Pièces jointes
+          selected: Sélectionné
+        created_at: Créé à
+        delete: Supprimer
+        delete_aria_label:
+          one: 'Delete file: %{name}'
+          other: 'Delete files: %{name}'
+        delete_confirm: Êtes-vous sûr de vouloir supprimer la pièce jointe '%{name}'?
+        filename: Nom du fichier
+        format: Format
+        id: PUID
+        limit:
+          item: Pièces jointes
+        preview: Aperçu
+        preview_aria_label: 'Preview attachment: %{name}'
+        select_page: Sélectionner/Désélectionner les pièces jointes visibles
+        type: Type
+    breadcrumb:
+      dropdown:
+        aria_label: Breadcrumb dropdown
+      navigation_aria_label: Navigation du fil d'Ariane
+    clipboard:
+      copied: Copié!
+    confirmation:
+      cancel: Annuler
+      confirm: Confirmer
+      confirm_label: Valeur de confirmation
+      title: Confirmation requise
+    dialog:
+      close: Fermer la boîte de dialogue
+      pagination:
+        at_first_aria_label: You are on the first page
+        at_last_aria_label: You are on the last page
+    flash:
+      error_message: Error
+      information_message: Information
+      message: Message
+      success_message: Success
+      warning_message: Warning
+    groups_dashboard:
+      information_component:
+        no_description: No description provided
+    history:
+      created_by: "%{type} créé par %{user}"
+      deleted_by: "%{type} supprimé par %{user}"
+      latest: Dernier
+      link_text: Version %{version}
+      modified_by: "%{type} modifié par %{user}"
+      restored_by: "%{type} restauré par %{user}"
+      transferred_by: "%{type} transféré par %{user}"
+    history_version:
+      current_version: Actuel (Version %{version})
+      keys_deleted: 'Clés supprimées :'
+      previous_version: Précédent (Version %{version})
+    layout:
+      language_selection:
+        title: Language Selection
+      main_content_link: Skip to content
+    list_filter:
+      apply: Appliquer un filtre
+      title: Filtrer par nom d’échantillon ou identifiant
+    list_input:
+      clear: Enlever toutes les étiquettes
+      description: Coller une liste de noms d’échantillons ou d’identificateurs <kbd>,</kbd> séparés
+      remove_tag: Retirer
+    namespace_row:
+      contents_component:
+        projects:
+          aria-label: Projets
+          tooltip: "%{count} projets dans %{namespace_name}"
+        samples:
+          aria-label: Échantillons
+          tooltip: "%{count} échantillons dans %{namespace_name}"
+        subnamespaces:
+          aria-label: Sous-groupes
+          tooltip: "%{count} sous-groupes dans %{namespace_name}"
+    nextflow:
+      email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
+      required: Obligatoire
+      samplesheet:
+        file_cell_component:
+          no_selected_file: Aucun fichier sélectionné
+        header_component:
+          default: "%{label} (par défaut)"
+          required: Obligatoire
+      samplesheet_component:
+        filter:
+          clear: Clear search
+          placeholder: Rechercher par PUID ou nom
+          search: Rechercher
+        label: Échantillons
+        next: Suivant
+        page_selection:
+          aria_label: Sélecteur de page de pagination
+        previous: Précédent
+      shared_with:
+        group: Partager les résultats avec les membres du groupe?
+        project: Partager les résultats avec les membres du projet?
+      update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
+    nextflow_component:
+      data_missing_error: 'Les échantillons suivants manquent de données requises : '
+      filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
+      name:
+        error: Name is required. Please enter a name for the workflow execution.
+        helper: Un nom personnalisé facilitera la recherche à l’avenir.
+        label:
+          optional: Nom (facultatif)
+          required: Nom
+      processing_request: Le traitement de votre soumission peut prendre un certain temps.
+      processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
+      submission_error: Quelque chose s’est mal passé avec la demande de soumission.
+    project_dashboard:
+      activity_title: Dernière activité
+      info_title: Renseignements sur le projet
+      information:
+        created_on: Créé le
+        description: Description
+        number_of_automated_workflow_executions: Pipelines automatisés
+        number_of_members: Membres
+        number_of_samples: Échantillons
+        statistics_title: Statistiques du projet
+      samples_title: Échantillons récemment mis à jour
+      screen_reader_context: 'Tableau de bord du projet: %{project_name}'
+      view_more_activity: Voir plus d'activité
+      view_more_samples: Voir plus d'échantillons
+    puid:
+      title: 'Copy to clipboard value: %{puid}'
+    ransack:
+      sort_dropdown_component:
+        prefix: Sort by
+        sorting:
+          created_at_asc: Plus ancien créé
+          created_at_desc: Dernier créé
+          name_asc: Nom
+          name_desc: Nom, décroissant
+          namespace_name_asc: Nom
+          namespace_name_desc: Nom, décroissant
+          updated_at_asc: Plus ancien mis à jour
+          updated_at_desc: Mis à jour à
+    samples:
+      table_component:
+        counts:
+          status:
+            one: 1 sample selected
+            other: "%{selected} sur %{total} échantillons sélectionnés"
+    search:
+      advanced:
+        results_message:
+          plural: "%{total_count} results found for advanced search"
+          singular: 1 result found for advanced search
+          zero: No results found for advanced search
+      results_message:
+        plural: "%{total_count} results found for '%{search_term}'"
+        singular: 1 result found for '%{search_term}'
+        zero: No results found for '%{search_term}'
+    search_field_component:
+      clear_button: Clear search
+      instructions: Appuyez sur Entrée pour rechercher
+      search_button: Rechercher
+    token:
+      copied: Copié!
+      copy: Copier dans le presse-papiers
+      hide: Hide token
+      show: Show token
+      toggle_visible: Basculer la visibilité
+    treegrid:
+      row:
+        collapse: Développer
+        expand: Réduire
+        group:
+          aria_label: "%{name}, puid: %{puid}, role: %{role}, subgroups: %{subgroups_count}, projects: %{group_projects_count}, samples: %{samples_count}"
+        project:
+          aria_label: "%{name}, puid: %{puid}, role: %{role}, samples: %{samples_count}"
+    viral:
+      data_table_component:
+        header:
+          action: Mesure
+      form:
+        prefixed:
+          boolean_component:
+            'false': Faux
+            'true': Vrai
+      pagy:
+        empty_state:
+          description: Aucun article trouvé correspondant à votre recherche
+          title: Aucun article trouvé
+        limit_component:
+          item_aria_label: Show %{items} items per page
+          items: "%{items} par page :"
+          select_items_action: select the number of items to display
+          summary:
+            one: Afficher l’élément <span class='font-bold'>%{count}</span>
+            other: Afficher les éléments <span class='font-bold'>%{from}-%{to}</span> de <span class='font-bold'>%{count}</span>
+        pagination_component:
+          aria_label: Pagination
+          current_page: Page %{number} (current)
+          current_page_aria_label: Current page %{number}
+          item_aria_label: Go to Page %{number}
+          next: Suivant
+          next_aria_label: Go to next page
+          page_number: Page %{number}
+          previous: Précédent
+          previous_aria_label: Go to previous page
+          select_page_aria_label: Select page
+      sortable_list:
+        list_component:
+          actions: Actions
+          add: Ajouter
+          aria_role_description: "%{list} listbox drag and drop"
+          down: Down
+          keyboard_shortcuts:
+            add: Enter
+            down: Alt+ArrowDown
+            remove: Delete
+            up: Alt+ArrowUp
+          remove: Supprimer
+          up: Up
+      sortable_lists_component:
+        no_template: Pas de modèle
