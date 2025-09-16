@@ -65,8 +65,8 @@ module Pathogen
       def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
         options = add_test_selector(options)
 
-        # Render using the Pathogen component with Rails signature
-        Pathogen::Form::Checkbox.new(
+        # Render using the focused Pathogen CheckBox component for Rails forms
+        Pathogen::Form::CheckBox.new(
           method, options, checked_value, unchecked_value, form: self
         ).call
       end
