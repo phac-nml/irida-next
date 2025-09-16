@@ -97,7 +97,7 @@
                     {
                       id: dom_id(workflow_execution, "checkbox"),
                       aria: {
-                        label: workflow_execution.name || workflow_execution.id,
+                        label: workflow_execution.name.presence || workflow_execution.id,
                       },
                       data: {
                         action: "input->selection#toggle",
