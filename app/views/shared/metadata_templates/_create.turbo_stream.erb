@@ -10,7 +10,7 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
   <%= turbo_stream.replace "metadata-templates-table" do %>
-    <%= turbo_frame_tag "metadata-templates-table", src: namespace_project_metadata_templates_path do %>
+    <%= turbo_frame_tag "metadata-templates-table", src: index_path do %>
       <%= render SpinnerComponent.new(
         message: t("metadata_templates.table_component.spinner_message"),
       ) %>
