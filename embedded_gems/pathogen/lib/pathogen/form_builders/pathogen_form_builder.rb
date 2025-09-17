@@ -66,9 +66,9 @@ module Pathogen
         options = add_test_selector(options)
 
         # Render using the focused Pathogen CheckBox component for Rails forms
-        Pathogen::Form::CheckBox.new(
-          method, options, checked_value, unchecked_value, form: self
-        ).call
+        @template.render(Pathogen::Form::CheckBox.new(
+                           method, options, checked_value, unchecked_value, form: self
+                         ))
       end
     end
   end
