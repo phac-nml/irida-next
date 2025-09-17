@@ -34,8 +34,10 @@ export default class extends Controller {
    * @public
    */
   connect() {
-    this.#resizeObserver = new ResizeObserver(() => this.#updateLayout());
+    this.boundUpdateLayout = this.#updateLayout.bind(this);
+    this.#resizeObserver = new ResizeObserver(this.boundUpdateLayout);
     this.#resizeObserver.observe(this.listTarget);
+    document.addEventListener("turbo:morph", this.boundUpdateLayout);
   }
 
   /**
@@ -47,6 +49,7 @@ export default class extends Controller {
       this.#resizeObserver.disconnect();
       this.#resizeObserver = null;
     }
+    document.removeEventListener("turbo:morph", this.boundUpdateLayout);
   }
 
   /**
@@ -130,6 +133,10 @@ export default class extends Controller {
         if (usedWidth < width) {
           visibleSet.add(i);
         } else {
+          // if at least one item invisible, check that there is enough space for the dropdown menu
+          if (i >= 0 && width - usedWidth < this.dropdownMenuTarget.width) {
+            visibleSet.delete(i + 1);
+          }
           break;
         }
       }
@@ -208,7 +215,8 @@ export default class extends Controller {
       }
     });
 
-    this.dropdownMenuTarget.classList.toggle("hidden", !hasHiddenItems);
+    this.dropdownMenuTarget.classList.toggle("invisible", !hasHiddenItems);
+    this.dropdownMenuTarget.classList.toggle("absolute", !hasHiddenItems);
     this.dropdownMenuTarget.classList.toggle("inline-flex", hasHiddenItems);
   }
 }
