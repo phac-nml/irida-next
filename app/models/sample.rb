@@ -12,19 +12,7 @@ class Sample < ApplicationRecord
 
   belongs_to :project, counter_cache: true
 
-  after_commit do
-    unless Sample.suppressed_turbo_broadcasts
-      projects = [project]
-      projects << Project.find(previous_changes['project_id'][0]) if previous_changes['project_id'] && !previous_changes['project_id'][0].nil?
-
-      projects.each do |project|
-        broadcast_refresh_later_to project, :samples
-        project.namespace.parent.self_and_ancestors.each do |ancestor|
-          broadcast_refresh_later_to ancestor, :samples
-        end
-      end
-    end
-  end
+  after_commit :broadcast_refresh_later_to_samples_table
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
@@ -79,5 +67,23 @@ class Sample < ApplicationRecord
     return true unless metadata_provenance.key?(field)
 
     metadata_provenance[field]['source'] == 'user'
+  end
+
+  private
+
+  def broadcast_refresh_later_to_samples_table # rubocop:disable Metrics/AbcSize
+    return if Sample.suppressed_turbo_broadcasts
+
+    projects = [project]
+    if previous_changes['project_id'] && !previous_changes['project_id'][0].nil?
+      projects << Project.find(previous_changes['project_id'][0])
+    end
+
+    projects.each do |project|
+      broadcast_refresh_later_to project, :samples
+      project.namespace.parent.self_and_ancestors.each do |ancestor|
+        broadcast_refresh_later_to ancestor, :samples
+      end
+    end
   end
 end
