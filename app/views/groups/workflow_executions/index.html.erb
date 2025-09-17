@@ -8,59 +8,63 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <%= button_to t(".create_export_button"),
-    new_data_export_path,
-    params: {
-      export_type: "analysis",
-      analysis_type: "group",
-      namespace_id: @namespace.id,
-    },
-    method: :get,
-    data: {
-      turbo_stream: true,
-      controller: "action-button",
-      action_button_required_value: 1,
-    },
-    class: "button button-default action-button" %>
+    <% if @allowed_to[:export_data] %>
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "group",
+        namespace_id: @namespace.id,
+      },
+      method: :get,
+      data: {
+        turbo_stream: true,
+        controller: "action-button",
+        action_button_required_value: 1,
+      },
+      class: "button button-default action-button w-full" %>
+    <% end %>
   <% end %>
 <% end %>
-<div class="flow-root">
-  <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
-    <% if @allowed_to[:export_data] %>
-      <div class="inline-flex grow space-x-2">
-        <%= form_with(
+<div
+  class="
+    flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
+  "
+>
+  <div class="inline-flex grow @xl:grow-0 space-x-2">
+    <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
                   id: "select-all-form",
+                  class: "flex-grow",
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <input type="hidden" name="select" value="on"/>
-          <%= f.submit t(".select_all_button"), class: "button button-default" %>
-        <% end %>
-        <%= form_with(
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="select" value="on"/>
+      <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+    <% end %>
+    <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
-                  id: "deselect-all-form" ,
+                  id: "deselect-all-form",
+                  class: "flex-grow",
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
-        <% end %>
-      </div>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
     <% end %>
-    <div class="flex grow-0">
-      <%= render SearchComponent.new(
-        query: @q,
-        url: group_workflow_executions_path(**request.query_parameters),
-        search_attribute: :name_or_id_cont,
-        label: t(".search.label"),
-        placeholder: t(".search.placeholder"),
-        total_count: @pagy.count,
-        value: @q.name_or_id_cont,
-        data: {
-          "search-field-selection-outlet": "#workflow-executions-table",
-        },
-      ) %>
-    </div>
+  </div>
+  <div class="flex-row">
+    <%= render SearchComponent.new(
+      query: @q,
+      url: group_workflow_executions_path(**request.query_parameters),
+      search_attribute: :name_or_id_cont,
+      label: t(".search.label"),
+      placeholder: t(".search.placeholder"),
+      total_count: @pagy.count,
+      value: @q.name_or_id_cont,
+      data: {
+        "search-field-selection-outlet": "#workflow-executions-table",
+      },
+    ) %>
   </div>
 </div>
 

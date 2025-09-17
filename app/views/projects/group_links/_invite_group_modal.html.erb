@@ -1,7 +1,7 @@
 <%= viral_dialog(id: 'new-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: I18n.t("projects.group_links.new.title")) %>
   <% dialog.with_trigger do %>
-    <button class="button button-default" data-action="viral--dialog#open">
+    <button class="button button-default w-full" data-action="viral--dialog#open">
       <%= I18n.t("projects.members.index.invite_group") %>
     </button>
   <% end %>

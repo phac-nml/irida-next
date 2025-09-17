@@ -9,7 +9,11 @@
 <%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
-    <div class="flex flex-row">
+    <div
+      class="
+        flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-1 mb-2
+      "
+    >
       <% if @allowed_to[:export_data] %>
         <% if @workflow_execution.completed? %>
           <%= button_to t("groups.workflow_executions.show.create_export_button"),
@@ -25,7 +29,7 @@
           data: {
             turbo_stream: true,
           },
-          class: "button button-default mr-2" %>
+          class: "button button-default w-full" %>
         <% else %>
           <%= button_to t("groups.workflow_executions.show.create_export_button"),
           new_data_export_path,
@@ -41,7 +45,7 @@
             turbo_stream: true,
           },
           class:
-            "button button-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
+            "button button-default w-full pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300" %>
         <% end %>
       <% end %>
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
@@ -53,7 +57,7 @@
             t("groups.workflow_executions.show.cancel_button_confirmation"),
         },
         method: :put,
-        class: "button button-default mr-1" %>
+        class: "button button-default w-full" %>
       <% end %>
       <% if @allowed_to[:update] %>
         <%= button_to t("groups.workflow_executions.show.edit_button"),
@@ -62,7 +66,7 @@
         data: {
           turbo_stream: true,
         },
-        class: "button button-default mr-1" %>
+        class: "button button-default w-full" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
         <%= button_to t("groups.workflow_executions.show.remove_button"),
@@ -73,7 +77,7 @@
             t("groups.workflow_executions.show.remove_button_confirmation"),
         },
         method: :delete,
-        class: "button button-default mr-1" %>
+        class: "button button-default w-full" %>
       <% end %>
     </div>
   <% end %>

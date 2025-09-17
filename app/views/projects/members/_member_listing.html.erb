@@ -1,8 +1,6 @@
 <div class="flex flex-col gap-2 mt-2">
-  <div class="flex">
-    <div class="flex-1"></div>
-    <div class="grow-0">
-      <%= render SearchComponent.new(
+  <div class="flex flex-col @lg:flex-row-reverse mb-2">
+    <%= render SearchComponent.new(
               query: @q,
               url: namespace_project_members_url(**request.query_parameters),
               search_attribute: :user_email_cont,
@@ -11,10 +9,9 @@
               value: @q.user_email_cont,
               total_count: @pagy.count,
             ) do %>
-        <input type="hidden" name="tab" value=""/>
-        <input type="hidden" name="format" value="turbo_stream"/>
-      <% end %>
-    </div>
+      <input type="hidden" name="tab" value=""/>
+      <input type="hidden" name="format" value="turbo_stream"/>
+    <% end %>
   </div>
   <%= render Members::TableComponent.new(
     @namespace,
