@@ -34,8 +34,10 @@ export default class extends Controller {
    * @public
    */
   connect() {
-    this.#resizeObserver = new ResizeObserver(() => this.#updateLayout());
+    this.boundUpdateLayout = this.#updateLayout.bind(this);
+    this.#resizeObserver = new ResizeObserver(this.boundUpdateLayout);
     this.#resizeObserver.observe(this.listTarget);
+    document.addEventListener("turbo:morph", this.boundUpdateLayout);
   }
 
   /**
@@ -47,6 +49,7 @@ export default class extends Controller {
       this.#resizeObserver.disconnect();
       this.#resizeObserver = null;
     }
+    document.removeEventListener("turbo:morph", this.boundUpdateLayout);
   }
 
   /**
