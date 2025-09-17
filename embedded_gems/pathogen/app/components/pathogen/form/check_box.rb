@@ -48,7 +48,7 @@ module Pathogen
         # Extract Rails-specific options
         options ||= {}
         @checked = options.delete(:checked)
-        @include_hidden = options.delete(:include_hidden) || true
+        @include_hidden = options.delete(:include_hidden) { true }
 
         # Store remaining HTML options for the input
         @html_options = options

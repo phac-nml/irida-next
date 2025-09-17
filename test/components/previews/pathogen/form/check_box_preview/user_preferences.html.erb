@@ -1,0 +1,130 @@
+<%# User preferences form example %>
+<div class="p-6 bg-white rounded-lg border border-gray-200 shadow-sm max-w-lg">
+  <h3 class="text-lg font-semibold mb-4">User Preferences</h3>
+
+  <%= form_with model: User.new, local: true, class: "space-y-6" do |form| %>
+    <!-- Account Settings -->
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-medium text-gray-900">Account Settings</legend>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :newsletter, { class: "focus:ring-2 focus:ring-blue-500" } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Newsletter subscription</span>
+          <p class="text-xs text-gray-600">Receive weekly updates about new features</p>
+        </div>
+      </label>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :marketing_emails %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Marketing emails</span>
+          <p class="text-xs text-gray-600">Promotional offers and product announcements</p>
+        </div>
+      </label>
+    </fieldset>
+    <!-- Notification Preferences -->
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-medium text-gray-900">Notifications</legend>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :email_notifications, { checked: true } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Email notifications</span>
+          <p class="text-xs text-gray-600">Important account updates and security alerts</p>
+        </div>
+      </label>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :push_notifications,
+                       {
+                         data: {
+                           controller: "notification-toggle",
+                           action: "input->notification-toggle#update",
+                         },
+                       } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Push notifications</span>
+          <p class="text-xs text-gray-600">Real-time alerts in your browser</p>
+        </div>
+      </label>
+    </fieldset>
+    <!-- Privacy Settings -->
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-medium text-gray-900">Privacy</legend>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :public_profile, { aria: { describedby: "public-profile-help" } } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Public profile</span>
+          <p id="public-profile-help" class="text-xs text-gray-600">
+            Make your profile visible to other users
+          </p>
+        </div>
+      </label>
+
+      <label class="flex items-center space-x-3 cursor-pointer">
+        <%= form.check_box :allow_indexing, { checked: true } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">Search engine indexing</span>
+          <p class="text-xs text-gray-600">Allow search engines to find your public content</p>
+        </div>
+      </label>
+    </fieldset>
+    <!-- Required Legal -->
+    <fieldset class="space-y-3 pt-3 border-t border-gray-200">
+      <label class="flex items-start space-x-3 cursor-pointer">
+        <%= form.check_box :terms_accepted,
+                       {
+                         required: true,
+                         aria: {
+                           label: "Accept terms and conditions",
+                         },
+                       } %>
+        <div class="flex-1">
+          <span class="text-sm font-medium">
+            I agree to the
+            <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
+            and
+            <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
+          </span>
+          <p class="text-xs text-red-600">* Required</p>
+        </div>
+      </label>
+    </fieldset>
+
+    <div class="pt-4 border-t border-gray-200">
+      <button
+        type="submit"
+        class="
+          w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+        "
+      >
+        Save Preferences
+      </button>
+    </div>
+  <% end %>
+</div>
+
+<%# Simple User model for this example %>
+<% class User
+  include ActiveModel::Model
+  include ActiveModel::Attributes
+
+  attribute :newsletter, :boolean, default: false
+  attribute :marketing_emails, :boolean, default: false
+  attribute :email_notifications, :boolean, default: true
+  attribute :push_notifications, :boolean, default: false
+  attribute :public_profile, :boolean, default: false
+  attribute :allow_indexing, :boolean, default: true
+  attribute :terms_accepted, :boolean, default: false
+
+  def persisted?
+    false
+  end
+
+  def model_name
+    @model_name ||= ActiveModel::Name.new(self.class, nil, "User")
+  end
+end %>
