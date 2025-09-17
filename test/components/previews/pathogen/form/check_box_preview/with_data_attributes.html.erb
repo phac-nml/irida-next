@@ -3,9 +3,9 @@
     <div class="mb-4">
       <%= form.check_box(:auto_save, {
             data: {
-              action: 'input->autosave#toggle',
-              controller: 'autosave',
-              autosave_target: 'checkbox'
+              action: 'input->collapsible#toggle',
+              controller: 'collapsible',
+              collapsible_target: 'item'
             }
           }) %>
     </div>

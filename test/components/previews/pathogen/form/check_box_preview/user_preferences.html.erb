@@ -39,8 +39,8 @@
         <%= form.check_box :push_notifications,
                        {
                          data: {
-                           controller: "notification-toggle",
-                           action: "input->notification-toggle#update",
+                           controller: "collapsible",
+                           action: "input->collapsible#toggle",
                          },
                        } %>
         <div class="flex-1">
