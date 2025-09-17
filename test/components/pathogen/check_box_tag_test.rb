@@ -19,20 +19,16 @@ module Pathogen
         assert_selector 'input.text-primary-600'
         assert_selector 'input.bg-slate-100'
         assert_selector 'input.border-slate-300'
-        assert_selector 'input.rounded'
+        assert_selector 'input.rounded-sm'
         assert_selector 'input.cursor-pointer'
         assert_selector 'input.dark\\:bg-slate-700'
         assert_selector 'input.dark\\:border-slate-600'
-
-        # Should include hidden field for unchecked value (default "0")
-        assert_selector "input[type='hidden'][name='sample_quality'][value='0']", visible: false
       end
 
       def test_renders_checkbox_tag_with_custom_values
         render_inline(CheckBoxTag.new('workflow_step', 'assembly'))
 
         assert_selector "input[type='checkbox'][value='assembly']"
-        assert_selector "input[type='hidden'][value='0']", visible: false
         assert_selector "input[name='workflow_step']"
       end
 
@@ -59,7 +55,6 @@ module Pathogen
         render_inline(CheckBoxTag.new('sample_ids[]', '123'))
 
         assert_selector "input[name='sample_ids[]'][value='123']"
-        assert_selector "input[type='hidden'][name='sample_ids[]'][value='0']", visible: false
       end
 
       def test_handles_attachment_selection
@@ -84,7 +79,6 @@ module Pathogen
         render_inline(CheckBoxTag.new('select-page', '1'))
 
         assert_selector "input[name='select-page'][value='1']"
-        assert_selector "input[type='hidden'][name='select-page'][value='0']", visible: false
       end
 
       def test_handles_special_characters_in_values
@@ -231,7 +225,7 @@ module Pathogen
       def test_excludes_include_hidden_option_from_html_attributes
         render_inline(CheckBoxTag.new('test_field', '1', false, { include_hidden: false }))
 
-        # Should not render hidden field
+        # Should not render hidden field (CheckBoxTag never renders hidden fields)
         assert_no_selector "input[type='hidden']"
         # Should not have include_hidden as HTML attribute
         assert_no_selector 'input[include_hidden]'

@@ -18,14 +18,27 @@ module Pathogen
       # @return [String] complete CSS class string for the input
       def checkbox_classes # rubocop:disable Metrics/MethodLength
         base_classes = [
-          'size-5',
+          'size-6', # 24px - better accessibility
           'text-primary-600',
           'bg-slate-100',
           'border-slate-300',
-          'rounded',
+          'rounded-sm', # Consistent with style guide for form elements
+          'cursor-pointer',
+          # Transitions for smooth animations
+          'transition-all',
+          'duration-150',
+          'ease-in-out',
+          # Hover states
+          'hover:bg-slate-200',
+          'hover:border-slate-400',
+          # Disabled states
+          'disabled:opacity-50',
+          'disabled:cursor-not-allowed',
+          # Dark mode variants
           'dark:bg-slate-700',
           'dark:border-slate-600',
-          'cursor-pointer'
+          'dark:hover:bg-slate-600',
+          'dark:hover:border-slate-500'
         ]
 
         user_classes = @html_options[:class]
