@@ -47,6 +47,9 @@ module Pathogen
           base_classes << 'mb-0' # Remove bottom margin
           base_classes << 'flex-shrink-0' # Prevent compression in flex containers
           base_classes << 'self-center' # Align self to center in flex container
+
+          # Remove :table from html_options to avoid invalid HTML attribute
+          @html_options = @html_options.except(:table)
         end
 
         user_classes = @html_options[:class]
