@@ -135,7 +135,7 @@ export default class extends Controller {
         } else {
           // if at least one item invisible, check that there is enough space for the dropdown menu
           if (i >= 0 && width - usedWidth < this.dropdownMenuTarget.width) {
-            visibleSet.remove(i + 1);
+            visibleSet.delete(i + 1);
           }
           break;
         }
