@@ -22,15 +22,6 @@ module NextflowHelper
     end
   end
 
-  def checkbox_input(fields, name, property)
-    viral_checkbox(
-      container: fields,
-      name:,
-      label: property[:description],
-      value: true
-    )
-  end
-
   def format_name_as_arg(name)
     name.length > 1 ? "--#{name}" : "-#{name}"
   end
