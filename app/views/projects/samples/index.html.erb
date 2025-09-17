@@ -5,8 +5,6 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
-<%= turbo_stream_from @project %>
-
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
@@ -184,6 +182,15 @@
       </div>
     <% end %>
   <% end %>
+
+  <div data-controller="refresh">
+    <%= turbo_stream_from @project, :samples, data: { "refresh-target": "source" } %>
+    <%= viral_alert(message: "Samples table is out of date. Please refresh to view latest changes.", data: { "refresh-target": "notice" }, classes: "hidden mb-6") do %>
+      <%= pathogen_button(tag: :a, href: url_for) do %>
+        Refresh
+      <% end %>
+    <% end %>
+  </div>
 
   <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
     <div class="inline-flex grow space-x-2">
