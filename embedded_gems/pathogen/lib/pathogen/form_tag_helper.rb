@@ -14,6 +14,8 @@ module Pathogen
       def check_box_tag(name, value = '1', checked = false, options = {}) # rubocop:disable Style/OptionalBooleanParameter
         # Apply Pathogen styling to checkbox options
         options = apply_pathogen_styling(options)
+        options = add_test_selector(options)
+        options = options.except(:include_hidden) if options.key?(:include_hidden)
 
         # Call the default Rails check_box_tag with our enhanced options
         super
