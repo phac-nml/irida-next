@@ -1,0 +1,94 @@
+<div
+  data-controller="viral--sortable-lists--two-lists-selection"
+  data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t("metadata_templates.form.selected") %>"
+  data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("metadata_templates.form.available") %>"
+  data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
+  class="font-normal text-slate-500 dark:text-slate-400"
+>
+  <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
+    <%= render partial: "shared/form/required_field_legend" %>
+    <% invalid_name = @metadata_template.errors&.include?(:name) %>
+    <div class="grid gap-4">
+      <div class="mt-2 form-field <%= 'invalid' if invalid_name %>">
+        <%= form.label :name, data: { required: true } %>
+        <%= form.text_field :name,
+                        required: true,
+                        class: "form-control",
+                        aria: {
+                          describedby:
+                            (
+                              if invalid_name
+                                form.field_id(:name, "error")
+                              else
+                                nil
+                              end
+                            ),
+                          invalid: invalid_name,
+                          required: true,
+                        },
+                        autofocus: invalid_name %>
+        <% if invalid_name %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:name, "error"),
+          errors: @metadata_template.errors.full_messages_for(:name) %>
+        <% end %>
+      </div>
+      <% invalid_description = @metadata_template.errors&.include?(:description) %>
+      <div class="mt-2 form-field <%= 'invalid' if invalid_description %>">
+        <%= form.label :description %>
+        <%= form.text_area :description,
+                       class: "form-control",
+                       aria: {
+                         describedby:
+                           (
+                             if invalid_description
+                               form.field_id(:description, "error")
+                             else
+                               nil
+                             end
+                           ),
+                         invalid: invalid_description,
+                       },
+                       autofocus: invalid_description %>
+        <% if invalid_description %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:description, "error"),
+          errors: @metadata_template.errors.full_messages_for(:description) %>
+        <% end %>
+      </div>
+      <div
+        class="hidden"
+        data-viral--sortable-lists--two-lists-selection-target="field"
+      ></div>
+      <%= viral_sortable_lists(
+                  title: t("metadata_templates.form.metadata"),
+                  description: t("metadata_templates.form.description"),
+                  ) do |sortable_lists| %>
+        <%= sortable_lists.with_list(
+          id: t("metadata_templates.form.available"),
+          title: t("metadata_templates.form.available"),
+          list_items: @available_metadata_fields,
+          group: "metadata_selection",
+        ) %>
+        <%= sortable_lists.with_list(
+          id: t("metadata_templates.form.selected"),
+          title: t("metadata_templates.form.selected"),
+          list_items: @current_template_fields,
+          group: "metadata_selection",
+          required: true,
+        ) %>
+      <% end %>
+      <div class="mt-4">
+        <%= form.submit submit_button_text,
+                    data: {
+                      turbo_frame: "_top",
+                      action:
+                        "click->viral--sortable-lists--two-lists-selection#constructParams",
+                      "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                    },
+                    class: "button button-primary",
+                    disabled: true %>
+      </div>
+    </div>
+  <% end %>
+</div>

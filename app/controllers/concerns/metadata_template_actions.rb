@@ -10,7 +10,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
     before_action proc { metadata_templates_ancestral }, only: %i[list]
-    before_action proc { view_authorizations }, only: %i[index]
+    before_action proc { view_authorizations }, only: %i[index update]
   end
 
   def index
@@ -23,10 +23,10 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def new
     authorize! @namespace, to: :create_metadata_templates?
-    @new_template = MetadataTemplate.new(namespace_id: @namespace.id)
+    @metadata_template = MetadataTemplate.new(namespace_id: @namespace.id)
 
     respond_to do |format|
-      format.turbo_stream do
+      format.html do
         render status: :ok
       end
     end
@@ -36,7 +36,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     authorize! @metadata_template, to: :update_metadata_template?
 
     respond_to do |format|
-      format.turbo_stream do
+      format.html do
         render status: :ok
       end
     end
@@ -52,18 +52,23 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def create
-    @new_template = MetadataTemplates::CreateService.new(
+  def create # rubocop:disable Metrics/MethodLength
+    @metadata_template = MetadataTemplates::CreateService.new(
       current_user, @namespace, metadata_template_params
     ).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @new_template.persisted?
+        if @metadata_template.persisted?
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
-                                template_name: @new_template.name))
+                                template_name: @metadata_template.name))
         else
-          render_error(error_message(@new_template))
+          error_msg = if @metadata_template.errors.size == 1 && @metadata_template.errors[:fields].any?
+                        error_message(@metadata_template)
+                      else
+                        t(:'general.form.error_notification')
+                      end
+          render_error(error_msg)
         end
       end
     end
@@ -71,14 +76,14 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def destroy
     MetadataTemplates::DestroyService.new(current_user, @metadata_template).execute
+
     respond_to do |format|
       format.turbo_stream do
         if @metadata_template.deleted?
-          flash[:success] =
-            I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
-          redirect_to metadata_templates_path
+          render_success(I18n.t('concerns.metadata_template_actions.destroy.success',
+                                template_name: @metadata_template.name))
         else
-          render_error(error_message(@new_template))
+          render_error(error_message(@metadata_template))
         end
       end
     end
@@ -94,14 +99,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
                                 template_name: @metadata_template.name))
         end
       else
-        msg = if @metadata_template.errors.any?
-                @metadata_template.errors.full_messages.to_sentence
-              else
-                I18n.t('concerns.metadata_template_actions.update.error',
-                       template_name: @metadata_template.name)
-              end
+        error_msg = if @metadata_template.errors.size == 1 && @metadata_template.errors[:fields].any?
+                      error_message(@metadata_template)
+                    else
+                      t(:'general.form.error_notification')
+                    end
         format.turbo_stream do
-          render_error(msg)
+          render_error(error_msg)
         end
       end
     end
