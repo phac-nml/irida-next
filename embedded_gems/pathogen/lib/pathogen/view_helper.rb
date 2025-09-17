@@ -9,7 +9,8 @@ module Pathogen
       icon: 'Pathogen::Icon',
       link: 'Pathogen::Link',
       radio_button: 'Pathogen::Form::RadioButton',
-      checkbox: 'Pathogen::Form::Checkbox'
+      checkbox: 'Pathogen::Form::CheckBox',
+      checkbox_tag: 'Pathogen::Form::CheckBoxTag'
     }.freeze
 
     # Define helper methods for components
