@@ -151,9 +151,7 @@
 
   <div data-controller="refresh">
     <%= turbo_stream_from @group, :samples, data: { "refresh-target": "source" } %>
-    <%= viral_alert(message: "Samples table is out of date. Please refresh to view latest changes.", data: { "refresh-target": "notice" }, classes: "hidden mb-6", aria: {
-            live: "assertive",
-          }) do %>
+    <%= viral_alert(message: "Samples table is out of date. Please refresh to view latest changes.", data: { "refresh-target": "notice" }, classes: "hidden mb-6") do %>
       <%= pathogen_button(tag: :a, href: url_for) do %>
         Refresh
       <% end %>
