@@ -72,21 +72,6 @@ module Pathogen
         # Call the default Rails check_box implementation with our enhanced options
         super
       end
-
-      # Standalone checkbox tag with consistent styling
-      #
-      # @param name [String] The field name for the checkbox
-      # @param value [String] Value when checked (default: "1")
-      # @param checked [Boolean] Whether the checkbox is checked (default: false)
-      # @param options [Hash] Options for the checkbox
-      # @return [String] HTML for the checkbox
-      def check_box_tag(name, value = '1', checked = false, options = {}) # rubocop:disable Style/OptionalBooleanParameter
-        options = add_test_selector(options)
-        options = apply_pathogen_styling(options)
-
-        # Use the template's check_box_tag to render the checkbox with our styling
-        @template.check_box_tag(name, value, checked, options)
-      end
     end
   end
 end
