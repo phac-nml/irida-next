@@ -27,6 +27,7 @@
                   <% if index.zero? and @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
+                    false,
                     {
                       id: "select-page",
                       aria: {
