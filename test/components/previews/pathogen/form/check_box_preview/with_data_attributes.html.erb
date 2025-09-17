@@ -1,16 +1,21 @@
 <div class="p-4 border border-gray-200 rounded-lg">
   <%= form_with url: '#', local: true, class: 'space-y-4' do |form| %>
     <div class="mb-4">
-      <%= form.check_box(:auto_save, {
-            data: {
-              action: 'input->collapsible#toggle',
-              controller: 'collapsible',
-              collapsible_target: 'item'
-            }
-          }) %>
+      <%= form.check_box(
+        :auto_save,
+        {
+          data: {
+            action: "input->collapsible#toggle",
+            controller: "collapsible",
+            collapsible_target: "item",
+          },
+        },
+      ) %>
     </div>
   <% end %>
   <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
-    <strong>Note:</strong> This checkbox includes Stimulus data attributes for JavaScript interactivity.
+    <strong>Note:</strong>
+    This checkbox includes Stimulus data attributes for JavaScript
+    interactivity.
   </div>
 </div>
