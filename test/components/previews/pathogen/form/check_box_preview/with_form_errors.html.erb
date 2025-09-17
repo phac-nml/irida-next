@@ -1,0 +1,45 @@
+<%
+# Create a user model with errors for this preview
+user_with_errors = Struct.new(:terms_accepted, :errors, :model_name, :to_key, :persisted?) do
+  def self.model_name
+    ActiveModel::Name.new(self, nil, 'User')
+  end
+
+  def model_name
+    self.class.model_name
+  end
+
+  def to_key
+    nil
+  end
+
+  def persisted?
+    false
+  end
+
+  def initialize(*)
+    super
+    self.errors = ActiveModel::Errors.new(self)
+    errors.add(:terms_accepted, 'must be accepted')
+  end
+end.new(false)
+%>
+
+<div class="p-4 border border-gray-200 rounded-lg">
+  <%= form_with model: user_with_errors, url: '#', local: true, class: 'space-y-4' do |form| %>
+    <div class="space-y-2">
+      <label class="flex items-center space-x-2">
+        <%= form.check_box(:terms_accepted) %>
+        <span>I accept the terms and conditions</span>
+      </label>
+      <% if user_with_errors.errors[:terms_accepted].any? %>
+        <div class="text-red-600 text-sm">
+          <%= user_with_errors.errors[:terms_accepted].first %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> This demonstrates how checkboxes appear with validation errors.
+  </div>
+</div>

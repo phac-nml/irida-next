@@ -1,0 +1,40 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <%= form_with url: '#', local: true, class: 'space-y-4' do |form| %>
+    <div class="space-y-4">
+      <fieldset class="border border-gray-200 rounded p-4">
+        <legend class="font-semibold text-sm px-2">Notification Preferences</legend>
+        <div class="space-y-2 mt-2">
+          <label class="flex items-center space-x-2">
+            <%= form.check_box(:email_notifications) %>
+            <span>Email notifications</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <%= form.check_box(:sms_notifications) %>
+            <span>SMS notifications</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <%= form.check_box(:push_notifications, { checked: true }) %>
+            <span>Push notifications</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="border border-gray-200 rounded p-4">
+        <legend class="font-semibold text-sm px-2">Privacy Settings</legend>
+        <div class="space-y-2 mt-2">
+          <label class="flex items-center space-x-2">
+            <%= form.check_box(:public_profile) %>
+            <span>Public profile</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <%= form.check_box(:allow_indexing, { checked: true }) %>
+            <span>Allow search engine indexing</span>
+          </label>
+        </div>
+      </fieldset>
+    </div>
+  <% end %>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> This demonstrates multiple checkboxes organized in fieldsets within a single form.
+  </div>
+</div>

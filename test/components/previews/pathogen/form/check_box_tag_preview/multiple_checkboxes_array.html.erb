@@ -1,0 +1,30 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <div class="mb-4">
+    <div class="space-y-2">
+      <label class="flex items-center space-x-2">
+        <%= check_box_tag('sample_ids[]', '1', false, {
+              id: 'sample-1',
+              aria: { label: 'Sample 1' }
+            }) %>
+        <span>Sample 1</span>
+      </label>
+      <label class="flex items-center space-x-2">
+        <%= check_box_tag('sample_ids[]', '2', true, {
+              id: 'sample-2',
+              aria: { label: 'Sample 2' }
+            }) %>
+        <span>Sample 2 (pre-selected)</span>
+      </label>
+      <label class="flex items-center space-x-2">
+        <%= check_box_tag('sample_ids[]', '3', false, {
+              id: 'sample-3',
+              aria: { label: 'Sample 3' }
+            }) %>
+        <span>Sample 3</span>
+      </label>
+    </div>
+  </div>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> Multiple checkboxes using array naming convention (sample_ids[]) for handling multiple selections.
+  </div>
+</div>

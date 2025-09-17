@@ -1,0 +1,12 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <div class="mb-4">
+    <%= check_box_tag('readonly', '1', false, {
+          disabled: true,
+          aria: { label: 'Read-only field' }
+        }) %>
+    <label class="ml-2 text-gray-500">Read-only field (disabled)</label>
+  </div>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> This checkbox is disabled and cannot be modified by the user.
+  </div>
+</div>

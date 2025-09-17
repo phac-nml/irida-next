@@ -18,7 +18,7 @@ module Pathogen
       # @return [String] complete CSS class string for the input
       def checkbox_classes # rubocop:disable Metrics/MethodLength
         base_classes = [
-          'size-6',
+          'size-5',
           'text-primary-600',
           'bg-slate-100',
           'border-slate-300',

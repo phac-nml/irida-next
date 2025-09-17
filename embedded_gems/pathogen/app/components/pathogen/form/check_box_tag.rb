@@ -41,10 +41,6 @@ module Pathogen
         @value = value.to_s
         @checked = checked
 
-        # Extract Rails-specific options
-        options ||= {}
-        @include_hidden = options.delete(:include_hidden) { true }
-
         # Store remaining HTML options for the input
         @html_options = options
       end
@@ -54,7 +50,6 @@ module Pathogen
       # @return [ActiveSupport::SafeBuffer] the rendered HTML
       def call
         html = ''.html_safe
-        html += render_hidden_field(@name, unchecked_value) if @include_hidden != false
         html += render_checkbox_input
         html
       end

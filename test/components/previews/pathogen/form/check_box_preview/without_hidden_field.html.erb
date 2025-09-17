@@ -1,0 +1,10 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <%= form_with url: '#', local: true, class: 'space-y-4' do |form| %>
+    <div class="mb-4">
+      <%= form.check_box(:optional_field, { include_hidden: false }) %>
+    </div>
+  <% end %>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> This checkbox excludes the hidden field that Rails normally includes for unchecked values.
+  </div>
+</div>

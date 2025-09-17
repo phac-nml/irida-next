@@ -1,0 +1,45 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <div class="mb-4">
+    <div class="space-y-3">
+      <div class="border-b pb-2">
+        <label class="flex items-center space-x-2 font-semibold">
+          <%= check_box_tag('select-all', '1', false, {
+                id: 'select-all',
+                aria: { label: 'Select all items' },
+                data: { action: 'input->selection#toggleAll' }
+              }) %>
+          <span>Select All</span>
+        </label>
+      </div>
+      <div class="space-y-2 ml-4">
+        <label class="flex items-center space-x-2">
+          <%= check_box_tag('item_ids[]', 'item1', false, {
+                id: 'item-1',
+                aria: { label: 'Item 1' },
+                data: { action: 'input->selection#toggle' }
+              }) %>
+          <span>Item 1</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <%= check_box_tag('item_ids[]', 'item2', false, {
+                id: 'item-2',
+                aria: { label: 'Item 2' },
+                data: { action: 'input->selection#toggle' }
+              }) %>
+          <span>Item 2</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <%= check_box_tag('item_ids[]', 'item3', false, {
+                id: 'item-3',
+                aria: { label: 'Item 3' },
+                data: { action: 'input->selection#toggle' }
+              }) %>
+          <span>Item 3</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> Master "Select All" checkbox pattern with subordinate checkboxes for bulk selection functionality.
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="p-4 border border-gray-200 rounded-lg">
+  <div class="mb-4">
+    <%= check_box_tag('sample_ids[]', '123', false, {
+          id: 'sample-123',
+          data: {
+            action: 'input->selection#toggle',
+            selection_target: 'rowSelection',
+            value: 'Sample 123'
+          }
+        }) %>
+    <label for="sample-123" class="ml-2">Sample 123</label>
+  </div>
+  <div class="mt-4 p-3 bg-gray-50 rounded text-sm">
+    <strong>Note:</strong> This checkbox includes Stimulus data attributes for JavaScript interactivity.
+  </div>
+</div>
