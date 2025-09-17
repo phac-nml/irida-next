@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require_relative 'styles/form_styles'
+require_relative 'test_selector_helper'
 
 module Pathogen
   # Module that overrides Rails form tag helpers to provide Pathogen styling
   module FormTagHelper
     extend ActiveSupport::Concern
     include Pathogen::Styles::FormStyles
+    include Pathogen::TestSelectorHelper
 
     included do
       # Override check_box_tag to use Pathogen styling

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../styles/form_styles'
+require_relative '../test_selector_helper'
 
 module Pathogen
   module FormBuilders
