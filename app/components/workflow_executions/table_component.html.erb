@@ -29,6 +29,7 @@
                   false,
                   {
                     id: "select-page",
+                    table: true,
                     aria: {
                       label: t(:".select_page"),
                     },
@@ -98,6 +99,7 @@
                     false,
                     {
                       id: dom_id(workflow_execution, "checkbox"),
+                      table: true,
                       aria: {
                         label: workflow_execution.name.presence || workflow_execution.id,
                       },

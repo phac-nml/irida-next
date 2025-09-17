@@ -41,6 +41,14 @@ module Pathogen
           'dark:hover:border-slate-500'
         ]
 
+        # Add table-specific classes if this checkbox is in a table context
+        if @html_options[:table]
+          base_classes << '-mt-0.5' # Small negative top margin to visually center
+          base_classes << 'mb-0' # Remove bottom margin
+          base_classes << 'flex-shrink-0' # Prevent compression in flex containers
+          base_classes << 'self-center' # Align self to center in flex container
+        end
+
         user_classes = @html_options[:class]
 
         if user_classes.present?
