@@ -8,9 +8,7 @@ module Pathogen
       datepicker: 'Pathogen::Datepicker',
       icon: 'Pathogen::Icon',
       link: 'Pathogen::Link',
-      radio_button: 'Pathogen::Form::RadioButton',
-      checkbox: 'Pathogen::Form::CheckBox',
-      checkbox_tag: 'Pathogen::Form::CheckBoxTag'
+      radio_button: 'Pathogen::Form::RadioButton'
     }.freeze
 
     # Define helper methods for components

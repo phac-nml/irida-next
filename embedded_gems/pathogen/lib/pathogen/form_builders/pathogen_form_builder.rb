@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../styles/form_styles'
+
 module Pathogen
   module FormBuilders
     # FormBuilder for Pathogen
@@ -14,6 +16,7 @@ module Pathogen
       # in a Rails-friendly way.
       include Pathogen::TestSelectorHelper
       include ActionView::Helpers::TagHelper
+      include Pathogen::Styles::FormStyles
 
       def field_set_tag(&)
         # Format the fieldset tag so it looks kick ass
@@ -64,11 +67,25 @@ module Pathogen
       # @return [String] HTML for the checkbox
       def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
         options = add_test_selector(options)
+        options = apply_pathogen_styling(options)
 
-        # Render using the focused Pathogen CheckBox component for Rails forms
-        @template.render(Pathogen::Form::CheckBox.new(
-                           method, options, checked_value, unchecked_value, form: self
-                         ))
+        # Call the default Rails check_box implementation with our enhanced options
+        super
+      end
+
+      # Standalone checkbox tag with consistent styling
+      #
+      # @param name [String] The field name for the checkbox
+      # @param value [String] Value when checked (default: "1")
+      # @param checked [Boolean] Whether the checkbox is checked (default: false)
+      # @param options [Hash] Options for the checkbox
+      # @return [String] HTML for the checkbox
+      def check_box_tag(name, value = '1', checked = false, options = {}) # rubocop:disable Style/OptionalBooleanParameter
+        options = add_test_selector(options)
+        options = apply_pathogen_styling(options)
+
+        # Use the template's check_box_tag to render the checkbox with our styling
+        @template.check_box_tag(name, value, checked, options)
       end
     end
   end
