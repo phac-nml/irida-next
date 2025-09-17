@@ -47,9 +47,6 @@ module Pathogen
           base_classes << 'mb-0' # Remove bottom margin
           base_classes << 'flex-shrink-0' # Prevent compression in flex containers
           base_classes << 'self-center' # Align self to center in flex container
-
-          # Remove :table from html_options to avoid invalid HTML attribute
-          @html_options = @html_options.except(:table)
         end
 
         user_classes = @html_options[:class]
@@ -67,7 +64,7 @@ module Pathogen
       #
       # @return [Hash] attributes for the checkbox input tag
       def build_checkbox_attributes
-        attrs = @html_options.except(:class, :id, :checked, :include_hidden)
+        attrs = @html_options.except(:class, :id, :checked, :include_hidden, :table)
         attrs[:type] = 'checkbox'
         attrs[:class] = checkbox_classes
         attrs[:checked] = 'checked' if @checked
