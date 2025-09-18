@@ -22,27 +22,25 @@
                       autocomplete: "email",
                       class:
                         "
-                                border-slate-300 focus:ring-blue-500 focus:border-blue-500
-                                invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
-                              ",
+                                  border-slate-300 focus:ring-blue-500 focus:border-blue-500
+                                  invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
+                                ",
                       data: {
                         email_input_target: "emailField",
-                        action: "blur->email-input#blur input->email-input#handleInput",
+                        action: "input->email-input#handleInput",
                       } %>
       </div>
       <!-- Error messages container -->
-      <div
+      <ul
         data-email-input-target="errorContainer"
         class="
-          hidden bg-red-50 border-l-4 border-red-300 dark:bg-slate-800 dark:border-red-800
-          dark:text-red-400 flex items-center p-4 text-red-800
+          max-w-md text-sm text-slate-500 list-inside dark:text-slate-400 hidden
         "
-        role="alert"
       >
-        <div>
-          <span class="font-semibold" data-email-input-target="errorMessage"></span>
-        </div>
-      </div>
+        <li>
+          <%= viral_help_text(state: :error) %>
+        </li>
+      </ul>
 
       <div>
         <%= f.submit t(".submit_button"), class: "button button-primary w-full" %>

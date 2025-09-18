@@ -8,7 +8,7 @@ import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
 
 export default class extends Controller {
-  static targets = ["form", "emailField", "errorContainer", "errorMessage"];
+  static targets = ["form", "emailField", "errorContainer"];
 
   static values = {
     emailMissing: { type: String, default: "Email is required" },
@@ -121,8 +121,10 @@ export default class extends Controller {
    * @param {boolean} shouldFocus - Whether to focus the field
    */
   showError(message, shouldFocus = true) {
+    const messageTextSpan =
+      this.errorContainerTarget.querySelector("span.grow");
     // Update error message
-    this.errorMessageTarget.textContent = message;
+    messageTextSpan.textContent = message;
     this.errorContainerTarget.classList.remove("hidden");
 
     // Generate a unique ID for ARIA attributes if needed
@@ -149,7 +151,6 @@ export default class extends Controller {
    */
   clearError() {
     this.errorContainerTarget.classList.add("hidden");
-    this.errorMessageTarget.textContent = "";
 
     // Clear validity using the Constraint Validation API
     // This removes the :invalid pseudo-class, which Tailwind's invalid: prefix uses
@@ -193,13 +194,5 @@ export default class extends Controller {
     }
 
     return true;
-  }
-
-  /**
-   * Handles blur event on the email field
-   * Forces validation when the user leaves the field
-   */
-  blur() {
-    this.validateEmail();
   }
 }
