@@ -62,9 +62,8 @@ export default class extends Controller {
 
   /**
    * Handles input events on the email field
-   * @param {Event} event - The input event
    */
-  handleInput(event) {
+  handleInput() {
     this.debouncedValidate();
   }
 
