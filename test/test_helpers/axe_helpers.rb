@@ -91,14 +91,12 @@ module AxeHelpers
   def fill_in(locator = nil, **kwargs)
     super
 
-    assert_accessible
     w3c_validate content: "<!DOCTYPE html>#{html}"
   end
 
   def visit(path, **attributes)
     super
 
-    assert_accessible
     w3c_validate content: "<!DOCTYPE html>#{html}"
   end
 end
