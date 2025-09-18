@@ -23,7 +23,7 @@
       selected: params[:personal],
     ) %>
     <% tabs_panel.with_right_content do %>
-      <div class="inline-flex space-x-2">
+      <div class="flex flex-col sm:flex-row space-y-2 sm:space-x-2 sm:space-y-0">
         <%= render SearchComponent.new(
           query: @q,
           url: dashboard_projects_url(**request.query_parameters),
