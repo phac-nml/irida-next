@@ -1105,17 +1105,14 @@ fr:
       user_email: Nom d’utilisateur
   metadata_templates:
     edit_template_dialog:
+      title: Modifier le modèle de métadonnées
+      update_button: Mise à jour
+    form:
       available: Disponible
       description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
       selected: Sélectionné
-      title: Modifier le modèle de métadonnées
-      update_button: Mise à jour
     new_template_dialog:
-      available: Disponible
-      description: Sélectionnez les champs de métadonnées du nouveau modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
-      metadata: Métadonnées
-      selected: Sélectionné
       submit_button: Envoyer
       title: Nouveau modèle de métadonnées
     table:
