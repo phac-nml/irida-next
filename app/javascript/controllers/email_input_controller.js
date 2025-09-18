@@ -24,23 +24,18 @@ export default class extends Controller {
 
     // Set up debounced validation for typing
     this.debouncedValidate = _.debounce(
-      this.validateEmailSilently.bind(this),
+      () => this.validateEmail(false, false),
       300,
     );
 
     // Add input event listener for real-time validation
-    this.emailFieldTarget.addEventListener(
-      "input",
-      this.handleInput.bind(this),
-    );
+    this.handleInput = this.handleInput.bind(this);
+    this.emailFieldTarget.addEventListener("input", this.handleInput);
   }
 
   disconnect() {
     // Clean up event listeners
-    this.emailFieldTarget.removeEventListener(
-      "input",
-      this.handleInput.bind(this),
-    );
+    this.emailFieldTarget.removeEventListener("input", this.handleInput);
   }
 
   /**
@@ -74,40 +69,23 @@ export default class extends Controller {
   }
 
   /**
-   * Validates email silently (without focus or submission effects)
-   * Used during typing for real-time feedback
-   */
-  validateEmailSilently() {
-    const email = this.emailFieldTarget.value.trim();
-
-    if (!email) {
-      // Don't show missing error during typing
-      return false;
-    }
-
-    if (!this.isValidEmailFormat(email)) {
-      this.showError(this.emailFormatValue, false);
-      return false;
-    }
-
-    this.clearError();
-    return true;
-  }
-
-  /**
-   * Validates email with full error handling
+   * Validates email with optional error handling and focus behavior
+   * @param {boolean} showMissingError - Whether to show error for missing email
+   * @param {boolean} shouldFocus - Whether to focus the field on error
    * @returns {boolean} - Whether the email is valid
    */
-  validateEmail() {
+  validateEmail(showMissingError = true, shouldFocus = true) {
     const email = this.emailFieldTarget.value.trim();
 
     if (!email) {
-      this.showError(this.emailMissingValue, true);
+      if (showMissingError) {
+        this.showError(this.emailMissingValue, shouldFocus);
+      }
       return false;
     }
 
     if (!this.isValidEmailFormat(email)) {
-      this.showError(this.emailFormatValue, true);
+      this.showError(this.emailFormatValue, shouldFocus);
       return false;
     }
 
@@ -128,9 +106,8 @@ export default class extends Controller {
     this.errorContainerTarget.classList.remove("hidden");
 
     // Generate a unique ID for ARIA attributes if needed
-    const errorId = this.errorContainerTarget.id || `email-error-${Date.now()}`;
     if (!this.errorContainerTarget.id) {
-      this.errorContainerTarget.id = errorId;
+      this.errorContainerTarget.id = `email-error-${Date.now()}`;
     }
 
     // Set validity using the Constraint Validation API
@@ -139,7 +116,7 @@ export default class extends Controller {
 
     // Update accessibility attributes
     this.emailFieldTarget.setAttribute("aria-invalid", "true");
-    this.emailFieldTarget.setAttribute("aria-describedby", errorId);
+    this.emailFieldTarget.setAttribute("aria-describedby", this.errorContainerTarget.id);
 
     if (shouldFocus) {
       this.emailFieldTarget.focus();
