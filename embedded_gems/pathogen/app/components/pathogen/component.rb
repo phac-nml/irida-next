@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../../../lib/pathogen/test_selector_helper'
+require_relative '../../lib/pathogen/fetch_or_fallback_helper'
+
 module Pathogen
   # @private
   # :nocov:

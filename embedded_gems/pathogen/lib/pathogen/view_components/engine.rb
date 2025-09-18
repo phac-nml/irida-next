@@ -6,6 +6,7 @@ require 'view_component/version'
 require_relative '../icon_helper'
 require_relative '../view_helper'
 require_relative '../form_helper'
+require_relative '../form_tag_helper'
 
 module Pathogen
   module ViewComponents
@@ -33,6 +34,7 @@ module Pathogen
           include Pathogen::IconHelper
           include Pathogen::ViewHelper
           include Pathogen::FormHelper
+          include Pathogen::FormTagHelper
         end
       end
     end

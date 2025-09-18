@@ -7,7 +7,6 @@ module ViewHelper
     avatar: 'Viral::AvatarComponent',
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
-    checkbox: 'Viral::Form::CheckboxComponent',
     dialog: 'Viral::DialogComponent',
     empty: 'Viral::EmptyStateComponent',
     data_table: 'Viral::DataTableComponent',

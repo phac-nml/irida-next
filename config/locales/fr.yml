@@ -1790,7 +1790,6 @@ fr:
       row:
         aria_label: Select sample %{name}
         deselected_message: Sample %{name} deselected
-        help_text: Check to select this sample, uncheck to deselect this sample
         selected_message: Sample %{name} selected
       select_all:
         aria_label: Select all samples on this page
