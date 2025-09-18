@@ -10,8 +10,8 @@ module Pathogen
       # Common styling classes for checkboxes
       CHECKBOX_CLASSES = [
         'size-6', # 24px - better accessibility
-        'bg-slate-100',
-        'border-slate-300',
+        'bg-white',
+        '!border-slate-300',
         'rounded-sm', # Consistent with style guide for form elements
         'cursor-pointer',
         'transition-all',
