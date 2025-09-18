@@ -9,6 +9,27 @@
     }, html: { method: :post, class: "space-y-4" }) do |f| %>
     <div class="space-y-4">
       <%= render "devise/shared/hidden_locale_input" %>
+
+      <%= render partial: "shared/form/required_field_legend" %>
+
+      <div class="form-field">
+        <%= f.label :email, data: { required: true } %>
+        <%= f.email_field :email,
+                      autofocus: true,
+                      aria: {
+                        required: true,
+                      },
+                      autocomplete: "email",
+                      class:
+                        "
+                                border-slate-300 focus:ring-blue-500 focus:border-blue-500
+                                invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
+                              ",
+                      data: {
+                        email_input_target: "emailField",
+                        action: "blur->email-input#blur input->email-input#handleInput",
+                      } %>
+      </div>
       <!-- Error messages container -->
       <div
         data-email-input-target="errorContainer"
@@ -21,26 +42,6 @@
         <div>
           <span class="font-semibold" data-email-input-target="errorMessage"></span>
         </div>
-      </div>
-
-      <%= render partial: "shared/form/required_field_legend" %>
-
-      <div class="form-field">
-        <%= f.label :email, data: { required: true } %>
-        <%= f.email_field :email,
-                      autofocus: true,
-                      aria: {
-                        required: true,
-                      },
-                      autocomplete: "email",
-                      class: "
-                        border-slate-300 focus:ring-blue-500 focus:border-blue-500
-                        invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
-                      ",
-                      data: {
-                        email_input_target: "emailField",
-                        action: "blur->email-input#blur input->email-input#handleInput",
-                      } %>
       </div>
 
       <div>
