@@ -3,20 +3,20 @@
 <%= render Viral::PageHeaderComponent.new(
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
-    <div class="flex flex-row">
+    <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-2">
       <% if @data_export.status == 'ready' %>
         <%= button_to(
           t("data_exports.show.download"),
           rails_blob_path(@data_export.file),
           method: :get,
-          class: "button button-primary",
+          class: "button button-primary w-full",
         ) %>
       <% else %>
         <button
           class="
             button button-default pointer-events-none cursor-not-allowed bg-slate-100
             text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100
-            dark:border-slate-600
+            dark:border-slate-600 w-full
           "
           disabled
         ><%= t("data_exports.show.download") %>
@@ -37,7 +37,7 @@
               name: @data_export.name || @data_export.id,
             ),
         },
-        class: "button button-default mr-1 ml-2",
+        class: "button button-default w-full",
       ) %>
     </div>
   <% end %>

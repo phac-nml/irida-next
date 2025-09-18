@@ -3,8 +3,8 @@
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
     <% if @allowed_to[:update_sample] %>
-      <div class="flex justify-end items-center mb-4">
-        <div class="flex items-center space-x-2">
+      <div class="flex flex-col sm:flex-row-reverse mb-2">
+        <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
           <%= button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
             @project.namespace.parent,
@@ -16,7 +16,7 @@
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-          class: "button button-default" %>
+          class: "button button-default w-full" %>
           <%= button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
             @project.namespace.parent,
@@ -30,7 +30,7 @@
             controller: "action-button",
             action_button_required_value: 1,
           },
-          class: "button button-default action-button" %>
+          class: "button button-default action-button w-full" %>
         </div>
       </div>
     <% end %>
@@ -74,17 +74,21 @@
             >
               <% if @allowed_to[:update_sample] %>
                 <td class="px-3 py-3">
-                  <%= pathogen_checkbox "metadata_keys[]", metadata[:key], {
+                  <%= pathogen_checkbox "metadata_keys[]",
+                  metadata[:key],
+                  {
                     checked: false,
                     id: metadata[:key],
                     aria: {
-                      label: metadata[:key]
+                      label: metadata[:key],
                     },
                     data: {
                       selection_target: "rowSelection",
-                      action: "input->selection#toggle"
-                    }
-                  }, metadata[:key], "0" %>
+                      action: "input->selection#toggle",
+                    },
+                  },
+                  metadata[:key],
+                  "0" %>
                 </td>
               <% end %>
               <td class="px-6 py-4"><%= metadata[:key] %></td>
