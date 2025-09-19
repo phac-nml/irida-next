@@ -1857,11 +1857,6 @@ fr:
       update:
         cannot_update_self: Vous ne pouvez pas mettre à jour votre propre rôle %{namespace_type}
         role_not_allowed: Un responsable ne peut mettre à jour le rôle d’un membre que jusqu’au rôle de responsable
-    metadata_templates:
-      create:
-        required:
-          fields: Impossible de créer un modèle de métadonnées puisque les champs sont obligatoires et doivent être un tableau de chaînes
-          name: Impossible de créer un modèle de métadonnées puisque le nom est obligatoire
     personal_access_tokens:
       create:
         required:
