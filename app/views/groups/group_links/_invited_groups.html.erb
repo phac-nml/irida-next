@@ -5,7 +5,6 @@
       url: group_group_links_url(**request.query_parameters),
       search_attribute: :group_name_cont,
       label: t(".search.label"),
-      placeholder: t(".search.placeholder"),
       total_count: @pagy.count,
       value: @q.group_name_cont,
     ) do %>

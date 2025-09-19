@@ -6,7 +6,6 @@ class SearchComponentTest < ViewComponent::TestCase
   setup do
     @url = '/-/groups/group-1/-/members'
     @search_attribute = :user_email_cont
-    @placeholder = 'Search by email address'
     @label = 'Email Search'
     @total_count = 0
     @value = nil
@@ -20,7 +19,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -29,7 +27,6 @@ class SearchComponentTest < ViewComponent::TestCase
     assert_selector "form[method='get']", count: 1
     assert_selector "input[id='q_#{@search_attribute}']", count: 1
     assert_selector "input[type='search']", count: 1
-    assert_selector "input[placeholder='#{@placeholder}']", count: 1
     assert_selector "label[for='q_#{@search_attribute}']", count: 1
     assert_text @label
   end
@@ -41,7 +38,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: custom_value
     )
@@ -55,7 +51,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: nil
     )
@@ -72,7 +67,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -89,7 +83,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value,
       **custom_data
@@ -108,7 +101,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: nil,
       value: @value
     )
@@ -123,7 +115,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: -1,
       value: @value
     )
@@ -139,7 +130,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -147,10 +137,8 @@ class SearchComponentTest < ViewComponent::TestCase
     # Check for proper form labeling
     assert_selector "label[for='q_#{@search_attribute}']", count: 1
     assert_selector "input[id='q_#{@search_attribute}']", count: 1
-
     # Check for proper input attributes
     assert_selector "input[type='search']", count: 1
-    assert_selector "input[placeholder='#{@placeholder}']", count: 1
   end
 
   # Integration with Ransack
@@ -160,7 +148,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -176,7 +163,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -193,7 +179,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     ) do
@@ -210,7 +195,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -229,7 +213,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -258,7 +241,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -276,7 +258,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value,
       **custom_data
@@ -293,7 +274,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -355,7 +335,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: ''
     )
@@ -371,7 +350,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: long_value
     )
@@ -387,7 +365,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: special_chars
     )
@@ -403,7 +380,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -425,7 +401,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value,
       **custom_kwargs
@@ -443,7 +418,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -461,7 +435,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -477,7 +450,6 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: @value
     )
@@ -495,12 +467,10 @@ class SearchComponentTest < ViewComponent::TestCase
       url: @url,
       search_attribute: @search_attribute,
       label: @label,
-      placeholder: @placeholder,
       total_count: @total_count,
       value: test_value
     )
 
-    assert_selector "input[placeholder='#{@placeholder}']", count: 1
     assert_selector "input[value='#{test_value}']", count: 1
   end
 end

@@ -68,7 +68,6 @@
       url: namespace_project_workflow_executions_path(**request.query_parameters),
       search_attribute: :name_or_id_cont,
       label: t(".search.label"),
-      placeholder: t(".search.placeholder"),
       total_count: @pagy.count,
       value: @q.name_or_id_cont,
     ) %>

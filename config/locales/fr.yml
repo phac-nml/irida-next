@@ -388,8 +388,7 @@ fr:
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom
+          label: Rechercher par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -407,8 +406,7 @@ fr:
         pagy_item: Projets
         personal: Personnel
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom
+          label: Rechercher par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -436,8 +434,7 @@ fr:
       no_data_exports: Aucune exportation de données
       no_data_exports_message: Vous n’avez actuellement aucune exportation de données.
       search:
-        label: Rechercher
-        placeholder: Rechercher par ID ou nom
+        label: Rechercher par ID ou nom
       table_header:
         action: Mesure
         created_at: Créé
@@ -707,8 +704,7 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom de fichier
+          label: Rechercher par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -818,8 +814,7 @@ fr:
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
       invited_groups:
         search:
-          label: Rechercher
-          placeholder: Search by group name
+          label: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -867,8 +862,7 @@ fr:
         title: Membres
       member_listing:
         search:
-          label: Rechercher
-          placeholder: Search by username
+          label: Search by username
       new:
         access_level_hint: Select group access level to assign to user
         add_member_to_group: Ajouter un membre au groupe
@@ -907,8 +901,7 @@ fr:
       table_filter:
         loading: Chargement des résultats de recherche...
         search:
-          label: Rechercher
-          placeholder: Rechercher par nom ou PUID
+          label: Rechercher par nom ou PUID
     shared_namespaces:
       pagy:
         item: Groupes et projets partagés
@@ -924,8 +917,7 @@ fr:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        label: Rechercher
-        placeholder: Rechercher par nom ou PUID
+        label: Rechercher par nom ou PUID
       shared_namespaces:
         no_shared:
           description: Les groupes et les projets peuvent être partagés avec d’autres groupes par l’intermédiaire de leur page de membres.
@@ -974,14 +966,12 @@ fr:
         title: Edit workflow execution
       files:
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom de fichier
+          label: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
         search:
-          label: Rechercher
-          placeholder: Rechercher par nom ou ID
+          label: Rechercher par nom ou ID
         select_all_button: Tout sélectionner
         subtitle: These are the workflow executions that have been shared within this group
         title: Exécutions de flux de travail
@@ -1283,8 +1273,7 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom de fichier
+          label: Rechercher par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1444,8 +1433,7 @@ fr:
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le projet %{namespace_name} du groupe %{group_name}?
       invited_groups:
         search:
-          label: Rechercher
-          placeholder: Search by group name
+          label: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
         button:
@@ -1494,8 +1482,7 @@ fr:
         title: Membres
       member_listing:
         search:
-          label: Rechercher
-          placeholder: Search by username
+          label: Search by username
       new:
         access_level_hint: Select project access level to assign to user
         add_member_to_project: Ajouter un membre au projet
@@ -1560,8 +1547,7 @@ fr:
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            label: Rechercher
-            placeholder: Rechercher par PUID ou nom de fichier
+            label: Rechercher par PUID ou nom de fichier
           select_all_button: Tout sélectionner
       create:
         success: L’échantillon a été créé avec succès.
@@ -1668,8 +1654,7 @@ fr:
       table_filter:
         loading: Recherche en cours...
         search:
-          label: Rechercher
-          placeholder: Rechercher par nom ou PUID
+          label: Rechercher par nom ou PUID
       update:
         success: L’échantillon a été mis à jour avec succès.
     sidebar:
@@ -1699,15 +1684,13 @@ fr:
         title: Modifier l’exécution automatisée du flux de travail
       files:
         search:
-          label: Rechercher
-          placeholder: Rechercher par PUID ou nom de fichier
+          label: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Désélectionner tout
         search:
-          label: Rechercher
-          placeholder: Rechercher par ID ou nom
+          label: Rechercher par ID ou nom
         select_all_button: Tout sélectionner
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
         title: Exécutions de flux de travail
@@ -2140,15 +2123,13 @@ fr:
         description: There are no files associated with this workflow execution.
         title: Aucun fichier
       search:
-        label: Rechercher
-        placeholder: Rechercher par PUID ou nom de fichier
+        label: Rechercher par PUID ou nom de fichier
     index:
       create_export_button: Créer une exportation
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
       search:
-        label: Rechercher
-        placeholder: Rechercher par ID ou nom
+        label: Rechercher par ID ou nom
       select_all_button: Tout sélectionner
       title: Exécutions de flux de travail
     samples:
