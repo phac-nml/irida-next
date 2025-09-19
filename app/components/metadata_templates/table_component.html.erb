@@ -1,7 +1,6 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <% unless @metadata_templates.empty? %>
     <table
-      id="metadata-templates-table"
       class="
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
         whitespace-nowrap
@@ -43,92 +42,16 @@
         </tr>
       </thead>
       <tbody
-        id="metadata-templates-table-body"
         class="
           bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
         "
       >
         <% @metadata_templates.each do |metadata_template| %>
-          <%= render Viral::BaseComponent.new(**row_arguments(metadata_template)) do %>
-            <% @columns.each_with_index do |column, index| %>
-              <%= render_cell(
-                tag: 'td',
-                scope: nil,
-                classes: class_names('px-3 py-3', '2xl:sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
-              ) do %>
-                <% if column == :name %>
-                  <span class="text-slate-900 dark:text-slate-100 font-semibold">
-                    <%= metadata_template.name %>
-                  </span>
-                <% elsif column == :description %>
-                  <%= metadata_template.description %>
-                <% elsif column == :created_by_email %>
-                  <%= metadata_template.created_by.email %>
-                <% elsif column == :created_at %>
-                  <%= helpers.local_date(metadata_template.created_at, :long) %>
-                <% elsif column == :updated_at %>
-                  <%= helpers.local_time_ago(metadata_template.updated_at) %>
-                <% end %>
-              <% end %>
-            <% end %>
-            <% if @renders_row_actions %>
-              <%= render_cell(
-                tag: 'td',
-                classes: 'flex space-x-2 px-3 py-3 justify-end'
-              ) do %>
-                <% if @row_actions.key?(:update_metadata_templates) %>
-                  <%= button_to t(:"metadata_templates.table_component.edit_button"),
-                  edit_path(metadata_template),
-                  data: {
-                    controller: "viral--dialog-trigger",
-                    "viral--dialog-trigger-target": "button",
-                    action: "viral--dialog-trigger#open",
-                    "viral--dialog-trigger-viral--dialog-outlet": "#test_me",
-                    turbo_frame: "metadata_template_modal",
-                    turbo_stream: true,
-                  },
-                  method: :get,
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"metadata_templates.table_component.edit_aria_label",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
-                <% end %>
-                <% if @row_actions.key?(:destroy_metadata_templates) %>
-                  <%= button_to t(:"metadata_templates.table_component.remove_button"),
-                  individual_path(metadata_template),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm:
-                      (
-                        t(
-                          :"metadata_templates.table_component.remove_confirmation",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  method: :delete,
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"metadata_templates.table_component.remove_aria_label",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
-                <% end %>
-              <% end %>
-            <% end %>
-          <% end %>
+          <%= render MetadataTemplates::RowComponent.new(
+            metadata_template,
+            @namespace,
+            @row_actions,
+          ) %>
         <% end %>
       </tbody>
     </table>
