@@ -66,13 +66,14 @@ module Pathogen
       # @param checked_value [String] Value when checked (default: "1")
       # @param unchecked_value [String] Value when unchecked (default: "0")
       # @return [String] HTML for the checkbox
-      def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
+      def checkbox(method, options = {}, checked_value = '1', unchecked_value = '0')
         options = add_test_selector(options)
         options = apply_pathogen_styling(options)
 
         # Call the default Rails check_box implementation with our enhanced options
         super
       end
+      alias check_box checkbox
     end
   end
 end

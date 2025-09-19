@@ -134,10 +134,6 @@ en:
               taken: The namespace has already been shared with this group
             namespace_type:
               inclusion: can only be Group or Project
-        personal_access_token:
-          attributes:
-            scopes:
-              inclusion: can only contain available scopes
         user:
           attributes:
             password:
@@ -1824,12 +1820,6 @@ en:
       destroy:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
         does_not_belong_to_attachable: This attachment does not belong to this sample.
-    bots:
-      create:
-        required:
-          access_level: must be selected
-          scopes: must be selected
-          token_name: is required
     data_exports:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
@@ -1853,11 +1843,6 @@ en:
       update:
         cannot_update_self: You cannot update your own %{namespace_type} role
         role_not_allowed: A maintainer can only update a member's role up to the Maintainer role
-    personal_access_tokens:
-      create:
-        required:
-          scopes: Unable to generate personal access token as the API scope must be selected
-          token_name: Unable to generate personal access token as the name is required
     projects:
       create:
         namespace_required: Namespace required

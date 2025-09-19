@@ -12,6 +12,8 @@ class NamespaceBot < ApplicationRecord
 
   validate :validate_bot_user_type
 
+  accepts_nested_attributes_for :user
+
   def validate_bot_user_type
     return unless user.human?
 

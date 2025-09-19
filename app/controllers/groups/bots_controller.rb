@@ -13,7 +13,10 @@ module Groups
     private
 
     def bot_params
-      params.expect(bot: [:id, :token_name, :access_level, :expires_at, { scopes: [] }])
+      params.expect(namespace_bot: [{ user_attributes: [
+                      :first_name, :last_name, { members_attributes: [%i[access_level namespace]] },
+                      { personal_access_tokens_attributes: [[:name, :expires_at, { scopes: [] }]] }
+                    ] }])
     end
 
     protected
