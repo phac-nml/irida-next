@@ -3,11 +3,11 @@ import { createFocusTrap } from "focus-trap";
 
 // persistent dialog state between connect/disconnects
 const savedDialogStates = new Map();
-
 export default class extends Controller {
   static targets = ["dialog", "trigger"];
   static values = { open: Boolean };
   #focusTrap = null;
+  #trigger = null;
 
   connect() {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {
@@ -51,10 +51,10 @@ export default class extends Controller {
     this.openValue = false;
     this.#focusTrap.deactivate();
     this.dialogTarget.close();
-    if (this.hasTriggerTarget) {
+    if (this.#trigger) {
       // close will refocus the trigger so we don't need to save it to refocus on next connect
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
-      this.triggerTarget.focus();
+      this.#trigger.focus();
     }
   }
 
@@ -65,8 +65,12 @@ export default class extends Controller {
   restoreFocusState() {
     const state = savedDialogStates.get(this.dialogTarget.id);
     if (state && state.refocusTrigger) {
-      this.triggerTarget.focus();
+      this.#trigger.focus();
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
     }
+  }
+
+  updateTrigger(button) {
+    this.#trigger = button;
   }
 }
