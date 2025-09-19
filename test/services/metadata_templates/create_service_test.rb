@@ -30,7 +30,9 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
+      assert new_template.errors.full_messages.to_sentence.include?(
+        I18n.t('errors.messages.blank')
+      )
     end
 
     test 'metadata template not created due to missing fields' do
@@ -42,7 +44,7 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+      assert new_template.errors.full_messages.include?('Fields array size at root is less than: 1')
     end
 
     test 'raises unauthorized error when user lacks permission' do
@@ -110,7 +112,7 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+      assert new_template.errors.full_messages.include?('Fields value at root is not an array')
     end
 
     test 'prevents duplicate template names within same namespace' do

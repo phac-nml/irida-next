@@ -1853,11 +1853,6 @@ en:
       update:
         cannot_update_self: You cannot update your own %{namespace_type} role
         role_not_allowed: A maintainer can only update a member's role up to the Maintainer role
-    metadata_templates:
-      create:
-        required:
-          fields: Unable to create metadata template as the fields are required and must be an array of strings
-          name: Unable to create metadata template as the name is required
     personal_access_tokens:
       create:
         required:
