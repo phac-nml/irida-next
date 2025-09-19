@@ -11,11 +11,8 @@ export default class extends Controller {
   static targets = ["form", "emailField", "errorContainer"];
 
   static values = {
-    emailMissing: { type: String, default: "Email is required" },
-    emailFormat: {
-      type: String,
-      default: "Please enter a valid email address",
-    },
+    emailMissing: { type: String },
+    emailFormat: { type: String }
   };
 
   connect() {
