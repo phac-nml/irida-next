@@ -330,8 +330,9 @@ module Groups
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_ryan.user.email
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_bot.user.email
 
-      fill_in placeholder: I18n.t(:'groups.members.member_listing.search.placeholder'), with: @member_james.user.email
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]')
+        .set(@member_james.user.email)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1

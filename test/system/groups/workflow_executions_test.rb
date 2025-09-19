@@ -108,9 +108,8 @@ module Groups
         assert_text @workflow_execution_group_shared3.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
-              with: @workflow_execution_group_shared1.id
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').set(@workflow_execution_group_shared1.id)
+      find('input[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -124,16 +123,14 @@ module Groups
         assert_no_text @workflow_execution_group_shared3.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
-              with: ''
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').set('')
+      find('input[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 11 items'
       assert_selector 'table tbody tr', count: 11
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
-              with: @workflow_execution_group_shared2.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').set(@workflow_execution_group_shared2.name)
+      find('input[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -233,17 +230,18 @@ module Groups
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
       end
 
-      fill_in placeholder: I18n.t('groups.workflow_executions.files.search.placeholder', locale: user.locale),
-              with: attachments(:workflow_execution_group_shared_output_attachment).puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]')
+        .set(attachments(:workflow_execution_group_shared_output_attachment).puid)
+      find('input[data-test-selector="search-field-input"]')
+        .send_keys(:enter)
 
       within 'tbody' do
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
       end
 
-      fill_in placeholder: I18n.t('groups.workflow_executions.files.search.placeholder', locale: user.locale),
-              with: attachments(:workflow_execution_group_shared_output_attachment).file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]')
+        .set(attachments(:workflow_execution_group_shared_output_attachment).file.filename.to_s)
+      find('input[data-test-selector="search-field-input"]').send_keys(:enter)
 
       within 'tbody' do
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid

@@ -284,7 +284,7 @@ class SearchComponentTest < ViewComponent::TestCase
 
     # Check for search field component
     assert_selector 'input[type="search"]', count: 1
-    assert_selector 'input[placeholder]', count: 1
+    assert_selector 'input[data-test-selector="search-field-input"]', count: 1
   end
 
   test 'renders with different search attributes' do
@@ -296,7 +296,6 @@ class SearchComponentTest < ViewComponent::TestCase
         url: @url,
         search_attribute: attr,
         label: @label,
-        placeholder: @placeholder,
         total_count: @total_count,
         value: @value
       )
@@ -319,7 +318,6 @@ class SearchComponentTest < ViewComponent::TestCase
         url: url,
         search_attribute: @search_attribute,
         label: @label,
-        placeholder: @placeholder,
         total_count: @total_count,
         value: @value
       )
@@ -388,7 +386,6 @@ class SearchComponentTest < ViewComponent::TestCase
     assert_equal @url, component.instance_variable_get(:@url)
     assert_equal @search_attribute, component.instance_variable_get(:@search_attribute)
     assert_equal @label, component.instance_variable_get(:@label)
-    assert_equal @placeholder, component.instance_variable_get(:@placeholder)
     assert_equal @total_count, component.instance_variable_get(:@total_count)
     assert_nil component.instance_variable_get(:@value)
   end
@@ -424,7 +421,6 @@ class SearchComponentTest < ViewComponent::TestCase
 
     # Verify the search field component is rendered with correct attributes
     assert_selector 'input[type="search"]', count: 1
-    assert_selector 'input[placeholder]', count: 1
     assert_selector 'label[for]', count: 1
   end
 
@@ -457,20 +453,5 @@ class SearchComponentTest < ViewComponent::TestCase
     input_id = "q_#{@search_attribute}"
     assert_selector "label[for='#{input_id}']", count: 1
     assert_selector "input[id='#{input_id}']", count: 1
-  end
-
-  # Placeholder and Value Tests
-  test 'input has correct placeholder and value' do
-    test_value = 'test value'
-    render_inline SearchComponent.new(
-      query: @query,
-      url: @url,
-      search_attribute: @search_attribute,
-      label: @label,
-      total_count: @total_count,
-      value: test_value
-    )
-
-    assert_selector "input[value='#{test_value}']", count: 1
   end
 end
