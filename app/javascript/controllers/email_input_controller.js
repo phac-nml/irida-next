@@ -19,6 +19,9 @@ export default class extends Controller {
     // Initialize field state
     this.isSubmitting = false;
 
+    // Validate required Stimulus values
+    this.#validateRequiredValues();
+
     // Set up debounced validation for typing
     this.debouncedValidate = _.debounce(
       () => this.validateEmail(false, false),
@@ -167,5 +170,18 @@ export default class extends Controller {
     }
 
     return true;
+  }
+
+  /**
+   * Validates that required Stimulus values are provided
+   * @throws {Error} If a required value is missing
+   */
+  #validateRequiredValues() {
+    if (this.emailMissingValue === undefined) {
+      throw new Error("email-missing value is required");
+    }
+    if (this.emailFormatValue === undefined) {
+      throw new Error("email-format value is required");
+    }
   }
 }
