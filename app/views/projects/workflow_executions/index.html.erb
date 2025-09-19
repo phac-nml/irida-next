@@ -40,12 +40,8 @@
     <% end %>
   <% end %>
 <% end %>
-<div
-  class="
-    flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
-  "
->
-  <div class="inline-flex grow @xl:grow-0 space-x-2">
+<div class=" flex flex-col @xl:flex-row @lg:justify-between gap-3 mb-2 ">
+  <div class="inline-flex grow @xl:grow-0 gap-3">
     <%= form_with(
                   url: select_namespace_project_workflow_executions_url,
                   method: :get,
