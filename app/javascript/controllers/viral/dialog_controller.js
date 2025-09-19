@@ -9,6 +9,10 @@ export default class extends Controller {
   #focusTrap = null;
   #trigger = null;
 
+  triggerTargetConnected() {
+    this.#trigger = this.triggerTarget;
+  }
+
   connect() {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {
       onActivate: () => this.dialogTarget.classList.add("focus-trap"),
@@ -20,6 +24,7 @@ export default class extends Controller {
     } else {
       this.restoreFocusState();
     }
+
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -27,7 +32,7 @@ export default class extends Controller {
     this.#focusTrap.deactivate();
     if (this.openValue) {
       this.close();
-      if (this.hasTriggerTarget) {
+      if (this.#trigger) {
         // re-add refocusTrigger on save
         // (this is so that turbo page loads that replace the open dialog with a closed one will refocus the trigger)
         savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
@@ -38,7 +43,7 @@ export default class extends Controller {
   open() {
     this.element.setAttribute("data-turbo-permanent", "");
     this.openValue = true;
-    if (this.hasTriggerTarget) {
+    if (this.#trigger) {
       // once a dialog has been opened we need to save it to the state to refocus the trigger if the controller is disconnected before close
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
     }

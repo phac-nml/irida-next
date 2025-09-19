@@ -26,32 +26,8 @@ module MetadataTemplates
       }
     end
 
-    def row_arguments(metadata_template)
-      { tag: 'tr' }.tap do |args|
-        args[:classes] =
-          class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'border-slate-200 dark:border-slate-700')
-        args[:id] = dom_id(metadata_template)
-      end
-    end
-
     def render_cell(**arguments, &)
       render(Viral::BaseComponent.new(**arguments), &)
-    end
-
-    def edit_path(metadata_template)
-      if @namespace.group_namespace?
-        edit_group_metadata_template_path(@namespace, metadata_template)
-      else
-        edit_namespace_project_metadata_template_path(@namespace.parent, @namespace.project, metadata_template)
-      end
-    end
-
-    def individual_path(metadata_template)
-      if @namespace.group_namespace?
-        group_metadata_template_path(@namespace, metadata_template)
-      else
-        namespace_project_metadata_template_path(@namespace.parent, @namespace.project, metadata_template)
-      end
     end
 
     private
