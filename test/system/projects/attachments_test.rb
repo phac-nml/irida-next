@@ -223,9 +223,8 @@ module Projects
       assert_text 'Displaying 1-2 of 2 items'
       assert_selector 'table tbody tr', count: 2
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
-              with: @attachment1.file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@attachment1.file.filename.to_s)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -237,9 +236,8 @@ module Projects
         assert_no_text @attachment2.file.filename.to_s
       end
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
-              with: @attachment2.puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@attachment2.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -360,9 +358,8 @@ module Projects
       assert_no_text I18n.t('projects.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       assert_no_text I18n.t('projects.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
-              with: 'fastq.gz'
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('fastq.gz')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector '#attachments-table table tbody tr', count: 2
       assert_text 'Displaying 1-2 of 2 items'
@@ -383,9 +380,8 @@ module Projects
       assert_text 'Displaying 1-2 of 2 items'
       assert_selector 'table tbody tr', count: 2
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
-              with: 'filter that results in no attachments'
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('filter that results in no attachments')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_no_selector 'table'
 

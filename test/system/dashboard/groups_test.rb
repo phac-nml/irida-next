@@ -194,21 +194,21 @@ module Dashboard
     test 'can search for a group by name or puid' do
       visit dashboard_groups_url
 
-      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group a'
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('group a')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text groups(:group_a).name
       assert_no_text groups(:group_b).name
 
-      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: groups(:group_b).puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(groups(:group_b).puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_no_text groups(:group_a).name
       assert_text groups(:group_b).name
 
       #   Test empty state
-      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('z6z6z6')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
       assert_text I18n.t(:'components.viral.pagy.empty_state.title')
       assert_text I18n.t(:'components.viral.pagy.empty_state.description')
     end
@@ -231,8 +231,8 @@ module Dashboard
         end
       end
 
-      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group'
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('group')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       within('#groups_tree') do
         assert_text group1.name

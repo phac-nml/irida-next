@@ -280,9 +280,8 @@ module Groups
       assert_text 'Displaying 2 items'
       assert_selector 'table tbody tr', count: 2
 
-      fill_in placeholder: I18n.t(:'groups.group_links.invited_groups.search.placeholder'),
-              with: @group_link5.group.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@group_link5.group.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1

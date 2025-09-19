@@ -506,8 +506,9 @@ class GroupsTest < ApplicationSystemTestCase
     @group = groups(:group_one)
     visit group_url(@group)
     assert_text I18n.t(:'components.viral.pagy.pagination_component.next')
-    fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
-    find('input.t-search-component').native.send_keys(:return)
+
+    find('[data-test-selector="search-field-input"]').set('project 2')
+    find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
     assert_selector 'div.treegrid-row', count: 5
   end
@@ -535,8 +536,8 @@ class GroupsTest < ApplicationSystemTestCase
       assert_no_text subgroup12aa.name
     end
 
-    fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
-    find('input.t-search-component').native.send_keys(:return)
+    find('[data-test-selector="search-field-input"]').set('subgroup')
+    find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 3

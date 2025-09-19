@@ -412,9 +412,8 @@ module Projects
         assert_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
-              with: @workflow_execution1.id
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@workflow_execution1.id)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -426,16 +425,14 @@ module Projects
         assert_no_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
-              with: ''
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(' ')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
-              with: @workflow_execution2.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@workflow_execution2.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -537,8 +534,8 @@ module Projects
         assert_text I18n.t('components.attachments.table_component.preview')
       end
 
-      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(attachment.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       within 'tbody' do
         assert_text attachment.puid
@@ -546,8 +543,8 @@ module Projects
         assert_text I18n.t('components.attachments.table_component.preview')
       end
 
-      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(attachment.file.filename.to_s)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       within 'tbody' do
         assert_text attachment.puid

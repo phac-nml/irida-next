@@ -78,8 +78,8 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector '.treegrid-row', count: 20
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      click_button I18n.t(:'dashboard.projects.index.search.label')
+      find('[data-test-selector="search-field-input"]').set(@project.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
                                                                                       locale: @user.locale))
@@ -100,8 +100,8 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector '.treegrid-row', count: 20
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
-      click_button I18n.t(:'dashboard.projects.index.search.label')
+      find('[data-test-selector="search-field-input"]').set(@project.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
@@ -141,8 +141,9 @@ module Dashboard
         assert_text @project.human_name
       end
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
+
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
@@ -179,8 +180,8 @@ module Dashboard
         assert_text projects(:projectHotel).human_name
       end
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
@@ -302,8 +303,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project.namespace.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text @project.namespace.name
       assert_equal 4, @project.reload.samples.size
@@ -348,8 +349,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project.namespace.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text @project.namespace.name
       assert_no_text @project2.namespace.name
@@ -360,8 +361,8 @@ module Dashboard
         assert_text @project.samples.size.to_s
       end
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project2.namespace.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text @project2.namespace.name
       assert_no_text @project.namespace.name
@@ -409,8 +410,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project.namespace.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text @project.namespace.name
       assert_no_text @project2.namespace.name
@@ -421,8 +422,8 @@ module Dashboard
         assert_text @project.samples.size.to_s
       end
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@project2.namespace.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_text @project2.namespace.name
       assert_no_text @project.namespace.name
