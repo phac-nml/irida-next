@@ -134,10 +134,6 @@ fr:
               taken: L’espace de noms a déjà été partagé avec ce groupe
             namespace_type:
               inclusion: Ne peut être qu’un groupe ou un projet
-        personal_access_token:
-          attributes:
-            scopes:
-              inclusion: Ne peut contenir que les portées disponibles
         user:
           attributes:
             password:
@@ -1828,12 +1824,6 @@ fr:
       destroy:
         associated_att_does_not_belong_to_attachable: Cette pièce jointe n’appartient pas à l’échantillon.
         does_not_belong_to_attachable: Cette pièce jointe n’appartient pas à cet échantillon.
-    bots:
-      create:
-        required:
-          access_level: Impossible de créer un compte de bot, car un niveau d’accès doit être sélectionné
-          scopes: Impossible de créer un compte de bot, car la portée de l’API du bot doit être sélectionnée
-          token_name: Impossible de créer un compte de bot, car le nom du jeton est requis
     data_exports:
       create:
         invalid_export_samples: Impossible de créer une exportation en raison des autorisations d’échantillonnage ou d’échantillons introuvables.
@@ -1857,11 +1847,6 @@ fr:
       update:
         cannot_update_self: Vous ne pouvez pas mettre à jour votre propre rôle %{namespace_type}
         role_not_allowed: Un responsable ne peut mettre à jour le rôle d’un membre que jusqu’au rôle de responsable
-    personal_access_tokens:
-      create:
-        required:
-          scopes: Impossible de générer un jeton d’accès personnel puisque la portée de l’API doit être sélectionnée
-          token_name: Impossible de générer un jeton d’accès personnel puisque le nom est requis
     projects:
       create:
         namespace_required: Espace de noms requis

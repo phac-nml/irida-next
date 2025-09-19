@@ -35,7 +35,7 @@
         <% if invalid_token_name %>
           <%= render "shared/form/field_errors",
           id: f.field_id(:name, "error"),
-          errors: personal_access_token.errors[:name] %>
+          errors: personal_access_token.errors.full_messages_for(:name) %>
         <% end %>
       </div>
       <div class="form-field">
@@ -86,7 +86,7 @@
         <% if invalid_scopes %>
           <%= render "shared/form/field_errors",
           id: f.field_id(:scopes, "error"),
-          errors: personal_access_token.errors[:scopes] %>
+          errors: personal_access_token.errors.full_messages_for(:scopes) %>
         <% end %>
       </div>
       <div class="my-2">
