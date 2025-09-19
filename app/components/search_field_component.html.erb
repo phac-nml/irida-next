@@ -1,17 +1,22 @@
 <%= render Viral::BaseComponent.new(tag: :div, **system_arguments) do %>
-  <%= @form.label @field_name, @label, class: "sr-only" %>
   <div class="relative">
-    <%= @form.search_field @field_name,
-                       "data-search-field-target": "input",
-                       "data-test-selector":
-                         !Rails.env.production? ? "search-field-input" : nil,
-                       class:
-                         "t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-300 dark:text-white",
-                       aria: {
-                         label: t("components.search_field_component.instructions"),
-                       },
-                       placeholder: @placeholder,
-                       value: @value %>
+    <div class="relative"><%= @form.search_field @field_name,
+                         "data-search-field-target": "input",
+                         "data-test-selector":
+                           !Rails.env.production? ? "search-field-input" : nil,
+                         class:
+                           "t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-white dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-300 dark:text-white peer",
+                         aria: {
+                           label: t("components.search_field_component.instructions"),
+                         },
+                         placeholder: " ",
+                         value: @value %>
+      <%= @form.label @field_name,
+                  @placeholder,
+                  class:
+                    "absolute cursor-text text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-4 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1" %>
+
+    </div>
     <!-- Clear button (shown only when there are existing search results) -->
     <button
       type="button"
