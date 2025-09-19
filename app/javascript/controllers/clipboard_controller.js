@@ -19,16 +19,19 @@ export default class extends Controller {
 
   #tooltip;
 
-  /**
-   * @description Initializes the clipboard controller.
-   * @returns {void}
-   */
-  connect() {
+  contentTargetConnected() {
     if (this.hasButtonTarget && this.hasContentTarget) {
       this.#tooltip = new Tooltip(this.contentTarget, this.buttonTarget, {
         placement: "top",
         triggerType: "none",
       });
+    }
+  }
+
+  contentTargetDisconnected() {
+    if (this.#tooltip) {
+      this.#tooltip.dispose();
+      this.#tooltip = null;
     }
   }
 
