@@ -211,8 +211,8 @@ module Groups
         assert_text @sample2.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('Sample 1')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -292,8 +292,8 @@ module Groups
         assert_text @sample1.puid
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('Sample 1')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -330,8 +330,8 @@ module Groups
         assert_text @sample1.puid
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@sample1.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -369,8 +369,8 @@ module Groups
         assert_text @sample2.puid
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@sample1.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -452,8 +452,8 @@ module Groups
         assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set('Sample 1')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -499,8 +499,8 @@ module Groups
         assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      click_button I18n.t('components.search_field_component.search_button')
+      find('[data-test-selector="search-field-input"]').set(@sample1.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
       assert_selector 'input[data-test-selector="search-field-input"]', focused: true
 
       if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
@@ -847,8 +847,8 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@sample1.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -871,8 +871,8 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(' ')
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1321,8 +1321,8 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@sample1.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1381,8 +1381,8 @@ module Groups
         assert_selector 'th', count: 10
       end
 
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(@sample28.name)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1627,8 +1627,8 @@ module Groups
         end
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: sample.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('[data-test-selector="search-field-input"]').set(sample.puid)
+      find('[data-test-selector="search-field-input"]').send_keys(:enter)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'

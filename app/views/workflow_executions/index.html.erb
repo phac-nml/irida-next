@@ -36,7 +36,7 @@
 <% end %>
 <div
   class="
-    flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
+    flex flex-col @xl:flex-row @lg:justify-between gap-3 @lg:space-x-2 mb-2
   "
 >
   <div class="inline-flex grow @xl:grow-0 space-x-2">
@@ -66,7 +66,6 @@
       url: workflow_executions_path,
       search_attribute: :name_or_id_cont,
       label: t(".search.label"),
-      placeholder: t(".search.placeholder"),
       value: @q.name_or_id_cont,
       total_count: @pagy.count,
       search_field_arguments: {

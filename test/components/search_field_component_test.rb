@@ -5,7 +5,6 @@ require 'test_helper'
 class SearchFieldComponentTest < ViewComponent::TestCase
   setup do
     @label = 'Search by email'
-    @placeholder = 'Enter email address'
     @field_name = :user_email_cont
     @value = nil
 
@@ -18,7 +17,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     def initialize(field_name, label, placeholder, value)
       @field_name = field_name
       @label = label
-      @placeholder = placeholder
       @value = value
     end
 
@@ -40,7 +38,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'renders search field with correct structure' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -54,7 +51,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'renders with all required parameters' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -69,7 +65,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     custom_value = 'test@example.com'
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: custom_value
@@ -81,7 +76,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'renders with nil value' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -94,7 +88,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'shows clear button when value is present' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -109,7 +102,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'hides clear button when value is nil' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -122,7 +114,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'hides clear button when value is empty string' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: ''
@@ -135,7 +126,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'hides clear button when value is whitespace only' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: '   '
@@ -149,7 +139,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'shows submit button when value is nil' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -163,7 +152,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'shows submit button when value is empty string' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: ''
@@ -177,7 +165,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'hides submit button when value is present' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -191,7 +178,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear button has correct attributes and actions' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -208,7 +194,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'submit button has correct attributes and actions' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -225,7 +210,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has proper accessibility attributes' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -238,7 +222,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear button is accessible' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -253,7 +236,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'submit button is accessible' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -269,7 +251,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear_button? method returns true for present values' do
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -281,7 +262,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear_button? method returns false for nil values' do
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -293,7 +273,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear_button? method returns false for empty string values' do
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: ''
@@ -305,7 +284,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'clear_button? method returns false for whitespace only values' do
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: '   '
@@ -319,7 +297,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     long_value = 'a' * 1000
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: long_value
@@ -335,7 +312,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     special_chars = 'test@example.com & special/chars <>'
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: special_chars
@@ -351,7 +327,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     unicode_chars = 'café résumé naïve'
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: unicode_chars
@@ -367,7 +342,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'initializes with all required parameters' do
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -384,7 +358,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     custom_value = 'custom@example.com'
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: custom_value
@@ -400,27 +373,8 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     different_field_names.each do |field_name|
       render_inline SearchFieldComponent.new(
         label: @label,
-        placeholder: @placeholder,
         form: @mock_form,
         field_name: field_name,
-        value: @value
-      )
-
-      assert_selector 'div[data-controller="search-field"]', count: 1
-    end
-  end
-
-  # Different Labels and Placeholders Tests
-  test 'renders with different labels and placeholders' do
-    different_labels = ['Search by name', 'Search by ID', 'Search by description']
-    different_placeholders = ['Enter name', 'Enter ID', 'Enter description']
-
-    different_labels.each_with_index do |label, index|
-      render_inline SearchFieldComponent.new(
-        label: label,
-        placeholder: different_placeholders[index],
-        form: @mock_form,
-        field_name: @field_name,
         value: @value
       )
 
@@ -433,7 +387,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Test with nil value
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: nil
@@ -444,7 +397,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Test with empty string
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: ''
@@ -455,7 +407,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Test with whitespace
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: '   '
@@ -466,7 +417,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     # Test with actual value
     component = SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: 'test@example.com'
@@ -496,7 +446,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has correct CSS classes for styling' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -511,7 +460,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has correct data attributes for Stimulus' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -529,7 +477,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'renders icons for buttons' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -544,7 +491,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has responsive design classes' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -559,7 +505,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'supports dark mode styling' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -573,7 +518,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has hover effects for buttons' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
@@ -588,7 +532,6 @@ class SearchFieldComponentTest < ViewComponent::TestCase
   test 'has transition effects for buttons' do
     render_inline SearchFieldComponent.new(
       label: @label,
-      placeholder: @placeholder,
       form: @mock_form,
       field_name: @field_name,
       value: @value
