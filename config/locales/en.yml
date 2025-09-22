@@ -722,7 +722,6 @@ en:
             cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
             expires_at: Token Expiration Date (optional)
-            name: Token Name
             submit: Submit
             title: New Personal Access Token
           new_bot_modal:
@@ -1334,7 +1333,6 @@ en:
             cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
             expires_at: Token Expiration Date (optional)
-            name: Token Name
             submit: Submit
             title: New Personal Access Token
           new_bot_modal:

@@ -724,7 +724,6 @@ fr:
             cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
             expires_at: Date d’expiration du jeton (facultatif)
-            name: Nom du jeton
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
@@ -1338,7 +1337,6 @@ fr:
             cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
             expires_at: Date d’expiration du jeton (facultatif)
-            name: Nom du jeton
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
