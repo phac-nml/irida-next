@@ -22,12 +22,9 @@ module BotActions
   def new
     authorize! @namespace, to: :create_bot_accounts?
 
-    # @new_bot_account = User.new(first_name: @namespace.type, last_name: 'Bot')
     @bot_account = NamespaceBot.new(namespace: @namespace,
                                     user_attributes:
-                                    { first_name: @namespace.type,
-                                      last_name: 'Bot',
-                                      members_attributes: [{ namespace: @namespace }],
+                                    { members_attributes: [{ namespace: @namespace }],
                                       personal_access_tokens_attributes: [{ name: '', scopes: [] }] })
 
     respond_to do |format|
@@ -86,6 +83,13 @@ module BotActions
   end
 
   private
+
+  def bot_params
+    params.expect(namespace_bot: [{ user_attributes: [
+                    { members_attributes: [%i[access_level]] },
+                    { personal_access_tokens_attributes: [[:name, :expires_at, { scopes: [] }]] }
+                  ] }])
+  end
 
   def view_authorizations
     @allowed_to = {

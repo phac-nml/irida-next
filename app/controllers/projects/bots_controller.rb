@@ -10,15 +10,6 @@ module Projects
     before_action :current_page
     before_action :page_title
 
-    private
-
-    def bot_params
-      params.expect(namespace_bot: [{ user_attributes: [
-                      :first_name, :last_name, { members_attributes: [%i[access_level namespace]] },
-                      { personal_access_tokens_attributes: [[:name, :expires_at, { scopes: [] }]] }
-                    ] }])
-    end
-
     protected
 
     def namespace
