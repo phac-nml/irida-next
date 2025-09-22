@@ -6,7 +6,7 @@ module Pathogen
   # Utilizes Turbo Drive for seamless navigation between sections.
   class TabsPanel < Pathogen::Component
     # 🔧 Default HTML tag for the component's root element.
-    TAG_DEFAULT = :nav
+    TAG_DEFAULT = :div
 
     # 💅 Default CSS classes for the root <nav> element.
     SYSTEM_DEFAULT_CLASSES = 'w-full'
