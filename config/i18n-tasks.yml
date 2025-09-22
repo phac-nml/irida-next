@@ -152,6 +152,8 @@ search:
 ignore_missing:
   en:
     - "helpers.submit.*.create"
+    - "local_time"
+    - "local_time.*"
 
 ## Consider these keys used:
 ignore_unused:
