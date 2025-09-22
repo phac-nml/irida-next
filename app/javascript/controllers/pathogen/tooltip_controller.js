@@ -13,4 +13,8 @@ export default class extends Controller {
       triggerType: ["hover", "focus"],
     });
   }
+
+  targetTargetDisconnected () {
+    this.targetTarget.destroy();
+  }
 }

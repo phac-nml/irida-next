@@ -30,7 +30,7 @@ export default class extends Controller {
 
   contentTargetDisconnected() {
     if (this.#tooltip) {
-      this.#tooltip.dispose();
+      this.#tooltip.destroy();
       this.#tooltip = null;
     }
   }
