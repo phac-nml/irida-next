@@ -28,6 +28,11 @@
           "
           value="<%= selected_value %>"
           data-action="input->viral--select2#input"
+          <% if aria.present? %>
+            <% aria.each do |key, value| %>
+              <%= "aria-#{key}=#{value}" %>
+            <% end %>
+          <% end %>
         >
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
