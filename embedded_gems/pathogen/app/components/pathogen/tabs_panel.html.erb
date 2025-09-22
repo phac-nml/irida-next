@@ -1,6 +1,6 @@
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
   <%# Parent flex container: draws border on sm+ screens %>
-  <div
+  <nav
     class="
       flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200
       sm:dark:border-slate-700
@@ -33,7 +33,7 @@
         <%= right_content %>
       </div>
     <% end %>
-  </div>
+  </nav>
 
   <section id="<%= "#{@id}-content" %>" class="mt-4">
     <%= content %>
