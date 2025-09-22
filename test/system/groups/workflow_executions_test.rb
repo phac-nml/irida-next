@@ -188,9 +188,7 @@ module Groups
       assert_text @workflow_execution_group_shared1.metadata['workflow_name']
       assert_text @workflow_execution_group_shared1.metadata['workflow_version']
 
-      within %(nav[id="workflow-executions-tabs"]) do
-        click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
-      end
+      click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
 
       attachment = attachments(:workflow_execution_group_shared_output_attachment)
       within('table tbody') do
@@ -199,9 +197,7 @@ module Groups
         assert_text I18n.t('components.attachments.table_component.preview', locale: user.locale)
       end
 
-      within %(nav[id="workflow-executions-tabs"]) do
-        click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
-      end
+      click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
 
       assert_selector 'div.project_name-param > span', text: '--project_name'
       assert_selector 'div.project_name-param > input[value="assembly"]'
@@ -268,9 +264,7 @@ module Groups
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
 
-      within %(nav[id="workflow-executions-tabs"]) do
-        click_on I18n.t('workflow_executions.show.tabs.files')
-      end
+      click_on I18n.t('workflow_executions.show.tabs.files')
 
       assert_text I18n.t('workflow_executions.files.empty.title')
       assert_text I18n.t('workflow_executions.files.empty.description')

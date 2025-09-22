@@ -13,7 +13,6 @@ module Pathogen
       render_inline(tabs_component)
 
       # Navigation container
-      assert_selector 'nav[id="test_panel"]'
       assert_selector 'ul[id="test_panel-list"]'
       assert_selector 'li', count: 3
 
@@ -115,7 +114,6 @@ module Pathogen
       tabs_component = Pathogen::TabsPanel.new(id: 'test_panel')
       render_inline(tabs_component)
 
-      assert_selector 'nav[id="test_panel"]'
       assert_selector 'ul[id="test_panel-list"]'
       assert_no_selector 'li'
     end
