@@ -15,7 +15,7 @@ module Bots
 
       bot_text = is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
 
-      set_default_params(bot_text)
+      set_default_params(bot_text, bot_type, current_count)
     end
 
     def execute
@@ -26,7 +26,7 @@ module Bots
 
     private
 
-    def set_default_params(bot_text) # rubocop:disable Metrics/AbcSize,Naming/AccessorMethodName
+    def set_default_params(bot_text, bot_type, current_count) # rubocop:disable Metrics/AbcSize
       @params[:namespace] = namespace
       @params[:user_attributes] ||= {}
       @params[:user_attributes].merge!({
@@ -37,7 +37,7 @@ module Bots
                                        })
       @params[:user_attributes][:members_attributes] ||= {}
       @params[:user_attributes][:members_attributes][:'0'] ||= {}
-      @params[:user_attributes][:members_attributes][:'0'].merge!({ created_by: user, namespace: namespace })
+      @params[:user_attributes][:members_attributes][:'0'].merge!({ created_by: current_user, namespace: namespace })
     end
   end
 end
