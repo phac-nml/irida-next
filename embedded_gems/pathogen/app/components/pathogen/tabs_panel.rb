@@ -6,7 +6,7 @@ module Pathogen
   # Utilizes Turbo Drive for seamless navigation between sections.
   class TabsPanel < Pathogen::Component
     # 🔧 Default HTML tag for the component's root element.
-    TAG_DEFAULT = :nav
+    TAG_DEFAULT = :div
 
     # 💅 Default CSS classes for the root <nav> element.
     SYSTEM_DEFAULT_CLASSES = 'w-full'
@@ -26,15 +26,31 @@ module Pathogen
     # @param options [Hash] Configuration options for the tab.
     # @option options [Boolean] :selected (false) Whether the tab is currently selected.
     # @option options [String] :href The URL the tab links to.
+    # @option options [String] :id Unique identifier for the tab (auto-generated if not provided).
     # @return [Pathogen::TabsPanel::Tab] A new tab instance.
     renders_many :tabs, lambda { |options = {}|
-      Pathogen::TabsPanel::Tab.new(
-        options.merge(
-          selected: options[:selected] || false,
-          tab_type: 'underline', # Assumes Tab component handles its specific underline style
-          href: options[:href]
-        )
+      tab_id = options[:id] || "#{@id}-tab-#{@tab_counter}"
+      @tab_counter += 1
+
+      # Track selected tab for aria-labelledby
+      @selected_tab_id = tab_id if options[:selected]
+
+      # Build system_arguments for the Tab component
+      system_arguments = (options[:system_arguments] || {}).merge(
+        role: 'tab',
+        'aria-selected': options[:selected] || false,
+        'aria-controls': "#{@id}-panel-#{tab_id.split('-').last}"
       )
+
+      tab_options = options.merge(
+        selected: options[:selected] || false,
+        tab_type: 'underline',
+        href: options[:href],
+        id: tab_id,
+        system_arguments: system_arguments
+      )
+
+      Pathogen::TabsPanel::Tab.new(tab_options)
     }
 
     # 🎨 Renders optional content aligned to the right of the tabs.
@@ -50,8 +66,9 @@ module Pathogen
       raise ArgumentError, 'id is required' if id.blank?
 
       @id = id
+      @tab_counter = 0
+      @selected_tab_id = nil
       @system_arguments = system_arguments
-      @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
       @label = label
 
@@ -64,12 +81,20 @@ module Pathogen
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      # id is now guaranteed to be present by the initializer
-      @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
         @system_arguments[:class]
       )
+
+      # Store nav-specific attributes separately
+      @nav_attributes = {
+        id: @id,
+        class: class_names(
+          SYSTEM_DEFAULT_CLASSES,
+          'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700'
+        )
+      }
+      @nav_attributes[:'aria-label'] = @label if @label.present?
     end
 
     # 🏗️ Configures HTML attributes for the <ul> list container.
@@ -80,12 +105,15 @@ module Pathogen
       custom_classes_provided = @body_arguments[:classes].present?
       @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
 
-      @body_arguments[:id] = "#{@system_arguments[:id]}-list"
+      @body_arguments[:id] = "#{@id}-list"
+      @body_arguments[:role] = 'tablist'
       # Merge data attributes, preserving existing ones.
       @body_arguments[:data] = {
-        # Ensure this still works as expected, @system_arguments[:id] is now directly set
-        tabs_list_id_value: @system_arguments[:id]
+        tabs_list_id_value: @id
       }.merge(@body_arguments[:data] || {})
     end
+
+    # 🔍 Returns the ID of the currently selected tab for aria-labelledby
+    attr_reader :selected_tab_id, :nav_attributes
   end
 end

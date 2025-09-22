@@ -1,11 +1,6 @@
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
   <%# Parent flex container: draws border on sm+ screens %>
-  <div
-    class="
-      flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200
-      sm:dark:border-slate-700
-    "
-  >
+  <nav<% nav_attributes.each do |key, value| %> <%= key %>="<%= value %>"<% end %>>
 
     <%# Tabs List (ul) %>
     <%# - sm:border-b-0: Removes its own border on sm+ screens (parent div has it) %>
@@ -33,9 +28,9 @@
         <%= right_content %>
       </div>
     <% end %>
-  </div>
+  </nav>
 
-  <section id="<%= "#{@id}-content" %>" class="mt-4">
+  <section id="<%= "#{@id}-content" %>" class="mt-4" role="tabpanel"<% if selected_tab_id %> aria-labelledby="<%= selected_tab_id %>"<% end %>>
     <%= content %>
   </section>
 <% end %>
