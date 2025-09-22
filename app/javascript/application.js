@@ -111,6 +111,12 @@ document.addEventListener("turbo:morph", () => {
   }
 });
 
+document.addEventListener("turbo:morph-element", (event) => {
+  if (event.target.nodeName === "TIME") {
+    LocalTime.process(event.target);
+  }
+});
+
 Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
