@@ -200,6 +200,8 @@ module Projects
       within(table_row) do
         assert_text 'Project Template011'
       end
+
+      assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), focused: true
     end
 
     test 'cannot create a template with no fields selected' do
@@ -529,6 +531,7 @@ module Projects
 
       within(table_row) do
         assert_text 'Project Template011'
+        assert_selector 'button', text: I18n.t('metadata_templates.table_component.edit_button'), focused: true
       end
     end
   end
