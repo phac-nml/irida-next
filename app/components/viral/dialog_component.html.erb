@@ -1,7 +1,7 @@
 <%= render Viral::BaseComponent.new(tag: :div, data: {
   controller: "viral--dialog",
   "viral--dialog-open-value": open
-}, id: "test_me") do %>
+}, classes: ["dialog"]) do %>
 
   <% if trigger.present? %>
     <%= trigger %>
