@@ -5,11 +5,6 @@ import "flowbite";
 
 import * as ActiveStorage from "@rails/activestorage";
 
-// import LocalTime from "local-time";
-
-// LocalTime.config.locale = document.documentElement.lang;
-// console.log("hello");
-// LocalTime.start();
 ActiveStorage.start();
 
 function isElementInViewport(el) {
