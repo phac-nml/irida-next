@@ -9,7 +9,7 @@
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-  <%= turbo_stream.replace @metadata_template do %>
+  <%= turbo_stream.replace @metadata_template, method: :morph do %>
     <%= render MetadataTemplates::RowComponent.new(
       @metadata_template,
       @namespace,
