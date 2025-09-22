@@ -5,15 +5,8 @@
       "data one with a very very very very very very very very very very very very very very very very very very long name",
     pill: "green",
     date: DateTime.new(2024, 01, 01),
-    time_ago_date: (DateTime.now - (1 / 1440.0)),
   },
-  {
-    id: 2,
-    name: "data two",
-    pill: "blue",
-    date: DateTime.new(2022, 07, 15),
-    time_ago_date: (DateTime.now - (1 / 24.0)),
-  },
+  { id: 2, name: "data two", pill: "blue", date: DateTime.new(2022, 07, 15) },
 ] %>
 
 <%= viral_data_table(table_data, id: 'preview_table') do |table| %>
@@ -32,9 +25,6 @@
   <% end %>
   <% table.with_column("date") do |row| %>
     <%= local_date(row[:date], :long) %>
-  <% end %>
-  <% table.with_column("time ago") do |row| %>
-    <%= local_time_ago(row[:time_ago_date]) %>
   <% end %>
   <% table.with_column(I18n.t('workflow_executions.files.table_header.actions'), sticky_key: :right) do |row| %>
     <%= link_to(
