@@ -11,10 +11,22 @@ module Bots
 
       current_count = @namespace.namespace_bots.with_deleted.count
 
-      @is_automation_bot = HasUserType::AUTOMATION_BOT_USER_TYPES.include?(bot_type)
+      is_automation_bot = HasUserType::AUTOMATION_BOT_USER_TYPES.include?(bot_type)
 
-      bot_text = @is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
+      bot_text = is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
 
+      set_default_params(bot_text)
+    end
+
+    def execute
+      authorize! namespace, to: :create_bot_accounts?
+
+      NamespaceBot.create(params)
+    end
+
+    private
+
+    def set_default_params(bot_text) # rubocop:disable Metrics/AbcSize,Naming/AccessorMethodName
       @params[:namespace] = namespace
       @params[:user_attributes] ||= {}
       @params[:user_attributes].merge!({
@@ -26,12 +38,6 @@ module Bots
       @params[:user_attributes][:members_attributes] ||= {}
       @params[:user_attributes][:members_attributes][:'0'] ||= {}
       @params[:user_attributes][:members_attributes][:'0'].merge!({ created_by: user, namespace: namespace })
-    end
-
-    def execute
-      authorize! namespace, to: :create_bot_accounts?
-
-      NamespaceBot.create(params)
     end
   end
 end
