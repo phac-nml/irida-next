@@ -28,6 +28,8 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:morph", () => {
+  LocalTime.config.locale = document.documentElement.lang;
+  LocalTime.run();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
