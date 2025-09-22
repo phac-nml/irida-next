@@ -101,10 +101,7 @@ end %>
                        required: true,
                        title: t(:"projects.new.help"),
                        aria: {
-                         describedby: [
-                           invalid_path ? builder.field_id(:path, "error") : nil,
-                           builder.field_id(:path, "hint"),
-                         ].join(" "),
+                         describedby: invalid_path ? builder.field_id(:path, "error") : builder.field_id(:path, "hint"),
                          invalid: invalid_path,
                          required: true,
                        },
@@ -126,7 +123,7 @@ end %>
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
-                      "aria-described-by" =>
+                      "aria-describedby" =>
                         (
                           if invalid_description
                             builder.field_id(:description, "error")
