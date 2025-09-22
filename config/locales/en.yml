@@ -726,7 +726,6 @@ en:
             submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            access_level: Access Level
             cancel: Cancel
             description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             expires_at: Token Expiration Date (optional)
@@ -734,7 +733,6 @@ en:
             submit: Submit
             title: New Bot Account
             token_details: Token details
-            token_name: Token Name
         personal_access_tokens_listing_modal:
           description: Viewing a list of active personal access tokens for %{bot_account}
           personal_access_token:
@@ -1340,7 +1338,6 @@ en:
             submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            access_level: Access Level
             cancel: Cancel
             description: This will create a bot user with email format 'inxt_prj_PROJECT_PUID_bot_n@iridanext.com', add them as a member to the Project with 'Access level' role, and then create a personal access token for the bot using the details below
             expires_at: Token Expiration Date (optional)
@@ -1348,7 +1345,6 @@ en:
             submit: Submit
             title: New Bot Account
             token_details: Token details
-            token_name: Token Name
         personal_access_tokens_listing_modal:
           description: Viewing a list of active personal access tokens for %{bot_account}
           personal_access_token:

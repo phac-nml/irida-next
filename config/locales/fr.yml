@@ -728,7 +728,6 @@ fr:
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            access_level: Niveau d’accès
             cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             expires_at: Date d’expiration du jeton (facultatif)
@@ -736,7 +735,6 @@ fr:
             submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
-            token_name: Nom du jeton
         personal_access_tokens_listing_modal:
           description: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
           personal_access_token:
@@ -1344,7 +1342,6 @@ fr:
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            access_level: Niveau d’accès
             cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             expires_at: Date d’expiration du jeton (facultatif)
@@ -1352,7 +1349,6 @@ fr:
             submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
-            token_name: Nom du jeton
         personal_access_tokens_listing_modal:
           description: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
           personal_access_token:
