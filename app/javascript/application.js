@@ -5,85 +5,11 @@ import "flowbite";
 
 import * as ActiveStorage from "@rails/activestorage";
 
-import LocalTime from "local-time";
+// import LocalTime from "local-time";
 
-LocalTime.config.locale = document.documentElement.lang;
-LocalTime.config.i18n["fr"] = {
-  date: {
-    dayNames: [
-      "Dimanche",
-      "Lundi",
-      "Mardi",
-      "Mercredi",
-      "Jeudi",
-      "Vendredi",
-      "Samedi",
-    ],
-    abbrDayNames: ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."],
-    monthNames: [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ],
-    abbrMonthNames: [
-      "Janv.",
-      "Févr.",
-      "Mars",
-      "Avr.",
-      "Mai",
-      "Juin",
-      "Juil.",
-      "Août",
-      "Sept.",
-      "Oct.",
-      "Nov.",
-      "Déc.",
-    ],
-    yesterday: "hier",
-    today: "aujourd'hui",
-    tomorrow: "demain",
-    on: "un {date}",
-    formats: {
-      default: "%b %e, %Y",
-      thisYear: "%b %e",
-    },
-  },
-  time: {
-    am: "am",
-    pm: "pm",
-    singular: "une {time}",
-    singularAn: "une {time}",
-    elapsed: "il y a {time}",
-    second: "seconde",
-    seconds: "secondes",
-    minute: "minute",
-    minutes: "minutes",
-    hour: "heure",
-    hours: "heures",
-    formats: {
-      default: "%H:%M",
-      default_24h: "%H:%M",
-    },
-  },
-  datetime: {
-    at: "{date} à {time}",
-    formats: {
-      default: "%B %e, %Y à %H:%M %Z",
-      default_24h: "%B %e, %Y à %H:%M %Z",
-    },
-  },
-};
-
-LocalTime.start();
+// LocalTime.config.locale = document.documentElement.lang;
+// console.log("hello");
+// LocalTime.start();
 ActiveStorage.start();
 
 function isElementInViewport(el) {
@@ -102,9 +28,6 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:morph", () => {
-  LocalTime.config.locale = document.documentElement.lang;
-  LocalTime.run();
-
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
