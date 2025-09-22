@@ -160,6 +160,7 @@ ignore_unused:
   - "activity.*"
   - "components.viral.data_table_component.*"
   - "samples.table_component.namespaces.puid"
+  - "local_time.*"
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
