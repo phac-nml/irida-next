@@ -135,15 +135,12 @@ module Pathogen
         end
       end
 
-      # ID is now auto-generated for ARIA compliance, so no validation error expected
-      # Test that auto-generated IDs work
-      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
-        nav.with_tab(text: 'Home', href: '/home')
+      # Test that tab requires id
+      assert_raises ArgumentError do
+        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+          nav.with_tab(text: 'Home', href: '/home')
+        end
       end
-      render_inline(tabs_component)
-
-      # Should have auto-generated ID
-      assert_selector 'a[id^="test_panel-tab-"]', text: 'Home'
     end
 
     test 'navigation with many items' do

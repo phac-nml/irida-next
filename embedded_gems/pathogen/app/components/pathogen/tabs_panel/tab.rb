@@ -118,8 +118,6 @@ module Pathogen
       def setup_wrapper_attributes
         @wrapper_arguments[:tag] ||= :li
         @wrapper_arguments[:classes] ||= WRAPPER_CLASSES
-        # Add presentation role to remove listitem semantics for ARIA compliance
-        @wrapper_arguments[:role] = 'presentation'
       end
 
       # 🏗️ Sets up visual styling classes
