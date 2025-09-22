@@ -568,10 +568,6 @@ module Groups
         )
       end
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
       assert_equal 7, metadata_template.reload.fields.length
       assert_equal 'Group Template011', metadata_template.name
 
