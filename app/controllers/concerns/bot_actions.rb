@@ -22,7 +22,10 @@ module BotActions
   def new
     authorize! @namespace, to: :create_bot_accounts?
 
-    @new_bot_account = User.new(first_name: @namespace.type, last_name: 'Bot')
+    @bot_account = NamespaceBot.new(namespace: @namespace,
+                                    user_attributes:
+                                    { members_attributes: [{ namespace: @namespace }],
+                                      personal_access_tokens_attributes: [{ name: '', scopes: [] }] })
 
     respond_to do |format|
       format.turbo_stream do
@@ -31,23 +34,20 @@ module BotActions
     end
   end
 
-  def create # rubocop:disable Metrics/MethodLength
-    @new_bot_account = Bots::CreateService.new(current_user, @namespace, @bot_type, bot_params).execute
+  def create
+    @bot_account = Bots::CreateService.new(current_user, @namespace, @bot_type, bot_params).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @new_bot_account[:bot_user_account].persisted?
+        if @bot_account.persisted?
           render status: :ok, locals: {
             type: 'success',
             message: t('concerns.bot_actions.create.success'),
-            personal_access_token: @new_bot_account[:personal_access_token]
+            personal_access_token: @bot_account.user.personal_access_tokens[0]
           }
         else
           render status: :unprocessable_entity,
-                 locals:
-                { type: 'alert',
-                  message: t(:'general.form.error_notification'),
-                  bot_params: }
+                 locals: { type: 'alert', message: t(:'general.form.error_notification') }
 
         end
       end
@@ -83,6 +83,13 @@ module BotActions
   end
 
   private
+
+  def bot_params
+    params.expect(namespace_bot: [{ user_attributes: [
+                    { members_attributes: [%i[access_level]] },
+                    { personal_access_tokens_attributes: [[:name, :expires_at, { scopes: [] }]] }
+                  ] }])
+  end
 
   def view_authorizations
     @allowed_to = {

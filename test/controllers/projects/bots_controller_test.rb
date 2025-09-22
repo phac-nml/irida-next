@@ -59,11 +59,17 @@ module Projects
       project = projects(:project1)
 
       post namespace_project_bots_path(namespace, project, format: :turbo_stream),
-           params: { bot: {
-             token_name: 'newtesttoken',
-             access_level: Member::AccessLevel::UPLOADER,
-             scopes: ['read_api']
-           } }
+           params: { namespace_bot: { user_attributes: {
+             members_attributes: {
+               '0': { access_level: Member::AccessLevel::UPLOADER }
+             },
+             personal_access_tokens_attributes: {
+               '0': {
+                 name: 'newtesttoken',
+                 scopes: ['read_api']
+               }
+             }
+           } } }
 
       assert_response :success
     end
@@ -75,11 +81,17 @@ module Projects
       project = projects(:project1)
 
       post namespace_project_bots_path(namespace, project, format: :turbo_stream),
-           params: { bot: {
-             token_name: 'newtesttoken',
-             access_level: Member::AccessLevel::UPLOADER,
-             scopes: ['read_api']
-           } }
+           params: { namespace_bot: { user_attributes: {
+             members_attributes: {
+               '0': { access_level: Member::AccessLevel::UPLOADER }
+             },
+             personal_access_tokens_attributes: {
+               '0': {
+                 name: 'newtesttoken',
+                 scopes: ['read_api']
+               }
+             }
+           } } }
 
       assert_response :unauthorized
     end

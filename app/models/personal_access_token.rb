@@ -13,6 +13,7 @@ class PersonalAccessToken < ApplicationRecord
 
   before_create :ensure_token
 
+  validates :name, presence: true
   validates :scopes, presence: true
   validate :validate_scopes
 

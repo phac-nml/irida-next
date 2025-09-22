@@ -41,6 +41,9 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :full_path, to: :namespace
 
+  accepts_nested_attributes_for :personal_access_tokens
+  accepts_nested_attributes_for :members
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[first_name last_name email]
   end
@@ -137,7 +140,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def password_required?
-    return false if skip_password_validation
+    return false if skip_password_validation || bot?
 
     super
   end

@@ -15,9 +15,14 @@ module Bots
 
     test 'create new project bot account' do
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_difference -> { User.count } => 1, -> { PersonalAccessToken.count } => 1, -> { Member.count } => 1 do
@@ -27,54 +32,69 @@ module Bots
 
     test 'project bot account not created due to missing token name' do
       invalid_params = {
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, @project_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:token_name).include?(
-          I18n.t(:'services.bots.create.required.token_name')
-        )
+        assert result.user.personal_access_tokens[0].errors.added?(:name, :blank)
       end
     end
 
     test 'project bot account not created as token scopes are missing' do
-      invalid_params = {
-        token_name: 'newtoken',
-        access_level: Member::AccessLevel::UPLOADER
-      }
+      invalid_params =
+        {
+          user_attributes: {
+            members_attributes: {
+              '0': { access_level: Member::AccessLevel::UPLOADER }
+            },
+            personal_access_tokens_attributes: [
+              { name: 'newtoken' }
+            ]
+          }
+        }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, @project_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:scopes).include?(
-          I18n.t(:'services.bots.create.required.scopes')
-        )
+        assert result.user.personal_access_tokens[0].errors.added?(:scopes, :blank)
       end
     end
 
     test 'project bot account not created due to missing access level' do
       invalid_params = {
-        token_name: 'newtoken',
-        scopes: %w[read_api api]
+        user_attributes: {
+          personal_access_tokens_attributes: [
+            { name: 'newtoken', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, @project_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:access_level).include?(
-          I18n.t(:'services.bots.create.required.access_level')
-        )
+        assert result.user.members[0].errors.added?(:access_level, :blank)
       end
     end
 
     test 'valid authorization to create project bot account' do
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_authorized_to(:create_bot_accounts?, @project.namespace,
@@ -87,9 +107,14 @@ module Bots
     test 'invalid authorization to create project bot account' do
       user = users(:micha_doe)
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
@@ -106,9 +131,14 @@ module Bots
 
     test 'create new group bot account' do
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_difference -> { User.count } => 1, -> { PersonalAccessToken.count } => 1, -> { Member.count } => 1 do
@@ -118,54 +148,68 @@ module Bots
 
     test 'group bot account not created due to missing token name' do
       invalid_params = {
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @group, @group_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:token_name).include?(
-          I18n.t(:'services.bots.create.required.token_name')
-        )
+        assert result.user.personal_access_tokens[0].errors.added?(:name, :blank)
       end
     end
 
     test 'group bot account not created as token scopes are missing' do
       invalid_params = {
-        token_name: 'newtoken',
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'newtoken' }
+          ]
+        }
       }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @group, @group_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:scopes).include?(
-          I18n.t(:'services.bots.create.required.scopes')
-        )
+        assert result.user.personal_access_tokens[0].errors.added?(:scopes, :blank)
       end
     end
 
     test 'group bot account not created due to missing access level' do
       invalid_params = {
-        token_name: 'newtoken',
-        scopes: %w[read_api api]
+        user_attributes: {
+          personal_access_tokens_attributes: [
+            { name: 'newtoken', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @group, @group_bot_type, invalid_params).execute
 
-        assert result[:bot_user_account].errors.messages_for(:access_level).include?(
-          I18n.t(:'services.bots.create.required.access_level')
-        )
+        assert result.user.members[0].errors.added?(:access_level, :blank)
       end
     end
 
     test 'valid authorization to create group bot account' do
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       assert_authorized_to(:create_bot_accounts?, @group,
@@ -178,9 +222,14 @@ module Bots
     test 'invalid authorization to create group bot account' do
       user = users(:micha_doe)
       valid_params = {
-        token_name: 'Uploader',
-        scopes: %w[read_api api],
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          },
+          personal_access_tokens_attributes: [
+            { name: 'Uploader', scopes: %w[read_api api] }
+          ]
+        }
       }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
@@ -197,7 +246,11 @@ module Bots
 
     test 'project automation bot should not have any personal access tokens' do
       valid_params = {
-        access_level: Member::AccessLevel::UPLOADER
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::UPLOADER }
+          }
+        }
       }
 
       assert_difference -> { User.count } => 1, -> { PersonalAccessToken.count } => 0, -> { Member.count } => 1 do

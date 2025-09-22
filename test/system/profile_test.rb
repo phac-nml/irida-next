@@ -93,7 +93,9 @@ class ProfileTest < ApplicationSystemTestCase
     assert_no_text 'my new token'
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count)
-    assert_text I18n.t('services.personal_access_tokens.create.required.scopes')
+    assert_text I18n.t(:'errors.format',
+                       attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+                       message: I18n.t(:'errors.messages.blank'))
   end
 
   test 'can revoke personal access tokens' do

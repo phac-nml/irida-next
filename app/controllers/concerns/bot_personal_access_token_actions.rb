@@ -25,6 +25,8 @@ module BotPersonalAccessTokenActions
   def new
     authorize! @namespace, to: :generate_bot_personal_access_token?
 
+    @personal_access_token = PersonalAccessToken.new
+
     respond_to do |format|
       format.turbo_stream do
         render status: :ok

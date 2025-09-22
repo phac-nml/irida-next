@@ -13,149 +13,65 @@
     <%= turbo_frame_tag("new_bot_account-error-alert") %>
   </div>
 
-  <%= form_for(:bot, url: group_bots_path, method: :post, html: { novalidate: true }) do |form| %>
-    <div class="grid gap-4">
-      <%= render partial: "shared/form/required_field_legend" %>
-      <% invalid_access_level = new_bot_account.errors.include?(:access_level) %>
-      <div class="form-field <%= 'invalid' if invalid_access_level %>">
-        <%= form.label :access_level,
-                   t("groups.bots.index.bot_listing.new_bot_modal.access_level"),
-                   data: {
-                     required: true,
-                   } %>
-        <%= form.select :access_level,
-                    @access_levels,
-                    {
-                      prompt:
-                        t(
-                          "groups.bots.index.bot_listing.new_bot_modal.select_access_level",
-                        ),
-                      selected: !bot_params.nil? ? bot_params[:access_level] : nil,
-                    },
-                    {
-                      required: true,
-                      aria: {
-                        describedby:
-                          (
-                            if invalid_access_level
-                              form.field_id(:access_level, "error")
-                            else
-                              nil
-                            end
-                          ),
-                        invalid: invalid_access_level,
-                        required: true,
-                      },
-                      autofocus: invalid_access_level,
-                    } %>
-        <% if invalid_access_level %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:access_level, "error"),
-          errors: new_bot_account.errors.full_messages_for(:access_level) %>
+  <%= form_for(@bot_account, url: group_bots_path, method: :post, html: { novalidate: true }) do |form| %>
+    <%= form.fields_for :user do |user_fields| %>
+      <div class="grid gap-4">
+        <%= user_fields.fields_for :members do |member_fields| %>
+          <%= render partial: "shared/form/required_field_legend" %>
+          <% invalid_access_level =
+            @bot_account.user.members[0].errors.include?(:access_level) %>
+          <div class="form-field <%= 'invalid' if invalid_access_level %>">
+            <%= member_fields.label :access_level, data: { required: true } %>
+            <%= member_fields.select :access_level,
+                                 @access_levels,
+                                 {
+                                   prompt:
+                                     t(
+                                       "groups.bots.index.bot_listing.new_bot_modal.select_access_level",
+                                     ),
+                                 },
+                                 {
+                                   required: true,
+                                   aria: {
+                                     describedby:
+                                       (
+                                         if invalid_access_level
+                                           member_fields.field_id(:access_level, "error")
+                                         else
+                                           nil
+                                         end
+                                       ),
+                                     invalid: invalid_access_level,
+                                     required: true,
+                                   },
+                                   autofocus: invalid_access_level,
+                                 } %>
+            <% if invalid_access_level %>
+              <%= render "shared/form/field_errors",
+              id: member_fields.field_id(:access_level, "error"),
+              errors: @bot_account.user.members[0].errors.full_messages_for(:access_level) %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= user_fields.fields_for :personal_access_tokens do |pat_fields| %>
+          <div
+            class="
+              grid gap-4 p-6 bg-white border rounded-lg shadow border-slate-200
+              dark:bg-slate-800 dark:border-slate-700
+            "
+          >
+            <p class="font-semibold dark:text-white"><%= t("groups.bots.index.bot_listing.new_bot_modal.token_details") %></p>
+
+            <%= render partial: "shared/personal_access_tokens/form_fields",
+            locals: {
+              pat: @bot_account.user.personal_access_tokens[0],
+              form: pat_fields,
+            } %>
+          </div>
         <% end %>
       </div>
-
-      <div
-        class="
-          grid gap-4 p-6 bg-white border rounded-lg shadow border-slate-200
-          dark:bg-slate-800 dark:border-slate-700
-        "
-      >
-        <p class="font-semibold dark:text-white"><%= t("groups.bots.index.bot_listing.new_bot_modal.token_details") %></p>
-        <% invalid_token_name = new_bot_account.errors.include?(:token_name) %>
-        <div class="form-field <%= 'invalid' if invalid_token_name %>">
-          <%= form.label :token_name,
-                     t("groups.bots.index.bot_listing.new_bot_modal.token_name"),
-                     data: {
-                       required: true,
-                     } %>
-          <%= form.text_field :token_name,
-                          required: true,
-                          value: !bot_params.nil? ? bot_params[:token_name] : "",
-                          class: "form-control",
-                          aria: {
-                            describedby:
-                              (
-                                if invalid_token_name
-                                  form.field_id(:token_name, "error")
-                                else
-                                  nil
-                                end
-                              ),
-                            invalid: invalid_token_name,
-                            required: true,
-                          },
-                          autofocus: invalid_token_name %>
-          <% if invalid_token_name %>
-            <%= render "shared/form/field_errors",
-            id: form.field_id(:token_name, "error"),
-            errors: new_bot_account.errors.full_messages_for(:token_name) %>
-          <% end %>
-        </div>
-        <div class="form-field">
-          <%= pathogen_datepicker(
-            id: "bot_expires_at",
-            input_name: "bot[expires_at]",
-            label: t("groups.bots.index.bot_listing.new_bot_modal.expires_at"),
-            selected_date: !bot_params.nil? ? bot_params[:expires_at] : nil,
-          ) %>
-        </div>
-
-        <% invalid_scopes = new_bot_account.errors.include?(:scopes) %>
-        <div class="form-field <%= 'invalid' if invalid_scopes %>">
-          <fieldset>
-            <legend data-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
-            <% Irida::Auth.all_available_scopes.each do |scope| %>
-              <div class="flex">
-                <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]",
-                  scope,
-                  (
-                    if !bot_params.nil? && bot_params[:scopes]
-                      bot_params[:scopes].include?(scope.to_s)
-                    else
-                      nil
-                    end
-                  ),
-                  id: "bot_scopes_#{scope}",
-                  aria: {
-                    describedby:
-                      (
-                        if invalid_scopes
-                          form.field_id(:scopes, "error")
-                        else
-                          nil
-                        end
-                      ),
-                    invalid: invalid_scopes,
-                  },
-                  autofocus: invalid_scopes %>
-                </div>
-                <div class="ml-2 text-sm">
-                  <%= label_tag "bot_scopes_#{scope}",
-                  scope,
-                  class: "font-medium text-slate-900 dark:text-slate-300" %>
-                  <p
-                    id="<%= "bot_scopes_#{scope}_help-text" %>"
-                    class="
-                      text-xs font-normal text-slate-500 dark:text-slate-400
-                    "
-                  ><%= t("auth.scopes.#{scope}") %></p>
-                </div>
-              </div>
-            <% end %>
-
-          </fieldset>
-          <% if invalid_scopes %>
-            <%= render "shared/form/field_errors",
-            id: form.field_id(:scopes, "error"),
-            errors: new_bot_account.errors.full_messages_for(:scopes) %>
-          <% end %>
-        </div>
-
-      </div>
-
-    </div>
+    <% end %>
     <div class="mt-4">
       <%= form.submit t("groups.bots.index.bot_listing.new_bot_modal.submit"),
                   class: "button button-primary" %>

@@ -10,12 +10,6 @@ module Projects
     before_action :current_page
     before_action :page_title
 
-    private
-
-    def bot_params
-      params.expect(bot: [:id, :token_name, :access_level, :expires_at, { scopes: [] }])
-    end
-
     protected
 
     def namespace

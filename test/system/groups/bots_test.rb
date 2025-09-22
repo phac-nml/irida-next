@@ -85,9 +85,9 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.title')
         assert_selector 'p', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.description')
 
-        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
-        find('#bot_access_level').find('option',
-                                       text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Uploader'
+        select I18n.t('activerecord.models.member.access_level.analyst'),
+               from: I18n.t(:'activerecord.attributes.member.access_level')
 
         all('input[type=checkbox]').each(&:click)
 
@@ -136,9 +136,9 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.title')
         assert_selector 'p', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.description')
 
-        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
-        find('#bot_access_level').find('option',
-                                       text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Uploader'
+        select I18n.t('activerecord.models.member.access_level.analyst'),
+               from: I18n.t(:'activerecord.attributes.member.access_level')
 
         assert_html5_inputs_valid
 
@@ -150,7 +150,9 @@ module Groups
         within('#new_bot_account-error-alert') do
           assert_text I18n.t(:'general.form.error_notification')
         end
-        assert_text I18n.t(:'services.bots.create.required.scopes')
+        assert_text I18n.t(:'errors.format',
+                           attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+                           message: I18n.t(:'errors.messages.blank'))
       end
       ### VERIFY END ###
     end
@@ -251,7 +253,7 @@ module Groups
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.title')
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
                            bot_account: @group_bot.user.email)
-        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
         click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
       end
@@ -346,7 +348,7 @@ module Groups
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.title')
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
                            bot_account: @group_bot.user.email)
-        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
         click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
       end
@@ -415,7 +417,7 @@ module Groups
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
                            bot_account: @group_bot.user.email)
         # fill in PAT values
-        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
         click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
       end
