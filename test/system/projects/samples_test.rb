@@ -28,6 +28,7 @@ module Projects
 
     test 'samples index table' do
       freeze_time
+      sign_in users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -3993,6 +3994,23 @@ module Projects
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
+    end
+
+    test 'local_time localization' do
+      # must be tested in system as view component can't run <script> from <head>
+      freeze_time
+      sign_in users(:james_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      # samples table
+      within('#samples-table table tbody') do
+        # row contents
+        within("tr[id='#{dom_id(@sample1)}']") do
+          assert_selector 'td:nth-child(4)', text: 'il y a 3 heures'
+          assert_selector 'td:nth-child(5)', text: 'il y a 2 heures'
+          # actions tested by role in separate test
+        end
+      end
     end
   end
 end
