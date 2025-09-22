@@ -54,7 +54,8 @@ end %>
     <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
-      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace")) do |select| %>
+      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), aria: { invalid: invalid_namespace,
+      describedby: invalid_namespace ? builder.field_id(:namespace, "error") : builder.field_id(:namespace, "hint") } ) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
@@ -125,14 +126,12 @@ end %>
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
-                      "aria-label" =>
-                        t(:"projects.create.description.aria_label"),
                       "aria-described-by" =>
                         (
                           if invalid_description
                             builder.field_id(:description, "error")
                           else
-                            nil
+                            builder.field_id(:description, "hint")
                           end
                         ),
                       "aria-invalid" => invalid_description,
