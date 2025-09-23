@@ -843,8 +843,8 @@ en:
           remove_aria_label: 'Remove group member: %{member}'
         add: Add New Member
         empty_state:
-          description: Aucun groupe n'a reçu d'accès délégué à ce groupe
-          title: Aucun groupe
+          description: There are no members that have been delegated access to this group
+          title: No members
         invite_group: Invite Group
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
