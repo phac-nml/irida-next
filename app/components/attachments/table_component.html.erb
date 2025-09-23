@@ -177,7 +177,7 @@
                             data: {
                               turbo: false,
                             },
-                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                            class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                 <%= highlight(
                                   attachment.file.filename.to_s,
                                   defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
@@ -198,7 +198,7 @@
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                   <%= highlight(
                                     attachment.file.filename.to_s,
                                     defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
@@ -215,7 +215,7 @@
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                   <%= highlight(
                                     attachment.associated_attachment.file.filename.to_s,
                                     defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
@@ -235,7 +235,7 @@
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                   <%= highlight(
                                     attachment.file.filename.to_s,
                                     defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
