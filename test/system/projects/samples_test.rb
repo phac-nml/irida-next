@@ -3995,20 +3995,40 @@ module Projects
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
     end
 
-    test 'local_time localization' do
-      # must be tested in system as view component can't run <script> from <head>
+    test 'local_time localization with language toggle' do
       freeze_time
-      sign_in users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      # verifies navigation to page
+      assert_selector 'h1', text: I18n.t('projects.samples.index.title')
+
       # samples table
-      within('#samples-table table tbody') do
-        # row contents
-        within("tr[id='#{dom_id(@sample1)}']") do
-          assert_selector 'td:nth-child(4)', text: 'il y a 3 heures'
-          assert_selector 'td:nth-child(5)', text: 'il y a 2 heures'
-          # actions tested by role in separate test
+      within('#samples-table table') do
+        # headers
+        within('thead tr:first-child') do
+          assert_selector 'th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
+          assert_selector 'th:nth-child(5)', text: I18n.t('samples.table_component.attachments_updated_at').upcase
         end
+        # values with time_ago
+        within("tbody tr[id='#{dom_id(@sample1)}']") do
+          assert_selector 'td:nth-child(4)', text: '3 hours ago'
+          assert_selector 'td:nth-child(5)', text: '2 hours ago'
+        end
+      end
+
+      # change language
+      find('#language-selection-dd-trigger').click
+      within find('#language_selection_dropdown') do
+        click_button I18n.t(:'locales.fr', locale: :fr)
+      end
+
+      # verify language change without refresh
+      within("#samples-table table tbody tr[id='#{dom_id(@sample1)}']") do
+        assert_selector 'td:nth-child(4)', text: 'il y a 3 heures'
+        assert_selector 'td:nth-child(5)', text: 'il y a 2 heures'
       end
     end
   end
