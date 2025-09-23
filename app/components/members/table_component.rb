@@ -23,7 +23,7 @@ module Members
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('relative overflow-x-auto')
+        classes: class_names('table-container relative overflow-x-auto')
       }
     end
 

@@ -1,20 +1,22 @@
-<%= render PaginationComponent.new(
-  info: pagy_info(@pagy),
-  prev_url:
-    (
-      if @pagy.prev
-        group_members_url(page: @pagy.prev, q: params[:q]&.to_unsafe_h)
-      else
-        nil
-      end
-    ),
-  next_url:
-    (
-      if @pagy.next
-        group_members_url(page: @pagy.next, q: params[:q]&.to_unsafe_h)
-      else
-        nil
-      end
-    ),
-  autofocus_link: params.key?(:page),
-) %>
+<% if @pagy.count.positive? %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url:
+      (
+        if @pagy.prev
+          group_members_url(page: @pagy.prev, q: params[:q]&.to_unsafe_h)
+        else
+          nil
+        end
+      ),
+    next_url:
+      (
+        if @pagy.next
+          group_members_url(page: @pagy.next, q: params[:q]&.to_unsafe_h)
+        else
+          nil
+        end
+      ),
+    autofocus_link: params.key?(:page),
+  ) %>
+<% end %>
