@@ -64,7 +64,6 @@ module Pathogen
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      # id is now guaranteed to be present by the initializer
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
         @system_arguments[:class]

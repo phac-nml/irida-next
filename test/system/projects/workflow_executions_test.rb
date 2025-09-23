@@ -345,7 +345,9 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      click_on I18n.t('workflow_executions.show.tabs.files')
+      within %(nav[id="workflow-executions-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
 
       assert_text I18n.t('workflow_executions.files.empty.title')
       assert_text I18n.t('workflow_executions.files.empty.description')
@@ -501,7 +503,9 @@ module Projects
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
 
-      click_on I18n.t('workflow_executions.show.tabs.files')
+      within %(nav[id="workflow-executions-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
 
       attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
       within('table tbody') do
@@ -522,7 +526,9 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      click_on I18n.t('workflow_executions.show.tabs.files')
+      within %(nav[id="workflow-executions-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
 
       attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
       within 'tbody' do
