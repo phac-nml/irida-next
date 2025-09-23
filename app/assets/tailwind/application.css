@@ -38,8 +38,7 @@ input[type="search"] {
   appearance: textfield;
 }
 
-:focus-visible,
-:focus {
+:focus-visible {
   /* Universal custom focus ring (keyboard + high contrast)
      Note: Removed :not(.pill-focus-reset) for simpler, faster matching.
      The reset for .pill-focus-reset remains defined later and will override this. */
