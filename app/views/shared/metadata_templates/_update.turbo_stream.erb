@@ -9,12 +9,16 @@
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-  <%= turbo_stream.append "metadata-templates-table" do %>
-    <%= render SpinnerComponent.new(
-      message: t("metadata_templates.table_component.spinner_message"),
+  <%= turbo_stream.replace @metadata_template, method: :morph do %>
+    <%= render MetadataTemplates::RowComponent.new(
+      @metadata_template,
+      @namespace,
+      {
+        update_metadata_templates: @allowed_to[:update_metadata_templates],
+        destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
+      },
     ) %>
   <% end %>
-  <turbo-stream action="refresh"></turbo-stream>
 <% else %>
   <%= turbo_stream.update "metadata_template_error_alert",
                       viral_alert(type:, message:, classes: "mb-4") %>

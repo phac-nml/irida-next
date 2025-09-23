@@ -201,6 +201,8 @@ module Groups
       within(table_row) do
         assert_text 'Group Template011'
       end
+
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), focused: true
     end
 
     test 'cannot create a template with no fields selected' do
@@ -568,10 +570,6 @@ module Groups
         )
       end
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
       assert_equal 7, metadata_template.reload.fields.length
       assert_equal 'Group Template011', metadata_template.name
 
@@ -579,6 +577,7 @@ module Groups
 
       within(table_row) do
         assert_text 'Group Template011'
+        assert_selector 'button', text: I18n.t('metadata_templates.table_component.edit_button'), focused: true
       end
     end
   end
