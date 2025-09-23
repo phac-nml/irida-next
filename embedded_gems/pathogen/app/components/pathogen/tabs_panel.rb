@@ -51,7 +51,6 @@ module Pathogen
 
       @id = id
       @system_arguments = system_arguments
-      @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
       @label = label
 
