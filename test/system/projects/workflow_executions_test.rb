@@ -522,9 +522,7 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      within %(nav[id="workflow-executions-tabs"]) do
-        click_on I18n.t('workflow_executions.show.tabs.files')
-      end
+      click_on I18n.t('workflow_executions.show.tabs.files')
 
       attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
       within 'tbody' do

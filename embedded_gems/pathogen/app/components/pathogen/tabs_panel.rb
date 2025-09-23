@@ -65,7 +65,6 @@ module Pathogen
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
       # id is now guaranteed to be present by the initializer
-      @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
         @system_arguments[:class]
