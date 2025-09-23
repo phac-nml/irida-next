@@ -14,8 +14,7 @@
       turbo: false,
     },
   ) %>
-  <%= pathogen_button(scheme: :slate, href: namespace_path(@namespace), tag: :a) do |button| %>
-    <% button.with_trailing_visual_icon(icon: ICON::ARROW_UP_RIGHT) %>
+  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name && @namespace.parent %>
       <span><%= @namespace.parent.full_name %>
         /
