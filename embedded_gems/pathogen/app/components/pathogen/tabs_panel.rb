@@ -6,10 +6,11 @@ module Pathogen
   # Utilizes Turbo Drive for seamless navigation between sections.
   class TabsPanel < Pathogen::Component
     # 🔧 Default HTML tag for the component's root element.
-    TAG_DEFAULT = :div
+    TAG_DEFAULT = :nav
 
     # 💅 Default CSS classes for the root <nav> element.
-    SYSTEM_DEFAULT_CLASSES = 'w-full'
+    SYSTEM_DEFAULT_CLASSES = 'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200
+      sm:dark:border-slate-700'
 
     # 🔧 Default HTML tag for the list element containing the tabs.
     BODY_TAG_DEFAULT = :ul
@@ -51,6 +52,7 @@ module Pathogen
 
       @id = id
       @system_arguments = system_arguments
+      @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
       @label = label
 
@@ -63,6 +65,8 @@ module Pathogen
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
+      # id is now guaranteed to be present by the initializer
+      @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
         @system_arguments[:class]
