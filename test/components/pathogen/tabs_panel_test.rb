@@ -165,7 +165,7 @@ module Pathogen
       end
       render_inline(tabs_component)
 
-      assert_selector 'nav[class*="w-full"]'
+      assert_selector 'nav[id="test_panel"]'
       assert_selector 'ul[class*="w-full"]'
     end
   end
