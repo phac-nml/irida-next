@@ -1,4 +1,4 @@
-<div data-controller="metadata-template-dd">
+<div data-controller="metadata-template-dd" class="max-sm:grow">
   <%= form_with url: url, data: { turbo_frame: "metadata_templates_dropdown", turbo_stream: true, "metadata-template-dd-target": "form" }, method: :get do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
     <input type="hidden" name="limit" value="<%= pagy&.limit %>"/>

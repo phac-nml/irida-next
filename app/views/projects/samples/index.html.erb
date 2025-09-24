@@ -183,55 +183,48 @@
     <% end %>
   <% end %>
 
-  <div
-    class="
-      flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
-    "
-  >
-    <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 gap-2">
-      <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
-        <%= form_with(
+  <div class="flex flex-wrap gap-2 mb-2">
+    <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
+      <%= form_with(
             url: select_namespace_project_samples_url,
             method: :get,
             id: "select-all-form",
-            class: "flex-grow",
+            class: "max-sm:grow",
           ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <input type="hidden" name="select" value="on"/>
-          <%= render "shared/samples/timestamp_input" %>
-          <%= f.submit t(".select_all_button"),
-                   class: "button button-default w-full",
-                   title: t(".select_all_tooltip") %>
-        <% end %>
-        <%= form_with(
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <input type="hidden" name="select" value="on"/>
+        <%= render "shared/samples/timestamp_input" %>
+        <%= f.submit t(".select_all_button"),
+                 class: "button button-default w-full",
+                 title: t(".select_all_tooltip") %>
+      <% end %>
+      <%= form_with(
                   url: select_namespace_project_samples_url,
                   method: :get,
                   id: "deselect-all-form",
-                  class: "flex-grow",
+                  class: "max-sm:grow",
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit t(".deselect_all_button"),
-                   class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip") %>
-        <% end %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <%= f.submit t(".deselect_all_button"),
+                 class: "button button-default w-full",
+                 title: t(".deselect_all_tooltip") %>
       <% end %>
+    <% end %>
+    <div class="sm:grow max-sm:hidden" role="presentation"></div>
+    <div id="table-filter" role="presentation" class="max-sm:grow">
+      <%= render partial: "table_filter" %>
     </div>
-    <div class="flex flex-col lg:flex-row">
-      <div id="table-filter">
-        <%= render partial: "table_filter" %>
-      </div>
 
-      <%= render partial: "shared/samples/metadata_template_dropdown",
-      locals: {
-        url:
-          list_namespace_project_metadata_templates_url(
-            @project.namespace.parent,
-            @project,
-          ),
-        metadata_template: @metadata_template,
-        pagy: @pagy,
-      } %>
-    </div>
+    <%= render partial: "shared/samples/metadata_template_dropdown",
+    locals: {
+      url:
+        list_namespace_project_metadata_templates_url(
+          @project.namespace.parent,
+          @project,
+        ),
+      metadata_template: @metadata_template,
+      pagy: @pagy,
+    } %>
   </div>
 
   <%= render partial: "table",
