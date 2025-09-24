@@ -116,7 +116,7 @@
                       <%= link_to(
                     sample_path(sample),
                     data: { turbo: false },
-                    class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
+                    class: "text-slate-700 dark:text-slate-300 font-semibold underline hover:decoration-2"
                   ) do %>
                         <span class="font-semibold">
                           <%= highlight(
@@ -133,7 +133,7 @@
                       data: {
                         turbo: false,
                       },
-                      class: "font-semibold hover:underline" %>
+                      class: "font-semibold underline hover:decoration-2" %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(sample[column], :long) %>
                     <% elsif column == :updated_at || column == :attachments_updated_at %>

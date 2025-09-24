@@ -107,7 +107,7 @@ input[type="search"] {
 }
 
 @utility link {
-  @apply font-medium text-green-700 hover:underline dark:text-green-500;
+  @apply font-medium text-green-700 underline hover:decoration-2 dark:text-green-500;
 }
 
 @utility card {
@@ -518,7 +518,7 @@ input[type="search"] {
   }
 
   p link {
-    @apply font-medium text-green-600 underline hover:no-underline dark:text-green-500;
+    @apply font-medium text-green-600 underline hover:decoration-2 dark:text-green-500;
   }
 
   input[type="search"]::-webkit-search-cancel-button {

@@ -14,7 +14,7 @@
       turbo: false,
     },
   ) %>
-  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline font-semibold dark:text-white wrap-anywhere min-w-0" do %>
+  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name && @namespace.parent %>
       <span><%= @namespace.parent.full_name %>
         /

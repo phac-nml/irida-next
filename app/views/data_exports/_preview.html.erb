@@ -22,7 +22,7 @@
                   data: {
                     turbo: false,
                   },
-                  class: "hover:underline text-sm" %>
+                  class: "underline hover:decoration-2 text-sm" %>
                 </span>
               </div>
               <% project["children"].each do |sample| %>
@@ -36,7 +36,7 @@
                         data: {
                           turbo: false,
                         },
-                        class: "hover:underline text-sm" %>
+                        class: "underline hover:decoration-2 text-sm" %>
                       </span>
                     </div>
                     <% sample["children"].each do |attachments| %>
@@ -79,7 +79,7 @@
                   data: {
                     turbo: false,
                   },
-                  class: "hover:underline text-sm" %>
+                  class: "underline hover:decoration-2 text-sm" %>
                 </span>
               </div>
               <% workflow_execution_id["children"].each do |child| %>
@@ -94,7 +94,7 @@
                           data: {
                             turbo: false,
                           },
-                          class: "hover:underline text-sm" %>
+                          class: "underline hover:decoration-2 text-sm" %>
                         </span>
                       <% else %>
                         <%= pathogen_icon(ICON::FILE_TEXT, class: "size-5 m-0") %>

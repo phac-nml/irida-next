@@ -115,7 +115,7 @@
                     data: {
                       turbo: false,
                     },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
+                    class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2",
                   ) do %>
                       <span class="font-semibold">
                         <%= highlight(
@@ -178,7 +178,7 @@
                           ),
                       },
                       class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                     <% end %>
                     <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
                       <%= button_to t(:"workflow_executions.actions.delete"),
@@ -195,7 +195,7 @@
                           ),
                       },
                       class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                     <% end %>
                   <% end %>
                 </div>

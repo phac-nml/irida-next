@@ -12,7 +12,7 @@
         },
         method: :get,
         class:
-          "font-semibold text-slate-800 dark:text-slate-300 hover:underline hover:underline cursor-pointer" %>
+          "font-semibold text-slate-800 dark:text-slate-300 underline hover:decoration-2 cursor-pointer" %>
       <% else %>
         0
       <% end %>
@@ -50,7 +50,7 @@
             ),
         },
         class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer mr-2" %>
+          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
       <% end %>
       <% if @abilities[:destroy_bot] %>
         <%= button_to t("bots.index.table.actions.destroy"),
@@ -63,7 +63,7 @@
           label: t("bots.index.table.actions.destroy_aria_label", name: row.user.email),
         },
         class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
 
       <% end %>
     <% end %>
