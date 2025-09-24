@@ -9,7 +9,8 @@ module Pathogen
     TAG_DEFAULT = :nav
 
     # 💅 Default CSS classes for the root <nav> element.
-    SYSTEM_DEFAULT_CLASSES = 'w-full'
+    SYSTEM_DEFAULT_CLASSES = 'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200
+      sm:dark:border-slate-700'
 
     # 🔧 Default HTML tag for the list element containing the tabs.
     BODY_TAG_DEFAULT = :ul
