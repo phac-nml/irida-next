@@ -1,4 +1,4 @@
-<div class="flex flex-col @lg:flex-row-reverse mb-2">
+<div class="flex justify-end mb-2">
   <% if Flipper.enabled?(:workflow_execution_attachments_searching) %>
     <%= render SearchComponent.new(
               query: @q,
@@ -7,6 +7,7 @@
               placeholder: t(".search.placeholder"),
               url: group_workflow_execution_path(@namespace, @workflow_execution),
               total_count: @pagy.count,
+              class: "max-sm:grow",
               value: @q.puid_or_file_blob_filename_cont,
             ) do %>
       <%= hidden_field_tag :limit, @pagy.limit %>

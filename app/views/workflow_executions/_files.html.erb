@@ -1,4 +1,4 @@
-<div class="flex flex-col @lg:flex-row-reverse mb-2">
+<div class="flex justify-end mb-2">
   <% if Flipper.enabled?(:workflow_execution_attachments_searching) %>
     <%= render SearchComponent.new(
               query: @q,
@@ -8,6 +8,7 @@
               url: workflow_execution_path(@workflow_execution),
               total_count: @pagy.count,
               value: @q.puid_or_file_blob_filename_cont,
+              class: "max-sm:grow",
               html: {
                 "data-turbo-action": "replace",
               }

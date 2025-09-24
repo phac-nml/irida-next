@@ -40,43 +40,37 @@
     <% end %>
   <% end %>
 <% end %>
-<div
-  class="
-    flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
-  "
->
-  <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 gap-2">
-    <%= form_with(
+<div class="flex flex-wrap gap-2 mb-2">
+  <%= form_with(
                   url: select_namespace_project_workflow_executions_url,
                   method: :get,
                   id: "select-all-form",
                   class: "flex-grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="select" value="on"/>
-      <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
-    <% end %>
-    <%= form_with(
+    <input type="hidden" name="format" value="turbo_stream"/>
+    <input type="hidden" name="select" value="on"/>
+    <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+  <% end %>
+  <%= form_with(
                   url: select_namespace_project_workflow_executions_url,
                   method: :get,
                   id: "deselect-all-form" ,
                   class: "flex-grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
-    <% end %>
-  </div>
-  <div class="flex-row">
-    <%= render SearchComponent.new(
-      query: @q,
-      url: namespace_project_workflow_executions_path(**request.query_parameters),
-      search_attribute: :name_or_id_cont,
-      label: t(".search.label"),
-      placeholder: t(".search.placeholder"),
-      total_count: @pagy.count,
-      value: @q.name_or_id_cont,
-    ) %>
-  </div>
+    <input type="hidden" name="format" value="turbo_stream"/>
+    <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+  <% end %>
+  <div class="sm:grow max-sm:hidden" role="presentation"></div>
+  <%= render SearchComponent.new(
+    query: @q,
+    url: namespace_project_workflow_executions_path(**request.query_parameters),
+    search_attribute: :name_or_id_cont,
+    label: t(".search.label"),
+    placeholder: t(".search.placeholder"),
+    total_count: @pagy.count,
+    value: @q.name_or_id_cont,
+    count: "max-sm:grow",
+  ) %>
 </div>
 <%= render partial: "table",
 locals: {

@@ -22,7 +22,7 @@
   <% end %>
 
   <div class="flex flex-col gap-2 mt-2">
-    <div class="flex flex-col @lg:flex-row-reverse mb-2">
+    <div class="flex justify-end mb-2">
       <%= render SearchComponent.new(
         query: @q,
         search_attribute: :puid_or_file_blob_filename_cont,
@@ -30,6 +30,7 @@
         placeholder: t(:".search.placeholder"),
         url: namespace_project_attachments_path(@project.parent, @project),
         total_count: @pagy.count,
+        class: "max-sm:grow"
         value: @q.puid_or_file_blob_filename_cont,
       ) do %>
         <%= hidden_field_tag :limit, @pagy.limit %>
