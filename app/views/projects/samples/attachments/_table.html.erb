@@ -6,7 +6,7 @@
       "
     >
       <% if Flipper.enabled?(:sample_attachments_searching) %>
-        <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 space-x-2">
+        <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 gap-2">
           <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
