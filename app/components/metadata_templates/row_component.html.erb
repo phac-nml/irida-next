@@ -6,11 +6,7 @@
                 classes: class_names('px-3 py-3', '2xl:sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
       <% if column == :name %>
-        <span
-          class="
-            text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2
-          "
-        >
+        <span class="text-slate-900 dark:text-slate-100 font-semibold">
           <%= @metadata_template.name %>
         </span>
       <% elsif column == :description %>
