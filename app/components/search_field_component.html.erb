@@ -1,12 +1,12 @@
 <%= render Viral::BaseComponent.new(tag: :div, **system_arguments) do %>
   <%= @form.label @field_name, @label, class: "sr-only" %>
-  <div class="relative">
+  <div class="relative h-[44px]">
     <%= @form.search_field @field_name,
                        "data-search-field-target": "input",
                        "data-test-selector":
                          !Rails.env.production? ? "search-field-input" : nil,
                        class:
-                         "t-search-component block w-full p-2.5 pr-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-300 dark:text-white",
+                         "t-search-component h-full w-full placeholder-shown:field-sizing-content block p-2.5 pr-11.5 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-300 dark:text-white",
                        aria: {
                          label: t("components.search_field_component.instructions"),
                        },
@@ -18,7 +18,7 @@
       data-search-field-target="clearButton"
       data-action="click->search-field#clear"
       class="
-        absolute inset-y-0 right-0 flex items-center justify-center w-12
+        absolute inset-y-0 right-0 flex items-center justify-center w-[44px]
         pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
         border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
         dark:hover:bg-slate-600 <%= clear_button? ? '' : 'hidden' %>
@@ -36,7 +36,7 @@
         click->search-field#updateFocus
       "
       class="
-        absolute inset-y-0 right-0 flex items-center justify-center w-12
+        absolute inset-y-0 right-0 flex items-center justify-center w-[44px]
         pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
         border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
         dark:hover:bg-slate-600 <%= clear_button? ? 'hidden' : '' %>

@@ -1,35 +1,29 @@
 <div role="status" class="sr-only"><%= @results_message %></div>
 
-<%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex space-x-2 flex-grow" do |f| %>
-  <div
-    class="
-      flex flex-col md:flex-row flex-grow space-y-2 md:space-x-2 mb-2 md:mb-0
-    "
-  >
-    <div>
-      <%= render SearchFieldComponent.new(
-        label: t(".search.label"),
-        placeholder: t(".search.placeholder"),
-        form: f,
-        field_name: :name_or_puid_cont,
-        value: @search_params[:name_or_puid_cont],
-        data: {
-          "search-field-selection-outlet": "#samples-table",
-        },
-      ) %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
-    </div>
-    <div class="lg:mr-2">
-      <%= render AdvancedSearchComponent.new(
-        form: f,
-        search: @query,
-        sample_fields: @sample_fields,
-        metadata_fields: @metadata_fields,
-        open: @query.errors.any?,
-        status: @query.advanced_query?,
-      ) %>
-      <%= f.submit hidden: true %>
-    </div>
+<%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters contents" do |f| %>
+  <div class="max-sm:grow">
+    <%= render SearchFieldComponent.new(
+      label: t(".search.label"),
+      placeholder: t(".search.placeholder"),
+      form: f,
+      field_name: :name_or_puid_cont,
+      value: @search_params[:name_or_puid_cont],
+      data: {
+        "search-field-selection-outlet": "#samples-table",
+      },
+    ) %>
+    <input type="hidden" name="format" value="turbo_stream"/>
+    <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
+  </div>
+  <div class="max-sm:grow">
+    <%= render AdvancedSearchComponent.new(
+      form: f,
+      search: @query,
+      sample_fields: @sample_fields,
+      metadata_fields: @metadata_fields,
+      open: @query.errors.any?,
+      status: @query.advanced_query?,
+    ) %>
+    <%= f.submit hidden: true %>
   </div>
 <% end %>

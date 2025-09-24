@@ -2,11 +2,10 @@
   data-controller="advanced-search"
   data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
   data-advanced-search-list-filter-outlet=".list-filter"
-  class="flex flex-col grow"
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>
-      <div class="flex flex-row rounded-lg" role="group">
+      <div class="flex flex-row rounded-lg w-full grow" role="group">
         <button
           type="button"
           class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"

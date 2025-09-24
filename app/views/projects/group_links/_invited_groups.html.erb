@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-2 mt-2">
-  <div class="flex flex-col @lg:flex-row-reverse mb-2">
+  <div class="flex justify-end mb-2">
     <%= render SearchComponent.new(
               query: @q,
               url: namespace_project_group_links_url(**request.query_parameters),
@@ -7,6 +7,7 @@
               label: t(".search.label"),
               placeholder: t(".search.placeholder"),
               total_count: @pagy.count,
+              class: "max-sm:grow",
               value: @q.group_name_cont,
             ) do %>
       <input type="hidden" name="tab" value="invited_groups"/>

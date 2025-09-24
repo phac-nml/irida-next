@@ -1,47 +1,35 @@
 <div id="sample-attachments">
   <% if @allowed_to[:update_sample] && @has_attachments %>
-    <div
-      class="
-        flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-2 mb-2
-      "
-    >
+    <div class="flex flex-wrap gap-2 mb-2 ">
       <% if Flipper.enabled?(:sample_attachments_searching) %>
-        <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 gap-2">
-          <%= form_with(
+        <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "select-all-form",
-                  class: "flex-grow",
+                  class: "max-sm:grow"
                 ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <input type="hidden" name="select" value="on"/>
-            <input
-              type="hidden"
-              name="q[puid_or_file_blob_filename_cont]"
-              value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
-            >
-            <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
-          <% end %>
-          <%= form_with(
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <input type="hidden" name="select" value="on"/>
+          <input
+            type="hidden"
+            name="q[puid_or_file_blob_filename_cont]"
+            value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
+          >
+          <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+        <% end %>
+        <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "deselect-all-form" ,
-                  class: "flex-grow",
+                  class: "max-sm:grow",
                 ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
-          <% end %>
-        </div>
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+        <% end %>
       <% end %>
-      <div
-        class="
-          flex flex-col sm:flex-col-2 lg:flex-row gap-3 sm:gap-2 lg:flex-shrink-0
-          lg:self-start
-        "
-      >
-        <div class="flex shrink-0">
-          <% if Flipper.enabled?(:sample_attachments_searching) %>
-            <%= render SearchComponent.new(
+      <div class="sm:grow max-sm:hidden" role="presentation"></div>
+      <% if Flipper.enabled?(:sample_attachments_searching) %>
+        <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               label: t(".search.label"),
@@ -49,53 +37,49 @@
               value: @q.puid_or_file_blob_filename_cont,
               url: namespace_project_sample_path,
               total_count: @pagy.count,
-              class: "w-full @xl:inline-block",
+              class: "max-sm:grow",
               search_field_arguments: {
                 data: {
                   'search-field-selection-outlet': '#attachments-table'
                 }
               }
               ) do %>
-              <%= hidden_field_tag :limit, @pagy.limit %>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="@md:space-x-2 flex flex-col @md:flex-row space-y-2 @md:space-y-0">
-          <%= button_to t("projects.samples.show.new_attachment_button"),
-          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: true,
-          },
-          form_class: "flex-grow",
-          class: "button button-default w-full" %>
-          <%= button_to t("projects.samples.show.concatenate_button"),
-          new_namespace_project_sample_attachments_concatenation_path(
-            sample_id: @sample.id,
-          ),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 2,
-          },
-          form_class: "flex-grow",
-          class: "button button-default action-button w-full" %>
-          <%= button_to t("projects.samples.show.delete_files_button"),
-          new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 1,
-          },
-          form_class: "flex-grow",
-          class: "button button-default action-button w-full" %>
-        </div>
-      </div>
+          <%= hidden_field_tag :limit, @pagy.limit %>
+        <% end %>
+      <% end %>
+      <%= button_to t("projects.samples.show.new_attachment_button"),
+      new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+      method: :get,
+      data: {
+        turbo_frame: "sample_modal",
+        turbo_stream: true,
+      },
+      form_class: "max-sm:grow",
+      class: "button button-default w-full" %>
+      <%= button_to t("projects.samples.show.concatenate_button"),
+      new_namespace_project_sample_attachments_concatenation_path(
+        sample_id: @sample.id,
+      ),
+      method: :get,
+      data: {
+        turbo_frame: "sample_modal",
+        turbo_stream: false,
+        controller: "action-button",
+        action_button_required_value: 2,
+      },
+      form_class: "max-sm:grow",
+      class: "button button-default action-button w-full" %>
+      <%= button_to t("projects.samples.show.delete_files_button"),
+      new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+      method: :get,
+      data: {
+        turbo_frame: "sample_modal",
+        turbo_stream: false,
+        controller: "action-button",
+        action_button_required_value: 1,
+      },
+      form_class: "max-sm:grow",
+      class: "button button-default action-button w-full" %>
     </div>
   <% end %>
   <%= turbo_frame_tag "selected" %>
