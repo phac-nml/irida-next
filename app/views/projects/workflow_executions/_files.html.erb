@@ -9,7 +9,7 @@
                 namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution),
               total_count: @pagy.count,
               value: @q.puid_or_file_blob_filename_cont,
-              class: "max-sm:grow"
+              class: "max-sm:grow",
             ) do %>
       <%= hidden_field_tag :limit, @pagy.limit %>
       <%= hidden_field_tag :tab, @tab %>
