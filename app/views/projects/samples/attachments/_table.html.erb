@@ -2,8 +2,7 @@
   <% if @allowed_to[:update_sample] && @has_attachments %>
     <div class="flex flex-wrap gap-2 mb-2 ">
       <% if Flipper.enabled?(:sample_attachments_searching) %>
-        <div class="inline-flex flex-wrap grow @md:flex-nowrap @xl:grow-0 gap-2">
-          <%= form_with(
+        <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "select-all-form",
