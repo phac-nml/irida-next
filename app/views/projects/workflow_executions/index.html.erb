@@ -45,7 +45,7 @@
                   url: select_namespace_project_workflow_executions_url,
                   method: :get,
                   id: "select-all-form",
-                  class: "flex-grow",
+                  class: "max-sm:grow",
                 ) do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
     <input type="hidden" name="select" value="on"/>
@@ -55,7 +55,7 @@
                   url: select_namespace_project_workflow_executions_url,
                   method: :get,
                   id: "deselect-all-form" ,
-                  class: "flex-grow",
+                  class: "max-sm:grow",
                 ) do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
     <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
