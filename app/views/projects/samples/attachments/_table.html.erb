@@ -22,7 +22,7 @@
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "deselect-all-form" ,
-                  class: "max-sm:grow"
+                  class: "max-sm:grow",
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>

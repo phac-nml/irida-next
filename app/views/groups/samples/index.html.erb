@@ -174,7 +174,7 @@
                   url: select_group_samples_url,
                   method: :get,
                   id: "select-all-form",
-                  class: "max-sm:grow"
+                  class: "max-sm:grow",
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
@@ -187,7 +187,7 @@
                   url: select_group_samples_url,
                   method: :get,
                   id: "deselect-all-form",
-                  class: "max-sm:grow"
+                  class: "max-sm:grow",
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <%= f.submit t(".deselect_all_button"),
