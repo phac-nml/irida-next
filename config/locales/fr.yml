@@ -1611,7 +1611,7 @@ fr:
         title: Créer un échantillon
       show:
         concatenate_button: Concatenate Files
-        delete_files_button: Supprimer des fichiersDelete Files
+        delete_files_button: Supprimer des fichiers
         edit_button: Modifier cet échantillon
         files: Fichiers
         files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
