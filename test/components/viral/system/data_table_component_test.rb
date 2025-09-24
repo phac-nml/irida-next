@@ -14,7 +14,8 @@ module System
         assert_selector 'tr:first-child th:nth-child(2)', text: 'NAME'
         assert_selector 'tr:first-child th:nth-child(3)', text: 'PILL WITH CONDITIONAL'
         assert_selector 'tr:first-child th:nth-child(4)', text: 'DATE'
-        assert_selector 'tr:first-child th:nth-child(5)',
+        assert_selector 'tr:first-child th:nth-child(5)', text: 'TIME AGO'
+        assert_selector 'tr:first-child th:nth-child(6)',
                         text: I18n.t('workflow_executions.table_component.actions').upcase
       end
 
@@ -25,14 +26,16 @@ module System
         assert_selector 'tr:first-child td:nth-child(3)', text: 'this pill is green'
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: I18n.l(DateTime.new(2024, 1, 1).localtime.to_date, format: :long)
-        assert_selector 'tr:first-child td:nth-child(5)', text: 'data one Action1 data one Action2'
+        assert_selector 'tr:first-child td:nth-child(5)', text: 'a minute ago'
+        assert_selector 'tr:first-child td:nth-child(6)', text: 'data one Action1 data one Action2'
 
         assert_selector 'tr:nth-child(2) th:first-child', text: '2'
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'data two'
         assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'this pill is blue'
         assert_selector 'tr:nth-child(2) td:nth-child(4)',
                         text: I18n.l(DateTime.new(2022, 7, 15).localtime.to_date, format: :long)
-        assert_selector 'tr:nth-child(2) td:nth-child(5)', text: 'data two Action1 data two Action2'
+        assert_selector 'tr:nth-child(2) td:nth-child(5)', text: 'an hour ago'
+        assert_selector 'tr:nth-child(2) td:nth-child(6)', text: 'data two Action1 data two Action2'
 
         within('tr:first-child td:nth-child(3)') do
           assert_selector '.bg-green-100.text-green-800.text-xs.font-medium.rounded-full'
