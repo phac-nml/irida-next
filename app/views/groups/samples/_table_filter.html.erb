@@ -5,7 +5,7 @@
   controller: "filters metadata-toggle",
   "metadata-toggle-page-value": @pagy&.page,
   "filters-selection-outlet": "#samples-table",
-}, class: "filters flex flex-wrap gap-2" do |f| %>
+}, class: "filters contents" do |f| %>
   <div class="max-sm:grow">
     <%= render SearchFieldComponent.new(
       label: t(".search.label"),
