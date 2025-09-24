@@ -6,6 +6,7 @@
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
         '
+        style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
@@ -21,10 +22,10 @@
               tag: 'th',
               scope: 'col',
               **helpers.aria_sort(column, @sort_key, @sort_direction),
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@4xl:sticky left-56 z-10': index == 1)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10': index.zero?, '@4xl:sticky left-(--puid-width) z-10': index == 1)
                 ) do %>
                 <div class="flex items-center gap-3">
-                  <% if index.zero? and @abilities[:select_samples] %>
+                  <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
                     false,
@@ -89,9 +90,9 @@
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
               <% @columns.each_with_index do |column, index| %>
                 <%= render_cell(
-                tag: index.zero? ? 'th' :'td',
+                tag: index.zero? ? 'th' : 'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@4xl:sticky z-5 left-56 bg-slate-50 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
                   <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_samples] %>
@@ -112,20 +113,27 @@
                         },
                       } %>
                     <% end %>
-                    <% if column == :puid || column == :name %>
-                      <%= link_to(
-                    sample_path(sample),
-                    data: { turbo: false },
-                    class: "text-slate-700 dark:text-slate-300 font-semibold underline hover:decoration-2"
-                  ) do %>
-                        <span class="font-semibold">
+                    <% if column == :puid %>
+<span class="font-mono font-semibold">
                           <%= highlight(
                             sample[column],
                             defined?(@search_params[:name_or_puid_cont]) &&
                               @search_params[:name_or_puid_cont],
                             highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                           ) %>
-                        </span>
+</span>
+                      <% elsif column == :name %>
+                      <%= link_to(
+                    sample_path(sample),
+                    data: { turbo: false },
+                    class: "text-slate-700 dark:text-slate-300 font-semibold underline hover:decoration-2"
+                  ) do %>
+                      <%= highlight(
+                        sample[column],
+                        defined?(@search_params[:name_or_puid_cont]) &&
+                          @search_params[:name_or_puid_cont],
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\1</mark>',
+                      ) %>
                       <% end %>
                     <% elsif column == "namespaces.puid" %>
                       <%= link_to sample.project.puid,
