@@ -16,7 +16,7 @@
       class="list-filter"
     >
       <%= render ListInputComponent.new(
-        list_input_form_name: @conditions_form.field_name(:value),
+        list_input_form_name: @conditions_form.field_name(:value, multiple: true),
         show_description: false,
         "aria-invalid": invalid_value,
         "aria-describedby": @conditions_form.field_id(:value, "error"),
