@@ -15,6 +15,7 @@ module Groups
           namespace,
           Member::AccessLevel.access_level_options_owner,
           q,
+          namespace_group_links.count.positive?,
           abilities: {
             update_namespace: true,
             unlink_group: true
@@ -44,6 +45,7 @@ module Groups
           namespace,
           Member::AccessLevel.access_level_options_owner,
           q,
+          namespace_group_links.count.positive?,
           abilities: {
             update_namespace: true,
             unlink_group: true

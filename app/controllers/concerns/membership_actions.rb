@@ -17,6 +17,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :member_listing?
     @q = load_members.ransack(params[:q])
+    @has_members = load_members.size.positive?
     set_default_sort
     @pagy, @members = pagy(@q.result)
     respond_to do |format|

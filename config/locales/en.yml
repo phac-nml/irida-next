@@ -842,6 +842,9 @@ en:
           leave_group_aria_label: Leave group
           remove_aria_label: 'Remove group member: %{member}'
         add: Add New Member
+        empty_state:
+          description: There are no members that have been delegated access to this group
+          title: No members
         invite_group: Invite Group
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
@@ -1460,6 +1463,9 @@ en:
           leave_project_aria_label: Leave project
           remove_aria_label: 'Remove project member: %{member}'
         add: Add New Member
+        empty_state:
+          description: There are no members that have been delegated access to this project
+          title: No members
         invite_group: Invite group
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from the project?

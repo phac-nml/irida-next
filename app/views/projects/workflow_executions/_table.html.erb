@@ -1,8 +1,9 @@
-<%# locals: (namespace:, pagy:, q:, workflow_executions:) -%>
+<%# locals: (namespace:, pagy:, q:, workflow_executions:, has_workflow_executions:) -%>
 <%= render WorkflowExecutions::TableComponent.new(
   workflow_executions,
   pagy,
   q,
+  has_workflow_executions,
   namespace: namespace,
   search_params: @search_params,
   abilities: {

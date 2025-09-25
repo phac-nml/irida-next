@@ -1,26 +1,36 @@
-<%= render PaginationComponent.new(
-  info: pagy_info(@pagy),
-  prev_url:
-    (
-      if @pagy.prev
-        namespace_project_members_url(
-          page: @pagy.prev,
-          q: params[:q]&.to_unsafe_h,
-        )
-      else
-        nil
-      end
-    ),
-  next_url:
-    (
-      if @pagy.next
-        namespace_project_members_url(
-          page: @pagy.next,
-          q: params[:q]&.to_unsafe_h,
-        )
-      else
-        nil
-      end
-    ),
-  autofocus_link: params.key?(:page),
-) %>
+<% if @has_members %>
+  <% if @pagy.count.positive? %>
+    <%= render PaginationComponent.new(
+      info: pagy_info(@pagy),
+      prev_url:
+        (
+          if @pagy.prev
+            namespace_project_members_url(
+              page: @pagy.prev,
+              q: params[:q]&.to_unsafe_h,
+            )
+          else
+            nil
+          end
+        ),
+      next_url:
+        (
+          if @pagy.next
+            namespace_project_members_url(
+              page: @pagy.next,
+              q: params[:q]&.to_unsafe_h,
+            )
+          else
+            nil
+          end
+        ),
+      autofocus_link: params.key?(:page),
+    ) %>
+  <% else %>
+    <%= render Viral::EmptyStateComponent.new(
+      icon_name: ICON::MAGNIFYING_GLASS,
+      title: t("components.viral.pagy.empty_state.title"),
+      description: t("components.viral.pagy.empty_state.description"),
+    ) %>
+  <% end %>
+<% end %>

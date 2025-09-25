@@ -9,11 +9,12 @@ module Members
     include MembersHelper
 
     # rubocop:disable Naming/MethodParameterName, Metrics/ParameterLists
-    def initialize(namespace, members, access_levels, q, current_user, abilities = {})
+    def initialize(namespace, members, access_levels, q, has_members, current_user, abilities = {})
       @namespace = namespace
       @members = members
       @access_levels = access_levels
       @q = q
+      @has_members = has_members
       @current_user = current_user
       @abilities = abilities
       @columns = columns
@@ -23,7 +24,7 @@ module Members
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('relative overflow-x-auto')
+        classes: class_names('table-container relative overflow-x-auto')
       }
     end
 

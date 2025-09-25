@@ -155,7 +155,6 @@ module Projects
       project = projects(:john_doe_project4)
       visit namespace_project_members_url(namespace, project)
       project_member = members(:project_four_member_joan_doe)
-      members_count = members.select { |member| member.namespace == project.namespace }.count
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
@@ -169,7 +168,7 @@ module Projects
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: (members_count - 1) + header_row_count
+      assert_text I18n.t(:'projects.members.index.empty_state.title')
     end
 
     test 'can leave a project that is under a user namespace where user is the only owner "member" of the project' do

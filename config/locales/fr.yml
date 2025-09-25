@@ -844,6 +844,9 @@ fr:
           leave_group_aria_label: Bouton Quitter le groupe
           remove_aria_label: 'Supprimer le membre du groupe : %{member}'
         add: Ajouter un nouveau membre
+        empty_state:
+          description: Aucun members n'a reçu d'accès délégué à ce groupe
+          title: Aucun membres
         invite_group: Inviter le groupe
         invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
@@ -1464,6 +1467,9 @@ fr:
           leave_project_aria_label: Laisser le lien du projet
           remove_aria_label: 'Supprimer le lien du membre du projet : %{member}'
         add: Ajouter un nouveau membre
+        empty_state:
+          description: Aucun members n'a reçu d'accès délégué à ce projet
+          title: Aucun membres
         invite_group: Inviter le groupe
         invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?

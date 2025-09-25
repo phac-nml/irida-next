@@ -13,6 +13,7 @@ module Groups
       namespace,
       access_levels,
       q,
+      has_group_links,
       abilities: {},
       **system_arguments
     )
@@ -20,6 +21,7 @@ module Groups
       @namespace = namespace
       @access_levels = access_levels
       @q = q
+      @has_group_links = has_group_links
       @abilities = abilities
       @system_arguments = system_arguments
 
