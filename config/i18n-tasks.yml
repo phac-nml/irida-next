@@ -39,7 +39,7 @@ data:
     # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
     # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']
     - "config/locales/%{locale}.yml"
-    - "config/locales/local_time.%{local}.yml"
+    - "config/locales/local_time.%{locale}.yml"
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
