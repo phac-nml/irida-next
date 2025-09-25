@@ -7,7 +7,7 @@
   >
     <% Pathogen::Icon::SIZES.each_key do |size| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
-        <%= pathogen_icon(ICON::BANK, size: size) %>
+        <%= render Pathogen::Icon.new("bank", size: size) %>
         <span class="text-xs text-slate-600 font-medium"><%= size %></span>
         <span class="text-xs text-slate-400 font-mono break-all text-center"><%= Pathogen::Icon::SIZES[size] %></span>
       </div>
