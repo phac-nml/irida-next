@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # Pathogen::Icon renders a Heroicon SVG with variant coloring and system arguments.
+  # Pathogen::Icon renders icons using rails_icons with variant coloring and system arguments.
   #
-  # @example Default usage
-  #   = render Pathogen::Icon.new(:clipboard)
+  # @example Direct icon name usage
+  #   = render Pathogen::Icon.new("clipboard-text")
+  #   = render Pathogen::Icon.new(:arrow_up)
   #
-  # @example With variant and custom classes
-  #   = render Pathogen::Icon.new(:clipboard, variant: :primary, size: nil, class: "size-24")
+  # @example With pathogen styling options
+  #   = render Pathogen::Icon.new("clipboard-text", color: :primary, size: :lg)
+  #
+  # @example With rails_icons options
+  #   = render Pathogen::Icon.new("heart", variant: :fill, library: :heroicons)
+  #   = render Pathogen::Icon.new("check", class: "w-6 h-6 text-green-500")
   #
   class Icon < Pathogen::Component
     # Tailwind color variants for icon text color
@@ -28,22 +33,75 @@ module Pathogen
       xl: 'size-10'
     }.freeze
 
-    # @param icon [Symbol, String] The icon name or key (must be valid in ICON constant)
-    # @param color [Symbol] The color variant (default, primary, etc.)
-    # @param system_arguments [Hash] Additional HTML/system arguments
-    def initialize(icon, color: :default, size: :md, **system_arguments)
-      @icon_name = icon
-      @system_arguments = system_arguments
-      @system_arguments[:class] = class_names(
+    # @param icon_name [Symbol, String] The icon name (e.g., "clipboard-text", :arrow_up)
+    # @param options [Hash] Options including color, size, variant, library, and system arguments
+    def initialize(icon_name_or_hash, **options)
+      # Handle both new API (direct names) and legacy ICON hash constants
+      if icon_name_or_hash.is_a?(Hash) && icon_name_or_hash[:name]
+        # Legacy ICON constant format
+        @icon_name = normalize_icon_name(icon_name_or_hash[:name])
+        legacy_options = icon_name_or_hash[:options] || {}
+        merged_options = legacy_options.merge(options)
+      else
+        # New direct name format
+        @icon_name = normalize_icon_name(icon_name_or_hash)
+        merged_options = options
+      end
+
+      # Extract pathogen and rails_icons options
+      color = merged_options.delete(:color) || :default
+      size = merged_options.delete(:size) || :md
+      variant = merged_options.delete(:variant)
+      library = merged_options.delete(:library)
+
+      # Build rails_icons options
+      @rails_icons_options = build_rails_icons_options(variant, library)
+
+      # Build final class with pathogen styling + user classes
+      pathogen_classes = class_names(
         COLORS[color] => color.present?,
-        SIZES[size] => size.present?,
-        @system_arguments[:class] => @system_arguments[:class].present?
+        SIZES[size] => size.present?
       )
+
+      @rails_icons_options[:class] = class_names(
+        pathogen_classes,
+        merged_options[:class]
+      )
+
+      # Merge remaining system arguments (excluding class to avoid duplication)
+      remaining_options = merged_options.except(:class)
+      @rails_icons_options.merge!(remaining_options)
     end
 
-    # Render the icon using the icon helper
+    # Render the icon using rails_icons (via render_icon for backward compatibility)
     def call
-      render_icon(@icon_name, **@system_arguments)
+      render_icon(@icon_name, **@rails_icons_options)
+    rescue StandardError => e
+      Rails.logger.warn "[Pathogen::Icon] Failed to render icon '#{@icon_name}': #{e.message}"
+
+      # Return helpful error in development/test
+      if Rails.env.local?
+        content_tag :span, "⚠️ Icon '#{@icon_name}' not found",
+                    class: 'text-red-500 text-xs font-mono'
+      end
+    end
+
+    private
+
+    # Normalize icon name to string format expected by rails_icons
+    def normalize_icon_name(name)
+      return name.to_s if name.is_a?(String)
+
+      # Convert symbols like :arrow_up to "arrow-up"
+      name.to_s.tr('_', '-')
+    end
+
+    # Extract rails_icons specific options
+    def build_rails_icons_options(variant, library)
+      options = {}
+      options[:variant] = variant if variant
+      options[:library] = library if library
+      options
     end
   end
 end
