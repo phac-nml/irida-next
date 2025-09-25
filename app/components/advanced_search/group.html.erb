@@ -5,14 +5,15 @@
     text-slate-500 dark:text-slate-400
   "
 >
-  <legend><%= t("components.advanced_search_component.group", index: @group_index + 1) %></legend>
-  <%= @form.fields_for :groups, @group do |groups_form| %>
+  <legend><%= t("components.advanced_search_component.group", index: @group_number) %></legend>
+  <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::Condition.new(
         groups_form: groups_form,
         group_index: @group_index,
         condition: condition,
         condition_index: condition_index,
+        condition_number: condition_index + 1,
         sample_fields: @sample_fields,
         metadata_fields: @metadata_fields,
         operations: @operations,

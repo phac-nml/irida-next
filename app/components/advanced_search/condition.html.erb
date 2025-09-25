@@ -6,8 +6,8 @@
     dark:text-slate-400
   "
 >
-  <legend><%= t("components.advanced_search_component.condition", index: @condition_index + 1) %></legend>
-  <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
+  <legend><%= t("components.advanced_search_component.condition", index: @condition_number) %></legend>
+  <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
     <div
       class="
