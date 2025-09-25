@@ -178,17 +178,18 @@ export default class extends Controller {
   //   return params;
   // }
 
-  #generateAriaLiveText(params) {
-    const action = params["action"];
-    let ariaLiveString = this.#ariaLiveTranslations[action];
-    if (action === "list_order_changed") {
-      return ariaLiveString
-        .replace(/LIST_PLACEHOLDER/g, params["listName"])
-        .concat(params["options"].join(", "));
-    } else {
-      return ariaLiveString.concat(params["movedOption"]);
-    }
-  }
+  // Temporarily disabled - drag and drop functionality removed
+  // #generateAriaLiveText(params) {
+  //   const action = params["action"];
+  //   let ariaLiveString = this.#ariaLiveTranslations[action];
+  //   if (action === "list_order_changed") {
+  //     return ariaLiveString
+  //       .replace(/LIST_PLACEHOLDER/g, params["listName"])
+  //       .concat(params["options"].join(", "));
+  //   } else {
+  //     return ariaLiveString.concat(params["movedOption"]);
+  //   }
+  // }
 
   #cleanupAvailableList() {
     const itemsToRemove = Array.from(
