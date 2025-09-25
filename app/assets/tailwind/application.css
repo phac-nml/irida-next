@@ -123,10 +123,18 @@ input[type="search"] {
   /*
     content separated by / tells the screenreader that the content is blank so that the asterisk is not read out
   */
-  & label[data-required]::after,
-  legend[data-required]::after {
+  & legend[data-required]::after {
     content: " *" / "";
-    @apply text-red-500;
+    @apply text-red-500 no-underline;
+    text-decoration: none;
+    font-size: 150%;
+  }
+
+  /* Required field indicator for PathogenFormBuilder labels */
+  & abbr.req {
+    @apply text-red-500 no-underline;
+    text-decoration: none;
+    font-size: 150%;
   }
 
   & div.field_with_errors {
