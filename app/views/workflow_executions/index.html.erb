@@ -8,29 +8,31 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
-    <%= button_to t(".create_export_button"),
-    new_data_export_path,
-    params: {
-      export_type: "analysis",
-      analysis_type: "user",
-    },
-    method: :get,
-    data: {
-      turbo_stream: true,
-      controller: "action-button",
-      action_button_required_value: 1,
-    },
-    class: "button button-default action-button w-full" %>
-    <% if Flipper.enabled?(:delete_multiple_workflows) %>
-      <%= button_to t(".delete_workflows_button"),
-      destroy_multiple_confirmation_workflow_executions_path,
+    <% if @has_workflow_executions %>
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "user",
+      },
       method: :get,
       data: {
         turbo_stream: true,
         controller: "action-button",
         action_button_required_value: 1,
       },
-      class: "button button-destructive action-button w-full" %>
+      class: "button button-default action-button w-full" %>
+      <% if Flipper.enabled?(:delete_multiple_workflows) %>
+        <%= button_to t(".delete_workflows_button"),
+        destroy_multiple_confirmation_workflow_executions_path,
+        method: :get,
+        data: {
+          turbo_stream: true,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button-destructive action-button w-full" %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
@@ -55,7 +57,7 @@
     <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
   <% end %>
   <div class="sm:grow max-sm:hidden" role="presentation"></div>
-  <% if @workflow_executions.length.positive? %>
+  <% if @has_workflow_executions %>
     <%= render SearchComponent.new(
       query: @q,
       url: workflow_executions_path,

@@ -11,7 +11,7 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <% if @workflow_executions.length.positive? %>
+    <% if @has_workflow_executions %>
       <% if allowed_to?(:export_data?, @project.namespace) %>
         <%= button_to t(".create_export_button"),
         new_data_export_path,
@@ -42,7 +42,7 @@
     <% end %>
   <% end %>
 <% end %>
-<% if @workflow_executions.length.positive? %>
+<% if @has_workflow_executions %>
   <div class="flex flex-wrap gap-2 mb-2">
     <%= form_with(
                     url: select_namespace_project_workflow_executions_url,
