@@ -4,6 +4,7 @@ require 'pathogen/view_components/version'
 require 'pathogen/view_components/engine'
 require 'pathogen/view_helper'
 require 'pathogen/styles/form_styles'
+require 'pathogen/legacy_icon_constants'
 
 module Pathogen
   # :nodoc:
