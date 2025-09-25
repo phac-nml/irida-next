@@ -55,21 +55,23 @@
     <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
   <% end %>
   <div class="sm:grow max-sm:hidden" role="presentation"></div>
-  <%= render SearchComponent.new(
-    query: @q,
-    url: workflow_executions_path,
-    search_attribute: :name_or_id_cont,
-    label: t(".search.label"),
-    placeholder: t(".search.placeholder"),
-    value: @q.name_or_id_cont,
-    total_count: @pagy.count,
-    class: "max-sm:grow",
-    search_field_arguments: {
-      data: {
-        "search-field-selection-outlet": "#workflow-executions-table",
+  <% if @workflow_executions.length.positive? %>
+    <%= render SearchComponent.new(
+      query: @q,
+      url: workflow_executions_path,
+      search_attribute: :name_or_id_cont,
+      label: t(".search.label"),
+      placeholder: t(".search.placeholder"),
+      value: @q.name_or_id_cont,
+      total_count: @pagy.count,
+      class: "max-sm:grow",
+      search_field_arguments: {
+        data: {
+          "search-field-selection-outlet": "#workflow-executions-table",
+        },
       },
-    },
-  ) %>
+    ) %>
+  <% end %>
 </div>
 <%= render partial: "table",
 locals: {

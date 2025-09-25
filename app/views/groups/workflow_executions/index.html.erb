@@ -8,7 +8,7 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <% if @allowed_to[:export_data] %>
+    <% if @allowed_to[:export_data] && @workflow_executions.length.positive? %>
       <%= button_to t(".create_export_button"),
       new_data_export_path,
       params: {
@@ -26,41 +26,46 @@
     <% end %>
   <% end %>
 <% end %>
-<div class="flex flex-wrap gap-2 mb-2">
-  <%= form_with(
+
+<% if @workflow_executions.length.positive? %>
+  <div class="flex flex-wrap gap-2 mb-2">
+    <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
                   id: "select-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="select" value="on"/>
-    <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
-  <% end %>
-  <%= form_with(
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="select" value="on"/>
+      <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+    <% end %>
+    <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
                   id: "deselect-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
-  <% end %>
-  <div class="sm:grow max-sm:hidden" role="presentation"></div>
-  <%= render SearchComponent.new(
-    query: @q,
-    url: group_workflow_executions_path(**request.query_parameters),
-    search_attribute: :name_or_id_cont,
-    label: t(".search.label"),
-    placeholder: t(".search.placeholder"),
-    total_count: @pagy.count,
-    class: "max-sm:grow",
-    value: @q.name_or_id_cont,
-    data: {
-      "search-field-selection-outlet": "#workflow-executions-table",
-    },
-  ) %>
-</div>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+    <% end %>
+    <div class="sm:grow max-sm:hidden" role="presentation"></div>
+
+    <%= render SearchComponent.new(
+      query: @q,
+      url: group_workflow_executions_path(**request.query_parameters),
+      search_attribute: :name_or_id_cont,
+      label: t(".search.label"),
+      placeholder: t(".search.placeholder"),
+      total_count: @pagy.count,
+      class: "max-sm:grow",
+      value: @q.name_or_id_cont,
+      data: {
+        "search-field-selection-outlet": "#workflow-executions-table",
+      },
+    ) %>
+
+  </div>
+<% end %>
 
 <%= render partial: "table",
 locals: {

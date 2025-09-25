@@ -12,28 +12,31 @@
     class="border-b border-slate-200 dark:text-slate-400 dark:border-slate-700"
   >
     <div class="flex flex-wrap gap-2 mb-2 justify-end">
-      <%= render SearchComponent.new(
-        query: @q,
-        url: dashboard_groups_url,
-        search_attribute: :name_or_puid_cont,
-        label: t(:".search.label"),
-        placeholder: t(:".search.placeholder"),
-        total_count: @pagy.count,
-        class: "max-sm:grow",
-        value: @q.name_or_puid_cont,
-      ) %>
-      <%= render Ransack::SortDropdownComponent.new(
-        @q,
-        "groups",
-        [
-          { name: "created_at", dir: "desc" },
-          { name: "created_at", dir: "asc" },
-          { name: "name", dir: "asc" },
-          { name: "name", dir: "desc" },
-          { name: "updated_at", dir: "desc" },
-          { name: "updated_at", dir: "asc" },
-        ],
-      ) %>
+      <% if @has_groups %>
+        <%= render SearchComponent.new(
+          query: @q,
+          url: dashboard_groups_url,
+          search_attribute: :name_or_puid_cont,
+          label: t(:".search.label"),
+          placeholder: t(:".search.placeholder"),
+          total_count: @pagy.count,
+          class: "max-sm:grow",
+          value: @q.name_or_puid_cont,
+        ) %>
+
+        <%= render Ransack::SortDropdownComponent.new(
+          @q,
+          "groups",
+          [
+            { name: "created_at", dir: "desc" },
+            { name: "created_at", dir: "asc" },
+            { name: "name", dir: "asc" },
+            { name: "name", dir: "desc" },
+            { name: "updated_at", dir: "desc" },
+            { name: "updated_at", dir: "asc" },
+          ],
+        ) %>
+      <% end %>
     </div>
   </div>
   <% if @has_groups %>
