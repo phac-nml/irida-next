@@ -6,17 +6,17 @@
     "
   >
     <% {
-      'DETAILS' => ICON::DETAILS,
-      'SAMPLES' => ICON::SAMPLES,
-      'SETTINGS' => ICON::SETTINGS,
-      'PROJECTS' => ICON::PROJECTS,
-      'GROUPS' => ICON::GROUPS,
-      'WORKFLOWS' => ICON::WORKFLOWS,
-      'DATA_EXPORTS' => ICON::DATA_EXPORTS,
-      'TOKEN' => ICON::TOKEN
+      'DETAILS' => { name: 'clipboard-text', options: {} },
+      'SAMPLES' => { name: 'test-tube', options: {} },
+      'SETTINGS' => { name: 'gear-six', options: {} },
+      'PROJECTS' => { name: 'stack', options: {} },
+      'GROUPS' => { name: 'squares-four', options: {} },
+      'WORKFLOWS' => { name: 'terminal-window', options: {} },
+      'DATA_EXPORTS' => { name: 'export', options: {} },
+      'TOKEN' => { name: 'poker-chip', options: { variant: :duotone } }
     }.each do |const_name, icon_def| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
-        <%= pathogen_icon(icon_def, size: :md) %>
+        <%= render Pathogen::Icon.new(icon_def[:name], size: :md, **icon_def[:options]) %>
         <span class="text-xs text-slate-600 font-medium"><%= icon_def[:name] %></span>
         <span class="text-xs text-slate-400 font-mono break-all text-center">ICON::<%= const_name %></span>
       </div>

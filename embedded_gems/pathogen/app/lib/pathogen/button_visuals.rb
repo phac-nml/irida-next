@@ -22,10 +22,15 @@ module Pathogen
     end
 
     def icon_visual(args)
-      icon = args[:icon]
+      icon_name = args[:icon]
       args.delete(:icon)
       args[:class] = class_names(args[:class], icon_classes)
-      render_icon(icon, color: nil, **args)
+
+      # Ensure aria-hidden is set for decorative icons unless explicitly provided
+      args['aria-hidden'] = true unless args.key?('aria-hidden') || args.key?(:'aria-hidden')
+
+      # Use rails_icons icon method directly
+      icon(icon_name, **args)
     end
 
     def svg_visual(args, name)

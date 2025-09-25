@@ -6,11 +6,11 @@
     "
   >
     <% {
-      'BEAKER' => ICON::BEAKER,
-    }.each do |const_name, icon_def| %>
+      'BEAKER' => 'beaker',
+    }.each do |const_name, icon_name| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
-        <%= pathogen_icon(icon_def, size: :md) %>
-        <span class="text-xs text-slate-600 font-medium"><%= icon_def[:name] %></span>
+        <%= render Pathogen::Icon.new(icon_name, size: :md, library: :heroicons) %>
+        <span class="text-xs text-slate-600 font-medium"><%= icon_name %></span>
         <span class="text-xs text-slate-400 font-mono break-all text-center">ICON::<%= const_name %></span>
       </div>
     <% end %>
