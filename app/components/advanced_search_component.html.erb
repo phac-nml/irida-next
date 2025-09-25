@@ -67,25 +67,30 @@
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">
-    <div class="form-field w-5/12 @max-xl:w-full value">
-      <div data-controller="list-filter" class="list-filter">
-        <%= render ListInputComponent.new(
-          list_input_form_name:
-            "q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value][]",
-          show_description: false,
+    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = Sample::SearchCondition.new(operator: "in") %>
+      <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+        <%= render AdvancedSearch::Value.new(
+          conditions_form: conditions_form,
+          group_index: "GROUP_INDEX_PLACEHOLDER",
+          condition: condition,
+          condition_index: "CONDITION_INDEX_PLACEHOLDER",
         ) %>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <div class="form-field w-5/12 @max-xl:w-full value">
-      <input
-        type="text"
-        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
-        placeholder="<%= t("activemodel.attributes.sample/search_condition.value") %>"
-        aria-label="<%= t("activemodel.attributes.sample/search_condition.value") %>"
-      />
-    </div>
+    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = Sample::SearchCondition.new(operator: "=") %>
+      <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+        <%= render AdvancedSearch::Value.new(
+          conditions_form: conditions_form,
+          group_index: "GROUP_INDEX_PLACEHOLDER",
+          condition: condition,
+          condition_index: "CONDITION_INDEX_PLACEHOLDER",
+        ) %>
+      <% end %>
+    <% end %>
   </template>
   <template data-advanced-search-target="conditionTemplate">
     <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
