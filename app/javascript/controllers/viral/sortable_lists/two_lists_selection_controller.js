@@ -886,15 +886,17 @@ export default class extends Controller {
   // finds the difference between two lists. This is specifically used for the drag and drop listener, so only one
   // option difference at most will be found
   // eg: receives [1, 2, 3] and [1, 2, 3, 4] and returns 4
-  #verifyOptionsDifference(listOne, listTwo) {
-    let difference = listOne.filter((x) => !listTwo.includes(x));
-    return difference[0];
-  }
+  // Temporarily disabled - drag and drop functionality removed
+  // #verifyOptionsDifference(listOne, listTwo) {
+  //   let difference = listOne.filter((x) => !listTwo.includes(x));
+  //   return difference[0];
+  // }
 
+  // Temporarily disabled - drag and drop functionality removed
   // receives OPTION_NAME and returns <li id="OPTION_NAME">OPTION_NAME</li>
-  #getOptionNode(option) {
-    return document.getElementById(this.#validateId(option));
-  }
+  // #getOptionNode(option) {
+  //   return document.getElementById(this.#validateId(option));
+  // }
 
   #updateAriaLive(updateString) {
     this.ariaLiveUpdateTarget.innerText = "";
