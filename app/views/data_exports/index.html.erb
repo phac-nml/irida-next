@@ -4,18 +4,20 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
 
-<div class="flex justify-end mb-2">
-  <%= render SearchComponent.new(
-    query: @q,
-    url: data_exports_url,
-    search_attribute: :id_or_name_cont,
-    label: t(:".search.label"),
-    placeholder: t(:".search.placeholder"),
-    total_count: @pagy.count,
-    class: "max-sm:grow",
-    value: @q.id_or_name_cont,
-  ) %>
-</div>
+<% if @has_data_exports %>
+  <div class="flex justify-end mb-4">
+    <%= render SearchComponent.new(
+      query: @q,
+      url: data_exports_url,
+      search_attribute: :id_or_name_cont,
+      label: t(:".search.label"),
+      placeholder: t(:".search.placeholder"),
+      total_count: @pagy.count,
+      class: "max-sm:grow",
+      value: @q.id_or_name_cont,
+    ) %>
+  </div>
+<% end %>
 
 <%= render partial: "table",
 locals: {

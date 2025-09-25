@@ -1,6 +1,6 @@
 <div id="sample-attachments">
   <% if @has_attachments %>
-    <div class="flex flex-wrap gap-2 mb-2 ">
+    <div class="flex flex-wrap gap-2 mb-4">
       <% if @allowed_to[:update_sample] %>
         <% if Flipper.enabled?(:sample_attachments_searching) %>
           <%= form_with(
