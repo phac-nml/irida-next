@@ -145,7 +145,8 @@ module Pathogen
         return @template.capture(&) if block_given?
         return content_or_options.to_s if content_or_options
 
-        method.to_s.humanize
+        # Use Rails' built-in label translation lookup
+        @object.class.human_attribute_name(method)
       end
 
       def append_required_indicator(content)
