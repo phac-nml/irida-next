@@ -10,8 +10,8 @@ module StyleHelper
   # @return [String] CSS width expression, e.g. "calc(12ch + var(--spacing) * 3 + 24px)"
   def puid_width(object_class:, has_checkbox: false)
     puid_length = Irida::PersistentUniqueId.generate(object_class: object_class).length
-    checkbox_offset = has_checkbox ? ' + 24px' : ''
-    "calc(#{puid_length}ch + var(--spacing) * 3#{checkbox_offset})"
+    checkbox_offset = has_checkbox ? ' + 32px' : ''
+    "calc(#{puid_length}ch + var(--spacing) * 9#{checkbox_offset})"
   end
 
   # Returns a CSS calc() string for the UUID column width.
@@ -21,7 +21,7 @@ module StyleHelper
   # @return [String] CSS width expression, e.g. "calc(36ch + var(--spacing) * 3 + 24px)"
   def uuid_width(has_checkbox: false)
     uuid_length = 36 # Standard UUID format: 8-4-4-4-12 = 36 characters including hyphens
-    checkbox_offset = has_checkbox ? ' + 24px' : ''
-    "calc(#{uuid_length}ch + var(--spacing) * 3#{checkbox_offset})"
+    checkbox_offset = has_checkbox ? ' + 32px' : ''
+    "calc(#{uuid_length}ch + var(--spacing) * 9#{checkbox_offset})"
   end
 end
