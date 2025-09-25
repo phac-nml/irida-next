@@ -49,7 +49,7 @@ module Pathogen
     # @param variant [String, Symbol] rails_icons variant (e.g., :fill, :outline)
     # @param library [String, Symbol] rails_icons library (e.g., :heroicons, :phosphor)
     # @param options [Hash] Additional system arguments passed to rails_icons
-    def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options)
+    def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options) # rubocop:disable Metrics/ParameterLists
       @icon_name = normalize_icon_name(icon_name)
 
       # Build rails_icons options with variant and library
@@ -122,9 +122,9 @@ module Pathogen
     # Ensure proper accessibility defaults for decorative icons
     def ensure_accessibility_defaults
       # Set aria-hidden=true by default unless explicitly provided
-      unless @rails_icons_options.key?('aria-hidden') || @rails_icons_options.key?(:'aria-hidden')
-        @rails_icons_options['aria-hidden'] = true
-      end
+      return if @rails_icons_options.key?('aria-hidden') || @rails_icons_options.key?(:'aria-hidden')
+
+      @rails_icons_options['aria-hidden'] = true
     end
 
     # Add debug class for development environments
@@ -144,11 +144,11 @@ module Pathogen
       Rails.logger.warn "[Pathogen::Icon] Failed to render icon '#{@icon_name}': #{error.message}"
 
       # Return helpful error indicator in local environments
-      if Rails.env.local?
-        content_tag(:span, "⚠️ Icon '#{@icon_name}' not found",
-                    class: 'text-red-500 text-xs font-mono',
-                    title: "Icon rendering error: #{error.message}")
-      end
+      return unless Rails.env.local?
+
+      content_tag(:span, "⚠️ Icon '#{@icon_name}' not found",
+                  class: 'text-red-500 text-xs font-mono',
+                  title: "Icon rendering error: #{error.message}")
     end
   end
 end
