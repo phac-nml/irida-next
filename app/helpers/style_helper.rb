@@ -13,4 +13,15 @@ module StyleHelper
     checkbox_offset = has_checkbox ? ' + 24px' : ''
     "calc(#{puid_length}ch + var(--spacing) * 3#{checkbox_offset})"
   end
+
+  # Returns a CSS calc() string for the UUID column width.
+  # The width is based on the standard UUID format length (36 characters), spacing, and optionally a checkbox offset.
+  #
+  # @param has_checkbox [Boolean] whether to include additional width for a leading checkbox
+  # @return [String] CSS width expression, e.g. "calc(36ch + var(--spacing) * 3 + 24px)"
+  def uuid_width(has_checkbox: false)
+    uuid_length = 36 # Standard UUID format: 8-4-4-4-12 = 36 characters including hyphens
+    checkbox_offset = has_checkbox ? ' + 24px' : ''
+    "calc(#{uuid_length}ch + var(--spacing) * 3#{checkbox_offset})"
+  end
 end
