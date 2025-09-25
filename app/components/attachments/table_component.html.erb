@@ -6,10 +6,11 @@
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
         '
+        style="--puid-width: <%= helpers.puid_width(object_class: Attachment, has_checkbox: @abilities[:select_attachments]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
-        <thead class='sticky top-0 z-10 text-xs uppercase'>
+        <thead class='sticky top-0 z-10 uppercase'>
           <tr
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -21,9 +22,11 @@
                 tag: 'th',
                 **helpers.aria_sort(sort_column_name(column), @q.sorts[0].name, @q.sorts[0].dir),
                 scope: 'col',
-                classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@2xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
               ) do %>
-                <div class="flex items-center gap-3">
+                <div
+                  class="<%= class_names('flex items-center gap-3', 'font-sans': index.zero? || index == 1) %>"
+                >
                   <% if index.zero? and @abilities[:select_attachments] %>
                     <%= check_box_tag "select-page",
                     "1",
@@ -129,7 +132,7 @@
                 <%= render_cell(
                   tag: index.zero? ? 'th' :'td',
                   scope: index.zero? ? 'row' : nil,
-                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900 truncate': index == 1)
+                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@2xl:sticky left-(--puid-width) bg-slate-50 dark:bg-slate-900 truncate font-mono': index == 1)
                 ) do %>
                   <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_attachments] %>
@@ -155,99 +158,99 @@
                       } %>
                     <% end %>
                     <% if column == :id %>
-                      <%= highlight(
-                        attachment.puid,
-                        defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                          params[:q][:puid_or_file_blob_filename_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                      ) %>
+                      <span class="font-mono font-semibold">
+                        <%= highlight(
+                          attachment.puid,
+                          defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                            params[:q][:puid_or_file_blob_filename_cont],
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      </span>
                     <% elsif column == :filename %>
-                      <% if @render_individual_attachments %>
-                        <div>
-                          <div class="flex items-center">
-                            <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
-                              <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm, class: "ml-0 mr-2") %>
-                            <% elsif attachment.associated_attachment %>
-                              <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm, class: "ml-0 mr-2") %>
-                            <% else %>
-                              <%= pathogen_icon(ICON::FILE_TEXT, size: :sm, class: "ml-0 mr-2") %>
-                            <% end %>
-                            <span>
-                              <%= link_to rails_blob_path(attachment.file),
+                      <div class="flex items-centers font-sans">
+                        <% if @render_individual_attachments %>
+                          <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
+                            <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm, class: "ml-0 mr-2") %>
+                          <% elsif attachment.associated_attachment %>
+                            <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm, class: "ml-0 mr-2") %>
+                          <% else %>
+                            <%= pathogen_icon(ICON::FILE_TEXT, size: :sm, class: "ml-0 mr-2") %>
+                          <% end %>
+                          <span>
+                            <%= link_to rails_blob_path(attachment.file),
                             data: {
                               turbo: false,
                             },
                             class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
-                                <%= highlight(
-                                  attachment.file.filename.to_s,
-                                  defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                    params[:q][:puid_or_file_blob_filename_cont],
-                                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                                ) %>
-                              <% end %>
-                            </span>
-                          </div>
-                        </div>
-                      <% else %>
-                        <% if attachment.associated_attachment %>
-                          <div>
-                            <div class="flex items-center mb-4">
-                              <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm, class: "ml-0 mr-2") %>
-                              <span>
-                                <%= link_to rails_blob_path(attachment.file),
-                              data: {
-                                turbo: false,
-                              },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
-                                  <%= highlight(
-                                    attachment.file.filename.to_s,
-                                    defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                      params[:q][:puid_or_file_blob_filename_cont],
-                                    highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                                  ) %>
-                                <% end %>
-                              </span>
-                            </div>
-                            <div class="flex items-center">
-                              <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm, class: "ml-0 mr-2") %>
-                              <span>
-                                <%= link_to rails_blob_path(attachment.associated_attachment.file),
-                              data: {
-                                turbo: false,
-                              },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
-                                  <%= highlight(
-                                    attachment.associated_attachment.file.filename.to_s,
-                                    defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                      params[:q][:puid_or_file_blob_filename_cont],
-                                    highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                                  ) %>
-                                <% end %>
-                              </span>
-                            </div>
-                          </div>
+                              <%= highlight(
+                                attachment.file.filename.to_s,
+                                defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                  params[:q][:puid_or_file_blob_filename_cont],
+                                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                              ) %>
+                            <% end %>
+                          </span>
                         <% else %>
-                          <div>
-                            <div class="flex items-center">
-                              <%= pathogen_icon(ICON::FILE_TEXT, size: :sm, class: "ml-0 mr-2") %>
-                              <span>
-                                <%= link_to rails_blob_path(attachment.file),
+                          <% if attachment.associated_attachment %>
+                            <div>
+                              <div class="flex items-center mb-4">
+                                <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm, class: "ml-0 mr-2") %>
+                                <span>
+                                  <%= link_to rails_blob_path(attachment.file),
                               data: {
                                 turbo: false,
                               },
                               class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
-                                  <%= highlight(
-                                    attachment.file.filename.to_s,
-                                    defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                      params[:q][:puid_or_file_blob_filename_cont],
-                                    highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                                  ) %>
-                                <% end %>
-                              </span>
+                                    <%= highlight(
+                                      attachment.file.filename.to_s,
+                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                    ) %>
+                                  <% end %>
+                                </span>
+                              </div>
+                              <div class="flex items-center">
+                                <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm, class: "ml-0 mr-2") %>
+                                <span>
+                                  <%= link_to rails_blob_path(attachment.associated_attachment.file),
+                              data: {
+                                turbo: false,
+                              },
+                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
+                                    <%= highlight(
+                                      attachment.associated_attachment.file.filename.to_s,
+                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                    ) %>
+                                  <% end %>
+                                </span>
+                              </div>
                             </div>
-                          </div>
+                          <% else %>
+                            <div>
+                              <div class="flex items-center">
+                                <%= pathogen_icon(ICON::FILE_TEXT, size: :sm, class: "ml-0 mr-2") %>
+                                <span>
+                                  <%= link_to rails_blob_path(attachment.file),
+                              data: {
+                                turbo: false,
+                              },
+                              class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
+                                    <%= highlight(
+                                      attachment.file.filename.to_s,
+                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                    ) %>
+                                  <% end %>
+                                </span>
+                              </div>
+                            </div>
+                          <% end %>
                         <% end %>
-                      <% end %>
+                      </div>
                     <% elsif column == :format || column == :type %>
                       <%= viral_pill(
                         text: attachment.metadata[column.to_s],
