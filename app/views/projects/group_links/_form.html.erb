@@ -23,14 +23,10 @@
     <% invalid_group_id = new_group_link.errors.include?(:group_id) %>
     <div class="form-field <%= 'invalid' if invalid_group_id %>">
       <% form_id = "share_group_id_input" %>
-      <label
-        for="<%= form_id %>"
-        class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-        data-required="true"
-      >
-
-        <%= t("projects.group_links.new.label.shared_group") %>
-      </label>
+      <%= form.label :group_id, t("projects.group_links.new.label.shared_group"),
+                     for: form_id,
+                     class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                     data: { required: true } %>
       <%= viral_select2(form:, name: :group_id, id: form_id, selected_value: new_group_link.group_id, aria_invalid: invalid_group_id, field_hint: true) do |select| %>
         <% @namespace_linkable_groups.each do |group| %>
           <% select.with_option(
