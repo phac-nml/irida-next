@@ -1,266 +1,275 @@
-<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
-  <%= render Viral::BaseComponent.new(**system_arguments) do %>
-    <table
-      class='
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      '
-      style="--uuid-width: <%= helpers.uuid_width(has_checkbox: @abilities[:select_workflow_executions]) %>;"
-      data-controller="table"
-      data-action="focusin->table#handleCellFocus"
-    >
-      <thead class='sticky top-0 z-10 text-xs uppercase '>
-        <tr
-          class='
-            border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
-            text-slate-900 bg-slate-100 dark:bg-slate-900
-          '
-        >
-          <% @columns.each_with_index do |column, index| %>
-            <%= render_cell(
+<% if @has_workflow_executions %>
+  <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+    <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <table
+        class='
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        '
+        style="--uuid-width: <%= helpers.uuid_width(has_checkbox: @abilities[:select_workflow_executions]) %>;"
+        data-controller="table"
+        data-action="focusin->table#handleCellFocus"
+      >
+        <thead class='sticky top-0 z-10 text-xs uppercase '>
+          <tr
+            class='
+              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
+              text-slate-900 bg-slate-100 dark:bg-slate-900
+            '
+          >
+            <% @columns.each_with_index do |column, index| %>
+              <%= render_cell(
               tag: 'th',
               **helpers.aria_sort(sort_column_name(column), @q.sorts[0].name, @q.sorts[0].dir),
               scope: 'col',
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', '@2xl:sticky left-0 w-(--uuid-width) z-10': index.zero?)
             ) do %>
-              <div class="flex items-center gap-3">
-                <% if index.zero? and @abilities[:select_workflow_executions] %>
-                  <%= check_box_tag "select-page",
-                  "1",
-                  false,
-                  {
-                    id: "select-page",
-                    table: true,
-                    aria: {
-                      label: t(:".select_page"),
-                    },
-                    data: {
-                      action: "input->selection#togglePage",
-                      controller: "filters",
-                      selection_target: "selectPage",
-                    },
-                  } %>
-                <% end %>
-                <% if column == :workflow_name || column == :workflow_version %>
-                  <%= render Ransack::SortComponent.new(
-                    ransack_obj: @q,
-                    label: t(".#{column}"),
-                    url:
-                      helpers.sorting_url(
-                        @q,
-                        URI.encode_www_form_component("metadata_#{column}"),
-                      ),
-                    field: "metadata_#{column}",
-                    data: {
-                      turbo_action: "replace",
-                    },
-                  ) %>
-                <% else %>
-                  <%= render Ransack::SortComponent.new(
-                    ransack_obj: @q,
-                    label: t(".#{column}"),
-                    url: helpers.sorting_url(@q, column),
-                    field: column,
-                    data: {
-                      turbo_action: "replace",
-                    },
-                  ) %>
-                <% end %>
-              </div>
-            <% end %>
-          <% end %>
-          <% if @renders_row_actions %>
-            <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 @2xl:sticky right-0 text-right')
-            ) do %>
-              <%= t(".actions") %>
-            <% end %>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody
-        class='
-          bg-white border-y border-slate-200 dark:bg-slate-800 dark:border-slate-700
-        '
-      >
-        <% @workflow_executions.each do |workflow_execution| %>
-          <%= render Viral::BaseComponent.new(**row_arguments(workflow_execution)) do %>
-            <% @columns.each_with_index do |column, index| %>
-              <%= render_cell(
-                tag: index.zero? ? 'th' :'td',
-                scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--uuid-width) bg-slate-50 dark:bg-slate-900': index.zero?)
-              ) do %>
                 <div class="flex items-center gap-3">
-                  <% if index.zero? && @abilities[:select_workflow_executions] %>
-                    <%= check_box_tag "workflow_execution_ids[]",
-                    workflow_execution.id,
+                  <% if index.zero? and @abilities[:select_workflow_executions] %>
+                    <%= check_box_tag "select-page",
+                    "1",
                     false,
                     {
-                      id: dom_id(workflow_execution, "checkbox"),
+                      id: "select-page",
                       table: true,
                       aria: {
-                        label: workflow_execution.name.presence || workflow_execution.id,
+                        label: t(:".select_page"),
                       },
                       data: {
-                        action: "input->selection#toggle",
-                        selection_target: "rowSelection",
+                        action: "input->selection#togglePage",
+                        controller: "filters",
+                        selection_target: "selectPage",
                       },
                     } %>
                   <% end %>
-                  <% if column == :id %>
-                    <%= link_to(
-                    individual_path(workflow_execution),
-                    data: {
-                      turbo: false,
-                    },
-                    class: "text-slate-900 dark:text-slate-100 font-mono underline hover:decoration-2",
-                  ) do %>
-                      <%= highlight(
-                        workflow_execution.id,
-                        defined?(@search_params[:name_or_id_cont]) &&
-                          @search_params[:name_or_id_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                      ) %>
-                    <% end %>
-                  <% elsif column == :state %>
-                    <%= viral_pill(
-                      text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
-                      color: helpers.find_pill_color_for_state(workflow_execution[column]),
-                      border: true,
+                  <% if column == :workflow_name || column == :workflow_version %>
+                    <%= render Ransack::SortComponent.new(
+                      ransack_obj: @q,
+                      label: t(".#{column}"),
+                      url:
+                        helpers.sorting_url(
+                          @q,
+                          URI.encode_www_form_component("metadata_#{column}"),
+                        ),
+                      field: "metadata_#{column}",
+                      data: {
+                        turbo_action: "replace",
+                      },
                     ) %>
-                  <% elsif column == :workflow_name || column == :workflow_version %>
-                    <%= workflow_execution.metadata[column.to_s] %>
-                  <% elsif column == :created_at %>
-                    <%= helpers.local_date(workflow_execution[column], :long) %>
-                  <% elsif column == :updated_at || column == :attachments_updated_at %>
-                    <% if workflow_execution[column].present? %>
-                      <%= helpers.local_time_ago(workflow_execution[column]) %>
-                    <% end %>
-                  <% elsif column == :name %>
-                    <span class="font-semibold">
-                      <%= highlight(
-                        workflow_execution.name,
-                        defined?(@search_params[:name_or_id_cont]) &&
-                          @search_params[:name_or_id_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                      ) %>
-                    </span>
                   <% else %>
-                    <%= workflow_execution[column.to_sym] %>
+                    <%= render Ransack::SortComponent.new(
+                      ransack_obj: @q,
+                      label: t(".#{column}"),
+                      url: helpers.sorting_url(@q, column),
+                      field: column,
+                      data: {
+                        turbo_action: "replace",
+                      },
+                    ) %>
                   <% end %>
                 </div>
               <% end %>
             <% end %>
             <% if @renders_row_actions %>
               <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 @2xl:sticky right-0 text-right')
+            ) do %>
+                <%= t(".actions") %>
+              <% end %>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody
+          class='
+            bg-white border-y border-slate-200 dark:bg-slate-800 dark:border-slate-700
+          '
+        >
+          <% @workflow_executions.each do |workflow_execution| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(workflow_execution)) do %>
+              <% @columns.each_with_index do |column, index| %>
+                <%= render_cell(
+                tag: index.zero? ? 'th' :'td',
+                scope: index.zero? ? 'row' : nil,
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--uuid-width) bg-slate-50 dark:bg-slate-900': index.zero?)
+              ) do %>
+                  <div class="flex items-center gap-3">
+                    <% if index.zero? && @abilities[:select_workflow_executions] %>
+                      <%= check_box_tag "workflow_execution_ids[]",
+                      workflow_execution.id,
+                      false,
+                      {
+                        id: dom_id(workflow_execution, "checkbox"),
+                        table: true,
+                        aria: {
+                          label: workflow_execution.name.presence || workflow_execution.id,
+                        },
+                        data: {
+                          action: "input->selection#toggle",
+                          selection_target: "rowSelection",
+                        },
+                      } %>
+                    <% end %>
+                    <% if column == :id %>
+                      <%= link_to(
+                    individual_path(workflow_execution),
+                    data: {
+                      turbo: false,
+                    },
+                    class: "text-slate-900 dark:text-slate-100 font-mono underline hover:decoration-2",
+                  ) do %>
+                        <%= highlight(
+                          workflow_execution.id,
+                          defined?(@search_params[:name_or_id_cont]) &&
+                            @search_params[:name_or_id_cont],
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      <% end %>
+                    <% elsif column == :state %>
+                      <%= viral_pill(
+                        text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
+                        color: helpers.find_pill_color_for_state(workflow_execution[column]),
+                        border: true,
+                      ) %>
+                    <% elsif column == :workflow_name || column == :workflow_version %>
+                      <%= workflow_execution.metadata[column.to_s] %>
+                    <% elsif column == :created_at %>
+                      <%= helpers.local_date(workflow_execution[column], :long) %>
+                    <% elsif column == :updated_at || column == :attachments_updated_at %>
+                      <% if workflow_execution[column].present? %>
+                        <%= helpers.local_time_ago(workflow_execution[column]) %>
+                      <% end %>
+                    <% elsif column == :name %>
+                      <span class="font-semibold">
+                        <%= highlight(
+                          workflow_execution.name,
+                          defined?(@search_params[:name_or_id_cont]) &&
+                            @search_params[:name_or_id_cont],
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      </span>
+                    <% else %>
+                      <%= workflow_execution[column.to_sym] %>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+              <% if @renders_row_actions %>
+                <%= render_cell(
                 tag: 'td',
                 classes: class_names('@2xl:sticky right-0')
               ) do %>
-                <div class="bg-white w-full dark:bg-slate-800 text-right px-3 py-2.5 space-x-2">
-                  <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
-                    <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                      <%= button_to t(:"workflow_executions.actions.cancel"),
-                      cancel_path(workflow_execution),
-                      data: {
-                        turbo_method: :put,
-                        turbo_confirm: t(:"workflow_executions.actions.cancel_confirm"),
-                      },
-                      method: :put,
-                      aria: {
-                        label:
-                          t(
-                            :"workflow_executions.actions.cancel_aria_label",
-                            name: workflow_execution.name,
-                          ),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                  <div class="bg-white w-full dark:bg-slate-800 text-right px-3 py-2.5 space-x-2">
+                    <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
+                      <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
+                        <%= button_to t(:"workflow_executions.actions.cancel"),
+                        cancel_path(workflow_execution),
+                        data: {
+                          turbo_method: :put,
+                          turbo_confirm: t(:"workflow_executions.actions.cancel_confirm"),
+                        },
+                        method: :put,
+                        aria: {
+                          label:
+                            t(
+                              :"workflow_executions.actions.cancel_aria_label",
+                              name: workflow_execution.name,
+                            ),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                      <% end %>
+                      <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
+                        <%= button_to t(:"workflow_executions.actions.delete"),
+                        destroy_confirmation_path(workflow_execution),
+                        data: {
+                          turbo_stream: :true,
+                        },
+                        method: :get,
+                        aria: {
+                          label:
+                            t(
+                              :"workflow_executions.actions.delete_aria_label",
+                              name: workflow_execution.name,
+                            ),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                      <% end %>
                     <% end %>
-                    <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                      <%= button_to t(:"workflow_executions.actions.delete"),
-                      destroy_confirmation_path(workflow_execution),
-                      data: {
-                        turbo_stream: :true,
-                      },
-                      method: :get,
-                      aria: {
-                        label:
-                          t(
-                            :"workflow_executions.actions.delete_aria_label",
-                            name: workflow_execution.name,
-                          ),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
-                    <% end %>
-                  <% end %>
-                </div>
+                  </div>
+                <% end %>
               <% end %>
             <% end %>
           <% end %>
+        </tbody>
+        <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
+          <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
+            <tr>
+              <td
+                class="
+                  @2xl:sticky left-0 z-10 w-(--uuid-width) px-6 py-3 text-slate-700
+                  dark:text-slate-300
+                "
+                colspan="3"
+              >
+                <span>
+                  <%= t(".counts.workflow_executions") %>:
+                  <strong><%= @pagy.count %></strong>
+                </span>
+                <span>
+                  <%= t(".counts.selected") %>:
+                  <strong data-selection-target="selected">0</strong>
+                </span>
+              </td>
+              <td
+                colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
+                class="px-3 py-3 bg-slate-100 dark:bg-slate-900"
+              ></td>
+            </tr>
+          </tfoot>
         <% end %>
-      </tbody>
-      <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
-        <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
-          <tr>
-            <td
-              class="
-                @2xl:sticky left-0 z-10 w-(--uuid-width) px-6 py-3 text-slate-700
-                dark:text-slate-300
-              "
-              colspan="3"
-            >
-              <span>
-                <%= t(".counts.workflow_executions") %>:
-                <strong><%= @pagy.count %></strong>
-              </span>
-              <span>
-                <%= t(".counts.selected") %>:
-                <strong data-selection-target="selected">0</strong>
-              </span>
-            </td>
-            <td
-              colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
-              class="px-3 py-3 bg-slate-100 dark:bg-slate-900"
-            ></td>
-          </tr>
-        </tfoot>
-      <% end %>
-    </table>
+      </table>
+    <% end %>
+    <% if @pagy.count.positive? %>
+      <%= render PaginationComponent.new(
+        info: helpers.pagy_info(@pagy),
+        prev_url:
+          (
+            if @pagy.prev
+              helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+                "workflow_executions.turbo_stream",
+                "workflow_executions",
+              )
+            else
+              nil
+            end
+          ),
+        next_url:
+          (
+            if @pagy.next
+              helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+                "workflow_executions.turbo_stream",
+                "workflow_executions",
+              )
+            else
+              nil
+            end
+          ),
+        data: {
+          turbo_action: "replace",
+        },
+      ) %>
+    <% else %>
+      <%= render Viral::EmptyStateComponent.new(
+        icon_name: ICON::MAGNIFYING_GLASS,
+        title: t("components.viral.pagy.empty_state.title"),
+        description: t("components.viral.pagy.empty_state.description"),
+      ) %>
+    <% end %>
   <% end %>
-  <% unless @workflow_executions.empty? %>
-    <%= render PaginationComponent.new(
-      info: helpers.pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
-              "workflow_executions.turbo_stream",
-              "workflow_executions",
-            )
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            helpers.pagy_url_for(@pagy, @pagy.next).gsub(
-              "workflow_executions.turbo_stream",
-              "workflow_executions",
-            )
-          else
-            nil
-          end
-        ),
-      data: {
-        turbo_action: "replace",
-      },
-    ) %>
-  <% end %>
+<% else %>
   <div class="empty_state_message">
     <%= viral_empty(
       title: @empty[:title],

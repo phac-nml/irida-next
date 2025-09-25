@@ -1,8 +1,9 @@
-<%# locals: (pagy:, q:, workflow_executions:) -%>
+<%# locals: (pagy:, q:, workflow_executions:, has_workflow_executions:) -%>
 <%= render WorkflowExecutions::TableComponent.new(
   workflow_executions,
   pagy,
   q,
+  has_workflow_executions,
   search_params: @search_params,
   abilities: {
     select_workflow_executions: true,

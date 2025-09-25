@@ -15,6 +15,7 @@ module WorkflowExecutions
       workflow_executions,
       pagy,
       q,
+      has_workflow_executions,
       namespace: nil,
       row_actions: false,
       search_params: nil,
@@ -25,6 +26,7 @@ module WorkflowExecutions
       @workflow_executions = workflow_executions
       @pagy = pagy
       @q = q
+      @has_workflow_executions = has_workflow_executions
       @namespace = namespace
       @abilities = abilities
       @search_params = search_params
