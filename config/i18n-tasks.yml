@@ -35,6 +35,7 @@ data:
     - ["pathogen.*", "embedded_gems/pathogen/config/locales/%{locale}.yml"]
     - ["components.*", "config/locales/components.%{locale}.yml"]
     - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
+    - ["local_time.*", "config/locales/local_time.%{locale}.yml"]
     # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
     # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
     # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']
@@ -151,6 +152,8 @@ search:
 ignore_missing:
   en:
     - "helpers.submit.*.create"
+    - "local_time"
+    - "local_time.*"
 
 ## Consider these keys used:
 ignore_unused:
@@ -159,6 +162,7 @@ ignore_unused:
   - "activity.*"
   - "components.viral.data_table_component.*"
   - "samples.table_component.namespaces.puid"
+  - "local_time.*"
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
