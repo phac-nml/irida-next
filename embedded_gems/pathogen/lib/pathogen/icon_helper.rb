@@ -22,6 +22,7 @@ module Pathogen
     ARROW_DOWN = { name: 'arrow-down', options: {} }.freeze
     ARROW_RIGHT = { name: 'arrow-right', options: {} }.freeze
     ARROW_LEFT = { name: 'arrow-left', options: {} }.freeze
+    ARROW_UP_RIGHT = { name: 'arrow-up-right', options: {} }.freeze
     BANK = { name: :bank, options: {} }.freeze
     CALENDAR_DOTS = { name: 'calendar-dots', options: {} }.freeze
     CARET_DOWN = { name: 'caret-down', options: {} }.freeze
