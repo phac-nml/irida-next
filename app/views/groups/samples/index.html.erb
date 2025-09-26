@@ -12,7 +12,7 @@
         <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
                   class: "button button-default action-button w-full" do %>
-          <%= pathogen_icon(ICON::ROCKET_LAUNCH, size: :sm) %>
+          <%= pathogen_icon("rocket-launch", size: :sm) %>
           <span class="ml-2"><%= t(".workflows.button_sr") %></span>
         <% end %>
       <% end %>

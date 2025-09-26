@@ -22,7 +22,7 @@
       data-pathogen--datepicker--calendar-target="backButton"
       aria-label="<%= t("pathogen.datepicker.aria_label.previous_month_button")%>"
     >
-      <%= pathogen_icon(ICON::ARROW_LEFT, size: :sm) %>
+      <%= pathogen_icon("arrow-left", size: :sm) %>
     </button>
     <div
       data-pathogen--datepicker--calendar-target="monthSelectContainer"
@@ -53,7 +53,7 @@
       data-action="click->pathogen--datepicker--calendar#nextMonth"
       aria-label="<%= t("pathogen.datepicker.aria_label.next_month_button")%>"
     >
-      <%= pathogen_icon(ICON::ARROW_RIGHT, size: :sm) %>
+      <%= pathogen_icon("arrow-right", size: :sm) %>
     </button>
   </div>
 </div>

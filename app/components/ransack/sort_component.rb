@@ -28,7 +28,7 @@ module Ransack
         return
       end
 
-      @ransack_obj.sorts[0].dir == 'asc' ? ICON::ARROW_UP : ICON::ARROW_DOWN
+      @ransack_obj.sorts[0].dir == 'asc' ? 'arrow-up' : 'arrow-down'
     end
   end
 end

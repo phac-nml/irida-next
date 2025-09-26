@@ -7,7 +7,7 @@ module Layout
   #   <%= render Layout::SidebarComponent.new do |sidebar| %>
   #     <% sidebar.with_section(title: 'Main') do |section| %>
   #       <% section.with_item(url: root_path, selected: current_page?(root_path)) do |item| %>
-  #         <% item.with_icon { pathogen_icon(ICON::HOUSE) } %>
+  #         <% item.with_icon { pathogen_icon(:house) } %>
   #         Dashboard
   #       <% end %>
   #     <% end %>

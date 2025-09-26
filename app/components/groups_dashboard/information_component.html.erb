@@ -29,7 +29,7 @@
           id_prefix: "group-created",
           label: t(:"groups.show.information.created_on"),
           value: @group.created_at || Time.zone.now,
-          icon_name: ICON::CALENDAR_DOTS,
+          icon_name: "calendar-dots",
           color_scheme: :slate,
         ) %>
       </div>
@@ -40,7 +40,7 @@
           id_prefix: "group-samples",
           label: t(:"groups.show.information.number_of_samples"),
           value: @group.samples_count || 0,
-          icon_name: ICON::BEAKER,
+          icon_name: "test-tube",
           color_scheme: :blue,
         ) %>
       </div>
@@ -51,7 +51,7 @@
           id_prefix: "group-projects",
           label: t(:"groups.show.information.number_of_projects"),
           value: @group.project_namespaces.count || 0,
-          icon_name: ICON::PROJECTS,
+          icon_name: :stack,
           color_scheme: :fuchsia,
         ) %>
       </div>
@@ -62,7 +62,7 @@
           id_prefix: "group-subgroups",
           label: t(:"groups.show.information.number_of_subgroups"),
           value: @group.children.count || 0,
-          icon_name: ICON::GROUPS,
+          icon_name: "squares-four",
           color_scheme: :amber,
         ) %>
       </div>

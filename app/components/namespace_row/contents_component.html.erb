@@ -64,7 +64,7 @@
             ),
         ) %>
         <span class="<%= count_pill_classes(:groups) %>">
-          <%= pathogen_icon ICON::GROUPS,
+          <%= pathogen_icon "squares-four",
           size: :sm,
           class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
           <%= @namespace.children.count %>
@@ -81,7 +81,7 @@
             ),
         ) %>
         <span class="<%= count_pill_classes(:projects) %>">
-          <%= pathogen_icon ICON::PROJECTS,
+          <%= pathogen_icon :stack,
           size: :sm,
           class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
           <%= @namespace.project_namespaces.count %>
@@ -101,7 +101,7 @@
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
           class="<%= count_pill_classes(:samples) %>"
         >
-          <%= pathogen_icon ICON::SAMPLES,
+          <%= pathogen_icon "test-tube",
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.aggregated_samples_count %>
@@ -123,7 +123,7 @@
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
           class="<%= count_pill_classes(:samples) %>"
         >
-          <%= pathogen_icon ICON::SAMPLES,
+          <%= pathogen_icon "test-tube",
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.project.samples.size %>
