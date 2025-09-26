@@ -26,11 +26,9 @@ module Pathogen
       args.delete(:icon)
       args[:class] = class_names(args[:class], icon_classes)
 
-      # Ensure aria-hidden is set for decorative icons unless explicitly provided
-      args['aria-hidden'] = true unless args.key?('aria-hidden') || args.key?(:'aria-hidden')
-
-      # Use rails_icons icon method directly
-      icon(icon_name, **args)
+      # Use the enhanced Pathogen::Icon component for better functionality
+      # (includes debug classes, error handling, accessibility defaults)
+      Pathogen::Icon.new(icon_name, **args)
     end
 
     def svg_visual(args, name)
