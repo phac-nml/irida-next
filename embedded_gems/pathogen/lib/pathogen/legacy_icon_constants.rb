@@ -72,5 +72,5 @@ module Pathogen
 end
 
 # Define global ICON constant for easier access
-# This allows using ICON::ARROW_UP instead of Pathogen::ICON::ARROW_UP
+# This allows using "arrow-up" instead of Pathogen::"arrow-up"
 ICON = Pathogen::ICON unless defined?(ICON)

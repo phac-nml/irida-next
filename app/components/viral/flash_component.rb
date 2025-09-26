@@ -60,13 +60,13 @@ module Viral
     def icon_name
       case type.to_s
       when 'success'
-        ICON::CHECK_CIRCLE
+        :check_CIRCLE
       when 'error'
-        ICON::X_CIRCLE
+        :x_CIRCLE
       when 'warning'
         ICON::WARNING_CIRCLE
       when 'info'
-        ICON::INFO
+        :info
       else
         '' # Default icon or handle error
       end

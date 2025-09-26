@@ -46,8 +46,8 @@ module Pathogen
     end
 
     test 'render_icon works with ICON constants for backward compatibility' do
-      # This assumes ICON::CHECK is still defined in legacy_icon_constants.rb
-      result = render_icon(ICON::CHECK)
+      # This assumes :check is still defined in legacy_icon_constants.rb
+      result = render_icon(:check)
       assert_match(/<svg/, result)
     end
 

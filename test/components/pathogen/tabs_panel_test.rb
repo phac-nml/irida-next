@@ -45,7 +45,7 @@ module Pathogen
           tab.with_icon(icon: ICON::BANK)
         end
         nav.with_tab(id: 'nav-2', text: 'Profile', href: '/profile') do |tab|
-          tab.with_icon(icon: ICON::USERS)
+          tab.with_icon(icon: :users)
         end
       end
       render_inline(tabs_component)

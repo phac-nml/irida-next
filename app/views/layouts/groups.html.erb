@@ -14,21 +14,21 @@
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
-            icon: ICON::SAMPLES,
+            icon: "test-tube",
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @group) %>
             <%= render section.with_item(
               url: group_attachments_path(@group),
-              icon: ICON::FILES,
+              icon: :files,
               label: t(:"groups.sidebar.files"),
               selected: @current_page == t(:"groups.sidebar.files"),
             ) %>
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: ICON::USERS,
+            icon: :users,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>

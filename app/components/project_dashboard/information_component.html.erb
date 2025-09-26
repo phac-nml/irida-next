@@ -28,7 +28,7 @@
         id_prefix: "project-created",
         label: t(:"components.project_dashboard.information.created_on"),
         value: @project.created_at,
-        icon_name: ICON::CALENDAR_DOTS,
+        icon_name: "calendar-dots",
         color_scheme: :slate,
       ) %>
     </div>
@@ -36,7 +36,7 @@
     <%# Samples Count - Full width on mobile, half on sm and up %>
     <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
-        icon_name: ICON::SAMPLES,
+        icon_name: "test-tube",
         id_prefix: "project-samples",
         label: t(:"components.project_dashboard.information.number_of_samples"),
         value: @project.samples.count || 0,
@@ -62,7 +62,7 @@
     <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "project-members",
-        icon_name: ICON::USERS,
+        icon_name: :users,
         label: t(:"components.project_dashboard.information.number_of_members"),
         value: @project.namespace.project_members.without_automation_bots.count || 0,
         color_scheme: :indigo,

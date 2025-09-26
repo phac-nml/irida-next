@@ -105,10 +105,10 @@ module Viral
     # @return [String]
     def icon_name
       case type
-      when 'danger' then ICON::X_CIRCLE
-      when 'success' then ICON::CHECK_CIRCLE
+      when 'danger' then :x_CIRCLE
+      when 'success' then :check_CIRCLE
       when 'warning' then ICON::WARNING_CIRCLE
-      else ICON::INFO
+      else :info
       end
     end
 
