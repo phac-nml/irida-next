@@ -53,7 +53,7 @@ module Pathogen
     USERS = { name: :users, options: {} }.freeze
     WARNING_CIRCLE = { name: 'warning-circle', options: {} }.freeze
     X = { name: :x, options: {} }.freeze
-    X_CIRCLE = { name: 'x-circle', options: {} }.freeze
+    "x-circle" = { name: 'x-circle', options: {} }.freeze
     # Heroicons
     BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
     # Named icons

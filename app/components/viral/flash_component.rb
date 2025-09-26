@@ -62,7 +62,7 @@ module Viral
       when 'success'
         :check_CIRCLE
       when 'error'
-        :x_CIRCLE
+        :'x-circle'
       when 'warning'
         'warning-circle'
       when 'info'
