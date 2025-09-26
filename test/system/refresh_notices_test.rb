@@ -12,13 +12,10 @@ class RefreshNoticesTest < ApplicationSystemTestCase
   end
 
   test 'refresh notice appears when samples are updated in another session' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Verify the notice is initially hidden
     assert_selector '[data-refresh-target="notice"]', visible: false
-
-    # Update a sample in the background (simulating another user's action)
-    sample = samples(:sample1)
 
     # Use ActionCable test helper to simulate the broadcast
     broadcast_refresh_later_to @project, :samples
@@ -31,7 +28,7 @@ class RefreshNoticesTest < ApplicationSystemTestCase
   end
 
   test 'refresh notice can be dismissed' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Simulate a refresh broadcast
     broadcast_refresh_later_to @project, :samples
@@ -45,7 +42,7 @@ class RefreshNoticesTest < ApplicationSystemTestCase
   end
 
   test 'refresh notice refreshes the page when clicked' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Get current URL for comparison
     current_url = page.current_url
@@ -64,7 +61,7 @@ class RefreshNoticesTest < ApplicationSystemTestCase
   end
 
   test 'refresh notice shows update count for multiple rapid updates' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Simulate multiple rapid broadcasts
     3.times do
@@ -94,7 +91,7 @@ class RefreshNoticesTest < ApplicationSystemTestCase
   end
 
   test 'refresh notice auto-dismisses when configured' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Verify auto-dismiss is configured (10 seconds for samples)
     refresh_div = page.find('[data-controller="refresh"]')
@@ -106,29 +103,34 @@ class RefreshNoticesTest < ApplicationSystemTestCase
     # Notice should appear
     assert_selector '[data-refresh-target="notice"]', visible: true
 
-    # Note: We can't easily test the actual auto-dismiss in a fast test,
+    # NOTE: We can't easily test the actual auto-dismiss in a fast test,
     # but we can verify the configuration is present
   end
 
   test 'refresh notice respects debouncing configuration' do
-    visit namespace_project_samples_path(@project.namespace, @project)
+    visit namespace_project_samples_path(@project.namespace.parent, @project)
 
     # Verify debouncing is configured
     refresh_div = page.find('[data-controller="refresh"]')
     debounce_value = refresh_div['data-refresh-debounce-value']
     assert debounce_value.present?, 'Debounce value should be configured'
-    assert debounce_value.to_i > 0, 'Debounce value should be positive'
+    assert debounce_value.to_i.positive?, 'Debounce value should be positive'
   end
 
   private
 
-  def broadcast_refresh_later_to(resource, stream_name)
+  def broadcast_refresh_later_to(_resource, _stream_name)
     # Simulate the Turbo broadcast that would normally happen
-    # We need to simulate the message that the refresh controller expects
-    ActionCable.server.broadcast(
-      "#{resource.to_gid_param}:#{stream_name}",
-      '<turbo-stream action="refresh"></turbo-stream>'
-    )
+    # We need to simulate the message event that the refresh controller expects
+    page.execute_script(<<~JS)
+      const refreshSource = document.querySelector('[data-refresh-target="source"]');
+      if (refreshSource) {
+        const event = new MessageEvent('message', {
+          data: '<turbo-stream action="refresh"></turbo-stream>'
+        });
+        refreshSource.dispatchEvent(event);
+      }
+    JS
 
     # Give a small delay for JavaScript to process
     sleep 0.1
