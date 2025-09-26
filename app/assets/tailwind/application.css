@@ -121,9 +121,7 @@ input[type="search"] {
 
   /* Required field indicator for PathogenFormBuilder labels */
   & abbr.req {
-    @apply text-red-500 no-underline;
-    text-decoration: none;
-    font-size: 150%;
+    @apply text-xl text-red-500 no-underline;
   }
 
   & div.field_with_errors {
