@@ -39,5 +39,8 @@ fr:
         september: septembre
       placeholder: AAAA-MM-JJ
       show_today: Show Today
+    label:
+      required_indicator: "*"
+      title: obligatoire
     link:
       aria-label: "%{content} (opens in a new window)"

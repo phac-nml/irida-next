@@ -44,13 +44,16 @@ end %>
   <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
   <div class="form-field <%= 'invalid' if invalid_namespace %>">
     <% form_id = "namespace-select" %>
-    <label
-      for="<%= form_id %>"
-      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-    >
-      <%= t("activerecord.attributes.namespaces/project_namespace.parent_id") %>
-      <span class="text-red-500">*</span>
-    </label>
+    <%= builder.label :parent_id,
+                  t(
+                    "activerecord.attributes.namespaces/project_namespace.parent_id",
+                  ),
+                  for: form_id,
+                  data: {
+                    required: true,
+                  },
+                  class:
+                    "mb-1 block text-sm font-medium text-slate-900 dark:text-white" %>
     <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>

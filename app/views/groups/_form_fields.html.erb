@@ -37,13 +37,14 @@
     <div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
       <div class="form-field">
         <% form_id = "namespace-select" %>
-        <label
-          for="<%= form_id %>"
-          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-          data-required="true"
-        >
-          <%= t("activerecord.attributes.group.parent_id") %>
-        </label>
+        <%= form.label :parent_id,
+                   t("activerecord.attributes.group.parent_id"),
+                   for: form_id,
+                   class:
+                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                   data: {
+                     required: true,
+                   } %>
         <div>
           <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>

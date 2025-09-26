@@ -3,14 +3,14 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
   <div class="form-field">
     <% form_id = "transfer_namespace_id_input" %>
-    <label
-      for="<%= form_id %>"
-      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-      data-required="true"
-    >
-
-      <%= t("groups.edit.advanced.transfer.new_namespace_id") %>
-    </label>
+    <%= form.label :new_namespace_id,
+               t("groups.edit.advanced.transfer.new_namespace_id"),
+               class:
+                 "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+               data: {
+                 required: true,
+               },
+               for: form_id %>
     <% if @authorized_namespaces.empty? %>
       <input
         disabled

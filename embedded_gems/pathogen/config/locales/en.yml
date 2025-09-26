@@ -39,5 +39,8 @@ en:
         september: September
       placeholder: YYYY-MM-DD
       show_today: Show Today
+    label:
+      required_indicator: "*"
+      title: required
     link:
       aria-label: "%{content} (opens in a new window)"

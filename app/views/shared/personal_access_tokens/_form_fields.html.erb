@@ -36,7 +36,8 @@
 <% invalid_scopes = pat.errors.include?(:scopes) %>
 <div class="form-field <%= 'invalid' if invalid_scopes %>">
   <fieldset>
-    <legend data-required="true"><%= t(:"activerecord.attributes.personal_access_token.scopes") %></legend>
+    <legend><%= t(:"activerecord.attributes.personal_access_token.scopes") %>
+      <abbr class="req" title="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr></legend>
     <% Irida::Auth.all_available_scopes.each do |scope| %>
       <div class="flex">
         <div class="flex items-center h-5">

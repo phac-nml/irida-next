@@ -74,6 +74,125 @@ module Pathogen
         super
       end
       alias check_box checkbox
+
+      # Renders a label with consistent styling and required field indicators
+      #
+      # Overrides the default Rails form builder's label method to provide
+      # automatic required field indicators when data-required="true" is present
+      # in the options. The required indicator is added as an HTML abbr element
+      # rather than relying on CSS pseudo-elements for better semantic meaning.
+      #
+      # @param method [Symbol] The method name for the label
+      # @param content_or_options [String, Hash] Either content text or options hash
+      # @param options [Hash] Options for the label (if content_or_options is String)
+      # @return [String] HTML for the label with required indicator if needed
+      #
+      # @example Basic usage with data hash
+      #   f.label :name, "Full Name", data: { required: "true" }
+      #
+      # @example Basic usage with string attribute
+      #   f.label :email, "Email", "data-required" => "true"
+      #
+      # @example With block content
+      #   f.label :email, data: { required: "true" } do
+      #     "Email Address"
+      #   end
+      def label(method, content_or_options = nil, options = nil, &)
+        options, content_or_options = normalize_label_params(content_or_options, options)
+        options = add_test_selector(options)
+        options = apply_label_styling(options)
+
+        is_required = required_field?(options)
+
+        # Remove the data-required attribute after determining the required state
+        remove_required_attributes(options) if is_required
+
+        return super unless is_required
+
+        enhanced_content = build_enhanced_label_content(method, content_or_options, &)
+        super(method, enhanced_content, options)
+      end
+
+      private
+
+      def normalize_label_params(content_or_options, options)
+        if content_or_options.is_a?(Hash)
+          [content_or_options, nil]
+        else
+          [options || {}, content_or_options]
+        end
+      end
+
+      def required_field?(options)
+        # Pull the potential required flag from typical locations and
+        # treat only "true" or "1" (or their non-string equivalents) as required.
+        val = options.dig(:data, :required) || options.dig(:data, 'required') || options['data-required']
+        %w[true 1].include?(val.to_s)
+      end
+
+      def remove_required_attributes(options)
+        # Remove data-required attributes from various possible locations
+        options[:data]&.delete(:required)
+        options[:data]&.delete('required')
+        options.delete('data-required')
+      end
+
+      def build_enhanced_label_content(method, content_or_options, &)
+        base_content = determine_base_content(method, content_or_options, &)
+        append_required_indicator(base_content)
+      end
+
+      def determine_base_content(method, content_or_options, &)
+        return @template.capture(&) if block_given?
+        return content_or_options.to_s if content_or_options
+
+        # Use Rails' built-in label translation lookup
+        if @object&.class.respond_to?(:human_attribute_name)
+          @object.class.human_attribute_name(method)
+        else
+          method.to_s.humanize
+        end
+      end
+
+      def append_required_indicator(content)
+        safe_content = ERB::Util.html_escape(content.to_s.strip)
+        required_abbr = @template.tag.abbr(
+          I18n.t('pathogen.label.required_indicator'),
+          class: 'req',
+          title: I18n.t('pathogen.label.title')
+        )
+        @template.safe_join([safe_content, ' ', required_abbr])
+      end
+
+      # Apply label styling to label options
+      #
+      # Adds CSS classes for consistent label styling
+      # that integrates well with the grid-based form layout and provides
+      # proper typography, spacing, and dark mode support.
+      #
+      # @param options [Hash] Options for the label
+      # @return [Hash] Options with label styling applied
+      def apply_label_styling(options)
+        # Label classes for consistent styling
+        label_classes = [
+          'block',           # Display as block element
+          'mb-2',            # Margin bottom for spacing
+          'text-sm',         # Small text size
+          'font-medium',     # Medium font weight
+          'text-slate-900',  # Text color for light mode
+          'dark:text-white'  # Text color for dark mode
+        ]
+
+        # Merge custom classes with label classes
+        if options[:class].present?
+          user_classes = options[:class].is_a?(Array) ? options[:class] : [options[:class].to_s]
+          options[:class] = label_classes + user_classes
+        else
+          options[:class] = label_classes
+        end
+
+        options
+      end
     end
   end
 end

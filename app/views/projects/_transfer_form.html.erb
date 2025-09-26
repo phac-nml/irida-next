@@ -5,14 +5,10 @@
   </div>
   <div class="form-field">
     <% form_id = "transfer-form-select2" %>
-    <label
-      for="<%= form_id %>"
-      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-      data-required="true"
-    >
-
-      <%= t(:"projects.edit.advanced.transfer.new_namespace_id") %>
-    </label>
+    <%= form.label :new_namespace_id, t(:"projects.edit.advanced.transfer.new_namespace_id"),
+                   for: form_id,
+                   class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                   data: { required: true } %>
     <% if @authorized_namespaces.empty? %>
       <input
         disabled

@@ -115,18 +115,15 @@ input[type="search"] {
 }
 
 @utility form-field {
-  & label,
   legend {
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
-  /*
-    content separated by / tells the screenreader that the content is blank so that the asterisk is not read out
-  */
-  & label[data-required]::after,
-  legend[data-required]::after {
-    content: " *" / "";
-    @apply text-red-500;
+  /* Required field indicator for PathogenFormBuilder labels */
+  & abbr.req {
+    @apply text-red-500 no-underline;
+    text-decoration: none;
+    font-size: 150%;
   }
 
   & div.field_with_errors {

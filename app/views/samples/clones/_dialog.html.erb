@@ -56,15 +56,10 @@
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "clone-project-select" %>
-              <label
-                for="<%= form_id %>"
-                class="
-                  mb-1 block text-sm font-medium text-slate-900 dark:text-white
-                "
-                data-required="true"
-              >
-                <%= t(".new_project_id") %>
-              </label>
+              <%= form.label :new_project_id, t(".new_project_id"),
+                             for: form_id,
+                             class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                             data: { required: true } %>
               <% if @projects.empty? %>
                 <input
                   disabled

@@ -69,6 +69,7 @@ search:
   paths:
    - app/
    - embedded_gems/pathogen/app/
+   - embedded_gems/pathogen/lib/
   ## Root directories for relative keys resolution.
   relative_roots:
     - app/controllers
