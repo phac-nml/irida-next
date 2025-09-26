@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import { FIELD_CLASSES } from "utilities/styles";
 
 export default class extends Controller {
   static targets = [
@@ -18,32 +17,40 @@ export default class extends Controller {
   };
 
   #errors = [];
+  #fieldCounter = 0;
 
   connect() {
     this.addField();
   }
 
-  // Add new field and replace the PLACEHOLDER with a current datetime for unique identifier
+  // Add new field and replace the PLACEHOLDER with a counter for unique identifier
   addField() {
-    const currentTime = new Date().getTime();
+    const fieldId = this.#fieldCounter++;
     let newField = this.fieldTemplateTarget.innerHTML.replace(
       /PLACEHOLDER/g,
-      currentTime,
+      fieldId,
     );
     this.fieldsContainerTarget.insertAdjacentHTML("beforeend", newField);
 
-    document.getElementById(`key[${currentTime}]`).focus();
+    // Focus on the key input field of the newly added field
+    const newKeyInput = document.getElementById(`key_${fieldId}`);
+    if (newKeyInput) {
+      newKeyInput.focus();
+    }
   }
 
   removeField(event) {
-    let key_id = event.target
-      .closest(".inputField")
-      .querySelector("div")
-      .querySelector("input").id;
-    event.target.closest(".inputField").remove();
+    const inputFieldDiv = event.target.closest(".inputField");
+    const keyInput = inputFieldDiv.querySelector("input[id^='key_']");
+    const key_id = keyInput.id;
+
+    inputFieldDiv.remove();
 
     // Remove error messages div if inputField div is removed
-    document.getElementById(key_id + "_field_errors").remove();
+    const errorDiv = document.getElementById(key_id + "_field_errors");
+    if (errorDiv) {
+      errorDiv.remove();
+    }
 
     // Remove metadata field from errors if it was removed from the DOM
     this.#removeMetadataKeyIdFromErrors(key_id);
@@ -61,8 +68,8 @@ export default class extends Controller {
 
     setTimeout(() => {
       for (let input of inputFields) {
-        let metadata_field = input.querySelector(".keyInput");
-        let value_field = input.querySelector(".valueInput");
+        let metadata_field = input.querySelector("input[id^='key_']");
+        let value_field = input.querySelector("input[id^='value_']");
 
         if (!metadata_field.value || !value_field.value) {
           // If either key or value is blank render error states for the field
@@ -73,8 +80,8 @@ export default class extends Controller {
           // No errors for key or value so we remove the error states and remove
           // the metadata field from the errors
           if (this.#errors.includes(metadata_field.id)) {
-            this.#removeFieldErrorState(metadata_field, "key_input");
-            this.#removeFieldErrorState(value_field, "value_input");
+            this.#removeFieldErrorState(metadata_field);
+            this.#removeFieldErrorState(value_field);
             this.#removeMetadataKeyIdFromErrors(metadata_field.id);
           }
           this.#addMetadataFieldHiddenInput(metadata_field, value_field);
@@ -133,12 +140,11 @@ export default class extends Controller {
     if (!metadata_field.value) {
       this.#addFieldErrorState(
         metadata_field,
-        "key_input",
         this.keyMissingValue,
       );
       this.#addMetadataKeyIdToErrors(metadata_field.id);
     } else if (metadata_field.value) {
-      this.#removeFieldErrorState(metadata_field, "key_input");
+      this.#removeFieldErrorState(metadata_field);
     }
   }
 
@@ -149,12 +155,11 @@ export default class extends Controller {
     if (!value_field.value) {
       this.#addFieldErrorState(
         value_field,
-        "value_input",
         this.valueMissingValue,
       );
       this.#addMetadataKeyIdToErrors(metadata_field_id);
     } else if (value_field.value) {
-      this.#removeFieldErrorState(value_field, "value_input");
+      this.#removeFieldErrorState(value_field);
     }
   }
 
@@ -175,50 +180,64 @@ export default class extends Controller {
   }
 
   // Display input field error state with error messages for field
-  #addFieldErrorState(field, inputDivIdSuffix, errorMessage) {
+  #addFieldErrorState(field, errorMessage) {
     let field_id = field.id;
-    let fieldError = document.getElementById(
-      field_id + "_error",
-    ).lastElementChild;
-    let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let keyField = document.getElementById(field_id + "_" + inputDivIdSuffix);
+    let fieldError = document.getElementById(field_id + "_error");
+    let helpTextComponent = fieldError?.querySelector('.viral-help-text');
+    let inputDiv = field.closest('.form-field');
 
-    if (fieldErrorSpan.innerHTML === errorMessage) {
+    if (helpTextComponent && helpTextComponent.textContent.trim() === errorMessage) {
       // Errors are already displayed for this field so we exit early
       return;
     }
 
     field.setAttribute("aria-invalid", true);
     field.setAttribute("aria-describedBy", field_id + "_error");
-    field.classList.remove(...FIELD_CLASSES["VALID"]);
-    field.classList.add(...FIELD_CLASSES["ERROR"]);
-    fieldError.classList.remove("hidden");
-    fieldErrorSpan.innerHTML = errorMessage;
-    fieldErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
-    keyField.classList.add("invalid");
+
+    // Update field styling for the new floating label form structure
+    field.classList.remove("border-slate-300", "dark:border-slate-600");
+    field.classList.add("border-red-500", "dark:border-red-500");
+
+    if (fieldError) {
+      fieldError.classList.remove("hidden");
+    }
+    if (helpTextComponent) {
+      helpTextComponent.textContent = errorMessage;
+      helpTextComponent.classList.remove("hidden");
+    }
+    if (inputDiv) {
+      inputDiv.classList.add("invalid");
+    }
   }
 
   // Remove input field error state and error messages for field
-  #removeFieldErrorState(field, inputDivIdSuffix) {
+  #removeFieldErrorState(field) {
     let field_id = field.id;
-    let fieldError = document.getElementById(
-      field_id + "_error",
-    ).lastElementChild;
-    let fieldErrorSpan = fieldError.getElementsByClassName("grow")[0];
-    let keyField = document.getElementById(field_id + "_" + inputDivIdSuffix);
+    let fieldError = document.getElementById(field_id + "_error");
+    let helpTextComponent = fieldError?.querySelector('.viral-help-text');
+    let inputDiv = field.closest('.form-field');
 
-    if (fieldErrorSpan.innerHTML === "") {
+    if (helpTextComponent && helpTextComponent.textContent.trim() === "") {
       // Errors are not displayed for this field so we exit early
       return;
     }
 
     field.removeAttribute("aria-invalid");
     field.removeAttribute("aria-describedBy");
-    field.classList.add(...FIELD_CLASSES["VALID"]);
-    field.classList.remove(...FIELD_CLASSES["ERROR"]);
-    fieldError.classList.add("hidden");
-    fieldErrorSpan.innerHTML = "";
-    fieldErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
-    keyField.classList.remove("invalid");
+
+    // Reset field styling for the new floating label form structure
+    field.classList.remove("border-red-500", "dark:border-red-500");
+    field.classList.add("border-slate-300", "dark:border-slate-600");
+
+    if (fieldError) {
+      fieldError.classList.add("hidden");
+    }
+    if (helpTextComponent) {
+      helpTextComponent.textContent = "";
+      helpTextComponent.classList.add("hidden");
+    }
+    if (inputDiv) {
+      inputDiv.classList.remove("invalid");
+    }
   }
 }

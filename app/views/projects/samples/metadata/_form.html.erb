@@ -44,6 +44,7 @@
               :key,
               multiple: true,
               child_index: "PLACEHOLDER",
+              id: "key_PLACEHOLDER",
               class:
                 "keyInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent rounded-lg border-1 border-slate-300 appearance-none dark:text-white dark:border-slate-600 peer",
               placeholder: "",
@@ -70,6 +71,7 @@
               :value,
               multiple: true,
               child_index: "PLACEHOLDER",
+              id: "value_PLACEHOLDER",
               class:
                 "valueInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent rounded-lg border-1 border-slate-300 appearance-none dark:text-white dark:border-slate-600 peer",
               placeholder: "",
@@ -100,11 +102,11 @@
             <%= pathogen_icon(ICON::X, size: :sm) %>
           </button>
         </div>
-        <div class="flex mb-4" id="key[PLACEHOLDER]_field_errors">
-          <div id="key[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+        <div class="flex mb-4" id="key_PLACEHOLDER_field_errors">
+          <div id="key_PLACEHOLDER_error" class="text-sm relative z-0 w-full">
             <%= viral_help_text(state: :error, classes: "hidden") %>
           </div>
-          <div id="value[PLACEHOLDER]_error" class="text-sm relative z-0 w-full">
+          <div id="value_PLACEHOLDER_error" class="text-sm relative z-0 w-full">
             <%= viral_help_text(state: :error, classes: "hidden") %>
           </div>
           <div class="w-[55]"></div>
