@@ -8,69 +8,74 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
-    <%= button_to t(".create_export_button"),
-    new_data_export_path,
-    params: {
-      export_type: "analysis",
-      analysis_type: "user",
-    },
-    method: :get,
-    data: {
-      turbo_stream: true,
-      controller: "action-button",
-      action_button_required_value: 1,
-    },
-    class: "button button-default action-button w-full" %>
-    <% if Flipper.enabled?(:delete_multiple_workflows) %>
-      <%= button_to t(".delete_workflows_button"),
-      destroy_multiple_confirmation_workflow_executions_path,
+    <% if @has_workflow_executions %>
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "user",
+      },
       method: :get,
       data: {
         turbo_stream: true,
         controller: "action-button",
         action_button_required_value: 1,
       },
-      class: "button button-destructive action-button w-full" %>
+      class: "button button-default action-button w-full" %>
+      <% if Flipper.enabled?(:delete_multiple_workflows) %>
+        <%= button_to t(".delete_workflows_button"),
+        destroy_multiple_confirmation_workflow_executions_path,
+        method: :get,
+        data: {
+          turbo_stream: true,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button-destructive action-button w-full" %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
-<div class="flex flex-wrap gap-2 mb-2 ">
-  <%= form_with(
-                  url: select_workflow_executions_url,
-                  method: :get,
-                  id: "select-all-form",
-                  class: "max-sm:grow",
-                ) do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="select" value="on"/>
-    <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
-  <% end %>
-  <%= form_with(
-                  url: select_workflow_executions_url,
-                  method: :get,
-                  id: "deselect-all-form",
-                  class: "max-sm:grow",
-                ) do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
-  <% end %>
-  <div class="sm:grow max-sm:hidden" role="presentation"></div>
-  <%= render SearchComponent.new(
-    query: @q,
-    url: workflow_executions_path,
-    search_attribute: :name_or_id_cont,
-    label: t(".search.label"),
-    placeholder: t(".search.placeholder"),
-    value: @q.name_or_id_cont,
-    total_count: @pagy.count,
-    class: "max-sm:grow",
-    search_field_arguments: {
-      data: {
-        "search-field-selection-outlet": "#workflow-executions-table",
+
+<% if @has_workflow_executions %>
+  <div class="flex flex-wrap gap-2 mb-4">
+    <%= form_with(
+                    url: select_workflow_executions_url,
+                    method: :get,
+                    id: "select-all-form",
+                    class: "max-sm:grow",
+                  ) do |f| %>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="select" value="on"/>
+      <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+    <% end %>
+    <%= form_with(
+                    url: select_workflow_executions_url,
+                    method: :get,
+                    id: "deselect-all-form",
+                    class: "max-sm:grow",
+                  ) do |f| %>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+    <% end %>
+    <div class="sm:grow max-sm:hidden" role="presentation"></div>
+    <%= render SearchComponent.new(
+      query: @q,
+      url: workflow_executions_path,
+      search_attribute: :name_or_id_cont,
+      label: t(".search.label"),
+      placeholder: t(".search.placeholder"),
+      value: @q.name_or_id_cont,
+      total_count: @pagy.count,
+      class: "max-sm:grow",
+      search_field_arguments: {
+        data: {
+          "search-field-selection-outlet": "#workflow-executions-table",
+        },
       },
-    },
-  ) %>
-</div>
+    ) %>
+  </div>
+<% end %>
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,

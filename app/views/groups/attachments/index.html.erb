@@ -22,25 +22,27 @@
   <% end %>
 
   <div class="flex flex-col gap-2 mt-2">
-    <div class="flex justify-end mb-2">
-      <%= render SearchComponent.new(
-        query: @q,
-        search_attribute: :puid_or_file_blob_filename_cont,
-        label: t(:".search.label"),
-        placeholder: t(:".search.placeholder"),
-        url: group_attachments_path(@group),
-        total_count: @pagy.count,
-        class: "max-sm:grow",
-        value: @q.puid_or_file_blob_filename_cont,
-        search_field_arguments: {
-          data: {
-            'search-field-selection-outlet': '#attachments-table'
+    <% if @has_attachments %>
+      <div class="flex justify-end mb-2">
+        <%= render SearchComponent.new(
+          query: @q,
+          search_attribute: :puid_or_file_blob_filename_cont,
+          label: t(:".search.label"),
+          placeholder: t(:".search.placeholder"),
+          url: group_attachments_path(@group),
+          total_count: @pagy.count,
+          class: "max-sm:grow",
+          value: @q.puid_or_file_blob_filename_cont,
+          search_field_arguments: {
+            data: {
+              'search-field-selection-outlet': '#attachments-table'
+            }
           }
-        }
-      ) do %>
-        <%= hidden_field_tag :limit, @pagy.limit %>
-      <% end %>
-    </div>
+        ) do %>
+          <%= hidden_field_tag :limit, @pagy.limit %>
+        <% end %>
+      </div>
+    <% end %>
     <%= render partial: "table",
     locals: {
       attachments: @attachments,
