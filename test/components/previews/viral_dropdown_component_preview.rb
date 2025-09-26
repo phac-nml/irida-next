@@ -20,7 +20,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_icon
-    render Viral::DropdownComponent.new(icon: :plus_CIRCLE,
+    render Viral::DropdownComponent.new(icon: 'plus-circle',
                                         aria: { label: 'Organism dropdown list' }) do |dropdown|
       dropdown.with_item(label: 'Aspergillus awamori', url: '#')
       dropdown.with_item(label: 'Bacillus cereus', url: '#')
