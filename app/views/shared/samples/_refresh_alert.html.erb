@@ -1,0 +1,77 @@
+<div data-controller="refresh" data-refresh-auto-dismiss-value="10000" data-refresh-debounce-value="500">
+  <%= turbo_stream_from resource, :samples, data: { "refresh-target": "source" } %>
+
+  <!-- Screen reader live region for announcements -->
+  <div data-refresh-target="liveRegion" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+
+  <div data-refresh-target="notice"
+       class="hidden mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 dark:bg-blue-900 dark:border-blue-700"
+       role="alert"
+       aria-labelledby="refresh-alert-heading"
+       aria-describedby="refresh-alert-description">
+
+    <!-- Alert header with message -->
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center">
+        <h3 id="refresh-alert-heading" class="text-sm font-medium text-blue-800 dark:text-blue-200 sr-only">
+          <%= t(".heading") %>
+        </h3>
+        <span id="refresh-alert-description" data-refresh-message class="text-sm font-medium text-blue-800 dark:text-blue-200">
+          <%= t(".message") %>
+        </span>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="flex gap-2 mb-3">
+      <%= pathogen_button(
+        tag: :a,
+        href: url_for,
+        size: :small,
+        "aria-describedby": "refresh-alert-description"
+      ) do |button| %>
+        <% button.with_leading_visual_icon(icon: ICON::ARROW_CLOCKWISE) %>
+        <%= t(".refresh_button") %>
+      <% end %>
+
+      <%= pathogen_button(
+        data: {
+          action: "refresh#hideNotice",
+          "refresh-target": "dismissButton"
+        },
+        "aria-label": "Dismiss refresh notification",
+        "aria-describedby": "refresh-alert-description"
+      ) do %>
+        <%= t(".dismiss_button") %>
+      <% end %>
+    </div>
+
+    <!-- Progress bar container -->
+    <div data-refresh-target="progressContainer"
+         class="hidden"
+         role="region"
+         aria-labelledby="progress-label"
+         aria-describedby="progress-description">
+
+      <div class="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400 mb-1">
+        <span id="progress-label"><%= t(".progress_bar.countdown") %></span>
+        <span data-refresh-target="countdown" id="progress-description" aria-live="polite">10s</span>
+      </div>
+
+      <div class="w-full bg-blue-200 rounded-full h-2 dark:bg-blue-800"
+           role="progressbar"
+           aria-label="<%= t(".progress_bar.aria_label") %>">
+        <div
+          data-refresh-target="progressBar"
+          class="bg-blue-600 h-2 rounded-full motion-safe:transition-all motion-safe:duration-1000 motion-safe:ease-linear dark:bg-blue-400"
+          style="width: 100%"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="100"
+          aria-label="<%= t(".progress_bar.time_remaining") %>">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

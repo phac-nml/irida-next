@@ -67,6 +67,14 @@ class Sample < ApplicationRecord
 
   private
 
+  def broadcast_refresh_notice_to(resource, stream_name)
+    # Broadcast a custom refresh message that our JavaScript controller will catch
+    Turbo::StreamsChannel.broadcast_stream_to(
+      [resource, stream_name],
+      content: '<turbo-stream action="refresh"></turbo-stream>'
+    )
+  end
+
   def broadcast_refresh_later_to_samples_table # rubocop:disable Metrics/AbcSize
     return if Sample.suppressed_turbo_broadcasts
 
@@ -76,9 +84,9 @@ class Sample < ApplicationRecord
     end
 
     projects.each do |project|
-      broadcast_refresh_later_to project, :samples
+      broadcast_refresh_notice_to project, :samples
       project.namespace.parent.self_and_ancestors.each do |ancestor|
-        broadcast_refresh_later_to ancestor, :samples
+        broadcast_refresh_notice_to ancestor, :samples
       end
     end
   end

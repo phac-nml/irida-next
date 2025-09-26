@@ -167,14 +167,7 @@
     <% end %>
   <% end %>
 
-  <div data-controller="refresh">
-    <%= turbo_stream_from @group, :samples, data: { "refresh-target": "source" } %>
-    <%= viral_alert(message: "Samples table is out of date. Please refresh to view latest changes.", data: { "refresh-target": "notice" }, classes: "hidden mb-6") do %>
-      <%= pathogen_button(tag: :a, href: url_for) do %>
-        Refresh
-      <% end %>
-    <% end %>
-  </div>
+  <%= render "shared/samples/refresh_alert", resource: @group %>
 
   <% if @group_project_ids.count.positive? %>
     <div class="flex flex-wrap gap-2 mb-4">
