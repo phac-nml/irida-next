@@ -9,6 +9,7 @@
     <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
 >
+  <%= @conditions_form.label :value, data: { required: true } %>
   <% if %w[in not_in].include?(@condition.operator) %>
     <div
       data-controller="list-filter"
@@ -24,10 +25,6 @@
     </div>
   <% else %>
     <%= @conditions_form.text_field :value,
-                                placeholder:
-                                  t(
-                                    "activemodel.attributes.sample/search_condition.value",
-                                  ),
                                 "aria-label":
                                   t(
                                     "activemodel.attributes.sample/search_condition.value",
