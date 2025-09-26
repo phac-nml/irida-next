@@ -209,7 +209,7 @@ fr:
         create_html: "%{user} a créé le projet %{href} dans le groupe"
         destroy_html: "%{user} a supprimé le projet %{href} du groupe"
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
-        transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+        transfer_out_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
       samples:
         clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
         destroy_html: "%{user} removed %{href} samples from group"
@@ -288,7 +288,7 @@ fr:
   auth:
     scopes:
       api: Accorde un accès complet en lecture/écriture à l’API.
-      label: Scopes
+      label: Portées
       read_api: Accorde l’accès en lecture à l’API.
   bots:
     destroy_confirmation:
@@ -422,7 +422,7 @@ fr:
       success: L’exportation de données '%{name}' a été supprimée avec succès.
     index:
       actions:
-        delete: Delete
+        delete: Supprimer
         delete_aria_label: Supprimer l’exportation de données %{name}
         download: Télécharger
         download_aria_label: Télécharger l’exportation des données %{name}
@@ -912,7 +912,7 @@ fr:
       information:
         created_on: Created on
         description: Description
-        number_of_projects: Projects
+        number_of_projects: Projets
         number_of_samples: Samples
         number_of_subgroups: Subgroups
         title: Group Information
@@ -2039,7 +2039,7 @@ fr:
         workflow_executions: Workflow Executions
       list_workflow_execution:
         id: 'ID:'
-        name: 'Name:'
+        name: 'Nom:'
         run_id: 'Run ID:'
         workflow: 'Workflow:'
       workflow_execution: Workflow Execution
