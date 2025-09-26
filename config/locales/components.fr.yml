@@ -3,110 +3,110 @@ fr:
   components:
     activity:
       dialog:
-        close: Close
+        close: Clôture
         group_sample_transfer:
           description:
-            one: "%{user} transferred 1 sample between projects"
-            other: "%{user} transferred %{count} samples between projects"
-          sample_name: Sample Name
-          title: Transferred Samples
-          transferred_from: Transferred From
-          transferred_to: Transferred To
+            one: "%{user} a transféré un échantillon entre les projets"
+            other: "%{user} a transféré les échantillons %{count} entre les projets"
+          sample_name: Nom de l’échantillon
+          title: Échantillons transférés
+          transferred_from: Transférés de
+          transferred_to: Transférés à
         import_samples:
           description:
-            group: "%{user} imported %{count} samples to group"
-            project: "%{user} imported %{count} samples to project"
-          project: Project
-          sample: Sample
-          title: Imported Samples
+            group: "%{user} a importé les échantillons %{count} au groupe"
+            project: "%{user} a importé les échantillons %{count} au projet"
+          project: Projet
+          sample: Échantillon
+          title: Échantillons importés
         pagination:
           aria_label: Pagination
-          at_first_aria_label: You are on the first page
-          at_last_aria_label: You are on the last page
+          at_first_aria_label: Vous êtes sur la première page.
+          at_last_aria_label: Vous êtes sur la dernière page.
           next: Suivant
-          next_aria_label: Go to next page
+          next_aria_label: Passer à la prochaine page.
           previous: Précédent
-          previous_aria_label: Go to previous page
+          previous_aria_label: Aller à la page précédente.
         sample_clone:
-          copied_from: Copied From
-          copied_to: Copied To
+          copied_from: Copiés de
+          copied_to: Copiés à
           group:
             target_project_description:
-              one: "%{user} copied 1 sample to another project"
-              other: "%{user} copied %{count} samples to other projects"
+              one: "%{user} a copié un échantillon dans un autre projet"
+              other: "%{user} a copié les échantillons %{count} dans d’autres projets"
           project:
             source_project_description:
-              one: "%{user} copied 1 sample from project %{source_project_puid}"
-              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+              one: "%{user} a copié un échantillon du projet %{source_project_puid}"
+              other: "%{user} a copié les échantillons %{count} du projet %{source_project_puid}"
             target_project_description:
-              one: "%{user} copied 1 sample to project %{target_project_puid}"
-              other: "%{user} copied %{count} samples to project %{target_project_puid}"
-          project_from: Project From
-          project_to: Project To
-          title: Copied Samples
+              one: "%{user} a copié un échantillon au projet %{target_project_puid}"
+              other: "%{user} a copié les échantillons %{count} au projet %{target_project_puid}"
+          project_from: Projet de
+          project_to: Projet à
+          title: Échantillons copiés
         sample_destroy:
           description:
             group:
-              one: "%{user} removed 1 sample from the group"
-              other: "%{user} removed %{count} samples from the group"
+              one: "%{user} a retiré un échantillon du groupe"
+              other: "%{user} a retiré les échantillons %{count} du groupe"
             project:
-              one: "%{user} removed 1 sample from the project"
-              other: "%{user} removed %{count} samples from the project"
-          project: Project
-          sample: Sample
-          title: Deleted Samples
+              one: "%{user} a retiré un échantillon du projet"
+              other: "%{user} a retiré les échantillons %{count} du projet"
+          project: Projet
+          sample: Échantillon
+          title: Échantillons supprimés
         sample_transfer:
           source_project_description:
-            one: "%{user} transferred 1 sample from project %{source_project_puid}"
-            other: "%{user} transferred %{count} samples from project %{source_project_puid}"
+            one: "%{user} a transféré un échantillon du projet %{source_project_puid}"
+            other: "%{user} a transféré les échantillons %{count} du projet %{source_project_puid}"
           target_project_description:
-            one: "%{user} transferred 1 sample to project %{target_project_puid}"
-            other: "%{user} transferred %{count} samples to project %{target_project_puid}"
-          title: Transferred Samples
+            one: "%{user} a transféré un échantillon au projet %{target_project_puid}"
+            other: "%{user} a transféré les échantillons %{count} au projet %{target_project_puid}"
+          title: Échantillons transférés
         workflow_execution_destroy:
-          description: "%{user} removed %{count} workflow executions from the project"
+          description: "%{user} a retiré les exécutions des flux de travail %{count} du projet"
           id: id
-          name: name
-          title: Deleted Workflow Executions
+          name: nom
+          title: Exécutions de flux de travail supprimés
       groups:
-        link_descriptive_text: View group page for group with persistent unique identifier %{group_puid}
+        link_descriptive_text: Voir la page de groupe du groupe ayant l’identifiant unique persistant %{group_puid}
         projects:
-          link_descriptive_text: View details page for project with persistent unique identifier %{project_puid}
-      load_more: Load more activities
+          link_descriptive_text: Voir la page des détails du projet ayant l’identifiant unique persistant %{project_puid}
+      load_more: Charger plus d’activités
       members:
-        link_descriptive_text: View members page for %{namespace_type}
+        link_descriptive_text: Voir la page des membres pour %{namespace_type}
       metadata_templates:
         group:
-          link_descriptive_text: View metadata templates for group
+          link_descriptive_text: Voir les modèles de métadonnées pour le groupe
         project:
-          link_descriptive_text: View metadata templates for project
-      more_details: More details
+          link_descriptive_text: Voir les modèles de métadonnées pour le projet
+      more_details: Plus de détails
       samples:
         clone:
-          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          link_descriptive_text: Voir la page des échantillons du projet ayant l’identifiant unique persistant %{project_puid}
           more_details:
-            button_descriptive_text: View more details for copied samples
+            button_descriptive_text: Voir plus de détails sur les échantillons copiés
         destroy:
           more_details:
-            button_descriptive_text: View more details about deleted samples
+            button_descriptive_text: Voir plus de détails sur les échantillons supprimés
         import:
           more_details:
-            button_descriptive_text: View more details about imported samples
-        link_descriptive_text: View sample details for sample with persistent unique identifier %{sample_puid}
+            button_descriptive_text: Voir plus de détails sur les échantillons importés
+        link_descriptive_text: Voir les détails de l’échantillon pour l’échantillon ayant l’identifiant unique persistant %{sample_puid}
         transfer:
-          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          link_descriptive_text: Voir la page des échantillons du projet ayant l’identifiant unique persistant %{project_puid}
           more_details:
-            button_descriptive_text: View more details for transferred samples
+            button_descriptive_text: Voir plus de détails sur les échantillons transférés
       subgroups:
-        link_descriptive_text: View subgroup page for subgroup with persistent unique identifier %{subgroup_puid}
+        link_descriptive_text: Voir la page du sous-groupe pour le sous-groupe ayant l’identifiant unique persistant %{subgroup_puid}
       workflow_executions:
         destroy:
           more_details:
-            button_descriptive_text: View more details about deleted workflow executions
+            button_descriptive_text: Voir plus de détails sur les exécutions de flux de travail supprimés
         index:
-          link_descriptive_text: View workflow executions listing for project
+          link_descriptive_text: Voir la liste des exécutions de flux de travail pour le projet
         show:
-          link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
+          link_descriptive_text: Consultez les détails d’exécution de flux de travail pour l’identifiant %{workflow_id}
     advanced_search_component:
       add_condition_button: Ajouter une condition
       add_group_button: Ajouter un groupe
@@ -118,16 +118,16 @@ fr:
       description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
       group: Groupe %{index}
       operation:
-        contains: contains
+        contains: contient
         equals: "="
-        exists: exists
+        exists: existe
         greater_than: ">="
-        in: in
+        in: in (dans)
         less_than: "<="
-        metadata_fields: Metadata fields
+        metadata_fields: Champs de métadonnées
         not_equals: "!="
-        not_exists: not exists
-        not_in: not in
+        not_exists: n’existe pas
+        not_in: not in (pas dans)
       remove_condition_aria_label: Supprimer la condition
       remove_group_button: Supprimer le groupe
       rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
@@ -156,8 +156,8 @@ fr:
         created_at: Créé à
         delete: Supprimer
         delete_aria_label:
-          one: 'Delete file: %{name}'
-          other: 'Delete files: %{name}'
+          one: 'Supprimer le fichier : %{name}'
+          other: 'Supprimer les fichiers : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer la pièce jointe '%{name}'?
         filename: Nom du fichier
         format: Format
@@ -165,12 +165,12 @@ fr:
         limit:
           item: Pièces jointes
         preview: Aperçu
-        preview_aria_label: 'Preview attachment: %{name}'
+        preview_aria_label: 'Voir un aperçu de la pièce jointe : %{name}'
         select_page: Sélectionner/Désélectionner les pièces jointes visibles
         type: Type
     breadcrumb:
       dropdown:
-        aria_label: Breadcrumb dropdown
+        aria_label: Menu déroulant du fil d’Ariane
       navigation_aria_label: Navigation du fil d'Ariane
     clipboard:
       copied: Copié!
@@ -182,17 +182,17 @@ fr:
     dialog:
       close: Fermer la boîte de dialogue
       pagination:
-        at_first_aria_label: You are on the first page
-        at_last_aria_label: You are on the last page
+        at_first_aria_label: Vous êtes sur la première page.
+        at_last_aria_label: Vous êtes sur la dernière page.
     flash:
-      error_message: Error
+      error_message: Erreur
       information_message: Information
       message: Message
-      success_message: Success
-      warning_message: Warning
+      success_message: Réussite
+      warning_message: Attention
     groups_dashboard:
       information_component:
-        no_description: No description provided
+        no_description: Aucune description fournie
     history:
       created_by: "%{type} créé par %{user}"
       deleted_by: "%{type} supprimé par %{user}"
@@ -207,8 +207,8 @@ fr:
       previous_version: Précédent (Version %{version})
     layout:
       language_selection:
-        title: Language Selection
-      main_content_link: Skip to content
+        title: Sélection de langue
+      main_content_link: Passer au contenu
     list_filter:
       apply: Appliquer un filtre
       title: Filtrer par nom d’échantillon ou identifiant
@@ -238,7 +238,7 @@ fr:
           required: Obligatoire
       samplesheet_component:
         filter:
-          clear: Clear search
+          clear: Effacer les données de recherche
           placeholder: Rechercher par PUID ou nom
           search: Rechercher
         label: Échantillons
@@ -254,7 +254,7 @@ fr:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
       filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
       name:
-        error: Name is required. Please enter a name for the workflow execution.
+        error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
         helper: Un nom personnalisé facilitera la recherche à l’avenir.
         label:
           optional: Nom (facultatif)
@@ -277,10 +277,10 @@ fr:
       view_more_activity: Voir plus d'activité
       view_more_samples: Voir plus d'échantillons
     puid:
-      title: 'Copy to clipboard value: %{puid}'
+      title: 'Copier à la valeur du presse-papiers : %{puid}'
     ransack:
       sort_dropdown_component:
-        prefix: Sort by
+        prefix: Trier par
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -294,36 +294,36 @@ fr:
       table_component:
         counts:
           status:
-            one: 1 sample selected
+            one: 1 échantillon sélectionné
             other: "%{selected} sur %{total} échantillons sélectionnés"
     search:
       advanced:
         results_message:
-          plural: "%{total_count} results found for advanced search"
-          singular: 1 result found for advanced search
-          zero: No results found for advanced search
+          plural: "%{total_count} résultats trouvés pour la recherche avancée"
+          singular: 1 résultat trouvé pour la recherche avancée
+          zero: Aucun résultat trouvé pour la recherche avancée
       results_message:
-        plural: "%{total_count} results found for '%{search_term}'"
-        singular: 1 result found for '%{search_term}'
-        zero: No results found for '%{search_term}'
+        plural: "%{total_count} résultats trouvés pour '%{search_term}'"
+        singular: 1 résultat trouvé pour '%{search_term}'
+        zero: Aucun résultat trouvé pour '%{search_term}'
     search_field_component:
-      clear_button: Clear search
+      clear_button: Effacer la recherche
       instructions: Appuyez sur Entrée pour rechercher
       search_button: Rechercher
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
-      hide: Hide token
-      show: Show token
+      hide: Cacher le jeton
+      show: Montrer le jeton
       toggle_visible: Basculer la visibilité
     treegrid:
       row:
         collapse: Développer
         expand: Réduire
         group:
-          aria_label: "%{name}, puid: %{puid}, role: %{role}, subgroups: %{subgroups_count}, projects: %{group_projects_count}, samples: %{samples_count}"
+          aria_label: "%{name}, puid : %{puid}, rôle : %{role}, sous-groupes : %{subgroups_count}, projets : %{group_projects_count}, échantillons : %{samples_count}"
         project:
-          aria_label: "%{name}, puid: %{puid}, role: %{role}, samples: %{samples_count}"
+          aria_label: "%{name}, puid : %{puid}, rôle : %{role}, échantillons : %{samples_count}"
     viral:
       data_table_component:
         header:
@@ -338,35 +338,35 @@ fr:
           description: Aucun article trouvé correspondant à votre recherche
           title: Aucun article trouvé
         limit_component:
-          item_aria_label: Show %{items} items per page
+          item_aria_label: Afficher %{items} éléments par page
           items: "%{items} par page :"
-          select_items_action: select the number of items to display
+          select_items_action: Sélectionner le nombre d’éléments à afficher.
           summary:
             one: Afficher l’élément <span class='font-bold'>%{count}</span>
             other: Afficher les éléments <span class='font-bold'>%{from}-%{to}</span> de <span class='font-bold'>%{count}</span>
         pagination_component:
           aria_label: Pagination
-          current_page: Page %{number} (current)
-          current_page_aria_label: Current page %{number}
-          item_aria_label: Go to Page %{number}
+          current_page: Page %{number} (actuelle)
+          current_page_aria_label: Page actuelle %{number}
+          item_aria_label: Aller à la page %{number}
           next: Suivant
-          next_aria_label: Go to next page
+          next_aria_label: Passer à la prochaine page.
           page_number: Page %{number}
           previous: Précédent
-          previous_aria_label: Go to previous page
-          select_page_aria_label: Select page
+          previous_aria_label: Aller à la page précédente.
+          select_page_aria_label: Sélectionner la page
       sortable_list:
         list_component:
-          actions: Actions
+          actions: Mesures
           add: Ajouter
-          aria_role_description: "%{list} listbox drag and drop"
-          down: Down
+          aria_role_description: Glisser-déposer dans la liste %{list}
+          down: Bas
           keyboard_shortcuts:
             add: Enter
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
           remove: Supprimer
-          up: Up
+          up: Haut
       sortable_lists_component:
         no_template: Pas de modèle
