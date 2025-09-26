@@ -15,7 +15,7 @@ class ListInputComponent < Component
       args[:type] = 'text'
       args[:name] = @list_input_form_name
       args[:autofocus] = true
-      args[:classes] = class_names(args[:classes], 'bg-transparent border-none grow')
+      args[:classes] = class_names(args[:classes], 'bg-transparent! border-none grow')
       args[:aria] ||= {}
       args[:aria][:label] = t(:'components.list_input.description')
       args[:data] ||= {}

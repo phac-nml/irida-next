@@ -1,7 +1,7 @@
 <template data-list-filter-target="template">
   <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
     <input type="hidden" data-turbo-temporary name="<%= list_input_form_name %>">
-    <span class="mr-1 font-mono text-base font-semibold label"></span>
+    <span class="mr-1 font-mono text-sm font-semibold label"></span>
     <button
       type="button"
       class="
@@ -24,9 +24,9 @@
   <% end %>
   <div
     class="
-      relative flex flex-wrap font-mono bg-slate-50 border border-slate-300
-      text-slate-900 text-sm rounded-lg w-full p-2.5 dark:bg-slate-700
-      dark:placeholder-slate-400 dark:text-white
+      relative flex flex-wrap font-mono bg-transparent border border-slate-300
+      text-slate-900 text-sm rounded-lg w-full p-2.5 dark:placeholder-slate-400
+      dark:text-white dark:border-slate-600
     "
     data-list-filter-target="tags"
     data-action="click->list-filter#focus"
@@ -35,9 +35,9 @@
     <button
       type="button"
       class="
-        absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold
-        rounded-full text-slate-600 bg-slate-100 border-3 border-slate-10 bottom-2 end-2
-        dark:text-slate-300 dark:border-slate-900 dark:bg-slate-600
+        absolute inline-flex items-center justify-center w-6 h-6 p 1.5 rounded-full
+        text-slate-600 bg-slate-100 border-1 border-slate-300 bottom-2 end-2
+        dark:text-slate-300 dark:border-slate-600 dark:bg-slate-600
         dark:hover:bg-slate-500 hover:bg-slate-300 z-25
       "
       data-action="click->list-filter#clear"

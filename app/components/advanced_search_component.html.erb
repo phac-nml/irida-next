@@ -35,6 +35,11 @@
       <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
         <%= t("components.advanced_search_component.rules") %>
       </p>
+
+      <div class="mb-4">
+        <%= render partial: "shared/form/required_field_legend" %>
+      </div>
+
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
       <div class="flex justify-end space-x-2">
