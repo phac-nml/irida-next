@@ -100,6 +100,7 @@ module Pathogen
       def label(method, content_or_options = nil, options = nil, &)
         options, content_or_options = normalize_label_params(content_or_options, options)
         options = add_test_selector(options)
+        options = apply_label_styling(options)
 
         is_required = required_field?(options)
 
@@ -161,6 +162,36 @@ module Pathogen
           title: I18n.t('pathogen.label.title')
         )
         @template.safe_join([safe_content, ' ', required_abbr])
+      end
+
+      # Apply label styling to label options
+      #
+      # Adds CSS classes for consistent label styling
+      # that integrates well with the grid-based form layout and provides
+      # proper typography, spacing, and dark mode support.
+      #
+      # @param options [Hash] Options for the label
+      # @return [Hash] Options with label styling applied
+      def apply_label_styling(options)
+        # Label classes for consistent styling
+        label_classes = [
+          'block',           # Display as block element
+          'mb-2',            # Margin bottom for spacing
+          'text-sm',         # Small text size
+          'font-medium',     # Medium font weight
+          'text-slate-900',  # Text color for light mode
+          'dark:text-white'  # Text color for dark mode
+        ]
+
+        # Merge custom classes with label classes
+        if options[:class].present?
+          user_classes = options[:class].is_a?(Array) ? options[:class] : [options[:class].to_s]
+          options[:class] = label_classes + user_classes
+        else
+          options[:class] = label_classes
+        end
+
+        options
       end
     end
   end
