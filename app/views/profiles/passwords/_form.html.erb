@@ -7,6 +7,10 @@
       <%= t :"profiles.passwords.update.subtitle" %>
     </p>
   </div>
+
+  <div class="mb-4">
+    <%= render partial: "shared/form/required_field_legend" %>
+  </div>
   <%= form_with(model: user, url: profile_password_path, method: :patch, html: {class: "space-y-4", novalidate: true}) do |form| %>
 
     <%= if user.errors.any?
@@ -21,7 +25,7 @@
 
     <% invalid_current = user.errors.include?(:current_password) %>
     <div class="form-field <%= 'invalid' if invalid_current %>">
-      <%= form.label :current_password %>
+      <%= form.label :current_password, data: { required: true } %>
       <%= form.password_field :current_password,
                           required: true,
                           aria: {
@@ -39,14 +43,14 @@
                             required: true,
                           },
                           autocomplete: "current-password" %>
-      <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
       <%= render "shared/form/field_errors",
       errors: user.errors.full_messages_for(:current_password) %>
+      <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
     </div>
 
     <% invalid_password = user.errors.include?(:password) %>
     <div class="form-field <%= 'invalid' if invalid_password %>">
-      <%= form.label :password %>
+      <%= form.label :password, data: { required: true } %>
       <%= form.password_field :password,
                           required: true,
                           aria: {
@@ -78,7 +82,7 @@
 
     <% invalid_password_confirmation = user.errors.include?(:password_confirmation) %>
     <div class="form-field mt-2 <%= 'invalid' if invalid_password_confirmation %>">
-      <%= form.label :password_confirmation %>
+      <%= form.label :password_confirmation, data: { required: true } %>
       <%= form.password_field :password_confirmation,
                           required: true,
                           aria: {

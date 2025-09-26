@@ -33,9 +33,9 @@ class ProfileTest < ApplicationSystemTestCase
     click_link I18n.t(:'profiles.sidebar.password')
 
     within %(form[action="/-/profile/password"]) do
-      fill_in 'Current password', with: 'password1'
-      fill_in 'Password', with: 'new_password'
-      fill_in 'Password confirmation', with: 'new_password'
+      fill_in 'user_current_password', with: 'password1'
+      fill_in 'user_password', with: 'new_password'
+      fill_in 'user_password_confirmation', with: 'new_password'
       click_button I18n.t(:'profiles.passwords.update.submit')
     end
 
