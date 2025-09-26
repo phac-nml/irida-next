@@ -18,6 +18,7 @@ module Pathogen
   #
   module ICON
     # Icon definitions as constants
+    ARROW_CLOCKWISE = { name: 'arrow-clockwise', options: {} }.freeze
     ARROW_UP = { name: 'arrow-up', options: {} }.freeze
     ARROW_DOWN = { name: 'arrow-down', options: {} }.freeze
     ARROW_RIGHT = { name: 'arrow-right', options: {} }.freeze

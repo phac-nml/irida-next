@@ -1975,6 +1975,15 @@ fr:
           label: Modèles de métadonnées
           selected: Sélectionné
         tooltip: Paramètres d’affichage des métadonnées
+      refresh_alert:
+        dismiss_button: Fermer
+        heading: Notification de mise à jour du tableau des échantillons
+        message: Le tableau des échantillons n'est plus à jour. Veuillez actualiser pour voir les dernières modifications.
+        progress_bar:
+          aria_label: Progression du compte à rebours de l'actualisation automatique
+          countdown: Le compte à rebours de l'actualisation automatique a commencé. L'alerte s'actualisera automatiquement sauf si vous interagissez avec elle.
+          time_remaining: Temps restant avant l'actualisation automatique
+        refresh_button: Actualiser maintenant
       spreadsheet_imports:
         dialog:
           available: Disponible

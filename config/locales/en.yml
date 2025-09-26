@@ -1971,6 +1971,15 @@ en:
           label: Metadata Templates
           selected: Selected
         tooltip: Metadata display settings
+      refresh_alert:
+        dismiss_button: Dismiss
+        heading: Samples Table Update Notification
+        message: Samples table is out of date. Please refresh to view latest changes.
+        progress_bar:
+          aria_label: Auto-refresh countdown progress
+          countdown: Auto-refresh countdown started. Alert will refresh automatically unless you interact with it.
+          time_remaining: Time remaining until auto-refresh
+        refresh_button: Refresh Now
       spreadsheet_imports:
         dialog:
           available: Available
