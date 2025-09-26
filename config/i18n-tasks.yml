@@ -13,7 +13,7 @@ csv:
   export:
     - tmp/i18n-export/main.csv
   import:
-    - tmp/i18n-export/main.csv
+    - tmp/i18n-import/main.csv
 
 # Read and write translations.
 data:

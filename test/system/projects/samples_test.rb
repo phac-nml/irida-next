@@ -151,7 +151,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.label', locale: user.locale)
       assert_selector 'button',
                       text: I18n.t('shared.samples.actions_dropdown.linelist_export', locale: user.locale)
       assert_selector 'button',

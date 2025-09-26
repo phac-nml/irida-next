@@ -86,7 +86,7 @@ fr:
     errors:
       models:
         activity_extended_detail:
-          maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
+          maximum_entries: L’enregistrement sur les détails étendu est déjà lié au nombre maximal d’activités pour le type %{activity_type}
         attachment:
           attributes:
             file:
@@ -119,8 +119,8 @@ fr:
         namespace:
           attributes:
             path:
-              invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
-              reserved_value: "%{value} is a reserved value."
+              invalid_format: Ne peut contenir que des lettres, des chiffres, '_', '-’ et '.'. Ne peut pas commencer par '-' ni finir par '.'.
+              reserved_value: "%{value} est une valeur réservée."
         namespace_group_link:
           attributes:
             group_access_level:
@@ -146,7 +146,7 @@ fr:
               blank: Ne peut pas être vide
           invalid_namespace: Ne peut être qu’un groupe ou un projet
           invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'
-          missing_namespace: does not have a namespace
+          missing_namespace: N’a pas d’espace de noms
     exceptions:
       personal_access_token:
         not_found: Impossible de trouver le jeton d’accès personnel avec l’identifiant %{token_id}
@@ -179,16 +179,16 @@ fr:
         other: Échantillons
   activities:
     show:
-      error: Unable to open dialog
+      error: Impossible d’ouvrir la boîte de dialogue
   activity:
     group:
       attachment:
-        create_html: "%{user} attached files to group"
-        destroy_html: "%{user} removed files from group"
+        create_html: "%{user} a joint des fichiers au groupe"
+        destroy_html: "%{user} a retiré des fichiers du groupe"
       create_html: "%{user} a créé le groupe"
       destroy_html: "%{user} a supprimé le groupe"
       import_samples:
-        create_html: "%{user} imported %{href} samples to projects within this group"
+        create_html: "%{user} a importé les échantillons %{href} à des projets dans ce groupe"
       member:
         create_html: "%{user} a ajouté le membre %{href} au groupe"
         destroy_html: "%{user} a supprimé le membre %{href} du groupe"
@@ -209,11 +209,11 @@ fr:
         create_html: "%{user} a créé le projet %{href} dans le groupe"
         destroy_html: "%{user} a supprimé le projet %{href} du groupe"
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
-        transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+        transfer_out_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
       samples:
-        clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
-        destroy_html: "%{user} removed %{href} samples from group"
-        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
+        clone_html: "%{user} a copié les échantillons %{cloned_samples_count} dans d’autres projets"
+        destroy_html: "%{user} a retiré les échantillons %{href} du groupe"
+        transfer_html: "%{user} a transféré les échantillons %{transferred_samples_count} entre les projets"
       subgroups:
         create_html: "%{user} a créé le sous-groupe %{href}"
         destroy_html: "%{user} a supprimé le groupe descendant %{href}"
@@ -223,12 +223,12 @@ fr:
       update_html: "%{user} a mis à jour les attributs de groupe"
     namespaces_project_namespace:
       attachment:
-        create_html: "%{user} attached files to project"
-        destroy_html: "%{user} removed files from project"
+        create_html: "%{user} a joint des fichiers au projet"
+        destroy_html: "%{user} a retiré des fichiers du projet"
       create_html: "%{user} a créé le projet"
       destroy_html: "%{user} a supprimé le projet"
       import_samples:
-        create_html: "%{user} imported %{href} samples to project"
+        create_html: "%{user} a importé les échantillons %{href} au projet"
       member:
         create_html: "%{user} a ajouté le membre %{href} au projet"
         destroy_html: "%{user} a supprimé le membre %{href} du projet"
@@ -259,7 +259,7 @@ fr:
       transfer_html: "%{user} a transféré le projet de l’espace de noms %{old_namespace} vers %{new_namespace}"
       update_html: "%{user} a mis à jour les attributs de projet"
       workflow_executions:
-        destroy_html: "%{user} removed %{href} workflow executions from project"
+        destroy_html: "%{user} a retiré les exécutions de flux de travail %{href} du projet"
     workflow_execution:
       automated_workflow:
         create_html: "%{user} a mis en place le pipeline automatisé %{href} pour le projet"
@@ -279,16 +279,16 @@ fr:
       copied: Copié
       copy: Copie
       download: Télécharger
-      file_not_found: File not found.
+      file_not_found: Fichier non trouvé
       image:
-        alt: Rendering of file %{filename}
+        alt: Rendu du fichier %{filename}
       not_available:
-        details: Please download to view the contents
-        title: Preview not available for this file type
+        details: Téléchargez pour consulter le contenu.
+        title: Aperçu non disponible pour ce type de fichier
   auth:
     scopes:
       api: Accorde un accès complet en lecture/écriture à l’API.
-      label: Scopes
+      label: Portées
       read_api: Accorde l’accès en lecture à l’API.
   bots:
     destroy_confirmation:
@@ -371,10 +371,10 @@ fr:
         error: Impossible de supprimer le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été supprimé avec succès
       destroy_multiple:
-        error: Could not delete any selected workflows
-        partial_error: "%{not_deleted} workflows could not be deleted"
-        partial_success: "%{deleted} workflows were successfully deleted"
-        success: All selected workflows were successfully deleted
+        error: Impossible de supprimer les flux de travail sélectionnés
+        partial_error: Les flux de travail %{not_deleted} n’ont pas pu être supprimés.
+        partial_success: Les flux de travail %{deleted} ont été supprimés avec succès.
+        success: Tous les flux de travail sélectionnés ont été supprimés avec succès.
       update:
         success: Le flux de travail %{workflow_name} a été mis à jour avec succès
   dashboard:
@@ -415,14 +415,14 @@ fr:
         title: Projets
   data_exports:
     create:
-      error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'
+      error: Une erreur est survenue lors de la création de l’exportation des données. Veuillez communiquer avec votre administrateur système si cette erreur persiste.
       success: L’exportation de données '%{name}' a été lancée avec succès.
     destroy:
       error: L’exportation de données '%{name}' n’a pas pu être supprimée.
       success: L’exportation de données '%{name}' a été supprimée avec succès.
     index:
       actions:
-        delete: Delete
+        delete: Supprimer
         delete_aria_label: Supprimer l’exportation de données %{name}
         download: Télécharger
         download_aria_label: Télécharger l’exportation des données %{name}
@@ -492,13 +492,13 @@ fr:
       manifest_json: manifest.json
     show:
       download: Télécharger
-      page_title: Data Export
+      page_title: Exportation de données
       remove_button: Retirer
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
         preview: Aperçu
         summary: Résumé
-        title: Data Export Navigation
+        title: Navigation d’exportation de données
     status:
       processing: TRAITEMENT
       ready: PRÊT
@@ -657,7 +657,7 @@ fr:
         other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
   general:
     default_sidebar:
-      aria_label: Main sidebar
+      aria_label: Encadré principal
       data_exports: Exportations de données
       goto: Allez à
       groups: Groupes
@@ -666,7 +666,7 @@ fr:
       title: Votre travail
       workflows: Exécutions de flux de travail
     form:
-      error_notification: 'Please review the problems below:'
+      error_notification: 'Veuillez examiner les problèmes ci-dessous :'
     help: Aide
     name: IRIDA Next
     navbar:
@@ -674,19 +674,19 @@ fr:
         aria_label: Menu déroulant du compte
         profile: Modifier le profil
         sign_out: Se déconnecter
-        title: Account
+        title: Compte
       collapse:
         aria_label: Réduire le menu de navigation
-        title: Collapse
+        title: Réduire
       expand:
         aria_label: Développer le menu de navigation
-        title: Expand
+        title: Agrandir
       new_dropdown:
         aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
         project: Créer un nouveau projet
-        title: Create
-    opens_in_new_tab: Opens in new tab
+        title: Créer
+    opens_in_new_tab: S’ouvre dans un nouvel onglet
     screen_reader:
       close: Fermer
   graphql:
@@ -760,11 +760,11 @@ fr:
             - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
             - Veuillez taper <kbd>%{group}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning:
-              post_html: After you delete a group, you <strong>cannot</strong> restore it or its components.
-              pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
-              projects_count: "%{count} project(s)"
-              samples_count: "%{count} sample(s)"
-              subgroups_count: "%{count} subgroup(s)"
+              post_html: Si vous supprimez un groupe, vous ne <strong>pourrez pas</strong> le rétablir, ni ses composants.
+              pre_html: 'Vous êtes sur le point de supprimer le groupe <strong>%{group_name}</strong>. Cette action supprimera également :'
+              projects_count: "%{count} projets"
+              samples_count: "%{count} échantillons"
+              subgroups_count: "%{count} sous-groupes"
           description: La suppression d’un groupe est permanente et ne peut pas être annulée. Tous les projets, sous-groupes et membres directs seront supprimés avec le groupe.
           submit: Supprimer le groupe
           title: Supprimer le groupe
@@ -810,14 +810,14 @@ fr:
       invited_groups:
         search:
           label: Rechercher
-          placeholder: Search by group name
+          placeholder: Chercher par nom de groupe
       new:
-        access_level_hint: Maximum access level to assign to group
+        access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
           cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
-        group_hint: Select a group to share namespace with
+        group_hint: Sélectionner un groupe avec lequel partager l’espace de noms
         label:
           access_expiration: Expiration de l’accès (facultatif)
           group_access_level: Niveau d’accès
@@ -848,7 +848,7 @@ fr:
           description: Aucun members n'a reçu d'accès délégué à ce groupe
           title: Aucun membres
         invite_group: Inviter le groupe
-        invited_groups: Invited Groups
+        invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
         leave_group: Quitter le groupe
         remove: Retirer
@@ -862,16 +862,16 @@ fr:
       member_listing:
         search:
           label: Rechercher
-          placeholder: Search by username
+          placeholder: Chercher par nom d’utilisateur
       new:
-        access_level_hint: Select group access level to assign to user
+        access_level_hint: Sélectionner le niveau d’accès du groupe à attribuer à l’utilisateur
         add_member_to_group: Ajouter un membre au groupe
         button:
           cancel: Annuler
         description: Vous ajoutez un nouveau membre au groupe %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         title: Ajouter un nouveau membre
-        user_hint: Select a user to add to group
+        user_hint: Sélectionner un utilisateur à ajouter au groupe
         user_select: Utilisateur
     metadata_templates:
       index:
@@ -910,13 +910,13 @@ fr:
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
       information:
-        created_on: Created on
+        created_on: 'Créé le '
         description: Description
-        number_of_projects: Projects
-        number_of_samples: Samples
-        number_of_subgroups: Subgroups
-        title: Group Information
-      screen_reader_context: 'Dashboard for group: %{group_name}'
+        number_of_projects: Projets
+        number_of_samples: Échantillons
+        number_of_subgroups: Sous-groupes
+        title: Information sur le groupe
+      screen_reader_context: 'Tableau de bord du groupe : %{group_name}'
       search:
         label: Rechercher
         placeholder: Rechercher par nom ou PUID
@@ -961,11 +961,11 @@ fr:
       success: Le groupe %{group_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        cancel_button: Cancel
-        description: You are editing workflow execution '%{workflow_execution_id}'
-        name_placeholder: Enter workflow execution name (optional)
-        submit_button: Submit
-        title: Edit workflow execution
+        cancel_button: Annuler
+        description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
+        name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+        submit_button: Envoyer
+        title: Modifier l’exécution du flux de travail
       files:
         search:
           label: Rechercher
@@ -977,7 +977,7 @@ fr:
           label: Rechercher
           placeholder: Rechercher par nom ou ID
         select_all_button: Tout sélectionner
-        subtitle: These are the workflow executions that have been shared within this group
+        subtitle: Ce sont les exécutions du flux de travail qui ont été partagées au sein de ce groupe.
         title: Exécutions de flux de travail
       show:
         cancel_button: Annuler
@@ -996,8 +996,8 @@ fr:
         workflow_version: Version du flux de travail
       table:
         empty:
-          description: There are no workflow executions associated with this group.
-          title: No workflow executions.
+          description: Il n’y a aucune exécution du flux de travail associée à ce groupe.
+          title: Aucune exécution de flux de travail
   helpers:
     select:
       prompt: Veuillez sélectionner
@@ -1010,8 +1010,8 @@ fr:
   layouts:
     application:
       browser_page_titles:
-        page_not_found: Page Not Found
-        unauthorized: Unauthorized
+        page_not_found: Page non trouvée
+        unauthorized: Non autorisé
       language_selection:
         aria_label: 'Langue sélectionnée : Français'
       site_title: IRIDA Next
@@ -1037,8 +1037,8 @@ fr:
         subject: Le groupe '%{group_name}' a obtenu l’accès à %{namespace_type} '%{namespace_name}'
         view_details: 'Pour voir tous les membres de %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_granted_user_email:
-        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
-        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
+        body_html: Le groupe '%{group_name}' a <strong>obtenu</strong> l’accès à %{namespace_type} '%{namespace_name}'
+        subject: Le groupe '%{group_name}' a obtenu l’accès à %{namespace_type} '%{namespace_name}'
         view_details: 'Pour voir %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_manager_email:
         body_html: L’accès à %{namespace_type} '%{namespace_name}' a été <strong>révoqué</strong> pour le groupe '%{group_name}'
@@ -1195,7 +1195,7 @@ fr:
         scopes: Portées
       never: Jamais
       revoke: Révoquer
-      revoke_aria_label: 'Revoke personal access token: %{name}'
+      revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
   profiles:
     accounts:
@@ -1244,7 +1244,7 @@ fr:
         system_theme: Système
         theme_title: Thème des couleurs
       update:
-        error: Language could not be updated
+        error: Le langage n’a pas pu être mis à jour.
         success: Langue mise à jour avec succès
     show:
       email:
@@ -1284,15 +1284,15 @@ fr:
         upload_files: Télécharger des fichiers
       table:
         empty:
-          description: There are no files associated with this project.
+          description: Il n’y a aucun fichier associé à ce projet.
           title: Aucun fichier
     automated_workflow_executions:
       actions:
         delete: Supprimer
-        delete_aria_label: 'Delete automated pipeline: %{name}'
+        delete_aria_label: 'Supprimer le pipeline automatisé : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer ce pipeline automatisé?
         edit: Modifier
-        edit_aria_label: 'Edit automated pipeline: %{name}'
+        edit_aria_label: 'Modifier le pipeline automatisé : %{name}'
       create:
         error: Impossible de créer un pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été créé avec succès
@@ -1356,11 +1356,11 @@ fr:
         subtitle: Configurez des comptes de bot pour pouvoir effectuer des actions en utilisant l’API qui ne peuvent pas être attribuées à un utilisateur individuel.
         title: Comptes de bot
     create:
-      description_help: Description can have a maximum 255 characters
-      name_help: Project name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Reserved project names</a>
-      namespace_and_path: Namespace in which to create project and the path to the project which is used in the URL
-      namespace_help: The namespace in which the project will be created
-      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+      description_help: La description peut contenir un maximum de 255 caractères.
+      name_help: Le nom du projet doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/project/projects/reserved-names/">Noms de projets réservés</a>.
+      namespace_and_path: Espace de nom dans lequel créer le projet et le chemin au projet qui est utilisé dans l’URL.
+      namespace_help: Espace de nom dans lequel le projet sera créé
+      path_help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       success: Le projet %{project_name} a été créé avec succès
     destroy:
       success: Le projet %{project_name} a été supprimé avec succès
@@ -1372,10 +1372,10 @@ fr:
             - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
             - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning:
-              automated_workflows_count: "%{count} automated workflow execution(s)"
-              post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
-              pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
-              samples_count: "%{count} sample(s)"
+              automated_workflows_count: "%{count} exécution automatisée des flux de travail"
+              post_html: Si vous supprimez un projet, vous ne <strong>pourrez pas</strong> le rétablir, ni ses composants.
+              pre_html: 'Vous êtes sur le point de supprimer le projet <strong>%{project_name}</strong>. Cette action supprimera également :'
+              samples_count: "%{count} échantillons"
           description: La suppression d’un projet est permanente et ne peut pas être annulée. Tous les échantillons et les membres directs seront supprimés en même temps que le projet.
           submit: Supprimer le projet
           title: Supprimer le projet
@@ -1432,14 +1432,14 @@ fr:
       invited_groups:
         search:
           label: Rechercher
-          placeholder: Search by group name
+          placeholder: Chercher par nom de groupe
       new:
-        access_level_hint: Maximum access level to assign to group
+        access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
           cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
-        group_hint: Select a group to share project namespace with
+        group_hint: Sélectionner un groupe avec lequel partager l’espace de noms du projet
         label:
           access_expiration: Expiration de l’accès (facultatif)
           group_access_level: Niveau d’accès
@@ -1471,7 +1471,7 @@ fr:
           description: Aucun members n'a reçu d'accès délégué à ce projet
           title: Aucun membres
         invite_group: Inviter le groupe
-        invited_groups: Invited Groups
+        invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?
         leave_project: Quitter le projet
         remove: Retirer
@@ -1485,17 +1485,17 @@ fr:
       member_listing:
         search:
           label: Rechercher
-          placeholder: Search by username
+          placeholder: Chercher par nom d’utilisateur
       new:
-        access_level_hint: Select project access level to assign to user
+        access_level_hint: Sélectionner le niveau d’accès du projet à attribuer à l’utilisateur
         add_member_to_project: Ajouter un membre au projet
         button:
           cancel: Annuler
         description: Vous ajoutez un nouveau membre au projet %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         title: Ajouter un nouveau membre
-        user_hint: Select a user to add to project
-        user_select: User
+        user_hint: Sélectionner un utilisateur à ajouter au projet
+        user_select: Utilisateur
     metadata_templates:
       index:
         new_button: Ajouter un nouveau modèle
@@ -1509,7 +1509,7 @@ fr:
       select_namespace: Sélectionnez l’espace de noms
       submit: Créer un projet
       subtitle: Les projets sont l’endroit où vous pouvez stocker et analyser vos données
-      title: Create project
+      title: Créer un projet
     samples:
       attachments:
         attachment:
@@ -1545,10 +1545,10 @@ fr:
         table:
           deselect_all_button: Désélectionner tout
           empty_state:
-            action_text: Upload Files
-            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
-            no_permission_description: You do not have permission to upload files to this sample
-            title: No files have been uploaded
+            action_text: Télécharger des fichiers
+            description: Cet échantillon n’a actuellement aucun fichier joint. Commencer par télécharger les données de séquence, les fichiers d’assemblage ou d’autres documents pertinents
+            no_permission_description: Vous n’avez pas la permission de télécharger des dossiers dans cet échantillon.
+            title: Aucun fichier n’a été téléchargé
           search:
             label: Rechercher
             placeholder: Rechercher par PUID ou nom de fichier
@@ -1564,11 +1564,11 @@ fr:
         title: Modifier l’échantillon
       index:
         deselect_all_button: Désélectionner tout
-        deselect_all_tooltip: Deselect all samples in this project
+        deselect_all_tooltip: Désélectionner tous les échantillons de ce projet
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
         select_all_button: Tout sélectionner
-        select_all_tooltip: Select all samples in this project
+        select_all_tooltip: Sélectionner tous les échantillons de ce projet
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
@@ -1602,21 +1602,21 @@ fr:
           value: Valeur
         new_metadata_modal:
           required_error:
-            key: Metadata key is required
-            value: Metadata value is required
-          title: Add Metadata
+            key: La clé de métadonnées est requise.
+            value: La valeur de métadonnées est requise.
+          title: Ajouter des métadonnées
         table:
-          add_metadata: Add Metadata
-          delete_metadata_button: Delete Metadata
+          add_metadata: Ajouter des métadonnées
+          delete_metadata_button: Supprimer les métadonnées
           no_associated_metadata: This sample currently has no metadata.  Get started by adding metadata to your sample.
           no_metadata: No metadata has added
-          no_permission_description: You do not have permission to add metadata to this sample
+          no_permission_description: Vous n’avez pas la permission d’ajouter des métadonnées dans cet échantillon.
       new:
         cancel_button: Annuler
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
-        concatenate_button: Concatenate Files
+        concatenate_button: Concaténer les fichiers
         delete_files_button: Supprimer des fichiers
         edit_button: Modifier cet échantillon
         files: Fichiers
@@ -1636,23 +1636,23 @@ fr:
               delete: Supprimer
               update: Mise à jour
           update:
-            key: Key
+            key: Clé
             update: Mise à jour
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
-        nav_aria_label: Sample Navigation
+        nav_aria_label: Navigation dans les échantillons
         new_attachment_button: Télécharger des fichiers
         remove_button: Retirer
         table_header:
           action: Mesure
-          key: Key
+          key: Clé
           last_updated: Dernière mise à jour
           source: Source
           value: Valeur
         tabs:
           files: Fichiers
           history: Historique
-          metadata: Metadata
+          metadata: Métadonnées
         upload: Télécharger
         upload_files: Télécharger des fichiers
       table_filter:
@@ -1693,7 +1693,7 @@ fr:
           placeholder: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
-        delete_workflows_button: Delete Workflow Executions
+        delete_workflows_button: Supprimer les exécutions de flux de travail
         deselect_all_button: Désélectionner tout
         search:
           label: Rechercher
@@ -1708,7 +1708,7 @@ fr:
         edit_button: Modifier
         remove_button: Retirer
         tabs:
-          label: Workflow Execution Details
+          label: Détails de l’exécution de flux de travail
       summary:
         created_at: Créé
         name: Nom
@@ -1763,7 +1763,7 @@ fr:
         submit_button: Retirer
         title: Supprimer l’échantillon
     editable_cell:
-      update_success: Metadata was successfully updated
+      update_success: Les métadonnées ont été mises à jour avec succès
     table_component:
       action: Mesure
       attachments_updated_at: Dernière mise à jour des fichiers
@@ -1778,13 +1778,13 @@ fr:
         puid: Projet
       puid: PUID de l’échantillon
       row:
-        aria_label: Select sample %{name}
-        deselected_message: Sample %{name} deselected
-        selected_message: Sample %{name} selected
+        aria_label: Sélectionner l’échantillon %{name}
+        deselected_message: Échantillon %{name} désélectionné
+        selected_message: Échantillon %{name} sélectionné
       select_all:
-        aria_label: Select all samples on this page
+        aria_label: Sélectionner tous les échantillons sur cette page
         deselected_message: Selection cleared
-        selected_message: All items on this page selected
+        selected_message: Tous les éléments de cette page sont sélectionnés
       select_page: Sélectionner/Désélectionner les échantillons visibles
       updated_at: Dernière mise à jour
     transfers:
@@ -1826,7 +1826,7 @@ fr:
     groups:
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.
-        group_required: Group is required
+        group_required: Groupe requis
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
         invalid_namespace_type: Type d’espace de noms non valide
       transfer:
@@ -1859,7 +1859,7 @@ fr:
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
         samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source: %{sample_ids}'
-        unauthorized: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
+        unauthorized: 'Vous n’avez pas la permission de copier les échantillons suivants avec les identifiants d’échantillon : %{sample_ids}'
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
@@ -1874,10 +1874,10 @@ fr:
         sample_does_not_belong_to_project: L’exemple '%{sample_name}' n’appartient pas au projet '%{project_name}'
         update_fields:
           key_exists: L’échantillon contient déjà le champ de métadonnées '%{key}'.
-          key_required: Metadata key is required
+          key_required: La clé de métadonnées est requise.
           metadata_was_not_changed: Les champs de métadonnées n’ont pas été modifiés.
           user_cannot_edit_metadata_key: La clé de métadonnées '%{key}' ne peut pas être mise à jour par un utilisateur.
-          value_required: Metadata value is required
+          value_required: La valeur de métadonnées est requise.
         user_cannot_update_metadata: Les champs de métadonnées '%{metadata_fields}' de l’échantillon '%{sample_name}' ne peuvent pas être écrasés par un utilisateur puisqu’ils ont été précédemment mis à jour avec une analyse.
       transfer:
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
@@ -1886,10 +1886,10 @@ fr:
         same_project: Les échantillons existent déjà dans le projet. Veuillez sélectionner un autre projet.
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
         samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
-        target_project_duplicate: Sample %{sample_name} already belongs to target project
-        unauthorized: 'Samples with the following sample ids could not be transferred as you are not authorized to do so for the source project: %{sample_ids}'
+        target_project_duplicate: L’échantillon %{sample_name} appartient déjà au projet cible.
+        unauthorized: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés car vous n’avez pas la permission de le faire pour le projet source : %{sample_ids}'
     spreadsheet_import:
-      csv_file_malformed: The CSV file is malformed.
+      csv_file_malformed: Le fichier CSV est malformé.
       duplicate_column_names: Le fichier comporte des noms d’en-tête de colonne en double. Veuillez supprimer les colonnes avec des noms d’en-tête en double et réessayer de les télécharger.
       invalid_file_extension: Le fichier ne peut être qu’un fichier csv, tsv ou excel.
       missing_data_columns: Il manque des colonnes de données au fichier. Veuillez ajouter des colonnes de données et des en-têtes supplémentaires et réessayer le téléchargement.
@@ -1901,23 +1901,23 @@ fr:
       list:
         danger: Danger
     form:
-      required_field: indicates required field
+      required_field: Indique un champ obligatoire
     loading:
       form:
         loading: Chargement...
       samples_list_skeleton:
         loading: Chargement...
     progress_bar:
-      in_progress: Action in progress. Please do not refresh the page.
+      in_progress: Action en cours Ne pas actualiser la page
     samples:
       actions_dropdown:
         clone: Copier des échantillons
         delete_samples: Supprimer les échantillons
-        export: Export
-        import: Import
+        export: Exporter
+        import: Importer
         import_metadata: Importer des métadonnées
-        import_samples: Import samples
-        label: Sample Actions
+        import_samples: Importer des échantillons
+        label: Actions liées à l’échantillon
         linelist_export: Exportation de liste détaillée
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
@@ -1942,28 +1942,28 @@ fr:
             file_help: CSV, TSV, XLS ou XLSX.
             ignore_empty_values:
               description: Si cette option est sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l’échantillon si elles sont présentes. Cependant, si cette option n’est pas sélectionnée, tous les échantillons avec la clé de métadonnées et la valeur vide seront supprimés.
-            metadata_columns: Metadata Columns
+            metadata_columns: Colonnes de métadonnées
             namespace:
               description: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. '
               group:
                 description_html: L’identificateur est sensible à la casse et doit contenir l’<b>PUID de l’échantillon</b>.
               project:
                 description_html: L’identificateur est sensible à la casse et peut contenir le <b>nom ou l’PUID de l’échantillon</b>.
-            no_valid_metadata: The uploaded spreadsheet contains no viable metadata
+            no_valid_metadata: Le chiffrier téléchargé ne contient aucune métadonnée viable.
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
             selected: Sélectionné
             spinner_message: L’importation d’échantillons de métadonnées, cela peut prendre un certain temps...
-            submit_button: Import Metadata
+            submit_button: Importer des métadonnées
             title: Télécharger des échantillons de métadonnées
-            uploading: Uploading
+            uploading: Téléchargement
           errors:
             description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
             ok_button: OK
           success:
             description: Les métadonnées ont été importées avec succès!
             ok_button: OK
-            success: Success
+            success: Réussite
       metadata_templates:
         fields:
           all: Afficher tous les champs
@@ -1977,78 +1977,78 @@ fr:
         tooltip: Paramètres d’affichage des métadonnées
       spreadsheet_imports:
         dialog:
-          available: Available
-          description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
-          file: File
-          file_help: CSV, TSV, XLS or XLSX.
-          metadata: Metadata
+          available: Disponible
+          description: Importer un tableur d’échantillons permet d’ajouter plusieurs échantillons, avec ou sans champs de métadonnées, en même temps.
+          file: Fichier
+          file_help: CSV, TSV, XLS ou XLSX.
+          metadata: Métadonnées
           namespace:
             group:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
             project:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
-          project_puid_column: Project PUID Column
-          project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
-          project_selection: Project Selection
-          project_selection_description: You can specify which project(s) samples are assigned to by selecting a Project ID column and/or a static project
-          sample_description_column: Sample Description Column (Optional)
-          sample_name_column: Sample Name Column
-          select_project_puid_column: Select a Project PUID Column
-          select_sample_description_column: Select a Sample Description Column
-          select_sample_name_column: Select a Sample Name Column
-          select_static_project: Select Static Project
-          selected: Selected
-          spinner_message: Importing samples, this might take a while...
-          static_project: Static Project
-          static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid
-          static_project_empty_state: No projects are associated with that name or ID
-          submit_button: Import Samples
-          title: Import Samples
-          uploading: Uploading
+          project_puid_column: Colonne PUID du projet
+          project_puid_column_description: Attribuer chaque échantillon au projet associé dans le tableur importé
+          project_selection: Sélection des projets
+          project_selection_description: Vous pouvez préciser quels échantillons de projets sont attribués en sélectionnant une colonne d’identifiant du projet ou un projet statique.
+          sample_description_column: Colonne de description de l’échantillon (facultatif)
+          sample_name_column: Colonne du nom de l’échantillon
+          select_project_puid_column: Sélectionner une colonne PUID d projet
+          select_sample_description_column: Sélectionner une colonne de description de l’échantillon
+          select_sample_name_column: Sélectionner une colonne de nom d’échantillon
+          select_static_project: Sélectionner un projet statique
+          selected: Sélectionné
+          spinner_message: Importation d’échantillons, cela peut prendre un certain temps...
+          static_project: Projet statique
+          static_project_description: Attribue chaque échantillon au projet statique si la colonne d’identifiant du projet n’est pas attribuée, ou si la colonne d’identifiant du projet est attribuée mais que la valeur du projet dans le tableur est vide ou non valide.
+          static_project_empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+          submit_button: Importer des échantillons
+          title: Importer des échantillons
+          uploading: Téléchargement
         errors:
-          description: 'The sample import completed with the following errors:'
+          description: 'L’importation des échantillons s’est terminée avec les erreurs suivantes :'
           ok_button: OK
         success:
-          description: The sample spreadsheet has been processed.
+          description: Le chiffrier des échantillons a été traité.
           ok_button: OK
           problem_message: "%{path} %{message}"
-          problems: Errors were encountered while importing the following samples.
+          problems: Des erreurs sont survenues pendant l’importation des échantillons suivants.
       success:
         ok_button: OK
         success: Réussite
     sortable_lists:
       aria_live_update:
-        added: 'The following options have been added: '
-        list_order_changed: 'Options ordering changed for LIST_PLACEHOLDER list. The ordering is the following: '
-        move_down: Option OPTION_PLACEHOLDER was moved down.
-        move_up: Option OPTION_PLACEHOLDER was moved up.
-        removed: 'The following options have been removed: '
+        added: 'Les options suivantes ont été ajoutées : '
+        list_order_changed: 'L’ordre des options a changé pour la liste LIST_PLACEHOLDER. L’ordre est le suivant : '
+        move_down: L’option OPTION_PLACEHOLDER a été déplacée vers le bas.
+        move_up: L’option OPTION_PLACEHOLDER a été déplacée vers le haut.
+        removed: 'Les options suivantes ont été retirées : '
     workflow_executions:
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
         submit_button: Confirmer
-        title: Delete Workflow Execution
+        title: Supprimer les exécutions de flux de travail
       destroy_multiple_confirmation_dialog:
         description:
-          plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
-          singular: The selected workflow execution will be deleted.
-          zero: The selected 0 workflow executions will be deleted.
-        state_warning_html: Please note, only non-shared workflow executions that are in the <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Completed</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Canceled</span>, and <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Error</span> states will be deleted.
-        submit_button: Confirm
-        title: Delete Workflow Executions
-        workflow_executions: Workflow Executions
+          plural: Les exécutions de flux de travail COUNT_PLACEHOLDER sélectionnées seront supprimées.
+          singular: L’exécution des flux de travail sélectionnés sera supprimée.
+          zero: L’exécution des flux de travail 0 sélectionnés sera supprimée.
+        state_warning_html: À noter que seules les exécutions des flux de travail non partagées qui ont un statut <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Terminé</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Annulé</span> et <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Erreur</span> seront supprimées.
+        submit_button: Confirmer
+        title: Supprimer les exécutions de flux de travail
+        workflow_executions: Exécutions de flux de travail
       list_workflow_execution:
-        id: 'ID:'
-        name: 'Name:'
-        run_id: 'Run ID:'
-        workflow: 'Workflow:'
-      workflow_execution: Workflow Execution
+        id: 'ID :'
+        name: 'Nom :'
+        run_id: 'Exécuter l’identifiant :'
+        workflow: 'Flux de travail :'
+      workflow_execution: Exécutions de flux de travail
   spreadsheet_helper:
-    failed_parsing: 'Failed to parse spreadsheet file: %{error}'
-    no_file: No file provided
-    no_headers: No headers found in file
-    unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
-    unknown_file_format: 'Unknown file type: %{extension}'
+    failed_parsing: 'Échec d’analyse du fichier tableur : %{error}'
+    no_file: Aucun fichier fourni
+    no_headers: Aucun en-tête trouvé dans le fichier
+    unexpected_error: 'Une erreur inattendue est survenue lors de l’analyse du fichier : %{error}'
+    unknown_file_format: 'Type de fichier inconnu : %{extension}'
   support:
     array:
       last_word_connector: " et "
@@ -2056,12 +2056,12 @@ fr:
       words_connector: ", "
   theme:
     announcements:
-      changed: Theme changed to %{theme} mode
-      error: Failed to change theme. Please try again.
+      changed: Thème changé en mode %{theme}
+      error: Le changement de thème a échoué. Veuillez essayer de nouveau.
     modes:
-      dark: Dark
-      light: Light
-      system: System
+      dark: Foncé
+      light: Pâle
+      system: Système
   time:
     am: am
     formats:
@@ -2080,10 +2080,10 @@ fr:
   workflow_executions:
     actions:
       cancel: Annuler
-      cancel_aria_label: 'Cancel workflow execution: %{name}'
+      cancel_aria_label: 'Annuler l’exécution du flux de travail : %{name}'
       cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
       delete: Supprimer
-      delete_aria_label: 'Delete workflow execution: %{name}'
+      delete_aria_label: 'Supprimer l’exécution du flux de travail : %{name}'
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
@@ -2091,8 +2091,8 @@ fr:
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
       shared_with_namespace:
-        group: Share results with group members?
-        project: Share results with project members?
+        group: Partager les résultats avec les membres du groupe?
+        project: Partager les résultats avec les membres du projet?
       submit_button: Envoyer
       title: Modifier l’exécution du flux de travail
     file_selector:
@@ -2111,14 +2111,14 @@ fr:
         submit_button: Envoyer
     files:
       empty:
-        description: There are no files associated with this workflow execution.
+        description: Il n’y a aucun fichier associé à cette exécution du flux de travail.
         title: Aucun fichier
       search:
         label: Rechercher
         placeholder: Rechercher par PUID ou nom de fichier
     index:
       create_export_button: Créer une exportation
-      delete_workflows_button: Delete Workflow Executions
+      delete_workflows_button: Supprimer les exécutions de flux de travail
       deselect_all_button: Désélectionner tout
       search:
         label: Rechercher
@@ -2151,7 +2151,7 @@ fr:
     submissions:
       create:
         submit: Envoyer
-        title: "%{workflow} parameters"
+        title: Paramètres %{workflow}
         update: Mise à jour
       pipeline_selection:
         loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>La préparation des arguments d’exécution du flux de travail pour les échantillons COUNT_PLACEHOLDER peut prendre un certain temps."
@@ -2160,12 +2160,12 @@ fr:
       created_at: Créé
       name: Nom
       run_from_namespace:
-        group: Run from Group
-        project: Run from Project
+        group: Faire l’exécution à partir du groupe
+        project: Faire l’exécution à partir du projet
       run_id: Exécuter l’identifiant
       shared_with_namespace:
-        group: Shared with Group
-        project: Shared with Project
+        group: Partagé avec le groupe
+        project: Partagé avec le projet
       state: État
       updated_at: Dernière mise à jour
       workflow_name: Nom du flux de travail
