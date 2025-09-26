@@ -12,7 +12,7 @@
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
         <%= render Pathogen::Icon.new(icon_def[:name], size: :md, **icon_def[:options]) %>
         <span class="text-xs text-slate-600 font-medium"><%= icon_def[:name] %></span>
-        <span class="text-xs text-slate-400 font-mono break-all text-center">ICON::<%= const_name %></span>
+        <span class="text-xs text-slate-400 font-mono break-all text-center"><%= const_name %></span>
       </div>
     <% end %>
   </div>
