@@ -139,19 +139,19 @@
       <!-- Semantic Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.semantic("info", aria_label: "Information", color: :primary, size: :sm, class: "mr-2") %>
+          <%= render Pathogen::Icon.primary("info", "aria-label": "Information", size: :sm, class: "mr-2") %>
           Semantic Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that convey meaning and should be announced by screen readers.</p>
 
         <div class="space-y-4">
           <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
-            <%= render Pathogen::Icon.semantic("info", aria_label: "Important information", color: :primary, class: "float-left mr-2 mt-0.5") %>
+            <%= render Pathogen::Icon.primary("info", "aria-label": "Important information", class: "float-left mr-2 mt-0.5") %>
             <p class="text-blue-800 dark:text-blue-200 text-sm">This icon conveys important information and includes an aria-label for screen readers.</p>
           </div>
 
           <code class="block text-xs bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-            &lt;%= render Pathogen::Icon.semantic("info", aria_label: "Important information") %&gt;
+            &lt;%= render Pathogen::Icon.new("info", "aria-label": "Important information") %&gt;
           </code>
 
           <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -163,7 +163,7 @@
       <!-- Decorative Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.decorative("sparkle", color: :primary, size: :sm, class: "mr-2") %>
+          <%= render Pathogen::Icon.primary("sparkle", size: :sm, class: "mr-2", "aria-hidden": true) %>
           Decorative Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that are purely visual and should be hidden from screen readers.</p>
@@ -171,14 +171,14 @@
         <div class="space-y-4">
           <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
             <h4 class="font-medium text-slate-900 dark:text-slate-100 flex items-center">
-              <%= render Pathogen::Icon.decorative("sparkle", color: :primary, size: :sm, class: "mr-2") %>
+              <%= render Pathogen::Icon.primary("sparkle", size: :sm, class: "mr-2", "aria-hidden": true) %>
               Beautiful Design
             </h4>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">The sparkle icon is decorative and enhances the visual appeal.</p>
           </div>
 
           <code class="block text-xs bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-            &lt;%= render Pathogen::Icon.decorative("sparkle") %&gt;
+            &lt;%= render Pathogen::Icon.new("sparkle", "aria-hidden": true) %&gt;
           </code>
 
           <div class="text-xs text-slate-500 dark:text-slate-400">

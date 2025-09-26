@@ -25,24 +25,6 @@ module Pathogen
   class Icon < Pathogen::Component
     # Factory methods for common icon patterns
     class << self
-      # Create a semantic icon with proper accessibility
-      #
-      # @param icon_name [String, Symbol] The icon name
-      # @param aria_label [String] Required aria-label for semantic icons
-      # @param options [Hash] Additional options
-      # @return [Pathogen::Icon] Icon instance
-      def semantic(icon_name, aria_label:, **)
-        new(icon_name, semantic: true, 'aria-label': aria_label, **)
-      end
-
-      # Create a decorative icon (hidden from screen readers)
-      #
-      # @param icon_name [String, Symbol] The icon name
-      # @param options [Hash] Additional options
-      # @return [Pathogen::Icon] Icon instance
-      def decorative(icon_name, **)
-        new(icon_name, semantic: false, **)
-      end
 
       # Factory methods for common color variants
       def success(icon_name, **)
@@ -101,13 +83,11 @@ module Pathogen
     # @param icon_name [String, Symbol] The icon name (e.g., "clipboard-text", :arrow_up)
     # @param color [Symbol] Pathogen color variant (:default, :primary, :success, etc.)
     # @param size [Symbol] Pathogen size variant (:sm, :md, :lg, :xl)
-    # @param semantic [Boolean] Whether this icon is semantic (needs aria-label) or decorative
     # @param variant [String, Symbol] rails_icons variant (e.g., :fill, :outline)
     # @param library [String, Symbol] rails_icons library (e.g., :heroicons, :phosphor)
     # @param options [Hash] Additional system arguments passed to rails_icons
-    def initialize(icon_name, color: :default, size: :md, semantic: false, variant: nil, library: nil, **options) # rubocop:disable Metrics/ParameterLists
+    def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options)
       @icon_name = normalize_icon_name(icon_name)
-      @semantic = semantic
 
       # Validate and normalize parameters
       @color = validate_color(color)
@@ -121,9 +101,6 @@ module Pathogen
 
       # Apply Pathogen styling classes
       apply_pathogen_styling
-
-      # Ensure proper accessibility based on semantic nature
-      ensure_accessibility_defaults
     end
 
     # Render the icon using rails_icons
@@ -219,34 +196,6 @@ module Pathogen
       return 'fill-current' if @variant&.to_s == 'fill'
 
       nil
-    end
-
-    # Ensure proper accessibility based on semantic nature
-    def ensure_accessibility_defaults
-      if @semantic
-        ensure_semantic_accessibility
-      else
-        ensure_decorative_accessibility
-      end
-    end
-
-    # Handle accessibility for semantic icons (meaningful to content)
-    def ensure_semantic_accessibility
-      # Semantic icons should have proper labeling
-      unless @rails_icons_options.key?('aria-label') || @rails_icons_options.key?(:'aria-label')
-        Rails.logger.warn "[Pathogen::Icon] Semantic icon '#{@icon_name}' missing aria-label. Consider adding one for better accessibility."
-      end
-
-      @rails_icons_options['aria-hidden'] = false
-      @rails_icons_options['role'] ||= 'img'
-    end
-
-    # Handle accessibility for decorative icons
-    def ensure_decorative_accessibility
-      # Decorative icons should be hidden from screen readers unless explicitly overridden
-      return if @rails_icons_options.key?('aria-hidden') || @rails_icons_options.key?(:'aria-hidden')
-
-      @rails_icons_options['aria-hidden'] = true
     end
 
     # Add debug class for development environments
