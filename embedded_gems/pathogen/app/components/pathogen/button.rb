@@ -10,7 +10,7 @@ module Pathogen
     include Pathogen::ButtonSizes
     include Pathogen::ButtonVisuals
 
-    SCHEME_OPTIONS = %i[primary default danger].freeze
+    SCHEME_OPTIONS = %i[primary default slate danger].freeze
     DEFAULT_SCHEME = :default
     # rubocop:disable Layout/LineLength
     DEFAULT_CLASSES = 'relative cursor-pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus-visible:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
@@ -99,21 +99,13 @@ module Pathogen
     # @param tag [Symbol] The HTML tag type (:button or :a).
     # @return [String] A string of CSS classes corresponding to the specified scheme.
     def generate_scheme_mapping(scheme, tag = :button)
-      # rubocop:disable Layout/LineLength
-      if tag == :a
-        {
-          primary: 'bg-primary-700 text-white hover:bg-primary-800',
-          default: 'text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700',
-          danger: 'border border-red-100 bg-slate-50 text-red-500 hover:text-red-50 dark:hover:text-red-50 hover:bg-red-800 dark:border-red-800 dark:bg-slate-900 dark:text-red-500'
-        }[scheme]
-      else
-        {
-          primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800',
-          default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:enabled:hover:text-white dark:enabled:hover:bg-slate-700',
-          danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 dark:border-red-800 dark:bg-slate-900 dark:text-red-500'
-        }[scheme]
-      end
-      # rubocop:enable Layout/LineLength
+      base_styles = COMMON_BASE_STYLES[scheme]
+
+      class_names(
+        base_styles,
+        LINK_HOVER_STYLES[scheme] => tag == :a,
+        BUTTON_HOVER_STYLES[scheme] => tag != :a
+      )
     end
   end
 end
