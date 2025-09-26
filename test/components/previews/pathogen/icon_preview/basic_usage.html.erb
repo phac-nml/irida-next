@@ -1,0 +1,159 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= render Pathogen::Icon.new("test-tube", color: :primary, size: :xl, class: "inline mr-3") %>
+      Pathogen Icons - Basic Usage
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Simple, accessible icons with built-in theming, error handling, and developer-friendly features.
+    </p>
+  </div>
+
+  <!-- Basic Examples -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= render Pathogen::Icon.new("clipboard-text", color: :primary, class: "mr-3") %>
+      Basic Examples
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- String Icon -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
+          <%= render Pathogen::Icon.new("check-circle", color: :success, size: :lg) %>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">String Icon Name</h3>
+        <code class="text-sm bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded text-slate-700 dark:text-slate-300 block">
+          Pathogen::Icon.new("check-circle")
+        </code>
+      </div>
+
+      <!-- Symbol Icon -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
+          <%= render Pathogen::Icon.new(:arrow_up, color: :primary, size: :lg) %>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Symbol Icon Name</h3>
+        <code class="text-sm bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded text-slate-700 dark:text-slate-300 block">
+          Pathogen::Icon.new(:arrow_up)
+        </code>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Underscores automatically convert to dashes</p>
+      </div>
+
+      <!-- With Options -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
+          <%= render Pathogen::Icon.new("heart", variant: :fill, color: :danger, size: :lg) %>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">With Options</h3>
+        <code class="text-sm bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded text-slate-700 dark:text-slate-300 block">
+          Pathogen::Icon.new("heart", variant: :fill, color: :danger)
+        </code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Helper Methods -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= render Pathogen::Icon.new("code", color: :primary, class: "mr-3") %>
+      Helper Methods in ERB
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Using render</h3>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <%= render Pathogen::Icon.new("check", color: :success) %>
+              <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                &lt;%= render Pathogen::Icon.new("check") %&gt;
+              </code>
+            </div>
+            <div class="flex items-center gap-3">
+              <%= render Pathogen::Icon.new("x", color: :danger) %>
+              <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                &lt;%= render Pathogen::Icon.new("x") %&gt;
+              </code>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Using pathogen_icon helper</h3>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <%= pathogen_icon("info", color: :primary) %>
+              <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                &lt;%= pathogen_icon("info") %&gt;
+              </code>
+            </div>
+            <div class="flex items-center gap-3">
+              <%= pathogen_icon("warning", color: :warning) %>
+              <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                &lt;%= pathogen_icon("warning") %&gt;
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Parameters -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= render Pathogen::Icon.new("sliders-horizontal", color: :primary, class: "mr-3") %>
+      Common Parameters
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Parameter</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Type</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Options</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Example</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">color</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">:default, :primary, :success, :warning, :danger, :subdued</td>
+              <td class="py-3 px-4"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">color: :success</code></td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">size</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">:sm, :md, :lg, :xl</td>
+              <td class="py-3 px-4"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">size: :lg</code></td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">semantic</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Boolean</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">true, false</td>
+              <td class="py-3 px-4"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">semantic: true</code></td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">variant</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">:fill, :outline, :duotone (depends on library)</td>
+              <td class="py-3 px-4"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">variant: :fill</code></td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">library</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">:phosphor, :heroicons</td>
+              <td class="py-3 px-4"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">library: :heroicons</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

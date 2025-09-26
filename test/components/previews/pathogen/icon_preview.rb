@@ -2,24 +2,19 @@
 
 module Pathogen
   class IconPreview < ViewComponent::Preview
-    # @!group Icons
-    # @label Phosphor Icons
-    def phosphor_icons; end
+    # @!group Enhanced Pathogen Icons
 
-    # @label Heroicons
-    def heroicons; end
+    # @label Basic Usage & Getting Started
+    def basic_usage; end
 
-    # @label Named Icons
-    def named_icons; end
+    # @label Colors & Sizes
+    def colors_and_sizes; end
 
-    # @label Special Icons
-    def special_icons; end
+    # @label Factory Methods & Enhanced Features
+    def factory_methods; end
 
-    # @label Icon Sizes
-    def icon_sizes; end
-
-    # @label Icon Color Variants
-    def icon_color_variants; end
+    # @label Icon Library & Catalog
+    def icon_library; end
 
     # @!endgroup
   end
