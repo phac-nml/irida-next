@@ -1645,7 +1645,7 @@ fr:
         remove_button: Retirer
         table_header:
           action: Mesure
-          key: Key
+          key: Clé
           last_updated: Dernière mise à jour
           source: Source
           value: Valeur
