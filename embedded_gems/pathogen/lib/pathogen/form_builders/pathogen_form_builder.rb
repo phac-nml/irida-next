@@ -146,7 +146,7 @@ module Pathogen
         return content_or_options.to_s if content_or_options
 
         # Use Rails' built-in label translation lookup
-        if @object&.class&.respond_to?(:human_attribute_name)
+        if @object&.class.respond_to?(:human_attribute_name)
           @object.class.human_attribute_name(method)
         else
           method.to_s.humanize
