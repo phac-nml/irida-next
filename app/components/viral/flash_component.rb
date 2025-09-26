@@ -64,7 +64,7 @@ module Viral
       when 'error'
         :x_CIRCLE
       when 'warning'
-        ICON::WARNING_CIRCLE
+        'warning-circle'
       when 'info'
         :info
       else
