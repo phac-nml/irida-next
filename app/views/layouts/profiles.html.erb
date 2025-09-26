@@ -8,33 +8,33 @@
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: profile_path,
-            icon: ICON::USER_CIRCLE,
+            icon: "user-circle",
             label: t(:"profiles.sidebar.profile"),
             selected: @current_page == t(:"profiles.sidebar.profile"),
           ) %>
           <% if allowed_to?(:edit_password?, @user) %>
             <%= render section.with_item(
               url: edit_profile_password_path,
-              icon: ICON::LOCK_KEY,
+              icon: "lock-key",
               label: t(:"profiles.sidebar.password"),
               selected: @current_page == t(:"profiles.sidebar.password"),
             ) %>
           <% end %>
           <%= render section.with_item(
             url: profile_personal_access_tokens_path,
-            icon: ICON::TICKET,
+            icon: :ticket,
             label: t(:"profiles.sidebar.access_tokens"),
             selected: @current_page == t(:"profiles.sidebar.access_tokens"),
           ) %>
           <%= render section.with_item(
             url: profile_preferences_path,
-            icon: ICON::SLIDERS_HORIZONTAL,
+            icon: "sliders-horizontal",
             label: t(:"profiles.sidebar.preferences"),
             selected: @current_page == t(:"profiles.sidebar.preferences"),
           ) %>
           <%= render section.with_item(
             url: profile_account_path,
-            icon: ICON::BANK,
+            icon: :bank,
             label: t(:"profiles.sidebar.account"),
             selected: @current_page == t(:"profiles.sidebar.account"),
           ) %>

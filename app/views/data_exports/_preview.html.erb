@@ -29,7 +29,7 @@
                 <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
-                      <%= pathogen_icon(ICON::FOLDER_OPEN, size: :sm) %>
+                      <%= pathogen_icon("folder-open", size: :sm) %>
                       <span class="ml-2">
                         <%= link_to sample["name"],
                         redirect_data_export_path(identifier: sample["name"]),
@@ -43,7 +43,7 @@
                       <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                         <li>
                           <div class="flex text-blue-800 dark:text-blue-300">
-                            <%= pathogen_icon(ICON::FOLDER_OPEN, size: :sm) %>
+                            <%= pathogen_icon("folder-open", size: :sm) %>
                             <span class="ml-2 text-sm">
                               <%= attachments["name"] %>
                             </span>
@@ -72,7 +72,7 @@
           <% @manifest['children'].each do |workflow_execution_id| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= pathogen_icon(ICON::FOLDER_OPEN, class: "size-5 m-0") %>
+                <%= pathogen_icon("folder-open", class: "size-5 m-0") %>
                 <span class="ml-2">
                   <%= link_to workflow_execution_id["name"],
                   redirect_data_export_path(identifier: workflow_execution_id["name"]),
@@ -87,7 +87,7 @@
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
                       <% if child["type"] == "folder" %>
-                        <%= pathogen_icon(ICON::FOLDER_OPEN, class: "size-5 m-0") %>
+                        <%= pathogen_icon("folder-open", class: "size-5 m-0") %>
                         <span class="ml-2">
                           <%= link_to child["name"],
                           redirect_data_export_path(identifier: child["name"]),

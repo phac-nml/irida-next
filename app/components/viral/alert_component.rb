@@ -107,7 +107,7 @@ module Viral
       case type
       when 'danger' then :x_CIRCLE
       when 'success' then :check_CIRCLE
-      when 'warning' then ICON::WARNING_CIRCLE
+      when 'warning' then 'warning-circle'
       else :info
       end
     end

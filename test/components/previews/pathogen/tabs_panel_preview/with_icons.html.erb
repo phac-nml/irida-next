@@ -6,7 +6,7 @@
     href: "/home",
     selected: true,
   ) do |tab| %>
-    <%= tab.with_icon(icon: ICON::BANK) %>
+    <%= tab.with_icon(icon: :bank) %>
   <% end %>
 
   <% nav.with_tab(
@@ -22,6 +22,6 @@
     text: "Settings",
     href: "/settings",
   ) do |tab| %>
-    <%= tab.with_icon(icon: ICON::GEAR_SIX) %>
+    <%= tab.with_icon(icon: "gear-six") %>
   <% end %>
 <% end %>

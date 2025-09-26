@@ -154,7 +154,7 @@
     <% if @allowed_to[:update_sample] %>
       <%= render(
         Viral::EmptyStateComponent.new(
-          icon_name: ICON::TABLE,
+          icon_name: :table,
           title: t(".no_metadata"),
           description: t(".no_associated_metadata"),
           action_text: t(".add_metadata"),
@@ -174,7 +174,7 @@
     <% else %>
       <%= render(
         Viral::EmptyStateComponent.new(
-          icon_name: ICON::TABLE,
+          icon_name: :table,
           title: t(".no_metadata"),
           description: t(".no_permission_description"),
         ),
