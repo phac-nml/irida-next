@@ -1,6 +1,6 @@
 <div role="status" class="sr-only"><%= results_message if search_term? %></div>
 
-<%= search_form_for @query, url: @url, **kwargs do |f| %>
+<%= search_form_for @query, url: @url, html: { role: "search" }, **kwargs do |f| %>
   <%= render Ransack::HiddenSortFieldComponent.new(@query) %>
   <%= render SearchFieldComponent.new(
     form: f,
