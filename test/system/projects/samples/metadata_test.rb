@@ -254,9 +254,9 @@ module Projects
           key_id = all('input.keyInput')[0][:id]
           value_id = all('input.valueInput')[0][:id]
 
-          find(:xpath, %(//*[@id="#{key_id}_error"]/span/span[2]),
+          find(:xpath, %(//*[@id="#{key_id}_error"]//span[@class="grow"]),
                text: I18n.t('projects.samples.metadata.new_metadata_modal.required_error.key'))
-          find(:xpath, %(//*[@id="#{value_id}_error"]/span/span[2]),
+          find(:xpath, %(//*[@id="#{value_id}_error"]//span[@class="grow"]),
                text: I18n.t('projects.samples.metadata.new_metadata_modal.required_error.value'))
 
           # Fill in empty key and value
