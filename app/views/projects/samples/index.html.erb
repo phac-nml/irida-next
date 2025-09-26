@@ -211,14 +211,10 @@
                    title: t(".deselect_all_tooltip") %>
         <% end %>
       <% end %>
-    </div>
-  <% end %>
-      <% end %>
       <div class="sm:grow max-sm:hidden" role="presentation"></div>
       <div id="table-filter" role="presentation" class="contents">
         <%= render partial: "table_filter" %>
       </div>
-
       <%= render partial: "shared/samples/metadata_template_dropdown",
       locals: {
         url:
@@ -231,6 +227,7 @@
       } %>
     </div>
   <% end %>
+
   <%= render partial: "table",
   locals: {
     allowed_to: @allowed_to,
