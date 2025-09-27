@@ -70,7 +70,9 @@ module Pathogen
     #
     # @return [ActiveSupport::SafeBuffer, nil] The rendered icon HTML or error fallback
     def call
-      icon(@icon_name, **@rails_icons_options)
+      html = icon(@icon_name, **@rails_icons_options)
+      # Remove any data attributes from the final HTML as they're not allowed on SVG
+      remove_data_attributes_from_html(html)
     rescue StandardError => e
       handle_icon_error(e)
     end
@@ -127,6 +129,9 @@ module Pathogen
     def build_rails_icons_options(variant, library, additional_options)
       options = additional_options.dup
 
+      # Remove data attributes as they're not allowed on SVG elements
+      filter_data_attributes(options)
+
       # Add rails_icons specific options
       options[:variant] = variant if variant
       options[:library] = library if library
@@ -159,6 +164,36 @@ module Pathogen
       return 'fill-current' if @variant&.to_s == 'fill'
 
       nil
+    end
+
+    # Remove data attributes from options since they're not allowed on SVG elements
+    #
+    # @param options [Hash] Options hash to filter
+    def filter_data_attributes(options)
+      # Remove any keys that start with 'data-' or are exactly 'data'
+      keys_to_remove = options.keys.select do |key|
+        key_str = key.to_s
+        key_str.start_with?('data-') || key_str == 'data'
+      end
+
+      keys_to_remove.each { |key| options.delete(key) }
+
+      # Debug logging in development
+      return unless Rails.env.development? && keys_to_remove.any?
+
+      Rails.logger.debug { "[Pathogen::Icon] Removed data attributes: #{keys_to_remove.inspect} from #{@icon_name}" }
+    end
+
+    # Remove data attributes from rendered HTML using regex
+    #
+    # @param html [String] The HTML string to clean
+    # @return [ActiveSupport::SafeBuffer] Cleaned HTML
+    def remove_data_attributes_from_html(html)
+      return html unless html.is_a?(String)
+
+      # Remove data attributes from SVG elements
+      cleaned_html = html.gsub(/\s+data(?:-[a-z0-9-]*)?(?:="[^"]*")?/i, '')
+      cleaned_html.html_safe
     end
 
     # Add debug class for development environments
