@@ -16,7 +16,7 @@ module Pathogen
 
     test 'button with leading visual icon' do
       component = Pathogen::Button.new(test_selector: 'playground').tap do |c|
-        c.with_leading_visual_icon(icon: ICON::ARROW_RIGHT)
+        c.with_leading_visual_icon(icon: 'arrow-right')
       end
       render_inline(component) { 'Button' }
       assert_selector 'button[data-test-selector="playground"]:not([disabled])', count: 1, visible: true, text: 'Button'
@@ -25,7 +25,7 @@ module Pathogen
 
     test 'button with trailing visual icon' do
       component = Pathogen::Button.new(test_selector: 'playground').tap do |c|
-        c.with_trailing_visual_icon(icon: ICON::ARROW_RIGHT)
+        c.with_trailing_visual_icon(icon: 'arrow-right')
       end
       render_inline(component) { 'Button' }
       assert_selector 'button[data-test-selector="playground"]:not([disabled])', count: 1, visible: true, text: 'Button'

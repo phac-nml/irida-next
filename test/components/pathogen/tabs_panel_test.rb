@@ -42,10 +42,10 @@ module Pathogen
     test 'navigation with icons' do
       tabs_component = Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
         nav.with_tab(id: 'nav-1', text: 'Home', href: '/home', selected: true) do |tab|
-          tab.with_icon(icon: ICON::BANK)
+          tab.with_icon(icon: :bank)
         end
         nav.with_tab(id: 'nav-2', text: 'Profile', href: '/profile') do |tab|
-          tab.with_icon(icon: ICON::USERS)
+          tab.with_icon(icon: :users)
         end
       end
       render_inline(tabs_component)
