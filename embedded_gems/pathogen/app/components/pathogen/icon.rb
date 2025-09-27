@@ -23,43 +23,6 @@ module Pathogen
   #   = render Pathogen::Icon.new("info", "aria-hidden": false, "aria-label": "Information")
   #
   class Icon < Pathogen::Component
-    # Factory methods for common icon patterns
-    class << self
-
-      # Factory methods for common color variants
-      def success(icon_name, **)
-        new(icon_name, color: :success, **)
-      end
-
-      def danger(icon_name, **)
-        new(icon_name, color: :danger, **)
-      end
-
-      def warning(icon_name, **)
-        new(icon_name, color: :warning, **)
-      end
-
-      def primary(icon_name, **)
-        new(icon_name, color: :primary, **)
-      end
-
-      def subdued(icon_name, **)
-        new(icon_name, color: :subdued, **)
-      end
-
-      # Factory methods for common size variants
-      def small(icon_name, **)
-        new(icon_name, size: :sm, **)
-      end
-
-      def large(icon_name, **)
-        new(icon_name, size: :lg, **)
-      end
-
-      def extra_large(icon_name, **)
-        new(icon_name, size: :xl, **)
-      end
-    end
     # Tailwind color variants for icon text color
     COLORS = {
       default: 'text-slate-900 dark:text-slate-100',
@@ -86,7 +49,7 @@ module Pathogen
     # @param variant [String, Symbol] rails_icons variant (e.g., :fill, :outline)
     # @param library [String, Symbol] rails_icons library (e.g., :heroicons, :phosphor)
     # @param options [Hash] Additional system arguments passed to rails_icons
-    def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options)
+    def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options) # rubocop:disable Metrics/ParameterLists
       @icon_name = normalize_icon_name(icon_name)
 
       # Validate and normalize parameters
@@ -152,7 +115,7 @@ module Pathogen
         Rails.logger.warn "[Pathogen::Icon] Suspicious icon name: '#{normalized}'"
       end
 
-      normalized
+      normalized.downcase
     end
 
     # Build the options hash for rails_icons with variant, library, and additional options
