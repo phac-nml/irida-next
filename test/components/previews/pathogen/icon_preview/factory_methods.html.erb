@@ -28,14 +28,14 @@
       ].each do |item| %>
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
           <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-            <%= render Pathogen::Icon.send(item[:method], item[:icon], size: :lg) %>
+            <%= render Pathogen::Icon.new(item[:icon], color: item[:color], size: :lg) %>
           </div>
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-            Icon.<%= item[:method] %>()
+            Icon.new() with color: :<%= item[:method] %>
           </h3>
           <p class="text-sm text-slate-600 dark:text-slate-400 mb-3"><%= item[:desc] %></p>
           <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300 block">
-            Pathogen::Icon.<%= item[:method] %>("<%= item[:icon] %>")
+            Pathogen::Icon.new("<%= item[:icon] %>", color: :<%= item[:method] %>)
           </code>
         </div>
       <% end %>
@@ -49,15 +49,15 @@
           <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Status Messages</h4>
           <div class="space-y-3">
             <div class="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <%= render Pathogen::Icon.success("check-circle") %>
+              <%= render Pathogen::Icon.new("check-circle", color: :success) %>
               <span class="text-green-800 dark:text-green-200">Payment processed successfully</span>
             </div>
             <div class="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-              <%= render Pathogen::Icon.warning("warning") %>
+              <%= render Pathogen::Icon.new("warning", color: :warning) %>
               <span class="text-yellow-800 dark:text-yellow-200">Account verification pending</span>
             </div>
             <div class="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <%= render Pathogen::Icon.danger("x-circle") %>
+              <%= render Pathogen::Icon.new("x-circle", color: :danger) %>
               <span class="text-red-800 dark:text-red-200">Unable to connect to server</span>
             </div>
           </div>
@@ -66,16 +66,16 @@
           <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Interface Elements</h4>
           <div class="space-y-3">
             <button class="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg w-full">
-              <%= render Pathogen::Icon.primary("plus", size: :sm, class: "text-white") %>
+              <%= render Pathogen::Icon.new("plus", color: :primary, size: :sm, class: "text-white") %>
               Create New Project
             </button>
             <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 text-sm">
-              <%= render Pathogen::Icon.subdued("clock") %>
+              <%= render Pathogen::Icon.new("clock", color: :subdued) %>
               <span>Last updated 5 minutes ago</span>
             </div>
             <div class="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
               <span class="text-slate-900 dark:text-slate-100">Delete Account</span>
-              <%= render Pathogen::Icon.danger("trash", size: :sm) %>
+              <%= render Pathogen::Icon.new("trash", color: :danger, size: :sm) %>
             </div>
           </div>
         </div>
@@ -94,34 +94,34 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.small("heart", color: :danger) %>
+          <%= render Pathogen::Icon.new("heart", color: :danger, size: :sm) %>
         </div>
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.small()</h3>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :sm</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Perfect for inline use in text</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.small("heart")
+          Icon.new("heart", size: :sm)
         </code>
       </div>
 
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.large("star", color: :primary) %>
+          <%= render Pathogen::Icon.new("star", color: :primary, size: :lg) %>
         </div>
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.large()</h3>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :lg</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Great for feature highlights</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.large("star")
+          Icon.new("star", size: :lg)
         </code>
       </div>
 
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.extra_large("rocket-launch", color: :success) %>
+          <%= render Pathogen::Icon.new("rocket-launch", color: :success, size: :xl) %>
         </div>
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.extra_large()</h3>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :xl</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Ideal for hero sections</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.extra_large("rocket")
+          Icon.new("rocket", size: :xl)
         </code>
       </div>
     </div>
@@ -139,14 +139,14 @@
       <!-- Semantic Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.primary("info", "aria-label": "Information", size: :sm, class: "mr-2") %>
+          <%= render Pathogen::Icon.new("info", color: :primary, "aria-label": "Information", size: :sm, class: "mr-2") %>
           Semantic Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that convey meaning and should be announced by screen readers.</p>
 
         <div class="space-y-4">
           <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
-            <%= render Pathogen::Icon.primary("info", "aria-label": "Important information", class: "float-left mr-2 mt-0.5") %>
+            <%= render Pathogen::Icon.new("info", color: :primary, "aria-label": "Important information", class: "float-left mr-2 mt-0.5") %>
             <p class="text-blue-800 dark:text-blue-200 text-sm">This icon conveys important information and includes an aria-label for screen readers.</p>
           </div>
 
@@ -163,7 +163,7 @@
       <!-- Decorative Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.primary("sparkle", size: :sm, class: "mr-2", "aria-hidden": true) %>
+          <%= render Pathogen::Icon.new("sparkle", color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
           Decorative Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that are purely visual and should be hidden from screen readers.</p>
@@ -171,7 +171,7 @@
         <div class="space-y-4">
           <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
             <h4 class="font-medium text-slate-900 dark:text-slate-100 flex items-center">
-              <%= render Pathogen::Icon.primary("sparkle", size: :sm, class: "mr-2", "aria-hidden": true) %>
+              <%= render Pathogen::Icon.new("sparkle", color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
               Beautiful Design
             </h4>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">The sparkle icon is decorative and enhances the visual appeal.</p>
