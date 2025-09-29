@@ -7,6 +7,11 @@ module Pathogen
   # styling system on top. It handles icon name normalization, applies consistent color and
   # size theming, and provides proper error handling with accessibility defaults.
   #
+  # The component is built using a modular architecture with separate classes handling:
+  # - IconValidator: Parameter validation and normalization
+  # - IconRenderer: HTML generation and cleanup
+  # - IconErrorHandler: Error handling and fallbacks
+  #
   # @example Basic icon usage
   #   = render Pathogen::Icon.new("clipboard-text")
   #   = render Pathogen::Icon.new(:arrow_up)
@@ -23,23 +28,7 @@ module Pathogen
   #   = render Pathogen::Icon.new("info", "aria-hidden": false, "aria-label": "Information")
   #
   class Icon < Pathogen::Component
-    # Tailwind color variants for icon text color
-    COLORS = {
-      default: 'text-slate-900 dark:text-slate-100',
-      subdued: 'text-slate-600 dark:text-slate-300',
-      primary: 'text-primary-600 dark:text-primary-500',
-      success: 'text-green-600 dark:text-green-500',
-      warning: 'text-yellow-600 dark:text-yellow-500',
-      danger: 'text-red-600 dark:text-red-500',
-      blue: 'text-blue-600 dark:text-blue-500'
-    }.freeze
-
-    SIZES = {
-      sm: 'size-4',
-      md: 'size-6',
-      lg: 'size-8',
-      xl: 'size-10'
-    }.freeze
+    attr_reader :icon_name, :color, :size, :variant, :rails_icons_options
 
     # Initialize a new Icon component
     #
@@ -50,228 +39,49 @@ module Pathogen
     # @param library [String, Symbol] rails_icons library (e.g., :heroicons, :phosphor)
     # @param options [Hash] Additional system arguments passed to rails_icons
     def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options) # rubocop:disable Metrics/ParameterLists
-      @icon_name = normalize_icon_name(icon_name)
-
-      # Validate and normalize parameters
-      @color = validate_color(color)
-      @size = validate_size(size)
-
-      # Store variant for styling decisions
+      @icon_name = IconValidator.normalize_icon_name(icon_name)
+      @color = IconValidator.validate_color(color)
+      @size = IconValidator.validate_size(size)
       @variant = variant
 
-      # Build rails_icons options with variant and library
       @rails_icons_options = build_rails_icons_options(variant, library, options)
-
-      # Apply Pathogen styling classes
       apply_pathogen_styling
     end
 
-    # Render the icon using rails_icons
-    #
-    # rails_icons may add empty data attributes to SVG elements, which are not valid.
-    # We strip these out immediately after generation.
+    # Render the icon using rails_icons with proper error handling
     #
     # @return [ActiveSupport::SafeBuffer, nil] The rendered icon HTML or error fallback
     def call
-      html = icon(@icon_name, **@rails_icons_options)
-      # rails_icons adds invalid data attributes to SVG - remove them with Nokogiri
-      remove_data_attributes_from_html(html)
+      html = icon(icon_name, **rails_icons_options)
+      IconRenderer.clean_html(html)
     rescue StandardError => e
-      handle_icon_error(e)
+      error_handler.handle_error(e)
     end
 
     private
 
-    # Validate color parameter and provide fallback
-    #
-    # @param color [Symbol] The color to validate
-    # @return [Symbol] Valid color or fallback
-    def validate_color(color)
-      return color if COLORS.key?(color)
-
-      Rails.logger.warn "[Pathogen::Icon] Invalid color '#{color}', " \
-                        "falling back to :default. Valid colors: #{COLORS.keys.join(', ')}"
-      :default
-    end
-
-    # Validate size parameter and provide fallback
-    #
-    # @param size [Symbol] The size to validate
-    # @return [Symbol] Valid size or fallback
-    def validate_size(size)
-      return size if SIZES.key?(size)
-
-      Rails.logger.warn "[Pathogen::Icon] Invalid size '#{size}', " \
-                        "falling back to :md. Valid sizes: #{SIZES.keys.join(', ')}"
-      :md
-    end
-
-    # Normalize icon name to string format expected by rails_icons
-    #
-    # @param name [String, Symbol] The icon name to normalize
-    # @return [String] Normalized icon name
-    def normalize_icon_name(name)
-      raise ArgumentError, 'Icon name cannot be nil or blank' if name.blank?
-
-      normalized = name.is_a?(String) ? name : name.to_s.tr('_', '-')
-
-      # Add basic validation for reasonable icon names
-      if normalized.length > 50 || normalized.match?(/[^a-z0-9\-_]/)
-        Rails.logger.warn "[Pathogen::Icon] Suspicious icon name: '#{normalized}'"
-      end
-
-      normalized.downcase
-    end
-
-    # Build the options hash for rails_icons with variant, library, and additional options
+    # Build the complete options hash for rails_icons
     #
     # @param variant [String, Symbol, nil] Icon variant
     # @param library [String, Symbol, nil] Icon library
     # @param additional_options [Hash] Additional options to merge
     # @return [Hash] Complete options hash for rails_icons
     def build_rails_icons_options(variant, library, additional_options)
-      options = additional_options.dup
-
-      # Add rails_icons specific options
-      options[:variant] = variant if variant
-      options[:library] = library if library
-
-      # Add icon-specific class for development debugging (non-production only)
-      add_debug_class(options) unless Rails.env.production?
-
+      options = IconRenderer.build_options(variant, library, additional_options)
+      options[:icon_name] = icon_name # Store for debug class generation
       options
     end
 
-    # Apply Pathogen color and size styling to the icon
+    # Apply Pathogen color and size styling to the icon options
     def apply_pathogen_styling
-      @rails_icons_options[:class] = class_names(
-        pathogen_classes,
-        @rails_icons_options[:class]
-      )
+      IconRenderer.apply_styling(rails_icons_options, color, size, variant)
     end
 
-    # Memoized pathogen styling classes for performance
-    def pathogen_classes
-      @pathogen_classes ||= class_names(
-        COLORS[@color],
-        SIZES[@size],
-        filled_variant_class
-      )
-    end
-
-    # Add CSS class for filled variants to ensure they inherit color
-    def filled_variant_class
-      return 'fill-current' if @variant&.to_s == 'fill'
-
-      nil
-    end
-
-    # Remove data attributes from rendered HTML using Nokogiri
+    # Get the error handler instance for this icon
     #
-    # rails_icons sometimes adds empty or invalid data attributes to SVG elements.
-    # SVG elements don't support data attributes according to the SVG spec, so we
-    # strip them out using Nokogiri for reliable HTML parsing.
-    #
-    # @param html [String] The HTML string to clean
-    # @return [ActiveSupport::SafeBuffer] Cleaned HTML
-    def remove_data_attributes_from_html(html)
-      # Accept SafeBuffer or String; otherwise just return untouched
-      return html if !html.is_a?(String) && !html.is_a?(ActiveSupport::SafeBuffer)
-
-      raw = html.to_s
-      begin
-        fragment = Nokogiri::HTML::DocumentFragment.parse(raw)
-        fragment.css('svg').each do |svg|
-          svg.remove_attribute('data') if svg.attribute('data')
-        end
-        ActiveSupport::SafeBuffer.new(fragment.to_html)
-      rescue StandardError => e
-        Rails.logger.debug { "[Pathogen::Icon] SVG cleanup fallback due to: #{e.message}" }
-        cleaned = raw.gsub(/(<svg\b[^>]*?)\sdata=""/i) { Regexp.last_match(1) }
-                     .gsub(/(<svg\b[^>]*?)\sdata(?=\s|>)/i) { Regexp.last_match(1) }
-        ActiveSupport::SafeBuffer.new(cleaned)
-      end
-    end
-
-    # Add debug class for development environments
-    #
-    # @param options [Hash] Options hash to modify
-    def add_debug_class(options)
-      existing_class = options[:class] || options['class'] || ''
-      options[:class] = "#{existing_class} #{debug_class}".strip
-    end
-
-    # Memoized debug class for performance
-    def debug_class
-      @debug_class ||= "#{@icon_name}-icon"
-    end
-
-    # Handle icon rendering errors with appropriate fallbacks
-    #
-    # @param error [StandardError] The error that occurred
-    # @return [ActiveSupport::SafeBuffer, nil] Error fallback HTML or nil
-    def handle_icon_error(error)
-      # Log with more context
-      Rails.logger.warn "[Pathogen::Icon] Failed to render icon '#{@icon_name}' " \
-                        "with options #{@rails_icons_options.inspect}: " \
-                        "#{error.message}"
-
-      # Try fallback strategies
-      fallback_icon = attempt_fallback_icon
-      return fallback_icon if fallback_icon
-
-      # Return development error indicator
-      return development_error_indicator(error) if Rails.env.local?
-
-      # Return nothing in production to avoid breaking layouts
-      nil
-    end
-
-    # Attempt to render fallback icons when primary icon fails
-    #
-    # @return [ActiveSupport::SafeBuffer, nil] Fallback icon HTML or nil
-    def attempt_fallback_icon
-      fallbacks = %w[question-mark-circle warning]
-
-      fallbacks.each do |fallback_name|
-        return icon(fallback_name, **@rails_icons_options.except(:variant, :library))
-      rescue StandardError
-        next
-      end
-
-      nil
-    end
-
-    # Create enhanced development error indicator with suggestions
-    #
-    # @param error [StandardError] The original error
-    # @return [ActiveSupport::SafeBuffer] Error indicator HTML
-    def development_error_indicator(error)
-      suggestions = suggest_similar_icons
-      suggestion_text = suggestions.any? ? " (Suggestions: #{suggestions.join(', ')})" : ''
-
-      content_tag(:span, "⚠️ Icon '#{@icon_name}' not found#{suggestion_text}",
-                  class: 'text-red-500 text-xs font-mono border border-red-300 ' \
-                         'rounded px-2 py-1 bg-red-50',
-                  title: "Icon rendering error: #{error.message}")
-    end
-
-    # Suggest similar icon names based on common patterns
-    #
-    # @return [Array<String>] Array of suggested icon names
-    def suggest_similar_icons
-      suggestions = {
-        /check/ => %w[check check-circle check-badge],
-        /arrow/ => %w[arrow-up arrow-down arrow-left arrow-right],
-        /user/ => %w[user user-circle users],
-        /plus/ => %w[plus plus-circle plus-square],
-        /minus/ => %w[minus minus-circle minus-square],
-        /x/ => %w[x x-circle x-mark],
-        /eye/ => %w[eye eye-slash],
-        /heart/ => %w[heart heart-fill]
-      }
-
-      suggestions.find { |pattern, _| @icon_name.match?(pattern) }&.last || []
+    # @return [IconErrorHandler] The error handler instance
+    def error_handler
+      @error_handler ||= IconErrorHandler.new(icon_name, rails_icons_options)
     end
   end
 end
