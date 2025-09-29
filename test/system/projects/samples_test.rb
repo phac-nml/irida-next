@@ -1726,6 +1726,7 @@ module Projects
         find('input#file_import_delete_metadata_with_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
+
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1740,9 +1741,10 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
-        # unchanged value
-        assert_selector 'td:nth-child(6)', text: 'value1'
+        # value is deleted
+        assert_selector 'td:nth-child(6)', text: ''
       end
+
       ### VERIFY END ###
     end
 
@@ -1801,8 +1803,8 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
-        # value is deleted for metadatafield1
-        assert_selector 'td:nth-child(6)', text: ''
+        # unchanged value
+        assert_selector 'td:nth-child(6)', text: 'value1'
       end
       ### VERIFY END ###
     end
