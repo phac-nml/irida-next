@@ -14,7 +14,7 @@ module Viral
 
       ICON_MAPPINGS = {
         default: nil,
-        success: 'check_circle_solid',
+        success: 'check',
         error: 'x-circle'
       }.freeze
 

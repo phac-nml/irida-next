@@ -68,10 +68,13 @@ module Pathogen
 
     # Render the icon using rails_icons
     #
+    # rails_icons may add empty data attributes to SVG elements, which are not valid.
+    # We strip these out immediately after generation.
+    #
     # @return [ActiveSupport::SafeBuffer, nil] The rendered icon HTML or error fallback
     def call
       html = icon(@icon_name, **@rails_icons_options)
-      # Remove any data attributes from the final HTML as they're not allowed on SVG
+      # rails_icons adds invalid data attributes to SVG - remove them with Nokogiri
       remove_data_attributes_from_html(html)
     rescue StandardError => e
       handle_icon_error(e)
@@ -129,9 +132,6 @@ module Pathogen
     def build_rails_icons_options(variant, library, additional_options)
       options = additional_options.dup
 
-      # Remove data attributes as they're not allowed on SVG elements
-      filter_data_attributes(options)
-
       # Add rails_icons specific options
       options[:variant] = variant if variant
       options[:library] = library if library
@@ -166,34 +166,31 @@ module Pathogen
       nil
     end
 
-    # Remove data attributes from options since they're not allowed on SVG elements
+    # Remove data attributes from rendered HTML using Nokogiri
     #
-    # @param options [Hash] Options hash to filter
-    def filter_data_attributes(options)
-      # Remove any keys that start with 'data-' or are exactly 'data'
-      keys_to_remove = options.keys.select do |key|
-        key_str = key.to_s
-        key_str.start_with?('data-') || key_str == 'data'
-      end
-
-      keys_to_remove.each { |key| options.delete(key) }
-
-      # Debug logging in development
-      return unless Rails.env.development? && keys_to_remove.any?
-
-      Rails.logger.debug { "[Pathogen::Icon] Removed data attributes: #{keys_to_remove.inspect} from #{@icon_name}" }
-    end
-
-    # Remove data attributes from rendered HTML using regex
+    # rails_icons sometimes adds empty or invalid data attributes to SVG elements.
+    # SVG elements don't support data attributes according to the SVG spec, so we
+    # strip them out using Nokogiri for reliable HTML parsing.
     #
     # @param html [String] The HTML string to clean
     # @return [ActiveSupport::SafeBuffer] Cleaned HTML
     def remove_data_attributes_from_html(html)
-      return html unless html.is_a?(String)
+      # Accept SafeBuffer or String; otherwise just return untouched
+      return html if !html.is_a?(String) && !html.is_a?(ActiveSupport::SafeBuffer)
 
-      # Remove data attributes from SVG elements
-      cleaned_html = html.gsub(/\s+data(?:-[a-z0-9-]*)?(?:="[^"]*")?/i, '')
-      cleaned_html.html_safe
+      raw = html.to_s
+      begin
+        fragment = Nokogiri::HTML::DocumentFragment.parse(raw)
+        fragment.css('svg').each do |svg|
+          svg.remove_attribute('data') if svg.attribute('data')
+        end
+        ActiveSupport::SafeBuffer.new(fragment.to_html)
+      rescue StandardError => e
+        Rails.logger.debug { "[Pathogen::Icon] SVG cleanup fallback due to: #{e.message}" }
+        cleaned = raw.gsub(/(<svg\b[^>]*?)\sdata=""/i) { Regexp.last_match(1) }
+                     .gsub(/(<svg\b[^>]*?)\sdata(?=\s|>)/i) { Regexp.last_match(1) }
+        ActiveSupport::SafeBuffer.new(cleaned)
+      end
     end
 
     # Add debug class for development environments
