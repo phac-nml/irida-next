@@ -952,7 +952,7 @@ module Groups
       end
     end
 
-    test 'should import metadata with ignore empty values' do
+    test 'should import metadata without delete empty values' do
       group = groups(:subgroup_twelve_a)
       project = projects(:project29)
       sample = samples(:sample32)
@@ -974,7 +974,7 @@ module Groups
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        check 'Ignore empty values'
+        assert_not find_field('Delete metadata with empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
 
@@ -1006,7 +1006,7 @@ module Groups
       ### VERIFY END ###
     end
 
-    test 'should import metadata without ignore empty values' do
+    test 'should import metadata with delete empty values' do
       group = groups(:subgroup_twelve_a)
       project = projects(:project29)
       sample = samples(:sample32)
@@ -1028,7 +1028,7 @@ module Groups
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        assert_not find_field('Ignore empty values').checked?
+        check 'Delete metadata with empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
 

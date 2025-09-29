@@ -1685,8 +1685,8 @@ module Projects
       ### ACTIONS AND VERIFY END ###
     end
 
-    test 'should import metadata with ignore empty values' do
-      # enabled ignore empty values will leave sample metadata values unchanged
+    test 'should import metadata with delete empty values' do
+      # enabled delete empty values will leave sample metadata values unchanged
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # verify samples table has loaded to prevent flakes
@@ -1722,7 +1722,7 @@ module Projects
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        # enable ignore empty values
+        # enable delete empty values
         find('input#file_import_delete_metadata_with_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
@@ -1746,8 +1746,8 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'should import metadata without ignore empty values' do
-      # disabled ignore empty values will delete any metadata values that are empty on the import
+    test 'should import metadata without delete empty values' do
+      # disabled delete empty values will delete any metadata values that are empty on the import
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # verify samples table has loaded to prevent flakes
@@ -1783,7 +1783,7 @@ module Projects
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        # leave ignore empty values disabled
+        # leave delete empty values disabled
         assert_not find('input#file_import_delete_metadata_with_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
