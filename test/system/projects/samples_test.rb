@@ -1700,7 +1700,7 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
-        # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
+        # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
       ### SETUP END ###
@@ -1763,7 +1763,7 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       within("tr[id='#{dom_id(@sample32)}']") do
-        # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
+        # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
       ### SETUP END ###
