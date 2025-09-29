@@ -67,14 +67,13 @@ module Pathogen
     # @param additional_options [Hash] Additional options to merge
     # @return [Hash] Complete options hash for rails_icons
     def build_rails_icons_options(variant, library, additional_options)
-      options = IconRenderer.build_options(variant, library, additional_options)
-      options[:icon_name] = icon_name # Store for debug class generation
-      options
+      IconRenderer.build_options(variant, library, additional_options)
     end
 
     # Apply Pathogen color and size styling to the icon options
     def apply_pathogen_styling
       IconRenderer.apply_styling(rails_icons_options, color, size, variant)
+      IconRenderer.append_icon_name_class(rails_icons_options, icon_name)
     end
 
     # Get the error handler instance for this icon
