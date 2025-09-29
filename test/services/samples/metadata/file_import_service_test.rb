@@ -374,7 +374,7 @@ module Samples
         assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
       end
 
-      test 'import sample metadata with empty values set to true' do
+      test 'import sample metadata with delete empty values set to true' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample32.metadata)
@@ -388,11 +388,11 @@ module Samples
         )
 
         params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3],
-                   ignore_empty_values: true }
+                   delete_metadata_with_empty_values: true }
         response = Samples::Metadata::FileImportService.new(project29.namespace, @john_doe, blob.id, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
-                                          deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                                          deleted: ['metadatafield1'], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      sample32.reload.metadata)
       end
 
@@ -424,7 +424,7 @@ module Samples
                      sample34.reload.metadata)
       end
 
-      test 'import sample metadata with empty values set to false' do
+      test 'import sample metadata with delete empty values set to false' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample32.metadata)
@@ -438,11 +438,12 @@ module Samples
         )
 
         params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3],
-                   ignore_empty_values: false }
+                   delete_metadata_with_empty_values: false }
         response = Samples::Metadata::FileImportService.new(project29.namespace, @john_doe, blob.id, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
-                                          deleted: ['metadatafield1'], not_updated: [], unchanged: [] } }, response)
-        assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' }, sample32.reload.metadata)
+                                          deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     sample32.reload.metadata)
       end
 
       test 'import sample metadata with whitespace keys and values via csv' do

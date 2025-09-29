@@ -1937,11 +1937,11 @@ fr:
         file_imports:
           dialog:
             available: Disponible
+            delete_metadata_with_empty_values:
+              description: If selected, any metadata with a key and empty value will be deleted from the sample. However, if this is not selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
             description: L’importation d’une feuille de calcul de métadonnées permet d’ajouter, de mettre à jour ou de supprimer plusieurs champs de métadonnées dans plusieurs échantillons à la fois.
             file: Fichier
             file_help: CSV, TSV, XLS ou XLSX.
-            ignore_empty_values:
-              description: Si cette option est sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l’échantillon si elles sont présentes. Cependant, si cette option n’est pas sélectionnée, tous les échantillons avec la clé de métadonnées et la valeur vide seront supprimés.
             metadata_columns: Colonnes de métadonnées
             namespace:
               description: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. '

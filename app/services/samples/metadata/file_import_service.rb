@@ -9,7 +9,7 @@ module Samples
       def initialize(namespace, user = nil, blob_id = nil, params = {})
         @sample_id_column = params[:sample_id_column]
         @selected_headers = params[:metadata_columns] || []
-        @ignore_empty_values = params[:ignore_empty_values]
+        @delete_metadata_with_empty_values = params[:delete_metadata_with_empty_values]
         super(namespace, user, blob_id, [@sample_id_column], 1, params)
       end
 
@@ -46,7 +46,7 @@ module Samples
           sample_id = metadata[@sample_id_column]
 
           metadata.delete(@sample_id_column)
-          metadata.compact! if @ignore_empty_values
+          metadata.compact! unless @delete_metadata_with_empty_values
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
