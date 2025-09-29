@@ -73,7 +73,7 @@ module Pathogen
     # Apply Pathogen color and size styling to the icon options
     def apply_pathogen_styling
       IconRenderer.apply_styling(rails_icons_options, color, size, variant)
-      IconRenderer.append_icon_name_class(rails_icons_options, icon_name)
+      IconRenderer.append_icon_name_class(rails_icons_options, icon_name) unless Rails.env.production?
     end
 
     # Get the error handler instance for this icon

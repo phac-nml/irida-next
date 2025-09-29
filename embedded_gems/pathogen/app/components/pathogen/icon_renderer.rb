@@ -38,12 +38,6 @@ module Pathogen
       options[:variant] = variant if variant
       options[:library] = library if library
 
-      add_debug_class(options) unless Rails.env.production?
-
-      # Remove icon_name from options before passing to rails_icons
-      # It's only used for debug class generation
-      options.delete(:icon_name)
-
       options
     end
 
@@ -102,17 +96,8 @@ module Pathogen
       variant&.to_s == 'fill' ? 'fill-current' : nil
     end
 
-    # Add debug class for development environments
-    #
-    # @param options [Hash] Options hash to modify
-    def self.add_debug_class(options)
-      existing_class = options[:class] || options['class'] || ''
-      debug_class = "icon-#{options[:icon_name]}" if options[:icon_name]
-      options[:class] = "#{existing_class} #{debug_class}".strip if debug_class
-    end
-
     # Append the normalized icon name directly as a CSS class.
-    # This prevents rendering an invalid `icon-name` attribute while preserving
+    # This prevents rendering an invalid `name-icon` attribute while preserving
     # the ability to target specific icons via CSS or tests.
     #
     # @param options [Hash] Options hash to mutate
@@ -121,7 +106,7 @@ module Pathogen
       return if icon_name.blank?
 
       existing_class = options[:class] || options['class']
-      options[:class] = combine_classes(existing_class, icon_name)
+      options[:class] = combine_classes(existing_class, "#{icon_name}-icon")
     end
 
     # Clean HTML using Nokogiri for reliable parsing
