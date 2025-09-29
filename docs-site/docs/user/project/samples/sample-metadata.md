@@ -85,7 +85,7 @@ The following metadata will be added:
 
 When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or PUIDs. When importing metadata from a **project**, the sample identifier can be either the **sample name or PUID**. If importing metadata from a **group**, the sample identifier must be the **sample PUID**.
 
-**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
+**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Delete metadata with empty values**. If this is **selected**, any metadata with a key and empty value will be **deleted**. However, if this **not selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
 
 For example, if the metadata above was imported and added to Sample 1 and Sample 2, and the following spreadsheet was then imported:
 
@@ -96,7 +96,25 @@ For example, if the metadata above was imported and added to Sample 1 and Sample
 
 This would result in the following sample metadata:
 
-- If **Ignore empty values** was **checked**:
+- If **Delete metadata with empty values** was **checked**:
+
+  - Sample 1:
+
+    | Key            | Value         |
+    | :------------- | :------------ |
+    | MetadataField2 | newValue2     |
+    | MetadataField3 | newValue3     |
+    | MetadataField4 | anotherValue1 |
+
+  - Sample 2:
+
+    | Key            | Value         |
+    | :------------- | :------------ |
+    | MetadataField1 | newValue4     |
+    | MetadataField3 | newValue6     |
+    | MetadataField4 | anotherValue2 |
+
+- If **Delete metadata with empty values** was **not checked**:
 
   - Sample 1:
 
@@ -116,24 +134,6 @@ This would result in the following sample metadata:
     | MetadataField3 | newValue6     |
     | MetadataField4 | anotherValue2 |
 
-- If **Ignore empty values** was **not checked**:
-
-  - Sample 1:
-
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField2 | newValue2     |
-    | MetadataField3 | newValue3     |
-    | MetadataField4 | anotherValue1 |
-
-  - Sample 2:
-
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | newValue4     |
-    | MetadataField3 | newValue6     |
-    | MetadataField4 | anotherValue2 |
-
 ## Steps to Import Metadata
 
 Prerequisites:
@@ -146,7 +146,7 @@ Prerequisites:
 3. From the left sidebar, select **Samples**
 4. Click **Import Metadata**
 
-A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](sample-metadata#learn-about-importing-metadata).
+A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Delete metadata with empty values](sample-metadata#learn-about-importing-metadata).
 
 ## Delete Metadata
 

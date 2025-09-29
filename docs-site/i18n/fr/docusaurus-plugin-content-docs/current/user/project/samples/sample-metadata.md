@@ -85,7 +85,7 @@ Les métadonnées suivantes seront ajoutées :
 
 Lors de la création de la feuille de calcul, vous devez avoir une colonne qui contient un identifiant d'échantillon. L'identifiant est sensible à la casse et peut contenir soit les noms d'échantillon, soit les PUID. Lors de l'importation de métadonnées à partir d'un **projet**, l'identifiant d'échantillon peut être soit le **nom de l'échantillon, soit le PUID**. Si vous importez des métadonnées à partir d'un **groupe**, l'identifiant d'échantillon doit être le **PUID de l'échantillon**.
 
-**Une note importante :** Lors de l'importation d'une feuille de calcul de métadonnées, il vous sera demandé si vous souhaitez **Ignorer les valeurs vides**. Si cela est **sélectionné**, tous les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l'échantillon si elles sont présentes. Cependant, si cela n'est **pas sélectionné**, tous les échantillons avec la clé de métadonnées et une valeur vide seront **supprimés**.
+**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Delete metadata with empty values**. If this is **selected**, any metadata with a key and empty value will be **deleted**. However, if this **not selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
 
 Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à Échantillon1 et Échantillon2, et que la feuille de calcul suivante était ensuite importée :
 
@@ -146,7 +146,7 @@ Prérequis :
 3. Dans la barre latérale gauche, sélectionnez **Échantillons**
 4. Cliquez sur **Importer des métadonnées**
 
-Une boîte de dialogue apparaîtra pour sélectionner la feuille de calcul à importer. Après avoir sélectionné le fichier de feuille de calcul, identifiez quelle colonne contient l'identifiant d'échantillon et si vous souhaitez [Ignorer les valeurs vides](sample-metadata#learn-about-importing-metadata).
+A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Delete metadata with empty values](sample-metadata#learn-about-importing-metadata).
 
 ## Supprimer des métadonnées
 
