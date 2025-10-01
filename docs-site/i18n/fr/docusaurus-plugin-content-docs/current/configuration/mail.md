@@ -10,10 +10,10 @@ Les options suivantes peuvent être définies dans le fichier d'informations d'i
 
 ```yml
 action_mailer:
-  default_from: <some email address>
+  default_from: <une adresse courriel>
   smtp_options:
-    address: <some smtp server>
-    port: <some smtp port>
+    address: <un serveur smtp>
+    port: <un port smtp>
     ...
 ```
 
