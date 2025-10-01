@@ -14,6 +14,7 @@ export default class extends Controller {
     "checkmarkTemplate",
     "hiddenCheckmarkTemplate",
     "ariaLiveUpdate",
+    "required",
   ];
 
   static values = {
@@ -256,7 +257,8 @@ export default class extends Controller {
 
     // disable submit if no options in selected list
     this.#setSubmitButtonDisableState(
-      this.selectedList.querySelectorAll("li").length === 0,
+      this.selectedList.getAttribute("aria-required") === "true" &&
+        this.selectedList.querySelectorAll("li").length === 0,
     );
   }
 
@@ -287,9 +289,7 @@ export default class extends Controller {
 
   #setSubmitButtonDisableState(disableState) {
     if (this.hasSubmitBtnTarget) {
-      this.submitBtnTarget.disabled = !(
-        !disableState && this.selectedList.querySelectorAll("li").length > 0
-      );
+      this.submitBtnTarget.disabled = disableState;
     }
   }
 
