@@ -12,7 +12,7 @@ class NextflowComponentPreview < ViewComponent::Preview
       url: 'https://github.com/phac-nml/iridanextexample'
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new(entry, '1.0.1',
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, '1.0.1',
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
@@ -71,7 +71,7 @@ class NextflowComponentPreview < ViewComponent::Preview
       ]
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new(entry, '0.2.0',
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, '0.2.0',
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
@@ -87,7 +87,7 @@ class NextflowComponentPreview < ViewComponent::Preview
       name: 'phac-nml/mikrokondo',
       description: 'Mikrokondo pipeline'
     }
-    workflow = Irida::Pipeline.new(entry, '0.1.2',
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, '0.1.2',
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
     render_with_template(

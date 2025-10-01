@@ -2,17 +2,18 @@
 
 module Irida
   # Class to store pipeline values
-  class Pipeline
-    attr_accessor :name, :description, :metadata, :type, :type_version,
+  class Pipeline # rubocop:disable Metrics/ClassLength
+    attr_accessor :pipeline_id, :name, :description, :metadata, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
                   :default_params, :default_workflow_params
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
-    def initialize(entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength
+    def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength
+      @pipeline_id = pipeline_id # TODO: is this line needed?
       @name = entry['name']
       @description = entry['description']
-      @metadata = { workflow_name: name, workflow_version: version }
+      @metadata = { pipeline_id:, workflow_name: name, workflow_version: version }
       @type = 'NFL'
       @type_version = 'DSL2'
       @engine = 'nextflow'

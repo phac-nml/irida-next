@@ -170,7 +170,7 @@ end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   workflow_execution_basic = WorkflowExecution.create(
-    metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
+    metadata: { pipeline_id: 'irida-next-example', workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
     name: 'irida-next-example-basic',
     namespace_id: Sample.first.project.namespace.id,
     workflow_params: { assembler: 'stub' },
@@ -199,7 +199,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
   )
 
   workflow_execution_completed = WorkflowExecution.create(
-    metadata: { workflow_name: 'irida-next-example-completed', workflow_version: '1.0dev' },
+    metadata: {
+      pipeline_id: 'irida-next-example-completed',
+      workflow_name: 'irida-next-example-completed',
+      workflow_version: '1.0dev'
+    },
     name: 'irida-next-example-completed',
     namespace_id: Sample.first.project.namespace.id,
     workflow_params: { assembler: 'stub' },

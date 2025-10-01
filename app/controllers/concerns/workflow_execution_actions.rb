@@ -188,7 +188,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   private
 
   def workflow_properties
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
                                                           @workflow_execution.metadata['workflow_version'],
                                                           'available')
     return {} if workflow.blank?
@@ -248,7 +248,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def format_samplesheet_params
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
                                                           @workflow_execution.metadata['workflow_version'],
                                                           'available')
     @samplesheet_headers = workflow.samplesheet_headers

@@ -7,7 +7,7 @@ module WorkflowExecutions
 
     def initialize(user = nil, params = {})
       super
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:workflow_name],
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:pipeline_id],
                                                              params[:metadata][:workflow_version])
     end
 

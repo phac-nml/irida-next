@@ -58,7 +58,7 @@ module WorkflowExecutions
     private
 
     def find_pipeline
-      Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+      Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
                                                  @workflow_execution.metadata['workflow_version'])
     end
 
