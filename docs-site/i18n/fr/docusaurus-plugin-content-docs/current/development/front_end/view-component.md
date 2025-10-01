@@ -3,7 +3,7 @@ id: view_component
 sidebar_position: 2
 ---
 
-# View Component
+# Composant de Vue
 
 ## Parcourir les composants avec LookBook
 
