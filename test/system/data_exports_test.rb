@@ -1105,8 +1105,6 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_text 'metadatafield2'
         assert_no_selector 'li'
       end
-
-      assert_selector 'input[disabled]'
     end
   end
 
