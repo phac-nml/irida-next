@@ -47,10 +47,8 @@ module Viral
         'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200'
       when 'warning'
         'text-orange-500 bg-orange-100 dark:bg-orange-700 dark:text-orange-200'
-      when :info
-        'text-blue-500 bg-blue-100 dark:bg-blue-800 dark:text-blue-200'
       else
-        '' # Default or fallback classes if needed
+        'text-blue-500 bg-blue-100 dark:bg-blue-800 dark:text-blue-200'
       end
     end
 
@@ -65,10 +63,8 @@ module Viral
         :x_circle
       when 'warning'
         :warning_circle
-      when :info
-        :info
       else
-        '' # Default icon or handle error
+        :info # Default icon or handle error
       end
     end
 
@@ -84,10 +80,8 @@ module Viral
         t('components.flash.error_message')
       when 'warning'
         t('components.flash.warning_message')
-      when :info
-        t('components.flash.information_message')
       else
-        t('components.flash.message')
+        t('components.flash.information_message')
       end
     end
 
