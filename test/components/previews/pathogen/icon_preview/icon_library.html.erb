@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="mb-12 text-center">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-      <%= render Pathogen::Icon.new("squares-four", color: :primary, size: :xl, class: "inline mr-3") %>
+      <%= render Pathogen::Icon.new(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %>
       Icon Library Showcase
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
@@ -48,8 +48,8 @@
         <% [
           { icon: "test-tube", name: "Samples", color: :primary },
           { icon: "stack", name: "Projects", color: :success },
-          { icon: "squares-four", name: "Groups", color: :warning },
-          { icon: "terminal-window", name: "Workflows", color: :danger },
+          { icon: :squares_four, name: "Groups", color: :warning },
+          { icon: :terminal_window, name: "Workflows", color: :danger },
           { icon: "export", name: "Data Exports", color: :subdued },
           { icon: "poker-chip", name: "Tokens", color: :primary }
         ].each do |item| %>

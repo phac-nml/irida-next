@@ -21,22 +21,22 @@ module Pathogen
     end
 
     test 'applies default color and size classes' do
-      render_inline(Pathogen::Icon.new('check'))
+      render_inline(Pathogen::Icon.new(:check))
       assert_selector 'svg.text-slate-900.dark\\:text-slate-100.size-6', count: 1
     end
 
     test 'applies custom color' do
-      render_inline(Pathogen::Icon.new('check', color: :primary))
+      render_inline(Pathogen::Icon.new(:check, color: :primary))
       assert_selector 'svg.text-primary-600.dark\\:text-primary-500', count: 1
     end
 
     test 'applies custom size' do
-      render_inline(Pathogen::Icon.new('check', size: :lg))
+      render_inline(Pathogen::Icon.new(:check, size: :lg))
       assert_selector 'svg.size-8', count: 1
     end
 
     test 'applies custom color and size together' do
-      render_inline(Pathogen::Icon.new('check', color: :success, size: :sm))
+      render_inline(Pathogen::Icon.new(:check, color: :success, size: :sm))
       assert_selector 'svg.text-green-600.dark\\:text-green-500.size-4', count: 1
     end
 
@@ -51,32 +51,32 @@ module Pathogen
     end
 
     test 'merges custom classes with pathogen styling' do
-      render_inline(Pathogen::Icon.new('check', color: :primary, class: 'custom-class'))
+      render_inline(Pathogen::Icon.new(:check, color: :primary, class: 'custom-class'))
       assert_selector 'svg.text-primary-600.dark\\:text-primary-500.custom-class', count: 1
     end
 
     test 'passes through other system arguments' do
-      icon = Pathogen::Icon.new('check', id: 'my-icon', 'data-test': 'icon')
+      icon = Pathogen::Icon.new(:check, id: 'my-icon', 'data-test': 'icon')
       assert_equal 'my-icon', icon.rails_icons_options[:id]
       assert_equal 'icon', icon.rails_icons_options[:'data-test']
     end
 
     test 'includes aria-hidden in rails_icons options' do
-      icon = Pathogen::Icon.new('check')
+      icon = Pathogen::Icon.new(:check)
       # The actual aria-hidden setting would be handled by IconHelper.render_icon
       assert_not_nil icon.rails_icons_options
     end
 
     test 'supports all color variants' do
       Pathogen::IconValidator::COLORS.each_key do |color|
-        icon = Pathogen::Icon.new('check', color: color)
+        icon = Pathogen::Icon.new(:check, color: color)
         assert_not_nil icon
       end
     end
 
     test 'supports all size variants' do
       Pathogen::IconValidator::SIZES.each_key do |size|
-        icon = Pathogen::Icon.new('check', size: size)
+        icon = Pathogen::Icon.new(:check, size: size)
         assert_not_nil icon
       end
     end

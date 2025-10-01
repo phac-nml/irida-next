@@ -47,7 +47,7 @@ module Viral
         'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200'
       when 'warning'
         'text-orange-500 bg-orange-100 dark:bg-orange-700 dark:text-orange-200'
-      when 'info'
+      when :info
         'text-blue-500 bg-blue-100 dark:bg-blue-800 dark:text-blue-200'
       else
         '' # Default or fallback classes if needed
@@ -60,12 +60,12 @@ module Viral
     def icon_name
       case type.to_s
       when 'success'
-        :check_CIRCLE
+        :check_circle
       when 'error'
-        :'x-circle'
+        ::x_circle
       when 'warning'
-        'warning-circle'
-      when 'info'
+        :warning_circle
+      when :info
         :info
       else
         '' # Default icon or handle error
@@ -84,7 +84,7 @@ module Viral
         t('components.flash.error_message')
       when 'warning'
         t('components.flash.warning_message')
-      when 'info'
+      when :info
         t('components.flash.information_message')
       else
         t('components.flash.message')
@@ -94,16 +94,16 @@ module Viral
     private
 
     # Normalizes the flash message type.
-    # 'notice' is mapped to 'info'.
+    # 'notice' is mapped to :info.
     # 'alert' is mapped to 'error'.
     # Other types are used as is.
     #
     # @param type_string [String] The raw type string.
-    # @return [String] The normalized type string ('success', 'error', 'warning', 'info').
+    # @return [String] The normalized type string ('success', 'error', 'warning', :info).
     def normalize_type(type_string)
       case type_string
       when 'notice'
-        'info'
+        :info
       when 'alert'
         'error'
       else

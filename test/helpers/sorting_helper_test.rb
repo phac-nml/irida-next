@@ -61,7 +61,7 @@ class SortingHelperTest < ActionView::TestCase
 
     assert_equal 'Email (A-Z)', dropdown.instance_variable_get(:@item)[:label]
     assert_equal '/sort/email/asc', dropdown.instance_variable_get(:@item)[:url]
-    assert_equal 'check', dropdown.instance_variable_get(:@item)[:icon_name]
+    assert_equal :check, dropdown.instance_variable_get(:@item)[:icon_name]
     assert_equal({ turbo: true, turbo_action: 'replace' }, dropdown.instance_variable_get(:@item)[:data])
   end
 

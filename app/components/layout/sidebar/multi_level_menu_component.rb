@@ -12,7 +12,7 @@ module Layout
     #     current_page: request.path
     #   ) do |menu| %>
     #     <% menu.with_menu_item(url: projects_path, selected: current_page?(projects_path)) do |item| %>
-    #       <% item.with_icon { pathogen_icon("squares-four") } %>
+    #       <% item.with_icon { pathogen_icon(:squares_four) } %>
     #       All Projects
     #     <% end %>
     #     <% menu.with_menu_item(url: new_project_path, selected: current_page?(new_project_path)) do |item| %>

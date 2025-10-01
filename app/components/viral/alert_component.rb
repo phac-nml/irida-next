@@ -33,9 +33,9 @@ module Viral
     # Maps incoming logical types (including Rails flash keys) to canonical UI states
     TYPE_MAPPINGS = {
       alert: 'danger',
-      notice: 'info',
+      notice: :info,
       success: 'success',
-      info: 'info',
+      info: :info,
       danger: 'danger',
       warning: 'warning'
     }.freeze
@@ -78,7 +78,7 @@ module Viral
       case type
       when 'danger'
         'text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-red-900/20 dark:border-red-800/50'
-      when 'info'
+      when :info
         'text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20 dark:border-blue-800/50'
       when 'success'
         'text-green-800 border-green-300 bg-green-50 dark:text-green-400 dark:bg-green-900/20 dark:border-green-800/50'
@@ -94,7 +94,7 @@ module Viral
     def icon_color
       case type
       when 'danger' then :danger
-      when 'info' then :blue
+      when :info then :blue
       when 'success' then :success
       when 'warning' then :warning
       else :subdued
@@ -105,9 +105,9 @@ module Viral
     # @return [String]
     def icon_name
       case type
-      when 'danger' then :'x-circle'
-      when 'success' then :check_CIRCLE
-      when 'warning' then 'warning-circle'
+      when 'danger' then :x_circle
+      when 'success' then :check_circle
+      when 'warning' then :warning_circle
       else :info
       end
     end
