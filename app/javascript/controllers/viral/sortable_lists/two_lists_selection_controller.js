@@ -14,7 +14,6 @@ export default class extends Controller {
     "checkmarkTemplate",
     "hiddenCheckmarkTemplate",
     "ariaLiveUpdate",
-    "required",
   ];
 
   static values = {

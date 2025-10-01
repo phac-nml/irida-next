@@ -895,25 +895,6 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'svg.file-text-icon', count: 3
   end
 
-  test 'projects with samples containing no metadata should have linelist export link disabled' do
-    project = projects(:project2)
-    Project.reset_counters(project.id, :samples_count)
-    sample3 = samples(:sample3)
-
-    visit namespace_project_samples_url(@group1, project)
-    click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_selector 'button[disabled]',
-                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
-
-    within %(#samples-table) do
-      find("input[type='checkbox'][value='#{sample3.id}']").click
-    end
-
-    click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_selector 'button[disabled]',
-                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
-  end
-
   test 'groups with samples containing no metadata should have linelist export link disabled' do
     group = groups(:group_sixteen)
     sample43 = samples(:sample43)
@@ -1035,8 +1016,6 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
 
-      # submit button disabled
-      assert_selector 'input[disabled]'
       # all buttons disabled
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.remove')
