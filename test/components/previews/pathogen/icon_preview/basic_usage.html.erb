@@ -87,13 +87,13 @@
             <div class="flex items-center gap-3">
               <%= pathogen_icon(:info, color: :primary) %>
               <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
-                &lt;%= pathogen_icon("info") %&gt;
+                &lt;%= pathogen_icon(:info) %&gt;
               </code>
             </div>
             <div class="flex items-center gap-3">
               <%= pathogen_icon(:warning, color: :warning) %>
               <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
-                &lt;%= pathogen_icon("warning") %&gt;
+                &lt;%= pathogen_icon(:warning) %&gt;
               </code>
             </div>
           </div>
@@ -105,7 +105,7 @@
   <!-- Common Parameters -->
   <div>
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("sliders-horizontal", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:sliders_horizontal, color: :primary, class: "mr-3") %>
       Common Parameters
     </h2>
 
