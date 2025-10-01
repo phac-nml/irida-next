@@ -4,6 +4,10 @@
   ) %>
   <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_ids[]" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
+      <%= form.hidden_field :pipeline_id,
+                        data: {
+                          "workflow-selection-target": "pipelineId",
+                        } %>
       <%= form.hidden_field :workflow_name,
                         data: {
                           "workflow-selection-target": "workflowName",
@@ -20,6 +24,7 @@
               type="button"
               class="group w-full button button-default"
               data-workflow-selection-target="workflow"
+              data-workflow-selection-pipelineId-param="<%= workflow.pipeline_id %>"
               data-workflow-selection-workflowName-param="<%= workflow.name %>"
               data-workflow-selection-workflowVersion-param="<%= workflow.version %>"
               data-workflow-selection-namespaceId-param="<%= @namespace_id %>"

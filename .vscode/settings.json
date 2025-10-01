@@ -32,6 +32,7 @@
     "activemodel",
     "activerecord",
     "attachables",
+    "automatable",
     "binmode",
     "Cancelation",
     "caxlsx",
