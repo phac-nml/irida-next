@@ -23,10 +23,10 @@
       <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Common Interface Icons</h3>
       <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-4">
         <% %w[
-          home user users gear-six gear-six bell envelope
-          search magnifying-glass plus minus x check
+          house-line user users gear-six gear-six bell envelope
+          magnifying-glass plus minus x check
           heart star bookmark flag calendar clock
-          edit pencil trash trash folder-open file
+          pencil trash trash folder-open file
           download upload share link eye eye-slash
           arrow-up arrow-down arrow-left arrow-right caret-up caret-down
           question info warning check-circle x-circle
@@ -76,7 +76,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
       <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Heroicons Examples</h3>
       <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 mb-6">
-        <% %w[beaker academic-cap adjustments-horizontal archive arrow-path bell book-open].each do |icon| %>
+        <% %w[beaker academic-cap adjustments-horizontal archive-box arrow-path bell book-open].each do |icon| %>
           <div class="text-center">
             <div class="flex items-center justify-center h-10 mb-2">
               <%= render Pathogen::Icon.new(icon, library: :heroicons, color: :primary, size: :md) %>
