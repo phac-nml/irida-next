@@ -3,9 +3,9 @@
 module Resolvers
   # Project Resolver
   class PipelineResolver < BaseResolver
-    argument :workflow_name, String,
+    argument :pipeline_id, String,
              required: true,
-             description: 'Name of the Workflow'
+             description: 'ID of the Workflow'
     argument :workflow_type, String,
              required: false,
              default_value: 'executable',
@@ -16,9 +16,9 @@ module Resolvers
 
     type Types::PipelineType, null: true
 
-    def resolve(workflow_name:, workflow_version:, workflow_type:)
+    def resolve(pipeline_id:, workflow_version:, workflow_type:)
       Irida::Pipelines.instance.find_pipeline_by(
-        workflow_name,
+        pipeline_id,
         workflow_version,
         workflow_type
       )

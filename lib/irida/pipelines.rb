@@ -32,19 +32,19 @@ module Irida
     def register_pipelines # rubocop:disable Metrics/AbcSize
       data = read_json_config
 
-      data.each do |entry|
+      data.each do |pipeline_id, entry|
         entry['versions'].each do |version|
-          next if @available_pipelines.key?("#{entry['name']}_#{version['name']}")
+          next if @available_pipelines.key?("#{pipeline_id}_#{version['name']}")
 
           nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
           schema_input_location = prepare_schema_download(entry, version, 'schema_input')
 
-          pipeline = Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
-          @available_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
+          pipeline = Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+          @available_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
           next unless version['executable'] != false
 
-          @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
-          @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
+          @executable_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
+          @automatable_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline if version['automatable']
         end
       end
     end
@@ -143,14 +143,14 @@ module Irida
       end
     end
 
-    def find_pipeline_by(name, version, type = 'executable')
+    def find_pipeline_by(pipeline_id, version, type = 'executable')
       case type
       when 'available'
-        @available_pipelines["#{name}_#{version}"]
+        @available_pipelines["#{pipeline_id}_#{version}"]
       when 'automatable'
-        @automatable_pipelines["#{name}_#{version}"]
+        @automatable_pipelines["#{pipeline_id}_#{version}"]
       else
-        @executable_pipelines["#{name}_#{version}"]
+        @executable_pipelines["#{pipeline_id}_#{version}"]
       end
     end
   end

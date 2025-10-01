@@ -10,7 +10,7 @@ function preventEscapeListener(event) {
 
 // Connects to data-controller="workflow-selection"
 export default class extends Controller {
-  static targets = ["workflow", "workflowName", "workflowVersion", "form"];
+  static targets = ["workflow", "pipelineId", "workflowName", "workflowVersion", "form"];
   static outlets = ["selection"];
   static values = {
     fieldName: String,
@@ -69,6 +69,7 @@ export default class extends Controller {
 
   selectWorkflow({ params }) {
     this.preventClosingDialog();
+    this.pipelineIdTarget.value = params.pipelineid;
     this.workflowNameTarget.value = params.workflowname;
     this.workflowVersionTarget.value = params.workflowversion;
 
