@@ -6,11 +6,11 @@
   <% if disclosure.present? %>
     <% case disclosure %>
     <% when :down %>
-      <%= pathogen_icon("caret-down", size: :sm, class: "ml-2") %>
+      <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2") %>
     <% when :up %>
-      <%= pathogen_icon("caret-up", size: :sm, class: "ml-2") %>
+      <%= pathogen_icon(:caret_up, size: :sm, class: "ml-2") %>
     <% when :right %>
-      <%= pathogen_icon("caret-right", size: :sm, class: "ml-2") %>
+      <%= pathogen_icon(:caret_right, size: :sm, class: "ml-2") %>
     <% end %>
   <% end %>
 <% end %>

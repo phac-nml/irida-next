@@ -30,7 +30,7 @@
     <td class="px-6 py-4">
       <div>
         <div class="flex items-center mb-4">
-          <%= pathogen_icon("arrow-right", color: :subdued) %>
+          <%= pathogen_icon(:arrow_right, color: :subdued) %>
           <span>
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
@@ -42,7 +42,7 @@
           </span>
         </div>
         <div class="flex items-center">
-          <%= pathogen_icon("arrow-left", color: :subdued) %>
+          <%= pathogen_icon(:arrow_left, color: :subdued) %>
           <span>
             <%= link_to attachment.associated_attachment.file.filename,
             rails_blob_path(attachment.associated_attachment.file),
@@ -59,7 +59,7 @@
     <td class="px-6 py-4">
       <div>
         <div class="flex items-center">
-          <%= pathogen_icon("file-text", color: :subdued) %>
+          <%= pathogen_icon(:file_text, color: :subdued) %>
           <span>
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),

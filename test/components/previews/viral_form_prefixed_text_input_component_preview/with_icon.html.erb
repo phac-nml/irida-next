@@ -1,7 +1,7 @@
 <%= form_with url: '#' do |form| %>
   <%= viral_prefixed_text_input(form: form, name: "prefixed") do |input| %>
     <%= input.with_prefix do %>
-      <%= pathogen_icon("warning-circle", size: :sm, color: :warning) %>
+      <%= pathogen_icon(:warning_circle, size: :sm, color: :warning) %>
     <% end %>
   <% end %>
 <% end %>

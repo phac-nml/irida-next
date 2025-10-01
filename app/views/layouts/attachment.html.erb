@@ -18,7 +18,7 @@
     >
       <div class="flex items-center space-x-4">
         <div class="text-gray-500 dark:text-gray-400">
-          <%= pathogen_icon("file-text", size: :xl) %>
+          <%= pathogen_icon(:file_text, size: :xl) %>
         </div>
         <div>
           <h1 class="text-xl font-semibold text-gray-900 dark:text-white"><%= @attachment.file.filename %></h1>
@@ -47,7 +47,7 @@
               <%= t("attachment.show.copied") %>
             </span>
             <span class="flex items-center" data-copy-target="buttonLabel">
-              <%= pathogen_icon("clipboard-text", size: :sm, class: "mr-2") %>
+              <%= pathogen_icon(:clipboard_text, size: :sm, class: "mr-2") %>
               <%= t("attachment.show.copy") %>
             </span>
           </button>
@@ -60,7 +60,7 @@
         method: :get,
         class:
           "inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus-visible:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
-          <%= pathogen_icon("file-arrow-down", size: :sm, class: "mr-2") %>
+          <%= pathogen_icon(:file_arrow_down, size: :sm, class: "mr-2") %>
           <%= t("attachment.show.download") %>
         <% end %>
       </div>
@@ -72,7 +72,7 @@
       <% else %>
         <div class="flex flex-col items-center justify-center py-12 text-center">
           <div class="mb-4">
-            <%= pathogen_icon("file-text", size: :xl, color: :subdued) %>
+            <%= pathogen_icon(:file_text, size: :xl, color: :subdued) %>
           </div>
           <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">
             <%= t("attachment.show.not_available.title") %>
