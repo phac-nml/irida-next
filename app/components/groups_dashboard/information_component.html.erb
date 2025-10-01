@@ -29,7 +29,7 @@
           id_prefix: "group-created",
           label: t(:"groups.show.information.created_on"),
           value: @group.created_at || Time.zone.now,
-          icon_name: "calendar-dots",
+          icon_name: :calendar_dots,
           color_scheme: :slate,
         ) %>
       </div>
@@ -40,7 +40,7 @@
           id_prefix: "group-samples",
           label: t(:"groups.show.information.number_of_samples"),
           value: @group.samples_count || 0,
-          icon_name: "test-tube",
+          icon_name: :test_tube,
           color_scheme: :blue,
         ) %>
       </div>
@@ -62,7 +62,7 @@
           id_prefix: "group-subgroups",
           label: t(:"groups.show.information.number_of_subgroups"),
           value: @group.children.count || 0,
-          icon_name: "squares-four",
+          icon_name: :squares_four,
           color_scheme: :amber,
         ) %>
       </div>

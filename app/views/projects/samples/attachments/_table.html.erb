@@ -104,7 +104,7 @@
       empty:
         if @allowed_to[:update_sample]
           {
-            icon_name: "file-text",
+            icon_name: :file_text,
             title: t(".empty_state.title"),
             description: t(".empty_state.description"),
             action_text: t(".empty_state.action_text"),
@@ -118,7 +118,7 @@
           }
         else
           {
-            icon_name: "file-text",
+            icon_name: :file_text,
             title: t(".empty_state.title"),
             description: t(".empty_state.no_permission_description"),
           }

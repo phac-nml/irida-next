@@ -37,7 +37,7 @@ class NamespaceStatisticComponentTest < ViewComponent::TestCase
                     id_prefix: 'icon-stat',
                     label: 'With Icon',
                     value: 7,
-                    icon_name: 'users'
+                    icon_name: :users
                   ))
 
     assert_selector 'svg', count: 1

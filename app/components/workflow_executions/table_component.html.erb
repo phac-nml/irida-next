@@ -263,7 +263,7 @@
       ) %>
     <% else %>
       <%= render Viral::EmptyStateComponent.new(
-        icon_name: "magnifying-glass",
+        icon_name: :magnifying_glass,
         title: t("components.viral.pagy.empty_state.title"),
         description: t("components.viral.pagy.empty_state.description"),
       ) %>
@@ -274,7 +274,7 @@
     <%= viral_empty(
       title: @empty[:title],
       description: @empty[:description],
-      icon_name: "terminal-window",
+      icon_name: :terminal_window,
     ) %>
   </div>
 <% end %>
