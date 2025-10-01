@@ -1,40 +1,40 @@
 ---
 sidebar_position: 3
 id: share-projects
-title: Share Projects
+title: Partager les projets
 ---
 
-In IRIDA Next you can invite a group to a project to allow them members of the group access to the project
+Dans IRIDA Next, vous pouvez inviter un groupe à un projet pour permettre aux membres du groupe d'accéder au projet
 
-## Share a project with a group
+## Partager un projet avec un groupe
 
-To share a project with a group:
+Pour partager un projet avec un groupe :
 
-1. Go to the project that you would like to share
-2. Select **Members** from the left sidebar
-3. Select **Invite group**
-4. Select the group you would like to provide access to
-5. Select the **Maximum group access level**
-6. Set an optional **Access expiration**. This will expire access to the project as of the selected date.
-7. Select **Share**
+1. Allez au projet que vous souhaitez partager
+2. Sélectionnez **Membres** dans la barre latérale gauche
+3. Sélectionnez **Inviter un groupe**
+4. Sélectionnez le groupe auquel vous souhaitez fournir l'accès
+5. Sélectionnez le **Niveau d'accès maximum du groupe**
+6. Définissez une **Expiration d'accès** optionnelle. Cela expirera l'accès au projet à partir de la date sélectionnée.
+7. Sélectionnez **Partager**
 
-## Maximum group access level
+## Niveau d'accès maximum du groupe
 
-When you invite a group to a project, the maximum group access level is the highest level of access the invited group members are allowed to have in the project.
+Lorsque vous invitez un groupe à un projet, le niveau d'accès maximum du groupe est le niveau d'accès le plus élevé que les membres du groupe invité sont autorisés à avoir dans le projet.
 
-When multiple groups contain the same members, and the groups have access to the same project, the group members are given the highest access level of the two for the project.
+Lorsque plusieurs groupes contiennent les mêmes membres et que les groupes ont accès au même projet, les membres du groupe reçoivent le niveau d'accès le plus élevé des deux pour le projet.
 
-The member’s Max role is the more restrictive of:
+Le rôle maximum du membre est le plus restrictif de :
 
-- The role the user is assigned for the group.
-- The role you chose when you invited the group to the project.
+- Le rôle que l'utilisateur se voit attribuer pour le groupe.
+- Le rôle que vous avez choisi lorsque vous avez invité le groupe au projet.
 
-## Revoke access to project for a group
+## Révoquer l'accès au projet pour un groupe
 
-To remove project share with a group:
+Pour retirer le partage de projet avec un groupe :
 
-1. Go to the project that you would like to unshare
-2. Select **Members** from the left sidebar
-3. Select **Groups** tab
-4. Select ellipsis at the end of the row for the group you would like to remove
-5. Select **Unlink**
+1. Allez au projet que vous souhaitez ne plus partager
+2. Sélectionnez **Membres** dans la barre latérale gauche
+3. Sélectionnez l'onglet **Groupes**
+4. Sélectionnez les points de suspension à la fin de la ligne pour le groupe que vous souhaitez retirer
+5. Sélectionnez **Dissocier**

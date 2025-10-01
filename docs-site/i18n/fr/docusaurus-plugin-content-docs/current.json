@@ -1,82 +1,82 @@
 {
   "version.label": {
-    "message": "Next",
-    "description": "The label for version current"
+    "message": "Suivante",
+    "description": "Libellé pour la version actuelle"
   },
   "sidebar.docs.category.Use IRIDA Next": {
-    "message": "Use IRIDA Next",
-    "description": "The label for category Use IRIDA Next in sidebar docs"
+    "message": "Utiliser IRIDA Next",
+    "description": "Libellé de la catégorie Utiliser IRIDA Next dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Set up your organization": {
-    "message": "Set up your organization",
-    "description": "The label for category Set up your organization in sidebar docs"
+    "message": "Configurer votre organisation",
+    "description": "Libellé de la catégorie Configurer votre organisation dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Set up your organization.link.generated-index.description": {
-    "message": "Configure your organization and its users. Determine user roles and give everyone access to the projects they need.",
-    "description": "The generated-index page description for category Set up your organization in sidebar docs"
+    "message": "Configurez votre organisation et ses utilisateurs. Déterminez les rôles des utilisateurs et donnez à chacun l’accès aux projets dont il a besoin.",
+    "description": "Description de la page d’index générée pour la catégorie Configurer votre organisation dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Members": {
-    "message": "Members",
-    "description": "The label for category Members in sidebar docs"
+    "message": "Membres",
+    "description": "Libellé de la catégorie Membres dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Groups": {
-    "message": "Groups",
-    "description": "The label for category Groups in sidebar docs"
+    "message": "Groupes",
+    "description": "Libellé de la catégorie Groupes dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Bot Accounts": {
-    "message": "Bot Accounts",
-    "description": "The label for category Bot Accounts in sidebar docs"
+    "message": "Comptes de robot",
+    "description": "Libellé de la catégorie Comptes de robot dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Organize work with projects": {
-    "message": "Organize work with projects",
-    "description": "The label for category Organize work with projects in sidebar docs"
+    "message": "Organiser le travail avec des projets",
+    "description": "Libellé de la catégorie Organiser le travail avec des projets dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Projects": {
-    "message": "Projects",
-    "description": "The label for category Projects in sidebar docs"
+    "message": "Projets",
+    "description": "Libellé de la catégorie Projets dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Samples": {
-    "message": "Samples",
-    "description": "The label for category Samples in sidebar docs"
+    "message": "Échantillons",
+    "description": "Libellé de la catégorie Échantillons dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Analyse your data": {
-    "message": "Analyse your data",
-    "description": "The label for category Analyse your data in sidebar docs"
+    "message": "Analyser vos données",
+    "description": "Libellé de la catégorie Analyser vos données dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Analyse your data.link.generated-index.description": {
-    "message": "Run workflow executions to analyse your data.",
-    "description": "The generated-index page description for category Analyse your data in sidebar docs"
+    "message": "Exécutez des flux de travail pour analyser vos données.",
+    "description": "Description de la page d’index générée pour la catégorie Analyser vos données dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Export your data": {
-    "message": "Export your data",
-    "description": "The label for category Export your data in sidebar docs"
+    "message": "Exporter vos données",
+    "description": "Libellé de la catégorie Exporter vos données dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Export your data.link.generated-index.description": {
-    "message": "Export your data from IRIDA Next.",
-    "description": "The generated-index page description for category Export your data in sidebar docs"
+    "message": "Exportez vos données à partir d’IRIDA Next.",
+    "description": "Description de la page d’index générée pour la catégorie Exporter vos données dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Extend": {
-    "message": "Extend",
-    "description": "The label for category Extend in sidebar docs"
+    "message": "Étendre",
+    "description": "Libellé de la catégorie Étendre dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Contribute": {
-    "message": "Contribute",
-    "description": "The label for category Contribute in sidebar docs"
+    "message": "Contribuer",
+    "description": "Libellé de la catégorie Contribuer dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Development Processes": {
-    "message": "Development Processes",
-    "description": "The label for category Development Processes in sidebar docs"
+    "message": "Processus de développement",
+    "description": "Libellé de la catégorie Processus de développement dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Front End Development": {
-    "message": "Front End Development",
-    "description": "The label for category Front End Development in sidebar docs"
+    "message": "Développement front-end",
+    "description": "Libellé de la catégorie Développement front-end dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Integrations": {
-    "message": "Integrations",
-    "description": "The label for category Integrations in sidebar docs"
+    "message": "Intégrations",
+    "description": "Libellé de la catégorie Intégrations dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Configuration": {
     "message": "Configuration",
-    "description": "The label for category Configuration in sidebar docs"
+    "description": "Libellé de la catégorie Configuration dans la barre latérale de la documentation"
   }
 }

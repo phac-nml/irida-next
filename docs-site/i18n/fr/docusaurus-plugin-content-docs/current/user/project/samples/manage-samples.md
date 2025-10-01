@@ -1,123 +1,124 @@
 ---
 sidebar_position: 1
 id: manage-samples
-title: Manage Samples
+title: Gérer les échantillons
 ---
 
-In IRIDA Next samples are stored inside of a project
+Dans IRIDA Next, les échantillons sont stockés à l'intérieur d'un projet
 
-## View Samples
+## Voir les échantillons
 
-Prerequisite:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
 
-To view samples that the project contains:
+Pour voir les échantillons que le projet contient :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
 
-## Create Sample
+## Créer un échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least a **Maintainer** role
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Responsable**
 
-To create a new sample in a project:
+Pour créer un nouvel échantillon dans un projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select **New Sample**
-5. Enter the name of the sample in the **Name** field
-6. Enter an optional description for the sample in the **Description** field
-7. Select **Create sample**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez **Nouvel échantillon**
+5. Entrez le nom de l'échantillon dans le champ **Nom**
+6. Entrez une description optionnelle pour l'échantillon dans le champ **Description**
+7. Sélectionnez **Créer un échantillon**
 
-## Update Sample
+## Mettre à jour un échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least a **Maintainer** role
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Responsable**
 
-To update sample details:
+Pour mettre à jour les détails de l'échantillon :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select **Edit this sample**
-6. Enter the name of the sample in the **Name** field
-7. Enter an optional description for the sample in the **Description** field
-8. Select **Update sample**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Sélectionnez **Modifier cet échantillon**
+6. Entrez le nom de l'échantillon dans le champ **Nom**
+7. Entrez une description optionnelle pour l'échantillon dans le champ **Description**
+8. Sélectionnez **Mettre à jour l'échantillon**
 
-## Transfer Samples
+## Transférer des échantillons
 
-Prerequisites:
+Prérequis :
 
-- If you have a **Maintainer** role, you can only transfer samples to other projects which share a common ancestor to the project from which you are transferring from.
+- Si vous avez un rôle **Responsable**, vous ne pouvez transférer des échantillons que vers d'autres projets qui partagent un ancêtre commun avec le projet à partir duquel vous transférez.
 
-Otherwise:
+Sinon :
 
-- You must have access to the project from which you are transferring samples, and the project into which you are transferring either through membership, or through a namespace share
-- You must have at least an **Owner** role in the project you are transferring from
-- You must have at least a **Maintainer** role in the project you are transferring into
+- Vous devez avoir accès au projet à partir duquel vous transférez des échantillons, et au projet dans lequel vous transférez, soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Propriétaire** dans le projet à partir duquel vous transférez
+- Vous devez avoir au moins un rôle **Responsable** dans le projet vers lequel vous transférez
 
-To transfer samples into another project:
+Pour transférer des échantillons vers un autre projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the checkboxes for the samples that you would like to transfer
-5. Select **Transfer samples**
-6. From the transfer samples pop-up, select the project to which you would like to transfer the samples to, and select **Submit**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Cochez les cases des échantillons que vous souhaitez transférer
+5. Sélectionnez **Transférer des échantillons**
+6. Dans la fenêtre contextuelle de transfert d'échantillons, sélectionnez le projet vers lequel vous souhaitez transférer les échantillons, puis sélectionnez **Soumettre**
 
-## Clone Samples
+## Cloner des échantillons
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project from which you are cloning samples, and the project into which you are cloning either through membership, or through a namespace share
-- You must have at least a **Maintainer** role in the project you are cloning from
-- You must have at least a **Maintainer** role in the project you are cloning into
+- Vous devez avoir accès au projet à partir duquel vous clonez des échantillons, et au projet dans lequel vous clonez, soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Responsable** dans le projet à partir duquel vous clonez
+- Vous devez avoir au moins un rôle **Responsable** dans le projet vers lequel vous clonez
 
-To clone samples into another project:
+Pour cloner des échantillons vers un autre projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the checkboxes for the samples that you would like to clone
-5. Select **Clone samples**
-6. From the clone samples pop-up, select the project to which you would like to clone the samples to, and select **Submit**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Cochez les cases des échantillons que vous souhaitez cloner
+5. Sélectionnez **Cloner des échantillons**
+6. Dans la fenêtre contextuelle de clonage d'échantillons, sélectionnez le projet vers lequel vous souhaitez cloner les échantillons, puis sélectionnez **Soumettre**
 
-## Delete Sample
+## Supprimer un échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least an **Owner** role
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Propriétaire**
 
-To remove a sample:
+Pour retirer un échantillon :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select **Remove**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Sélectionnez **Retirer**
 
-## View Sample History
+## Voir l'historique de l'échantillon
 
-Prerequisite:
-- You must have at least the Maintainer role for the sample's project.
-- You must be a direct or inherited member of the project's ancestry. Shared groups and their members cannot see the history.
+Prérequis :
 
-To view a sample's history:
+- Vous devez avoir au moins le rôle Responsable pour le projet de l'échantillon.
+- Vous devez être un membre direct ou hérité de l'ascendance du projet. Les groupes partagés et leurs membres ne peuvent pas voir l'historique.
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the **History** tab
+Pour voir l'historique d'un échantillon :
 
-A new sample version is created each time the sample's information is changed. Clicking a version within the sample's history will display what changes were made to the sample.
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cliquez sur l'onglet **Historique**
+
+Une nouvelle version d'échantillon est créée chaque fois que les informations de l'échantillon sont modifiées. Cliquer sur une version dans l'historique de l'échantillon affichera les modifications apportées à l'échantillon.

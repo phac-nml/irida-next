@@ -1,35 +1,35 @@
 ---
 sidebar_position: 1
 id: namespaces
-title: Namespaces
+title: Espaces de noms
 ---
 
-In IRIDA Next, a _namespace_ provides one place to organize your related projects. Projects in one namespace are separate from projects in other namespaces, which means you can use the same name for projects in different namespaces.
+Dans IRIDA Next, un _espace de noms_ fournit un endroit pour organiser vos projets connexes. Les projets dans un espace de noms sont séparés des projets dans d'autres espaces de noms, ce qui signifie que vous pouvez utiliser le même nom pour des projets dans différents espaces de noms.
 
-## Types of namespaces
+## Types d'espaces de noms
 
-IRIDA Next has two types of namespaces:
+IRIDA Next a deux types d'espaces de noms :
 
-- A _personal_ namespace, which is based on your email address and provided to you when you create your account.
-  - You cannot create subgroups in a personal namespace.
-  - Groups in your namespace do not inherit your namespace permissions and group features.
-  - All the projects you create are under the scope of this namespace.
-  - If you change your email address, the project and namespace URLs in your account also change.
-- A _group_ or _subgroup_ namespace, which is based on the group or subgroup name:
-  - You can create multiple subgroups to manage multiple projects.
-  - You can configure settings specifically for each subgroup and project in the namespace.
-  - You can change the URL of group and subgroup namespaces.
+- Un espace de noms _personnel_, qui est basé sur votre adresse courriel et vous est fourni lorsque vous créez votre compte.
+  - Vous ne pouvez pas créer de sous-groupes dans un espace de noms personnel.
+  - Les groupes dans votre espace de noms n'héritent pas de vos permissions d'espace de noms et des fonctionnalités de groupe.
+  - Tous les projets que vous créez sont sous la portée de cet espace de noms.
+  - Si vous changez votre adresse courriel, les URL du projet et de l'espace de noms dans votre compte changent également.
+- Un espace de noms de _groupe_ ou de _sous-groupe_, qui est basé sur le nom du groupe ou du sous-groupe :
+  - Vous pouvez créer plusieurs sous-groupes pour gérer plusieurs projets.
+  - Vous pouvez configurer des paramètres spécifiquement pour chaque sous-groupe et projet dans l'espace de noms.
+  - Vous pouvez modifier l'URL des espaces de noms de groupe et de sous-groupe.
 
-## Determine which type of namespace you're viewing
+## Déterminer quel type d'espace de noms vous consultez
 
-To determine whether you're viewing a group or personal namespace, you can view the URL. For example:
+Pour déterminer si vous consultez un espace de noms de groupe ou personnel, vous pouvez consulter l'URL. Par exemple :
 
-| Namespace for                                                 | Url                                                      | Namespace                 |
+| Espace de noms pour                                           | Url                                                      | Espace de noms            |
 | :------------------------------------------------------------ | :------------------------------------------------------- | :------------------------ |
-| A user with email address `john.doe@example.com`              | `https://irida-next.example.com/john.doe_at_example.com` | `john.doe_at_example.com` |
-| A group named `pathogen`                                      | `https://irida-next.example.com/pathogen`                | `pathogen`                |
-| A group named `pathogen` with a subgroup named `surveillance` | `https://irida-next.example.com/pathogen/surveillance`   | `pathogen/surveillance`   |
+| Un utilisateur avec l'adresse courriel `john.doe@example.com` | `https://irida-next.example.com/john.doe_at_example.com` | `john.doe_at_example.com` |
+| Un groupe nommé `pathogen`                                    | `https://irida-next.example.com/pathogen`                | `pathogen`                |
+| Un groupe nommé `pathogen` avec un sous-groupe nommé `surveillance` | `https://irida-next.example.com/pathogen/surveillance`   | `pathogen/surveillance`   |
 
-## Naming limitations for namespaces
+## Limitations de nommage pour les espaces de noms
 
-When choosing a name for your namespace, keep in mind the [character limitations](../project/projects/reserved-names#limitations-on-project-names), [reserved group names](../organization/groups/reserved-names) and [reserved project names](../project/projects/reserved-names#reserved-project-names).
+Lors du choix d'un nom pour votre espace de noms, gardez à l'esprit les [limitations de caractères](../project/projects/reserved-names#limitations-on-project-names), les [noms de groupe réservés](../organization/groups/reserved-names) et les [noms de projet réservés](../project/projects/reserved-names#reserved-project-names).

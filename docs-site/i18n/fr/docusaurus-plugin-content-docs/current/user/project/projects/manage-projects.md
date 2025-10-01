@@ -1,114 +1,115 @@
 ---
 sidebar_position: 2
 id: manage-projects
-title: Manage Projects
+title: Gérer les projets
 ---
 
-Most of the work done in IRIDA next is done in a project.
+La plupart du travail effectué dans IRIDA Next est effectué dans un projet.
 
-## View projects you have access to
+## Voir les projets auxquels vous avez accès
 
-To view personal projects, projects that you are a member of, or provided access via sharing with a group that you are a member of:
+Pour voir les projets personnels, les projets dont vous êtes membre ou l'accès fourni via le partage avec un groupe dont vous êtes membre :
 
-1. On the left sidebar select **Projects**. This will list all the projects that you have access to
-2. To view your personal projects, select the **Personal** tab
+1. Dans la barre latérale gauche, sélectionnez **Projets**. Cela listera tous les projets auxquels vous avez accès
+2. Pour voir vos projets personnels, sélectionnez l'onglet **Personnel**
 
-In IRIDA Next, you can create a project in a few different ways
+Dans IRIDA Next, vous pouvez créer un projet de différentes manières
 
-## Create a project under user namespace
+## Créer un projet sous l'espace de noms utilisateur
 
-To create a project under your user namespace:
+Pour créer un projet sous votre espace de noms utilisateur :
 
-1. On the left sidebar, at the top, select (**+**) and **Create new project**, or if on the **Projects** view select **New project**
-2. Enter the project details:
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
-   - The **Project URL** is automatically set to your user namespace. You may change it if you would like the project to be under a different namespace. Note that projects can only live under a **user** or **group namespace**.
-   - In the **Path** field, enter the path to your project. To change the path first enter the project name, then change the path.
-   - In the **Description** field, enter a description. This field is optional.
-3. Select **Create project**
+1. Dans la barre latérale gauche, en haut, sélectionnez (**+**) et **Créer un nouveau projet**, ou si vous êtes sur la vue **Projets**, sélectionnez **Nouveau projet**
+2. Entrez les détails du projet :
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - L'**URL du projet** est automatiquement définie sur votre espace de noms utilisateur. Vous pouvez la modifier si vous souhaitez que le projet soit sous un espace de noms différent. Notez que les projets ne peuvent vivre que sous un **espace de noms utilisateur** ou **groupe**.
+   - Dans le champ **Chemin**, entrez le chemin vers votre projet. Pour modifier le chemin, entrez d'abord le nom du projet, puis modifiez le chemin.
+   - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
+3. Sélectionnez **Créer un projet**
 
-## Create a project under group
+## Créer un projet sous un groupe
 
-To create a project under group namespace:
+Pour créer un projet sous l'espace de noms de groupe :
 
-Prerequisite:
+Prérequis :
 
-- You must have at least the Maintainer role for the group if creating a project under a group
+- Vous devez avoir au moins le rôle Responsable pour le groupe si vous créez un projet sous un groupe
 
-1. From within a group, select **New project**
-2. Enter the project details:
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
-   - The **Project URL** is automatically set to the current group namespace. You may change it if you would like the project to be under a different namespace. Note that projects can only live under a **user** or **group namespace**.
-   - In the **Path** field, enter the path to your project. To change the path first enter the project name, then change the path.
-   - In the **Description** field, enter a description. This field is optional.
-3. Select **Create project**
+1. Au sein d'un groupe, sélectionnez **Nouveau projet**
+2. Entrez les détails du projet :
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - L'**URL du projet** est automatiquement définie sur l'espace de noms du groupe actuel. Vous pouvez la modifier si vous souhaitez que le projet soit sous un espace de noms différent. Notez que les projets ne peuvent vivre que sous un **espace de noms utilisateur** ou **groupe**.
+   - Dans le champ **Chemin**, entrez le chemin vers votre projet. Pour modifier le chemin, entrez d'abord le nom du projet, puis modifiez le chemin.
+   - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
+3. Sélectionnez **Créer un projet**
 
-## Edit Project Details
+## Modifier les détails du projet
 
-Prerequisite:
+Prérequis :
 
-- You must have at least the Maintainer role for the project.
+- Vous devez avoir au moins le rôle Responsable pour le projet.
 
-To edit the project details:
+Pour modifier les détails du projet :
 
-1. Select the project that you want to edit and then on the left sidebar, select **Settings**
-2. To update the **Name** or **Description**:
+1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche, sélectionnez **Paramètres**
+2. Pour mettre à jour le **Nom** ou la **Description** :
 
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
-   - In the **Description** field, enter a description. This field is optional.
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
 
-3. Select **Update project**
+3. Sélectionnez **Mettre à jour le projet**
 
-## Edit Project URL
+## Modifier l'URL du projet
 
-Prerequisite:
+Prérequis :
 
-- You must have at least the Maintainer role for the project.
+- Vous devez avoir au moins le rôle Responsable pour le projet.
 
-To update the URL of the project:
+Pour mettre à jour l'URL du projet :
 
-1. Select the project that you want to edit and then on the left sidebar, select **Settings**
-2. In the **Advanced settings** section:
+1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche, sélectionnez **Paramètres**
+2. Dans la section **Paramètres avancés** :
 
-   - Enter the new URL for the project. Note that this could have unintended side effects.
+   - Entrez la nouvelle URL pour le projet. Notez que cela pourrait avoir des effets secondaires involontaires.
 
-3. Select **Change project URL**
+3. Sélectionnez **Modifier l'URL du projet**
 
-## View Project History
+## Voir l'historique du projet
 
-Prerequisite:
-- You must have at least the Maintainer role for the project.
-- You must be a direct or inherited member of the project's ancestry. Shared groups and their members cannot see the history.
+Prérequis :
 
-To view a project's history:
+- Vous devez avoir au moins le rôle Responsable pour le projet.
+- Vous devez être un membre direct ou hérité de l'ascendance du projet. Les groupes partagés et leurs membres ne peuvent pas voir l'historique.
 
-1. Select the project that you want to edit and then on the left sidebar
-2. Select **History**
+Pour voir l'historique d'un projet :
 
-A new project version is created each time the project's information is changed. Clicking a version within the project's history will display what changes were made to the project.
+1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche
+2. Sélectionnez **Historique**
 
-## Transfer Project
+Une nouvelle version du projet est créée chaque fois que les informations du projet sont modifiées. Cliquer sur une version dans l'historique du projet affichera les modifications apportées au projet.
 
-Prerequisites:
+## Transférer un projet
 
-- You must have at least the Maintainer role for the group you are transferring to.
-- You must have at least the Owner role for the project you transfer.
+Prérequis :
 
-To transfer the project into another namespace:
+- Vous devez avoir au moins le rôle Responsable pour le groupe vers lequel vous transférez.
+- Vous devez avoir au moins le rôle Propriétaire pour le projet que vous transférez.
 
-1. Select the project that you want to edit and then on the left sidebar, select **Settings**
-2. In the **Advanced settings** -> **Transfer project** section:
-   - Select the new namespace that you would like the project to be under. Note that you can transfer the project into any namespace that you have direct access to or through sharing.
-   - Select **Transfer project**
-   - In the pop-ip, type in the name of the project and select **Confirm**
+Pour transférer le projet dans un autre espace de noms :
 
-## Delete Project
+1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche, sélectionnez **Paramètres**
+2. Dans la section **Paramètres avancés** -> **Transférer le projet** :
+   - Sélectionnez le nouvel espace de noms sous lequel vous souhaitez placer le projet. Notez que vous pouvez transférer le projet dans n'importe quel espace de noms auquel vous avez un accès direct ou par partage.
+   - Sélectionnez **Transférer le projet**
+   - Dans la fenêtre contextuelle, tapez le nom du projet et sélectionnez **Confirmer**
 
-Prerequisite:
+## Supprimer un projet
 
-- You must have at least the Owner role for the project.
+Prérequis :
 
-1. Select the project that you want to edit and then on the left sidebar, select **Settings**
-2. In the **Advanced settings** -> **Delete project** section:
-   - Select **Delete project**
-   - In the pop-up, select **Confirm**
+- Vous devez avoir au moins le rôle Propriétaire pour le projet.
+
+1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche, sélectionnez **Paramètres**
+2. Dans la section **Paramètres avancés** -> **Supprimer le projet** :
+   - Sélectionnez **Supprimer le projet**
+   - Dans la fenêtre contextuelle, sélectionnez **Confirmer**

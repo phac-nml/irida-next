@@ -1,77 +1,77 @@
 ---
 sidebar_position: 2
 id: sample-files
-title: Sample Files
+title: Fichiers d'échantillon
 ---
 
-Files can be uploaded and attached to samples for analysis
+Les fichiers peuvent être téléversés et attachés aux échantillons pour l'analyse
 
-## View Sample files
+## Voir les fichiers d'échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. The table lists all the single-end and paired-end files which have been uploaded to the sample
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Le tableau répertorie tous les fichiers simple-end et paired-end qui ont été téléversés vers l'échantillon
 
-## Upload Files to Samples
+## Téléverser des fichiers vers les échantillons
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least a **Maintainer** role
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir au moins un rôle **Responsable**
 
-To upload files to a sample:
+Pour téléverser des fichiers vers un échantillon :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select **Upload Files**
-6. From the dialog, select **Choose files**
-7. Select the files you would like to upload. Multi file selection is enabled
-8. Select **Upload**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Sélectionnez **Téléverser des fichiers**
+6. Dans la boîte de dialogue, sélectionnez **Choisir des fichiers**
+7. Sélectionnez les fichiers que vous souhaitez téléverser. La sélection de plusieurs fichiers est activée
+8. Sélectionnez **Téléverser**
 
-## Concatenate Sample files
+## Concaténer des fichiers d'échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have a **Maintainer** role
-- Files of the same type (single-end or paired-end) and compression can be concatenated together
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir un rôle **Responsable**
+- Les fichiers du même type (simple-end ou paired-end) et de la même compression peuvent être concaténés ensemble
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select the checkboxes for the files you would like to concatenate, and select **Concatenate files**
-6. In the dialog, the files to be concatenated are listed.
-7. Enter the **Filename**. This will be the base name of the concatenated files.
-8. Select the checkbox **Delete originals** if you would like to remove the original files after concatenation
-9. Select **Concatenate**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cochez les cases des fichiers que vous souhaitez concaténer, puis sélectionnez **Concaténer des fichiers**
+6. Dans la boîte de dialogue, les fichiers à concaténer sont listés.
+7. Entrez le **Nom de fichier**. Ce sera le nom de base des fichiers concaténés.
+8. Cochez la case **Supprimer les originaux** si vous souhaitez retirer les fichiers originaux après la concaténation
+9. Sélectionnez **Concaténer**
 
-## Download Sample files
+## Télécharger les fichiers d'échantillon
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the filename you'd like to download
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cliquez sur le nom du fichier que vous souhaitez télécharger
 
-## Delete Sample files
+## Supprimer les fichiers d'échantillon
 
-Prerequisites:
+Prérequis :
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have an **Owner** role
+- Vous devez avoir accès au projet soit par appartenance, soit par partage d'espace de noms
+- Vous devez avoir un rôle **Propriétaire**
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. To delete multiple files, select the checkboxes for the files you would like to delete, then click **Delete Files**
-6. To delete individual single end and paired-end reads, select **Delete** for the files you would like to delete.
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Pour supprimer plusieurs fichiers, cochez les cases des fichiers que vous souhaitez supprimer, puis cliquez sur **Supprimer les fichiers**
+6. Pour supprimer des lectures simple-end et paired-end individuelles, sélectionnez **Supprimer** pour les fichiers que vous souhaitez supprimer.

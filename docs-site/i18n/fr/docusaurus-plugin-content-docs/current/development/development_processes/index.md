@@ -1,5 +1,5 @@
 ---
-title: Development Processes
+title: Processus de développement
 ---
 
 import DocCardList from '@theme/DocCardList';

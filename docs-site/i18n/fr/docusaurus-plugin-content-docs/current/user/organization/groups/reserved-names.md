@@ -1,27 +1,27 @@
 ---
 sidebar_position: 1
 id: reserved-names
-title: Reserved group names
+title: Noms de groupe réservés
 ---
 
-Not all group names are allowed because they would conflict with existing routes used by IRIDA Next.
+Tous les noms de groupe ne sont pas autorisés car ils entreraient en conflit avec les routes existantes utilisées par IRIDA Next.
 
-For a list of words that are not allowed to be used as group names, see the `path_regex.rb` file under the `TOP_LEVEL_ROUTES`, and `WILDCARD_ROUTES` lists:
-* `TOP_LEVEL_ROUTES`: are names that are reserved as usernames or top level groups.
-* `WILDCARD_ROUTES`: are names that are reserved for child groups or projects.
+Pour une liste de mots qui ne sont pas autorisés à être utilisés comme noms de groupe, consultez le fichier `path_regex.rb` sous les listes `TOP_LEVEL_ROUTES` et `WILDCARD_ROUTES` :
+* `TOP_LEVEL_ROUTES` : sont des noms qui sont réservés comme noms d'utilisateur ou groupes de niveau supérieur.
+* `WILDCARD_ROUTES` : sont des noms qui sont réservés pour les groupes enfants ou les projets.
 
-## Limitations on group names
+## Limitations sur les noms de groupe
 
-* Group names must start with a letter, digit, emoji, or "_".
-* Group names can only contain letters, digits, emojis, "_", ".", dashes, or spaces.
-* Group slugs must start with a letter or digit.
-* Group slugs can only contain letters, digits, ‘_’, ‘.’, ‘+’, or dashes.
-* Group slugs must not contain consecutive special characters.
-* Group slugs cannot end with a special character.
+* Les noms de groupe doivent commencer par une lettre, un chiffre, un emoji ou "_".
+* Les noms de groupe ne peuvent contenir que des lettres, des chiffres, des emojis, "_", ".", des tirets ou des espaces.
+* Les slugs de groupe doivent commencer par une lettre ou un chiffre.
+* Les slugs de groupe ne peuvent contenir que des lettres, des chiffres, '_', '.', '+' ou des tirets.
+* Les slugs de groupe ne doivent pas contenir de caractères spéciaux consécutifs.
+* Les slugs de groupe ne peuvent pas se terminer par un caractère spécial.
 
-## Reserved group names
+## Noms de groupe réservés
 
-The following names are reserved as top level groups:
+Les noms suivants sont réservés comme groupes de niveau supérieur :
 * `\-`
 * `403.html`
 * `421.html`
@@ -38,5 +38,5 @@ The following names are reserved as top level groups:
 * `robots.txt`
 * `user`
 
-These group names are unavailable as subgroup names:
+Ces noms de groupe ne sont pas disponibles comme noms de sous-groupe :
 * `\-`

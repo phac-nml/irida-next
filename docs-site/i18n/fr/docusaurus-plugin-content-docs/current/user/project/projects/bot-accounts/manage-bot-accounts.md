@@ -1,70 +1,70 @@
 ---
 sidebar_position: 3
 id: manage-bot-accounts
-title: Manage Bot Accounts
+title: Gérer les comptes de robot
 ---
 
-A project bot can only be associated to the project it was created within.
+Un robot de projet ne peut être associé qu'au projet dans lequel il a été créé.
 
-## Add Bot Account
+## Ajouter un compte de robot
 
-Prerequisite:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Responsable**.
 
-To add a bot account to a project:
+Pour ajouter un compte de robot à un projet :
 
-1. From the left sidebar, select **Projects** and find your project.
-2. From the left sidebar, select **Settings > Bot Accounts**.
-3. Click the **New bot account** button.
-4. Enter the token name in the **Name** field.
-5. Select an access level.
-6. Set an optional expiry date.
-7. Select at least one scope.
-8. Click the **Submit** button.
+1. Dans la barre latérale gauche, sélectionnez **Projets** et trouvez votre projet.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Comptes de robot**.
+3. Cliquez sur le bouton **Nouveau compte de robot**.
+4. Entrez le nom du jeton dans le champ **Nom**.
+5. Sélectionnez un niveau d'accès.
+6. Définissez une date d'expiration optionnelle.
+7. Sélectionnez au moins une portée.
+8. Cliquez sur le bouton **Soumettre**.
 
-You should now see the new bot account listed within the bot accounts table. Above the table you should also see a section for the newly created personal access token. Copy the personal access token, as it cannot be accessed afterwards.
+Vous devriez maintenant voir le nouveau compte de robot répertorié dans le tableau des comptes de robot. Au-dessus du tableau, vous devriez également voir une section pour le jeton d'accès personnel nouvellement créé. Copiez le jeton d'accès personnel, car il ne peut pas être consulté par la suite.
 
-## Delete Bot Account
+## Supprimer un compte de robot
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Responsable**.
 
-To remove an existing bot account from a project:
+Pour retirer un compte de robot existant d'un projet :
 
-1. From the left sidebar, select **Projects** and find your project.
-2. From the left sidebar, select **Settings > Bot Accounts**.
-3. On the right hand side of the row for the bot account you want to delete, click the **Delete bot** link.
-4. Confirm that you would like to permanently delete the bot account by clicking the **Confirm** button.
+1. Dans la barre latérale gauche, sélectionnez **Projets** et trouvez votre projet.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Comptes de robot**.
+3. Sur le côté droit de la ligne pour le compte de robot que vous souhaitez supprimer, cliquez sur le lien **Supprimer le robot**.
+4. Confirmez que vous souhaitez supprimer définitivement le compte de robot en cliquant sur le bouton **Confirmer**.
 
-All memberships associated with the deleted bot will automatically be removed.
+Toutes les appartenances associées au robot supprimé seront automatiquement retirées.
 
-## Add Membership
+## Ajouter une appartenance
 
-Prerequisite:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Responsable**.
 
-To add a bot account membership to a project:
+Pour ajouter une appartenance de compte de robot à un projet :
 
-1. From the left sidebar, select **Projects** and find your project.
-2. From the left sidebar, select **Members**.
-3. Click the **Add Member** button.
-4. Select the bot account you want to add to the project.
-5. Select an access level (role).
-6. Select an optional **Access expiration**.
-7. Click the **Add member to project** button.
+1. Dans la barre latérale gauche, sélectionnez **Projets** et trouvez votre projet.
+2. Dans la barre latérale gauche, sélectionnez **Membres**.
+3. Cliquez sur le bouton **Ajouter un membre**.
+4. Sélectionnez le compte de robot que vous souhaitez ajouter au projet.
+5. Sélectionnez un niveau d'accès (rôle).
+6. Sélectionnez une **Expiration d'accès** optionnelle.
+7. Cliquez sur le bouton **Ajouter un membre au projet**.
 
-## Remove Membership
+## Retirer une appartenance
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Responsable**.
 
-To remove a bot account membership from a project:
+Pour retirer une appartenance de compte de robot d'un projet :
 
-1. From the left sidebar, select **Projects** and find your project.
-2. From the left sidebar, select **Members**.
-3. On the right hand side of the row for the bot account membership you want to remove, click the **Remove** link.
-4. Confirm that you would like to remove the bot account membership by clicking the **Confirm** button.
+1. Dans la barre latérale gauche, sélectionnez **Projets** et trouvez votre projet.
+2. Dans la barre latérale gauche, sélectionnez **Membres**.
+3. Sur le côté droit de la ligne pour l'appartenance de compte de robot que vous souhaitez retirer, cliquez sur le lien **Retirer**.
+4. Confirmez que vous souhaitez retirer l'appartenance du compte de robot en cliquant sur le bouton **Confirmer**.

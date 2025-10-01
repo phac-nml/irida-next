@@ -1,40 +1,40 @@
 ---
 sidebar_position: 4
 id: share-groups
-title: Share Groups
+title: Partager les groupes
 ---
 
-In IRIDA Next you can invite a group to a group to allow the members of the group access to the shared group
+Dans IRIDA Next, vous pouvez inviter un groupe à un groupe pour permettre aux membres du groupe d'accéder au groupe partagé
 
-## Share a group with a group
+## Partager un groupe avec un groupe
 
-To share a group with a group:
+Pour partager un groupe avec un groupe :
 
-1. Go to the group that you would like to share
-2. Select **Members** from the left sidebar
-3. Select **Invite group**
-4. Select the group you would like to provide access to
-5. Select the **Maximum group access level**
-6. Set an optional **Access expiration**. This will expire access to the group as of the selected date.
-7. Select **Share**
+1. Allez au groupe que vous souhaitez partager
+2. Sélectionnez **Membres** dans la barre latérale gauche
+3. Sélectionnez **Inviter un groupe**
+4. Sélectionnez le groupe auquel vous souhaitez fournir l'accès
+5. Sélectionnez le **Niveau d'accès maximum du groupe**
+6. Définissez une **Expiration d'accès** optionnelle. Cela expirera l'accès au groupe à partir de la date sélectionnée.
+7. Sélectionnez **Partager**
 
-## Maximum group access level
+## Niveau d'accès maximum du groupe
 
-When you invite a group to a group, the maximum group access level is the highest level of access the invited group members are allowed to have in the shared group.
+Lorsque vous invitez un groupe à un groupe, le niveau d'accès maximum du groupe est le niveau d'accès le plus élevé que les membres du groupe invité sont autorisés à avoir dans le groupe partagé.
 
-When multiple groups contain the same members, and the groups have access to the same shared project, the group members are given the highest access level of the two for the shared group.
+Lorsque plusieurs groupes contiennent les mêmes membres et que les groupes ont accès au même projet partagé, les membres du groupe reçoivent le niveau d'accès le plus élevé des deux pour le groupe partagé.
 
-The member’s Max role is the more restrictive of:
+Le rôle maximum du membre est le plus restrictif de :
 
-- The role the user is assigned for the group.
-- The role you chose when you invited the group to the group.
+- Le rôle que l'utilisateur se voit attribuer pour le groupe.
+- Le rôle que vous avez choisi lorsque vous avez invité le groupe au groupe.
 
-## Revoke access to a shared group for a group
+## Révoquer l'accès à un groupe partagé pour un groupe
 
-To remove group shared with a group:
+Pour retirer un groupe partagé avec un groupe :
 
-1. Go to the group that you would like to unshare
-2. Select **Members** from the left sidebar
-3. Select **Groups** tab
-4. Select ellipsis at the end of the row for the group you would like to remove
-5. Select **Unlink**
+1. Allez au groupe que vous souhaitez ne plus partager
+2. Sélectionnez **Membres** dans la barre latérale gauche
+3. Sélectionnez l'onglet **Groupes**
+4. Sélectionnez les points de suspension à la fin de la ligne pour le groupe que vous souhaitez retirer
+5. Sélectionnez **Dissocier**

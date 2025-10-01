@@ -3,38 +3,38 @@ id: subgroups
 sidebar_position: 3
 ---
 
-# Subgroups
+# Sous-groupes
 
-You can organize IRIDA Next groups into subgroups. You can use subgroups to:
+Vous pouvez organiser les groupes IRIDA Next en sous-groupes. Vous pouvez utiliser les sous-groupes pour :
 
-- Separate organizations. You can host groups for different purposes under the same parent group.
-- Manage people and control visibility. Give a user a different role for each group they're a member of.
+- Séparer les organisations. Vous pouvez héberger des groupes à des fins différentes sous le même groupe parent.
+- Gérer les personnes et contrôler la visibilité. Donner à un utilisateur un rôle différent pour chaque groupe dont il est membre.
 
-Subgroups can:
+Les sous-groupes peuvent :
 
-- Belong to one immediate parent group.
-- Have many subgroups.
-- Be nested up to 10 levels.
+- Appartenir à un groupe parent immédiat.
+- Avoir plusieurs sous-groupes.
+- Être imbriqués jusqu'à 10 niveaux.
 
-## View subgroups of a group
+## Voir les sous-groupes d'un groupe
 
-To view the subgroups of a group:
+Pour voir les sous-groupes d'un groupe :
 
-1. On the top bar, select **Main menu > Groups** and find your group.
-2. Select the **Subgroups and projects** tab.
-3. To view a nested subgroup, expand a subgroup in the hierarchy list.
+1. Dans la barre supérieure, sélectionnez **Menu principal > Groupes** et trouvez votre groupe.
+2. Sélectionnez l'onglet **Sous-groupes et projets**.
+3. Pour voir un sous-groupe imbriqué, développez un sous-groupe dans la liste hiérarchique.
 
-## Create a subgroup
+## Créer un sous-groupe
 
-Prerequisites:
+Prérequis :
 
-- You must have either:
-  - At least the Maintainer role for a group to create subgroups for it.
+- Vous devez avoir soit :
+  - Au moins le rôle Responsable pour un groupe afin de créer des sous-groupes pour celui-ci.
 
-To create a subgroup:
+Pour créer un sous-groupe :
 
-1. On the top bar, select **Main menu > Groups** and find and select the parent group to add a subgroup to.
-2. On the parent group's overview page, in the upper-right corner, select **New subgroup**.
-3. Select **Create group**.
-4. Fill in the fields. View a list of [reserved names](../../project/projects/reserved-names).
-5. Select **Create group**.
+1. Dans la barre supérieure, sélectionnez **Menu principal > Groupes** et trouvez et sélectionnez le groupe parent auquel ajouter un sous-groupe.
+2. Sur la page d'aperçu du groupe parent, dans le coin supérieur droit, sélectionnez **Nouveau sous-groupe**.
+3. Sélectionnez **Créer un groupe**.
+4. Remplissez les champs. Consultez une liste de [noms réservés](../../project/projects/reserved-names).
+5. Sélectionnez **Créer un groupe**.

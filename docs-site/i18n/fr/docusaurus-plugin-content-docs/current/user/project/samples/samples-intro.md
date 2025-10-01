@@ -2,10 +2,10 @@
 id: introduction
 ---
 
-# Samples
+# Échantillons
 
-Samples belong to projects and contain the files to be analyzed by IRIDA Next.
+Les échantillons appartiennent aux projets et contiennent les fichiers à analyser par IRIDA Next.
 
-Access to samples is dependent on its project's membership.
+L'accès aux échantillons dépend de l'appartenance à son projet.
 
-Learn how to [manage your samples](manage-samples), [work with sample files](sample-files) and [manage sample metadata](sample-metadata).
+Apprenez à [gérer vos échantillons](manage-samples), [travailler avec les fichiers d'échantillon](sample-files) et [gérer les métadonnées d'échantillon](sample-metadata).

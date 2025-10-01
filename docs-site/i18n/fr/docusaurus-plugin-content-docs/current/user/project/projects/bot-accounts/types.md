@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
 id: types
-title: Bot Account Types
+title: Types de compte de robot
 ---
 
-The different bot account types are:
+Les différents types de compte de robot sont :
 
-- **Project bot** - A bot that is created within a project. This bot can only be associated to the project it was created in.
-- **Project automation bot** - A bot that is automatically created when an automated workflow execution is generated. This bot is used to run automated workflow exections.
+- **Robot de projet** - Un robot créé au sein d'un projet. Ce robot ne peut être associé qu'au projet dans lequel il a été créé.
+- **Robot d'automatisation de projet** - Un robot créé automatiquement lorsqu'une exécution de flux de travail automatisée est générée. Ce robot est utilisé pour exécuter des exécutions de flux de travail automatisées.

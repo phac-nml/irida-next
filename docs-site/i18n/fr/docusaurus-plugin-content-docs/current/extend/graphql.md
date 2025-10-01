@@ -1,34 +1,34 @@
 ---
 sidebar_position: 1
 id: graphql
-title: GraphQL API
+title: API GraphQL
 ---
 
-[GraphQL](https://graphql.org/) is a query language for APIs. You can use it to request the exact data you need, and therefore limit the number of requests you need.
+[GraphQL](https://graphql.org/) est un langage de requête pour les API. Vous pouvez l'utiliser pour demander exactement les données dont vous avez besoin, et donc limiter le nombre de requêtes dont vous avez besoin.
 
-GraphQL data is arranged in types, so your client can use [client-side GraphQL libraries](https://graphql.org/code/#graphql-clients) to consume the API and avoid manual parsing.
+Les données GraphQL sont organisées en types, de sorte que votre client peut utiliser [des bibliothèques GraphQL côté client](https://graphql.org/code/#graphql-clients) pour consommer l'API et éviter l'analyse manuelle.
 
-The GraphQL API is [versionless](https://graphql.org/learn/best-practices/#versioning).
+L'API GraphQL est [sans version](https://graphql.org/learn/best-practices/#versioning).
 
-## Accessing GraphIQL
+## Accéder à GraphIQL
 
-The easiest way to use the GraphQL API is through `GraphIQL` using the following steps.
+Le moyen le plus simple d'utiliser l'API GraphQL est via `GraphIQL` en utilisant les étapes suivantes.
 
-1. Sign into IRIDA Next `http://my.irida.server/users/sign_in`
-2. Go to the GraphIQL url `http://my.irida.server/graphiql`
+1. Connectez-vous à IRIDA Next `http://my.irida.server/users/sign_in`
+2. Allez à l'URL GraphIQL `http://my.irida.server/graphiql`
 
-You will be greeted with the in browser tool for writing, validating and testing GraphQL queries.
+Vous serez accueilli avec l'outil intégré au navigateur pour écrire, valider et tester des requêtes GraphQL.
 
-For more on GraphIQL see [the official docs](https://graphql-dotnet.github.io/docs/getting-started/graphiql/)
+Pour plus d'informations sur GraphIQL, consultez [la documentation officielle](https://graphql-dotnet.github.io/docs/getting-started/graphiql/)
 
-## GraphQL Examples
+## Exemples GraphQL
 
 <table>
 <tr>
-<td> Example </td> <td> Query </td> <td> Response </td>
+<td> Exemple </td> <td> Requête </td> <td> Réponse </td>
 </tr>
 <tr>
-<td> Get Current User </td>
+<td> Obtenir l'utilisateur actuel </td>
 <td>
 
 ```graphql
@@ -55,7 +55,7 @@ query {
 </td>
 </tr>
 <tr>
-<td> Get Samples </td>
+<td> Obtenir les échantillons </td>
 <td>
 
 ```graphql
@@ -107,7 +107,7 @@ query {
 </tr>
 
 <tr>
-<td> Get a specific samples details </td>
+<td> Obtenir les détails d'un échantillon spécifique </td>
 <td>
 
 ```graphql
@@ -162,53 +162,53 @@ query {
 </tr>
 </table>
 
-## Authentication with Personal Access Tokens
+## Authentification avec les jetons d'accès personnels
 
-To use the GraphQL API with [any of the GraphQL Clients](https://graphql.org/code/#graphql-clients), you will need to generate a Personal Access Token.
+Pour utiliser l'API GraphQL avec [l'un des clients GraphQL](https://graphql.org/code/#graphql-clients), vous devrez générer un jeton d'accès personnel.
 
-### Navigate to the Access Tokens screen
+### Naviguer vers l'écran Jetons d'accès
 
-Once you are signed in to IRIDA Next follow these steps.
+Une fois que vous êtes connecté à IRIDA Next, suivez ces étapes.
 
-1. From the top bar on the left sidebar, select the **Profile Icon** next to the plus sign
-2. From the drop down options, select **Edit profile**
-3. From the left sidebar, select **Access Tokens**
+1. Dans la barre supérieure de la barre latérale gauche, sélectionnez l'**Icône de profil** à côté du signe plus
+2. Dans les options du menu déroulant, sélectionnez **Modifier le profil**
+3. Dans la barre latérale gauche, sélectionnez **Jetons d'accès**
 
-This page lets you add new personal access tokens, and view/remove existing tokens.
+Cette page vous permet d'ajouter de nouveaux jetons d'accès personnels et de voir/retirer les jetons existants.
 
-### Token Scopes
+### Portées de jeton
 
-There are 2 scopes for your access token, `api` and `read_api`
+Il existe 2 portées pour votre jeton d'accès, `api` et `read_api`
 
-If your GraphQL queries will only be reading data, and not making any changes, select `read_api`.
+Si vos requêtes GraphQL ne feront que lire des données et ne feront aucun changement, sélectionnez `read_api`.
 
-If your GraphQL queries will be modifying data or uploading new data, select `api`.
+Si vos requêtes GraphQL modifieront des données ou téléverseront de nouvelles données, sélectionnez `api`.
 
-### Generate a Token
+### Générer un jeton
 
-When `Create personal access token` is clicked, a secret token will be generated for you. This will be used to authenticate your GraphQL API requests.
+Lorsque `Créer un jeton d'accès personnel` est cliqué, un jeton secret sera généré pour vous. Celui-ci sera utilisé pour authentifier vos requêtes API GraphQL.
 
-It is important that you do not share this token with anyone else as it is directly tied to your account.
+Il est important que vous ne partagiez pas ce jeton avec quelqu'un d'autre car il est directement lié à votre compte.
 
-### Using Token for Sessionless Authentication
+### Utilisation du jeton pour l'authentification sans session
 
-Tokens generated by IRIDA Next are `Basic Authentication` tokens. They are tied to your email.
+Les jetons générés par IRIDA Next sont des jetons d'`Authentification de base`. Ils sont liés à votre courriel.
 
-This uses [Basic HTTP Authentication](https://datatracker.ietf.org/doc/html/rfc7617), in the form of $USEREMAIL:$ACCESSTOKEN that is Base64 encoded.
+Cela utilise [l'authentification HTTP de base](https://datatracker.ietf.org/doc/html/rfc7617), sous la forme de $USEREMAIL:$ACCESSTOKEN qui est encodé en Base64.
 
-e.g. `user0@email.com:yK1euURqVRtQ1D-3uKsW` becomes `dXNlcjBAZW1haWwuY29tOnlLMWV1VVJxVlJ0UTFELTN1S3NX`
+par ex. `user0@email.com:yK1euURqVRtQ1D-3uKsW` devient `dXNlcjBAZW1haWwuY29tOnlLMWV1VVJxVlJ0UTFELTN1S3NX`
 
-Which would be used like the following:
+Qui serait utilisé comme suit :
 
-e.g. `Authorization: Basic YWRtaW5AZW1haWwuY29tOnlLMWV1VVJxVlJ0UTFELTN1S3NX`
+par ex. `Authorization: Basic YWRtaW5AZW1haWwuY29tOnlLMWV1VVJxVlJ0UTFELTN1S3NX`
 
-You can test your token by doing the encoding and executing the following `curl` command.
+Vous pouvez tester votre jeton en effectuant l'encodage et en exécutant la commande `curl` suivante.
 
 ```bash
 curl "http://localhost:3000/api/graphql" --header "Authorization: Basic <your token here>" --header "Content-Type: application/json" --request POST --data "{\"query\": \"query {currentUser{email}}}\"}"
 ```
 
-response
+réponse
 
 ```json
 {"data":{"currentUser":{"email":"user0@email.com"}}}

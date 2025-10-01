@@ -1,51 +1,51 @@
 ---
 sidebar_position: 4
 id: project-files
-title: Project Files
+title: Fichiers de projet
 ---
 
-Files can be uploaded and attached to projects
+Les fichiers peuvent être téléversés et attachés aux projets
 
-## View Project files
+## Voir les fichiers de projet
 
-Prerequisites:
+Prérequis :
 
-- You must have at least an **Analyst** role
+- Vous devez avoir au moins un rôle **Analyste**
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Files**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
 
-## Upload Files to Projects
+## Téléverser des fichiers vers les projets
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role
+- Vous devez avoir au moins un rôle **Responsable**
 
-To upload files to a project:
+Pour téléverser des fichiers vers un projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Files**
-4. Select **Upload Files**
-5. From the dialog, select **Choose files**
-6. Select the files you would like to upload. You can select multiple files at once.
-7. Select **Upload**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Sélectionnez **Téléverser des fichiers**
+5. Dans la boîte de dialogue, sélectionnez **Choisir des fichiers**
+6. Sélectionnez les fichiers que vous souhaitez téléverser. Vous pouvez sélectionner plusieurs fichiers à la fois.
+7. Sélectionnez **Téléverser**
 
-## Download Project files
+## Télécharger les fichiers de projet
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Files**
-4. Click the filename you'd like to download
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Cliquez sur le nom du fichier que vous souhaitez télécharger
 
-## Delete Project files
+## Supprimer les fichiers de projet
 
-Prerequisites:
+Prérequis :
 
-- You must have a **Maintainer** role
+- Vous devez avoir un rôle **Responsable**
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Files**
-4. Select **Delete** for the files you would like to delete.
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Sélectionnez **Supprimer** pour les fichiers que vous souhaitez supprimer.

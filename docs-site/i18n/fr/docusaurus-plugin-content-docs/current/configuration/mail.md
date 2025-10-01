@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 id: mail
-title: Configuring mail options
+title: Configuration des options de courriel
 ---
 
-## Setup
+## Configuration
 
-The following options can be set in the rails credentials file.
+Les options suivantes peuvent être définies dans le fichier d'informations d'identification rails.
 
 ```yml
 action_mailer:
@@ -19,10 +19,10 @@ action_mailer:
 
 ### default_from
 
-The default from email address in all mail sent from the application.
+L'adresse courriel par défaut de tous les courriels envoyés depuis l'application.
 
 ### smtp_options
 
-Can be used to connect to a specific smtp server to use to send the emails.
+Peut être utilisé pour se connecter à un serveur smtp spécifique à utiliser pour envoyer les courriels.
 
-See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+Pour plus d'informations, consultez la documentation officielle Ruby on Rails [Action Mailer Configuration](https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).

@@ -1,34 +1,34 @@
 ---
 sidebar_position: 5
 id: storage
-title: Storage Options
+title: Options de stockage
 ---
 
-## Storage
+## Stockage
 
-When configuring storage, a mix of credentials and ENV variables are used
+Lors de la configuration du stockage, un mélange d'informations d'identification et de variables ENV est utilisé
 
-You can edit your credentials file with the following command.
+Vous pouvez modifier votre fichier d'informations d'identification avec la commande suivante.
 
 `EDITOR="vim --nofork" bin/rails credentials:edit --environment production`
 
-When selecting a storage service to use, set the following ENV variable to the service you want.
+Lors de la sélection d'un service de stockage à utiliser, définissez la variable ENV suivante sur le service que vous souhaitez.
 
-| ENV variable | Description | Default |
+| Variable ENV | Description | Défaut |
 | -------- | ------- | ------- |
-| `RAILS_STORAGE_SERVICE` | Which type of storage to use. One of [`local`,`amazon`,`google`,`microsoft`]. | `local` |
+| `RAILS_STORAGE_SERVICE` | Quel type de stockage utiliser. L'un de [`local`,`amazon`,`google`,`microsoft`]. | `local` |
 
-Default values below that contain `#{Rails.env}` refer to the environment the IRIDA Next is running in. In production, this is `production`
+Les valeurs par défaut ci-dessous contenant `#{Rails.env}` font référence à l'environnement dans lequel IRIDA Next s'exécute. En production, c'est `production`
 
 ### Local
 
-Files are stored locally in the `storage/` directory.
+Les fichiers sont stockés localement dans le répertoire `storage/`.
 
-No additional options are needed for this configuration.
+Aucune option supplémentaire n'est nécessaire pour cette configuration.
 
 ### Amazon S3
 
-Credentials
+Informations d'identification
 
 ```yml
 aws:
@@ -36,30 +36,30 @@ aws:
   secret_access_key:
 ```
 
-| ENV variable | Description | Default |
+| Variable ENV | Description | Défaut |
 | -------- | ------- | ------- |
-| `S3_REGION` | S3 region | `us-east-1` |
-| `S3_BUCKET_NAME` | S3 bucket name | `your_own_bucket-#{Rails.env}` |
+| `S3_REGION` | Région S3 | `us-east-1` |
+| `S3_BUCKET_NAME` | Nom du compartiment S3 | `your_own_bucket-#{Rails.env}` |
 
 ### Google Cloud Storage
 
-| ENV variable | Description | Default |
+| Variable ENV | Description | Défaut |
 | -------- | ------- | ------- |
-| `GCS_PROJECT_NAME` | Google Cloud Storage project name | `your_project` |
-| `GCS_KEYFILE` | Relative path to gcs.keyfile | `gcs.keyfile` |
-| `GCS_BUCKET_NAME` | Google Cloud Storage bucket name | `your_own_bucket-#{Rails.env}` |
+| `GCS_PROJECT_NAME` | Nom du projet Google Cloud Storage | `your_project` |
+| `GCS_KEYFILE` | Chemin relatif vers gcs.keyfile | `gcs.keyfile` |
+| `GCS_BUCKET_NAME` | Nom du compartiment Google Cloud Storage | `your_own_bucket-#{Rails.env}` |
 
 ### Microsoft Azure
 
-Credentials
+Informations d'identification
 
 ```yml
 azure_storage:
   storage_access_key:
 ```
 
-| ENV variable | Description | Default |
+| Variable ENV | Description | Défaut |
 | -------- | ------- | ------- |
-| `AZURE_STORAGE_ACCOUNT_NAME` | Storage Account Name | `your_account_name` |
-| `AZURE_STORAGE_CONTAINER_NAME` | Storage Container Name | `your_container_name-#{Rails.env}` |
-| `AZURE_STORAGE_BLOB_HOST` | Optional. Storage Blob Host | N/A |
+| `AZURE_STORAGE_ACCOUNT_NAME` | Nom du compte de stockage | `your_account_name` |
+| `AZURE_STORAGE_CONTAINER_NAME` | Nom du conteneur de stockage | `your_container_name-#{Rails.env}` |
+| `AZURE_STORAGE_BLOB_HOST` | Optionnel. Hôte Blob de stockage | N/A |

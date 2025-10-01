@@ -1,64 +1,71 @@
 ---
 sidebar_position: 2
 id: working-with-workflow-executions
-title: Working with Workflow Executions
+title: Travailler avec les exécutions de flux de travail
 ---
 
-Learn how to use workflow executions in IRIDA Next
+Apprenez à utiliser les exécutions de flux de travail dans IRIDA Next
 
-## View User Workflow Executions
+## Voir les exécutions de flux de travail utilisateur
 
-There are two ways to navigate and view user workflow executions:
+Il existe deux façons de naviguer et de voir vos exécutions de flux de travail utilisateur :
 
-  * If you are currently viewing a project or group, click the dropdown on the left sidebar that contains the project or group name, and click **Workflow Executions** in the dropdown menu.
-  * If you are not currently viewing a project or group, click **Workflow Executions** on the left sidebar.
+- Si vous consultez actuellement un projet ou un groupe, cliquez sur le menu déroulant dans la barre latérale gauche qui contient le nom du projet ou du groupe, puis cliquez sur **Exécutions de flux de travail** dans le menu déroulant.
+- Si vous ne consultez pas actuellement un projet ou un groupe, cliquez sur **Exécutions de flux de travail** dans la barre latérale gauche.
 
-This page will list all your workflow executions.
+Cette page répertorie toutes vos exécutions de flux de travail.
 
-## View Automated Workflow Executions
+## Voir les exécutions de flux de travail automatisées
 
-Prerequisites:
-  * You must have at least the Analyst role to the project with workflow executions.
+Prérequis :
 
-To view automated workflow executions:
-  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) containing the workflow executions
-  2. Click **Workflow Executions**
+- Vous devez avoir au moins le rôle Analyste pour le projet contenant les exécutions de flux de travail.
 
-This page will list all of the project's workflow executions.
+Pour voir les exécutions de flux de travail automatisées :
 
-## View A Workflow Execution
+1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) contenant les exécutions de flux de travail
+2. Cliquez sur **Exécutions de flux de travail**
 
-To view a specific workflow execution:
-  1. Follow the steps to view either the [user](../analysis/working-with-workflow-executions#view-user-workflow-executions) or [automated](../analysis/working-with-workflow-executions#view-automated-workflow-executions) workflow executions listing page
-  2. Click the **ID** of the workflow execution you'd like to view
+Cette page répertorie toutes les exécutions de flux de travail du projet.
 
-Each individual workflow execution will contain a summary, the parameters selected during set-up, a samplesheet that includes input files, and the output files once analysis has completed.
+## Voir une exécution de flux de travail
 
-## Create A User Workflow Execution
+Pour voir une exécution de flux de travail spécifique :
 
-Prerequisites:
-  * A project must contain at least one sample, and that sample must have uploaded paired-end files.
-  * You must have at least the Analyst role to the project or group you will create the workflow execution from.
+1. Suivez les étapes pour voir la page de liste des exécutions de flux de travail [utilisateur](../analysis/working-with-workflow-executions#view-user-workflow-executions) ou [automatisées](../analysis/working-with-workflow-executions#view-automated-workflow-executions)
+2. Cliquez sur l'**ID** de l'exécution de flux de travail que vous souhaitez voir
 
-To create a user workflow execution:
-  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) or [group](../organization/groups/manage#view-groups) that contains the samples you'd like to analyse
-  2. From the left sidebar, select **Samples**
-  3. Click the checkbox of each sample you'd like to include in the analysis
-  4. Click ![workflow_execution_btn](./assets/rocket_launch.svg)
-  5. Select a pipeline from the dialog
-  6. The next dialog contains a list of parameters for you to enter and/or confirm. This list includes parameters specific to the selected pipeline, along with optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
+Chaque exécution de flux de travail individuelle contiendra un résumé, les paramètres sélectionnés lors de la configuration, une feuille d'échantillons qui inclut les fichiers d'entrée et les fichiers de sortie une fois l'analyse terminée.
 
-## Set-up Automated Workflow Executions
+## Créer une exécution de flux de travail utilisateur
 
-Prerequisites:
-  * A project and at least the Maintainer role for this project.
+Prérequis :
 
-To set-up automated workflow executions:
-  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) which you'd like to set up automated workflow executions
-  2. From the left sidebar, select **Settings**
-  3. In the **Settings** dropdown menu, select **Automated Workflow Executions**
-  4. Click **New automated workflow execution**
-  5. Select a pipeline from the dialog
-  6. The next dialog contains a list of parameters for you to enter and/or confirm. This list includes parameters specific to the selected pipeline, along with optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
+- Un projet doit contenir au moins un échantillon, et cet échantillon doit avoir des fichiers appariés téléversés.
+- Vous devez avoir au moins le rôle Analyste pour le projet ou le groupe à partir duquel vous créerez l'exécution de flux de travail.
 
-Once set-up, each time paired-end files are uploaded to a sample belonging to this project, a workflow execution with these selected parameters will execute.
+Pour créer une exécution de flux de travail utilisateur :
+
+1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) ou le [groupe](../organization/groups/manage#view-groups) qui contient les échantillons que vous souhaitez analyser
+2. Dans la barre latérale gauche, sélectionnez **Échantillons**
+3. Cochez la case de chaque échantillon que vous souhaitez inclure dans l'analyse
+4. Cliquez sur ![workflow_execution_btn](./assets/rocket_launch.svg)
+5. Sélectionnez un pipeline dans la boîte de dialogue
+6. La boîte de dialogue suivante contient une liste de paramètres que vous devez saisir et/ou confirmer. Cette liste comprend des paramètres spécifiques au pipeline sélectionné, ainsi que des paramètres optionnels tels que le nom du flux de travail, la notification par courriel et les mises à jour des échantillons à la fin du flux de travail.
+
+## Configurer les exécutions de flux de travail automatisées
+
+Prérequis :
+
+- Un projet et au moins le rôle Responsable pour ce projet.
+
+Pour configurer les exécutions de flux de travail automatisées :
+
+1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) pour lequel vous souhaitez configurer les exécutions de flux de travail automatisées
+2. Dans la barre latérale gauche, sélectionnez **Paramètres**
+3. Dans le menu déroulant **Paramètres**, sélectionnez **Exécutions de flux de travail automatisées**
+4. Cliquez sur **Nouvelle exécution de flux de travail automatisée**
+5. Sélectionnez un pipeline dans la boîte de dialogue
+6. La boîte de dialogue suivante contient une liste de paramètres que vous devez saisir et/ou confirmer. Cette liste comprend des paramètres spécifiques au pipeline sélectionné, ainsi que des paramètres optionnels tels que le nom du flux de travail, la notification par courriel et les mises à jour des échantillons à la fin du flux de travail.
+
+Une fois configurée, chaque fois que des fichiers appariés sont téléversés vers un échantillon appartenant à ce projet, une exécution de flux de travail avec ces paramètres sélectionnés sera exécutée.

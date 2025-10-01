@@ -5,12 +5,12 @@ sidebar_position: 2
 
 # View Component
 
-## Browse components with LookBook
+## Parcourir les composants avec LookBook
 
-We have a [LookBook](https://v2.lookbook.build/guide) at `http://localhost:3000/rails/lookbook` (only available in development mode) to browse and interact with ViewComponent previews.
+Nous avons un [LookBook](https://v2.lookbook.build/guide) à `http://localhost:3000/rails/lookbook` (uniquement disponible en mode développement) pour parcourir et interagir avec les aperçus ViewComponent.
 
-## Best practices
+## Meilleures pratiques
 
-- If you are creating a new view in Html, use the available components over creating plain Html tags with Tailwind CSS classes.
-- If you are making changes to an existing Html view, for example, an svg icon that is still implemented in plain Html, consider migrating it to use a ViewComponet.
-- If you decide to create a new component, consider creating [previews](https://viewcomponent.org/guide/previews.html) for it as well. This will help others to discover your component with LookBook, also it makes it much eaier to test its different states.
+- Si vous créez une nouvelle vue en Html, utilisez les composants disponibles plutôt que de créer des balises Html simples avec des classes Tailwind CSS.
+- Si vous apportez des modifications à une vue Html existante, par exemple, une icône svg qui est toujours implémentée en Html simple, envisagez de la migrer pour utiliser un ViewComponent.
+- Si vous décidez de créer un nouveau composant, envisagez de créer également des [aperçus](https://viewcomponent.org/guide/previews.html) pour celui-ci. Cela aidera les autres à découvrir votre composant avec LookBook, et cela facilite également beaucoup les tests de ses différents états.

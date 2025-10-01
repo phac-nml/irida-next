@@ -1,167 +1,167 @@
 ---
 sidebar_position: 1
 id: group-and-project-members
-title: Group and Project Members
+title: Membres de groupe et de projet
 ---
 
-In IRIDA Next, members are the users and groups which have access to your project. Each member has a role, which determines what they can do or access in the project.
+Dans IRIDA Next, les membres sont les utilisateurs et les groupes qui ont accès à votre projet. Chaque membre a un rôle, qui détermine ce qu'il peut faire ou accéder dans le projet.
 
-## Membership Types
+## Types d'appartenance
 
-IRIDA Next has four types of membership
+IRIDA Next a quatre types d'appartenance
 
-| Membership Type  | Process                                                                      |
-| :--------------- | :--------------------------------------------------------------------------- |
-| Direct           | The user is added directly to the group or project                           |
-| Inherited        | The user is a member of an ancestor group                                    |
-| Direct Shared    | The user is a direct member of a group that the namespace is shared with     |
-| Inherited Shared | The user is an inherited member of a group that the namespace is shared with |
+| Type d'appartenance | Processus                                                                               |
+| :------------------ | :-------------------------------------------------------------------------------------- |
+| Direct              | L'utilisateur est ajouté directement au groupe ou au projet                             |
+| Hérité              | L'utilisateur est membre d'un groupe ancêtre                                            |
+| Partagé direct      | L'utilisateur est un membre direct d'un groupe avec lequel l'espace de noms est partagé |
+| Partagé hérité      | L'utilisateur est un membre hérité d'un groupe avec lequel l'espace de noms est partagé |
 
-## Direct Membership
+## Appartenance directe
 
-When the project belongs to a group, if a user is added directly to a project, and that user is a member of a parent group or it's ancestors, the minimum role that the user could be assigned in the project is their maximum role in the parent group and it's ancestors.
+Lorsque le projet appartient à un groupe, si un utilisateur est ajouté directement à un projet et que cet utilisateur est membre d'un groupe parent ou de ses ancêtres, le rôle minimum que l'utilisateur pourrait se voir attribuer dans le projet est son rôle maximum dans le groupe parent et ses ancêtres.
 
-For Example:
+Par exemple :
 
-- User 0 is a member of Group 1 with **Maintainer** role
-- Group 1 has a subgroup Subgroup 1
-- Project 1 belongs to Subgroup 1
-- The only roles that User 0 can be assigned in the project are **Maintainer** and **Owner**
+- L'utilisateur 0 est membre du Groupe 1 avec le rôle **Responsable**
+- Le Groupe 1 a un sous-groupe Sous-groupe 1
+- Le Projet 1 appartient au Sous-groupe 1
+- Les seuls rôles que l'utilisateur 0 peut se voir attribuer dans le projet sont **Responsable** et **Propriétaire**
 
-## Inherited Membership
+## Appartenance héritée
 
-When the project belongs to a group, the members of this project will inherit their role from the group and it's ancestors.
+Lorsque le projet appartient à un groupe, les membres de ce projet hériteront de leur rôle du groupe et de ses ancêtres.
 
-For Example:
+Par exemple :
 
-- User 0 is a Member of Group 1 with a **Maintainer** role
-- Group 1 has a subgroup Subgroup 1
-- Project 1 belongs to Subgroup 1
-- User 0 has the inherited membership in Project 1 through the ancestor (Group 1) of Subgroup 1 with the **Maintainer** role
+- L'utilisateur 0 est membre du Groupe 1 avec un rôle **Responsable**
+- Le Groupe 1 a un sous-groupe Sous-groupe 1
+- Le Projet 1 appartient au Sous-groupe 1
+- L'utilisateur 0 a l'appartenance héritée dans le Projet 1 par l'ancêtre (Groupe 1) du Sous-groupe 1 avec le rôle **Responsable**
 
-## Direct Shared Membership
+## Appartenance partagée directe
 
-When the project belongs to a group, if the project is shared directly with another group, the minimum of the effective group access level and the user's access level in their group applies
+Lorsque le projet appartient à un groupe, si le projet est partagé directement avec un autre groupe, le minimum du niveau d'accès effectif du groupe et du niveau d'accès de l'utilisateur dans son groupe s'applique
 
-For Example:
+Par exemple :
 
-- User 0 is a member of Group A with **Analyst** role
-- Project 1 belongs to Group B
-- Project 1 is shared with Group A with a group access level **Maintainer**
-- User 0 will have a maximum role of **Analyst** from their group when accessing Project 1
+- L'utilisateur 0 est membre du Groupe A avec le rôle **Analyste**
+- Le Projet 1 appartient au Groupe B
+- Le Projet 1 est partagé avec le Groupe A avec un niveau d'accès de groupe **Responsable**
+- L'utilisateur 0 aura un rôle maximum d'**Analyste** de son groupe lors de l'accès au Projet 1
 
-## Inherited Shared Membership
+## Appartenance partagée héritée
 
-When the project belongs to a group, and the group is shared with another group in which a user has membership, the minimum of the effective group access level and the user's access level in their group applies
+Lorsque le projet appartient à un groupe et que le groupe est partagé avec un autre groupe dans lequel un utilisateur a une appartenance, le minimum du niveau d'accès effectif du groupe et du niveau d'accès de l'utilisateur dans son groupe s'applique
 
-For Example:
+Par exemple :
 
-- User 0 is a member of Group A with **Analyst** role
-- Project 1 belongs to Group B
-- Group B is shared with Group A with a group access level **Maintainer**
-- User 0 will have a maximum role of **Analyst** from their group when accessing Group B and it's descendants (subgroups and projects)
+- L'utilisateur 0 est membre du Groupe A avec le rôle **Analyste**
+- Le Projet 1 appartient au Groupe B
+- Le Groupe B est partagé avec le Groupe A avec un niveau d'accès de groupe **Mainteneur**
+- L'utilisateur 0 aura un rôle maximum d'**Analyste** de son groupe lors de l'accès au Groupe B et à ses descendants (sous-groupes et projets)
 
-## Add members to a group
+## Ajouter des membres à un groupe
 
-Add users to a group so they can have access to subgroups and projects within the group
+Ajoutez des utilisateurs à un groupe afin qu'ils puissent avoir accès aux sous-groupes et aux projets au sein du groupe
 
-Prerequisite:
+Prérequis :
 
-You must have at least a **Maintainer** role, or you must be the owner of the group
+Vous devez avoir au moins un rôle **Responsable**, ou vous devez être le propriétaire du groupe
 
-To add a user to a group:
+Pour ajouter un utilisateur à un groupe :
 
-1. From the left sidebar, select **Groups**, and find your group
-2. From the left sidebar, select **Members**
-3. Click the **Add Member** button
-4. Select the user you want to add to the group
-5. Select an access level (role)
-6. Select an optional **Access expiration**
-7. Click the **Add member to group** button
+1. Dans la barre latérale gauche, sélectionnez **Groupes**, et trouvez votre groupe
+2. Dans la barre latérale gauche, sélectionnez **Membres**
+3. Cliquez sur le bouton **Ajouter un membre**
+4. Sélectionnez l'utilisateur que vous souhaitez ajouter au groupe
+5. Sélectionnez un niveau d'accès (rôle)
+6. Sélectionnez une **Expiration d'accès** optionnelle
+7. Cliquez sur le bouton **Ajouter un membre au groupe**
 
-## Edit members for a group or project
+## Modifier les membres d'un groupe ou d'un projet
 
-Prerequisite:
+Prérequis :
 
-You must have at least a **Maintainer** role, or you must be the owner of the group
+Vous devez avoir au moins un rôle **Mainteneur**, ou vous devez être le propriétaire du groupe
 
-1. From the left sidebar, select **Projects** or **Groups**
-2. Select the project or group
-3. From the left sidebar, select **Members**
-4. Find the member that you would like to update
+1. Dans la barre latérale gauche, sélectionnez **Projets** ou **Groupes**
+2. Sélectionnez le projet ou le groupe
+3. Dans la barre latérale gauche, sélectionnez **Membres**
+4. Trouvez le membre que vous souhaitez mettre à jour
 
-To update a member's role:
+Pour mettre à jour le rôle d'un membre :
 
-1. In the **Access Level** column, select the new role for the member in the dropdown
+1. Dans la colonne **Niveau d'accès**, sélectionnez le nouveau rôle pour le membre dans le menu déroulant
 
-To update a member's access expiration:
+Pour mettre à jour l'expiration d'accès d'un membre :
 
-1. In the **Expiration** column, select the input and set a date using the date picker.
+1. Dans la colonne **Expiration**, sélectionnez l'entrée et définissez une date à l'aide du sélecteur de date.
 
-## Add members to a project
+## Ajouter des membres à un projet
 
-Add users to a project so they become direct members and have permission to perform actions.
+Ajoutez des utilisateurs à un projet afin qu'ils deviennent des membres directs et aient la permission d'effectuer des actions.
 
-Prerequisite:
+Prérequis :
 
-You must have at least a **Maintainer** role, or the project must be under your user namespace.
+Vous devez avoir au moins un rôle **Responsable**, ou le projet doit être sous votre espace de noms utilisateur.
 
-To add a direct user to a project:
+Pour ajouter un utilisateur direct à un projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Members**
-4. Click the **Add Member** button
-5. Select the user you want to add to the project
-6. Select an access level (role)
-7. Select an optional **Access expiration**
-8. Click the **Add member to project** button
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Membres**
+4. Cliquez sur le bouton **Ajouter un membre**
+5. Sélectionnez l'utilisateur que vous souhaitez ajouter au projet
+6. Sélectionnez un niveau d'accès (rôle)
+7. Sélectionnez une **Expiration d'accès** optionnelle
+8. Cliquez sur le bouton **Ajouter un membre au projet**
 
-## Which roles you can assign
+## Quels rôles vous pouvez attribuer
 
-The maximum role you can assign depends on whether you have the **Owner** or **Maintainer** role for the group ancestory. For example, the maximum role you can set is:
+Le rôle maximum que vous pouvez attribuer dépend de si vous avez le rôle **Propriétaire** ou **Responsable** pour l'ascendance du groupe. Par exemple, le rôle maximum que vous pouvez définir est :
 
-- Owner, if you have the Owner role for the project.
-- Maintainer, if you have the Maintainer role on the project.
+- Propriétaire, si vous avez le rôle Propriétaire pour le projet.
+- Responsable, si vous avez le rôle Responsable sur le projet.
 
-## Remove a member from a project
+## Retirer un membre d'un projet
 
-If a user is:
+Si un utilisateur est :
 
-- A direct member of a project, you can remove them directly from the project.
-- An inherited member from a parent group, you can only remove them from the parent group itself.
+- Un membre direct d'un projet, vous pouvez le retirer directement du projet.
+- Un membre hérité d'un groupe parent, vous ne pouvez le retirer que du groupe parent lui-même.
 
-Prerequisites:
+Prérequis :
 
-- To remove direct members that have the:
-  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer or Owner role.
-  - Owner role, you must also have an Owner role.
+- Pour retirer les membres directs qui ont le :
+  - Rôle Responsable, Développeur, Analyste, Téléverseur ou Invité, vous devez avoir le rôle Responsable ou Propriétaire.
+  - Rôle Propriétaire, vous devez également avoir un rôle Propriétaire.
 
-To remove a member from a project:
+Pour retirer un membre d'un projet :
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Members**
-4. On the right hand side of the row for the member you want to remove, click **Remove**.
-5. Confirm that you would like to remove the member from the project in the popup by clicking the **OK** button
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Membres**
+4. Sur le côté droit de la ligne pour le membre que vous souhaitez retirer, cliquez sur **Retirer**.
+5. Confirmez que vous souhaitez retirer le membre du projet dans la fenêtre contextuelle en cliquant sur le bouton **OK**
 
-## Remove a member from a group
+## Retirer un membre d'un groupe
 
-If a user is:
+Si un utilisateur est :
 
-- A direct member of a group, you can remove them directly from the group.
-- An inherited member from a parent group, you can only remove them from the parent group itself.
+- Un membre direct d'un groupe, vous pouvez le retirer directement du groupe.
+- Un membre hérité d'un groupe parent, vous ne pouvez le retirer que du groupe parent lui-même.
 
-Prerequisites:
+Prérequis :
 
-- To remove direct members that have the:
-  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer role.
-  - Owner role, you must have the Owner role.
+- Pour retirer les membres directs qui ont le :
+  - Rôle Responsable, Développeur, Analyste, Téléverseur ou Invité, vous devez avoir le rôle Responsable.
+  - Rôle Propriétaire, vous devez avoir le rôle Propriétaire.
 
-To remove a member from a group:
+Pour retirer un membre d'un groupe :
 
-1. From the left sidebar, select **Groups**
-2. Select the group
-3. From the left sidebar, select **Members**
-4. On the right hand side of the row for the member you want to remove, click **Remove**.
-5. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button
+1. Dans la barre latérale gauche, sélectionnez **Groupes**
+2. Sélectionnez le groupe
+3. Dans la barre latérale gauche, sélectionnez **Membres**
+4. Sur le côté droit de la ligne pour le membre que vous souhaitez retirer, cliquez sur **Retirer**.
+5. Confirmez que vous souhaitez retirer le membre du groupe dans la fenêtre contextuelle en cliquant sur le bouton **OK**
