@@ -93,7 +93,7 @@ module Pathogen
       # This will depend on rails_icons behavior for invalid icons
       # The component should handle errors gracefully without crashing
       assert_nothing_raised do
-        icon = Pathogen::Icon.new(:definitely_not_a_real_icon_name_12345)
+        icon = Pathogen::Icon.new(:definitely_not_a_real_icon_name)
         assert_not_nil icon
       end
     end
