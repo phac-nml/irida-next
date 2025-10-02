@@ -18,7 +18,7 @@ query {
   samples(
     orderBy: { field: name, direction: desc }
     filter: {
-      name_or_puid_cont: "Sample Name"
+      name_or_puid_cont: "Nom d'échantillon"
       advanced_search: [
         [
           { field: "metadata.country", operator: EQUALS, value: "Canada" }
@@ -82,17 +82,17 @@ L'entrée de recherche avancée est validée avant que la recherche ne soit effe
 
 Les règles de validation mentionnées ci-dessus concernant les opérateurs ont été résumées dans ce tableau pour référence rapide.
 
-| Opérateur           | Valeur             | Unicité                                             |
-| ------------------- | ------------------ | --------------------------------------------------- |
-| EQUALS              | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs   |
-| NOT_EQUALS          | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs   |
-| LESS_THAN_EQUALS    | Date ou numérique  | Peut être combiné avec GREATER_THAN_EQUALS          |
-| GREATER_THAN_EQUALS | Date ou numérique  | Peut être combiné avec LESS_THAN_EQUALS             |
-| CONTAINS            | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs   |
-| EXISTS              | N/A                | Ne peut pas être combiné avec d'autres opérateurs   |
-| NOT_EXISTS          | N/A                | Ne peut pas être combiné avec d'autres opérateurs   |
-| IN                  | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs   |
-| NOT_IN              | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs   |
+| Opérateur           | Valeur             | Unicité                                           |
+| ------------------- | ------------------ | ------------------------------------------------- |
+| EQUALS              | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_EQUALS          | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| LESS_THAN_EQUALS    | Date ou numérique  | Peut être combiné avec GREATER_THAN_EQUALS        |
+| GREATER_THAN_EQUALS | Date ou numérique  | Peut être combiné avec LESS_THAN_EQUALS           |
+| CONTAINS            | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| EXISTS              | N/A                | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_EXISTS          | N/A                | Ne peut pas être combiné avec d'autres opérateurs |
+| IN                  | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_IN              | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs |
 
 _\* La colonne d'unicité compare les conditions au sein du même groupe._
 
