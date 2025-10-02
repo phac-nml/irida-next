@@ -895,7 +895,47 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'svg.file-text-icon', count: 3
   end
 
-  test 'groups with samples containing no metadata should have linelist export link disabled' do
+  test 'projects with samples containing no metadata should have linelist export link enabled' do
+    project = projects(:project2)
+    Project.reset_counters(project.id, :samples_count)
+    sample3 = samples(:sample3)
+
+    visit namespace_project_samples_url(@group1, project)
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{sample3.id}']").click
+    end
+
+    assert_no_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
+
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text sample3.name
+        assert_text sample3.puid
+      end
+
+      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+        assert_no_selector 'li'
+      end
+
+      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+        assert_no_selector 'li'
+      end
+
+      assert_no_selector 'input[disabled]' # submit button enabled
+    end
+  end
+
+  test 'groups with samples containing no metadata should have linelist export link enabled' do
     group = groups(:group_sixteen)
     sample43 = samples(:sample43)
 
@@ -908,11 +948,30 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
+    assert_no_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
     click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_no_selector 'button[disabled]',
-                       text: I18n.t('groups.samples.index.create_export_button.label')
-    assert_selector 'button',
-                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
+
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text sample43.name
+        assert_text sample43.puid
+      end
+
+      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+        assert_no_selector 'li'
+      end
+
+      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+        assert_no_selector 'li'
+      end
+
+      assert_no_selector 'input[disabled]' # submit button enabled
+    end
   end
 
   test 'new linelist export dialog' do
