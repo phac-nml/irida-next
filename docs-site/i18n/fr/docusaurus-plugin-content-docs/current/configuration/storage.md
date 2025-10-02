@@ -14,9 +14,9 @@ Vous pouvez modifier votre fichier d'informations d'identification avec la comma
 
 Lors de la sélection d'un service de stockage à utiliser, définissez la variable ENV suivante sur le service que vous souhaitez.
 
-| Variable ENV | Description | Défaut |
-| -------- | ------- | ------- |
-| `RAILS_STORAGE_SERVICE` | Quel type de stockage utiliser. L'un de [`local`,`amazon`,`google`,`microsoft`]. | `local` |
+| Variable d'environnement | Description                                                                      | Défaut  |
+| :----------------------- | :------------------------------------------------------------------------------- | :------ |
+| `RAILS_STORAGE_SERVICE`  | Quel type de stockage utiliser. L'un de [`local`,`amazon`,`google`,`microsoft`]. | `local` |
 
 Les valeurs par défaut ci-dessous contenant `#{Rails.env}` font référence à l'environnement dans lequel IRIDA Next s'exécute. En production, c'est `production`
 
@@ -36,18 +36,18 @@ aws:
   secret_access_key:
 ```
 
-| Variable ENV | Description | Défaut |
-| -------- | ------- | ------- |
-| `S3_REGION` | Région S3 | `us-east-1` |
-| `S3_BUCKET_NAME` | Nom du compartiment S3 | `your_own_bucket-#{Rails.env}` |
+| Variable d'environnement | Description            | Défaut                                   |
+| :----------------------- | :--------------------- | :--------------------------------------- |
+| `S3_REGION`              | Région S3              | `us-east-1`                              |
+| `S3_BUCKET_NAME`         | Nom du compartiment S3 | `votre_propre_compartiment-#{Rails.env}` |
 
 ### Google Cloud Storage
 
-| Variable ENV | Description | Défaut |
-| -------- | ------- | ------- |
-| `GCS_PROJECT_NAME` | Nom du projet Google Cloud Storage | `your_project` |
-| `GCS_KEYFILE` | Chemin relatif vers gcs.keyfile | `gcs.keyfile` |
-| `GCS_BUCKET_NAME` | Nom du compartiment Google Cloud Storage | `your_own_bucket-#{Rails.env}` |
+| Variable d'environnement | Description                              | Défaut                                   |
+| :----------------------- | :--------------------------------------- | :--------------------------------------- |
+| `GCS_PROJECT_NAME`       | Nom du projet Google Cloud Storage       | `votre_projet`                           |
+| `GCS_KEYFILE`            | Chemin relatif vers gcs.keyfile          | `gcs.keyfile`                            |
+| `GCS_BUCKET_NAME`        | Nom du compartiment Google Cloud Storage | `votre_propre_compartiment-#{Rails.env}` |
 
 ### Microsoft Azure
 
@@ -58,8 +58,8 @@ azure_storage:
   storage_access_key:
 ```
 
-| Variable ENV | Description | Défaut |
-| -------- | ------- | ------- |
-| `AZURE_STORAGE_ACCOUNT_NAME` | Nom du compte de stockage | `your_account_name` |
-| `AZURE_STORAGE_CONTAINER_NAME` | Nom du conteneur de stockage | `your_container_name-#{Rails.env}` |
-| `AZURE_STORAGE_BLOB_HOST` | Optionnel. Hôte Blob de stockage | N/A |
+| Variable d'environnement       | Description                      | Défaut                             |
+| :----------------------------- | :------------------------------- | :--------------------------------- |
+| `AZURE_STORAGE_ACCOUNT_NAME`   | Nom du compte de stockage        | `votre_nom_compte`                 |
+| `AZURE_STORAGE_CONTAINER_NAME` | Nom du conteneur de stockage     | `votre_nom_conteneur-#{Rails.env}` |
+| `AZURE_STORAGE_BLOB_HOST`      | Optionnel. Hôte Blob de stockage | N/A                                |
