@@ -365,16 +365,13 @@ module DataExports
     end
 
     test 'linelist data export with missing metadata_fields' do
-      invalid_params = { 'export_type' => 'linelist',
-                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
-                                                  'namespace_id' => @project1.namespace.id,
-                                                  'linelist_format' => 'xlsx' } }
+      valid_params = { 'export_type' => 'linelist',
+                       'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                'namespace_id' => @project1.namespace.id,
+                                                'linelist_format' => 'xlsx' } }
 
-      assert_no_difference -> { DataExport.count } do
-        data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t(
-          'activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'
-        ), data_export.errors[:export_parameters].first
+      assert_difference -> { DataExport.count } => 1 do
+        DataExports::CreateService.new(@user, valid_params).execute
       end
     end
 

@@ -102,7 +102,6 @@ en:
               missing_attachment_formats: must have attachment formats for sample exports
               missing_file_format: must contain a format for linelist exports
               missing_ids: does not contain any ids to export.
-              missing_metadata_fields: must contain metadata fields for linelist exports
               missing_namespace_id: must have a namespace id
         member:
           attributes:
