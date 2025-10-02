@@ -14,7 +14,8 @@ module Pathogen
       success: 'text-green-600 dark:text-green-500',
       warning: 'text-yellow-600 dark:text-yellow-500',
       danger: 'text-red-600 dark:text-red-500',
-      blue: 'text-blue-600 dark:text-blue-500'
+      blue: 'text-blue-600 dark:text-blue-500',
+      white: 'text-white'
     }.freeze
 
     SIZES = {
