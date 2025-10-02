@@ -71,9 +71,9 @@ Pour Entra, vous aurez besoin des lignes suivantes
 
 ```yml
 entra_id:
-  client_id: YOUR_CLIENT_ID
-  client_secret: YOUR_CLIENT_SECRET
-  tenant_id: YOUR_TENANT_ID
+  client_id: VOTRE_ID_CLIENT
+  client_secret: VOTRE_SECRET_CLIENT
+  tenant_id: VOTRE_ID_LOCATAIRE
 ```
 
 #### SAML
@@ -82,9 +82,9 @@ Pour SAML, vous aurez besoin des lignes suivantes
 
 ```yml
 saml:
-  idp_sso_service_url: YOUR_SAML_IDP_SSO_SERVICE_URL
-  sp_entity_id: YOUR_SAML_SP_ENTITY_ID
-  idp_cert: YOUR_SAML_IDP_CERT
+  idp_sso_service_url: VOTRE_URL_SERVICE_SSO_IDP_SAML
+  sp_entity_id: VOTRE_ID_ENTITE_SP_SAML
+  idp_cert: VOTRE_CERT_IDP_SAML
 ```
 
 ## Personnalisation supplémentaire

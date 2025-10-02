@@ -63,17 +63,17 @@ Note : Si vos permissions de groupe docker sont configurées correctement, vous 
 
 ```bash
 # Allez où vous stockez vos dépôts git
-cd ~/path/to/git/repos
+cd ~/chemin/vers/dépôts/git
 # Cloner et extraire la branche irida-next
 git clone git@github.com:phac-nml/sapporo-service.git
 cd sapporo-service
 # Cette branche a un script docker compose personnalisé pour irida next
 git checkout irida-next
-# Remplacez /PATH/TO/IRIDA/NEXT/REPO par votre chemin de dépôt irida next.
+# Remplacez /CHEMIN/VERS/DÉPÔT/IRIDA/NEXT par votre chemin de dépôt irida next.
 # Cela permet au conteneur docker un accès en lecture/écriture au dépôt
 # Ceci est nécessaire pour qu'il puisse lire les fichiers d'entrée et écrire les fichiers de sortie dans les répertoires blob
-IRIDA_NEXT_PATH=/PATH/TO/IRIDA/NEXT/REPO docker compose -f compose.irida-next.yml up -d --build
-IRIDA_NEXT_PATH=/PATH/TO/IRIDA/NEXT/REPO docker compose -f compose.irida-next.yml exec app bash
+IRIDA_NEXT_PATH=/CHEMIN/VERS/DÉPÔT/IRIDA/NEXT docker compose -f compose.irida-next.yml up -d --build
+IRIDA_NEXT_PATH=/CHEMIN/VERS/DÉPÔT/IRIDA/NEXT docker compose -f compose.irida-next.yml exec app bash
 # Dans le conteneur docker, démarrer sapporo
 sapporo
 ```

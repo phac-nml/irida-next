@@ -60,8 +60,8 @@ query {
 
 ```graphql
 query {
-  samples (first:5){
-    nodes{
+  samples(first: 5) {
+    nodes {
       name
       id
     }
@@ -78,23 +78,23 @@ query {
     "samples": {
       "nodes": [
         {
-          "name": "Bacillus anthracis/Outbreak 2022 Sample 1",
+          "name": "Bacillus anthracis/Éclosion 2022 Échantillon 1",
           "id": "gid://irida/Sample/1"
         },
         {
-          "name": "Bacillus anthracis/Outbreak 2022 Sample 2",
+          "name": "Bacillus anthracis/Éclosion 2022 Échantillon 2",
           "id": "gid://irida/Sample/2"
         },
         {
-          "name": "Bacillus anthracis/Outbreak 2022 Sample 3",
+          "name": "Bacillus anthracis/Éclosion 2022 Échantillon 3",
           "id": "gid://irida/Sample/3"
         },
         {
-          "name": "Bacillus anthracis/Outbreak 2022 Sample 4",
+          "name": "Bacillus anthracis/Éclosion 2022 Échantillon 4",
           "id": "gid://irida/Sample/4"
         },
         {
-          "name": "Bacillus anthracis/Outbreak 2022 Sample 5",
+          "name": "Bacillus anthracis/Éclosion 2022 Échantillon 5",
           "id": "gid://irida/Sample/5"
         }
       ]
@@ -112,14 +112,14 @@ query {
 
 ```graphql
 query {
-  node(id: "gid://irida/Sample/1"){
-    ... on Sample{
-      id,
+  node(id: "gid://irida/Sample/1") {
+    ... on Sample {
+      id
       name
       description
       metadata
-      project{
-        id,
+      project {
+        id
         fullPath
       }
     }
@@ -135,21 +135,21 @@ query {
   "data": {
     "node": {
       "id": "gid://irida/Sample/1",
-      "name": "Bacillus anthracis/Outbreak 2022 Sample 1",
-      "description": "This is a description for sample Bacillus anthracis/Outbreak 2022 Sample 1.",
+      "name": "Bacillus anthracis/Éclosion 2022 Échantillon 1",
+      "description": "Ceci est une description pour l'échantillon Bacillus anthracis/Éclosion 2022 Échantillon 1.",
       "project": {
         "id": "gid://irida/Project/1",
-        "fullPath": "bacillus/bacillus-anthracis/outbreak-2022"
+        "fullPath": "bacille/bacille-anthracis/eclosion-2022"
       },
       "metadata": {
         "age": 40,
-        "food": "Cheeseburger",
+        "food": "Hamburger au fromage",
         "onset": "2022-06-21",
         "WGS_id": 6862301436,
-        "gender": "Female",
-        "country": "Gabon",
+        "gender": "Féminin",
+        "country": "Canada",
         "patient_age": 8,
-        "patient_sex": "Male",
+        "patient_sex": "Masculin",
         "earliest_date": "2022-10-03",
         "NCBI_ACCESSION": "NM_7807606.5"
       }
@@ -205,11 +205,11 @@ par ex. `Authorization: Basic YWRtaW5AZW1haWwuY29tOnlLMWV1VVJxVlJ0UTFELTN1S3NX`
 Vous pouvez tester votre jeton en effectuant l'encodage et en exécutant la commande `curl` suivante.
 
 ```bash
-curl "http://localhost:3000/api/graphql" --header "Authorization: Basic <your token here>" --header "Content-Type: application/json" --request POST --data "{\"query\": \"query {currentUser{email}}}\"}"
+curl "http://localhost:3000/api/graphql" --header "Authorization: Basic <votre jeton ici>" --header "Content-Type: application/json" --request POST --data "{\"query\": \"query {currentUser{email}}}\"}"
 ```
 
 réponse
 
 ```json
-{"data":{"currentUser":{"email":"user0@email.com"}}}
+{ "data": { "currentUser": { "email": "user0@email.com" } } }
 ```
