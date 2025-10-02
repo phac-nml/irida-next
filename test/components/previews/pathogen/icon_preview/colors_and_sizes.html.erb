@@ -8,7 +8,7 @@
   <div class="mb-12 text-center">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
       <%= render Pathogen::Icon.new(
-        "palette",
+        :palette,
         color: :primary,
         size: :xl,
         class: "inline mr-3",
@@ -26,18 +26,18 @@
         text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= render Pathogen::Icon.new("swatches", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:swatches, color: :primary, class: "mr-3") %>
       Color Variants
     </h2>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <% [
-        { color: :default, icon: "heart", name: "Default", desc: "Standard text color" },
-        { color: :primary, icon: "star", name: "Primary", desc: "Brand primary color" },
-        { color: :success, icon: "check-circle", name: "Success", desc: "Green for positive actions" },
-        { color: :warning, icon: "warning", name: "Warning", desc: "Yellow for caution" },
-        { color: :danger, icon: "x-circle", name: "Danger", desc: "Red for errors/deletion" },
-        { color: :subdued, icon: "info", name: "Subdued", desc: "Muted for secondary content" }
+        { color: :default, icon: :heart, name: "Default", desc: "Standard text color" },
+        { color: :primary, icon: :star, name: "Primary", desc: "Brand primary color" },
+        { color: :success, icon: :check_circle, name: "Success", desc: "Green for positive actions" },
+        { color: :warning, icon: :warning, name: "Warning", desc: "Yellow for caution" },
+        { color: :danger, icon: :x_circle, name: "Danger", desc: "Red for errors/deletion" },
+        { color: :subdued, icon: :info, name: "Subdued", desc: "Muted for secondary content" }
       ].each do |item| %>
         <div
           class="
@@ -81,7 +81,7 @@
               flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("check-circle", color: :success) %>
+            <%= render Pathogen::Icon.new(:check_circle, color: :success) %>
             <span class="text-green-800 dark:text-green-200">Task completed successfully</span>
           </div>
           <div
@@ -89,7 +89,7 @@
               flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("x-circle", color: :danger) %>
+            <%= render Pathogen::Icon.new(:x_circle, color: :danger) %>
             <span class="text-red-800 dark:text-red-200">Error occurred while processing</span>
           </div>
           <div
@@ -97,7 +97,7 @@
               flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("warning", color: :warning) %>
+            <%= render Pathogen::Icon.new(:warning, color: :warning) %>
             <span class="text-yellow-800 dark:text-yellow-200">Please review before continuing</span>
           </div>
         </div>
@@ -107,7 +107,7 @@
               flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("info", color: :primary) %>
+            <%= render Pathogen::Icon.new(:info, color: :primary) %>
             <span class="text-blue-800 dark:text-blue-200">Additional information available</span>
           </div>
           <div
@@ -115,7 +115,7 @@
               flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("clock", color: :subdued) %>
+            <%= render Pathogen::Icon.new(:clock, color: :subdued) %>
             <span class="text-slate-600 dark:text-slate-300">Updated 2 hours ago</span>
           </div>
         </div>
@@ -129,7 +129,7 @@
         text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= render Pathogen::Icon.new("resize", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:resize, color: :primary, class: "mr-3") %>
       Size Variants
     </h2>
 
@@ -152,7 +152,7 @@
               mb-4
             "
           >
-            <%= render Pathogen::Icon.new("star", size: item[:size], color: :primary) %>
+            <%= render Pathogen::Icon.new(:star, size: item[:size], color: :primary) %>
           </div>
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-1"><%= item[:name] %></h3>
           <p class="text-xs text-slate-500 dark:text-slate-400 mb-2"><%= item[:pixels] %></p>
@@ -178,19 +178,19 @@
       <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Size Comparison</h3>
       <div class="flex items-end justify-center gap-8 py-6">
         <div class="text-center">
-          <%= render Pathogen::Icon.new("heart", size: :sm, color: :danger) %>
+          <%= render Pathogen::Icon.new(:heart, size: :sm, color: :danger) %>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">:sm</p>
         </div>
         <div class="text-center">
-          <%= render Pathogen::Icon.new("heart", size: :md, color: :danger) %>
+          <%= render Pathogen::Icon.new(:heart, size: :md, color: :danger) %>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">:md</p>
         </div>
         <div class="text-center">
-          <%= render Pathogen::Icon.new("heart", size: :lg, color: :danger) %>
+          <%= render Pathogen::Icon.new(:heart, size: :lg, color: :danger) %>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">:lg</p>
         </div>
         <div class="text-center">
-          <%= render Pathogen::Icon.new("heart", size: :xl, color: :danger) %>
+          <%= render Pathogen::Icon.new(:heart, size: :xl, color: :danger) %>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">:xl</p>
         </div>
       </div>
@@ -203,7 +203,7 @@
         text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= render Pathogen::Icon.new("sparkle", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:sparkle, color: :primary, class: "mr-3") %>
       Real-World Usage
     </h2>
 
@@ -221,7 +221,7 @@
           "
         >
           <%= render Pathogen::Icon.new(
-            "clipboard-text",
+            :clipboard_text,
             size: :sm,
             color: :primary,
             class: "mr-2",
@@ -245,7 +245,7 @@
                 value="user@example.com"
               >
               <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <%= render Pathogen::Icon.new("check-circle", color: :success, size: :sm) %>
+                <%= render Pathogen::Icon.new(:check_circle, color: :success, size: :sm) %>
               </div>
             </div>
           </div>
@@ -264,11 +264,11 @@
                 "
               >
               <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <%= render Pathogen::Icon.new("x-circle", color: :danger, size: :sm) %>
+                <%= render Pathogen::Icon.new(:x_circle, color: :danger, size: :sm) %>
               </div>
             </div>
             <p class="text-sm text-red-600 dark:text-red-400 mt-1 flex items-center">
-              <%= render Pathogen::Icon.new("warning", color: :danger, size: :sm, class: "mr-2") %>
+              <%= render Pathogen::Icon.new(:warning, color: :danger, size: :sm, class: "mr-2") %>
               Password must be at least 8 characters
             </p>
           </div>
@@ -303,7 +303,7 @@
             "
           >
             <%= render Pathogen::Icon.new(
-              "house-line",
+              :house_line,
               size: :sm,
               color: :primary,
               class: "mr-3",
@@ -317,7 +317,7 @@
               hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("users", size: :sm, color: :subdued, class: "mr-3") %>
+            <%= render Pathogen::Icon.new(:users, size: :sm, color: :subdued, class: "mr-3") %>
             Team Members
           </a>
           <a
@@ -337,7 +337,7 @@
               hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg
             "
           >
-            <%= render Pathogen::Icon.new("question", size: :sm, color: :subdued, class: "mr-3") %>
+            <%= render Pathogen::Icon.new(:question, size: :sm, color: :subdued, class: "mr-3") %>
             Help & Support
           </a>
         </nav>

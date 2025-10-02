@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="mb-12 text-center">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-      <%= render Pathogen::Icon.new("test-tube", color: :primary, size: :xl, class: "inline mr-3") %>
+      <%= render Pathogen::Icon.new(:test_tube, color: :primary, size: :xl, class: "inline mr-3") %>
       Pathogen Icons - Basic Usage
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
@@ -13,7 +13,7 @@
   <!-- Basic Examples -->
   <div class="mb-12">
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("clipboard-text", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:clipboard_text, color: :primary, class: "mr-3") %>
       Basic Examples
     </h2>
 
@@ -21,11 +21,11 @@
       <!-- String Icon -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.new("check-circle", color: :success, size: :lg) %>
+          <%= render Pathogen::Icon.new(:check_circle, color: :success, size: :lg) %>
         </div>
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">String Icon Name</h3>
         <code class="text-sm bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded text-slate-700 dark:text-slate-300 block">
-          Pathogen::Icon.new("check-circle")
+          Pathogen::Icon.new(:check_circle)
         </code>
       </div>
 
@@ -44,11 +44,11 @@
       <!-- With Options -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.new("heart", variant: :fill, color: :danger, size: :lg) %>
+          <%= render Pathogen::Icon.new(:heart, variant: :fill, color: :danger, size: :lg) %>
         </div>
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">With Options</h3>
         <code class="text-sm bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded text-slate-700 dark:text-slate-300 block">
-          Pathogen::Icon.new("heart", variant: :fill, color: :danger)
+          Pathogen::Icon.new(:heart, variant: :fill, color: :danger)
         </code>
       </div>
     </div>
@@ -57,7 +57,7 @@
   <!-- Helper Methods -->
   <div class="mb-12">
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("code", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:code, color: :primary, class: "mr-3") %>
       Helper Methods in ERB
     </h2>
 
@@ -67,15 +67,15 @@
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Using render</h3>
           <div class="space-y-3">
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new("check", color: :success) %>
+              <%= render Pathogen::Icon.new(:check, color: :success) %>
               <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
-                &lt;%= render Pathogen::Icon.new("check") %&gt;
+                &lt;%= render Pathogen::Icon.new(:check) %&gt;
               </code>
             </div>
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new("x", color: :danger) %>
+              <%= render Pathogen::Icon.new(:x, color: :danger) %>
               <code class="text-sm bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
-                &lt;%= render Pathogen::Icon.new("x") %&gt;
+                &lt;%= render Pathogen::Icon.new(:x) %&gt;
               </code>
             </div>
           </div>

@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="mb-12 text-center">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-      <%= render Pathogen::Icon.new("hammer", color: :primary, size: :xl, class: "inline mr-3") %>
+      <%= render Pathogen::Icon.new(:hammer, color: :primary, size: :xl, class: "inline mr-3") %>
       Factory Methods & Enhanced Features
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
@@ -13,18 +13,18 @@
   <!-- Color Factory Methods -->
   <div class="mb-12">
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("paint-brush", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:paint_brush, color: :primary, class: "mr-3") %>
       Color Factory Methods
     </h2>
     <p class="text-slate-600 dark:text-slate-400 mb-6">Quick shortcuts for common color patterns.</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% [
-        { method: "success", icon: "check-circle", color: :success, desc: "Perfect for confirmations and positive actions" },
-        { method: "danger", icon: "warning", color: :danger, desc: "Ideal for errors, warnings, and destructive actions" },
-        { method: "warning", icon: "warning-circle", color: :warning, desc: "Great for caution messages and alerts" },
-        { method: "primary", icon: "star", color: :primary, desc: "Use for brand elements and CTAs" },
-        { method: "subdued", icon: "info", color: :subdued, desc: "Perfect for secondary information" }
+        { method: "success", icon: :check_circle, color: :success, desc: "Perfect for confirmations and positive actions" },
+        { method: "danger", icon: :warning, color: :danger, desc: "Ideal for errors, warnings, and destructive actions" },
+        { method: "warning", icon: :warning_circle, color: :warning, desc: "Great for caution messages and alerts" },
+        { method: "primary", icon: :star, color: :primary, desc: "Use for brand elements and CTAs" },
+        { method: "subdued", icon: :info, color: :subdued, desc: "Perfect for secondary information" }
       ].each do |item| %>
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
           <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
@@ -35,7 +35,7 @@
           </h3>
           <p class="text-sm text-slate-600 dark:text-slate-400 mb-3"><%= item[:desc] %></p>
           <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300 block">
-            Pathogen::Icon.new("<%= item[:icon] %>", color: :<%= item[:method] %>)
+            Pathogen::Icon.new(<%= item[:icon] %>, color: :<%= item[:method] %>)
           </code>
         </div>
       <% end %>
@@ -49,15 +49,15 @@
           <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Status Messages</h4>
           <div class="space-y-3">
             <div class="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <%= render Pathogen::Icon.new("check-circle", color: :success) %>
+              <%= render Pathogen::Icon.new(:check_circle, color: :success) %>
               <span class="text-green-800 dark:text-green-200">Payment processed successfully</span>
             </div>
             <div class="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-              <%= render Pathogen::Icon.new("warning", color: :warning) %>
+              <%= render Pathogen::Icon.new(:warning, color: :warning) %>
               <span class="text-yellow-800 dark:text-yellow-200">Account verification pending</span>
             </div>
             <div class="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <%= render Pathogen::Icon.new("x-circle", color: :danger) %>
+              <%= render Pathogen::Icon.new(:x_circle, color: :danger) %>
               <span class="text-red-800 dark:text-red-200">Unable to connect to server</span>
             </div>
           </div>
@@ -66,16 +66,16 @@
           <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Interface Elements</h4>
           <div class="space-y-3">
             <button class="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg w-full">
-              <%= render Pathogen::Icon.new("plus", color: :primary, size: :sm, class: "text-white") %>
+              <%= render Pathogen::Icon.new(:plus, color: :primary, size: :sm, class: "text-white") %>
               Create New Project
             </button>
             <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 text-sm">
-              <%= render Pathogen::Icon.new("clock", color: :subdued) %>
+              <%= render Pathogen::Icon.new(:clock, color: :subdued) %>
               <span>Last updated 5 minutes ago</span>
             </div>
             <div class="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
               <span class="text-slate-900 dark:text-slate-100">Delete Account</span>
-              <%= render Pathogen::Icon.new("trash", color: :danger, size: :sm) %>
+              <%= render Pathogen::Icon.new(:trash, color: :danger, size: :sm) %>
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@
   <!-- Size Factory Methods -->
   <div class="mb-12">
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("arrows-out", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:arrows_out, color: :primary, class: "mr-3") %>
       Size Factory Methods
     </h2>
     <p class="text-slate-600 dark:text-slate-400 mb-6">Quick shortcuts for common size patterns.</p>
@@ -94,34 +94,34 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.new("heart", color: :danger, size: :sm) %>
+          <%= render Pathogen::Icon.new(:heart, color: :danger, size: :sm) %>
         </div>
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :sm</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Perfect for inline use in text</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.new("heart", size: :sm)
+          Icon.new(:heart, size: :sm)
         </code>
       </div>
 
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.new("star", color: :primary, size: :lg) %>
+          <%= render Pathogen::Icon.new(:star, color: :primary, size: :lg) %>
         </div>
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :lg</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Great for feature highlights</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.new("star", size: :lg)
+          Icon.new(:star, size: :lg)
         </code>
       </div>
 
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
         <div class="flex items-center justify-center h-16 bg-slate-50 dark:bg-slate-700 rounded-lg mb-4">
-          <%= render Pathogen::Icon.new("rocket-launch", color: :success, size: :xl) %>
+          <%= render Pathogen::Icon.new(:rocket_launch, color: :success, size: :xl) %>
         </div>
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Icon.new() with size: :xl</h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Ideal for hero sections</p>
         <code class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-700 dark:text-slate-300">
-          Icon.new("rocket", size: :xl)
+          Icon.new(:rocket, size: :xl)
         </code>
       </div>
     </div>
@@ -130,7 +130,7 @@
   <!-- Accessibility Features -->
   <div class="mb-12">
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("eye", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:eye, color: :primary, class: "mr-3") %>
       Accessibility Features
     </h2>
     <p class="text-slate-600 dark:text-slate-400 mb-6">Built-in accessibility with semantic and decorative icon handling.</p>
@@ -139,19 +139,19 @@
       <!-- Semantic Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.new("info", color: :primary, "aria-label": "Information", size: :sm, class: "mr-2") %>
+          <%= render Pathogen::Icon.new(:info, color: :primary, "aria-label": "Information", size: :sm, class: "mr-2") %>
           Semantic Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that convey meaning and should be announced by screen readers.</p>
 
         <div class="space-y-4">
           <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
-            <%= render Pathogen::Icon.new("info", color: :primary, "aria-label": "Important information", class: "float-left mr-2 mt-0.5") %>
+            <%= render Pathogen::Icon.new(:info, color: :primary, "aria-label": "Important information", class: "float-left mr-2 mt-0.5") %>
             <p class="text-blue-800 dark:text-blue-200 text-sm">This icon conveys important information and includes an aria-label for screen readers.</p>
           </div>
 
           <code class="block text-xs bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-            &lt;%= render Pathogen::Icon.new("info", "aria-label": "Important information") %&gt;
+            &lt;%= render Pathogen::Icon.new(:info, "aria-label": "Important information") %&gt;
           </code>
 
           <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -163,7 +163,7 @@
       <!-- Decorative Icons -->
       <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
         <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <%= render Pathogen::Icon.new("sparkle", color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
+          <%= render Pathogen::Icon.new(:sparkle, color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
           Decorative Icons
         </h3>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Icons that are purely visual and should be hidden from screen readers.</p>
@@ -171,14 +171,14 @@
         <div class="space-y-4">
           <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
             <h4 class="font-medium text-slate-900 dark:text-slate-100 flex items-center">
-              <%= render Pathogen::Icon.new("sparkle", color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
+              <%= render Pathogen::Icon.new(:sparkle, color: :primary, size: :sm, class: "mr-2", "aria-hidden": true) %>
               Beautiful Design
             </h4>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">The sparkle icon is decorative and enhances the visual appeal.</p>
           </div>
 
           <code class="block text-xs bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-            &lt;%= render Pathogen::Icon.new("sparkle", "aria-hidden": true) %&gt;
+            &lt;%= render Pathogen::Icon.new(:sparkle, "aria-hidden": true) %&gt;
           </code>
 
           <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -192,7 +192,7 @@
   <!-- Error Handling & Fallbacks -->
   <div>
     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new("shield-check", color: :primary, class: "mr-3") %>
+      <%= render Pathogen::Icon.new(:shield_check, color: :primary, class: "mr-3") %>
       Error Handling & Fallbacks
     </h2>
     <p class="text-slate-600 dark:text-slate-400 mb-6">Robust error handling with helpful developer feedback and graceful fallbacks.</p>
@@ -211,7 +211,7 @@
           </div>
 
           <code class="block text-xs bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-            &lt;%= render Pathogen::Icon.new("invalid-icon-name") %&gt;
+            &lt;%= render Pathogen::Icon.new(:invalid_icon_name) %&gt;
           </code>
         </div>
 
@@ -228,7 +228,7 @@
         <div class="space-y-3">
           <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new("question", color: :subdued) %>
+              <%= render Pathogen::Icon.new(:question, color: :subdued) %>
               <span class="text-slate-600 dark:text-slate-400">Fallback icon when primary fails</span>
             </div>
           </div>
@@ -256,7 +256,7 @@
             [Pathogen::Icon] Invalid color 'purple', falling back to :default. Valid colors: default, primary, success, warning, danger, subdued
           </div>
           <code class="text-xs bg-slate-100 dark:bg-slate-700 p-2 rounded block">
-            Icon.new("star", color: :purple)
+            Icon.new(:star, color: :purple)
           </code>
         </div>
         <div>
@@ -265,7 +265,7 @@
             [Pathogen::Icon] Invalid size 'huge', falling back to :md. Valid sizes: sm, md, lg, xl
           </div>
           <code class="text-xs bg-slate-100 dark:bg-slate-700 p-2 rounded block">
-            Icon.new("star", size: :huge)
+            Icon.new(:star, size: :huge)
           </code>
         </div>
       </div>
