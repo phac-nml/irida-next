@@ -30,5 +30,9 @@ module Viral
         removed: I18n.t('shared.sortable_lists.aria_live_update.removed')
       }.to_json
     end
+
+    def empty_lists
+      lists.all? { |list| list.list_items.empty? }
+    end
   end
 end

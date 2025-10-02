@@ -1,4 +1,6 @@
-<div>
+<% empty_lists = lists.all? { |list| list.list_items.empty? } %>
+
+<div class="<%= 'hidden' if empty_lists %>">
   <div class="block text-sm font-medium text-slate-900 dark:text-white">
     <%= title %>
   </div>
@@ -33,7 +35,12 @@
     </select>
   </div>
 <% end %>
-<div class="grid sm:grid-cols-2 max-sm:grid-cols-1 gap-2">
+<div
+  class="
+    grid sm:grid-cols-2 max-sm:grid-cols-1 gap-2
+    <%= 'hidden' if empty_lists %>
+  "
+>
   <% lists.each do |list| %>
     <%= list %>
   <% end %>
