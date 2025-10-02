@@ -5,7 +5,7 @@ require 'test_helper'
 module Pathogen
   class IconTest < ViewComponent::TestCase
     test 'renders icon with string name' do
-      render_inline(Pathogen::Icon.new('clipboard-text'))
+      render_inline(Pathogen::Icon.new(:clipboard_text))
       assert_selector 'svg', count: 1
     end
 
@@ -85,7 +85,7 @@ module Pathogen
     test 'works with legacy ICON constant hash format' do
       # This ensures our component still works if someone passes an ICON hash
       # until we migrate all usage
-      render_inline(Pathogen::Icon.new('clipboard-text'))
+      render_inline(Pathogen::Icon.new(:clipboard_text))
       assert_selector 'svg', count: 1
     end
 
