@@ -21,7 +21,7 @@
   },
   "editor.formatOnSave": true,
   "rubyLsp.rubyVersionManager": {
-    "identifier": "auto"
+    "identifier": "custom"
   },
   "rubyLsp.featureFlags": { "fullTestDiscovery": true },
   "files.trimTrailingWhitespace": true,
@@ -80,5 +80,6 @@
     "samplesheet",
     "sendfile",
     "tailwindcss"
-  ]
+  ],
+  "rubyLsp.customRubyCommand": "bash"
 }
