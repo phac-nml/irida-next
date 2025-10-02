@@ -28,9 +28,9 @@ Interroger la liste des pipelines pour trouver celui que vous souhaitez utiliser
 
 ```graphql
 query getPipelines {
-    pipelines(workflowType: "available"){
-        name
-        version
+  pipelines(workflowType: "available") {
+    name
+    version
   }
 }
 ```
@@ -70,7 +70,10 @@ Nous sommes capables d'obtenir toutes les informations sur un pipeline avec cett
 
 ```graphql
 query getPipelineInfo {
-    pipeline(workflowName:"phac-nml/iridanextexample",workflowVersion:"1.0.3"){
+  pipeline(
+    workflowName: "phac-nml/iridanextexample"
+    workflowVersion: "1.0.3"
+  ) {
     automatable
     description
     executable
@@ -88,12 +91,12 @@ La sortie nous informe de la structure des champs que nous fournirons pour exéc
 
 Spécifiquement, nous utiliserons les champs suivants du résultat :
 
-* `workflowName`
-* `workflowVersion`
-* `workflowParams`
-  * `assembler`
-  * `random_seed`
-  * `project_name`
+- `workflowName`
+- `workflowVersion`
+- `workflowParams`
+  - `assembler`
+  - `random_seed`
+  - `project_name`
 
 La sortie nous informe également de la structure pour `samplesWorkflowExecutionAttributes` (`sample_id`) et `samplesheet_params` (`sample`, `fastq_1`, `fastq_2`) dans notre requête de soumission finale.
 
@@ -103,8 +106,8 @@ Interroger pour trouver le projet contenant les échantillons que vous souhaitez
 
 ```graphql
 query getProjects {
-  projects(first: 1){
-    nodes{
+  projects(first: 1) {
+    nodes {
       fullName
       id
       fullPath
@@ -139,21 +142,21 @@ En utilisant le `fullPath` de l'étape précédente, nous interrogerons les info
 
 L'étape 2 nous a informés que pour chaque échantillon nous avons besoin de :
 
-* l'`id` de l'échantillon
-* le `puid` de l'échantillon,
-* les `id` des fichiers (pièce jointe)
+- l'`id` de l'échantillon
+- le `puid` de l'échantillon,
+- les `id` des fichiers (pièce jointe)
 
 Dans cet exemple, nous n'utiliserons qu'1 échantillon.
 
 ```graphql
-query getProjectInfo{
+query getProjectInfo {
   project(fullPath: "borrelia/borrelia-burgdorferi/outbreak-2024") {
-    samples(first:1){
-      nodes{
+    samples(first: 1) {
+      nodes {
         id
         puid
-        attachments{
-          nodes{
+        attachments {
+          nodes {
             filename
             id
           }
@@ -176,35 +179,37 @@ Puisqu'il s'agit d'une mutation, nous incluons également les blocs `workflowExe
 
 ```graphql
 mutation submitWorkflowExecution {
-  submitWorkflowExecution (input:{
-    name:"My Workflow Submission from GraphQL"
-    projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
-    updateSamples: false
-    emailNotification: false
-    workflowName: "phac-nml/iridanextexample"
-    workflowVersion:"1.0.3"
-    workflowParams: {
-      assembler: "stub",
-      random_seed: 1,
-      project_name: "assembly"
-    }
-    samplesWorkflowExecutionsAttributes:[
-      {
-        sample_id:"gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
-        samplesheet_params:{
-          sample: "INXT_SAM_AZCMYRDHEJ",
-          fastq_1:"gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390",
-          fastq_2:"gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
-        }
+  submitWorkflowExecution(
+    input: {
+      name: "Ma soumission de flux de travail depuis GraphQL"
+      projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
+      updateSamples: false
+      emailNotification: false
+      workflowName: "phac-nml/iridanextexample"
+      workflowVersion: "1.0.3"
+      workflowParams: {
+        assembler: "stub"
+        random_seed: 1
+        project_name: "assembly"
       }
-    ]
-  }){
-    workflowExecution{
+      samplesWorkflowExecutionsAttributes: [
+        {
+          sample_id: "gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
+          samplesheet_params: {
+            sample: "INXT_SAM_AZCMYRDHEJ"
+            fastq_1: "gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390"
+            fastq_2: "gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
+          }
+        }
+      ]
+    }
+  ) {
+    workflowExecution {
       name
       state
       id
     }
-    errors{
+    errors {
       message
       path
     }
@@ -219,7 +224,7 @@ Résultat
   "data": {
     "submitWorkflowExecution": {
       "workflowExecution": {
-        "name": "My Workflow Submission from GraphQL",
+        "name": "Ma soumission de flux de travail depuis GraphQL",
         "state": "initial",
         "id": "gid://irida/WorkflowExecution/468dcdb5-cf94-4deb-b0b6-67033f156af4"
       },
