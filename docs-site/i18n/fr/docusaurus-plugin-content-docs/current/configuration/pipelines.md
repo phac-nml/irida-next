@@ -18,14 +18,14 @@ Le fichier de configuration pour enregistrer les pipelines est au format `json` 
 
 Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure les éléments suivants :
 
-- **URL** *(Requis)* du dépôt GitHub du pipeline
-- **name** *(Requis)* du pipeline
-- **description** *(Requise)* du pipeline
-- **versions** *(Requises)* du pipeline qui devraient être disponibles pour le lancement.
-  - `name` : *(Requis)* fait référence au drapeau `-r` utilisé par nextflow.
-  - `automatable` : *(Optionnel)* `true` ou `false` pour spécifier si le pipeline peut être automatisé.
-  - `executable` : *(Optionnel)* `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
-- **overrides** *(Optionnel)* pour le pipeline
+- **URL** _(Requis)_ du dépôt GitHub du pipeline
+- **name** _(Requis)_ du pipeline
+- **description** _(Requise)_ du pipeline
+- **versions** _(Requises)_ du pipeline qui devraient être disponibles pour le lancement.
+  - `name` : _(Requis)_ fait référence au drapeau `-r` utilisé par nextflow.
+  - `automatable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être automatisé.
+  - `executable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
+- **overrides** _(Optionnel)_ pour le pipeline
 
 #### Exemple
 
@@ -34,7 +34,7 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
   {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
-    "description": "IRIDA Next Example Pipeline",
+    "description": "Pipeline d'exemple IRIDA Next",
     "overrides": {
       # VOIR SECTION OVERRIDE CI-DESSOUS
     },
@@ -74,14 +74,14 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 {
     "$schema": "http://example.com/schema",
     "$id": "https://example.com/nextflow_schema.json",
-    "title": "My Example Schema",
-    "description": "Example Schema: for demonstrating overrides",
+    "title": "Mon schéma d'exemple",
+    "description": "Schéma d'exemple : pour démontrer les remplacements",
     "type": "object",
     "definitions": {
         "input_output_options": {
-            "title": "Input/Output Options",
+            "title": "Options d'entrée/sortie",
             "type": "object",
-            "description": "Define which data to use with the pipeline.",
+            "description": "Définir quelles données utiliser avec le pipeline.",
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
@@ -92,25 +92,25 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
                 },
                 "database": {
                   "type": "string",
-                  "description": "Kraken DB",
+                  "description": "Base de données Kraken",
                   "enum": [
                     [
-                      "default_db",
-                      "PATH_TO_DB"
+                      "bd_par_defaut",
+                      "CHEMIN_VERS_BD"
                     ],
                     [
-                      "organization db",
-                      "PATH_TO_ORG_DB"
+                      "bd_organisation",
+                      "CHEMIN_VERS_BD_ORG"
                     ]
                   ]
                 }
             }
         },
-        "more options": {
+        "plus_options": {
           ...
         }
     },
-    "more options": {
+    "plus_options": {
       ...
     }
 }
@@ -123,7 +123,7 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
   {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
-    "description": "IRIDA Next Example Pipeline",
+    "description": "Pipeline d'exemple IRIDA Next",
     "overrides": {
       "definitions": {
         "input_output_options": {
@@ -131,12 +131,12 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
             "database": {
               "enum": [
                 [
-                  "custom_db",
-                  "PATH_TO_CUSTOM_DB"
+                  "bd_personnalisee",
+                  "CHEMIN_VERS_BD_PERSONNALISEE"
                 ],
                 [
-                  "custom_db_2",
-                  "PATH_TO_CUSTOM_DB_2"
+                  "bd_personnalisee_2",
+                  "CHEMIN_VERS_BD_PERSONNALISEE_2"
                 ]
               ]
             }
@@ -158,14 +158,14 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 {
     "$schema": "http://example.com/schema",
     "$id": "https://example.com/nextflow_schema.json",
-    "title": "My Example Schema",
-    "description": "Example Schema: for demonstrating overrides",
+    "title": "Mon schéma d'exemple",
+    "description": "Schéma d'exemple : pour démontrer les remplacements",
     "type": "object",
     "definitions": {
         "input_output_options": {
-            "title": "Input/Output Options",
+            "title": "Options d'entrée/sortie",
             "type": "object",
-            "description": "Define which data to use with the pipeline.",
+            "description": "Définir quelles données utiliser avec le pipeline.",
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
@@ -176,25 +176,25 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
                 },
                 "database": {
                   "type": "string",
-                  "description": "Kraken DB",
+                  "description": "Base de données Kraken",
                   "enum": [
                     [
-                      "custom_db",
-                      "PATH_TO_CUSTOM_DB"
+                      "bd_personnalisee",
+                      "CHEMIN_VERS_BD_PERSONNALISEE"
                     ],
                     [
-                      "custom_db_2",
-                      "PATH_TO_CUSTOM_DB_2"
+                      "bd_personnalisee_2",
+                      "CHEMIN_VERS_BD_PERSONNALISEE_2"
                     ]
                   ]
                 }
             }
         },
-        "more options": {
+        "plus_options": {
           ...
         }
     },
-    "more options": {
+    "plus_options": {
       ...
     }
 }
