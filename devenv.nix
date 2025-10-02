@@ -9,6 +9,9 @@
     coreutils
     nodejs_24
     pnpm_10
+    python313
+    jq
+    file
   ];
 
   # https://devenv.sh/languages/
@@ -25,9 +28,25 @@
     corepack.enable = true;
   };
 
+  languages.python = {
+    enable = true;
+    venv.enable = true;
+    venv.requirements = ''
+      setuptools
+      wheel
+      pip
+    '';
+  };
+
 
   # https://devenv.sh/processes/
   # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
+  processes.sapporo-service = {
+    exec = ''
+      SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh sapporo
+    '';
+    cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
+  };
 
   # https://devenv.sh/services/
   services.postgres = {
@@ -48,6 +67,7 @@
 
   # https://devenv.sh/basics/
   enterShell = ''
+    export GA4GH_WES_URL="http://localhost:1122"
     ruby --version
     gem install ruby-lsp
     bundle
@@ -59,6 +79,17 @@
   #   "myproj:setup".exec = "mytool build";
   #   "devenv:enterShell".after = [ "myproj:setup" ];
   # };
+  tasks."sapporo:setup-data" = {
+    exec = ''
+      [ ! -d 'sapporo-service' ] && git clone https://github.com/phac-nml/sapporo-service.git
+      cd sapporo-service
+      git checkout irida-next
+      git pull
+      python3 -m pip install -e .
+    '';
+    cwd = "${config.git.root}/.devenv";
+    before = [ "devenv:processes:sapporo-service" ];
+  };
 
   # https://devenv.sh/tests/
   enterTest = ''
