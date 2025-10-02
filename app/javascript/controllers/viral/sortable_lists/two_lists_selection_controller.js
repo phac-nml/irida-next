@@ -256,8 +256,7 @@ export default class extends Controller {
 
     // disable submit if no options in selected list
     this.#setSubmitButtonDisableState(
-      this.selectedList.getAttribute("aria-required") === "true" &&
-        this.selectedList.querySelectorAll("li").length === 0,
+      this.selectedList.querySelectorAll("li").length === 0,
     );
   }
 
