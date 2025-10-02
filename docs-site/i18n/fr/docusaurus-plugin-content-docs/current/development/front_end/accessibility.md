@@ -9,4 +9,4 @@ L'accessibilité est importante pour les utilisateurs qui utilisent des lecteurs
 
 ## Essais
 
-Nous utilisons [axe-core](https://github.com/dequelabs/axe-core) pour les tests d'accessibilité dans nos cas de test système. Vous pouvez appeler `assert_accessible` à tout moment, ce qui exécutera `axe-core` et signalera toute erreur d'accessibilité trouvée. Note : Ceci est automatiquement appelé lorsque les helpers `fill_in` ou `visit` sont appelés dans les tests.
+Nous utilisons [axe-core](https://github.com/dequelabs/axe-core) pour les essais d'accessibilité dans nos cas d'essai système. Vous pouvez appeler `assert_accessible` à tout moment, ce qui exécutera `axe-core` et signalera toute erreur d'accessibilité trouvée. Note : Ceci est automatiquement appelé lorsque les helpers `fill_in` ou `visit` sont appelés dans les essais.
