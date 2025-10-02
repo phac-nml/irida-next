@@ -67,7 +67,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     when 'files'
       list_workflow_execution_attachments
     when 'params'
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
                                                              @workflow_execution.metadata['workflow_version'],
                                                              'available')
     when 'samplesheet'
