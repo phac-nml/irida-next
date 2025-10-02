@@ -13,19 +13,19 @@ module Pathogen
   # - IconErrorHandler: Error handling and fallbacks
   #
   # @example Basic icon usage
-  #   = render Pathogen::Icon.new("clipboard-text")
+  #   = render Pathogen::Icon.new(:clipboard_text)
   #   = render Pathogen::Icon.new(:arrow_up)
   #
   # @example With Pathogen styling options
-  #   = render Pathogen::Icon.new("clipboard-text", color: :primary, size: :lg)
-  #   = render Pathogen::Icon.new("heart", color: :danger, size: :sm)
+  #   = render Pathogen::Icon.new(:clipboard_text, color: :primary, size: :lg)
+  #   = render Pathogen::Icon.new(:heart, color: :danger, size: :sm)
   #
   # @example With rails_icons options
-  #   = render Pathogen::Icon.new("heart", variant: :fill, library: :heroicons)
-  #   = render Pathogen::Icon.new("check", class: "w-6 h-6 text-green-500")
+  #   = render Pathogen::Icon.new(:heart, variant: :fill, library: :heroicons)
+  #   = render Pathogen::Icon.new(:check, class: "w-6 h-6 text-green-500")
   #
   # @example With accessibility options
-  #   = render Pathogen::Icon.new("info", "aria-hidden": false, "aria-label": "Information")
+  #   = render Pathogen::Icon.new(:info, "aria-hidden": false, "aria-label": "Information")
   #
   class Icon < Pathogen::Component
     attr_reader :icon_name, :color, :size, :variant, :rails_icons_options

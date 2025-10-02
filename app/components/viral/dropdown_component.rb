@@ -11,7 +11,7 @@ module Viral
   #   - Custom styles and system arguments
   #
   # 📝 Usage:
-  #   <%= render Viral::DropdownComponent.new(label: "Menu", icon: "dots", tooltip: "More actions") do |dropdown| %>
+  #   <%= render Viral::DropdownComponent.new(label: "Menu", icon: :dots, tooltip: "More actions") do |dropdown| %>
   #     <%= dropdown.item ... %>
   #   <% end %>
   #

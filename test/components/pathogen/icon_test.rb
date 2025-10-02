@@ -41,12 +41,12 @@ module Pathogen
     end
 
     test 'passes rails_icons variant option' do
-      icon = Pathogen::Icon.new('heart', variant: :fill)
+      icon = Pathogen::Icon.new(:heart, variant: :fill)
       assert_equal :fill, icon.rails_icons_options[:variant]
     end
 
     test 'passes rails_icons library option' do
-      icon = Pathogen::Icon.new('beaker', library: :heroicons)
+      icon = Pathogen::Icon.new(:beaker, library: :heroicons)
       assert_equal :heroicons, icon.rails_icons_options[:library]
     end
 
@@ -93,7 +93,7 @@ module Pathogen
       # This will depend on rails_icons behavior for invalid icons
       # The component should handle errors gracefully without crashing
       assert_nothing_raised do
-        icon = Pathogen::Icon.new('definitely-not-a-real-icon-name-12345')
+        icon = Pathogen::Icon.new(:definitely_not_a_real_icon_name_12345)
         assert_not_nil icon
       end
     end
