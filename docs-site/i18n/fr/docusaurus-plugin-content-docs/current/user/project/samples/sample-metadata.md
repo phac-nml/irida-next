@@ -60,79 +60,79 @@ L'importation de métadonnées vous permet d'ajouter plusieurs champs de métado
 
 Ceci est un exemple du format de feuille de calcul attendu :
 
-| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 |
-| :---------- | :------------- | :------------- | :------------- |
-| Sample 1    | value1         | value2         | value3         |
-| Sample 2    | value4         | value5         | value6         |
+| nomEchantillon | champMetadonnees1 | champMetadonnees2 | champMetadonnees3 |
+| :------------- | :---------------- | :---------------- | :---------------- |
+| echantillon1   | valeur1           | valeur2           | valeur3           |
+| echantillon2   | valeur4           | valeur5           | valeur6           |
 
 Les métadonnées suivantes seront ajoutées :
 
-- Sample 1 :
+- Échantillon1 :
 
-  | Key            | Value  |
-  | :------------- | :----- |
-  | MetadataField1 | value1 |
-  | MetadataField2 | value2 |
-  | MetadataField3 | value3 |
+  | cle               | valeur  |
+  | :---------------- | :------ |
+  | champMetadonnees1 | valeur1 |
+  | champMetadonnees2 | valeur2 |
+  | champMetadonnees3 | valeur3 |
 
-- Sample 2 :
+- Échantillon2 :
 
-  | Key            | Value  |
-  | :------------- | :----- |
-  | MetadataField1 | value4 |
-  | MetadataField2 | value5 |
-  | MetadataField3 | value6 |
+  | cle               | valeur  |
+  | :---------------- | :------ |
+  | champMetadonnees1 | valeur4 |
+  | champMetadonnees2 | valeur5 |
+  | champMetadonnees3 | valeur6 |
 
 Lors de la création de la feuille de calcul, vous devez avoir une colonne qui contient un identifiant d'échantillon. L'identifiant est sensible à la casse et peut contenir soit les noms d'échantillon, soit les PUID. Lors de l'importation de métadonnées à partir d'un **projet**, l'identifiant d'échantillon peut être soit le **nom de l'échantillon, soit le PUID**. Si vous importez des métadonnées à partir d'un **groupe**, l'identifiant d'échantillon doit être le **PUID de l'échantillon**.
 
 **Une note importante :** Lors de l'importation d'une feuille de calcul de métadonnées, il vous sera demandé si vous souhaitez **Ignorer les valeurs vides**. Si cela est **sélectionné**, tous les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l'échantillon si elles sont présentes. Cependant, si cela n'est **pas sélectionné**, tous les échantillons avec la clé de métadonnées et une valeur vide seront **supprimés**.
 
-Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à Sample 1 et Sample 2, et que la feuille de calcul suivante était ensuite importée :
+Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à Échantillon1 et Échantillon2, et que la feuille de calcul suivante était ensuite importée :
 
-| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 | MetadataField4 |
-| :---------- | :------------- | :------------- | :------------- | :------------- |
-| Sample 1    |                | newValue2      | newValue3      | anotherValue1  |
-| Sample 2    | newValue4      |                | newValue6      | anotherValue2  |
+| nomEchantillon | champMetadonnees1 | champMetadonnees2 | champMetadonnees3 | champMetadonnees4 |
+| :------------- | :---------------- | :---------------- | :---------------- | :---------------- |
+| echantillon1   |                   | nouvelleValeur2   | nouvelleValeur3   | autreValeur1      |
+| echantillon2   | nouvelleValeur4   |                   | nouvelleValeur6   | autreValeur2      |
 
 Cela résulterait en les métadonnées d'échantillon suivantes :
 
 - Si **Ignorer les valeurs vides** était **coché** :
 
-  - Sample 1 :
+  - Échantillon1 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | value1        |
-    | MetadataField2 | newValue2     |
-    | MetadataField3 | newValue3     |
-    | MetadataField4 | anotherValue1 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | valeur1         |
+    | champMetadonnees2 | nouvelleValeur2 |
+    | champMetadonnees3 | nouvelleValeur3 |
+    | champMetadonnees4 | autreValeur1    |
 
-  - Sample 2 :
+  - Échantillon2 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | newValue4     |
-    | MetadataField2 | value5        |
-    | MetadataField3 | newValue6     |
-    | MetadataField4 | anotherValue2 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | nouvelleValeur4 |
+    | champMetadonnees2 | valeur5         |
+    | champMetadonnees3 | nouvelleValeur6 |
+    | champMetadonnees4 | autreValeur2    |
 
 - Si **Ignorer les valeurs vides** n'était **pas coché** :
 
-  - Sample 1 :
+  - Échantillon1 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField2 | newValue2     |
-    | MetadataField3 | newValue3     |
-    | MetadataField4 | anotherValue1 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees2 | nouvelleValeur2 |
+    | champMetadonnees3 | nouvelleValeur3 |
+    | champMetadonnees4 | autreValeur1    |
 
-  - Sample 2 :
+  - Échantillon2 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | newValue4     |
-    | MetadataField3 | newValue6     |
-    | MetadataField4 | anotherValue2 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | nouvelleValeur4 |
+    | champMetadonnees3 | nouvelleValeur6 |
+    | champMetadonnees4 | autreValeur2    |
 
 ## Étapes pour importer des métadonnées
 
