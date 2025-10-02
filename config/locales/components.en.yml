@@ -187,7 +187,6 @@ en:
     flash:
       error_message: Error
       information_message: Information
-      message: Message
       success_message: Success
       warning_message: Warning
     groups_dashboard:
