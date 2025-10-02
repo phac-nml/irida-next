@@ -24,14 +24,14 @@ module Projects
       authorize! @namespace, to: :create_automated_workflow_executions?
 
       @workflow = if params[:workflow_name].present? && params[:workflow_version].present?
-                    Irida::Pipelines.instance.find_pipeline_by(params[:workflow_name], params[:workflow_version],
+                    Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id], params[:workflow_version],
                                                                'automatable')
                   end
     end
 
     def edit # rubocop:disable Metrics/MethodLength
       authorize! @namespace, to: :update_automated_workflow_executions?
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['pipeline_id'],
                                                              @automated_workflow_execution.metadata['workflow_version'],
                                                              'available')
 
