@@ -12,6 +12,7 @@
     coreutils
     sssd
     postgresql_14
+    nextflow
     nodejs_24
     pnpm_10
     python313
@@ -43,12 +44,13 @@
     '';
   };
 
+  process.manager.implementation = "overmind";
 
   # https://devenv.sh/processes/
   # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
   processes.sapporo-service = {
     exec = ''
-      SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh sapporo
+      SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh sapporo
     '';
     cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
   };
@@ -87,8 +89,10 @@
     exec = ''
       [ ! -d 'sapporo-service' ] && git clone https://github.com/phac-nml/sapporo-service.git
       cd sapporo-service
+      git checkout main
+      git branch -D irida-next
+      git fetch --all
       git checkout irida-next
-      git pull
       python3 -m pip install -e .
     '';
     cwd = "${config.git.root}/.devenv";

@@ -81,5 +81,6 @@
     "sendfile",
     "tailwindcss"
   ],
-  "rubyLsp.customRubyCommand": "bash"
+  "rubyLsp.customRubyCommand": "bash",
+  "git.autoRepositoryDetection": false
 }
