@@ -1,15 +1,15 @@
 ---
 sidebar_position: 1
 id: intro
-title: Intro
+title: Introduction
 hide_table_of_contents: true
 ---
 
-IRIDA Next Docs
-===============
+Documentation IRIDA Next
+========================
 
-Welcome to the IRIDA Next documentation.
+Bienvenue dans la documentation d'IRIDA Next.
 
 |                         |                         |
 |:------------------------|:------------------------|
-| [**Use IRIDA Next**](user)<br />Get started with IRIDA Next features and functionality. | **Administer IRIDA Next**<br />Administer a self-managed IRIDA Next instance. |
+| [**Utiliser IRIDA Next**](user)<br />Commencez avec les fonctionnalités d'IRIDA Next. | **Administrer IRIDA Next**<br />Administrez une instance autogérée d'IRIDA Next. |

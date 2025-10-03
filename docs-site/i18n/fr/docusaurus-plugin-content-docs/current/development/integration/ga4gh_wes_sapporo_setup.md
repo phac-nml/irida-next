@@ -1,50 +1,50 @@
 ---
 sidebar_position: 1
 id: ga4gh_wes_sapporo_setup
-title: GA4GH WES Sapporo Setup
+title: Configuration de GA4GH WES Sapporo
 ---
 
-## Prerequisites
+## Prérequis
 
-You will need to have [Docker Compose plugin](https://docs.docker.com/compose/install/linux/) installed for managing Sapporo
+Vous devrez avoir le [plugin Docker Compose](https://docs.docker.com/compose/install/linux/) installé pour gérer Sapporo
 
 ```bash
-# Instructions for installing Docker Compose plugin on Ubuntu
+# Instructions pour installer le plugin Docker Compose sur Ubuntu
 sudo apt-get update
 sudo apt-get install docker-compose-plugin
-# Verify installation
+# Vérifier l'installation
 docker compose version
-# expected result
+# résultat attendu
 > Docker Compose version vN.N.N
-# You should have version v2.26.1 or newer
+# Vous devriez avoir la version v2.26.1 ou plus récente
 ```
 
-You will need to add yourself to the docker group to be able to run docker commands
+Vous devrez vous ajouter au groupe docker pour pouvoir exécuter les commandes docker
 
 ```bash
-# create the docker group if it does not exist
+# créer le groupe docker s'il n'existe pas
 sudo groupadd docker
-# add yourself to the docker group
+# vous ajouter au groupe docker
 sudo usermod -aG docker $USER
-# reboot, log out/log in, or run the following command
+# redémarrer, se déconnecter/se connecter, ou exécuter la commande suivante
 newgrp docker
-# If you still have issues with running docker, you may need to change the permissions of the docker socket using the following command
+# Si vous avez toujours des problèmes pour exécuter docker, vous devrez peut-être modifier les permissions du socket docker en utilisant la commande suivante
 sudo chmod 666 /var/run/docker.sock
 ```
 
-## How to set up a Sapporo GA4GH WES instance for development
+## Comment configurer une instance Sapporo GA4GH WES pour le développement
 
-Note: This should only be used for development purposes, use a production WSGI server for production environments.
+Note : Ceci ne devrait être utilisé qu'à des fins de développement, utilisez un serveur WSGI de production pour les environnements de production.
 
-### Configure IRIDA Next
+### Configurer IRIDA Next
 
-Check that your active storage service is set to `:local` in `config/environments/development.rb`. This is the default configuration.
+Vérifiez que votre service de stockage actif est défini sur `:local` dans `config/environments/development.rb`. C'est la configuration par défaut.
 
 ```ruby
 config.active_storage.service = :local
 ```
 
-Configure environment developer credentials
+Configurer les informations d'identification de l'environnement de développement
 
 ```bash
 EDITOR="vim --nofork" bin/rails credentials:edit --environment development
@@ -55,34 +55,34 @@ ga4gh_wes:
   server_url_endpoint: 'http://localhost:1122/'
 ```
 
-### Setup Sapporo (WES implementation)
+### Configuration de Sapporo (implémentation WES)
 
-Download and run the [PHAC-NML Sapporo](https://github.com/phac-nml/sapporo-service) fork in dev docker mode.
+Téléchargez et exécutez le fork [PHAC-NML Sapporo](https://github.com/phac-nml/sapporo-service) en mode docker de développement.
 
-Note: If your docker group permissions are setup correctly you should not have to use `sudo` when running any of these commands.
+Note : Si vos permissions de groupe docker sont configurées correctement, vous ne devriez pas avoir à utiliser `sudo` lors de l'exécution de ces commandes.
 
 ```bash
-# Go to wherever you store your git repos
-cd ~/path/to/git/repos
-# Clone and checkout the irida-next branch
+# Allez où vous stockez vos dépôts git
+cd ~/chemin/vers/dépôts/git
+# Cloner et extraire la branche irida-next
 git clone git@github.com:phac-nml/sapporo-service.git
 cd sapporo-service
-# This branch has a custom docker compose script for irida next
+# Cette branche a un script docker compose personnalisé pour irida next
 git checkout irida-next
-# Replace /PATH/TO/IRIDA/NEXT/REPO with your irida next repo path.
-# This allows the docker container read/write access to the repo
-# This is needed for it to read the input files, and write the output files back to the blob directories
-IRIDA_NEXT_PATH=/PATH/TO/IRIDA/NEXT/REPO docker compose -f compose.irida-next.yml up -d --build
-IRIDA_NEXT_PATH=/PATH/TO/IRIDA/NEXT/REPO docker compose -f compose.irida-next.yml exec app bash
-# Within docker container, start sapporo
+# Remplacez /CHEMIN/VERS/DÉPÔT/IRIDA/NEXT par votre chemin de dépôt irida next.
+# Cela permet au conteneur docker un accès en lecture/écriture au dépôt
+# Ceci est nécessaire pour qu'il puisse lire les fichiers d'entrée et écrire les fichiers de sortie dans les répertoires blob
+IRIDA_NEXT_PATH=/CHEMIN/VERS/DÉPÔT/IRIDA/NEXT docker compose -f compose.irida-next.yml up -d --build
+IRIDA_NEXT_PATH=/CHEMIN/VERS/DÉPÔT/IRIDA/NEXT docker compose -f compose.irida-next.yml exec app bash
+# Dans le conteneur docker, démarrer sapporo
 sapporo
 ```
 
-In a new terminal confirm sapporo is running
+Dans un nouveau terminal, confirmez que sapporo fonctionne
 
 ```bash
-# This should output all the service information for this ga4gh wes instance
+# Cela devrait afficher toutes les informations de service pour cette instance ga4gh wes
 curl -X GET http://localhost:1122/service-info
 ```
 
-You should now be able to start IRIDA Next and run workflows with full GA4GH WES integration
+Vous devriez maintenant pouvoir démarrer IRIDA Next et exécuter des flux de travail avec une intégration complète de GA4GH WES

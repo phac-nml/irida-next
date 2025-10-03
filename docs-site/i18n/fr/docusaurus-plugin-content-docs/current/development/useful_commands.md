@@ -1,37 +1,37 @@
 ---
 sidebar_position: 3
 id: useful_commands
-title: Useful Commands for Development
+title: Commandes utiles pour le développement
 ---
 
-### Drop, rebuild and seed db
+### Supprimer, reconstruire et peupler la bd
 
 ``` bash
 bin/rails db:drop db:create db:migrate db:seed
 ```
 
-### Create new credentials
+### Créer de nouvelles informations d'identification
 
 ``` bash
 rm config/credentials.yml.enc
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
-### Additional process to have UI changes updated as they are changed
+### Processus additionnel pour que les changements d'interface utilisateur soient mis à jour au fur et à mesure qu'ils sont modifiés
 
-When running the server with `bin/rails s` instead of `bin/dev`, like when attaching the debugger in VSCode, the tailwind process can be run separately.
+Lors de l'exécution du serveur avec `bin/rails s` au lieu de `bin/dev`, comme lors de l'attachement du débogueur dans VSCode, le processus tailwind peut être exécuté séparément.
 
 ``` bash
 bin/rails tailwindcss:watch
 ```
 
-### Build graphql schema
+### Construire le schéma graphql
 
 ``` bash
 bin/rails graphql:dump_schema
 ```
 
-### Build and run docs
+### Construire et exécuter la documentation
 
 ```bash
 cd docs-site
@@ -40,11 +40,11 @@ pnpm build
 npm run serve
 ```
 
-### Output logs during rake tasks
+### Sortir les journaux pendant les tâches rake
 
-Rake tasks can be prepended with `info`, `debug`, or `verbose` to output the appropriate level of logging
+Les tâches rake peuvent être précédées de `info`, `debug` ou `verbose` pour sortir le niveau de journalisation approprié
 
 ```bash
-# Example
+# Exemple
 rake debug db:seed
 ```

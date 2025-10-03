@@ -1,131 +1,135 @@
 ---
 sidebar_position: 1
 id: code_review
-title: Code Review Guidelines
+title: Directives de révision de code
 ---
 
-This guide contains advice and best practices for performing code review, and having your code reviewed.
+Ce guide contient des conseils et des meilleures pratiques pour effectuer une révision de code et pour faire réviser votre code.
 
-All merge requests for IRIDA Next, whether written by a IRIDA team member or a wider community member, must go through a code review process to ensure the code is effective, understandable, maintainable, and secure.
+Toutes les demandes de fusion pour IRIDA Next, qu'elles soient écrites par un membre de l'équipe IRIDA ou par un membre de la communauté élargie, doivent passer par un processus de révision de code pour garantir que le code est efficace, compréhensible, maintenable et sécurisé.
 
-## Getting your pull request reviewed, approved, and merged
+## Faire réviser, approuver et fusionner votre pull request
 
-Before you begin:
-* Familiarize yourself with the [contribution acceptance criteria](./pull_request_workflow#contribution-acceptance-criteria)
+Avant de commencer :
 
-As soon as you have code to review, have the code **reviewed** by a reviewer. The reviewer can:
-* Give you a second opinion on the chosen solution and implementation.
-* Help look for bugs, logic problems, or uncovered edge cases.
+- Familiarisez-vous avec les [critères d'acceptation de contribution](./pull_request_workflow#contribution-acceptance-criteria)
 
-Getting your pull request **merged** also requires a maintainer. If it requires more than one approval, the last maintainer to review and approve merges it.
+Dès que vous avez du code à réviser, faites **réviser** le code par un réviseur. Le réviseur peut :
 
-### Acceptance checklist
+- Vous donner un deuxième avis sur la solution et l'implémentation choisies.
+- Aider à chercher des bogues, des problèmes de logique ou des cas limites non couverts.
 
-This checklist encourages the authors, reviewers, and maintainers of pull requests (MRs) to confirm changes were analyzed for high-impact risks to quality, performance, reliability, security, observability, and maintainability.
+Faire **fusionner** votre pull request nécessite également un mainteneur. S'il nécessite plus d'une approbation, le dernier mainteneur à réviser et approuver le fusionne.
 
-Using checklists improves quality in software engineering. This checklist is a straightforward tool to support and bolster the skills of contributors to the IRIDA Next codebase.
+### Liste de vérification d'acceptation
 
-#### Quality
+Cette liste de vérification encourage les auteurs, les réviseurs et les mainteneurs des pull requests (PR) à confirmer que les changements ont été analysés pour les risques à fort impact sur la qualité, les performances, la fiabilité, la sécurité, l'observabilité et la maintenabilité.
 
-1. You have self-reviewed this PR per [code review guidelines](./code_review).
-1. For the code that this change impacts, you believe that the automated tests validate functionality that is highly important to users.
-1. If the existing automated tests do not cover the above functionality, you have added the necessary tests or added an issue to describe the automation testing gap and linked it to this PR.
-1. You have considered the technical aspects of this change's impact on IRIDA Next.
-1. You have considered the impact of this change on the frontend, backend, and database portions of the system where appropriate and applied the `~ux`, `~frontend`, `~backend`, and `~database` labels accordingly.
+L'utilisation de listes de vérification améliore la qualité en génie logiciel. Cette liste de vérification est un outil simple pour soutenir et renforcer les compétences des contributeurs à la base de code d'IRIDA Next.
 
-#### Performance, reliability, and availability
+#### Qualité
 
-1. You are confident that this PR does not harm performance, or you have asked a reviewer to help assess the performance impact.
-1. You have added information for database reviewers in the PR description, or you have decided that it is unnecessary.
-1. You have considered the scalability risk based on future predicted growth.
+1. Vous avez effectué une auto-révision de cette PR selon les [directives de révision de code](./code_review).
+1. Pour le code que ce changement impacte, vous croyez que les essais automatisés valident les fonctionnalités qui sont très importantes pour les utilisateurs.
+1. Si les essais automatisés existants ne couvrent pas la fonctionnalité ci-dessus, vous avez ajouté les essais nécessaires ou ajouté un problème pour décrire l'écart d'essai d'automatisation et l'avez lié à cette PR.
+1. Vous avez considéré les aspects techniques de l'impact de ce changement sur IRIDA Next.
+1. Vous avez considéré l'impact de ce changement sur le frontend, le backend et les portions de base de données du système le cas échéant et avez appliqué les étiquettes `~ux`, `~frontend`, `~backend` et `~database` en conséquence.
+
+#### Performance, fiabilité et disponibilité
+
+1. Vous êtes confiant que cette PR ne nuit pas aux performances, ou vous avez demandé à un réviseur d'aider à évaluer l'impact sur les performances.
+1. Vous avez ajouté des informations pour les réviseurs de base de données dans la description de la PR, ou vous avez décidé que c'était inutile.
+1. Vous avez considéré le risque de scalabilité basé sur la croissance future prévue.
 
 #### Documentation
 
-1. You have added/updated documentation or decided that documentation changes are unnecessary for this PR.
+1. Vous avez ajouté/mis à jour la documentation ou décidé que les changements de documentation ne sont pas nécessaires pour cette PR.
 
-#### Security
+#### Sécurité
 
-1. You have confirmed that if this PR contains a change to processing or storing credentials or tokens, authorization and authentication methods, you have added the `~security` label.
+1. Vous avez confirmé que si cette PR contient un changement au traitement ou au stockage d'informations d'identification ou de jetons, aux méthodes d'autorisation et d'authentification, vous avez ajouté l'étiquette `~security`.
 
-## Best practices
+## Meilleures pratiques
 
-### Everyone
+### Tout le monde
 
-* Be kind.
-* Accept that many programming decisions are opinions. Discuss tradeoffs, which you prefer, and reach a resolution quickly.
-* Ask questions; don't make demands. ("What do you think about naming this `:sample_id`?")
-* Ask for clarification. ("I didn't understand. Can you clarify?")
-* Avoid selective ownership of code. ("mine", "not mine", "yours")
-* Avoid using terms that could be seen as referring to personal traits. ("dumb", "stupid"). Assume everyone is intelligent and well-meaning.
-* Be explicit. Remember people don't always understand your intentions online.
-* Be humble. ("I'm not sure - let's look it up.")
-* Don't use hyperbole. ("always", "never", "endlessly", "nothing")
-* Be careful about the use of sarcasm. Everything we do is public; what seems like good-natured ribbing to you and a long-time colleague might come off as mean and unwelcoming to a person new to the project.
-* Consider one-on-one chats or video calls if there are too many "I didn't understand" or "Alternative solution:" comments. Post a follow-up comment summarizing one-on-one discussion.
-* If you ask a question to a specific person, always start the comment by mentioning them.
+- Soyez gentil.
+- Acceptez que de nombreuses décisions de programmation sont des opinions. Discutez des compromis, celui que vous préférez, et parvenez rapidement à une résolution.
+- Posez des questions ; ne faites pas de demandes. (« Que penses-tu de nommer ceci `:sample_id` ? »)
+- Demandez des éclaircissements. (« Je n'ai pas compris. Peux-tu clarifier ? »)
+- Évitez la propriété sélective du code. (« le mien », « pas le mien », « le tien »)
+- Évitez d'utiliser des termes qui pourraient être perçus comme faisant référence à des traits personnels. (« stupide », « idiot »). Supposez que tout le monde est intelligent et bien intentionné.
+- Soyez explicite. Rappelez-vous que les gens ne comprennent pas toujours vos intentions en ligne.
+- Soyez humble. (« Je ne suis pas sûr - vérifions. »)
+- N'utilisez pas d'hyperbole. (« toujours », « jamais », « sans fin », « rien »)
+- Soyez prudent avec l'utilisation du sarcasme. Tout ce que nous faisons est public ; ce qui semble être une taquinerie de bonne nature pour vous et un collègue de longue date pourrait sembler méchant et non accueillant pour une personne nouvelle au projet.
+- Envisagez des discussions individuelles ou des appels vidéo s'il y a trop de commentaires « Je n'ai pas compris » ou « Solution alternative : ». Publiez un commentaire de suivi résumant la discussion individuelle.
+- Si vous posez une question à une personne spécifique, commencez toujours le commentaire en la mentionnant.
 
-### Having your pull request reviewed
+### Faire réviser votre pull request
 
-Please keep in mind that code review is a process that can take multiple iterations, and reviewers may spot things later that they may not have seen the first time.
+Veuillez garder à l'esprit que la révision de code est un processus qui peut prendre plusieurs itérations, et les réviseurs peuvent repérer des choses plus tard qu'ils n'ont peut-être pas vues la première fois.
 
-* The first reviewer of your code is *you*. Before you perform that first push of your shiny new branch, read through the entire diff. Does it make sense? Did you include something unrelated to the overall purpose of the changes? Did you forget to remove any debugging code?
-* Write a detailed description as outlined in the [pull request guidelines](./pull_request_workflow). Some reviewers may not be familiar with the feature or area of the codebase. Thorough descriptions help all reviewers understand your request and test effectively.
-* If you know your change depends on another being merge first, note it in the description and set a dependency.
-* Be grateful for reviewer's suggestions. ("Good call. I'll make that change.")
-* Don't take it personally. The review is of the code, not of you.
-* Explain why the code exists. ("It's like that because of these reasons. Would it be more clear if I rename this class/file/method/variable?")
-* Extract unrelated changes and refactorings into future merge requests/issues.
-* Seek to understand the reviewer's perspective.
-* Try to respond to every comment.
-* The merge request author resolves only the threads they have fully addressed. If there's an open reply, an open thread, a suggestion, a question, or anything else, the thread should be left to be resolved by the reviewer.
-* It should not be assumed that all feedback requires their recommended changes to be incorporated into the PR before it is merged. It is a judgement call by the PR author and the reviewer as to if this is required, or if a follow-up issue should be created to address the feedback in the future after the PR in question is merged.
-* Push commits based on earlier rounds of feedback as isolated commits to the branch. Do not squash until the branch is ready to merge. Reviewers should be able to read individual updates based on their earlier feedback.
-* Request a new review from the reviewer once you are ready for another round of review.
+- Le premier réviseur de votre code, c'est _vous_. Avant d'effectuer cette première poussée de votre nouvelle branche brillante, lisez l'intégralité du diff. Est-ce que cela a du sens ? Avez-vous inclus quelque chose de non lié à l'objectif global des changements ? Avez-vous oublié de supprimer du code de débogage ?
+- Rédigez une description détaillée comme indiqué dans les [directives de pull request](./pull_request_workflow). Certains réviseurs peuvent ne pas être familiers avec la fonctionnalité ou la zone de la base de code. Des descriptions approfondies aident tous les réviseurs à comprendre votre demande et à tester efficacement.
+- Si vous savez que votre changement dépend d'une autre fusion en premier, notez-le dans la description et définissez une dépendance.
+- Soyez reconnaissant pour les suggestions du réviseur. (« Bon point. Je vais faire ce changement. »)
+- Ne le prenez pas personnellement. La révision porte sur le code, pas sur vous.
+- Expliquez pourquoi le code existe. (« C'est comme ça à cause de ces raisons. Serait-il plus clair si je renomme cette classe/fichier/méthode/variable ? »)
+- Extrayez les changements non liés et les refactorisations dans de futures demandes de fusion/problèmes.
+- Cherchez à comprendre la perspective du réviseur.
+- Essayez de répondre à chaque commentaire.
+- L'auteur de la demande de fusion ne résout que les fils qu'il a entièrement traités. S'il y a une réponse ouverte, un fil ouvert, une suggestion, une question ou quoi que ce soit d'autre, le fil doit être laissé pour être résolu par le réviseur.
+- Il ne faut pas supposer que tous les commentaires nécessitent que leurs changements recommandés soient incorporés dans la PR avant qu'elle ne soit fusionnée. C'est un jugement de l'auteur de la PR et du réviseur pour savoir si cela est nécessaire, ou si un problème de suivi devrait être créé pour traiter les commentaires à l'avenir après la fusion de la PR en question.
+- Poussez les commits basés sur des tours de commentaires antérieurs comme des commits isolés vers la branche. Ne squashez pas jusqu'à ce que la branche soit prête à fusionner. Les réviseurs doivent pouvoir lire les mises à jour individuelles basées sur leurs commentaires antérieurs.
+- Demandez une nouvelle révision au réviseur une fois que vous êtes prêt pour un autre tour de révision.
 
-### Requesting a review
+### Demander une révision
 
-When you are ready to have your pull request reviewed, you should request an initial review by selecting a reviewer based on the approval guidelines.
+Lorsque vous êtes prêt à faire réviser votre pull request, vous devez demander une révision initiale en sélectionnant un réviseur basé sur les directives d'approbation.
 
-When a pull request has multiple areas for review, it is recommended that you specify which area a reviewer should be reviewing, and a which stage (first or second). This will help team members who qualify as reviewers for multiple areas to know which area they're being requested to review. For example a pull request has both `backend` and `frontend` concerns, you can mention the review in this manner: `@john_doe can you please review ~backend` or `@jane_doe could you please give this PR a ~frontend review?`
+Lorsqu'une pull request a plusieurs domaines à réviser, il est recommandé de spécifier quel domaine un réviseur devrait réviser, et à quel stade (premier ou deuxième). Cela aidera les membres de l'équipe qui sont qualifiés comme réviseurs pour plusieurs domaines à savoir quel domaine ils sont invités à réviser. Par exemple, une pull request a des préoccupations à la fois `backend` et `frontend`, vous pouvez mentionner la révision de cette manière : `@john_doe peux-tu s'il te plaît réviser ~backend` ou `@jane_doe pourrais-tu s'il te plaît donner à cette PR une révision ~frontend ?`
 
-You can also use `ready for review` label. That means that your pull request is ready to be reviewed and any reviewer can pick it. It is recommended to use that label only if there isn’t time pressure and make sure the pull request is assigned to a reviewer.
+Vous pouvez également utiliser l'étiquette `ready for review`. Cela signifie que votre pull request est prête à être révisée et que n'importe quel réviseur peut la prendre. Il est recommandé de n'utiliser cette étiquette que s'il n'y a pas de pression temporelle et de s'assurer que la pull request est assignée à un réviseur.
 
-It is the responsiblity of the author for the merge request to be reviewed. If it stays in the `ready for review` state too long it is recommended to request a review from a specific reviewer.
+Il est de la responsabilité de l'auteur de la demande de fusion d'être révisée. Si elle reste dans l'état `ready for review` trop longtemps, il est recommandé de demander une révision à un réviseur spécifique.
 
-### Volunteering to review
+### Se porter volontaire pour réviser
 
-IRIDA Next engineers who have the capacity can regularly check the list of [pull requests to review](https://github.com/phac-nml/irida-next/pulls?q=is%3Apr+is%3Aopen+label%3A%22ready+for+review%22+) and add themselves as a reviewer for any pull request they want to review.
+Les ingénieurs d'IRIDA Next qui ont la capacité peuvent régulièrement vérifier la liste des [pull requests à réviser](https://github.com/phac-nml/irida-next/pulls?q=is%3Apr+is%3Aopen+label%3A%22ready+for+review%22+) et s'ajouter comme réviseur pour toute pull request qu'ils souhaitent réviser.
 
-### Reviewing a pull request
+### Réviser une pull request
 
-Understand why the change is necessary (fixes a bug, improves the user experience, refactors the existing code). Then:
-* Try to be thorough in your reviews to reduce the number of iterations.
-* Communicate which ideas you feel strongly about and those that you don't.
-* Identify ways to simplify the code while still solving the problem.
-* Offer alternative implementations, but assume the author already considered them. ("What do you think about using a custom validator here?")
-* Seek to understand the authors perspective.
-* Check out the branch, and test the changes locally. You can decide how much manual testing you want to perform. Your testing might result in opportunities to add automated tests.
-* If you don't understand a piece of code, *say so*. There's a good chance someone else would be confused by it as well.
-* Ensure the author is clear on what is required from them to address/resolve the suggestion.
-  * Consider using the [Conventional Comment format](https://conventionalcomments.org/#format) to convey your intent.
-  * For non-mandatory suggestions, decorate with (non-blocking) so the author knows they can optionally resolve within the pull request or follow-up at a later stage.
-  * There's a [Chrome](https://chrome.google.com/webstore/detail/conventional-comments/pagggmojbbphjnpcjeeniigdkglamffk) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/conventional-comments/) add-on which you can use to apply [Conventional Comment](https://conventionalcomments.org) prefixes.
-* Ensure there are not open dependencies.
-* After a round of line notes, it can helpful to post a summary note such as "Looks good to me", or "Just a couple things to address."
-* Let the author know if changes are required following your review.
+Comprenez pourquoi le changement est nécessaire (corrige un bogue, améliore l'expérience utilisateur, refactorise le code existant). Ensuite :
 
-### Merging a pull request
+- Essayez d'être minutieux dans vos révisions pour réduire le nombre d'itérations.
+- Communiquez les idées pour lesquelles vous avez des convictions fortes et celles pour lesquelles vous n'en avez pas.
+- Identifiez des moyens de simplifier le code tout en résolvant le problème.
+- Offrez des implémentations alternatives, mais supposez que l'auteur les a déjà envisagées. (« Que penses-tu d'utiliser un validateur personnalisé ici ? »)
+- Cherchez à comprendre la perspective de l'auteur.
+- Récupérez la branche et testez les changements localement. Vous pouvez décider de l'étendue des essais manuels que vous souhaitez effectuer. Vos essais pourraient entraîner des opportunités d'ajouter des essais automatisés.
+- Si vous ne comprenez pas un morceau de code, _dites-le_. Il y a de bonnes chances que quelqu'un d'autre soit également confus.
+- Assurez-vous que l'auteur comprend clairement ce qui est requis de sa part pour traiter/résoudre la suggestion.
+  - Envisagez d'utiliser le [format Conventional Comment](https://conventionalcomments.org/#format) pour transmettre votre intention.
+  - Pour les suggestions non obligatoires, décorez avec (non-bloquant) afin que l'auteur sache qu'il peut éventuellement résoudre dans la pull request ou faire un suivi ultérieurement.
+  - Il existe un [module complémentaire Chrome](https://chrome.google.com/webstore/detail/conventional-comments/pagggmojbbphjnpcjeeniigdkglamffk) et [Firefox](https://addons.mozilla.org/en-US/firefox/addon/conventional-comments/) que vous pouvez utiliser pour appliquer les préfixes [Conventional Comment](https://conventionalcomments.org).
+- Assurez-vous qu'il n'y a pas de dépendances ouvertes.
+- Après un tour de notes de ligne, il peut être utile de publier une note récapitulative telle que « Ça me semble bon » ou « Juste quelques choses à traiter ».
+- Faites savoir à l'auteur si des changements sont requis suite à votre révision.
 
-Before taking the decision to merge:
-* Confirm that the correct PR type label is applied.
-* Consider warnings and errors from code quality, and other reports. Unless a strong case can be made for the violation, these should be resolved before merging. A comment must be posted if the PR is merged with any failed job.
+### Fusionner une pull request
 
-At least one maintainer must approve a PR before it can be merged. PR authors and people who add commits to a PR are not authorized to approve or merge the PR and must seek a maintainer who has not contributed to the PR to approve and merge it.
+Avant de prendre la décision de fusionner :
 
-When ready to merge:
-* Consider using the Squash and merge feature when the pull request has a lot of commits. When merging code, a maintainer should only use the squash feature if the author has already set this option, or if the merge request clearly contains a messy commit history, it will be more efficient to squash commits instead of circling back with the author about that. Otherwise if the PR only has a few commits, we'll be respecting the author's setting by not squashing them.
+- Confirmez que l'étiquette de type de PR correcte est appliquée.
+- Tenez compte des avertissements et des erreurs des rapports de qualité du code et autres. À moins qu'un argument solide puisse être avancé pour la violation, ceux-ci doivent être résolus avant la fusion. Un commentaire doit être publié si la PR est fusionnée avec un travail échoué.
 
+Au moins un mainteneur doit approuver une PR avant qu'elle puisse être fusionnée. Les auteurs de PR et les personnes qui ajoutent des commits à une PR ne sont pas autorisés à approuver ou fusionner la PR et doivent rechercher un mainteneur qui n'a pas contribué à la PR pour l'approuver et la fusionner.
 
-## Credits
+Lorsque prêt à fusionner :
 
-Largely based on the [`gitlab` code review guide](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/code_review.md), which was largely based on the [`thoughtbot` code review guide](https://github.com/thoughtbot/guides/tree/master/code-review).
+- Envisagez d'utiliser la fonctionnalité Squash and merge lorsque la pull request a beaucoup de commits. Lors de la fusion du code, un mainteneur ne devrait utiliser la fonctionnalité de squash que si l'auteur a déjà défini cette option, ou si la demande de fusion contient clairement un historique de commits désordonné, il sera plus efficace de squasher les commits au lieu de revenir vers l'auteur à ce sujet. Sinon, si la PR n'a que quelques commits, nous respecterons le paramètre de l'auteur en ne les squashant pas.
+
+## Crédits
+
+Largement basé sur le [guide de révision de code de `gitlab`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/code_review.md), qui était largement basé sur le [guide de révision de code de `thoughtbot`](https://github.com/thoughtbot/guides/tree/master/code-review).

@@ -1,25 +1,25 @@
 ---
 sidebar_position: 1
 id: reserved-names
-title: Reserved project names
+title: Noms de projet réservés
 ---
 
-Not all project names are allowed because they would conflict with existing routes used by IRIDA Next.
+Tous les noms de projet ne sont pas autorisés car ils entreraient en conflit avec les routes existantes utilisées par IRIDA Next.
 
-For a list of words that are not allowed to be used as project names, see the `path_regex.rb` file under the `TOP_LEVEL_ROUTES`, and `WILDCARD_ROUTES` lists:
-* `TOP_LEVEL_ROUTES`: are names that are reserved as usernames or top level groups.
-* `WILDCARD_ROUTES`: are names that are reserved for child groups or projects.
+Pour une liste de mots qui ne sont pas autorisés à être utilisés comme noms de projet, consultez le fichier `path_regex.rb` sous les listes `TOP_LEVEL_ROUTES` et `WILDCARD_ROUTES` :
+* `TOP_LEVEL_ROUTES` : sont des noms qui sont réservés comme noms d'utilisateur ou groupes de niveau supérieur.
+* `WILDCARD_ROUTES` : sont des noms qui sont réservés pour les groupes enfants ou les projets.
 
-## Limitations on project names
+## Limitations sur les noms de projet
 
-* Project names must start with a letter, digit, emoji, or "_".
-* Project names can only contain letters, digits, emojis, "_", ".", dashes, or spaces.
-* Project slugs must start with a letter or digit.
-* Project slugs can only contain letters, digits, ‘_’, ‘.’, ‘+’, or dashes.
-* Project slugs must not contain consecutive special characters.
-* Project slugs cannot end with a special character.
+* Les noms de projet doivent commencer par une lettre, un chiffre, un emoji ou "_".
+* Les noms de projet ne peuvent contenir que des lettres, des chiffres, des emojis, "_", ".", des tirets ou des espaces.
+* Les slugs de projet doivent commencer par une lettre ou un chiffre.
+* Les slugs de projet ne peuvent contenir que des lettres, des chiffres, '_', '.', '+' ou des tirets.
+* Les slugs de projet ne doivent pas contenir de caractères spéciaux consécutifs.
+* Les slugs de projet ne peuvent pas se terminer par un caractère spécial.
 
-## Reserved project names
+## Noms de projet réservés
 
-It is not possible to create a project with the following names:
+Il n'est pas possible de créer un projet avec les noms suivants :
 * `\-`

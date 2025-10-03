@@ -1,58 +1,58 @@
 ---
 sidebar_position: 1
 id: getting-started
-title: Getting Started
+title: Mise en route
 ---
 
-In IRIDA Next, analysis of samples is performed using workflow execution pipelines.
+Dans IRIDA Next, l'analyse des échantillons est effectuée à l'aide de pipelines d'exécution de flux de travail.
 
-## Workflow Execution Types
+## Types d'exécution de flux de travail
 
-There are two types of workflow executions in IRIDA Next:
+Il existe deux types d'exécutions de flux de travail dans IRIDA Next :
 
-| Workflow Execution Type | Description                                                                                                                     |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
-| User                    | Allows users to select any number of samples belonging to either a group or project and perform an analysis on them.            |
-| Automated               | Automated workflow executions belong to projects and once set-up, an analysis is performed on all newly uploaded paired-end files within that project |
+| Type d'exécution de flux de travail | Description                                                                                                                     |
+| :----------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| Utilisateur                          | Permet aux utilisateurs de sélectionner un nombre quelconque d'échantillons appartenant à un groupe ou à un projet et d'effectuer une analyse sur ceux-ci. |
+| Automatisée                          | Les exécutions de flux de travail automatisées appartiennent aux projets et, une fois configurées, une analyse est effectuée sur tous les fichiers appariés nouvellement téléversés dans ce projet. |
 
-User workflow executions are personal and are only accessible to the user that created it, while automated workflow executions are accessible to all project members who have at least the Analyst role.
+Les exécutions de flux de travail utilisateur sont personnelles et ne sont accessibles qu'à l'utilisateur qui les a créées, tandis que les exécutions de flux de travail automatisées sont accessibles à tous les membres du projet qui ont au moins le rôle d'analyste.
 
-## Requirements
+## Exigences
 
-You will require the following to perform workflow executions:
-  - User workflow execution
-    - Project that has at least one associated sample, and paired-end files uploaded to the sample.
-    - At least the Analyst role for the project containing samples for workflow execution.
-  - Automated workflow execution
-    - A project and at least the Maintainer role for this project.
+Vous aurez besoin des éléments suivants pour effectuer des exécutions de flux de travail :
+  - Exécution de flux de travail utilisateur
+    - Un projet qui possède au moins un échantillon associé, et des fichiers appariés téléversés vers l'échantillon.
+    - Au moins le rôle d'analyste pour le projet contenant les échantillons pour l'exécution du flux de travail.
+  - Exécution de flux de travail automatisée
+    - Un projet et au moins le rôle de mainteneur pour ce projet.
 
-## Workflow Execution States
+## États d'exécution de flux de travail
 
-While a workflow execution is running, it will go through numerous states to give you feedback on its progress.
+Pendant qu'une exécution de flux de travail est en cours, elle passera par de nombreux états pour vous informer de sa progression.
 
-  States for a successful workflow execution (in order):
+  États pour une exécution de flux de travail réussie (dans l'ordre) :
 
-  | State      | Description                                                                                                                 |
+  | État       | Description                                                                                                                 |
   | :--------- | :-------------------------------------------------------------------------------------------------------------------------- |
-  | New        | This is the initial state acknowledging the workflow execution has successfully created and prepares its files for analysis |
-  | Prepared   | Files were successfully prepared and is being submitted to the selected pipeline                                            |
-  | Submitted  | The workflow execution was submitted to the selected pipeline                                                               |
-  | Running    | The workflow execution is being executed by the selected pipeline                                                           |
-  | Completing | The analysis was successful and IRIDA Next is finalizing the workflow execution for the user                                |
-  | Completed  | The workflow execution is complete and ready for the user                                                                   |
+  | Nouveau    | Il s'agit de l'état initial confirmant que l'exécution du flux de travail a été créée avec succès et prépare ses fichiers pour l'analyse |
+  | Préparé    | Les fichiers ont été préparés avec succès et sont en cours de soumission au pipeline sélectionné                            |
+  | Soumis     | L'exécution du flux de travail a été soumise au pipeline sélectionné                                                        |
+  | En cours   | L'exécution du flux de travail est en cours d'exécution par le pipeline sélectionné                                         |
+  | Finalisation | L'analyse a réussi et IRIDA Next finalise l'exécution du flux de travail pour l'utilisateur                                |
+  | Terminé    | L'exécution du flux de travail est terminée et prête pour l'utilisateur                                                     |
 
-  Error states:
+  États d'erreur :
 
-  | State     | Description                                                                                |
-  | :-------- | :----------------------------------------------------------------------------------------- |
-  | Error     | An error occurred during analysis and the run was aborted                                  |
-  | Canceling | The workflow execution was canceled and IRIDA Next is in the process of canceling the run  |
-  | Canceled  | The workflow execution successfully canceled                                               |
+  | État           | Description                                                                                |
+  | :------------- | :----------------------------------------------------------------------------------------- |
+  | Erreur         | Une erreur s'est produite pendant l'analyse et l'exécution a été interrompue               |
+  | Annulation     | L'exécution du flux de travail a été annulée et IRIDA Next est en train d'annuler l'exécution |
+  | Annulé         | L'exécution du flux de travail a été annulée avec succès                                   |
 
-The current state of any workflow execution is shown on the workflow execution [listing page](../analysis/working-with-workflow-executions).
+L'état actuel de toute exécution de flux de travail est affiché sur la [page de liste](../analysis/working-with-workflow-executions) des exécutions de flux de travail.
 
-## Workflow Execution Deletions
+## Suppressions d'exécution de flux de travail
 
-When deleting a workflow execution, there are a couple points to keep in mind:
-  - Deleted errored and canceled runs have no additional considerations
-  - Deleting completed runs does not delete the associated results that have been propogated to the samples
+Lors de la suppression d'une exécution de flux de travail, il y a quelques points à garder à l'esprit :
+  - Les exécutions supprimées ayant échoué ou annulées n'ont pas de considérations supplémentaires
+  - La suppression d'exécutions terminées ne supprime pas les résultats associés qui ont été propagés aux échantillons

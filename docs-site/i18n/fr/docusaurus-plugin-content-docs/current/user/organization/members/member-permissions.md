@@ -1,114 +1,113 @@
 ---
 sidebar_position: 2
 id: member-permissions
-title: Permissions and Roles
+title: Permissions et rôles
 ---
 
-When you add a user to a project or group, you assign them a role. The role determines which actions they can take in IRIDA Next.
+Lorsque vous ajoutez un utilisateur à un projet ou à un groupe, vous lui attribuez un rôle. Le rôle détermine quelles actions il peut effectuer dans IRIDA Next.
 
-If you add a user to both a project’s group and the project itself, the higher role is used.
+Si vous ajoutez un utilisateur à la fois au groupe d'un projet et au projet lui-même, le rôle le plus élevé est utilisé.
 
-## Roles
+## Rôles
 
-The available roles are:
+Les rôles disponibles sont :
 
-- Guest
-- Uploader
-- Analyst
-- Maintainer
-- Owner
+- Invité
+- Téléverseur
+- Analyste
+- Responsable
+- Propriétaire
 
-A user assigned the Guest role has the least permissions, and the Owner has the most.
+Un utilisateur affecté au rôle Invité a le moins de permissions, et le Propriétaire en a le plus.
 
-The **Uploader** is to be used for api access for the uploader
+Le **Téléverseur** doit être utilisé pour l'accès API pour le téléverseur
 
-All users can create top-level groups and projects.
+Tous les utilisateurs peuvent créer des groupes et des projets de niveau supérieur.
 
-## Group Members Permissions
+## Permissions des membres de groupe
 
-Any user can remove themselves from a group, unless they are the last Owner of the group.
+Tout utilisateur peut se retirer d'un groupe, sauf s'il est le dernier Propriétaire du groupe.
 
-The following table lists group permissions available for each role:
+Le tableau suivant liste les permissions de groupe disponibles pour chaque rôle :
 
-| Action                       | Guest | Uploader | Analyst | Maintainer | Owner |
-| :--------------------------- | :---- | :------- | :------ | :--------- | :---- |
-| Create Group and Subgroups   |       |          |         | ✓          | ✓     |
-| Edit Group and Subgroups     |       |          |         | ✓          | ✓     |
-| Delete Group and Subgroups   |       |          |         |            | ✓     |
-| View Group and Subgroups     | ✓     | ✓ (2)    | ✓       | ✓          | ✓     |
-| Transfer Group and Subgroups |       |          |         |            | ✓     |
-| Add Group Member             |       |          |         | ✓(1)       | ✓     |
-| Edit Group Member            |       |          |         | ✓(1)       | ✓     |
-| Remove Group Member          |       |          |         | ✓(1)       | ✓     |
-| View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
-| View Group Files             |       |          | ✓       | ✓          | ✓     |
-| Upload Group Files           |       |          |         | ✓          | ✓     |
-| Remove Group Files           |       |          |         | ✓          | ✓     |
+| Action                                 | Invité | Téléverseur | Analyste | Responsable | Propriétaire |
+| :------------------------------------- | :----- | :---------- | :------- | :---------- | :----------- |
+| Créer des groupes et sous-groupes      |        |             |          | ✓           | ✓            |
+| Modifier les groupes et sous-groupes   |        |             |          | ✓           | ✓            |
+| Supprimer les groupes et sous-groupes  |        |             |          |             | ✓            |
+| Voir les groupes et sous-groupes       | ✓      | ✓ (2)       | ✓        | ✓           | ✓            |
+| Transférer les groupes et sous-groupes |        |             |          |             | ✓            |
+| Ajouter un membre de groupe            |        |             |          | ✓(1)        | ✓            |
+| Modifier un membre de groupe           |        |             |          | ✓(1)        | ✓            |
+| Retirer un membre de groupe            |        |             |          | ✓(1)        | ✓            |
+| Voir les membres de groupe             | ✓      |             | ✓        | ✓           | ✓            |
+| Voir les fichiers de groupe            |        |             | ✓        | ✓           | ✓            |
+| Téléverser des fichiers de groupe      |        |             |          | ✓           | ✓            |
+| Retirer des fichiers de groupe         |        |             |          | ✓           | ✓            |
 
-1. A user with the **Maintainer** role can only modify members upto and including their role
-2. A user or bot account with the **Uploader** role can only perform these actions via the api
+1. Un utilisateur avec le rôle **Responsable** ne peut modifier que les membres jusqu'à et y compris leur rôle
+2. Un utilisateur ou un compte de robot avec le rôle **Téléverseur** ne peut effectuer ces actions que via l'API
 
-## Subgroup permissions
+## Permissions de sous-groupe
 
-When you add a member to a subgroup where they are also a member of one of the parent groups, they inherit the member role from the parent groups.
+Lorsque vous ajoutez un membre à un sous-groupe où il est également membre de l'un des groupes parents, il hérite du rôle de membre des groupes parents.
 
-## Project Members Permissions
+## Permissions des membres de projet
 
-  - Project Management:
+- Gestion de projet :
 
-    | Action                              | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :---------------------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
-    | Create Project                      |       |          |         | ✓          | ✓     |
-    | Edit Project                        |       |          |         | ✓          | ✓     |
-    | Delete Project                      |       |          |         |            | ✓     |
-    | Transfer Project                    |       |          |         |            | ✓     |
-    | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
-    | Add Project Member                  |       |          |         | ✓(2)       | ✓     |
-    | Edit Project Member                 |       |          |         | ✓(2)       | ✓     |
-    | Remove Project Member               |       |          |         | ✓(2)       | ✓     |
-    | Add Bot Account                     |       |          |         | ✓          | ✓     |
-    | Remove Bot Account                  |       |          |         | ✓          | ✓     |
-    | Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
-    | View Project History                |       |          |         | ✓          | ✓     |
-    | View Project Files                  |       |          | ✓       | ✓          | ✓     |
-    | Upload Project Files                |       |          |         | ✓          | ✓     |
-    | Remove Project Files                |       |          |         | ✓          | ✓     |
+  | Action                                                | Invité | Téléverseur | Analyste | Responsable | Propriétaire |
+  | :---------------------------------------------------- | :----- | ----------- | -------- | ----------- | ------------ |
+  | Voir le projet                                        | ✓      | ✓(1)        | ✓        | ✓           | ✓            |
+  | Créer un projet                                       |        |             |          | ✓           | ✓            |
+  | Modifier le projet                                    |        |             |          | ✓           | ✓            |
+  | Supprimer le projet                                   |        |             |          |             | ✓            |
+  | Transférer le projet                                  |        |             |          |             | ✓            |
+  | Voir les membres du projet                            | ✓      |             | ✓        | ✓           | ✓            |
+  | Ajouter un membre de projet                           |        |             |          | ✓(2)        | ✓            |
+  | Modifier un membre de projet                          |        |             |          | ✓(2)        | ✓            |
+  | Retirer un membre de projet                           |        |             |          | ✓(2)        | ✓            |
+  | Ajouter un compte de robot                            |        |             |          | ✓           | ✓            |
+  | Retirer un compte de robot                            |        |             |          | ✓           | ✓            |
+  | Configurer l'exécution de flux de travail automatisée |        |             |          | ✓           | ✓            |
+  | Voir l'historique du projet                           |        |             |          | ✓           | ✓            |
+  | Voir les fichiers du projet                           |        |             | ✓        | ✓           | ✓            |
+  | Téléverser des fichiers de projet                     |        |             |          | ✓           | ✓            |
+  | Retirer des fichiers de projet                        |        |             |          | ✓           | ✓            |
 
+1. Un utilisateur ou un compte de robot avec le rôle **Téléverseur** ne peut effectuer ces actions que via l'API
+2. Un utilisateur avec le rôle **Responsable** ne peut modifier que les membres jusqu'à et y compris leur rôle
 
-  1. A user or bot account with the **Uploader** role can only perform these actions via the api
-  2. A user with the **Maintainer** role can only modify members upto and including their role
+- Gestion des échantillons :
 
-  - Sample Management:
+  | Action                             | Invité | Téléverseur | Analyste | Responsable | Propriétaire |
+  | :--------------------------------- | :----- | ----------- | -------- | ----------- | ------------ |
+  | Voir les échantillons              | ✓      | ✓(1)        | ✓        | ✓           | ✓            |
+  | Créer des échantillons             |        | ✓(1)        |          | ✓           | ✓            |
+  | Modifier les échantillons          |        | ✓(1)        |          | ✓           | ✓            |
+  | Supprimer les échantillons         |        |             |          |             | ✓            |
+  | Transférer les échantillons        |        |             |          | ✓(2)        | ✓            |
+  | Cloner les échantillons            |        |             |          | ✓           | ✓            |
+  | Exporter les échantillons          |        |             | ✓        | ✓           | ✓            |
+  | Voir l'historique de l'échantillon |        |             |          | ✓           | ✓            |
 
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | View Samples          | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
-    | Create Samples        |       | ✓(1)     |         | ✓          | ✓     |
-    | Edit Samples          |       | ✓(1)     |         | ✓          | ✓     |
-    | Delete Samples        |       |          |         |            | ✓     |
-    | Transfer Samples      |       |          |         | ✓(2)       | ✓     |
-    | Clone Samples         |       |          |         | ✓          | ✓     |
-    | Export Samples        |       |          | ✓       | ✓          | ✓     |
-    | View Sample History   |       |          |         | ✓          | ✓     |
+1. Un utilisateur ou un compte de robot avec le rôle **Téléverseur** ne peut effectuer ces actions que via l'API
+2. Un utilisateur avec le rôle **Responsable** ne peut transférer des échantillons que vers un autre projet sous l'ancêtre commun pour le projet actuel
 
-  1. A user or bot account with the **Uploader** role can only perform these actions via the api
-  2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
+- Gestion des fichiers d'échantillon :
 
-  - Sample File Management:
+  | Action                   | Invité | Téléverseur | Analyste | Responsable | Propriétaire |
+  | :----------------------- | :----- | ----------- | -------- | ----------- | ------------ |
+  | Téléverser des fichiers  |        |             |          | ✓           | ✓            |
+  | Concaténer des fichiers  |        |             |          | ✓           | ✓            |
+  | Télécharger des fichiers | ✓      |             | ✓        | ✓           | ✓            |
+  | Supprimer des fichiers   |        |             |          |             | ✓            |
 
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | Upload Files          |       |          |         | ✓          | ✓     |
-    | Concatenate Files     |       |          |         | ✓          | ✓     |
-    | Download Files        | ✓     |          | ✓       | ✓          | ✓     |
-    | Delete Files          |       |          |         |            | ✓     |
+- Gestion des métadonnées d'échantillon :
 
-  - Sample Metadata Mangement:
-
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | Add Metadata          |       |          |         | ✓          | ✓     |
-    | Update Metadata       |       |          |         | ✓          | ✓     |
-    | Import Metadata       |       |          |         | ✓          | ✓     |
-    | Delete Metadata       |       |          |         | ✓          | ✓     |
+  | Action                        | Invité | Téléverseur | Analyste | Responsable | Propriétaire |
+  | :---------------------------- | :----- | ----------- | -------- | ----------- | ------------ |
+  | Ajouter des métadonnées       |        |             |          | ✓           | ✓            |
+  | Mettre à jour les métadonnées |        |             |          | ✓           | ✓            |
+  | Importer des métadonnées      |        |             |          | ✓           | ✓            |
+  | Supprimer des métadonnées     |        |             |          | ✓           | ✓            |

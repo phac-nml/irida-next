@@ -1,16 +1,16 @@
 ---
 sidebar_position: 1
 id: authentication
-title: Connecting to an Authentication Server
+title: Connexion à un serveur d'authentification
 ---
 
-## Setup
+## Configuration
 
-### Enable remote authentication
+### Activer l'authentification à distance
 
-By default, remote authentication is disabled. To enable it you will need to edit the config file `config/authentication/auth_config.yml`
+Par défaut, l'authentification à distance est désactivée. Pour l'activer, vous devrez modifier le fichier de configuration `config/authentication/auth_config.yml`
 
-The auth_config.yml has the format below.
+Le fichier auth_config.yml a le format ci-dessous.
 
 ```yml
 development:
@@ -39,65 +39,65 @@ test:
   # entra_id_icon:
 ```
 
-For your production environment, uncomment and edit the relevant `production` lines.
+Pour votre environnement de production, décommentez et modifiez les lignes `production` pertinentes.
 
-For Entra ID, formerly Azure Active Directory
+Pour Entra ID, anciennement Azure Active Directory
 
 ```yml
 production:
   omniauth_providers: [entra_id]
 ```
 
-For SAML
+Pour SAML
 
 ```yml
 production:
   omniauth_providers: [saml]
 ```
 
-### Credentials
+### Informations d'identification
 
-You will need to setup the authentication server credentials in the IRIDA Next secret credentials file.
+Vous devrez configurer les informations d'identification du serveur d'authentification dans le fichier d'informations d'identification secrètes d'IRIDA Next.
 
-You can edit this file with the following command.
+Vous pouvez modifier ce fichier avec la commande suivante.
 
 ```bash
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
-#### Entra ID (formerly Azure Active Directory V2)
+#### Entra ID (anciennement Azure Active Directory V2)
 
-For Entra, you will need the following lines
+Pour Entra, vous aurez besoin des lignes suivantes
 
 ```yml
 entra_id:
-  client_id: YOUR_CLIENT_ID
-  client_secret: YOUR_CLIENT_SECRET
-  tenant_id: YOUR_TENANT_ID
+  client_id: VOTRE_ID_CLIENT
+  client_secret: VOTRE_SECRET_CLIENT
+  tenant_id: VOTRE_ID_LOCATAIRE
 ```
 
 #### SAML
 
-For SAML, you will need the following lines
+Pour SAML, vous aurez besoin des lignes suivantes
 
 ```yml
 saml:
-  idp_sso_service_url: YOUR_SAML_IDP_SSO_SERVICE_URL
-  sp_entity_id: YOUR_SAML_SP_ENTITY_ID
-  idp_cert: YOUR_SAML_IDP_CERT
+  idp_sso_service_url: VOTRE_URL_SERVICE_SSO_IDP_SAML
+  sp_entity_id: VOTRE_ID_ENTITE_SP_SAML
+  idp_cert: VOTRE_CERT_IDP_SAML
 ```
 
-## Further customization
+## Personnalisation supplémentaire
 
-You can change the display name and icon to match your organization.
+Vous pouvez modifier le nom d'affichage et l'icône pour correspondre à votre organisation.
 
-In the `config/authentication/auth_config.yml` file, edit `_text` and `_icon` fields appropriate for your Entra or SAML setup.
+Dans le fichier `config/authentication/auth_config.yml`, modifiez les champs `_text` et `_icon` appropriés pour votre configuration Entra ou SAML.
 
-Put your organizations name in the `_text` field.
+Mettez le nom de votre organisation dans le champ `_text`.
 
-Place a `.svg` icon file in the `config/authentication/icons/` directory and add the filename to the `_icon` field.
+Placez un fichier d'icône `.svg` dans le répertoire `config/authentication/icons/` et ajoutez le nom de fichier au champ `_icon`.
 
-Example:
+Exemple :
 
 ```yml
 production:

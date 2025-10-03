@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
 id: types
-title: Bot Account Types
+title: Types de compte de robot
 ---
 
-The different bot account types are:
+Les différents types de compte de robot sont :
 
-- **Group bot** - A bot that is created within a group. It can also be added as a member to other global projects and groups.
+- **Robot de groupe** - Un robot créé au sein d'un groupe. Il peut également être ajouté en tant que membre à d'autres projets et groupes globaux.

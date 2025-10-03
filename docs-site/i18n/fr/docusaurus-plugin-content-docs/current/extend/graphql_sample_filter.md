@@ -1,24 +1,24 @@
 ---
 sidebar_position: 3
 id: graphql_sample_filter
-title: GraphQL Sample Filter
+title: Filtre d'échantillon GraphQL
 ---
 
-## Overview
+## Aperçu
 
-Sample filtering can be performed using one or both of the following ways:
+Le filtrage d'échantillons peut être effectué en utilisant l'une ou les deux des méthodes suivantes :
 
-- _Basic search_ queries samples with a name or puid containing a given string
-- _Advanced search_ uses groups & conditions to build complex queries given sample metadata
+- _Recherche de base_ interroge les échantillons avec un nom ou un puid contenant une chaîne donnée
+- _Recherche avancée_ utilise des groupes et des conditions pour construire des requêtes complexes données les métadonnées d'échantillon
 
-An example of a GraphQL query.
+Un exemple de requête GraphQL.
 
 ```graphql
 query {
   samples(
     orderBy: { field: name, direction: desc }
     filter: {
-      name_or_puid_cont: "Sample Name"
+      name_or_puid_cont: "Nom d'échantillon"
       advanced_search: [
         [
           { field: "metadata.country", operator: EQUALS, value: "Canada" }
@@ -56,46 +56,46 @@ query {
 }
 ```
 
-## Advanced Search
+## Recherche avancée
 
-Advanced search uses groups & conditions to build complex queries based on criteria. An advanced search consists of one or more groups and each group consists of one or more conditions. Groups are joined together with a logical OR operator and conditions are joined with a logical AND operator. For example, assuming A, B, C, and D are conditions for an advanced search [[A,B],[C,D]] would translate to (A AND B) OR (C AND D).
+La recherche avancée utilise des groupes et des conditions pour construire des requêtes complexes basées sur des critères. Une recherche avancée se compose d'un ou plusieurs groupes et chaque groupe se compose d'une ou plusieurs conditions. Les groupes sont joints ensemble avec un opérateur logique OR et les conditions sont jointes avec un opérateur logique AND. Par exemple, en supposant que A, B, C et D sont des conditions pour une recherche avancée [[A,B],[C,D]] se traduirait par (A AND B) OR (C AND D).
 
-### Definitions
+### Définitions
 
-**Groups** consist of one or more conditions.
+**Groupes** se composent d'une ou plusieurs conditions.
 
-**Conditions** consist of a field, operator, and value.
+**Conditions** se composent d'un champ, d'un opérateur et d'une valeur.
 
-**Fields** are sample attributes which can be one of name, puid, created_at, updated_at, or attachments_updated_at. If the field is metadata, it must begin with 'metadata.'.
+**Champs** sont des attributs d'échantillon qui peuvent être l'un de name, puid, created_at, updated_at ou attachments_updated_at. Si le champ est metadata, il doit commencer par 'metadata.'.
 
-**Operators** can only be one of EQUALS, NOT_EQUALS, LESS_THAN_EQUALS, GREATER_THAN_EQUALS, CONTAINS, EXISTS, NOT_EXISTS, IN, and NOT_IN.
+**Opérateurs** ne peuvent être que l'un de EQUALS, NOT_EQUALS, LESS_THAN_EQUALS, GREATER_THAN_EQUALS, CONTAINS, EXISTS, NOT_EXISTS, IN et NOT_IN.
 
-**Values** are always strings and are case insensitive. A value can also be an array of strings if used with the IN or NOT_IN operators. Values are not required when used withe EXISTS or NOT_EXISTS.
+**Valeurs** sont toujours des chaînes et sont insensibles à la casse. Une valeur peut également être un tableau de chaînes si elle est utilisée avec les opérateurs IN ou NOT_IN. Les valeurs ne sont pas requises lorsqu'elles sont utilisées avec EXISTS ou NOT_EXISTS.
 
 ### Validation
 
-The advanced search input is validated before the search is performed. This is a list of the validation rules.
+L'entrée de recherche avancée est validée avant que la recherche ne soit effectuée. Voici une liste des règles de validation.
 
-1. Date values must be formatted "YYYY-MM-DD" and the field must end with '\_date'.
+1. Les valeurs de date doivent être formatées « AAAA-MM-JJ » et le champ doit se terminer par '\_date'.
 
-2. Conditions must have unique fields within the same group unless using the between operators. Between operators are LESS_THAN_EQUAL and GREATER_THAN_EQUALS.
+2. Les conditions doivent avoir des champs uniques au sein du même groupe sauf si elles utilisent les opérateurs between. Les opérateurs between sont LESS_THAN_EQUAL et GREATER_THAN_EQUALS.
 
-Validation rules mentioned above around operators have been summarized in this table for quick reference.
+Les règles de validation mentionnées ci-dessus concernant les opérateurs ont été résumées dans ce tableau pour référence rapide.
 
-| Operator            | Value            | Uniqueness                               |
-| ------------------- | ---------------- | ---------------------------------------- |
-| EQUALS              | String           | Cannot be combined with other operators  |
-| NOT_EQUALS          | String           | Cannot be combined with other operators  |
-| LESS_THAN_EQUALS    | Date or numeric  | Can be combined with GREATER_THAN_EQUALS |
-| GREATER_THAN_EQUALS | Date or numeric  | Can be combined with LESS_THAN_EQUALS    |
-| CONTAINS            | String           | Cannot be combined with other operators  |
-| EXISTS              | N/A              | Cannot be combined with other operators  |
-| NOT_EXISTS          | N/A              | Cannot be combined with other operators  |
-| IN                  | Array of strings | Cannot be combined with other operators  |
-| NOT_IN              | Array of strings | Cannot be combined with other operators  |
+| Opérateur           | Valeur             | Unicité                                           |
+| ------------------- | ------------------ | ------------------------------------------------- |
+| EQUALS              | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_EQUALS          | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| LESS_THAN_EQUALS    | Date ou numérique  | Peut être combiné avec GREATER_THAN_EQUALS        |
+| GREATER_THAN_EQUALS | Date ou numérique  | Peut être combiné avec LESS_THAN_EQUALS           |
+| CONTAINS            | Chaîne             | Ne peut pas être combiné avec d'autres opérateurs |
+| EXISTS              | N/A                | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_EXISTS          | N/A                | Ne peut pas être combiné avec d'autres opérateurs |
+| IN                  | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs |
+| NOT_IN              | Tableau de chaînes | Ne peut pas être combiné avec d'autres opérateurs |
 
-_\* The uniqueness column compares conditions within the same group._
+_\* La colonne d'unicité compare les conditions au sein du même groupe._
 
-Error messages will be prefixed with the group index, condition index, and condition attribute (field, operator, or value)
-to make it easier to understand which filter argument caused a failure.
-An example error message example is `filter.advanced_search.0.0.field: 'metadata.' is an invalid metadata field`.
+Les messages d'erreur seront préfixés avec l'index du groupe, l'index de la condition et l'attribut de condition (champ, opérateur ou valeur)
+pour faciliter la compréhension de l'argument de filtre qui a causé un échec.
+Un exemple de message d'erreur est `filter.advanced_search.0.0.field: 'metadata.' is an invalid metadata field`.

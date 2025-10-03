@@ -1,42 +1,42 @@
 ---
 sidebar_position: 3
 id: pipelines
-title: Registering Pipelines
+title: Enregistrement des pipelines
 ---
 
-Pipelines are registered when the IRIDA Next server is started up.  Future restarts of the server will only register new pipelines that are added to the configuration file, and schema files for a particular pipeline will update if newer versions are available in the repository.
+Les pipelines sont enregistrés au démarrage du serveur IRIDA Next. Les redémarrages futurs du serveur n'enregistreront que les nouveaux pipelines ajoutés au fichier de configuration, et les fichiers de schéma pour un pipeline particulier seront mis à jour si des versions plus récentes sont disponibles dans le dépôt.
 
-## Pipeline repository
+## Dépôt de pipeline
 
-Currently, only **Nextflow** pipelines are supported and they must have a GitHub repository. Each pipeline is required to have a `nextflow_schema.json` file at the top level of the repository, and a `schema_input.json` file under an `assets` directory within the repository.
+Actuellement, seuls les pipelines **Nextflow** sont pris en charge et ils doivent avoir un dépôt GitHub. Chaque pipeline doit avoir un fichier `nextflow_schema.json` au niveau supérieur du dépôt, et un fichier `schema_input.json` sous un répertoire `assets` dans le dépôt.
 
-## Setup
+## Configuration
 
 ### Configuration
 
-The configuration file to register pipelines is in `json` format and stored in the `config/pipelines/` directory with the name `pipelines.json`.
+Le fichier de configuration pour enregistrer les pipelines est au format `json` et stocké dans le répertoire `config/pipelines/` avec le nom `pipelines.json`.
 
-This `pipelines.json` file should be in the format below and can include the following:
+Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure les éléments suivants :
 
-- **URL** *(Required)* of the pipeline GitHub repository
-- **name** *(Required)* of the pipeline
-- **description** *(Required)* of the pipeline
-- **versions** *(Required)* of the pipeline that should be available to launch.
-  - `name`: *(Required)* refers to the `-r` flag used by nextflow.
-  - `automatable`: *(Optional)* `true` or `false` to specify if the pipeline can be automated.
-  - `executable`: *(Optional)* `true` or `false` to specify if the pipeline is able to be executed. When set to `false`, the pipeline will not be listed to the user.
-- **overrides** *(Optional)* for the pipeline
+- **URL** _(Requis)_ du dépôt GitHub du pipeline
+- **name** _(Requis)_ du pipeline
+- **description** _(Requise)_ du pipeline
+- **versions** _(Requises)_ du pipeline qui devraient être disponibles pour le lancement.
+  - `name` : _(Requis)_ fait référence au drapeau `-r` utilisé par nextflow.
+  - `automatable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être automatisé.
+  - `executable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
+- **overrides** _(Optionnel)_ pour le pipeline
 
-#### Example
+#### Exemple
 
 ```json
 [
   {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
-    "description": "IRIDA Next Example Pipeline",
+    "description": "Pipeline d'exemple IRIDA Next",
     "overrides": {
-      # SEE OVERRIDE SECTION BELOW
+      # VOIR SECTION OVERRIDE CI-DESSOUS
     },
     "versions": [
       {
@@ -62,26 +62,26 @@ This `pipelines.json` file should be in the format below and can include the fol
 ]
 ```
 
-### Schema Overrides
+### Remplacements de schéma
 
-The Overrides section can be used to change anything within the original nextflow pipeline schema. Anything within the `"overrides": {<json data>}` will overwrite the original schema with `<json data>` starting at the highest level.
+La section Remplacements peut être utilisée pour modifier n'importe quoi dans le schéma du pipeline nextflow d'origine. Tout ce qui se trouve dans `"overrides": {<json data>}` remplacera le schéma d'origine par `<json data>` en commençant au niveau le plus élevé.
 
-In the below example, we will override the database connection options so we can connect the pipeline to our custom database path. Note that only the overridden fields need to be provided, as everything else provided by the schema stays the same.
+Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base de données afin de pouvoir connecter le pipeline à notre chemin de base de données personnalisé. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par le schéma reste le même.
 
-#### Example schema
+#### Exemple de schéma
 
 ```json
 {
     "$schema": "http://example.com/schema",
     "$id": "https://example.com/nextflow_schema.json",
-    "title": "My Example Schema",
-    "description": "Example Schema: for demonstrating overrides",
+    "title": "Mon schéma d'exemple",
+    "description": "Schéma d'exemple : pour démontrer les remplacements",
     "type": "object",
     "definitions": {
         "input_output_options": {
-            "title": "Input/Output Options",
+            "title": "Options d'entrée/sortie",
             "type": "object",
-            "description": "Define which data to use with the pipeline.",
+            "description": "Définir quelles données utiliser avec le pipeline.",
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
@@ -92,38 +92,38 @@ In the below example, we will override the database connection options so we can
                 },
                 "database": {
                   "type": "string",
-                  "description": "Kraken DB",
+                  "description": "Base de données Kraken",
                   "enum": [
                     [
-                      "default_db",
-                      "PATH_TO_DB"
+                      "bd_par_defaut",
+                      "CHEMIN_VERS_BD"
                     ],
                     [
-                      "organization db",
-                      "PATH_TO_ORG_DB"
+                      "bd_organisation",
+                      "CHEMIN_VERS_BD_ORG"
                     ]
                   ]
                 }
             }
         },
-        "more options": {
+        "plus_options": {
           ...
         }
     },
-    "more options": {
+    "plus_options": {
       ...
     }
 }
 ```
 
-#### Example override
+#### Exemple de remplacement
 
 ```json
 [
   {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
-    "description": "IRIDA Next Example Pipeline",
+    "description": "Pipeline d'exemple IRIDA Next",
     "overrides": {
       "definitions": {
         "input_output_options": {
@@ -131,12 +131,12 @@ In the below example, we will override the database connection options so we can
             "database": {
               "enum": [
                 [
-                  "custom_db",
-                  "PATH_TO_CUSTOM_DB"
+                  "bd_personnalisee",
+                  "CHEMIN_VERS_BD_PERSONNALISEE"
                 ],
                 [
-                  "custom_db_2",
-                  "PATH_TO_CUSTOM_DB_2"
+                  "bd_personnalisee_2",
+                  "CHEMIN_VERS_BD_PERSONNALISEE_2"
                 ]
               ]
             }
@@ -152,21 +152,20 @@ In the below example, we will override the database connection options so we can
 ]
 ```
 
-#### Effective Result
-
+#### Résultat effectif
 
 ```json
 {
     "$schema": "http://example.com/schema",
     "$id": "https://example.com/nextflow_schema.json",
-    "title": "My Example Schema",
-    "description": "Example Schema: for demonstrating overrides",
+    "title": "Mon schéma d'exemple",
+    "description": "Schéma d'exemple : pour démontrer les remplacements",
     "type": "object",
     "definitions": {
         "input_output_options": {
-            "title": "Input/Output Options",
+            "title": "Options d'entrée/sortie",
             "type": "object",
-            "description": "Define which data to use with the pipeline.",
+            "description": "Définir quelles données utiliser avec le pipeline.",
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
@@ -177,25 +176,25 @@ In the below example, we will override the database connection options so we can
                 },
                 "database": {
                   "type": "string",
-                  "description": "Kraken DB",
+                  "description": "Base de données Kraken",
                   "enum": [
                     [
-                      "custom_db",
-                      "PATH_TO_CUSTOM_DB"
+                      "bd_personnalisee",
+                      "CHEMIN_VERS_BD_PERSONNALISEE"
                     ],
                     [
-                      "custom_db_2",
-                      "PATH_TO_CUSTOM_DB_2"
+                      "bd_personnalisee_2",
+                      "CHEMIN_VERS_BD_PERSONNALISEE_2"
                     ]
                   ]
                 }
             }
         },
-        "more options": {
+        "plus_options": {
           ...
         }
     },
-    "more options": {
+    "plus_options": {
       ...
     }
 }

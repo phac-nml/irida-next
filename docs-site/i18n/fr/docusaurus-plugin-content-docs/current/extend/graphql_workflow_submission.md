@@ -1,41 +1,41 @@
 ---
 sidebar_position: 2
 id: graphql_workflow_submission
-title: GraphQL Workflow Submission Tutorial
+title: Tutoriel de soumission de flux de travail GraphQL
 ---
 
-### Please Note:
+### Veuillez noter :
 
-This is an advanced feature. Please familiarize yourself with the [GraphQL API Documentation](./graphql) before continuing with this tutorial.
+Ceci est une fonctionnalité avancée. Veuillez vous familiariser avec la [Documentation de l'API GraphQL](./graphql) avant de continuer avec ce tutoriel.
 
-## Overview
+## Aperçu
 
-Submitting a workflow execution via the GraphQL API is done in multiple steps. It is expected that this will be done programmatically and not manually. Many id's will be fetched and used in the submission process so simply copying and pasting the values will likely result in user error.
+La soumission d'une exécution de flux de travail via l'API GraphQL se fait en plusieurs étapes. Il est prévu que cela soit fait par programme et non manuellement. De nombreux identifiants seront récupérés et utilisés dans le processus de soumission, donc simplement copier et coller les valeurs entraînera probablement une erreur de l'utilisateur.
 
-Steps:
+Étapes :
 
-1. Query for pipelines
-2. Query specific pipeline information
-3. Query Project information
-4. Query Sample and File data from Project
-5. Submit a Workflow Execution using the information queried in the previous steps
+1. Interroger les pipelines
+2. Interroger des informations spécifiques sur le pipeline
+3. Interroger les informations du projet
+4. Interroger les données d'échantillon et de fichier du projet
+5. Soumettre une exécution de flux de travail en utilisant les informations interrogées dans les étapes précédentes
 
-Please note: All values fetched by executing these queries are unique to your database. Copying and Pasting the commands without replacing the values with your own id's will not work.
+Veuillez noter : Toutes les valeurs récupérées en exécutant ces requêtes sont uniques à votre base de données. Copier et coller les commandes sans remplacer les valeurs par vos propres identifiants ne fonctionnera pas.
 
-### 1. Query for pipelines
+### 1. Interroger les pipelines
 
-Query the list of pipelines to find the one you want to use.
+Interroger la liste des pipelines pour trouver celui que vous souhaitez utiliser.
 
 ```graphql
 query getPipelines {
-    pipelines(workflowType: "available"){
-        name
-        version
+  pipelines(workflowType: "available") {
+    name
+    version
   }
 }
 ```
 
-Result
+Résultat
 
 ```json
 {
@@ -62,15 +62,18 @@ Result
 }
 ```
 
-The `name` and `version` fields will be used in the next step. In this example version `1.0.3`.
+Les champs `name` et `version` seront utilisés dans la prochaine étape. Dans cet exemple, la version `1.0.3`.
 
-### 2. Query for Pipeline Information
+### 2. Interroger les informations sur le pipeline
 
-We are able to get all the information about a pipeline with this query.
+Nous sommes capables d'obtenir toutes les informations sur un pipeline avec cette requête.
 
 ```graphql
 query getPipelineInfo {
-    pipeline(workflowName:"phac-nml/iridanextexample",workflowVersion:"1.0.3"){
+  pipeline(
+    workflowName: "phac-nml/iridanextexample"
+    workflowVersion: "1.0.3"
+  ) {
     automatable
     description
     executable
@@ -82,139 +85,29 @@ query getPipelineInfo {
 }
 ```
 
-Result:
+Résultat : (tronqué pour la brièveté - voir fichier d'origine pour le résultat complet)
 
-```json
-{
-  "data": {
-    "pipeline": {
-      "automatable": false,
-      "description": "IRIDA Next Example Pipeline",
-      "executable": true,
-      "metadata": {
-        "workflow_name": "phac-nml/iridanextexample",
-        "workflow_version": {
-          "name": "1.0.3"
-        }
-      },
-      "name": "phac-nml/iridanextexample",
-      "version": "1.0.3",
-      "workflowParams": {
-        "input_output_options": {
-          "title": "Input/output options",
-          "description": "Define where the pipeline should find input data and save output data.",
-          "properties": {
-            "input": {
-              "type": "string",
-              "format": "file-path",
-              "exists": true,
-              "mimetype": "text/csv",
-              "pattern": "^\\S+\\.csv$",
-              "schema": {
-                "$schema": "http://json-schema.org/draft-07/schema",
-                "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample/main/assets/schema_input.json",
-                "title": "phac-nml/iridanextexample pipeline - params.input schema",
-                "description": "Schema for the file provided with params.input",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "sample": {
-                      "type": "string",
-                      "pattern": "^\\S+$",
-                      "meta": [
-                        "id"
-                      ],
-                      "unique": true,
-                      "errorMessage": "Sample name must be provided and cannot contain spaces"
-                    },
-                    "fastq_1": {
-                      "type": "string",
-                      "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
-                      "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'"
-                    },
-                    "fastq_2": {
-                      "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'",
-                      "anyOf": [
-                        {
-                          "type": "string",
-                          "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$"
-                        },
-                        {
-                          "type": "string",
-                          "maxLength": 0
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "sample",
-                    "fastq_1"
-                  ]
-                }
-              },
-              "description": "Path to comma-separated file containing information about the samples in the experiment.",
-              "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
-              "fa_icon": "fas fa-file-csv",
-              "required": false
-            },
-            "project_name": {
-              "type": "string",
-              "default": "assembly",
-              "pattern": "^\\S+$",
-              "description": "The name of the project.",
-              "fa_icon": "fas fa-tag",
-              "required": false
-            },
-            "assembler": {
-              "type": "string",
-              "default": "stub",
-              "fa_icon": "fas fa-desktop",
-              "description": "The sequence assembler to use for sequence assembly.",
-              "enum": [
-                "default",
-                "stub",
-                "experimental"
-              ],
-              "required": false
-            },
-            "random_seed": {
-              "type": "integer",
-              "default": 1,
-              "fa_icon": "fas fa-dice-six",
-              "description": "The random seed to use for sequence assembly.",
-              "minimum": 1,
-              "required": false
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
+La sortie nous informe de la structure des champs que nous fournirons pour exécuter le pipeline.
 
-The output informs us of the structure of the fields we will provide to run the pipeline.
+Spécifiquement, nous utiliserons les champs suivants du résultat :
 
-Specifically, We will be using the following fields from the result
+- `workflowName`
+- `workflowVersion`
+- `workflowParams`
+  - `assembler`
+  - `random_seed`
+  - `project_name`
 
-* `workflowName`
-* `workflowVersion`
-* `workflowParams`
-  * `assembler`
-  * `random_seed`
-  * `project_name`
+La sortie nous informe également de la structure pour `samplesWorkflowExecutionAttributes` (`sample_id`) et `samplesheet_params` (`sample`, `fastq_1`, `fastq_2`) dans notre requête de soumission finale.
 
-The output also informs us of the structure for the `samplesWorkflowExecutionAttributes` (`sample_id`) and `samplesheet_params` (`sample`, `fastq_1`, `fastq_2`) in our final submission query.
+### 3. Interroger les informations sur le projet
 
-### 3. Query Project information
-
-Query to find the Project containing the samples you want to use in the pipeline. In this example we are simply getting the first project.
+Interroger pour trouver le projet contenant les échantillons que vous souhaitez utiliser dans le pipeline. Dans cet exemple, nous obtenons simplement le premier projet.
 
 ```graphql
 query getProjects {
-  projects(first: 1){
-    nodes{
+  projects(first: 1) {
+    nodes {
       fullName
       id
       fullPath
@@ -223,7 +116,7 @@ query getProjects {
 }
 ```
 
-Result
+Résultat
 
 ```json
 {
@@ -241,29 +134,29 @@ Result
 }
 ```
 
-We will be using the `fullPath` field in the next step, and `id` in the final step
+Nous utiliserons le champ `fullPath` dans la prochaine étape, et `id` dans l'étape finale
 
-### 4. Query Sample and File data from Project
+### 4. Interroger les données d'échantillon et de fichier du projet
 
-Using the `fullPath` from the previous step, we will query for the sample and file information we will use in the pipeline.
+En utilisant le `fullPath` de l'étape précédente, nous interrogerons les informations d'échantillon et de fichier que nous utiliserons dans le pipeline.
 
-Step 2 informed us that for each sample we need:
+L'étape 2 nous a informés que pour chaque échantillon nous avons besoin de :
 
-* the sample `id`
-* the sample `puid`,
-* the file (attachment) `id`'s
+- l'`id` de l'échantillon
+- le `puid` de l'échantillon,
+- les `id` des fichiers (pièce jointe)
 
-In this example we will only use 1 sample.
+Dans cet exemple, nous n'utiliserons qu'1 échantillon.
 
 ```graphql
-query getProjectInfo{
+query getProjectInfo {
   project(fullPath: "borrelia/borrelia-burgdorferi/outbreak-2024") {
-    samples(first:1){
-      nodes{
+    samples(first: 1) {
+      nodes {
         id
         puid
-        attachments{
-          nodes{
+        attachments {
+          nodes {
             filename
             id
           }
@@ -274,80 +167,49 @@ query getProjectInfo{
 }
 ```
 
-Result
+Résultat (tronqué)
 
-```json
-{
-  "data": {
-    "project": {
-      "samples": {
-        "nodes": [
-          {
-            "id": "gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11",
-            "puid": "INXT_SAM_AZCMYRDHEJ",
-            "attachments": {
-              "nodes": [
-                {
-                  "filename": "reference.fasta",
-                  "id": "gid://irida/Attachment/b6ab6077-b3bf-4d5a-ba0c-dc97de7741df"
-                },
-                {
-                  "filename": "08-5578-small_S1_L001_R2_001.fastq.gz",
-                  "id": "gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
-                },
-                {
-                  "filename": "08-5578-small_S1_L001_R1_001.fastq.gz",
-                  "id": "gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-  }
-}
-```
+Dans notre exemple, nous nous intéressons aux lectures avant et arrière, noms de fichiers `08-55...R1...fastq.gz` et `08-55...R2...fastq.gz`. Faites attention de noter quel identifiant de fichier est avant et arrière car l'étape suivante les acceptera comme `fastq_1` et `fastq_2`. Les directions de lecture peuvent également être interrogées à partir des champs `metadata` des `attachments`.
 
-In our example, we are interested in the forward and reverse reads, filenames `08-55...R1...fastq.gz` and `08-55...R2...fastq.gz`. Take care to note which file id is forward and reverse as the next step will accept them as `fastq_1` and `fastq_2`. The read directions can also be queried from the `attachments` `metadata` fields.
+### 5. Soumettre une exécution de flux de travail en utilisant les informations interrogées dans les étapes précédentes
 
-### 5. Submit a Workflow Execution using the information queried in the previous steps
+En utilisant toutes les informations recueillies dans les étapes précédentes, nous pouvons maintenant soumettre notre exécution de flux de travail.
 
-Using all the information gathered in the previous steps, we can now submit our Workflow Execution.
-
-Since this is a Mutation, we also include the `workflowExecution` and `error` blocks to see the if our submission succeeded.
+Puisqu'il s'agit d'une mutation, nous incluons également les blocs `workflowExecution` et `error` pour voir si notre soumission a réussi.
 
 ```graphql
 mutation submitWorkflowExecution {
-  submitWorkflowExecution (input:{
-    name:"My Workflow Submission from GraphQL"
-    projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
-    updateSamples: false
-    emailNotification: false
-    workflowName: "phac-nml/iridanextexample"
-    workflowVersion:"1.0.3"
-    workflowParams: {
-      assembler: "stub",
-      random_seed: 1,
-      project_name: "assembly"
-    }
-    samplesWorkflowExecutionsAttributes:[
-      {
-        sample_id:"gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
-        samplesheet_params:{
-          sample: "INXT_SAM_AZCMYRDHEJ",
-          fastq_1:"gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390",
-          fastq_2:"gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
-        }
+  submitWorkflowExecution(
+    input: {
+      name: "Ma soumission de flux de travail depuis GraphQL"
+      projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
+      updateSamples: false
+      emailNotification: false
+      workflowName: "phac-nml/iridanextexample"
+      workflowVersion: "1.0.3"
+      workflowParams: {
+        assembler: "stub"
+        random_seed: 1
+        project_name: "assembly"
       }
-    ]
-  }){
-    workflowExecution{
+      samplesWorkflowExecutionsAttributes: [
+        {
+          sample_id: "gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
+          samplesheet_params: {
+            sample: "INXT_SAM_AZCMYRDHEJ"
+            fastq_1: "gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390"
+            fastq_2: "gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
+          }
+        }
+      ]
+    }
+  ) {
+    workflowExecution {
       name
       state
       id
     }
-    errors{
+    errors {
       message
       path
     }
@@ -355,14 +217,14 @@ mutation submitWorkflowExecution {
 }
 ```
 
-Result
+Résultat
 
 ```json
 {
   "data": {
     "submitWorkflowExecution": {
       "workflowExecution": {
-        "name": "My Workflow Submission from GraphQL",
+        "name": "Ma soumission de flux de travail depuis GraphQL",
         "state": "initial",
         "id": "gid://irida/WorkflowExecution/468dcdb5-cf94-4deb-b0b6-67033f156af4"
       },
@@ -372,4 +234,4 @@ Result
 }
 ```
 
-If we now look at the Workflow Executions page in IRIDA Next, we should see our submitted pipeline.
+Si nous regardons maintenant la page Exécutions de flux de travail dans IRIDA Next, nous devrions voir notre pipeline soumis.

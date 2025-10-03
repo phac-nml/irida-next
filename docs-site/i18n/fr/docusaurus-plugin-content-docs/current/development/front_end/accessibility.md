@@ -3,10 +3,10 @@ id: accessibility
 sidebar_position: 1
 ---
 
-# Accessibility
+# Accessibilité
 
-Accessibility is important for users who use screen readers or rely on keyboard-only functionality to ensure they have an equivalent experience to sighted mouse users.
+L'accessibilité est importante pour les utilisateurs qui utilisent des lecteurs d'écran ou qui s'appuient sur des fonctionnalités clavier uniquement pour s'assurer qu'ils ont une expérience équivalente aux utilisateurs voyants utilisant une souris.
 
-## Testing
+## Essais
 
-We use [axe-core](https://github.com/dequelabs/axe-core) for accessibility testing in our system test cases. You can call `assert_accessible` at any point which will run `axe-core` and report any accesibility errors found. Note: This is automatically called when `fill_in` or `visit` helpers are called in the tests.
+Nous utilisons [axe-core](https://github.com/dequelabs/axe-core) pour les essais d'accessibilité dans nos cas d'essai système. Vous pouvez appeler `assert_accessible` à tout moment, ce qui exécutera `axe-core` et signalera toute erreur d'accessibilité trouvée. Note : Ceci est automatiquement appelé lorsque les helpers `fill_in` ou `visit` sont appelés dans les essais.

@@ -1,51 +1,51 @@
 ---
 sidebar_position: 5
 id: group-files
-title: Group Files
+title: Fichiers de groupe
 ---
 
-Files can be uploaded and attached to groups
+Les fichiers peuvent être téléversés et attachés aux groupes
 
-## View Group files
+## Voir les fichiers de groupe
 
-Prerequisites:
+Prérequis :
 
-- You must have at least an **Analyst** role
+- Vous devez avoir au moins un rôle **Analyste**
 
-1. From the left sidebar, select **Groups**
-2. Select the group
-3. From the left sidebar, select **Files**
+1. Dans la barre latérale gauche, sélectionnez **Groupes**
+2. Sélectionnez le groupe
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
 
-## Upload Files to Groups
+## Téléverser des fichiers vers les groupes
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role
+- Vous devez avoir au moins un rôle **Responsable**
 
-To upload files to a group:
+Pour téléverser des fichiers vers un groupe :
 
-1. From the left sidebar, select **Groups**
-2. Select the group
-3. From the left sidebar, select **Files**
-4. Select **Upload Files**
-5. From the dialog, select **Choose files**
-6. Select the files you would like to upload. You can select multiple files at once.
-7. Select **Upload**
+1. Dans la barre latérale gauche, sélectionnez **Groupes**
+2. Sélectionnez le groupe
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Sélectionnez **Téléverser des fichiers**
+5. Dans la boîte de dialogue, sélectionnez **Choisir des fichiers**
+6. Sélectionnez les fichiers que vous souhaitez téléverser. Vous pouvez sélectionner plusieurs fichiers à la fois.
+7. Sélectionnez **Téléverser**
 
-## Download Group files
+## Télécharger les fichiers de groupe
 
-1. From the left sidebar, select **Groups**
-2. Select the group
-3. From the left sidebar, select **Files**
-4. Click the filename you'd like to download
+1. Dans la barre latérale gauche, sélectionnez **Groupes**
+2. Sélectionnez le groupe
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Cliquez sur le nom du fichier que vous souhaitez télécharger
 
-## Delete Group files
+## Supprimer les fichiers de groupe
 
-Prerequisites:
+Prérequis :
 
-- You must have a **Maintainer** role
+- Vous devez avoir un rôle **Responsable**
 
-1. From the left sidebar, select **Groups**
-2. Select the group
-3. From the left sidebar, select **Files**
-4. Select **Delete** for the files you would like to delete.
+1. Dans la barre latérale gauche, sélectionnez **Groupes**
+2. Sélectionnez le groupe
+3. Dans la barre latérale gauche, sélectionnez **Fichiers**
+4. Sélectionnez **Supprimer** pour les fichiers que vous souhaitez supprimer.

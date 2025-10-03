@@ -1,164 +1,164 @@
 ---
 sidebar_position: 3
 id: sample-metadata
-title: Sample Metadata
+title: Métadonnées d'échantillon
 ---
 
-Metadata can be added to samples to give them any additional information required by users.
+Les métadonnées peuvent être ajoutées aux échantillons pour leur donner toute information supplémentaire requise par les utilisateurs.
 
-A sample cannot have metadata with the same key, and metadata added by an analysis cannot be overwritten by a user.
+Un échantillon ne peut pas avoir de métadonnées avec la même clé, et les métadonnées ajoutées par une analyse ne peuvent pas être écrasées par un utilisateur.
 
-## View Metadata
+## Voir les métadonnées
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Click the toggle beside **Metadata**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Cliquez sur le bouton à bascule à côté de **Métadonnées**
 
-The samples table will update with all the samples' metadata.
+Le tableau des échantillons se mettra à jour avec toutes les métadonnées des échantillons.
 
-To view individual sample metadata:
+Pour voir les métadonnées d'un échantillon individuel :
 
-5. Select the sample
-6. Click the **Metadata** tab
+5. Sélectionnez l'échantillon
+6. Cliquez sur l'onglet **Métadonnées**
 
-## Add Metadata
+## Ajouter des métadonnées
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role for the sample's project
-- A sample added to the project
+- Vous devez avoir au moins un rôle **Responsable** pour le projet de l'échantillon
+- Un échantillon ajouté au projet
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the **Metadata** tab
-6. Click **Add Metadata**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cliquez sur l'onglet **Métadonnées**
+6. Cliquez sur **Ajouter des métadonnées**
 
-A dialog will pop-up where you can add new metadata.
+Une boîte de dialogue apparaîtra où vous pourrez ajouter de nouvelles métadonnées.
 
-## Update Metadata
+## Mettre à jour les métadonnées
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role for the sample's project
-- A sample with existing metadata added to the project
+- Vous devez avoir au moins un rôle **Responsable** pour le projet de l'échantillon
+- Un échantillon avec des métadonnées existantes ajouté au projet
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the **Metadata** tab
-6. Click the **Update** link of the metadata you'd like to update
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cliquez sur l'onglet **Métadonnées**
+6. Cliquez sur le lien **Mettre à jour** des métadonnées que vous souhaitez mettre à jour
 
-A dialog will pop-up where you can update the metadata.
+Une boîte de dialogue apparaîtra où vous pourrez mettre à jour les métadonnées.
 
-## Learn About Importing Metadata
+## En savoir plus sur l'importation de métadonnées
 
-Importing metadata allows you to add multiple metadata fields to multiple samples all at once. This requires a spreadsheet in .csv, .tsv, .xls, or .xlsx format.
+L'importation de métadonnées vous permet d'ajouter plusieurs champs de métadonnées à plusieurs échantillons en une seule fois. Cela nécessite une feuille de calcul au format .csv, .tsv, .xls ou .xlsx.
 
-This is an example of the expected spreadsheet format:
+Ceci est un exemple du format de feuille de calcul attendu :
 
-| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 |
-| :---------- | :------------- | :------------- | :------------- |
-| Sample 1    | value1         | value2         | value3         |
-| Sample 2    | value4         | value5         | value6         |
+| nomEchantillon | champMetadonnees1 | champMetadonnees2 | champMetadonnees3 |
+| :------------- | :---------------- | :---------------- | :---------------- |
+| echantillon1   | valeur1           | valeur2           | valeur3           |
+| echantillon2   | valeur4           | valeur5           | valeur6           |
 
-The following metadata will be added:
+Les métadonnées suivantes seront ajoutées :
 
-- Sample 1:
+- Échantillon1 :
 
-  | Key            | Value  |
-  | :------------- | :----- |
-  | MetadataField1 | value1 |
-  | MetadataField2 | value2 |
-  | MetadataField3 | value3 |
+  | cle               | valeur  |
+  | :---------------- | :------ |
+  | champMetadonnees1 | valeur1 |
+  | champMetadonnees2 | valeur2 |
+  | champMetadonnees3 | valeur3 |
 
-- Sample 2:
+- Échantillon2 :
 
-  | Key            | Value  |
-  | :------------- | :----- |
-  | MetadataField1 | value4 |
-  | MetadataField2 | value5 |
-  | MetadataField3 | value6 |
+  | cle               | valeur  |
+  | :---------------- | :------ |
+  | champMetadonnees1 | valeur4 |
+  | champMetadonnees2 | valeur5 |
+  | champMetadonnees3 | valeur6 |
 
-When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or PUIDs. When importing metadata from a **project**, the sample identifier can be either the **sample name or PUID**. If importing metadata from a **group**, the sample identifier must be the **sample PUID**.
+Lors de la création de la feuille de calcul, vous devez avoir une colonne qui contient un identifiant d'échantillon. L'identifiant est sensible à la casse et peut contenir soit les noms d'échantillon, soit les PUID. Lors de l'importation de métadonnées à partir d'un **projet**, l'identifiant d'échantillon peut être soit le **nom de l'échantillon, soit le PUID**. Si vous importez des métadonnées à partir d'un **groupe**, l'identifiant d'échantillon doit être le **PUID de l'échantillon**.
 
-**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
+**Une note importante :** Lors de l'importation d'une feuille de calcul de métadonnées, il vous sera demandé si vous souhaitez **Ignorer les valeurs vides**. Si cela est **sélectionné**, tous les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l'échantillon si elles sont présentes. Cependant, si cela n'est **pas sélectionné**, tous les échantillons avec la clé de métadonnées et une valeur vide seront **supprimés**.
 
-For example, if the metadata above was imported and added to Sample 1 and Sample 2, and the following spreadsheet was then imported:
+Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à Échantillon1 et Échantillon2, et que la feuille de calcul suivante était ensuite importée :
 
-| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 | MetadataField4 |
-| :---------- | :------------- | :------------- | :------------- | :------------- |
-| Sample 1    |                | newValue2      | newValue3      | anotherValue1  |
-| Sample 2    | newValue4      |                | newValue6      | anotherValue2  |
+| nomEchantillon | champMetadonnees1 | champMetadonnees2 | champMetadonnees3 | champMetadonnees4 |
+| :------------- | :---------------- | :---------------- | :---------------- | :---------------- |
+| echantillon1   |                   | nouvelleValeur2   | nouvelleValeur3   | autreValeur1      |
+| echantillon2   | nouvelleValeur4   |                   | nouvelleValeur6   | autreValeur2      |
 
-This would result in the following sample metadata:
+Cela résulterait en les métadonnées d'échantillon suivantes :
 
-- If **Ignore empty values** was **checked**:
+- Si **Ignorer les valeurs vides** était **coché** :
 
-  - Sample 1:
+  - Échantillon1 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | value1        |
-    | MetadataField2 | newValue2     |
-    | MetadataField3 | newValue3     |
-    | MetadataField4 | anotherValue1 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | valeur1         |
+    | champMetadonnees2 | nouvelleValeur2 |
+    | champMetadonnees3 | nouvelleValeur3 |
+    | champMetadonnees4 | autreValeur1    |
 
-  - Sample 2:
+  - Échantillon2 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | newValue4     |
-    | MetadataField2 | value5        |
-    | MetadataField3 | newValue6     |
-    | MetadataField4 | anotherValue2 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | nouvelleValeur4 |
+    | champMetadonnees2 | valeur5         |
+    | champMetadonnees3 | nouvelleValeur6 |
+    | champMetadonnees4 | autreValeur2    |
 
-- If **Ignore empty values** was **not checked**:
+- Si **Ignorer les valeurs vides** n'était **pas coché** :
 
-  - Sample 1:
+  - Échantillon1 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField2 | newValue2     |
-    | MetadataField3 | newValue3     |
-    | MetadataField4 | anotherValue1 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees2 | nouvelleValeur2 |
+    | champMetadonnees3 | nouvelleValeur3 |
+    | champMetadonnees4 | autreValeur1    |
 
-  - Sample 2:
+  - Échantillon2 :
 
-    | Key            | Value         |
-    | :------------- | :------------ |
-    | MetadataField1 | newValue4     |
-    | MetadataField3 | newValue6     |
-    | MetadataField4 | anotherValue2 |
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | nouvelleValeur4 |
+    | champMetadonnees3 | nouvelleValeur6 |
+    | champMetadonnees4 | autreValeur2    |
 
-## Steps to Import Metadata
+## Étapes pour importer des métadonnées
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role for the sample's project or group
-- A sample added to the project or group
+- Vous devez avoir au moins un rôle **Responsable** pour le projet ou le groupe de l'échantillon
+- Un échantillon ajouté au projet ou au groupe
 
-1. From the left sidebar, select **Projects** or **Groups**
-2. Select the project or group
-3. From the left sidebar, select **Samples**
-4. Click **Import Metadata**
+1. Dans la barre latérale gauche, sélectionnez **Projets** ou **Groupes**
+2. Sélectionnez le projet ou le groupe
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Cliquez sur **Importer des métadonnées**
 
-A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](sample-metadata#learn-about-importing-metadata).
+Une boîte de dialogue apparaîtra pour sélectionner la feuille de calcul à importer. Après avoir sélectionné le fichier de feuille de calcul, identifiez quelle colonne contient l'identifiant d'échantillon et si vous souhaitez [Ignorer les valeurs vides](sample-metadata#learn-about-importing-metadata).
 
-## Delete Metadata
+## Supprimer des métadonnées
 
-Prerequisites:
+Prérequis :
 
-- You must have at least a **Maintainer** role for the sample's project
-- A sample with existing metadata added to the project
+- Vous devez avoir au moins un rôle **Responsable** pour le projet de l'échantillon
+- Un échantillon avec des métadonnées existantes ajouté au projet
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the **Metadata** tab
-6. Click the checkboxes of the metadata you'd like to delete.
-7. Click **Delete Metadata**
+1. Dans la barre latérale gauche, sélectionnez **Projets**
+2. Sélectionnez le projet
+3. Dans la barre latérale gauche, sélectionnez **Échantillons**
+4. Sélectionnez l'échantillon
+5. Cliquez sur l'onglet **Métadonnées**
+6. Cochez les cases des métadonnées que vous souhaitez supprimer.
+7. Cliquez sur **Supprimer les métadonnées**

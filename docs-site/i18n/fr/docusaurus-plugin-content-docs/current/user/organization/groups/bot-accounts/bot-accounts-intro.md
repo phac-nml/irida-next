@@ -2,6 +2,6 @@
 id: introduction
 ---
 
-# Bot Accounts
+# Comptes de robot
 
-Bot accounts are used when performing actions which can't be attributed to a human user. For example, using an uploader.
+Les comptes de robot sont utilisés lors de l'exécution d'actions qui ne peuvent pas être attribuées à un utilisateur humain. Par exemple, lors de l'utilisation d'un téléverseur.

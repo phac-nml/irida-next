@@ -1,54 +1,53 @@
 ---
 sidebar_position: 1
 id: getting-started
-title: Getting Started
+title: Démarrage
 ---
 
-In IRIDA Next, you can download data from multiple samples or all files associated with a workflow execution at once by creating a data export.
+Dans IRIDA Next, vous pouvez télécharger des données de plusieurs échantillons ou tous les fichiers associés à une exécution de flux de travail en une seule fois en créant une exportation de données.
 
-## Export Types
+## Types d'exportation
 
-There are three types of exports in IRIDA Next:
+Il existe trois types d'exportation dans IRIDA Next :
 
-| Export Type      | Description                                                                                                                           |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| Sample           | Allows users to select any number of samples belonging to either a group or project and download all the associated files.    |
-| Linelist         | Allows users to select any number of samples belonging to either a group or project and download all the associated metadata. |
-| Analysis         | Allows users to download all files associated with a workflow execution.                                                      |
+| Type d'exportation | Description                                                                                                                                      |
+| :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Échantillon        | Permet aux utilisateurs de sélectionner n'importe quel nombre d'échantillons appartenant à un groupe ou à un projet et de télécharger tous les fichiers associés. |
+| Liste linéaire     | Permet aux utilisateurs de sélectionner n'importe quel nombre d'échantillons appartenant à un groupe ou à un projet et de télécharger toutes les métadonnées associées. |
+| Analyse            | Permet aux utilisateurs de télécharger tous les fichiers associés à une exécution de flux de travail.                                           |
 
-## Requirements
+## Exigences
 
-The following is required to create an export:
-* Sample Export
-  * Project that has at least one associated sample, and files uploaded to the sample.
-  * At least the Analyst role for the Project or Group containing the samples for export.
-* Linelist Export
-  * Project that has at least one associated sample that contains metadata.
-  * At least the Analyst role for the Project or Group containing the samples for export.
-* Analysis Export
-  * User Workflow Execution
-    * A user workflow execution in the completed state.
-  * Automated Workflow Execution
-    * Project that has at least one automated workflow execution in the completed state.
-    * At least the Analyst role for the project containing the automated workflow execution.
+Les éléments suivants sont requis pour créer une exportation :
+* Exportation d'échantillon
+  * Projet ayant au moins un échantillon associé, et des fichiers téléversés vers l'échantillon.
+  * Au moins le rôle Analyste pour le projet ou le groupe contenant les échantillons à exporter.
+* Exportation de liste linéaire
+  * Projet ayant au moins un échantillon associé contenant des métadonnées.
+  * Au moins le rôle Analyste pour le projet ou le groupe contenant les échantillons à exporter.
+* Exportation d'analyse
+  * Exécution de flux de travail utilisateur
+    * Une exécution de flux de travail utilisateur dans l'état terminé.
+  * Exécution de flux de travail automatisée
+    * Projet ayant au moins une exécution de flux de travail automatisée dans l'état terminé.
+    * Au moins le rôle Analyste pour le projet contenant l'exécution de flux de travail automatisée.
 
-## Export Contents
+## Contenu de l'exportation
 
-Exports allow users to download their data from IRIDA Next with a single click. Follow these [steps](../export/working-with-exports) to learn how to work with exports.
+Les exportations permettent aux utilisateurs de télécharger leurs données depuis IRIDA Next en un seul clic. Suivez ces [étapes](../export/working-with-exports) pour apprendre à travailler avec les exportations.
 
-Sample and Analysis exports:
-* The files are added to a single, compressed folder. In addition to the exported files selected by the user, three additional files are included:
-  * Each export includes a **manifest.json** and **manifest.txt** file that contains an overview of what's included in the export.
-  * Each analysis export includes a **summary.txt.gz** file that contains the pipeline summary.
+Exportations d'échantillon et d'analyse :
+* Les fichiers sont ajoutés à un seul dossier compressé. En plus des fichiers exportés sélectionnés par l'utilisateur, trois fichiers supplémentaires sont inclus :
+  * Chaque exportation inclut un fichier **manifest.json** et **manifest.txt** qui contient un aperçu de ce qui est inclus dans l'exportation.
+  * Chaque exportation d'analyse inclut un fichier **summary.txt.gz** qui contient le résumé du pipeline.
 
-Linelist exports:
-* The export contents will be contained in a single file of the chosen format (.csv or .xlsx).
+Exportations de liste linéaire :
+* Le contenu de l'exportation sera contenu dans un seul fichier du format choisi (.csv ou .xlsx).
 
-## Export Statuses
+## Statuts d'exportation
 
-Exports will have either a **Processing** or **Ready** status assigned to them.
-  * When an export is **Processing**, IRIDA Next is in the process of creating your export and, therefore, your export is not available to download.
-  * Once the export status is **Ready**, the export is ready to download. A [preview](../export/working-with-exports#view-single-export) of the export contents for Sample and Analysis exports is also viewable on IRIDA Next once the export status is **Ready**.
+Les exportations auront soit un statut **En traitement** ou **Prêt** qui leur est attribué.
+  * Lorsqu'une exportation est **En traitement**, IRIDA Next est en train de créer votre exportation et, par conséquent, votre exportation n'est pas disponible pour téléchargement.
+  * Une fois que le statut de l'exportation est **Prêt**, l'exportation est prête à être téléchargée. Un [aperçu](../export/working-with-exports#view-single-export) du contenu de l'exportation pour les exportations d'échantillon et d'analyse est également visible sur IRIDA Next une fois que le statut de l'exportation est **Prêt**.
 
-After the export status is set to **Ready**, you will have **3 business days** to download the export before it is automatically deleted. You can choose to receive an [e-mail](../export/working-with-exports#create-sample-export) when creating the export to ensure you do not miss the download window.
-
+Une fois que le statut de l'exportation est défini sur **Prêt**, vous aurez **3 jours ouvrables** pour télécharger l'exportation avant qu'elle ne soit automatiquement supprimée. Vous pouvez choisir de recevoir un [courriel](../export/working-with-exports#create-sample-export) lors de la création de l'exportation pour vous assurer de ne pas manquer la fenêtre de téléchargement.

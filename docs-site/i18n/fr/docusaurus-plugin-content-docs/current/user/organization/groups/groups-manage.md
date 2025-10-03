@@ -3,36 +3,36 @@ id: manage
 sidebar_position: 2
 ---
 
-# Manage Groups
+# Gérer les groupes
 
-Use groups to manage one or more related projects at the same time.
+Utilisez les groupes pour gérer un ou plusieurs projets connexes en même temps.
 
-## View Groups
+## Voir les groupes
 
-To view groups, on the top bar, select **Main menu > Groups > View all groups**.
+Pour voir les groupes, dans la barre supérieure, sélectionnez **Menu principal > Groupes > Voir tous les groupes**.
 
-The **Groups** page shows a list of groups, sorted by last updated date.
-* To explore all public groups, select **Explore groups**.
-* To view groups where you have a direct or indirect membership, select **Your groups**. This tab shows groups that you are a member of:
-  * Through membership of a subgroup's parent group.
-  * Through direct or inherited membership of a project in the group or subgroup.
+La page **Groupes** affiche une liste de groupes, triés par date de dernière mise à jour.
+* Pour explorer tous les groupes publics, sélectionnez **Explorer les groupes**.
+* Pour voir les groupes dont vous êtes membre directement ou indirectement, sélectionnez **Vos groupes**. Cet onglet affiche les groupes dont vous êtes membre :
+  * Par l'appartenance au groupe parent d'un sous-groupe.
+  * Par l'appartenance directe ou héritée à un projet dans le groupe ou le sous-groupe.
 
-## Create a group
+## Créer un groupe
 
-To create a group:
-1. On the top bar, either:
-  * Select **Main menu > Groups > View all groups**, and on the right, select **New group**.
-  * To the left of the search box, select the plus sign and then **New group**.
-2. Select **Create group**.
-3. Enter a name for the group in **Group name**. For a list of words that cannot be used as group names, see [reserved names](../../project/projects/reserved-names).
-4. Enter a path for the group in **Group URL**, which is used for the [namespace](../namespaces).
+Pour créer un groupe :
+1. Dans la barre supérieure, soit :
+  * Sélectionnez **Menu principal > Groupes > Voir tous les groupes**, puis à droite, sélectionnez **Nouveau groupe**.
+  * À gauche de la zone de recherche, sélectionnez le signe plus puis **Nouveau groupe**.
+2. Sélectionnez **Créer un groupe**.
+3. Entrez un nom pour le groupe dans **Nom du groupe**. Pour une liste de mots qui ne peuvent pas être utilisés comme noms de groupe, consultez [noms réservés](../../project/projects/reserved-names).
+4. Entrez un chemin pour le groupe dans **URL du groupe**, qui est utilisé pour l'[espace de noms](../namespaces).
 
-## Remove a group
+## Retirer un groupe
 
-To remove a group and its contents:
-1. On the top bar, select **Main menu > Groups** and find your group.
-2. On the left sidebar, select **Settings > General**.
-3. Expand the **Advanced** section.
-4. In the **Remove group** section, select **Remove group**.
+Pour retirer un groupe et son contenu :
+1. Dans la barre supérieure, sélectionnez **Menu principal > Groupes** et trouvez votre groupe.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Général**.
+3. Développez la section **Avancé**.
+4. Dans la section **Retirer le groupe**, sélectionnez **Retirer le groupe**.
 
-This action removes the group.
+Cette action retire le groupe.

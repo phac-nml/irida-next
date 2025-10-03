@@ -2,12 +2,12 @@
 id: introduction
 ---
 
-# Groups
+# Groupes
 
-In IRIDA Next, you use groups to manage one or more related projects at the same time.
+Dans IRIDA Next, vous utilisez des groupes pour gérer un ou plusieurs projets connexes en même temps.
 
-You can use groups to manage permissions for your projects. If someone has access to the group, they get access to all the projects in the group.
+Vous pouvez utiliser des groupes pour gérer les permissions de vos projets. Si quelqu'un a accès au groupe, il obtient accès à tous les projets du groupe.
 
-You can also create subgroups.
+Vous pouvez également créer des sous-groupes.
 
-For more information about creating and managing your groups, see [Manage groups](manage).
+Pour plus d'informations sur la création et la gestion de vos groupes, consultez [Gérer les groupes](manage).

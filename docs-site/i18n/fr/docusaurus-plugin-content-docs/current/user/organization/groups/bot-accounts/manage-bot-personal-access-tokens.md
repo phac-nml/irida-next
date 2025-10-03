@@ -1,50 +1,50 @@
 ---
 sidebar_position: 4
 id: manage-bot-PAT
-title: Manage Bot Account Personal Access Tokens
+title: Gérer les jetons d'accès personnels des comptes de robot
 ---
 
-Personal Access Tokens (PAT) are needed to use the IRIDA Next GraphQL API. See [Authentication with Personal Access Tokens](/docs/extend/graphql#authentication-with-personal-access-tokens) for more information.
+Les jetons d'accès personnels (PAT) sont nécessaires pour utiliser l'API GraphQL d'IRIDA Next. Consultez [Authentification avec les jetons d'accès personnels](/docs/extend/graphql#authentication-with-personal-access-tokens) pour plus d'informations.
 
-## View Personal Access Token
+## Voir le jeton d'accès personnel
 
-Prerequisite:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Mainteneur**.
 
-To view bot account personal access tokens within a group:
+Pour voir les jetons d'accès personnels des comptes de robot au sein d'un groupe :
 
-1. From the left sidebar, select **Groups** and find your group.
-2. From the left sidebar, select **Settings > Bot Accounts**.
-3. Click on the **Active Tokens** total link within the row of the bot account personal access token you want to view. A list of the active personal access tokens will be displayed.
+1. Dans la barre latérale gauche, sélectionnez **Groupes** et trouvez votre groupe.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Comptes de robot**.
+3. Cliquez sur le lien du total **Jetons actifs** dans la ligne du jeton d'accès personnel du compte de robot que vous souhaitez voir. Une liste des jetons d'accès personnels actifs sera affichée.
 
-## Generate Personal Access Token
+## Générer un jeton d'accès personnel
 
-Prerequisite:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Mainteneur**.
 
-To generate a bot account personal access token within a group:
+Pour générer un jeton d'accès personnel de compte de robot au sein d'un groupe :
 
-1. From the left sidebar, select **Groups** and find your group.
-2. From the left sidebar, select **Settings > Bot Accounts**.
-3. On the right hand side of the row for the bot account, click the **Generate new token** link.
-4. Enter the token name in the **Name** field.
-5. Select an access level.
-6. Set an optional expiry date.
-7. Select at least one scope.
-8. Click the **Submit** button.
+1. Dans la barre latérale gauche, sélectionnez **Groupes** et trouvez votre groupe.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Comptes de robot**.
+3. Sur le côté droit de la ligne pour le compte de robot, cliquez sur le lien **Générer un nouveau jeton**.
+4. Entrez le nom du jeton dans le champ **Nom**.
+5. Sélectionnez un niveau d'accès.
+6. Définissez une date d'expiration optionnelle.
+7. Sélectionnez au moins une portée.
+8. Cliquez sur le bouton **Soumettre**.
 
-## Revoke Personal Access Token
+## Révoquer un jeton d'accès personnel
 
-Prerequisite:
+Prérequis :
 
-- You must have at least a **Maintainer** role.
+- Vous devez avoir au moins un rôle **Mainteneur**.
 
-To revoke a bot account personal access token within a group:
+Pour révoquer un jeton d'accès personnel de compte de robot au sein d'un groupe :
 
-1. From the left sidebar, select **Groups** and find your group.
-2. From the left sidebar, select **Settings > Bot Accounts**.
-3. Click on the **Active Tokens** total link within the row of the bot account personal access token you want to revoke. A list of the active personal access tokens will be displayed.
-4. On the right hand side of the row for the bot account personal access token, click the **Revoke** button.
-5. Confirm that you would like to revoke the bot account personal access token by clicking the **Confirm** button.
+1. Dans la barre latérale gauche, sélectionnez **Groupes** et trouvez votre groupe.
+2. Dans la barre latérale gauche, sélectionnez **Paramètres > Comptes de robot**.
+3. Cliquez sur le lien du total **Jetons actifs** dans la ligne du jeton d'accès personnel du compte de robot que vous souhaitez révoquer. Une liste des jetons d'accès personnels actifs sera affichée.
+4. Sur le côté droit de la ligne pour le jeton d'accès personnel du compte de robot, cliquez sur le bouton **Révoquer**.
+5. Confirmez que vous souhaitez révoquer le jeton d'accès personnel du compte de robot en cliquant sur le bouton **Confirmer**.
