@@ -1,12 +1,17 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
+  env.GA4GH_WES_URL = "http://localhost:1122";
+  env.LD_LIBRARY_PATH = "${pkgs.sssd}/lib";
+
   # https://devenv.sh/packages/
   packages = with pkgs; [
     pkg-config
     libyaml.dev
     openssl.dev
     coreutils
+    sssd
+    postgresql_14
     nodejs_24
     pnpm_10
     python313
@@ -67,7 +72,6 @@
 
   # https://devenv.sh/basics/
   enterShell = ''
-    export GA4GH_WES_URL="http://localhost:1122"
     ruby --version
     gem install ruby-lsp
     bundle
