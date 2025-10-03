@@ -146,7 +146,7 @@ en:
             name:
               blank: can't be blank
           invalid_namespace: can only be Group or Project
-          invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
+          invalid_workflow: unable to find workflow with id '%{pipeline_id}' and version '%{workflow_version}'
           missing_namespace: does not have a namespace
     exceptions:
       personal_access_token:
