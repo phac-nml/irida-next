@@ -60,8 +60,7 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 # gem "sassc-rails"
 
 # Tailwind CSS [https://tailwindcss.com]
-gem 'heroicon-rails', '>= 0.2.9'
-gem 'pathogen_view_components', path: './embedded_gems/pathogen'
+gem 'pathogen_view_components', github: 'phac-nml/pathogen', branch: 'main', require: false
 gem 'tailwindcss-rails', '~> 4.0'
 gem 'view_component', '~> 3.21.0'
 
