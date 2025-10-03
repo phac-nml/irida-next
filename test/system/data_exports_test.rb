@@ -923,13 +923,8 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text sample3.puid
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
-        assert_no_selector 'li'
-      end
-
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
-        assert_no_selector 'li'
-      end
+      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']"
+      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']"
 
       assert_no_selector 'input[disabled]' # submit button enabled
     end
@@ -962,13 +957,8 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text sample43.puid
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
-        assert_no_selector 'li'
-      end
-
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
-        assert_no_selector 'li'
-      end
+      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']"
+      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']"
 
       assert_no_selector 'input[disabled]' # submit button enabled
     end
