@@ -1,18 +1,18 @@
 {
   "title": {
     "message": "IRIDA Next",
-    "description": "The title in the navbar"
+    "description": "Le titre dans la barre de navigation"
   },
   "logo.alt": {
     "message": "IRIDA Next Logo",
-    "description": "The alt text of navbar logo"
+    "description": "Le texte alternatif du logo de la barre de navigation"
   },
   "item.label.Docs": {
     "message": "Docs",
-    "description": "Navbar item with label Docs"
+    "description": "Élément de la barre de navigation avec l'étiquette Docs"
   },
   "item.label.GitHub": {
     "message": "GitHub",
-    "description": "Navbar item with label GitHub"
+    "description": "Élément de la barre de navigation avec l'étiquette GitHub"
   }
 }
