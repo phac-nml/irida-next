@@ -146,8 +146,8 @@ fr:
             name:
               blank: Ne peut pas être vide
           invalid_namespace: Ne peut être qu’un groupe ou un projet
-          invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'
-          missing_namespace: N’a pas d’espace de noms
+          invalid_workflow: Impossible de trouver le flux de travail avec l’ID '%{pipeline_id}' et la version '%{workflow_version}'
+          missing_namespace: does not have a namespace
     exceptions:
       personal_access_token:
         not_found: Impossible de trouver le jeton d’accès personnel avec l’identifiant %{token_id}
