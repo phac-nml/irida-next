@@ -43,7 +43,7 @@ lib.mkMerge [
       '';
     };
 
-    process.manager.implementation = "mprocs";
+    process.manager.implementation = "honcho";
 
     # https://devenv.sh/processes/
     # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
@@ -92,7 +92,7 @@ lib.mkMerge [
         git checkout main
         git branch -D irida-next &>/dev/null || true
         git checkout irida-next
-        python3 -m pip install -e .
+        pip install -e .
       '';
       cwd = "${config.git.root}/.devenv";
       before = [ "devenv:processes:sapporo-service" ];
