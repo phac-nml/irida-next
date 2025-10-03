@@ -23,7 +23,9 @@
   "rubyLsp.rubyVersionManager": {
     "identifier": "custom"
   },
-  "rubyLsp.featureFlags": { "fullTestDiscovery": true },
+  "rubyLsp.featureFlags": {
+    "fullTestDiscovery": true
+  },
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "editor.rulers": [120],
@@ -82,5 +84,17 @@
     "tailwindcss"
   ],
   "rubyLsp.customRubyCommand": "bash",
-  "git.autoRepositoryDetection": false
+  "git.autoRepositoryDetection": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/CVS": true,
+    "**/.ruby-lsp": true,
+    "**/.devenv/profile/": true,
+    "**/.devenv/run/": true,
+    "**/.devenv/state/.bundle": true
+  }
 }
