@@ -4,11 +4,11 @@
     "description": "Le titre dans la barre de navigation"
   },
   "logo.alt": {
-    "message": "IRIDA Next Logo",
+    "message": "Logo d'IRIDA Next",
     "description": "Le texte alternatif du logo de la barre de navigation"
   },
   "item.label.Docs": {
-    "message": "Docs",
+    "message": "Documentation",
     "description": "Élément de la barre de navigation avec l'étiquette Docs"
   },
   "item.label.GitHub": {

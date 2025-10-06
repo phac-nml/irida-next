@@ -191,7 +191,7 @@
     "description": "L'étiquette ARIA pour réduire la catégorie de la barre latérale"
   },
   "theme.NavBar.navAriaLabel": {
-    "message": "Main",
+    "message": "Navigation principale",
     "description": "L'étiquette ARIA pour la navigation principale"
   },
   "theme.navbar.mobileLanguageDropdown.label": {
@@ -235,7 +235,7 @@
     "description": "L'attribut titre pour le bouton de réduction de la barre latérale de documentation"
   },
   "theme.docs.sidebar.navAriaLabel": {
-    "message": "Docs sidebar",
+    "message": "Barre latérale de la documentation",
     "description": "L'étiquette ARIA pour la navigation de la barre latérale"
   },
   "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
@@ -271,15 +271,15 @@
     "description": "Le titre de la page pour un auteur de blog"
   },
   "theme.blog.authorsList.pageTitle": {
-    "message": "Authors",
+    "message": "Auteurs",
     "description": "Le titre de la page des auteurs"
   },
   "theme.blog.authorsList.viewAll": {
-    "message": "View All Authors",
+    "message": "Voir tous les auteurs",
     "description": "L'étiquette du lien ciblant la page des auteurs du blog"
   },
   "theme.blog.author.noPosts": {
-    "message": "This author has not written any posts yet.",
+    "message": "Cet auteur n'a pas encore écrit d'article.",
     "description": "Le texte pour les auteurs avec 0 article de blog"
   },
   "theme.contentVisibility.unlistedBanner.title": {
@@ -291,11 +291,11 @@
     "description": "Le message de la bannière de contenu non répertorié"
   },
   "theme.contentVisibility.draftBanner.title": {
-    "message": "Draft page",
+    "message": "Page brouillon",
     "description": "Le titre de la bannière de contenu brouillon"
   },
   "theme.contentVisibility.draftBanner.message": {
-    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
+    "message": "Cette page est un brouillon. Elle sera visible seulement en développement et exclue de la version de production.",
     "description": "Le message de la bannière de contenu brouillon"
   },
   "theme.ErrorPageContent.tryAgain": {
@@ -311,11 +311,11 @@
     "description": "Le titre de la page de liste des étiquettes"
   },
   "IRIDA Next Docs": {
-    "message": "IRIDA Next Docs",
+    "message": "Documentation IRIDA Next",
     "description": "Le titre principal de la page d'accueil"
   },
   "Integrated Rapid Infectious Disease Analysis": {
-    "message": "Integrated Rapid Infectious Disease Analysis",
+    "message": "Analyse intégrée rapide des maladies infectieuses",
     "description": "Le slogan de la page d'accueil"
   }
 }

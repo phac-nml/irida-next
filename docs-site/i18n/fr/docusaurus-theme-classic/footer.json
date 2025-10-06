@@ -1,18 +1,18 @@
 {
   "link.title.Docs": {
-    "message": "Docs",
+    "message": "Documentation",
     "description": "Le titre de la colonne de liens du pied de page avec title=Docs dans le pied de page"
   },
   "link.title.Community": {
-    "message": "Community",
+    "message": "Communauté",
     "description": "Le titre de la colonne de liens du pied de page avec title=Community dans le pied de page"
   },
   "link.title.More": {
-    "message": "More",
+    "message": "Plus",
     "description": "Le titre de la colonne de liens du pied de page avec title=More dans le pied de page"
   },
   "link.item.label.Docs": {
-    "message": "Docs",
+    "message": "Documentation",
     "description": "L'étiquette du lien du pied de page avec label=Docs liant vers /docs/intro"
   },
   "link.item.label.Gitter": {
@@ -24,7 +24,7 @@
     "description": "L'étiquette du lien du pied de page avec label=GitHub liant vers https://github.com/phac-nml/irida-next"
   },
   "copyright": {
-    "message": "Copyright © 2025 IRIDA Next. Built with Docusaurus.",
+    "message": "Droits d'auteur © 2025 IRIDA Next. Propulsé par Docusaurus.",
     "description": "Le copyright du pied de page"
   }
 }
