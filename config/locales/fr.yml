@@ -139,6 +139,7 @@ fr:
               too_short: est trop court (le minimum est de 6 caractères)
             password_confirmation:
               confirmation: ne correspond pas au mot de passe
+          only_system_account: Cannot remove account as this would leave the application without a system user
         workflow_execution:
           attributes:
             name:
@@ -2053,6 +2054,10 @@ fr:
       last_word_connector: " et "
       two_words_connector: " et "
       words_connector: ", "
+  system:
+    initial_setup:
+      update:
+        success: Initial account configured! Please sign in.
   theme:
     announcements:
       changed: Thème changé en mode %{theme}
