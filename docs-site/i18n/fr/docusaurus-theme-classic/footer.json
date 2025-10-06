@@ -1,30 +1,30 @@
 {
   "link.title.Docs": {
-    "message": "Docs",
-    "description": "The title of the footer links column with title=Docs in the footer"
+    "message": "Documentation",
+    "description": "Le titre de la colonne de liens du pied de page avec title=Docs dans le pied de page"
   },
   "link.title.Community": {
-    "message": "Community",
-    "description": "The title of the footer links column with title=Community in the footer"
+    "message": "Communauté",
+    "description": "Le titre de la colonne de liens du pied de page avec title=Community dans le pied de page"
   },
   "link.title.More": {
-    "message": "More",
-    "description": "The title of the footer links column with title=More in the footer"
+    "message": "Plus",
+    "description": "Le titre de la colonne de liens du pied de page avec title=More dans le pied de page"
   },
   "link.item.label.Docs": {
-    "message": "Docs",
-    "description": "The label of footer link with label=Docs linking to /docs/intro"
+    "message": "Documentation",
+    "description": "L'étiquette du lien du pied de page avec label=Docs liant vers /docs/intro"
   },
   "link.item.label.Gitter": {
     "message": "Gitter",
-    "description": "The label of footer link with label=Gitter linking to https://gitter.im/irida-project"
+    "description": "L'étiquette du lien du pied de page avec label=Gitter liant vers https://gitter.im/irida-project"
   },
   "link.item.label.GitHub": {
     "message": "GitHub",
-    "description": "The label of footer link with label=GitHub linking to https://github.com/phac-nml/irida-next"
+    "description": "L'étiquette du lien du pied de page avec label=GitHub liant vers https://github.com/phac-nml/irida-next"
   },
   "copyright": {
-    "message": "Copyright © 2025 IRIDA Next. Built with Docusaurus.",
-    "description": "The footer copyright"
+    "message": "Droits d'auteur © 2025 IRIDA Next. Propulsé par Docusaurus.",
+    "description": "Le copyright du pied de page"
   }
 }
