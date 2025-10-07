@@ -99,7 +99,6 @@
               id: t(".selected"),
               title: t(".selected"),
               group: "metadata_selection",
-              required: true,
             ) %>
           <% end %>
 
@@ -171,17 +170,14 @@
                 turbo_frame: "_top",
                 action: "click->viral--sortable-lists--two-lists-selection#constructParams",
                 "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-              }
-              disabled = true %>
+              } %>
             <% else %>
-              <% data = { turbo_frame: "_top" }
-              disabled = false %>
+              <% data = { turbo_frame: "_top" } %>
             <% end %>
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
                           data: data,
-                          class: "button button-primary",
-                          disabled: disabled %>
+                          class: "button button-primary" %>
             </div>
           </div>
         <% end %>
