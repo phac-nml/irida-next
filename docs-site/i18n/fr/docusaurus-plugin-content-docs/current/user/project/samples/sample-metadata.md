@@ -96,7 +96,25 @@ Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à 
 
 Cela résulterait en les métadonnées d'échantillon suivantes :
 
-- Si **Ignorer les valeurs vides** était **coché** :
+- If **Delete metadata with empty values** was **checked**:
+
+  - Échantillon1 :
+
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees2 | nouvelleValeur2 |
+    | champMetadonnees3 | nouvelleValeur3 |
+    | champMetadonnees4 | autreValeur1    |
+
+  - Échantillon2 :
+
+    | cle               | valeur          |
+    | :---------------- | :-------------- |
+    | champMetadonnees1 | nouvelleValeur4 |
+    | champMetadonnees3 | nouvelleValeur6 |
+    | champMetadonnees4 | autreValeur2    |
+
+- If **Delete metadata with empty values** was **not checked**:
 
   - Échantillon1 :
 
@@ -113,24 +131,6 @@ Cela résulterait en les métadonnées d'échantillon suivantes :
     | :---------------- | :-------------- |
     | champMetadonnees1 | nouvelleValeur4 |
     | champMetadonnees2 | valeur5         |
-    | champMetadonnees3 | nouvelleValeur6 |
-    | champMetadonnees4 | autreValeur2    |
-
-- Si **Ignorer les valeurs vides** n'était **pas coché** :
-
-  - Échantillon1 :
-
-    | cle               | valeur          |
-    | :---------------- | :-------------- |
-    | champMetadonnees2 | nouvelleValeur2 |
-    | champMetadonnees3 | nouvelleValeur3 |
-    | champMetadonnees4 | autreValeur1    |
-
-  - Échantillon2 :
-
-    | cle               | valeur          |
-    | :---------------- | :-------------- |
-    | champMetadonnees1 | nouvelleValeur4 |
     | champMetadonnees3 | nouvelleValeur6 |
     | champMetadonnees4 | autreValeur2    |
 
