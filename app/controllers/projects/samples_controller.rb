@@ -31,7 +31,7 @@ module Projects
           if @query.valid?
             render status: :ok
           else
-            render status: :unprocessable_entity
+            render status: :unprocessable_content
           end
         end
       end
@@ -81,7 +81,7 @@ module Projects
         flash[:success] = t('.success')
         redirect_to namespace_project_sample_path(id: @sample.id)
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -91,7 +91,7 @@ module Projects
           flash[:success] = t('.success')
           format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
-          format.html { render :edit, status: :unprocessable_entity }
+          format.html { render :edit, status: :unprocessable_content }
         end
       end
     end

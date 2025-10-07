@@ -109,7 +109,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
            scopes: %w[read_api api]
          } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'cannot create project bot personal access token with missing scopes' do
@@ -126,7 +126,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
            name: 'Newest Token'
          } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group bot personal access tokens index' do
@@ -226,7 +226,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
            scopes: %w[read_api api]
          } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'cannot create group bot personal access token with missing scopes' do
@@ -242,7 +242,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
            name: 'Newest Token'
          } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'can open new revoke in group' do

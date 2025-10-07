@@ -29,9 +29,9 @@ module Profiles
                         else
                           t(:'general.form.error_notification')
                         end
-            render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
-                                                            new_personal_access_token: nil,
-                                                            message: error_msg }
+            render status: :unprocessable_content, locals: { personal_access_token: @personal_access_token,
+                                                             new_personal_access_token: nil,
+                                                             message: error_msg }
           end
         end
       end

@@ -99,7 +99,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
            }
          }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should update a project which is a part of a parent group and of which the user is a member' do

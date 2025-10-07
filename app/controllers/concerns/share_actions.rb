@@ -49,7 +49,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     else
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: { namespace_group_link: @created_namespace_group_link,
                            type: 'alert',
                            message: error_message(@created_namespace_group_link) }
@@ -73,7 +73,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
           end
         else
           format.turbo_stream do
-            render status: :unprocessable_entity,
+            render status: :unprocessable_content,
                    locals: { namespace_group_link: @namespace_group_link, type: 'alert',
                              message: error_message(@namespace_group_link) }
           end
@@ -109,7 +109,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: { namespace_group_link: @namespace_group_link, type: 'alert',
                            message: t('concerns.share_actions.update.error') }
         end

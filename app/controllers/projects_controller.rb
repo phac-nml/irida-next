@@ -3,6 +3,7 @@
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
+
   layout :resolve_layout
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
   before_action :current_page
@@ -43,7 +44,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         namespace_project_path(@project.namespace.parent, @project)
       )
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -61,7 +62,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_entity
+          render status: :unprocessable_content
         end
       end
     end

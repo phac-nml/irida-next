@@ -56,7 +56,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       redirect_to group_path(@new_group.full_path)
     else
       @group = @new_group.parent
-      render_new status: :unprocessable_entity
+      render_new status: :unprocessable_content
     end
   end
 
@@ -74,7 +74,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_entity
+          render status: :unprocessable_content
         end
       end
     end
@@ -115,7 +115,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       else
         @error = @group.errors.messages.values.flatten.first
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { confirm_value: @group.path, error: @error }
+          render status: :unprocessable_content, locals: { confirm_value: @group.path, error: @error }
         end
       end
     end

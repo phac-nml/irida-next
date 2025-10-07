@@ -20,7 +20,7 @@ class ProfilesController < Profiles::ApplicationController
         flash[:success] = t('.success')
         format.html { redirect_to profile_path }
       else
-        format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
+        format.html { render :show, status: :unprocessable_content, locals: { user: @user } }
       end
     end
   end

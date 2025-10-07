@@ -67,7 +67,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                         created_by_id: user.id,
                                                         access_level: Member::AccessLevel::OWNER + 100_000 },
                                               format: :turbo_stream }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group members destroy' do
@@ -105,7 +105,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  access_level: Member::AccessLevel::OWNER + 100_000 },
                                        format: :turbo_stream }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group members destroy invalid' do
@@ -118,7 +118,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
       delete group_member_path(group, group_member, format: :turbo_stream)
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'update group member access role as owner' do

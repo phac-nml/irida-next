@@ -22,7 +22,7 @@ module Profiles
           flash[:success] = t('.success')
           format.html { redirect_to edit_profile_password_path }
         else
-          format.html { render :edit, status: :unprocessable_entity, locals: { user: @user } }
+          format.html { render :edit, status: :unprocessable_content, locals: { user: @user } }
         end
       end
     end

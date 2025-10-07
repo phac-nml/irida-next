@@ -34,9 +34,9 @@ module Projects
                           error_message(@sample)
                         end
 
-            render status: :unprocessable_entity, locals: { type: :danger,
-                                                            message: error_msg,
-                                                            concatenation_params: }
+            render status: :unprocessable_content, locals: { type: :danger,
+                                                             message: error_msg,
+                                                             concatenation_params: }
 
           end
         end

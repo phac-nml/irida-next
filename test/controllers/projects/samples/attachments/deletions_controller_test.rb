@@ -82,7 +82,7 @@ module Projects
                    }
                  }
 
-          assert_response :unprocessable_entity
+          assert_response :unprocessable_content
         end
 
         test 'should not delete attachments with role <= owner' do

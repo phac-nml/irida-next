@@ -32,7 +32,7 @@ module Samples
                                                        create_field_params['create_fields']).execute
 
       if @sample.errors.any?
-        render status: :unprocessable_entity, locals: { type: 'error', message: error_message(@sample) }
+        render status: :unprocessable_content, locals: { type: 'error', message: error_message(@sample) }
       else
         @status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
         @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
@@ -49,7 +49,7 @@ module Samples
       updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
                                                                               update_field_params).execute
       if @sample.errors.any?
-        render status: :unprocessable_entity,
+        render status: :unprocessable_content,
                locals: { key: update_field_params['update_field']['key'].keys[0],
                          value: update_field_params['update_field']['value'].keys[0] }
       else
@@ -85,7 +85,7 @@ module Samples
       if added_keys.count.positive? && existing_keys.count.positive?
         :multi_status
       elsif existing_keys.count.positive?
-        :unprocessable_entity
+        :unprocessable_content
       else
         :ok
       end
@@ -123,7 +123,7 @@ module Samples
         update_render_params[:message] =
           { type: 'success', message: t('projects.samples.metadata.fields.update.success') }
       else
-        update_render_params[:status] = :unprocessable_entity
+        update_render_params[:status] = :unprocessable_content
         update_render_params[:message] = { type: 'error', message: error_message(@sample) }
       end
       update_render_params
@@ -169,7 +169,7 @@ module Samples
     end
 
     def render_update_error(cell_id)
-      # render status: :unprocessable_entity,
+      # render status: :unprocessable_content,
       #       locals: { type: 'error', message: error_message(@sample) }
       render turbo_stream: [
         turbo_stream.update(

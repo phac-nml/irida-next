@@ -29,7 +29,7 @@ module Groups
           if @query.valid?
             render status: :ok
           else
-            render status: :unprocessable_entity
+            render status: :unprocessable_content
           end
         end
       end

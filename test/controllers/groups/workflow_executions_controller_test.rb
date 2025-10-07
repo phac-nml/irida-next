@@ -125,7 +125,7 @@ module Groups
 
       put cancel_group_workflow_execution_path(@group, workflow_execution, format: :turbo_stream)
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       assert workflow_execution.completed?
     end
@@ -182,7 +182,7 @@ module Groups
         delete group_workflow_execution_path(@group, workflow_execution,
                                              format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not delete a submitted workflow' do
@@ -194,7 +194,7 @@ module Groups
         delete group_workflow_execution_path(@group, workflow_execution,
                                              format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should delete a completed workflow' do
@@ -232,7 +232,7 @@ module Groups
         delete group_workflow_execution_path(@group, workflow_execution,
                                              format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should delete a canceled workflow' do
@@ -257,7 +257,7 @@ module Groups
         delete group_workflow_execution_path(@group, workflow_execution,
                                              format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not delete a new workflow' do
@@ -269,7 +269,7 @@ module Groups
         delete group_workflow_execution_path(@group, workflow_execution,
                                              format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'redirect to project workflow executions page when workflow execution is deleted' do

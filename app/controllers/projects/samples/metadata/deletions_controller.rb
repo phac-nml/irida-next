@@ -44,7 +44,7 @@ module Projects
           if @sample.errors.any? && deleted_keys.count.positive?
             :multi_status
           elsif @sample.errors.any?
-            :unprocessable_entity
+            :unprocessable_content
           else
             :ok
           end

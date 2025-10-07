@@ -46,7 +46,7 @@ module BotActions
             personal_access_token: @bot_account.user.personal_access_tokens[0]
           }
         else
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: { type: 'alert', message: t(:'general.form.error_notification') }
 
         end
@@ -72,7 +72,7 @@ module BotActions
           flash[:success] = t('concerns.bot_actions.destroy.success')
           redirect_to redirect_path
         else
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: {
                    type: 'alert',
                    message: error_message(@bot_account)

@@ -63,7 +63,7 @@ module Groups
         delete group_member_path(group, group_member, format: :turbo_stream)
       end
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
   end
 end

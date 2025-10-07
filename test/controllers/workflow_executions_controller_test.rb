@@ -82,7 +82,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should cancel a submitted workflow with valid params' do
@@ -102,7 +102,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not cancel a completed workflow' do
@@ -110,7 +110,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert workflow_execution.completed?
 
     put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     assert workflow_execution.completed?
   end
@@ -144,7 +144,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should delete a canceled workflow' do
@@ -165,7 +165,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should cancel a running workflow' do
@@ -185,7 +185,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should show the workflow' do
@@ -300,6 +300,6 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
            params: { destroy_multiple: { workflow_execution_ids: [running_workflow.id,
                                                                   new_workflow.id] } }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

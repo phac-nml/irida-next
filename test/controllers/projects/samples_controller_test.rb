@@ -47,7 +47,7 @@ module Projects
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: '' } } } } } },
            as: :turbo_stream
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should create sample' do
@@ -73,7 +73,7 @@ module Projects
                name: '?'
              } }
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not create a sample with same sample name parameter' do
@@ -86,7 +86,7 @@ module Projects
                name: 'Project 1 Sample 1'
              } }
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should show sample when user is a member of a parent group of the project' do
@@ -148,7 +148,7 @@ module Projects
             params: { sample: { description: @sample1.description, name: '?',
                                 project_id: @sample1.project_id } }
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'show sample history listing' do

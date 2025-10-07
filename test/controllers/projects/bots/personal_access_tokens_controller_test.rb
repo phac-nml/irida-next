@@ -111,7 +111,7 @@ module Projects
                scopes: %w[read_api api]
              } }
 
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should not successfully create a new bot personal access token with missing scopes' do
@@ -128,7 +128,7 @@ module Projects
                name: 'Newest Token'
              } }
 
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
     end
   end

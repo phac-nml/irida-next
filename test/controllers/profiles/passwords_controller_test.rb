@@ -28,7 +28,7 @@ module Profiles
 
       patch profile_password_path,
             params: { user: { password: '', password_confirmation: '', current_password: 'password1' } }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'omniauth user should not update password' do

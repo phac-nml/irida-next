@@ -30,7 +30,7 @@ module Projects
 
           # No selected attachments were destroyed
           if attachments_to_delete.count.positive? && attachments_to_delete.count == attachments_to_delete_count
-            render status: :unprocessable_entity,
+            render status: :unprocessable_content,
                    locals: { message: nil, not_deleted_attachments: attachments_to_delete }
           # Only some selected attachments were destroyed
           elsif attachments_to_delete.count.positive?

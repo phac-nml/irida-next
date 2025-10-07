@@ -5,6 +5,7 @@ module Projects
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController
       include SampleAttachment
+
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
       before_action :view_authorizations, only: %i[destroy create select]
@@ -26,7 +27,7 @@ module Projects
         @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
 
         status = if !@attachments.count.positive?
-                   :unprocessable_entity
+                   :unprocessable_content
                  elsif @attachments.count(&:persisted?) == @attachments.count
                    :ok
                  else
@@ -66,7 +67,7 @@ module Projects
             end
           else
             format.turbo_stream do
-              render status: :unprocessable_entity,
+              render status: :unprocessable_content,
                      locals: { message: t('.error',
                                           filename: @attachment.file.filename,
                                           errors: error_message(@attachment)),
@@ -122,7 +123,7 @@ module Projects
       def destroy_status(attachment, count)
         return count == 2 ? :ok : :multi_status if attachment.associated_attachment
 
-        count == 1 ? :ok : :unprocessable_entity
+        count == 1 ? :ok : :unprocessable_content
       end
     end
   end

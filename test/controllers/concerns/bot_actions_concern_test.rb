@@ -57,7 +57,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
            }
          } } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project bot account destroy' do
@@ -118,7 +118,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
            }
          } } }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group bot account destroy' do

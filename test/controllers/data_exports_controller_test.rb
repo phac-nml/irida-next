@@ -173,7 +173,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new export without export_parameters param' do
@@ -183,7 +183,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
              export_type: 'sample'
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new export without export_parameters["ids"] param' do
@@ -195,7 +195,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new linelist export without format param' do
@@ -208,7 +208,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new linelist export with invalid linelist_format param' do
@@ -222,7 +222,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new linelist export with missing namespace param' do
@@ -235,7 +235,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new linelist export with invalid namespace param' do
@@ -249,7 +249,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new linelist export with missing metadata_fields param' do
@@ -262,7 +262,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'linelist_format' => 'csv' }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create sample export without attachment_formats param' do
@@ -275,7 +275,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference('DataExport.count') do
       post data_exports_path(params)
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should redirect from project PUID' do
@@ -328,7 +328,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'namespace_id' => @namespace.id }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new analysis export with invalid analysis_type' do
@@ -340,7 +340,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'namespace_id' => 'invalid_id' }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new analysis export with both user and project workflow ids and analysis_type project' do
@@ -354,7 +354,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'analysis_type' => 'project' }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not create new analysis export with both user and project workflow ids and analysis_type user' do
@@ -367,6 +367,6 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'analysis_type' => 'user' }
            }
          }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

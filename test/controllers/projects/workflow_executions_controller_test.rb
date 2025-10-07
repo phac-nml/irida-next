@@ -122,7 +122,7 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should cancel a submitted workflow with valid params' do
@@ -144,7 +144,7 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not cancel a completed workflow' do
@@ -153,7 +153,7 @@ module Projects
 
       put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                            format: :turbo_stream)
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       assert workflow_execution.completed?
     end
@@ -190,7 +190,7 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should delete a canceled workflow' do
@@ -213,7 +213,7 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should cancel a running workflow' do
@@ -235,7 +235,7 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'redirect to project workflow executions page when workflow execution is deleted' do
@@ -344,7 +344,7 @@ module Projects
           destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id], namespace: @namespace }
         }
       end
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not destroy workflows if unauthorized' do

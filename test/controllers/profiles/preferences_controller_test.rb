@@ -37,7 +37,7 @@ module Profiles
 
       patch profile_preferences_path,
             params: { user: { locale: 'not_a_locale' } }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'shouldn\'t update the users locale with an invalid locale via turbo_stream' do
@@ -45,7 +45,7 @@ module Profiles
 
       patch profile_preferences_path(format: :turbo_stream),
             params: { user: { locale: 'not_a_locale' } }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
   end
 end

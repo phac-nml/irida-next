@@ -110,7 +110,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                              created_by_id: users(:john_doe).id,
                              access_level: Member::AccessLevel::OWNER + 100_000 }, format: :turbo_stream }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project members destroy member with owner role when current user has a maintainer role for project' do
@@ -126,7 +126,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
       delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project members create with maintainer role' do

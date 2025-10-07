@@ -52,7 +52,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                                       workflow_name: @workflow_execution.metadata['workflow_name']) }
 
         else
-          render status: :unprocessable_entity, locals: {
+          render status: :unprocessable_content, locals: {
             type: 'alert', message: error_message(@workflow_execution)
           }
         end
@@ -89,7 +89,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
               workflow_name: @workflow_execution.metadata['workflow_name'])
           redirect_to redirect_path
         else
-          render status: :unprocessable_entity, locals: {
+          render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
                                       workflow_name: @workflow_execution.metadata['workflow_name'])
           }
@@ -109,7 +109,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                            message: t('concerns.workflow_execution_actions.cancel.success',
                                       workflow_name: @workflow_execution.metadata['workflow_name']) }
         else
-          render status: :unprocessable_entity, locals: {
+          render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.cancel.error',
                                       workflow_name: @workflow_execution.metadata['workflow_name'])
           }
@@ -166,7 +166,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       format.turbo_stream do
         # No selected workflows deleted
         if deleted_workflows_count.zero?
-          render status: :unprocessable_entity, locals: {
+          render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy_multiple.error')
           }
         # Partial workflow deletion
