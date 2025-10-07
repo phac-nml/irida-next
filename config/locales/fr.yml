@@ -1984,9 +1984,9 @@ fr:
           metadata: Métadonnées
           namespace:
             group:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
+              description_html: The spreadsheet is required to have columns for <b>Sample Name</b> and <b>Project PUID</b>, and optionally <b>Sample Description</b>.
             project:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
           project_puid_column: Colonne PUID du projet
           project_puid_column_description: Attribuer chaque échantillon au projet associé dans le tableur importé
           project_selection: Sélection des projets
