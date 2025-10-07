@@ -34,7 +34,7 @@ module Profiles
              params: { personal_access_token: { name: 'token' } }
       end
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not create personal access token with invalid scopes' do
@@ -45,7 +45,7 @@ module Profiles
              params: { personal_access_token: { name: 'token', scopes: ['write_api'] } }
       end
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should revoke personal access token' do

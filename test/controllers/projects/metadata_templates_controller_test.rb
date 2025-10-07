@@ -25,25 +25,25 @@ module Projects
       post namespace_project_metadata_templates_path(@namespace.parent, @namespace.project,
                                                      format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template' } }
       post namespace_project_metadata_templates_path(@namespace.parent, @namespace.project,
                                                      format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template', fields: [] } }
       post namespace_project_metadata_templates_path(@namespace.parent, @namespace.project,
                                                      format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template', fields: nil } }
       post namespace_project_metadata_templates_path(@namespace.parent, @namespace.project,
                                                      format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'create metadata template unauthorized' do
@@ -68,13 +68,13 @@ module Projects
       put namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template,
                                                    format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { fields: [] } }
       put namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template,
                                                    format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'update metadata template unauthorized' do

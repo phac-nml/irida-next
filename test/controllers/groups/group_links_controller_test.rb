@@ -31,7 +31,7 @@ module Groups
                                     group_access_level: Member::AccessLevel::ANALYST
                                   }, format: :turbo_stream })
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not share group b with group a as user doesn\'t have correct permissions' do
@@ -67,7 +67,7 @@ module Groups
                                     group_access_level: Member::AccessLevel::ANALYST
                                   }, format: :turbo_stream })
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'unshare group' do
@@ -125,7 +125,7 @@ module Groups
                                     }, format: :turbo_stream
                                   })
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not update namespace group share due to incorrect permissions' do

@@ -73,7 +73,7 @@ module Projects
         delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
       end
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
   end
 end

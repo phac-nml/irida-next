@@ -68,7 +68,7 @@ module Projects
       attachment = attachments(:attachmentA)
       delete namespace_project_attachment_url(@namespace, @project1, attachment),
              as: :turbo_stream
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should not destroy attachment without proper access' do

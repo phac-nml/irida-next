@@ -162,7 +162,7 @@ module Projects
       get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
                                                                    params: { format: :turbo_stream })
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'cannot access the edit page to update an automated workflow execution with incorrect permissions' do

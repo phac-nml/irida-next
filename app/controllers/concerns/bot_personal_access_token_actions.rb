@@ -52,7 +52,7 @@ module BotPersonalAccessTokenActions
                         t(:'general.form.error_notification')
                       end
 
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: { type: 'alert', message: error_msg }
 
         end
@@ -81,8 +81,8 @@ module BotPersonalAccessTokenActions
                        pat_name: @personal_access_token.name)
           }
         else
-          render status: :unprocessable_entity, locals: { type: 'alert',
-                                                          message: error_message(@personal_access_token) }
+          render status: :unprocessable_content, locals: { type: 'alert',
+                                                           message: error_message(@personal_access_token) }
         end
       end
     end

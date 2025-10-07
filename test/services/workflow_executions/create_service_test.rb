@@ -26,11 +26,6 @@ module WorkflowExecutions
       workflow_params1 = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
@@ -40,11 +35,6 @@ module WorkflowExecutions
       workflow_params2 = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
@@ -150,11 +140,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes
@@ -171,11 +156,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
@@ -208,11 +188,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
@@ -273,11 +248,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-          {
-            input: '/blah/samplesheet.csv',
-            outdir: '/blah/output'
-          },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         name: test_name,
@@ -303,11 +273,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-          {
-            input: '/blah/samplesheet.csv',
-            outdir: '/blah/output'
-          },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         name: test_name,
@@ -350,11 +315,6 @@ module WorkflowExecutions
         namespace_id: @project.namespace.id,
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: user.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
@@ -383,11 +343,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: samples_workflow_executions_attributes
@@ -417,11 +372,6 @@ module WorkflowExecutions
       workflow_params = {
         metadata:
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: samples_workflow_executions_attributes

@@ -29,7 +29,7 @@ module Groups
           if @query.valid?
             render status: :ok
           else
-            render status: :unprocessable_entity
+            render status: :unprocessable_content
           end
         end
       end
@@ -149,9 +149,9 @@ module Groups
       updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
       updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes', 'metadata_template', 'sort')
 
-      if !updated_params.key?(:sort) ||
-         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
-        updated_params[:sort] = 'updated_at desc'
+      if !updated_params.key?('sort') ||
+         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
+        updated_params['sort'] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params

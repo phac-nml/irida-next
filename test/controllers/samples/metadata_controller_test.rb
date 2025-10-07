@@ -30,7 +30,7 @@ module Samples
                                                 'metadatafield2' => 'value4' } },
              format: :turbo_stream
            }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'add new metadata where keys both exist and don\'t exist' do
@@ -87,7 +87,7 @@ module Samples
               'key' => { 'metadatafield1' => 'metadatafield2' },
               'value' => { 'value1' => 'value1' }
             } }, format: :turbo_stream }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'update metadata with unchanged metadata' do
@@ -96,7 +96,7 @@ module Samples
               'key' => { 'metadatafield1' => 'metadatafield1' },
               'value' => { 'value1' => 'value1' }
             } }, format: :turbo_stream }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'cannot update sample if not a member with access to the project' do
@@ -117,7 +117,7 @@ module Samples
               'key' => { 'metadatafield1' => 'metadatafield3' },
               'value' => { 'value1' => 'value1' }
             } }, format: :turbo_stream }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'cannot update metadata value originally added by an analysis' do
@@ -128,7 +128,7 @@ module Samples
               'key' => { 'metadatafield1' => 'metadatafield1' },
               'value' => { 'value1' => 'value2' }
             } }, format: :turbo_stream }
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'builds correct update params for updating a value' do

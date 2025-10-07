@@ -31,7 +31,7 @@ module Samples
 
       # use rpartition to split on the first space encountered from the right side
       # this allows us to sort by metadata fields which contain spaces
-      @sort_key, _space, @sort_direction = search_params[:sort].rpartition(' ')
+      @sort_key, _space, @sort_direction = search_params['sort'].rpartition(' ')
 
       @columns = columns
     end

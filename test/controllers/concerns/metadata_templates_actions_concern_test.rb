@@ -65,22 +65,22 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
     post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { name: 'Newest template' } }
     post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
     post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { name: 'Newest template', fields: nil } }
     post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group metadata templates create unauthorized' do
@@ -95,7 +95,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     metadata_template_params = { metadata_template: { name: '', fields: [] } }
     post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group metadata templates update' do
@@ -111,13 +111,13 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
         params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { fields: [] } }
     put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
         params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group metadata templates update with invalid params' do
@@ -125,7 +125,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
         params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'group metadata templates destroy' do
@@ -203,7 +203,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { fields: %w[field1 field5] } }
     post namespace_project_metadata_templates_path(
@@ -211,7 +211,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { fields: [] } }
     post namespace_project_metadata_templates_path(
@@ -219,7 +219,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { fields: nil } }
     post namespace_project_metadata_templates_path(
@@ -246,7 +246,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     post namespace_project_metadata_templates_path(@project_namespace.parent, @project, format: :turbo_stream),
          params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project metadata templates update' do
@@ -266,7 +266,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, @project_metadata_template, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     metadata_template_params = { metadata_template: { fields: [] } }
     put namespace_project_metadata_template_path(
@@ -274,7 +274,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, @project_metadata_template, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project metadata templates update with invalid params' do
@@ -286,7 +286,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'project metadata templates update unauthorized' do

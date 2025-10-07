@@ -51,8 +51,8 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     else
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { member: @new_member, type: 'alert',
-                                                          message: error_message(@new_member) }
+          render status: :unprocessable_content, locals: { member: @new_member, type: 'alert',
+                                                           message: error_message(@new_member) }
         end
       end
     end
@@ -88,8 +88,8 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { member: @member, type: 'alert',
-                                                          message: }
+          render status: :unprocessable_content, locals: { member: @member, type: 'alert',
+                                                           message: }
         end
       end
     end

@@ -15,7 +15,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       redirect_to workflow_executions_path
     else
       render locals: { message: t('.error_message'), errors: @workflow_execution.errors.full_messages },
-             status: :unprocessable_entity
+             status: :unprocessable_content
     end
   end
 

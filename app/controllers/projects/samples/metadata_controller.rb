@@ -38,7 +38,7 @@ module Projects
             end
           else
             format.turbo_stream do
-              render status: :unprocessable_entity,
+              render status: :unprocessable_content,
                      locals: { type: 'error', message: t('.error') }
             end
           end

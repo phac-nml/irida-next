@@ -30,11 +30,11 @@ module Profiles
           end
         else
           format.turbo_stream do
-            render status: :unprocessable_entity, locals: { type: 'error', message: t('.error') }
+            render status: :unprocessable_content, locals: { type: 'error', message: t('.error') }
           end
           format.html do
             flash[:error] = t('.error')
-            render :show, status: :unprocessable_entity, locals: { user: @user }
+            render :show, status: :unprocessable_content, locals: { user: @user }
           end
         end
       end

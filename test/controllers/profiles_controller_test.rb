@@ -44,20 +44,20 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     patch profile_url, params: { user: { email: '' } }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not update a users first_name with a blank first_name' do
     sign_in users(:john_doe)
 
     patch profile_url, params: { user: { first_name: '' } }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not update a users last_name with a blank last_name' do
     sign_in users(:john_doe)
 
     patch profile_url, params: { user: { last_name: '' } }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

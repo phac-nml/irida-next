@@ -38,7 +38,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if @automated_workflow_execution.disabled
-            render status: :unprocessable_entity,
+            render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
                                                workflow_name: @automated_workflow_execution.id)
@@ -63,7 +63,7 @@ module Projects
                              message: t('.success',
                                         workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
           else
-            render status: :unprocessable_entity,
+            render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
                                                workflow_name: @automated_workflow_execution.metadata['workflow_name'])
@@ -83,7 +83,7 @@ module Projects
           if updated
             render status: :ok
           else
-            render status: :unprocessable_entity
+            render status: :unprocessable_content
           end
         end
       end
@@ -100,7 +100,7 @@ module Projects
                              message: t('.success',
                                         workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
           else
-            render status: :unprocessable_entity,
+            render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
                                                workflow_name: @automated_workflow_execution.metadata['workflow_name'])

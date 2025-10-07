@@ -31,7 +31,7 @@ module Groups
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: '' } } } } } },
            as: :turbo_stream
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'should select samples' do

@@ -48,7 +48,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
     if @data_export.errors.any?
-      render status: :unprocessable_entity,
+      render status: :unprocessable_content,
              locals: { type: 'alert', message: error_message(@data_export),
                        export_type: data_export_params['export_type'] }
     else
@@ -72,7 +72,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     respond_to do |format|
       format.turbo_stream do
         if @data_export.persisted?
-          render status: :unprocessable_entity,
+          render status: :unprocessable_content,
                  locals: { type: 'alert',
                            message: t('.error', name: @data_export.name || @data_export.id) }
         else

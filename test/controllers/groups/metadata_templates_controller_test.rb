@@ -21,22 +21,22 @@ module Groups
       template_params = { metadata_template: { name: '', fields: %w[field1 field2] } }
       post group_metadata_templates_path(@group, format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template' } }
       post group_metadata_templates_path(@group, format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template', fields: [] } }
       post group_metadata_templates_path(@group, format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { name: 'New Template', fields: nil } }
       post group_metadata_templates_path(@group, format: :turbo_stream), params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'create metadata template unauthorized' do
@@ -60,13 +60,13 @@ module Groups
       put group_metadata_template_path(@group, @metadata_template, format: :turbo_stream),
           params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
 
       template_params = { metadata_template: { fields: [] } }
       put group_metadata_template_path(@group, @metadata_template, format: :turbo_stream),
           params: template_params
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
     end
 
     test 'update metadata template unauthorized' do

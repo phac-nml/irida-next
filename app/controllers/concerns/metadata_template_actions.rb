@@ -169,7 +169,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def render_error(message)
-    render status: :unprocessable_entity,
+    render status: :unprocessable_content,
            locals: {
              type: 'alert',
              message:

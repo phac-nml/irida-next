@@ -68,7 +68,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
       post groups_path, params: { group: { name: 'Ne', path: 'new_group', description: 'This is a new group' } }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should update a group' do
@@ -86,7 +86,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_no_changes -> { group.name } do
       patch group_path(group), params: { group: { name: 'NG' }, format: :turbo_stream }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should show the sub group' do
@@ -195,7 +195,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     put group_transfer_path(group),
         params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test 'should not transfer a group without permission' do
