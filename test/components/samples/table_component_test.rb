@@ -22,7 +22,7 @@ module Samples
             edit_sample_metadata: true
           },
           metadata_fields: [],
-          search_params: { metadata_template: 'none', sort: 'namespaces.puid asc' },
+          search_params: { metadata_template: 'none', sort: 'namespaces.puid asc' }.with_indifferent_access,
           empty: {
             title: I18n.t(:'groups.samples.table.no_samples'),
             description: I18n.t(:'groups.samples.table.no_associated_samples')

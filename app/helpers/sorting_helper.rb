@@ -56,7 +56,7 @@ module SortingHelper
   #   - Returns { 'aria-sort': 'ascending' } or { 'aria-sort': 'descending' } if sorted
   #
   # @example Setting ARIA attributes on a column header
-  #   <%= content_tag :th, **aria_sort('name', params[:sort], params[:direction]) %>
+  #   <%= content_tag :th, **aria_sort('name', params['sort'], params[:direction]) %>
   def aria_sort(column, sort_key, sort_direction)
     return {} unless sort_key.present? && sort_key == column.to_s
 

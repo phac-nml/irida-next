@@ -233,8 +233,8 @@ module Projects
                             'metadata_template', 'sort')
 
       if !updated_params.key?(:sort) ||
-         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
-        updated_params[:sort] = 'updated_at desc'
+         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
+        updated_params['sort'] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params
