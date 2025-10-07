@@ -167,17 +167,21 @@
                 class="hidden"
                 data-viral--sortable-lists--two-lists-selection-target="field"
               ></div>
+              <% data = {
+                turbo_frame: "_top",
+                action: "click->viral--sortable-lists--two-lists-selection#constructParams",
+                "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+              }
+              disabled = true %>
+            <% else %>
+              <% data = { turbo_frame: "_top" }
+              disabled = false %>
             <% end %>
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
-                          data: {
-                            turbo_frame: "_top",
-                            action:
-                              "click->viral--sortable-lists--two-lists-selection#constructParams",
-                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-                          },
+                          data: data,
                           class: "button button-primary",
-                          disabled: !@namespace.metadata_fields.empty? %>
+                          disabled: disabled %>
             </div>
           </div>
         <% end %>
