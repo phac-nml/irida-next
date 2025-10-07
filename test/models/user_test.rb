@@ -113,13 +113,4 @@ class UserTest < ActiveSupport::TestCase
   test 'full_name should combine the users first and last names' do
     assert_equal "#{@user.first_name} #{@user.last_name}", @user.full_name
   end
-
-  test 'only remaining system account cannot be removed' do
-    @user.system = true
-    @user.save
-
-    @user.destroy
-
-    assert @user.errors.full_messages.include?(I18n.t('activerecord.errors.models.user.only_system_account'))
-  end
 end

@@ -39,8 +39,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   before_validation :ensure_namespace
   before_save :ensure_namespace
 
-  before_destroy :validate_system_account, prepend: true
-
   delegate :full_path, to: :namespace
 
   scope :system_accounts, -> { where(system: true) }
@@ -145,13 +143,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       build_namespace(name: build_namespace_name, path: build_namespace_path)
     end
-  end
-
-  def validate_system_account
-    return unless system? && User.system_accounts.count == 1
-
-    errors.add(:base, I18n.t('activerecord.errors.models.user.only_system_account'))
-    throw :abort
   end
 
   def password_required?
