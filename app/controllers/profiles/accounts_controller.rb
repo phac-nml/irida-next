@@ -13,9 +13,7 @@ module Profiles
 
     def destroy
       authorize! @user
-
       @user.destroy
-
       redirect_to new_user_session_url
     end
 
