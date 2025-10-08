@@ -7,7 +7,7 @@ module Viral
     def test_renders_with_title_and_description
       render_inline(
         Viral::EmptyStateComponent.new(
-          icon_name: ICON::BANK,
+          icon_name: :bank,
           title: 'No files have been uploaded',
           description: 'Get started by uploading sequence data, assembly files, or other relevant documents.',
           action_text: 'Upload Files',
@@ -25,7 +25,7 @@ module Viral
     def test_accessibility
       render_inline(
         Viral::EmptyStateComponent.new(
-          icon_name: ICON::BANK,
+          icon_name: :bank,
           title: 'No files',
           description: 'Description',
           action_text: 'Action',

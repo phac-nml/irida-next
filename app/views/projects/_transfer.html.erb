@@ -22,7 +22,7 @@
             dark:text-red-400
           "
         >
-          <%= pathogen_icon(ICON::WARNING_CIRCLE, color: nil) %>
+          <%= pathogen_icon(:warning_circle, color: :danger) %>
           <span class="flex-1 ml-4"><%= t(
               "projects.edit.advanced.transfer.confirm.warning_html",
               project_name: @project.human_name,

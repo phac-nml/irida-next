@@ -16,7 +16,7 @@
   >
     <div class="flex items-start w-full">
       <div class="flex-shrink-0 mr-3">
-        <%= pathogen_icon ICON::X_CIRCLE, color: :red %>
+        <%= pathogen_icon :x_circle, color: :danger %>
       </div>
       <div class="flex-1 min-w-0 mt-0.5">
         <div
@@ -91,7 +91,7 @@
             "
             aria-label="<%= t(".remove_field")%>"
           >
-            <%= pathogen_icon(ICON::X, size: :sm) %>
+            <%= pathogen_icon(:x, size: :sm) %>
           </button>
         </div>
         <div class="flex mb-4" id="key_PLACEHOLDER_field_errors">

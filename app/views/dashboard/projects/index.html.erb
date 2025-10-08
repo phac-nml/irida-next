@@ -75,7 +75,7 @@
           <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy_item")) %>
         <% else %>
           <%= viral_empty(
-            icon_name: ICON::MAGNIFYING_GLASS,
+            icon_name: :magnifying_glass,
             title: t("components.viral.pagy.empty_state.title"),
             description: t("components.viral.pagy.empty_state.description"),
           ) %>
@@ -84,7 +84,7 @@
     <% else %>
       <div class="empty_state_message">
         <%= viral_empty(
-          icon_name: ICON::PROJECTS,
+          icon_name: :stack,
           title: t(".no_projects"),
           description: t(".no_projects_description"),
         ) %>

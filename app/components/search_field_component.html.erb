@@ -26,7 +26,7 @@
       "
       aria-label="<%= t('components.search_field_component.clear_button') %>"
     >
-      <%= pathogen_icon(ICON::X, size: :sm, color: :subdued) %>
+      <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
     </button>
     <!-- Submit/search button (hidden while clear button is active) -->
     <button
@@ -44,7 +44,7 @@
       "
       aria-label="<%= t('components.search_field_component.search_button') %>"
     >
-      <%= pathogen_icon(ICON::MAGNIFYING_GLASS, size: :sm, color: :subdued) %>
+      <%= pathogen_icon(:magnifying_glass, size: :sm, color: :subdued) %>
     </button>
   </div>
 <% end %>

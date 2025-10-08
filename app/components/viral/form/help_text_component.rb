@@ -14,8 +14,8 @@ module Viral
 
       ICON_MAPPINGS = {
         default: nil,
-        success: 'check_circle_solid',
-        error: 'x_circle'
+        success: :check,
+        error: :x_circle
       }.freeze
 
       def initialize(state: :default, **system_arguments)

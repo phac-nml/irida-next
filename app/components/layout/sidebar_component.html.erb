@@ -21,7 +21,11 @@
           class="whitespace-nowrap py-2.5 inline-flex items-center"
           data-layout-target="logo"
         >
-          <%= pathogen_icon ICON::IRIDA_LOGO, size: :lg, color: :primary, class: "rotate-12" %>
+          <%= pathogen_icon :beaker,
+          library: :heroicons,
+          size: :lg,
+          color: :primary,
+          class: "rotate-12" %>
           <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
             <%= t(:"general.name") %>
           </span>
@@ -38,10 +42,10 @@
             "
             aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
           >
-            <%= pathogen_icon ICON::SIDEBAR %>
+            <%= pathogen_icon :sidebar %>
           </button>
           <!-- Add new items -->
-          <%= viral_dropdown(icon: ICON::PLUS, styles: { button: "
+          <%= viral_dropdown(icon: :plus, styles: { button: "
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
               dark:hover:text-slate-200
@@ -56,7 +60,7 @@
             ) %>
           <% end %>
           <!-- Profile menu -->
-          <%= viral_dropdown(icon: "user_circle", styles: { button: "
+          <%= viral_dropdown(icon: :user_circle, styles: { button: "
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
               dark:hover:text-slate-200
@@ -174,7 +178,7 @@
         "
         aria-label="<%= t('general.help') %> - <%= t('general.opens_in_new_tab') %>"
       >
-        <%= pathogen_icon ICON::QUESTION, class: "mr-2" %>
+        <%= pathogen_icon :question, class: "mr-2" %>
         <%= t("general.help") %>
       </a>
     </div>

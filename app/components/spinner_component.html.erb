@@ -18,7 +18,7 @@
       "
       role="alert"
     >
-      <%= pathogen_icon(ICON::LOADING, color: :primary) %>
+      <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
       <span
         <% if id %> id="<%= id %>-message"
         <% end %> class="text-sm font-normal"><%= message %></span>

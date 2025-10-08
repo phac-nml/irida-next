@@ -14,27 +14,27 @@
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
-            icon: ICON::SAMPLES,
+            icon: :test_tube,
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @group) %>
             <%= render section.with_item(
               url: group_attachments_path(@group),
-              icon: ICON::FILES,
+              icon: :files,
               label: t(:"groups.sidebar.files"),
               selected: @current_page == t(:"groups.sidebar.files"),
             ) %>
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: ICON::USERS,
+            icon: :users,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: group_activity_path(@group),
-            icon: ICON::LIST_BULLETS,
+            icon: :list_bullets,
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
@@ -42,7 +42,7 @@
             <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
               <%= render section.with_item(
                 url: group_workflow_executions_path(@group),
-                icon: ICON::WORKFLOWS,
+                icon: :terminal_window,
                 label: t(:"groups.sidebar.workflow_executions"),
                 selected: @current_page == t(:"groups.sidebar.workflow_executions"),
               ) %>
@@ -51,7 +51,7 @@
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
               title: t(:"groups.sidebar.settings"),
-              icon: ICON::SETTINGS,
+              icon: :gear_six,
               selectable_pages: [
                 t(:"groups.sidebar.general"),
                 t(:"groups.sidebar.bot_accounts"),

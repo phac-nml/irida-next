@@ -6,7 +6,7 @@ class NamespaceStatisticComponent < Component
   # @param id_prefix [String] Prefix for unique HTML IDs (e.g., "group-created" becomes "group-created").
   # @param label [String] Translated label for the statistic (e.g., t('groups.show.information.created_on')).
   # @param value [Object] The value to display (can be a number, date, or string).
-  # @param icon_name [String, nil] Optional icon name (e.g., 'calendar').
+  # @param icon_name [Symbol, nil] Optional icon name (e.g., :calendar).
   # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to :slate.
   # @param bg_color [String] Optional custom background color class.
   # @param dark_bg_color [String] Optional custom dark mode background color class.

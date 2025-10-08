@@ -16,7 +16,7 @@
             "dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:hover:text-white"
           ],
           "aria-label": t("components.viral.pagy.pagination_component.previous_aria_label") do %>
-      <%= pathogen_icon(ICON::CARET_LEFT, size: :sm, class: "mr-2") %>
+      <%= pathogen_icon(:caret_left, size: :sm, class: "mr-2") %>
       <span><%= t("components.viral.pagy.pagination_component.previous") %></span>
     <% end %>
   <% end %>
@@ -33,7 +33,7 @@
           ],
           "aria-label": t("components.viral.pagy.pagination_component.next_aria_label") do %>
       <span><%= t("components.viral.pagy.pagination_component.next") %></span>
-      <%= pathogen_icon(ICON::CARET_RIGHT, size: :sm, class: "ml-2") %>
+      <%= pathogen_icon(:caret_right, size: :sm, class: "ml-2") %>
     <% end %>
   <% end %>
 </nav>

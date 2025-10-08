@@ -22,7 +22,7 @@
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
   <% elsif @has_namespaces %>
     <%= viral_empty(
-      icon_name: ICON::MAGNIFYING_GLASS,
+      icon_name: :magnifying_glass,
       title: t("components.viral.pagy.empty_state.title"),
       description: t("components.viral.pagy.empty_state.description"),
     ) %>
@@ -30,7 +30,7 @@
     <%= viral_empty(
       title: t(:"groups.show.shared_namespaces.no_shared.title"),
       description: t(:"groups.show.shared_namespaces.no_shared.description"),
-      icon_name: ICON::GROUPS,
+      icon_name: :squares_four,
     ) %>
   <% end %>
 </div>

@@ -21,7 +21,7 @@ module Viral
   # - Helper methods used by the template are private to keep the public API small.
   class AlertComponent < Viral::Component
     # Public, read-only inputs surfaced to the template
-    # @return [String] one of "danger", "info", "success", "warning"
+    # @return [Symbol] one of :danger, :info, :success, :warning
     attr_reader :type
     # @return [String, nil]
     attr_reader :message
@@ -32,12 +32,12 @@ module Viral
     TYPE_DEFAULT = :info
     # Maps incoming logical types (including Rails flash keys) to canonical UI states
     TYPE_MAPPINGS = {
-      alert: 'danger',
-      notice: 'info',
-      success: 'success',
-      info: 'info',
-      danger: 'danger',
-      warning: 'warning'
+      alert: :danger,
+      notice: :info,
+      success: :success,
+      info: :info,
+      danger: :danger,
+      warning: :warning
     }.freeze
     # Canonical, rendered types
     TYPE_OPTIONS = TYPE_MAPPINGS.values.uniq.freeze
@@ -76,13 +76,13 @@ module Viral
     # @return [String]
     def classes_for_alert
       case type
-      when 'danger'
+      when :danger
         'text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-red-900/20 dark:border-red-800/50'
-      when 'info'
+      when :info
         'text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20 dark:border-blue-800/50'
-      when 'success'
+      when :success
         'text-green-800 border-green-300 bg-green-50 dark:text-green-400 dark:bg-green-900/20 dark:border-green-800/50'
-      when 'warning'
+      when :warning
         'text-amber-800 border-amber-300 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/20 dark:border-amber-800/50'
       else
         'text-slate-800 border-slate-300 bg-slate-50 dark:text-slate-400 dark:bg-slate-900/20 dark:border-slate-800/50'
@@ -93,10 +93,10 @@ module Viral
     # @return [Symbol]
     def icon_color
       case type
-      when 'danger' then :danger
-      when 'info' then :blue
-      when 'success' then :success
-      when 'warning' then :warning
+      when :danger then :danger
+      when :info then :blue
+      when :success then :success
+      when :warning then :warning
       else :subdued
       end
     end
@@ -105,10 +105,10 @@ module Viral
     # @return [String]
     def icon_name
       case type
-      when 'danger' then ICON::X_CIRCLE
-      when 'success' then ICON::CHECK_CIRCLE
-      when 'warning' then ICON::WARNING_CIRCLE
-      else ICON::INFO
+      when :danger then :x_circle
+      when :success then :check_circle
+      when :warning then :warning_circle
+      else :info
       end
     end
 
