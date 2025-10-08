@@ -64,7 +64,7 @@
             ),
         ) %>
         <span class="<%= count_pill_classes(:groups) %>">
-          <%= pathogen_icon :squares_four,
+          <%= pathogen_icon Group.icon,
           size: :sm,
           class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
           <%= @namespace.children.count %>

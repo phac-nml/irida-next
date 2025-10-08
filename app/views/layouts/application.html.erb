@@ -13,7 +13,7 @@
             selected: @current_page == t(:"general.default_sidebar.projects"),
           ) %>
           <%= render section.with_item(
-            icon: :squares_four,
+            icon: Group.icon,
             label: t(:"general.default_sidebar.groups"),
             url: dashboard_groups_path,
             selected: @current_page == t(:"general.default_sidebar.groups"),

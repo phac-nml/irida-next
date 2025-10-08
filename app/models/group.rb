@@ -70,6 +70,10 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     'GRP'
   end
 
+  def self.icon
+    :squares_four
+  end
+
   def metadata_fields
     metadata_fields = metadata_summary.keys
 
@@ -110,7 +114,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     )
   end
 
-  def has_samples? # rubocop:disable Naming/PredicateName
+  def has_samples?
     samples_count.positive? || aggregated_samples_count.positive?
   end
 
