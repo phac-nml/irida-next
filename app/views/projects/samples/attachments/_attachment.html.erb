@@ -59,7 +59,7 @@
     <td class="px-6 py-4">
       <div>
         <div class="flex items-center">
-          <%= pathogen_icon(:file_text, color: :subdued) %>
+          <%= pathogen_icon(Attachment.icon, color: :subdued) %>
           <span>
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),

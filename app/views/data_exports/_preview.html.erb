@@ -5,7 +5,7 @@
       <ul class="space-y-3 list-inside list-none mt-3">
         <li>
           <div class="flex text-primary-800 dark:text-primary-400">
-            <%= pathogen_icon(:file_text, size: :sm) %>
+            <%= pathogen_icon(Attachment.icon, size: :sm) %>
             <span class="ml-2 text-sm">
               <%= t(".manifest_json") %>
             </span>
@@ -15,7 +15,7 @@
           <% @manifest['children'].each do |project| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= pathogen_icon(:file_text, size: :sm) %>
+                <%= pathogen_icon(Attachment.icon, size: :sm) %>
                 <span class="ml-2">
                   <%= link_to project["name"],
                   redirect_data_export_path(identifier: project["name"]),
@@ -52,7 +52,7 @@
                             <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                               <li>
                                 <div class="flex text-slate-900 dark:text-white">
-                                  <%= pathogen_icon(:file_text, size: :sm) %>
+                                  <%= pathogen_icon(Attachment.icon, size: :sm) %>
                                   <span class="ml-2 text-sm">
                                     <%= attachment["name"] %>
                                   </span>
@@ -97,7 +97,7 @@
                           class: "underline hover:decoration-2 text-sm" %>
                         </span>
                       <% else %>
-                        <%= pathogen_icon(:file_text, class: "size-5 m-0") %>
+                        <%= pathogen_icon(Attachment.icon, class: "size-5 m-0") %>
                         <span class="ml-2 text-sm">
                           <%= child["name"] %>
                         </span>
@@ -108,7 +108,7 @@
                         <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                           <li>
                             <div class="flex text-blue-800 dark:text-blue-300">
-                              <%= pathogen_icon(:file_text, class: "size -5 m-0") %>
+                              <%= pathogen_icon(Attachment.icon, class: "size -5 m-0") %>
                               <span class="ml-2 text-sm">
                                 <%= attachments["name"] %>
                               </span>
