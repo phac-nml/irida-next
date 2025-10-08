@@ -262,7 +262,8 @@ export default class extends Controller {
 
     // disable submit if no options in selected list
     this.#setSubmitButtonDisableState(
-      this.selectedList.getAttribute("aria-required") === "true" &&
+      this.selectedList.getAttribute("aria-required") ===
+        this.constructor.ARIA_REQUIRED_TRUE &&
         this.selectedList.querySelectorAll("li").length === 0,
     );
   }
@@ -279,11 +280,14 @@ export default class extends Controller {
       selectedItems.map((li) => li.lastElementChild.textContent),
     );
 
-    const matchingTemplate = Array.from(this.templateSelectorTarget.options)
-      .find(option => {
-        if (!option.dataset.fields) return false;
-        return JSON.stringify(JSON.parse(option.dataset.fields)) === selectedListValues;
-      });
+    const matchingTemplate = Array.from(
+      this.templateSelectorTarget.options,
+    ).find((option) => {
+      if (!option.dataset.fields) return false;
+      return (
+        JSON.stringify(JSON.parse(option.dataset.fields)) === selectedListValues
+      );
+    });
 
     this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
   }
@@ -298,19 +302,24 @@ export default class extends Controller {
     if (disableState) {
       button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_TRUE);
     } else {
-      button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_FALSE);
+      button.setAttribute(
+        "aria-disabled",
+        this.constructor.ARIA_DISABLED_FALSE,
+      );
     }
   }
 
   #getSelectedOptions(list) {
-    return list.querySelectorAll(`li[aria-selected="${this.constructor.ARIA_SELECTED_TRUE}"]`);
+    return list.querySelectorAll(
+      `li[aria-selected="${this.constructor.ARIA_SELECTED_TRUE}"]`,
+    );
   }
 
   constructParams() {
     this.fieldTarget.replaceChildren(
-      ...Array.from(this.selectedList.querySelectorAll("li")).map(li =>
-        createHiddenInput(this.fieldNameValue, li.lastElementChild.textContent)
-      )
+      ...Array.from(this.selectedList.querySelectorAll("li")).map((li) =>
+        createHiddenInput(this.fieldNameValue, li.lastElementChild.textContent),
+      ),
     );
   }
 
@@ -359,7 +368,9 @@ export default class extends Controller {
       // but maintain the order of the items in the template fields
       const fields = JSON.parse(selectedOption.dataset.fields);
       const items = Array.from(this.availableList.querySelectorAll("li"));
-      const textFields = Array.from(items).map((item) => item.lastElementChild.textContent);
+      const textFields = Array.from(items).map(
+        (item) => item.lastElementChild.textContent,
+      );
 
       fields.forEach((element) => {
         const index = textFields.indexOf(element);
@@ -444,7 +455,10 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
-    if (this.addButtonTarget.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_FALSE) {
+    if (
+      this.addButtonTarget.getAttribute("aria-disabled") ===
+      this.constructor.ARIA_DISABLED_FALSE
+    ) {
       this.#performSelection(
         false,
         false,
@@ -460,7 +474,10 @@ export default class extends Controller {
   }
 
   removeSelectionByRemoveButton() {
-    if (this.removeButtonTarget.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_FALSE) {
+    if (
+      this.removeButtonTarget.getAttribute("aria-disabled") ===
+      this.constructor.ARIA_DISABLED_FALSE
+    ) {
       this.#performSelection(
         false,
         false,
@@ -484,7 +501,9 @@ export default class extends Controller {
     let selectedOptionsText = [];
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
-        selectedOptionsText.push(selectedOptions[i].lastElementChild.textContent);
+        selectedOptionsText.push(
+          selectedOptions[i].lastElementChild.textContent,
+        );
         this.#removeSelectedAttributes(selectedOptions[i]);
         targetList.appendChild(selectedOptions[i]);
       }
@@ -518,12 +537,18 @@ export default class extends Controller {
 
     // if current focus element is a selected element, find next unselected
     // else if current focus element not selected, just return as we will keep the current focus
-    if (currentFocusedElement.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE) {
+    if (
+      currentFocusedElement.getAttribute("aria-selected") ===
+      this.constructor.ARIA_SELECTED_TRUE
+    ) {
       let nextUnselected = currentFocusedElement.nextElementSibling;
 
       // check list 'downwards' if there's an unselected option
       while (nextUnselected) {
-        if (nextUnselected.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
+        if (
+          nextUnselected.getAttribute("aria-selected") ===
+          this.constructor.ARIA_SELECTED_FALSE
+        ) {
           return nextUnselected;
         } else {
           nextUnselected = nextUnselected.nextElementSibling;
@@ -534,7 +559,10 @@ export default class extends Controller {
       // if after going downwards, no unselected options were found, check 'upwards'
       nextUnselected = currentFocusedElement.previousElementSibling;
       while (nextUnselected) {
-        if (nextUnselected.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
+        if (
+          nextUnselected.getAttribute("aria-selected") ===
+          this.constructor.ARIA_SELECTED_FALSE
+        ) {
           return nextUnselected;
         } else {
           nextUnselected = nextUnselected.previousElementSibling;
@@ -564,7 +592,8 @@ export default class extends Controller {
       selectedOptionNodeList.length === 1 &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
-      event.target.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE
+      event.target.getAttribute("aria-selected") ===
+        this.constructor.ARIA_SELECTED_TRUE
     ) {
       selectedOption = selectedOptionNodeList[0];
     } else {
@@ -627,7 +656,10 @@ export default class extends Controller {
 
     const ariaLiveText = this.#ariaLiveTranslations[
       direction === "up" ? "move_up" : "move_down"
-    ].replace(/OPTION_PLACEHOLDER/g, selectedOption.lastElementChild.textContent);
+    ].replace(
+      /OPTION_PLACEHOLDER/g,
+      selectedOption.lastElementChild.textContent,
+    );
     this.#updateAriaLive(ariaLiveText);
   }
 
@@ -678,7 +710,11 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
-    if (event.target.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_TRUE) return;
+    if (
+      event.target.getAttribute("aria-disabled") ===
+      this.constructor.ARIA_DISABLED_TRUE
+    )
+      return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -761,7 +797,10 @@ export default class extends Controller {
       this.#unselectListOptions(listNode);
     } else {
       for (let i = 0; i < allOptions.length; i++) {
-        if (allOptions[i].getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
+        if (
+          allOptions[i].getAttribute("aria-selected") ===
+          this.constructor.ARIA_SELECTED_FALSE
+        ) {
           this.#addSelectedAttributes(allOptions[i]);
         }
       }
@@ -771,7 +810,10 @@ export default class extends Controller {
   #unselectListOptions(list) {
     const listOptions = list.querySelectorAll("li");
     for (let i = 0; i < listOptions.length; i++) {
-      if (listOptions[i].getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE) {
+      if (
+        listOptions[i].getAttribute("aria-selected") ===
+        this.constructor.ARIA_SELECTED_TRUE
+      ) {
         this.#removeSelectedAttributes(listOptions[i]);
       }
     }
@@ -784,9 +826,7 @@ export default class extends Controller {
     checkmark.querySelector("span").id =
       `${this.#validateId(optionText)}_selected`;
     option
-      .querySelector(
-        `span[id="${this.#validateId(optionText)}_unselected"`,
-      )
+      .querySelector(`span[id="${this.#validateId(optionText)}_unselected"`)
       .replaceWith(checkmark);
     option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_TRUE);
   }
@@ -880,7 +920,10 @@ export default class extends Controller {
   // turns <ul> DOM element and returns an array of its list
   // eg: receives <ul><li>OPTION1</li><li>OPTION2</li></ul> and returns ['OPTION1', 'OPTION2']
   #extractOptionsIntoArray(list) {
-    return Array.from(list.querySelectorAll("li"), option => option.lastElementChild.textContent);
+    return Array.from(
+      list.querySelectorAll("li"),
+      (option) => option.lastElementChild.textContent,
+    );
   }
 
   // finds the difference between two lists. This is specifically used for the drag and drop listener, so only one
