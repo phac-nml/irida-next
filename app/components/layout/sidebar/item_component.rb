@@ -86,9 +86,9 @@ module Layout
         icon_classes = class_names(
           'size-5 transition-colors duration-200',
           {
-            'text-primary-800 dark:text-primary-400' => selected,
+            'text-primary-800 dark:text-primary-400 fill-primary-800 dark:fill-primary-400' => selected,
 
-            'text-slate-500 dark:text-slate-400 ' \
+            'text-slate-500 dark:text-slate-400 fill-slate-500 dark:fill-slate-400' => !selected,
             'group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300' => !selected
           }
         )
