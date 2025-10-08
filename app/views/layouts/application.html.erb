@@ -20,7 +20,7 @@
           ) %>
           <% if @pipelines_enabled %>
             <%= render section.with_item(
-              icon: :terminal_window,
+              icon: WorkflowExecution.icon,
               label: t(:"general.default_sidebar.workflows"),
               url: workflow_executions_path,
               selected: @current_page == t(:"general.default_sidebar.workflows"),

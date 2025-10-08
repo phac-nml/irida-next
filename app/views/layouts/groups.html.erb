@@ -42,7 +42,7 @@
             <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
               <%= render section.with_item(
                 url: group_workflow_executions_path(@group),
-                icon: :terminal_window,
+                icon: WorkflowExecution.icon,
                 label: t(:"groups.sidebar.workflow_executions"),
                 selected: @current_page == t(:"groups.sidebar.workflow_executions"),
               ) %>
