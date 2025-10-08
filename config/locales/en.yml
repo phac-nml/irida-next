@@ -1935,6 +1935,7 @@ en:
             available: Available
             delete_metadata_with_empty_values:
               description: If selected, any metadata with a key and empty value will be deleted from the sample. However, if this is not selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
+              label: Delete metadata with empty values
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
             file: File
             file_help: CSV, TSV, XLS or XLSX.

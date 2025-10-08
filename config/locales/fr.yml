@@ -1938,7 +1938,8 @@ fr:
           dialog:
             available: Disponible
             delete_metadata_with_empty_values:
-              description: If selected, any metadata with a key and empty value will be deleted from the sample. However, if this is not selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
+              description: Si cette option est sélectionnée, toutes les métadonnées avec une clé et une valeur vide seront supprimées de l'échantillon. En revanche, si elle n'est pas sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et les clés de métadonnées correspondantes, le cas échéant, ne seront pas supprimées de l'échantillon.
+              label: Supprimer les métadonnées avec des valeurs vides
             description: L’importation d’une feuille de calcul de métadonnées permet d’ajouter, de mettre à jour ou de supprimer plusieurs champs de métadonnées dans plusieurs échantillons à la fois.
             file: Fichier
             file_help: CSV, TSV, XLS ou XLSX.

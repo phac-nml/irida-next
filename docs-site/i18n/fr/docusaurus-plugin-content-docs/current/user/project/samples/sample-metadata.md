@@ -85,7 +85,7 @@ Les métadonnées suivantes seront ajoutées :
 
 Lors de la création de la feuille de calcul, vous devez avoir une colonne qui contient un identifiant d'échantillon. L'identifiant est sensible à la casse et peut contenir soit les noms d'échantillon, soit les PUID. Lors de l'importation de métadonnées à partir d'un **projet**, l'identifiant d'échantillon peut être soit le **nom de l'échantillon, soit le PUID**. Si vous importez des métadonnées à partir d'un **groupe**, l'identifiant d'échantillon doit être le **PUID de l'échantillon**.
 
-**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Delete metadata with empty values**. If this is **selected**, any metadata with a key and empty value will be **deleted**. However, if this **not selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present.
+**Remarque importante** : lors de l'importation d'une feuille de calcul de métadonnées, il vous sera demandé si vous souhaitez **Supprimer les métadonnées contenant des valeurs vides**. Si cette option est **cochée**, toutes les métadonnées contenant une clé et une valeur vide seront **supprimées**. En revanche, si cette option n'est pas **cochée**, tous les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées, si présentes, ne seront pas supprimées de l'échantillon.
 
 Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à Échantillon1 et Échantillon2, et que la feuille de calcul suivante était ensuite importée :
 
@@ -96,7 +96,7 @@ Par exemple, si les métadonnées ci-dessus étaient importées et ajoutées à 
 
 Cela résulterait en les métadonnées d'échantillon suivantes :
 
-- If **Delete metadata with empty values** was **checked**:
+- Si **Supprimer les métadonnées avec des valeurs vides** était **coché** :
 
   - Échantillon1 :
 
@@ -114,7 +114,7 @@ Cela résulterait en les métadonnées d'échantillon suivantes :
     | champMetadonnees3 | nouvelleValeur6 |
     | champMetadonnees4 | autreValeur2    |
 
-- If **Delete metadata with empty values** was **not checked**:
+- Si **Supprimer les métadonnées avec des valeurs vides** n'était **pas coché** :
 
   - Échantillon1 :
 
@@ -146,7 +146,7 @@ Prérequis :
 3. Dans la barre latérale gauche, sélectionnez **Échantillons**
 4. Cliquez sur **Importer des métadonnées**
 
-A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Delete metadata with empty values](sample-metadata#learn-about-importing-metadata).
+Une boîte de dialogue s'ouvre pour sélectionner la feuille de calcul à importer. Après avoir sélectionné la feuille de calcul, identifiez la colonne contenant l'identifiant de l'échantillon et indiquez si vous souhaitez [Supprimer les métadonnées contenant des valeurs vides](sample-metadata#en-savoir-plus-sur-limportation-de-métadonnées).
 
 ## Supprimer des métadonnées
 
