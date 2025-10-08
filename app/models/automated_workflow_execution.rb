@@ -15,6 +15,10 @@ class AutomatedWorkflowExecution < ApplicationRecord
 
   validate :validate_namespace_type
 
+  def self.icon
+    :terminal_window
+  end
+
   private
 
   def validate_namespace_type
