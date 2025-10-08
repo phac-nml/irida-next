@@ -2,10 +2,12 @@
   <% dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
+      data-controller="infinite-scroll <%='viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
+      <% unless @namespace.metadata_fields.empty? %>
       data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
       data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
       data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+      <% end %>
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
@@ -77,7 +79,8 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
-        <%= viral_sortable_lists(
+        <% unless @namespace.metadata_fields.empty? %>
+          <%= viral_sortable_lists(
             title: t(".metadata"),
             description: t(".metadata_description",
               available: t(".available").downcase,
@@ -86,26 +89,27 @@
             templates: templates,
             template_label: t("data_exports.new.template_select_label")
             ) do |sortable_lists| %>
-          <%= sortable_lists.with_list(
-            id: t(".available"),
-            title: t(".available"),
-            list_items: @namespace.metadata_fields,
-            group: "metadata_selection",
-          ) %>
-          <%= sortable_lists.with_list(
-            id: t(".selected"),
-            title: t(".selected"),
-            group: "metadata_selection",
-            required: true,
-          ) %>
+            <%= sortable_lists.with_list(
+              id: t(".available"),
+              title: t(".available"),
+              list_items: @namespace.metadata_fields,
+              group: "metadata_selection",
+            ) %>
+            <%= sortable_lists.with_list(
+              id: t(".selected"),
+              title: t(".selected"),
+              group: "metadata_selection",
+            ) %>
+          <% end %>
+
+          <template
+            id="sortable-list-item-template"
+            data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
+          >
+            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          </template>
         <% end %>
 
-        <template
-          id="sortable-list-item-template"
-          data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
-        >
-          <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
-        </template>
         <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--json-submission",
@@ -157,20 +161,23 @@
                 <%= export_parameters.hidden_field :namespace_id, value: namespace_id %>
               <% end %>
             </div>
-            <div
-              class="hidden"
-              data-viral--sortable-lists--two-lists-selection-target="field"
-            ></div>
+            <% unless @namespace.metadata_fields.empty? %>
+              <div
+                class="hidden"
+                data-viral--sortable-lists--two-lists-selection-target="field"
+              ></div>
+              <% data = {
+                turbo_frame: "_top",
+                action: "click->viral--sortable-lists--two-lists-selection#constructParams",
+                "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+              } %>
+            <% else %>
+              <% data = { turbo_frame: "_top" } %>
+            <% end %>
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
-                          data: {
-                            turbo_frame: "_top",
-                            action:
-                              "click->viral--sortable-lists--two-lists-selection#constructParams",
-                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-                          },
-                          class: "button button-primary",
-                          disabled: true %>
+                          data: data,
+                          class: "button button-primary" %>
             </div>
           </div>
         <% end %>

@@ -49,7 +49,7 @@ class DataExport < ApplicationRecord
     when 'analysis'
       validate_analysis_type
     when 'linelist'
-      validate_linelist_export_parameters
+      validate_linelist_format
     end
   end
 
@@ -93,15 +93,6 @@ class DataExport < ApplicationRecord
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'))
     end
-  end
-
-  def validate_linelist_export_parameters
-    unless export_parameters.key?('metadata_fields')
-      errors.add(:export_parameters,
-                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'))
-    end
-
-    validate_linelist_format
   end
 
   def validate_linelist_format

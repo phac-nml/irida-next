@@ -89,9 +89,7 @@ class DataExportTest < ActiveSupport::TestCase
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], linelist_format: 'xlsx',
                                                       namespace_id: @project1.namespace.id })
-    assert_not data_export.valid?
-    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'),
-                 data_export.errors[:export_parameters].first
+    assert data_export.valid?
   end
 
   test 'sample export with missing namespace_id' do

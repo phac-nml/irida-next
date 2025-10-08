@@ -319,13 +319,16 @@ module DataExports
 
     def write_spreadsheet_header(metadata_fields)
       header = ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID']
-      header += metadata_fields.map(&:upcase)
+      header += metadata_fields.map(&:upcase) unless metadata_fields.nil?
       header
     end
 
     def write_spreadsheet_row(sample, data_export)
       row = [sample.puid, sample.name, sample.project.puid]
-      row += map_metadata_fields(data_export.export_parameters['metadata_fields'], sample.metadata)
+      unless data_export.export_parameters['metadata_fields'].nil?
+        row += map_metadata_fields(data_export.export_parameters['metadata_fields'],
+                                   sample.metadata)
+      end
       row
     end
 

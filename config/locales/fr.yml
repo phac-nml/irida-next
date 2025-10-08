@@ -102,7 +102,6 @@ fr:
               missing_attachment_formats: Doit avoir des formats de pièces jointes pour les exportations d’échantillons
               missing_file_format: Doit contenir un format pour les exportations de listes de lignes
               missing_ids: Ne contient pas d’identifiants à exporter.
-              missing_metadata_fields: Doit contenir des champs de métadonnées pour les exportations de listes de lignes
               missing_namespace_id: Doit avoir un identifiant d’espace de noms
         member:
           attributes:

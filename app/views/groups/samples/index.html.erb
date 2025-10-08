@@ -110,41 +110,23 @@
               section_header: true,
             ) %>
 
-            <% if @group.metadata_fields.empty? %>
-              <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.linelist_export"),
-                url: new_data_export_path,
-                params: {
-                  export_type: "linelist",
-                  namespace_id: @group.id,
-                },
-                disableable: true,
-                data: {
-                  turbo_stream: true,
-                  controller: "action-button",
-                  action_button_required_value: 1,
-                },
-                class:
-                  "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
-              ) %>
-            <% else %>
-              <% dropdown.with_item(
-                label: t("shared.samples.actions_dropdown.linelist_export"),
-                url: new_data_export_path,
-                params: {
-                  export_type: "linelist",
-                  namespace_id: @group.id,
-                },
-                disableable: true,
-                data: {
-                  turbo_stream: true,
-                  controller: "action-button",
-                  action_button_required_value: 1,
-                },
-                class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
-              ) %>
-            <% end %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.linelist_export"),
+              url: new_data_export_path,
+              params: {
+                export_type: "linelist",
+                namespace_id: @group.id,
+              },
+              disableable: true,
+              data: {
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+            ) %>
+
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.sample_export"),
               url: new_data_export_path,
