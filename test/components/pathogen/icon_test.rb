@@ -59,8 +59,8 @@ module Pathogen
       render_inline(Pathogen::Icon.new(:check, color: nil, class: 'text-purple-500 fill-purple-500'))
 
       assert_selector 'svg.text-purple-500.fill-purple-500', count: 1
-      assert_no_match(/text-slate-900/, page.html)
-      assert_no_match(/fill-slate-900/, page.html)
+      assert_no_match(/text-slate-900/, page.native.to_html)
+      assert_no_match(/fill-slate-900/, page.native.to_html)
     end
 
     test 'passes through other system arguments' do
