@@ -23,7 +23,7 @@
     "
     aria-hidden="true"
   >
-    <%= pathogen_icon(icon_name, size: :md) %>
+    <%= pathogen_icon(icon_name, size: :md, color: icon_color) %>
   </div>
   <!-- Message content -->
   <div
@@ -48,6 +48,6 @@
     "
     aria-label="<%= t('general.screen_reader.close') %>"
   >
-    <%= pathogen_icon(:x, size: :sm) %>
+    <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
   </button>
 </div>

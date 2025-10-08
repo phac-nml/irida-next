@@ -8,14 +8,14 @@ module Pathogen
   class IconValidator
     # Tailwind color variants for icon text color
     COLORS = {
-      default: 'text-slate-900 dark:text-slate-100',
-      subdued: 'text-slate-600 dark:text-slate-300',
-      primary: 'text-primary-600 dark:text-primary-500',
-      success: 'text-green-600 dark:text-green-500',
-      warning: 'text-yellow-600 dark:text-yellow-500',
-      danger: 'text-red-600 dark:text-red-500',
-      blue: 'text-blue-600 dark:text-blue-500',
-      white: 'text-white'
+      default: 'text-slate-900 dark:text-slate-100 fill-slate-900 dark:fill-slate-100',
+      subdued: 'text-slate-600 dark:text-slate-300 fill-slate-600 dark:fill-slate-300',
+      primary: 'text-primary-600 dark:text-primary-500 fill-primary-600 dark:fill-primary-500',
+      success: 'text-green-600 dark:text-green-500 fill-green-600 dark:fill-green-500',
+      warning: 'text-yellow-600 dark:text-yellow-500 fill-yellow-600 dark:fill-yellow-500',
+      danger: 'text-red-600 dark:text-red-500 fill-red-600 dark:fill-red-500',
+      blue: 'text-blue-600 dark:text-blue-500 fill-blue-600 dark:fill-blue-500',
+      white: 'text-white fill-white'
     }.freeze
 
     SIZES = {
