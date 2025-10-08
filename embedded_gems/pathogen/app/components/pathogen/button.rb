@@ -10,11 +10,37 @@ module Pathogen
     include Pathogen::ButtonSizes
     include Pathogen::ButtonVisuals
 
-    SCHEME_OPTIONS = %i[primary default danger].freeze
+    SCHEME_OPTIONS = %i[primary default slate danger].freeze
     DEFAULT_SCHEME = :default
     # rubocop:disable Layout/LineLength
     DEFAULT_CLASSES = 'relative cursor-pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus-visible:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
     # rubocop:enable Layout/LineLength
+
+    # Common base styles shared between buttons and links
+    COMMON_BASE_STYLES = {
+      slate: 'bg-slate-500 text-white dark:bg-slate-400 dark:text-black',
+      primary: 'bg-primary-700 text-white',
+      default: 'text-slate-900 bg-white border border-slate-200 dark:bg-slate-800 dark:text-slate-400 ' \
+               'dark:border-slate-600',
+      danger: 'border border-red-100 bg-slate-50 text-red-500 dark:border-red-800 dark:bg-slate-900 ' \
+              'dark:text-red-500'
+    }.freeze
+
+    # Hover styles specific to link tags
+    LINK_HOVER_STYLES = {
+      slate: 'hover:bg-slate-600 dark:hover:bg-slate-300',
+      primary: 'hover:bg-primary-800',
+      default: 'hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-700',
+      danger: 'hover:text-red-50 dark:hover:text-red-50 hover:bg-red-800'
+    }.freeze
+
+    # Hover styles specific to button tags (with enabled prefix)
+    BUTTON_HOVER_STYLES = {
+      slate: 'enabled:hover:bg-slate-600 dark:enabled:hover:bg-slate-300 dark:enabled:hover:text-black',
+      primary: 'enabled:hover:bg-primary-800',
+      default: 'enabled:hover:bg-slate-100 dark:enabled:hover:text-white dark:enabled:hover:bg-slate-700',
+      danger: 'enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800'
+    }.freeze
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
@@ -31,7 +57,7 @@ module Pathogen
 
       @system_arguments[:classes] = class_names(
         system_arguments[:class],
-        generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)),
+        generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME), @system_arguments[:tag]),
         SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
         DEFAULT_CLASSES,
         'block w-full' => block
@@ -69,16 +95,17 @@ module Pathogen
 
     # Generates the appropriate CSS classes for the button's color scheme and tag type.
     #
-    # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
+    # @param scheme [Symbol] The color scheme of the button (:primary, :default, :slate, or :danger).
+    # @param tag [Symbol] The HTML tag type (:button or :a).
     # @return [String] A string of CSS classes corresponding to the specified scheme.
-    def generate_scheme_mapping(scheme)
-      # rubocop:disable Layout/LineLength
-      {
-        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800',
-        default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:enabled:hover:text-white dark:enabled:hover:bg-slate-700',
-        danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 dark:border-red-800 dark:bg-slate-900 dark:text-red-500'
-      }[scheme]
-      # rubocop:enable Layout/LineLength
+    def generate_scheme_mapping(scheme, tag = :button)
+      base_styles = COMMON_BASE_STYLES[scheme]
+
+      class_names(
+        base_styles,
+        LINK_HOVER_STYLES[scheme] => tag == :a,
+        BUTTON_HOVER_STYLES[scheme] => tag != :a
+      )
     end
   end
 end
