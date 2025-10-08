@@ -48,6 +48,10 @@ class PersonalAccessToken < ApplicationRecord
     find_by(token_digest:)
   end
 
+  def self.icon
+    :ticket
+  end
+
   private
 
   def validate_scopes

@@ -22,7 +22,7 @@
           <% end %>
           <%= render section.with_item(
             url: profile_personal_access_tokens_path,
-            icon: :ticket,
+            icon: PersonalAccessToken.icon,
             label: t(:"profiles.sidebar.access_tokens"),
             selected: @current_page == t(:"profiles.sidebar.access_tokens"),
           ) %>
