@@ -29,6 +29,10 @@ class DataExport < ApplicationRecord
     %w[]
   end
 
+  def self.icon
+    :export
+  end
+
   private
 
   def validate_export_parameters

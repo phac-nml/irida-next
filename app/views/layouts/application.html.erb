@@ -27,7 +27,7 @@
             ) %>
           <% end %>
           <%= render section.with_item(
-            icon: :export,
+            icon: DataExport.icon,
             label: t(:"general.default_sidebar.data_exports"),
             url: data_exports_path,
             selected: @current_page == t(:"general.default_sidebar.data_exports"),
