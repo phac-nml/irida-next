@@ -974,7 +974,7 @@ module Groups
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        check 'Ignore empty values'
+        assert find_field('Ignore empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
 
@@ -1028,7 +1028,7 @@ module Groups
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        assert_not find_field('Ignore empty values').checked?
+        uncheck 'Ignore empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
 
