@@ -1318,6 +1318,8 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+        # disable ignore empty values
+        find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
         ### ACTIONS END ###
       end
@@ -1722,8 +1724,8 @@ module Projects
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        # enable ignore empty values
-        find('input#file_import_ignore_empty_values').click
+        # leave ignore empty values enabled
+        assert find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1783,8 +1785,8 @@ module Projects
           assert_text 'metadatafield3'
           assert_selector 'li', count: 3
         end
-        # leave ignore empty values disabled
-        assert_not find('input#file_import_ignore_empty_values').checked?
+        # disable ignore empty values
+        find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
