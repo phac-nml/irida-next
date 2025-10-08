@@ -22,7 +22,13 @@ export default class extends Controller {
     fieldName: String,
   };
 
+  static ARIA_SELECTED_TRUE = "true";
+  static ARIA_SELECTED_FALSE = "false";
+  static ARIA_DISABLED_TRUE = "true";
+  static ARIA_DISABLED_FALSE = "false";
+
   #originalAvailableList;
+  #idCache = new Map();
 
   #lastClickedOption;
   #shiftSelectionOption;
@@ -262,28 +268,24 @@ export default class extends Controller {
   }
 
   #checkTemplateSelectorState() {
-    const selected_values = this.selectedList.querySelectorAll("li");
-    if (selected_values.length === 0) {
-      this.templateSelectorTarget.value = "none";
-    } else {
-      const selectedListValues = JSON.stringify(
-        Array.from(selected_values).map((li) => li.innerText),
-      );
+    const selectedItems = Array.from(this.selectedList.querySelectorAll("li"));
 
-      let template = "none";
-      for (const option of this.templateSelectorTarget.options) {
-        if (typeof option.dataset.fields !== "undefined") {
-          const templateFields = JSON.stringify(
-            JSON.parse(option.dataset.fields),
-          );
-          if (templateFields === selectedListValues) {
-            template = option.value;
-            break;
-          }
-        }
-      }
-      this.templateSelectorTarget.value = template;
+    if (selectedItems.length === 0) {
+      this.templateSelectorTarget.value = "none";
+      return;
     }
+
+    const selectedListValues = JSON.stringify(
+      selectedItems.map((li) => li.lastElementChild.textContent),
+    );
+
+    const matchingTemplate = Array.from(this.templateSelectorTarget.options)
+      .find(option => {
+        if (!option.dataset.fields) return false;
+        return JSON.stringify(JSON.parse(option.dataset.fields)) === selectedListValues;
+      });
+
+    this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
   }
 
   #setSubmitButtonDisableState(disableState) {
@@ -294,25 +296,22 @@ export default class extends Controller {
 
   #setButtonDisableState(button, disableState) {
     if (disableState) {
-      button.setAttribute("aria-disabled", "true");
+      button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_TRUE);
     } else {
-      button.setAttribute("aria-disabled", "false");
+      button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_FALSE);
     }
   }
 
   #getSelectedOptions(list) {
-    return list.querySelectorAll('li[aria-selected="true"]');
+    return list.querySelectorAll(`li[aria-selected="${this.constructor.ARIA_SELECTED_TRUE}"]`);
   }
 
   constructParams() {
-    this.fieldTarget.innerHTML = null;
-    const list_values = this.selectedList.querySelectorAll("li");
-
-    for (const list_value of list_values) {
-      this.fieldTarget.appendChild(
-        createHiddenInput(this.fieldNameValue, list_value.innerText),
-      );
-    }
+    this.fieldTarget.replaceChildren(
+      ...Array.from(this.selectedList.querySelectorAll("li")).map(li =>
+        createHiddenInput(this.fieldNameValue, li.lastElementChild.textContent)
+      )
+    );
   }
 
   disconnect() {
@@ -360,7 +359,7 @@ export default class extends Controller {
       // but maintain the order of the items in the template fields
       const fields = JSON.parse(selectedOption.dataset.fields);
       const items = Array.from(this.availableList.querySelectorAll("li"));
-      const textFields = Array.from(items).map((item) => item.innerText);
+      const textFields = Array.from(items).map((item) => item.lastElementChild.textContent);
 
       fields.forEach((element) => {
         const index = textFields.indexOf(element);
@@ -421,7 +420,7 @@ export default class extends Controller {
   #selectOrUnselectOption(option) {
     if (
       option.querySelector(
-        `span[id="${this.#validateId(option.innerText)}_unselected"`,
+        `span[id="${this.#validateId(option.lastElementChild.textContent)}_unselected"`,
       )
     ) {
       this.#addSelectedAttributes(option);
@@ -445,7 +444,7 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
-    if (this.addButtonTarget.getAttribute("aria-disabled") === "false") {
+    if (this.addButtonTarget.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_FALSE) {
       this.#performSelection(
         false,
         false,
@@ -461,7 +460,7 @@ export default class extends Controller {
   }
 
   removeSelectionByRemoveButton() {
-    if (this.removeButtonTarget.getAttribute("aria-disabled") === "false") {
+    if (this.removeButtonTarget.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_FALSE) {
       this.#performSelection(
         false,
         false,
@@ -485,7 +484,7 @@ export default class extends Controller {
     let selectedOptionsText = [];
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
-        selectedOptionsText.push(selectedOptions[i].innerText);
+        selectedOptionsText.push(selectedOptions[i].lastElementChild.textContent);
         this.#removeSelectedAttributes(selectedOptions[i]);
         targetList.appendChild(selectedOptions[i]);
       }
@@ -519,12 +518,12 @@ export default class extends Controller {
 
     // if current focus element is a selected element, find next unselected
     // else if current focus element not selected, just return as we will keep the current focus
-    if (currentFocusedElement.getAttribute("aria-selected") === "true") {
+    if (currentFocusedElement.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE) {
       let nextUnselected = currentFocusedElement.nextElementSibling;
 
       // check list 'downwards' if there's an unselected option
       while (nextUnselected) {
-        if (nextUnselected.getAttribute("aria-selected") === "false") {
+        if (nextUnselected.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
           return nextUnselected;
         } else {
           nextUnselected = nextUnselected.nextElementSibling;
@@ -535,7 +534,7 @@ export default class extends Controller {
       // if after going downwards, no unselected options were found, check 'upwards'
       nextUnselected = currentFocusedElement.previousElementSibling;
       while (nextUnselected) {
-        if (nextUnselected.getAttribute("aria-selected") === "false") {
+        if (nextUnselected.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
           return nextUnselected;
         } else {
           nextUnselected = nextUnselected.previousElementSibling;
@@ -565,7 +564,7 @@ export default class extends Controller {
       selectedOptionNodeList.length === 1 &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
-      event.target.getAttribute("aria-selected") === "true"
+      event.target.getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE
     ) {
       selectedOption = selectedOptionNodeList[0];
     } else {
@@ -628,7 +627,7 @@ export default class extends Controller {
 
     const ariaLiveText = this.#ariaLiveTranslations[
       direction === "up" ? "move_up" : "move_down"
-    ].replace(/OPTION_PLACEHOLDER/g, selectedOption.innerText);
+    ].replace(/OPTION_PLACEHOLDER/g, selectedOption.lastElementChild.textContent);
     this.#updateAriaLive(ariaLiveText);
   }
 
@@ -679,7 +678,7 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
-    if (event.target.getAttribute("aria-disabled") === "true") return;
+    if (event.target.getAttribute("aria-disabled") === this.constructor.ARIA_DISABLED_TRUE) return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -754,7 +753,7 @@ export default class extends Controller {
     const listNode = event.target.parentNode;
     const allOptions = listNode.querySelectorAll("li");
     const unselectedOptions = listNode.querySelectorAll(
-      'li[aria-selected="false"]',
+      `li[aria-selected="${this.constructor.ARIA_SELECTED_FALSE}"]`,
     );
     // if everything is selected, unselect
     // else select all
@@ -762,7 +761,7 @@ export default class extends Controller {
       this.#unselectListOptions(listNode);
     } else {
       for (let i = 0; i < allOptions.length; i++) {
-        if (allOptions[i].getAttribute("aria-selected") === "false") {
+        if (allOptions[i].getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_FALSE) {
           this.#addSelectedAttributes(allOptions[i]);
         }
       }
@@ -772,7 +771,7 @@ export default class extends Controller {
   #unselectListOptions(list) {
     const listOptions = list.querySelectorAll("li");
     for (let i = 0; i < listOptions.length; i++) {
-      if (listOptions[i].getAttribute("aria-selected") === "true") {
+      if (listOptions[i].getAttribute("aria-selected") === this.constructor.ARIA_SELECTED_TRUE) {
         this.#removeSelectedAttributes(listOptions[i]);
       }
     }
@@ -781,28 +780,30 @@ export default class extends Controller {
   // add checkmark to option
   #addSelectedAttributes(option) {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
+    const optionText = option.lastElementChild.textContent;
     checkmark.querySelector("span").id =
-      `${this.#validateId(option.innerText)}_selected`;
+      `${this.#validateId(optionText)}_selected`;
     option
       .querySelector(
-        `span[id="${this.#validateId(option.innerText)}_unselected"`,
+        `span[id="${this.#validateId(optionText)}_unselected"`,
       )
       .replaceWith(checkmark);
-    option.setAttribute("aria-selected", "true");
+    option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_TRUE);
   }
 
   // remove checkmark from option
   #removeSelectedAttributes(option) {
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
+    const optionText = option.lastElementChild.textContent;
     hiddenCheckmark.querySelector("span").id =
-      `${this.#validateId(option.innerText)}_unselected`;
+      `${this.#validateId(optionText)}_unselected`;
 
     option
-      .querySelector(`span[id="${this.#validateId(option.innerText)}_selected"`)
+      .querySelector(`span[id="${this.#validateId(optionText)}_selected"`)
       .replaceWith(hiddenCheckmark);
 
-    option.setAttribute("aria-selected", "false");
+    option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_FALSE);
   }
 
   // used for dynamic/changing listing values
@@ -813,16 +814,18 @@ export default class extends Controller {
     // check which values already exist in lists; prevents moving metadata between lists that have already been moved
     // by user
     this.availableList.querySelectorAll("li").forEach((availableMetadata) => {
-      if (newMetadata.includes(availableMetadata.innerText)) {
-        existingMetadata["available"].push(availableMetadata.innerText);
-        newMetadata.splice(newMetadata.indexOf(availableMetadata.innerText), 1);
+      const text = availableMetadata.lastElementChild.textContent;
+      if (newMetadata.includes(text)) {
+        existingMetadata["available"].push(text);
+        newMetadata.splice(newMetadata.indexOf(text), 1);
       }
     });
 
     this.selectedList.querySelectorAll("li").forEach((selectedMetadata) => {
-      if (newMetadata.includes(selectedMetadata.innerText)) {
-        existingMetadata["selected"].push(selectedMetadata.innerText);
-        newMetadata.splice(newMetadata.indexOf(selectedMetadata.innerText), 1);
+      const text = selectedMetadata.lastElementChild.textContent;
+      if (newMetadata.includes(text)) {
+        existingMetadata["selected"].push(text);
+        newMetadata.splice(newMetadata.indexOf(text), 1);
       }
     });
 
@@ -849,14 +852,17 @@ export default class extends Controller {
     let template = this.itemTemplateTarget.content.cloneNode(true);
     template.querySelector("li").firstElementChild.id =
       `${this.#validateId(element)}_unselected`;
-    template.querySelector("li").lastElementChild.innerText = element;
+    template.querySelector("li").lastElementChild.textContent = element;
     template.querySelector("li").id = this.#validateId(element);
     list.append(template);
   }
 
   // replace whitespace with hyphen
   #validateId(id) {
-    return id.replace(/\s+/g, "-");
+    if (!this.#idCache.has(id)) {
+      this.#idCache.set(id, id.replace(/\s+/g, "-"));
+    }
+    return this.#idCache.get(id);
   }
 
   // updates and retains the options lists to compare for aria-live updating
@@ -874,12 +880,7 @@ export default class extends Controller {
   // turns <ul> DOM element and returns an array of its list
   // eg: receives <ul><li>OPTION1</li><li>OPTION2</li></ul> and returns ['OPTION1', 'OPTION2']
   #extractOptionsIntoArray(list) {
-    let options = [];
-    list.querySelectorAll("li").forEach((option) => {
-      options.push(option.innerText);
-    });
-
-    return options;
+    return Array.from(list.querySelectorAll("li"), option => option.lastElementChild.textContent);
   }
 
   // finds the difference between two lists. This is specifically used for the drag and drop listener, so only one
