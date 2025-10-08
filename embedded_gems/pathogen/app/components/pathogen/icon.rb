@@ -34,7 +34,8 @@ module Pathogen
     # Initialize a new Icon component
     #
     # @param icon_name [String, Symbol] The icon name (e.g., "clipboard-text", :arrow_up)
-    # @param color [Symbol, nil] Pathogen color variant (:default, :primary, :success, etc.) or nil to skip color classes
+    # @param color [Symbol, nil] Pathogen color variant (:default, :primary, :success, etc.)
+    #   or nil to skip color classes
     # @param size [Symbol] Pathogen size variant (:sm, :md, :lg, :xl)
     # @param variant [String, Symbol] rails_icons variant (e.g., :fill, :outline)
     # @param library [String, Symbol] rails_icons library (e.g., :heroicons, :phosphor)
