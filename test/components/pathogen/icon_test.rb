@@ -55,6 +55,14 @@ module Pathogen
       assert_selector 'svg.text-primary-600.dark\\:text-primary-500.custom-class', count: 1
     end
 
+    test 'allows opting out of pathogen color classes' do
+      render_inline(Pathogen::Icon.new(:check, color: nil, class: 'text-purple-500 fill-purple-500'))
+
+      assert_selector 'svg.text-purple-500.fill-purple-500', count: 1
+      assert_no_match(/text-slate-900/, page.html)
+      assert_no_match(/fill-slate-900/, page.html)
+    end
+
     test 'passes through other system arguments' do
       icon = Pathogen::Icon.new(:check, id: 'my-icon', 'data-test': 'icon')
       assert_equal 'my-icon', icon.rails_icons_options[:id]

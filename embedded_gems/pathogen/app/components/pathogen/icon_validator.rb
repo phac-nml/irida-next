@@ -31,6 +31,7 @@ module Pathogen
       # @param color [Symbol] The color to validate
       # @return [Symbol] Valid color or :default fallback
       def validate_color(color)
+        return nil if color.nil?
         return color if COLORS.key?(color)
 
         Rails.logger.warn "[Pathogen::Icon] Invalid color '#{color}', " \
