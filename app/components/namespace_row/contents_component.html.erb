@@ -101,7 +101,7 @@
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
           class="<%= count_pill_classes(:samples) %>"
         >
-          <%= pathogen_icon :test_tube,
+          <%= pathogen_icon Sample.icon,
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.aggregated_samples_count %>
@@ -123,7 +123,7 @@
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
           class="<%= count_pill_classes(:samples) %>"
         >
-          <%= pathogen_icon :test_tube,
+          <%= pathogen_icon Sample.icon,
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.project.samples.size %>
