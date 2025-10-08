@@ -104,6 +104,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def ransackable_associations(_auth_object = nil)
       %w[user namespace group]
     end
+
+    def icon
+      :users_four
+    end
   end
 
   def validate_namespace

@@ -14,7 +14,7 @@
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
-            icon: :users,
+            icon: Member.icon,
             label: t(:"projects.sidebar.members"),
             selected: @current_page == t(:"projects.sidebar.members"),
           ) %>

@@ -28,7 +28,7 @@
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: :users,
+            icon: Member.icon,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
