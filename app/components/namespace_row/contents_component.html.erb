@@ -81,7 +81,7 @@
             ),
         ) %>
         <span class="<%= count_pill_classes(:projects) %>">
-          <%= pathogen_icon :stack,
+          <%= pathogen_icon Project.icon,
           size: :sm,
           class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
           <%= @namespace.project_namespaces.count %>

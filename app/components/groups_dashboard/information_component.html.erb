@@ -51,7 +51,7 @@
           id_prefix: "group-projects",
           label: t(:"groups.show.information.number_of_projects"),
           value: @group.project_namespaces.count || 0,
-          icon_name: :stack,
+          icon_name: Project.icon,
           color_scheme: :fuchsia,
         ) %>
       </div>

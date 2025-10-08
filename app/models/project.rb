@@ -43,6 +43,10 @@ class Project < ApplicationRecord
     %w[namespace]
   end
 
+  def self.icon
+    :stack
+  end
+
   private
 
   def destroy_namespace

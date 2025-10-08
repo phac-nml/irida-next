@@ -7,7 +7,7 @@
         <%= navigation.with_header(label: t(:"general.default_sidebar.title")) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
-            icon: :stack,
+            icon: Project.icon,
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path,
             selected: @current_page == t(:"general.default_sidebar.projects"),
