@@ -26,7 +26,7 @@
         dark:text-white
       "
     >
-      <option value="none"><%= t("components.viral.sortable_lists_component.no_template") %></option>
+      <option value="none"><%= t("common.labels.selected") %></option>
       <%= templates.each do |template| %>
         <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
       <% end %>

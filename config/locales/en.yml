@@ -292,7 +292,6 @@ en:
   bots:
     destroy_confirmation:
       description: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete bot account %{bot_name}?
-      submit_button: Confirm
       title: Delete Bot
     index:
       pagy_item: Bot Accounts
@@ -305,7 +304,6 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
-          destroy: Delete
           destroy_aria_label: 'Delete bot account: %{name}'
           generate_new_token: Generate new token
           generate_new_token_aria_label: 'Generate a new personal access token for bot account: %{name}'
@@ -320,6 +318,39 @@ en:
           expiration: Expiration
           username: Username
         never: Never
+  common:
+    actions:
+      cancel: Cancel
+      close: Close
+      confirm: Confirm
+      create: Create
+      delete: Delete
+      edit: Edit
+      remove: Remove
+      save: Save
+      submit: Submit
+      update: Update
+    labels:
+      action: Action
+      actions: Actions
+      available: Available
+      created: Created
+      created_at: Created
+      date: Date
+      description: Description
+      email: Email
+      file: File
+      files: Files
+      id: ID
+      name: Name
+      password: Password
+      search: Search
+      selected: Selected
+      status: Status
+      time: Time
+      type: Type
+      updated_at: Last Updated
+      user: User
   concerns:
     attachment_actions:
       destroy:
@@ -492,7 +523,6 @@ en:
     show:
       download: Download
       page_title: Data Export
-      remove_button: Remove
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         preview: Preview
@@ -684,8 +714,6 @@ en:
         project: Create new project
         title: Create
     opens_in_new_tab: Opens in new tab
-    screen_reader:
-      close: Close
   graphql:
     value_scalar:
       error: "%{value} must be a string or an array of strings"
@@ -718,15 +746,11 @@ en:
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            cancel: Cancel
             description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -811,7 +835,6 @@ en:
       new:
         access_level_hint: Maximum access level to assign to group
         button:
-          cancel: Cancel
           submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share namespace with
@@ -958,10 +981,8 @@ en:
       success: Group %{group_name} was successfully updated
     workflow_executions:
       edit_dialog:
-        cancel_button: Cancel
         description: You are editing workflow execution '%{workflow_execution_id}'
         name_placeholder: Enter workflow execution name (optional)
-        submit_button: Submit
         title: Edit workflow execution
       files:
         search:
@@ -981,7 +1002,6 @@ en:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         edit_button: Edit
-        remove_button: Remove
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
         created_at: Created
@@ -1097,12 +1117,9 @@ en:
       title: Edit Metadata Template
       update_button: Update
     form:
-      available: Available
       description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
       metadata: Metadata
-      selected: Selected
     new_template_dialog:
-      submit_button: Submit
       title: New Metadata Template
     table:
       empty:
@@ -1178,7 +1195,6 @@ en:
   personal_access_tokens:
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
-      submit_button: Confirm
       title: Revoke personal access token
     table:
       header:
@@ -1330,15 +1346,11 @@ en:
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            cancel: Cancel
             description: This will create a bot user with email format 'inxt_prj_PROJECT_PUID_bot_n@iridanext.com', add them as a member to the Project with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -1431,7 +1443,6 @@ en:
       new:
         access_level_hint: Maximum access level to assign to group
         button:
-          cancel: Cancel
           submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share project namespace with
@@ -1551,7 +1562,6 @@ en:
       create:
         success: Sample was successfully created.
       edit:
-        cancel_button: Cancel
         form:
           title: Name and Description
         submit_button: Update sample
@@ -1607,7 +1617,6 @@ en:
           no_metadata: No metadata has been added
           no_permission_description: You do not have permission to add metadata to this sample
       new:
-        cancel_button: Cancel
         subtitle: Create a new sample in the current Project
         title: Create sample
       show:
@@ -1637,7 +1646,6 @@ en:
             value: Value
         nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
-        remove_button: Remove
         table_header:
           action: Action
           key: Key
@@ -1677,10 +1685,8 @@ en:
       success: Project %{project_name} was successfully updated
     workflow_executions:
       edit_dialog:
-        cancel_button: Cancel
         description: You are editing automated workflow execution '%{workflow_execution_id}'
         name_placeholder: Enter workflow execution name (optional)
-        submit_button: Submit
         title: Edit automated workflow execution
       files:
         search:
@@ -1701,7 +1707,6 @@ en:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         edit_button: Edit
-        remove_button: Remove
         tabs:
           label: Workflow Execution Details
       summary:
@@ -2082,13 +2087,11 @@ en:
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
-      cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
       name_placeholder: Enter workflow execution name (optional)
       shared_with_namespace:
         group: Share results with group members?
         project: Share results with project members?
-      submit_button: Submit
       title: Edit workflow execution
     file_selector:
       file_selector_dialog:

@@ -292,7 +292,6 @@ fr:
   bots:
     destroy_confirmation:
       description: Cette action supprimera définitivement le compte de bot et supprimera tous les abonnements existants pour le compte de bot. Êtes-vous sûr de vouloir supprimer définitivement le compte de bot %{bot_name}?
-      submit_button: Confirmer
       title: Supprimer le bot
     index:
       pagy_item: Comptes de bot
@@ -305,7 +304,6 @@ fr:
           level_40: Responsable
           level_50: Propriétaire
         actions:
-          destroy: Supprimer
           destroy_aria_label: 'Supprimer le compte de bot : %{name}'
           generate_new_token: Générer un nouveau jeton
           generate_new_token_aria_label: 'Générer un nouveau jeton d’accès personnel pour le compte de bot : %{name}'
@@ -320,6 +318,39 @@ fr:
           expiration: Expiration
           username: Nom d’utilisateur
         never: Jamais
+  common:
+    actions:
+      cancel: Annuler
+      close: Fermer
+      confirm: Confirmer
+      create: Créer
+      delete: Supprimer
+      edit: Modifier
+      remove: Retirer
+      save: Enregistrer
+      submit: Soumettre
+      update: Mettre à jour
+    labels:
+      action: Mesure
+      actions: Actions
+      available: Disponible
+      created: Créé
+      created_at: Créé
+      date: Date
+      description: Description
+      email: Courriel
+      file: Fichier
+      files: Fichiers
+      id: Identifiant
+      name: Nom
+      password: Mot de passe
+      search: Rechercher
+      selected: Sélectionné
+      status: Statut
+      time: Heure
+      type: Type
+      updated_at: Dernière mise à jour
+      user: Utilisateur
   concerns:
     attachment_actions:
       destroy:
@@ -458,7 +489,7 @@ fr:
       samples_count:
         non_zero: Échantillons (COUNT_PLACEHOLDER sélectionnés)
         zero: Échantillons (0 sélectionné)
-      submit_button: Envoyer
+      submit_button: Soumettre
       template_select_label: Sélectionner les champs par modèle de métadonnées
     new_analysis_export_dialog:
       description:
@@ -492,7 +523,6 @@ fr:
     show:
       download: Télécharger
       page_title: Exportation de données
-      remove_button: Retirer
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
         preview: Aperçu
@@ -686,8 +716,6 @@ fr:
         project: Créer un nouveau projet
         title: Créer
     opens_in_new_tab: S’ouvre dans un nouvel onglet
-    screen_reader:
-      close: Fermer
   graphql:
     value_scalar:
       error: "%{value} doit être une chaîne ou un tableau de chaînes"
@@ -720,15 +748,11 @@ fr:
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
-            submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
-            submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
@@ -813,7 +837,6 @@ fr:
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
-          cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms
@@ -960,10 +983,8 @@ fr:
       success: Le groupe %{group_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        cancel_button: Annuler
         description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
-        submit_button: Envoyer
         title: Modifier l’exécution du flux de travail
       files:
         search:
@@ -983,7 +1004,6 @@ fr:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
         edit_button: Modifier
-        remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       summary:
         created_at: Créé
@@ -1101,12 +1121,9 @@ fr:
       title: Modifier le modèle de métadonnées
       update_button: Mise à jour
     form:
-      available: Disponible
       description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
-      selected: Sélectionné
     new_template_dialog:
-      submit_button: Envoyer
       title: Nouveau modèle de métadonnées
     table:
       empty:
@@ -1182,7 +1199,6 @@ fr:
   personal_access_tokens:
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
-      submit_button: Confirmer
       title: Révoquer le jeton d’accès personnel
     table:
       header:
@@ -1334,15 +1350,11 @@ fr:
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
-            submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
-            submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
@@ -1435,7 +1447,6 @@ fr:
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
-          cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms du projet
@@ -1555,7 +1566,6 @@ fr:
       create:
         success: L’échantillon a été créé avec succès.
       edit:
-        cancel_button: Annuler
         form:
           title: Nom et description
         submit_button: Mettre à jour l’échantillon
@@ -1611,7 +1621,6 @@ fr:
           no_metadata: No metadata has added
           no_permission_description: Vous n’avez pas la permission d’ajouter des métadonnées dans cet échantillon.
       new:
-        cancel_button: Annuler
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
@@ -1641,7 +1650,6 @@ fr:
             value: Valeur
         nav_aria_label: Navigation dans les échantillons
         new_attachment_button: Télécharger des fichiers
-        remove_button: Retirer
         table_header:
           action: Mesure
           key: Clé
@@ -1681,10 +1689,8 @@ fr:
       success: Le projet %{project_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        cancel_button: Annuler
         description: Vous modifiez l’exécution automatisée du flux de travail '%{workflow_execution_id}'
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
-        submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
       files:
         search:
@@ -1705,7 +1711,6 @@ fr:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
         edit_button: Modifier
-        remove_button: Retirer
         tabs:
           label: Détails de l’exécution de flux de travail
       summary:
@@ -1737,7 +1742,7 @@ fr:
         samples: Échantillons
         select_project: Sélectionner le projet
         spinner_message: Copier des échantillons, cela peut prendre un certain temps...
-        submit_button: Envoyer
+        submit_button: Soumettre
         title: Copier des échantillons
     deletions:
       destroy:
@@ -1802,7 +1807,7 @@ fr:
         samples: Échantillons
         select_project: Sélectionner le projet
         spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
-        submit_button: Envoyer
+        submit_button: Soumettre
         title: Transférer des échantillons
   services:
     attachments:
@@ -2086,13 +2091,11 @@ fr:
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
-      cancel_button: Annuler
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
       shared_with_namespace:
         group: Partager les résultats avec les membres du groupe?
         project: Partager les résultats avec les membres du projet?
-      submit_button: Envoyer
       title: Modifier l’exécution du flux de travail
     file_selector:
       file_selector_dialog:

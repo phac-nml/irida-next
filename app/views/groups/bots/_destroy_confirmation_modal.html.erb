@@ -18,7 +18,7 @@
               action:"turbo:submit-end->viral--dialog#close"
             }
           ) do |form| %>
-      <%= form.submit t("bots.destroy_confirmation.submit_button"),
+      <%= form.submit t("common.actions.confirm"),
                   class: "button button-destructive",
                   data: {
                     action: "click->token#removeTokenPanel",

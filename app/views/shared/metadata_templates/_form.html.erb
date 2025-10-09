@@ -1,7 +1,7 @@
 <div
   data-controller="viral--sortable-lists--two-lists-selection"
-  data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t("metadata_templates.form.selected") %>"
-  data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("metadata_templates.form.available") %>"
+  data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t("common.labels.selected") %>"
+  data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t("common.labels.available") %>"
   data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
   class="font-normal text-slate-500 dark:text-slate-400"
 >
@@ -65,14 +65,14 @@
                   description: t("metadata_templates.form.description"),
                   ) do |sortable_lists| %>
         <%= sortable_lists.with_list(
-          id: t("metadata_templates.form.available"),
-          title: t("metadata_templates.form.available"),
+          id: t("common.labels.available"),
+          title: t("common.labels.available"),
           list_items: @available_metadata_fields,
           group: "metadata_selection",
         ) %>
         <%= sortable_lists.with_list(
-          id: t("metadata_templates.form.selected"),
-          title: t("metadata_templates.form.selected"),
+          id: t("common.labels.selected"),
+          title: t("common.labels.selected"),
           list_items: @current_template_fields,
           group: "metadata_selection",
           required: true,
