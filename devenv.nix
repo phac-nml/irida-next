@@ -58,16 +58,12 @@ lib.mkMerge [
     services.postgres = {
       enable = true;
       package = pkgs.postgresql_14;
+      createDatabase = false;
       initialScript = ''
-        CREATE ROLE postgres SUPERUSER;
         CREATE ROLE test LOGIN SUPERUSER PASSWORD 'test';
         CREATE EXTENSION IF NOT EXISTS hstore;
         CREATE EXTENSION IF NOT EXISTS pg_trgm;
       '';
-      initialDatabases = [
-        { name = "irida_next_development"; user = "test"; schema = ./db/structure.sql; }
-        { name = "irida_next_jobs_development"; user = "test"; schema = ./db/jobs_structure.sql; }
-      ];
       listen_addresses = "localhost";
     };
 
@@ -75,8 +71,6 @@ lib.mkMerge [
     enterShell = ''
       ruby --version
       gem install ruby-lsp
-      bundle
-      pnpm install --frozen-lockfile
     '';
 
     # https://devenv.sh/tasks/
