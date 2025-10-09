@@ -10,8 +10,8 @@ class NextflowComponentTest < ViewComponentTestCase
     sample44 = samples(:sample44)
 
     workflow = Irida::Pipeline.new(
+      'phac-nml/iridanextexample',
       {
-        'pipeline_id' => 'phac-nml/iridanextexample',
         'name' => 'phac-nml/iridanextexample',
         'description' => 'This is a test workflow',
         'url' => 'https://nf-co.re/testpipeline'
