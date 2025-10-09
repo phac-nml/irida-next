@@ -52,6 +52,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     assert_includes @workflow_execution_invalid_workflow.errors[:base],
                     I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
                            workflow_name: @workflow_execution_invalid_workflow.metadata['workflow_name'],
+                           pipeline_id: @workflow_execution_invalid_workflow.metadata['pipeline_id'],
                            workflow_version: @workflow_execution_invalid_workflow.metadata['workflow_version'])
   end
 
