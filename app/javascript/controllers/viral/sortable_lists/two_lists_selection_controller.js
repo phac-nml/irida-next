@@ -26,6 +26,7 @@ export default class extends Controller {
   static ARIA_SELECTED_FALSE = "false";
   static ARIA_DISABLED_TRUE = "true";
   static ARIA_DISABLED_FALSE = "false";
+  static ARIA_REQUIRED_TRUE = "true";
 
   #originalAvailableList;
   #idCache = new Map();
