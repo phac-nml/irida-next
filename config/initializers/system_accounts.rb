@@ -2,8 +2,8 @@
 
 # Initializer to provide `system` (metrics) access to users retrieved from credentials
 Rails.application.config.after_initialize do
-  unless Rails.application.credentials[:system_accounts].nil?
-    user_emails = Rails.application.credentials[:system_accounts][:user_emails].split(',')
+  unless !defined?(Rails::Server) || Rails.application.credentials.system_accounts.nil?
+    user_emails = Rails.application.credentials[:system_accounts][:user_emails]
 
     # Remove users who are no longer given `system` (metrics) access
     existing_system_users = User.where(system: true).where.not(email: user_emails)
