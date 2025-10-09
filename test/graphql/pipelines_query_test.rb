@@ -11,6 +11,7 @@ class PipelinesQueryTest < ActiveSupport::TestCase
         executable
         metadata
         name
+        pipelineId
         version
         workflowParams
       }
