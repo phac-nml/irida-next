@@ -5,7 +5,11 @@ valid_automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.2",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: true
   update_samples: false
@@ -15,6 +19,7 @@ invalid_metadata_automated_workflow_execution:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata:
     {
+      pipeline_id: "phac-nml/iridanextexample",
       workflow_name: "phac-nml/iridanextexample",
       "missing a param here": "invalid",
     }
@@ -27,7 +32,11 @@ disabled_automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.2",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: true
   update_samples: false
@@ -37,7 +46,11 @@ projectA_automated_workflow_execution_one:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.2",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: false
   update_samples: false
@@ -46,7 +59,11 @@ projectA_automated_workflow_execution_two:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.1" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.1",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: false
   update_samples: false
@@ -55,7 +72,11 @@ projectA_automated_workflow_execution_three:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.0" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.0",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: false
   update_samples: false
@@ -64,7 +85,11 @@ projectA_automated_workflow_execution_four:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.4" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.4",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: false
   update_samples: false
@@ -73,7 +98,11 @@ projectA_invalid_automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "invalid" }
+    {
+      workflow_name: "phac-nml/iridanextexample",
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "invalid",
+    }
   workflow_params: { "assembler": "stub" }
   email_notification: false
   update_samples: false
