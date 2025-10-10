@@ -43,9 +43,12 @@
       >
         <button
           data-action="click->layout#expand:capture"
+          data-layout-target="expandButton"
           class="text-slate-500 navbar-button cursor-pointer"
           title="<%= t(:'general.navbar.expand.label') %>"
           aria-label="<%= t(:'general.navbar.expand.label') %>"
+          aria-controls="sidebar"
+          aria-expanded="true"
         >
           <%= pathogen_icon :sidebar %>
         </button>

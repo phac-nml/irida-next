@@ -36,6 +36,7 @@
           <button
             type="button"
             data-action="click->layout#collapse"
+            data-layout-target="collapseButton"
             title="<%= t(:'general.navbar.collapse.label') %>"
             class="
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
@@ -43,6 +44,8 @@
               dark:hover:text-slate-200
             "
             aria-label="<%= t(:'general.navbar.collapse.label') %>"
+            aria-controls="sidebar"
+            aria-expanded="true"
           >
             <%= pathogen_icon :sidebar %>
           </button>
