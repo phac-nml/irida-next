@@ -20,16 +20,15 @@ module Profiles
 
       respond_to do |format|
         if updated
-          # Wrapping this in I18n.with_locale in case the user changed their language preference,
+          # Changing the current locale in case the user changed their language preference,
           # that way the toast message will be in the correction translation
-          I18n.with_locale(@user.locale.to_sym) do
-            format.turbo_stream do
-              render status: :ok, locals: { type: 'success', message: t('.success') }
-            end
-            format.html do
-              flash[:success] = t('.success')
-              redirect_back_or_to profile_preferences_path
-            end
+          I18n.locale = @user.locale.to_sym
+          format.turbo_stream do
+            render status: :ok, locals: { type: 'success', message: t('.success') }
+          end
+          format.html do
+            flash[:success] = t('.success')
+            redirect_back_or_to profile_preferences_path
           end
         else
           format.turbo_stream do
