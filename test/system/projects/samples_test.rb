@@ -416,7 +416,7 @@ module Projects
                                                                                       locale: @user.locale))
 
       # select all samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
         assert_selector "tr[id='#{dom_id(@sample1)}']"
@@ -476,7 +476,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -507,7 +507,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -565,7 +565,7 @@ module Projects
 
       ### ACTIONS START ###
       # select all 3 samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -629,7 +629,7 @@ module Projects
 
       ### ACTIONS START ###
       # select all 3 samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector '#dialog'
@@ -675,7 +675,7 @@ module Projects
 
       ### ACTIONS START ###
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -731,7 +731,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -803,7 +803,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
       end
@@ -907,7 +907,7 @@ module Projects
 
       ### ACTIONS START ###
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2548,7 +2548,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2579,7 +2579,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2729,7 +2729,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2789,7 +2789,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2849,7 +2849,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ####
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2880,7 +2880,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
       end
@@ -2993,7 +2993,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       # samples selected
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -3010,7 +3010,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
       # select all again
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
@@ -3020,7 +3020,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       # deselect all
-      click_button I18n.t(:'projects.samples.index.deselect_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -3113,7 +3113,7 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
 
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
@@ -3184,7 +3184,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -3215,7 +3215,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -3251,7 +3251,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -3924,7 +3924,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tfoot' do
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'

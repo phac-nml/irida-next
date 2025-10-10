@@ -175,7 +175,6 @@ fr:
     clipboard:
       copied: Copié!
     confirmation:
-      cancel: Annuler
       confirm: Confirmer
       confirm_label: Valeur de confirmation
       title: Confirmation requise

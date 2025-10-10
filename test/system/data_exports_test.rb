@@ -184,7 +184,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'name is not shown on data export page if data_export.name is nil' do
     visit data_export_path(@data_export2)
 
-    assert_no_text I18n.t('data_exports.summary.name')
+    assert_no_text I18n.t('common.labels.name')
   end
 
   test 'expire has once_ready text on data export page if data_export.status is processing' do

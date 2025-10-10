@@ -1,0 +1,11 @@
+---
+fr:
+  common:
+    actions:
+      cancel: Annuler
+    controls:
+      deselect_all: Désélectionner tout
+      search: Rechercher
+      select_all: Tout sélectionner
+    labels:
+      name: Nom

@@ -46,7 +46,7 @@
         disabled: true %>
       <% end %>
       <% if @workflow_execution.cancellable? %>
-        <%= button_to t("workflow_executions.show.cancel_button"),
+        <%= button_to t('common.actions.cancel'),
         cancel_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_method: :put,

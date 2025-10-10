@@ -159,13 +159,13 @@ module Groups
 
       assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared1)}']"
       within("tr[id='#{dom_id(@workflow_execution_group_shared1)}'] td:last-child") do
-        assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
+        assert_no_link I18n.t('common.actions.cancel')
         assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
       assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared2)}']"
       within("tr[id='#{dom_id(@workflow_execution_group_shared2)}'] td:last-child") do
-        assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
+        assert_no_link I18n.t('common.actions.cancel')
         assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
@@ -264,7 +264,7 @@ module Groups
       assert_text @workflow_execution_group_shared2.metadata['workflow_version']
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
-      assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
+      assert_no_link I18n.t('common.actions.cancel')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
 
@@ -297,7 +297,7 @@ module Groups
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
 
-      click_button I18n.t(:'groups.workflow_executions.show.cancel_button', locale: user.locale)
+      click_button I18n.t('common.actions.cancel', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
