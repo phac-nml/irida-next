@@ -14,7 +14,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentCSV))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_button I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
 
     assert_selector 'table', count: 1
     assert_selector 'thead th', count: 10
@@ -26,7 +26,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentTSV))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_button I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
 
     assert_selector 'table', count: 1
     assert_selector 'thead th', count: 8
@@ -38,7 +38,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentText))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_button I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
     assert_text 'This is some valid text.'
   end
 
@@ -47,7 +47,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentJSON))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_button I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
 
     assert_selector 'pre', count: 1002
   end
@@ -57,7 +57,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentSpreadsheet))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_no_selector 'button', text: I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
 
     assert_selector 'table', count: 1
     assert_selector 'thead th', count: 10
@@ -69,7 +69,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentImage))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_no_selector 'button', text: I18n.t('attachment.show.copy')
-    assert_button I18n.t('attachment.show.download')
+    assert_button I18n.t('common.actions.download')
     assert_selector "img[alt='#{I18n.t('attachment.show.image.alt', filename: attachment.file.filename.to_s)}']",
                     count: 1
   end
