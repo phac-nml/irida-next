@@ -279,7 +279,6 @@ fr:
     show:
       copied: Copié
       copy: Copie
-      download: Télécharger
       file_not_found: Fichier non trouvé
       image:
         alt: Rendu du fichier %{filename}
@@ -421,7 +420,6 @@ fr:
     index:
       actions:
         delete_aria_label: Supprimer l’exportation de données %{name}
-        download: Télécharger
         download_aria_label: Télécharger l’exportation des données %{name}
       delete_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       limit:
@@ -432,7 +430,6 @@ fr:
         placeholder: Rechercher par ID ou nom
       table_header:
         action: Mesure
-        created_at: Créé
         expires_at: Expire
         export_type: Type
         id: ID
@@ -487,18 +484,13 @@ fr:
     preview:
       manifest_json: manifest.json
     show:
-      download: Télécharger
       page_title: Exportation de données
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
         preview: Aperçu
         summary: Résumé
         title: Navigation d’exportation de données
-    status:
-      processing: TRAITEMENT
-      ready: PRÊT
     summary:
-      created_at: Créé
       expires_at: Expire
       format: Format
       id: ID
@@ -714,12 +706,10 @@ fr:
         bot_listing:
           generate_personal_access_token_modal:
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
-            submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
-            submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
@@ -801,13 +791,10 @@ fr:
           placeholder: Chercher par nom de groupe
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
-        button:
-          submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms
         label:
           access_expiration: Expiration de l’accès (facultatif)
-          group_access_level: Niveau d’accès
           group_id: Groupe
         sharing_namespace_with_group: Vous partagez le %{name} de groupe avec un groupe
         title: Partager l’espace de noms
@@ -913,15 +900,12 @@ fr:
     sidebar:
       activity: Activité
       bot_accounts: Comptes de bot
-      details: Détails
       files: Fichiers
-      general: Général
       history: Historique
       label: Groupe
       members: Membres
       metadata_templates: Modèles de métadonnées
       samples: Échantillons
-      settings: Paramètres
       workflow_executions: Exécutions de flux de travail
     subgroups_and_projects:
       pagy:
@@ -1275,7 +1259,6 @@ fr:
       pipeline_selection_modal:
         title: Sélection de pipelines
       table:
-        disabled: DÉSACTIVÉ
         empty:
           description: Aucun pipeline automatisé n’a été configuré pour ce projet
           title: Pas de pipeline automatisé
@@ -1299,12 +1282,10 @@ fr:
         bot_listing:
           generate_personal_access_token_modal:
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
-            submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
-            submit: Envoyer
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
@@ -1395,13 +1376,10 @@ fr:
           placeholder: Chercher par nom de groupe
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
-        button:
-          submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms du projet
         label:
           access_expiration: Expiration de l’accès (facultatif)
-          group_access_level: Niveau d’accès
           shared_group: Groupe
         sharing_namespace_with_group: Vous partagez le %{name} de groupe avec un groupe
         title: Partager l’espace de noms
@@ -1604,15 +1582,12 @@ fr:
       activity: Activité
       automated_workflow_executions: Pipelines automatisés
       bot_accounts: Comptes de bot
-      details: Détails
       files: Fichiers
-      general: Général
       history: Historique
       label: Projet
       members: Membres
       metadata_templates: Modèles de métadonnées
       samples: Échantillons
-      settings: Paramètres
       workflow_executions: Exécutions de flux de travail
     transfer:
       success: Réussite

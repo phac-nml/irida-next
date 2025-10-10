@@ -51,7 +51,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(6)",
                       text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
 
@@ -60,7 +60,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export2.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export2.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
       assert find("tr[id='#{dom_id(@data_export2)}'] td:nth-child(6)").text.blank?
 
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:first-child", text: @data_export6.id
@@ -68,7 +68,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export6.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export6.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export6.status}").upcase
       assert find("tr[id='#{dom_id(@data_export6)}'] td:nth-child(6)").text.blank?
 
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:first-child", text: @data_export7.id
@@ -76,7 +76,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(6)",
                       text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
     end
@@ -91,7 +91,7 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       within %(tr[id='#{dom_id(@data_export1)}'] td:last-child) do
-        assert_text I18n.t('data_exports.index.actions.download')
+        assert_text I18n.t('common.actions.download')
         assert_text I18n.t('common.actions.delete')
       end
     end
@@ -174,7 +174,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:first-child dd', text: @data_export1.id
     assert_selector 'div:nth-child(2) dd', text: @data_export1.name
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
-    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
     assert_selector 'div:nth-child(5) dd',
                     text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
@@ -200,7 +200,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(dl div:nth-child(3) dd) do
       assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
-                      text: I18n.t(:"data_exports.status.#{@data_export2.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
     end
 
     # ready
@@ -208,7 +208,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(dl div:nth-child(4) dd) do
       assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
-                      text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
     end
   end
 
@@ -216,13 +216,13 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_export_path(@data_export1)
 
     assert_selector 'button',
-                    text: I18n.t(:'data_exports.show.download')
+                    text: I18n.t('common.actions.download')
     assert_text I18n.t(:'data_exports.show.tabs.preview')
 
     visit data_export_path(@data_export2)
 
     assert_selector 'button[disabled]',
-                    text: I18n.t(:'data_exports.show.download')
+                    text: I18n.t('common.actions.download')
     assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
 
@@ -870,7 +870,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:first-child dd', text: @data_export7.id
     assert_selector 'div:nth-child(2) dd', text: @data_export7.name
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
-    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
     assert_selector 'div:nth-child(5) dd',
                     text: I18n.l(@data_export7.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
@@ -1817,15 +1817,15 @@ class DataExportsTest < ApplicationSystemTestCase
     click_on 'Status'
     assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
     within('table tbody') do
-      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export2.status}")
-      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export6.status}")
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export6.status}").upcase
     end
 
     click_on 'Status'
     assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
     within('table tbody') do
-      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
-      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
     end
 
     click_on 'Created'

@@ -279,7 +279,6 @@ en:
     show:
       copied: Copied
       copy: Copy
-      download: Download
       file_not_found: File not found.
       image:
         alt: Rendering of file %{filename}
@@ -421,7 +420,6 @@ en:
     index:
       actions:
         delete_aria_label: Delete data export %{name}
-        download: Download
         download_aria_label: Download data export %{name}
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       limit:
@@ -432,7 +430,6 @@ en:
         placeholder: Search by ID or name
       table_header:
         action: Action
-        created_at: Created
         expires_at: Expires
         export_type: Type
         id: ID
@@ -487,18 +484,13 @@ en:
     preview:
       manifest_json: manifest.json
     show:
-      download: Download
       page_title: Data Export
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         preview: Preview
         summary: Summary
         title: Data Export Navigation
-    status:
-      processing: PROCESSING
-      ready: READY
     summary:
-      created_at: Created
       expires_at: Expires
       format: Format
       id: ID
@@ -712,12 +704,10 @@ en:
         bot_listing:
           generate_personal_access_token_modal:
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
             description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -799,13 +789,10 @@ en:
           placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
-        button:
-          submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Access level
           group_id: Group
         sharing_namespace_with_group: You're sharing group %{name} with a group
         title: Share namespace
@@ -911,15 +898,12 @@ en:
     sidebar:
       activity: Activity
       bot_accounts: Bot Accounts
-      details: Details
       files: Files
-      general: General
       history: History
       label: Group
       members: Members
       metadata_templates: Metadata Templates
       samples: Samples
-      settings: Settings
       workflow_executions: Workflow Executions
     subgroups_and_projects:
       pagy:
@@ -1271,7 +1255,6 @@ en:
       pipeline_selection_modal:
         title: Pipeline Selection
       table:
-        disabled: DISABLED
         empty:
           description: No automated pipelines have been configured for this project
           title: No automated pipelines
@@ -1295,12 +1278,10 @@ en:
         bot_listing:
           generate_personal_access_token_modal:
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
             description: This will create a bot user with email format 'inxt_prj_PROJECT_PUID_bot_n@iridanext.com', add them as a member to the Project with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -1391,13 +1372,10 @@ en:
           placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
-        button:
-          submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share project namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Access level
           shared_group: Group
         sharing_namespace_with_group: You're sharing project %{name} with a group
         title: Share namespace
@@ -1600,15 +1578,12 @@ en:
       activity: Activity
       automated_workflow_executions: Automated Pipelines
       bot_accounts: Bot Accounts
-      details: Details
       files: Files
-      general: General
       history: History
       label: Project
       members: Members
       metadata_templates: Metadata Templates
       samples: Samples
-      settings: Settings
       workflow_executions: Workflow Executions
     transfer:
       success: Success

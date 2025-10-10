@@ -6,7 +6,7 @@
     <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-2">
       <% if @data_export.status == 'ready' %>
         <%= button_to(
-          t("data_exports.show.download"),
+          t('common.actions.download'),
           rails_blob_path(@data_export.file),
           method: :get,
           class: "button button-primary w-full",
@@ -19,7 +19,7 @@
             dark:border-slate-600 w-full
           "
           disabled
-        ><%= t("data_exports.show.download") %>
+        ><%= t('common.actions.download') %>
         </button>
       <% end %>
       <%= button_to(

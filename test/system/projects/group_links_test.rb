@@ -36,7 +36,7 @@ module Projects
         find('li[data-label="Subgroup 2"]').click
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 
-        click_button I18n.t(:'projects.group_links.new.button.submit')
+        click_button I18n.t('common.actions.share')
       end
 
       assert_selector 'tr', count: (@namespace.shared_with_group_links.of_ancestors.count + 1) + header_row_count
