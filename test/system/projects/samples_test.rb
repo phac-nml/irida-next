@@ -3020,7 +3020,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       # deselect all
-      click_button I18n.t('common.controls.select_all')
+      click_button I18n.t('common.controls.deselect_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
