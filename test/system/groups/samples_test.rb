@@ -757,7 +757,7 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       click_button I18n.t('common.controls.select_all')
@@ -765,14 +765,14 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '25'
       end
       click_button I18n.t('common.controls.select_all')
@@ -781,10 +781,10 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
-      click_button I18n.t('common.controls.select_all')
+      click_button I18n.t('common.controls.deselect_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
