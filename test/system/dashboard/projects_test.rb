@@ -255,7 +255,7 @@ module Dashboard
       end
 
       visit namespace_project_sample_url(@group1, @project, @sample1)
-      click_button I18n.t('projects.samples.show.remove_button')
+      click_button I18n.t('common.actions.remove')
 
       within('dialog[open]') do
         click_button I18n.t('common.actions.remove')

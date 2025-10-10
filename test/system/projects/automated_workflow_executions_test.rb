@@ -125,8 +125,8 @@ module Projects
                         text: disabled_automated_pipeline.id
 
         within("tr[id='#{dom_id(disabled_automated_pipeline)}'] td:last-child") do
-          assert_text I18n.t('projects.automated_workflow_executions.actions.delete')
-          assert_no_text I18n.t('projects.automated_workflow_executions.actions.edit')
+          assert_text I18n.t('common.actions.delete')
+          assert_no_text I18n.t('common.actions.edit')
         end
       end
     end
