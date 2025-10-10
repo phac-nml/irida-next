@@ -87,12 +87,12 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within('tbody') do
       within %(tr[id='#{dom_id(@data_export6)}'] td:last-child) do
-        assert_text I18n.t('data_exports.index.actions.delete')
+        assert_text I18n.t('common.actions.delete')
       end
 
       within %(tr[id='#{dom_id(@data_export1)}'] td:last-child) do
         assert_text I18n.t('data_exports.index.actions.download')
-        assert_text I18n.t('data_exports.index.actions.delete')
+        assert_text I18n.t('common.actions.delete')
       end
     end
   end
@@ -102,7 +102,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 7
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -110,7 +110,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 6
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -118,7 +118,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 5
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -126,7 +126,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 4
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -134,7 +134,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 3
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -142,7 +142,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 2
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -150,7 +150,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 1
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -236,7 +236,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(@data_export2)
 
-    click_button I18n.t(:'data_exports.show.remove_button')
+    click_button I18n.t('common.actions.remove')
 
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -990,7 +990,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
       assert_selector 'button[aria-disabled="true"]',
@@ -1067,7 +1067,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
 
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
@@ -1079,7 +1079,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1106,7 +1106,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled again
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1117,7 +1117,7 @@ class DataExportsTest < ApplicationSystemTestCase
       # after 1 selection, remove, and down buttons enabled; add and up still disabled (up disabled because top option
       # is selected)
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_no_selector 'button[aria-disabled="true"]',
@@ -1134,14 +1134,14 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#metadatafield2').click
       # after 2 selections, up and down are now disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.down')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
-      click_button I18n.t('components.viral.sortable_list.list_component.remove')
+      click_button I18n.t('common.actions.remove')
 
       within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
         assert_text 'metadatafield1'
@@ -1250,7 +1250,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled again
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1260,7 +1260,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#csv').click
       # after 1 selection, remove and down buttons enabled; add and up (first option, can't move up) still disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_no_selector 'button[aria-disabled="true"]',
@@ -1270,14 +1270,14 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#json').click
       # after 2 selections, up and down are now disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.down')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
-      click_button I18n.t('components.viral.sortable_list.list_component.remove')
+      click_button I18n.t('common.actions.remove')
 
       within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
         assert_selector 'li', count: 8
@@ -1288,7 +1288,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
 
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
@@ -1300,7 +1300,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',

@@ -258,7 +258,7 @@ module Dashboard
       click_button I18n.t('projects.samples.show.remove_button')
 
       within('dialog[open]') do
-        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
+        click_button I18n.t('common.actions.remove')
       end
 
       visit dashboard_projects_url

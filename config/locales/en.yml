@@ -307,7 +307,6 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
-          destroy: Delete
           destroy_aria_label: 'Delete bot account: %{name}'
           generate_new_token: Generate new token
           generate_new_token_aria_label: 'Generate a new personal access token for bot account: %{name}'
@@ -421,7 +420,6 @@ en:
       success: Data export '%{name}' was successfully deleted.
     index:
       actions:
-        delete: Delete
         delete_aria_label: Delete data export %{name}
         download: Download
         download_aria_label: Download data export %{name}
@@ -491,7 +489,6 @@ en:
     show:
       download: Download
       page_title: Data Export
-      remove_button: Remove
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         preview: Preview
@@ -681,7 +678,6 @@ en:
         aria_label: Create menu
         group: Create new group
         project: Create new project
-        title: Create
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close
@@ -841,7 +837,6 @@ en:
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
         leave_group: Leave group
-        remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the group?
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
@@ -959,8 +954,6 @@ en:
       show:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
-        edit_button: Edit
-        remove_button: Remove
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
         created_at: Created
@@ -1073,7 +1066,6 @@ en:
   metadata_templates:
     edit_template_dialog:
       title: Edit Metadata Template
-      update_button: Update
     form:
       available: Available
       description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
@@ -1092,10 +1084,8 @@ en:
       created_by_email: Created By
       description: Description
       edit_aria_label: 'Edit metadata template: %{template_name}'
-      edit_button: Edit
       name: Template Name
       remove_aria_label: 'Delete metadata template: %{template_name}'
-      remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       spinner_message: Loading metadata templates...
       updated_at: Last Modified
@@ -1260,10 +1250,8 @@ en:
           title: No Files
     automated_workflow_executions:
       actions:
-        delete: Delete
         delete_aria_label: 'Delete automated pipeline: %{name}'
         delete_confirm: Are you sure that you want to delete this automated pipeline?
-        edit: Edit
         edit_aria_label: 'Edit automated pipeline: %{name}'
       create:
         error: Could not create an automated pipeline for %{workflow_name}
@@ -1442,7 +1430,6 @@ en:
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from the project?
         leave_project: Leave project
-        remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the project?
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
@@ -1477,8 +1464,6 @@ en:
       title: Create project
     samples:
       attachments:
-        attachment:
-          delete: Delete
         concatenations:
           create:
             basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
@@ -1502,19 +1487,18 @@ en:
             success: Files were successfully deleted.
           modal:
             description: 'The following files were selected for deletion:'
-            submit_button: Delete
             title: Delete Files
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
-      table:
-        empty_state:
-          action_text: Upload Files
-          description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
-          no_permission_description: You do not have permission to upload files to this sample
-          title: No files have been uploaded
-        search:
-          placeholder: Search by PUID or Filename
+        table:
+          empty_state:
+            action_text: Upload Files
+            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            no_permission_description: You do not have permission to upload files to this sample
+            title: No files have been uploaded
+          search:
+            placeholder: Search by PUID or Filename
       create:
         success: Sample was successfully created.
       edit:
@@ -1539,7 +1523,6 @@ en:
           modal:
             description: 'Metadata fields selected for deletion:'
             key_header: Key
-            submit_button: Delete
             title: Delete Metadata
             value_header: Value
         destroy:
@@ -1590,17 +1573,12 @@ en:
         metadata:
           actions:
             delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
-            dropdown:
-              delete: Delete
-              update: Update
           update:
             key: Key
-            update: Update
             update_metadata: Update Metadata
             value: Value
         nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
-        remove_button: Remove
         table_header:
           action: Action
           key: Key
@@ -1613,6 +1591,14 @@ en:
           metadata: Metadata
         upload: Upload
         upload_files: Upload Files
+      table:
+        empty_state:
+          action_text: Upload Files
+          description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+          no_permission_description: You do not have permission to upload files to this sample
+          title: No files have been uploaded
+        search:
+          placeholder: Search by PUID or Filename
       table_filter:
         loading: Loading search results...
         search:
@@ -1656,8 +1642,6 @@ en:
       show:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
-        edit_button: Edit
-        remove_button: Remove
         tabs:
           label: Workflow Execution Details
       summary:
@@ -1710,7 +1694,6 @@ en:
         title: Delete Samples
       destroy_single_confirmation_dialog:
         description: Are you sure you want to delete sample '%{sample_name}'?
-        submit_button: Remove
         title: Delete Sample
     editable_cell:
       update_success: Metadata was successfully updated
@@ -2032,7 +2015,6 @@ en:
     actions:
       cancel_aria_label: 'Cancel workflow execution: %{name}'
       cancel_confirm: Are you sure you want to cancel this workflow execution?
-      delete: Delete
       delete_aria_label: 'Delete workflow execution: %{name}'
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
@@ -2075,8 +2057,6 @@ en:
     show:
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export
-      edit_button: Edit
-      remove_button: Remove
       tabs:
         files: Files
         params: Parameters
@@ -2096,7 +2076,6 @@ en:
       create:
         submit: Submit
         title: "%{workflow} parameters"
-        update: Update
       pipeline_selection:
         loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time."
         title: Workflow Selection

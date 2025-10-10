@@ -182,7 +182,7 @@
                           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                       <% end %>
                       <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                        <%= button_to t(:"workflow_executions.actions.delete"),
+                        <%= button_to t('common.actions.delete'),
                         destroy_confirmation_path(workflow_execution),
                         data: {
                           turbo_stream: :true,

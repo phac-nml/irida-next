@@ -138,7 +138,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_button I18n.t(:'projects.members.index.remove')
+        click_button I18n.t('common.actions.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -159,7 +159,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_button I18n.t(:'projects.members.index.remove')
+        click_button I18n.t('common.actions.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -351,7 +351,7 @@ module Projects
       end
 
       within "#member_#{project_member.id}" do
-        assert_selector 'button', text: I18n.t(:'projects.members.index.remove'), focused: true
+        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
       end
     end
 

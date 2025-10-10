@@ -115,8 +115,8 @@ module Projects
         visit namespace_project_sample_url(@namespace, @project, @sample1)
 
         within('#attachments-table-body') do
-          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
-          click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+          assert_button text: I18n.t('common.actions.delete'), count: 2
+          click_on I18n.t('common.actions.delete'), match: :first
         end
 
         within('dialog[open]') do
@@ -138,7 +138,7 @@ module Projects
         within('#sample-attachments') do
           assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
           assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
-          assert_no_selector 'button[disabled]', text: I18n.t('projects.samples.attachments.attachment.delete')
+          assert_no_selector 'button[disabled]', text: I18n.t('common.actions.delete')
         end
         click_on I18n.t('projects.samples.show.upload_files'), match: :first
 
@@ -159,12 +159,12 @@ module Projects
         within('#sample-attachments') do
           assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
           assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
-          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+          assert_button text: I18n.t('common.actions.delete'), count: 1
         end
 
         # Destroy paired files
         within('#attachments-table-body') do
-          click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+          click_on I18n.t('common.actions.delete'), match: :first
         end
 
         within('dialog[open]') do
@@ -431,7 +431,7 @@ module Projects
         within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
-          click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+          click_on I18n.t('common.actions.delete')
           assert_html5_inputs_valid
         end
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
@@ -466,7 +466,7 @@ module Projects
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
           assert_text 'test_file_D.fastq'
-          click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+          click_on I18n.t('common.actions.delete')
         end
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
         within '#sample-attachments' do
@@ -486,7 +486,7 @@ module Projects
         assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
         within '#attachments-table-body' do
           assert_selector 'tr', count: 2
-          assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+          assert_text I18n.t('common.actions.delete'), count: 2
         end
       end
 
@@ -496,7 +496,7 @@ module Projects
         assert_text I18n.t('projects.samples.show.delete_files_button'), count: 0
         within 'table #attachments-table-body' do
           assert_selector ' tr', count: 2
-          assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 0
+          assert_text I18n.t('common.actions.delete'), count: 0
         end
       end
 
@@ -655,9 +655,9 @@ module Projects
         visit namespace_project_sample_url(@namespace, @project, @sample1)
 
         within('#attachments-table-body') do
-          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+          assert_button text: I18n.t('common.actions.delete'), count: 2
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-          click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+          click_on I18n.t('common.actions.delete'), match: :first
         end
 
         within('dialog[open]') do
@@ -676,7 +676,7 @@ module Projects
         within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_no_text 'test_file_B.fastq'
-          click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+          click_button I18n.t('common.actions.delete')
         end
 
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')

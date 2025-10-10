@@ -154,7 +154,6 @@ fr:
           attachments: Pièces jointes
           selected: Sélectionné
         created_at: Créé à
-        delete: Supprimer
         delete_aria_label:
           one: 'Supprimer le fichier : %{name}'
           other: 'Supprimer les fichiers : %{name}'
@@ -213,7 +212,6 @@ fr:
     list_input:
       clear: Enlever toutes les étiquettes
       description: Coller une liste de noms d’échantillons ou d’identificateurs <kbd>,</kbd> séparés
-      remove_tag: Retirer
     namespace_row:
       contents_component:
         projects:
@@ -364,7 +362,6 @@ fr:
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
-          remove: Supprimer
           up: Haut
       sortable_lists_component:
         no_template: Pas de modèle

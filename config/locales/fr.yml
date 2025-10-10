@@ -307,7 +307,6 @@ fr:
           level_40: Responsable
           level_50: Propriétaire
         actions:
-          destroy: Supprimer
           destroy_aria_label: 'Supprimer le compte de bot : %{name}'
           generate_new_token: Générer un nouveau jeton
           generate_new_token_aria_label: 'Générer un nouveau jeton d’accès personnel pour le compte de bot : %{name}'
@@ -421,7 +420,6 @@ fr:
       success: L’exportation de données '%{name}' a été supprimée avec succès.
     index:
       actions:
-        delete: Supprimer
         delete_aria_label: Supprimer l’exportation de données %{name}
         download: Télécharger
         download_aria_label: Télécharger l’exportation des données %{name}
@@ -491,7 +489,6 @@ fr:
     show:
       download: Télécharger
       page_title: Exportation de données
-      remove_button: Retirer
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
         preview: Aperçu
@@ -683,7 +680,6 @@ fr:
         aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
         project: Créer un nouveau projet
-        title: Créer
     opens_in_new_tab: S’ouvre dans un nouvel onglet
     screen_reader:
       close: Fermer
@@ -843,7 +839,6 @@ fr:
         invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
         leave_group: Quitter le groupe
-        remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du groupe?
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
@@ -961,8 +956,6 @@ fr:
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
-        edit_button: Modifier
-        remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       summary:
         created_at: Créé
@@ -1077,7 +1070,6 @@ fr:
   metadata_templates:
     edit_template_dialog:
       title: Modifier le modèle de métadonnées
-      update_button: Mise à jour
     form:
       available: Disponible
       description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
@@ -1096,10 +1088,8 @@ fr:
       created_by_email: Créé par
       description: Description
       edit_aria_label: 'Modifier le modèle de métadonnées : %{template_name}'
-      edit_button: Modifier
       name: Nom du modèle
       remove_aria_label: 'Supprimer le modèle de métadonnées : %{template_name}'
-      remove_button: Supprimer
       remove_confirmation: Êtes-vous sûr de vouloir supprimer le modèle de métadonnées %{template_name}?
       spinner_message: Chargement des modèles de métadonnées...
       updated_at: Dernière modification
@@ -1264,10 +1254,8 @@ fr:
           title: Aucun fichier
     automated_workflow_executions:
       actions:
-        delete: Supprimer
         delete_aria_label: 'Supprimer le pipeline automatisé : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer ce pipeline automatisé?
-        edit: Modifier
         edit_aria_label: 'Modifier le pipeline automatisé : %{name}'
       create:
         error: Impossible de créer un pipeline automatisé pour %{workflow_name}
@@ -1446,7 +1434,6 @@ fr:
         invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?
         leave_project: Quitter le projet
-        remove: Retirer
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du projet?
         subtitle: Ce sont les membres qui ont accès à %{namespace_type} %{namespace_name}
         tabs:
@@ -1482,7 +1469,6 @@ fr:
     samples:
       attachments:
         attachment:
-          delete: Supprimer
         concatenations:
           create:
             basename_help: Le nom de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
@@ -1506,7 +1492,6 @@ fr:
             success: Les fichiers ont été supprimés avec succès.
           modal:
             description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
-            submit_button: Supprimer
             title: Supprimer des fichiers
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
@@ -1543,7 +1528,6 @@ fr:
           modal:
             description: 'Champs de métadonnées sélectionnés pour suppression :'
             key_header: Clé
-            submit_button: Supprimer
             title: Supprimer les métadonnées
             value_header: Valeur
         destroy:
@@ -1578,6 +1562,8 @@ fr:
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
+        actions:
+          delete_confirm: Êtes-vous sûr de vouloir supprimer le champ de métadonnées '%{deleted_key}' de l’échantillon?
         concatenate_button: Concaténer les fichiers
         delete_files_button: Supprimer des fichiers
         edit_button: Modifier cet échantillon
@@ -1592,19 +1578,8 @@ fr:
             transferred_by: Échantillon transféré par %{user}
             version: Version %{version}
         metadata:
-          actions:
-            delete_confirm: Êtes-vous sûr de vouloir supprimer le champ de métadonnées '%{deleted_key}' de l’échantillon?
-            dropdown:
-              delete: Supprimer
-              update: Mise à jour
-          update:
-            key: Clé
-            update: Mise à jour
-            update_metadata: Mettre à jour les métadonnées
-            value: Valeur
         nav_aria_label: Navigation dans les échantillons
         new_attachment_button: Télécharger des fichiers
-        remove_button: Retirer
         table_header:
           action: Mesure
           key: Clé
@@ -1615,6 +1590,10 @@ fr:
           files: Fichiers
           history: Historique
           metadata: Métadonnées
+        update:
+          key: Clé
+          update_metadata: Mettre à jour les métadonnées
+          value: Valeur
         upload: Télécharger
         upload_files: Télécharger des fichiers
       table_filter:
@@ -1660,8 +1639,6 @@ fr:
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
-        edit_button: Modifier
-        remove_button: Retirer
         tabs:
           label: Détails de l’exécution de flux de travail
       summary:
@@ -1714,7 +1691,6 @@ fr:
         title: Supprimer les échantillons
       destroy_single_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
-        submit_button: Retirer
         title: Supprimer l’échantillon
     editable_cell:
       update_success: Les métadonnées ont été mises à jour avec succès
@@ -2036,7 +2012,6 @@ fr:
     actions:
       cancel_aria_label: 'Annuler l’exécution du flux de travail : %{name}'
       cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
-      delete: Supprimer
       delete_aria_label: 'Supprimer l’exécution du flux de travail : %{name}'
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
@@ -2079,8 +2054,6 @@ fr:
     show:
       cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
       create_export_button: Créer une exportation
-      edit_button: Modifier
-      remove_button: Retirer
       tabs:
         files: Fichiers
         params: Paramètres
@@ -2100,7 +2073,6 @@ fr:
       create:
         submit: Envoyer
         title: Paramètres %{workflow}
-        update: Mise à jour
       pipeline_selection:
         loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>La préparation des arguments d’exécution du flux de travail pour les échantillons COUNT_PLACEHOLDER peut prendre un certain temps."
         title: Sélection du flux de travail

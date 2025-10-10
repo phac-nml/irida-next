@@ -2,7 +2,12 @@
 fr:
   common:
     actions:
+      create: Créer
+      delete: Supprimer
+      edit: Modifier
       cancel: Annuler
+      remove: Retirer
+      update: Mettre à jour
     controls:
       deselect_all: Désélectionner tout
       search: Rechercher

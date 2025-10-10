@@ -1688,7 +1688,7 @@ module Groups
         find('#metadata2').click
         find('#description').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -1792,7 +1792,7 @@ module Groups
         find('#metadata1').click
         find('#metadata2').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         select 'metadata1',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')

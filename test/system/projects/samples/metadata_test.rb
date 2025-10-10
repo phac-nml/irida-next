@@ -46,7 +46,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'value1'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+            click_on I18n.t('common.actions.update')
           end
         end
 
@@ -55,7 +55,7 @@ module Projects
           assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
           assert_selector 'input#sample_update_field_value_value1', count: 1
           find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
-          click_on I18n.t('projects.samples.show.metadata.update.update')
+          click_on I18n.t('common.actions.update')
         end
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -73,7 +73,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'value1'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+            click_on I18n.t('common.actions.update')
           end
         end
 
@@ -82,7 +82,7 @@ module Projects
           assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
           assert_selector 'input#sample_update_field_value_value1', count: 1
           find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
-          click_on I18n.t('projects.samples.show.metadata.update.update')
+          click_on I18n.t('common.actions.update')
         end
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -100,7 +100,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'value1'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+            click_on I18n.t('common.actions.update')
           end
         end
 
@@ -110,7 +110,7 @@ module Projects
           assert_selector 'input#sample_update_field_value_value1', count: 1
           find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
           find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
-          click_on I18n.t('projects.samples.show.metadata.update.update')
+          click_on I18n.t('common.actions.update')
         end
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -129,7 +129,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+            click_on I18n.t('common.actions.update')
           end
         end
 
@@ -138,7 +138,7 @@ module Projects
           assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
           assert_selector 'input#sample_update_field_value_value1', count: 1
           find('input#sample_update_field_key_metadatafield1').fill_in with: 'metadatafield2'
-          click_on I18n.t('projects.samples.show.metadata.update.update')
+          click_on I18n.t('common.actions.update')
         end
 
         assert_text I18n.t('services.samples.metadata.update_fields.key_exists', key: 'metadatafield2')
@@ -172,7 +172,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text "#{I18n.t('models.sample.analysis')} 1"
           within('tbody tr:first-child td:last-child') do
-            assert_no_text I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+            assert_no_text I18n.t('common.actions.update')
           end
         end
       end
@@ -468,7 +468,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'value1'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+            click_on I18n.t('common.actions.delete')
           end
         end
 
@@ -497,7 +497,7 @@ module Projects
           assert_text 'metadatafield1'
           assert_text 'value1'
           within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+            click_on I18n.t('common.actions.delete')
           end
         end
 
@@ -529,7 +529,7 @@ module Projects
         within %(turbo-frame[id="sample_modal"]) do
           assert_text 'metadatafield1'
           assert_text 'value1'
-          click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+          click_on I18n.t('common.actions.delete')
         end
 
         assert_text I18n.t('projects.samples.metadata.deletions.destroy.single_success', deleted_key: 'metadatafield1')
@@ -560,7 +560,7 @@ module Projects
           assert_text 'value1'
           assert_text 'metadatafield2'
           assert_text 'value2'
-          click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+          click_on I18n.t('common.actions.delete')
         end
 
         assert_text I18n.t('projects.samples.metadata.deletions.destroy.multi_success',
