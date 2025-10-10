@@ -18,6 +18,8 @@
   "
   data-controller="layout"
   data-layout-target="layoutContainer"
+  data-layout-collapsed-announcement-value="<%= t(:'components.layout.sidebar.collapsed_announcement') %>"
+  data-layout-expanded-announcement-value="<%= t(:'components.layout.sidebar.expanded_announcement') %>"
   data-turbo-prefetch="false"
 >
   <%= sidebar %>
@@ -74,6 +76,13 @@
         <%= viral_flash(type: key, data: value) %>
       <% end %>
     </div>
+    <span
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      data-layout-target="announcement"
+    ></span>
   </div>
   <div tabindex="0" data-action="focus->layout#handleContentFocus"></div>
 </div>
