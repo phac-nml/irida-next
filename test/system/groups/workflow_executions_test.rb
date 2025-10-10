@@ -265,8 +265,8 @@ module Groups
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
       assert_no_link I18n.t('common.actions.cancel')
-      assert_no_link I18n.t(:'workflow_executions.show.edit_button')
-      assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+      assert_no_link I18n.t('common.actions.edit')
+      assert_no_link I18n.t('common.actions.remove')
 
       within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
@@ -321,9 +321,9 @@ module Groups
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
       assert_selector 'dt', text: dt_value
 
-      assert_selector 'button', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale),
+      assert_selector 'button', text: I18n.t('common.actions.edit', locale: user.locale),
                                 count: 1
-      click_button I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale)
+      click_button I18n.t('common.actions.edit', locale: user.locale)
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t('groups.workflow_executions.edit_dialog.title', locale: user.locale)
@@ -363,7 +363,7 @@ module Groups
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      assert_no_button I18n.t('common.actions.remove', locale: user.locale)
     end
 
     test 'should not delete a submitted workflow' do
@@ -374,7 +374,7 @@ module Groups
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      assert_no_button I18n.t('common.actions.remove', locale: user.locale)
     end
 
     test 'should delete a completed workflow' do
@@ -384,7 +384,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -403,7 +403,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -423,7 +423,7 @@ module Groups
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      assert_no_button I18n.t('common.actions.remove', locale: user.locale)
     end
 
     test 'should delete a canceled workflow' do
@@ -433,7 +433,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -453,7 +453,7 @@ module Groups
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      assert_no_button I18n.t('common.actions.remove', locale: user.locale)
     end
 
     test 'should not delete a new workflow' do
@@ -464,7 +464,7 @@ module Groups
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      assert_no_button I18n.t('common.actions.remove', locale: user.locale)
     end
   end
 end

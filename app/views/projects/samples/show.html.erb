@@ -15,7 +15,7 @@
       <% end %>
       <% if @allowed_to[:destroy_sample] %>
         <%= button_to(
-          t("projects.samples.show.remove_button"),
+          t('common.actions.remove'),
           new_samples_deletions_path,
           params: {
             namespace_id: @project.namespace.id,

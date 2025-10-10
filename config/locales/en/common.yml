@@ -2,7 +2,12 @@
 en:
   common:
     actions:
+      create: Create
+      delete: Delete
+      edit: Edit
       cancel: Cancel
+      remove: Remove
+      update: Update
     controls:
       deselect_all: Deselect All
       search: Search

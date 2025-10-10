@@ -435,10 +435,10 @@ module Projects
 
       ### ACTIONS START ##
       # remove sample
-      click_button I18n.t(:'projects.samples.show.remove_button')
+      click_button I18n.t('common.actions.remove')
 
       within('dialog[open]') do
-        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
+        click_button I18n.t('common.actions.remove')
       end
       ### ACTIONS END ###
 
@@ -2352,7 +2352,7 @@ module Projects
         find('#metadata2').click
         find('#description').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -2454,7 +2454,7 @@ module Projects
         find('#metadata1').click
         find('#metadata2').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         select 'metadata1',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')

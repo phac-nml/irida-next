@@ -154,7 +154,6 @@ en:
           attachments: Attachments
           selected: Selected
         created_at: Uploaded
-        delete: Delete
         delete_aria_label:
           one: 'Delete file: %{name}'
           other: 'Delete files: %{name}'
@@ -213,7 +212,6 @@ en:
     list_input:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
-      remove_tag: Remove
     namespace_row:
       contents_component:
         projects:
@@ -364,7 +362,6 @@ en:
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
-          remove: Remove
           up: Up
       sortable_lists_component:
         no_template: No template

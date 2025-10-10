@@ -65,7 +65,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= button_to t("projects.workflow_executions.show.edit_button"),
+        <%= button_to t('common.actions.edit'),
         edit_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -78,7 +78,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= button_to t("projects.workflow_executions.show.remove_button"),
+        <%= button_to t('common.actions.remove'),
         destroy_confirmation_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,

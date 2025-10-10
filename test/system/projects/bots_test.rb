@@ -168,7 +168,7 @@ module Projects
 
       ### ACTIONS START ###
       within('table tbody tr:first-child td:last-child') do
-        click_button I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t('common.actions.delete')
       end
 
       assert_selector '#dialog'
@@ -443,7 +443,7 @@ module Projects
       assert_selector "#bots-table table tbody tr[id='#{dom_id(@project_bot)}']"
       within("#bots-table table tbody tr[id='#{dom_id(@project_bot)}'] td:nth-child(6)") do
         # destroy bot
-        click_button I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t('common.actions.delete')
       end
 
       # confirm destroy bot

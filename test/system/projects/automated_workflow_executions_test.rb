@@ -82,7 +82,7 @@ module Projects
       assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_button I18n.t(:'projects.automated_workflow_executions.actions.delete')
+        click_button I18n.t('common.actions.delete')
       end
 
       within('#turbo-confirm[open]') do
@@ -99,14 +99,14 @@ module Projects
       assert_selector 'span', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_button I18n.t(:'projects.automated_workflow_executions.actions.edit')
+        click_button I18n.t('common.actions.edit')
       end
 
       within('dialog[open].dialog--size-xl') do
         assert_accessible
         # update input[name="workflow_execution[name]"] with the value 'Updated Name'
         fill_in 'workflow_execution[name]', with: 'Updated Name'
-        click_button I18n.t(:'workflow_executions.submissions.create.update')
+        click_button I18n.t('common.actions.update')
       end
 
       assert_no_selector 'dialog[open]'

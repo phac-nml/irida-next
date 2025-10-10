@@ -289,7 +289,7 @@
                   <% end %>
                   <% if @row_actions[:destroy] %>
                     <%= button_to(
-                      t("components.attachments.table_component.delete"),
+                      t('common.actions.delete'),
                       destroy_path(attachment.id),
                       aria: {
                         label:
