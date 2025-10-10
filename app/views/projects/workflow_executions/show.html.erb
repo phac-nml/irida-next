@@ -50,7 +50,7 @@
         <% end %>
       <% end %>
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= button_to t("projects.workflow_executions.show.cancel_button"),
+        <%= button_to t('common.actions.cancel'),
         cancel_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,

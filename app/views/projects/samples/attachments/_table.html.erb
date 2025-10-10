@@ -16,7 +16,7 @@
               name="q[puid_or_file_blob_filename_cont]"
               value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
             >
-            <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+            <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
           <% end %>
           <%= form_with(
                       url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
@@ -25,7 +25,7 @@
                       class: "max-sm:grow",
                     ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
-            <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+            <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
           <% end %>
         <% end %>
       <% end %>
@@ -34,7 +34,7 @@
         <%= render SearchComponent.new(
                 query: @q,
                 search_attribute: :puid_or_file_blob_filename_cont,
-                label: t(".search.label"),
+                label: t('common.controls.search'),
                 placeholder: t(:".search.placeholder"),
                 value: @q.puid_or_file_blob_filename_cont,
                 url: namespace_project_sample_path,

@@ -564,7 +564,7 @@ module Projects
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
         # attachments selected
-        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+        click_button I18n.t('common.controls.select_all')
         within 'tbody' do
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
         end
@@ -581,7 +581,7 @@ module Projects
           assert_selector 'strong[data-selection-target="selected"]', text: '5'
         end
         # select all again
-        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+        click_button I18n.t('common.controls.select_all')
         within 'tbody' do
           assert_selector 'input[name="attachment_ids[]"]', count: 6
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
@@ -591,7 +591,7 @@ module Projects
           assert_selector 'strong[data-selection-target="selected"]', text: '6'
         end
         # deselect all
-        click_button I18n.t(:'projects.samples.attachments.table.deselect_all_button')
+        click_button I18n.t('common.controls.select_all')
         within 'tbody' do
           assert_selector 'input[name="attachment_ids[]"]', count: 6
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
@@ -632,7 +632,7 @@ module Projects
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
         end
 
-        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+        click_button I18n.t('common.controls.select_all')
 
         within 'tbody' do
           assert_selector 'input[name="attachment_ids[]"]:checked', count: 2

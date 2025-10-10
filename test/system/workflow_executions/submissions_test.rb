@@ -733,7 +733,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -797,7 +797,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -873,7 +873,7 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -949,7 +949,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -1005,7 +1005,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -1074,7 +1074,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -1140,7 +1140,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -1207,7 +1207,7 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: user.locale))
       # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -1306,7 +1306,7 @@ module WorkflowExecutions
                                                                                       locale: user.locale))
       # select samples
 
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 4

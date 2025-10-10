@@ -3,7 +3,7 @@
 <%= form_with model: @query, html: { role: "search" }, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters contents" do |f| %>
   <div class="max-sm:grow">
     <%= render SearchFieldComponent.new(
-      label: t(".search.label"),
+      label: t('common.controls.search'),
       placeholder: t(".search.placeholder"),
       form: f,
       field_name: :name_or_puid_cont,

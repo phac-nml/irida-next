@@ -37,7 +37,7 @@
                 ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream"/>
       <input type="hidden" name="select" value="on"/>
-      <%= f.submit t(".select_all_button"), class: "button button-default w-full" %>
+      <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
     <% end %>
     <%= form_with(
                   url: select_group_workflow_executions_url,
@@ -46,7 +46,7 @@
                   class: "max-sm:grow",
                 ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <%= f.submit t(".deselect_all_button"), class: "button button-default w-full" %>
+      <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
     <% end %>
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
 
@@ -54,7 +54,7 @@
       query: @q,
       url: group_workflow_executions_path(**request.query_parameters),
       search_attribute: :name_or_id_cont,
-      label: t(".search.label"),
+      label: t('common.controls.search'),
       placeholder: t(".search.placeholder"),
       total_count: @pagy.count,
       class: "max-sm:grow",

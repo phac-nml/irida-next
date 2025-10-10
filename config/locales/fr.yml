@@ -385,7 +385,6 @@ fr:
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
@@ -404,7 +403,6 @@ fr:
         pagy_item: Projets
         personal: Personnel
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
@@ -433,7 +431,6 @@ fr:
       no_data_exports: Aucune exportation de données
       no_data_exports_message: Vous n’avez actuellement aucune exportation de données.
       search:
-        label: Rechercher
         placeholder: Rechercher par ID ou nom
       table_header:
         action: Mesure
@@ -704,7 +701,6 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
         title: Fichiers
@@ -722,12 +718,10 @@ fr:
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
             submit: Envoyer
@@ -743,7 +737,6 @@ fr:
         subtitle: Configurez des comptes de bot pour pouvoir effectuer des actions en utilisant l’API qui ne peuvent pas être attribuées à un utilisateur individuel.
         title: Comptes de bot
     create:
-      cancel: Annuler
       name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
       name_placeholder: Nom de groupe génial
       path_help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
@@ -810,12 +803,10 @@ fr:
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
       invited_groups:
         search:
-          label: Rechercher
           placeholder: Chercher par nom de groupe
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
-          cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms
@@ -862,13 +853,10 @@ fr:
         title: Membres
       member_listing:
         search:
-          label: Rechercher
           placeholder: Chercher par nom d’utilisateur
       new:
         access_level_hint: Sélectionner le niveau d’accès du groupe à attribuer à l’utilisateur
         add_member_to_group: Ajouter un membre au groupe
-        button:
-          cancel: Annuler
         description: Vous ajoutez un nouveau membre au groupe %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         title: Ajouter un nouveau membre
@@ -880,7 +868,6 @@ fr:
         subtitle: Il s’agit de modèles de métadonnées pour le groupe
         title: Modèles de métadonnées
     new_subgroup:
-      cancel: Annuler
       empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
       select_group: Sélectionner un groupe
       submit: Créer un sous-groupe
@@ -888,9 +875,7 @@ fr:
       title: Créer un sous-groupe
     samples:
       index:
-        deselect_all_button: Désélectionner tout
         deselect_all_tooltip: Désélectionner tout
-        select_all_button: Tout sélectionner
         select_all_tooltip: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
@@ -902,7 +887,6 @@ fr:
       table_filter:
         loading: Chargement des résultats de recherche...
         search:
-          label: Rechercher
           placeholder: Rechercher par nom ou PUID
     shared_namespaces:
       pagy:
@@ -919,7 +903,6 @@ fr:
         title: Information sur le groupe
       screen_reader_context: 'Tableau de bord du groupe : %{group_name}'
       search:
-        label: Rechercher
         placeholder: Rechercher par nom ou PUID
       shared_namespaces:
         no_shared:
@@ -962,26 +945,20 @@ fr:
       success: Le groupe %{group_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        cancel_button: Annuler
         description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution du flux de travail
       files:
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
-        deselect_all_button: Désélectionner tout
         search:
-          label: Rechercher
           placeholder: Rechercher par nom ou ID
-        select_all_button: Tout sélectionner
         subtitle: Ce sont les exécutions du flux de travail qui ont été partagées au sein de ce groupe.
         title: Exécutions de flux de travail
       show:
-        cancel_button: Annuler
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
         edit_button: Modifier
@@ -989,7 +966,6 @@ fr:
         remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       summary:
         created_at: Créé
-        name: Nom
         run_id: Exécuter l’identifiant
         state: État
         updated_at: Dernière mise à jour
@@ -1278,7 +1254,6 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
         title: Fichiers
@@ -1336,12 +1311,10 @@ fr:
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Annuler
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
             submit: Envoyer
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            cancel: Annuler
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
             submit: Envoyer
@@ -1432,12 +1405,10 @@ fr:
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le projet %{namespace_name} du groupe %{group_name}?
       invited_groups:
         search:
-          label: Rechercher
           placeholder: Chercher par nom de groupe
       new:
         access_level_hint: Niveau d’accès maximal à attribuer au groupe
         button:
-          cancel: Annuler
           submit: Partager
         empty_state: Aucun groupe n’est associé à ce nom ou à cet identifiant
         group_hint: Sélectionner un groupe avec lequel partager l’espace de noms du projet
@@ -1485,13 +1456,10 @@ fr:
         title: Membres
       member_listing:
         search:
-          label: Rechercher
           placeholder: Chercher par nom d’utilisateur
       new:
         access_level_hint: Sélectionner le niveau d’accès du projet à attribuer à l’utilisateur
         add_member_to_project: Ajouter un membre au projet
-        button:
-          cancel: Annuler
         description: Vous ajoutez un nouveau membre au projet %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         title: Ajouter un nouveau membre
@@ -1544,31 +1512,25 @@ fr:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
         table:
-          deselect_all_button: Désélectionner tout
           empty_state:
             action_text: Télécharger des fichiers
             description: Cet échantillon n’a actuellement aucun fichier joint. Commencer par télécharger les données de séquence, les fichiers d’assemblage ou d’autres documents pertinents
             no_permission_description: Vous n’avez pas la permission de télécharger des dossiers dans cet échantillon.
             title: Aucun fichier n’a été téléchargé
           search:
-            label: Rechercher
             placeholder: Rechercher par PUID ou nom de fichier
-          select_all_button: Tout sélectionner
       create:
         success: L’échantillon a été créé avec succès.
       edit:
-        cancel_button: Annuler
         form:
           title: Nom et description
         submit_button: Mettre à jour l’échantillon
         subtitle: Mettre à jour le nom et la description de l’échantillon actuel
         title: Modifier l’échantillon
       index:
-        deselect_all_button: Désélectionner tout
         deselect_all_tooltip: Désélectionner tous les échantillons de ce projet
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
-        select_all_button: Tout sélectionner
         select_all_tooltip: Sélectionner tous les échantillons de ce projet
         title: Échantillons
         workflows:
@@ -1613,7 +1575,6 @@ fr:
           no_metadata: No metadata has added
           no_permission_description: Vous n’avez pas la permission d’ajouter des métadonnées dans cet échantillon.
       new:
-        cancel_button: Annuler
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
@@ -1659,7 +1620,6 @@ fr:
       table_filter:
         loading: Recherche en cours...
         search:
-          label: Rechercher
           placeholder: Rechercher par nom ou PUID
       update:
         success: L’échantillon a été mis à jour avec succès.
@@ -1683,27 +1643,21 @@ fr:
       success: Le projet %{project_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        cancel_button: Annuler
         description: Vous modifiez l’exécution automatisée du flux de travail '%{workflow_execution_id}'
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
       files:
         search:
-          label: Rechercher
           placeholder: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Supprimer les exécutions de flux de travail
-        deselect_all_button: Désélectionner tout
         search:
-          label: Rechercher
           placeholder: Rechercher par ID ou nom
-        select_all_button: Tout sélectionner
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
         title: Exécutions de flux de travail
       show:
-        cancel_button: Annuler
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
         edit_button: Modifier
@@ -1712,7 +1666,6 @@ fr:
           label: Détails de l’exécution de flux de travail
       summary:
         created_at: Créé
-        name: Nom
         run_id: Exécuter l’identifiant
         state: État
         updated_at: Dernière mise à jour
@@ -2081,7 +2034,6 @@ fr:
       sample_puid_error: La propriété '%{property}' doit correspondre au PUID de l’échantillon
   workflow_executions:
     actions:
-      cancel: Annuler
       cancel_aria_label: 'Annuler l’exécution du flux de travail : %{name}'
       cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
       delete: Supprimer
@@ -2089,7 +2041,6 @@ fr:
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
-      cancel_button: Annuler
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
       shared_with_namespace:
@@ -2116,21 +2067,16 @@ fr:
         description: Il n’y a aucun fichier associé à cette exécution du flux de travail.
         title: Aucun fichier
       search:
-        label: Rechercher
         placeholder: Rechercher par PUID ou nom de fichier
     index:
       create_export_button: Créer une exportation
       delete_workflows_button: Supprimer les exécutions de flux de travail
-      deselect_all_button: Désélectionner tout
       search:
-        label: Rechercher
         placeholder: Rechercher par ID ou nom
-      select_all_button: Tout sélectionner
       title: Exécutions de flux de travail
     samples:
       empty: Aucun échantillon n’a pu être trouvé pour cette exécution de flux de travail
     show:
-      cancel_button: Annuler
       cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
       create_export_button: Créer une exportation
       edit_button: Modifier
@@ -2160,7 +2106,6 @@ fr:
         title: Sélection du flux de travail
     summary:
       created_at: Créé
-      name: Nom
       run_from_namespace:
         group: Faire l’exécution à partir du groupe
         project: Faire l’exécution à partir du projet
@@ -2183,7 +2128,6 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
-      name: Nom
       run_id: Exécuter l’identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles
       state: État
