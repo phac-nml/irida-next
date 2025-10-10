@@ -8,7 +8,13 @@ export default class extends Controller {
     "content",
     "logo",
     "sidebarOverlay",
+    "announcement",
   ];
+
+  static values = {
+    collapsedAnnouncement: String,
+    expandedAnnouncement: String,
+  };
 
   connect() {
     // Need to determine the previous state
@@ -28,6 +34,10 @@ export default class extends Controller {
     this.layoutContainerTarget.classList.add("max-xl:collapsed", "collapsed");
     this.expandButtonContainerTarget.classList.remove("xl:hidden");
     localStorage.setItem("layout", "collapsed");
+
+    if (this.hasAnnouncementTarget) {
+      this.#announce(this.collapsedAnnouncementValue);
+    }
   }
 
   expand() {
@@ -41,6 +51,10 @@ export default class extends Controller {
     setTimeout(() => {
       this.logoTarget.focus();
     }, 25);
+
+    if (this.hasAnnouncementTarget) {
+      this.#announce(this.expandedAnnouncementValue);
+    }
   }
 
   handleContentFocus() {
@@ -60,5 +74,13 @@ export default class extends Controller {
     return (
       rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
     );
+  }
+
+  #announce(message) {
+    if (!message) return;
+    this.announcementTarget.textContent = "";
+    window.requestAnimationFrame(() => {
+      this.announcementTarget.textContent = message;
+    });
   }
 }
