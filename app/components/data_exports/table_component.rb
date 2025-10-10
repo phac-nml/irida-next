@@ -57,5 +57,14 @@ module DataExports
     def columns
       %i[id name export_type status created_at expires_at]
     end
+
+    def column_label(column)
+      case column
+      when :created_at
+        I18n.t('common.labels.created')
+      else
+        I18n.t("data_exports.index.table_header.#{column}")
+      end
+    end
   end
 end

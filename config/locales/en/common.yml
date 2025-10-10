@@ -7,24 +7,18 @@ en:
       delete: Delete
       download: Download
       edit: Edit
-      share: Share
-      select: Select
       remove: Remove
-      upload: Upload
+      select: Select
+      share: Share
       update: Update
+      upload: Upload
     controls:
-      deselect_all: Deselect All
       close: Close
       confirm: Confirm
+      deselect_all: Deselect All
       search: Search
-      submit: Submit
       select_all: Select All
-    statuses:
-      disabled: Disabled
-      error: Error
-      processing: Processing
-      ready: Ready
-      success: Success
+      submit: Submit
     labels:
       access_level: Access Level
       actions: Actions
@@ -35,3 +29,9 @@ en:
       name: Name
       settings: Settings
       title: Title
+    statuses:
+      disabled: Disabled
+      error: Error
+      processing: Processing
+      ready: Ready
+      success: Success

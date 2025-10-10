@@ -172,8 +172,8 @@ class GroupsTest < ApplicationSystemTestCase
     group_description = 'Edited group description'
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
     fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
@@ -199,8 +199,8 @@ class GroupsTest < ApplicationSystemTestCase
     group_name = ''
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
     click_on I18n.t('groups.edit.details.submit')
@@ -213,8 +213,8 @@ class GroupsTest < ApplicationSystemTestCase
     group_descrtiption = 'a' * 300
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.description'), with: group_descrtiption
     click_on I18n.t('groups.edit.details.submit')
@@ -226,8 +226,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.path'), with: 'group-1-edited'
     click_on I18n.t('groups.edit.advanced.path.submit')
@@ -240,8 +240,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.path'), with: ''
     click_on I18n.t('groups.edit.advanced.path.submit')
@@ -254,8 +254,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
     click_on I18n.t('groups.edit.details.submit')
@@ -277,8 +277,8 @@ class GroupsTest < ApplicationSystemTestCase
     group2 = groups(:group_two)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
     click_on I18n.t('groups.edit.details.submit')
@@ -299,8 +299,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
     click_on I18n.t('groups.edit.details.submit')
@@ -321,8 +321,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     group2 = groups(:group_two)
 
@@ -345,10 +345,10 @@ class GroupsTest < ApplicationSystemTestCase
     group2 = groups(:group_two)
     visit group_url(group2)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
-    assert_selector 'h2', text: I18n.t('groups.sidebar.general')
+    assert_selector 'h2', text: I18n.t('common.labels.general')
     click_on I18n.t('groups.edit.advanced.delete.submit')
 
     within('#turbo-confirm') do
@@ -370,8 +370,8 @@ class GroupsTest < ApplicationSystemTestCase
     group3 = groups(:group_three)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
@@ -395,8 +395,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
@@ -411,8 +411,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings', locale: user.locale)
-    click_link I18n.t('groups.sidebar.general', locale: user.locale)
+    click_on I18n.t('common.labels.settings', locale: user.locale)
+    click_link I18n.t('common.labels.general', locale: user.locale)
 
     assert_selector 'h3', text: I18n.t('groups.edit.advanced.transfer.title', locale: user.locale), count: 0
   end
@@ -421,8 +421,8 @@ class GroupsTest < ApplicationSystemTestCase
     group = groups(:group_one)
     visit group_url(group)
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
 
@@ -443,7 +443,7 @@ class GroupsTest < ApplicationSystemTestCase
     login_as users(:ryan_doe)
     visit group_url(groups(:group_one))
 
-    assert_selector 'a', text: I18n.t('groups.sidebar.settings'), count: 0
+    assert_selector 'a', text: I18n.t('common.labels.settings'), count: 0
   end
 
   test 'can view settings but cannot delete a group' do
@@ -451,8 +451,8 @@ class GroupsTest < ApplicationSystemTestCase
     login_as user
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings', locale: user.locale)
-    click_link I18n.t('groups.sidebar.general', locale: user.locale)
+    click_on I18n.t('common.labels.settings', locale: user.locale)
+    click_link I18n.t('common.labels.general', locale: user.locale)
 
     assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit', locale: user.locale), count: 0
   end
