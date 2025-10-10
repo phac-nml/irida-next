@@ -5,12 +5,33 @@ en:
       cancel: Cancel
       create: Create
       delete: Delete
+      download: Download
       edit: Edit
+      share: Share
+      select: Select
       remove: Remove
+      upload: Upload
       update: Update
     controls:
       deselect_all: Deselect All
+      close: Close
+      confirm: Confirm
       search: Search
+      submit: Submit
       select_all: Select All
+    statuses:
+      disabled: Disabled
+      error: Error
+      processing: Processing
+      ready: Ready
+      success: Success
     labels:
+      access_level: Access Level
+      actions: Actions
+      created: Created
+      description: Description
+      details: Details
+      general: General
       name: Name
+      settings: Settings
+      title: Title

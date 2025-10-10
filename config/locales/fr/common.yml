@@ -5,12 +5,33 @@ fr:
       cancel: Annuler
       create: Créer
       delete: Supprimer
+      download: Télécharger
       edit: Modifier
+      share: Partager
+      select: Sélectionner
       remove: Retirer
+      upload: Télécharger
       update: Mettre à jour
     controls:
       deselect_all: Désélectionner tout
+      close: Clôture
+      confirm: Confirmer
       search: Rechercher
+      submit: Soumettre
       select_all: Tout sélectionner
+    statuses:
+      disabled: Désactivé
+      error: Erreur
+      processing: Traitement
+      ready: Prêt
+      success: Réussite
     labels:
+      access_level: Niveau d’accès
+      actions: Actions
+      created: Créé
+      description: Description
+      details: Détails
+      general: Général
       name: Nom
+      settings: Paramètres
+      title: Titre

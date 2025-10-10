@@ -215,7 +215,7 @@ class ProjectsTest < ApplicationSystemTestCase
       assert_text I18n.t(:'projects.edit.advanced.destroy.confirm.warning.samples_count', count: 3)
       assert_text I18n.t(:'projects.edit.advanced.destroy.confirm.warning.automated_workflows_count', count: 10)
       fill_in I18n.t(:'components.confirmation.confirm_label'), with: project.name
-      click_on I18n.t(:'components.confirmation.confirm')
+      click_on I18n.t('common.controls.confirm')
     end
 
     assert_text I18n.t(:'projects.destroy.success', project_name: project.name)

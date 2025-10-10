@@ -216,7 +216,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
 
     # Check button attributes using selectors
     assert_selector 'button[data-search-field-target="submitButton"][type="submit"]', count: 1
-    search_aria = I18n.t('components.search_field_component.search_button')
+    search_aria = I18n.t('common.controls.search')
     submit_selector = format("button[data-search-field-target='submitButton'][aria-label='%s']", search_aria)
     assert_selector submit_selector, count: 1
   end
@@ -260,7 +260,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     )
 
     # Check accessibility using selectors
-    search_aria = I18n.t('components.search_field_component.search_button')
+    search_aria = I18n.t('common.controls.search')
     submit_selector = format("button[data-search-field-target='submitButton'][aria-label='%s']", search_aria)
     assert_selector submit_selector, count: 1
   end

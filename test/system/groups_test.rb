@@ -357,7 +357,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.projects_count', count: 0)
       assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.samples_count', count: 0)
       fill_in I18n.t('components.confirmation.confirm_label'), with: group2.path
-      click_on I18n.t('components.confirmation.confirm')
+      click_on I18n.t('common.controls.confirm')
     end
 
     assert_text I18n.t('groups.destroy.success', group_name: group2.name)
@@ -385,7 +385,7 @@ class GroupsTest < ApplicationSystemTestCase
     within('#turbo-confirm') do
       assert_text I18n.t('components.confirmation.title')
       fill_in I18n.t('components.confirmation.confirm_label'), with: group1.path
-      click_on I18n.t('components.confirmation.confirm')
+      click_on I18n.t('common.controls.confirm')
     end
 
     assert_text I18n.t('groups.transfer.success')

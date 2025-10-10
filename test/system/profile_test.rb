@@ -49,7 +49,7 @@ class ProfileTest < ApplicationSystemTestCase
     click_button I18n.t(:'profiles.accounts.delete.button')
 
     within('#turbo-confirm[open]') do
-      click_on I18n.t(:'components.confirmation.confirm')
+      click_on I18n.t('common.controls.confirm')
     end
 
     assert_selector 'h1', text: I18n.t(:'devise.layout.title')
@@ -114,7 +114,7 @@ class ProfileTest < ApplicationSystemTestCase
     end
 
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
     within('#access-tokens-table') do
       assert_no_text token_to_revoke.name

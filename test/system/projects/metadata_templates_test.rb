@@ -138,7 +138,7 @@ module Projects
         template_name: metadata_template.name
       )
 
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(

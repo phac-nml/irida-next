@@ -300,7 +300,7 @@ module Groups
       click_button I18n.t('common.actions.cancel', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
+        click_button I18n.t('common.controls.confirm', locale: user.locale)
       end
 
       assert_text I18n.t(:'concerns.workflow_execution_actions.cancel.success',
@@ -387,7 +387,7 @@ module Groups
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
+        click_button I18n.t('common.controls.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -406,7 +406,7 @@ module Groups
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
+        click_button I18n.t('common.controls.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -436,7 +436,7 @@ module Groups
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
+        click_button I18n.t('common.controls.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do

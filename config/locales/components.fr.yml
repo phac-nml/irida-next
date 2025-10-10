@@ -3,7 +3,6 @@ fr:
   components:
     activity:
       dialog:
-        close: Clôture
         group_sample_transfer:
           description:
             one: "%{user} a transféré un échantillon entre les projets"
@@ -143,12 +142,10 @@ fr:
         new_attachment_component:
           files: Fichiers
           files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
-          upload: Télécharger
           upload_files: Télécharger des fichiers
           uploading: Téléchargement
       table_component:
         action: Mesure
-        actions: Mesures
         byte_size: Taille
         counts:
           attachments: Pièces jointes
@@ -174,7 +171,6 @@ fr:
     clipboard:
       copied: Copié!
     confirmation:
-      confirm: Confirmer
       confirm_label: Valeur de confirmation
       title: Confirmation requise
     dialog:
@@ -183,9 +179,7 @@ fr:
         at_first_aria_label: Vous êtes sur la première page.
         at_last_aria_label: Vous êtes sur la dernière page.
     flash:
-      error_message: Erreur
       information_message: Information
-      success_message: Réussite
       warning_message: Attention
     groups_dashboard:
       information_component:
@@ -236,7 +230,6 @@ fr:
         filter:
           clear: Effacer les données de recherche
           placeholder: Rechercher par PUID ou nom
-          search: Rechercher
         label: Échantillons
         next: Suivant
         page_selection:
@@ -263,7 +256,6 @@ fr:
       info_title: Renseignements sur le projet
       information:
         created_on: Créé le
-        description: Description
         number_of_automated_workflow_executions: Pipelines automatisés
         number_of_members: Membres
         number_of_samples: Échantillons
@@ -305,7 +297,6 @@ fr:
     search_field_component:
       clear_button: Effacer la recherche
       instructions: Appuyez sur Entrée pour rechercher
-      search_button: Rechercher
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
@@ -353,7 +344,6 @@ fr:
           select_page_aria_label: Sélectionner la page
       sortable_list:
         list_component:
-          actions: Mesures
           add: Ajouter
           aria_role_description: Glisser-déposer dans la liste %{list}
           down: Bas
