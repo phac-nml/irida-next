@@ -502,7 +502,6 @@ en:
       expires_at: Expires
       format: Format
       id: ID
-      name: Name
       once_ready: Available once export is ready
       status: Status
       type: Type
@@ -1591,14 +1590,6 @@ en:
           metadata: Metadata
         upload: Upload
         upload_files: Upload Files
-      table:
-        empty_state:
-          action_text: Upload Files
-          description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
-          no_permission_description: You do not have permission to upload files to this sample
-          title: No files have been uploaded
-        search:
-          placeholder: Search by PUID or Filename
       table_filter:
         loading: Loading search results...
         search:

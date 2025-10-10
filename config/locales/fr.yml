@@ -502,7 +502,6 @@ fr:
       expires_at: Expire
       format: Format
       id: ID
-      name: Nom
       once_ready: Disponible une fois que l’exportation sera prête
       status: Statut
       type: Type
@@ -1468,7 +1467,6 @@ fr:
       title: Créer un projet
     samples:
       attachments:
-        attachment:
         concatenations:
           create:
             basename_help: Le nom de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
@@ -1562,8 +1560,6 @@ fr:
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
       show:
-        actions:
-          delete_confirm: Êtes-vous sûr de vouloir supprimer le champ de métadonnées '%{deleted_key}' de l’échantillon?
         concatenate_button: Concaténer les fichiers
         delete_files_button: Supprimer des fichiers
         edit_button: Modifier cet échantillon
@@ -1573,11 +1569,17 @@ fr:
           modal:
             created_by: Échantillon créé par %{user}
             deleted_by: Échantillon supprimé par %{user}
-            modified_by: Échantillons d’attributs modifiés par %{user}
+            modified_by: Échantillons d'attributs modifiés par %{user}
             restored_by: Échantillon restauré par %{user}
             transferred_by: Échantillon transféré par %{user}
             version: Version %{version}
         metadata:
+          actions:
+            delete_confirm: Êtes-vous sûr de vouloir supprimer le champ de métadonnées '%{deleted_key}' de l'échantillon?
+          update:
+            key: Clé
+            update_metadata: Mettre à jour les métadonnées
+            value: Valeur
         nav_aria_label: Navigation dans les échantillons
         new_attachment_button: Télécharger des fichiers
         table_header:
@@ -1590,10 +1592,6 @@ fr:
           files: Fichiers
           history: Historique
           metadata: Métadonnées
-        update:
-          key: Clé
-          update_metadata: Mettre à jour les métadonnées
-          value: Valeur
         upload: Télécharger
         upload_files: Télécharger des fichiers
       table_filter:

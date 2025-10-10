@@ -25,6 +25,7 @@ data:
   read:
     - config/locales/%{locale}.yml
     - config/locales/*.%{locale}.yml
+    - config/locales/**/*.yml
     - app/components/**/*.%{locale}.yml
     - embedded_gems/pathogen/config/locales/%{locale}.yml
 
@@ -36,6 +37,7 @@ data:
     - ["components.*", "config/locales/components.%{locale}.yml"]
     - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
     - ["local_time.*", "config/locales/local_time.%{locale}.yml"]
+    - ["common.*", "config/locales/%{locale}/common.yml"]
     # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
     # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
     # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']

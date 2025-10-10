@@ -2,10 +2,10 @@
 en:
   common:
     actions:
+      cancel: Cancel
       create: Create
       delete: Delete
       edit: Edit
-      cancel: Cancel
       remove: Remove
       update: Update
     controls:
