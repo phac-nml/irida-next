@@ -40,7 +40,7 @@ module Projects
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
         # check that button goes from being enabled to disabled when clicked
         assert_selector '#t-upload-button:not(:disabled)'
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
         assert_selector '#t-upload-button:disabled'
       end
 
@@ -72,7 +72,7 @@ module Projects
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_text I18n.t('projects.attachments.create.success', filename: 'test_file_2.fastq.gz')
@@ -82,7 +82,7 @@ module Projects
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_text I18n.t('projects.attachments.create.failure', filename: 'test_file_2.fastq.gz',
@@ -297,7 +297,7 @@ module Projects
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
@@ -339,7 +339,7 @@ module Projects
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_selector '#attachments-table table tbody tr', count: 3

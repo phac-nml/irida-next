@@ -23,7 +23,7 @@ module Projects
       within('#turbo-confirm') do
         assert_text I18n.t(:'components.confirmation.title')
         fill_in I18n.t('components.confirmation.confirm_label'), with: @project.name
-        click_on I18n.t(:'components.confirmation.confirm')
+        click_on I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'projects.transfer.success', project_name: @project.name)
@@ -47,7 +47,7 @@ module Projects
       within('#turbo-confirm') do
         assert_text I18n.t(:'components.confirmation.title')
         fill_in I18n.t('components.confirmation.confirm_label'), with: project2.name
-        click_on I18n.t(:'components.confirmation.confirm')
+        click_on I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'services.projects.transfer.namespace_project_exists', project_name: project2.name)

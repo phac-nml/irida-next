@@ -142,7 +142,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
@@ -163,7 +163,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
@@ -193,7 +193,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: project.name)
@@ -209,7 +209,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: @project.name)

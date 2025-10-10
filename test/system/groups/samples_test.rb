@@ -500,7 +500,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      click_button I18n.t('components.search_field_component.search_button')
+      click_button I18n.t('common.controls.search')
       assert_selector 'input[data-test-selector="search-field-input"]', focused: true
 
       if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)

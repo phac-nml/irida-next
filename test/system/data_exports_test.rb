@@ -105,7 +105,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 6
@@ -113,7 +113,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 5
@@ -121,7 +121,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 4
@@ -129,7 +129,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 3
@@ -137,7 +137,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 2
@@ -145,7 +145,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 1
@@ -153,7 +153,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_no_selector 'table'
@@ -239,7 +239,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_button I18n.t('common.actions.remove')
 
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     within('tbody') do

@@ -474,7 +474,7 @@ module Projects
 
         within('#turbo-confirm[open]') do
           assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
-          click_button I18n.t(:'components.confirmation.confirm')
+          click_button I18n.t('common.controls.confirm')
         end
 
         assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
@@ -503,7 +503,7 @@ module Projects
 
         within('#turbo-confirm[open]') do
           assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
-          click_button I18n.t(:'components.confirmation.confirm')
+          click_button I18n.t('common.controls.confirm')
         end
 
         assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')

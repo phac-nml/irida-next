@@ -12,7 +12,7 @@ module Viral
       assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']"
       assert_selector 'div.text-green-500.bg-green-100 svg.check-circle-icon'
       assert_selector 'div[aria-hidden="true"]' # Icon container hidden from screen readers
-      assert_selector 'span.sr-only', text: I18n.t('components.flash.success_message')
+      assert_selector 'span.sr-only', text: I18n.t('common.statuses.success')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
     end
 
@@ -24,7 +24,7 @@ module Viral
       assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']"
       assert_selector 'div.text-red-500.bg-red-100 svg.x-circle-icon'
       assert_selector 'div[aria-hidden="true"]' # Icon container hidden from screen readers
-      assert_selector 'span.sr-only', text: I18n.t('components.flash.error_message')
+      assert_selector 'span.sr-only', text: I18n.t('common.statuses.error')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
     end
 
@@ -72,7 +72,7 @@ module Viral
       assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']"
       assert_selector 'div.text-red-500.bg-red-100 svg.x-circle-icon'
       assert_selector 'div[aria-hidden="true"]' # Icon container hidden from screen readers
-      assert_selector 'span.sr-only', text: I18n.t('components.flash.error_message')
+      assert_selector 'span.sr-only', text: I18n.t('common.statuses.error')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
     end
 

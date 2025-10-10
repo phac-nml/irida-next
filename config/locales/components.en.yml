@@ -3,7 +3,6 @@ en:
   components:
     activity:
       dialog:
-        close: Close
         group_sample_transfer:
           description:
             one: "%{user} transferred 1 sample between projects"
@@ -143,12 +142,10 @@ en:
         new_attachment_component:
           files: Files
           files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
-          upload: Upload
           upload_files: Upload Files
           uploading: Uploading
       table_component:
         action: Action
-        actions: Actions
         byte_size: Size
         counts:
           attachments: Attachments
@@ -174,7 +171,6 @@ en:
     clipboard:
       copied: Copied!
     confirmation:
-      confirm: Confirm
       confirm_label: Confirmation value
       title: Confirmation required
     dialog:
@@ -183,9 +179,7 @@ en:
         at_first_aria_label: You are on the first page
         at_last_aria_label: You are on the last page
     flash:
-      error_message: Error
       information_message: Information
-      success_message: Success
       warning_message: Warning
     groups_dashboard:
       information_component:
@@ -236,7 +230,6 @@ en:
         filter:
           clear: Clear search
           placeholder: Search by PUID or name
-          search: Search
         label: Samples
         next: Next
         page_selection:
@@ -263,7 +256,6 @@ en:
       info_title: Project Information
       information:
         created_on: Created on
-        description: Description
         number_of_automated_workflow_executions: Automated pipelines
         number_of_members: Members
         number_of_samples: Samples
@@ -305,7 +297,6 @@ en:
     search_field_component:
       clear_button: Clear search
       instructions: Press enter to search
-      search_button: Search
     token:
       copied: Copied!
       copy: Copy to clipboard
@@ -353,7 +344,6 @@ en:
           select_page_aria_label: Select page
       sortable_list:
         list_component:
-          actions: Actions
           add: Add
           aria_role_description: "%{list} listbox drag and drop"
           down: Down
