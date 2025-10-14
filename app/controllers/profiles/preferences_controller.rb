@@ -16,16 +16,18 @@ module Profiles
 
     def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @user
+      updated = @user.update(update_params)
+
       respond_to do |format|
-        # Locale is called now rather than from the around_action in app_controller because we need the locale
-        # change prior to the success flash so that the flash contains the correct translation
-        updated = @user.update(update_params)
         if updated
+          # Changing the current locale in case the user changed their language preference,
+          # that way the toast message will be in the correction translation
+          I18n.locale = @user.locale.to_sym
           format.turbo_stream do
-            render status: :ok, locals: { type: 'success', message: t('.success', locale: current_user.locale) }
+            render status: :ok, locals: { type: 'success', message: t('.success') }
           end
           format.html do
-            flash[:success] = t('.success', locale: current_user.locale)
+            flash[:success] = t('.success')
             redirect_back_or_to profile_preferences_path
           end
         else
