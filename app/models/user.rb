@@ -90,6 +90,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     user
   end
 
+  def self.icon
+    :user_circle
+  end
+
   def update_password_with_password(params)
     current_password = params.delete(:current_password)
 

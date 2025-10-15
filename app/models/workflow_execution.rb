@@ -3,6 +3,7 @@
 # entity class for Sample
 class WorkflowExecution < ApplicationRecord
   include MetadataSortable
+
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
   has_logidze
@@ -32,6 +33,10 @@ class WorkflowExecution < ApplicationRecord
   enum :state,
        { initial: 0, prepared: 1, submitted: 2, running: 3, completing: 4, completed: 5, error: 6, canceling: 7,
          canceled: 8 }
+
+  def self.icon
+    :terminal_window
+  end
 
   def send_email
     return unless email_notification

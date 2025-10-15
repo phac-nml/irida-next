@@ -47,11 +47,11 @@
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <% [
           { icon: :test_tube, name: "Samples", color: :primary },
-          { icon: :stack, name: "Projects", color: :success },
+          { icon: Project.icon, name: "Projects", color: :success },
           { icon: :squares_four, name: "Groups", color: :warning },
           { icon: :terminal_window, name: "Workflows", color: :danger },
           { icon: :export, name: "Data Exports", color: :subdued },
-          { icon: :poker_chip, name: "Tokens", color: :primary }
+          { icon: :ticket, name: "Tokens", color: :primary }
         ].each do |item| %>
           <div class="bg-white dark:bg-slate-800 rounded-lg p-4 text-center shadow-sm border border-slate-200 dark:border-slate-700">
             <div class="flex items-center justify-center h-12 mb-3">

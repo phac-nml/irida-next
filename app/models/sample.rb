@@ -40,6 +40,10 @@ class Sample < ApplicationRecord
     %w[]
   end
 
+  def self.icon
+    :test_tube
+  end
+
   def metadata_with_provenance
     sample_metadata = []
     metadata.each do |key, value|

@@ -65,6 +65,10 @@ class Attachment < ApplicationRecord
     %w[file_blob]
   end
 
+  def self.icon
+    :file_text
+  end
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)

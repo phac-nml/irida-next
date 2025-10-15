@@ -40,7 +40,7 @@
           id_prefix: "group-samples",
           label: t(:"groups.show.information.number_of_samples"),
           value: @group.samples_count || 0,
-          icon_name: :test_tube,
+          icon_name: Sample.icon,
           color_scheme: :blue,
         ) %>
       </div>
@@ -51,7 +51,7 @@
           id_prefix: "group-projects",
           label: t(:"groups.show.information.number_of_projects"),
           value: @group.project_namespaces.count || 0,
-          icon_name: :stack,
+          icon_name: Project.icon,
           color_scheme: :fuchsia,
         ) %>
       </div>
@@ -62,7 +62,7 @@
           id_prefix: "group-subgroups",
           label: t(:"groups.show.information.number_of_subgroups"),
           value: @group.children.count || 0,
-          icon_name: :squares_four,
+          icon_name: Group.icon,
           color_scheme: :amber,
         ) %>
       </div>

@@ -14,13 +14,13 @@
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
-            icon: :users,
+            icon: Member.icon,
             label: t(:"projects.sidebar.members"),
             selected: @current_page == t(:"projects.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: namespace_project_samples_path,
-            icon: :test_tube,
+            icon: Sample.icon,
             label: t(:"projects.sidebar.samples"),
             selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
@@ -43,7 +43,7 @@
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
               url: namespace_project_workflow_executions_path,
-              icon: :terminal_window,
+              icon: WorkflowExecution.icon,
               label: t(:"projects.sidebar.workflow_executions"),
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>

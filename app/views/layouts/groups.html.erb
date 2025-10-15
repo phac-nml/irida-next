@@ -14,7 +14,7 @@
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
-            icon: :test_tube,
+            icon: Sample.icon,
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
@@ -28,7 +28,7 @@
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: :users,
+            icon: Member.icon,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
@@ -42,7 +42,7 @@
             <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
               <%= render section.with_item(
                 url: group_workflow_executions_path(@group),
-                icon: :terminal_window,
+                icon: WorkflowExecution.icon,
                 label: t(:"groups.sidebar.workflow_executions"),
                 selected: @current_page == t(:"groups.sidebar.workflow_executions"),
               ) %>

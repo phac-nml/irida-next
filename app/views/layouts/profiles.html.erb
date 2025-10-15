@@ -3,12 +3,12 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
-      <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: :user_circle, pipelines_enabled: @pipelines_enabled) do |navigation| %>
+      <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: User.icon, pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t(:"profiles.sidebar.header")) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: profile_path,
-            icon: :user_circle,
+            icon: User.icon,
             label: t(:"profiles.sidebar.profile"),
             selected: @current_page == t(:"profiles.sidebar.profile"),
           ) %>
@@ -22,7 +22,7 @@
           <% end %>
           <%= render section.with_item(
             url: profile_personal_access_tokens_path,
-            icon: :ticket,
+            icon: PersonalAccessToken.icon,
             label: t(:"profiles.sidebar.access_tokens"),
             selected: @current_page == t(:"profiles.sidebar.access_tokens"),
           ) %>
