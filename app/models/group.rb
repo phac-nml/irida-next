@@ -114,7 +114,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     )
   end
 
-  def has_samples?
+  def has_samples? # rubocop:disable Naming/PredicatePrefix
     samples_count.positive? || aggregated_samples_count.positive?
   end
 
