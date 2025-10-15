@@ -18,7 +18,8 @@ export default class extends Controller {
   messageHandler(event) {
     if (
       typeof event.data === "string" &&
-      event.data === '<turbo-stream action="refresh"></turbo-stream>'
+      event.data.startsWith("<turbo-stream") &&
+      event.data.includes('action="refresh"')
     ) {
       this.noticeTarget.classList.remove("hidden");
       event.stopImmediatePropagation();
