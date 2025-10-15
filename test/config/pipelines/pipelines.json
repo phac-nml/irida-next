@@ -1,5 +1,5 @@
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -19,4 +19,4 @@
       }
     ]
   }
-]
+}

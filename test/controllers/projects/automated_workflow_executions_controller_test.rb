@@ -28,7 +28,9 @@ module Projects
       workflow_name = 'Test Workflow'
       valid_params = { workflow_execution: {
         name: workflow_name,
-        metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        metadata: { pipeline_id: '/phac-nml/iridanextexample',
+                    workflow_name: '/phac-nml/iridanextexample',
+                    workflow_version: '1.0.2' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,
         update_samples: true
@@ -61,7 +63,9 @@ module Projects
 
       post namespace_project_automated_workflow_executions_path(@namespace, project),
            params: { workflow_execution: {
-             metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+             metadata: { pipeline_id: '/phac-nml/iridanextexample',
+                         workflow_name: '/phac-nml/iridanextexample',
+                         workflow_version: '1.0.2' },
              workflow_params: { assembler: 'stub' },
              email_notification: true,
              update_samples: true
