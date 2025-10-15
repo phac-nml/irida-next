@@ -23,7 +23,7 @@ module Projects
     def new
       authorize! @namespace, to: :create_automated_workflow_executions?
 
-      @workflow = if params[:workflow_name].present? && params[:workflow_version].present?
+      @workflow = if params[:pipeline_id].present? && params[:workflow_version].present?
                     Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id], params[:workflow_version],
                                                                'automatable')
                   end
