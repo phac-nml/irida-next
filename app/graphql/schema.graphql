@@ -2596,6 +2596,11 @@ input SubmitWorkflowExecutionInput {
   name: String
 
   """
+  Id of the pipeline to be run on this workflow execution
+  """
+  pipelineId: String!
+
+  """
   The Node ID of the project to run workflow in. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
   """
   projectId: ID
