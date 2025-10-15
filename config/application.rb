@@ -62,6 +62,9 @@ module Irida
     # Set default locale
     config.i18n.default_locale = :en
 
+    # CORS Configuration
+    config.cors_config = config_for(Rails.root.join('config/integrations/cors_config.yml'))
+
     # Omniauth Configuration
     config.auth_config = config_for(Rails.root.join('config/authentication/auth_config.yml'))
 
