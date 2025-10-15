@@ -91,8 +91,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.onListboxPointerout.bind(this),
     );
 
-    // Traverse the element children of domNode: configure each with
-    // option role behavior and store reference in.options array.
     var nodes = this.listboxTarget.getElementsByTagName("LI");
 
     for (var i = 0; i < nodes.length; i++) {
@@ -106,13 +104,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.filterOptions();
 
-    // Open Button
-
-    var button = this.comboboxTarget.nextElementSibling;
-
-    if (button && button.tagName === "BUTTON") {
-      button.addEventListener("click", this.onButtonClick.bind(this));
-    }
+    this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
   }
 
   getLowercaseContent(node) {
