@@ -39,7 +39,7 @@ module Groups
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
         # check that button goes from being enabled to disabled when clicked
         assert_selector '#t-upload-button:not(:disabled)'
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
         assert_selector '#t-upload-button:disabled'
       end
 
@@ -71,7 +71,7 @@ module Groups
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_text I18n.t('groups.attachments.create.success', filename: 'test_file_2.fastq.gz')
@@ -81,7 +81,7 @@ module Groups
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_text I18n.t('groups.attachments.create.failure', filename: 'test_file_2.fastq.gz',
@@ -260,7 +260,7 @@ module Groups
       within('table tbody') do
         assert_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_button I18n.t('components.attachments.table_component.delete'), match: :first
+        click_button I18n.t('common.actions.delete'), match: :first
       end
 
       within('dialog') do
@@ -272,7 +272,7 @@ module Groups
       within('table tbody') do
         assert_no_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_button I18n.t('components.attachments.table_component.delete'), match: :first
+        click_button I18n.t('common.actions.delete'), match: :first
       end
 
       within('dialog') do
@@ -296,7 +296,7 @@ module Groups
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
@@ -307,7 +307,7 @@ module Groups
         assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
         within('tr:first-child') do
-          click_button I18n.t('components.attachments.table_component.delete'), match: :first
+          click_button I18n.t('common.actions.delete'), match: :first
         end
       end
 
@@ -338,7 +338,7 @@ module Groups
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('components.attachments.dialogs.new_attachment_component.upload')
+        click_on I18n.t('common.actions.upload')
       end
 
       assert_selector '#attachments-table table tbody tr', count: 3

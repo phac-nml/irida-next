@@ -65,7 +65,6 @@ fr:
         current_password_hint: "(nous avons besoin de votre mot de passe actuel pour valider ces modifications)"
         password_blank_hint: "(laissez ce champ vide pour le laisser inchangé)"
         password_length_hint: "(%{minimum_password_length} caractères minimums)"
-        submit_button: Modifier
         title: Éditer %{resource_name}
         unhappy: Pas content ?
       new:

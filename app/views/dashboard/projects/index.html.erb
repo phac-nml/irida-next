@@ -29,7 +29,7 @@
             query: @q,
             url: dashboard_projects_url(**request.query_parameters),
             search_attribute: :namespace_name_or_namespace_puid_cont,
-            label: t(".search.label"),
+          label: t('common.controls.search'),
             placeholder: t(".search.placeholder"),
             total_count: @pagy.count,
             class: "max-sm:grow",

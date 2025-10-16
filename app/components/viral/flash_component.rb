@@ -80,9 +80,9 @@ module Viral
     def message_type_sr_text
       case type
       when :success
-        t('components.flash.success_message')
+        t('common.statuses.success')
       when :error
-        t('components.flash.error_message')
+        t('common.statuses.error')
       when :warning
         t('components.flash.warning_message')
       else

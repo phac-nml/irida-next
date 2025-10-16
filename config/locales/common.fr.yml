@@ -1,0 +1,37 @@
+---
+fr:
+  common:
+    actions:
+      cancel: Annuler
+      create: Créer
+      delete: Supprimer
+      download: Télécharger
+      edit: Modifier
+      remove: Retirer
+      select: Sélectionner
+      share: Partager
+      update: Mettre à jour
+      upload: Télécharger
+    controls:
+      close: Clôture
+      confirm: Confirmer
+      deselect_all: Désélectionner tout
+      search: Rechercher
+      select_all: Tout sélectionner
+      submit: Soumettre
+    labels:
+      access_level: Niveau d’accès
+      actions: Actions
+      created: Créé
+      description: Description
+      details: Détails
+      general: Général
+      name: Nom
+      settings: Paramètres
+      title: Titre
+    statuses:
+      disabled: Désactivé
+      error: Erreur
+      processing: Traitement
+      ready: Prêt
+      success: Réussite

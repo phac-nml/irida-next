@@ -3,7 +3,7 @@
     <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
-              label: t(".search.label"),
+              label: t('common.controls.search'),
               placeholder: t(".search.placeholder"),
               url: group_workflow_execution_path(@namespace, @workflow_execution),
               total_count: @pagy.count,

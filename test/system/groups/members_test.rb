@@ -134,7 +134,7 @@ module Groups
       table_row = find(:table_row, { 'Username' => group_member.user.email })
 
       within table_row do
-        click_button I18n.t(:'groups.members.index.remove')
+        click_button I18n.t('common.actions.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -248,7 +248,7 @@ module Groups
       end
 
       within "#member_#{group_member.id}" do
-        assert_selector 'button', text: I18n.t(:'groups.members.index.remove'), focused: true
+        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
       end
     end
 

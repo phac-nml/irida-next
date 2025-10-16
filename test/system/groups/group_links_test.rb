@@ -33,7 +33,7 @@ module Groups
         find("li[data-label='Subgroup 3']").click
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 
-        click_button I18n.t(:'groups.group_links.new.button.submit')
+        click_button I18n.t('common.actions.share')
       end
 
       assert_no_selector 'dialog[open]'

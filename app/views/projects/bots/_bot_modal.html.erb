@@ -72,14 +72,13 @@
       </div>
     <% end %>
     <div class="mt-4">
-      <%= form.submit t("projects.bots.index.bot_listing.new_bot_modal.submit"),
-                  class: "button button-primary" %>
+      <%= form.submit t('common.controls.submit'), class: "button button-primary" %>
       <button
         type="button"
         class="button button-default"
         data-action="click->viral--dialog#close"
       >
-        <%= t("projects.bots.index.bot_listing.new_bot_modal.cancel") %>
+        <%= t('common.actions.cancel') %>
       </button>
     </div>
 

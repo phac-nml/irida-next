@@ -138,11 +138,11 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_button I18n.t(:'projects.members.index.remove')
+        click_button I18n.t('common.actions.remove')
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
@@ -159,11 +159,11 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_button I18n.t(:'projects.members.index.remove')
+        click_button I18n.t('common.actions.remove')
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
@@ -193,7 +193,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: project.name)
@@ -209,7 +209,7 @@ module Projects
       end
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t('common.controls.confirm')
       end
 
       assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: @project.name)
@@ -351,7 +351,7 @@ module Projects
       end
 
       within "#member_#{project_member.id}" do
-        assert_selector 'button', text: I18n.t(:'projects.members.index.remove'), focused: true
+        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
       end
     end
 

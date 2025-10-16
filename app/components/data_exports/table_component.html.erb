@@ -25,7 +25,7 @@
             ) do %>
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
-                  label: t("data_exports.index.table_header.#{column}"),
+                  label: column_label(column),
                   url: helpers.sorting_url(@q, column),
                   field: column,
                   data: {
@@ -75,10 +75,11 @@
                 <%= t(:"data_exports.types.#{data_export.export_type}") %>
               </td>
               <td class="px-3 py-3">
+                <% status_text = t("common.statuses.#{data_export.status}").upcase %>
                 <% if data_export.status == 'ready' %>
-                  <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :green) %>
+                  <%= viral_pill(text: status_text, color: :green) %>
                 <% else %>
-                  <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :slate) %>
+                  <%= viral_pill(text: status_text, color: :slate) %>
                 <% end %>
               </td>
               <td class="px-3 py-3">
@@ -91,7 +92,7 @@
               </td>
               <td class="px-3 py-3 space-x-2">
                 <% if data_export.status == 'ready' %>
-                  <%= button_to t(:"data_exports.index.actions.download"),
+                  <%= button_to t('common.actions.download'),
                   rails_blob_path(data_export.file),
                   data: {
                     turbo: false,
@@ -109,7 +110,7 @@
                   class:
                     "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                 <% end %>
-                <%= button_to t(:"data_exports.index.actions.delete"),
+                <%= button_to t('common.actions.delete'),
                 data_export_path(data_export),
                 data: {
                   turbo_method: :delete,

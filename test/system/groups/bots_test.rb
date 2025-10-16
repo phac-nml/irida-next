@@ -91,7 +91,7 @@ module Groups
 
         all('input[type=checkbox]').each(&:click)
 
-        click_button I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.submit')
+        click_button I18n.t('common.controls.submit')
       end
       ### ACTIONS END ###
 
@@ -142,7 +142,7 @@ module Groups
 
         assert_html5_inputs_valid
 
-        click_button I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.submit')
+        click_button I18n.t('common.controls.submit')
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -168,7 +168,7 @@ module Groups
 
       ### ACTIONS START ###
       within('table tbody tr:first-child td:last-child') do
-        click_button I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t('common.actions.delete')
       end
       assert_selector '#dialog'
       within('#dialog') do
@@ -255,7 +255,7 @@ module Groups
                            bot_account: @group_bot.user.email)
         fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
-        click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+        click_button I18n.t('common.controls.submit')
       end
       ### ACTIONS END ###
 
@@ -350,7 +350,7 @@ module Groups
                            bot_account: @group_bot.user.email)
         fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
-        click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+        click_button I18n.t('common.controls.submit')
       end
 
       # PAT panel now present
@@ -419,7 +419,7 @@ module Groups
         # fill in PAT values
         fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Newest token'
         all('input[type=checkbox]').each(&:click)
-        click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+        click_button I18n.t('common.controls.submit')
       end
 
       # PAT panel now present
@@ -438,7 +438,7 @@ module Groups
       assert_selector "#bots-table table tbody tr[id='#{dom_id(@group_bot)}']"
       within("#bots-table table tbody tr[id='#{dom_id(@group_bot)}'] td:nth-child(6)") do
         # destroy bot
-        click_button I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t('common.actions.delete')
       end
 
       # confirm destroy bot
