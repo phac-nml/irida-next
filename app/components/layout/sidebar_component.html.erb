@@ -36,13 +36,13 @@
           <button
             type="button"
             data-action="click->layout#collapse"
-            title="<%= t(:'general.navbar.collapse.title') %>"
+            title="<%= t(:'general.navbar.collapse.label') %>"
             class="
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
               dark:hover:text-slate-200
             "
-            aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
+            aria-label="<%= t(:'general.navbar.collapse.label') %>"
           >
             <%= pathogen_icon :sidebar %>
           </button>
@@ -66,7 +66,7 @@
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
               dark:hover:text-slate-200
-            "}, title: t(:'general.navbar.account_dropdown.title'), aria: { label: t(:'general.navbar.account_dropdown.aria_label') }) do |dropdown| %>
+            "}, title: t(:'general.navbar.account_dropdown.label'), aria: { label: t(:'general.navbar.account_dropdown.label') }) do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.account_dropdown.profile"),
               url: profile_path,
