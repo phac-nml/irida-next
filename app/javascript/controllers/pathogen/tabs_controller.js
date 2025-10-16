@@ -5,11 +5,12 @@ import { Controller } from "@hotwired/stimulus";
  *
  * Implements W3C ARIA Authoring Practices Guide tab pattern with automatic activation.
  * Provides keyboard navigation (arrow keys, Home, End) and accessible tab switching.
+ * Supports optional URL hash syncing for bookmarkable tabs and browser back/forward navigation.
  *
  * @class TabsController
  * @extends Controller
  *
- * @example
+ * @example Basic Usage
  * <nav data-controller="pathogen--tabs" data-pathogen--tabs-default-index-value="0">
  *   <div role="tablist">
  *     <button role="tab" data-pathogen--tabs-target="tab">Tab 1</button>
@@ -17,6 +18,18 @@ import { Controller } from "@hotwired/stimulus";
  *   </div>
  *   <div data-pathogen--tabs-target="panel">Panel 1</div>
  *   <div data-pathogen--tabs-target="panel">Panel 2</div>
+ * </nav>
+ *
+ * @example With URL Sync (Bookmarkable Tabs)
+ * <nav data-controller="pathogen--tabs"
+ *      data-pathogen--tabs-sync-url-value="true"
+ *      data-pathogen--tabs-default-index-value="0">
+ *   <div role="tablist">
+ *     <button role="tab" id="overview-tab" data-pathogen--tabs-target="tab">Overview</button>
+ *     <button role="tab" id="settings-tab" data-pathogen--tabs-target="tab">Settings</button>
+ *   </div>
+ *   <div id="overview-panel" data-pathogen--tabs-target="panel">Panel 1</div>
+ *   <div id="settings-panel" data-pathogen--tabs-target="panel">Panel 2</div>
  * </nav>
  *
  * @see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
@@ -32,10 +45,19 @@ export default class extends Controller {
    * Stimulus values
    * @type {Object}
    * @property {Number} defaultIndex - Index of the initially selected tab (default: 0)
+   * @property {Boolean} syncUrl - Whether to sync tab selection with URL hash (default: false)
    */
   static values = {
     defaultIndex: { type: Number, default: 0 },
+    syncUrl: { type: Boolean, default: false },
   };
+
+  /**
+   * Private field for storing bound hash change handler
+   * @type {Function|null}
+   * @private
+   */
+  #boundHandleHashChange = null;
 
   /**
    * Initializes the controller when it connects to the DOM
@@ -53,9 +75,24 @@ export default class extends Controller {
       // Set up ARIA roles and relationships
       this.#setupARIA();
 
-      // Select the default tab
-      const defaultIndex = this.#validateDefaultIndex(this.defaultIndexValue);
-      this.#selectTabByIndex(defaultIndex);
+      // Determine initial tab index
+      let initialIndex = this.defaultIndexValue;
+
+      // If URL sync is enabled, check for hash in URL
+      if (this.syncUrlValue) {
+        const hashIndex = this.#getTabIndexFromHash();
+        if (hashIndex !== -1) {
+          initialIndex = hashIndex;
+        }
+
+        // Listen for hash changes (back/forward navigation)
+        this.#boundHandleHashChange = this.#handleHashChange.bind(this);
+        window.addEventListener("hashchange", this.#boundHandleHashChange);
+      }
+
+      // Select the initial tab
+      const validatedIndex = this.#validateDefaultIndex(initialIndex);
+      this.#selectTabByIndex(validatedIndex);
 
       // Add initialization marker class for CSS progressive enhancement
       this.element.classList.add("tabs-initialized");
@@ -121,6 +158,11 @@ export default class extends Controller {
    * @returns {void}
    */
   disconnect() {
+    // Remove hash change listener if URL sync is enabled
+    if (this.syncUrlValue && this.#boundHandleHashChange) {
+      window.removeEventListener("hashchange", this.#boundHandleHashChange);
+    }
+
     // Remove initialization marker
     this.element.classList.remove("tabs-initialized");
 
@@ -232,9 +274,10 @@ export default class extends Controller {
    *
    * @private
    * @param {number} index - The tab index to select
+   * @param {boolean} updateUrl - Whether to update the URL hash (default: true)
    * @returns {void}
    */
-  #selectTabByIndex(index) {
+  #selectTabByIndex(index, updateUrl = true) {
     if (index < 0 || index >= this.tabTargets.length) {
       return;
     }
@@ -263,6 +306,11 @@ export default class extends Controller {
       // Update ARIA hidden state
       panel.setAttribute("aria-hidden", String(!isVisible));
     });
+
+    // Update URL hash if sync is enabled
+    if (this.syncUrlValue && updateUrl) {
+      this.#updateUrlHash(index);
+    }
 
     // Turbo Frame lazy loading happens automatically here:
     // If the newly visible panel contains a <turbo-frame loading="lazy" src="...">,
@@ -334,5 +382,104 @@ export default class extends Controller {
 
     // Select the tab (automatic activation)
     this.#selectTabByIndex(index);
+  }
+
+  /**
+   * Gets the tab ID for URL hash
+   * Uses the tab's ID if available, otherwise uses the panel's ID, or falls back to index
+   * @private
+   * @param {number} index - The tab index
+   * @returns {string} The hash identifier
+   */
+  #getTabHash(index) {
+    const tab = this.tabTargets[index];
+    const panel = this.panelTargets[index];
+
+    // Prefer tab ID, then panel ID, finally fall back to index
+    if (tab?.id) {
+      return tab.id;
+    }
+    if (panel?.id) {
+      return panel.id;
+    }
+    return `tab-${index}`;
+  }
+
+  /**
+   * Updates the URL hash with the selected tab
+   * @private
+   * @param {number} index - The tab index
+   * @returns {void}
+   */
+  #updateUrlHash(index) {
+    try {
+      const hash = this.#getTabHash(index);
+      const url = new URL(window.location.href);
+      url.hash = hash;
+
+      // Use replaceState to avoid adding to browser history on every tab change
+      window.history.replaceState(null, "", url.toString());
+    } catch (error) {
+      console.error("[pathogen--tabs] Error updating URL hash:", error);
+    }
+  }
+
+  /**
+   * Gets the tab index from the current URL hash
+   * @private
+   * @returns {number} The tab index, or -1 if not found
+   */
+  #getTabIndexFromHash() {
+    try {
+      const hash = window.location.hash.slice(1); // Remove the '#'
+      if (!hash) {
+        return -1;
+      }
+
+      // Try to find tab by ID
+      const tabIndex = this.tabTargets.findIndex((tab) => tab.id === hash);
+      if (tabIndex !== -1) {
+        return tabIndex;
+      }
+
+      // Try to find panel by ID
+      const panelIndex = this.panelTargets.findIndex(
+        (panel) => panel.id === hash,
+      );
+      if (panelIndex !== -1) {
+        return panelIndex;
+      }
+
+      // Try to parse as tab-{index} format
+      const match = hash.match(/^tab-(\d+)$/);
+      if (match) {
+        const index = parseInt(match[1], 10);
+        if (index >= 0 && index < this.tabTargets.length) {
+          return index;
+        }
+      }
+
+      return -1;
+    } catch (error) {
+      console.error("[pathogen--tabs] Error getting tab index from hash:", error);
+      return -1;
+    }
+  }
+
+  /**
+   * Handles browser hash change events (back/forward navigation)
+   * @private
+   * @returns {void}
+   */
+  #handleHashChange() {
+    try {
+      const hashIndex = this.#getTabIndexFromHash();
+      if (hashIndex !== -1) {
+        // Don't update URL again when responding to hash change
+        this.#selectTabByIndex(hashIndex, false);
+      }
+    } catch (error) {
+      console.error("[pathogen--tabs] Error handling hash change:", error);
+    }
   }
 }

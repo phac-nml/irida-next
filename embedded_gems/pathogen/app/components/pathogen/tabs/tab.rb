@@ -84,6 +84,8 @@ module Pathogen
       end
 
       # Sets up CSS classes based on selection state
+      # Note: We apply both selected and unselected classes with aria-selected selectors
+      # so that JavaScript can dynamically toggle the appearance by changing aria-selected
       def setup_css_classes
         state_classes = @selected ? SELECTED_CLASSES : UNSELECTED_CLASSES
         @system_arguments[:class] = class_names(
