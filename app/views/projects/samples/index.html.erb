@@ -163,14 +163,7 @@
     <% end %>
   <% end %>
 
-  <div data-controller="refresh">
-    <%= turbo_stream_from @project, :samples, data: { "refresh-target": "source" } %>
-    <%= viral_alert(message: "Page has updated", data: { "refresh-target": "notice" }, classes: "hidden", aria: {
-              live: "assertive",
-            }) do %>
-      <%= link_to "refresh" %>
-    <% end %>
-  </div>
+  <%= render RefreshNoticeComponent.new(streamable: @project, stream_name: :samples, message: t(".refresh_notice.message")) %>
 
   <% if @has_samples %>
     <div class="flex flex-wrap gap-2 mb-4">
