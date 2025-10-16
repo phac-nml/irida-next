@@ -25,4 +25,13 @@ export default class extends Controller {
       event.stopImmediatePropagation();
     }
   }
+
+  dismiss() {
+    this.noticeTarget.classList.add("hidden");
+  }
+
+  refresh() {
+    // Reload the current page
+    window.location.reload();
+  }
 }
