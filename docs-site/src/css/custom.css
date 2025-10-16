@@ -29,9 +29,13 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.theme-doc-markdown a {
+.theme-doc-markdown a:not(.card) {
   color: var(--ifm-color-primary-darker);
   text-decoration: underline;
+}
+
+.theme-doc-markdown a:not(.card):hover {
+  text-decoration-thickness: 1.5px;
 }
 
 .navbar__logo {

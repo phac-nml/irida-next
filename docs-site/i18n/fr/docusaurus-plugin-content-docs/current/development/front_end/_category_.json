@@ -1,8 +1,4 @@
 {
   "label": "Développement front-end",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "slug": "/front_end"
-  }
+  "position": 2
 }
