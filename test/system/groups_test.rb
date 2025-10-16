@@ -186,7 +186,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_field I18n.t('activerecord.attributes.group.description'), with: group_description
     end
 
-    within 'aside#sidebar' do
+    within 'nav#sidebar' do
       assert_text group_name
     end
 
