@@ -25,7 +25,8 @@
   <%= render Pathogen::Tabs.new(
     id: "project-members-tabs",
     label: t(:"projects.members.index.tabs.aria_label"),
-    default_index: @tab == "invited_groups" ? 1 : 0
+    default_index: @tab == "invited_groups" ? 1 : 0,
+    sync_url: true
   ) do |tabs| %>
     <% tabs.with_tab(
       id: "members-tab",
