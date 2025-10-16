@@ -852,6 +852,8 @@ en:
     samples:
       index:
         deselect_all_tooltip: Deselect all samples in this group
+        refresh_notice:
+          message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this group
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples

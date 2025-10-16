@@ -8,6 +8,7 @@ export default class extends Controller {
     "confirmDialogContainer",
     "confirmDialogTemplate",
   ];
+  static outlets = ["refresh"];
   #originalCellContent;
 
   initialize() {
@@ -53,6 +54,8 @@ export default class extends Controller {
       console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
       return;
     }
+
+    this.#notifyRefreshControllers();
 
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
@@ -153,5 +156,15 @@ export default class extends Controller {
       .querySelector(`th:nth-child(${element.cellIndex + 1})`)
       .dataset.fieldId.replaceAll(" ", "SPACE");
     return `${field}_${element.parentNode.rowIndex}`;
+  }
+
+  #notifyRefreshControllers() {
+    if (!this.hasRefreshOutlet) return;
+
+    this.refreshOutlets.forEach((outlet) => {
+      if (outlet && typeof outlet.ignoreNextRefresh === "function") {
+        outlet.ignoreNextRefresh();
+      }
+    });
   }
 }

@@ -855,6 +855,9 @@ fr:
       index:
         deselect_all_tooltip: Désélectionner tous les échantillons de ce groupe
         select_all_tooltip: Sélectionner tous les échantillons de ce groupe
+        refresh_notice:
+          message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
+
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
         workflows:
