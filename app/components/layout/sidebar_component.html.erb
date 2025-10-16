@@ -1,4 +1,4 @@
-<aside
+<nav
   id="sidebar"
   class="
     flex flex-col text-sm border-r sidebar border-slate-200/50 bg-white/80
@@ -9,7 +9,7 @@
   aria-label="<%= t(:'general.default_sidebar.aria_label') %>"
 >
   <div class="flex flex-col h-full sm:overflow-y-hidden max-sm:overflow-y-auto">
-    <div class="bg-slate-200/80 dark:bg-slate-700/80">
+    <header class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
           flex flex-wrap content-stretch items-center @min-[279px]/sidebar:justify-between
@@ -146,7 +146,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </header>
     <div class="flex-1 flex flex-col sm:overflow-hidden pt-4 grow">
       <%# Render the header slot if it's provided %>
       <turbo-frame id="sidebar-header" class="shrink-0">
@@ -154,19 +154,22 @@
       </turbo-frame>
 
       <%# Main navigation area %>
-      <nav
+      <div
         class="pt-1 space-y-1 sm:overflow-y-auto flex-1"
-        aria-label="<%= t(:'general.default_sidebar.navigation') %>"
       >
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
         <% end %>
         <%# Iterate over items and render them %>
-        <% items.each do |item| %>
-          <%= item %>
+        <% if items.present? %>
+          <ul class="space-y-1">
+            <% items.each do |item| %>
+              <%= item %>
+            <% end %>
+          </ul>
         <% end %>
-      </nav>
+      </div>
     </div>
     <div class="p-2 border-t border-slate-200 dark:border-slate-800">
       <a
@@ -185,7 +188,7 @@
       </a>
     </div>
   </div>
-</aside>
+</nav>
 <div
   class="
     fixed xl:invisible xl:hidden sidebar-overlay h-screen w-screen backdrop-blur-xs
