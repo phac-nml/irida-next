@@ -663,3 +663,10 @@ a.pill-focus-reset:focus-visible {
   --tw-ring-color: transparent !important;
   --tw-ring-offset-width: 0px !important;
 }
+
+/* Tabs Component - Progressive Enhancement
+   Show only first panel when JavaScript not yet loaded or disabled */
+[data-controller="pathogen--tabs"]:not(.tabs-initialized)
+  [data-pathogen--tabs-target="panel"]:not(:first-child) {
+  display: none;
+}
