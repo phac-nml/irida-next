@@ -19,6 +19,20 @@ module Pathogen
   #     <% end %>
   #   <% end %>
   #
+  # @example With URL syncing for bookmarkable tabs
+  #   <%= render Pathogen::Tabs.new(id: "demo-tabs", label: "Content sections", sync_url: true) do |tabs| %>
+  #     <% tabs.with_tab(id: "tab-1", label: "Overview") %>
+  #     <% tabs.with_tab(id: "tab-2", label: "Details") %>
+  #
+  #     <% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+  #       <p>Overview content</p>
+  #     <% end %>
+  #
+  #     <% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
+  #       <p>Details content</p>
+  #     <% end %>
+  #   <% end %>
+  #
   # @example With Turbo Frame lazy loading
   #   <%= render Pathogen::Tabs.new(id: "demo-tabs", label: "Content sections") do |tabs| %>
   #     <% tabs.with_tab(id: "tab-1", label: "Overview") %>
@@ -82,9 +96,10 @@ module Pathogen
     # @param label [String] Accessible label for the tablist (required)
     # @param default_index [Integer] Index of the initially selected tab (default: 0)
     # @param orientation [Symbol] Tab orientation (:horizontal or :vertical, default: :horizontal)
+    # @param sync_url [Boolean] Whether to sync tab selection with URL hash for bookmarking (default: false)
     # @param system_arguments [Hash] Additional HTML attributes
     # @raise [ArgumentError] if id or label is missing
-    def initialize(id:, label:, default_index: 0, orientation: ORIENTATION_DEFAULT, **system_arguments)
+    def initialize(id:, label:, default_index: 0, orientation: ORIENTATION_DEFAULT, sync_url: false, **system_arguments)
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'label is required' if label.blank?
 
@@ -92,6 +107,7 @@ module Pathogen
       @label = label
       @default_index = default_index
       @orientation = fetch_or_fallback(ORIENTATION_OPTIONS, orientation, ORIENTATION_DEFAULT)
+      @sync_url = sync_url
       @system_arguments = system_arguments
 
       setup_container_attributes
@@ -114,6 +130,7 @@ module Pathogen
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:controller] = 'pathogen--tabs'
       @system_arguments[:data]['pathogen--tabs-default-index-value'] = @default_index
+      @system_arguments[:data]['pathogen--tabs-sync-url-value'] = @sync_url
     end
 
     # Validates that tabs and panels are properly configured
