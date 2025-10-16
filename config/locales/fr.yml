@@ -892,6 +892,8 @@ fr:
       index:
         deselect_all_button: Désélectionner tout
         deselect_all_tooltip: Désélectionner tout
+        refresh_notice:
+          message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
         select_all_button: Tout sélectionner
         select_all_tooltip: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}

@@ -1,34 +1,40 @@
 <div <%= tag.attributes(system_arguments_with_data) %>>
-  <%= helpers.turbo_stream_from streamable, stream_name, data: { "refresh-target": "source" } %>
+  <%= helpers.turbo_stream_from streamable,
+                            stream_name,
+                            data: {
+                              "refresh-target": "source",
+                            } %>
 
-  <!-- Flowbite-style Refresh Notice -->
   <div
     id="<%= alert_id %>"
     data-refresh-target="notice"
     role="alert"
     aria-live="assertive"
     aria-atomic="true"
-    class="hidden fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 z-50 w-full max-w-xl mx-auto px-4"
+    class="
+      hidden fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 z-50 w-full
+      max-w-xl mx-auto px-4
+    "
   >
-    <div class="
-      flex items-center p-4 rounded-lg shadow-lg
-      bg-white dark:bg-slate-800
-      border border-slate-200 dark:border-slate-700
-    ">
+    <div
+      class="
+        flex items-center p-4 rounded-lg shadow-lg bg-white dark:bg-slate-800 border
+        border-slate-200 dark:border-slate-700
+      "
+    >
       <!-- Icon -->
-      <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900">
-        <%= helpers.pathogen_icon(
-          :info,
-          color: :blue,
-          size: :md,
-        ) %>
+      <div
+        class="
+          inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg
+          bg-blue-100 dark:bg-blue-900
+        "
+      >
+        <%= helpers.pathogen_icon(:info, color: :blue, size: :md) %>
       </div>
-
       <!-- Message -->
       <div class="ml-3 text-sm font-medium text-slate-700 dark:text-slate-200 flex-1">
         <%= message %>
       </div>
-
       <!-- Actions -->
       <div class="flex items-center ml-auto pl-3 gap-3">
         <!-- Refresh Button -->
@@ -37,21 +43,20 @@
           data-action="click->refresh#refresh"
           class="
             px-3 py-1.5 text-sm font-medium text-primary-600 dark:text-primary-400
-            hover:text-primary-800 dark:hover:text-primary-300
-            transition-colors duration-200 cursor-pointer
+            hover:text-primary-800 dark:hover:text-primary-300 transition-colors
+            duration-200 cursor-pointer
           "
         >
           <%= link_text %>
         </button>
-
         <!-- Dismiss Button -->
         <button
           type="button"
           data-action="click->refresh#dismiss"
           class="
-            inline-flex items-center justify-center p-1
-            text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300
-            transition-colors duration-200 cursor-pointer
+            inline-flex items-center justify-center p-1 text-slate-400 hover:text-slate-600
+            dark:text-slate-500 dark:hover:text-slate-300 transition-colors duration-200
+            cursor-pointer
           "
           aria-label="<%= I18n.t('general.screen_reader.close') %>"
         >
