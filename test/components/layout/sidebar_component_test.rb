@@ -4,29 +4,22 @@ require 'test_helper'
 
 module Layout
   class SidebarComponentTest < ViewComponent::TestCase
-    test 'renders with default classes' do
+    test 'renders navigation container with overlay' do
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
 
-      assert_selector('aside')
+      assert_selector('nav#sidebar[aria-label="Main sidebar"]')
+      assert_selector('button[title="Collapse navigation menu"]')
+      assert_selector('.sidebar-overlay', visible: :all)
     end
 
-    test 'accepts custom classes' do
-      render_inline(Layout::SidebarComponent.new) do |sidebar|
-        sidebar.with_header(label: 'Header')
-      end
-
-      # The component should render with the default structure
-      assert_selector('aside')
-    end
-
-    test 'renders with header' do
+    test 'renders header slot content' do
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Custom Header')
       end
 
-      assert_text('Custom Header')
+      assert_selector('[data-test-selector="sidebar-header-root"]', text: 'Custom Header')
     end
 
     test 'renders with sections' do
@@ -62,8 +55,7 @@ module Layout
         sidebar.with_header(label: 'Header')
       end
 
-      # Verify the sidebar renders without pipeline-specific content
-      assert_selector('aside')
+      assert_selector('nav#sidebar')
     end
 
     test 'renders collapsed by default when specified' do
@@ -72,7 +64,7 @@ module Layout
       end
 
       # The collapsed state is handled by JavaScript, so we just check the component renders
-      assert_selector('aside')
+      assert_selector('nav#sidebar')
     end
 
     test 'renders with icons' do
@@ -105,7 +97,7 @@ module Layout
         end
       end
 
-      assert_selector('aside[aria-label]')
+      assert_selector('nav#sidebar[aria-label="Main sidebar"]')
       assert_selector('a[href="/projects"]', text: 'Projects')
     end
 
@@ -122,6 +114,14 @@ module Layout
 
       # The menu items might be hidden by default, so we just check the button is rendered
       assert_selector('button', text: 'Configuration')
+    end
+
+    test 'renders help link with accessible label' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      assert_selector('a[aria-label="Help - Opens in new tab"]', text: 'Help')
     end
   end
 end
