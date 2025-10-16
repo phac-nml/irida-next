@@ -320,6 +320,10 @@ en:
           expiration: Expiration
           username: Username
         never: Never
+  components:
+    refresh_notice:
+      default_link_text: Refresh
+      default_message: New data available
   concerns:
     attachment_actions:
       destroy:
@@ -1562,6 +1566,8 @@ en:
         deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
+        refresh_notice:
+          message: Samples table is out of date. Please refresh to view latest changes.
         select_all_button: Select All
         select_all_tooltip: Select all samples in this project
         title: Samples
