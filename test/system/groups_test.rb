@@ -21,7 +21,7 @@ class GroupsTest < ApplicationSystemTestCase
   test 'can create a group' do
     visit groups_url
 
-    click_button I18n.t('general.navbar.new_dropdown.aria_label')
+    click_button I18n.t('general.navbar.new_dropdown.label')
     click_link I18n.t('general.navbar.new_dropdown.group')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
