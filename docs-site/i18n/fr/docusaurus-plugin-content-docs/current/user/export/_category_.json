@@ -1,9 +1,4 @@
 {
   "label": "Exporter vos données",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "slug": "/export",
-    "description": "Exportez vos données à partir d’IRIDA Next."
-  }
+  "position": 4
 }

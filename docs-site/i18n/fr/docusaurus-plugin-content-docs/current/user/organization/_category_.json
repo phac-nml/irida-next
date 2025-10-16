@@ -1,9 +1,4 @@
 {
     "label": "Configurer votre organisation",
-    "position": 1,
-    "link": {
-        "type": "generated-index",
-        "slug": "/organization",
-        "description": "Configurez votre organisation et ses utilisateurs. Déterminez les rôles des utilisateurs et donnez à chacun l’accès aux projets dont il a besoin."
-    }
+    "position": 1
 }

@@ -11,10 +11,6 @@
     "message": "Configurer votre organisation",
     "description": "Libellé de la catégorie Configurer votre organisation dans la barre latérale de la documentation"
   },
-  "sidebar.docs.category.Set up your organization.link.generated-index.description": {
-    "message": "Configurez votre organisation et ses utilisateurs. Déterminez les rôles des utilisateurs et donnez à chacun l’accès aux projets dont il a besoin.",
-    "description": "Description de la page d’index générée pour la catégorie Configurer votre organisation dans la barre latérale de la documentation"
-  },
   "sidebar.docs.category.Members": {
     "message": "Membres",
     "description": "Libellé de la catégorie Membres dans la barre latérale de la documentation"
@@ -23,7 +19,11 @@
     "message": "Groupes",
     "description": "Libellé de la catégorie Groupes dans la barre latérale de la documentation"
   },
-  "sidebar.docs.category.Bot Accounts": {
+  "sidebar.docs.category.Project Bot Accounts": {
+    "message": "Comptes de robot",
+    "description": "Libellé de la catégorie Comptes de robot dans la barre latérale de la documentation"
+  },
+  "sidebar.docs.category.Group Bot Accounts": {
     "message": "Comptes de robot",
     "description": "Libellé de la catégorie Comptes de robot dans la barre latérale de la documentation"
   },
@@ -43,17 +43,9 @@
     "message": "Analyser vos données",
     "description": "Libellé de la catégorie Analyser vos données dans la barre latérale de la documentation"
   },
-  "sidebar.docs.category.Analyse your data.link.generated-index.description": {
-    "message": "Exécutez des flux de travail pour analyser vos données.",
-    "description": "Description de la page d’index générée pour la catégorie Analyser vos données dans la barre latérale de la documentation"
-  },
   "sidebar.docs.category.Export your data": {
     "message": "Exporter vos données",
     "description": "Libellé de la catégorie Exporter vos données dans la barre latérale de la documentation"
-  },
-  "sidebar.docs.category.Export your data.link.generated-index.description": {
-    "message": "Exportez vos données à partir d’IRIDA Next.",
-    "description": "Description de la page d’index générée pour la catégorie Exporter vos données dans la barre latérale de la documentation"
   },
   "sidebar.docs.category.Extend": {
     "message": "Étendre",
