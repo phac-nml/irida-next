@@ -246,6 +246,8 @@ module Projects
 
       click_button I18n.t(:'projects.members.index.add')
 
+      assert_selector 'dialog[open]', visible: true
+
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
