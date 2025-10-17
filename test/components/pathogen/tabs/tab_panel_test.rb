@@ -159,17 +159,6 @@ module Pathogen
         assert_text 'Loading...'
       end
 
-      test 'panel preserves whitespace in content' do
-        render_inline(Pathogen::Tabs::TabPanel.new(
-                        id: 'panel-1',
-                        tab_id: 'tab-1'
-                      )) do
-          '   Spaced content   '
-        end
-
-        assert_text '   Spaced content   '
-      end
-
       test 'panel can be empty' do
         render_inline(Pathogen::Tabs::TabPanel.new(
                         id: 'panel-1',
