@@ -52,6 +52,17 @@ export default class extends Controller {
   }
 
   idempotentConnect() {
+    // Clean up any disconnected calendar reference
+    if (this.#calendar && !this.#calendar.isConnected) {
+      this.#calendar = null;
+    }
+
+    // Clean up any existing calendar from a previous connection (e.g., after morph)
+    const existingCalendar = document.getElementById(this.calendarIdValue);
+    if (existingCalendar && existingCalendar !== this.#calendar) {
+      existingCalendar.remove();
+    }
+
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
 
@@ -60,6 +71,11 @@ export default class extends Controller {
     // Position the calendar
     this.#initializeDropdown();
 
+    // Remove event listener first to avoid duplicates
+    this.datepickerInputTarget.removeEventListener(
+      "focus",
+      this.boundHandleDatepickerInputFocus,
+    );
     this.datepickerInputTarget.addEventListener(
       "focus",
       this.boundHandleDatepickerInputFocus,
@@ -74,8 +90,15 @@ export default class extends Controller {
       this.boundHandleDatepickerInputFocus,
     );
 
-    this.#calendar.remove();
-    this.#calendar = null;
+    if (this.#calendar) {
+      this.#calendar.remove();
+      this.#calendar = null;
+    }
+
+    // Clean up the dropdown instance to allow proper reinitialization
+    if (this.#dropdown) {
+      this.#dropdown = null;
+    }
   }
 
   #initializeDropdown() {
@@ -85,6 +108,12 @@ export default class extends Controller {
           "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
         );
       }
+
+      // Reinitialize dropdown if it already exists (e.g., after a Turbo morph)
+      if (this.#dropdown) {
+        this.#dropdown = null;
+      }
+
       this.#dropdown = new Dropdown(
         this.#calendar,
         this.datepickerInputTarget,
@@ -128,8 +157,22 @@ export default class extends Controller {
 
   #addCalendarTemplate() {
     try {
-      // Don't add calendar if already exists
-      if (this.#calendar) return;
+      // Check if we have a calendar reference and if it's still in the DOM
+      if (this.#calendar && this.#calendar.isConnected) {
+        return;
+      }
+
+      // Check if calendar exists in DOM (not just if we have a reference)
+      const existingCalendar = document.getElementById(this.calendarIdValue);
+      if (existingCalendar && existingCalendar.isConnected) {
+        this.#calendar = existingCalendar;
+        return;
+      }
+
+      if (!this.hasCalendarTemplateTarget) {
+        console.error('[datepicker] calendarTemplateTarget is missing!');
+        return;
+      }
 
       // Add the calendar template to the DOM
       const calendar = this.calendarTemplateTarget.content.cloneNode(true);
@@ -194,6 +237,18 @@ export default class extends Controller {
   }
 
   handleDatepickerInputFocus() {
+    // Check if calendar was removed from DOM and recreate if needed
+    if (!this.#calendar || !this.#calendar.isConnected) {
+      this.#calendar = null;
+      this.#dropdown = null;
+      this.#addCalendarTemplate();
+      this.#initializeDropdown();
+    }
+
+    if (!this.#dropdown) {
+      console.error('[datepicker] Dropdown instance is null, reinitializing...');
+      this.#initializeDropdown();
+    }
     if (!this.#dropdown.isVisible()) {
       this.#dropdown.show();
     }
