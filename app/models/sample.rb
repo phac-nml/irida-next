@@ -76,11 +76,14 @@ class Sample < ApplicationRecord
 
     projects = [project]
     if previous_changes['project_id'] && !previous_changes['project_id'][0].nil?
-      projects << Project.find(previous_changes['project_id'][0])
+      old_project = Project.find_by(id: previous_changes['project_id'][0])
+      projects << old_project if old_project
     end
 
     projects.each do |project|
       broadcast_refresh_later_to project, :samples
+      # Broadcast to all ancestor groups since they display samples from child projects/groups.
+      # This ensures group sample views are notified of changes in nested projects.
       project.namespace.parent.self_and_ancestors.each do |ancestor|
         broadcast_refresh_later_to ancestor, :samples
       end

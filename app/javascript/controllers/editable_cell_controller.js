@@ -8,6 +8,8 @@ export default class extends Controller {
     "confirmDialogContainer",
     "confirmDialogTemplate",
   ];
+  // Outlet to refresh controller - used to prevent false-positive refresh notices
+  // when user edits cells (since edits trigger broadcasts).
   static outlets = ["refresh"];
   #originalCellContent;
 
@@ -158,6 +160,8 @@ export default class extends Controller {
     return `${field}_${element.parentNode.rowIndex}`;
   }
 
+  // Notify refresh controllers to ignore the next broadcast caused by this user edit.
+  // Prevents showing "refresh available" notice for changes the user just made.
   #notifyRefreshControllers() {
     if (!this.hasRefreshOutlet) return;
 
