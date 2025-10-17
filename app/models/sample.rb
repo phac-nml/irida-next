@@ -76,8 +76,7 @@ class Sample < ApplicationRecord
 
     projects = [project]
     if previous_changes['project_id'] && !previous_changes['project_id'][0].nil?
-      old_project = Project.find_by(id: previous_changes['project_id'][0])
-      projects << old_project if old_project
+      projects << Project.find(previous_changes['project_id'][0])
     end
 
     projects.each do |project|
