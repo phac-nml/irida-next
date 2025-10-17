@@ -126,11 +126,17 @@ module Pathogen
       end
 
       # Sets up CSS classes including initial hidden state
+      # Note: We always add 'hidden' class here and let JavaScript control visibility.
+      # This ensures consistent behavior across all scenarios including Turbo morphs.
       def setup_css_classes
         @system_arguments[:class] = class_names(
           'hidden', # Initially hidden, JavaScript will show the selected panel
           @system_arguments[:class]
         )
+
+        # Add a data attribute to help JavaScript identify panels after morph
+        @system_arguments[:data] ||= {}
+        @system_arguments[:data]['tab-panel-id'] = @id
       end
     end
   end
