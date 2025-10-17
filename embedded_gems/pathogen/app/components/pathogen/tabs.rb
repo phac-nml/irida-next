@@ -99,7 +99,9 @@ module Pathogen
     # @param sync_url [Boolean] Whether to sync tab selection with URL hash for bookmarking (default: false)
     # @param system_arguments [Hash] Additional HTML attributes
     # @raise [ArgumentError] if id or label is missing
+    # rubocop:disable Metrics/ParameterLists
     def initialize(id:, label:, default_index: 0, orientation: ORIENTATION_DEFAULT, sync_url: false, **system_arguments)
+      # rubocop:enable Metrics/ParameterLists
       raise ArgumentError, 'id is required' if id.blank?
       raise ArgumentError, 'label is required' if label.blank?
 
@@ -153,14 +155,12 @@ module Pathogen
     # @raise [ArgumentError] if duplicate IDs are found
     def validate_unique_ids!
       tab_ids = tabs.map(&:id)
-      if tab_ids.uniq.length != tab_ids.length
-        raise ArgumentError, 'Duplicate tab IDs found'
-      end
+      raise ArgumentError, 'Duplicate tab IDs found' if tab_ids.uniq.length != tab_ids.length
 
       panel_ids = panels.map(&:id)
-      if panel_ids.uniq.length != panel_ids.length
-        raise ArgumentError, 'Duplicate panel IDs found'
-      end
+      return unless panel_ids.uniq.length != panel_ids.length
+
+      raise ArgumentError, 'Duplicate panel IDs found'
     end
 
     # Validates that all panels reference existing tabs

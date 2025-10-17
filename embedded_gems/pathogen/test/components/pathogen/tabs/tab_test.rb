@@ -4,12 +4,15 @@ require 'test_helper'
 
 module Pathogen
   class Tabs
+    # Test suite for Pathogen::Tabs::Tab component
+    # Validates ARIA attributes, keyboard accessibility, and styling
+    # rubocop:disable Metrics/ClassLength
     class TabTest < ViewComponent::TestCase
       test 'renders with role tab' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[role="tab"]'
         assert_selector 'button[role="tab"]'
@@ -17,104 +20,104 @@ module Pathogen
 
       test 'renders with correct id' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[role="tab"]#tab-1'
       end
 
       test 'renders with label text' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_text 'First Tab'
       end
 
       test 'renders as button element' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector 'button[type="button"]'
       end
 
       test 'selected state has aria-selected true' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: true
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: true
+                      ))
 
         assert_selector '[role="tab"][aria-selected="true"]'
       end
 
       test 'unselected state has aria-selected false' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: false
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: false
+                      ))
 
         assert_selector '[role="tab"][aria-selected="false"]'
       end
 
       test 'selected tab has tabindex 0' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: true
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: true
+                      ))
 
         assert_selector '[role="tab"][tabindex="0"]'
       end
 
       test 'unselected tab has tabindex -1' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: false
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: false
+                      ))
 
         assert_selector '[role="tab"][tabindex="-1"]'
       end
 
       test 'has Stimulus target attribute' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[data-pathogen--tabs-target="tab"]'
       end
 
       test 'has click action for selectTab' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[data-action*="click->pathogen--tabs#selectTab"]'
       end
 
       test 'has keydown action for handleKeyDown' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[data-action*="keydown->pathogen--tabs#handleKeyDown"]'
       end
 
       test 'selected tab has selected CSS classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: true
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: true
+                      ))
 
         # Check for selected classes
         assert_selector '.border-primary-800'
@@ -123,10 +126,10 @@ module Pathogen
 
       test 'unselected tab has unselected CSS classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          selected: false
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        selected: false
+                      ))
 
         # Check for unselected classes
         assert_selector '.border-transparent'
@@ -135,9 +138,9 @@ module Pathogen
 
       test 'tab has base CSS classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         # Check for base classes
         assert_selector '.inline-block'
@@ -149,9 +152,9 @@ module Pathogen
 
       test 'tab has focus ring classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '.focus\\:outline-none'
         assert_selector '.focus\\:ring-2'
@@ -160,9 +163,9 @@ module Pathogen
 
       test 'tab has transition classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '.transition-colors'
         assert_selector '.duration-200'
@@ -182,33 +185,34 @@ module Pathogen
 
       test 'accepts custom CSS classes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          class: 'custom-class'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        class: 'custom-class'
+                      ))
 
         assert_selector '.custom-class'
       end
 
       test 'accepts custom data attributes' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab',
-          'data-test': 'my-tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab',
+                        'data-test': 'my-tab'
+                      ))
 
         assert_selector '[data-test="my-tab"]'
       end
 
       test 'defaults to unselected when selected not specified' do
         render_inline(Pathogen::Tabs::Tab.new(
-          id: 'tab-1',
-          label: 'First Tab'
-        ))
+                        id: 'tab-1',
+                        label: 'First Tab'
+                      ))
 
         assert_selector '[aria-selected="false"]'
         assert_selector '[tabindex="-1"]'
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
