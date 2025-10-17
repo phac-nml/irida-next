@@ -41,6 +41,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :full_path, to: :namespace
 
+  scope :system_accounts, -> { where(system: true) }
+
   accepts_nested_attributes_for :personal_access_tokens
   accepts_nested_attributes_for :members
 
