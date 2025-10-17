@@ -6,3 +6,10 @@ import("local-time").then(module => {
   LocalTime.start()
 })
 </script>
+
+<!-- Embed locale translations for turbo:morph events -->
+<% if I18n.locale != :en %>
+  <script type="application/json" id="local-time-i18n" data-locale="<%= I18n.locale %>">
+    <%= t('local_time').to_json.html_safe %>
+  </script>
+<% end %>
