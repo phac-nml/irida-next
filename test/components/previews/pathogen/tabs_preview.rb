@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 module Pathogen
+  # ViewComponent preview for demonstrating Pathogen::Tabs usage
+  # Showcases accessibility features, lazy loading, and various configurations
   class TabsPreview < ViewComponent::Preview
     # @!group Tabs Component
 
     # @label Default
     # Three tabs with basic content to demonstrate default behavior
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def default
       render(Pathogen::Tabs.new(id: 'preview-tabs-default', label: 'Preview tabs')) do |tabs|
         tabs.with_tab(id: 'tab-1', label: 'First', selected: true)
@@ -34,15 +37,17 @@ module Pathogen
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @label With Selection
     # Demonstrates tabs with a specific tab selected by default (second tab)
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def with_selection
       render(Pathogen::Tabs.new(
-        id: 'preview-tabs-selection',
-        label: 'Preview tabs',
-        default_index: 1
-      )) do |tabs|
+               id: 'preview-tabs-selection',
+               label: 'Preview tabs',
+               default_index: 1
+             )) do |tabs|
         tabs.with_tab(id: 'tab-1', label: 'First')
         tabs.with_tab(id: 'tab-2', label: 'Second', selected: true)
         tabs.with_tab(id: 'tab-3', label: 'Third')
@@ -66,6 +71,7 @@ module Pathogen
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @label Single Tab
     # Edge case with only one tab
@@ -87,9 +93,7 @@ module Pathogen
       render(Pathogen::Tabs.new(id: 'preview-tabs-many', label: 'Many tabs preview')) do |tabs|
         (1..8).each do |i|
           tabs.with_tab(id: "tab-#{i}", label: "Tab #{i}", selected: i == 1)
-        end
 
-        (1..8).each do |i|
           tabs.with_panel(id: "panel-#{i}", tab_id: "tab-#{i}") do
             tag.div(class: 'p-4') do
               tag.h3("Content for Tab #{i}", class: 'text-lg font-semibold mb-2') +
@@ -102,6 +106,7 @@ module Pathogen
 
     # @label With Rich Content
     # Demonstrates tabs with more complex HTML content
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def with_rich_content
       render(Pathogen::Tabs.new(id: 'preview-tabs-rich', label: 'Rich content tabs')) do |tabs|
         tabs.with_tab(id: 'tab-overview', label: 'Overview', selected: true)
@@ -111,7 +116,8 @@ module Pathogen
         tabs.with_panel(id: 'panel-overview', tab_id: 'tab-overview') do
           tag.div(class: 'p-4 space-y-4') do
             tag.h3('Project Overview', class: 'text-xl font-bold text-slate-900 dark:text-white') +
-              tag.p('This panel contains rich HTML content with multiple elements.', class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('This panel contains rich HTML content with multiple elements.',
+                    class: 'text-slate-700 dark:text-slate-300') +
               tag.ul(class: 'list-disc list-inside space-y-2') do
                 tag.li('Feature 1: Accessible keyboard navigation') +
                   tag.li('Feature 2: ARIA compliant') +
@@ -153,9 +159,11 @@ module Pathogen
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @label With Right Content
     # Demonstrates tabs with right-aligned content area
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def with_right_content
       render(Pathogen::Tabs.new(id: 'preview-tabs-right', label: 'Tabs with right content')) do |tabs|
         tabs.with_tab(id: 'tab-1', label: 'First', selected: true)
@@ -179,9 +187,11 @@ module Pathogen
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @label Accessibility Features
     # Demonstrates accessibility features including ARIA attributes and keyboard navigation hints
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def accessibility_features
       render(Pathogen::Tabs.new(id: 'preview-tabs-a11y', label: 'Accessibility demonstration')) do |tabs|
         tabs.with_tab(id: 'tab-keyboard', label: 'Keyboard', selected: true)
@@ -193,10 +203,10 @@ module Pathogen
             tag.h3('Keyboard Navigation', class: 'text-lg font-semibold mb-2') +
               tag.p('This tabs component supports full keyboard navigation:', class: 'mb-2') +
               tag.ul(class: 'list-disc list-inside space-y-1 text-sm') do
-                tag.li(tag.kbd('→') + ' and ' + tag.kbd('←') + ' to navigate between tabs') +
-                  tag.li(tag.kbd('Home') + ' to jump to first tab') +
-                  tag.li(tag.kbd('End') + ' to jump to last tab') +
-                  tag.li(tag.kbd('Tab') + ' to move focus in and out of tab list')
+                tag.li("#{tag.kbd('→')} and #{tag.kbd('←')} to navigate between tabs") +
+                  tag.li("#{tag.kbd('Home')} to jump to first tab") +
+                  tag.li("#{tag.kbd('End')} to jump to last tab") +
+                  tag.li("#{tag.kbd('Tab')} to move focus in and out of tab list")
               end
           end
         end
@@ -230,10 +240,12 @@ module Pathogen
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @label Lazy Loading
     # Demonstrates Turbo Frame lazy loading with loading indicators
     # This preview shows how panels can load content on demand when tabs are clicked
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def lazy_loading
       render(Pathogen::Tabs.new(id: 'preview-tabs-lazy', label: 'Lazy loading demonstration')) do |tabs|
         tabs.with_tab(id: 'tab-overview-lazy', label: 'Overview', selected: true)
@@ -245,7 +257,8 @@ module Pathogen
           tag.div(class: 'p-4 space-y-3') do
             tag.h3('Overview panel content', class: 'text-lg font-semibold mb-2') +
               tag.p('This panel loads immediately with the page.', class: 'text-slate-700 dark:text-slate-300') +
-              tag.p('The other tabs use Turbo Frame lazy loading to defer content until clicked.', class: 'text-slate-600 dark:text-slate-400 text-sm')
+              tag.p('The other tabs use Turbo Frame lazy loading to defer content until clicked.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
           end
         end
 
@@ -263,7 +276,8 @@ module Pathogen
                 tag.div(class: 'animate-spin h-5 w-5 border-2 border-primary-500 border-t-transparent rounded-full') +
                   tag.p('Loading details...', class: 'text-slate-600 dark:text-slate-400')
               end +
-                tag.p('In a real implementation, this would show a loading spinner while content fetches.', class: 'text-sm text-slate-500 dark:text-slate-500')
+                tag.p('In a real implementation, this would show a loading spinner while content fetches.',
+                      class: 'text-sm text-slate-500 dark:text-slate-500')
             end
           end
         end
@@ -280,12 +294,14 @@ module Pathogen
                 tag.div(class: 'animate-spin h-5 w-5 border-2 border-primary-500 border-t-transparent rounded-full') +
                   tag.p('Loading settings...', class: 'text-slate-600 dark:text-slate-400')
               end +
-                tag.p('Click back to Details tab to see cached content (no refetch).', class: 'text-sm text-slate-500 dark:text-slate-500')
+                tag.p('Click back to Details tab to see cached content (no refetch).',
+                      class: 'text-sm text-slate-500 dark:text-slate-500')
             end
           end
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @!endgroup
   end
