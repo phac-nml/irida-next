@@ -347,7 +347,7 @@ module Pathogen
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
           # First panel should show its content (not loading indicator)
-          first_panel = find('[role="tabpanel"]:not(.hidden)')
+          find('[role="tabpanel"]:not(.hidden)')
           assert_text 'Overview panel content'
 
           # Other panels should still show loading indicators (Turbo Frame not fetched yet)
