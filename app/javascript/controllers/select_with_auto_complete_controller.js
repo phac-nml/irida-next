@@ -29,10 +29,6 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.hasHover = false;
 
-    this.isNone = false;
-    this.isList = false;
-    this.isBoth = false;
-
     this.allOptions = [];
 
     this.option = null;
@@ -42,69 +38,28 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.filteredOptions = [];
     this.filter = "";
 
-    var autocomplete = this.comboboxTarget.getAttribute("aria-autocomplete");
-
-    if (typeof autocomplete === "string") {
-      autocomplete = autocomplete.toLowerCase();
-      this.isNone = autocomplete === "none";
-      this.isList = autocomplete === "list";
-      this.isBoth = autocomplete === "both";
-    } else {
-      // default value of autocomplete
-      this.isNone = true;
-    }
-
-    this.comboboxTarget.addEventListener(
-      "keydown",
-      this.onComboboxKeyDown.bind(this),
-    );
-    this.comboboxTarget.addEventListener(
-      "keyup",
-      this.onComboboxKeyUp.bind(this),
-    );
-    this.comboboxTarget.addEventListener(
-      "click",
-      this.onComboboxClick.bind(this),
-    );
-    this.comboboxTarget.addEventListener(
-      "focus",
-      this.onComboboxFocus.bind(this),
-    );
-    this.comboboxTarget.addEventListener(
-      "blur",
-      this.onComboboxBlur.bind(this),
-    );
-
+    /* add event handlers */
     document.body.addEventListener(
       "pointerup",
       this.onBackgroundPointerUp.bind(this),
       true,
     );
+    this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
+    this.addComboboxEventListeners(this.comboboxTarget);
+    this.addListboxEventListeners(this.listboxTarget);
 
-    // initialize pop up menu
-    this.listboxTarget.addEventListener(
-      "pointerover",
-      this.onListboxPointerover.bind(this),
-    );
-    this.listboxTarget.addEventListener(
-      "pointerout",
-      this.onListboxPointerout.bind(this),
-    );
-
-    var nodes = this.listboxTarget.getElementsByTagName("LI");
-
-    for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i];
-      this.allOptions.push(node);
-
-      node.addEventListener("click", this.onOptionClick.bind(this));
-      node.addEventListener("pointerover", this.onOptionPointerover.bind(this));
-      node.addEventListener("pointerout", this.onOptionPointerout.bind(this));
+    var categories = this.listboxTarget.getElementsByTagName("ul");
+    for (var i = 0; i < categories.length; i++) {
+      var category = categories[i];
+      this.allOptions.push(category);
+      var categoryItems = category.querySelectorAll('li[role="option"]');
+      for (var j = 0; j < categoryItems.length; j++) {
+        var categoryItem = categoryItems[j];
+        this.addListboxOptionEventListeners(categoryItem);
+      }
     }
 
     this.filterOptions();
-
-    this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
   }
 
   getLowercaseContent(node) {
@@ -154,26 +109,24 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.setCurrentOptionStyle(this.option);
       this.setActiveDescendant(this.option);
 
-      if (this.isBoth) {
-        this.comboboxTarget.value = this.option.textContent;
-        if (flag) {
-          this.comboboxTarget.setSelectionRange(
-            this.option.textContent.length,
-            this.option.textContent.length,
-          );
-        } else {
-          this.comboboxTarget.setSelectionRange(
-            this.filter.length,
-            this.option.textContent.length,
-          );
-        }
+      this.comboboxTarget.value = this.option.textContent;
+      if (flag) {
+        this.comboboxTarget.setSelectionRange(
+          this.option.textContent.length,
+          this.option.textContent.length,
+        );
+      } else {
+        this.comboboxTarget.setSelectionRange(
+          this.filter.length,
+          this.option.textContent.length,
+        );
       }
     }
   }
 
   setVisualFocusCombobox() {
     this.listboxTarget.classList.remove("focus");
-    this.comboboxTarget.parentNode.classList.add("focus"); // set the focus class to the parent for easier styling
+    this.comboboxTarget.parentNode.classList.add("focus");
     this.comboboxHasVisualFocus = true;
     this.listboxHasVisualFocus = false;
     this.setActiveDescendant(false);
@@ -199,11 +152,6 @@ export default class SelectWithAutoCompleteController extends Controller {
   // ComboboxAutocomplete Events
 
   filterOptions() {
-    // do not filter any options if autocomplete is none
-    if (this.isNone) {
-      this.filter = "";
-    }
-
     var option = null;
     var currentOption = this.option;
     var filter = this.filter.toLowerCase();
@@ -212,13 +160,27 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.listboxTarget.innerHTML = "";
 
     for (var i = 0; i < this.allOptions.length; i++) {
-      option = this.allOptions[i];
-      if (
-        filter.length === 0 ||
-        this.getLowercaseContent(option).indexOf(filter) === 0
-      ) {
-        this.filteredOptions.push(option);
-        this.listboxTarget.appendChild(option);
+      var optionCategory = this.allOptions[i].cloneNode(true);
+      this.addListboxEventListeners(optionCategory);
+      var options = optionCategory.querySelectorAll('li[role="option"]');
+      var flag = false;
+
+      for (var j = 0; j < options.length; j++) {
+        option = options[j];
+        this.addListboxOptionEventListeners(option);
+        if (
+          filter.length === 0 ||
+          this.getLowercaseContent(option).indexOf(filter) === 0
+        ) {
+          flag = true;
+        } else {
+          optionCategory.removeChild(option);
+        }
+      }
+
+      if (flag) {
+        this.filteredOptions.push(optionCategory);
+        this.listboxTarget.appendChild(optionCategory);
       }
     }
 
@@ -278,7 +240,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     return this.firstOption;
   }
 
-  /* MENU DISPLAY METHODS */
+  // Menu display methods
 
   doesOptionHaveFocus() {
     return this.comboboxTarget.getAttribute("aria-activedescendant") !== "";
@@ -322,7 +284,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  /* combobox Events */
+  // Combobox events
 
   onComboboxKeyDown(event) {
     var flag = false,
@@ -481,37 +443,35 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.setCurrentOptionStyle(false);
           flag = true;
 
-          if (this.isList || this.isBoth) {
-            option = this.filterOptions();
-            if (option) {
-              if (this.isClosed() && this.comboboxTarget.value.length) {
-                this.open();
-              }
+          option = this.filterOptions();
+          if (option) {
+            if (this.isClosed() && this.comboboxTarget.value.length) {
+              this.open();
+            }
 
-              if (
-                this.getLowercaseContent(option).indexOf(
-                  this.comboboxTarget.value.toLowerCase(),
-                ) === 0
-              ) {
-                this.option = option;
-                if (this.isBoth || this.listboxHasVisualFocus) {
-                  this.setCurrentOptionStyle(option);
-                  if (this.isBoth) {
-                    this.setOption(option);
-                  }
+            if (
+              this.getLowercaseContent(option).indexOf(
+                this.comboboxTarget.value.toLowerCase(),
+              ) === 0
+            ) {
+              this.option = option;
+              if (this.isBoth || this.listboxHasVisualFocus) {
+                this.setCurrentOptionStyle(option);
+                if (this.isBoth) {
+                  this.setOption(option);
                 }
-              } else {
-                this.option = null;
-                this.setCurrentOptionStyle(false);
               }
             } else {
-              this.close();
               this.option = null;
-              this.setActiveDescendant(false);
+              this.setCurrentOptionStyle(false);
             }
-          } else if (this.comboboxTarget.value.length) {
-            this.open();
+          } else {
+            this.close();
+            this.option = null;
+            this.setActiveDescendant(false);
           }
+        } else if (this.comboboxTarget.value.length) {
+          this.open();
         }
 
         break;
@@ -566,7 +526,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.setVisualFocusCombobox();
   }
 
-  /* Listbox Events */
+  // Listbox events
 
   onListboxPointerover() {
     this.hasHover = true;
@@ -577,7 +537,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     setTimeout(this.close.bind(this, false), 300);
   }
 
-  // Listbox Option Events
+  // Listbox Option events
 
   onOptionClick(event) {
     this.comboboxTarget.value = event.target.textContent;
@@ -592,5 +552,28 @@ export default class SelectWithAutoCompleteController extends Controller {
   onOptionPointerout() {
     this.hasHover = false;
     setTimeout(this.close.bind(this, false), 300);
+  }
+
+  // Event handlers
+  addComboboxEventListeners(combobox) {
+    combobox.addEventListener("keydown", this.onComboboxKeyDown.bind(this));
+    combobox.addEventListener("keyup", this.onComboboxKeyUp.bind(this));
+    combobox.addEventListener("click", this.onComboboxClick.bind(this));
+    combobox.addEventListener("focus", this.onComboboxFocus.bind(this));
+    combobox.addEventListener("blur", this.onComboboxBlur.bind(this));
+  }
+
+  addListboxEventListeners(listbox) {
+    listbox.addEventListener(
+      "pointerover",
+      this.onListboxPointerover.bind(this),
+    );
+    listbox.addEventListener("pointerout", this.onListboxPointerout.bind(this));
+  }
+
+  addListboxOptionEventListeners(option) {
+    option.addEventListener("click", this.onOptionClick.bind(this));
+    option.addEventListener("pointerover", this.onOptionPointerover.bind(this));
+    option.addEventListener("pointerout", this.onOptionPointerout.bind(this));
   }
 }

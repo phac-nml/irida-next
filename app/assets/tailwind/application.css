@@ -750,6 +750,15 @@ a.pill-focus-reset:focus-visible {
     cursor: pointer;
   }
 
+  [role="listbox"] > [role="group"] > [role="presentation"] {
+    display: block;
+    margin: 0;
+    padding: 0 0.5em;
+    font-weight: bold;
+    line-height: 2;
+    background-color: #ccc;
+  }
+
   [role="listbox"] [role="group"] [role="option"] {
     margin: 0;
     display: block;
