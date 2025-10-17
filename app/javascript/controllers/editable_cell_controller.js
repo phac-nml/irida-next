@@ -8,6 +8,9 @@ export default class extends Controller {
     "confirmDialogContainer",
     "confirmDialogTemplate",
   ];
+  // Outlet to refresh controller - used to prevent false-positive refresh notices
+  // when user edits cells (since edits trigger broadcasts).
+  static outlets = ["refresh"];
   #originalCellContent;
 
   initialize() {
@@ -53,6 +56,8 @@ export default class extends Controller {
       console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
       return;
     }
+
+    this.#notifyRefreshControllers();
 
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
@@ -153,5 +158,17 @@ export default class extends Controller {
       .querySelector(`th:nth-child(${element.cellIndex + 1})`)
       .dataset.fieldId.replaceAll(" ", "SPACE");
     return `${field}_${element.parentNode.rowIndex}`;
+  }
+
+  // Notify refresh controllers to ignore the next broadcast caused by this user edit.
+  // Prevents showing "refresh available" notice for changes the user just made.
+  #notifyRefreshControllers() {
+    if (!this.hasRefreshOutlet) return;
+
+    this.refreshOutlets.forEach((outlet) => {
+      if (outlet && typeof outlet.ignoreNextRefresh === "function") {
+        outlet.ignoreNextRefresh();
+      }
+    });
   }
 }
