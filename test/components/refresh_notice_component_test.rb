@@ -4,7 +4,7 @@ require 'view_component_test_case'
 
 class RefreshNoticeComponentTest < ViewComponentTestCase
   def setup
-    @project = namespaces_project_namespaces(:project1)
+    @project = namespaces_project_namespaces(:project1_namespace)
   end
 
   # 🔄 BASIC RENDERING - Ensure component renders with required elements
