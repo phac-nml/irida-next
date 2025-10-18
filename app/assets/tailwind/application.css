@@ -652,3 +652,20 @@ a.pill-focus-reset:focus-visible {
   --tw-ring-color: transparent !important;
   --tw-ring-offset-width: 0px !important;
 }
+
+/* Tabs Component - Progressive Enhancement
+   Show only first panel when JavaScript not yet loaded or disabled */
+[data-controller="pathogen--tabs"]:not(.tabs-initialized)
+  [data-pathogen--tabs-target="panel"]:not(:first-child) {
+  display: none;
+}
+
+/* Tabs Component - Dynamic styling based on aria-selected
+   Override the server-rendered classes when JavaScript updates aria-selected */
+[role="tab"][aria-selected="true"] {
+  @apply border-primary-800 dark:border-white text-slate-900 dark:text-white bg-transparent;
+}
+
+[role="tab"][aria-selected="false"] {
+  @apply border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:border-slate-700 dark:hover:border-white;
+}

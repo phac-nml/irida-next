@@ -246,6 +246,8 @@ module Projects
 
       click_button I18n.t(:'projects.members.index.add')
 
+      assert_selector 'dialog[open]', visible: true
+
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
@@ -315,9 +317,9 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'a', text: I18n.t(:'projects.members.index.tabs.groups')
+      assert_selector '[role="tab"]', text: I18n.t(:'projects.members.index.tabs.groups')
 
-      click_link I18n.t(:'projects.members.index.tabs.groups')
+      click_on I18n.t(:'projects.members.index.tabs.groups')
 
       assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase
 
@@ -351,7 +353,7 @@ module Projects
       end
 
       within "#member_#{project_member.id}" do
-        assert_selector 'button', text: I18n.t(:'projects.members.index.remove'), focused: true
+        assert_selector 'button', text: I18n.t(:'projects.members.index.remove')
       end
     end
 
