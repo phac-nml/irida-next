@@ -27,6 +27,12 @@ class PipelinesOverrides < ActiveSupport::TestCase
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.0/assets/schema_input.json')
       .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.1/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"g1gh"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.1/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"h1hi"]' })
   end
 
   teardown do
@@ -44,5 +50,18 @@ class PipelinesOverrides < ActiveSupport::TestCase
     workflow2 = pipelines.find_pipeline_by('phac-nml/iridanextexample', '2.0.1')
     assert_equal 'UNIQUE PROJECT NAME',
                  workflow2.workflow_params[:input_output_options][:properties][:project_name][:default]
+  end
+
+  test 'pipelines with samplesheet overrides at entry level' do
+    pipelines = Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines_with_overrides/pipelines.json',
+                                     pipeline_schema_file_dir: @pipeline_schema_file_dir)
+
+    workflow1 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
+
+    assert_equal 'new_isolates_date',
+                 workflow1.samplesheet_overrides[:items][:properties][:metadata_1][:'x-irida-next-selected']
+  end
+
+  test 'pipelines with samplesheet overrides at version level' do
   end
 end
