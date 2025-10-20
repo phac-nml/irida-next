@@ -186,6 +186,176 @@ module Pathogen
 
       assert_text 'Panel 1 Content'
     end
+
+    # Validation tests
+    test 'raises error when id is missing' do
+      assert_raises(ArgumentError, 'id is required') do
+        Pathogen::Tabs.new(label: 'Test tabs')
+      end
+    end
+
+    test 'raises error when label is missing' do
+      assert_raises(ArgumentError, 'label is required') do
+        Pathogen::Tabs.new(id: 'test-tabs')
+      end
+    end
+
+    test 'raises error when no tabs are provided' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs')
+        render_inline(tabs)
+      end
+
+      assert_equal 'At least one tab is required', error.message
+    end
+
+    test 'raises error when no panels are provided' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+        end
+        render_inline(tabs)
+      end
+
+      assert_equal 'At least one panel is required', error.message
+    end
+
+    test 'raises error when tab and panel counts do not match' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_tab(id: 'tab-2', label: 'Second')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+        end
+        render_inline(tabs)
+      end
+
+      assert_equal 'Tab and panel counts must match', error.message
+    end
+
+    test 'raises error when default_index is out of bounds (negative)' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs', default_index: -1).tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+        end
+        render_inline(tabs)
+      end
+
+      assert_match(/default_index -1 out of bounds/, error.message)
+    end
+
+    test 'raises error when default_index is out of bounds (too large)' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs', default_index: 5).tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_tab(id: 'tab-2', label: 'Second')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+          t.with_panel(id: 'panel-2', tab_id: 'tab-2') { 'Content 2' }
+        end
+        render_inline(tabs)
+      end
+
+      assert_match(/default_index 5 out of bounds \(2 tabs\)/, error.message)
+    end
+
+    test 'raises error when duplicate tab IDs are found' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_tab(id: 'tab-1', label: 'Second') # Duplicate ID
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+          t.with_panel(id: 'panel-2', tab_id: 'tab-1') { 'Content 2' }
+        end
+        render_inline(tabs)
+      end
+
+      assert_equal 'Duplicate tab IDs found', error.message
+    end
+
+    test 'raises error when duplicate panel IDs are found' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_tab(id: 'tab-2', label: 'Second')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+          t.with_panel(id: 'panel-1', tab_id: 'tab-2') { 'Content 2' } # Duplicate ID
+        end
+        render_inline(tabs)
+      end
+
+      assert_equal 'Duplicate panel IDs found', error.message
+    end
+
+    test 'raises error when panel references non-existent tab' do
+      error = assert_raises(ArgumentError) do
+        tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_tab(id: 'tab-2', label: 'Second')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+          t.with_panel(id: 'panel-2', tab_id: 'non-existent-tab') { 'Content 2' }
+        end
+        render_inline(tabs)
+      end
+
+      assert_match(/Panel panel-2 references non-existent tab non-existent-tab/, error.message)
+    end
+
+    test 'falls back to horizontal when invalid orientation is provided' do
+      # Invalid orientation should raise an error in test environment
+      error = assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+        Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs', orientation: :invalid).tap do |t|
+          t.with_tab(id: 'tab-1', label: 'First')
+          t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+        end
+      end
+
+      assert_match(/Expected one of: \[:horizontal, :vertical\]/, error.message)
+      assert_match(/Got: :invalid/, error.message)
+    end
+
+    # Right content slot tests
+    test 'renders without right_content slot' do
+      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+        t.with_tab(id: 'tab-1', label: 'First')
+        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+      end
+
+      render_inline(tabs)
+
+      # Should render successfully without right_content
+      assert_selector '[role="tablist"]'
+    end
+
+    test 'renders with right_content slot' do
+      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+        t.with_tab(id: 'tab-1', label: 'First')
+        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+        t.with_right_content { '<button>Action</button>'.html_safe }
+      end
+
+      render_inline(tabs)
+
+      # Should render the right content
+      assert_selector 'button', text: 'Action'
+    end
+
+    test 'right_content renders alongside tabs' do
+      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+        t.with_tab(id: 'tab-1', label: 'First')
+        t.with_tab(id: 'tab-2', label: 'Second')
+        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
+        t.with_panel(id: 'panel-2', tab_id: 'tab-2') { 'Content 2' }
+        t.with_right_content { '<span class="badge">New</span>'.html_safe }
+      end
+
+      render_inline(tabs)
+
+      # Both tabs and right content should be present
+      assert_selector '[role="tab"]', text: 'First'
+      assert_selector '[role="tab"]', text: 'Second'
+      assert_selector '.badge', text: 'New'
+    end
   end
   # rubocop:enable Metrics/ClassLength
 end

@@ -671,6 +671,13 @@ a.pill-focus-reset:focus-visible {
   display: none;
 }
 
+/* Tabs Component - Panel Visibility
+   Ensure visible panels always display as block, overriding any conflicting styles.
+   This prevents CSS conflicts and eliminates the need for inline style manipulation. */
+[data-controller="pathogen--tabs"] [role="tabpanel"]:not(.hidden) {
+  display: block !important;
+}
+
 /* Tabs Component - Dynamic styling based on aria-selected
    Override the server-rendered classes when JavaScript updates aria-selected */
 [role="tab"][aria-selected="true"] {

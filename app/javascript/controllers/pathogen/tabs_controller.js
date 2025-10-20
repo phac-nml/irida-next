@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import TurboStatePreservation from "./concerns/turbo_state_preservation";
 
 /**
  * Tabs Controller
@@ -36,6 +37,14 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   /**
+   * Timing constants for Turbo Frame integration
+   * These delays ensure Turbo has completed processing before we interact with the DOM
+   * @private
+   */
+  static TURBO_SETTLE_DELAY_MS = 50; // Time for Turbo to finish processing frames after render
+  static PANEL_VISIBILITY_CHECK_DELAY_MS = 100; // Time for CSS transitions and computed styles to settle
+
+  /**
    * Stimulus targets
    * @type {string[]}
    */
@@ -60,32 +69,11 @@ export default class extends Controller {
   #boundHandleHashChange = null;
 
   /**
-   * Private field for storing bound Turbo render handler
-   * @type {Function|null}
+   * Private field for Turbo state preservation helper
+   * @type {TurboStatePreservation|null}
    * @private
    */
-  #boundHandleTurboRender = null;
-
-  /**
-   * Private field for storing bound Turbo before-morph handler
-   * @type {Function|null}
-   * @private
-   */
-  #boundHandleBeforeMorph = null;
-
-  /**
-   * Private field for storing bound Turbo before-render handler
-   * @type {Function|null}
-   * @private
-   */
-  #boundHandleBeforeRender = null;
-
-  /**
-   * Private field for storing the currently selected index before morph
-   * @type {number|null}
-   * @private
-   */
-  #selectedIndexBeforeMorph = null;
+  #turboState = null;
 
   /**
    * Initializes the controller when it connects to the DOM
@@ -106,13 +94,8 @@ export default class extends Controller {
       // Determine initial tab index
       let initialIndex = this.defaultIndexValue;
 
-      // Check if we preserved state from a morph
-      if (this.#selectedIndexBeforeMorph !== null) {
-        initialIndex = this.#selectedIndexBeforeMorph;
-        this.#selectedIndexBeforeMorph = null;
-      }
       // If URL sync is enabled, check for hash in URL
-      else if (this.syncUrlValue) {
+      if (this.syncUrlValue) {
         const hashIndex = this.#getTabIndexFromHash();
         if (hashIndex !== -1) {
           initialIndex = hashIndex;
@@ -122,19 +105,20 @@ export default class extends Controller {
         this.#boundHandleHashChange = this.#handleHashChange.bind(this);
         window.addEventListener("hashchange", this.#boundHandleHashChange);
 
-        // Listen for Turbo morph events to re-select tab from hash
-        this.#boundHandleTurboRender = this.#handleTurboRender.bind(this);
-        this.#boundHandleBeforeMorph = this.#handleBeforeMorph.bind(this);
-        this.#boundHandleBeforeRender = this.#handleBeforeRender.bind(this);
-
-        // Listen to turbo:before-render to mark visible panel as permanent BEFORE morphing starts
-        document.addEventListener("turbo:before-render", this.#boundHandleBeforeRender);
-
-        // Listen to turbo:before-morph-element to preserve visibility during morph
-        document.addEventListener("turbo:before-morph-element", this.#boundHandleBeforeMorph);
-
-        // Listen to turbo:render which fires after morphing is complete
-        document.addEventListener("turbo:render", this.#boundHandleTurboRender);
+        // Set up Turbo state preservation to maintain tab selection across morphs
+        this.#turboState = new TurboStatePreservation(this, {
+          getState: () => this.#getTabIndexFromHash(),
+          restoreState: (hashIndex) => {
+            if (hashIndex !== -1 && this.#validateTargets()) {
+              this.#selectTabByIndex(hashIndex, false);
+            }
+          },
+          onBeforeRender: () => this.#markPermanentFrames(),
+          onBeforeMorph: (event) => this.#preservePanelVisibility(event),
+          onRender: () => this.#reloadVisibleFrames(),
+          settleDelayMs: this.constructor.TURBO_SETTLE_DELAY_MS
+        });
+        this.#turboState.enable();
       }
 
       // Select the initial tab
@@ -174,17 +158,31 @@ export default class extends Controller {
   }
 
   /**
+   * Gets the orientation of the tablist
+   * @private
+   * @returns {string} 'horizontal' or 'vertical'
+   */
+  #getOrientation() {
+    const tablist = this.element.querySelector('[role="tablist"]');
+    return tablist?.getAttribute('aria-orientation') || 'horizontal';
+  }
+
+  /**
    * Handles keyboard navigation
-   * Supports Arrow Left/Right, Home, End keys
+   * Supports Arrow Left/Right (horizontal) or Up/Down (vertical), Home, End keys
+   * Navigation direction adapts to aria-orientation attribute
    *
    * @param {KeyboardEvent} event - The keyboard event
    * @returns {void}
    */
   handleKeyDown(event) {
     try {
+      const isVertical = this.#getOrientation() === 'vertical';
+
+      // Map keys based on orientation
       const handlers = {
-        ArrowLeft: () => this.#navigateToPrevious(event),
-        ArrowRight: () => this.#navigateToNext(event),
+        [isVertical ? 'ArrowUp' : 'ArrowLeft']: () => this.#navigateToPrevious(event),
+        [isVertical ? 'ArrowDown' : 'ArrowRight']: () => this.#navigateToNext(event),
         Home: () => this.#navigateToFirst(event),
         End: () => this.#navigateToLast(event),
       };
@@ -201,34 +199,19 @@ export default class extends Controller {
 
   /**
    * Cleans up when controller disconnects from the DOM
-   * Preserves selected tab index if this is part of a Turbo morph
    *
    * @returns {void}
    */
   disconnect() {
-    // Store selected index before disconnect (for Turbo morph scenarios)
-    // Find the currently selected tab
-    const selectedTab = this.tabTargets.find((tab) =>
-      tab.getAttribute("aria-selected") === "true"
-    );
-    if (selectedTab) {
-      this.#selectedIndexBeforeMorph = this.tabTargets.indexOf(selectedTab);
-    }
-
     // Remove hash change listener if URL sync is enabled
     if (this.syncUrlValue) {
       if (this.#boundHandleHashChange) {
         window.removeEventListener("hashchange", this.#boundHandleHashChange);
       }
-      if (this.#boundHandleBeforeRender) {
-        document.removeEventListener("turbo:before-render", this.#boundHandleBeforeRender);
-      }
-      if (this.#boundHandleBeforeMorph) {
-        document.removeEventListener("turbo:before-morph-element", this.#boundHandleBeforeMorph);
-      }
-      if (this.#boundHandleTurboRender) {
-        document.removeEventListener("turbo:morph", this.#boundHandleTurboRender);
-        document.removeEventListener("turbo:render", this.#boundHandleTurboRender);
+
+      // Disable Turbo state preservation
+      if (this.#turboState) {
+        this.#turboState.disable();
       }
     }
 
@@ -379,27 +362,14 @@ export default class extends Controller {
       // Note: Using classList.toggle with 'hidden' class (not inline styles)
       // is critical for Turbo Frame lazy loading. When 'hidden' is removed,
       // Turbo detects the frame is now visible and triggers automatic fetch.
+      // CSS ensures visible panels display as block via [role="tabpanel"]:not(.hidden) rule.
       panel.classList.toggle("hidden", !isVisible);
-
-      // Clear any inline display style that might have been forced
-      // and force display:block for visible panels to override any CSS issues
-      if (isVisible) {
-        panel.style.display = 'block';
-      } else {
-        panel.style.display = '';
-      }
 
       // Update ARIA hidden state
       panel.setAttribute("aria-hidden", String(!isVisible));
 
-      // Force Turbo frames to reload if they're lazy and becoming visible
-      if (isVisible) {
-        const lazyFrames = panel.querySelectorAll('turbo-frame[loading="lazy"][src]');
-        lazyFrames.forEach((frame) => {
-          // Don't interfere with frames that are busy or already loaded
-          // Just let Turbo handle it naturally when the panel becomes visible
-        });
-      }
+      // Turbo Frame lazy loading happens automatically when panel becomes visible
+      // No explicit intervention needed - Turbo handles it when 'hidden' class is removed
     });
 
     // Update URL hash if sync is enabled
@@ -589,20 +559,17 @@ export default class extends Controller {
   }
 
   /**
-   * Handles Turbo before-render to prevent Turbo Frame auto-refresh in visible panels
-   * This fires BEFORE Turbo starts morphing, allowing us to temporarily disable
-   * the refresh attribute on frames so they don't auto-reload during morph
+   * Marks Turbo Frames in visible panels as permanent to prevent morphing
+   * This preserves loaded frame content during Turbo page morphs
    * @private
-   * @param {CustomEvent} event - The turbo:before-render event
    * @returns {void}
    */
-  #handleBeforeRender(event) {
+  #markPermanentFrames() {
     try {
       // Find the currently visible panel
       const visiblePanel = this.panelTargets.find(panel => !panel.classList.contains('hidden'));
 
       if (visiblePanel) {
-
         // Mark all Turbo Frames in the visible panel as permanent to prevent morphing
         const frames = visiblePanel.querySelectorAll('turbo-frame');
         frames.forEach(frame => {
@@ -613,19 +580,18 @@ export default class extends Controller {
         });
       }
     } catch (error) {
-      console.error("[pathogen--tabs] Error handling before render:", error);
+      console.error("[pathogen--tabs] Error marking permanent frames:", error);
     }
   }
 
   /**
-   * Handles Turbo before-morph-element to preserve panel visibility
-   * This fires before Turbo morphs each element, allowing us to transfer
-   * the visibility state from the old element to the new one
+   * Preserves panel visibility state during Turbo morphing
+   * Transfers visibility from old panel element to new panel element
    * @private
    * @param {CustomEvent} event - The turbo:before-morph-element event
    * @returns {void}
    */
-  #handleBeforeMorph(event) {
+  #preservePanelVisibility(event) {
     try {
       const { target, detail } = event;
       const { newElement } = detail;
@@ -643,18 +609,17 @@ export default class extends Controller {
         }
       }
     } catch (error) {
-      console.error("[pathogen--tabs] Error handling before morph:", error);
+      console.error("[pathogen--tabs] Error preserving panel visibility:", error);
     }
   }
 
   /**
-   * Handles Turbo morph/render events to restore tab selection from hash
-   * This ensures that after a Turbo morph (e.g., language change), the correct
-   * tab is selected based on the URL hash, even if the server renders a different default
+   * Reloads Turbo Frames in visible panels after morph completes
+   * Removes permanent markers and triggers reload to fetch updated content
    * @private
    * @returns {void}
    */
-  #handleTurboRender() {
+  #reloadVisibleFrames() {
     try {
       // Remove permanent attribute from frames and reload them to get translated content
       this.panelTargets.forEach(panel => {
@@ -668,33 +633,8 @@ export default class extends Controller {
           }
         });
       });
-
-      // Use setTimeout with a slight delay to ensure Turbo frames are fully settled
-      // requestAnimationFrame is not enough because Turbo may still be processing frames
-      setTimeout(() => {
-        const hashIndex = this.#getTabIndexFromHash();
-        if (hashIndex !== -1) {
-          // Re-validate targets after morph
-          if (!this.#validateTargets()) {
-            console.error("[pathogen--tabs] Targets validation failed after morph");
-            return;
-          }
-
-          // Don't update URL - it already has the hash
-          this.#selectTabByIndex(hashIndex, false);
-
-          // Verify the panel stays visible after a short delay
-          setTimeout(() => {
-            // Check actual visibility and force display:block if needed
-            const visiblePanel = this.panelTargets.find(p => !p.classList.contains('hidden'));
-            if (visiblePanel && window.getComputedStyle(visiblePanel).display === 'none') {
-              visiblePanel.style.display = 'block';
-            }
-          }, 100);
-        }
-      }, 50); // Small delay to let Turbo finish processing
     } catch (error) {
-      console.error("[pathogen--tabs] Error handling Turbo render:", error);
+      console.error("[pathogen--tabs] Error reloading visible frames:", error);
     }
   }
 }

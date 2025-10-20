@@ -303,6 +303,98 @@ module Pathogen
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+    # @label With URL Sync
+    # Demonstrates tabs with URL hash synchronization for bookmarkable tabs
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def with_url_sync
+      render(Pathogen::Tabs.new(
+               id: 'preview-tabs-url-sync',
+               label: 'URL synchronized tabs',
+               sync_url: true
+             )) do |tabs|
+        tabs.with_tab(id: 'tab-overview', label: 'Overview', selected: true)
+        tabs.with_tab(id: 'tab-details', label: 'Details')
+        tabs.with_tab(id: 'tab-settings', label: 'Settings')
+
+        tabs.with_panel(id: 'panel-overview', tab_id: 'tab-overview') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('Overview panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('This tab is synchronized with the URL hash. Try refreshing the page or using browser back/forward buttons.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('The URL will update when you click different tabs.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+
+        tabs.with_panel(id: 'panel-details', tab_id: 'tab-details') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('Details panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('This tab can be bookmarked and shared via URL.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('Check the browser address bar to see the hash change.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+
+        tabs.with_panel(id: 'panel-settings', tab_id: 'tab-settings') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('Settings panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('URL synchronization works with keyboard navigation too.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('Try using arrow keys and watch the URL update.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+      end
+    end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+    # @label Vertical Orientation
+    # Demonstrates tabs with vertical orientation
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def vertical
+      render(Pathogen::Tabs.new(
+               id: 'preview-tabs-vertical',
+               label: 'Vertical tabs',
+               orientation: :vertical
+             )) do |tabs|
+        tabs.with_tab(id: 'tab-1-vertical', label: 'First', selected: true)
+        tabs.with_tab(id: 'tab-2-vertical', label: 'Second')
+        tabs.with_tab(id: 'tab-3-vertical', label: 'Third')
+
+        tabs.with_panel(id: 'panel-1-vertical', tab_id: 'tab-1-vertical') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('First panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('This demonstrates vertical tab orientation.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('Use Up/Down arrow keys to navigate between tabs.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+
+        tabs.with_panel(id: 'panel-2-vertical', tab_id: 'tab-2-vertical') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('Second panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('Vertical tabs are useful for sidebars and narrow layouts.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('The keyboard navigation adapts to the orientation.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+
+        tabs.with_panel(id: 'panel-3-vertical', tab_id: 'tab-3-vertical') do
+          tag.div(class: 'p-4 space-y-3') do
+            tag.h3('Third panel content', class: 'text-lg font-semibold mb-2') +
+              tag.p('Home and End keys still work for jumping to first/last tabs.',
+                    class: 'text-slate-700 dark:text-slate-300') +
+              tag.p('All accessibility features are preserved in vertical mode.',
+                    class: 'text-slate-600 dark:text-slate-400 text-sm')
+          end
+        end
+      end
+    end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
     # @!endgroup
   end
 end
