@@ -18,6 +18,7 @@
       <% if @namespace.group_namespace? %>
       data-viral--select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
       <% end %>
+      data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
       data-action="
         spreadsheet-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
       "
@@ -198,7 +199,7 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "click->viral--sortable-lists--two-lists-selection#constructParams",
+                            "click->viral--sortable-lists--two-lists-selection#constructParams click->spreadsheet-import#handleSubmit",
                           "spreadsheet-import-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },
