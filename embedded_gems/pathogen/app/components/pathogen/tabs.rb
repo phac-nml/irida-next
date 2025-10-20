@@ -5,6 +5,27 @@ module Pathogen
   # Accessible tabs component following W3C ARIA Authoring Practices Guide.
   # Implements automatic tab activation with keyboard navigation support.
   #
+  # == CSS Dependencies
+  #
+  # This component requires the following CSS to be present in your application:
+  #
+  # 1. **Tailwind 'hidden' class** (or equivalent):
+  #    .hidden { display: none; }
+  #
+  # 2. **Tab panel visibility rules** (see app/assets/tailwind/application.css):
+  #    - Progressive enhancement for non-JS environments
+  #    - Visibility control for active panels
+  #    - Dynamic tab styling based on aria-selected
+  #
+  # 3. **JavaScript controller**: app/javascript/controllers/pathogen/tabs_controller.js
+  #    - Handles ARIA state management
+  #    - Keyboard navigation (Arrow keys, Home, End)
+  #    - Optional URL hash syncing
+  #    - Turbo Frame lazy loading integration
+  #
+  # @see app/assets/tailwind/application.css for required CSS rules
+  # @see app/javascript/controllers/pathogen/tabs_controller.js for controller implementation
+  #
   # @example Basic usage
   #   <%= render Pathogen::Tabs.new(id: "demo-tabs", label: "Content sections") do |tabs| %>
   #     <% tabs.with_tab(id: "tab-1", label: "Overview", selected: true) %>
@@ -116,8 +137,9 @@ module Pathogen
     end
 
     # Validates component configuration before rendering
+    # ViewComponent lifecycle hook called automatically before rendering
     # @raise [ArgumentError] if validation fails
-    def before_render_check
+    def before_render
       validate_tabs_and_panels!
       validate_default_index!
       validate_unique_ids!

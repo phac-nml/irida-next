@@ -126,8 +126,23 @@ module Pathogen
       end
 
       # Sets up CSS classes including initial hidden state
-      # Note: We always add 'hidden' class here and let JavaScript control visibility.
-      # This ensures consistent behavior across all scenarios including Turbo morphs.
+      #
+      # == CSS Dependency: Tailwind 'hidden' Class
+      #
+      # This component requires Tailwind CSS or equivalent 'hidden' class definition:
+      #   .hidden { display: none; }
+      #
+      # The component's visibility is controlled via the 'hidden' class rather than
+      # inline styles for two critical reasons:
+      #
+      # 1. **Turbo Frame Lazy Loading**: Turbo detects visibility changes via CSS classes.
+      #    When the 'hidden' class is removed, Turbo automatically triggers lazy frame fetches.
+      #
+      # 2. **CSS Architecture**: Visibility is enforced via CSS selector in application.css:
+      #    [role="tabpanel"]:not(.hidden) { display: block !important; }
+      #    This prevents conflicts and eliminates the need for inline style manipulation.
+      #
+      # @see app/assets/tailwind/application.css for panel visibility rules
       def setup_css_classes
         @system_arguments[:class] = class_names(
           'hidden', # Initially hidden, JavaScript will show the selected panel
