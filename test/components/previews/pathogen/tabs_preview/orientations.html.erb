@@ -62,20 +62,13 @@
           <div class="p-6 space-y-4">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Usage</h3>
             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <%= render Lookbook::Code::Component.new(
-                language: :erb,
-                theme: :github,
-                dark: true,
-                class: "code-preview block rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 shadow-sm"
-              ) do %>
-                <%%= render(Pathogen::Tabs.new(
-                  id: "my-tabs",
-                  label: "Content sections",
-                  orientation: :horizontal # Default, can be omitted
-                )) do |tabs| %>
-                  <!-- tabs and panels here -->
-                <%% end %>
-              <% end %>
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+  id: "my-tabs",
+  label: "Content sections",
+  orientation: :horizontal # Default, can be omitted
+)) do |tabs| %>
+  <!-- tabs and panels here -->
+<%% end %></code></pre>
             </div>
           </div>
         <% end %>
@@ -178,29 +171,22 @@
           <div class="p-6 space-y-4">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Usage Example</h3>
             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <%= render Lookbook::Code::Component.new(
-                language: :erb,
-                theme: :github,
-                dark: true,
-                class: "code-preview block rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 shadow-sm"
-              ) do %>
-                <%%= render(Pathogen::Tabs.new(
-                  id: "sidebar-tabs",
-                  label: "Sidebar navigation",
-                  orientation: :vertical
-                )) do |tabs| %>
-                  <%% tabs.with_tab(id: "tab-1", label: "Dashboard") %>
-                  <%% tabs.with_tab(id: "tab-2", label: "Settings") %>
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+  id: "sidebar-tabs",
+  label: "Sidebar navigation",
+  orientation: :vertical
+)) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-1", label: "Dashboard") %>
+  <%% tabs.with_tab(id: "tab-2", label: "Settings") %>
 
-                  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
-                    Dashboard content
-                  <%% end %>
+  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+    Dashboard content
+  <%% end %>
 
-                  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
-                    Settings content
-                  <%% end %>
-                <%% end %>
-              <% end %>
+  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
+    Settings content
+  <%% end %>
+<%% end %></code></pre>
             </div>
           </div>
         <% end %>

@@ -357,22 +357,14 @@
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Installation</h3>
             <p class="text-slate-700 dark:text-slate-300">Install the package using your preferred package manager:</p>
             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <%= render Lookbook::Code::Component.new(
-                language: :bash,
-                theme: :github,
-                dark: true,
-                class: "code-preview block rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 shadow-sm",
-                source: <<~'BASH'
-                  # Using npm
-                  npm install @pathogen/tabs
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"># Using npm
+npm install @pathogen/tabs
 
-                  # Using yarn
-                  yarn add @pathogen/tabs
+# Using yarn
+yarn add @pathogen/tabs
 
-                  # Using pnpm
-                  pnpm add @pathogen/tabs
-                BASH
-              ) %>
+# Using pnpm
+pnpm add @pathogen/tabs</code></pre>
             </div>
           </div>
         <% end %>

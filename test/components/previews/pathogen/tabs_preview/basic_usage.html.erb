@@ -78,25 +78,19 @@
         <% tabs.with_panel(id: 'panel-usage', tab_id: 'tab-usage') do %>
           <div class="p-6 space-y-4">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Basic Usage</h3>
-            <div class="bg-slate-50 dark:text-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <%= render Lookbook::Code::Component.new(
-                language: :erb,
-                theme: :github,
-                dark: true,
-              ) do %>
-                <%%= render(Pathogen::Tabs.new(id: "my-tabs", label: "Content sections")) do |tabs| %>
-                  <%% tabs.with_tab(id: "tab-1", label: "First", selected: true) %>
-                  <%% tabs.with_tab(id: "tab-2", label: "Second") %>
+            <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(id: "my-tabs", label: "Content sections")) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-1", label: "First", selected: true) %>
+  <%% tabs.with_tab(id: "tab-2", label: "Second") %>
 
-                  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
-                    Content for first tab
-                  <%% end %>
+  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+    Content for first tab
+  <%% end %>
 
-                  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
-                    Content for second tab
-                  <%% end %>
-                <%% end %>
-              <% end %>
+  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
+    Content for second tab
+  <%% end %>
+<%% end %></code></pre>
             </div>
           </div>
         <% end %>
