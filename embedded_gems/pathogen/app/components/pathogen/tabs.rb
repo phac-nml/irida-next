@@ -91,6 +91,7 @@ module Pathogen
         id: id,
         label: label,
         selected: selected,
+        orientation: @orientation,
         **system_arguments
       )
     }

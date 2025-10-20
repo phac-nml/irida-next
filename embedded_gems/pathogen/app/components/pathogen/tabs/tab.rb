@@ -16,7 +16,7 @@ module Pathogen
       # Base CSS classes for all tabs
       BASE_CLASSES = %w[
         cursor-pointer
-        inline-block p-4 rounded-t-lg
+        inline-block p-4
         font-semibold transition-colors duration-200
         focus:outline-none focus:ring-2 focus:ring-primary-500
         border-b-2
@@ -37,21 +37,29 @@ module Pathogen
         hover:border-slate-700 dark:hover:border-white
       ].freeze
 
-      attr_reader :id, :label, :selected
+      # CSS classes for horizontal orientation
+      HORIZONTAL_CLASSES = %w[rounded-t-lg].freeze
+
+      # CSS classes for vertical orientation
+      VERTICAL_CLASSES = %w[rounded-l-lg border-b-0 border-r-2].freeze
+
+      attr_reader :id, :label, :selected, :orientation
 
       # Initialize a new Tab component
       # @param id [String] Unique identifier for the tab (required)
       # @param label [String] Text label for the tab (required)
       # @param selected [Boolean] Whether the tab is initially selected (default: false)
+      # @param orientation [Symbol] Tab orientation (:horizontal or :vertical, default: :horizontal)
       # @param system_arguments [Hash] Additional HTML attributes
       # @raise [ArgumentError] if id or label is missing
-      def initialize(id:, label:, selected: false, **system_arguments)
+      def initialize(id:, label:, selected: false, orientation: :horizontal, **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'label is required' if label.blank?
 
         @id = id
         @label = label
         @selected = selected
+        @orientation = orientation
         @system_arguments = system_arguments
 
         setup_tab_attributes
@@ -88,8 +96,27 @@ module Pathogen
       # so that JavaScript can dynamically toggle the appearance by changing aria-selected
       def setup_css_classes
         state_classes = @selected ? SELECTED_CLASSES : UNSELECTED_CLASSES
+        orientation_classes = @orientation == :vertical ? VERTICAL_CLASSES : HORIZONTAL_CLASSES
+
+        # Override border classes for vertical orientation
+        if @orientation == :vertical
+          state_classes = state_classes.map do |cls|
+            case cls
+            when 'border-primary-800 dark:border-white'
+              'border-r-primary-800 dark:border-r-white'
+            when 'border-transparent'
+              'border-r-transparent'
+            when 'hover:border-slate-700 dark:hover:border-white'
+              'hover:border-r-slate-700 dark:hover:border-r-white'
+            else
+              cls
+            end
+          end
+        end
+
         @system_arguments[:class] = class_names(
           BASE_CLASSES,
+          orientation_classes,
           state_classes,
           @system_arguments[:class]
         )
