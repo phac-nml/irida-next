@@ -5,7 +5,7 @@ module Irida
   class Pipeline # rubocop:disable Metrics/ClassLength
     attr_accessor :pipeline_id, :name, :description, :metadata, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
-                  :default_params, :default_workflow_params
+                  :default_params, :default_workflow_params, :entry
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
@@ -25,6 +25,7 @@ module Irida
       @automatable = version['automatable'] || false
       @executable = true unless version['executable'] == false
       @overrides = overrides_for_entry(entry)
+      @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry)
       @default_params = default_params_for_entry(entry)
       @default_workflow_params = default_workflow_params_for_entry(entry)
     end
@@ -58,6 +59,15 @@ module Irida
       sample_sheet['items']['properties'][property_name]['pattern']
     end
 
+    def samplesheet_schema_overrides_for_entry(entry)
+      overrides = entry['samplesheet_schema_overrides'] || {}
+      version_overrides = (entry['versions']&.find do |v|
+        v['name'] == @version
+      end || {})['samplesheet_schema_overrides'] || {}
+      overrides.deep_merge!(version_overrides)
+      overrides
+    end
+
     private
 
     def process_section(key, properties, required)
@@ -84,7 +94,9 @@ module Irida
     end
 
     def process_samplesheet_schema
-      JSON.parse(schema_input_loc.read)
+      default_schema = JSON.parse(schema_input_loc.read)
+      default_schema.deep_merge!(@samplesheet_schema_overrides_for_entry)
+      default_schema
     end
 
     def show_section?(properties)
