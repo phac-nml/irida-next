@@ -69,6 +69,7 @@ export default class extends Controller {
   // Called by outlet controllers (e.g., editable-cell) to suppress the next refresh notice.
   // Used when the user initiates a change that will trigger a broadcast.
   ignoreNextRefresh() {
+    console.log("ignoreNextRefresh");
     this.#ignoreNextRefresh = true;
     this.#clearIgnoreTimeout();
     // Reset ignore flag after 5 seconds to handle delayed broadcasts.

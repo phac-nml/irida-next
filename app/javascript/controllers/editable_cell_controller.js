@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
   static targets = [
@@ -57,7 +58,7 @@ export default class extends Controller {
       return;
     }
 
-    this.#notifyRefreshControllers();
+    notifyRefreshControllers(this);
 
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
@@ -158,17 +159,5 @@ export default class extends Controller {
       .querySelector(`th:nth-child(${element.cellIndex + 1})`)
       .dataset.fieldId.replaceAll(" ", "SPACE");
     return `${field}_${element.parentNode.rowIndex}`;
-  }
-
-  // Notify refresh controllers to ignore the next broadcast caused by this user edit.
-  // Prevents showing "refresh available" notice for changes the user just made.
-  #notifyRefreshControllers() {
-    if (!this.hasRefreshOutlet) return;
-
-    this.refreshOutlets.forEach((outlet) => {
-      if (outlet && typeof outlet.ignoreNextRefresh === "function") {
-        outlet.ignoreNextRefresh();
-      }
-    });
   }
 }
