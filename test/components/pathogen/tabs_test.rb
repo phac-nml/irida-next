@@ -189,15 +189,19 @@ module Pathogen
 
     # Validation tests
     test 'raises error when id is missing' do
-      assert_raises(ArgumentError, 'id is required') do
+      error = assert_raises(ArgumentError) do
         Pathogen::Tabs.new(label: 'Test tabs')
       end
+
+      assert_equal 'id is required', error.message
     end
 
     test 'raises error when label is missing' do
-      assert_raises(ArgumentError, 'label is required') do
+      error = assert_raises(ArgumentError) do
         Pathogen::Tabs.new(id: 'test-tabs')
       end
+
+      assert_equal 'label is required', error.message
     end
 
     test 'raises error when no tabs are provided' do
