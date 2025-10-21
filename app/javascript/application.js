@@ -22,18 +22,13 @@ function isElementInViewport(el) {
   );
 }
 
-document.addEventListener("turbo:morph", () => {
+document.addEventListener("turbo:render", () => {
   LocalTime.config.locale = document.documentElement.lang;
-  LocalTime.run();
+  // reprocess each time element regardless if it has been already processed
+  LocalTime.process(...document.querySelectorAll("time"));
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
-  }
-});
-
-document.addEventListener("turbo:morph-element", (event) => {
-  if (event.target.nodeName === "TIME") {
-    LocalTime.process(event.target);
   }
 });
 
