@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import TurboStatePreservation from "./concerns/turbo_state_preservation";
+import TurboStatePreservation from "../concerns/turbo_state_preservation";
 
 /**
  * Tabs Controller
@@ -116,7 +116,7 @@ export default class extends Controller {
           onBeforeRender: () => this.#markPermanentFrames(),
           onBeforeMorph: (event) => this.#preservePanelVisibility(event),
           onRender: () => this.#reloadVisibleFrames(),
-          settleDelayMs: this.constructor.TURBO_SETTLE_DELAY_MS
+          settleDelayMs: this.constructor.TURBO_SETTLE_DELAY_MS,
         });
         this.#turboState.enable();
       }
@@ -164,7 +164,7 @@ export default class extends Controller {
    */
   #getOrientation() {
     const tablist = this.element.querySelector('[role="tablist"]');
-    return tablist?.getAttribute('aria-orientation') || 'horizontal';
+    return tablist?.getAttribute("aria-orientation") || "horizontal";
   }
 
   /**
@@ -177,12 +177,14 @@ export default class extends Controller {
    */
   handleKeyDown(event) {
     try {
-      const isVertical = this.#getOrientation() === 'vertical';
+      const isVertical = this.#getOrientation() === "vertical";
 
       // Map keys based on orientation
       const handlers = {
-        [isVertical ? 'ArrowUp' : 'ArrowLeft']: () => this.#navigateToPrevious(event),
-        [isVertical ? 'ArrowDown' : 'ArrowRight']: () => this.#navigateToNext(event),
+        [isVertical ? "ArrowUp" : "ArrowLeft"]: () =>
+          this.#navigateToPrevious(event),
+        [isVertical ? "ArrowDown" : "ArrowRight"]: () =>
+          this.#navigateToNext(event),
         Home: () => this.#navigateToFirst(event),
         End: () => this.#navigateToLast(event),
       };
@@ -512,7 +514,9 @@ export default class extends Controller {
       }
 
       // Try to find tab by ID
-      const tabIndex = this.tabTargets.findIndex((tab) => tab && tab.id === hash);
+      const tabIndex = this.tabTargets.findIndex(
+        (tab) => tab && tab.id === hash,
+      );
       if (tabIndex !== -1) {
         return tabIndex;
       }
@@ -536,7 +540,10 @@ export default class extends Controller {
 
       return -1;
     } catch (error) {
-      console.error("[pathogen--tabs] Error getting tab index from hash:", error);
+      console.error(
+        "[pathogen--tabs] Error getting tab index from hash:",
+        error,
+      );
       return -1;
     }
   }
@@ -567,15 +574,17 @@ export default class extends Controller {
   #markPermanentFrames() {
     try {
       // Find the currently visible panel
-      const visiblePanel = this.panelTargets.find(panel => !panel.classList.contains('hidden'));
+      const visiblePanel = this.panelTargets.find(
+        (panel) => !panel.classList.contains("hidden"),
+      );
 
       if (visiblePanel) {
         // Mark all Turbo Frames in the visible panel as permanent to prevent morphing
-        const frames = visiblePanel.querySelectorAll('turbo-frame');
-        frames.forEach(frame => {
+        const frames = visiblePanel.querySelectorAll("turbo-frame");
+        frames.forEach((frame) => {
           if (frame.complete) {
-            frame.setAttribute('data-turbo-permanent', '');
-            frame.setAttribute('id', frame.id); // Ensure ID is present for matching
+            frame.setAttribute("data-turbo-permanent", "");
+            frame.setAttribute("id", frame.id); // Ensure ID is present for matching
           }
         });
       }
@@ -597,19 +606,24 @@ export default class extends Controller {
       const { newElement } = detail;
 
       // Check if this is one of our tab panels being morphed
-      if (target.hasAttribute && target.hasAttribute('data-pathogen--tabs-target') &&
-          target.getAttribute('data-pathogen--tabs-target') === 'panel') {
-
+      if (
+        target.hasAttribute &&
+        target.hasAttribute("data-pathogen--tabs-target") &&
+        target.getAttribute("data-pathogen--tabs-target") === "panel"
+      ) {
         // If the old panel is visible (not hidden), make sure the new one is too
-        const isVisible = !target.classList.contains('hidden');
+        const isVisible = !target.classList.contains("hidden");
 
-        if (isVisible && newElement.classList.contains('hidden')) {
-          newElement.classList.remove('hidden');
-          newElement.setAttribute('aria-hidden', 'false');
+        if (isVisible && newElement.classList.contains("hidden")) {
+          newElement.classList.remove("hidden");
+          newElement.setAttribute("aria-hidden", "false");
         }
       }
     } catch (error) {
-      console.error("[pathogen--tabs] Error preserving panel visibility:", error);
+      console.error(
+        "[pathogen--tabs] Error preserving panel visibility:",
+        error,
+      );
     }
   }
 
@@ -622,13 +636,15 @@ export default class extends Controller {
   #reloadVisibleFrames() {
     try {
       // Remove permanent attribute from frames and reload them to get translated content
-      this.panelTargets.forEach(panel => {
-        const permanentFrames = panel.querySelectorAll('turbo-frame[data-turbo-permanent]');
-        permanentFrames.forEach(frame => {
-          frame.removeAttribute('data-turbo-permanent');
+      this.panelTargets.forEach((panel) => {
+        const permanentFrames = panel.querySelectorAll(
+          "turbo-frame[data-turbo-permanent]",
+        );
+        permanentFrames.forEach((frame) => {
+          frame.removeAttribute("data-turbo-permanent");
 
           // Only reload frames in visible panels to get translated content
-          if (!panel.classList.contains('hidden') && frame.src) {
+          if (!panel.classList.contains("hidden") && frame.src) {
             frame.reload();
           }
         });
