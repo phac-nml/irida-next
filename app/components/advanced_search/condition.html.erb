@@ -35,6 +35,9 @@
                                "aria-describedby":
                                  conditions_form.field_id(:field, "error"),
                                autofocus: invalid_field,
+                               data: {
+                                 controller: "select-with-auto-complete",
+                               },
                              } %>
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:field),

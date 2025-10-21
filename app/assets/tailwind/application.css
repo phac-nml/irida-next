@@ -687,3 +687,9 @@ a.pill-focus-reset:focus-visible {
 [data-controller="pathogen--tabs"] [role="tab"][aria-selected="false"] {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
+
+/* TODO */
+
+.ts-wrapper.single .ts-control {
+  @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
+}
