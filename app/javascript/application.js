@@ -2,6 +2,7 @@
 import "@hotwired/turbo-rails";
 import "controllers";
 import "flowbite";
+import { createFocusTrap } from "focus-trap";
 
 import * as ActiveStorage from "@rails/activestorage";
 
@@ -22,23 +23,22 @@ function isElementInViewport(el) {
   );
 }
 
-document.addEventListener("turbo:morph", () => {
+document.addEventListener("turbo:render", () => {
   LocalTime.config.locale = document.documentElement.lang;
-  LocalTime.run();
+  // reprocess each time element regardless if it has been already processed
+  LocalTime.process(...document.querySelectorAll("time"));
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
   }
 });
 
-document.addEventListener("turbo:morph-element", (event) => {
-  if (event.target.nodeName === "TIME") {
-    LocalTime.process(event.target);
-  }
-});
-
 Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
+  const focusTrap = createFocusTrap(dialog, {
+    onActivate: () => dialog.classList.add("focus-trap"),
+    onDeactivate: () => dialog.classList.remove("focus-trap"),
+  });
   if (!dialog) {
     console.error(
       "Missing #turbo-confirm dialog. Please add it to your layout.",
@@ -76,6 +76,7 @@ Turbo.config.forms.confirm = (message, element) => {
   }
 
   dialog.showModal();
+  focusTrap.activate();
 
   return new Promise((resolve, reject) => {
     dialog.addEventListener(
@@ -84,6 +85,7 @@ Turbo.config.forms.confirm = (message, element) => {
         // Reset the dialog content
         dialog.innerHTML = defaultState;
         resolve(dialog.returnValue === "confirm");
+        focusTrap.deactivate();
       },
       { once: true },
     );

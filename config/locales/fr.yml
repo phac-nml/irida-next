@@ -84,6 +84,8 @@ fr:
       track_activity:
         system: Système
     errors:
+      messages:
+        record_invalid: 'La validation a échoué : %{errors}'
       models:
         activity_extended_detail:
           maximum_entries: L’enregistrement sur les détails étendu est déjà lié au nombre maximal d’activités pour le type %{activity_type}
@@ -1941,6 +1943,7 @@ fr:
             file_help: CSV, TSV, XLS ou XLSX.
             ignore_empty_values:
               description: Si cette option est sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l’échantillon si elles sont présentes. Cependant, si cette option n’est pas sélectionnée, tous les échantillons avec la clé de métadonnées et la valeur vide seront supprimés.
+              label: Ignorer les valeurs vides
             metadata_columns: Colonnes de métadonnées
             namespace:
               description: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. '
