@@ -68,7 +68,7 @@
                     @access_levels,
                     new_group_link.group_access_level,
                   ),
-                  {},
+                  {include_blank: t('common.actions.select'),},
                   {
                     required: true,
                     aria: {
@@ -84,9 +84,6 @@
                       ].join(" "),
                       invalid: invalid_group_access_level,
                       required: true,
-                    },
-                    data: {
-                      placeholder: I18n.t('common.actions.select'),
                     },
                     autofocus: invalid_group_access_level,
                     value: new_group_link.group_access_level,
