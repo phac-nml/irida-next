@@ -2,6 +2,7 @@
 import "@hotwired/turbo-rails";
 import "controllers";
 import "flowbite";
+import { createFocusTrap } from "focus-trap";
 
 import * as ActiveStorage from "@rails/activestorage";
 
@@ -34,6 +35,10 @@ document.addEventListener("turbo:render", () => {
 
 Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
+  const focusTrap = createFocusTrap(dialog, {
+    onActivate: () => dialog.classList.add("focus-trap"),
+    onDeactivate: () => dialog.classList.remove("focus-trap"),
+  });
   if (!dialog) {
     console.error(
       "Missing #turbo-confirm dialog. Please add it to your layout.",
@@ -71,6 +76,7 @@ Turbo.config.forms.confirm = (message, element) => {
   }
 
   dialog.showModal();
+  focusTrap.activate();
 
   return new Promise((resolve, reject) => {
     dialog.addEventListener(
@@ -79,6 +85,7 @@ Turbo.config.forms.confirm = (message, element) => {
         // Reset the dialog content
         dialog.innerHTML = defaultState;
         resolve(dialog.returnValue === "confirm");
+        focusTrap.deactivate();
       },
       { once: true },
     );
