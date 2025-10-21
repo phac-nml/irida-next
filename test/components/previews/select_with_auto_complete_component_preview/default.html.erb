@@ -1,0 +1,8 @@
+<%= form_with(url: "#") do |form| %>
+  <%= form.select :field,
+              options_for_select(fields),
+              { prompt: "Select a field" },
+              data: {
+                controller: "select-with-auto-complete",
+              } %>
+<% end %>

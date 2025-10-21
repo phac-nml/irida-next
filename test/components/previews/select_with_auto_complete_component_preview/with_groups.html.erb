@@ -1,0 +1,8 @@
+<%= form_with(url: "#") do |form| %>
+  <%= form.select :field,
+              grouped_options_for_select(fields),
+              { include_blank: true },
+              data: {
+                controller: "select-with-auto-complete",
+              } %>
+<% end %>
