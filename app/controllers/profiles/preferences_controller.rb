@@ -19,6 +19,9 @@ module Profiles
       updated = @user.update(update_params)
 
       respond_to do |format|
+        # Locale is called now rather than from the around_action in app_controller because we need the locale
+        # change prior to the success flash so that the flash contains the correct translation
+        updated = Users::UpdateService.new(current_user, @user, update_params).execute
         if updated
           # Changing the current locale in case the user changed their language preference,
           # that way the toast message will be in the correction translation

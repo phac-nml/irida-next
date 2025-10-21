@@ -896,7 +896,8 @@ CREATE TABLE public.users (
     last_name character varying,
     locale character varying DEFAULT 'en'::character varying,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_type integer DEFAULT 0
+    user_type integer DEFAULT 0,
+    system boolean DEFAULT false NOT NULL
 );
 
 
@@ -2032,6 +2033,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251006195129'),
 ('20250826161932'),
 ('20250605171908'),
 ('20250424155356'),
