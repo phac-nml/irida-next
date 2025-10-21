@@ -176,12 +176,12 @@
             <div>
               <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Email Notifications</h3>
               <div class="space-y-3">
-                <%= [
+                <% [
                   { label: 'Comments on your posts', description: 'Receive emails when someone comments on your content', checked: true },
                   { label: 'New followers', description: 'Get notified when someone follows your profile', checked: true },
                   { label: 'Direct messages', description: 'Email notifications for new direct messages', checked: false },
                   { label: 'Weekly digest', description: 'Summary of activity from the past week', checked: true }
-                ].map do |setting| %>
+                ].each do |setting| %>
                   <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
                     <input type="checkbox" <%= 'checked' if setting[:checked] %> class="mt-1 w-4 h-4 text-blue-600 rounded">
                     <div>
@@ -189,7 +189,7 @@
                       <div class="text-sm text-slate-600 dark:text-slate-400"><%= setting[:description] %></div>
                     </div>
                   </label>
-                <% end.join.html_safe %>
+                <% end %>
               </div>
             </div>
 
@@ -247,12 +247,12 @@
         <% tabs.with_panel(id: 'panel-overview', tab_id: 'tab-overview') do %>
           <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <%= [
+              <% [
                 { label: 'Total Visitors', value: '124,582', change: '+12.5%', trend: :up },
                 { label: 'Page Views', value: '456,789', change: '+8.2%', trend: :up },
                 { label: 'Avg. Duration', value: '4m 32s', change: '-2.1%', trend: :down },
                 { label: 'Bounce Rate', value: '42.3%', change: '-5.4%', trend: :up }
-              ].map do |metric| %>
+              ].each do |metric| %>
                 <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
                   <div class="text-sm text-slate-600 dark:text-slate-400 mb-1"><%= metric[:label] %></div>
                   <div class="text-2xl font-bold text-slate-900 dark:text-white mb-1"><%= metric[:value] %></div>
@@ -261,7 +261,7 @@
                     <span><%= metric[:change] %></span>
                   </div>
                 </div>
-              <% end.join.html_safe %>
+              <% end %>
             </div>
 
             <div class="h-64 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center">
@@ -277,12 +277,12 @@
           <div class="p-6">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Traffic Sources</h3>
             <div class="space-y-3">
-              <%= [
+              <% [
                 { source: 'Organic Search', visitors: '45,234', percentage: 36 },
                 { source: 'Direct', visitors: '32,156', percentage: 26 },
                 { source: 'Social Media', visitors: '28,912', percentage: 23 },
                 { source: 'Referral', visitors: '18,280', percentage: 15 }
-              ].map do |source| %>
+              ].each do |source| %>
                 <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
                   <div class="flex justify-between items-center mb-2">
                     <span class="font-semibold text-slate-900 dark:text-white"><%= source[:source] %></span>
@@ -292,7 +292,7 @@
                     <div class="bg-blue-600 h-2 rounded-full" style="width: <%= source[:percentage] %>%"></div>
                   </div>
                 </div>
-              <% end.join.html_safe %>
+              <% end %>
             </div>
           </div>
         <% end %>
