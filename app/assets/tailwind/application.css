@@ -663,3 +663,9 @@ a.pill-focus-reset:focus-visible {
   --tw-ring-color: transparent !important;
   --tw-ring-offset-width: 0px !important;
 }
+
+/* TODO */
+
+.ts-wrapper.single .ts-control {
+  @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
+}
