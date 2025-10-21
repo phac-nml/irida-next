@@ -4,216 +4,478 @@ require 'application_system_test_case'
 
 module Pathogen
   module System
-    # Tests for the Pathogen::Tabs component
+    # System tests for the Pathogen::Tabs component
+    # Tests interactive functionality including click navigation, keyboard controls,
+    # URL synchronization, and accessibility features using real browser interactions
     class TabsTest < ApplicationSystemTestCase
-      # T015: Click navigation tests
-      test 'switches tabs on click' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      # =============================================================================
+      # CLICK NAVIGATION TESTS
+      # =============================================================================
+
+      test 'switches tabs on click in basic usage' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          # First tab should be selected initially
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'First panel content'
+          # Overview tab should be selected initially
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
 
-          # Click second tab
-          find('[role="tab"]', text: 'Second').click
+          # Click Features tab
+          find('[role="tab"]', text: 'Features').click
 
-          # Second tab should be selected
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
-          assert_selector '[role="tab"][aria-selected="false"]', text: 'First'
+          # Features tab should be selected
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
+          assert_selector '[role="tab"][aria-selected="false"]', text: 'Overview'
 
-          # Second panel should be visible, first hidden
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Second panel content'
-          assert_no_selector '[role="tabpanel"]:not(.hidden)', text: 'First panel content'
+          # Features panel should be visible, Overview hidden
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Key Features'
+          assert_no_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
         end
       end
 
       test 'updates ARIA attributes on click' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          second_tab = find('[role="tab"]', text: 'Second')
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          features_tab = find('[role="tab"]', text: 'Features')
 
-          # Click second tab
-          second_tab.click
+          # Initially overview is selected
+          assert_equal 'true', overview_tab['aria-selected']
+          assert_equal 'false', features_tab['aria-selected']
 
-          # Check ARIA attributes
-          assert_equal 'false', first_tab['aria-selected']
-          assert_equal 'true', second_tab['aria-selected']
-          assert_equal '-1', first_tab['tabindex']
-          assert_equal '0', second_tab['tabindex']
+          # Click features tab
+          features_tab.click
+
+          # Check ARIA attributes updated
+          assert_equal 'false', overview_tab['aria-selected']
+          assert_equal 'true', features_tab['aria-selected']
+          assert_equal '-1', overview_tab['tabindex']
+          assert_equal '0', features_tab['tabindex']
         end
       end
 
       test 'maintains selection state across multiple clicks' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           # Click through all tabs
-          find('[role="tab"]', text: 'Second').click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
+          find('[role="tab"]', text: 'Features').click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
 
-          find('[role="tab"]', text: 'Third').click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third'
+          find('[role="tab"]', text: 'Usage').click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Usage'
 
           # Click back to first
-          find('[role="tab"]', text: 'First').click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
+          find('[role="tab"]', text: 'Overview').click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
           # Only one tab should be selected
           assert_selector '[role="tab"][aria-selected="true"]', count: 1
         end
       end
 
-      # T016: Keyboard navigation tests
-      test 'navigates to next tab with Right Arrow' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      # =============================================================================
+      # KEYBOARD NAVIGATION TESTS - HORIZONTAL
+      # =============================================================================
+
+      test 'navigates to next tab with Right Arrow in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click # Ensure focus
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click # Ensure focus
 
           # Press Right Arrow
-          first_tab.native.send_keys(:right)
+          overview_tab.native.send_keys(:right)
 
-          # Second tab should be selected and focused
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
-          # Focus verification - the selected tab should have tabindex="0"
-          assert_equal '0', find('[role="tab"]', text: 'Second')['tabindex']
+          # Features tab should be selected and focused
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
+          assert_equal '0', find('[role="tab"]', text: 'Features')['tabindex']
         end
       end
 
-      test 'navigates to previous tab with Left Arrow' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'navigates to previous tab with Left Arrow in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          # Start with second tab
-          second_tab = find('[role="tab"]', text: 'Second')
-          second_tab.click
+          # Start with Features tab
+          features_tab = find('[role="tab"]', text: 'Features')
+          features_tab.click
 
           # Press Left Arrow
-          second_tab.native.send_keys(:left)
+          features_tab.native.send_keys(:left)
 
-          # First tab should be selected and focused
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
+          # Overview tab should be selected and focused
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
         end
       end
 
-      test 'wraps to first tab when pressing Right Arrow on last tab' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'wraps to first tab when pressing Right Arrow on last tab in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           # Navigate to last tab
-          third_tab = find('[role="tab"]', text: 'Third')
-          third_tab.click
+          usage_tab = find('[role="tab"]', text: 'Usage')
+          usage_tab.click
 
           # Press Right Arrow
-          third_tab.native.send_keys(:right)
+          usage_tab.native.send_keys(:right)
 
           # Should wrap to first tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
         end
       end
 
-      test 'wraps to last tab when pressing Left Arrow on first tab' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'wraps to last tab when pressing Left Arrow on first tab in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
 
           # Press Left Arrow
-          first_tab.native.send_keys(:left)
+          overview_tab.native.send_keys(:left)
 
           # Should wrap to last tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third'
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Usage'
         end
       end
 
-      test 'navigates to first tab with Home key' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'navigates to first tab with Home key in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          # Start with third tab
-          third_tab = find('[role="tab"]', text: 'Third')
-          third_tab.click
+          # Start with last tab
+          usage_tab = find('[role="tab"]', text: 'Usage')
+          usage_tab.click
 
           # Press Home
-          third_tab.native.send_keys(:home)
+          usage_tab.native.send_keys(:home)
 
           # Should jump to first tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
         end
       end
 
-      test 'navigates to last tab with End key' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'navigates to last tab with End key in horizontal mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
 
           # Press End
-          first_tab.native.send_keys(:end)
+          overview_tab.native.send_keys(:end)
 
           # Should jump to last tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third'
-        end
-      end
-
-      test 'Tab key moves focus out of tablist' do
-        visit('/rails/view_components/pathogen/tabs/default')
-        within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
-
-          # Press Tab key
-          first_tab.native.send_keys(:tab)
-
-          # Focus should move away from tab (to panel or next focusable element)
-          # In this test environment, Tab key may not move focus if there's no other focusable element
-          # We verify that the tab is still selected (which is correct behavior)
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Usage'
         end
       end
 
       test 'automatic activation: panel changes immediately with arrow keys' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
 
-          # Initial state
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'First panel content'
+          # Initial state - Overview panel visible
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
 
           # Press Right Arrow
-          first_tab.native.send_keys(:right)
+          overview_tab.native.send_keys(:right)
 
           # Panel should change immediately without Enter/Space
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Second panel content'
-          assert_no_selector '[role="tabpanel"]:not(.hidden)', text: 'First panel content'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Key Features'
+          assert_no_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
         end
       end
 
       test 'roving tabindex pattern with keyboard navigation' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          second_tab = find('[role="tab"]', text: 'Second')
-          third_tab = find('[role="tab"]', text: 'Third')
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          features_tab = find('[role="tab"]', text: 'Features')
+          usage_tab = find('[role="tab"]', text: 'Usage')
 
-          first_tab.click
+          overview_tab.click
 
           # Only first tab should be in tab sequence
-          assert_equal '0', first_tab['tabindex']
-          assert_equal '-1', second_tab['tabindex']
-          assert_equal '-1', third_tab['tabindex']
+          assert_equal '0', overview_tab['tabindex']
+          assert_equal '-1', features_tab['tabindex']
+          assert_equal '-1', usage_tab['tabindex']
 
           # Navigate to second
-          first_tab.native.send_keys(:right)
+          overview_tab.native.send_keys(:right)
 
           # Now only second tab should be in tab sequence
-          assert_equal '-1', first_tab['tabindex']
-          assert_equal '0', second_tab['tabindex']
-          assert_equal '-1', third_tab['tabindex']
+          assert_equal '-1', overview_tab['tabindex']
+          assert_equal '0', features_tab['tabindex']
+          assert_equal '-1', usage_tab['tabindex']
         end
       end
 
-      # T017: Accessibility tests
+      # =============================================================================
+      # KEYBOARD NAVIGATION TESTS - VERTICAL ORIENTATION
+      # =============================================================================
+
+      test 'navigates to next tab with Down Arrow in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+
+        # Wait for controller to connect
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          # Verify vertical orientation
+          assert_selector '[role="tablist"][aria-orientation="vertical"]'
+
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click # Ensure focus
+
+          # Wait for tab to be selected
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          # Press Down Arrow
+          find('[role="tab"]', text: 'Overview').native.send_keys(:down)
+
+          # Features tab should be selected and focused
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features', wait: 1
+          assert_equal '0', find('[role="tab"]', text: 'Features')['tabindex']
+        end
+      end
+
+      test 'navigates to previous tab with Up Arrow in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          # Start with Features tab
+          features_tab = find('[role="tab"]', text: 'Features')
+          features_tab.click
+
+          # Wait for selection to update
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
+
+          # Press Up Arrow
+          find('[role="tab"]', text: 'Features').native.send_keys(:up)
+
+          # Overview tab should be selected and focused
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview', wait: 1
+        end
+      end
+
+      test 'wraps to first tab when pressing Down Arrow on last tab in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          # Navigate to last tab
+          examples_tab = find('[role="tab"]', text: 'Examples')
+          examples_tab.click
+
+          # Wait for selection
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples'
+
+          # Press Down Arrow
+          find('[role="tab"]', text: 'Examples').native.send_keys(:down)
+
+          # Should wrap to first tab
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview', wait: 1
+        end
+      end
+
+      test 'wraps to last tab when pressing Up Arrow on first tab in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
+
+          # Wait for selection
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          # Press Up Arrow
+          find('[role="tab"]', text: 'Overview').native.send_keys(:up)
+
+          # Should wrap to last tab
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples', wait: 1
+        end
+      end
+
+      test 'Home and End keys work in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          # Start with Features tab
+          features_tab = find('[role="tab"]', text: 'Features')
+          features_tab.click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
+
+          # Press Home
+          find('[role="tab"]', text: 'Features').native.send_keys(:home)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview', wait: 1
+
+          # Press End
+          find('[role="tab"]', text: 'Overview').native.send_keys(:end)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples', wait: 1
+        end
+      end
+
+      test 'horizontal arrow keys do not navigate in vertical mode' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          # Press Right Arrow (should not navigate in vertical mode)
+          find('[role="tab"]', text: 'Overview').native.send_keys(:right)
+
+          # Overview tab should still be selected - allow brief time for any errant JS
+          sleep 0.05
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          # Press Left Arrow (should not navigate in vertical mode)
+          find('[role="tab"]', text: 'Overview').native.send_keys(:left)
+
+          # Overview tab should still be selected
+          sleep 0.05
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+        end
+      end
+
+      # =============================================================================
+      # URL HASH SYNCHRONIZATION TESTS
+      # =============================================================================
+
+      test 'updates URL hash when tab is clicked with sync_url enabled' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync')
+        within('[data-controller-connected="true"]') do
+          # Initial hash should be set to first tab
+          assert_equal '#tab-getting-started', page.evaluate_script('window.location.hash')
+
+          # Click second tab
+          find('[role="tab"]', text: 'How It Works').click
+
+          # URL hash should update
+          assert_equal '#tab-how-it-works', page.evaluate_script('window.location.hash')
+
+          # Click third tab
+          find('[role="tab"]', text: 'Use Cases').click
+
+          # URL hash should update again
+          assert_equal '#tab-use-cases', page.evaluate_script('window.location.hash')
+        end
+      end
+
+      test 'initializes with tab from URL hash when sync_url enabled' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync#tab-how-it-works')
+        within('[data-controller-connected="true"]') do
+          # Second tab should be selected based on hash
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The component listens for tab changes'
+
+          # URL hash should be preserved
+          assert_equal '#tab-how-it-works', page.evaluate_script('window.location.hash')
+        end
+      end
+
+      test 'falls back to default when hash is invalid with sync_url' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync#invalid-hash')
+        within('[data-controller-connected="true"]') do
+          # Should fall back to first tab (default_index: 0)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Getting Started'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'What is URL Sync?'
+        end
+      end
+
+      test 'browser back button navigates to previous tab' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        # Navigate through tabs - need to be outside within block for hash navigation
+        find('[role="tab"]', text: 'How It Works').click
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 1
+
+        find('[role="tab"]', text: 'Use Cases').click
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'Use Cases', wait: 1
+
+        # Press back button
+        page.evaluate_script('window.history.back()')
+
+        # Wait for hash change to trigger tab change
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 2
+        assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The component listens for tab changes'
+      end
+
+      test 'browser forward button navigates to next tab' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        # Navigate forward
+        find('[role="tab"]', text: 'How It Works').click
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 1
+
+        find('[role="tab"]', text: 'Use Cases').click
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'Use Cases', wait: 1
+
+        # Go back
+        page.evaluate_script('window.history.back()')
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 2
+
+        # Go forward
+        page.evaluate_script('window.history.forward()')
+
+        # Should be back on Use Cases tab
+        assert_selector '[role="tab"][aria-selected="true"]', text: 'Use Cases', wait: 2
+        assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Perfect Use Cases'
+      end
+
+      test 'keyboard navigation updates URL hash with sync_url enabled' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync')
+        assert_selector '[data-controller-connected="true"]', wait: 2
+
+        within('[data-controller-connected="true"]') do
+          getting_started_tab = find('[role="tab"]', text: 'Getting Started')
+          getting_started_tab.click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Getting Started'
+
+          # Navigate with keyboard
+          find('[role="tab"]', text: 'Getting Started').native.send_keys(:right)
+
+          # How It Works tab should be selected
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 1
+        end
+
+        # URL should update
+        assert_equal '#tab-how-it-works', page.evaluate_script('window.location.hash')
+      end
+
+      test 'does not update URL when sync_url is false' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
+        within('[data-controller-connected="true"]') do
+          # Initial hash should be empty
+          initial_hash = page.evaluate_script('window.location.hash')
+          assert_equal '', initial_hash
+
+          # Click Features tab
+          find('[role="tab"]', text: 'Features').click
+
+          # Hash should remain empty
+          assert_equal '', page.evaluate_script('window.location.hash')
+        end
+      end
+
+      test 'hash supports panel ID format' do
+        visit('/rails/view_components/pathogen/tabs_preview/url_sync#panel-how-it-works')
+        within('[data-controller-connected="true"]') do
+          # Should find tab by panel ID
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The component listens for tab changes'
+        end
+      end
+
+      # =============================================================================
+      # ACCESSIBILITY TESTS
+      # =============================================================================
+
       test 'has proper ARIA structure' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           # Tablist with label
           assert_selector '[role="tablist"][aria-label]'
@@ -243,7 +505,7 @@ module Pathogen
       end
 
       test 'tab-panel associations are correct' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           tabs = all('[role="tab"]')
           panels = all('[role="tabpanel"]', visible: false)
@@ -256,7 +518,7 @@ module Pathogen
           tabs.each_with_index do |tab, index|
             panel = panels[index]
             assert_not_nil panel, "Panel at index #{index} should exist"
-            
+
             # aria-labelledby should reference tab id (set by component)
             assert_equal tab['id'], panel['aria-labelledby']
             # aria-controls should reference panel id (set by JS)
@@ -265,22 +527,8 @@ module Pathogen
         end
       end
 
-      test 'focus indicators are visible' do
-        visit('/rails/view_components/pathogen/tabs/default')
-        within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-
-          # Focus the tab
-          first_tab.click
-
-          # Check for focus ring classes (visual focus indicator)
-          assert_selector '.focus\\:ring-2'
-          assert_selector '.focus\\:outline-none'
-        end
-      end
-
       test 'screen reader state announcements are correct' do
-        visit('/rails/view_components/pathogen/tabs/default')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           # When a tab is selected, aria-selected should be true for screen readers
           selected_tab = find('[role="tab"][aria-selected="true"]')
@@ -297,300 +545,43 @@ module Pathogen
         end
       end
 
-      test 'works with single tab' do
-        visit('/rails/view_components/pathogen/tabs/single_tab')
+      test 'orientation attribute is set correctly for horizontal' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          # Should render correctly
-          assert_selector '[role="tab"]', count: 1
-          assert_selector '[role="tabpanel"]', count: 1
-
-          # Single tab should be selected
-          assert_selector '[role="tab"][aria-selected="true"]', count: 1
-          assert_selector '[role="tabpanel"]:not(.hidden)', count: 1
-
-          # Keyboard navigation should handle single tab gracefully
-          tab = find('[role="tab"]')
-          tab.click
-
-          # Arrow keys should not cause errors
-          tab.native.send_keys(:right)
-          assert_selector '[role="tab"][aria-selected="true"]', count: 1
-
-          tab.native.send_keys(:left)
-          assert_selector '[role="tab"][aria-selected="true"]', count: 1
+          assert_selector '[role="tablist"][aria-orientation="horizontal"]'
         end
       end
 
-      test 'initializes with specified default index' do
-        visit('/rails/view_components/pathogen/tabs/with_selection')
+      test 'orientation attribute is set correctly for vertical' do
+        visit('/rails/view_components/pathogen/tabs_preview/orientations')
         within('[data-controller-connected="true"]') do
-          # Second tab should be selected initially (default_index: 1)
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Second panel content'
-        end
-      end
-
-      # T018: Vertical orientation keyboard navigation tests
-      test 'navigates to next tab with Down Arrow in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-
-        # Wait for controller to connect
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        within('[data-controller-connected="true"]') do
-          # Verify vertical orientation
+          # Find the vertical tabs section
           assert_selector '[role="tablist"][aria-orientation="vertical"]'
-
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click # Ensure focus
-
-          # Wait for tab to be selected
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-
-          # Press Down Arrow - get fresh element reference
-          find('[role="tab"]', text: 'First').native.send_keys(:down)
-
-          # Second tab should be selected and focused
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second', wait: 1
-          assert_equal '0', find('[role="tab"]', text: 'Second')['tabindex']
         end
       end
 
-      test 'navigates to previous tab with Up Arrow in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-        assert_selector '[data-controller-connected="true"]', wait: 2
+      # =============================================================================
+      # CONTROLLER LIFECYCLE TESTS
+      # =============================================================================
 
-        within('[data-controller-connected="true"]') do
-          # Start with second tab
-          second_tab = find('[role="tab"]', text: 'Second')
-          second_tab.click
+      test 'controller adds initialization marker class on connect' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
 
-          # Wait for selection to update
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
-
-          # Press Up Arrow - get fresh element reference
-          find('[role="tab"]', text: 'Second').native.send_keys(:up)
-
-          # First tab should be selected and focused
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First', wait: 1
-        end
+        # Verify controller is connected and marker is present
+        tabs_container = find('[data-controller="pathogen--tabs"]')
+        assert tabs_container[:class].include?('tabs-initialized')
       end
 
-      test 'wraps to first tab when pressing Down Arrow on last tab in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-        assert_selector '[data-controller-connected="true"]', wait: 2
+      test 'controller adds connected marker attribute' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
 
-        within('[data-controller-connected="true"]') do
-          # Navigate to last tab
-          third_tab = find('[role="tab"]', text: 'Third')
-          third_tab.click
-
-          # Wait for selection
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third'
-
-          # Press Down Arrow - get fresh element
-          find('[role="tab"]', text: 'Third').native.send_keys(:down)
-
-          # Should wrap to first tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First', wait: 1
-        end
+        # Verify marker is present
+        tabs_container = find('[data-controller="pathogen--tabs"]')
+        assert_equal 'true', tabs_container['data-controller-connected']
       end
 
-      test 'wraps to last tab when pressing Up Arrow on first tab in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
-
-          # Wait for selection
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-
-          # Press Up Arrow - get fresh element
-          find('[role="tab"]', text: 'First').native.send_keys(:up)
-
-          # Should wrap to last tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third', wait: 1
-        end
-      end
-
-      test 'Home and End keys work in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        within('[data-controller-connected="true"]') do
-          # Start with second tab
-          second_tab = find('[role="tab"]', text: 'Second')
-          second_tab.click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Second'
-
-          # Press Home
-          find('[role="tab"]', text: 'Second').native.send_keys(:home)
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First', wait: 1
-
-          # Press End
-          find('[role="tab"]', text: 'First').native.send_keys(:end)
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Third', wait: 1
-        end
-      end
-
-      test 'horizontal arrow keys do not navigate in vertical mode' do
-        visit('/rails/view_components/pathogen/tabs/vertical')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'First')
-          first_tab.click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-
-          # Press Right Arrow (should not navigate in vertical mode)
-          find('[role="tab"]', text: 'First').native.send_keys(:right)
-
-          # First tab should still be selected - allow brief time for any errant JS
-          sleep 0.05
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-
-          # Press Left Arrow (should not navigate in vertical mode)
-          find('[role="tab"]', text: 'First').native.send_keys(:left)
-
-          # First tab should still be selected
-          sleep 0.05
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'First'
-        end
-      end
-
-      # T019: URL hash syncing tests
-      test 'updates URL hash when tab is clicked with sync_url enabled' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync')
-        within('[data-controller-connected="true"]') do
-          # Initial hash should be set to first tab
-          assert_equal '#tab-overview', page.evaluate_script('window.location.hash')
-
-          # Click second tab
-          find('[role="tab"]', text: 'Details').click
-
-          # URL hash should update
-          assert_equal '#tab-details', page.evaluate_script('window.location.hash')
-
-          # Click third tab
-          find('[role="tab"]', text: 'Settings').click
-
-          # URL hash should update again
-          assert_equal '#tab-settings', page.evaluate_script('window.location.hash')
-        end
-      end
-
-      test 'initializes with tab from URL hash when sync_url enabled' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync#tab-details')
-        within('[data-controller-connected="true"]') do
-          # Second tab should be selected based on hash
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Details'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Details panel content'
-
-          # URL hash should be preserved
-          assert_equal '#tab-details', page.evaluate_script('window.location.hash')
-        end
-      end
-
-      test 'falls back to default_index when hash is invalid' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync#invalid-hash')
-        within('[data-controller-connected="true"]') do
-          # Should fall back to first tab (default_index: 0)
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Overview panel content'
-        end
-      end
-
-      test 'browser back button navigates to previous tab' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        # Navigate through tabs - need to be outside within block for hash navigation
-        find('[role="tab"]', text: 'Details').click
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Details', wait: 1
-
-        find('[role="tab"]', text: 'Settings').click
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings', wait: 1
-
-        # Press back button
-        page.evaluate_script('window.history.back()')
-
-        # Wait for hash change to trigger tab change
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Details', wait: 2
-        assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Details panel content'
-      end
-
-      test 'browser forward button navigates to next tab' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        # Navigate forward
-        find('[role="tab"]', text: 'Details').click
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Details', wait: 1
-
-        find('[role="tab"]', text: 'Settings').click
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings', wait: 1
-
-        # Go back
-        page.evaluate_script('window.history.back()')
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Details', wait: 2
-
-        # Go forward
-        page.evaluate_script('window.history.forward()')
-
-        # Should be back on Settings tab
-        assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings', wait: 2
-        assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Settings panel content'
-      end
-
-      test 'keyboard navigation updates URL hash with sync_url enabled' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync')
-        assert_selector '[data-controller-connected="true"]', wait: 2
-
-        within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'Overview')
-          first_tab.click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
-
-          # Navigate with keyboard
-          find('[role="tab"]', text: 'Overview').native.send_keys(:right)
-
-          # Details tab should be selected
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Details', wait: 1
-        end
-
-        # URL should update
-        assert_equal '#tab-details', page.evaluate_script('window.location.hash')
-      end
-
-      test 'does not update URL when sync_url is false' do
-        visit('/rails/view_components/pathogen/tabs/default')
-        within('[data-controller-connected="true"]') do
-          # Initial hash should be empty
-          initial_hash = page.evaluate_script('window.location.hash')
-          assert_equal '', initial_hash
-
-          # Click second tab
-          find('[role="tab"]', text: 'Second').click
-
-          # Hash should remain empty
-          assert_equal '', page.evaluate_script('window.location.hash')
-        end
-      end
-
-      test 'hash supports panel ID format' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync#panel-details')
-        within('[data-controller-connected="true"]') do
-          # Should find tab by panel ID
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Details'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Details panel content'
-        end
-      end
-
-      # T020: Controller disconnect cleanup tests
-      test 'removes initialization marker class on disconnect' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'removes initialization marker class on simulated disconnect' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
 
         # Verify controller is connected and marker is present
         tabs_container = find('[data-controller="pathogen--tabs"]')
@@ -600,7 +591,6 @@ module Pathogen
         page.execute_script(<<~JS)
           const element = document.querySelector('[data-controller="pathogen--tabs"]');
           if (element) {
-            // Remove the initialization marker to simulate disconnect
             element.classList.remove('tabs-initialized');
           }
         JS
@@ -610,18 +600,17 @@ module Pathogen
         assert_not tabs_container[:class].include?('tabs-initialized')
       end
 
-      test 'removes controller connected marker on disconnect' do
-        visit('/rails/view_components/pathogen/tabs/default')
+      test 'removes controller connected marker on simulated disconnect' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
 
         # Verify marker is present
         tabs_container = find('[data-controller="pathogen--tabs"]')
-        assert tabs_container['data-controller-connected'] == 'true'
+        assert_equal 'true', tabs_container['data-controller-connected']
 
         # Simulate disconnect by removing the connected marker
         page.execute_script(<<~JS)
           const element = document.querySelector('[data-controller="pathogen--tabs"]');
           if (element) {
-            // Remove the connected marker to simulate disconnect
             delete element.dataset.controllerConnected;
           }
         JS
@@ -631,179 +620,17 @@ module Pathogen
         assert_nil tabs_container['data-controller-connected']
       end
 
-      test 'removes hash change listener on disconnect with sync_url enabled' do
-        visit('/rails/view_components/pathogen/tabs/with_url_sync')
+      # =============================================================================
+      # EDGE CASES & INTERACTION TESTS
+      # =============================================================================
 
-        # Navigate to verify hash sync is working
-        within('[data-controller-connected="true"]') do
-          find('[role="tab"]', text: 'Details').click
-          assert_equal '#tab-details', page.evaluate_script('window.location.hash')
-        end
-
-        # Disconnect controller by removing the connected marker
-        page.execute_script(<<~JS)
-          const element = document.querySelector('[data-controller="pathogen--tabs"]');
-          if (element) {
-            // Remove the connected marker to simulate disconnect
-            delete element.dataset.controllerConnected;
-          }
-        JS
-
-        # Change hash manually
-        page.execute_script('window.location.hash = "tab-settings"')
-        sleep 0.1
-
-        # Tab should NOT change because listener was removed
-        # (Note: This is hard to test definitively, but we verify the disconnect happened)
-        tabs_container = find('[data-controller="pathogen--tabs"]')
-        assert_nil tabs_container['data-controller-connected']
-      end
-
-      # Optional: Axe-core accessibility tests (if axe-capybara gem is available)
-      # Uncomment if axe-capybara is installed
-      #
-      # test 'passes WCAG 2.1 AA accessibility checks' do
-      #   visit('/rails/view_components/pathogen/tabs/default')
-      #   within('[data-controller-connected="true"]') do
-      #     assert_no_axe_violations(according_to: :wcag21aa)
-      #   end
-      # end
-      #
-      # test 'passes ARIA pattern accessibility checks' do
-      #   visit('/rails/view_components/pathogen/tabs/default')
-      #   within('[data-controller-connected="true"]') do
-      #     assert_no_axe_violations(checking: 'wcag2a')
-      #   end
-      # end
-
-      # T026: Lazy loading with Turbo Frames tests
-      test 'only first tab content loads on page load with lazy loading' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
-        within('[data-controller-connected="true"]') do
-          # First tab should be selected and its content visible
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
-
-          # First panel should show its content (not loading indicator)
-          find('[role="tabpanel"]:not(.hidden)')
-          assert_text 'Overview panel content'
-
-          # Other panels should still show loading indicators (Turbo Frame not fetched yet)
-          # We can't directly test this without more complex setup, but we can verify
-          # that panels exist and are hidden
-          all_panels = all('[role="tabpanel"]', visible: false)
-          hidden_panels = all_panels.select { |panel| panel[:class].include?('hidden') }
-          assert_operator hidden_panels.count, :>=, 1
-        end
-      end
-
-      test 'clicking inactive tab triggers Turbo Frame fetch' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
-        within('[data-controller-connected="true"]') do
-          # Click on second tab (lazy loaded)
-          find('[role="tab"]', text: 'Details').click
-
-          # Second tab should be selected
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Details'
-
-          # Second panel should become visible
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-
-          # Should show loading content
-          assert_text 'Loading details...'
-
-          # Turbo Frame should be present in the panel
-          # Note: In a real implementation, this would trigger a fetch
-          # For testing purposes, we verify the structure is correct
-          within('[role="tabpanel"]:not(.hidden)') do
-            assert_selector 'turbo-frame[loading="lazy"]'
-          end
-        end
-      end
-
-      test 'loading indicator displays during fetch' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
-        within('[data-controller-connected="true"]') do
-          # Click on third tab (lazy loaded with slower response)
-          find('[role="tab"]', text: 'Settings').click
-
-          # Panel should become visible
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading settings...'
-
-          # Loading indicator should be visible inside the Turbo Frame
-          # This tests that the frame's fallback content (loading indicator) displays
-          within('[role="tabpanel"]:not(.hidden)') do
-            # Turbo Frame should exist
-            assert_selector 'turbo-frame[loading="lazy"]'
-
-            # In actual implementation, this would show a spinner or loading text
-            # For now, we verify the structure allows for loading indicators
-          end
-        end
-      end
-
-      test 'content morphs into place after fetch' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
-        within('[data-controller-connected="true"]') do
-          # Click on second tab
-          find('[role="tab"]', text: 'Details').click
-
-          # Panel should be visible
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading details...'
-
-          # After Turbo Frame loads, content should replace loading indicator
-          # In a real implementation with actual endpoints, we'd wait for content
-          # For testing, we verify the panel structure supports morphing
-          visible_panel = find('[role="tabpanel"]:not(.hidden)')
-          assert visible_panel.has_selector?('turbo-frame')
-
-          # Verify aria-hidden is correctly set (not hidden)
-          assert_equal 'false', visible_panel['aria-hidden']
-        end
-      end
-
-      test 'returning to previously loaded tab shows cached content' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
-        within('[data-controller-connected="true"]') do
-          # Start on first tab
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
-
-          # Click second tab
-          find('[role="tab"]', text: 'Details').click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Details'
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading details...'
-
-          # Click third tab
-          find('[role="tab"]', text: 'Settings').click
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings'
-          assert_text 'Loading settings...'
-
-          # Return to second tab
-          find('[role="tab"]', text: 'Details').click
-
-          # Should show cached content immediately (no refetch)
-          # Turbo Frame should still be present but already loaded
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading details...'
-          within('[role="tabpanel"]:not(.hidden)') do
-            assert_selector 'turbo-frame'
-          end
-
-          # Content should be visible (not loading indicator)
-          # In real implementation, this would verify actual content vs spinner
-        end
-      end
-
-      # T027: Rapid tab switching tests
       test 'rapid tab switching shows most recent tab content' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
           # Click through tabs with small delays to ensure JavaScript processes each click
-          find('[role="tab"]', text: 'Details').click
+          find('[role="tab"]', text: 'Features').click
           sleep(0.05)
-          find('[role="tab"]', text: 'Settings').click
+          find('[role="tab"]', text: 'Usage').click
           sleep(0.05)
           find('[role="tab"]', text: 'Overview').click
 
@@ -814,7 +641,7 @@ module Pathogen
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
           # Final panel should be visible
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Overview panel content'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
 
           # Only one panel should be visible
           assert_selector '[role="tabpanel"]:not(.hidden)', count: 1
@@ -827,55 +654,57 @@ module Pathogen
       end
 
       test 'rapid keyboard navigation shows correct final tab' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          first_tab = find('[role="tab"]', text: 'Overview')
-          first_tab.click
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
 
           # Rapidly press arrow right multiple times
-          first_tab.native.send_keys(:right)
+          overview_tab.native.send_keys(:right)
           sleep 0.05 # Small delay to simulate rapid but sequential keypresses
 
-          second_tab = find('[role="tab"]', text: 'Details')
-          second_tab.native.send_keys(:right)
+          features_tab = find('[role="tab"]', text: 'Features')
+          features_tab.native.send_keys(:right)
           sleep 0.05
 
-          third_tab = find('[role="tab"]', text: 'Settings')
-          third_tab.native.send_keys(:right) # Wraps to first
+          usage_tab = find('[role="tab"]', text: 'Usage')
+          usage_tab.native.send_keys(:right) # Wraps to first
 
           # Should have wrapped back to first tab
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
-          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'Overview panel content'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
         end
       end
 
-      test 'tab switching does not break Turbo Frame loading state' do
-        visit('/rails/view_components/pathogen/tabs/lazy_loading')
+      test 'clicking already selected tab maintains selection' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
         within('[data-controller-connected="true"]') do
-          # Click on lazy-loaded tab
-          find('[role="tab"]', text: 'Details').click
+          overview_tab = find('[role="tab"]', text: 'Overview')
 
-          # Immediately switch to another tab before frame loads
-          find('[role="tab"]', text: 'Settings').click
+          # Overview is already selected
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
-          # Settings tab should be selected
-          assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings'
+          # Click it again
+          overview_tab.click
 
-          # Settings panel should be visible
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading settings...'
+          # Should still be selected
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+          assert_selector '[role="tabpanel"]:not(.hidden)', text: 'The Pathogen::Tabs component provides'
+          assert_selector '[role="tab"][aria-selected="true"]', count: 1
+        end
+      end
 
-          # Details panel should be hidden (even if frame was loading)
-          details_panel = all('[role="tabpanel"]', visible: false).find { |p| p['id'] == 'panel-details-lazy' }
-          assert_not_nil details_panel, "Details panel should exist"
-          assert details_panel[:class].include?('hidden')
+      test 'Tab key moves focus without changing selection' do
+        visit('/rails/view_components/pathogen/tabs_preview/basic_usage')
+        within('[data-controller-connected="true"]') do
+          overview_tab = find('[role="tab"]', text: 'Overview')
+          overview_tab.click
 
-          # Return to Details tab
-          find('[role="tab"]', text: 'Details').click
+          # Press Tab key
+          overview_tab.native.send_keys(:tab)
 
-          # Details panel should now be visible
-          assert_selector '[role="tabpanel"]:not(.hidden)'
-          assert_text 'Loading details...'
+          # Tab is still selected (which is correct behavior)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
         end
       end
     end

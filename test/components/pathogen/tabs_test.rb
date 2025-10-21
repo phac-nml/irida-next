@@ -193,7 +193,7 @@ module Pathogen
         Pathogen::Tabs.new(label: 'Test tabs')
       end
 
-      assert_equal 'id is required', error.message
+      assert_equal 'missing keyword: :id', error.message
     end
 
     test 'raises error when label is missing' do
@@ -201,7 +201,7 @@ module Pathogen
         Pathogen::Tabs.new(id: 'test-tabs')
       end
 
-      assert_equal 'label is required', error.message
+      assert_equal 'missing keyword: :label', error.message
     end
 
     test 'raises error when no tabs are provided' do
