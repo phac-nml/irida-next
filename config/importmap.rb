@@ -21,3 +21,4 @@ pin 'lodash' # @4.17.21
 pin 'focus-trap' # @7.6.5
 pin 'tabbable' # @6.2.0
 pin 'uuid' # @13.0.0
+pin 'tom-select', to: 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/+esm'

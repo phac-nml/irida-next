@@ -202,3 +202,5 @@ gem 'activerecord-session_store', '~> 2.1'
 gem 'minitest', '~> 5.25', '>= 5.25.5'
 
 gem 'rails_icons', '~> 1.3'
+
+# gem 'tom-select-rails', '~> 2.4', '>= 2.4.3'
