@@ -36,11 +36,11 @@ data:
     - ["components.*", "config/locales/components.%{locale}.yml"]
     - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
     - ["local_time.*", "config/locales/local_time.%{locale}.yml"]
+    - ["common.*", "config/locales/common.%{locale}.yml"]
     # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
     # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
     # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']
-    - "config/locales/%{locale}.yml",
-    - ["common.*", "config/locales/common.%{locale}.yml"]
+    - "config/locales/%{locale}.yml"
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
