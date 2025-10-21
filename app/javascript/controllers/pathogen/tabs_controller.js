@@ -125,14 +125,12 @@ export default class extends Controller {
       const validatedIndex = this.#validateDefaultIndex(initialIndex);
       this.#selectTabByIndex(validatedIndex);
 
-      // Add initialization marker class for CSS progressive enhancement
+      // Add initialization markers
       this.element.classList.add("tabs-initialized");
-
-      // Add test marker to indicate controller is connected
-      this.element.dataset.controllerConnected = "true";
     } catch (error) {
       console.error("[pathogen--tabs] Error during initialization:", error);
     }
+    this.element.dataset.controllerConnected = "true";
   }
 
   /**
