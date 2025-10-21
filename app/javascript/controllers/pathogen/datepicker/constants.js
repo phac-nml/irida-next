@@ -4,6 +4,23 @@ export const FOCUSABLE_ELEMENTS =
 
 export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
+// specifically required for when utils.js getDayOfWeek() is called as new Date(date).getDay() doesn't work with
+// non-english month names
+export const MONTHS_IN_ENGLISH = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const CALENDAR_CLASSES = {
   SELECTED_DATE: [
     "bg-primary-700",
