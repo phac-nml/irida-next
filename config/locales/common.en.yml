@@ -28,7 +28,6 @@ en:
       general: General
       name: Name
       settings: Settings
-      title: Title
     statuses:
       disabled: Disabled
       error: Error

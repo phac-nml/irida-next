@@ -857,7 +857,6 @@ fr:
     samples:
       index:
         deselect_all_tooltip: Désélectionner tous les échantillons de ce groupe
-        no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         select_all_tooltip: Sélectionner tous les échantillons de ce groupe
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons

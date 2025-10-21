@@ -28,7 +28,6 @@ fr:
       general: Général
       name: Nom
       settings: Paramètres
-      title: Titre
     statuses:
       disabled: Désactivé
       error: Erreur
