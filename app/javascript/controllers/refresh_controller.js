@@ -37,6 +37,11 @@ export default class extends Controller {
       return;
     }
 
+    // If there's no notice target, allow Turbo's default auto-refresh behavior
+    if (!this.hasNoticeTarget) {
+      return;
+    }
+
     // Debounce rapid successive refresh broadcasts (e.g., during bulk operations).
     // Show the notice on the first broadcast, then ignore subsequent ones for 300ms.
     if (this.#isDebouncing) {
@@ -44,9 +49,7 @@ export default class extends Controller {
       return;
     }
 
-    if (this.hasNoticeTarget) {
-      this.noticeTarget.classList.remove("hidden");
-    }
+    this.noticeTarget.classList.remove("hidden");
 
     this.#isDebouncing = true;
     this.#debounceTimeoutId = window.setTimeout(() => {

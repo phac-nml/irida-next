@@ -66,4 +66,11 @@ class RefreshNoticeComponent < Component
   def alert_id
     @alert_id ||= "refresh-notice-#{object_id}"
   end
+
+  # Whether to show the notice UI (vs. auto-refreshing)
+  #
+  # @return [Boolean]
+  def show_notice?
+    Flipper.enabled?(:samples_refresh_notice)
+  end
 end
