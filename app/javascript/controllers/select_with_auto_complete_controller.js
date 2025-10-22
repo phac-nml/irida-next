@@ -126,14 +126,14 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   setVisualFocusCombobox() {
     this.listboxTarget.classList.remove("focus");
-    this.comboboxTarget.parentNode.classList.add("focus");
+    this.comboboxTarget.parentNode.parentNode.classList.add("focus");
     this.comboboxHasVisualFocus = true;
     this.listboxHasVisualFocus = false;
     this.setActiveDescendant(false);
   }
 
   setVisualFocusListbox() {
-    this.comboboxTarget.parentNode.classList.remove("focus");
+    this.comboboxTarget.parentNode.parentNode.classList.remove("focus");
     this.comboboxHasVisualFocus = false;
     this.listboxHasVisualFocus = true;
     this.listboxTarget.classList.add("focus");
@@ -141,7 +141,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   removeVisualFocusAll() {
-    this.comboboxTarget.parentNode.classList.remove("focus");
+    this.comboboxTarget.parentNode.parentNode.classList.remove("focus");
     this.comboboxHasVisualFocus = false;
     this.listboxHasVisualFocus = false;
     this.listboxTarget.classList.remove("focus");
@@ -242,10 +242,6 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   // Menu display methods
 
-  doesOptionHaveFocus() {
-    return this.comboboxTarget.getAttribute("aria-activedescendant") !== "";
-  }
-
   isOpen() {
     return this.listboxTarget.style.display === "block";
   }
@@ -279,8 +275,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.listboxTarget.style.display = "none";
       this.comboboxTarget.setAttribute("aria-expanded", "false");
       this.buttonTarget.setAttribute("aria-expanded", "false");
-      this.setActiveDescendant(false);
-      this.comboboxTarget.parentNode.classList.add("focus");
     }
   }
 
@@ -400,13 +394,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter += char;
     }
 
-    // this is for the case when a selection in the textbox has been deleted
-    if (this.comboboxTarget.value.length < this.filter.length) {
-      this.filter = this.comboboxTarget.value;
-      this.option = null;
-      this.filterOptions();
-    }
-
     if (event.key === "Escape" || event.key === "Esc") {
       return;
     }
@@ -470,8 +457,6 @@ export default class SelectWithAutoCompleteController extends Controller {
             this.option = null;
             this.setActiveDescendant(false);
           }
-        } else if (this.comboboxTarget.value.length) {
-          this.open();
         }
 
         break;
@@ -516,7 +501,8 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  onButtonClick() {
+  onButtonClick(event) {
+    event.preventDefault();
     if (this.isOpen()) {
       this.close(true);
     } else {
@@ -555,6 +541,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   // Event handlers
+
   addComboboxEventListeners(combobox) {
     combobox.addEventListener("keydown", this.onComboboxKeyDown.bind(this));
     combobox.addEventListener("keyup", this.onComboboxKeyUp.bind(this));
