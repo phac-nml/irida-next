@@ -57,7 +57,7 @@ end %>
     <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
-      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), aria: { invalid: invalid_namespace,
+      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), required: true, aria: { invalid: invalid_namespace,
       describedby: [invalid_namespace ? builder.field_id(:namespace, "error") : nil, builder.field_id(:namespace, "hint")].join(" ") } ) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
@@ -115,6 +115,7 @@ end %>
 
     <% if invalid_path %>
       <%= render "shared/form/field_errors",
+      id: builder.field_id(:path, "error"),
       errors: @project.namespace.errors.full_messages_for(:path) %>
     <% end %>
     <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
@@ -144,6 +145,7 @@ end %>
                     } %>
   <% if invalid_description %>
     <%= render "shared/form/field_errors",
+    id: builder.field_id(:description, "error"),
     errors: @project.namespace.errors.full_messages_for(:description) %>
   <% end %>
   <span id="<%= builder.field_id(:description, "hint") %>" class="field-hint">
