@@ -19,8 +19,6 @@ export default class extends Controller {
   };
 
   connect() {
-    this.announcementsEnabled = true;
-
     // Need to determine the previous state
     if (localStorage.getItem("layout") === "collapsed") {
       this.announcementsEnabled = false;
