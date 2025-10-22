@@ -4,7 +4,14 @@ require 'view_component_test_case'
 
 class RefreshNoticeComponentTest < ViewComponentTestCase
   def setup
+    super
     @project = namespaces_project_namespaces(:project1_namespace)
+    Flipper.enable(:samples_refresh_notice)
+  end
+
+  def teardown
+    Flipper.disable(:samples_refresh_notice)
+    super
   end
 
   # 🔄 BASIC RENDERING - Ensure component renders with required elements
@@ -122,6 +129,20 @@ class RefreshNoticeComponentTest < ViewComponentTestCase
 
     # The alert should have the hidden class initially
     assert_selector '.hidden', count: 1
+  end
+
+  test 'renders without notice UI when feature flag disabled' do
+    Flipper.disable(:samples_refresh_notice)
+
+    render_inline(RefreshNoticeComponent.new(streamable: @project, stream_name: :samples))
+
+    # Controller and turbo stream should still render for auto-refresh behavior
+    assert_selector '[data-controller="refresh"]', count: 1
+    assert_selector 'turbo-cable-stream-source', count: 1
+
+    # But the notice UI should not render
+    assert_no_selector '[data-refresh-target="notice"]'
+    assert_no_selector '[aria-live="assertive"]'
   end
 
   # 🧪 INTEGRATION - Test component structure
