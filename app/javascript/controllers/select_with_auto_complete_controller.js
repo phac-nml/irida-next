@@ -173,13 +173,13 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.getLowercaseContent(option).indexOf(filter) === 0
         ) {
           flag = true;
+          this.filteredOptions.push(option);
         } else {
           optionCategory.removeChild(option);
         }
       }
 
       if (flag) {
-        this.filteredOptions.push(optionCategory);
         this.listboxTarget.appendChild(optionCategory);
       }
     }
