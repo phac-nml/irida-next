@@ -30,6 +30,7 @@ export default class extends Controller {
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
+    this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
   }
@@ -62,12 +63,21 @@ export default class extends Controller {
 
   triggerTargetConnected(element) {
     element.addEventListener("keydown", this.boundOnButtonKeyDown);
+    element.addEventListener("click", this.boundOnButtonClick, true);
     this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget, {
+      triggerType: "none",
       onShow: () => {
+        this.triggerTarget.setAttribute("aria-expanded", "true");
         if (this.hasFormTarget) {
           // Auto-submit the form when dropdown is shown
           this.formTarget.requestSubmit();
         }
+      },
+      onHide: () => {
+        this.triggerTarget.setAttribute("aria-expanded", "false");
+        this.#menuItems(element).forEach((menuitem) => {
+          menuitem.setAttribute("tabindex", "-1");
+        });
       },
     });
 
@@ -75,8 +85,24 @@ export default class extends Controller {
   }
 
   focusOut(event) {
-    if (!this.menuTarget.contains(event.relatedTarget)) {
+    if (!this.element.contains(event.relatedTarget)) {
       this.#dropdown.hide();
+    }
+  }
+
+  onButtonClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.#dropdown.isVisible()) {
+      this.#dropdown.hide();
+    } else {
+      var menuItems = this.#menuItems(this.menuTarget);
+      this.#dropdown.show();
+      if (!this.hasFormTarget) {
+        menuItems[0].tabIndex = "0";
+        menuItems[0].focus();
+      }
     }
   }
 
@@ -158,6 +184,13 @@ export default class extends Controller {
         menuItems[currentIndex].tabIndex = "-1";
         menuItems[menuItems.length - 1].tabIndex = "0";
         menuItems[menuItems.length - 1].focus();
+        break;
+      case "Tab":
+        if (event.shiftKey) {
+          event.preventDefault();
+          this.triggerTarget.focus();
+          this.#dropdown.hide();
+        }
         break;
     }
   }
