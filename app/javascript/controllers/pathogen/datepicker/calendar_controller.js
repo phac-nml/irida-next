@@ -54,7 +54,6 @@ export default class extends Controller {
     // set the month and year inputs
     this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
-
     if (this.hasMinDateMessageTarget) {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
     }
@@ -123,8 +122,11 @@ export default class extends Controller {
 
   #getPreviousMonthsDates() {
     let firstDayOfMonthIndex = getDayOfWeek(
-      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
+      this.#selectedYear,
+      this.#selectedMonthIndex,
+      1,
     );
+
     // if first day lands on Sunday, we don't need to backfill dates
     if (firstDayOfMonthIndex === 0) {
       return [];
@@ -160,7 +162,9 @@ export default class extends Controller {
 
   #getNextMonthsDates(thisMonthsLastDate) {
     let lastDayOfMonthDay = getDayOfWeek(
-      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
+      this.#selectedYear,
+      this.#selectedMonthIndex,
+      thisMonthsLastDate,
     );
 
     // if lastDay == 6, last day is on a saturday and we don't need to fill out the rest of the week
