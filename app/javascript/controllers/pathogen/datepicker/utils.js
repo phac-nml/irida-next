@@ -1,5 +1,5 @@
-export function getDayOfWeek(date) {
-  return new Date(date).getDay();
+export function getDayOfWeek(year, monthIndex, day) {
+  return new Date(year, monthIndex, day).getDay();
 }
 
 // check if date is inMonth (eg: if calendar is on July but contains June 30, June 30 is 'outOfMonth')
