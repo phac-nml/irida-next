@@ -1668,7 +1668,7 @@ module Groups
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
         # metadata sortable lists no longer hidden
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
         end
@@ -1677,7 +1677,7 @@ module Groups
         select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_text 'description'
@@ -1690,7 +1690,7 @@ module Groups
 
         click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_text 'description'
@@ -1700,7 +1700,7 @@ module Groups
         select 'description',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_no_text 'description'
@@ -1710,13 +1710,13 @@ module Groups
         select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_no_text 'description'
         end
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_no_text 'metadata1'
           assert_no_text 'metadata2'
           assert_text 'description'
@@ -1754,7 +1754,7 @@ module Groups
         # metadata sortable lists renders now that description header is available
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'description'
         end
 
@@ -1800,11 +1800,11 @@ module Groups
         select 'description',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
         end
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata2'
         end
 
