@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# adds the new required metadata field `pipeline_id` to WorkflowExecution objects
 class AddPipelineIdToWorkflowExecutionMetadata < ActiveRecord::Migration[8.0]
   def change
     workflow_executions = WorkflowExecution.all
