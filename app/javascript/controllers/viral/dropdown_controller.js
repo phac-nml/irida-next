@@ -10,7 +10,8 @@ export default class extends Controller {
   };
 
   initialize() {
-    this.boundKeydown = this.keyDown.bind(this);
+    this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
+    this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
   }
 
@@ -20,30 +21,32 @@ export default class extends Controller {
 
   menuTargetConnected(element) {
     element.setAttribute("aria-hidden", "true");
-    element.addEventListener("keydown", this.boundKeydown);
+    element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
     element.addEventListener("focusout", this.boundFocusOut);
+    this.#menuItems(element).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
+    });
   }
 
   menuTargetDisconnected(element) {
-    element.removeEventListener("keydown", this.boundKeydown);
+    element.removeEventListener("keydown", this.boundOnMenuItemKeyDown);
     element.removeEventListener("focusout", this.boundFocusOut);
   }
 
   triggerTargetConnected(element) {
+    element.addEventListener("keydown", this.boundOnButtonKeyDown);
     this.dropdown = new Dropdown(this.menuTarget, element, {
-      triggerType: this.triggerValue,
+      triggerType: "click",
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
       onShow: () => {
         this.triggerTarget.setAttribute("aria-expanded", "true");
         this.menuTarget.setAttribute("aria-hidden", "false");
         this.menuTarget.removeAttribute("hidden");
-        this.menuTarget.setAttribute("tabindex", "0");
       },
       onHide: () => {
         this.triggerTarget.setAttribute("aria-expanded", "false");
         this.menuTarget.setAttribute("aria-hidden", "true");
-        this.menuTarget.setAttribute("tabindex", "-1");
         this.menuTarget.setAttribute("hidden", "hidden");
       },
     });
@@ -55,17 +58,51 @@ export default class extends Controller {
     }
   }
 
-  keyDown(event) {
-    var menuLinks = Array.prototype.slice.call(
-      this.menuTarget.querySelectorAll("a"),
-    );
-    var currentIndex = menuLinks.indexOf(document.activeElement);
-    this.#focusByKey(event, menuLinks, currentIndex);
-  }
-
-  #focusByKey(event, menuLinks, currentIndex) {
+  onButtonKeyDown(event) {
+    var menuItems = this.#menuItems(this.menuTarget);
     switch (event.key) {
       case "Enter":
+      case " ":
+      case "ArrowDown":
+        event.preventDefault();
+        this.dropdown.show();
+        menuItems[0].tabIndex = "0";
+        menuItems[0].focus();
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        this.dropdown.show();
+        menuItems[menuItems.length - 1].tabIndex = "0";
+        menuItems[menuItems.length - 1].focus();
+        break;
+    }
+  }
+
+  onMenuItemKeyDown(event) {
+    var menuItems = this.#menuItems(this.menuTarget);
+    var currentIndex = menuItems.indexOf(document.activeElement);
+    this.#focusByKey(event, menuItems, currentIndex);
+  }
+
+  #focusByKey(event, menuItems, currentIndex) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        if (menuItems[currentIndex].nodeName === "LI") {
+          // find first clickable target
+          const clickableTarget = menuItems[currentIndex].querySelector(
+            'a, button, input[type="submit"]',
+          );
+          // fire click or close dropdown
+          if (clickableTarget) {
+            clickableTarget.click();
+          } else {
+            this.dropdown.hide();
+          }
+        } else {
+          menuItems[currentIndex].click();
+        }
         return document.addEventListener(
           "turbo:morph",
           () => {
@@ -78,29 +115,45 @@ export default class extends Controller {
         this.triggerTarget.focus();
         break;
       case "ArrowUp":
-      case "ArrowLeft":
         event.preventDefault();
-        if (currentIndex > -1) {
+        var prevIndex = menuItems.length - 1;
+        if (currentIndex > 0) {
           var prevIndex = Math.max(0, currentIndex - 1);
-          menuLinks[prevIndex].focus();
         }
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[prevIndex].tabIndex = "0";
+        menuItems[prevIndex].focus();
         break;
       case "ArrowDown":
-      case "ArrowRight":
         event.preventDefault();
-        if (currentIndex > -1) {
-          var nextIndex = Math.min(menuLinks.length - 1, currentIndex + 1);
-          menuLinks[nextIndex].focus();
+        var nextIndex = 0;
+        if (currentIndex < menuItems.length - 1) {
+          var nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
         }
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[nextIndex].tabIndex = "0";
+        menuItems[nextIndex].focus();
         break;
       case "Home":
         event.preventDefault();
-        menuLinks[0].focus();
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[0].tabIndex = "0";
+        menuItems[0].focus();
         break;
       case "End":
         event.preventDefault();
-        menuLinks[menuLinks.length - 1].focus();
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[menuItems.length - 1].tabIndex = "0";
+        menuItems[menuItems.length - 1].focus();
         break;
     }
+  }
+
+  #menuItems(menu) {
+    return Array.prototype.slice.call(
+      menu.querySelectorAll(
+        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
+      ),
+    );
   }
 }
