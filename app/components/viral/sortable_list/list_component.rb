@@ -21,7 +21,6 @@ module Viral
           min-h-[225px] overflow-y-auto')
         @system_arguments[:container_classes] =
           class_names('text-slate-900 dark:text-white grow block mb-1 text-sm font-medium')
-        puts "id: #{id}"
         @available_list = id.include?('available')
         @selected_list = id.include?('selected')
       end
