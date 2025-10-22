@@ -747,7 +747,6 @@ a.pill-focus-reset:focus-visible {
     overflow: scroll;
     overflow-x: hidden;
     font-size: 87.5%;
-    cursor: pointer;
   }
 
   [role="listbox"] > [role="group"] > [role="presentation"] {
@@ -765,10 +764,11 @@ a.pill-focus-reset:focus-visible {
     padding-left: 3px;
     padding-top: 2px;
     padding-bottom: 2px;
+    cursor: pointer;
   }
 
-  [role="listbox"]:focus [role="option"].focused,
-  [role="option"]:hover {
+  [role="listbox"].focus [role="option"][aria-selected="true"],
+  [role="listbox"] [role="option"]:hover {
     outline: 2px solid currentcolor;
   }
 }
