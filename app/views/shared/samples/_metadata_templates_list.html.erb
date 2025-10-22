@@ -6,7 +6,7 @@ data: {
   <input type="hidden" name="limit" value="<%= @limit %>"/>
   <input type="hidden" name="page" value="<%= @page %>"/>
   <ul
-    id="metadata_templates"
+    id="metadata_templates_dropdown"
     class="py-2 text-sm text-slate-700 dark:text-slate-200"
     aria-labelledby="metadata-template-dd-trigger"
     role="menu"
@@ -25,12 +25,14 @@ data: {
       selected: @current_metadata_template_id == "all",
       label: t("shared.samples.metadata_templates.fields.all"),
       value: "all",
+      autofocus: focusedMenuItemIndex == "0",
     } %>
     <%= render partial: "shared/samples/metadata_template_item",
     locals: {
       selected: @current_metadata_template_id == "none",
       label: t("shared.samples.metadata_templates.fields.none"),
       value: "none",
+      autofocus: focusedMenuItemIndex == "-1" && @metadata_templates.empty?,
     } %>
     <%- if @metadata_templates.any? %>
       <li
@@ -42,12 +44,14 @@ data: {
       >
         <%= t("shared.samples.metadata_templates.templates.label") %>
       </li>
-      <% @metadata_templates.each do |metadata_template| %>
+      <% @metadata_templates.each_with_index do |metadata_template, index| %>
         <%= render partial: "shared/samples/metadata_template_item",
         locals: {
           selected: @current_metadata_template_id == metadata_template.id,
           label: metadata_template.name,
           value: metadata_template.id,
+          autofocus:
+            focusedMenuItemIndex == "-1" && index == @metadata_templates.size - 1,
         } %>
 
       <% end %>

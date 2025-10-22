@@ -3,6 +3,7 @@
     <input type="hidden" name="format" value="turbo_stream"/>
     <input type="hidden" name="limit" value="<%= pagy&.limit %>"/>
     <input type="hidden" name="page" value="<%= pagy&.page %>"/>
+    <input type="hidden" name="focusedMenuItemIndex" value="0"/>
     <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
   <% end %>
   <button

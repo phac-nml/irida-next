@@ -28,18 +28,16 @@ export default class extends Controller {
   /** @type {Function} Bound event handler for turbo:submit-end */
   #turboSubmitEndListener = this.#handleTurboSubmitEnd.bind(this);
 
+  initialize() {
+    this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
+    this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
+    this.boundFocusOut = this.focusOut.bind(this);
+  }
+
   /**
    * Connects the controller, initializes the dropdown, and sets up event listeners.
    */
   connect() {
-    this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget, {
-      onShow: () => {
-        // Auto-submit the form when dropdown is shown
-        this.formTarget.requestSubmit();
-      },
-    });
-
-    document.addEventListener("turbo:submit-end", this.#turboSubmitEndListener);
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -57,6 +55,113 @@ export default class extends Controller {
     }
   }
 
+  menuTargetConnected(element) {
+    element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
+    element.addEventListener("focusout", this.boundFocusOut);
+  }
+
+  triggerTargetConnected(element) {
+    element.addEventListener("keydown", this.boundOnButtonKeyDown);
+    this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget, {
+      onShow: () => {
+        if (this.hasFormTarget) {
+          // Auto-submit the form when dropdown is shown
+          this.formTarget.requestSubmit();
+        }
+      },
+    });
+
+    document.addEventListener("turbo:submit-end", this.#turboSubmitEndListener);
+  }
+
+  focusOut(event) {
+    if (!this.menuTarget.contains(event.relatedTarget)) {
+      this.#dropdown.hide();
+    }
+  }
+
+  onButtonKeyDown(event) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+      case "ArrowDown":
+        event.preventDefault();
+        this.#dropdown.show();
+        if (!this.hasFormTarget) {
+          this.#menuItems(this.menuTarget)[0].focus();
+        }
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        if (this.hasFormTarget) {
+          this.formTarget.querySelector(
+            'input[name="focusedMenuItemIndex"]',
+          ).value = "-1";
+        }
+        this.#dropdown.show();
+        if (!this.hasFormTarget) {
+          this.#menuItems(this.menuTarget).at(-1).focus();
+        }
+        break;
+    }
+  }
+
+  onMenuItemKeyDown(event) {
+    var menuItems = this.#menuItems(this.menuTarget);
+    var currentIndex = menuItems.indexOf(document.activeElement);
+    this.#focusByKey(event, menuItems, currentIndex);
+  }
+
+  #focusByKey(event, menuItems, currentIndex) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        return document.addEventListener(
+          "turbo:morph",
+          () => {
+            this.triggerTarget.focus();
+          },
+          { once: true },
+        );
+      case "Escape":
+        event.preventDefault();
+        this.triggerTarget.focus();
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        var prevIndex = menuItems.length - 1;
+        if (currentIndex > 0) {
+          var prevIndex = Math.max(0, currentIndex - 1);
+        }
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[prevIndex].tabIndex = "0";
+        menuItems[prevIndex].focus();
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        var nextIndex = 0;
+        if (currentIndex < menuItems.length - 1) {
+          var nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
+        }
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[nextIndex].tabIndex = "0";
+        menuItems[nextIndex].focus();
+        break;
+      case "Home":
+        event.preventDefault();
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[0].tabIndex = "0";
+        menuItems[0].focus();
+        break;
+      case "End":
+        event.preventDefault();
+        menuItems[currentIndex].tabIndex = "-1";
+        menuItems[menuItems.length - 1].tabIndex = "0";
+        menuItems[menuItems.length - 1].focus();
+        break;
+    }
+  }
+
   /**
    * Handles Turbo form submission events.
    * Hides the dropdown if a successful submission occurs outside this form.
@@ -65,8 +170,21 @@ export default class extends Controller {
    * @private
    */
   #handleTurboSubmitEnd(event) {
-    if (event.detail.success && event.target !== this.formTarget) {
-      this.#dropdown?.hide();
+    if (event.detail.success) {
+      if (this.hasFormTarget && event.target === this.formTarget) {
+        this.formTarget.remove();
+        document.activeElement.blur();
+      } else {
+        this.#dropdown?.hide();
+      }
     }
+  }
+
+  #menuItems(menu) {
+    return Array.prototype.slice.call(
+      menu.querySelectorAll(
+        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
+      ),
+    );
   }
 }
