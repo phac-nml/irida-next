@@ -320,10 +320,6 @@ en:
           expiration: Expiration
           username: Username
         never: Never
-  components:
-    refresh_notice:
-      default_link_text: Refresh
-      default_message: New data available
   concerns:
     attachment_actions:
       destroy:
