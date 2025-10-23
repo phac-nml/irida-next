@@ -51,7 +51,7 @@
               navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
               dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
               dark:hover:text-slate-200
-            " }, title: t('common.actions.create'), aria: { label: t(:'general.navbar.new_dropdown.aria_label') }) do |dropdown| %>
+            " }, title: t('general.navbar.new_dropdown.label'), aria: { label: t(:'general.navbar.new_dropdown.label') }) do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.new_dropdown.project"),
               url: new_project_path,

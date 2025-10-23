@@ -3,7 +3,6 @@ fr:
   common:
     actions:
       cancel: Annuler
-      create: Créer
       delete: Supprimer
       download: Télécharger
       edit: Modifier
