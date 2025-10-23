@@ -322,22 +322,21 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'group metadata templates list with none template' do
-    get list_group_metadata_templates_path(@group, metadata_template: 'none', format: :turbo_stream)
+    get list_group_metadata_templates_path(@group, metadata_template: 'none')
 
     assert_response :success
     assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.none')
   end
 
   test 'group metadata templates list with all template' do
-    get list_group_metadata_templates_path(@group, metadata_template: 'all', format: :turbo_stream)
+    get list_group_metadata_templates_path(@group, metadata_template: 'all')
 
     assert_response :success
     assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.all')
   end
 
   test 'group metadata templates list with specific template' do
-    get list_group_metadata_templates_path(@group, metadata_template: @group_metadata_template.id,
-                                                   format: :turbo_stream)
+    get list_group_metadata_templates_path(@group, metadata_template: @group_metadata_template.id)
 
     assert_response :success
     assert_includes @response.body, @group_metadata_template.name
@@ -347,8 +346,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get list_group_metadata_templates_path(@group,
                                            metadata_template: 'all',
                                            limit: 10,
-                                           page: 2,
-                                           format: :turbo_stream)
+                                           page: 2)
 
     assert_response :success
     # Verify the response includes the paginated content
@@ -368,8 +366,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get list_namespace_project_metadata_templates_path(
       @project_namespace.parent,
       @project,
-      metadata_template: 'none',
-      format: :turbo_stream
+      metadata_template: 'none'
     )
 
     assert_response :success
@@ -380,8 +377,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get list_namespace_project_metadata_templates_path(
       @project_namespace.parent,
       @project,
-      metadata_template: 'all',
-      format: :turbo_stream
+      metadata_template: 'all'
     )
 
     assert_response :success
@@ -392,8 +388,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get list_namespace_project_metadata_templates_path(
       @project_namespace.parent,
       @project,
-      metadata_template: @project_metadata_template.id,
-      format: :turbo_stream
+      metadata_template: @project_metadata_template.id
     )
 
     assert_response :success
