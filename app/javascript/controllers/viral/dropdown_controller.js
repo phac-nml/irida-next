@@ -35,7 +35,9 @@ export default class extends Controller {
 
   triggerTargetConnected(element) {
     element.addEventListener("keydown", this.boundOnButtonKeyDown);
-    element.addEventListener("click", this.boundOnButtonClick, true);
+    element.addEventListener("click", this.boundOnButtonClick, {
+      capture: true,
+    });
     this.dropdown = new Dropdown(this.menuTarget, element, {
       triggerType: "none",
       offsetSkidding: this.skiddingValue,
@@ -78,6 +80,7 @@ export default class extends Controller {
       case "Enter":
       case " ":
       case "ArrowDown":
+        event.preventDefault();
         this.#openMenuAndFocusMenuItem(0);
         break;
       case "ArrowUp":
