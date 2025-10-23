@@ -17,7 +17,7 @@ fr:
       confirm: Confirmer
       deselect_all: Désélectionner tout
       search: Rechercher
-      select_all: Tout sélectionner
+      select_all: Sélectionner tout
       submit: Envoyer
     labels:
       access_level: Niveau d’accès
