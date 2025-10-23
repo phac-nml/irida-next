@@ -14,7 +14,7 @@ class WorkflowExecutionCleanupJob < WorkflowExecutionJob
                   workflow_execution.canceled? ||
                   workflow_execution.error?
 
-    # TODO: early return from cleanup service unhandled
-    workflow_execution = WorkflowExecutions::CleanupService.new(workflow_execution).execute # rubocop:disable Lint/UselessAssignment
+    # Final stage of WorkflowExecution life cycle. No further work required.
+    WorkflowExecutions::CleanupService.new(workflow_execution).execute
   end
 end
