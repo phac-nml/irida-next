@@ -31,6 +31,7 @@ export default class extends Controller {
 
   menuTargetDisconnected(element) {
     element.removeEventListener("keydown", this.boundOnMenuItemKeyDown);
+    element.removeEventListener("focusout", this.boundFocusOut);
   }
 
   triggerTargetConnected(element) {
