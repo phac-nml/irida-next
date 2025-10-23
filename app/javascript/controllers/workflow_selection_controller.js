@@ -84,6 +84,29 @@ export default class extends Controller {
       .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
       .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
 
+    const submitStart = Date.now();
+
+    // for accessibility, show the spinner for a minimum of 3500ms
+    const A11Y_TIMEOUT = 3500;
+    document.addEventListener(
+      "turbo:before-stream-render",
+      (event) => {
+        const ms = Date.now() - submitStart;
+
+        // delay render for up to 3500ms
+        if (ms < A11Y_TIMEOUT) {
+          const defaultRender = event.detail.render;
+
+          event.detail.render = function (streamElement) {
+            setTimeout(() => {
+              defaultRender(streamElement);
+            }, A11Y_TIMEOUT - ms);
+          };
+        }
+      },
+      { once: true },
+    );
+
     this.formTarget.requestSubmit();
   }
 
