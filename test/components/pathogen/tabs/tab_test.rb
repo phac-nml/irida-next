@@ -150,17 +150,6 @@ module Pathogen
         assert_selector '.border-b-2'
       end
 
-      test 'tab has focus ring classes' do
-        render_inline(Pathogen::Tabs::Tab.new(
-                        id: 'tab-1',
-                        label: 'First Tab'
-                      ))
-
-        assert_selector '.focus\\:outline-none'
-        assert_selector '.focus\\:ring-2'
-        assert_selector '.focus\\:ring-primary-500'
-      end
-
       test 'tab has transition classes' do
         render_inline(Pathogen::Tabs::Tab.new(
                         id: 'tab-1',

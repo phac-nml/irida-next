@@ -23,6 +23,7 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:project26)
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -59,6 +60,7 @@ module Projects
       members_count = members.select { |member| member.namespace == parent_namespace }.count
 
       visit namespace_project_members_url(parent_namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -75,6 +77,7 @@ module Projects
       parent_namespace = groups(:group_one)
 
       visit namespace_project_members_url(parent_namespace, project)
+      wait_for_network_idle
 
       group_member = members(:group_one_member_ryan_doe)
 
@@ -99,12 +102,14 @@ module Projects
       login_as users(:david_doe)
 
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
 
       assert_text I18n.t(:'action_policy.policy.namespaces/project_namespace.member_listing?', name: @project.name)
     end
 
     test 'can add a member to the project' do
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = users(:jane_doe)
 
@@ -134,6 +139,7 @@ module Projects
 
     test 'can remove a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
       project_member = members(:project_two_member_ryan_doe)
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
@@ -155,6 +161,7 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project4)
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
       project_member = members(:project_four_member_joan_doe)
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
@@ -179,6 +186,7 @@ module Projects
       project = projects(:project26)
 
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
       project_member = members(:project_twenty_six_group_member25)
 
       assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
@@ -203,6 +211,7 @@ module Projects
 
     test 'can remove themselves as a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
@@ -269,6 +278,7 @@ module Projects
     test 'can not add a member to the project' do
       login_as users(:ryan_doe)
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 0
@@ -281,6 +291,7 @@ module Projects
 
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(namespace, project)
+        wait_for_network_idle
 
         assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -299,6 +310,7 @@ module Projects
       project_member = members(:project_twenty_two_member_james_doe)
 
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -316,6 +328,7 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_url(namespace_group_link.namespace.parent, namespace_group_link.namespace.project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -345,6 +358,7 @@ module Projects
       expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
 
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       find("#member-#{project_member.id}-expiration-input").click.set(expiry_date)
@@ -363,6 +377,7 @@ module Projects
       login_as users(:ryan_doe)
 
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       within('table') do
@@ -379,6 +394,7 @@ module Projects
       members_count = members.select { |member| member.namespace == project.namespace }.count
 
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
@@ -413,6 +429,7 @@ module Projects
       project = projects(:user29_project1)
 
       visit namespace_project_members_url(namespace, project)
+      wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
@@ -431,6 +448,7 @@ module Projects
     test 'can search members by username' do
       username_col = 1
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
@@ -455,6 +473,7 @@ module Projects
 
     test 'can sort members by column' do
       visit namespace_project_members_url(@namespace, @project)
+      wait_for_network_idle
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
