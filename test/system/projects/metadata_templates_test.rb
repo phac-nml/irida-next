@@ -164,13 +164,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -222,13 +222,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -266,13 +266,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -307,13 +307,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -352,13 +352,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -397,13 +397,13 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -414,13 +414,13 @@ module Projects
 
         click_button I18n.t('components.viral.sortable_list.list_component.add')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
@@ -431,13 +431,13 @@ module Projects
 
         click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -477,14 +477,14 @@ module Projects
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_selector 'li', count: 2
         end
 
         # fields currently in template fixture
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
@@ -496,13 +496,13 @@ module Projects
 
         click_button I18n.t('components.viral.sortable_list.list_component.add')
 
-        within "ul[id='#{I18n.t('metadata_templates.form.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
