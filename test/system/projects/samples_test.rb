@@ -4023,7 +4023,7 @@ module Projects
 
       # change language
       find('#language-selection-dd-trigger').click
-      within find('#language_selection_dropdown') do
+      within find('#language-selection-dd-menu') do
         click_button I18n.t(:'locales.fr', locale: :fr)
       end
 

@@ -1,22 +1,21 @@
 <div
+  class="inline-flex items-center"
   data-controller="viral--dropdown"
   data-viral--dropdown-skidding-value="0"
   data-viral--dropdown-distance-value="5"
-  data-viral--dropdown-trigger-value="click"
   data-viral--dropdown-position-value="bottom-start"
-  class="inline-flex items-center"
   role="region"
-  aria-labelledby="language_selection_dropdown"
+  aria-labelledby="language-selection-dd-menu"
 >
   <button
     data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
     class="button button-default px-3"
     type="button"
-    aria-haspopup="listbox"
+    aria-haspopup="true"
     aria-controls="language-selection-dd-menu"
     aria-expanded="false"
-    aria-labelledby="language_selection_dropdown"
+    aria-labelledby="language-selection-dd-menu"
   >
     <%= pathogen_icon(:translate, size: :sm, class: "mr-2") %>
     <abbr
@@ -30,54 +29,53 @@
     </span>
   </button>
   <!-- Dropdown menu -->
-  <div
-    data-viral--dropdown-target="menu"
+  <ul
     id="language-selection-dd-menu"
+    data-viral--dropdown-target="menu"
+    role="menu"
     class="
-      hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
-      dark:bg-slate-700 dark:divide-slate-600 z-30
+      hidden w-32 py-2 text-sm text-slate-700 dark:text-slate-200 bg-white rounded-lg
+      shadow-sm dark:bg-slate-700 z-30
     "
+    aria-label="<%= t(:'components.layout.language_selection.title') %>"
     aria-hidden="true"
     tabindex="-1"
     hidden="hidden"
   >
-    <ul
-      id="language_selection_dropdown"
-      class="py-2 text-sm text-slate-700 dark:text-slate-200"
-      aria-label="<%= t(:'components.layout.language_selection.title') %>"
-      role="menu"
-    >
-      <% @locale_options.each do |locale_name, locale_value| %>
-        <% if @user.locale.to_sym == locale_value %>
-          <li
-            role="menuitemcheckbox"
-            aria-checked="true"
-            aria-label="<%= locale_name%>"
-            class="
-              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-              dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
-              dark:text-slate-300 border-slate-100 dark:border-slate-600
-            "
-          ><%= locale_name %></li>
-        <% else %>
-          <li
-            role="menuitemcheckbox"
-            aria-checked="false"
-            lang="<%= locale_value %>"
-            class="
-              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-              dark:hover:text-white cursor-pointer
-            "
-          >
-            <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
-              <%= form.hidden_field :locale,
-                                value: locale_value,
-                                id: "language_selection_#{locale_value}" %>
-              <%= form.submit locale_name, class: "cursor-pointer", "aria-hidden": "true" %>
-            <% end %>
-          </li>
-        <% end %>
+    <% @locale_options.each do |locale_name, locale_value| %>
+      <% if @user.locale.to_sym == locale_value %>
+        <li
+          role="menuitemradio"
+          aria-checked="true"
+          aria-label="<%= locale_name%>"
+          class="
+            flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+            dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
+            dark:text-slate-300 border-slate-100 dark:border-slate-600
+          "
+        ><%= locale_name %></li>
+      <% else %>
+        <li
+          role="menuitemradio"
+          aria-checked="false"
+          aria-label="<%= locale_name%>"
+          lang="<%= locale_value %>"
+          class="
+            flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+            dark:hover:text-white cursor-pointer
+          "
+        >
+          <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
+            <%= form.hidden_field :locale,
+                              value: locale_value,
+                              id: "language_selection_#{locale_value}" %>
+            <%= form.submit locale_name,
+                        class: "cursor-pointer",
+                        "aria-hidden": "true",
+                        tabindex: "-1" %>
+          <% end %>
+        </li>
       <% end %>
-    </ul>
-  </div>
+    <% end %>
+  </ul>
 </div>

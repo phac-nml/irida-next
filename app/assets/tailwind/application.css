@@ -70,6 +70,17 @@ input[type="search"] {
   td button.file-selector:focus-visible {
     @apply -outline-offset-3!;
   }
+  ul[role="menu"] {
+    & [role="menuitem"]:focus-visible {
+      @apply -outline-offset-2! rounded-lg;
+    }
+    & [role="menuitemcheckbox"]:focus-visible {
+      @apply -outline-offset-2! rounded-lg;
+    }
+    & [role="menuitemradio"]:focus-visible {
+      @apply -outline-offset-2! rounded-lg;
+    }
+  }
 }
 
 @utility collapsed {

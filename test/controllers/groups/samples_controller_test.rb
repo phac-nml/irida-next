@@ -55,7 +55,7 @@ module Groups
       get group_samples_path(@group, params: { q: { metadata_template: 'none' } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('input[name="metadata_template"][value="none"]')
+      assert doc.at_css('turbo-frame[src*="metadata_template=none"]')
 
       w3c_validate 'Group Samples Page'
     end
@@ -64,7 +64,7 @@ module Groups
       get group_samples_path(@group, params: { q: { metadata_template: 'all' } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('input[name="metadata_template"][value="all"]')
+      assert doc.at_css('turbo-frame[src*="metadata_template=all"]')
 
       w3c_validate 'Group Samples Page'
     end
@@ -74,7 +74,7 @@ module Groups
       get group_samples_path(@group, params: { q: { metadata_template: template.id } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
-      assert doc.at_css("input[name='metadata_template'][value='#{template.id}']")
+      assert doc.at_css("turbo-frame[src*=\"metadata_template=#{template.id}\"]")
 
       w3c_validate 'Group Samples Page'
     end

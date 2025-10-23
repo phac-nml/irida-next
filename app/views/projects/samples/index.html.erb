@@ -203,6 +203,9 @@
           list_namespace_project_metadata_templates_url(
             @project.namespace.parent,
             @project,
+            metadata_template: @metadata_template[:id],
+            limit: @pagy&.limit,
+            page: @pagy&.page,
           ),
         metadata_template: @metadata_template,
         pagy: @pagy,
