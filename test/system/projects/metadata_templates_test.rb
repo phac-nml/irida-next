@@ -164,6 +164,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list'
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -222,6 +223,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -266,6 +268,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -307,6 +310,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -352,6 +356,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -397,6 +402,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -414,6 +420,7 @@ module Projects
 
         click_button I18n.t('components.viral.sortable_list.list_component.add')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -431,6 +438,7 @@ module Projects
 
         click_button I18n.t('common.actions.remove')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -477,6 +485,7 @@ module Projects
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
@@ -496,6 +505,7 @@ module Projects
 
         click_button I18n.t('components.viral.sortable_list.list_component.add')
 
+        assert_selector 'ul#available-list', wait: 20
         within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'

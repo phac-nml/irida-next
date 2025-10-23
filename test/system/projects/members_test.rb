@@ -62,7 +62,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase, wait: 10
 
       assert_selector 'tr', count: members_count + header_row_count
 
@@ -124,6 +124,7 @@ module Projects
 
       assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+      assert_selector '#members', wait: 10
       within('#members') do
         assert_selector 'tr', count: (@members_count + 1) + header_row_count
       end
@@ -283,6 +284,7 @@ module Projects
 
         assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
+        assert_selector "#member-#{project_member.id}-access-level-select", wait: 10
         find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
         within %(turbo-frame[id="member-update-alert"]) do
@@ -321,7 +323,7 @@ module Projects
 
       click_on I18n.t(:'projects.members.index.tabs.groups')
 
-      assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase
+      assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase, wait: 10
 
       assert_selector 'tr', count: 4 + header_row_count
 

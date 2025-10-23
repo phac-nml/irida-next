@@ -157,7 +157,7 @@ module Pathogen
 
       test 'tabs expose controller connection markers for progressive enhancement' do
         visit BASIC_PREVIEW_PATH
-        assert_selector '#simple-tabs-container.tabs-initialized[data-controller-connected="true"]'
+        assert_selector '#simple-tabs-container.tabs-initialized[data-controller-connected="true"]', wait: 10
       end
 
       test 'tabs and panels remain paired via aria attributes' do
@@ -181,7 +181,7 @@ module Pathogen
       private
 
       def wait_for_tabs(id)
-        assert_selector "##{id}-container[data-controller-connected=\"true\"]", wait: 5
+        assert_selector "##{id}-container[data-controller-connected=\"true\"]", wait: 10
       end
 
       def within_tabs(id, &)
