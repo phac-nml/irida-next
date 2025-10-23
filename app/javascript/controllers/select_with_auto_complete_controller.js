@@ -80,44 +80,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter.length,
     );
     this.filterOptions();
-    this.setVisualFocusCombobox();
-  }
-
-  setOption(option, flag) {
-    if (typeof flag !== "boolean") {
-      flag = false;
-    }
-
-    if (option) {
-      this.option = option;
-      this.setCurrentOptionStyle(this.option);
-      this.setActiveDescendant(this.option);
-
-      this.comboboxTarget.value = this.option.textContent;
-      if (flag) {
-        this.comboboxTarget.setSelectionRange(
-          this.option.textContent.length,
-          this.option.textContent.length,
-        );
-      } else {
-        this.comboboxTarget.setSelectionRange(
-          this.filter.length,
-          this.option.textContent.length,
-        );
-      }
-    }
-  }
-
-  setVisualFocusCombobox() {
-    this.setActiveDescendant(false);
-  }
-
-  setVisualFocusListbox() {
-    this.setActiveDescendant(this.option);
-  }
-
-  removeVisualFocusAll() {
-    this.option = null;
     this.setActiveDescendant(false);
   }
 
@@ -175,22 +137,29 @@ export default class SelectWithAutoCompleteController extends Controller {
     return option;
   }
 
-  setCurrentOptionStyle(option) {
-    for (var i = 0; i < this.filteredOptions.length; i++) {
-      var opt = this.filteredOptions[i];
-      if (opt === option) {
-        opt.setAttribute("aria-selected", "true");
-        if (
-          this.listboxTarget.scrollTop + this.listboxTarget.offsetHeight <
-          opt.offsetTop + opt.offsetHeight
-        ) {
-          this.listboxTarget.scrollTop =
-            opt.offsetTop + opt.offsetHeight - this.listboxTarget.offsetHeight;
-        } else if (this.listboxTarget.scrollTop > opt.offsetTop + 2) {
-          this.listboxTarget.scrollTop = opt.offsetTop;
+  setOption(option) {
+    if (option) {
+      this.option = option;
+      this.setActiveDescendant(option);
+
+      for (var i = 0; i < this.filteredOptions.length; i++) {
+        var opt = this.filteredOptions[i];
+        if (opt === option) {
+          opt.setAttribute("aria-selected", "true");
+          if (
+            this.listboxTarget.scrollTop + this.listboxTarget.offsetHeight <
+            opt.offsetTop + opt.offsetHeight
+          ) {
+            this.listboxTarget.scrollTop =
+              opt.offsetTop +
+              opt.offsetHeight -
+              this.listboxTarget.offsetHeight;
+          } else if (this.listboxTarget.scrollTop > opt.offsetTop + 2) {
+            this.listboxTarget.scrollTop = opt.offsetTop;
+          }
+        } else {
+          opt.removeAttribute("aria-selected");
         }
-      } else {
-        opt.removeAttribute("aria-selected");
       }
     }
   }
@@ -232,7 +201,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   close() {
-    this.setCurrentOptionStyle(false);
+    this.setOption(false);
     this.listboxTarget.style.display = "none";
     this.comboboxTarget.setAttribute("aria-expanded", "false");
     this.buttonTarget.setAttribute("aria-expanded", "false");
@@ -252,7 +221,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Enter":
         this.setValue(this.option.textContent);
         this.close();
-        this.setVisualFocusCombobox();
+        this.setActiveDescendant(false);
         flag = true;
         break;
 
@@ -267,10 +236,8 @@ export default class SelectWithAutoCompleteController extends Controller {
             }
             if (this.filteredOptions.length > 1) {
               this.setOption(this.getNextOption(this.option), true);
-              this.setVisualFocusListbox();
             } else {
               this.setOption(this.firstOption, true);
-              this.setVisualFocusListbox();
             }
           }
         }
@@ -286,7 +253,6 @@ export default class SelectWithAutoCompleteController extends Controller {
             this.open();
             if (!altKey) {
               this.setOption(this.lastOption, true);
-              this.setVisualFocusListbox();
             }
           }
         }
@@ -299,7 +265,7 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.close();
           this.filter = this.comboboxTarget.value;
           this.filterOptions();
-          this.setVisualFocusCombobox();
+          this.setActiveDescendant(false);
         } else {
           this.setValue("");
           this.comboboxTarget.value = "";
@@ -355,10 +321,8 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Backspace":
-        this.setVisualFocusCombobox();
-        this.setCurrentOptionStyle(false);
+        this.setOption(null);
         this.filter = this.comboboxTarget.value;
-        this.option = null;
         this.filterOptions();
         flag = true;
         break;
@@ -369,16 +333,13 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "ArrowRight":
       case "Home":
       case "End":
-        this.option = null;
-        this.setCurrentOptionStyle(false);
-        this.setVisualFocusCombobox();
+        this.setOption(null);
         flag = true;
         break;
 
       default:
         if (this.isPrintableCharacter(char)) {
-          this.setVisualFocusCombobox();
-          this.setCurrentOptionStyle(false);
+          this.setOption(null);
           flag = true;
 
           option = this.filterOptions();
@@ -392,16 +353,13 @@ export default class SelectWithAutoCompleteController extends Controller {
                 this.comboboxTarget.value.toLowerCase(),
               ) === 0
             ) {
-              this.option = option;
-              this.setCurrentOptionStyle(option);
+              this.setOption(option);
             } else {
-              this.option = null;
-              this.setCurrentOptionStyle(false);
+              this.setOption(null);
             }
           } else {
             this.close(); //TODO: Return "Item not found"
-            this.option = null;
-            this.setActiveDescendant(false);
+            this.setOption(null);
           }
         }
 
@@ -425,13 +383,11 @@ export default class SelectWithAutoCompleteController extends Controller {
   onComboboxFocus() {
     this.filter = this.comboboxTarget.value;
     this.filterOptions();
-    this.setVisualFocusCombobox();
-    this.option = null;
-    this.setCurrentOptionStyle(null);
+    this.setOption(null);
   }
 
   onComboboxBlur() {
-    this.removeVisualFocusAll();
+    this.setOption(null);
   }
 
   onBackgroundPointerUp(event) {
@@ -440,11 +396,12 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.listboxTarget.contains(event.target) &&
       !this.buttonTarget.contains(event.target)
     ) {
-      this.setCurrentOptionStyle(null);
-      this.removeVisualFocusAll();
+      this.setOption(null);
       setTimeout(this.close.bind(this, true), 300);
     }
   }
+
+  // Button events
 
   onButtonClick(event) {
     event.preventDefault();
@@ -454,7 +411,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.open();
     }
     this.comboboxTarget.focus();
-    this.setVisualFocusCombobox();
+    this.setActiveDescendant(false);
   }
 
   // Listbox Option events
