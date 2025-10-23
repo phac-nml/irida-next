@@ -767,8 +767,8 @@ a.pill-focus-reset:focus-visible {
     cursor: pointer;
   }
 
-  [role="listbox"].focus [role="option"][aria-selected="true"],
-  [role="listbox"] [role="option"]:hover {
+  [role="option"][aria-selected="true"],
+  [role="option"]:hover {
     outline: 2px solid currentcolor;
   }
 }

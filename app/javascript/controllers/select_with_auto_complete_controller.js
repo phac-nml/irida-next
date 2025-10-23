@@ -8,27 +8,11 @@ import { Controller } from "@hotwired/stimulus";
  * - Search filtering
  * - ARIA roles and attributes for accessibility
  * - Dropdown positioning and focus management
- * - Submit button enable/disable logic
  */
 export default class SelectWithAutoCompleteController extends Controller {
   static targets = ["combobox", "listbox", "button"];
 
   connect() {
-    console.debug("SelectWithAutoCompleteController: Connected");
-  }
-
-  disconnect() {
-    console.debug("SelectWithAutoCompleteController: Disconnected");
-  }
-
-  initialize() {
-    console.debug("SelectWithAutoCompleteController: Initialize");
-
-    this.comboboxHasVisualFocus = false;
-    this.listboxHasVisualFocus = false;
-
-    this.hasHover = false;
-
     this.allOptions = [];
 
     this.option = null;
@@ -38,7 +22,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.filteredOptions = [];
     this.filter = "";
 
-    /* add event handlers */
+    // Add event handlers
     document.body.addEventListener(
       "pointerup",
       this.onBackgroundPointerUp.bind(this),
@@ -46,7 +30,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     );
     this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
     this.addComboboxEventListeners(this.comboboxTarget);
-    this.addListboxEventListeners(this.listboxTarget);
 
     var categories = this.listboxTarget.getElementsByTagName("ul");
     for (var i = 0; i < categories.length; i++) {
@@ -79,7 +62,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   setActiveDescendant(option) {
-    if (option && this.listboxHasVisualFocus) {
+    if (option) {
       this.comboboxTarget.setAttribute("aria-activedescendant", option.id);
       if (!this.isOptionInView(option)) {
         option.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -97,6 +80,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter.length,
     );
     this.filterOptions();
+    this.setVisualFocusCombobox();
   }
 
   setOption(option, flag) {
@@ -125,31 +109,19 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   setVisualFocusCombobox() {
-    this.listboxTarget.classList.remove("focus");
-    this.comboboxTarget.parentNode.parentNode.classList.add("focus");
-    this.comboboxHasVisualFocus = true;
-    this.listboxHasVisualFocus = false;
     this.setActiveDescendant(false);
   }
 
   setVisualFocusListbox() {
-    this.comboboxTarget.parentNode.parentNode.classList.remove("focus");
-    this.comboboxHasVisualFocus = false;
-    this.listboxHasVisualFocus = true;
-    this.listboxTarget.classList.add("focus");
     this.setActiveDescendant(this.option);
   }
 
   removeVisualFocusAll() {
-    this.comboboxTarget.parentNode.parentNode.classList.remove("focus");
-    this.comboboxHasVisualFocus = false;
-    this.listboxHasVisualFocus = false;
-    this.listboxTarget.classList.remove("focus");
     this.option = null;
     this.setActiveDescendant(false);
   }
 
-  // ComboboxAutocomplete Events
+  // ComboboxAutocomplete events
 
   filterOptions() {
     var option = null;
@@ -161,7 +133,6 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     for (var i = 0; i < this.allOptions.length; i++) {
       var optionCategory = this.allOptions[i].cloneNode(true);
-      this.addListboxEventListeners(optionCategory);
       var options = optionCategory.querySelectorAll('li[role="option"]');
       var flag = false;
 
@@ -184,7 +155,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       }
     }
 
-    // Use populated options array to initialize firstOption and lastOption.
+    // Populate firstOption and lastOption
     var numItems = this.filteredOptions.length;
     if (numItems > 0) {
       this.firstOption = this.filteredOptions[0];
@@ -260,22 +231,11 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.buttonTarget.setAttribute("aria-expanded", "true");
   }
 
-  close(force) {
-    if (typeof force !== "boolean") {
-      force = false;
-    }
-
-    if (
-      force ||
-      (!this.comboboxHasVisualFocus &&
-        !this.listboxHasVisualFocus &&
-        !this.hasHover)
-    ) {
-      this.setCurrentOptionStyle(false);
-      this.listboxTarget.style.display = "none";
-      this.comboboxTarget.setAttribute("aria-expanded", "false");
-      this.buttonTarget.setAttribute("aria-expanded", "false");
-    }
+  close() {
+    this.setCurrentOptionStyle(false);
+    this.listboxTarget.style.display = "none";
+    this.comboboxTarget.setAttribute("aria-expanded", "false");
+    this.buttonTarget.setAttribute("aria-expanded", "false");
   }
 
   // Combobox events
@@ -290,10 +250,8 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Enter":
-        if (this.listboxHasVisualFocus) {
-          this.setValue(this.option.textContent);
-        }
-        this.close(true);
+        this.setValue(this.option.textContent);
+        this.close();
         this.setVisualFocusCombobox();
         flag = true;
         break;
@@ -301,14 +259,13 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Down":
       case "ArrowDown":
         if (this.filteredOptions.length > 0) {
-          if (altKey) {
+          if (altKey && this.isClosed()) {
             this.open();
           } else {
-            this.open();
-            if (
-              this.listboxHasVisualFocus ||
-              (this.isBoth && this.filteredOptions.length > 1)
-            ) {
+            if (this.isClosed()) {
+              this.open();
+            }
+            if (this.filteredOptions.length > 1) {
               this.setOption(this.getNextOption(this.option), true);
               this.setVisualFocusListbox();
             } else {
@@ -323,7 +280,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Up":
       case "ArrowUp":
         if (this.hasOptions()) {
-          if (this.listboxHasVisualFocus) {
+          if (this.isOpen()) {
             this.setOption(this.getPreviousOption(this.option), true);
           } else {
             this.open();
@@ -339,7 +296,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Esc":
       case "Escape":
         if (this.isOpen()) {
-          this.close(true);
+          this.close();
           this.filter = this.comboboxTarget.value;
           this.filterOptions();
           this.setVisualFocusCombobox();
@@ -352,11 +309,9 @@ export default class SelectWithAutoCompleteController extends Controller {
         break;
 
       case "Tab":
-        this.close(true);
-        if (this.listboxHasVisualFocus) {
-          if (this.option) {
-            this.setValue(this.option.textContent);
-          }
+        this.close();
+        if (this.option) {
+          this.setValue(this.option.textContent);
         }
         break;
 
@@ -414,12 +369,8 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "ArrowRight":
       case "Home":
       case "End":
-        if (this.isBoth) {
-          this.filter = this.comboboxTarget.value;
-        } else {
-          this.option = null;
-          this.setCurrentOptionStyle(false);
-        }
+        this.option = null;
+        this.setCurrentOptionStyle(false);
         this.setVisualFocusCombobox();
         flag = true;
         break;
@@ -442,18 +393,13 @@ export default class SelectWithAutoCompleteController extends Controller {
               ) === 0
             ) {
               this.option = option;
-              if (this.isBoth || this.listboxHasVisualFocus) {
-                this.setCurrentOptionStyle(option);
-                if (this.isBoth) {
-                  this.setOption(option);
-                }
-              }
+              this.setCurrentOptionStyle(option);
             } else {
               this.option = null;
               this.setCurrentOptionStyle(false);
             }
           } else {
-            this.close();
+            this.close(); //TODO: Return "Item not found"
             this.option = null;
             this.setActiveDescendant(false);
           }
@@ -470,7 +416,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   onComboboxClick() {
     if (this.isOpen()) {
-      this.close(true);
+      this.close();
     } else {
       this.open();
     }
@@ -494,7 +440,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.listboxTarget.contains(event.target) &&
       !this.buttonTarget.contains(event.target)
     ) {
-      this.comboboxHasVisualFocus = false;
       this.setCurrentOptionStyle(null);
       this.removeVisualFocusAll();
       setTimeout(this.close.bind(this, true), 300);
@@ -504,7 +449,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   onButtonClick(event) {
     event.preventDefault();
     if (this.isOpen()) {
-      this.close(true);
+      this.close();
     } else {
       this.open();
     }
@@ -512,32 +457,11 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.setVisualFocusCombobox();
   }
 
-  // Listbox events
-
-  onListboxPointerover() {
-    this.hasHover = true;
-  }
-
-  onListboxPointerout() {
-    this.hasHover = false;
-    setTimeout(this.close.bind(this, false), 300);
-  }
-
   // Listbox Option events
 
   onOptionClick(event) {
     this.comboboxTarget.value = event.target.textContent;
-    this.close(true);
-  }
-
-  onOptionPointerover() {
-    this.hasHover = true;
-    this.open();
-  }
-
-  onOptionPointerout() {
-    this.hasHover = false;
-    setTimeout(this.close.bind(this, false), 300);
+    this.close();
   }
 
   // Event handlers
@@ -550,17 +474,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("blur", this.onComboboxBlur.bind(this));
   }
 
-  addListboxEventListeners(listbox) {
-    listbox.addEventListener(
-      "pointerover",
-      this.onListboxPointerover.bind(this),
-    );
-    listbox.addEventListener("pointerout", this.onListboxPointerout.bind(this));
-  }
-
   addListboxOptionEventListeners(option) {
     option.addEventListener("click", this.onOptionClick.bind(this));
-    option.addEventListener("pointerover", this.onOptionPointerover.bind(this));
-    option.addEventListener("pointerout", this.onOptionPointerout.bind(this));
   }
 }
