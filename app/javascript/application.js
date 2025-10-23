@@ -23,15 +23,7 @@ function isElementInViewport(el) {
   );
 }
 
-document.addEventListener("turbo:morph", () => {
-  // Load LocalTime translations from script tag (set by _local_time.html.erb)
-  const i18nScript = document.getElementById("local-time-i18n");
-  if (i18nScript) {
-    const locale = i18nScript.dataset.locale;
-    const translations = JSON.parse(i18nScript.textContent);
-    LocalTime.config.i18n[locale] = translations;
-  }
-
+document.addEventListener("turbo:render", () => {
   LocalTime.config.locale = document.documentElement.lang;
   // reprocess each time element regardless if it has been already processed
   LocalTime.process(...document.querySelectorAll("time"));
