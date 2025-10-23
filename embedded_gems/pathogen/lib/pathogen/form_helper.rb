@@ -121,8 +121,6 @@ module Pathogen
       @onchange = options.delete(:onchange)
       @help_text = options.delete(:help_text)
       @role = options.delete(:role)
-      @selected_message = options.delete(:selected_message)
-      @deselected_message = options.delete(:deselected_message)
 
       # 🚫 Disallow top-level aria_* options; require nested aria: {}
       strip_disallowed_aria_options!(options)

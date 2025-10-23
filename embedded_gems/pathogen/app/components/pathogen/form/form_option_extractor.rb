@@ -56,8 +56,6 @@ module Pathogen
       def extract_behavior_options!(options)
         @lang = options.delete(:lang)
         @onchange = options.delete(:onchange)
-        @selected_message = options.delete(:selected_message)
-        @deselected_message = options.delete(:deselected_message)
       end
 
       # Processes nested ARIA options and sets instance variables.
