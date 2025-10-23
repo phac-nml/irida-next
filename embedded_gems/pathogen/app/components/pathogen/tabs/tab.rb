@@ -18,7 +18,6 @@ module Pathogen
         cursor-pointer
         inline-block p-4
         font-semibold transition-colors duration-200
-        focus:outline-none focus:ring-2 focus:ring-primary-500
         border-b-2
       ].freeze
 
