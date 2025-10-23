@@ -1,13 +1,6 @@
-<div data-controller="metadata-template-dd" class="max-sm:grow">
-  <%= form_with url: url, data: { turbo_frame: "metadata_templates_dropdown", turbo_stream: true, "metadata-template-dd-target": "form" }, method: :get do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="limit" value="<%= pagy&.limit %>"/>
-    <input type="hidden" name="page" value="<%= pagy&.page %>"/>
-    <input type="hidden" name="focusedMenuItemIndex" value="0"/>
-    <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
-  <% end %>
+<div data-controller="viral--dropdown" class="max-sm:grow">
   <button
-    data-metadata-template-dd-target="trigger"
+    data-viral--dropdown-target="trigger"
     title="<%= t("shared.samples.metadata_templates.tooltip") %>"
     id="metadata-template-dd-trigger"
     class="button button-default w-full"
@@ -22,24 +15,12 @@
     <%= pathogen_icon(:sliders_horizontal, size: :sm, class: "ml-2 flex-none") %>
   </button>
   <!-- Dropdown menu -->
-  <div
-    data-metadata-template-dd-target="menu"
-    id="metadata-template-dd-menu"
-    class="
+  <%= turbo_frame_tag "metadata-template-dd-menu", class: "
       hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
-    "
-  >
-    <ul
-      id="metadata_templates_dropdown"
-      aria-labelledby="metadata-template-dd-trigger"
-      tabindex="-1"
-    >
-      <li>
-        <%= render SpinnerComponent.new(
-          message: t("shared.samples.metadata_templates.loading"),
-        ) %>
-      </li>
-    </ul>
-  </div>
+    ", "data-viral--dropdown-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
+    <%= render SpinnerComponent.new(
+      message: t("shared.samples.metadata_templates.loading"),
+    ) %>
+  <% end %>
 </div>

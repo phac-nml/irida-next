@@ -118,10 +118,8 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     set_search_url
 
     respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace('metadata_templates_dropdown',
-                                                  partial: 'shared/samples/metadata_templates_list',
-                                                  locals: { focusedMenuItemIndex: params[:focusedMenuItemIndex] })
+      format.html do
+        render 'shared/samples/metadata_templates_list'
       end
     end
   end

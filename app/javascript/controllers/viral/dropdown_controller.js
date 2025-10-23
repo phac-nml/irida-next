@@ -69,30 +69,45 @@ export default class extends Controller {
     if (this.dropdown.isVisible()) {
       this.dropdown.hide();
     } else {
-      var menuItems = this.#menuItems(this.menuTarget);
-      this.dropdown.show();
-      menuItems[0].tabIndex = "0";
-      menuItems[0].focus();
+      this.#openMenuAndFocusMenuItem(0);
     }
   }
 
   onButtonKeyDown(event) {
-    var menuItems = this.#menuItems(this.menuTarget);
     switch (event.key) {
       case "Enter":
       case " ":
       case "ArrowDown":
-        event.preventDefault();
-        this.dropdown.show();
-        menuItems[0].tabIndex = "0";
-        menuItems[0].focus();
+        this.#openMenuAndFocusMenuItem(0);
         break;
       case "ArrowUp":
         event.preventDefault();
-        this.dropdown.show();
-        menuItems[menuItems.length - 1].tabIndex = "0";
-        menuItems[menuItems.length - 1].focus();
+        this.#openMenuAndFocusMenuItem(-1);
         break;
+    }
+  }
+
+  #openMenuAndFocusMenuItem(index) {
+    var menuItems = this.#menuItems(this.menuTarget);
+
+    if (menuItems.length === 0) {
+      // lazy loaded menu
+      document.addEventListener(
+        "turbo:frame-load",
+        () => {
+          var menuItems = this.#menuItems(this.menuTarget);
+          // initialize tab index to -1 on lazy load
+          menuItems.forEach((menuItem) => {
+            menuItem.setAttribute("tabindex", "-1");
+          });
+          this.#focusMenuItem(menuItems.at(index));
+        },
+        { once: true },
+      );
+      this.dropdown.show();
+    } else {
+      this.dropdown.show();
+      this.#focusMenuItem(menuItems.at(index));
     }
   }
 
@@ -139,8 +154,7 @@ export default class extends Controller {
           var prevIndex = Math.max(0, currentIndex - 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
-        menuItems[prevIndex].tabIndex = "0";
-        menuItems[prevIndex].focus();
+        this.#focusMenuItem(menuItems.at(prevIndex));
         break;
       case "ArrowDown":
         event.preventDefault();
@@ -149,20 +163,17 @@ export default class extends Controller {
           var nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
-        menuItems[nextIndex].tabIndex = "0";
-        menuItems[nextIndex].focus();
+        this.#focusMenuItem(menuItems.at(nextIndex));
         break;
       case "Home":
         event.preventDefault();
         menuItems[currentIndex].tabIndex = "-1";
-        menuItems[0].tabIndex = "0";
-        menuItems[0].focus();
+        this.#focusMenuItem(menuItems.at(0));
         break;
       case "End":
         event.preventDefault();
         menuItems[currentIndex].tabIndex = "-1";
-        menuItems[menuItems.length - 1].tabIndex = "0";
-        menuItems[menuItems.length - 1].focus();
+        this.#focusMenuItem(menuItems.at(-1));
         break;
       case "Tab":
         if (event.shiftKey) {
@@ -172,6 +183,11 @@ export default class extends Controller {
         }
         break;
     }
+  }
+
+  #focusMenuItem(menuItem) {
+    menuItem.tabIndex = "0";
+    menuItem.focus();
   }
 
   #menuItems(menu) {

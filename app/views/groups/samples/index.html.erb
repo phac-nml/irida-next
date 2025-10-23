@@ -184,7 +184,13 @@
 
       <%= render partial: "shared/samples/metadata_template_dropdown",
       locals: {
-        url: list_group_metadata_templates_url(@group),
+        url:
+          list_group_metadata_templates_url(
+            @group,
+            metadata_template: @metadata_template[:id],
+            limit: @pagy&.limit,
+            page: @pagy&.page,
+          ),
         metadata_template: @metadata_template,
         pagy: @pagy,
       } %>
