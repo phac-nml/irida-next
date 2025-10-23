@@ -104,13 +104,16 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <td class="px-6 py-4">
               <div>
                 <% if member.user.email != member.created_by.email %>
-                  <%= helpers.local_time_ago(member.created_at) %>
-                  by
-                  <span class="block">
+                  <div class="text-sm text-slate-500 dark:text-slate-400">
+                    <%== t(".created_by", timestamp: helpers.local_time_ago(member.created_at)) %>
+                  </div>
+                  <div class="text-sm font-medium text-slate-700 dark:text-slate-300 mt-1">
                     <%= member.created_by.email %>
-                  </span>
+                  </div>
                 <% else %>
-                  <%= helpers.local_time_ago(member.created_at) %>
+                  <div class="text-sm text-slate-500 dark:text-slate-400">
+                    <%= helpers.local_time_ago(member.created_at) %>
+                  </div>
                 <% end %>
               </div>
             </td>
