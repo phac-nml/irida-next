@@ -744,7 +744,7 @@ a.pill-focus-reset:focus-visible {
     border: 2px currentcolor solid;
     max-height: 250px;
     width: 168px;
-    overflow: scroll;
+    overflow: auto;
     overflow-x: hidden;
     font-size: 87.5%;
   }
