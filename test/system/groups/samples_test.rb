@@ -912,13 +912,13 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -946,8 +946,8 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
-        assert_no_selector '#Available'
-        assert_no_selector '#Selected'
+        assert_no_selector '#available-list'
+        assert_no_selector '#selected-list'
         assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
       end
     end
@@ -962,13 +962,13 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1016,13 +1016,13 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1059,13 +1059,13 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1091,13 +1091,13 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1142,13 +1142,13 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1184,12 +1184,12 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield3'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield3'
           assert_selector 'li', count: 2
@@ -1247,7 +1247,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.available')}']" do
+        within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'metadatafield3'
@@ -1255,7 +1255,7 @@ module Groups
           assert_no_text 'project_puid'
           assert_no_selector 'li'
         end
-        within "ul[id='#{I18n.t('shared.samples.metadata.file_imports.dialog.selected')}']" do
+        within 'ul#selected-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'metadatafield3'
@@ -1668,7 +1668,7 @@ module Groups
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
         # metadata sortable lists no longer hidden
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
         end
@@ -1677,7 +1677,7 @@ module Groups
         select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_text 'description'
@@ -1690,7 +1690,7 @@ module Groups
 
         click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_text 'description'
@@ -1700,7 +1700,7 @@ module Groups
         select 'description',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_no_text 'description'
@@ -1710,13 +1710,13 @@ module Groups
         select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata1'
           assert_text 'metadata2'
           assert_no_text 'description'
         end
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_no_text 'metadata1'
           assert_no_text 'metadata2'
           assert_text 'description'
@@ -1754,7 +1754,7 @@ module Groups
         # metadata sortable lists renders now that description header is available
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'description'
         end
 
@@ -1800,11 +1800,11 @@ module Groups
         select 'description',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#Selected') do
+        within('#selected-list') do
           assert_text 'metadata1'
         end
 
-        within('#Available') do
+        within('#available-list') do
           assert_text 'metadata2'
         end
 

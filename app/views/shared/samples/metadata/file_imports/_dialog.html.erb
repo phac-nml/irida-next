@@ -8,8 +8,8 @@
     <div
       <% if Flipper.enabled?(:metadata_import_field_selection) %>
       data-controller="attachment-upload metadata--file-import viral--sortable-lists--two-lists-selection"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
+      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       data-metadata--file-import-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       <% else %>
@@ -112,12 +112,12 @@
                 title: t(".metadata_columns"),
             ) do |sortable_lists| %>
                   <%= sortable_lists.with_list(
-                    id: t(".available"),
+                    id: "available-list",
                     title: t(".available"),
                     group: "metadata_selection",
                   ) %>
                   <%= sortable_lists.with_list(
-                    id: t(".selected"),
+                    id: "selected-list",
                     title: t(".selected"),
                     group: "metadata_selection",
                     required: true,

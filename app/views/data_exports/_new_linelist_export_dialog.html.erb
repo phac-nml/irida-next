@@ -4,8 +4,8 @@
     <div
       data-controller="infinite-scroll <%='viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
       <% unless @namespace.metadata_fields.empty? %>
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
+      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
       <% end %>
       data-infinite-scroll-selection-outlet='#samples-table'
@@ -90,13 +90,13 @@
             template_label: t("data_exports.new.template_select_label")
             ) do |sortable_lists| %>
             <%= sortable_lists.with_list(
-              id: t(".available"),
+              id: "available-list",
               title: t(".available"),
               list_items: @namespace.metadata_fields,
               group: "metadata_selection",
             ) %>
             <%= sortable_lists.with_list(
-              id: t(".selected"),
+              id: "selected-list",
               title: t(".selected"),
               group: "metadata_selection",
             ) %>

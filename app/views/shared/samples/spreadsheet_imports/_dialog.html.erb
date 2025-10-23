@@ -7,8 +7,8 @@
 
     <div
       data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
+      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
       data-spreadsheet-import-select-sample-value='<%= t(".select_sample_name_column") %>'
       data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
@@ -177,12 +177,12 @@
             title: t(".metadata"),
             ) do |sortable_lists| %>
               <%= sortable_lists.with_list(
-                id: t(".available"),
+                id: "available-list",
                 title: t(".available"),
                 group: "metadata_selection",
               ) %>
               <%= sortable_lists.with_list(
-                id: t(".selected"),
+                id: "selected-list",
                 title: t(".selected"),
                 group: "metadata_selection",
               ) %>

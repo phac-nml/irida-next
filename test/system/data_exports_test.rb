@@ -299,10 +299,10 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
       assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
                          selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
-      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+      within '#available-list' do
         assert_no_selector 'li'
       end
-      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
@@ -360,10 +360,10 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
       assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
                          selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
-      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+      within '#available-list' do
         assert_no_selector 'li'
       end
-      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
@@ -923,8 +923,8 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text sample3.puid
       end
 
-      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']"
-      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']"
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
 
       assert_no_selector 'input[disabled]' # submit button enabled
     end
@@ -957,8 +957,8 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text sample43.puid
       end
 
-      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']"
-      assert_no_selector "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']"
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
 
       assert_no_selector 'input[disabled]' # submit button enabled
     end
@@ -1023,13 +1023,13 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text @sample30.puid
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+      within 'ul#available-list' do
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
         assert_selector 'li', count: 2
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+      within 'ul#selected-list' do
         assert_no_text 'metadatafield1'
         assert_no_text 'metadatafield2'
         assert_no_selector 'li'
@@ -1053,13 +1053,13 @@ class DataExportsTest < ApplicationSystemTestCase
     click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+      within 'ul#available-list' do
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
         assert_selector 'li', count: 2
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+      within 'ul#selected-list' do
         assert_no_text 'metadatafield1'
         assert_no_text 'metadatafield2'
         assert_no_selector 'li'
@@ -1089,13 +1089,13 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#metadatafield2').click
       click_button I18n.t('components.viral.sortable_list.list_component.add')
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+      within 'ul#selected-list' do
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
         assert_selector 'li', count: 2
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+      within 'ul#available-list' do
         assert_no_text 'metadatafield1'
         assert_no_text 'metadatafield2'
         assert_no_selector 'li'
@@ -1143,13 +1143,13 @@ class DataExportsTest < ApplicationSystemTestCase
                       text: I18n.t('components.viral.sortable_list.list_component.add')
       click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
+      within 'ul#available-list' do
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
         assert_selector 'li', count: 2
       end
 
-      within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
+      within 'ul#selected-list' do
         assert_no_text 'metadatafield1'
         assert_no_text 'metadatafield2'
         assert_no_selector 'li'
@@ -1238,10 +1238,10 @@ class DataExportsTest < ApplicationSystemTestCase
     click_button I18n.t('shared.samples.actions_dropdown.sample_export'), match: :first
 
     within 'dialog[open].dialog--size-lg' do
-      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+      within '#available-list' do
         assert_no_selector 'li'
       end
-      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
@@ -1279,10 +1279,10 @@ class DataExportsTest < ApplicationSystemTestCase
                       text: I18n.t('components.viral.sortable_list.list_component.add')
       click_button I18n.t('components.viral.sortable_list.list_component.remove')
 
-      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+      within '#selected-list' do
         assert_selector 'li', count: 8
       end
-      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+      within '#available-list' do
         assert_selector 'li', count: 2
       end
 
@@ -1310,10 +1310,10 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#csv').click
       click_button I18n.t('components.viral.sortable_list.list_component.add')
 
-      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+      within '#available-list' do
         assert_no_selector 'li'
       end
-      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
