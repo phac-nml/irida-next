@@ -26,7 +26,7 @@
                 classes: 'flex space-x-2 px-3 py-3 justify-end'
               ) do %>
       <% if @row_actions.key?(:update_metadata_templates) %>
-        <%= button_to t(:"metadata_templates.table_component.edit_button"),
+        <%= button_to t('common.actions.edit'),
         edit_path,
         data: {
           controller: "viral--dialog-trigger",
@@ -50,7 +50,7 @@
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
       <% end %>
       <% if @row_actions.key?(:destroy_metadata_templates) %>
-        <%= button_to t(:"metadata_templates.table_component.remove_button"),
+        <%= button_to t('common.actions.delete'),
         individual_path,
         data: {
           turbo_method: :delete,

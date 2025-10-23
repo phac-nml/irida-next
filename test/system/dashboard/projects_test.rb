@@ -79,7 +79,7 @@ module Dashboard
       assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      click_button I18n.t(:'dashboard.projects.index.search.label')
+      click_button I18n.t('common.controls.search')
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
                                                                                       locale: @user.locale))
@@ -101,7 +101,7 @@ module Dashboard
       assert_selector '.treegrid-row', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
-      click_button I18n.t(:'dashboard.projects.index.search.label')
+      click_button I18n.t('common.controls.search')
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
@@ -255,10 +255,10 @@ module Dashboard
       end
 
       visit namespace_project_sample_url(@group1, @project, @sample1)
-      click_button I18n.t('projects.samples.show.remove_button')
+      click_button I18n.t('common.actions.remove')
 
       within('dialog[open]') do
-        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
+        click_button I18n.t('common.actions.remove')
       end
 
       visit dashboard_projects_url

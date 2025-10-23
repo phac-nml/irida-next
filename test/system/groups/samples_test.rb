@@ -500,7 +500,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      click_button I18n.t('components.search_field_component.search_button')
+      click_button I18n.t('common.controls.search')
       assert_selector 'input[data-test-selector="search-field-input"]', focused: true
 
       if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
@@ -757,34 +757,34 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '25'
       end
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
-      click_button I18n.t(:'groups.samples.index.deselect_all_button')
+      click_button I18n.t('common.controls.deselect_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -861,7 +861,7 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
 
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
@@ -1688,7 +1688,7 @@ module Groups
         find('#metadata2').click
         find('#description').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         within('#available-list') do
           assert_text 'metadata1'
@@ -1792,7 +1792,7 @@ module Groups
         find('#metadata1').click
         find('#metadata2').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         select 'metadata1',
                from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
@@ -1883,7 +1883,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -1917,7 +1917,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2058,7 +2058,7 @@ module Groups
 
       ### ACTIONS START ###
       # select all 3 samples
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector '#dialog'
@@ -2100,7 +2100,7 @@ module Groups
 
       ### ACTIONS START ###
       # select samples
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2167,7 +2167,7 @@ module Groups
                                                                                       locale: @user.locale))
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2253,7 +2253,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2289,7 +2289,7 @@ module Groups
 
       ### ACTIONS START ###
       # select samples
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2345,7 +2345,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2520,7 +2520,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2566,7 +2566,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -2623,7 +2623,7 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ####
-      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('common.controls.select_all')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end

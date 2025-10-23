@@ -198,7 +198,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def current_page
     @current_page = case action_name
                     when 'show'
-                      t(:'projects.sidebar.details')
+                      t('common.labels.details')
                     when 'new'
                       t(:'general.default_sidebar.projects')
                     when 'history'
@@ -206,18 +206,18 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                     when 'activity'
                       t(:'projects.sidebar.activity')
                     else
-                      t(:'projects.sidebar.general')
+                      t('common.labels.general')
                     end
   end
 
   def page_title
     @title = case action_name
              when 'show'
-               [t(:'projects.sidebar.details'), @project.full_name].join(' · ')
+               [t('common.labels.details'), @project.full_name].join(' · ')
              when 'activity'
                [t(:'projects.sidebar.activity'), @project.full_name].join(' · ')
              when 'edit'
-               [t(:'projects.sidebar.general'), t(:'projects.edit.title'), @project.full_name].join(' · ')
+               [t('common.labels.general'), t(:'projects.edit.title'), @project.full_name].join(' · ')
              when 'new'
                t(:'projects.new.title')
              else

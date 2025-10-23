@@ -122,8 +122,8 @@ module Groups
       table_row = find(:table_row, [metadata_template.name])
 
       within table_row do
-        assert_button I18n.t(:'metadata_templates.table_component.remove_button'), count: 1
-        click_button I18n.t(:'metadata_templates.table_component.remove_button')
+        assert_button I18n.t('common.actions.delete'), count: 1
+        click_button I18n.t('common.actions.delete')
       end
 
       assert_text I18n.t(
@@ -131,7 +131,7 @@ module Groups
         template_name: metadata_template.name
       )
 
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
@@ -463,7 +463,7 @@ module Groups
         find('li[id="unique.metadata.field"]').click
         find('li[id="metadata-field-with-spaces"]').click
 
-        click_button I18n.t('components.viral.sortable_list.list_component.remove')
+        click_button I18n.t('common.actions.remove')
 
         within 'ul#available-list' do
           assert_text 'metadatafield1'
@@ -506,8 +506,8 @@ module Groups
       assert_equal 'Group Template0', metadata_template.name
 
       within table_row do
-        assert_button I18n.t(:'metadata_templates.table_component.edit_button'), count: 1
-        click_button I18n.t(:'metadata_templates.table_component.edit_button')
+        assert_button I18n.t('common.actions.edit'), count: 1
+        click_button I18n.t('common.actions.edit')
       end
 
       assert_selector '#dialog'
@@ -560,7 +560,7 @@ module Groups
         fill_in 'Name', with: 'Group Template011'
 
         assert_selector 'input[type="submit"]', count: 1
-        click_on I18n.t('metadata_templates.edit_template_dialog.update_button')
+        click_on I18n.t('common.actions.update')
       end
 
       within %(div[data-controller='viral--flash']) do
@@ -577,7 +577,7 @@ module Groups
 
       within(table_row) do
         assert_text 'Group Template011'
-        assert_selector 'button', text: I18n.t('metadata_templates.table_component.edit_button'), focused: true
+        assert_selector 'button', text: I18n.t('common.actions.edit'), focused: true
       end
     end
   end

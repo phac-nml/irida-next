@@ -97,7 +97,7 @@
               <% if @allowed_to[:update_sample] %>
                 <td class="flex justify-start px-6 py-4 space-x-2">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= button_to t(:"projects.samples.show.metadata.actions.dropdown.update"),
+                    <%= button_to t('common.actions.update'),
                     edit_namespace_project_sample_metadata_path(
                       @project.namespace.parent,
                       @project,
@@ -111,7 +111,7 @@
                     class:
                       "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                   <% end %>
-                  <%= button_to t(:"projects.samples.show.metadata.actions.dropdown.delete"),
+                  <%= button_to t('common.actions.delete'),
                   namespace_project_sample_metadata_path(
                     @project.namespace.parent,
                     @project,

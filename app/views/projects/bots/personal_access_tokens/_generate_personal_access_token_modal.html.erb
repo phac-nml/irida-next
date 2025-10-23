@@ -29,16 +29,13 @@
 
     </div>
     <div class="mt-4">
-      <%= form.submit t(
-                    "projects.bots.index.bot_listing.generate_personal_access_token_modal.submit",
-                  ),
-                  class: "button button-primary" %>
+      <%= form.submit t('common.controls.submit'), class: "button button-primary" %>
       <button
         type="button"
         class="button button-default"
         data-action="click->viral--dialog#close"
       >
-        <%= t("projects.bots.index.bot_listing.generate_personal_access_token_modal.cancel") %>
+        <%= t('common.actions.cancel') %>
       </button>
     </div>
   <% end %>

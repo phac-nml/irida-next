@@ -1,0 +1,36 @@
+---
+en:
+  common:
+    actions:
+      cancel: Cancel
+      create: Create
+      delete: Delete
+      download: Download
+      edit: Edit
+      remove: Remove
+      select: Select
+      share: Share
+      update: Update
+      upload: Upload
+    controls:
+      close: Close
+      confirm: Confirm
+      deselect_all: Deselect All
+      search: Search
+      select_all: Select All
+      submit: Submit
+    labels:
+      access_level: Access Level
+      actions: Actions
+      created: Created
+      description: Description
+      details: Details
+      general: General
+      name: Name
+      settings: Settings
+    statuses:
+      disabled: Disabled
+      error: Error
+      processing: Processing
+      ready: Ready
+      success: Success

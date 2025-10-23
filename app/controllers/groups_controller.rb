@@ -222,16 +222,16 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @current_page = case action_name
                     when 'new', 'create'
                       if params.key?(:parent_id) || (params[:group] && params[:group][:parent_id].present?)
-                        t(:'groups.sidebar.details')
+                        t('common.labels.details')
                       else
                         t(:'general.default_sidebar.groups')
                       end
                     when 'show'
-                      t(:'groups.sidebar.details')
+                      t('common.labels.details')
                     when 'activity'
                       t(:'groups.sidebar.activity')
                     else
-                      t(:'groups.sidebar.general')
+                      t('common.labels.general')
                     end
   end
 
@@ -258,7 +258,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
              when 'activity'
                [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')
              when 'edit'
-               [t(:'groups.sidebar.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
+               [t('common.labels.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
              when 'new', 'create'
                if @group
                  t(:'groups.new_subgroup.title')

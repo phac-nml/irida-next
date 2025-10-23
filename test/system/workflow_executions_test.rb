@@ -124,7 +124,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector "tr[id='#{dom_id(workflow_execution)}']"
     within("tr[id='#{dom_id(workflow_execution)}'] td:last-child") do
-      assert_button I18n.t(:'workflow_executions.actions.cancel')
+      assert_button I18n.t('common.actions.cancel')
     end
   end
 
@@ -179,7 +179,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -195,7 +195,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -211,7 +211,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -221,7 +221,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
     # Select all workflow executions within the table
-    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    click_button I18n.t('common.controls.select_all')
     within 'tbody' do
       assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
     end
@@ -234,8 +234,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
-      assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
-      click_button I18n.t(:'workflow_executions.actions.delete')
+      assert_button I18n.t('common.actions.delete'), count: 1
+      click_button I18n.t('common.actions.delete')
     end
 
     assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -271,8 +271,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
-      click_button I18n.t(:'workflow_executions.actions.delete')
+      assert_button I18n.t('common.actions.delete'), count: 1
+      click_button I18n.t('common.actions.delete')
     end
 
     assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -293,7 +293,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -309,8 +309,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_button I18n.t(:'workflow_executions.actions.delete'), count: 1
-      click_button I18n.t(:'workflow_executions.actions.delete')
+      assert_button I18n.t('common.actions.delete'), count: 1
+      click_button I18n.t('common.actions.delete')
     end
 
     assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -331,7 +331,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -347,7 +347,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link I18n.t(:'workflow_executions.actions.delete')
+      assert_no_link I18n.t('common.actions.delete')
     end
   end
 
@@ -443,7 +443,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
     # Select all workflow executions within the table
-    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    click_button I18n.t('common.controls.select_all')
     within 'tbody' do
       assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
     end
@@ -453,7 +453,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_execution_path(@workflow_execution1)
 
-    click_button I18n.t(:'workflow_executions.show.remove_button')
+    click_button I18n.t('common.actions.remove')
 
     within('dialog[open]') do
       assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -525,7 +525,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
     visit workflow_execution_path(workflow_execution)
-    dt_value = I18n.t('projects.workflow_executions.summary.name', locale: @user.locale)
+    dt_value = I18n.t('common.labels.name', locale: @user.locale)
     new_we_name = 'New Name'
     ### SETUP END ###
 
@@ -539,8 +539,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     ### VERIFY END ###
 
     ### ACTIONS START ###
-    assert_selector 'button', text: I18n.t(:'workflow_executions.show.edit_button'), count: 1
-    click_button I18n.t(:'workflow_executions.show.edit_button')
+    assert_selector 'button', text: I18n.t('common.actions.edit'), count: 1
+    click_button I18n.t('common.actions.edit')
 
     within('dialog') do
       assert_selector 'h1', text: I18n.t('workflow_executions.edit_dialog.title')
@@ -580,9 +580,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text workflow_execution.metadata['workflow_version']
 
     assert_selector 'button[disabled]', text: I18n.t(:'workflow_executions.show.create_export_button')
-    assert_button I18n.t(:'workflow_executions.show.cancel_button')
-    assert_button I18n.t(:'workflow_executions.show.edit_button')
-    assert_no_button I18n.t(:'workflow_executions.show.remove_button')
+    assert_button I18n.t('common.actions.cancel')
+    assert_button I18n.t('common.actions.edit')
+    assert_no_button I18n.t('common.actions.remove')
   end
 
   test 'can successfully delete multiple workflows at once' do

@@ -176,7 +176,7 @@
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
-          <%= f.submit t(".select_all_button"),
+          <%= f.submit t('common.controls.select_all'),
                    class: "button button-default w-full",
                    title: t(".select_all_tooltip") %>
         <% end %>
@@ -187,7 +187,7 @@
                     class: "max-sm:grow",
                   ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit t(".deselect_all_button"),
+          <%= f.submit t('common.controls.deselect_all'),
                    class: "button button-default w-full",
                    title: t(".deselect_all_tooltip") %>
         <% end %>

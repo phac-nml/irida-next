@@ -51,7 +51,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
       assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(6)",
                       text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
 
@@ -60,7 +60,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export2.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export2.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
       assert find("tr[id='#{dom_id(@data_export2)}'] td:nth-child(6)").text.blank?
 
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:first-child", text: @data_export6.id
@@ -68,7 +68,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export6.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export6.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export6.status}").upcase
       assert find("tr[id='#{dom_id(@data_export6)}'] td:nth-child(6)").text.blank?
 
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:first-child", text: @data_export7.id
@@ -76,7 +76,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(4)",
-                      text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
       assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(6)",
                       text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
     end
@@ -87,12 +87,12 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within('tbody') do
       within %(tr[id='#{dom_id(@data_export6)}'] td:last-child) do
-        assert_text I18n.t('data_exports.index.actions.delete')
+        assert_text I18n.t('common.actions.delete')
       end
 
       within %(tr[id='#{dom_id(@data_export1)}'] td:last-child) do
-        assert_text I18n.t('data_exports.index.actions.download')
-        assert_text I18n.t('data_exports.index.actions.delete')
+        assert_text I18n.t('common.actions.download')
+        assert_text I18n.t('common.actions.delete')
       end
     end
   end
@@ -102,58 +102,58 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 7
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 6
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 5
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 4
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 3
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 2
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_selector 'table tbody tr', count: 1
     within('tbody') do
-      click_button I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('common.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     assert_no_selector 'table'
@@ -174,7 +174,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:first-child dd', text: @data_export1.id
     assert_selector 'div:nth-child(2) dd', text: @data_export1.name
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
-    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
     assert_selector 'div:nth-child(5) dd',
                     text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
@@ -184,7 +184,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'name is not shown on data export page if data_export.name is nil' do
     visit data_export_path(@data_export2)
 
-    assert_no_text I18n.t('data_exports.summary.name')
+    assert_no_text I18n.t('common.labels.name')
   end
 
   test 'expire has once_ready text on data export page if data_export.status is processing' do
@@ -200,7 +200,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(dl div:nth-child(3) dd) do
       assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
-                      text: I18n.t(:"data_exports.status.#{@data_export2.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
     end
 
     # ready
@@ -208,7 +208,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(dl div:nth-child(4) dd) do
       assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
-                      text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+                      text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
     end
   end
 
@@ -216,13 +216,13 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_export_path(@data_export1)
 
     assert_selector 'button',
-                    text: I18n.t(:'data_exports.show.download')
+                    text: I18n.t('common.actions.download')
     assert_text I18n.t(:'data_exports.show.tabs.preview')
 
     visit data_export_path(@data_export2)
 
     assert_selector 'button[disabled]',
-                    text: I18n.t(:'data_exports.show.download')
+                    text: I18n.t('common.actions.download')
     assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
 
@@ -236,10 +236,10 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(@data_export2)
 
-    click_button I18n.t(:'data_exports.show.remove_button')
+    click_button I18n.t('common.actions.remove')
 
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_button I18n.t('common.controls.confirm')
     end
 
     within('tbody') do
@@ -870,7 +870,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:first-child dd', text: @data_export7.id
     assert_selector 'div:nth-child(2) dd', text: @data_export7.name
     assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
-    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+    assert_selector 'div:nth-child(4) dd', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
     assert_selector 'div:nth-child(5) dd',
                     text: I18n.l(@data_export7.created_at.localtime.to_date, format: :long)
     assert_selector 'div:last-child dd',
@@ -990,7 +990,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
       assert_selector 'button[aria-disabled="true"]',
@@ -1067,7 +1067,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
 
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
@@ -1079,7 +1079,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1106,7 +1106,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled again
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1117,7 +1117,7 @@ class DataExportsTest < ApplicationSystemTestCase
       # after 1 selection, remove, and down buttons enabled; add and up still disabled (up disabled because top option
       # is selected)
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_no_selector 'button[aria-disabled="true"]',
@@ -1134,14 +1134,14 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#metadatafield2').click
       # after 2 selections, up and down are now disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.down')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
-      click_button I18n.t('components.viral.sortable_list.list_component.remove')
+      click_button I18n.t('common.actions.remove')
 
       within 'ul#available-list' do
         assert_text 'metadatafield1'
@@ -1250,7 +1250,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled again
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1260,7 +1260,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#csv').click
       # after 1 selection, remove and down buttons enabled; add and up (first option, can't move up) still disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_no_selector 'button[aria-disabled="true"]',
@@ -1270,14 +1270,14 @@ class DataExportsTest < ApplicationSystemTestCase
       find('li#json').click
       # after 2 selections, up and down are now disabled
       assert_no_selector 'button[aria-disabled="true"]',
-                         text: I18n.t('components.viral.sortable_list.list_component.remove')
+                         text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.down')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.add')
-      click_button I18n.t('components.viral.sortable_list.list_component.remove')
+      click_button I18n.t('common.actions.remove')
 
       within '#selected-list' do
         assert_selector 'li', count: 8
@@ -1288,7 +1288,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # all buttons disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
 
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
@@ -1300,7 +1300,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       # after 1 selection, add button enabled; remove, up and down buttons still disabled
       assert_selector 'button[aria-disabled="true"]',
-                      text: I18n.t('components.viral.sortable_list.list_component.remove')
+                      text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('components.viral.sortable_list.list_component.up')
       assert_selector 'button[aria-disabled="true"]',
@@ -1817,15 +1817,15 @@ class DataExportsTest < ApplicationSystemTestCase
     click_on 'Status'
     assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
     within('table tbody') do
-      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export2.status}")
-      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export6.status}")
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export2.status}").upcase
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export6.status}").upcase
     end
 
     click_on 'Status'
     assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
     within('table tbody') do
-      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
-      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export1.status}").upcase
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
     end
 
     click_on 'Created'

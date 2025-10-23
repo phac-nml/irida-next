@@ -11,7 +11,7 @@
     </div>
     <% unless @data_export.name.nil? %>
       <div class="flex flex-col py-3">
-        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t('common.labels.name') %></dt>
         <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.name %></dd>
       </div>
     <% end %>
@@ -28,21 +28,16 @@
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".status") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+        <% status_text = t("common.statuses.#{@data_export.status}").upcase %>
         <% if @data_export.status == 'ready' %>
-          <%= viral_pill(
-            text: t(:"data_exports.status.#{@data_export.status}"),
-            color: :green,
-          ) %>
+          <%= viral_pill(text: status_text, color: :green) %>
         <% else %>
-          <%= viral_pill(
-            text: t(:"data_exports.status.#{@data_export.status}"),
-            color: :slate,
-          ) %>
+          <%= viral_pill(text: status_text, color: :slate) %>
         <% end %>
       </dd>
     </div>
     <div class="flex flex-col py-3">
-      <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
+      <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t('common.labels.created') %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
         <%= local_date(@data_export.created_at, :long) %>
       </dd>

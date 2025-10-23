@@ -59,7 +59,7 @@
     <% invalid_group_access_level = new_group_link.errors.include?(:group_access_level) %>
     <div class="form-field <%= 'invalid' if invalid_group_access_level %>">
       <%= form.label :group_access_level,
-                 I18n.t("groups.group_links.new.label.group_access_level"),
+                 I18n.t('common.labels.access_level'),
                  data: {
                    required: true,
                  } %>
@@ -104,7 +104,7 @@
       input_name: "namespace_group_link[expires_at]",
     ) %>
     <div class="my-4">
-      <%= form.submit I18n.t("groups.group_links.new.button.submit"),
+      <%= form.submit I18n.t('common.actions.share'),
                   class: "button button-primary",
                   disabled: true,
                   data: {
@@ -115,7 +115,7 @@
         class="button button-default"
         data-action="click->viral--dialog#close"
       >
-        <%= I18n.t("groups.group_links.new.button.cancel") %>
+        <%= t('common.actions.cancel') %>
       </button>
     </div>
   </div>

@@ -279,7 +279,6 @@ en:
     show:
       copied: Copied
       copy: Copy
-      download: Download
       file_not_found: File not found.
       image:
         alt: Rendering of file %{filename}
@@ -307,7 +306,6 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
-          destroy: Delete
           destroy_aria_label: 'Delete bot account: %{name}'
           generate_new_token: Generate new token
           generate_new_token_aria_label: 'Generate a new personal access token for bot account: %{name}'
@@ -385,7 +383,6 @@ en:
         no_groups_description: You currently have no groups.
         no_groups_title: No groups
         search:
-          label: Search
           placeholder: Search by PUID or name
         sorting:
           created_at_asc: Oldest created
@@ -404,7 +401,6 @@ en:
         pagy_item: Projects
         personal: Personal
         search:
-          label: Search
           placeholder: Search by PUID or name
         sorting:
           created_at_asc: Oldest created
@@ -423,9 +419,7 @@ en:
       success: Data export '%{name}' was successfully deleted.
     index:
       actions:
-        delete: Delete
         delete_aria_label: Delete data export %{name}
-        download: Download
         download_aria_label: Download data export %{name}
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       limit:
@@ -433,11 +427,9 @@ en:
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
       search:
-        label: Search
         placeholder: Search by ID or name
       table_header:
         action: Action
-        created_at: Created
         expires_at: Expires
         export_type: Type
         id: ID
@@ -492,23 +484,16 @@ en:
     preview:
       manifest_json: manifest.json
     show:
-      download: Download
       page_title: Data Export
-      remove_button: Remove
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         preview: Preview
         summary: Summary
         title: Data Export Navigation
-    status:
-      processing: PROCESSING
-      ready: READY
     summary:
-      created_at: Created
       expires_at: Expires
       format: Format
       id: ID
-      name: Name
       once_ready: Available once export is ready
       status: Status
       type: Type
@@ -684,7 +669,6 @@ en:
         aria_label: Create menu
         group: Create new group
         project: Create new project
-        title: Create
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close
@@ -702,7 +686,6 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          label: Search
           placeholder: Search by PUID or Filename
         subtitle: These are the files that belong to Group %{group_name}
         title: Files
@@ -720,15 +703,11 @@ en:
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            cancel: Cancel
             description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -741,7 +720,6 @@ en:
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
     create:
-      cancel: Cancel
       name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
       name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
@@ -808,18 +786,13 @@ en:
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
       invited_groups:
         search:
-          label: Search
           placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
-        button:
-          cancel: Cancel
-          submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Access level
           group_id: Group
         sharing_namespace_with_group: You're sharing group %{name} with a group
         title: Share namespace
@@ -850,7 +823,6 @@ en:
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
         leave_group: Leave group
-        remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the group?
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
@@ -860,13 +832,10 @@ en:
         title: Members
       member_listing:
         search:
-          label: Search
           placeholder: Search by username
       new:
         access_level_hint: Select group access level to assign to user
         add_member_to_group: Add member to group
-        button:
-          cancel: Cancel
         description: You are adding a new member to group %{name}
         empty_state: There are no users with the provided email or name
         title: Add New Member
@@ -878,7 +847,6 @@ en:
         subtitle: These are metadata templates for the group
         title: Metadata Templates
     new_subgroup:
-      cancel: Cancel
       empty_state: No namespaces are associated with that name or ID
       select_group: Select Group
       submit: Create subgroup
@@ -886,9 +854,7 @@ en:
       title: Create subgroup
     samples:
       index:
-        deselect_all_button: Deselect All
         deselect_all_tooltip: Deselect all samples in this group
-        select_all_button: Select All
         select_all_tooltip: Select all samples in this group
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
@@ -900,7 +866,6 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          label: Search
           placeholder: Search by name or PUID
     shared_namespaces:
       pagy:
@@ -917,7 +882,6 @@ en:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        label: Search
         placeholder: Search by PUID or name
       shared_namespaces:
         no_shared:
@@ -934,15 +898,12 @@ en:
     sidebar:
       activity: Activity
       bot_accounts: Bot Accounts
-      details: Details
       files: Files
-      general: General
       history: History
       label: Group
       members: Members
       metadata_templates: Metadata Templates
       samples: Samples
-      settings: Settings
       workflow_executions: Workflow Executions
     subgroups_and_projects:
       pagy:
@@ -960,34 +921,25 @@ en:
       success: Group %{group_name} was successfully updated
     workflow_executions:
       edit_dialog:
-        cancel_button: Cancel
         description: You are editing workflow execution '%{workflow_execution_id}'
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
       files:
         search:
-          label: Search
           placeholder: Search by PUID or Filename
       index:
         create_export_button: Create Export
-        deselect_all_button: Deselect All
         search:
-          label: Search
           placeholder: Search by name or ID
-        select_all_button: Select All
         subtitle: These are the workflow executions that have been shared within this group
         title: Workflow Executions
       show:
-        cancel_button: Cancel
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
-        edit_button: Edit
-        remove_button: Remove
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
         created_at: Created
-        name: Name
         run_id: Run ID
         state: State
         updated_at: Last Updated
@@ -1097,7 +1049,6 @@ en:
   metadata_templates:
     edit_template_dialog:
       title: Edit Metadata Template
-      update_button: Update
     form:
       available: Available
       description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
@@ -1116,10 +1067,8 @@ en:
       created_by_email: Created By
       description: Description
       edit_aria_label: 'Edit metadata template: %{template_name}'
-      edit_button: Edit
       name: Template Name
       remove_aria_label: 'Delete metadata template: %{template_name}'
-      remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       spinner_message: Loading metadata templates...
       updated_at: Last Modified
@@ -1274,7 +1223,6 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          label: Search
           placeholder: Search by PUID or Filename
         subtitle: These are the files that belong to Project %{project_name}
         title: Files
@@ -1285,10 +1233,8 @@ en:
           title: No Files
     automated_workflow_executions:
       actions:
-        delete: Delete
         delete_aria_label: 'Delete automated pipeline: %{name}'
         delete_confirm: Are you sure that you want to delete this automated pipeline?
-        edit: Edit
         edit_aria_label: 'Edit automated pipeline: %{name}'
       create:
         error: Could not create an automated pipeline for %{workflow_name}
@@ -1309,7 +1255,6 @@ en:
       pipeline_selection_modal:
         title: Pipeline Selection
       table:
-        disabled: DISABLED
         empty:
           description: No automated pipelines have been configured for this project
           title: No automated pipelines
@@ -1332,15 +1277,11 @@ en:
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
-            cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
-            submit: Submit
             title: New Personal Access Token
           new_bot_modal:
-            cancel: Cancel
             description: This will create a bot user with email format 'inxt_prj_PROJECT_PUID_bot_n@iridanext.com', add them as a member to the Project with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
-            submit: Submit
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
@@ -1428,18 +1369,13 @@ en:
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
       invited_groups:
         search:
-          label: Search
           placeholder: Search by group name
       new:
         access_level_hint: Maximum access level to assign to group
-        button:
-          cancel: Cancel
-          submit: Share
         empty_state: No groups are associated with that name or ID
         group_hint: Select a group to share project namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Access level
           shared_group: Group
         sharing_namespace_with_group: You're sharing project %{name} with a group
         title: Share namespace
@@ -1471,7 +1407,6 @@ en:
         invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from the project?
         leave_project: Leave project
-        remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the project?
         subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
         tabs:
@@ -1481,13 +1416,10 @@ en:
         title: Members
       member_listing:
         search:
-          label: Search
           placeholder: Search by username
       new:
         access_level_hint: Select project access level to assign to user
         add_member_to_project: Add member to project
-        button:
-          cancel: Cancel
         description: You are adding a new member to project %{name}
         empty_state: There are no users with the provided email or name
         title: Add New Member
@@ -1509,8 +1441,6 @@ en:
       title: Create project
     samples:
       attachments:
-        attachment:
-          delete: Delete
         concatenations:
           create:
             basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
@@ -1534,37 +1464,30 @@ en:
             success: Files were successfully deleted.
           modal:
             description: 'The following files were selected for deletion:'
-            submit_button: Delete
             title: Delete Files
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
         table:
-          deselect_all_button: Deselect all
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            label: Search
             placeholder: Search by PUID or Filename
-          select_all_button: Select all
       create:
         success: Sample was successfully created.
       edit:
-        cancel_button: Cancel
         form:
           title: Name and Description
         submit_button: Update sample
         subtitle: Update the name and description of the current sample
         title: Edit sample
       index:
-        deselect_all_button: Deselect All
         deselect_all_tooltip: Deselect all samples in this project
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        select_all_button: Select All
         select_all_tooltip: Select all samples in this project
         title: Samples
         workflows:
@@ -1577,7 +1500,6 @@ en:
           modal:
             description: 'Metadata fields selected for deletion:'
             key_header: Key
-            submit_button: Delete
             title: Delete Metadata
             value_header: Value
         destroy:
@@ -1609,7 +1531,6 @@ en:
           no_metadata: No metadata has been added
           no_permission_description: You do not have permission to add metadata to this sample
       new:
-        cancel_button: Cancel
         subtitle: Create a new sample in the current Project
         title: Create sample
       show:
@@ -1629,17 +1550,12 @@ en:
         metadata:
           actions:
             delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
-            dropdown:
-              delete: Delete
-              update: Update
           update:
             key: Key
-            update: Update
             update_metadata: Update Metadata
             value: Value
         nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
-        remove_button: Remove
         table_header:
           action: Action
           key: Key
@@ -1655,7 +1571,6 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          label: Search
           placeholder: Search by name or PUID
       update:
         success: Sample was successfully updated.
@@ -1663,15 +1578,12 @@ en:
       activity: Activity
       automated_workflow_executions: Automated Pipelines
       bot_accounts: Bot Accounts
-      details: Details
       files: Files
-      general: General
       history: History
       label: Project
       members: Members
       metadata_templates: Metadata Templates
       samples: Samples
-      settings: Settings
       workflow_executions: Workflow Executions
     transfer:
       success: Success
@@ -1679,36 +1591,27 @@ en:
       success: Project %{project_name} was successfully updated
     workflow_executions:
       edit_dialog:
-        cancel_button: Cancel
         description: You are editing automated workflow execution '%{workflow_execution_id}'
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit automated workflow execution
       files:
         search:
-          label: Search
           placeholder: Search by PUID or filename
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
-        deselect_all_button: Deselect All
         search:
-          label: Search
           placeholder: Search by ID or name
-        select_all_button: Select All
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
         title: Workflow Executions
       show:
-        cancel_button: Cancel
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
-        edit_button: Edit
-        remove_button: Remove
         tabs:
           label: Workflow Execution Details
       summary:
         created_at: Created
-        name: Name
         run_id: Run ID
         state: State
         updated_at: Last Updated
@@ -1757,7 +1660,6 @@ en:
         title: Delete Samples
       destroy_single_confirmation_dialog:
         description: Are you sure you want to delete sample '%{sample_name}'?
-        submit_button: Remove
         title: Delete Sample
     editable_cell:
       update_success: Metadata was successfully updated
@@ -2077,15 +1979,12 @@ en:
       sample_puid_error: property '%{property}' must match Sample PUID
   workflow_executions:
     actions:
-      cancel: Cancel
       cancel_aria_label: 'Cancel workflow execution: %{name}'
       cancel_confirm: Are you sure you want to cancel this workflow execution?
-      delete: Delete
       delete_aria_label: 'Delete workflow execution: %{name}'
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
-      cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
       name_placeholder: Enter workflow execution name (optional)
       shared_with_namespace:
@@ -2112,25 +2011,18 @@ en:
         description: There are no files associated with this workflow execution.
         title: No Files
       search:
-        label: Search
         placeholder: Search by PUID or filename
     index:
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
-      deselect_all_button: Deselect All
       search:
-        label: Search
         placeholder: Search by ID or name
-      select_all_button: Select All
       title: Workflow Executions
     samples:
       empty: No samples could be found for this workflow execution
     show:
-      cancel_button: Cancel
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export
-      edit_button: Edit
-      remove_button: Remove
       tabs:
         files: Files
         params: Parameters
@@ -2150,13 +2042,11 @@ en:
       create:
         submit: Submit
         title: "%{workflow} parameters"
-        update: Update
       pipeline_selection:
         loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time."
         title: Workflow Selection
     summary:
       created_at: Created
-      name: Name
       run_from_namespace:
         group: Run from Group
         project: Run from Project
@@ -2179,7 +2069,6 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
-      name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions
       state: State
