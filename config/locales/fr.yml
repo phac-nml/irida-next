@@ -659,14 +659,11 @@ fr:
         label: Menu déroulant du compte
         profile: Modifier le profil
         sign_out: Se déconnecter
-      collapse:
-        label: Réduire le menu de navigation
-      expand:
-        label: Développer le menu de navigation
       new_dropdown:
         group: Créer un nouveau groupe
         label: Nouvel élément de menu
         project: Créer un nouveau projet
+      toggle_sidebar: Basculer le menu latéral
     opens_in_new_tab: S’ouvre dans un nouvel onglet
     screen_reader:
       close: Fermer
