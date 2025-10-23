@@ -657,14 +657,11 @@ en:
         label: Account menu
         profile: Edit profile
         sign_out: Sign out
-      collapse:
-        label: Collapse navigation menu
-      expand:
-        label: Expand navigation menu
       new_dropdown:
         group: Create new group
         label: Create menu
         project: Create new project
+      toggle_sidebar: Toggle sidebar menu
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close
