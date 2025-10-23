@@ -80,7 +80,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter.length,
     );
     this.filterOptions();
-    this.setActiveDescendant(false);
+    this.setOption(null);
   }
 
   // ComboboxAutocomplete events
@@ -201,7 +201,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   close() {
-    this.setOption(false);
+    this.setOption(null);
     this.listboxTarget.style.display = "none";
     this.comboboxTarget.setAttribute("aria-expanded", "false");
     this.buttonTarget.setAttribute("aria-expanded", "false");
@@ -221,7 +221,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Enter":
         this.setValue(this.option.textContent);
         this.close();
-        this.setActiveDescendant(false);
         flag = true;
         break;
 
@@ -263,14 +262,9 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Escape":
         if (this.isOpen()) {
           this.close();
-          this.filter = this.comboboxTarget.value;
-          this.filterOptions();
-          this.setActiveDescendant(false);
         } else {
           this.setValue("");
-          this.comboboxTarget.value = "";
         }
-        this.option = null;
         flag = true;
         break;
 
@@ -321,9 +315,9 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Backspace":
-        this.setOption(null);
         this.filter = this.comboboxTarget.value;
         this.filterOptions();
+        this.setOption(null);
         flag = true;
         break;
 
@@ -358,8 +352,9 @@ export default class SelectWithAutoCompleteController extends Controller {
               this.setOption(null);
             }
           } else {
-            this.close(); //TODO: Return "Item not found"
-            this.setOption(null);
+            const noResults = document.createElement("div");
+            noResults.textContent = "No results found";
+            this.listboxTarget.appendChild(noResults);
           }
         }
 
@@ -396,7 +391,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.listboxTarget.contains(event.target) &&
       !this.buttonTarget.contains(event.target)
     ) {
-      this.setOption(null);
       setTimeout(this.close.bind(this, true), 300);
     }
   }
