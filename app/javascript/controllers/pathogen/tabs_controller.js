@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import TurboStatePreservation from "../concerns/turbo_state_preservation";
+import TurboStatePreservation from "controllers/concerns/turbo_state_preservation";
 
 /**
  * Tabs Controller
