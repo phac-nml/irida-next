@@ -171,7 +171,7 @@ module Projects
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
@@ -404,7 +404,7 @@ module Projects
           assert_selector 'li', count: 2
         end
 
-        within "ul[id='#{I18n.t('metadata_templates.form.selected')}']" do
+        within 'ul#selected-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_selector 'li'
