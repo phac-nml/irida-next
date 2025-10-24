@@ -31,18 +31,26 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
     this.addComboboxEventListeners(this.comboboxTarget);
 
-    var categories = this.listboxTarget.getElementsByTagName("ul");
+    this.attachOptionEvents(this.listboxTarget, true);
+    var categories = this.listboxTarget.querySelectorAll('ul[role="group"]');
     for (var i = 0; i < categories.length; i++) {
       var category = categories[i];
       this.allOptions.push(category);
-      var categoryItems = category.querySelectorAll('li[role="option"]');
-      for (var j = 0; j < categoryItems.length; j++) {
-        var categoryItem = categoryItems[j];
-        this.addListboxOptionEventListeners(categoryItem);
-      }
+      this.attachOptionEvents(category);
     }
 
     this.filterOptions();
+  }
+
+  attachOptionEvents(category, add = false) {
+    var categoryItems = category.querySelectorAll('li[role="option"]');
+    for (var i = 0; i < categoryItems.length; i++) {
+      var categoryItem = categoryItems[i];
+      if (add) {
+        this.allOptions.push(categoryItem);
+      }
+      this.addListboxOptionEventListeners(categoryItem);
+    }
   }
 
   getLowercaseContent(node) {
@@ -94,21 +102,32 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.listboxTarget.innerHTML = "";
 
     for (var i = 0; i < this.allOptions.length; i++) {
-      var optionCategory = this.allOptions[i].cloneNode(true);
-      var options = optionCategory.querySelectorAll('li[role="option"]');
       var flag = false;
+      var optionCategory = this.allOptions[i].cloneNode(true);
 
-      for (var j = 0; j < options.length; j++) {
-        option = options[j];
-        this.addListboxOptionEventListeners(option);
+      if (optionCategory.nodeName === "LI") {
+        this.addListboxOptionEventListeners(optionCategory);
         if (
           filter.length === 0 ||
-          this.getLowercaseContent(option).indexOf(filter) === 0
+          this.getLowercaseContent(optionCategory).indexOf(filter) === 0
         ) {
           flag = true;
-          this.filteredOptions.push(option);
-        } else {
-          optionCategory.removeChild(option);
+          this.filteredOptions.push(optionCategory);
+        }
+      } else {
+        var options = optionCategory.querySelectorAll('li[role="option"]');
+        for (var j = 0; j < options.length; j++) {
+          option = options[j];
+          this.addListboxOptionEventListeners(option);
+          if (
+            filter.length === 0 ||
+            this.getLowercaseContent(option).indexOf(filter) === 0
+          ) {
+            flag = true;
+            this.filteredOptions.push(option);
+          } else {
+            optionCategory.removeChild(option);
+          }
         }
       }
 
