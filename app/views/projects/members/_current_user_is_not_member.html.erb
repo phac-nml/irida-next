@@ -5,6 +5,11 @@ data: {
   turbo_confirm: t(:"projects.members.index.remove_confirmation"),
 },
 method: :delete,
+form: {
+  data: {
+    member_action: 'remove',
+  },
+},
 aria: {
   label:
     t(

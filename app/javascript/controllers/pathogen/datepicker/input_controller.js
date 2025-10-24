@@ -16,6 +16,7 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
+    nextFocusSelector: String,
   };
 
   // today's date attributes for quick access
@@ -34,6 +35,10 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
+  #formElement;
+
+  #focusRestoreTimeouts = [];
+
   #dropdown;
 
   #minDate;
@@ -47,6 +52,7 @@ export default class extends Controller {
       this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+    this.boundHandleSubmitEnd = this.handleSubmitEnd.bind(this);
 
     this.idempotentConnect();
   }
@@ -56,6 +62,8 @@ export default class extends Controller {
     if (this.#calendar && !this.#calendar.isConnected) {
       this.#calendar = null;
     }
+
+    this.#setFormElement();
 
     // Clean up any existing calendar from a previous connection (e.g., after morph)
     const existingCalendar = document.getElementById(this.calendarIdValue);
@@ -89,6 +97,16 @@ export default class extends Controller {
       "focus",
       this.boundHandleDatepickerInputFocus,
     );
+
+    if (this.#formElement) {
+      this.#formElement.removeEventListener(
+        "turbo:submit-end",
+        this.boundHandleSubmitEnd,
+      );
+      this.#formElement = null;
+    }
+
+    this.#clearFocusRestoreTimers();
 
     if (this.#calendar) {
       this.#calendar.remove();
@@ -233,6 +251,7 @@ export default class extends Controller {
 
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
+    this.#setFormElement();
     this.#shareParamsWithCalendar();
   }
 
@@ -252,6 +271,15 @@ export default class extends Controller {
     if (!this.#dropdown.isVisible()) {
       this.#dropdown.show();
     }
+  }
+
+  handleSubmitEnd(event) {
+    if (!this.autosubmitValue) return;
+    if (event?.target !== this.#formElement) return;
+    const { success } = event.detail || {};
+    if (!success) return;
+
+    this.#scheduleFocusRestore();
   }
 
   handleCalendarFocus(event) {
@@ -428,6 +456,64 @@ export default class extends Controller {
   }
 
   focusNextFocusableElement() {
+    if (!this.#nextFocusableElementAfterInput) return;
     this.#nextFocusableElementAfterInput.focus();
+  }
+
+  #resolveNextFocusTarget() {
+    if (this.hasNextFocusSelectorValue) {
+      const scope = this.element.closest('tr') ?? document;
+      const candidate = scope.querySelector(this.nextFocusSelectorValue);
+      if (candidate) {
+        if (candidate.matches(FOCUSABLE_ELEMENTS)) {
+          return candidate;
+        }
+        return candidate.querySelector(FOCUSABLE_ELEMENTS);
+      }
+    }
+
+    this.#findNextFocusableElement();
+    return this.#nextFocusableElementAfterInput;
+  }
+
+  #setFormElement() {
+    const form = this.element.closest("form");
+    if (!form || form === this.#formElement) return;
+
+    if (this.#formElement) {
+      this.#formElement.removeEventListener(
+        "turbo:submit-end",
+        this.boundHandleSubmitEnd,
+      );
+    }
+
+    this.#formElement = form;
+    this.#formElement.addEventListener(
+      "turbo:submit-end",
+      this.boundHandleSubmitEnd,
+    );
+  }
+
+  #scheduleFocusRestore() {
+    const attemptFocus = () => {
+      const target = this.#resolveNextFocusTarget();
+      if (target?.focus) {
+        target.focus();
+      }
+    };
+
+    this.#clearFocusRestoreTimers();
+
+    this.#focusRestoreTimeouts = [
+      setTimeout(attemptFocus, 0),
+      setTimeout(attemptFocus, 200),
+      setTimeout(attemptFocus, 600),
+      setTimeout(attemptFocus, 1200),
+    ];
+  }
+
+  #clearFocusRestoreTimers() {
+    this.#focusRestoreTimeouts.forEach((id) => clearTimeout(id));
+    this.#focusRestoreTimeouts = [];
   }
 }
