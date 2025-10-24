@@ -19,7 +19,11 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
       post workflow_executions_path(format: :turbo_stream),
            params: {
              workflow_execution: {
-               metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+               metadata: {
+                 pipeline_id: 'phac-nml/iridanextexample',
+                 workflow_name: 'phac-nml/iridanextexample',
+                 workflow_version: '1.0.2'
+               },
                workflow_params: { assembler: 'stub' },
                workflow_type: 'NFL',
                workflow_type_version: 'DSL2',

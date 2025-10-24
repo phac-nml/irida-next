@@ -90,6 +90,7 @@
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
 
       <%= workflow.fields_for "metadata" do |metadata| %>
+        <%= metadata.hidden_field :pipeline_id, value: @workflow.pipeline_id %>
         <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
         <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
       <% end %>

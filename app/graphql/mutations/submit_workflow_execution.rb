@@ -12,6 +12,7 @@ module Mutations
              default_value: false,
              description: 'Set to true to enable email notifications from this workflow execution'
     argument :name, String, required: false, description: 'Name for the new workflow.'
+    argument :pipeline_id, String, description: 'Id of the pipeline to be run on this workflow execution' # rubocop:disable GraphQL/ExtractInputType
     argument :samples_workflow_executions_attributes, [GraphQL::Types::JSON], description: "A list of hashes containing a 'sample_id', and a hash of `samplesheet_params`." # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
     argument :update_samples, # rubocop:disable GraphQL/ExtractInputType
              Boolean,
@@ -55,7 +56,8 @@ module Mutations
 
       workflow_execution_params = {
         name: args[:name],
-        metadata: { workflow_name: args[:workflow_name],
+        metadata: { pipeline_id: args[:pipeline_id],
+                    workflow_name: args[:workflow_name],
                     workflow_version: args[:workflow_version] },
         namespace_id:,
         workflow_params: args[:workflow_params],

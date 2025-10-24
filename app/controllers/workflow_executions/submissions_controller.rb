@@ -31,10 +31,10 @@ module WorkflowExecutions
     end
 
     def workflow
-      workflow_name = params[:workflow_name]
+      pipeline_id = params[:pipeline_id]
       workflow_version = params[:workflow_version]
 
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(workflow_name, workflow_version)
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(pipeline_id, workflow_version)
     end
 
     def samples
