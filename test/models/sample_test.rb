@@ -67,12 +67,18 @@ class SampleTest < ActiveSupport::TestCase
   end
 
   test '#destroy removes sample, then is restored' do
-    assert_difference(-> { Sample.count } => -1) do
-      @sample.destroy
+    perform_enqueued_jobs only: Turbo::Streams::BroadcastJob do
+      assert_difference(-> { Sample.count } => -1) do
+        @sample.destroy
+      end
+      Turbo::StreamsChannel.refresh_debouncer_for(@sample.project, :samples).wait
     end
 
-    assert_difference(-> { Sample.count } => +1) do
-      Sample.restore(@sample.id, recursive: true)
+    perform_enqueued_jobs only: Turbo::Streams::BroadcastJob do
+      assert_difference(-> { Sample.count } => +1) do
+        Sample.restore(@sample.id, recursive: true)
+      end
+      Turbo::StreamsChannel.refresh_debouncer_for(@sample.project, :samples).wait
     end
   end
 
