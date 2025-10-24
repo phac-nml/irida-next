@@ -36,14 +36,6 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   /**
-   * Timing constants for Turbo Frame integration
-   * These delays ensure Turbo has completed processing before we interact with the DOM
-   * @private
-   */
-  static TURBO_SETTLE_DELAY_MS = 50; // Time for Turbo to finish processing frames after render
-  static PANEL_VISIBILITY_CHECK_DELAY_MS = 100; // Time for CSS transitions and computed styles to settle
-
-  /**
    * Stimulus targets
    * @type {string[]}
    */
