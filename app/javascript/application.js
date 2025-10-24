@@ -8,6 +8,16 @@ import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
 
+const processLocalTimes = (root = document) => {
+  if (!window.LocalTime) return;
+
+  const timeElements = root.querySelectorAll("time[data-local]");
+  if (timeElements.length === 0) return;
+
+  LocalTime.config.locale = document.documentElement.lang;
+  LocalTime.process(...timeElements);
+};
+
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
 
@@ -24,13 +34,35 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
-  LocalTime.config.locale = document.documentElement.lang;
-  // reprocess each time element regardless if it has been already processed
-  LocalTime.process(...document.querySelectorAll("time"));
+  processLocalTimes();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
   }
+});
+
+document.addEventListener("turbo:frame-load", (event) => {
+  const frame = event.target;
+  if (!(frame instanceof HTMLElement)) return;
+
+  processLocalTimes(frame);
+});
+
+document.addEventListener("turbo:before-stream-render", (event) => {
+  const originalRender = event.detail.render;
+
+  event.detail.render = (streamElement) => {
+    originalRender(streamElement);
+
+    const targetIdentifier =
+      streamElement.target || streamElement.getAttribute?.("target");
+    const target =
+      streamElement.targetElement ||
+      (targetIdentifier && document.getElementById(targetIdentifier)) ||
+      (targetIdentifier && document.querySelector(`[id="${targetIdentifier}"]`));
+
+    processLocalTimes(target || document);
+  };
 });
 
 Turbo.config.forms.confirm = (message, element) => {
