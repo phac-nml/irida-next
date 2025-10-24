@@ -472,6 +472,8 @@ export default class extends Controller {
     try {
       const hash = this.#getTabHash(index);
       const url = new URL(window.location.href);
+      // Clear stale tab query params so subsequent submissions don't carry outdated values
+      url.searchParams.delete("tab");
       url.hash = hash;
 
       // Use replaceState to avoid adding to browser history on every tab change
