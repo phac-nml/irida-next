@@ -14,7 +14,28 @@ const processLocalTimes = (root = document) => {
   const timeElements = root.querySelectorAll("time[data-local]");
   if (timeElements.length === 0) return;
 
-  LocalTime.config.locale = document.documentElement.lang;
+  // Resolve the current <html lang> to a locale LocalTime already has translations for.
+  const rawLocale = (document.documentElement.lang || "").toLowerCase();
+  const availableLocales = LocalTime.config?.i18n || {};
+  const candidates = [];
+
+  if (rawLocale) {
+    candidates.push(rawLocale);
+    const [baseLocale] = rawLocale.split("-");
+    if (baseLocale && baseLocale !== rawLocale) {
+      candidates.push(baseLocale);
+    }
+  } else if (LocalTime.config?.defaultLocale) {
+    candidates.push(LocalTime.config.defaultLocale);
+  }
+
+  const resolvedLocale = candidates.find(
+    (locale) => locale && availableLocales[locale],
+  );
+
+  if (!resolvedLocale) return;
+
+  LocalTime.config.locale = resolvedLocale;
   LocalTime.process(...timeElements);
 };
 
