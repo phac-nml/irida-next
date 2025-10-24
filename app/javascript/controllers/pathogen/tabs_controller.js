@@ -208,7 +208,10 @@ export default class extends Controller {
         window.removeEventListener("hashchange", this.#boundHandleHashChange);
       }
       if (this.#boundHandleTurboRender) {
-        document.removeEventListener("turbo:render", this.#boundHandleTurboRender);
+        document.removeEventListener(
+          "turbo:render",
+          this.#boundHandleTurboRender,
+        );
       }
     }
 
@@ -238,11 +241,15 @@ export default class extends Controller {
   #validateTargets() {
     if (this.tabTargets.length === 0) {
       console.error("[pathogen--tabs] At least one tab target is required");
+      this.element.innerHTML =
+        '<div class="text-red-600">At least one tab target is required</div>';
       return false;
     }
 
     if (this.panelTargets.length === 0) {
       console.error("[pathogen--tabs] At least one panel target is required");
+      this.element.innerHTML =
+        '<div class="text-red-600">At least one panel target is required</div>';
       return false;
     }
 
@@ -251,6 +258,8 @@ export default class extends Controller {
         tabs: this.tabTargets.length,
         panels: this.panelTargets.length,
       });
+      this.element.innerHTML =
+        '<div class="text-red-600">Tab and panel counts must match</div>';
       return false;
     }
 
@@ -614,7 +623,9 @@ export default class extends Controller {
         this.#selectTabByIndex(hashIndex, false);
       } else {
         // No hash found, use default index
-        const validatedIndex = this.#validateDefaultIndex(this.defaultIndexValue);
+        const validatedIndex = this.#validateDefaultIndex(
+          this.defaultIndexValue,
+        );
         this.#selectTabByIndex(validatedIndex, false);
       }
 
@@ -626,5 +637,4 @@ export default class extends Controller {
       console.error("[pathogen--tabs] Error handling turbo render:", error);
     }
   }
-
 }
