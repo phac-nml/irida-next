@@ -9,8 +9,8 @@ module Layout
         sidebar.with_header(label: 'Header')
       end
 
-      assert_selector('nav#sidebar[aria-label="Main sidebar"]')
-      assert_selector('button[title="Collapse navigation menu"]')
+      assert_selector("nav#sidebar[aria-label='#{I18n.t('general.default_sidebar.aria_label')}']")
+      assert_selector("button[title=\"#{I18n.t('general.navbar.toggle_sidebar')}\"]")
       assert_selector('.sidebar-overlay', visible: :all)
     end
 
