@@ -149,14 +149,14 @@ module Pathogen
         within_tabs('url-sync-demo') do
           # Start with Getting Started tab (should be selected by default)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Getting Started'
-          
+
           # Send right arrow key to navigate to next tab
           find('[role="tab"][aria-selected="true"]').native.send_keys(:right)
         end
 
         # Wait for tab selection and debounced hash update
         assert_selector '[role="tab"][aria-selected="true"]', text: 'How It Works', wait: 2
-        
+
         # Wait a bit more for the debounced hash update
         sleep(0.2)
         assert_equal '#tab-how-it-works', page.evaluate_script('window.location.hash')
