@@ -647,30 +647,23 @@ fr:
       data_exports: Exportations de données
       goto: Allez à
       groups: Groupes
-      navigation: Main navigation
       projects: Projets
       title: Votre travail
       workflows: Exécutions de flux de travail
     form:
-      error_notification: 'Veuillez examiner les problèmes ci-dessous :'
+      error_notification: 'Veuillez examiner les problèmes ci-dessous:'
     help: Aide
     name: IRIDA Next
     navbar:
       account_dropdown:
-        aria_label: Menu déroulant du compte
+        label: Menu déroulant du compte
         profile: Modifier le profil
         sign_out: Se déconnecter
-        title: Compte
-      collapse:
-        aria_label: Réduire le menu de navigation
-        title: Réduire
-      expand:
-        aria_label: Développer le menu de navigation
-        title: Agrandir
       new_dropdown:
-        aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
+        label: Nouvel élément de menu
         project: Créer un nouveau projet
+      toggle_sidebar: Basculer le menu latéral
     opens_in_new_tab: S’ouvre dans un nouvel onglet
     screen_reader:
       close: Fermer

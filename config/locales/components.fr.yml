@@ -200,6 +200,9 @@ fr:
       language_selection:
         title: Sélection de langue
       main_content_link: Passer au contenu
+      sidebar:
+        collapsed_announcement: Barre latérale repliée
+        expanded_announcement: Barre latérale déployée
     list_filter:
       apply: Appliquer un filtre
       title: Filtrer par nom d’échantillon ou identifiant

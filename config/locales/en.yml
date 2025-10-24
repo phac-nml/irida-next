@@ -645,7 +645,6 @@ en:
       data_exports: Data Exports
       goto: Go to
       groups: Groups
-      navigation: Main Navigation
       projects: Projects
       title: Your work
       workflows: Workflow Executions
@@ -655,20 +654,14 @@ en:
     name: IRIDA Next
     navbar:
       account_dropdown:
-        aria_label: Account menu
+        label: Account menu
         profile: Edit profile
         sign_out: Sign out
-        title: Account
-      collapse:
-        aria_label: Collapse navigation menu
-        title: Collapse
-      expand:
-        aria_label: Expand navigation menu
-        title: Expand
       new_dropdown:
-        aria_label: Create menu
         group: Create new group
+        label: Create menu
         project: Create new project
+      toggle_sidebar: Toggle sidebar menu
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close

@@ -28,10 +28,9 @@ class LayoutComponentTest < ViewComponent::TestCase
                   href: '#main-content'
 
       # Verify sidebar structure
-      assert_selector 'aside' do
+      assert_selector 'nav#sidebar' do
         # Check for the presence of navigation items rather than specific text
         # This is more resilient to changes in the exact text content
-        assert_selector 'nav'
 
         # Check for the presence of navigation items
         assert_selector 'a[href="/-/projects"]',
@@ -61,7 +60,7 @@ class LayoutComponentTest < ViewComponent::TestCase
       layout.with_body { 'Content' }
     end
 
-    # The layout controller might be on the aside or a parent element
+    # The layout controller might be on the nav or a parent element
     assert_selector '[data-controller~="layout"]'
   end
 
@@ -75,7 +74,7 @@ class LayoutComponentTest < ViewComponent::TestCase
       layout.with_body { 'Content' }
     end
 
-    assert_selector 'aside'
+    assert_selector 'nav#sidebar'
   end
 
   test 'renders with custom sidebar classes' do
@@ -92,7 +91,7 @@ class LayoutComponentTest < ViewComponent::TestCase
     end
 
     # Verify the sidebar renders with content
-    assert_selector 'aside'
+    assert_selector 'nav#sidebar'
   end
 
   test 'renders with multiple sections in sidebar' do
