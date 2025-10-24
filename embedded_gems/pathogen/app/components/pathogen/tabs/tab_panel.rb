@@ -163,9 +163,8 @@ module Pathogen
       #
       # @see app/assets/tailwind/application.css for panel visibility rules
       def setup_css_classes
-        existing_classes = extract_classes(@system_arguments[:class])
-        existing_classes << 'hidden' if initially_hidden?
-        @system_arguments[:class] = existing_classes.join(' ')
+        @base_class_argument = @system_arguments[:class]
+        update_hidden_class
 
         # Add a data attribute to help JavaScript identify panels after morph
         @system_arguments[:data] ||= {}
@@ -177,17 +176,8 @@ module Pathogen
       end
 
       def update_hidden_class
-        existing_classes = extract_classes(@system_arguments[:class])
-        existing_classes.delete('hidden')
-        existing_classes << 'hidden' if initially_hidden?
-        @system_arguments[:class] = existing_classes.join(' ')
-      end
-
-      def extract_classes(value)
-        Array(value)
-          .flat_map { |cls| cls.to_s.split(/\s+/) }
-          .map(&:strip)
-          .reject(&:blank?)
+        computed = class_names(@base_class_argument, (initially_hidden? ? 'hidden' : nil))
+        @system_arguments[:class] = computed.presence
       end
     end
   end
