@@ -87,24 +87,43 @@ module Pathogen
     class TabPanel < Pathogen::Component
       attr_reader :id, :tab_id
 
+      DEFAULT_INITIALLY_HIDDEN = true
+
       # Initialize a new TabPanel component
       # @param id [String] Unique identifier for the panel (required)
       # @param tab_id [String] ID of the associated tab (required)
       # @param system_arguments [Hash] Additional HTML attributes
       # @raise [ArgumentError] if id or tab_id is missing
-      def initialize(id:, tab_id:, **system_arguments, &block)
+      def initialize(id:, tab_id:, initially_hidden: DEFAULT_INITIALLY_HIDDEN, **system_arguments, &block)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'tab_id is required' if tab_id.blank?
 
         @id = id
         @tab_id = tab_id
+        @initially_hidden = initially_hidden
         @system_arguments = system_arguments
         @block = block
 
         setup_panel_attributes
       end
 
+      # Allows the parent Tabs component to adjust the initial visibility so the
+      # default panel remains visible when JavaScript is unavailable.
+      #
+      # @param hidden [Boolean] Whether the panel should start hidden
+      def set_initial_visibility(hidden: DEFAULT_INITIALLY_HIDDEN)
+        return if hidden == initially_hidden?
+
+        @initially_hidden = hidden
+        update_aria_hidden
+        update_hidden_class
+      end
+
       private
+
+      def initially_hidden?
+        @initially_hidden
+      end
 
       # Sets up HTML and ARIA attributes for the panel
       def setup_panel_attributes
@@ -112,7 +131,7 @@ module Pathogen
         @system_arguments[:role] = 'tabpanel'
         @system_arguments[:aria] ||= {}
         @system_arguments[:aria][:labelledby] = @tab_id
-        @system_arguments[:aria][:hidden] = 'true' # Will be updated by JavaScript
+        update_aria_hidden # Will be updated by JavaScript
         @system_arguments[:tabindex] = 0
 
         setup_data_attributes
@@ -144,14 +163,31 @@ module Pathogen
       #
       # @see app/assets/tailwind/application.css for panel visibility rules
       def setup_css_classes
-        @system_arguments[:class] = class_names(
-          'hidden', # Initially hidden, JavaScript will show the selected panel
-          @system_arguments[:class]
-        )
+        existing_classes = extract_classes(@system_arguments[:class])
+        existing_classes << 'hidden' if initially_hidden?
+        @system_arguments[:class] = existing_classes.join(' ')
 
         # Add a data attribute to help JavaScript identify panels after morph
         @system_arguments[:data] ||= {}
         @system_arguments[:data]['tab-panel-id'] = @id
+      end
+
+      def update_aria_hidden
+        @system_arguments[:aria][:hidden] = initially_hidden? ? 'true' : 'false'
+      end
+
+      def update_hidden_class
+        existing_classes = extract_classes(@system_arguments[:class])
+        existing_classes.delete('hidden')
+        existing_classes << 'hidden' if initially_hidden?
+        @system_arguments[:class] = existing_classes.join(' ')
+      end
+
+      def extract_classes(value)
+        Array(value)
+          .flat_map { |cls| cls.to_s.split(/\s+/) }
+          .map(&:strip)
+          .reject(&:blank?)
       end
     end
   end
