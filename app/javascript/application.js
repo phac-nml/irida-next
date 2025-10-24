@@ -3,41 +3,14 @@ import "@hotwired/turbo-rails";
 import "controllers";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
+import { initializeLocalTimeProcessing } from "./lib/local_time_processor";
 
 import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
 
-const processLocalTimes = (root = document) => {
-  if (!window.LocalTime) return;
-
-  const timeElements = root.querySelectorAll("time[data-local]");
-  if (timeElements.length === 0) return;
-
-  // Resolve the current <html lang> to a locale LocalTime already has translations for.
-  const rawLocale = (document.documentElement.lang || "").toLowerCase();
-  const availableLocales = LocalTime.config?.i18n || {};
-  const candidates = [];
-
-  if (rawLocale) {
-    candidates.push(rawLocale);
-    const [baseLocale] = rawLocale.split("-");
-    if (baseLocale && baseLocale !== rawLocale) {
-      candidates.push(baseLocale);
-    }
-  } else if (LocalTime.config?.defaultLocale) {
-    candidates.push(LocalTime.config.defaultLocale);
-  }
-
-  const resolvedLocale = candidates.find(
-    (locale) => locale && availableLocales[locale],
-  );
-
-  if (!resolvedLocale) return;
-
-  LocalTime.config.locale = resolvedLocale;
-  LocalTime.process(...timeElements);
-};
+// Initialize LocalTime processing for Turbo events
+initializeLocalTimeProcessing();
 
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
@@ -55,35 +28,10 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
-  processLocalTimes();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
   }
-});
-
-document.addEventListener("turbo:frame-load", (event) => {
-  const frame = event.target;
-  if (!(frame instanceof HTMLElement)) return;
-
-  processLocalTimes(frame);
-});
-
-document.addEventListener("turbo:before-stream-render", (event) => {
-  const originalRender = event.detail.render;
-
-  event.detail.render = (streamElement) => {
-    originalRender(streamElement);
-
-    const targetIdentifier =
-      streamElement.target || streamElement.getAttribute?.("target");
-    const target =
-      streamElement.targetElement ||
-      (targetIdentifier && document.getElementById(targetIdentifier)) ||
-      (targetIdentifier && document.querySelector(`[id="${targetIdentifier}"]`));
-
-    processLocalTimes(target || document);
-  };
 });
 
 Turbo.config.forms.confirm = (message, element) => {

@@ -67,6 +67,13 @@ export default class extends Controller {
   #boundHandleTurboRender = null;
 
   /**
+   * Private field for caching the tablist element reference
+   * @type {HTMLElement|null}
+   * @private
+   */
+  #tablist = null;
+
+  /**
    * Initializes the controller when it connects to the DOM
    * Sets up ARIA relationships and selects the default tab.
    *
@@ -74,6 +81,9 @@ export default class extends Controller {
    */
   connect() {
     try {
+      // Cache the tablist element reference for performance
+      this.#tablist = this.element.querySelector('[role="tablist"]');
+
       // Validate that we have matching tabs and panels
       if (!this.#validateTargets()) {
         return;
@@ -138,12 +148,12 @@ export default class extends Controller {
 
   /**
    * Gets the orientation of the tablist
+   * Uses cached tablist element for performance
    * @private
    * @returns {string} 'horizontal' or 'vertical'
    */
   #getOrientation() {
-    const tablist = this.element.querySelector('[role="tablist"]');
-    return tablist?.getAttribute("aria-orientation") || "horizontal";
+    return this.#tablist?.getAttribute("aria-orientation") || "horizontal";
   }
 
   /**
@@ -193,6 +203,9 @@ export default class extends Controller {
         document.removeEventListener("turbo:render", this.#boundHandleTurboRender);
       }
     }
+
+    // Clear cached DOM references
+    this.#tablist = null;
 
     // Remove initialization marker
     this.element.classList.remove("tabs-initialized");
