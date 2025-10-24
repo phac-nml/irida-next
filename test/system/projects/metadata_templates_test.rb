@@ -164,6 +164,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.form.description')
 
+        assert_selector 'ul#available-list'
         within 'ul#available-list' do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'

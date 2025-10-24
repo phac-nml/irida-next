@@ -22,38 +22,42 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <%= render Pathogen::TabsPanel.new(
+  <%= render Pathogen::Tabs.new(
     id: "project-members-tabs",
-    label: t(:"projects.members.index.tabs.aria_label")
+    label: t(:"projects.members.index.tabs.aria_label"),
+    default_index: @tab == "invited_groups" ? 1 : 0,
+    sync_url: true
   ) do |tabs| %>
     <% tabs.with_tab(
       id: "members-tab",
-      text: t(:"projects.members.index.tabs.members"),
-      href: namespace_project_members_path(),
+      label: t(:"projects.members.index.tabs.members"),
       selected: @tab != "invited_groups",
     ) %>
 
     <% tabs.with_tab(
       id: "groups-tab",
-      text: t(:"projects.members.index.tabs.groups"),
-      href: namespace_project_members_path(tab: "invited_groups"),
+      label: t(:"projects.members.index.tabs.groups"),
       selected: @tab == "invited_groups",
     ) %>
 
-    <% if @tab == "invited_groups" %>
-      <%= turbo_frame_tag "invited_groups", src: namespace_project_group_links_path(
-                                    format: :turbo_stream
-                                  ) do %>
+    <% tabs.with_panel(id: "members-panel", tab_id: "members-tab") do %>
+      <%= turbo_frame_tag "members",
+        src: namespace_project_members_path(format: :turbo_stream),
+        loading: :lazy,
+        refresh: "morph" do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
-      <%= turbo_frame_tag "invited_groups_pagination" %>
-    <% else %>
-      <%= turbo_frame_tag "members", src: namespace_project_members_path(
-                                    format: :turbo_stream
-                                  ) do %>
+      <%= turbo_frame_tag "members_pagination", loading: :lazy, refresh: "morph" %>
+    <% end %>
+
+    <% tabs.with_panel(id: "groups-panel", tab_id: "groups-tab") do %>
+      <%= turbo_frame_tag "invited_groups",
+        src: namespace_project_group_links_path(format: :turbo_stream),
+        loading: :lazy,
+        refresh: "morph" do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
-      <%= turbo_frame_tag "members_pagination" %>
+      <%= turbo_frame_tag "invited_groups_pagination", loading: :lazy, refresh: "morph" %>
     <% end %>
   <% end %>
 </div>

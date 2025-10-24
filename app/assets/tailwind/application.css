@@ -663,3 +663,27 @@ a.pill-focus-reset:focus-visible {
   --tw-ring-color: transparent !important;
   --tw-ring-offset-width: 0px !important;
 }
+
+/* Tabs Component - Progressive Enhancement
+   Show only first panel when JavaScript not yet loaded or disabled */
+[data-controller="pathogen--tabs"]:not(.tabs-initialized)
+  [data-pathogen--tabs-target="panel"]:not(:first-child) {
+  display: none;
+}
+
+/* Tabs Component - Panel Visibility
+   Ensure visible panels always display as block, overriding any conflicting styles.
+   This prevents CSS conflicts and eliminates the need for inline style manipulation. */
+[data-controller="pathogen--tabs"] [role="tabpanel"]:not(.hidden) {
+  display: block !important;
+}
+
+/* Tabs Component - Dynamic styling based on aria-selected
+   Override the server-rendered classes when JavaScript updates aria-selected */
+[data-controller="pathogen--tabs"] [role="tab"][aria-selected="true"] {
+  @apply border-primary-800 bg-transparent text-slate-900 dark:border-white dark:text-white;
+}
+
+[data-controller="pathogen--tabs"] [role="tab"][aria-selected="false"] {
+  @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
+}
