@@ -562,7 +562,9 @@ module Projects
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
       assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
       assert_selector '[role="tab"]#groups-tab[aria-selected="false"]'
-      assert_selector '[role="tabpanel"]#groups-panel.hidden'
+      # Groups panel should have hidden class
+      groups_panel = find('[role="tabpanel"]#groups-panel', visible: :all)
+      assert groups_panel[:class].include?('hidden'), 'Groups panel should have hidden class'
 
       # Click groups tab
       find('[role="tab"]#groups-tab').click
@@ -572,7 +574,9 @@ module Projects
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
       assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
       assert_selector '[role="tab"]#members-tab[aria-selected="false"]'
-      assert_selector '[role="tabpanel"]#members-panel.hidden'
+      # Members panel should have hidden class
+      members_panel = find('[role="tabpanel"]#members-panel', visible: :all)
+      assert members_panel[:class].include?('hidden'), 'Members panel should have hidden class'
 
       # Click members tab again
       find('[role="tab"]#members-tab').click
@@ -587,20 +591,15 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
       wait_for_network_idle
 
-      # Focus the first tab
-      members_tab = find('[role="tab"]#members-tab')
-      members_tab.send_keys(:tab) # Focus the element
-
       # Press ArrowRight to move to groups tab
-      members_tab.send_keys(:arrow_right)
+      find('[role="tab"]#members-tab').native.send_keys(:right)
 
       # Groups tab should now be selected (automatic activation)
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
       assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
 
       # Press ArrowLeft to move back to members tab
-      groups_tab = find('[role="tab"]#groups-tab')
-      groups_tab.send_keys(:arrow_left)
+      find('[role="tab"]#groups-tab').native.send_keys(:left)
 
       # Members tab should be selected again
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
@@ -611,20 +610,20 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
       wait_for_network_idle
 
-      # Focus and navigate to groups tab first
-      members_tab = find('[role="tab"]#members-tab')
-      members_tab.send_keys(:arrow_right)
+      # Navigate to groups tab first
+      find('[role="tab"]#members-tab').native.send_keys(:right)
+
+      # Should be on groups tab now
+      assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
 
       # Press Home key to go to first tab
-      groups_tab = find('[role="tab"]#groups-tab')
-      groups_tab.send_keys(:home)
+      find('[role="tab"]#groups-tab').native.send_keys(:home)
 
       # Should be on members tab (first tab)
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
 
       # Press End key to go to last tab
-      members_tab = find('[role="tab"]#members-tab')
-      members_tab.send_keys(:end)
+      find('[role="tab"]#members-tab').native.send_keys(:end)
 
       # Should be on groups tab (last tab)
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
@@ -641,10 +640,12 @@ module Projects
 
       # Click members tab
       find('[role="tab"]#members-tab').click
-      wait_for_network_idle
+
+      # Wait for debounced hash update (100ms debounce in controller)
+      sleep 0.15
 
       # URL hash should update
-      assert_current_path namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
+      assert_equal 'members-tab', URI.parse(current_url).fragment
     end
 
     test 'tabs component loads content via Turbo Frame lazy loading' do
@@ -681,8 +682,8 @@ module Projects
       assert_equal 'groups-panel', groups_tab['aria-controls']
       assert_equal 'false', groups_tab['aria-selected']
 
-      # Check ARIA attributes on groups panel
-      groups_panel = find('[role="tabpanel"]#groups-panel')
+      # Check ARIA attributes on groups panel (must use visible: :all since it's hidden)
+      groups_panel = find('[role="tabpanel"]#groups-panel', visible: :all)
       assert_equal 'groups-tab', groups_panel['aria-labelledby']
       assert_equal 'true', groups_panel['aria-hidden']
     end
