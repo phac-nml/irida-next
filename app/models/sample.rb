@@ -81,6 +81,8 @@ class Sample < ApplicationRecord
 
     projects.each do |project|
       broadcast_refresh_later_to project, :samples
+      next unless Flipper.enabled?(:samples_refresh_notice)
+
       # Broadcast to all ancestor groups since they display samples from child projects/groups.
       # This ensures group sample views are notified of changes in nested projects.
       project.namespace.parent.self_and_ancestors.each do |ancestor|
