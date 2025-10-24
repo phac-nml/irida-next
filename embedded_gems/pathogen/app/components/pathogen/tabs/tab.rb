@@ -21,19 +21,34 @@ module Pathogen
         border-b-2
       ].freeze
 
-      # CSS classes for selected tabs
-      SELECTED_CLASSES = %w[
+      # CSS classes for selected tabs (horizontal orientation)
+      SELECTED_CLASSES_HORIZONTAL = %w[
         border-primary-800 dark:border-white
         text-slate-900 dark:text-white
         bg-transparent
       ].freeze
 
-      # CSS classes for unselected tabs
-      UNSELECTED_CLASSES = %w[
+      # CSS classes for selected tabs (vertical orientation)
+      SELECTED_CLASSES_VERTICAL = %w[
+        border-r-primary-800 dark:border-r-white
+        text-slate-900 dark:text-white
+        bg-transparent
+      ].freeze
+
+      # CSS classes for unselected tabs (horizontal orientation)
+      UNSELECTED_CLASSES_HORIZONTAL = %w[
         border-transparent
         text-slate-700 dark:text-slate-200
         hover:text-slate-900 dark:hover:text-white
         hover:border-slate-700 dark:hover:border-white
+      ].freeze
+
+      # CSS classes for unselected tabs (vertical orientation)
+      UNSELECTED_CLASSES_VERTICAL = %w[
+        border-r-transparent
+        text-slate-700 dark:text-slate-200
+        hover:text-slate-900 dark:hover:text-white
+        hover:border-r-slate-700 dark:hover:border-r-white
       ].freeze
 
       # CSS classes for horizontal orientation
@@ -90,14 +105,18 @@ module Pathogen
         ].join(' ')
       end
 
-      # Sets up CSS classes based on selection state
+      # Sets up CSS classes based on selection state and orientation
       # Note: We apply both selected and unselected classes with aria-selected selectors
       # so that JavaScript can dynamically toggle the appearance by changing aria-selected
       def setup_css_classes
-        state_classes = @selected ? SELECTED_CLASSES : UNSELECTED_CLASSES
-        orientation_classes = @orientation == :vertical ? VERTICAL_CLASSES : HORIZONTAL_CLASSES
+        # Select appropriate state classes based on orientation
+        state_classes = if @orientation == :vertical
+                          @selected ? SELECTED_CLASSES_VERTICAL : UNSELECTED_CLASSES_VERTICAL
+                        else
+                          @selected ? SELECTED_CLASSES_HORIZONTAL : UNSELECTED_CLASSES_HORIZONTAL
+                        end
 
-        state_classes = map_vertical_border_classes(state_classes) if @orientation == :vertical
+        orientation_classes = @orientation == :vertical ? VERTICAL_CLASSES : HORIZONTAL_CLASSES
 
         @system_arguments[:class] = class_names(
           BASE_CLASSES,
@@ -105,22 +124,6 @@ module Pathogen
           state_classes,
           @system_arguments[:class]
         )
-      end
-
-      # Maps horizontal border classes to vertical border classes
-      def map_vertical_border_classes(classes)
-        classes.map do |cls|
-          case cls
-          when 'border-primary-800 dark:border-white'
-            'border-r-primary-800 dark:border-r-white'
-          when 'border-transparent'
-            'border-r-transparent'
-          when 'hover:border-slate-700 dark:hover:border-white'
-            'hover:border-r-slate-700 dark:hover:border-r-white'
-          else
-            cls
-          end
-        end
       end
     end
   end

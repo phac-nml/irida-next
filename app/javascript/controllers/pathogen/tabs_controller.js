@@ -74,6 +74,14 @@ export default class extends Controller {
   #tablist = null;
 
   /**
+   * Private field for storing the URL hash update timeout
+   * Used for debouncing hash updates during rapid tab switching
+   * @type {number|null}
+   * @private
+   */
+  #hashUpdateTimeout = null;
+
+  /**
    * Initializes the controller when it connects to the DOM
    * Sets up ARIA relationships and selects the default tab.
    *
@@ -202,6 +210,12 @@ export default class extends Controller {
       if (this.#boundHandleTurboRender) {
         document.removeEventListener("turbo:render", this.#boundHandleTurboRender);
       }
+    }
+
+    // Clear any pending hash update timeout
+    if (this.#hashUpdateTimeout) {
+      clearTimeout(this.#hashUpdateTimeout);
+      this.#hashUpdateTimeout = null;
     }
 
     // Clear cached DOM references
@@ -469,23 +483,35 @@ export default class extends Controller {
 
   /**
    * Updates the URL hash with the selected tab
+   * Debounced to prevent excessive updates during rapid tab switching (e.g., arrow keys)
    * @private
    * @param {number} index - The tab index
    * @returns {void}
    */
   #updateUrlHash(index) {
-    try {
-      const hash = this.#getTabHash(index);
-      const url = new URL(window.location.href);
-      // Clear stale tab query params so subsequent submissions don't carry outdated values
-      url.searchParams.delete("tab");
-      url.hash = hash;
-
-      // Use replaceState to avoid adding to browser history on every tab change
-      window.history.replaceState(null, "", url.toString());
-    } catch (error) {
-      console.error("[pathogen--tabs] Error updating URL hash:", error);
+    // Clear any pending update
+    if (this.#hashUpdateTimeout) {
+      clearTimeout(this.#hashUpdateTimeout);
     }
+
+    // Debounce the update by 100ms
+    // This prevents excessive URL updates during rapid arrow key navigation
+    this.#hashUpdateTimeout = setTimeout(() => {
+      try {
+        const hash = this.#getTabHash(index);
+        const url = new URL(window.location.href);
+        // Clear stale tab query params so subsequent submissions don't carry outdated values
+        url.searchParams.delete("tab");
+        url.hash = hash;
+
+        // Use replaceState to avoid adding to browser history on every tab change
+        window.history.replaceState(null, "", url.toString());
+      } catch (error) {
+        console.error("[pathogen--tabs] Error updating URL hash:", error);
+      } finally {
+        this.#hashUpdateTimeout = null;
+      }
+    }, 100);
   }
 
   /**
