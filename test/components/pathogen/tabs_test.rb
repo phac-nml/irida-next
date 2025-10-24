@@ -87,9 +87,13 @@ module Pathogen
 
       render_inline(tabs)
 
-      # Both panels initially have hidden class (JS will show selected one)
-      assert_selector '[role="tabpanel"]#panel-1.hidden'
+      # First panel remains visible for progressive enhancement fallback
+      assert_selector '[role="tabpanel"]#panel-1:not(.hidden)'
+      assert_selector '[role="tabpanel"]#panel-1[aria-hidden="false"]'
+
+      # Subsequent panels remain hidden until JavaScript activates them
       assert_selector '[role="tabpanel"]#panel-2.hidden'
+      assert_selector '[role="tabpanel"]#panel-2[aria-hidden="true"]'
     end
 
     test 'renders with Stimulus controller attributes' do

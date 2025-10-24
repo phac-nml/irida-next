@@ -145,6 +145,7 @@ module Pathogen
       validate_default_index!
       validate_unique_ids!
       validate_panel_associations!
+      apply_initial_panel_visibility
     end
 
     private
@@ -194,6 +195,12 @@ module Pathogen
         unless tab_ids.include?(panel.tab_id)
           raise ArgumentError, "Panel #{panel.id} references non-existent tab #{panel.tab_id}"
         end
+      end
+    end
+
+    def apply_initial_panel_visibility
+      panels.each_with_index do |panel, index|
+        panel.set_initial_visibility(hidden: index != @default_index)
       end
     end
   end
