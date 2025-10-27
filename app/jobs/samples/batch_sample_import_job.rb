@@ -3,6 +3,8 @@
 module Samples
   # Job used to import metadata for samples
   class BatchSampleImportJob < ApplicationJob
+    include WithResponsible
+
     queue_as :default
     queue_with_priority 15
 
@@ -44,7 +46,7 @@ module Samples
 
     private
 
-    def handle_response(broadcast_target, response) # rubocop:disable Metrics/MethodLength
+    def handle_response(broadcast_target, response)
       problems = []
       response.each do |key, value|
         next if value.is_a? Sample
@@ -59,11 +61,7 @@ module Samples
         broadcast_target,
         target: 'import_spreadsheet_dialog_content',
         partial: 'shared/samples/spreadsheet_imports/success',
-        locals: {
-          type: :success,
-          message: I18n.t('shared.samples.spreadsheet_imports.success.description'),
-          problems:
-        }
+        locals: { problems: }
       )
     end
   end

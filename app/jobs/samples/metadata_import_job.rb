@@ -3,6 +3,8 @@
 module Samples
   # Job used to import metadata for samples
   class MetadataImportJob < ApplicationJob
+    include WithResponsible
+
     queue_as :default
     queue_with_priority 15
 
@@ -15,11 +17,7 @@ module Samples
         Turbo::StreamsChannel.broadcast_replace_to(
           broadcast_target,
           target: 'import_metadata_dialog_content',
-          partial: 'shared/samples/metadata/file_imports/success',
-          locals: {
-            type: :success,
-            message: I18n.t('shared.samples.metadata.file_imports.success.description')
-          }
+          partial: 'shared/samples/metadata/file_imports/success'
         )
 
       elsif namespace.errors.include?(:sample)
@@ -31,7 +29,6 @@ module Samples
           partial: 'shared/samples/metadata/file_imports/errors',
           locals: {
             type: :alert,
-            message: I18n.t('shared.samples.metadata.file_imports.errors.description'),
             errors: errors
           }
         )
