@@ -3,14 +3,10 @@ import "@hotwired/turbo-rails";
 import "controllers";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
-import { initializeLocalTimeProcessing } from "./lib/local_time_processor";
 
 import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
-
-// Initialize LocalTime processing for Turbo events
-initializeLocalTimeProcessing();
 
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
@@ -28,6 +24,9 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
+  LocalTime.config.locale = document.documentElement.lang;
+  // reprocess each time element regardless if it has been already processed
+  LocalTime.process(...document.querySelectorAll("time"));
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();

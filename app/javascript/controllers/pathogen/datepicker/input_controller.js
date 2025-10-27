@@ -16,7 +16,6 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
-    nextFocusSelector: String,
   };
 
   // today's date attributes for quick access
@@ -35,10 +34,6 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
-  #formElement;
-
-  #focusRestoreTimeouts = [];
-
   #dropdown;
 
   #minDate;
@@ -52,25 +47,11 @@ export default class extends Controller {
       this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
-    this.boundHandleSubmitEnd = this.handleSubmitEnd.bind(this);
 
     this.idempotentConnect();
   }
 
   idempotentConnect() {
-    // Clean up any disconnected calendar reference
-    if (this.#calendar && !this.#calendar.isConnected) {
-      this.#calendar = null;
-    }
-
-    this.#setFormElement();
-
-    // Clean up any existing calendar from a previous connection (e.g., after morph)
-    const existingCalendar = document.getElementById(this.calendarIdValue);
-    if (existingCalendar && existingCalendar !== this.#calendar) {
-      existingCalendar.remove();
-    }
-
     // the currently selected date will be displayed on the initial calendar
     this.#setSelectedDate();
 
@@ -79,11 +60,6 @@ export default class extends Controller {
     // Position the calendar
     this.#initializeDropdown();
 
-    // Remove event listener first to avoid duplicates
-    this.datepickerInputTarget.removeEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
     this.datepickerInputTarget.addEventListener(
       "focus",
       this.boundHandleDatepickerInputFocus,
@@ -98,25 +74,8 @@ export default class extends Controller {
       this.boundHandleDatepickerInputFocus,
     );
 
-    if (this.#formElement) {
-      this.#formElement.removeEventListener(
-        "turbo:submit-end",
-        this.boundHandleSubmitEnd,
-      );
-      this.#formElement = null;
-    }
-
-    this.#clearFocusRestoreTimers();
-
-    if (this.#calendar) {
-      this.#calendar.remove();
-      this.#calendar = null;
-    }
-
-    // Clean up the dropdown instance to allow proper reinitialization
-    if (this.#dropdown) {
-      this.#dropdown = null;
-    }
+    this.#calendar.remove();
+    this.#calendar = null;
   }
 
   #initializeDropdown() {
@@ -126,12 +85,6 @@ export default class extends Controller {
           "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
         );
       }
-
-      // Reinitialize dropdown if it already exists (e.g., after a Turbo morph)
-      if (this.#dropdown) {
-        this.#dropdown = null;
-      }
-
       this.#dropdown = new Dropdown(
         this.#calendar,
         this.datepickerInputTarget,
@@ -175,22 +128,8 @@ export default class extends Controller {
 
   #addCalendarTemplate() {
     try {
-      // Check if we have a calendar reference and if it's still in the DOM
-      if (this.#calendar && this.#calendar.isConnected) {
-        return;
-      }
-
-      // Check if calendar exists in DOM (not just if we have a reference)
-      const existingCalendar = document.getElementById(this.calendarIdValue);
-      if (existingCalendar && existingCalendar.isConnected) {
-        this.#calendar = existingCalendar;
-        return;
-      }
-
-      if (!this.hasCalendarTemplateTarget) {
-        console.error('[datepicker] calendarTemplateTarget is missing!');
-        return;
-      }
+      // Don't add calendar if already exists
+      if (this.#calendar) return;
 
       // Add the calendar template to the DOM
       const calendar = this.calendarTemplateTarget.content.cloneNode(true);
@@ -251,35 +190,13 @@ export default class extends Controller {
 
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
-    this.#setFormElement();
     this.#shareParamsWithCalendar();
   }
 
   handleDatepickerInputFocus() {
-    // Check if calendar was removed from DOM and recreate if needed
-    if (!this.#calendar || !this.#calendar.isConnected) {
-      this.#calendar = null;
-      this.#dropdown = null;
-      this.#addCalendarTemplate();
-      this.#initializeDropdown();
-    }
-
-    if (!this.#dropdown) {
-      console.error('[datepicker] Dropdown instance is null, reinitializing...');
-      this.#initializeDropdown();
-    }
     if (!this.#dropdown.isVisible()) {
       this.#dropdown.show();
     }
-  }
-
-  handleSubmitEnd(event) {
-    if (!this.autosubmitValue) return;
-    if (event?.target !== this.#formElement) return;
-    const { success } = event.detail || {};
-    if (!success) return;
-
-    this.#scheduleFocusRestore();
   }
 
   handleCalendarFocus(event) {
@@ -456,64 +373,6 @@ export default class extends Controller {
   }
 
   focusNextFocusableElement() {
-    if (!this.#nextFocusableElementAfterInput) return;
     this.#nextFocusableElementAfterInput.focus();
-  }
-
-  #resolveNextFocusTarget() {
-    if (this.hasNextFocusSelectorValue) {
-      const scope = this.element.closest('tr') ?? document;
-      const candidate = scope.querySelector(this.nextFocusSelectorValue);
-      if (candidate) {
-        if (candidate.matches(FOCUSABLE_ELEMENTS)) {
-          return candidate;
-        }
-        return candidate.querySelector(FOCUSABLE_ELEMENTS);
-      }
-    }
-
-    this.#findNextFocusableElement();
-    return this.#nextFocusableElementAfterInput;
-  }
-
-  #setFormElement() {
-    const form = this.element.closest("form");
-    if (!form || form === this.#formElement) return;
-
-    if (this.#formElement) {
-      this.#formElement.removeEventListener(
-        "turbo:submit-end",
-        this.boundHandleSubmitEnd,
-      );
-    }
-
-    this.#formElement = form;
-    this.#formElement.addEventListener(
-      "turbo:submit-end",
-      this.boundHandleSubmitEnd,
-    );
-  }
-
-  #scheduleFocusRestore() {
-    const attemptFocus = () => {
-      const target = this.#resolveNextFocusTarget();
-      if (target?.focus) {
-        target.focus();
-      }
-    };
-
-    this.#clearFocusRestoreTimers();
-
-    this.#focusRestoreTimeouts = [
-      setTimeout(attemptFocus, 0),
-      setTimeout(attemptFocus, 200),
-      setTimeout(attemptFocus, 600),
-      setTimeout(attemptFocus, 1200),
-    ];
-  }
-
-  #clearFocusRestoreTimers() {
-    this.#focusRestoreTimeouts.forEach((id) => clearTimeout(id));
-    this.#focusRestoreTimeouts = [];
   }
 }

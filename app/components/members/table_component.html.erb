@@ -127,9 +127,6 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                     selected_date: member.expires_at,
                     autosubmit: true,
                     input_aria_label: t("members.table_component.aria_labels.expires_at"),
-                    data: {
-                      'pathogen--datepicker--input-next-focus-selector-value': "[data-member-action='remove'] button",
-                    },
                   ) %>
                 <% end %>
               <% elsif !member.expires_at.nil? %>
