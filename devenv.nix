@@ -14,7 +14,6 @@ lib.mkMerge [
       nextflow
       nodejs_24
       pnpm_10
-      python313
       jq
       file
     ];
@@ -37,9 +36,7 @@ lib.mkMerge [
       enable = true;
       venv.enable = true;
       venv.requirements = ''
-        setuptools
-        wheel
-        pip
+        poetry
       '';
     };
 
@@ -49,7 +46,7 @@ lib.mkMerge [
     # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
     processes.sapporo-service = {
       exec = ''
-        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh sapporo
+        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
       '';
       cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
     };
@@ -86,7 +83,8 @@ lib.mkMerge [
         git checkout main
         git branch -D irida-next &>/dev/null || true
         git checkout irida-next
-        pip install -e .
+        export LD_LIBRARY_PATH="${pkgs.file}/lib/libmagic${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}:$LD_LIBRARY_PATH"
+        poetry install -v
       '';
       cwd = "${config.git.root}/.devenv";
       before = [ "devenv:processes:sapporo-service" ];
