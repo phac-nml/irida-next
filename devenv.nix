@@ -83,7 +83,6 @@ lib.mkMerge [
         git checkout main
         git branch -D irida-next &>/dev/null || true
         git checkout irida-next
-        export LD_LIBRARY_PATH="${pkgs.file}/lib/libmagic${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}:$LD_LIBRARY_PATH"
         poetry install -v
       '';
       cwd = "${config.git.root}/.devenv";
