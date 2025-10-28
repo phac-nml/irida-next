@@ -150,7 +150,9 @@ module Pathogen
         if @object&.class.respond_to?(:human_attribute_name)
           @object.class.human_attribute_name(method)
         else
-          method.to_s.humanize
+          # Try helpers.label lookup for non-AR models/symbols
+          label_key = "helpers.label.#{@object_name}.#{method}"
+          I18n.t(label_key, default: method.to_s.humanize)
         end
       end
 
