@@ -722,7 +722,8 @@ fr:
         subtitle: Configurez des comptes de bot pour pouvoir effectuer des actions en utilisant l’API qui ne peuvent pas être attribuées à un utilisateur individuel.
         title: Comptes de bot
     create:
-      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
+      description_help: La description peut contenir un maximum de 255 caractères.
+      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d'informations, consultez <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
       name_placeholder: Nom de groupe génial
       path_help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       submit: Créer un groupe
