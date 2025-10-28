@@ -1,8 +1,7 @@
-<%= form_with(url: "#", data: { controller: "select-with-auto-complete" }) do |form| %>
+<%= form_with(url: "#") do |form| %>
   <%= render SelectWithAutoCompleteComponent.new(
-    label: label,
-    combobox_id: combobox_id,
-    listbox_id: listbox_id,
+    form: form,
+    field: :field,
     options: options,
   ) %>
 <% end %>
