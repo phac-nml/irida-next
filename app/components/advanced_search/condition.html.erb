@@ -15,16 +15,21 @@
       "
     >
       <%= conditions_form.label :field, data: { required: true } %>
+      <% options =
+        options_for_select(@sample_fields, selected_key = @condition.field).concat(
+          grouped_options_for_select(
+            @metadata_fields,
+            selected_key = @condition.field,
+          ),
+        ) %>
+      <%= render SelectWithAutoCompleteComponent.new(
+        form: conditions_form,
+        field: :field,
+        options: options,
+      ) %>
+      <!--
       <%= conditions_form.select :field,
-                             options_for_select(
-                               @sample_fields,
-                               selected_key = @condition.field,
-                             ).concat(
-                               grouped_options_for_select(
-                                 @metadata_fields,
-                                 selected_key = @condition.field,
-                               ),
-                             ),
+                             options,
                              { include_blank: true },
                              {
                                "aria-label":
@@ -36,6 +41,7 @@
                                  conditions_form.field_id(:field, "error"),
                                autofocus: invalid_field,
                              } %>
+      -->
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:field),
       id: conditions_form.field_id(:field, "error") %>

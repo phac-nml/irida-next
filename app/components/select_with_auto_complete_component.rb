@@ -2,25 +2,34 @@
 
 # Component for rendering a drop down that filters dynamically
 class SelectWithAutoCompleteComponent < Component
-  def initialize(label:, combobox_id:, listbox_id:, options:)
-    @label = label
-    @combobox_id = combobox_id
-    @listbox_id = listbox_id
-    @options = replace(options) # TODO: validate?
+  def initialize(form:, field:, options:)
+    @combobox_id = 'combobox_id'
+    @listbox_id = 'listbox_id'
+    @form = form
+    @field = field
+    @options = create_listbox(options) # TODO: validate?
+    @selected_option = get_selected_option(options) # Assume there is only one selected option for now
   end
 
   private
 
-  def replace(options)
+  def get_selected_option(options)
     fragment = Nokogiri::HTML.fragment(options)
-    fragment = replace_options(fragment)
-    fragment = replace_groups(fragment)
+    fragment.search('option').each do |option|
+      return { name: option.text, value: option['value'] } if option.key?('selected')
+    end
+    { name: '', value: '' }
+  end
+
+  def create_listbox(options)
+    fragment = Nokogiri::HTML.fragment(options)
+    fragment = create_listbox_options(fragment)
+    fragment = create_listbox_grouped_options(fragment)
     ActiveSupport::SafeBuffer.new(fragment.to_html)
   end
 
-  def replace_groups(fragment) # rubocop:disable Metrics/MethodLength
+  def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength
     fragment.search('optgroup').each_with_index do |group, group_index|
-      # TODO: handle selected
       id = "group#{group_index}"
       ul = Nokogiri::XML::Node.new('ul', fragment)
       ul['role'] = 'group'
@@ -38,9 +47,8 @@ class SelectWithAutoCompleteComponent < Component
     fragment
   end
 
-  def replace_options(fragment)
+  def create_listbox_options(fragment)
     fragment.search('option').each_with_index do |option, option_index|
-      # TODO: handle selected
       li = Nokogiri::XML::Node.new('li', fragment)
       li['id'] = "option#{option_index}"
       li['role'] = 'option'
