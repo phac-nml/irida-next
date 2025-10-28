@@ -33,58 +33,54 @@
       <%= render partial: "shared/form/required_field_legend" %>
       <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
       <template data-projects--samples--metadata--create-target="fieldTemplate">
-        <div class="flex space-x-2 inputField items-center">
+        <div class="flex space-x-2 inputField items-end">
           <div
             id="key[PLACEHOLDER]_key_input"
-            class="
-              relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
-            "
+            class="w-full form-field"
           >
+            <label
+              for="key_PLACEHOLDER"
+              data-required="true"
+              class="keyLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
+            >
+              <%= t("projects.samples.metadata.form.key") %>
+            </label>
             <input
               type="text"
               name="key_PLACEHOLDER"
               id="key_PLACEHOLDER"
-              class="keyInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent rounded-lg border-1 border-slate-300 appearance-none dark:text-white dark:border-slate-600 peer"
+              class="keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600"
               placeholder=""
             >
-            <label
-              for="key_PLACEHOLDER"
-              data-required="true"
-              class="keyLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-8 peer-[:not(:placeholder-shown)]:-translate-y-8 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 border-none"
-            >
-              <%= t("projects.samples.metadata.form.key") %>
-            </label>
           </div>
           <div
             id="value[PLACEHOLDER]_value_input"
-            class="
-              relative z-0 w-full group form-field text-slate-500 dark:text-slate-400
-            "
+            class="w-full form-field"
           >
+            <label
+              for="value_PLACEHOLDER"
+              data-required="true"
+              class="valueLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
+            >
+              <%= t("projects.samples.metadata.form.value") %>
+            </label>
             <input
               type="text"
               name="value_PLACEHOLDER"
               id="value_PLACEHOLDER"
-              class="valueInput block px-2.5 pb-2.5 pt-4 w-full text-sm text-slate-900 bg-transparent rounded-lg border-1 border-slate-300 appearance-none dark:text-white dark:border-slate-600 peer"
+              class="valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600"
               placeholder=""
               required
             >
-            <label
-              for="value_PLACEHOLDER"
-              data-required="true"
-              class="valueLabel absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-8 peer-[:not(:placeholder-shown)]:-translate-y-8 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 border-none"
-            >
-              <%= t("projects.samples.metadata.form.value") %>
-            </label>
           </div>
           <button
             type="button"
             data-action="projects--samples--metadata--create#removeField"
             class="
-              ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg p-1.5
-              hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8
+              bg-white text-slate-400 hover:text-slate-900 rounded-lg p-1.5
+              hover:bg-slate-100 inline-flex items-center justify-center h-9 w-9
               dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-              dark:hover:bg-slate-700 cursor-pointer
+              dark:hover:bg-slate-700 cursor-pointer flex-shrink-0
             "
             aria-label="<%= t(".remove_field")%>"
           >
