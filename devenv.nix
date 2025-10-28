@@ -22,7 +22,7 @@ lib.mkMerge [
     languages.ruby = {
       enable = true;
       versionFile = ./.ruby-version;
-      bundler.enable = true;
+      bundler.enable = false; # don't install bundler package from nix as this is already included with ruby
     };
 
     languages.javascript = {
