@@ -10,7 +10,7 @@ import { Controller } from "@hotwired/stimulus";
  * - Dropdown positioning and focus management
  */
 export default class SelectWithAutoCompleteController extends Controller {
-  static targets = ["combobox", "listbox", "button"];
+  static targets = ["combobox", "listbox", "button", "hidden"];
 
   connect() {
     this.allOptions = [];
@@ -43,7 +43,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   attachOptionEvents(category, add = false) {
-    var categoryItems = category.querySelectorAll('li[role="option"]');
+    var categoryItems = category.querySelectorAll(':scope > li[role="option"]');
     for (var i = 0; i < categoryItems.length; i++) {
       var categoryItem = categoryItems[i];
       if (add) {
@@ -80,8 +80,9 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  setValue(value) {
-    this.filter = value;
+  setValue(option) {
+    this.hiddenTarget.value = option.getAttribute("value");
+    this.filter = option.textContent;
     this.comboboxTarget.value = this.filter;
     this.comboboxTarget.setSelectionRange(
       this.filter.length,
@@ -238,7 +239,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Enter":
-        this.setValue(this.option.textContent);
+        this.setValue(this.option);
         this.close();
         flag = true;
         break;
@@ -290,7 +291,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Tab":
         this.close();
         if (this.option) {
-          this.setValue(this.option.textContent);
+          this.setValue(this.option);
         }
         break;
 
@@ -430,7 +431,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Listbox Option events
 
   onOptionClick(event) {
-    this.comboboxTarget.value = event.target.textContent;
+    this.setValue(event.target);
     this.close();
   }
 
