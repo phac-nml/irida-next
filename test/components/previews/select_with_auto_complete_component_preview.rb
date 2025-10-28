@@ -17,12 +17,11 @@ class SelectWithAutoCompleteComponentPreview < ViewComponent::Preview
                                             ['patient_sex', 'metadata.patient_sex'],
                                             ['wgs_id', 'metadata.wgs_id']] }
 
-    options = options_for_select(sample_fields).concat(grouped_options_for_select(metadata_fields))
+    options = options_for_select(sample_fields).concat(
+      grouped_options_for_select(metadata_fields, selected_key = 'metadata.age') # rubocop:disable Lint/UselessAssignment
+    )
 
     render_with_template(locals: {
-                           label: 'Cities',
-                           combobox_id: 'combobox_id',
-                           listbox_id: 'listbox_id',
                            options: options
                          })
   end
