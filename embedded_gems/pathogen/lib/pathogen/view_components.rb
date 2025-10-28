@@ -6,6 +6,19 @@ require 'pathogen/view_helper'
 require 'pathogen/styles/form_styles'
 
 module Pathogen
+  # Convenience module that includes all Pathogen helpers at once
+  # @example Include all helpers in a component
+  #   class MyComponent < ViewComponent::Base
+  #     include Pathogen::Helpers
+  #   end
+  module Helpers
+    def self.included(base)
+      base.include Pathogen::ViewHelper
+      base.include Pathogen::FormHelper
+      base.include Pathogen::FormTagHelper
+    end
+  end
+
   # :nodoc:
   module ViewComponents
     DEPRECATION_HORIZON = '1.0'
