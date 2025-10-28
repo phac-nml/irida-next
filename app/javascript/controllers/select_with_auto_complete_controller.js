@@ -4,7 +4,7 @@ import TomSelect from "tom-select";
 export default class SelectWithAutoCompleteController extends Controller {
   connect() {
     console.debug("SelectWithAutoCompleteController: Connected");
-    new TomSelect(this.element, {
+    const select = new TomSelect(this.element, {
       render: {
         optgroup: function (data, escape) {
           var optgroup = document.createElement("div");
@@ -24,6 +24,25 @@ export default class SelectWithAutoCompleteController extends Controller {
           return "";
         },
       },
+    });
+
+    select.control_input.addEventListener("keydown", function (event) {
+      switch (event.key) {
+        case "Home":
+          event.preventDefault();
+          select.control_input.setSelectionRange(0, 0);
+          break;
+
+        case "End":
+          event.preventDefault();
+          const filterValue = select.control_input.value;
+          var length = filterValue.length;
+          select.control_input.setSelectionRange(length, length);
+          break;
+
+        default:
+          break;
+      }
     });
   }
 
