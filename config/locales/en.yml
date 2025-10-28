@@ -720,7 +720,6 @@ en:
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
     create:
-      description_help: Description can have a maximum 255 characters
       name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="text-blue-600 underline hover:decoration-2 dark:text-blue-500" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
       name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
