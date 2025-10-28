@@ -20,12 +20,12 @@
     <%= pathogen_icon(:translate, size: :sm, class: "mr-2") %>
     <abbr
       class="text-sm sm:hidden"
-      title="<%= I18n.t(:"locales.#{locale}", locale: locale) %>"
+      title="<%= I18n.t(:"locales.#{user_locale}", locale: user_locale) %>"
     >
-      <%= locale.upcase %>
+      <%= user_locale.upcase %>
     </abbr>
     <span class="text-sm max-sm:hidden" id="language-selection-dd-label">
-      <%= I18n.t(:"locales.#{locale}", locale: locale) %>
+      <%= I18n.t(:"locales.#{user_locale}", locale: user_locale) %>
     </span>
   </button>
   <!-- Dropdown menu -->
@@ -43,7 +43,7 @@
     hidden="hidden"
   >
     <% @locale_options.each do |locale_name, locale_value| %>
-      <% if @user.locale.to_sym == locale_value %>
+      <% if user_locale.to_sym == locale_value %>
         <li
           role="menuitemradio"
           aria-checked="true"

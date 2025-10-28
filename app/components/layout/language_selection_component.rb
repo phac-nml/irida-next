@@ -7,5 +7,9 @@ module Layout
       @user = user
       @locale_options = I18n.available_locales.map { |locale| [I18n.t(:"locales.#{locale}", locale: locale), locale] }
     end
+
+    def user_locale
+      @user&.locale || I18n.default_locale
+    end
   end
 end

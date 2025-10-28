@@ -7,5 +7,6 @@ module Viral
 
     include ClassNameHelper
     include ViewHelper
+    include Pathogen::Helpers
   end
 end
