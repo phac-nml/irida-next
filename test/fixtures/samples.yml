@@ -43,6 +43,14 @@ sample23:
   created_at: <%= 23.weeks.ago %>
   updated_at: <%= 23.days.ago %>
 
+'1234':
+  name: 1234
+  description: 1234 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project4, :uuid) %>
+  puid: INXT_SAM_BAAAAAAAAA
+  created_at: <%= 23.weeks.ago %>
+  updated_at: <%= 23.days.ago %>
+
 sample24:
   name: John Doe Project 2 Sample 1
   description: John Doe Project 2 Sample 1 description.

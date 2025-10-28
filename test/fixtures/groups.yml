@@ -49,7 +49,7 @@ group_three:
   path: group-3
   description: Group 3 description
   puid: INXT_GRP_AAAAAAAAAD
-  samples_count: 1
+  samples_count: 2
 
 subgroup_one_group_three:
   <<: *DEFAULTS
@@ -58,7 +58,7 @@ subgroup_one_group_three:
   description: Subgroup 1 Group 3
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAE
-  samples_count: 1
+  samples_count: 2
 
 david_doe_group_four:
   <<: *DEFAULTS
