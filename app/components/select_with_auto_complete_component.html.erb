@@ -7,7 +7,8 @@
                          data: {
                            "select-with-auto-complete-target": "hidden",
                          } %>
-      <input
+      <%= render Viral::BaseComponent.new(**input_arguments) %>
+      <!--<input
         id="<%= @combobox_id %>"
         type="text"
         value="<%= @selected_option[:name] %>"
@@ -16,7 +17,7 @@
         aria-expanded="false"
         aria-controls="<%= @listbox_id %>"
         data-select-with-auto-complete-target="combobox"
-      >
+      >-->
       <button
         tabindex="-1"
         aria-label="<%= @label %>"
