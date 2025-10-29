@@ -3,6 +3,8 @@
 module Samples
   # Job used to clone samples
   class CloneJob < ApplicationJob
+    include WithResponsible
+
     queue_as :default
     queue_with_priority 15
 

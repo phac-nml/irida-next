@@ -28,7 +28,7 @@ john_doe_project4:
 project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace, :uuid) %>
-  samples_count: 1
+  samples_count: 2
 
 project5:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

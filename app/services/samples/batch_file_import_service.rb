@@ -48,7 +48,7 @@ module Samples
 
         update_progress_bar(index, total_sample_count, broadcast_target)
 
-        sample_name = data[@sample_name_column]
+        sample_name = data[@sample_name_column].to_s
 
         project_puid = data[@project_puid_column]
         description = data[@sample_description_column]
@@ -93,7 +93,7 @@ module Samples
     end
 
     def errors_on_sample_row(sample_name, project_puid, response, index)
-      if sample_name.nil? || (project_puid.nil? && @static_project.nil?)
+      if sample_name.blank? || (project_puid.nil? && @static_project.nil?)
         [{
           path: ['sample'],
           message: I18n.t('services.spreadsheet_import.missing_field', index:)

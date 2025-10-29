@@ -12,8 +12,10 @@ module Samples
         @jane_doe = users(:jane_doe)
         @group = groups(:group_one)
         @project = projects(:project1)
+        @project4 = projects(:project4)
         @sample1 = samples(:sample1)
         @sample2 = samples(:sample2)
+        @sample1234 = samples(:'1234')
         file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/valid.csv'))
         @blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
@@ -541,6 +543,26 @@ module Samples
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15' },
                      @sample2.reload.metadata)
+      end
+
+      test 'import sample metadata via xlsx file using numeric sample names for project namespace' do
+        assert_equal({}, @sample1234.metadata)
+
+        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/valid_numeric_sample_name.xlsx'))
+
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
+        response = Samples::Metadata::FileImportService.new(@project4.namespace, @john_doe, blob.id,
+                                                            params).execute
+        assert_equal({ @sample1234.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                             updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '1924-01-04', 'metadatafield3' => 'true' },
+                     @sample1234.reload.metadata)
       end
     end
   end

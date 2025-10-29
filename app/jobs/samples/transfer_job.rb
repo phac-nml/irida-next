@@ -3,6 +3,8 @@
 module Samples
   # Job used to transfer samples
   class TransferJob < ApplicationJob
+    include WithResponsible
+
     queue_as :default
     queue_with_priority 15
 

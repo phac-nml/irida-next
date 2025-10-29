@@ -43,8 +43,7 @@ module Samples
 
           update_progress_bar(index, total_sample_count, broadcast_target)
 
-          sample_id = metadata[@sample_id_column]
-
+          sample_id = metadata[@sample_id_column].to_s
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
 
