@@ -54,6 +54,10 @@ module Viral
         }
       end
 
+      def content_for(row)
+        @block.call(row)
+      end
+
       delegate :call, to: :@block
     end
   end
