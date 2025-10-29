@@ -18,6 +18,8 @@
   "
   data-controller="layout"
   data-layout-target="layoutContainer"
+  data-layout-collapsed-announcement-value="<%= t(:'components.layout.sidebar.collapsed_announcement') %>"
+  data-layout-expanded-announcement-value="<%= t(:'components.layout.sidebar.expanded_announcement') %>"
   data-turbo-prefetch="false"
 >
   <%= sidebar %>
@@ -28,7 +30,7 @@
     "
     data-layout-target="content"
   >
-    <div
+    <header
       class="
         flex sm:px-4 max-sm:px-2 z-20 h-16 -outline-offset-1 border-b border-slate-200
         dark:border-slate-950 bg-white dark:bg-slate-800 xl:absolute xl:top-0 w-full
@@ -41,9 +43,12 @@
       >
         <button
           data-action="click->layout#expand:capture"
+          data-layout-target="expandButton"
           class="text-slate-500 navbar-button cursor-pointer"
-          title="<%= t(:'general.navbar.expand.title') %>"
-          aria-label="<%= t(:'general.navbar.expand.aria_label') %>"
+          title="<%= t(:'general.navbar.toggle_sidebar') %>"
+          aria-label="<%= t(:'general.navbar.toggle_sidebar') %>"
+          aria-controls="sidebar"
+          aria-expanded="true"
         >
           <%= pathogen_icon :sidebar %>
         </button>
@@ -54,7 +59,7 @@
         </turbo-frame>
       </div>
       <%= language_selection %>
-    </div>
+    </header>
     <main
       id="main-content"
       tabindex="-1"
@@ -66,11 +71,21 @@
       <div class="<%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
-    <div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
+    <div
+      id="flashes"
+      class="fixed flex flex-col top-5 right-6 z-50"
+    >
       <% flash.each do |key, value| %>
         <%= viral_flash(type: key, data: value) %>
       <% end %>
     </div>
+    <span
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      data-layout-target="announcement"
+    ></span>
   </div>
   <div tabindex="0" data-action="focus->layout#handleContentFocus"></div>
 </div>

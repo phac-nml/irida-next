@@ -200,6 +200,9 @@ en:
       language_selection:
         title: Language Selection
       main_content_link: Skip to content
+      sidebar:
+        collapsed_announcement: Sidebar collapsed
+        expanded_announcement: Sidebar expanded
     list_filter:
       apply: Apply filter
       title: Filter by sample names or Id

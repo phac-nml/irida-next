@@ -30,7 +30,7 @@ class ProjectsTest < ApplicationSystemTestCase
   test 'should have Project URL filled with user namespace, when creating a new project using the nav bar' do
     visit dashboard_projects_url
 
-    click_button I18n.t('general.navbar.new_dropdown.aria_label')
+    click_button I18n.t('general.navbar.new_dropdown.label')
     click_link I18n.t('general.navbar.new_dropdown.project')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
@@ -157,7 +157,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
     assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
 
-    within 'aside#sidebar' do
+    within 'nav#sidebar' do
       assert_text project_name
     end
 

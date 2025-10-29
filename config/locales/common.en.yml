@@ -3,7 +3,6 @@ en:
   common:
     actions:
       cancel: Cancel
-      create: Create
       delete: Delete
       download: Download
       edit: Edit
