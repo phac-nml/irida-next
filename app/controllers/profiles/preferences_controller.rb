@@ -16,7 +16,6 @@ module Profiles
 
     def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @user
-      updated = @user.update(update_params)
 
       respond_to do |format|
         # Locale is called now rather than from the around_action in app_controller because we need the locale
@@ -34,6 +33,7 @@ module Profiles
             redirect_back_or_to profile_preferences_path
           end
         else
+          @user.reload # Reset in-memory changes to avoid invalid state
           format.turbo_stream do
             render status: :unprocessable_content, locals: { type: 'error', message: t('.error') }
           end
