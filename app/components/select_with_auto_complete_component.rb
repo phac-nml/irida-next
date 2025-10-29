@@ -2,20 +2,20 @@
 
 # Component for rendering a drop down that filters dynamically
 class SelectWithAutoCompleteComponent < Component
-  def initialize(form:, field:, options:, **input_arguments)
+  def initialize(form:, field:, options:, **combobox_arguments)
     @combobox_id = form.field_id(field)
     @listbox_id = 'listbox_id'
     @form = form
     @field = field
     @options = create_listbox(options) # TODO: validate?
     @selected_option = get_selected_option(options) # Assume there is only one selected option for now
-    @input_arguments = input_arguments
+    @combobox_arguments = combobox_arguments
   end
 
   private
 
-  def input_arguments # rubocop:disable Metrics/AbcSize
-    { tag: 'input' }.deep_merge(@input_arguments).tap do |args|
+  def combobox_arguments # rubocop:disable Metrics/AbcSize
+    { tag: 'input' }.deep_merge(@combobox_arguments).tap do |args|
       args[:id] = @combobox_id
       args[:type] = 'text'
       args[:value] = @selected_option[:name]
