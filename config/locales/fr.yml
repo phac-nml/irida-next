@@ -1675,12 +1675,8 @@ fr:
       puid: PUID de l’échantillon
       row:
         aria_label: Sélectionner l’échantillon %{name}
-        deselected_message: Échantillon %{name} désélectionné
-        selected_message: Échantillon %{name} sélectionné
       select_all:
         aria_label: Sélectionner tous les échantillons sur cette page
-        deselected_message: Selection cleared
-        selected_message: Tous les éléments de cette page sont sélectionnés
       select_page: Sélectionner/Désélectionner les échantillons visibles
       updated_at: Dernière mise à jour
     transfers:

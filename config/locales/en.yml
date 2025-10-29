@@ -1671,12 +1671,8 @@ en:
       puid: Sample PUID
       row:
         aria_label: Select sample %{name}
-        deselected_message: Sample %{name} deselected
-        selected_message: Sample %{name} selected
       select_all:
         aria_label: Select all samples on this page
-        deselected_message: Selected samples on this page deselected
-        selected_message: All items on this page selected
       select_page: Select / Deselect visible samples
       updated_at: Last Updated
     transfers:
