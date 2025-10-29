@@ -87,6 +87,7 @@ export default class extends Controller {
             "focusin",
             this.boundHandleCalendarFocus,
           );
+          this.pathogenDatepickerCalendarOutlet.setFocusOnTabbableDate();
         },
         onHide: () => {
           this.calendarButtonTarget.setAttribute("aria-expanded", "false");
@@ -203,8 +204,11 @@ export default class extends Controller {
   handleGlobalKeydown(event) {
     // Escape: close calendar
     if (event.key === "Escape") {
+      console.log("handle escape");
+      event.preventDefault();
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
+      this.focusCalendarButton();
       return;
     }
 
@@ -250,7 +254,6 @@ export default class extends Controller {
           this.#disableInputErrorState();
         }
         this.#setSelectedDate();
-        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
@@ -353,6 +356,11 @@ export default class extends Controller {
 
   focusNextFocusableElement() {
     this.#nextFocusableElementAfterInput.focus();
+  }
+
+  focusCalendarButton() {
+    console.log("focus calendar btn");
+    this.calendarButtonTarget.focus();
   }
 
   setCalendarButtonAriaLabel(label) {
