@@ -88,6 +88,7 @@ export default class extends Controller {
    * @returns {void}
    */
   connect() {
+    console.log("[pathogen--tabs] Controller connected");
     try {
       // Cache the tablist element reference for performance
       this.#tablist = this.element.querySelector('[role="tablist"]');
@@ -202,7 +203,7 @@ export default class extends Controller {
    * @returns {void}
    */
   disconnect() {
-    // Remove hash change listener if URL sync is enabled
+    // Remove event listeners if URL sync is enabled
     if (this.syncUrlValue) {
       if (this.#boundHandleHashChange) {
         window.removeEventListener("hashchange", this.#boundHandleHashChange);
@@ -513,8 +514,9 @@ export default class extends Controller {
         url.searchParams.delete("tab");
         url.hash = hash;
 
-        // Use replaceState to avoid adding to browser history on every tab change
-        window.history.replaceState(null, "", url.toString());
+        // Use pushState to add tab changes to browser history
+        // This allows users to navigate back through tabs with the back button
+        window.history.pushState(null, "", url.toString());
       } catch (error) {
         console.error("[pathogen--tabs] Error updating URL hash:", error);
       } finally {
