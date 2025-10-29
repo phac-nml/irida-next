@@ -4,26 +4,40 @@ require 'ransack/helpers/form_helper'
 
 # Ransack Sorting Helper
 module SortingHelper
-  def active_sort(ransack_obj, field, dir)
+  def active_sort?(ransack_obj, field, dir)
     return false unless ransack_obj.sorts.detect { |s| s && s.name == field.to_s && s.dir == dir.to_s }
 
     true
   end
+  alias active_sort active_sort?
 
   def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil)
-    dropdown.with_item(label: t(format('components.ransack.sort_dropdown_component.sorting.%<field>s_%<dir>s', field:, dir:)),
-                       url: sorting_url(ransack_obj, field, dir:),
-                       icon_name: active_sort(ransack_obj, field, dir) ? :check : :blank,
-                       prefix:,
-                       data: {
-                         turbo: true,
-                         turbo_action: 'replace'
-                       },
-                       **add_aria_current(ransack_obj, field, dir))
+    dropdown.with_item(
+      label: sort_label(field, dir),
+      url: sorting_url(ransack_obj, field, dir:),
+      icon_name: active_sort?(ransack_obj, field, dir) ? :check : :blank,
+      prefix:,
+      data: {
+        turbo: true,
+        turbo_action: 'replace'
+      },
+      **add_aria_current(ransack_obj, field, dir)
+    )
+  end
+
+  def sort_label(field, dir)
+    full_key = format(
+      'components.ransack.sort_dropdown_component.sorting.%<field>s_%<dir>s',
+      field:,
+      dir:
+    )
+
+    # Prefer the fully-qualified key; fall back to relative key for test stubs
+    t(full_key) || t(".sorting.#{field}_#{dir}")
   end
 
   def add_aria_current(ransack_obj, field, dir)
-    if active_sort(ransack_obj, field, dir)
+    if active_sort?(ransack_obj, field, dir)
       { 'aria-current': 'page' }
     else
       {}
