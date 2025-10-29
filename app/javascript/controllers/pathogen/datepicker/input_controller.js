@@ -36,7 +36,6 @@ export default class extends Controller {
   #nextFocusableElementAfterInput;
 
   #dropdown;
-  #isOpen = false;
 
   #minDate;
 
@@ -82,7 +81,7 @@ export default class extends Controller {
         offsetDistance: 10,
         delay: 300,
         onShow: () => {
-          this.datepickerInputTarget.setAttribute("aria-expanded", "true");
+          this.calendarButtonTarget.setAttribute("aria-expanded", "true");
           document.addEventListener("keydown", this.boundHandleGlobalKeydown);
           this.#calendar.addEventListener(
             "focusin",
@@ -90,7 +89,7 @@ export default class extends Controller {
           );
         },
         onHide: () => {
-          this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+          this.calendarButtonTarget.setAttribute("aria-expanded", "false");
           document.removeEventListener(
             "keydown",
             this.boundHandleGlobalKeydown,
