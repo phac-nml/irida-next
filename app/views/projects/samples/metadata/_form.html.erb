@@ -38,40 +38,36 @@
             id="key[PLACEHOLDER]_key_input"
             class="w-full form-field"
           >
-            <label
-              for="key_PLACEHOLDER"
-              data-required="true"
-              class="keyLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
-            >
-              <%= t("projects.samples.metadata.form.key") %>
-            </label>
-            <input
-              type="text"
-              name="key_PLACEHOLDER"
-              id="key_PLACEHOLDER"
-              class="keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600"
-              placeholder=""
-            >
+            <%= form.label(
+              "key_PLACEHOLDER",
+              t("projects.samples.metadata.form.key"),
+              class: "keyLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5",
+              data: { required: "true" }
+            ) %>
+            <%= form.text_field(
+              "key_PLACEHOLDER",
+              id: "key_PLACEHOLDER",
+              class: "keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600",
+              placeholder: ""
+            ) %>
           </div>
           <div
             id="value[PLACEHOLDER]_value_input"
             class="w-full form-field"
           >
-            <label
-              for="value_PLACEHOLDER"
-              data-required="true"
-              class="valueLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
-            >
-              <%= t("projects.samples.metadata.form.value") %>
-            </label>
-            <input
-              type="text"
-              name="value_PLACEHOLDER"
-              id="value_PLACEHOLDER"
-              class="valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600"
-              placeholder=""
-              required
-            >
+            <%= form.label(
+              "value_PLACEHOLDER",
+              t("projects.samples.metadata.form.value"),
+              class: "valueLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5",
+              data: { required: "true" }
+            ) %>
+            <%= form.text_field(
+              "value_PLACEHOLDER",
+              id: "value_PLACEHOLDER",
+              class: "valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600",
+              placeholder: "",
+              required: true
+            ) %>
           </div>
           <button
             type="button"
