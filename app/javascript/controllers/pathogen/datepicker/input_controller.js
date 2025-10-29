@@ -194,7 +194,10 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      if (this.#dropdown) {
+        this.#dropdown.hide();
+        this.focusCalendarButton();
+      }
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -207,7 +210,6 @@ export default class extends Controller {
       event.preventDefault();
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
-      this.focusCalendarButton();
       return;
     }
 
@@ -220,7 +222,6 @@ export default class extends Controller {
     ) {
       event.preventDefault();
       this.hideCalendar();
-      this.focusCalendarButton();
       return;
     }
   }
@@ -243,7 +244,6 @@ export default class extends Controller {
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
     }
-    this.hideCalendar();
   }
 
   // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
