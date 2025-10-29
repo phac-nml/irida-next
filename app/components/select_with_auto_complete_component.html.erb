@@ -8,16 +8,6 @@
                            "select-with-auto-complete-target": "hidden",
                          } %>
       <%= render Viral::BaseComponent.new(**combobox_arguments) %>
-      <!--<input
-        id="<%= @combobox_id %>"
-        type="text"
-        value="<%= @selected_option[:name] %>"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-expanded="false"
-        aria-controls="<%= @listbox_id %>"
-        data-select-with-auto-complete-target="combobox"
-      >-->
       <button
         tabindex="-1"
         aria-label="<%= @label %>"
@@ -25,7 +15,16 @@
         aria-controls="<%= @listbox_id %>"
         data-select-with-auto-complete-target="button"
       >
-        <%= pathogen_icon(:caret_down, size: :sm, aria: { hidden: true }, focusable: false) %>
+        <%= pathogen_icon(
+          :caret_down,
+          size: :sm,
+          color: :subdued,
+          aria: {
+            hidden: true,
+          },
+          focusable: false,
+          class: "ml-0 mr-2",
+        ) %>
       </button>
     </div>
     <div
