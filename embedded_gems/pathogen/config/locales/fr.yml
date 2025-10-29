@@ -4,6 +4,8 @@ fr:
     datepicker:
       aria_label:
         calendar: Calendrier
+        change_date: Changer de date
+        choose_date: Choisir une date
         clear_selection: Effacer la sélection de date
         next_month_button: Naviguer au prochain mois
         previous_month_button: Naviguer au mois précédent
@@ -23,7 +25,7 @@ fr:
         wednesday: mer
       errors:
         invalid_date: Date non valide
-        min_date_error: 'Date la plus ancienne autorisée : '
+        min_date_error: "Date la plus ancienne autorisée : "
       months:
         april: avril
         august: août

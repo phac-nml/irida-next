@@ -31,6 +31,7 @@ export default class extends Controller {
 
   static values = {
     months: Array,
+    ariaControlLabels: Object,
   };
 
   // today's date attributes for quick access
@@ -51,6 +52,8 @@ export default class extends Controller {
   idempotentConnect() {
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
+
+    this.#generateCalendarButtonAriaLabel();
     // set the month and year inputs
     this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
@@ -78,6 +81,17 @@ export default class extends Controller {
       }
     }
     this.monthSelectContainerTarget.appendChild(monthSelect);
+  }
+
+  #generateCalendarButtonAriaLabel() {
+    let label = "";
+    if (this.#selectedDate) {
+      label = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[this.#selectedMonthIndex]} ${this.#selectedDate.split("-")[2]}, ${this.#selectedYear}`;
+    } else {
+      label = this.ariaControlLabelsValue["choose_date"];
+    }
+
+    this.pathogenDatepickerInputOutlet.setCalendarButtonAriaLabel(label);
   }
 
   // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller

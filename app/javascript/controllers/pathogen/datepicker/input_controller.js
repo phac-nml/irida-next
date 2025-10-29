@@ -354,4 +354,8 @@ export default class extends Controller {
   focusNextFocusableElement() {
     this.#nextFocusableElementAfterInput.focus();
   }
+
+  setCalendarButtonAriaLabel(label) {
+    this.calendarButtonTarget.setAttribute("aria-label", label);
+  }
 }
