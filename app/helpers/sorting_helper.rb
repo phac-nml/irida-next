@@ -11,7 +11,7 @@ module SortingHelper
   end
 
   def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil)
-    dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
+    dropdown.with_item(label: t(format('components.ransack.sort_dropdown_component.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
                        icon_name: active_sort(ransack_obj, field, dir) ? :check : :blank,
                        prefix:,
