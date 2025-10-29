@@ -30,8 +30,8 @@ This `pipelines.json` file should be in the format below and can include the fol
 #### Example
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -57,9 +57,9 @@ This `pipelines.json` file should be in the format below and can include the fol
     ]
   },
   {
-    ........
+    ...
   }
-]
+}
 ```
 
 ### Schema Overrides
@@ -119,8 +119,8 @@ In the below example, we will override the database connection options so we can
 #### Example override
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -147,9 +147,9 @@ In the below example, we will override the database connection options so we can
     "versions": [...]
   },
   {
-    ........
+    ...
   }
-]
+}
 ```
 
 #### Effective Result

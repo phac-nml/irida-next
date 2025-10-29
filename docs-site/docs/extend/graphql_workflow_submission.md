@@ -29,6 +29,7 @@ Query the list of pipelines to find the one you want to use.
 ```graphql
 query getPipelines {
     pipelines(workflowType: "available"){
+    		pipelineId
         name
         version
   }
@@ -42,18 +43,22 @@ Result
   "data": {
     "pipelines": [
       {
+        "pipelineId": "phac-nml/iridanextexample",
         "name": "phac-nml/iridanextexample",
         "version": "1.0.3"
       },
       {
+        "pipelineId": "phac-nml/iridanextexample",
         "name": "phac-nml/iridanextexample",
         "version": "1.0.2"
       },
       {
+        "pipelineId": "phac-nml/iridanextexample",
         "name": "phac-nml/iridanextexample",
         "version": "1.0.1"
       },
       {
+        "pipelineId": "phac-nml/iridanextexample",
         "name": "phac-nml/iridanextexample",
         "version": "1.0.0"
       }
@@ -62,7 +67,7 @@ Result
 }
 ```
 
-The `name` and `version` fields will be used in the next step. In this example version `1.0.3`.
+The `pipelineId` and `version` fields will be used in the next step. In this example version `1.0.3`.
 
 ### 2. Query for Pipeline Information
 
@@ -70,7 +75,7 @@ We are able to get all the information about a pipeline with this query.
 
 ```graphql
 query getPipelineInfo {
-    pipeline(workflowName:"phac-nml/iridanextexample",workflowVersion:"1.0.3"){
+    pipeline(pipelineId:"phac-nml/iridanextexample",workflowVersion:"1.0.3"){
     automatable
     description
     executable
@@ -92,6 +97,7 @@ Result:
       "description": "IRIDA Next Example Pipeline",
       "executable": true,
       "metadata": {
+        "pipeline_id": "phac-nml/iridanextexample",
         "workflow_name": "phac-nml/iridanextexample",
         "workflow_version": {
           "name": "1.0.3"
@@ -198,6 +204,7 @@ The output informs us of the structure of the fields we will provide to run the 
 
 Specifically, We will be using the following fields from the result
 
+* `pipelineId`
 * `workflowName`
 * `workflowVersion`
 * `workflowParams`
@@ -324,6 +331,7 @@ mutation submitWorkflowExecution {
     projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
     updateSamples: false
     emailNotification: false
+    pipelineId: "phac-nml/iridanextexample"
     workflowName: "phac-nml/iridanextexample"
     workflowVersion:"1.0.3"
     workflowParams: {
