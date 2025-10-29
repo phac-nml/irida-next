@@ -33,6 +33,18 @@ document.addEventListener("turbo:render", () => {
   }
 });
 
+
+document.addEventListener("turbo:before-stream-render", (event) => {
+  const fallbackToDefaultActions = event.detail.render;
+
+  event.detail.render = (streamElement) => {
+    fallbackToDefaultActions(streamElement);
+
+    // process new time elements added via turbo streams
+    LocalTime.run();
+  };
+});
+
 Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   const focusTrap = createFocusTrap(dialog, {
