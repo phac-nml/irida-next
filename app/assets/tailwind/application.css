@@ -688,42 +688,44 @@ a.pill-focus-reset:focus-visible {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
 
-/* TODO */
+/* SelectWithAutoCompleteComponent */
 
 .combobox {
   position: relative;
+  @apply text-black dark:text-white;
 
   .group {
     display: inline-flex;
-    padding: 4px;
     cursor: pointer;
+    width: 100%;
   }
 
   input,
   button {
     box-sizing: border-box;
-    height: 30px;
     padding: 0;
     margin: 0;
     vertical-align: bottom;
     position: relative;
     cursor: pointer;
-    @apply border border-slate-300 bg-slate-50 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white;
+    @apply border border-slate-300 bg-slate-50 text-sm dark:border-slate-600 dark:bg-slate-800;
   }
 
   input {
-    width: 150px;
+    width: 100%;
     border-right: none;
     outline: none;
-    font-size: 87.5%;
-    padding: 1px 3px;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
     @apply rounded-l-lg rounded-r-none;
   }
 
   button {
-    width: 19px;
     border-left: none;
     outline: none;
+    background-color: white;
     @apply rounded-l-none rounded-r-lg;
   }
 
@@ -735,18 +737,21 @@ a.pill-focus-reset:focus-visible {
     margin: 0;
     padding: 0;
     position: absolute;
-    left: 4px;
-    top: 34px;
+    top: 100%;
     list-style: none;
     background-color: white;
     display: none;
     box-sizing: border-box;
-    border: 2px currentcolor solid;
-    max-height: 250px;
-    width: 168px;
-    overflow: auto;
-    overflow-x: hidden;
-    font-size: 87.5%;
+    border: 0.1px black solid;
+    max-height: 200px;
+    width: 100%;
+    overflow: hidden auto;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  [role="listbox"] > [role="group"] {
+    border-top: 1px black solid;
   }
 
   [role="listbox"] > [role="group"] > [role="presentation"] {
@@ -755,20 +760,19 @@ a.pill-focus-reset:focus-visible {
     padding: 0 0.5em;
     font-weight: bold;
     line-height: 2;
-    background-color: #ccc;
   }
 
-  [role="listbox"] [role="group"] [role="option"] {
+  [role="option"] {
     margin: 0;
     display: block;
-    padding-left: 3px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     cursor: pointer;
   }
 
   [role="option"][aria-selected="true"],
   [role="option"]:hover {
-    outline: 2px solid currentcolor;
+    background-color: #f5f5f5;
   }
 }

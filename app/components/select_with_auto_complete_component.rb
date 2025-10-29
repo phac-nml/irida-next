@@ -7,8 +7,8 @@ class SelectWithAutoCompleteComponent < Component
     @listbox_id = 'listbox_id'
     @form = form
     @field = field
-    @options = create_listbox(options) # TODO: validate?
-    @selected_option = get_selected_option(options) # Assume there is only one selected option for now
+    @options = create_listbox(options)
+    @selected_option = get_selected_option(options)
     @combobox_arguments = combobox_arguments
   end
 
