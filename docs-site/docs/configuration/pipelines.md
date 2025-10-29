@@ -56,7 +56,7 @@ This `pipelines.json` file should be in the format below and can include the fol
       }
     ]
   },
-  {
+  "some-other/pipeline": {
     ...
   }
 }
