@@ -28,7 +28,6 @@
   >
   <button
     type="button"
-    data-action="click->pathogen--datepicker--input#toggleCalendar"
     data-pathogen--datepicker--input-target="calendarButton"
     class="
       absolute inset-y-0 right-0 flex items-center justify-center w-[44px]
@@ -37,6 +36,7 @@
       dark:hover:bg-slate-600
     "
     aria-label="TODO open calendar"
+    aria-controls="<%= calendar_id %>"
   >
 
     <%= pathogen_icon(:calendar_dots) %>
