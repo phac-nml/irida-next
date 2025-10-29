@@ -512,7 +512,7 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerInputOutlet.focusDatepickerInput();
+      this.pathogenDatepickerInputOutlet.focusCalendarButton();
       this.pathogenDatepickerInputOutlet.hideCalendar();
     }
   }
@@ -558,7 +558,7 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
+    this.pathogenDatepickerInputOutlet.focusCalendarButton();
   }
 
   // clear selection by clicking clear button
@@ -570,7 +570,7 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
+    this.pathogenDatepickerInputOutlet.focusCalendarButton();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -725,8 +725,7 @@ export default class extends Controller {
     return this.clearButtonTarget;
   }
 
-  setFocusOnDefaultDate() {
-    console.log(this.calendarTarget.querySelectorAll("[tabindex='0'")[0]);
-    this.calendarTarget.querySelectorAll("[tabindex='0'")[0].focus();
+  setFocusOnTabbableDate() {
+    this.calendarTarget.querySelectorAll("[tabindex='0']")[0].focus();
   }
 }
