@@ -204,7 +204,6 @@ export default class extends Controller {
   handleGlobalKeydown(event) {
     // Escape: close calendar
     if (event.key === "Escape") {
-      console.log("handle escape");
       event.preventDefault();
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
@@ -212,8 +211,7 @@ export default class extends Controller {
       return;
     }
 
-    // If we tab off the last datepicker element, we want to force focus onto the next focusable element after
-    // the datepicker input
+    // If we tab off the last datepicker element, we want to force focus back onto the calendar button
     if (
       event.key === "Tab" &&
       event.target ===
@@ -222,21 +220,8 @@ export default class extends Controller {
     ) {
       event.preventDefault();
       this.hideCalendar();
-      this.focusNextFocusableElement();
+      this.focusCalendarButton();
       return;
-    }
-
-    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
-    // while Tab focuses on the first focusable element within the calendar
-    if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
-      if (event.shiftKey) {
-        this.hideCalendar();
-      } else if (!event.shiftKey) {
-        event.preventDefault();
-        this.pathogenDatepickerCalendarOutlet
-          .getFirstFocusableElement()
-          .focus();
-      }
     }
   }
 
@@ -349,17 +334,7 @@ export default class extends Controller {
     );
   }
 
-  // used by pathogen/datepicker/calendar.js
-  focusDatepickerInput() {
-    this.datepickerInputTarget.focus();
-  }
-
-  focusNextFocusableElement() {
-    this.#nextFocusableElementAfterInput.focus();
-  }
-
   focusCalendarButton() {
-    console.log("focus calendar btn");
     this.calendarButtonTarget.focus();
   }
 
