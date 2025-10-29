@@ -3,7 +3,7 @@
 # Component for rendering a drop down that filters dynamically
 class SelectWithAutoCompleteComponent < Component
   def initialize(form:, field:, options:)
-    @combobox_id = 'combobox_id'
+    @combobox_id = form.field_id(field)
     @listbox_id = 'listbox_id'
     @form = form
     @field = field
