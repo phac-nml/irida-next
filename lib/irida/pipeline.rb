@@ -10,7 +10,7 @@ module Irida
     IGNORED_PARAMS = %w[outdir email].freeze
 
     def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength
-      @pipeline_id = pipeline_id # TODO: is this line needed?
+      @pipeline_id = pipeline_id
       @name = entry['name']
       @description = entry['description']
       @metadata = { pipeline_id:, workflow_name: name, workflow_version: version }
