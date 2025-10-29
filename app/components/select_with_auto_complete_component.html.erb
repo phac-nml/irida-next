@@ -3,6 +3,7 @@
     <div class="group">
       <%= @form.hidden_field @field,
                          value: @selected_option[:value],
+                         id: "#{@combobox_id}_hidden",
                          data: {
                            "select-with-auto-complete-target": "hidden",
                          } %>
