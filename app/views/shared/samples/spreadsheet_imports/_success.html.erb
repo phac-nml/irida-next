@@ -13,11 +13,15 @@
       <% table.with_column("Sample Name") do |row| %>
         <%= row[:sample_name] %>
       <% end %>
-      <% table.with_column("Messages") do |row| %>
-        <% row[:message].each do |msg| %>
-          <%= t(".problem_message", path: msg[:path].join(" "), message: msg[:message]) %>
-        <% end %>
-      <% end %>
+      <% table.with_column("Messages") do |row| %><%= row[:message]
+          .map do |msg|
+            I18n.t(
+              "shared.samples.spreadsheet_imports.success.problem_message",
+              path: msg[:path].join(" "),
+              message: msg[:message],
+            )
+          end
+          .join %><% end %>
     <% end %>
 
   <% end %>
