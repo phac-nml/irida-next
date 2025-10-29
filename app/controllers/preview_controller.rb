@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # lookbook preview controller
-class PreviewController < ViewComponentsController
+class PreviewController < ActionController::Base
+  layout 'lookbook'
+
   before_action :set_locale
 
   def set_locale
