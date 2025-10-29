@@ -8,6 +8,7 @@ export default class extends Controller {
     "calendarTemplate",
     "inputError",
     "minDate",
+    "calendarButton",
   ];
 
   static values = {
@@ -35,6 +36,7 @@ export default class extends Controller {
   #nextFocusableElementAfterInput;
 
   #dropdown;
+  #isOpen = false;
 
   #minDate;
 
@@ -43,8 +45,6 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
-    this.boundHandleDatepickerInputFocus =
-      this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
@@ -60,20 +60,10 @@ export default class extends Controller {
     // Position the calendar
     this.#initializeDropdown();
 
-    this.datepickerInputTarget.addEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
     this.#findNextFocusableElement();
   }
 
   disconnect() {
-    this.datepickerInputTarget.removeEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
     this.#calendar.remove();
     this.#calendar = null;
   }
@@ -85,36 +75,32 @@ export default class extends Controller {
           "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
         );
       }
-      this.#dropdown = new Dropdown(
-        this.#calendar,
-        this.datepickerInputTarget,
-        {
-          placement: "top",
-          triggerType: "none", // handle via handleDatepickerInputFocus instead
-          offsetSkidding: 0,
-          offsetDistance: 10,
-          delay: 300,
-          onShow: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-            this.#calendar.addEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-          onHide: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-            document.removeEventListener(
-              "keydown",
-              this.boundHandleGlobalKeydown,
-            );
-            this.#calendar.removeEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
+      this.#dropdown = new Dropdown(this.#calendar, this.calendarButtonTarget, {
+        placement: "top",
+        triggerType: "click",
+        offsetSkidding: 0,
+        offsetDistance: 10,
+        delay: 300,
+        onShow: () => {
+          this.datepickerInputTarget.setAttribute("aria-expanded", "true");
+          document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+          this.#calendar.addEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
         },
-      );
+        onHide: () => {
+          this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+          document.removeEventListener(
+            "keydown",
+            this.boundHandleGlobalKeydown,
+          );
+          this.#calendar.removeEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
+        },
+      });
     } catch (error) {
       this.#handleError(error, "initializeDropdown");
     }
@@ -191,12 +177,6 @@ export default class extends Controller {
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
     this.#shareParamsWithCalendar();
-  }
-
-  handleDatepickerInputFocus() {
-    if (!this.#dropdown.isVisible()) {
-      this.#dropdown.show();
-    }
   }
 
   handleCalendarFocus(event) {
