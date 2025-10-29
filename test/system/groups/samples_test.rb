@@ -1974,7 +1974,7 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      # target project has 3 samples prior to transfer
+      # target project has 2 samples prior to transfer
       visit namespace_project_samples_url(project4.namespace.parent, project4)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                                       locale: @user.locale))
