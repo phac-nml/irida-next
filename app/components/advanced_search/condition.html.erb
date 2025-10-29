@@ -26,22 +26,11 @@
         form: conditions_form,
         field: :field,
         options: options,
+        "aria-label": t("activemodel.attributes.sample/search_condition.field"),
+        "aria-invalid": invalid_field,
+        "aria-describedby": conditions_form.field_id(:field, "error"),
+        autofocus: invalid_field,
       ) %>
-      <!--
-      <%= conditions_form.select :field,
-                             options,
-                             { include_blank: true },
-                             {
-                               "aria-label":
-                                 t(
-                                   "activemodel.attributes.sample/search_condition.field",
-                                 ),
-                               "aria-invalid": invalid_field,
-                               "aria-describedby":
-                                 conditions_form.field_id(:field, "error"),
-                               autofocus: invalid_field,
-                             } %>
-      -->
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:field),
       id: conditions_form.field_id(:field, "error") %>
