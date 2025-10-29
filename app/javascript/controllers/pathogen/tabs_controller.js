@@ -88,7 +88,6 @@ export default class extends Controller {
    * @returns {void}
    */
   connect() {
-    console.log("[pathogen--tabs] Controller connected");
     try {
       // Cache the tablist element reference for performance
       this.#tablist = this.element.querySelector('[role="tablist"]');
