@@ -512,7 +512,6 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerInputOutlet.focusCalendarButton();
       this.pathogenDatepickerInputOutlet.hideCalendar();
     }
   }
@@ -558,7 +557,6 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusCalendarButton();
   }
 
   // clear selection by clicking clear button
@@ -570,7 +568,6 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusCalendarButton();
   }
 
   // handles ArrowLeft/Right keyboard navigation
