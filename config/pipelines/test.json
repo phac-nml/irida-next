@@ -1,5 +1,5 @@
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -20,7 +20,7 @@
       }
     ]
   },
-  {
+  "phac-nml/gasclustering": {
     "url": "https://github.com/phac-nml/gasclustering",
     "name": "phac-nml/gasclustering",
     "description": "Genomic Address Service Clustering Workflow",
@@ -30,4 +30,4 @@
       }
     ]
   }
-]
+}

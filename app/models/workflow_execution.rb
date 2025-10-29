@@ -97,12 +97,12 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def validate_workflow_available
-    return if Irida::Pipelines.instance.find_pipeline_by(metadata['workflow_name'], metadata['workflow_version'],
+    return if Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'],
                                                          'available').present?
 
     errors.add(:base,
                I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
-                      workflow_name: metadata['workflow_name'],
+                      pipeline_id: metadata['pipeline_id'],
                       workflow_version: metadata['workflow_version']))
   end
 

@@ -10,6 +10,7 @@ module Types
     field :executable, GraphQL::Types::Boolean, null: true, description: ''
     field :metadata, GraphQL::Types::JSON, description: ''
     field :name, String, null: true, description: ''
+    field :pipeline_id, String, null: true, description: ''
     field :version, String, null: true, description: ''
     field :workflow_params, GraphQL::Types::JSON, null: false, description: ''
 

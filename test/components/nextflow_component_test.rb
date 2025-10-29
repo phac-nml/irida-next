@@ -10,6 +10,7 @@ class NextflowComponentTest < ViewComponentTestCase
     sample44 = samples(:sample44)
 
     workflow = Irida::Pipeline.new(
+      'phac-nml/iridanextexample',
       {
         'name' => 'phac-nml/iridanextexample',
         'description' => 'This is a test workflow',
@@ -85,7 +86,7 @@ class NextflowComponentTest < ViewComponentTestCase
       ]
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new(entry, '0.2.0',
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, '0.2.0',
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
     I18n.with_locale :fr do
@@ -155,7 +156,8 @@ class NextflowComponentTest < ViewComponentTestCase
                                                 fp_unqualified_precent_limit: '40'
                                               })
 
-    workflow = Irida::Pipeline.new({
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo',
+                                   {
                                      url: 'https://github.com/phac-nml/mikrokondo',
                                      name: 'phac-nml/mikrokondo',
                                      description: 'Mikrokondo pipeline'

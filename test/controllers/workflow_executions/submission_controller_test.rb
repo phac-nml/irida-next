@@ -21,6 +21,7 @@ module WorkflowExecutions
       sample1 = samples(:sample1)
       post workflow_executions_submissions_path(namespace_id: @project.namespace.id,
                                                 workflow_name: 'phac-nml/iridanextexample',
+                                                pipeline_id: 'phac-nml/iridanextexample',
                                                 workflow_version: '1.0.3',
                                                 samples: [sample1.id], format: :turbo_stream)
 
@@ -28,7 +29,9 @@ module WorkflowExecutions
     end
 
     test '@fields in create' do
-      post workflow_executions_submissions_path(format: :turbo_stream, workflow_name: 'phac-nml/iridanextexample',
+      post workflow_executions_submissions_path(format: :turbo_stream,
+                                                workflow_name: 'phac-nml/iridanextexample',
+                                                pipeline_id: 'phac-nml/iridanextexample',
                                                 workflow_version: '1.0.2', namespace_id: @group.id)
       assert_response :ok
       assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
