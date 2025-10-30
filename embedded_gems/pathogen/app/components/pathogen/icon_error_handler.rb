@@ -82,7 +82,8 @@ module Pathogen
     # @return [ActiveSupport::SafeBuffer] The rendered fallback icon
     def render_fallback_icon(fallback_name)
       fallback_options = rails_icons_options.except(:variant, :library)
-      helpers.icon(fallback_name, **fallback_options)
+      html = helpers.icon(fallback_name, **fallback_options)
+      IconRenderer.clean_html(html)
     end
 
     # Create enhanced development error indicator with icon suggestions
