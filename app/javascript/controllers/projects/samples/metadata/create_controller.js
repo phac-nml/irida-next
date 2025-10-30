@@ -21,18 +21,18 @@ export default class extends Controller {
   // ====================================================================
 
   static targets = [
-    "metadataToAdd",       // Container for hidden inputs
-    "fieldsContainer",     // Container for dynamic field pairs
-    "fieldTemplate",       // Template for new field pairs
-    "form",               // Main form element
-    "formFieldError",     // General error alert container
-    "formFieldErrorMessage" // General error message element
+    "metadataToAdd", // Container for hidden inputs
+    "fieldsContainer", // Container for dynamic field pairs
+    "fieldTemplate", // Template for new field pairs
+    "form", // Main form element
+    "formFieldError", // General error alert container
+    "formFieldErrorMessage", // General error message element
   ];
 
   static values = {
-    keyMissing: { type: String },   // Error message for missing key
+    keyMissing: { type: String }, // Error message for missing key
     valueMissing: { type: String }, // Error message for missing value
-    formError: { type: String }     // General form error message
+    formError: { type: String }, // General form error message
   };
 
   // ====================================================================
@@ -254,8 +254,10 @@ export default class extends Controller {
    * @param {Element} fieldContainer - Container with key/value inputs
    */
   #processMetadataField(fieldContainer) {
-    const keyInput = fieldContainer.querySelector("input[id^='key_']");
-    const valueInput = fieldContainer.querySelector("input[id^='value_']");
+    const keyInput = fieldContainer.querySelector("input[id^='sample_key_']");
+    const valueInput = fieldContainer.querySelector(
+      "input[id^='sample_value_']",
+    );
 
     if (!keyInput || !valueInput) {
       console.warn("Could not find key or value input in field");
@@ -266,7 +268,12 @@ export default class extends Controller {
     const hasValueValue = Boolean(valueInput.value?.trim());
 
     if (!hasKeyValue || !hasValueValue) {
-      this.#handleFieldValidationErrors(keyInput, valueInput, hasKeyValue, hasValueValue);
+      this.#handleFieldValidationErrors(
+        keyInput,
+        valueInput,
+        hasKeyValue,
+        hasValueValue,
+      );
     } else {
       this.#handleValidField(keyInput, valueInput);
     }
@@ -279,7 +286,12 @@ export default class extends Controller {
    * @param {boolean} hasKeyValue - Whether key has value
    * @param {boolean} hasValueValue - Whether value has value
    */
-  #handleFieldValidationErrors(keyInput, valueInput, hasKeyValue, hasValueValue) {
+  #handleFieldValidationErrors(
+    keyInput,
+    valueInput,
+    hasKeyValue,
+    hasValueValue,
+  ) {
     if (!hasKeyValue) {
       this.#showFieldError(keyInput, this.keyMissingValue);
       this.#addFieldIdToErrors(keyInput.id);
@@ -319,7 +331,9 @@ export default class extends Controller {
     const value = valueInput.value.trim();
     const inputName = `sample[create_fields][${key}]`;
 
-    let existingHiddenInput = document.querySelector(`input[name="${inputName}"]`);
+    let existingHiddenInput = document.querySelector(
+      `input[name="${inputName}"]`,
+    );
 
     if (existingHiddenInput) {
       // Update existing hidden input if value changed
@@ -368,7 +382,7 @@ export default class extends Controller {
    * @param {string} fieldId - Field ID to remove from errors
    */
   #removeFieldIdFromErrors(fieldId) {
-    this.#errorFieldIds = this.#errorFieldIds.filter(id => id !== fieldId);
+    this.#errorFieldIds = this.#errorFieldIds.filter((id) => id !== fieldId);
   }
 
   /**
@@ -402,8 +416,8 @@ export default class extends Controller {
 
     const fieldId = field.id;
     const errorContainer = document.getElementById(`${fieldId}_error`);
-    const helpTextComponent = errorContainer?.querySelector('span.grow');
-    const inputContainer = field.closest('.form-field');
+    const helpTextComponent = errorContainer?.querySelector("span.grow");
+    const inputContainer = field.closest(".form-field");
 
     // Skip if error already displayed
     if (helpTextComponent?.textContent.trim() === errorMessage) {
@@ -412,7 +426,12 @@ export default class extends Controller {
 
     this.#setFieldAriaAttributes(field, fieldId);
     this.#setFieldErrorStyling(field);
-    this.#showErrorElements(errorContainer, helpTextComponent, inputContainer, errorMessage);
+    this.#showErrorElements(
+      errorContainer,
+      helpTextComponent,
+      inputContainer,
+      errorMessage,
+    );
   }
 
   /**
@@ -424,8 +443,8 @@ export default class extends Controller {
 
     const fieldId = field.id;
     const errorContainer = document.getElementById(`${fieldId}_error`);
-    const helpTextComponent = errorContainer?.querySelector('span.grow');
-    const inputContainer = field.closest('.form-field');
+    const helpTextComponent = errorContainer?.querySelector("span.grow");
+    const inputContainer = field.closest(".form-field");
 
     // Skip if no error is displayed
     if (helpTextComponent?.textContent.trim() === "") {
@@ -481,11 +500,16 @@ export default class extends Controller {
    * @param {Element} inputContainer - Input container element
    * @param {string} errorMessage - Error message to display
    */
-  #showErrorElements(errorContainer, helpTextComponent, inputContainer, errorMessage) {
+  #showErrorElements(
+    errorContainer,
+    helpTextComponent,
+    inputContainer,
+    errorMessage,
+  ) {
     if (errorContainer) {
       errorContainer.classList.remove("hidden");
       // Also make sure the parent span is visible
-      const parentSpan = errorContainer.querySelector('span');
+      const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
         parentSpan.classList.remove("hidden");
       }
@@ -508,7 +532,7 @@ export default class extends Controller {
     if (errorContainer) {
       errorContainer.classList.add("hidden");
       // Also hide the parent span
-      const parentSpan = errorContainer.querySelector('span');
+      const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
         parentSpan.classList.add("hidden");
       }
@@ -530,7 +554,7 @@ export default class extends Controller {
     this.formFieldErrorMessageTarget.innerHTML = message;
     this.formFieldErrorTarget.scrollIntoView({
       behavior: "smooth",
-      block: "start"
+      block: "start",
     });
   }
 
