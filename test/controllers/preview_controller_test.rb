@@ -5,7 +5,7 @@ require 'test_helper'
 class PreviewControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  # Note: PreviewController is used by Lookbook for component previews
+  # NOTE: PreviewController is used by Lookbook for component previews
   # Testing locale setting behavior with simulated params
 
   test 'inherits from ApplicationController' do
@@ -14,24 +14,22 @@ class PreviewControllerTest < ActionDispatch::IntegrationTest
 
   test 'has lookbook layout configured' do
     # Check that the layout method is overridden
-    controller = PreviewController.new
     # ViewComponent 4.x uses the layout method differently
     # We just verify the class has the layout configured
     assert_equal 'lookbook', PreviewController._layout
   end
 
   test 'set_locale uses params lang when provided' do
-    controller = PreviewController.new
-    controller.params = ActionController::Parameters.new(
-      lookbook: { display: { lang: 'fr' } }
-    )
+    I18n.with_locale(I18n.default_locale) do
+      controller = PreviewController.new
+      controller.params = ActionController::Parameters.new(
+        lookbook: { display: { lang: 'fr' } }
+      )
 
-    controller.send(:set_locale)
+      controller.send(:set_locale)
 
-    assert_equal :fr, I18n.locale
-  ensure
-    # Reset locale to default after test
-    I18n.locale = I18n.default_locale
+      assert_equal :fr, I18n.locale
+    end
   end
 
   test 'set_locale uses default locale when lang not provided' do
@@ -46,15 +44,27 @@ class PreviewControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'set_locale uses default locale when lookbook params missing' do
-    controller = PreviewController.new
-    controller.params = ActionController::Parameters.new({})
+    I18n.with_locale(I18n.default_locale) do
+      controller = PreviewController.new
+      controller.params = ActionController::Parameters.new({})
 
-    controller.send(:set_locale)
+      controller.send(:set_locale)
 
-    assert_equal I18n.default_locale, I18n.locale
-  ensure
-    # Reset locale to default after test
-    I18n.locale = I18n.default_locale
+      assert_equal I18n.default_locale, I18n.locale
+    end
+  end
+
+  test 'set_locale uses default locale when lang is empty string' do
+    I18n.with_locale(I18n.default_locale) do
+      controller = PreviewController.new
+      controller.params = ActionController::Parameters.new(
+        lookbook: { display: { lang: '' } }
+      )
+
+      controller.send(:set_locale)
+
+      assert_equal I18n.default_locale, I18n.locale
+    end
   end
 
   test 'set_locale before_action is configured' do
