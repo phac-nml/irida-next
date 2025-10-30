@@ -7,6 +7,6 @@ class PreviewController < ApplicationController
   before_action :set_locale
 
   def set_locale
-    I18n.locale = params[:lookbook][:display][:lang] || I18n.default_locale
+    I18n.locale = params.dig(:lookbook, :display, :lang) || I18n.default_locale
   end
 end
