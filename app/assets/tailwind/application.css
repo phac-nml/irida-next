@@ -694,43 +694,40 @@ a.pill-focus-reset:focus-visible {
   position: relative;
   @apply text-black dark:text-white;
 
-  .group {
-    display: inline-flex;
-    cursor: pointer;
-    width: 100%;
-  }
-
-  input,
-  button {
+  input {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75em 0.75em;
     box-sizing: border-box;
-    padding: 0;
     margin: 0;
     vertical-align: bottom;
     position: relative;
     cursor: pointer;
-    @apply border border-slate-300 bg-slate-50 text-sm dark:border-slate-600 dark:bg-slate-800;
-  }
-
-  input {
     width: 100%;
-    border-right: none;
     outline: none;
     font-size: inherit;
     line-height: inherit;
     padding: 0.5rem 0.75rem;
     background-color: white;
-    @apply rounded-l-lg rounded-r-none;
+    @apply rounded-lg border border-slate-300 text-sm dark:border-slate-600;
   }
 
-  button {
-    border-left: none;
-    outline: none;
-    background-color: white;
-    @apply rounded-l-none rounded-r-lg;
+  input[aria-invalid="true"] {
+    @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
   }
 
-  button[aria-expanded="true"] svg {
-    transform: rotate(180deg);
+  input:focus-visible {
+    @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+    box-shadow: none !important;
+    outline-style: solid;
+  }
+
+  input[aria-invalid="true"]:focus-visible {
+    @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+    box-shadow: none !important;
+    outline-style: solid;
+    @apply outline-red-700 dark:outline-red-400;
   }
 
   [role="listbox"] {
@@ -743,11 +740,12 @@ a.pill-focus-reset:focus-visible {
     display: none;
     box-sizing: border-box;
     border: 0.1px black solid;
-    max-height: 200px;
+    max-height: 250px;
     width: 100%;
     overflow: hidden auto;
     font-size: inherit;
     line-height: inherit;
+    z-index: 10;
   }
 
   [role="listbox"] > [role="group"] {
@@ -755,19 +753,16 @@ a.pill-focus-reset:focus-visible {
   }
 
   [role="listbox"] > [role="group"] > [role="presentation"] {
-    display: block;
     margin: 0;
-    padding: 0 0.5em;
+    display: block;
+    padding: 3px 10px;
     font-weight: bold;
-    line-height: 2;
   }
 
   [role="option"] {
     margin: 0;
     display: block;
-    padding-left: 10px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding: 3px 10px;
     cursor: pointer;
   }
 
