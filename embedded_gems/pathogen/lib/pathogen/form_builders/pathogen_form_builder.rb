@@ -159,7 +159,10 @@ module Pathogen
         required_abbr = @template.tag.abbr(
           I18n.t('pathogen.label.required_indicator'),
           class: 'req',
-          title: I18n.t('pathogen.label.title')
+          title: I18n.t('pathogen.label.title'),
+          aria: {
+            hidden: true
+          }
         )
         @template.safe_join([safe_content, ' ', required_abbr])
       end
