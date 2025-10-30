@@ -1,32 +1,12 @@
 <div data-controller="select-with-auto-complete">
   <div class="combobox">
-    <div class="group">
-      <%= @form.hidden_field @field,
-                         value: @selected_option[:value],
-                         id: "#{@combobox_id}_hidden",
-                         data: {
-                           "select-with-auto-complete-target": "hidden",
-                         } %>
-      <%= render Viral::BaseComponent.new(**combobox_arguments) %>
-      <button
-        tabindex="-1"
-        aria-label="<%= @label %>"
-        aria-expanded="false"
-        aria-controls="<%= @listbox_id %>"
-        data-select-with-auto-complete-target="button"
-      >
-        <%= pathogen_icon(
-          :caret_down,
-          size: :sm,
-          color: :subdued,
-          aria: {
-            hidden: true,
-          },
-          focusable: false,
-          class: "ml-0 mr-2",
-        ) %>
-      </button>
-    </div>
+    <%= @form.hidden_field @field,
+                       value: @selected_option[:value],
+                       id: "#{@combobox_id}_hidden",
+                       data: {
+                         "select-with-auto-complete-target": "hidden",
+                       } %>
+    <%= render Viral::BaseComponent.new(**combobox_arguments) %>
     <div
       id="<%= @listbox_id %>"
       tabindex="0"
