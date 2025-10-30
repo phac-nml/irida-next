@@ -44,50 +44,6 @@ document.addEventListener("turbo:before-stream-render", (event) => {
   };
 });
 
-// Fix for Turbo Drive back button navigation with lazy-loaded frames
-//
-// Problem: When navigating away from pages with lazy-loaded Turbo Frames, then
-// clicking the browser back button, Turbo sometimes fails to restore the page
-// from cache, resulting in a silent failure where the URL updates but the page
-// content doesn't change.
-//
-// Solution: Listen for popstate events (back/forward button) and detect if the
-// page failed to load by checking for unprocessed lazy Turbo Frames. If found,
-// force a proper Turbo visit to reload the page.
-//
-// This works for any page with lazy-loaded frames, not just specific URLs.
-let currentUrl = window.location.href;
-
-// Update currentUrl on every Turbo navigation
-document.addEventListener("turbo:load", () => {
-  currentUrl = window.location.href;
-});
-
-// Listen for browser back/forward button
-window.addEventListener("popstate", () => {
-  const newUrl = window.location.href;
-
-  // Skip if URL didn't actually change
-  if (currentUrl === newUrl) return;
-
-  currentUrl = newUrl;
-
-  // Give Turbo a moment to try its own navigation
-  setTimeout(() => {
-    // Check if there are lazy-loaded turbo-frames with src attributes
-    // If they still have src after the timeout, it means they weren't loaded
-    // (when Turbo properly loads a page, lazy frames fetch and clear their src)
-    const unloadedFrames = document.querySelectorAll(
-      'turbo-frame[loading="lazy"][src]',
-    );
-
-    // If we found unloaded frames, Turbo failed to navigate properly
-    if (unloadedFrames.length > 0 && window.Turbo) {
-      window.Turbo.visit(newUrl, { action: "replace" });
-    }
-  }, 100);
-});
-
 Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   const focusTrap = createFocusTrap(dialog, {
