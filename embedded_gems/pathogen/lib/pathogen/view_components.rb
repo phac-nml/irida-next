@@ -6,9 +6,27 @@ require 'pathogen/view_helper'
 require 'pathogen/styles/form_styles'
 
 module Pathogen
-  # Convenience module that includes all Pathogen helpers at once
-  # @example Include all helpers in a component
+  # Convenience module that includes all Pathogen helpers at once.
+  #
+  # This module provides a single include statement to access all Pathogen helper methods
+  # for rendering icons, badges, forms, and other UI components with Pathogen styling.
+  #
+  # Includes:
+  # - Pathogen::ViewHelper: Core view helpers (pathogen_icon, pathogen_badge, etc.)
+  # - Pathogen::FormHelper: Form builder helpers with Pathogen styling
+  # - Pathogen::FormTagHelper: Form tag helpers with Pathogen styling
+  #
+  # @example Include all helpers in a ViewComponent
   #   class MyComponent < ViewComponent::Base
+  #     include Pathogen::Helpers
+  #
+  #     def call
+  #       pathogen_icon(:check, size: :md, color: :blue)
+  #     end
+  #   end
+  #
+  # @example Include in a Rails helper
+  #   module ApplicationHelper
   #     include Pathogen::Helpers
   #   end
   module Helpers
