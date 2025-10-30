@@ -38,7 +38,7 @@
                   scope: index.zero? ? 'row' : nil,
                   **column.body_cell_arguments
                 ) do %>
-                <%= column.call(row) %>
+                <%= column.content_for(row) %>
               <% end %>
             <% end %>
           <% end %>

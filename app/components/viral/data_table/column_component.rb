@@ -54,11 +54,18 @@ module Viral
         }
       end
 
+      # Render column content for a given row
+      # This method is provided for ViewComponent v4 compatibility where content
+      # is typically accessed via content_for methods. It delegates to the block
+      # provided during initialization.
+      #
+      # @param row [Object] The row data object
+      # @return [String, Object] The rendered content from the block
       def content_for(row)
         @block.call(row)
       end
 
-      delegate :call, to: :@block
+
     end
   end
 end
