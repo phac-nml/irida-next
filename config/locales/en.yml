@@ -943,6 +943,10 @@ en:
           description: There are no workflow executions associated with this group.
           title: No workflow executions.
   helpers:
+    label:
+      concatenation:
+        basename: Filename
+        delete_originals: Delete originals
     select:
       prompt: Please select
     submit:
@@ -1439,7 +1443,6 @@ en:
             basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
             success: Files were successfully concatenated.
           modal:
-            basename: Filename
             description: 'The following files were selected to be concatenated:'
             submit_button: Concatenate
             title: Concatenate Files

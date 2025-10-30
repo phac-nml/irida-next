@@ -945,6 +945,10 @@ fr:
           description: Il n’y a aucune exécution du flux de travail associée à ce groupe.
           title: Aucune exécution de flux de travail
   helpers:
+    label:
+      concatenation:
+        basename: Nom du fichier
+        delete_originals: Supprimer les fichiers originaux
     select:
       prompt: Veuillez sélectionner
     submit:
@@ -1443,7 +1447,6 @@ fr:
             basename_help: Le nom de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
             success: Les dossiers ont été concaténés avec succès.
           modal:
-            basename: Nom du fichier
             description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
             submit_button: Concaténer
             title: Concaténer les fichiers

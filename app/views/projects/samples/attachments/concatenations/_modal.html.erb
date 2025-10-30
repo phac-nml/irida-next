@@ -29,7 +29,7 @@
 
       <% invalid_basename = @sample.errors.include?(:basename) %>
       <div class="form-field <%= 'invalid' if invalid_basename%>">
-        <%= form.label :basename, t(".basename"), data: { required: true } %>
+        <%= form.label :basename, data: { required: true } %>
         <%= form.text_field :basename,
                         required: true,
                         value:
