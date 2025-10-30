@@ -7,7 +7,7 @@ class SelectWithAutoCompleteComponent < Component
     @listbox_id = 'listbox_id'
     @form = form
     @field = field
-    @options = create_listbox(options)
+    @listbox_options = create_listbox(options)
     @selected_option = get_selected_option(options)
     @combobox_arguments = combobox_arguments
   end
@@ -46,31 +46,31 @@ class SelectWithAutoCompleteComponent < Component
 
   def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength
     fragment.search('optgroup').each_with_index do |group, group_index|
-      id = "group#{group_index}"
-      ul = Nokogiri::XML::Node.new('ul', fragment)
-      ul['role'] = 'group'
-      ul['aria-labelledby'] = id
-      li = Nokogiri::XML::Node.new('li', ul)
-      li['id'] = id
-      li['role'] = 'presentation'
-      li.inner_html = group['label']
-      ul.add_child(li)
+      listbox_group_option_id = "group#{group_index}"
+      listbox_group = Nokogiri::XML::Node.new('div', fragment)
+      listbox_group['role'] = 'group'
+      listbox_group['aria-labelledby'] = listbox_group_option_id
+      listbox_group_option = Nokogiri::XML::Node.new('div', listbox_group)
+      listbox_group_option['id'] = listbox_group_option_id
+      listbox_group_option['role'] = 'presentation'
+      listbox_group_option.inner_html = group['label']
+      listbox_group.add_child(listbox_group_option)
       group.children.each do |child|
-        ul.add_child(child.dup)
+        listbox_group.add_child(child.dup)
       end
-      group.replace(ul)
+      group.replace(listbox_group)
     end
     fragment
   end
 
   def create_listbox_options(fragment)
     fragment.search('option').each_with_index do |option, option_index|
-      li = Nokogiri::XML::Node.new('li', fragment)
-      li['id'] = "option#{option_index}"
-      li['role'] = 'option'
-      li['value'] = option['value']
-      li.inner_html = option.text
-      option.replace(li)
+      listbox_group_option = Nokogiri::XML::Node.new('div', fragment)
+      listbox_group_option['id'] = "option#{option_index}"
+      listbox_group_option['role'] = 'option'
+      listbox_group_option['data-value'] = option['value']
+      listbox_group_option.inner_html = option.text
+      option.replace(listbox_group_option)
     end
     fragment
   end
