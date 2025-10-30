@@ -4,7 +4,7 @@
 class SelectWithAutoCompleteComponent < Component
   def initialize(form:, field:, options:, **combobox_arguments)
     @combobox_id = form.field_id(field)
-    @listbox_id = 'listbox_id'
+    @listbox_id = "#{form.field_id(field)}_listbox"
     @form = form
     @field = field
     @listbox_options = create_listbox(options)
@@ -46,7 +46,7 @@ class SelectWithAutoCompleteComponent < Component
 
   def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength
     fragment.search('optgroup').each_with_index do |group, group_index|
-      listbox_group_option_id = "group#{group_index}"
+      listbox_group_option_id = "#{@listbox_id}_group#{group_index}"
       listbox_group = Nokogiri::XML::Node.new('div', fragment)
       listbox_group['role'] = 'group'
       listbox_group['aria-labelledby'] = listbox_group_option_id
@@ -66,7 +66,7 @@ class SelectWithAutoCompleteComponent < Component
   def create_listbox_options(fragment)
     fragment.search('option').each_with_index do |option, option_index|
       listbox_group_option = Nokogiri::XML::Node.new('div', fragment)
-      listbox_group_option['id'] = "option#{option_index}"
+      listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
       listbox_group_option['role'] = 'option'
       listbox_group_option['data-value'] = option['value']
       listbox_group_option.inner_html = option.text

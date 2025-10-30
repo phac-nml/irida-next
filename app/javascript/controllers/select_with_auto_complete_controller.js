@@ -406,7 +406,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
-      setTimeout(this.close.bind(this, true), 300);
+      this.close.bind(this, true);
     }
   }
 

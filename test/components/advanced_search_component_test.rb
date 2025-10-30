@@ -22,15 +22,17 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         # verify the field list & option group elements are localized
-        within first("select[name$='[field]']") do
-          assert_text I18n.t('samples.table_component.name')
-          assert_text I18n.t('samples.table_component.puid')
-          assert_text I18n.t('samples.table_component.created_at')
-          assert_text I18n.t('samples.table_component.updated_at')
-          assert_text I18n.t('samples.table_component.attachments_updated_at')
-          assert_selector "optgroup[label='#{
-              I18n.t('components.advanced_search_component.operation.metadata_fields')
-            }']", count: 1
+        first("input[role='combobox']").fill_in with: ''
+        first("input[role='combobox']").click
+        within first("div[role='listbox']") do
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.name'), count: 1
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.puid'), count: 1
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.created_at'), count: 1
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.updated_at'), count: 2
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.attachments_updated_at'), count: 1
+          assert_selector "div[role='presentation']",
+                          text: I18n.t('components.advanced_search_component.operation.metadata_fields'),
+                          count: 1
         end
 
         # verify the operator list is localized
@@ -122,7 +124,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         # add a new filter
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.age']").select_option
+            find("input[id$='field']").fill_in with: 'age'
             find("select[name$='[operator]']").find("option[value='>=']").select_option
             find("input[name$='[value]']").fill_in with: '25'
           end
@@ -137,7 +139,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         # verify that dismissing the confirm keeps the unapplied filters and dialog open
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            assert_equal 'metadata.age', find("select[name$='[field]']").find("option[value='metadata.age']").value
+            assert_equal 'age', find("input[id$='field']").value
             assert_equal '>=', find("select[name$='[operator]']").find("option[value='>=']").value
             assert_equal '25', find("input[name$='[value]']").value
           end
@@ -169,7 +171,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         # select a value for field
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.age']").select_option
+            find("input[id$='field']").fill_in with: 'age'
           end
         end
 
@@ -182,7 +184,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         # verify that dismissing the confirm keeps the unapplied filters and dialog open
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            assert_equal 'metadata.age', find("select[name$='[field]']").find("option[value='metadata.age']").value
+            assert_equal 'age', find("input[id$='field']").value
           end
         end
 

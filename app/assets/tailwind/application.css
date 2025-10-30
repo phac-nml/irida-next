@@ -731,14 +731,11 @@ a.pill-focus-reset:focus-visible {
     padding: 0;
     position: absolute;
     top: 100%;
-    list-style: none;
     display: none;
     box-sizing: border-box;
     max-height: 250px;
     width: 100%;
     overflow: hidden auto;
-    font-size: inherit;
-    line-height: inherit;
     z-index: 10;
     @apply border border-slate-500 bg-white dark:border-slate-600 dark:bg-slate-800;
   }
