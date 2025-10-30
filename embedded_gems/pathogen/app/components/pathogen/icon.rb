@@ -82,7 +82,7 @@ module Pathogen
     #
     # @return [IconErrorHandler] The error handler instance
     def error_handler
-      @error_handler ||= IconErrorHandler.new(icon_name, rails_icons_options)
+      @error_handler ||= IconErrorHandler.new(icon_name, rails_icons_options, helpers)
     end
   end
 end
