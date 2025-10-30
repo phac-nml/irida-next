@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
   module DataTable
-    class ColumnComponentTest < ViewComponent::TestCase
+    class ColumnComponentTest < ViewComponentTestCase
       test 'initializes with title and block' do
         component = Viral::DataTable::ColumnComponent.new('Test Column') { |row| row[:name] }
 
@@ -19,8 +19,6 @@ module Viral
 
         assert_equal 'John Doe', result
       end
-
-
 
       test 'header_cell_arguments includes default classes' do
         component = Viral::DataTable::ColumnComponent.new('Column') { |row| row[:value] }
