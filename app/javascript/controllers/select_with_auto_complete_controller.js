@@ -31,18 +31,16 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.addComboboxEventListeners(this.comboboxTarget);
 
     this.attachOptionEvents(this.listboxTarget, true);
-    var categories = this.listboxTarget.querySelectorAll('ul[role="group"]');
+    var categories = this.listboxTarget.querySelectorAll('[role="group"]');
     for (var i = 0; i < categories.length; i++) {
       var category = categories[i];
       this.allOptions.push(category);
       this.attachOptionEvents(category);
     }
-
-    this.filterOptions();
   }
 
   attachOptionEvents(category, add = false) {
-    var categoryItems = category.querySelectorAll(':scope > li[role="option"]');
+    var categoryItems = category.querySelectorAll(':scope > [role="option"]');
     for (var i = 0; i < categoryItems.length; i++) {
       var categoryItem = categoryItems[i];
       if (add) {
@@ -80,8 +78,8 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   setValue(option) {
-    this.hiddenTarget.value = option.getAttribute("value");
-    this.filter = option.textContent;
+    this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
+    this.filter = option ? option.textContent : "";
     this.comboboxTarget.value = this.filter;
     this.comboboxTarget.setSelectionRange(
       this.filter.length,
@@ -105,17 +103,8 @@ export default class SelectWithAutoCompleteController extends Controller {
       var flag = false;
       var optionCategory = this.allOptions[i].cloneNode(true);
 
-      if (optionCategory.nodeName === "LI") {
-        this.addListboxOptionEventListeners(optionCategory);
-        if (
-          filter.length === 0 ||
-          this.getLowercaseContent(optionCategory).indexOf(filter) === 0
-        ) {
-          flag = true;
-          this.filteredOptions.push(optionCategory);
-        }
-      } else {
-        var options = optionCategory.querySelectorAll('li[role="option"]');
+      if (optionCategory.role === "group") {
+        var options = optionCategory.querySelectorAll('[role="option"]');
         for (var j = 0; j < options.length; j++) {
           option = options[j];
           this.addListboxOptionEventListeners(option);
@@ -128,6 +117,16 @@ export default class SelectWithAutoCompleteController extends Controller {
           } else {
             optionCategory.removeChild(option);
           }
+        }
+      } else {
+        // assume presentation & option role
+        this.addListboxOptionEventListeners(optionCategory);
+        if (
+          filter.length === 0 ||
+          this.getLowercaseContent(optionCategory).indexOf(filter) === 0
+        ) {
+          flag = true;
+          this.filteredOptions.push(optionCategory);
         }
       }
 
@@ -280,7 +279,7 @@ export default class SelectWithAutoCompleteController extends Controller {
         if (this.isOpen()) {
           this.close();
         } else {
-          this.setValue("");
+          this.setValue();
         }
         flag = true;
         break;
