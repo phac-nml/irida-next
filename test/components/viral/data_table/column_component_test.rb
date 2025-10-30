@@ -48,8 +48,9 @@ module Viral
 
         args = component.body_cell_arguments
 
-        # When padding is false, the padding classes should be empty
-        assert_includes args[:classes], ''
+        # When padding is false, the padding classes should not be present
+        assert_not_includes args[:classes], 'py-3'
+        assert_not_includes args[:classes], 'px-3'
       end
 
       test 'header_cell_arguments includes sticky classes when sticky_key is provided' do
