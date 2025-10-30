@@ -52,7 +52,7 @@ class SortingHelperTest < ActionView::TestCase
     end
 
     def t(key)
-      { '.sorting.email_asc' => 'Email (A-Z)' }[key]
+      { 'components.ransack.sort_dropdown_component.sorting.email_asc' => 'Email (A-Z)' }[key]
     end
 
     @ransack_obj.sorts << Sort.new('email', 'asc')
@@ -71,6 +71,21 @@ class SortingHelperTest < ActionView::TestCase
 
   test 'sorting_url without direction generates correct URL' do
     assert_equal '/sort/email', sorting_url(@ransack_obj, :email)
+  end
+
+  test 'sort_label returns fully-qualified translation key' do
+    def t(key)
+      { 'components.ransack.sort_dropdown_component.sorting.name_asc' => 'Name (A-Z)' }[key]
+    end
+
+    assert_equal 'Name (A-Z)', sort_label(:name, :asc)
+  end
+
+  test 'active_sort? is the primary method name for boolean check' do
+    @ransack_obj.sorts << Sort.new('email', 'asc')
+
+    assert active_sort?(@ransack_obj, :email, :asc)
+    assert_not active_sort?(@ransack_obj, :email, :desc)
   end
 
   test 'aria_sort returns empty hash when column is not sorted' do

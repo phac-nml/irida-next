@@ -26,14 +26,7 @@ module SortingHelper
   end
 
   def sort_label(field, dir)
-    full_key = format(
-      'components.ransack.sort_dropdown_component.sorting.%<field>s_%<dir>s',
-      field:,
-      dir:
-    )
-
-    # Prefer the fully-qualified key; fall back to relative key for test stubs
-    t(full_key) || t(".sorting.#{field}_#{dir}")
+    t("components.ransack.sort_dropdown_component.sorting.#{field}_#{dir}")
   end
 
   def add_aria_current(ransack_obj, field, dir)
