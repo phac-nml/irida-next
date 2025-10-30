@@ -10,7 +10,7 @@ import { Controller } from "@hotwired/stimulus";
  * - Dropdown positioning and focus management
  */
 export default class SelectWithAutoCompleteController extends Controller {
-  static targets = ["combobox", "listbox", "button", "hidden"];
+  static targets = ["combobox", "listbox", "hidden"];
 
   connect() {
     this.allOptions = [];
@@ -28,7 +28,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.onBackgroundPointerUp.bind(this),
       true,
     );
-    this.buttonTarget.addEventListener("click", this.onButtonClick.bind(this));
     this.addComboboxEventListeners(this.comboboxTarget);
 
     this.attachOptionEvents(this.listboxTarget, true);
@@ -217,14 +216,12 @@ export default class SelectWithAutoCompleteController extends Controller {
   open() {
     this.listboxTarget.style.display = "block";
     this.comboboxTarget.setAttribute("aria-expanded", "true");
-    this.buttonTarget.setAttribute("aria-expanded", "true");
   }
 
   close() {
     this.setOption(null);
     this.listboxTarget.style.display = "none";
     this.comboboxTarget.setAttribute("aria-expanded", "false");
-    this.buttonTarget.setAttribute("aria-expanded", "false");
   }
 
   // Combobox events
@@ -408,24 +405,10 @@ export default class SelectWithAutoCompleteController extends Controller {
   onBackgroundPointerUp(event) {
     if (
       !this.comboboxTarget.contains(event.target) &&
-      !this.listboxTarget.contains(event.target) &&
-      !this.buttonTarget.contains(event.target)
+      !this.listboxTarget.contains(event.target)
     ) {
       setTimeout(this.close.bind(this, true), 300);
     }
-  }
-
-  // Button events
-
-  onButtonClick(event) {
-    event.preventDefault();
-    if (this.isOpen()) {
-      this.close();
-    } else {
-      this.open();
-    }
-    this.comboboxTarget.focus();
-    this.setActiveDescendant(false);
   }
 
   // Listbox Option events
