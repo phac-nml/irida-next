@@ -623,7 +623,7 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='puid']").select_option
+            find("input[role='combobox']").send_keys('Sample PUID', :enter)
             find("select[name$='[operator]']").find("option[value='in']").select_option
             find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
           end
@@ -672,7 +672,7 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
+            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
           end
@@ -719,7 +719,7 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
+            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
             find("select[name$='[operator]']").find("option[value='exists']").select_option
           end
         end
