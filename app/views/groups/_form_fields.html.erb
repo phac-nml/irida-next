@@ -42,10 +42,7 @@
                    t("activerecord.attributes.group.parent_id"),
                    for: form_id,
                    class:
-                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                   data: {
-                     required: true,
-                   } %>
+                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white" %>
         <div>
           <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
@@ -53,14 +50,19 @@
                       value: namespace.id,
                       label: namespace.full_path,
                     ) do %>
-                <span
-                  class="
-                    text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                  "
-                >
-                  <%= namespace.full_path %>
-                  <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
-                </span>
+                <div class="flex items-center justify-between gap-3 pointer-events-none">
+                  <div class="min-w-0">
+                    <div class="text-slate-900 dark:text-slate-200 font-semibold truncate">
+                      <%= namespace.name %>
+                    </div>
+                    <div class="text-slate-600 dark:text-slate-400 text-sm truncate">
+                      <%= namespace.full_path %>
+                    </div>
+                  </div>
+                  <div class="shrink-0">
+                    <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+                  </div>
+                </div>
               <% end %>
             <% end %>
             <%= select.with_empty_state do %>
