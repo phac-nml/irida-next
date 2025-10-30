@@ -192,7 +192,7 @@ export default class extends Controller {
    * @returns {Element|null} Key input element
    */
   #findKeyInput(container) {
-    return container.querySelector("input[id^='key_']");
+    return container.querySelector("input[id^='sample_key_']");
   }
 
   /**
