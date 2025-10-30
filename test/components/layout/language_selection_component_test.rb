@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Layout
-  class LanguageSelectionComponentTest < ViewComponent::TestCase
+  class LanguageSelectionComponentTest < ViewComponentTestCase
     test 'renders language selection dropdown' do
       user = users(:john_doe)
       render_inline(Layout::LanguageSelectionComponent.new(user: user))
@@ -30,6 +30,24 @@ module Layout
       user = users(:john_doe)
       # Stub the locale to return nil
       user.define_singleton_method(:locale) { nil }
+      component = Layout::LanguageSelectionComponent.new(user: user)
+
+      assert_equal I18n.default_locale.to_s, component.user_locale.to_s
+    end
+
+    test 'user_locale returns default locale when user locale is invalid' do
+      user = users(:john_doe)
+      # Stub the locale to return an invalid locale
+      user.define_singleton_method(:locale) { 'invalid_locale' }
+      component = Layout::LanguageSelectionComponent.new(user: user)
+
+      assert_equal I18n.default_locale.to_s, component.user_locale.to_s
+    end
+
+    test 'user_locale returns default locale when user locale is empty string' do
+      user = users(:john_doe)
+      # Stub the locale to return an empty string
+      user.define_singleton_method(:locale) { '' }
       component = Layout::LanguageSelectionComponent.new(user: user)
 
       assert_equal I18n.default_locale.to_s, component.user_locale.to_s
