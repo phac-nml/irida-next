@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Tabs Controller
@@ -121,8 +122,9 @@ export default class extends Controller {
       }
 
       // Select the initial tab
+      // Use replaceState for initial selection to avoid creating unnecessary history entry
       const validatedIndex = this.#validateDefaultIndex(initialIndex);
-      this.#selectTabByIndex(validatedIndex);
+      this.#selectTabByIndex(validatedIndex, true, history.replaceState);
 
       // Add initialization markers
       this.element.classList.add("tabs-initialized");
@@ -342,9 +344,10 @@ export default class extends Controller {
    * @private
    * @param {number} index - The tab index to select
    * @param {boolean} updateUrl - Whether to update the URL hash (default: true)
+   * @param {Function} updateMethod - The history method to use (default: history.pushState)
    * @returns {void}
    */
-  #selectTabByIndex(index, updateUrl = true) {
+  #selectTabByIndex(index, updateUrl = true, updateMethod = history.pushState) {
     // Defensive checks for morph scenarios
     if (!this.hasTabTarget || !this.hasPanelTarget) {
       return;
@@ -389,7 +392,7 @@ export default class extends Controller {
 
     // Update URL hash if sync is enabled
     if (this.syncUrlValue && updateUrl) {
-      this.#updateUrlHash(index);
+      this.#updateUrlHash(index, updateMethod);
     }
 
     // Turbo Frame lazy loading happens automatically here:
@@ -495,9 +498,10 @@ export default class extends Controller {
    * Debounced to prevent excessive updates during rapid tab switching (e.g., arrow keys)
    * @private
    * @param {number} index - The tab index
+   * @param {Function} method - The history method to use (default: history.pushState)
    * @returns {void}
    */
-  #updateUrlHash(index) {
+  #updateUrlHash(index, method = history.pushState) {
     // Clear any pending update
     if (this.#hashUpdateTimeout) {
       clearTimeout(this.#hashUpdateTimeout);
@@ -513,9 +517,9 @@ export default class extends Controller {
         url.searchParams.delete("tab");
         url.hash = hash;
 
-        // Use pushState to add tab changes to browser history
-        // This allows users to navigate back through tabs with the back button
-        window.history.pushState(null, "", url.toString());
+        // Use Turbo's history API to properly integrate with Turbo navigation
+        // This ensures back/forward navigation works correctly with Turbo Drive
+        Turbo.session.history.update(method, url, uuidv4());
       } catch (error) {
         console.error("[pathogen--tabs] Error updating URL hash:", error);
       } finally {
@@ -585,8 +589,8 @@ export default class extends Controller {
     try {
       const hashIndex = this.#getTabIndexFromHash();
       if (hashIndex !== -1) {
-        // Don't update URL again when responding to hash change
-        this.#selectTabByIndex(hashIndex, false);
+        // Use replaceState when responding to hash change to avoid creating additional history entries
+        this.#selectTabByIndex(hashIndex, true, history.replaceState);
       }
     } catch (error) {
       console.error("[pathogen--tabs] Error handling hash change:", error);
@@ -621,13 +625,15 @@ export default class extends Controller {
       const hashIndex = this.#getTabIndexFromHash();
       if (hashIndex !== -1) {
         // Don't update URL again - we're restoring from it
-        this.#selectTabByIndex(hashIndex, false);
+        // Use replaceState since we're restoring state, not creating new history
+        this.#selectTabByIndex(hashIndex, true, history.replaceState);
       } else {
         // No hash found, use default index
+        // Use replaceState to avoid creating history entry during restoration
         const validatedIndex = this.#validateDefaultIndex(
           this.defaultIndexValue,
         );
-        this.#selectTabByIndex(validatedIndex, false);
+        this.#selectTabByIndex(validatedIndex, true, history.replaceState);
       }
 
       // Note: We don't reload frames here because:
