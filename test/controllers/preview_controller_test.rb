@@ -49,11 +49,12 @@ class PreviewControllerTest < ActionDispatch::IntegrationTest
     controller = PreviewController.new
     controller.params = ActionController::Parameters.new({})
 
-    # This will raise an error since params[:lookbook] is nil
-    # The controller should handle this gracefully or params should always be present
-    assert_raises(NoMethodError) do
-      controller.send(:set_locale)
-    end
+    controller.send(:set_locale)
+
+    assert_equal I18n.default_locale, I18n.locale
+  ensure
+    # Reset locale to default after test
+    I18n.locale = I18n.default_locale
   end
 
   test 'set_locale before_action is configured' do
