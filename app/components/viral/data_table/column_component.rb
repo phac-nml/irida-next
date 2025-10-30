@@ -64,8 +64,6 @@ module Viral
       def content_for(row)
         @block.call(row)
       end
-
-
     end
   end
 end
