@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Sample
-class WorkflowExecution < ApplicationRecord
+class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include MetadataSortable
 
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
