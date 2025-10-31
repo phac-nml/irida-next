@@ -577,20 +577,7 @@ export default class extends Controller {
 
       this.pathogenDatepickerInputOutlet.hideCalendar();
     } else if (event.type === "keydown") {
-      const oldSelectedDate = this.calendarTarget.querySelector(
-        '[aria-selected="true"]',
-      );
-      if (oldSelectedDate) {
-        const newClasses = verifyDateIsInMonth(oldSelectedDate)
-          ? CALENDAR_CLASSES["IN_MONTH"]
-          : CALENDAR_CLASSES["OUT_OF_MONTH"];
-        oldSelectedDate.removeAttribute("aria-selected");
-        this.#replaceDateStyling(
-          oldSelectedDate,
-          newClasses,
-          CALENDAR_CLASSES["SELECTED_DATE"],
-        );
-      }
+      this.#removeSelectedDateAttributes();
       const selectedDateString = selectedDate.getAttribute("data-date");
       this.pathogenDatepickerInputOutlet.fillInputValue(selectedDateString);
       this.#selectedDate = selectedDateString;
@@ -601,6 +588,8 @@ export default class extends Controller {
 
   // clear selection by clicking clear button
   clearSelection(event) {
+    console.log("clear selection mouse");
+    event.preventDefault();
     console.log(event.type);
     this.pathogenDatepickerInputOutlet.setInputValue("");
 
@@ -609,6 +598,32 @@ export default class extends Controller {
     }
 
     this.pathogenDatepickerInputOutlet.hideCalendar();
+  }
+
+  clearSelectionByKeyboard(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.#removeSelectedDateAttributes();
+
+      this.pathogenDatepickerInputOutlet.fillInputValue("");
+    }
+  }
+
+  #removeSelectedDateAttributes() {
+    const oldSelectedDate = this.calendarTarget.querySelector(
+      '[aria-selected="true"]',
+    );
+    if (oldSelectedDate) {
+      const defaultClasses = verifyDateIsInMonth(oldSelectedDate)
+        ? CALENDAR_CLASSES["IN_MONTH"]
+        : CALENDAR_CLASSES["OUT_OF_MONTH"];
+      oldSelectedDate.removeAttribute("aria-selected");
+      this.#replaceDateStyling(
+        oldSelectedDate,
+        defaultClasses,
+        CALENDAR_CLASSES["SELECTED_DATE"],
+      );
+    }
   }
 
   closeDatepicker(event) {
