@@ -28,6 +28,7 @@ module Irida
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry)
       @default_params = default_params_for_entry(entry)
       @default_workflow_params = default_workflow_params_for_entry(entry)
+      @entry = entry
     end
 
     def workflow_params
@@ -45,9 +46,9 @@ module Irida
 
         workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
       end
-
       workflow_params
     end
+
 
     def samplesheet_headers
       sample_sheet = process_samplesheet_schema
@@ -61,9 +62,7 @@ module Irida
 
     def samplesheet_schema_overrides_for_entry(entry)
       overrides = entry['samplesheet_schema_overrides'] || {}
-      version_overrides = (entry['versions']&.find do |v|
-        v['name'] == @version
-      end || {})['samplesheet_schema_overrides'] || {}
+      version_overrides = (entry['versions']&.find { |v| v['name'] == @version } || {})['samplesheet_schema_overrides'] || {}
       overrides.deep_merge!(version_overrides)
       overrides
     end
@@ -110,10 +109,13 @@ module Irida
       version_overrides = entry['versions'].find do |version|
         version['name'] == @version
       end || {}
+
       overrides
         .deep_merge(
           version_overrides.key?('overrides') ? version_overrides['overrides'] : {}
         )
+
+      return overrides
     end
 
     def default_workflow_params_for_entry(entry) # rubocop:disable Metrics/CyclomaticComplexity
