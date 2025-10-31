@@ -358,7 +358,6 @@ export default class extends Controller {
 
     if (selectedDate) {
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
-      selectedDate.setAttribute("aria-selected", true);
     }
 
     // don't need to add 'today' styling if today == selectedDate
@@ -573,7 +572,6 @@ export default class extends Controller {
     } else if (event.type === "keydown") {
       // move the selected date styling to the current selected date
       this.#removeSelectedDateAttributes();
-      selectedDate.setAttribute("aria-selected", true);
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
       this.#selectedDate = selectedDateString;
       this.#generateCalendarButtonAriaLabel();
@@ -598,14 +596,14 @@ export default class extends Controller {
 
   // when navigating and selecting by keyboard, selected classes will be added to newly selected dates prior to submission
   #removeSelectedDateAttributes() {
-    const oldSelectedDate = this.calendarTarget.querySelector(
-      '[aria-selected="true"]',
+    const oldSelectedDate = getDateNode(
+      this.calendarTarget,
+      this.#selectedDate,
     );
     if (oldSelectedDate) {
       const defaultClasses = verifyDateIsInMonth(oldSelectedDate)
         ? CALENDAR_CLASSES["IN_MONTH"]
         : CALENDAR_CLASSES["OUT_OF_MONTH"];
-      oldSelectedDate.removeAttribute("aria-selected");
       this.#replaceDateStyling(
         oldSelectedDate,
         defaultClasses,
