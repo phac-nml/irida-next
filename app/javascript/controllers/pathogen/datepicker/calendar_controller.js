@@ -768,10 +768,6 @@ export default class extends Controller {
       : this.backButtonTarget;
   }
 
-  getLastFocusableElement() {
-    return this.closeButtonTarget;
-  }
-
   // used by input_controller to set focus when datepicker is opened
   setFocusOnTabbableDate() {
     this.calendarTarget.querySelectorAll("[tabindex='0']")[0].focus();
