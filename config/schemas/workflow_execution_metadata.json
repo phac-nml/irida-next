@@ -3,9 +3,8 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "properties": {
       "pipeline_id": { "type": "string" },
-      "workflow_name": { "type": "string" },
       "workflow_version": { "type": "string" }
     },
-    "required": ["pipeline_id", "workflow_name", "workflow_version"]
+    "required": ["pipeline_id", "workflow_version"]
   }
 

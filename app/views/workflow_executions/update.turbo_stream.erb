@@ -18,7 +18,7 @@
 
   <%= turbo_stream.update "we_name_header" do %>
     <% if @workflow_execution.name.blank? %>
-      <%= @workflow_execution.metadata["workflow_name"] %>
+      <%= text_for(@workflow_execution.workflow&.name) %>
     <% else %>
       <%= @workflow_execution.name %>
     <% end %>

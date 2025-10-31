@@ -9,7 +9,14 @@
           "type": "string"
         },
         "name": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/translations"
+            }
+          ]
         },
         "description": {
           "anyOf": [

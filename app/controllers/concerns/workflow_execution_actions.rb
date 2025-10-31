@@ -49,7 +49,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.update.success',
-                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
 
         else
           render status: :unprocessable_content, locals: {
@@ -67,9 +67,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     when 'files'
       list_workflow_execution_attachments
     when 'params'
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                             @workflow_execution.metadata['workflow_version'],
-                                                             'available')
+      @workflow = @workflow_execution.workflow
     when 'samplesheet'
       format_samplesheet_params
     when 'summary'
@@ -86,12 +84,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         if @workflow_execution.deleted?
           flash[:success] =
             t('concerns.workflow_execution_actions.destroy.success',
-              workflow_name: @workflow_execution.metadata['workflow_name'])
+              workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           redirect_to redirect_path
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
-                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           }
         end
       end
@@ -107,11 +105,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.cancel.success',
-                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.cancel.error',
-                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           }
         end
       end
@@ -188,9 +186,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   private
 
   def workflow_properties
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                          @workflow_execution.metadata['workflow_version'],
-                                                          'available')
+    workflow = @workflow_execution.workflow
     return {} if workflow.blank?
 
     workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
@@ -248,9 +244,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def format_samplesheet_params
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                          @workflow_execution.metadata['workflow_version'],
-                                                          'available')
+    workflow = @workflow_execution.workflow
     @samplesheet_headers = workflow.samplesheet_headers
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|

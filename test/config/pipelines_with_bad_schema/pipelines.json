@@ -1,5 +1,5 @@
-{
-  "phac-nml/iridanextexample": {
+[
+  {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": {
       "en": "phac-nml/iridanextexample",
@@ -41,4 +41,4 @@
       }
     ]
   }
-}
+]
