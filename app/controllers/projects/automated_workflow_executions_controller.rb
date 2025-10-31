@@ -29,11 +29,9 @@ module Projects
                   end
     end
 
-    def edit # rubocop:disable Metrics/MethodLength
+    def edit
       authorize! @namespace, to: :update_automated_workflow_executions?
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['pipeline_id'],
-                                                             @automated_workflow_execution.metadata['workflow_version'],
-                                                             'available')
+      @workflow = @automated_workflow_execution.workflow
 
       respond_to do |format|
         format.turbo_stream do
@@ -61,12 +59,13 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
           else
             render status: :unprocessable_content,
                    locals: {
-                     type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                     type: 'alert',
+                     message: t('.error',
+                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end
@@ -98,12 +97,12 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
           else
             render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                                               workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end

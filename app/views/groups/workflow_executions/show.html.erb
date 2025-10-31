@@ -6,7 +6,7 @@
 
 <%= turbo_frame_tag "edit_dialog" %>
 
-<%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
+<%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? text_for(@workflow_execution.workflow.name) :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
     <div
@@ -49,7 +49,7 @@
         <% end %>
       <% end %>
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= button_to t('common.actions.cancel'),
+        <%= button_to t("common.actions.cancel"),
         cancel_group_workflow_execution_path(@namespace, @workflow_execution.id),
         data: {
           turbo_method: :put,
@@ -60,7 +60,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= button_to t('common.actions.edit'),
+        <%= button_to t("common.actions.edit"),
         edit_group_workflow_execution_path(@namespace, @workflow_execution),
         method: :get,
         data: {
@@ -69,7 +69,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= button_to t('common.actions.remove'),
+        <%= button_to t("common.actions.remove"),
         group_workflow_execution_path(@namespace, @workflow_execution, redirect: true),
         data: {
           turbo_method: :delete,

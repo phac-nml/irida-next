@@ -20,9 +20,20 @@ module AutomatedWorkflowExecutions
     end
 
     test 'returns false if workflow is not valid' do
+      @invalid_automated_workflow_execution = AutomatedWorkflowExecution.new(
+        namespace_id: namespaces_project_namespaces(:projectA_namespace).id,
+        created_by_id: users(:jeff_doe).id,
+        metadata: {
+          workflow_name: 'phac-nml/iridanextexample',
+          workflow_version: 'invalid'
+        },
+        workflow_params: { assembler: 'stub' },
+        email_notification: false,
+        update_samples: false
+      )
       assert_no_difference -> { WorkflowExecution.count } do
         ret_val = AutomatedWorkflowExecutions::LaunchService.new(
-          automated_workflow_executions(:projectA_invalid_automated_workflow_execution), @sample, @pe_attachment_pair,
+          @invalid_automated_workflow_execution, @sample, @pe_attachment_pair,
           @automation_bot
         ).execute
 

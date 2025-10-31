@@ -118,29 +118,6 @@ module WorkflowExecutions
       assert_equal 'completed', @workflow_execution_completing.reload.state
     end
 
-    test 'test create new workflow execution with missing required workflow name' do
-      workflow_params = {
-        metadata:
-          { pipeline_id: 'phac-nml/iridanextexample',
-            workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
-        submitter_id: @user.id,
-        namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
-      }
-
-      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
-
-      assert @workflow_execution.errors.full_messages.include?(
-        'Metadata object at root is missing required properties: workflow_name'
-      )
-      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
-    end
-
     test 'test create new workflow execution with missing required pipeline id' do
       workflow_params = {
         metadata:

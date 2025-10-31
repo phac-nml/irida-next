@@ -71,11 +71,11 @@ module Groups
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.metadata['workflow_name']
+                        text: @workflow_execution_group_shared1.workflow.name
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared2.metadata['workflow_name']
+                        text: @workflow_execution_group_shared2.workflow.name
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared3.metadata['workflow_name']
+                        text: @workflow_execution_group_shared3.workflow.name
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -85,11 +85,11 @@ module Groups
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_running.metadata['workflow_name']
+                        text: workflow_execution_running.workflow.name
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_submitted.metadata['workflow_name']
+                        text: workflow_execution_submitted.workflow.name
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.metadata['workflow_name']
+                        text: @workflow_execution_group_shared1.workflow.name
       end
     end
 
@@ -185,7 +185,7 @@ module Groups
 
       assert_text @workflow_execution_group_shared1.id
       assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}", locale: user.locale)
-      assert_text @workflow_execution_group_shared1.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared1.workflow.name
       assert_text @workflow_execution_group_shared1.metadata['workflow_version']
 
       within %(nav[id="workflow-executions-tabs"]) do
@@ -222,7 +222,7 @@ module Groups
 
       assert_text @workflow_execution_group_shared1.id
       assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}", locale: user.locale)
-      assert_text @workflow_execution_group_shared1.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared1.workflow.name
       assert_text @workflow_execution_group_shared1.metadata['workflow_version']
 
       within 'main' do
@@ -260,7 +260,7 @@ module Groups
 
       assert_text @workflow_execution_group_shared2.id
       assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared2.state}")
-      assert_text @workflow_execution_group_shared2.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared2.workflow.name
       assert_text @workflow_execution_group_shared2.metadata['workflow_version']
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
@@ -304,7 +304,7 @@ module Groups
       end
 
       assert_text I18n.t(:'concerns.workflow_execution_actions.cancel.success',
-                         workflow_name: workflow_execution.metadata['workflow_name'], locale: user.locale)
+                         workflow_name: workflow_execution.workflow.name, locale: user.locale)
 
       assert_text workflow_execution.id
       assert_equal workflow_execution.reload.state, 'canceled'

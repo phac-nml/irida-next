@@ -9,7 +9,7 @@
       <%= row[:name] %>
     <% end %>
     <% table.with_column(t(".headers.workflow_name")) do |row| %>
-      <%= row.metadata["workflow_name"] %>
+      <%= text_for(row.workflow.name) %>
     <% end %>
     <% table.with_column(t(".headers.workflow_version")) do |row| %>
       <%= row.metadata["workflow_version"] %>
@@ -22,7 +22,7 @@
     <% end %>
     <% table.with_column(t(".headers.status")) do |row| %>
       <% if row[:disabled] %>
-        <%= viral_pill(text: t('common.statuses.disabled').upcase, color: "red") %>
+        <%= viral_pill(text: t("common.statuses.disabled").upcase, color: "red") %>
       <% else %>
         <%= viral_pill(text: t(".enabled"), color: "green") %>
       <% end %>
@@ -31,7 +31,7 @@
         classes: "flex justify-start"
       ) do |row| %>
       <% unless row.disabled %>
-        <%= button_to t('common.actions.edit'),
+        <%= button_to t("common.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
           @project.parent,
           @project,
@@ -51,7 +51,7 @@
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
       <% end %>
-      <%= button_to t('common.actions.delete'),
+      <%= button_to t("common.actions.delete"),
       namespace_project_automated_workflow_execution_path(
         @project.parent,
         @project,
