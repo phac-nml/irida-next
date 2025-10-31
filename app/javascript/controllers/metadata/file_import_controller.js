@@ -1,9 +1,10 @@
 import * as XLSX from "xlsx";
 
 import { Controller } from "@hotwired/stimulus";
+import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
-  static outlets = ["viral--sortable-lists--two-lists-selection"];
+  static outlets = ["viral--sortable-lists--two-lists-selection", "refresh"];
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
@@ -187,5 +188,9 @@ export default class extends Controller {
     if (this.hasViralSortableListsTwoListsSelectionOutlet) {
       this.viralSortableListsTwoListsSelectionOutlet.idempotentConnect();
     }
+  }
+
+  handleSubmit() {
+    notifyRefreshControllers(this);
   }
 }

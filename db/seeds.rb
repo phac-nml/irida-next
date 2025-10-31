@@ -17,6 +17,7 @@ Flipper.enable(:group_samples_transfer)
 Flipper.enable(:group_samples_clone)
 Flipper.enable(:workflow_execution_attachments_searching)
 Flipper.enable(:group_samples_destroy)
+Flipper.enable(:samples_refresh_notice)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
