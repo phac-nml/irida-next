@@ -209,19 +209,13 @@ export default class extends Controller {
     if (event.key === "Escape") {
       event.preventDefault();
       this.hideCalendar();
-      this.setInputValue(this.#selectedDate);
-      return;
-    }
-
-    // If we tab off the last datepicker element, we want to force focus back onto the calendar button
-    if (
-      event.key === "Tab" &&
-      event.target ===
-        this.pathogenDatepickerCalendarOutlet.getLastFocusableElement() &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
-      this.hideCalendar();
+      // if a new date was selected via keyboard and then user hits escape, submit the new date
+      if (
+        this.#selectedDate !== this.datepickerInputTarget.value &&
+        this.autosubmitValue
+      ) {
+        this.submitDate();
+      }
       return;
     }
   }
@@ -307,6 +301,10 @@ export default class extends Controller {
     this.#setSelectedDate();
   }
 
+  fillInputValue(date) {
+    this.datepickerInputTarget.value = date;
+  }
+
   // passes all shared variables required by the calendar, avoids processing or passing values twice
   // triggers upon initial connection as well as after submission
   #shareParamsWithCalendar() {
@@ -340,5 +338,9 @@ export default class extends Controller {
 
   setCalendarButtonAriaLabel(label) {
     this.calendarButtonTarget.setAttribute("aria-label", label);
+  }
+
+  currentFilledDate() {
+    return this.datepickerInputTarget.value;
   }
 }

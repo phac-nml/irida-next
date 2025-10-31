@@ -24,7 +24,7 @@ export default class extends Controller {
     "inMonthDateTemplate",
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
-    "clearButton",
+    "closeButton",
     "minDateMessage",
     "ariaLive",
   ];
@@ -365,6 +365,7 @@ export default class extends Controller {
 
     if (selectedDate) {
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      selectedDate.setAttribute("aria-selected", true);
     }
 
     // don't need to add 'today' styling if today == selectedDate
@@ -392,11 +393,15 @@ export default class extends Controller {
   }
 
   // handles changing the date styling (today, selected and disabled dates)
-  #replaceDateStyling(date, classes) {
-    if (verifyDateIsInMonth(date)) {
+  #replaceDateStyling(date, classes, removePreviousClasses = null) {
+    if (verifyDateIsInMonth(date) && !removePreviousClasses) {
       date.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
     } else {
       date.classList.remove(...CALENDAR_CLASSES["OUT_OF_MONTH"]);
+    }
+
+    if (removePreviousClasses) {
+      date.classList.remove(...removePreviousClasses);
     }
     date.classList.add(...classes);
   }
@@ -501,18 +506,6 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
-  // show today on calendar via show today button
-  showToday() {
-    this.#selectedYear = this.#todaysYear;
-    if (this.#onLastDate()) {
-      this.#selectedMonthIndex = this.#todaysMonthIndex + 1;
-    } else {
-      this.#selectedMonthIndex = this.#todaysMonthIndex;
-    }
-
-    this.idempotentConnect();
-  }
-
   // handles Shift+Tab out of calendar into datepicker input
   tabBackToInput(event) {
     if (event.key !== "Tab" || !event.shiftKey) return;
@@ -523,7 +516,22 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
+      this.closeButtonTarget.focus();
+    }
+  }
+
+  handleKeydownOnCloseButton(event) {
+    if (event.key === "Tab" && !event.shiftKey) {
+      event.preventDefault();
+      this.getFirstFocusableElement().focus();
+      return;
+    }
+    if (event.key === " " || event.key === "Enter") {
+      if (this.#autosubmit) {
+        this.pathogenDatepickerInputOutlet.submitDate();
+      }
       this.pathogenDatepickerInputOutlet.hideCalendar();
+      return;
     }
   }
 
@@ -558,16 +566,21 @@ export default class extends Controller {
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.pathogenDatepickerInputOutlet.setInputValue(
-      selectedDate.getAttribute("data-date"),
-    );
 
-    // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
-    if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
+    if (event.type === "click") {
+      this.pathogenDatepickerInputOutlet.setInputValue(
+        selectedDate.getAttribute("data-date"),
+      );
+      if (this.#autosubmit) {
+        this.pathogenDatepickerInputOutlet.submitDate();
+      }
+
+      this.pathogenDatepickerInputOutlet.hideCalendar();
+    } else if (event.type === "keydown") {
+      this.pathogenDatepickerInputOutlet.fillInputValue(
+        selectedDate.getAttribute("data-date"),
+      );
     }
-
-    this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
   // clear selection by clicking clear button
@@ -578,6 +591,11 @@ export default class extends Controller {
       this.pathogenDatepickerInputOutlet.submitDate();
     }
 
+    this.pathogenDatepickerInputOutlet.hideCalendar();
+  }
+
+  closeDatepicker(event) {
+    event.preventDefault();
     this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
@@ -736,7 +754,7 @@ export default class extends Controller {
   }
 
   getLastFocusableElement() {
-    return this.clearButtonTarget;
+    return this.closeButtonTarget;
   }
 
   setFocusOnTabbableDate() {

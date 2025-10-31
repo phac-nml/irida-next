@@ -10,19 +10,19 @@
     <button
       type="button"
       class="button button-default w-1/2"
-      data-action="click->pathogen--datepicker--calendar#showToday"
-      aria-label="<%= t('pathogen.datepicker.aria_label.show_today') %>"
+      data-action="click->pathogen--datepicker--calendar#clearSelection"
+      aria-label="<%= t('pathogen.datepicker.aria_label.clear_selection') %>"
     >
-      <%= t("pathogen.datepicker.show_today") %>
+      <%= t("pathogen.datepicker.clear_selection") %>
     </button>
     <button
       type="button"
       class="button button-default w-1/2"
-      data-action="click->pathogen--datepicker--calendar#clearSelection"
-      data-pathogen--datepicker--calendar-target="clearButton"
-      aria-label="<%= t('pathogen.datepicker.aria_label.clear_selection') %>"
+      data-action="click->pathogen--datepicker--calendar#closeDatepicker keydown->pathogen--datepicker--calendar#handleKeydownOnCloseButton"
+      data-pathogen--datepicker--calendar-target="closeButton"
+      aria-label="close datepicker"
     >
-      <%= t("pathogen.datepicker.clear_selection") %>
+      close
     </button>
   </div>
 </div>
