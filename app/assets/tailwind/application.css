@@ -663,3 +663,29 @@ a.pill-focus-reset:focus-visible {
   --tw-ring-color: transparent !important;
   --tw-ring-offset-width: 0px !important;
 }
+
+/* Select with auto complete styles */
+.ts-wrapper.single .ts-control {
+  @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
+}
+
+.ts-control,
+.ts-wrapper.single.input-active .ts-control {
+  @apply dark:bg-slate-800;
+}
+
+.ts-dropdown {
+  @apply bg-white text-slate-900 dark:bg-slate-800 dark:text-white;
+}
+
+.ts-dropdown .optgroup-header {
+  @apply bg-white text-slate-900 dark:bg-slate-800 dark:text-white;
+}
+
+.ts-dropdown [data-selectable] .highlight {
+  @apply bg-blue-300 dark:bg-blue-300;
+}
+
+.ts-dropdown .active {
+  @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
+}
