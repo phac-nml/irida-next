@@ -49,7 +49,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.update.success',
-                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
 
         else
           render status: :unprocessable_content, locals: {
@@ -84,12 +84,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         if @workflow_execution.deleted?
           flash[:success] =
             t('concerns.workflow_execution_actions.destroy.success',
-              workflow_name: @workflow_execution.metadata['workflow_name'])
+              workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           redirect_to redirect_path
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
-                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           }
         end
       end
@@ -105,11 +105,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.cancel.success',
-                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.cancel.error',
-                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
           }
         end
       end

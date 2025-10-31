@@ -28,20 +28,17 @@ module Projects
       workflow_name = 'Test Workflow'
       valid_params = { workflow_execution: {
         name: workflow_name,
-        metadata: { pipeline_id: '/phac-nml/iridanextexample',
-                    workflow_name: '/phac-nml/iridanextexample',
+        metadata: { pipeline_id: 'phac-nml/iridanextexample',
                     workflow_version: '1.0.2' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,
         update_samples: true
       }, format: :turbo_stream }
 
-      assert project.namespace.automated_workflow_executions.count.zero?
-
-      post namespace_project_automated_workflow_executions_path(@namespace, project),
-           params: valid_params
-
-      assert_equal 1, project.namespace.automated_workflow_executions.count
+      assert_difference -> { project.namespace.automated_workflow_executions.count } => 1 do
+        post namespace_project_automated_workflow_executions_path(@namespace, project),
+             params: valid_params
+      end
 
       automated_workflow = project.namespace.automated_workflow_executions.first
 
@@ -110,14 +107,12 @@ module Projects
     end
 
     test 'can destroy a automated workflow execution for a project' do
-      assert_equal 3, @project.namespace.automated_workflow_executions.count
-
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
-      delete namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
-                                                                 format: :turbo_stream)
-
-      assert_equal 2, @project.namespace.automated_workflow_executions.count
+      assert_difference -> { @project.namespace.automated_workflow_executions.count } => -1 do
+        delete namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
+                                                                   format: :turbo_stream)
+      end
 
       assert_response :success
     end

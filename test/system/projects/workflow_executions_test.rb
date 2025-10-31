@@ -76,11 +76,11 @@ module Projects
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution2.metadata['workflow_name']
+                        text: @workflow_execution2.workflow.name
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution3.metadata['workflow_name']
+                        text: workflow_execution3.workflow.name
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared2.metadata['workflow_name']
+                        text: workflow_execution_shared2.workflow.name
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -90,11 +90,11 @@ module Projects
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared1.metadata['workflow_name']
+                        text: workflow_execution_shared1.workflow.name
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared2.metadata['workflow_name']
+                        text: workflow_execution_shared2.workflow.name
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution2.metadata['workflow_name']
+                        text: @workflow_execution2.workflow.name
       end
     end
 
@@ -151,7 +151,7 @@ module Projects
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
           :'concerns.workflow_execution_actions.cancel.success',
-          workflow_name: workflow_execution.metadata['workflow_name']
+          workflow_name: workflow_execution.workflow.name
         )
       end
 
@@ -223,7 +223,7 @@ module Projects
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
           :'concerns.workflow_execution_actions.destroy.success',
-          workflow_name: @workflow_execution1.metadata['workflow_name']
+          workflow_name: @workflow_execution1.workflow.name
         )
       end
 
@@ -342,7 +342,7 @@ module Projects
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_text workflow_execution.metadata['workflow_name']
+      assert_text workflow_execution.workflow.name
       assert_text workflow_execution.metadata['workflow_version']
 
       within %(nav[id="workflow-executions-tabs"]) do
@@ -495,7 +495,7 @@ module Projects
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_text workflow_execution.metadata['workflow_name']
+      assert_text workflow_execution.workflow.name
       assert_text workflow_execution.metadata['workflow_version']
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
@@ -523,7 +523,7 @@ module Projects
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_text workflow_execution.metadata['workflow_name']
+      assert_text workflow_execution.workflow.name
       assert_text workflow_execution.metadata['workflow_version']
 
       within %(nav[id="workflow-executions-tabs"]) do

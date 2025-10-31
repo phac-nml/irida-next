@@ -11,7 +11,7 @@ module WorkflowExecutions
     def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
-      @pipeline = find_pipeline
+      @pipeline = workflow_execution.workflow
       @samplesheet_rows = []
       @storage_service = ActiveStorage::Blob.service
     end
@@ -56,11 +56,6 @@ module WorkflowExecutions
     end
 
     private
-
-    def find_pipeline
-      Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                 @workflow_execution.metadata['workflow_version'])
-    end
 
     def validate_pipeline
       return true if @pipeline.executable?

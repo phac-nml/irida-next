@@ -59,12 +59,13 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
           else
             render status: :unprocessable_content,
                    locals: {
-                     type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                     type: 'alert',
+                     message: t('.error',
+                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end
@@ -96,12 +97,12 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
           else
             render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                                               workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end

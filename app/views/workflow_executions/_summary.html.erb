@@ -19,7 +19,7 @@
     </div>
     <% unless @workflow_execution.name.blank? %>
       <div class="flex flex-col py-3">
-        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t('common.labels.name') %></dt>
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t("common.labels.name") %></dt>
         <dd class="text-lg font-semibold text-slate-900 dark:text-white">
           <%= @workflow_execution.name %>
         </dd>
@@ -27,7 +27,7 @@
     <% end %>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_name") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_name"] %></dd>
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= text_for(@workflow_execution.workflow&.name) %></dd>
     </div>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_version") %></dt>

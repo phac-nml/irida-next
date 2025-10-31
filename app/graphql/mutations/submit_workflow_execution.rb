@@ -57,7 +57,6 @@ module Mutations
       workflow_execution_params = {
         name: args[:name],
         metadata: { pipeline_id: args[:pipeline_id],
-                    workflow_name: args[:workflow_name],
                     workflow_version: args[:workflow_version] },
         namespace_id:,
         workflow_params: args[:workflow_params],

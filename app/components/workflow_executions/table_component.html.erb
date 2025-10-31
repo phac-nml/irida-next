@@ -42,8 +42,22 @@
                       },
                     } %>
                   <% end %>
-                  <% label_text = column == :name ? t('common.labels.name') : t(".#{column}") %>
-                  <% if column == :workflow_name || column == :workflow_version %>
+                  <% label_text = column == :name ? t("common.labels.name") : t(".#{column}") %>
+                  <% if column == :workflow_name %>
+                    <%= render Ransack::SortComponent.new(
+                      ransack_obj: @q,
+                      label: label_text,
+                      url:
+                        helpers.sorting_url(
+                          @q,
+                          URI.encode_www_form_component("metadata_pipeline_id"),
+                        ),
+                      field: "metadata_pipeline_id",
+                      data: {
+                        turbo_action: "replace",
+                      },
+                    ) %>
+                  <% elsif column == :workflow_version %>
                     <%= render Ransack::SortComponent.new(
                       ransack_obj: @q,
                       label: label_text,
@@ -133,7 +147,9 @@
                         color: helpers.find_pill_color_for_state(workflow_execution[column]),
                         border: true,
                       ) %>
-                    <% elsif column == :workflow_name || column == :workflow_version %>
+                    <% elsif column == :workflow_name %>
+                      <%= helpers.text_for(workflow_execution.workflow&.name || "") %>
+                    <% elsif column == :workflow_version %>
                       <%= workflow_execution.metadata[column.to_s] %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(workflow_execution[column], :long) %>
@@ -164,7 +180,7 @@
                   <div class="bg-white w-full dark:bg-slate-800 text-right px-3 py-2.5 space-x-2">
                     <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
                       <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                        <%= button_to t('common.actions.cancel'),
+                        <%= button_to t("common.actions.cancel"),
                         cancel_path(workflow_execution),
                         data: {
                           turbo_method: :put,
@@ -182,7 +198,7 @@
                           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                       <% end %>
                       <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                        <%= button_to t('common.actions.delete'),
+                        <%= button_to t("common.actions.delete"),
                         destroy_confirmation_path(workflow_execution),
                         data: {
                           turbo_stream: :true,
