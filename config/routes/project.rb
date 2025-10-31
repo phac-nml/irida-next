@@ -32,7 +32,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
       end
 
-      if Irida::Pipelines.instance.available_pipelines.any?
+      if Irida::Pipelines.instance.pipelines.any?
         resources :automated_workflow_executions
 
         resources :workflow_executions, only: %i[index destroy show edit update] do

@@ -19,6 +19,10 @@ class AutomatedWorkflowExecution < ApplicationRecord
     :terminal_window
   end
 
+  def workflow
+    Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'])
+  end
+
   private
 
   def validate_namespace_type

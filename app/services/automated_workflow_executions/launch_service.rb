@@ -11,13 +11,11 @@ module AutomatedWorkflowExecutions
       @automated_workflow_execution = automated_workflow_execution
       @sample = sample
       @pe_attachment_pair = pe_attachment_pair
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['pipeline_id'],
-                                                             @automated_workflow_execution.metadata['workflow_version'],
-                                                             'automatable')
+      @workflow = @automated_workflow_execution.workflow
     end
 
     def execute
-      return false if @workflow.nil?
+      return false unless @workflow.automatable?
 
       authorize! @automated_workflow_execution.namespace, to: :submit_workflow?
 
