@@ -9,6 +9,7 @@ module Pathogen
   class Component < ViewComponent::Base
     include Pathogen::FetchOrFallbackHelper
     include Pathogen::TestSelectorHelper
+    include Pathogen::Helpers
 
     INVALID_ARIA_LABEL_TAGS = %i[div span p].freeze
 

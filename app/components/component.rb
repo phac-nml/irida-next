@@ -6,6 +6,7 @@ class Component < ViewComponent::Base
 
   include ViewHelper
   include ClassNameHelper
+  include Pathogen::Helpers
 
   # Icon color variations 🎨.
   # Keys: color scheme symbols. Values: Tailwind CSS classes.
