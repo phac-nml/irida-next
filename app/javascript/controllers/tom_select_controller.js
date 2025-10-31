@@ -1,9 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
 import TomSelect from "tom-select";
 
-export default class SelectWithAutoCompleteController extends Controller {
+export default class TomSelectController extends Controller {
   connect() {
-    console.debug("SelectWithAutoCompleteController: Connected");
+    console.debug("TomSelectController: Connected");
+
     const select = new TomSelect(this.element, {
       render: {
         optgroup: function (data, escape) {
@@ -47,7 +48,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   disconnect() {
-    console.debug("SelectWithAutoCompleteController: Disconnected");
+    console.debug("TomSelectController: Disconnected");
     if (this.element.tomselect) {
       this.element.tomselect.destroy();
     }
