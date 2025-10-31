@@ -568,13 +568,12 @@ export default class extends Controller {
     // fill date input value to the selected date
 
     if (event.type === "click") {
-      this.pathogenDatepickerInputOutlet.setInputValue(
+      this.pathogenDatepickerInputOutlet.fillInputValue(
         selectedDate.getAttribute("data-date"),
       );
       if (this.#autosubmit) {
         this.pathogenDatepickerInputOutlet.submitDate();
       }
-
       this.pathogenDatepickerInputOutlet.hideCalendar();
     } else if (event.type === "keydown") {
       this.#removeSelectedDateAttributes();
@@ -588,10 +587,8 @@ export default class extends Controller {
 
   // clear selection by clicking clear button
   clearSelection(event) {
-    console.log("clear selection mouse");
     event.preventDefault();
-    console.log(event.type);
-    this.pathogenDatepickerInputOutlet.setInputValue("");
+    this.pathogenDatepickerInputOutlet.fillInputValue("");
 
     if (this.#autosubmit) {
       this.pathogenDatepickerInputOutlet.submitDate();

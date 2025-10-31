@@ -271,7 +271,7 @@ export default class extends Controller {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
     }
-    this.setInputValue(this.#selectedDate);
+    this.fillInputValue(this.#selectedDate);
   }
 
   // disables the error state once a valid date is entered/selected
@@ -286,21 +286,14 @@ export default class extends Controller {
   // submits the selected date
   submitDate() {
     this.#disableInputErrorState();
-    this.element.closest("form").requestSubmit();
-    this.#setSelectedDate();
+    // submit the date only if it differs from original selected date
+    if (this.#selectedDate !== this.datepickerInputTarget.value) {
+      this.element.closest("form").requestSubmit();
+      this.#setSelectedDate();
+    }
   }
 
   // handles filling in the date input with the date
-  // use cases:
-  // 1. Add the newly selected date from the datepicker
-  // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
-  // 3. If user entered an invalid date, resets to original value
-  setInputValue(date) {
-    this.datepickerInputTarget.value = date;
-    this.#selectedDate = date;
-    this.#setSelectedDate();
-  }
-
   fillInputValue(date) {
     this.datepickerInputTarget.value = date;
   }
