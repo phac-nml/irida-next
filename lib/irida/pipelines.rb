@@ -8,43 +8,42 @@ require 'irida/pipeline'
 
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
-  class Pipelines
+  class Pipelines # rubocop:disable Metrics/ClassLength
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
+    UNKNOWN_PIPELINE_ENTRY = {
+      'name' => 'UNKNOWN WORKFLOW',
+      'description' => 'UNKNOWN WORKFLOW'
+    }.freeze
+    UNKNOWN_PIPELINE_VERSION = {
+      'executable' => false
+    }.freeze
 
     class_attribute :instance
-
-    attr_reader :available_pipelines, :automatable_pipelines, :executable_pipelines
 
     def initialize(**params)
       @pipeline_config_file = params.fetch(:pipeline_config_file, 'config/pipelines/pipelines.json')
       @pipeline_schema_file_dir = params.fetch(:pipeline_schema_file_dir, 'private/pipelines')
       @pipeline_schema_status_file = params.fetch(:pipeline_schema_status_file, 'status.json')
-      @available_pipelines = {}
-      @automatable_pipelines = {}
-      @executable_pipelines = {}
+      @pipelines = {}
 
       register_pipelines
     end
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
-    def register_pipelines # rubocop:disable Metrics/AbcSize
+    def register_pipelines
       data = read_json_config
 
       data.each do |pipeline_id, entry|
         entry['versions'].each do |version|
-          next if @available_pipelines.key?("#{pipeline_id}_#{version['name']}")
+          next if @pipelines.key?("#{pipeline_id}_#{version['name']}")
 
           nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
           schema_input_location = prepare_schema_download(entry, version, 'schema_input')
 
           pipeline = Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
-          @available_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
-          next unless version['executable'] != false
-
-          @executable_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
-          @automatable_pipelines["#{pipeline_id}_#{version['name']}"] = pipeline if version['automatable']
+          @pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
         end
       end
     end
@@ -143,15 +142,28 @@ module Irida
       end
     end
 
-    def find_pipeline_by(pipeline_id, version, type = 'executable')
+    def pipelines(type = 'available')
       case type
-      when 'available'
-        @available_pipelines["#{pipeline_id}_#{version}"]
+      when 'executable'
+        @pipelines.select { |_key, pipeline| pipeline.executable? }
       when 'automatable'
-        @automatable_pipelines["#{pipeline_id}_#{version}"]
+        @pipelines.select { |_key, pipeline| pipeline.automatable? && pipeline.executable? }
       else
-        @executable_pipelines["#{pipeline_id}_#{version}"]
+        @pipelines
       end
+    end
+
+    def find_pipeline_by(pipeline_id, version)
+      pipeline = @pipelines["#{pipeline_id}_#{version}"]
+
+      return pipeline unless pipeline.nil?
+
+      Pipeline.new(pipeline_id,
+                   UNKNOWN_PIPELINE_ENTRY,
+                   { 'name' => version }.merge(UNKNOWN_PIPELINE_VERSION),
+                   nil,
+                   nil,
+                   unknown: true)
     end
   end
 end

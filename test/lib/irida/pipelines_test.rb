@@ -37,31 +37,31 @@ class PipelinesTest < ActiveSupport::TestCase
   end
 
   test 'registers pipelines' do
-    assert_not @pipelines.available_pipelines.empty?
+    assert_not @pipelines.pipelines.empty?
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2', 'available')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1', 'available')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0', 'available')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
     assert_not_nil workflow
   end
 
   test 'automatable pipelines' do
-    assert_not @pipelines.automatable_pipelines.empty?
+    assert_not @pipelines.pipelines('automatable').empty?
 
-    assert @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.2']
-    assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
-    assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
+    assert @pipelines.pipelines('automatable')['phac-nml/iridanextexample_1.0.2']
+    assert_not @pipelines.pipelines('automatable')['phac-nml/iridanextexample_1.0.1']
+    assert_not @pipelines.pipelines('automatable')['phac-nml/iridanextexample_1.0.0']
   end
 
   test 'executable pipelines' do
-    assert_not @pipelines.executable_pipelines.empty?
+    assert_not @pipelines.pipelines('executable').empty?
 
-    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.2']
-    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.1']
-    assert_not @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.0']
+    assert @pipelines.pipelines('executable')['phac-nml/iridanextexample_1.0.2']
+    assert @pipelines.pipelines('executable')['phac-nml/iridanextexample_1.0.1']
+    assert_not @pipelines.pipelines('executable')['phac-nml/iridanextexample_1.0.0']
   end
 end

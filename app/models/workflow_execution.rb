@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Sample
-class WorkflowExecution < ApplicationRecord
+class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include MetadataSortable
 
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
@@ -73,6 +73,10 @@ class WorkflowExecution < ApplicationRecord
     }.compact
   end
 
+  def workflow
+    Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'])
+  end
+
   ransacker :id do
     Arel.sql('id::varchar')
   end
@@ -97,8 +101,8 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def validate_workflow_available
-    return if Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'],
-                                                         'available').present?
+    return unless Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'],
+                                                             metadata['workflow_version']).unknown?
 
     errors.add(:base,
                I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',

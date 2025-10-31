@@ -1,4 +1,4 @@
-<% if @workflow.nil? %>
+<% if @workflow.nil? || @workflow.unknown? || !@workflow.automatable? || !@workflow.executable? %>
   <%= turbo_stream.update "automated_workflow_execution_modal",
                       partial: "pipeline_selection_modal",
                       locals: {

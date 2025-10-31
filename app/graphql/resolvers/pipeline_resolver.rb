@@ -17,11 +17,21 @@ module Resolvers
     type Types::PipelineType, null: true
 
     def resolve(pipeline_id:, workflow_version:, workflow_type:)
-      Irida::Pipelines.instance.find_pipeline_by(
+      pipeline = Irida::Pipelines.instance.find_pipeline_by(
         pipeline_id,
-        workflow_version,
-        workflow_type
+        workflow_version
       )
+
+      return nil if pipeline.unknown?
+
+      case workflow_type
+      when 'automatable'
+        return nil unless pipeline.automatable?
+      when 'executable'
+        return nil unless pipeline.executable?
+      end
+
+      pipeline
     end
   end
 end
