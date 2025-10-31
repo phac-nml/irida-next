@@ -688,7 +688,7 @@ a.pill-focus-reset:focus-visible {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
 
-/* TODO */
+/* Select with auto complete styles */
 
 .ts-wrapper.single .ts-control {
   @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
