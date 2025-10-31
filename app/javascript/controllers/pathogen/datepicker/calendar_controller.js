@@ -577,14 +577,31 @@ export default class extends Controller {
 
       this.pathogenDatepickerInputOutlet.hideCalendar();
     } else if (event.type === "keydown") {
-      this.pathogenDatepickerInputOutlet.fillInputValue(
-        selectedDate.getAttribute("data-date"),
+      const oldSelectedDate = this.calendarTarget.querySelector(
+        '[aria-selected="true"]',
       );
+      if (oldSelectedDate) {
+        const newClasses = verifyDateIsInMonth(oldSelectedDate)
+          ? CALENDAR_CLASSES["IN_MONTH"]
+          : CALENDAR_CLASSES["OUT_OF_MONTH"];
+        oldSelectedDate.removeAttribute("aria-selected");
+        this.#replaceDateStyling(
+          oldSelectedDate,
+          newClasses,
+          CALENDAR_CLASSES["SELECTED_DATE"],
+        );
+      }
+      const selectedDateString = selectedDate.getAttribute("data-date");
+      this.pathogenDatepickerInputOutlet.fillInputValue(selectedDateString);
+      this.#selectedDate = selectedDateString;
+      selectedDate.setAttribute("aria-selected", true);
+      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
     }
   }
 
   // clear selection by clicking clear button
-  clearSelection() {
+  clearSelection(event) {
+    console.log(event.type);
     this.pathogenDatepickerInputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
