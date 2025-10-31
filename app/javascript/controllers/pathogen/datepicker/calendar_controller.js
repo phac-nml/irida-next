@@ -9,6 +9,7 @@ import {
   verifyDateIsInMonth,
   getDateNode,
   getFirstOfMonthNode,
+  splitDate,
 } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
@@ -47,7 +48,6 @@ export default class extends Controller {
 
   #minDate;
   #minDateMessage;
-  #autosubmit;
 
   idempotentConnect() {
     // set the months dropdown in case we're in the year of the minimum date
@@ -86,7 +86,9 @@ export default class extends Controller {
   #generateCalendarButtonAriaLabel() {
     let label = "";
     if (this.#selectedDate) {
-      label = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[this.#selectedMonthIndex]} ${this.#selectedDate.split("-")[2]}, ${this.#selectedYear}`;
+      let year, month, day;
+      [year, month, day] = splitDate(this.#selectedDate);
+      label = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[month]} ${day}, ${year}`;
     } else {
       label = this.ariaControlLabelsValue["choose_date"];
     }
@@ -105,7 +107,6 @@ export default class extends Controller {
     this.#selectedMonthIndex = params["selectedMonthIndex"];
     this.#minDate = params["minDate"];
     this.#minDateMessage = params["minDateMessage"];
-    this.#autosubmit = params["autosubmit"];
     this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
@@ -250,7 +251,6 @@ export default class extends Controller {
     };
 
     let row = document.createElement("tr");
-    row.setAttribute("role", "row");
 
     dates.forEach((day, i) => {
       // 🧩 Classify this index into prev/current/next.
@@ -295,7 +295,6 @@ export default class extends Controller {
       if ((i + 1) % 7 === 0) {
         this.calendarTarget.append(row);
         row = document.createElement("tr");
-        row.setAttribute("role", "row");
       }
     });
   }
@@ -312,14 +311,6 @@ export default class extends Controller {
   // get February's last date based on leap year
   #getFebLastDate(year) {
     return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
-  }
-
-  #onLastDate() {
-    const lastDate =
-      this.#todaysMonthIndex === 1
-        ? this.#getFebLastDate(this.#todaysYear)
-        : DAYS_IN_MONTH[this.#todaysMonthIndex];
-    return this.#todaysDate === lastDate;
   }
 
   #getRelativeYearAndMonth(relativePosition) {
@@ -508,10 +499,10 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
-  // handles Shift+Tab out of calendar into datepicker input
-  tabBackToInput(event) {
+  // handles Shift+Tab from first tabbable element to close button (eg: stay within datepicker)
+  tabBackToCloseButton(event) {
     if (event.key !== "Tab" || !event.shiftKey) return;
-    // if we're on the back button, or on the month select when back button is disabled, tab to the datepicker input
+    // if we're on the back button, or on the month select when back button is disabled, tab to the close button
     if (
       event.target === this.backButtonTarget ||
       (event.target === this.monthSelectTarget &&
@@ -522,16 +513,20 @@ export default class extends Controller {
     }
   }
 
+  handleCloseByClick(event) {
+    event.preventDefault();
+    this.pathogenDatepickerInputOutlet.hideCalendar();
+  }
+
   handleKeydownOnCloseButton(event) {
+    // when tabbing from close button, focus first focusable element in datepicker (back button or month select)
     if (event.key === "Tab" && !event.shiftKey) {
       event.preventDefault();
       this.getFirstFocusableElement().focus();
       return;
     }
+
     if (event.key === " " || event.key === "Enter") {
-      if (this.#autosubmit) {
-        this.pathogenDatepickerInputOutlet.submitDate();
-      }
       this.pathogenDatepickerInputOutlet.hideCalendar();
       return;
     }
@@ -563,51 +558,45 @@ export default class extends Controller {
   }
 
   // select date either by click or Enter/Space
+  // By click: clicked date is selected and calendar is hidden
+  // By keydown: When date is selected, calendar is not closed, and instead the user is able to select date
+  // multiple times. Calendar is hidden and selection finalized when they select the close button or Escape out
   selectDate(event) {
     const selectedDate = event.target;
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-
+    const selectedDateString = selectedDate.getAttribute("data-date");
+    this.pathogenDatepickerInputOutlet.setInputValue(selectedDateString);
     if (event.type === "click") {
-      this.pathogenDatepickerInputOutlet.fillInputValue(
-        selectedDate.getAttribute("data-date"),
-      );
-      if (this.#autosubmit) {
-        this.pathogenDatepickerInputOutlet.submitDate();
-      }
       this.pathogenDatepickerInputOutlet.hideCalendar();
     } else if (event.type === "keydown") {
+      // move the selected date styling to the current selected date
       this.#removeSelectedDateAttributes();
-      const selectedDateString = selectedDate.getAttribute("data-date");
-      this.pathogenDatepickerInputOutlet.fillInputValue(selectedDateString);
-      this.#selectedDate = selectedDateString;
       selectedDate.setAttribute("aria-selected", true);
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      this.#selectedDate = selectedDateString;
+      this.#generateCalendarButtonAriaLabel();
     }
   }
 
   // clear selection by clicking clear button
-  clearSelection(event) {
-    event.preventDefault();
-    this.pathogenDatepickerInputOutlet.fillInputValue("");
-
-    if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
-    }
-
+  // datepicker input value is cleared and calendar hidden
+  handleClearSelectionByClick() {
+    this.pathogenDatepickerInputOutlet.setInputValue("");
     this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
-  clearSelectionByKeyboard(event) {
+  // datepicker input is cleared but calendar remains open
+  handleClearSelectionByKeydown(event) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       this.#removeSelectedDateAttributes();
-
-      this.pathogenDatepickerInputOutlet.fillInputValue("");
+      this.pathogenDatepickerInputOutlet.setInputValue("");
     }
   }
 
+  // when navigating and selecting by keyboard, selected classes will be added to newly selected dates prior to submission
   #removeSelectedDateAttributes() {
     const oldSelectedDate = this.calendarTarget.querySelector(
       '[aria-selected="true"]',
@@ -623,11 +612,6 @@ export default class extends Controller {
         CALENDAR_CLASSES["SELECTED_DATE"],
       );
     }
-  }
-
-  closeDatepicker(event) {
-    event.preventDefault();
-    this.pathogenDatepickerInputOutlet.hideCalendar();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -777,7 +761,7 @@ export default class extends Controller {
     return false;
   }
 
-  // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
+  // getFirst/LastFocusableElement is used for Tab logic
   getFirstFocusableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget
@@ -788,6 +772,7 @@ export default class extends Controller {
     return this.closeButtonTarget;
   }
 
+  // used by input_controller to set focus when datepicker is opened
   setFocusOnTabbableDate() {
     this.calendarTarget.querySelectorAll("[tabindex='0']")[0].focus();
   }
