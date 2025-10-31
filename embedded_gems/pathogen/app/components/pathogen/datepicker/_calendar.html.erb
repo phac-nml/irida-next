@@ -16,5 +16,11 @@
       } %>
       <%= render partial: "pathogen/datepicker/calendar/footer", locals: { min_date: } %>
     </div>
+    <span
+                  data-pathogen--datepicker--calendar-target="ariaLive"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  class="sr-only"
+                ></span>
   <% end %>
 </template>
