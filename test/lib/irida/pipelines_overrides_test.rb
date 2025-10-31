@@ -69,22 +69,20 @@ class PipelinesOverrides < ActiveSupport::TestCase
     workflow1 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
     workflow2 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.0')
 
+    # rubocop:disable Layout/LineLength
     assert_equal 'new_isolates_date',
-                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_1']['x-irida-next-selected']
+                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_1']['x-irida-next-selected']
 
     assert_equal 'prediceted_primary_identification_name',
-                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_2']['x-irida-next-selected']
+                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_2']['x-irida-next-selected']
 
     assert_equal 'new_isolates_date',
-                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_1']['x-irida-next-selected']
+                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_1']['x-irida-next-selected']
 
     # Workflow2 has an entry level override which overrides ["metadata_2"]["x-irida-next-selected"]
     assert_not_equal 'prediceted_primary_identification_name',
-                     workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']
-    ['properties']['metadata_2']['x-irida-next-selected']
+                     workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_2']['x-irida-next-selected']
+    # rubocop:enable Layout/LineLength
   end
 
   test 'pipelines with samplesheet overrides at version level' do
@@ -94,20 +92,18 @@ class PipelinesOverrides < ActiveSupport::TestCase
     workflow1 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
     workflow2 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.0')
 
+    # rubocop:disable Layout/LineLength
     assert_equal 'new_isolates_date',
-                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_1']['x-irida-next-selected']
+                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_1']['x-irida-next-selected']
 
     assert_equal 'prediceted_primary_identification_name',
-                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_2']['x-irida-next-selected']
+                 workflow1.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_2']['x-irida-next-selected']
 
     assert_equal 'new_isolates_date',
-                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_1']['x-irida-next-selected']
+                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_1']['x-irida-next-selected']
 
     assert_equal 'overridden_metadata_field',
-                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-    ['metadata_2']['x-irida-next-selected']
+                 workflow2.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']['metadata_2']['x-irida-next-selected']
+    # rubocop:enable Layout/LineLength
   end
 end
