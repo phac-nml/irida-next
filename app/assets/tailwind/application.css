@@ -132,7 +132,7 @@ input[type="search"] {
 
   /* Required field indicator for PathogenFormBuilder labels */
   & abbr.req {
-    @apply text-xl text-red-500 no-underline;
+    @apply align-baseline text-sm leading-none text-red-500 no-underline;
   }
 
   & div.field_with_errors {
