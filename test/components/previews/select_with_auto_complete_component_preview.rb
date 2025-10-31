@@ -19,7 +19,7 @@ class SelectWithAutoCompleteComponentPreview < ViewComponent::Preview
                                             ['onset', 'metadata.onset'],
                                             ['patient_age', 'metadata.patient_age'],
                                             ['patient_sex', 'metadata.patient_sex'],
-                                            ['wgs_id', 'metadata.wgs_id']]}
+                                            ['wgs_id', 'metadata.wgs_id']] }
 
     render_with_template(locals: {
                            fields: metadata_fields.merge({ 'Sample fields': sample_fields })
