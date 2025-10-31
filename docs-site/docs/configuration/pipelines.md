@@ -26,6 +26,7 @@ This `pipelines.json` file should be in the format below and can include the fol
   - `automatable`: _(Optional)_ `true` or `false` to specify if the pipeline can be automated.
   - `executable`: _(Optional)_ `true` or `false` to specify if the pipeline is able to be executed. When set to `false`, the pipeline will not be listed to the user.
 - **overrides** _(Optional)_ for the pipeline
+- **samplesheet_overrides** _(Optional)_ for the pipeline
 
 #### Example
 
