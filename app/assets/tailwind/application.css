@@ -705,3 +705,11 @@ a.pill-focus-reset:focus-visible {
 .ts-dropdown .optgroup-header {
   @apply bg-white text-slate-900 dark:bg-slate-800 dark:text-white;
 }
+
+.ts-dropdown [data-selectable] .highlight {
+  @apply bg-blue-300 dark:bg-blue-300;
+}
+
+.ts-dropdown .active {
+  @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
+}
