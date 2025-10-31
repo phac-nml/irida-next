@@ -250,6 +250,7 @@ export default class extends Controller {
     };
 
     let row = document.createElement("tr");
+    row.setAttribute("role", "row");
 
     dates.forEach((day, i) => {
       // 🧩 Classify this index into prev/current/next.
@@ -294,6 +295,7 @@ export default class extends Controller {
       if ((i + 1) % 7 === 0) {
         this.calendarTarget.append(row);
         row = document.createElement("tr");
+        row.setAttribute("role", "row");
       }
     });
   }
