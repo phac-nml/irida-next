@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pipelines_enabled?
-    @pipelines_enabled = Irida::Pipelines.instance.available_pipelines.any?
+    @pipelines_enabled = Irida::Pipelines.instance.pipelines.any?
   end
 
   def error_message(object)

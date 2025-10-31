@@ -3,7 +3,7 @@
 # Updates the `pipeline_id` to match the entry in the pipelines config
 class AddPipelineIdToWorkflowExecutionMetadata < ActiveRecord::Migration[8.0]
   def change # rubocop:disable Metrics/AbcSize
-    pipeline_name_to_id = Irida::Pipelines.instance.available_pipelines.to_h do |_pipeline_id, pipeline_config|
+    pipeline_name_to_id = Irida::Pipelines.instance.pipelines.to_h do |_pipeline_id, pipeline_config|
       [pipeline_config.name, pipeline_config.pipeline_id]
     end
 

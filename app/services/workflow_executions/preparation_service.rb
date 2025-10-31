@@ -63,7 +63,7 @@ module WorkflowExecutions
     end
 
     def validate_pipeline
-      return true unless @pipeline.nil?
+      return true if @pipeline.executable?
 
       @workflow_execution.state = :error
       @workflow_execution.cleaned = true
