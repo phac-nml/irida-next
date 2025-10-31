@@ -27,7 +27,7 @@ module Irida
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
       @default_params = default_params_for_entry(entry)
-      @default_workflow_params = default_workflow_params_for_entry(entry)
+      @default_workflow_params = default_workflow_params_for_entry
     end
 
     def workflow_params

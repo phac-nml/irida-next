@@ -266,8 +266,8 @@ In the below example, we will override the default selected metadata fields. Not
 #### Example pipeline entry level samplesheet override
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -287,10 +287,10 @@ In the below example, we will override the default selected metadata fields. Not
     },
     "versions": [...]
   },
-  {
+  "some_other_pipeline": {
     ........
   }
-]
+}
 ```
 
 #### Effective Result
@@ -356,8 +356,8 @@ In the below example, we will override the default selected metadata fields. Not
 #### Example pipeline version level samplesheet override
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
@@ -379,11 +379,14 @@ In the below example, we will override the default selected metadata fields. Not
           }
         }
       },
-      ...
+      ......
     ],
     ........
   },
-]
+  "some other pipeline": {
+    .........
+  }
+}
 ```
 
 #### Effective Result
