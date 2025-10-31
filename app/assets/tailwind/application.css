@@ -689,8 +689,13 @@ a.pill-focus-reset:focus-visible {
 }
 
 /* Select with auto complete styles */
-.ts-control {
+.ts-wrapper.single .ts-control {
   @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
+}
+
+.ts-control,
+.ts-wrapper.single.input-active .ts-control {
+  @apply dark:bg-slate-800;
 }
 
 .ts-dropdown {
