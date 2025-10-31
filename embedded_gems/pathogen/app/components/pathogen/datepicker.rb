@@ -110,7 +110,7 @@ module Pathogen
     end
 
     # Configures HTML attributes for the <div> datepicker calendar.
-    def setup_calendar_attributes
+    def setup_calendar_attributes # rubocop:disable Metrics/AbcSize
       @calendar_arguments[:id] = @calendar_id
       @calendar_arguments[:tag] = TAG_DEFAULT
       @calendar_arguments[:class] = class_names(
@@ -123,6 +123,10 @@ module Pathogen
       @calendar_arguments[:data]['pathogen--datepicker--calendar-pathogen--datepicker--input-outlet'] =
         "##{@container_id}"
       @calendar_arguments[:data]['pathogen--datepicker--calendar-months-value'] = @months
+      @calendar_arguments[:data]['pathogen--datepicker--calendar-aria-control-labels-value'] = {
+        choose_date: I18n.t('pathogen.datepicker.aria_label.choose_date'),
+        change_date: I18n.t('pathogen.datepicker.aria_label.change_date')
+      }
     end
   end
 end
