@@ -24,8 +24,8 @@ module Irida
       @schema_input_loc = schema_input_loc
       @automatable = version['automatable'] || false
       @executable = true unless version['executable'] == false
-      @overrides = overrides_for_entry(entry)
-      @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry)
+      @overrides = overrides_for_entry(entry,version)
+      @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry,version)
       @default_params = default_params_for_entry(entry)
       @default_workflow_params = default_workflow_params_for_entry(entry)
     end
@@ -59,9 +59,9 @@ module Irida
       sample_sheet['items']['properties'][property_name]['pattern']
     end
 
-    def samplesheet_schema_overrides_for_entry(entry)
-      overrides = entry['samplesheet_schema_overrides'] || {}
-      version_overrides = (entry['versions']&.find { |v| v['name'] == @version } || {})['samplesheet_schema_overrides'] || {}
+    def samplesheet_schema_overrides_for_entry(entry,version)
+      overrides = entry['samplesheet_schema_overrides'].deep_dup || {}
+      version_overrides = version['samplesheet_schema_overrides'] || {}
       overrides.deep_merge!(version_overrides)
       overrides
     end
@@ -101,24 +101,21 @@ module Irida
       properties.values.any? { |property| !property.key?('hidden') }
     end
 
-    def overrides_for_entry(entry)
-      return {} if entry['versions'].nil?
+    def overrides_for_entry(entry,version)
+      return {} if version.nil?
 
-      overrides = entry['overrides'] || {}
-      version_overrides = entry['versions'].find do |version|
-        version['name'] == @version
-      end || {}
+      overrides = entry['overrides'].deep_dup || {}
 
       overrides
-        .deep_merge(
-          version_overrides.key?('overrides') ? version_overrides['overrides'] : {}
+        .deep_merge!(
+          version.key?('overrides') ? version['overrides'] : {}
         )
 
       return overrides
     end
 
     def default_workflow_params_for_entry(entry) # rubocop:disable Metrics/CyclomaticComplexity
-      return {} if entry['versions'].nil?
+      return {} if @overrides.nil?
 
       default_workflow_params = {}
 

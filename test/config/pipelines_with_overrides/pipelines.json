@@ -70,7 +70,7 @@
           "items": {
             "properties": {
               "metadata_2": {
-                "x-irida-next-selected": "aaaaaaaaaaaaaa"
+                "x-irida-next-selected": "overridden_metadata_field"
               }
             }
           }

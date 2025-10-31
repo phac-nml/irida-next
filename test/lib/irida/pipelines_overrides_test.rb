@@ -65,42 +65,39 @@ class PipelinesOverrides < ActiveSupport::TestCase
                                      pipeline_schema_file_dir: @pipeline_schema_file_dir)
 
     workflow1 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
-
+    workflow2 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.0')
 
     assert_equal 'new_isolates_date',
-                 workflow1.samplesheet_schema[:items][:properties][:metadata_1][:"x-irida-next-selected"]
+              workflow1.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_1"]["x-irida-next-selected"]
 
     assert_equal 'prediceted_primary_identification_name',
-                 workflow1.samplesheet_schema[:items][:properties][:metadata_2][:"x-irida-next-selected"]
+          workflow1.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_2"]["x-irida-next-selected"]
 
-    assert_nil workflow1.samplesheet_schema[:items][:properties][:metadata_3][:"x-irida-next-selected"]
+    assert_equal 'new_isolates_date',
+              workflow2.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_1"]["x-irida-next-selected"]
 
-    assert_nil workflow1.samplesheet_schema[:items][:properties][:metadata_15][:"x-irida-next-selected"]
-  end
+    # Workflow2 has an entry level override which overrides ["metadata_2"]["x-irida-next-selected"]
+    assert_not_equal 'prediceted_primary_identification_name',
+              workflow2.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_2"]["x-irida-next-selected"]
+    end
 
   test 'pipelines with samplesheet overrides at version level' do
     pipelines = Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines_with_overrides/pipelines.json',
                                      pipeline_schema_file_dir: @pipeline_schema_file_dir)
 
-
     workflow1 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
+    workflow2 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.0')
 
-    puts workflow1.workflow_params
+    assert_equal 'new_isolates_date',
+              workflow1.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_1"]["x-irida-next-selected"]
 
-    # assert_equal 'new_isolates_date',
-    #              workflow1.samplesheet_schema[:items][:properties][:metadata_1][:"x-irida-next-selected"]
+    assert_equal 'prediceted_primary_identification_name',
+          workflow1.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_2"]["x-irida-next-selected"]
 
-    # assert_equal 'prediceted_primary_identification_name',
-    #              workflow1.samplesheet_schema[:items][:properties][:metadata_2][:"x-irida-next-selected"]
+    assert_equal 'new_isolates_date',
+              workflow2.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_1"]["x-irida-next-selected"]
 
-    # assert_nil workflow1.samplesheet_schema[:items][:properties][:metadata_3][:"x-irida-next-selected"]
-
-    # assert_equal 'calc_earliest_date',
-    #           workflow1.samplesheet_schema[:items][:properties][:metadata_15][:"x-irida-next-selected"]
-
-    # workflow2 = pipelines.find_pipeline_by('PNC Fast Match', '0.4.1')
-
-    # assert_nil workflow2.samplesheet_schema[:items][:properties][:metadata_15][:"x-irida-next-selected"]
-
+    assert_equal 'overridden_metadata_field',
+              workflow2.workflow_params[:input_output_options][:properties][:input][:schema]["items"]["properties"]["metadata_2"]["x-irida-next-selected"]
   end
 end
