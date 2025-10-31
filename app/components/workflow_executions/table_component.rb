@@ -118,6 +118,9 @@ module WorkflowExecutions
       # 🛡️ Return the column name directly if it's not a special metadata field.
       return column.to_s unless METADATA_FIELDS.include?(column)
 
+      # special handling for workflow_name as we are actually sorting on pipeline_id
+      return 'metadata_pipeline_id' if column == :workflow_name
+
       # 🔧 Prefix metadata fields stored in the JSONB column.
       "metadata_#{column}"
     end
