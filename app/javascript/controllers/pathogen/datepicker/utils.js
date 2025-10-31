@@ -14,3 +14,10 @@ export function getDateNode(calendar, date) {
 export function getFirstOfMonthNode(calendar) {
   return calendar.querySelector('[data-date-within-month-position="inMonth"]');
 }
+
+export function splitDate(date) {
+  let year, month, day;
+  [year, month, day] = date.split("-").map(Number);
+  month--;
+  return [year, month, day];
+}

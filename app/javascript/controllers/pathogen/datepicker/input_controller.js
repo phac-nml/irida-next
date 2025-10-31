@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FOCUSABLE_ELEMENTS } from "controllers/pathogen/datepicker/constants";
+import { splitDate } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
@@ -197,6 +198,7 @@ export default class extends Controller {
       if (this.#dropdown) {
         this.#dropdown.hide();
         this.focusCalendarButton();
+        if (this.autosubmitValue) this.submitDate();
       }
     } catch (error) {
       this.#handleError(error, "hideDropdown");
@@ -209,13 +211,6 @@ export default class extends Controller {
     if (event.key === "Escape") {
       event.preventDefault();
       this.hideCalendar();
-      // if a new date was selected via keyboard and then user hits escape, submit the new date
-      if (
-        this.#selectedDate !== this.datepickerInputTarget.value &&
-        this.autosubmitValue
-      ) {
-        this.submitDate();
-      }
       return;
     }
   }
@@ -244,8 +239,7 @@ export default class extends Controller {
   #validateDateInput(dateInput) {
     let year, month, day;
     if (dateInput.match(this.dateFormatRegexValue)) {
-      [year, month, day] = dateInput.split("-").map(Number);
-      month--;
+      [year, month, day] = splitDate(dateInput);
       const date = new Date(year, month, day);
       return (
         date.getFullYear() === year &&
@@ -271,7 +265,7 @@ export default class extends Controller {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
     }
-    this.fillInputValue(this.#selectedDate);
+    this.setInputValue(this.#selectedDate);
   }
 
   // disables the error state once a valid date is entered/selected
@@ -294,7 +288,7 @@ export default class extends Controller {
   }
 
   // handles filling in the date input with the date
-  fillInputValue(date) {
+  setInputValue(date) {
     this.datepickerInputTarget.value = date;
   }
 
@@ -310,7 +304,6 @@ export default class extends Controller {
       selectedMonthIndex: this.#selectedMonthIndex,
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
-      autosubmit: this.autosubmitValue,
     };
     this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
@@ -331,9 +324,5 @@ export default class extends Controller {
 
   setCalendarButtonAriaLabel(label) {
     this.calendarButtonTarget.setAttribute("aria-label", label);
-  }
-
-  currentFilledDate() {
-    return this.datepickerInputTarget.value;
   }
 }
