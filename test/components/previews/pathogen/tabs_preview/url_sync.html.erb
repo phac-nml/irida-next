@@ -1,0 +1,349 @@
+<div class="p-8 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-slate-900 dark:to-violet-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:link, color: :primary, size: :xl, class: "inline mr-3") %>
+      URL Synchronization
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Make tabs bookmarkable and shareable with URL hash synchronization and browser navigation support.
+    </p>
+  </div>
+
+  <!-- Live Demo with URL Sync -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:cursor, color: :primary, class: "mr-3") %>
+      Live Demo - Try It!
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-6 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-b border-slate-200 dark:border-slate-600">
+        <div class="space-y-3">
+          <p class="text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <%= pathogen_icon(:hand_pointing, color: :primary) %>
+            <strong>Try this:</strong> Click tabs and watch the URL bar update with the tab hash!
+          </p>
+          <p class="text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <%= pathogen_icon(:arrow_u_left_up, color: :primary) %>
+            Use your browser's <strong>Back button</strong> to navigate between tabs
+          </p>
+          <p class="text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <%= pathogen_icon(:bookmark, color: :primary) %>
+            Bookmark this page while on a specific tab - it will return to that tab when you reload
+          </p>
+        </div>
+      </div>
+
+      <%= render(Pathogen::Tabs.new(
+        id: 'url-sync-demo',
+        label: 'URL synchronized tabs demo',
+        sync_url: true
+      )) do |tabs| %>
+        <% tabs.with_tab(id: 'tab-getting-started', label: 'Getting Started', selected: true) %>
+        <% tabs.with_tab(id: 'tab-how-it-works', label: 'How It Works') %>
+        <% tabs.with_tab(id: 'tab-use-cases', label: 'Use Cases') %>
+        <% tabs.with_tab(id: 'tab-implementation', label: 'Implementation') %>
+
+        <% tabs.with_panel(id: 'panel-getting-started', tab_id: 'tab-getting-started') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">What is URL Sync?</h3>
+            <p class="text-slate-700 dark:text-slate-300">
+              URL synchronization automatically updates the browser's URL hash when you switch tabs,
+              making the current tab state bookmarkable and shareable.
+            </p>
+            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p class="text-sm text-blue-800 dark:text-blue-200">
+                <strong>Check your URL bar right now!</strong> You should see something like
+                <code class="bg-blue-100 dark:bg-blue-900 px-2 py-0.5 rounded">#tab-getting-started</code>
+              </p>
+            </div>
+            <div class="space-y-2">
+              <h4 class="font-semibold text-slate-900 dark:text-white">Key Features:</h4>
+              <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-3">
+                <li>Automatic URL hash updates on tab changes</li>
+                <li>Browser back/forward button support</li>
+                <li>Initial tab selection from URL hash on page load</li>
+                <li>Works with keyboard navigation too!</li>
+                <li>Graceful fallback for invalid hashes</li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-how-it-works', tab_id: 'tab-how-it-works') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">How It Works</h3>
+            <p class="text-slate-700 dark:text-slate-300 mb-4">
+              The component listens for tab changes and browser history events to keep the URL and active tab in sync:
+            </p>
+
+            <div class="space-y-3">
+              <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <div class="flex-shrink-0 w-8 h-8 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 font-semibold">1</div>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white mb-1">User Clicks Tab</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">
+                    Tab activates → URL hash updates via <code class="bg-slate-100 dark:bg-slate-600 px-1 rounded">history.replaceState()</code>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <div class="flex-shrink-0 w-8 h-8 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 font-semibold">2</div>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white mb-1">Page Loads with Hash</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">
+                    Component reads URL hash → Activates matching tab (or falls back to default_index)
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <div class="flex-shrink-0 w-8 h-8 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 font-semibold">3</div>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white mb-1">Browser Back/Forward</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">
+                    Hash change event fires → Component switches to corresponding tab
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <div class="flex-shrink-0 w-8 h-8 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 font-semibold">4</div>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white mb-1">Keyboard Navigation</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">
+                    Arrow keys change tab → URL hash updates automatically (same as click)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+              <p class="text-sm text-amber-800 dark:text-amber-200">
+                <strong>Note:</strong> Uses <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded">replaceState()</code> instead of
+                <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded">pushState()</code> to avoid cluttering browser history with every tab change.
+              </p>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-use-cases', tab_id: 'tab-use-cases') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Perfect Use Cases</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:file_text, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Documentation Sites</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Share direct links to specific documentation sections
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:faders, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Settings Pages</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Link directly to specific settings sections
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:presentation_chart, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Product Tours</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Guide users through sequential tabs with shareable URLs
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:chart_bar, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Analytics Dashboards</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Bookmark specific report views
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:user_circle_plus, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Profile Pages</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Share links to specific profile sections (e.g., photos, posts)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <%= pathogen_icon(:shopping_cart_simple, color: :success) %>
+                  <div>
+                    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Multi-Step Forms</h4>
+                    <p class="text-sm text-green-800 dark:text-green-200">
+                      Preserve form progress in URL for browser back button
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-implementation', tab_id: 'tab-implementation') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Implementation</h3>
+
+            <p class="text-slate-700 dark:text-slate-300">
+              Simply add <code class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">sync_url: true</code> to enable URL synchronization:
+            </p>
+
+            <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+  id: "my-tabs",
+  label: "Content sections",
+  sync_url: true # <-- Enable URL sync
+)) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-overview", label: "Overview") %>
+  <%% tabs.with_tab(id: "tab-settings", label: "Settings") %>
+
+  <%% tabs.with_panel(id: "panel-overview", tab_id: "tab-overview") do %>
+    Overview content
+  <%% end %>
+
+  <%% tabs.with_panel(id: "panel-settings", tab_id: "tab-settings") do %>
+    Settings content
+  <%% end %>
+<%% end %></code></pre>
+            </div>
+
+            <div class="mt-6 space-y-3">
+              <h4 class="font-semibold text-slate-900 dark:text-white">Hash Format</h4>
+              <p class="text-sm text-slate-700 dark:text-slate-300">
+                The component supports multiple hash formats for flexibility:
+              </p>
+
+              <div class="space-y-2">
+                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded">
+                  <code class="text-sm text-blue-600 dark:text-blue-400">#tab-overview</code>
+                  <span class="text-sm text-slate-600 dark:text-slate-400 ml-2">Matches tab with id="tab-overview"</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded">
+                  <code class="text-sm text-blue-600 dark:text-blue-400">#panel-overview</code>
+                  <span class="text-sm text-slate-600 dark:text-slate-400 ml-2">Matches panel with id="panel-overview"</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded">
+                  <code class="text-sm text-blue-600 dark:text-blue-400">#tab-0</code>
+                  <span class="text-sm text-slate-600 dark:text-slate-400 ml-2">Matches tab by index (zero-based)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-lg">
+              <h4 class="font-semibold text-violet-900 dark:text-violet-100 mb-2">💡 Pro Tips</h4>
+              <ul class="text-sm text-violet-800 dark:text-violet-200 space-y-1 list-disc list-inside">
+                <li>Use descriptive tab IDs for SEO-friendly URLs</li>
+                <li>Hash updates use <code class="bg-violet-100 dark:bg-violet-900 px-1 rounded">replaceState()</code> to avoid history pollution</li>
+                <li>Component gracefully falls back to default_index for invalid hashes</li>
+                <li>Works seamlessly with keyboard navigation</li>
+                <li>Browser back/forward automatically supported</li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Browser Navigation Demo -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:arrows_counter_clockwise, color: :primary, class: "mr-3") %>
+      Browser Navigation Support
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="prose dark:prose-invert max-w-none">
+        <p class="text-slate-700 dark:text-slate-300 mb-6">
+          The component automatically integrates with browser navigation, making the tabs feel like native browser pages:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <%= pathogen_icon(:arrow_left, color: :primary) %>
+              Back Button
+            </h3>
+            <ol class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">1</span>
+                <span>Click through several tabs above</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">2</span>
+                <span>Press your browser's Back button</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">3</span>
+                <span>Watch the tabs navigate backward!</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <%= pathogen_icon(:arrow_right, color: :primary) %>
+              Forward Button
+            </h3>
+            <ol class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">1</span>
+                <span>After going back, press Forward</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">2</span>
+                <span>Tabs navigate forward in history</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="flex-shrink-0 w-5 h-5 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-300 text-xs font-semibold">3</span>
+                <span>Full browser integration!</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:lightbulb, color: :primary) %>
+            <div class="text-sm">
+              <strong class="text-blue-900 dark:text-blue-100">Implementation Detail:</strong>
+              <span class="text-blue-800 dark:text-blue-200">
+                The component listens for <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">hashchange</code> events
+                and automatically switches tabs when the URL hash changes from browser navigation.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

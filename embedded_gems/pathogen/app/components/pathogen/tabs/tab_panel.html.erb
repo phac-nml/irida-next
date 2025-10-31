@@ -1,0 +1,30 @@
+<%#
+  TabPanel Template
+
+  Renders a panel element with proper ARIA attributes and Stimulus integration.
+
+  Turbo Frame Error Handling:
+  When using Turbo Frames with loading="lazy", add error handling within the frame:
+
+  Example with rescue block for error handling:
+    turbo_frame_tag "content", src: content_path, loading: :lazy do
+      render partial: "shared/loading/spinner"
+    rescue
+      content_tag :div, class: "p-4 text-red-600" do
+        content_tag(:p, "Failed to load content.") +
+        button_to("Retry", content_path, class: "button")
+      end
+    end
+%>
+<div
+  id="<%= @id %>"
+  role="<%= @system_arguments[:role] %>"
+  aria-labelledby="<%= @system_arguments[:aria][:labelledby] %>"
+  aria-hidden="<%= @system_arguments[:aria][:hidden] %>"
+  tabindex="<%= @system_arguments[:tabindex] %>"
+  data-pathogen--tabs-target="<%= @system_arguments[:data]['pathogen--tabs-target'] %>"
+  class="<%= @system_arguments[:class] %>"
+  <%= tag.attributes(@system_arguments.except(:id, :role, :aria, :tabindex, :data, :class)) %>
+>
+  <%= content %>
+</div>
