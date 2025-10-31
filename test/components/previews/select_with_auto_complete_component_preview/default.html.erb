@@ -1,0 +1,7 @@
+<%= form_with(url: "#") do |form| %>
+  <%= render SelectWithAutoCompleteComponent.new(
+    form: form,
+    field: :field,
+    options: options,
+  ) %>
+<% end %>
