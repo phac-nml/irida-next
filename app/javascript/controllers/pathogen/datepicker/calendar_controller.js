@@ -9,7 +9,6 @@ import {
   verifyDateIsInMonth,
   getDateNode,
   getFirstOfMonthNode,
-  focusDate,
 } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
@@ -27,6 +26,7 @@ export default class extends Controller {
     "disabledDateTemplate",
     "clearButton",
     "minDateMessage",
+    "ariaLive",
   ];
 
   static values = {
@@ -230,7 +230,14 @@ export default class extends Controller {
     const nextYM = this.#getRelativeYearAndMonth("next");
 
     // 🛠️ Helper to render and append a date cell from a <template>.
-    const appendCell = (row, templateTarget, year, monthIndex, day) => {
+    const appendCell = (
+      row,
+      templateTarget,
+      year,
+      monthIndex,
+      day,
+      ariaLabel,
+    ) => {
       const fragment = templateTarget.content.cloneNode(true);
       const cell = fragment.querySelector("td");
       cell.innerText = day;
@@ -238,6 +245,7 @@ export default class extends Controller {
         "data-date",
         this.#getFormattedStringDate(year, monthIndex, day),
       );
+      cell.setAttribute("aria-label", ariaLabel);
       row.appendChild(fragment);
     };
 
@@ -260,6 +268,7 @@ export default class extends Controller {
           this.#selectedYear,
           this.#selectedMonthIndex,
           day,
+          `${this.monthsValue[this.#selectedMonthIndex]} ${day}, ${this.#selectedYear}`,
         );
       } else if (isPrev) {
         appendCell(
@@ -268,6 +277,7 @@ export default class extends Controller {
           prevYM.year,
           prevYM.month,
           day,
+          `${this.monthsValue[prevYM.month]} ${day}, ${prevYM.year}`,
         );
       } else {
         appendCell(
@@ -276,6 +286,7 @@ export default class extends Controller {
           nextYM.year,
           nextYM.month,
           day,
+          `${this.monthsValue[nextYM.month]} ${day}, ${nextYM.year}`,
         );
       }
 
@@ -603,7 +614,7 @@ export default class extends Controller {
       direction === "left" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(this.calendarTarget, targetDateNode);
+    this.#focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handle ArrowUp/Down keyboard navigation
@@ -642,7 +653,7 @@ export default class extends Controller {
       direction === "up" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(this.calendarTarget, targetDateNode);
+    this.#focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handles Home keypress
@@ -652,12 +663,12 @@ export default class extends Controller {
     const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
 
     if (firstDateNode.getAttribute("aria-disabled")) {
-      focusDate(
+      this.#focusDate(
         this.calendarTarget,
         getDateNode(this.calendarTarget, this.#minDate),
       );
     } else {
-      focusDate(this.calendarTarget, firstDateNode);
+      this.#focusDate(this.calendarTarget, firstDateNode);
     }
   }
 
@@ -670,7 +681,7 @@ export default class extends Controller {
       ),
     );
 
-    focusDate(
+    this.#focusDate(
       this.calendarTarget,
       allInMonthDatesNodes[allInMonthDatesNodes.length - 1],
     );
@@ -688,17 +699,23 @@ export default class extends Controller {
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
       if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-        focusDate(this.calendarTarget, minDateNode);
+        this.#focusDate(this.calendarTarget, minDateNode);
         return;
       }
     }
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+    this.#focusDate(
+      this.calendarTarget,
+      getFirstOfMonthNode(this.calendarTarget),
+    );
   }
 
   // load next month and focus 1st of the month
   #nextMonthByPageDown() {
     this.nextMonth();
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+    this.#focusDate(
+      this.calendarTarget,
+      getFirstOfMonthNode(this.calendarTarget),
+    );
   }
 
   // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
@@ -724,5 +741,17 @@ export default class extends Controller {
 
   setFocusOnTabbableDate() {
     this.calendarTarget.querySelectorAll("[tabindex='0']")[0].focus();
+  }
+
+  #focusDate(calendar, dateNode) {
+    // find current tabbable node, and remove tabIndex
+    const currentTabbableDate = calendar.querySelectorAll('[tabindex="0"]')[0];
+    currentTabbableDate.tabIndex = -1;
+
+    // assign tabindex and focus to the current target date
+    dateNode.tabIndex = 0;
+    dateNode.focus();
+    this.ariaLiveTarget.innerText = "";
+    this.ariaLiveTarget.innerText = dateNode.getAttribute("aria-label");
   }
 }
