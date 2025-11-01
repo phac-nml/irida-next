@@ -45,7 +45,7 @@ module Irida
 
         workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
       end
-      workflow_params.deep_symbolize_keys!
+      workflow_params
     end
 
     def samplesheet_headers
