@@ -86,7 +86,7 @@ class NextflowComponentTest < ViewComponentTestCase
       ]
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, '0.2.0',
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.2.0' },
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
     I18n.with_locale :fr do
