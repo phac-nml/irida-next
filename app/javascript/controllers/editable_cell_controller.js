@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
   static targets = [
@@ -8,6 +9,9 @@ export default class extends Controller {
     "confirmDialogContainer",
     "confirmDialogTemplate",
   ];
+  // Outlet to refresh controller - used to prevent false-positive refresh notices
+  // when user edits cells (since edits trigger broadcasts).
+  static outlets = ["refresh"];
   #originalCellContent;
 
   initialize() {
@@ -53,6 +57,8 @@ export default class extends Controller {
       console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
       return;
     }
+
+    notifyRefreshControllers(this);
 
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)

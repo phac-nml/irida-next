@@ -281,6 +281,9 @@ fr:
           namespace_name_desc: Nom, décroissant
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
+    refresh_notice:
+      default_link_text: Actualiser
+      default_message: Nouvelles données disponibles
     samples:
       table_component:
         counts:

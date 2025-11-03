@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
+import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
+  static outlets = ["refresh"];
   static targets = [
     "sampleNameColumn",
     "projectPUIDColumn",
@@ -293,5 +295,9 @@ export default class extends Controller {
         content: { metadata: unselectedHeaders },
       },
     });
+  }
+
+  handleSubmit() {
+    notifyRefreshControllers(this);
   }
 }
