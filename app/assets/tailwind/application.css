@@ -689,6 +689,22 @@ a.pill-focus-reset:focus-visible {
 }
 
 /* Select with auto complete styles */
+.field_with_errors .ts-wrapper.single .ts-control {
+  @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
+}
+
+.field_with_errors .focus .ts-control {
+  box-shadow: none !important;
+  outline-style: solid;
+  @apply outline-3 outline-offset-2 outline-red-700 dark:outline-red-400;
+}
+
+.focus .ts-control {
+  box-shadow: none !important;
+  outline-style: solid;
+  @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+}
+
 .ts-wrapper.single .ts-control {
   @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
 }
