@@ -11,7 +11,7 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
       url: 'https://github.com/phac-nml/iridanextexample'
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, '1.0.1',
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
@@ -30,7 +30,7 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
       url: 'https://github.com/phac-nml/iridanextexample'
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, '1.0.1',
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_snvphyl.json'))
 
@@ -48,7 +48,7 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
       url: 'https://github.com/phac-nml/iridanextexample'
     }.with_indifferent_access
 
-    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, '1.0.1',
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
 

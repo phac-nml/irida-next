@@ -9,7 +9,7 @@ module Irida
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
-    def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength
+    def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       @pipeline_id = pipeline_id
       @name = entry['name']
       @description = entry['description']
@@ -24,9 +24,10 @@ module Irida
       @schema_input_loc = schema_input_loc
       @automatable = version['automatable'] || false
       @executable = true unless version['executable'] == false
-      @overrides = overrides_for_entry(entry)
-      @default_params = default_params_for_entry(entry)
-      @default_workflow_params = default_workflow_params_for_entry(entry)
+      @overrides = overrides_for_entry(entry, version)
+      @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
+      @default_params = default_params_for_entry
+      @default_workflow_params = default_workflow_params_for_entry
     end
 
     def workflow_params
@@ -44,7 +45,6 @@ module Irida
 
         workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
       end
-
       workflow_params
     end
 
@@ -84,34 +84,37 @@ module Irida
     end
 
     def process_samplesheet_schema
-      JSON.parse(schema_input_loc.read)
+      default_schema = JSON.parse(schema_input_loc.read)
+      default_schema.deep_merge!(@samplesheet_schema_overrides_for_entry)
+      default_schema
     end
 
     def show_section?(properties)
       properties.values.any? { |property| !property.key?('hidden') }
     end
 
-    def overrides_for_entry(entry)
-      return {} if entry['versions'].nil?
+    def overrides_for_entry(entry, version)
+      overrides = entry['overrides'].deep_dup || {}
 
-      overrides = entry['overrides'] || {}
-      version_overrides = entry['versions'].find do |version|
-        version['name'] == @version
-      end || {}
       overrides
-        .deep_merge(
-          version_overrides.key?('overrides') ? version_overrides['overrides'] : {}
+        .deep_merge!(
+          version.key?('overrides') ? version['overrides'] : {}
         )
+
+      overrides
     end
 
-    def default_workflow_params_for_entry(entry) # rubocop:disable Metrics/CyclomaticComplexity
-      return {} if entry['versions'].nil?
+    def samplesheet_schema_overrides_for_entry(entry, version)
+      overrides = entry['samplesheet_schema_overrides'].deep_dup || {}
+      version_overrides = version['samplesheet_schema_overrides'] || {}
+      overrides.deep_merge!(version_overrides)
+      overrides
+    end
 
+    def default_workflow_params_for_entry
       default_workflow_params = {}
 
-      return default_workflow_params unless @overrides.key?('definitions')
-
-      @overrides['definitions'].each_value do |definition|
+      @overrides['definitions']&.each_value do |definition|
         next unless definition.key?('properties')
 
         definition['properties'].each do |name, property|
@@ -123,9 +126,7 @@ module Irida
       default_workflow_params
     end
 
-    def default_params_for_entry(entry)
-      return {} if entry['versions'].nil?
-
+    def default_params_for_entry
       {
         workflow_type: @type,
         workflow_type_version: @type_version,

@@ -26,12 +26,13 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
   - `automatable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être automatisé.
   - `executable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
 - **overrides** _(Optionnel)_ pour le pipeline
+- **samplesheet_overrides** _(Optional)_ pour le pipeline
 
 #### Exemple
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
@@ -56,10 +57,10 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
       }
     ]
   },
-  {
+  "some-other/pipeline": {
     ........
   }
-]
+}
 ```
 
 ### Remplacements de schéma
@@ -119,8 +120,8 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 #### Exemple de remplacement
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
@@ -146,10 +147,10 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
     },
     "versions": [...]
   },
-  {
+  "some-other/pipeline": {
     ........
   }
-]
+}
 ```
 
 #### Résultat effectif
@@ -197,5 +198,260 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
     "plus_options": {
       ...
     }
+}
+```
+
+### Remplacements de la feuille d'échantillons
+
+La section Remplacements de la feuille d'échantillons peut être utilisée pour modifier n'importe quoi dans la samplesheet d'origine du pipeline. Tout ce qui se trouve dans "samplesheet_overrides": {<json data>} écrasera la samplesheet d'origine avec <json data> en commençant au niveau le plus élevé.
+
+Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées sélectionnés par défaut. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par la samplesheet par défaut reste le même.
+
+#### Exemple de schéma
+
+```json
+{
+  "$schema": "http://example.com/schema",
+  "$id": "https://example.com/nextflow_schema.json",
+  "title": "Mon schéma d'exemple",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "meta": ["irida_id"],
+                "unique": true,
+                "errorMessage": "Le nom de l'échantillon doit être fourni et ne peut pas contenir d'espaces."
+            },
+            "sample_name": {
+                "type": "string",
+                "meta": ["id"],
+                "errorMessage": "Le nom de l’échantillon est facultatif ; s’il est fourni, il remplacera le champ « sample » pour la génération des noms de fichiers et des sorties"
+            },
+            "mlst_alleles": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$",
+                "errorMessage": "Le fichier JSON MLST provenant du rapport locidex ne peut pas contenir d'espaces et doit avoir l'extension : '.mlst.json', '.mlst.json.gz', '.mlst.subtyping.json' ou '.mlst.subtyping.json.gz'"
+            },
+            "fastmatch_category": {
+                "type": "string",
+                "errorMessage": "Doit être « query » ou « reference »",
+                "description": "Indique si un échantillon est de type \"query\" ou \"reference\"",
+                "fa_icon": "far fa-sticky-note",
+                "enum": ["query", "reference"]
+            },
+            "metadata_1": {
+                "type": "string",
+                "meta": ["metadata_1"],
+                "errorMessage": "Métadonnée associée à l'échantillon (metadata_1).",
+                "default": "",
+                "pattern": "^[^\\n\\t\"]+$"
+            },
+            "metadata_2": {
+                "type": "string",
+                "meta": ["metadata_2"],
+                "errorMessage": "Métadonnée associée à l'échantillon (metadata_2).",
+                "default": "",
+                "pattern": "^[^\\n\\t\"]+$"
+            },
+           .........
+        },
+        "required": ["sample", "mlst_alleles"]
+    }
+}
+```
+
+#### Exemple — remplacement de la samplesheet au niveau de l'entrée du pipeline
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "Pipeline d'exemple IRIDA Next",
+    "samplesheet_overrides": {
+      "items": {
+        "properties": {
+            "metadata_1": {
+                "x-irida-next-selected": "new_isolates_date"
+            },
+            "metadata_2": {
+                "x-irida-next-selected": "prediceted_primary_identification_name"
+            },
+            .........
+        },
+        "required": ["sample", "mlst_alleles"]
+      }
+    },
+    "versions": [...]
+  },
+  "some-other/pipeline": {
+    ........
+  }
+}
+```
+
+#### Résultat effectif
+
+```json
+{
+  "$schema": "http://example.com/schema",
+  "$id": "https://example.com/nextflow_schema.json",
+  "title": "Mon schéma d'exemple",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "type": "object",
+   "items": {
+      "type": "object",
+      "properties": {
+          "sample": {
+              "type": "string",
+              "pattern": "^\\S+$",
+              "meta": ["irida_id"],
+              "unique": true,
+              "errorMessage": "Le nom de l'échantillon doit être fourni et ne peut pas contenir d'espaces."
+          },
+          "sample_name": {
+              "type": "string",
+              "meta": ["id"],
+              "errorMessage": "Le nom de l’échantillon est facultatif ; s’il est fourni, il remplacera le champ « sample » pour la génération des noms de fichiers et des sorties"
+          },
+          "mlst_alleles": {
+              "type": "string",
+              "format": "file-path",
+              "pattern": "^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$",
+              "errorMessage": "Le fichier JSON MLST provenant du rapport locidex ne peut pas contenir d'espaces et doit avoir l'extension : '.mlst.json', '.mlst.json.gz', '.mlst.subtyping.json' ou '.mlst.subtyping.json.gz'"
+          },
+          "fastmatch_category": {
+              "type": "string",
+              "errorMessage": "Doit être « query » ou « reference »",
+              "description": "Indique si un échantillon est de type \"query\" ou \"reference\"",
+              "fa_icon": "far fa-sticky-note",
+              "enum": ["query", "reference"]
+          },
+          "metadata_1": {
+              "type": "string",
+              "meta": ["metadata_1"],
+              "errorMessage": "Métadonnée associée à l'échantillon (metadata_1).",
+              "default": "",
+              "pattern": "^[^\\n\\t\"]+$",
+              "x-irida-next-selected": "new_isolates_date"
+          },
+          "metadata_2": {
+              "type": "string",
+              "meta": ["metadata_2"],
+              "errorMessage": "Métadonnée associée à l'échantillon (metadata_2).",
+              "default": "",
+              "pattern": "^[^\\n\\t\"]+$",
+              "x-irida-next-selected": "prediceted_primary_identification_name"
+          },
+         ........
+      },
+      "required": ["sample", "mlst_alleles"]
+    }
+}
+```
+
+#### Exemple — remplacement de la samplesheet au niveau de la version du pipeline
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "Pipeline d'exemple IRIDA Next",
+    "versions": [
+      {
+        "name": "1.0.3",
+        "samplesheet_overrides": {
+          "items": {
+            "properties": {
+              "metadata_1": {
+                "x-irida-next-selected": "new_isolates_date"
+              },
+              "metadata_2": {
+                "x-irida-next-selected": "prediceted_primary_identification_name"
+              },
+            .........
+            },
+            "required": ["sample", "mlst_alleles"]
+          }
+        }
+      },
+      ......
+    ],
+    ........
+  },
+  "some-other/pipeline": {
+    .........
+  }
+}
+```
+
+#### Résultat effectif
+
+```json
+{
+  "$schema": "http://example.com/schema",
+  "$id": "https://example.com/nextflow_schema.json",
+  "title": "Mon schéma d'exemple",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "type": "object",
+  "versions": [
+    {
+      "name": "1.0.3",
+      "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "meta": ["irida_id"],
+                "unique": true,
+                "errorMessage": "Le nom de l'échantillon doit être fourni et ne peut pas contenir d'espaces."
+            },
+            "sample_name": {
+                "type": "string",
+                "meta": ["id"],
+                "errorMessage": "Le nom de l’échantillon est facultatif ; s’il est fourni, il remplacera le champ « sample » pour la génération des noms de fichiers et des sorties"
+            },
+            "mlst_alleles": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$",
+                "errorMessage": "Le fichier JSON MLST provenant du rapport locidex ne peut pas contenir d'espaces et doit avoir l'extension : '.mlst.json', '.mlst.json.gz', '.mlst.subtyping.json' ou '.mlst.subtyping.json.gz'"
+            },
+            "fastmatch_category": {
+                "type": "string",
+                "errorMessage": "Doit être « query » ou « reference »",
+                "description": "Indique si un échantillon est de type \"query\" ou \"reference\"",
+                "fa_icon": "far fa-sticky-note",
+                "enum": ["query", "reference"]
+            },
+            "metadata_1": {
+                "type": "string",
+                "meta": ["metadata_1"],
+                "errorMessage": "Métadonnée associée à l'échantillon (metadata_1).",
+                "default": "",
+                "pattern": "^[^\\n\\t\"]+$",
+                "x-irida-next-selected": "new_isolates_date"
+            },
+            "metadata_2": {
+                "type": "string",
+                "meta": ["metadata_2"],
+                "errorMessage": "Métadonnée associée à l'échantillon (metadata_2).",
+                "default": "",
+                "pattern": "^[^\\n\\t\"]+$",
+                "x-irida-next-selected": "prediceted_primary_identification_name"
+            },
+          ........
+        },
+        "required": ["sample", "mlst_alleles"]
+      },
+      ..........
+    }
+  ]
 }
 ```
