@@ -26,7 +26,7 @@ module Irida
       @executable = true unless version['executable'] == false
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
-      @default_params = default_params_for_entry(entry)
+      @default_params = default_params_for_entry
       @default_workflow_params = default_workflow_params_for_entry
     end
 
@@ -56,13 +56,6 @@ module Irida
     def property_pattern(property_name)
       sample_sheet = process_samplesheet_schema
       sample_sheet['items']['properties'][property_name]['pattern']
-    end
-
-    def samplesheet_schema_overrides_for_entry(entry, version)
-      overrides = entry['samplesheet_schema_overrides'].deep_dup || {}
-      version_overrides = version['samplesheet_schema_overrides'] || {}
-      overrides.deep_merge!(version_overrides)
-      overrides
     end
 
     private
@@ -101,8 +94,6 @@ module Irida
     end
 
     def overrides_for_entry(entry, version)
-      return {} if version.nil?
-
       overrides = entry['overrides'].deep_dup || {}
 
       overrides
@@ -113,14 +104,17 @@ module Irida
       overrides
     end
 
-    def default_workflow_params_for_entry # rubocop:disable Metrics/CyclomaticComplexity
-      return {} if @overrides.nil?
+    def samplesheet_schema_overrides_for_entry(entry, version)
+      overrides = entry['samplesheet_schema_overrides'].deep_dup || {}
+      version_overrides = version['samplesheet_schema_overrides'] || {}
+      overrides.deep_merge!(version_overrides)
+      overrides
+    end
 
+    def default_workflow_params_for_entry
       default_workflow_params = {}
 
-      return default_workflow_params unless @overrides.key?('definitions')
-
-      @overrides['definitions'].each_value do |definition|
+      @overrides['definitions']&.each_value do |definition|
         next unless definition.key?('properties')
 
         definition['properties'].each do |name, property|
@@ -132,9 +126,7 @@ module Irida
       default_workflow_params
     end
 
-    def default_params_for_entry(entry)
-      return {} if entry['versions'].nil?
-
+    def default_params_for_entry
       {
         workflow_type: @type,
         workflow_type_version: @type_version,
