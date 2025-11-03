@@ -2,7 +2,7 @@
 
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
-  class SamplesheetComponent < Component
+  class SamplesheetComponent < Component # rubocop:disable Metrics/ClassLength
     attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
@@ -46,7 +46,7 @@ module Nextflow
           [name,
            file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
         when 'metadata_cell'
-          [name, metadata_samplesheet_values(sample, property)]
+          [name, metadata_samplesheet_values(sample, name, property)]
         when 'dropdown_cell' || 'input_cell'
           [name, { form_value: '' }]
         end
@@ -73,12 +73,8 @@ module Nextflow
         attachment_id: file.empty? ? '' : file[:id] }
     end
 
-    def metadata_samplesheet_values(sample, property)
-      name = if property.key?('x-irida-next-selected')
-               property['x-irida-next-selected']
-             else
-               property['name']
-             end
+    def metadata_samplesheet_values(sample, name, property)
+      name = property['x-irida-next-selected'] if property.key?('x-irida-next-selected')
       metadata = sample.metadata.fetch(name, '')
       { form_value: metadata.empty? ? '' : metadata }
     end
