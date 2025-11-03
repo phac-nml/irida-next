@@ -689,6 +689,10 @@ a.pill-focus-reset:focus-visible {
 }
 
 /* Select with auto complete styles */
+.ts-control input {
+  @apply text-slate-900 dark:text-white;
+}
+
 .field_with_errors .ts-wrapper.single .ts-control {
   @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
 }

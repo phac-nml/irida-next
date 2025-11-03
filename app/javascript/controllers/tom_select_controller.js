@@ -9,6 +9,7 @@ export default class TomSelectController extends Controller {
 
     const select = new TomSelect(this.element, {
       render: {
+        no_results: null,
         optgroup: function (data, escape) {
           var optgroup = document.createElement("div");
           optgroup.className = "optgroup";
