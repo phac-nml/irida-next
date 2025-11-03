@@ -23,6 +23,10 @@ module Nextflow
       private
 
       def metadata_fields_for_field(field)
+        if @property.key?('meta') && @property['meta'] == [field] && @property.key?('x-irida-next-selected')
+          field = @property['x-irida-next-selected']
+          @header = field
+        end
         options = @metadata_fields.include?(field) ? @metadata_fields : [field].concat(@metadata_fields)
         label = t('components.nextflow.samplesheet.header_component.default', label: field)
         options.map { |f| [f.eql?(field) ? label : f, f] }

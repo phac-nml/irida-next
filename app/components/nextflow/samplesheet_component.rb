@@ -46,7 +46,7 @@ module Nextflow
           [name,
            file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
         when 'metadata_cell'
-          [name, metadata_samplesheet_values(sample, name)]
+          [name, metadata_samplesheet_values(sample, property)]
         when 'dropdown_cell' || 'input_cell'
           [name, { form_value: '' }]
         end
@@ -73,7 +73,12 @@ module Nextflow
         attachment_id: file.empty? ? '' : file[:id] }
     end
 
-    def metadata_samplesheet_values(sample, name)
+    def metadata_samplesheet_values(sample, property)
+      name = if property.key?('x-irida-next-selected')
+               property['x-irida-next-selected']
+             else
+               property['meta'].first
+             end
       metadata = sample.metadata.fetch(name, '')
       { form_value: metadata.empty? ? '' : metadata }
     end
