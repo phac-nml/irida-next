@@ -305,7 +305,8 @@ export default class extends Controller {
     );
   }
 
-  setCalendarButtonAriaLabel(label) {
-    this.calendarButtonTarget.setAttribute("aria-label", label);
+  setCalendarButtonAriaAttributes(ariaLabel, calendarId) {
+    this.calendarButtonTarget.setAttribute("aria-label", ariaLabel);
+    this.calendarButtonTarget.setAttribute("aria-controls", calendarId);
   }
 }

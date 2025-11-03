@@ -84,16 +84,19 @@ export default class extends Controller {
   }
 
   #generateCalendarButtonAriaLabel() {
-    let label = "";
+    let ariaLabel = "";
     if (this.#selectedDate) {
       let year, month, day;
       [year, month, day] = parseDate(this.#selectedDate);
-      label = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[month]} ${day}, ${year}`;
+      ariaLabel = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[month]} ${day}, ${year}`;
     } else {
-      label = this.ariaControlLabelsValue["choose_date"];
+      ariaLabel = this.ariaControlLabelsValue["choose_date"];
     }
 
-    this.pathogenDatepickerInputOutlet.setCalendarButtonAriaLabel(label);
+    this.pathogenDatepickerInputOutlet.setCalendarButtonAriaAttributes(
+      ariaLabel,
+      this.element.id,
+    );
   }
 
   // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
