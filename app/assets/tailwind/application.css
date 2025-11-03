@@ -689,6 +689,17 @@ a.pill-focus-reset:focus-visible {
 }
 
 /* Select with auto complete styles */
+
+.ts-control {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.ts-control .item {
+  white-space: nowrap;
+}
+
 .ts-control input {
   @apply text-slate-900 dark:text-white;
 }
