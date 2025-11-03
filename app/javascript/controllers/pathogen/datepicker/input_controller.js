@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FOCUSABLE_ELEMENTS } from "controllers/pathogen/datepicker/constants";
-import { splitDate } from "controllers/pathogen/datepicker/utils";
+import { parseDate } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
@@ -33,8 +33,6 @@ export default class extends Controller {
 
   // calendar DOM element once appended
   #calendar;
-  // retrieves next focusable element in DOM after date input
-  #nextFocusableElementAfterInput;
 
   #dropdown;
 
@@ -59,8 +57,6 @@ export default class extends Controller {
 
     // Position the calendar
     this.#initializeDropdown();
-
-    this.#findNextFocusableElement();
   }
 
   disconnect() {
@@ -153,16 +149,6 @@ export default class extends Controller {
     }
   }
 
-  // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
-  // tabbing through the calendar, we'd focus on the next element after the date input
-  #findNextFocusableElement() {
-    const focusable = Array.from(
-      document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
-    );
-    let index = focusable.indexOf(this.datepickerInputTarget);
-    this.#nextFocusableElementAfterInput = focusable[index + 1];
-  }
-
   // append datepicker to dialog if in dialog, otherwise append to body
   #findCalendarContainer() {
     let nextParentElement = this.datepickerInputTarget.parentElement;
@@ -197,7 +183,7 @@ export default class extends Controller {
     try {
       if (this.#dropdown) {
         this.#dropdown.hide();
-        this.focusCalendarButton();
+        this.calendarButtonTarget.focus();
         if (this.autosubmitValue) this.submitDate();
       }
     } catch (error) {
@@ -239,7 +225,7 @@ export default class extends Controller {
   #validateDateInput(dateInput) {
     let year, month, day;
     if (dateInput.match(this.dateFormatRegexValue)) {
-      [year, month, day] = splitDate(dateInput);
+      [year, month, day] = parseDate(dateInput);
       const date = new Date(year, month, day);
       return (
         date.getFullYear() === year &&
@@ -280,14 +266,15 @@ export default class extends Controller {
   // submits the selected date
   submitDate() {
     this.#disableInputErrorState();
-    // submit the date only if it differs from original selected date
+    // submit the date only if it differs from original selected date; prevents unnecessary submissions for unchanged
+    // values
     if (this.#selectedDate !== this.datepickerInputTarget.value) {
       this.element.closest("form").requestSubmit();
       this.#setSelectedDate();
     }
   }
 
-  // handles filling in the date input with the date
+  // handles filling in the date input with the date after selection
   setInputValue(date) {
     this.datepickerInputTarget.value = date;
   }
@@ -316,10 +303,6 @@ export default class extends Controller {
       `Pathogen--Datepicker--InputController error in ${source}:`,
       error,
     );
-  }
-
-  focusCalendarButton() {
-    this.calendarButtonTarget.focus();
   }
 
   setCalendarButtonAriaLabel(label) {

@@ -9,7 +9,7 @@ import {
   verifyDateIsInMonth,
   getDateNode,
   getFirstOfMonthNode,
-  splitDate,
+  parseDate,
 } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
@@ -87,7 +87,7 @@ export default class extends Controller {
     let label = "";
     if (this.#selectedDate) {
       let year, month, day;
-      [year, month, day] = splitDate(this.#selectedDate);
+      [year, month, day] = parseDate(this.#selectedDate);
       label = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[month]} ${day}, ${year}`;
     } else {
       label = this.ariaControlLabelsValue["choose_date"];

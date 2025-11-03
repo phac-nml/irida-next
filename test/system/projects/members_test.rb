@@ -351,7 +351,7 @@ module Projects
       end
 
       within "#member_#{project_member.id}" do
-        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
+        assert_selector "#member-#{project_member.id}-expiration-datepicker", focused: true
       end
     end
 

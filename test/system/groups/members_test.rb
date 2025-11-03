@@ -248,7 +248,7 @@ module Groups
       end
 
       within "#member_#{group_member.id}" do
-        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
+        assert_selector "#member-#{group_member.id}-expiration-datepicker", focused: true
       end
     end
 

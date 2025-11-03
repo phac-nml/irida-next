@@ -12,7 +12,6 @@ en:
         previous_month_button: Navigate to previous month
         select_month: Select month
         select_year: Select year
-        show_today: Show today
       clear_selection: Clear selection
       close: Close
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
@@ -42,7 +41,6 @@ en:
         october: October
         september: September
       placeholder: YYYY-MM-DD
-      show_today: Show Today
     label:
       required_indicator: "*"
       title: required

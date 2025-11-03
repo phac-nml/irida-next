@@ -12,7 +12,6 @@ fr:
         previous_month_button: Naviguer au mois précédent
         select_month: Sélectionner le mois
         select_year: Sélectionner l’année
-        show_today: Montrer aujourd’hui
       clear_selection: Effacer la sélection
       close: Fermer
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
@@ -42,7 +41,6 @@ fr:
         october: octobre
         september: septembre
       placeholder: AAAA-MM-JJ
-      show_today: Montrer aujourd’hui
     label:
       required_indicator: "*"
       title: obligatoire
