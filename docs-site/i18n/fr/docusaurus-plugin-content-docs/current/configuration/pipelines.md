@@ -31,8 +31,8 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
 #### Exemple
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
@@ -57,10 +57,10 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
       }
     ]
   },
-  {
+  "some-other/pipeline": {
     ........
   }
-]
+}
 ```
 
 ### Remplacements de schéma
@@ -120,8 +120,8 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 #### Exemple de remplacement
 
 ```json
-[
-  {
+{
+  "phac-nml/iridanextexample": {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
@@ -147,10 +147,10 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
     },
     "versions": [...]
   },
-  {
+  "some-other/pipeline": {
     ........
   }
-]
+}
 ```
 
 #### Résultat effectif
@@ -288,7 +288,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
     },
     "versions": [...]
   },
-  "some_other_pipeline": {
+  "some-other/pipeline": {
     ........
   }
 }
@@ -384,7 +384,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
     ],
     ........
   },
-  "some other pipeline": {
+  "some-other/pipeline": {
     .........
   }
 }
