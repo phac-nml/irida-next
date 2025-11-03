@@ -526,6 +526,7 @@ export default class extends Controller {
     }
 
     if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
       this.pathogenDatepickerInputOutlet.hideCalendar();
       return;
     }
