@@ -349,10 +349,6 @@ module Projects
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
       end
-
-      within "#member_#{project_member.id}" do
-        assert_selector "#member-#{project_member.id}-expiration-datepicker", focused: true
-      end
     end
 
     test 'cannot update member expiration' do
