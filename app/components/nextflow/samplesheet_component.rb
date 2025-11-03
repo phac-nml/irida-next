@@ -77,7 +77,7 @@ module Nextflow
       name = if property.key?('x-irida-next-selected')
                property['x-irida-next-selected']
              else
-               property['meta'].first
+               property['name']
              end
       metadata = sample.metadata.fetch(name, '')
       { form_value: metadata.empty? ? '' : metadata }
