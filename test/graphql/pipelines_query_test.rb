@@ -9,7 +9,6 @@ class PipelinesQueryTest < ActiveSupport::TestCase
         automatable
         description
         executable
-        metadata
         name
         pipelineId
         version

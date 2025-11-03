@@ -3,7 +3,7 @@
 module Irida
   # Class to store pipeline values
   class Pipeline # rubocop:disable Metrics/ClassLength
-    attr_accessor :pipeline_id, :name, :description, :metadata, :type, :type_version,
+    attr_accessor :pipeline_id, :name, :description, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
                   :default_params, :default_workflow_params
 
@@ -13,7 +13,6 @@ module Irida
       @pipeline_id = pipeline_id
       @name = entry['name']
       @description = entry['description']
-      @metadata = { pipeline_id:, workflow_name: name, workflow_version: version }
       @type = 'NFL'
       @type_version = 'DSL2'
       @engine = 'nextflow'
@@ -32,15 +31,15 @@ module Irida
     end
 
     def automatable?
-      @automatable == true
+      @automatable
     end
 
     def executable?
-      @executable == true
+      @executable
     end
 
     def unknown?
-      @unknown == true
+      @unknown
     end
 
     def workflow_params # rubocop:disable Metrics/AbcSize
