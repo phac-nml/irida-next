@@ -110,11 +110,6 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
                       workflow_version: metadata['workflow_version']))
   end
 
-  def workflow
-    Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'],
-                                               'available')
-  end
-
   private
 
   def send_user_emails
