@@ -42,6 +42,10 @@ module Irida
       @unknown
     end
 
+    def disabled?
+      unknown? || !automatable? || !executable?
+    end
+
     def workflow_params # rubocop:disable Metrics/AbcSize
       return {} if schema_loc.nil?
 

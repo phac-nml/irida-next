@@ -17,7 +17,7 @@ Rails.application.config.after_initialize do
 
     AutomatedWorkflowExecution.find_each do |automated_workflow_execution|
       pipeline = automated_workflow_execution.workflow
-      automated_workflow_execution.disabled = pipeline.unknown? || !pipeline.automatable? || !pipeline.executable?
+      automated_workflow_execution.disabled = pipeline.disabled?
       automated_workflow_execution.save
     end
   end
