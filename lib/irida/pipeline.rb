@@ -3,17 +3,16 @@
 module Irida
   # Class to store pipeline values
   class Pipeline # rubocop:disable Metrics/ClassLength
-    attr_accessor :pipeline_id, :name, :description, :metadata, :type, :type_version,
+    attr_accessor :pipeline_id, :name, :description, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
                   :default_params, :default_workflow_params
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
-    def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc, unknown: false) # rubocop:disable Metrics/MethodLength,Metrics/ParameterLists,Metrics/AbcSize
       @pipeline_id = pipeline_id
       @name = entry['name']
       @description = entry['description']
-      @metadata = { pipeline_id:, workflow_name: name, workflow_version: version }
       @type = 'NFL'
       @type_version = 'DSL2'
       @engine = 'nextflow'
@@ -22,15 +21,34 @@ module Irida
       @version = version['name']
       @schema_loc = schema_loc
       @schema_input_loc = schema_input_loc
-      @automatable = version['automatable'] || false
-      @executable = true unless version['executable'] == false
+      @automatable = version['automatable'].nil? ? false : version['automatable']
+      @executable = version['executable'].nil? || version['executable']
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
       @default_params = default_params_for_entry
       @default_workflow_params = default_workflow_params_for_entry
+      @unknown = unknown
     end
 
-    def workflow_params
+    def automatable?
+      @automatable
+    end
+
+    def executable?
+      @executable
+    end
+
+    def unknown?
+      @unknown
+    end
+
+    def disabled?
+      unknown? || !automatable? || !executable?
+    end
+
+    def workflow_params # rubocop:disable Metrics/AbcSize
+      return {} if schema_loc.nil?
+
       nextflow_schema = JSON.parse(schema_loc.read)
       workflow_params = {}
 
@@ -49,6 +67,8 @@ module Irida
     end
 
     def samplesheet_headers
+      return [] if schema_input_loc.nil?
+
       sample_sheet = process_samplesheet_schema
       sample_sheet['items']['properties'].keys
     end

@@ -24,20 +24,18 @@ module Projects
       authorize! @namespace, to: :create_automated_workflow_executions?
 
       @workflow = if params[:pipeline_id].present? && params[:workflow_version].present?
-                    Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id], params[:workflow_version],
-                                                               'automatable')
+                    Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id],
+                                                               params[:workflow_version])
                   end
     end
 
-    def edit # rubocop:disable Metrics/MethodLength
+    def edit
       authorize! @namespace, to: :update_automated_workflow_executions?
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['pipeline_id'],
-                                                             @automated_workflow_execution.metadata['workflow_version'],
-                                                             'available')
+      @workflow = @automated_workflow_execution.workflow
 
       respond_to do |format|
         format.turbo_stream do
-          if @automated_workflow_execution.disabled
+          if @automated_workflow_execution.disabled || @workflow.unknown?
             render status: :unprocessable_content,
                    locals: {
                      type: 'alert', message: t('.error',
@@ -141,7 +139,7 @@ module Projects
     end
 
     def available_automated_workflows
-      @available_automated_workflows = Irida::Pipelines.instance.automatable_pipelines
+      @available_automated_workflows = Irida::Pipelines.instance.pipelines('automatable')
     end
 
     def context_crumbs

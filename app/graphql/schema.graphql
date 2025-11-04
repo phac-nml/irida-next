@@ -1593,11 +1593,6 @@ type Pipeline {
   """
   
   """
-  metadata: JSON
-
-  """
-  
-  """
   name: String
 
   """

@@ -11,11 +11,11 @@ module Resolvers
     def resolve(workflow_type:)
       case workflow_type
       when 'executable'
-        Irida::Pipelines.instance.executable_pipelines.values
+        Irida::Pipelines.instance.pipelines('executable').values
       when 'automatable'
-        Irida::Pipelines.instance.automatable_pipelines.values
+        Irida::Pipelines.instance.pipelines('automatable').values
       when 'available'
-        Irida::Pipelines.instance.available_pipelines.values
+        Irida::Pipelines.instance.pipelines.values
       end
     end
   end

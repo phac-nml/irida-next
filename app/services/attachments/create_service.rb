@@ -44,7 +44,7 @@ module Attachments
 
       create_activities if @include_activity
 
-      if Irida::Pipelines.instance.available_pipelines.any? &&
+      if Irida::Pipelines.instance.pipelines.any? &&
          @attachable.instance_of?(Sample) &&
          @attachable.project.namespace.automated_workflow_executions.present?
         launch_automated_workflow_executions(@pe_attachments&.last)

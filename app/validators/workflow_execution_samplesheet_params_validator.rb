@@ -2,14 +2,12 @@
 
 # Validator for Workflow Execution Samplesheet Params
 class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
-  def validate(record) # rubocop:disable Metrics/AbcSize
+  def validate(record)
     return unless record.workflow_execution.state == 'initial' # only validate on creation
 
-    workflow = Irida::Pipelines.instance.find_pipeline_by(record.workflow_execution.metadata['pipeline_id'],
-                                                          record.workflow_execution.metadata['workflow_version'],
-                                                          'available')
+    workflow = record.workflow_execution.workflow
 
-    return if workflow.blank?
+    return if workflow.unknown?
 
     workflow_params = workflow.workflow_params
     samplesheet_schema = workflow_params[:input_output_options][:properties][:input][:schema]
@@ -78,7 +76,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
 
     return if value.blank?
 
-    return unless value != (record.sample&.puid)
+    return unless value != record.sample&.puid
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
@@ -92,7 +90,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
 
     return if value.blank?
 
-    return unless value != (record.sample&.name)
+    return unless value != record.sample&.name
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_name_error', property:)

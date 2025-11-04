@@ -4,6 +4,7 @@ module WorkflowExecutions
   # Workflow submission controller
   class SubmissionsController < ApplicationController
     include Metadata
+
     respond_to :turbo_stream
     before_action :workflows
     before_action :samples, only: %i[create]
@@ -27,7 +28,7 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = Irida::Pipelines.instance.executable_pipelines
+      @workflows = Irida::Pipelines.instance.pipelines('executable')
     end
 
     def workflow

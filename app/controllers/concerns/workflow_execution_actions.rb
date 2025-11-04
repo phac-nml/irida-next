@@ -67,9 +67,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     when 'files'
       list_workflow_execution_attachments
     when 'params'
-      @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                             @workflow_execution.metadata['workflow_version'],
-                                                             'available')
+      @workflow = @workflow_execution.workflow
     when 'samplesheet'
       format_samplesheet_params
     when 'summary'
@@ -188,10 +186,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   private
 
   def workflow_properties
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                          @workflow_execution.metadata['workflow_version'],
-                                                          'available')
-    return {} if workflow.blank?
+    workflow = @workflow_execution.workflow
+    return {} if workflow.workflow_params.empty?
 
     workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
   end
@@ -248,9 +244,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def format_samplesheet_params
-    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['pipeline_id'],
-                                                          @workflow_execution.metadata['workflow_version'],
-                                                          'available')
+    workflow = @workflow_execution.workflow
+
+    return unless workflow.executable?
+
     @samplesheet_headers = workflow.samplesheet_headers
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|
