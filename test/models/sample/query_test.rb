@@ -168,4 +168,40 @@ class QueryTest < ActiveSupport::TestCase
     assert query.groups[0].errors.added? :conditions, :invalid
     assert query.groups[0].conditions[0].errors.added? :operator, :not_a_date_operator
   end
+
+  test 'in operator with puid field' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'puid', operator: 'in', value: [sample1.puid] } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    assert_includes results, sample1
+    assert_not_includes results, sample2
+  end
+
+  test 'not_in operator with puid field' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'puid', operator: 'not_in', value: [sample1.puid] } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    assert_not_includes results, sample1
+    assert_includes results, sample2
+  end
 end
