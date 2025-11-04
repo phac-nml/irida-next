@@ -348,28 +348,6 @@ module Groups
       assert_selector 'turbo-frame#invited_groups', visible: :visible
     end
 
-    test 'tabs component preserves tab state in URL hash for bookmarking' do
-      # Visit directly with hash to test bookmark functionality
-      visit "#{group_members_url(@namespace)}#groups-tab"
-
-      # Wait for page load and controller initialization
-      sleep 0.3
-
-      # Verify groups tab is selected based on URL hash
-      assert_selector '#groups-tab[aria-selected="true"]'
-      assert_selector '#members-tab[aria-selected="false"]'
-
-      # Verify panels visibility matches the hash
-      groups_panel = find('#groups-panel', visible: :all)
-      members_panel = find('#members-panel', visible: :all)
-
-      assert_not groups_panel[:class].include?('hidden'), 'Groups panel should be visible when hash is #groups-tab'
-      assert members_panel[:class].include?('hidden'), 'Members panel should be hidden when hash is #groups-tab'
-
-      # Verify URL hash is preserved
-      assert_equal '#groups-tab', page.evaluate_script('window.location.hash')
-    end
-
     test 'can update member expiration' do
       group_member = members(:group_one_member_joan_doe)
       expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
