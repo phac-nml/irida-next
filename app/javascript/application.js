@@ -26,7 +26,7 @@ function isElementInViewport(el) {
 document.addEventListener("turbo:render", () => {
   LocalTime.config.locale = document.documentElement.lang;
   // reprocess each time element regardless if it has been already processed
-  LocalTime.process(...document.querySelectorAll("time"));
+  LocalTime.start();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
