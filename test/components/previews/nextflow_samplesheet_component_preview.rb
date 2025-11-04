@@ -68,10 +68,10 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
       samplesheet_schema_overrides: {
         items: {
           properties: {
-            metadata_1: {
+            metadata_1: { # rubocop:disable Naming/VariableNumber
               'x-irida-next-selected': 'new_isolates_date'
             },
-            metadata_2: {
+            metadata_2: { # rubocop:disable Naming/VariableNumber
               'x-irida-next-selected': 'prediceted_primary_identification_name'
             }
           },
