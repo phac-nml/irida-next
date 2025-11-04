@@ -103,23 +103,21 @@ module Projects
       when 'index'
         @title = "#{t(:'general.default_sidebar.workflows')} · #{@project.full_name}"
       when 'show'
+        workflow_execution_identifier =
+          @workflow_execution.name.nil? ? @workflow_execution.id : @workflow_execution.name
         @title = case @tab
                  when 'params'
-                   [t(:'workflow_executions.show.tabs.params'),
-                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id}",
-                    @project.full_name].join(' · ')
+                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
+                    t(:'workflow_executions.show.tabs.params'), @project.full_name].join(' · ')
                  when 'samplesheet'
-                   [t(:'workflow_executions.show.tabs.samplesheet'),
-                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id}",
-                    @project.full_name].join(' · ')
+                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
+                    t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
                  when 'files'
-                   [t(:'workflow_executions.show.tabs.files'),
-                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id}",
-                    @project.full_name].join(' · ')
+                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
+                    t(:'workflow_executions.show.tabs.files'), @project.full_name].join(' · ')
                  else
-                   [t(:'workflow_executions.show.tabs.summary'),
-                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id}",
-                    @project.full_name].join(' · ')
+                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
+                    t(:'workflow_executions.show.tabs.summary'), @project.full_name].join(' · ')
                  end
       end
     end

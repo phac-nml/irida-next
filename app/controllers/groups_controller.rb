@@ -260,9 +260,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                  [@group.full_name, t(:'groups.show.tabs.subgroups_and_projects')].join(' · ')
                end
              when 'activity'
-               [@group.full_name, t(:'groups.sidebar.activity')].join(' · ')
+               [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')
              when 'edit'
-               [@group.full_name, t('common.labels.general'), t(:'groups.edit.title')].join(' · ')
+               [t('common.labels.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
              when 'new', 'create'
                if @group
                  t(:'groups.new_subgroup.title')
