@@ -7,10 +7,13 @@
   <form
     id="limit-component-form"
     method="get"
-    action="<%= current_url_without_limit %>"
+    action="<%= current_url_without_params %>"
     class="@max-md:space-y-4"
     data-turbo-action="replace"
   >
+    <% current_url_query_params_without_limit.each do |param| %>
+      <input type="hidden" name="<%= param[0] %>" value="<%= param[1] %>"/>
+    <% end %>
     <div
       class="
         @max-md:flex @max-md:flex-col @max-md:space-y-4 @md:@max-xl:space-y-2 @2xl:flex
