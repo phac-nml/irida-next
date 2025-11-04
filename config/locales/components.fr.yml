@@ -361,3 +361,8 @@ fr:
           up: Haut
       sortable_lists_component:
         no_template: Pas de modèle
+    workflow_executions:
+      table_component:
+        counts:
+          one: 1 exécution de flux de travail sélectionnée
+          other: "%{selected} sur %{total} exécutions de flux de travail sélectionnées"

@@ -48,6 +48,10 @@ module WorkflowExecutions
           args[:data][:controller] = 'selection'
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-button-outlet'] = '.action-button'
+          args[:data][:'selection-count-message-one-value'] =
+            I18n.t('components.workflow_executions.table_component.counts.one')
+          args[:data][:'selection-count-message-other-value'] =
+            I18n.t('components.workflow_executions.table_component.counts.other')
         end
       end
     end

@@ -239,6 +239,14 @@
                   <%= t(".counts.selected") %>:
                   <strong data-selection-target="selected">0</strong>
                 </span>
+                <div
+                  aria-live="polite"
+                  aria-atomic="true"
+                  role="status"
+                  class="sr-only"
+                  data-selection-target="status"
+                >
+                </div>
               </td>
               <td
                 colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"

@@ -163,6 +163,7 @@ ignore_unused:
   - "*.sorting.*"
   - "activity.*"
   - "components.viral.data_table_component.*"
+  - "components.workflow_executions.table_component.counts*"
   - "samples.table_component.namespaces.puid"
   - "local_time.*"
 
