@@ -5,8 +5,6 @@ export default class TomSelectController extends Controller {
   connect() {
     console.debug("TomSelectController: Connected");
 
-    this.loadTomSelectCSS();
-
     var first_flag, last_flag;
     const select = this.element;
     const tom_select = new TomSelect(select, {
@@ -94,18 +92,6 @@ export default class TomSelectController extends Controller {
     console.debug("TomSelectController: Disconnected");
     if (this.element.tomselect) {
       this.element.tomselect.destroy();
-    }
-  }
-
-  loadTomSelectCSS() {
-    const cssId = "tom-select-default-css";
-    if (!document.getElementById(cssId)) {
-      const link = document.createElement("link");
-      link.id = cssId;
-      link.rel = "stylesheet";
-      link.href =
-        "https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.default.css";
-      document.head.insertBefore(link, document.head.firstChild);
     }
   }
 }

@@ -1,3 +1,8 @@
+<% content_for :head_vendor_css, flush: true do %>
+  <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.default.css",
+  rel: "stylesheet" %>
+<% end %>
+
 <div
   data-controller="advanced-search"
   data-advanced-search-open-value="<%= @open %>"
