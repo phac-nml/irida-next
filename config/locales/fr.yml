@@ -925,9 +925,6 @@ fr:
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution du flux de travail
-      files:
-        search:
-          placeholder: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
         search:
@@ -938,13 +935,6 @@ fr:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
         remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
-      summary:
-        created_at: Créé
-        run_id: Exécuter l’identifiant
-        state: État
-        updated_at: Dernière mise à jour
-        workflow_name: Nom du flux de travail
-        workflow_version: Version du flux de travail
       table:
         empty:
           description: Il n’y a aucune exécution du flux de travail associée à ce groupe.
@@ -1602,9 +1592,6 @@ fr:
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
-      files:
-        search:
-          placeholder: Rechercher par PUID ou nom de fichier
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Supprimer les exécutions de flux de travail
@@ -1617,13 +1604,6 @@ fr:
         create_export_button: Créer une exportation
         tabs:
           label: Détails de l’exécution de flux de travail
-      summary:
-        created_at: Créé
-        run_id: Exécuter l’identifiant
-        state: État
-        updated_at: Dernière mise à jour
-        workflow_name: Nom du flux de travail
-        workflow_version: Version du flux de travail
       table:
         empty:
           description: Il n’y a aucun pipeline automatisé associé à ce projet.

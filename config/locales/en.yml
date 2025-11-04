@@ -923,9 +923,6 @@ en:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
-      files:
-        search:
-          placeholder: Search by PUID or Filename
       index:
         create_export_button: Create Export
         search:
@@ -936,13 +933,6 @@ en:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
-      summary:
-        created_at: Created
-        run_id: Run ID
-        state: State
-        updated_at: Last Updated
-        workflow_name: Workflow Name
-        workflow_version: Workflow Version
       table:
         empty:
           description: There are no workflow executions associated with this group.
@@ -1598,9 +1588,6 @@ en:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit automated workflow execution
-      files:
-        search:
-          placeholder: Search by PUID or filename
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
@@ -1613,13 +1600,6 @@ en:
         create_export_button: Create Export
         tabs:
           label: Workflow Execution Details
-      summary:
-        created_at: Created
-        run_id: Run ID
-        state: State
-        updated_at: Last Updated
-        workflow_name: Workflow Name
-        workflow_version: Workflow Version
       table:
         empty:
           description: There are no automated pipelines associated with this project.
