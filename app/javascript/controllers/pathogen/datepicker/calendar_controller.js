@@ -63,7 +63,7 @@ export default class extends Controller {
     this.#loadCalendar();
     // announces current calendar's month/year
     this.#updateAriaLive(
-      `${this.monthsValue[this.#selectedMonthIndex]} ${this.#selectedYear}`,
+      `${this.monthSelectTarget.value} ${this.#selectedYear}`,
     );
   }
 
@@ -276,7 +276,7 @@ export default class extends Controller {
           this.#selectedYear,
           this.#selectedMonthIndex,
           day,
-          `${this.monthsValue[this.#selectedMonthIndex]} ${day}, ${this.#selectedYear}`,
+          `${this.monthSelectTarget.value} ${day}, ${this.#selectedYear}`,
         );
       } else if (isPrev) {
         appendCell(
@@ -456,7 +456,6 @@ export default class extends Controller {
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -468,7 +467,6 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
