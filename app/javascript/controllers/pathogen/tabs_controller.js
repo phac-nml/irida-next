@@ -589,7 +589,9 @@ export default class extends Controller {
     try {
       const hashIndex = this.#getTabIndexFromHash();
       if (hashIndex !== -1) {
-        // Use replaceState when responding to hash change to avoid creating additional history entries
+        // Use replaceState when hash is not present, to avoid creating additional history entries.
+        // (e.g. on initialization hash is not present and is set on initial connect,
+        // we don't want two history entries in this case).
         this.#selectTabByIndex(hashIndex, true, history.replaceState);
       }
     } catch (error) {
