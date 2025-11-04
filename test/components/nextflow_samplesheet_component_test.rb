@@ -51,4 +51,22 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       table.assert_selector 'tbody tr:last-of-type td:last-of-type', text: 'ERR31551163'
     end
   end
+
+  test 'with samplesheet overrides' do
+    visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+
+    assert_selector 'table' do |table|
+      table.assert_selector 'thead th', count: 20
+      table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', count: 1
+      table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', text: 'new_isolates_date (default)'
+      table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select', count: 1
+      table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select',
+                            text: 'prediceted_primary_identification_name (default)'
+      table.assert_selector 'tbody tr', count: 2
+      table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
+      table.assert_selector 'tbody tr:first-of-type td:nth-of-type(1)', text: @sample1.name
+      table.assert_selector 'tbody tr:last-of-type th:first-of-type', text: @sample2.puid
+      table.assert_selector 'tbody tr:last-of-type td:nth-of-type(1)', text: @sample2.name
+    end
+  end
 end
