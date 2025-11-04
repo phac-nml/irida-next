@@ -34,6 +34,9 @@ en:
         access_level: Access Level
         expires_at: Access expiration (optional)
         user_id: User
+      metadata_template:
+        description: Description
+        name: Name
       namespaces/project_namespace:
         description: Description
         name: Project Name
