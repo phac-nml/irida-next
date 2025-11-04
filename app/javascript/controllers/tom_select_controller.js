@@ -10,6 +10,7 @@ export default class TomSelectController extends Controller {
     var first_flag, last_flag;
     const select = this.element;
     const tom_select = new TomSelect(select, {
+      openOnFocus: false,
       render: {
         no_results: null,
         optgroup: function (data, escape) {
@@ -32,6 +33,9 @@ export default class TomSelectController extends Controller {
       },
     });
 
+    tom_select.control_input.ariaInvalid = select.getAttribute("aria-invalid");
+    tom_select.control_input.ariaDescribedby =
+      select.getAttribute("aria-invalid");
     tom_select.control_input.addEventListener("keydown", function (event) {
       switch (event.key) {
         case "Down":
