@@ -120,7 +120,7 @@
                 <% end %>
               <% else %>
                 <div>
-                  <% if property[:type] != 'boolean' %>
+                  <% if property[:type] != 'boolean' %>FLKJLKDSJFLKDSJLKF
                     <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                       <%= text_for(property[:description]) %>
                       <% if property[:required] %>
@@ -211,7 +211,7 @@
       <% if instance.nil? %>
         <%= t(:"workflow_executions.submissions.create.submit") %>
       <% else %>
-        <%= t('common.actions.update') %>
+        <%= t("common.actions.update") %>
       <% end %>
     </button>
   <% end %>

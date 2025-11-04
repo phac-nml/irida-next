@@ -14,8 +14,10 @@ module NextflowHelper
              end
     end
 
+    data = { 'metadata-header-name': name.to_s.remove('_header') } if metadata_header?(name.to_s)
+
     viral_prefixed_text_input(form: container, name:, required:, pattern: property[:pattern],
-                              value:) do |input|
+                              value:, data:) do |input|
       input.with_prefix do
         format_name_as_arg(name)
       end
@@ -44,5 +46,9 @@ module NextflowHelper
       index = property[:enum].find_index { |(_label, value)| value == original_value }
       index.nil? ? original_value : property[:enum][index][0]
     end
+  end
+
+  def metadata_header?(header_name)
+    /metadata_[0-9]+_header/.match?(header_name.to_s) && Flipper.enabled?(:update_nextflow_metadata_param)
   end
 end
