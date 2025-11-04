@@ -75,7 +75,7 @@ export default class TomSelectController extends Controller {
 
         case "End":
           event.preventDefault();
-          const filterValue = select.control_input.value;
+          const filterValue = tom_select.control_input.value;
           const length = filterValue.length;
           tom_select.control_input.setSelectionRange(length, length);
           break;
