@@ -61,6 +61,10 @@ export default class extends Controller {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
     }
     this.#loadCalendar();
+    // announces current calendar's month/year
+    this.#updateAriaLive(
+      `${this.monthsValue[this.#selectedMonthIndex]} ${this.#selectedYear}`,
+    );
   }
 
   setMonths() {
@@ -783,7 +787,11 @@ export default class extends Controller {
     // assign tabindex and focus to the current target date
     dateNode.tabIndex = 0;
     dateNode.focus();
+    this.#updateAriaLive(dateNode.getAttribute("aria-label"));
+  }
+
+  #updateAriaLive(string) {
     this.ariaLiveTarget.innerText = "";
-    this.ariaLiveTarget.innerText = dateNode.getAttribute("aria-label");
+    this.ariaLiveTarget.innerText = string;
   }
 }
