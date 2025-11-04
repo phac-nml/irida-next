@@ -50,7 +50,7 @@
         <% end %>
       <% end %>
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= button_to t('common.actions.cancel'),
+        <%= button_to t("common.actions.cancel"),
         cancel_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -65,7 +65,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= button_to t('common.actions.edit'),
+        <%= button_to t("common.actions.edit"),
         edit_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -78,7 +78,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= button_to t('common.actions.remove'),
+        <%= button_to t("common.actions.remove"),
         destroy_confirmation_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -150,12 +150,25 @@
   ) %>
 
   <% if @tab == 'summary' || @tab == nil %>
-    <%= render partial: "summary" %>
+    <%= render partial: "workflow_executions/summary" %>
   <% elsif @tab == "params" %>
-    <%= render partial: "params" %>
+    <%= render partial: "workflow_executions/params" %>
   <% elsif @tab == 'samplesheet' %>
-    <%= render partial: "samplesheet" %>
+    <%= render partial: "workflow_executions/samplesheet" %>
   <% elsif @tab == 'files' %>
-    <%= render partial: "files" %>
+    <%= render partial: "workflow_executions/files",
+    locals: {
+      pagy: @pagy,
+      q: @q,
+      search_url:
+        namespace_project_workflow_execution_path(
+          @namespace.parent,
+          @namespace.project,
+          @workflow_execution,
+        ),
+      attachments: @attachments,
+      workflow_execution: @workflow_execution,
+      has_attachments: @has_attachments,
+    } %>
   <% end %>
 <% end %>

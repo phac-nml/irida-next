@@ -46,7 +46,7 @@
         disabled: true %>
       <% end %>
       <% if @workflow_execution.cancellable? %>
-        <%= button_to t('common.actions.cancel'),
+        <%= button_to t("common.actions.cancel"),
         cancel_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_method: :put,
@@ -56,7 +56,7 @@
         class: "button button-default w-full" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= button_to t('common.actions.edit'),
+        <%= button_to t("common.actions.edit"),
         edit_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_stream: true,
@@ -66,7 +66,7 @@
 
       <% end %>
       <% if @workflow_execution.deletable? %>
-        <%= button_to t('common.actions.remove'),
+        <%= button_to t("common.actions.remove"),
         destroy_confirmation_workflow_execution_path(@workflow_execution),
         method: :get,
         data: {
@@ -110,6 +110,14 @@
   <% elsif @tab == 'samplesheet' %>
     <%= render partial: "samplesheet" %>
   <% elsif @tab == 'files' %>
-    <%= render partial: "files" %>
+    <%= render partial: "workflow_executions/files",
+    locals: {
+      pagy: @pagy,
+      q: @q,
+      search_url: workflow_execution_path(@workflow_execution),
+      attachments: @attachments,
+      workflow_execution: @workflow_execution,
+      has_attachments: @has_attachments,
+    } %>
   <% end %>
 <% end %>
