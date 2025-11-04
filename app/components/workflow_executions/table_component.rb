@@ -33,7 +33,7 @@ module WorkflowExecutions
       @search_params = search_params
       @row_actions = row_actions
       @empty = empty
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @system_arguments = system_arguments
 
       @columns = columns
@@ -44,16 +44,7 @@ module WorkflowExecutions
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'workflow-executions-table'
         args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
-        if @abilities[:select_workflow_executions]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
-          args[:data][:'selection-count-message-one-value'] =
-            I18n.t('components.workflow_executions.table_component.counts.one')
-          args[:data][:'selection-count-message-other-value'] =
-            I18n.t('components.workflow_executions.table_component.counts.other')
-        end
+        add_selection_data_attributes(args) if @abilities[:select_workflow_executions]
       end
     end
 
@@ -95,6 +86,17 @@ module WorkflowExecutions
     end
 
     private
+
+    def add_selection_data_attributes(args)
+      args[:data] ||= {}
+      args[:data][:controller] = 'selection'
+      args[:data][:'selection-total-value'] = @pagy.count
+      args[:data][:'selection-action-button-outlet'] = '.action-button'
+      args[:data][:'selection-count-message-one-value'] =
+        I18n.t('components.workflow_executions.table_component.counts.one')
+      args[:data][:'selection-count-message-other-value'] =
+        I18n.t('components.workflow_executions.table_component.counts.other')
+    end
 
     def columns
       %i[id name state run_id workflow_name workflow_version created_at updated_at]
