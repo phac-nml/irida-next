@@ -52,7 +52,7 @@
                   ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream"/>
       <input type="hidden" name="select" value="on"/>
-      <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
+      <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
     <%= form_with(
                     url: select_namespace_project_workflow_executions_url,
@@ -61,14 +61,15 @@
                     class: "max-sm:grow",
                   ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
+      <%= f.submit t("common.controls.deselect_all"),
+               class: "button button-default w-full" %>
     <% end %>
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
     <%= render SearchComponent.new(
       query: @q,
       url: namespace_project_workflow_executions_path(**request.query_parameters),
       search_attribute: :name_or_id_cont,
-      label: t('common.controls.search'),
+      label: t("common.controls.search"),
       placeholder: t(".search.placeholder"),
       total_count: @pagy.count,
       value: @q.name_or_id_cont,
@@ -76,11 +77,14 @@
     ) %>
   </div>
 <% end %>
-<%= render partial: "table",
+
+<%= render partial: "workflow_executions/table",
 locals: {
   workflow_executions: @workflow_executions,
   pagy: @pagy,
   q: @q,
   has_workflow_executions: @has_workflow_executions,
   namespace: @namespace,
+  empty_title: t(:"projects.workflow_executions.table.empty.title"),
+  empty_description: t(:"projects.workflow_executions.table.empty.description"),
 } %>

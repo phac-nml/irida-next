@@ -1,13 +1,14 @@
+<%# locals: (pagy:, q:, search_url:, attachments:, workflow_execution:, has_attachments: ) -%>
 <div class="flex justify-end mb-2">
   <% if Flipper.enabled?(:workflow_execution_attachments_searching) %>
     <%= render SearchComponent.new(
-              query: @q,
+              query: q,
               search_attribute: :puid_or_file_blob_filename_cont,
               label: t('common.controls.search'),
               placeholder: t(".search.placeholder"),
-              url: workflow_execution_path(@workflow_execution),
-              total_count: @pagy.count,
-              value: @q.puid_or_file_blob_filename_cont,
+              url: search_url,
+              total_count: pagy.count,
+              value: q.puid_or_file_blob_filename_cont,
               class: "max-sm:grow",
               html: {
                 "data-turbo-action": "replace",
@@ -20,12 +21,12 @@
 </div>
 
 <%= render Attachments::TableComponent.new(
-  @attachments,
-  @pagy,
-  @q,
-  @workflow_execution,
+  attachments,
+  pagy,
+  q,
+  workflow_execution,
   true,
-  @has_attachments,
+  has_attachments,
   abilities: {
   },
   row_actions: {

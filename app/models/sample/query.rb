@@ -149,7 +149,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       if metadata_field || condition.field == 'name'
         scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
       elsif condition.field == 'puid'
-        scope.where(node.in(condition.value.map(&:upcase)))
+        scope.where(node.not_in(condition.value.map(&:upcase)))
       else
         scope.where(node.not_in(condition.value))
       end

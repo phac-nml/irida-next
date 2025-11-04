@@ -233,7 +233,7 @@ module Groups
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
       end
 
-      fill_in placeholder: I18n.t('groups.workflow_executions.files.search.placeholder', locale: user.locale),
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
               with: attachments(:workflow_execution_group_shared_output_attachment).puid
       find('input.t-search-component').native.send_keys(:return)
 
@@ -241,7 +241,7 @@ module Groups
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
       end
 
-      fill_in placeholder: I18n.t('groups.workflow_executions.files.search.placeholder', locale: user.locale),
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
               with: attachments(:workflow_execution_group_shared_output_attachment).file.filename.to_s
       find('input.t-search-component').native.send_keys(:return)
 
