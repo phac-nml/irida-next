@@ -212,9 +212,9 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'a', text: I18n.t(:'groups.members.index.tabs.groups')
+      assert_selector 'button', text: I18n.t(:'groups.members.index.tabs.groups')
 
-      click_link I18n.t(:'groups.members.index.tabs.groups')
+      click_on I18n.t(:'groups.members.index.tabs.groups')
 
       assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase
 
