@@ -75,7 +75,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength
+  def destroy # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     WorkflowExecutions::DestroyService.new(current_user,
                                            { workflow_execution: @workflow_execution, namespace: @namespace }).execute
 
