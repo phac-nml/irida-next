@@ -100,13 +100,9 @@ module Projects
       authorize! @project, to: :sample_listing?
       @sample_ids = []
 
-      respond_to do |format|
-        format.turbo_stream do
-          if params[:select].present?
-            @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
-          end
-        end
-      end
+      return if params[:select].blank?
+
+      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
     end
 
     private
