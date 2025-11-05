@@ -2,7 +2,7 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
-  def form_input(container, name, property, required, instance)
+  def form_input(container, name, property, required, instance) # rubocop:disable Metrics/MethodLength
     value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
 
     if property[:enum].present?
