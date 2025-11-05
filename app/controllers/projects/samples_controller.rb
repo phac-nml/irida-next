@@ -39,17 +39,11 @@ module Projects
 
     def show
       authorize! @sample.project, to: :read_sample?
+      validate_and_set_tab
 
-      redirect_to namespace_project_sample_path unless !params.key?(:tab) || params[:tab].in?(%w[files metadata
-                                                                                                 history])
-
-      @tab = params[:tab]
-      if @tab == 'metadata'
-        @sample_metadata = @sample.metadata_with_provenance
-      elsif @tab == 'history'
-        @log_data = @sample.log_data_without_changes
-      else
-        list_sample_attachments
+      respond_to do |format|
+        format.html { load_tab_content_for_html }
+        format.turbo_stream { render_tab_content_turbo_stream }
       end
     end
 
@@ -208,7 +202,7 @@ module Projects
     def results_message_for_advanced_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.advanced.results_message.zero')
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.advanced.results_message.singular')
       else
         I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
@@ -218,7 +212,7 @@ module Projects
     def results_message_for_quick_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
       else
         I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
@@ -242,6 +236,43 @@ module Projects
 
     def redirect_to_first_page
       redirect_to url_for(page: 1, limit: params[:limit] || 20)
+    end
+
+    def validate_and_set_tab
+      valid_tabs = %w[files metadata history]
+      redirect_to namespace_project_sample_path unless !params.key?(:tab) || params[:tab].in?(valid_tabs)
+      @tab = params[:tab]
+    end
+
+    def load_tab_content_for_html
+      # For backward compatibility with query params (?tab=metadata),
+      # load the tab content during HTML format request
+      # This ensures existing tests and bookmarks continue to work
+      case @tab
+      when 'metadata'
+        @sample_metadata = @sample.metadata_with_provenance
+      when 'history'
+        @log_data = @sample.log_data_without_changes
+      else
+        list_sample_attachments
+      end
+    end
+
+    def render_tab_content_turbo_stream
+      case @tab
+      when 'files'
+        list_sample_attachments
+        render turbo_stream: turbo_stream.replace('files-content',
+                                                  partial: 'projects/samples/attachments/table')
+      when 'metadata'
+        @sample_metadata = @sample.metadata_with_provenance
+        render turbo_stream: turbo_stream.replace('metadata-content',
+                                                  partial: 'projects/samples/metadata/table')
+      when 'history'
+        @log_data = @sample.log_data_without_changes
+        render turbo_stream: turbo_stream.replace('history-content',
+                                                  partial: 'projects/samples/history/content')
+      end
     end
 
     def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

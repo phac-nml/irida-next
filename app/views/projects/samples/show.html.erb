@@ -34,48 +34,70 @@
 <% end %>
 
 <div>
-  <%= render Pathogen::TabsPanel.new(
+  <%= render Pathogen::Tabs.new(
     id: "sample-tabs",
-    label: t("projects.samples.show.nav_aria_label")
+    label: t("projects.samples.show.nav_aria_label"),
+    default_index: @tab == "metadata" ? 1 : (@tab == "history" ? 2 : 0),
+    sync_url: true
   ) do |tabs| %>
+    <%# Tab buttons %>
     <% tabs.with_tab(
       id: "files-tab",
-      text: t(:"projects.samples.show.tabs.files"),
-      href: namespace_project_sample_path(id: @sample.id, tab: "files"),
-      selected: (@tab == "files") || (@tab.nil?),
+      label: t(:"projects.samples.show.tabs.files"),
+      selected: (@tab == "files") || (@tab.nil?)
     ) %>
     <% tabs.with_tab(
       id: "metadata-tab",
-      text: t(:"projects.samples.show.tabs.metadata"),
-      href: namespace_project_sample_path(id: @sample.id, tab: "metadata"),
-      selected: @tab == "metadata",
+      label: t(:"projects.samples.show.tabs.metadata"),
+      selected: @tab == "metadata"
     ) %>
     <% tabs.with_tab(
       id: "history-tab",
-      text: t(:"projects.samples.show.tabs.history"),
-      href: namespace_project_sample_path(id: @sample.id, tab: "history"),
-      selected: @tab == "history",
+      label: t(:"projects.samples.show.tabs.history"),
+      selected: @tab == "history"
     ) %>
-  <% end %>
 
-  <% if @tab == "history" %>
-    <div class="grid gap-4 px-4 py-8">
-      <%= render HistoryComponent.new(
-        data: @log_data.reverse,
-        type: "Sample",
-        url:
-          namespace_project_sample_view_history_version_path(sample_id: @sample.id),
-      ) %>
-    </div>
-  <% elsif @tab == "metadata" %>
-    <%= render partial: "projects/samples/metadata/table",
-    locals: {
-      sample_metadata: @sample_metadata,
-    } %>
-  <% else %>
-    <%= render partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample_attachments,
-    } %>
+    <%# Tab panels with lazy loading or direct rendering based on query param %>
+    <% tabs.with_panel(id: "files-panel", tab_id: "files-tab") do %>
+      <% if @tab.nil? || @tab == "files" %>
+        <%# Direct render for backward compatibility with query params %>
+        <%= render partial: "projects/samples/attachments/table" %>
+      <% else %>
+        <%= turbo_frame_tag "files-content",
+          src: namespace_project_sample_path(id: @sample.id, tab: "files", format: :turbo_stream),
+          loading: :lazy,
+          refresh: "morph" do %>
+          <%= render partial: "shared/loading/table" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% tabs.with_panel(id: "metadata-panel", tab_id: "metadata-tab") do %>
+      <% if @tab == "metadata" %>
+        <%# Direct render for backward compatibility with query params %>
+        <%= render partial: "projects/samples/metadata/table", locals: { sample_metadata: @sample_metadata } %>
+      <% else %>
+        <%= turbo_frame_tag "metadata-content",
+          src: namespace_project_sample_path(id: @sample.id, tab: "metadata", format: :turbo_stream),
+          loading: :lazy,
+          refresh: "morph" do %>
+          <%= render partial: "shared/loading/table" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% tabs.with_panel(id: "history-panel", tab_id: "history-tab") do %>
+      <% if @tab == "history" %>
+        <%# Direct render for backward compatibility with query params %>
+        <%= render partial: "projects/samples/history/content" %>
+      <% else %>
+        <%= turbo_frame_tag "history-content",
+          src: namespace_project_sample_path(id: @sample.id, tab: "history", format: :turbo_stream),
+          loading: :lazy,
+          refresh: "morph" do %>
+          <%= render partial: "shared/loading/history" %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
