@@ -22,11 +22,12 @@
                     required: true,
                   },
                   autofocus: invalid_name %>
-  <%= if invalid_name
-    render "shared/form/field_errors",
+
+  <% if invalid_name %>
+    <%= render "shared/form/field_errors",
     id: form.field_id(:name, "error"),
-    errors: group.errors.full_messages_for(:name)
-  end %>
+    errors: group.errors.full_messages_for(:name) %>
+  <% end %>
   <span id="<%= form.field_id(:name, "hint") %>" class="field-hint">
     <%== t(:"groups.create.name_help") %>
   </span>
@@ -41,10 +42,7 @@
                    t("activerecord.attributes.group.parent_id"),
                    for: form_id,
                    class:
-                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                   data: {
-                     required: true,
-                   } %>
+                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white" %>
         <div>
           <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
@@ -52,14 +50,19 @@
                       value: namespace.id,
                       label: namespace.full_path,
                     ) do %>
-                <span
-                  class="
-                    text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                  "
-                >
-                  <%= namespace.full_path %>
-                  <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
-                </span>
+                <div class="flex items-center justify-between gap-3 pointer-events-none">
+                  <div class="min-w-0">
+                    <div class="text-slate-900 dark:text-slate-200 font-semibold truncate">
+                      <%= namespace.name %>
+                    </div>
+                    <div class="text-slate-600 dark:text-slate-400 text-sm truncate">
+                      <%= namespace.full_path %>
+                    </div>
+                  </div>
+                  <div class="shrink-0">
+                    <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+                  </div>
+                </div>
               <% end %>
             <% end %>
             <%= select.with_empty_state do %>
@@ -82,20 +85,21 @@
                         aria: {
                           describedby: [
                             invalid_path ? form.field_id(:path, "error") : nil,
-                            form.field_id(:name, "hint"),
+                            form.field_id(:path, "hint"),
                           ].join(" "),
                           invalid: invalid_path,
                           required: true,
                         },
                         autofocus: invalid_path %>
+
+        <% if invalid_path %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:path, "error"),
+          errors: group.errors.full_messages_for(:path) %>
+        <% end %>
         <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
           <%= t(:"groups.create.path_help") %>
         </span>
-        <%= if invalid_path
-          render "shared/form/field_errors",
-          id: form.field_id(:path, "error"),
-          errors: group.errors.full_messages_for(:path)
-        end %>
       </div>
     </div>
   <% else %>
@@ -112,16 +116,17 @@
                         describedby: [
                           invalid_path ? form.field_id(:path, "error") : nil,
                           form.field_id(:path, "hint"),
-                        ],
+                        ].join(" "),
                         invalid: invalid_path,
                         required: true,
                       },
                       autofocus: invalid_path %>
-      <%= if invalid_path
-        render "shared/form/field_errors",
+
+      <% if invalid_path %>
+        <%= render "shared/form/field_errors",
         id: form.field_id(:path, "error"),
-        errors: group.errors.full_messages_for(:path)
-      end %>
+        errors: group.errors.full_messages_for(:path) %>
+      <% end %>
       <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
         <%= t(:"groups.create.path_help") %>
       </span>
@@ -133,8 +138,9 @@
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
   <%= form.text_area :description,
-                 aria: {
-                   describedby:
+                 {
+                   :class => "form-control",
+                   "aria-describedby" => [
                      (
                        if invalid_description
                          form.field_id(:description, "error")
@@ -142,12 +148,17 @@
                          nil
                        end
                      ),
-                   invalid: invalid_description,
-                 },
-                 autofocus: invalid_description %>
-  <%= if invalid_description
-    render "shared/form/field_errors",
+                     form.field_id(:description, "hint"),
+                   ].join(" "),
+                   "aria-invalid" => invalid_description,
+                   :autofocus => invalid_description,
+                 } %>
+  <% if invalid_description %>
+    <%= render "shared/form/field_errors",
     id: form.field_id(:description, "error"),
-    errors: group.errors.full_messages_for(:description)
-  end %>
+    errors: group.errors.full_messages_for(:description) %>
+  <% end %>
+  <span id="<%= form.field_id(:description, "hint") %>" class="field-hint">
+    <%= t(:"groups.create.description_help") %>
+  </span>
 </div>
