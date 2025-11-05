@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "selected" do %>
+  <div
+    data-controller="table-selection"
+    data-table-selection-ids-value="<%= @sample_ids %>"
+    data-table-selection-selection-outlet="#samples-table"
+  ></div>
+<% end %>
