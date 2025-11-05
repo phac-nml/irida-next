@@ -56,7 +56,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     Flipper.enable(:update_nextflow_metadata_param)
     visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
-    within('[data-controller-connected="true"]') do
+    within('div[data-controller-connected="true"]') do
       assert_field 'The header name of metadata column 3.', with: 'metadata_3'
 
       assert_selector 'table' do |table|
