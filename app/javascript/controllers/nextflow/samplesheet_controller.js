@@ -107,6 +107,7 @@ export default class extends Controller {
       this.#updateMetadataColumnHeaderNames();
       this.#disableProcessingState();
     }
+    this.element.setAttribute("data-controller-connected", "true");
   }
 
   #setSamplesheetParametersAndData() {
