@@ -76,6 +76,7 @@ module Projects
 
       namespace_group_link.destroy
 
+      assert_selector 'table', wait: 10
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
@@ -128,6 +129,7 @@ module Projects
 
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+        assert_selector 'table', wait: 10
         assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
@@ -172,6 +174,7 @@ module Projects
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
 
+      assert_selector 'table', wait: 10
       within('table') do
         assert_selector 'input.datepicker-input', count: 0
       end
@@ -277,7 +280,7 @@ module Projects
     test 'can sort by column' do
       visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
 
-      assert_text 'Displaying 4 items'
+      assert_text 'Displaying 4 items', wait: 10
       assert_selector 'table tbody tr', count: 4
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
       within('tbody') do

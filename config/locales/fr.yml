@@ -1030,11 +1030,12 @@ fr:
       level_40: Responsable
       level_50: Propriétaire
     table_component:
-      access_level: Niveau d’accès
+      access_level: Niveau d'accès
       action: Mesure
       aria_labels:
         expires_at: Expiration des membres
       created_at: Accès accordé
+      created_by: "%{timestamp} par"
       expires_at: Expiration
       group_access_level: Niveau d’accès
       group_name: Groupe

@@ -1031,6 +1031,7 @@ en:
       aria_labels:
         expires_at: Member expiration
       created_at: Access Granted
+      created_by: "%{timestamp} by"
       expires_at: Expiration
       group_access_level: Access Level
       group_name: Group

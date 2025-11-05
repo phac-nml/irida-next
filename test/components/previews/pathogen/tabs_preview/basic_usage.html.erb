@@ -1,0 +1,205 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %>
+      Pathogen Tabs - Basic Usage
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Accessible tab components with W3C ARIA patterns, keyboard navigation, and automatic activation.
+    </p>
+  </div>
+
+  <!-- Simple Three Tab Example -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:clipboard, color: :primary, class: "mr-3") %>
+      Simple Three-Tab Example
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <%= render(Pathogen::Tabs.new(id: 'simple-tabs', label: 'Simple example tabs')) do |tabs| %>
+        <% tabs.with_tab(id: 'tab-overview', label: 'Overview', selected: true) %>
+        <% tabs.with_tab(id: 'tab-features', label: 'Features') %>
+        <% tabs.with_tab(id: 'tab-usage', label: 'Usage') %>
+
+        <% tabs.with_panel(id: 'panel-overview', tab_id: 'tab-overview') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Overview</h3>
+            <p class="text-slate-700 dark:text-slate-300">
+              The Pathogen::Tabs component provides an accessible, keyboard-navigable tab interface
+              following W3C ARIA Authoring Practices.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+              <li>Full keyboard navigation support</li>
+              <li>Screen reader accessible with proper ARIA attributes</li>
+              <li>Automatic tab activation (no need to press Enter)</li>
+              <li>Roving tabindex pattern for optimal keyboard UX</li>
+            </ul>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-features', tab_id: 'tab-features') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Key Features</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <%= pathogen_icon(:keyboard, color: :primary) %>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white">Keyboard Navigation</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Arrow keys, Home, End support</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+      <%= pathogen_icon(:wheelchair, color: :success) %>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white">ARIA Compliant</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Full W3C pattern implementation</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <%= pathogen_icon(:link, color: :primary) %>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white">URL Syncing</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Bookmarkable tabs with hash</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                <%= pathogen_icon(:lightning, color: :warning) %>
+                <div>
+                  <div class="font-semibold text-slate-900 dark:text-white">Lazy Loading</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Turbo Frame integration ready</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-usage', tab_id: 'tab-usage') do %>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Basic Usage</h3>
+            <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(id: "my-tabs", label: "Content sections")) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-1", label: "First", selected: true) %>
+  <%% tabs.with_tab(id: "tab-2", label: "Second") %>
+
+  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+    Content for first tab
+  <%% end %>
+
+  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
+    Content for second tab
+  <%% end %>
+<%% end %></code></pre>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Parameter Reference -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:sliders, color: :primary, class: "mr-3") %>
+      Common Parameters
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Parameter</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Type</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Required</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Description</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">id</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">String</td>
+              <td class="py-3 px-4"><span class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded text-xs">Required</span></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Unique identifier for the tablist</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">label</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">String</td>
+              <td class="py-3 px-4"><span class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded text-xs">Required</span></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Accessible label for screen readers</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">default_index</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Integer</td>
+              <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-xs">Optional</span></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Index of initially selected tab (default: 0)</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">orientation</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-xs">Optional</span></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">:horizontal or :vertical (default: :horizontal)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">sync_url</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Boolean</td>
+              <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-xs">Optional</span></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Sync tab selection with URL hash (default: false)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Tab & Panel Counts Must Match</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">Each tab must have a corresponding panel with matching tab_id</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Automatic Activation</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">Tabs activate immediately on arrow key press (no Enter needed)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:keyboard, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Keyboard Shortcuts</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">← → (or ↑ ↓ in vertical), Home, End, Tab to exit</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:warning, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Unique IDs Required</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">All tab and panel IDs must be unique within the component</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

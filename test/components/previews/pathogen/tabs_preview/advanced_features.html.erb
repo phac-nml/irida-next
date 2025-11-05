@@ -1,0 +1,472 @@
+<div class="p-8 bg-gradient-to-br from-indigo-50 to-cyan-50 dark:from-slate-900 dark:to-indigo-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:faders, color: :primary, size: :xl, class: "inline mr-3") %>
+      Advanced Features
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Explore right content slots, custom default selection, edge cases, and lazy loading patterns.
+    </p>
+  </div>
+
+  <!-- Right Content Slot Demo -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:grid_four, color: :primary, class: "mr-3") %>
+      Right Content Slot
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-6 bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-900/20 dark:to-cyan-900/20 border-b border-slate-200 dark:border-slate-600">
+        <p class="text-slate-700 dark:text-slate-300">
+          Add action buttons, filters, or other controls to the right side of the tab list using the <code class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">right_content</code> slot.
+        </p>
+      </div>
+
+      <%= render(Pathogen::Tabs.new(id: 'tabs-with-actions', label: 'Tabs with action buttons')) do |tabs| %>
+        <% tabs.with_tab(id: 'tab-inbox', label: 'Inbox', selected: true) %>
+        <% tabs.with_tab(id: 'tab-sent', label: 'Sent') %>
+
+        <% tabs.with_right_content do %>
+          <div class="flex items-center gap-2 mr-2">
+            <button class="px-3 py-1.5 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors text-sm flex items-center gap-1.5">
+              <%= pathogen_icon(:funnel, size: :sm) %>
+              <span>Filter</span>
+            </button>
+            <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm flex items-center gap-1.5">
+              <%= pathogen_icon(:plus, size: :sm, color: :white) %>
+              <span>New Message</span>
+            </button>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-inbox', tab_id: 'tab-inbox') do %>
+          <div class="p-6 space-y-3">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Inbox (12 messages)</h3>
+            <div class="space-y-2">
+              <% [
+                { from: 'Alice Johnson', subject: 'Project Update', time: '2 hours ago' },
+                { from: 'Bob Smith', subject: 'Meeting Tomorrow', time: '5 hours ago' },
+                { from: 'Carol Williams', subject: 'Design Review', time: '1 day ago' }
+              ].each do |msg| %>
+                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
+                  <div class="flex justify-between items-start mb-1">
+                    <div class="font-semibold text-slate-900 dark:text-white"><%= msg[:from] %></div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400"><%= msg[:time] %></div>
+                  </div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400"><%= msg[:subject] %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-sent', tab_id: 'tab-sent') do %>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Sent Messages (8)</h3>
+            <p class="text-slate-600 dark:text-slate-400">Your sent messages appear here.</p>
+          </div>
+        <% end %>
+
+      <% end %>
+
+      <div class="p-6 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-200 dark:border-slate-600">
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(id: "my-tabs", label: "Tabs")) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-1", label: "First") %>
+
+  <%% tabs.with_right_content do %>
+    &lt;button class="px-3 py-1.5 bg-blue-600 text-white rounded"&gt;
+      Action Button
+    &lt;/button&gt;
+  <%% end %>
+
+  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+    Content
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Default Index Selection -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:cursor, color: :primary, class: "mr-3") %>
+      Custom Default Tab Selection
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-6 bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-900/20 dark:to-cyan-900/20 border-b border-slate-200 dark:border-slate-600">
+        <p class="text-slate-700 dark:text-slate-300">
+          Use <code class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">default_index</code> to select which tab is initially active. This demo starts on the third tab (index 2).
+        </p>
+      </div>
+
+      <%= render(Pathogen::Tabs.new(
+        id: 'tabs-custom-default',
+        label: 'Tabs with custom default',
+        default_index: 2
+      )) do |tabs| %>
+        <% tabs.with_tab(id: 'tab-step1', label: 'Step 1: Setup') %>
+        <% tabs.with_tab(id: 'tab-step2', label: 'Step 2: Configure') %>
+        <% tabs.with_tab(id: 'tab-step3', label: 'Step 3: Review') %>
+        <% tabs.with_tab(id: 'tab-step4', label: 'Step 4: Complete') %>
+
+        <% tabs.with_panel(id: 'panel-step1', tab_id: 'tab-step1') do %>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Step 1: Initial Setup</h3>
+            <p class="text-slate-600 dark:text-slate-400">Configure your basic settings here.</p>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-step2', tab_id: 'tab-step2') do %>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Step 2: Advanced Configuration</h3>
+            <p class="text-slate-600 dark:text-slate-400">Set up advanced options.</p>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-step3', tab_id: 'tab-step3') do %>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+              <%= pathogen_icon(:check_circle, color: :success) %>
+              Step 3: Review (You start here!)
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400">This tab opens by default because <code class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">default_index: 2</code> was set.</p>
+            <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <p class="text-sm text-green-800 dark:text-green-200">
+                <strong>Use Case:</strong> Perfect for multi-step forms where the user may need to jump back to review or edit previous steps.
+              </p>
+            </div>
+          </div>
+        <% end %>
+
+        <% tabs.with_panel(id: 'panel-step4', tab_id: 'tab-step4') do %>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Step 4: Complete</h3>
+            <p class="text-slate-600 dark:text-slate-400">Finalize and submit your configuration.</p>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="p-6 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-200 dark:border-slate-600">
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+  id: "my-tabs",
+  label: "Multi-step form",
+  default_index: 2 # <-- Start on third tab (zero-based)
+)) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-1", label: "Step 1") %>
+  <%% tabs.with_tab(id: "tab-2", label: "Step 2") %>
+  <%% tabs.with_tab(id: "tab-3", label: "Step 3") %>
+  ...
+<%% end %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edge Cases -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:flask, color: :warning, class: "mr-3") %>
+      Edge Cases & Limits
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Single Tab -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-b border-slate-200 dark:border-slate-600">
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <%= pathogen_icon(:square, color: :primary) %>
+            Single Tab
+          </h3>
+        </div>
+        <%= render(Pathogen::Tabs.new(id: 'single-tab', label: 'Single tab example')) do |tabs| %>
+          <% tabs.with_tab(id: 'tab-only', label: 'Only Tab') %>
+          <% tabs.with_panel(id: 'panel-only', tab_id: 'tab-only') do %>
+            <div class="p-4">
+              <p class="text-sm text-slate-600 dark:text-slate-400">
+                The component works fine with a single tab, though you might question if tabs are the right UI choice here!
+              </p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Many Tabs -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-b border-slate-200 dark:border-slate-600">
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <%= pathogen_icon(:grid_four, color: :primary) %>
+            Many Tabs (8+)
+          </h3>
+        </div>
+        <%= render(Pathogen::Tabs.new(id: 'many-tabs', label: 'Many tabs example')) do |tabs| %>
+          <% (1..10).each do |i| %>
+            <% tabs.with_tab(id: "tab-#{i}", label: "Tab #{i}", selected: i == 1) %>
+          <% end %>
+          <% (1..10).each do |i| %>
+            <% tabs.with_panel(id: "panel-#{i}", tab_id: "tab-#{i}") do %>
+              <div class="p-4">
+                <p class="text-sm text-slate-600 dark:text-slate-400">Content for tab <%= i %></p>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <div class="p-4 bg-amber-50 dark:bg-amber-900/20 border-t border-amber-200 dark:border-amber-800">
+          <p class="text-xs text-amber-800 dark:text-amber-200">
+            <strong>Note:</strong> With many tabs, horizontal scrolling may occur. Consider vertical orientation or a different UI pattern for 10+ tabs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lazy Loading Documentation -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightning, color: :warning, class: "mr-3") %>
+      Turbo Frame Lazy Loading
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-slate-200 dark:border-slate-600">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :warning) %>
+          <div>
+            <p class="text-slate-700 dark:text-slate-300 mb-2">
+              <strong>Note:</strong> Lazy loading cannot be demonstrated in this preview because it requires actual backend routes and Turbo Frame endpoints.
+            </p>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+              Below is documentation on how to implement lazy loading with Turbo Frames in your application.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <!-- How It Works -->
+        <div>
+          <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:gear, color: :primary) %>
+            How Lazy Loading Works
+          </h3>
+          <p class="text-slate-700 dark:text-slate-300 mb-4">
+            The Pathogen::Tabs component integrates seamlessly with Hotwire Turbo Frames to support lazy-loaded content:
+          </p>
+
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-semibold">1</div>
+              <div>
+                <div class="font-semibold text-slate-900 dark:text-white mb-1">Initial Page Load</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">
+                  Only the active tab's content loads immediately. Other tabs contain empty Turbo Frames with <code class="bg-slate-100 dark:bg-slate-600 px-1 rounded">loading="lazy"</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-semibold">2</div>
+              <div>
+                <div class="font-semibold text-slate-900 dark:text-white mb-1">User Clicks Tab</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">
+                  Tab becomes visible → Stimulus controller removes <code class="bg-slate-100 dark:bg-slate-600 px-1 rounded">hidden</code> class from panel
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-semibold">3</div>
+              <div>
+                <div class="font-semibold text-slate-900 dark:text-white mb-1">Turbo Frame Loads</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">
+                  Panel becomes visible → Turbo automatically fetches content from <code class="bg-slate-100 dark:bg-slate-600 px-1 rounded">src</code> attribute
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-semibold">4</div>
+              <div>
+                <div class="font-semibold text-slate-900 dark:text-white mb-1">Content Rendered</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">
+                  Turbo replaces frame content with server response → User sees loaded content
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Implementation Example -->
+        <div>
+          <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:code, color: :primary) %>
+            Implementation Example
+          </h3>
+
+          <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto mb-4">
+            <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(id: "lazy-tabs", label: "Lazy loaded tabs")) do |tabs| %>
+  <%% tabs.with_tab(id: "tab-overview", label: "Overview", selected: true) %>
+  <%% tabs.with_tab(id: "tab-analytics", label: "Analytics") %>
+  <%% tabs.with_tab(id: "tab-reports", label: "Reports") %>
+
+  <!-- First panel: eager loaded (no turbo_frame) -->
+  <%% tabs.with_panel(id: "panel-overview", tab_id: "tab-overview") do %>
+    <div class="p-6">
+      <h3>Overview Content</h3>
+      <p>This loads immediately on page load.</p>
+    </div>
+  <%% end %>
+
+  <!-- Second panel: lazy loaded with Turbo Frame -->
+  <%% tabs.with_panel(id: "panel-analytics", tab_id: "tab-analytics") do %>
+    <%%= turbo_frame_tag "analytics-content",
+                         src: analytics_project_path(@project),
+                         loading: :lazy do %>
+      <div class="p-6 text-center">
+        <div class="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto"></div>
+        <p class="mt-2 text-slate-600">Loading analytics...</p>
+      </div>
+    <%% end %>
+  <%% end %>
+
+  <!-- Third panel: lazy loaded with Turbo Frame -->
+  <%% tabs.with_panel(id: "panel-reports", tab_id: "tab-reports") do %>
+    <%%= turbo_frame_tag "reports-content",
+                         src: reports_project_path(@project),
+                         loading: :lazy do %>
+      <div class="p-6 text-center">
+        <div class="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto"></div>
+        <p class="mt-2 text-slate-600">Loading reports...</p>
+      </div>
+    <%% end %>
+  <%% end %>
+<%% end %></code></pre>
+          </div>
+
+          <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <p class="text-sm text-blue-800 dark:text-blue-200">
+              <strong>Key:</strong> The <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">loading: :lazy</code> attribute tells Turbo to wait until the frame is visible before fetching content.
+            </p>
+          </div>
+        </div>
+
+        <!-- Backend Routes -->
+        <div>
+          <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:hard_drives, color: :primary) %>
+            Backend Requirements
+          </h3>
+
+          <p class="text-slate-700 dark:text-slate-300 mb-4">
+            Your backend needs to return partial HTML wrapped in a matching Turbo Frame:
+          </p>
+
+          <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+            <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"># routes.rb
+resources :projects do
+  member do
+    get :analytics
+    get :reports
+  end
+end
+
+# projects_controller.rb
+def analytics
+  @project = Project.find(params[:id])
+  # Heavy computation here
+  @analytics_data = AnalyticsService.new(@project).compute
+
+  render turbo_frame: "analytics-content"
+end
+
+# views/projects/analytics.html.erb
+<%%= turbo_frame_tag "analytics-content" do %>
+  <div class="p-6">
+    <h3 class="text-xl font-semibold">Analytics</h3>
+    <!-- Render complex analytics charts/data -->
+    <%%= render "analytics_charts", data: @analytics_data %>
+  </div>
+<%% end %></code></pre>
+          </div>
+        </div>
+
+        <!-- Benefits -->
+        <div>
+          <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:check_circle, color: :success) %>
+            Benefits of Lazy Loading
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div class="flex items-start gap-3">
+                <%= pathogen_icon(:lightning, color: :success) %>
+                <div>
+                  <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Faster Initial Load</h4>
+                  <p class="text-sm text-green-800 dark:text-green-200">
+                    Only load what the user sees first, reducing initial page weight by 70-90%
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div class="flex items-start gap-3">
+                <%= pathogen_icon(:database, color: :success) %>
+                <div>
+                  <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Reduced Server Load</h4>
+                  <p class="text-sm text-green-800 dark:text-green-200">
+                    Only execute expensive queries when tabs are actually viewed
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div class="flex items-start gap-3">
+                <%= pathogen_icon(:chart_bar, color: :success) %>
+                <div>
+                  <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Better Performance</h4>
+                  <p class="text-sm text-green-800 dark:text-green-200">
+                    Improved Core Web Vitals (LCP, TBT) by deferring heavy content
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div class="flex items-start gap-3">
+                <%= pathogen_icon(:arrows_clockwise, color: :success) %>
+                <div>
+                  <h4 class="font-semibold text-green-900 dark:text-green-100 mb-1">Seamless UX</h4>
+                  <p class="text-sm text-green-800 dark:text-green-200">
+                    Loading states provide feedback while content fetches in the background
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testing Reference -->
+        <div class="p-4 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-lg">
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:flask, color: :primary) %>
+            <div class="text-sm">
+              <strong class="text-violet-900 dark:text-violet-100">Testing:</strong>
+              <span class="text-violet-800 dark:text-violet-200">
+                See <code class="bg-violet-100 dark:bg-violet-900 px-1 rounded">test/components/pathogen/system/tabs_lazy_loading_test.rb</code> for comprehensive test patterns and implementation guides for lazy loading integration.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

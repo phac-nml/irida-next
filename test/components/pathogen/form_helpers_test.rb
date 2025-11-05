@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'ostruct'
 
 module Pathogen
   # rubocop:disable Metrics/ClassLength
@@ -12,6 +11,7 @@ module Pathogen
     # Test class that includes FormHelpers for testing
     class TestComponent
       include Pathogen::FormHelper
+
       attr_reader :form, :attribute, :value, :options
 
       def initialize(attribute:, form: nil, value: nil, **options)
