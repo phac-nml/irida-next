@@ -700,7 +700,7 @@ a.pill-focus-reset:focus-visible {
   white-space: nowrap;
 }
 
-.ts-control input {
+.ts-control {
   @apply text-slate-900 dark:text-white;
 }
 
@@ -720,6 +720,7 @@ a.pill-focus-reset:focus-visible {
   @apply outline-3 outline-offset-2 outline-black dark:outline-white;
 }
 
+.ts-control,
 .ts-wrapper.single .ts-control {
   @apply rounded-lg border border-slate-300 bg-none shadow-none dark:border-slate-600;
 }
