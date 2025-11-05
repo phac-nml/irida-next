@@ -1,6 +1,7 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <%= render LiveRegionComponent.new(controller: "selection", data: { selection_target: "status" }) %>
       <table
         class='
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -9,7 +10,7 @@
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
-      >
+        >
         <thead class='@2xl:sticky @2xl:top-0 z-10 uppercase'>
           <tr
             class="
@@ -174,12 +175,6 @@
                 "
                 colspan="2"
               >
-                <span
-                  data-selection-target="status"
-                  role="status"
-                  aria-live="polite"
-                  class="sr-only"
-                ></span>
                 <span>
                   <%= t(".counts.samples") %>:
                   <strong><%= @pagy.count %></strong>
@@ -222,7 +217,6 @@
           <% dialog.with_header(
             title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
           ) %>
-
           <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
             <span data-message-type="wov" class="hidden">
               <%= raw t(
@@ -254,7 +248,6 @@
       </div>
     <% end %>
   <% end %>
-
 <% else %>
   <div class="empty_state_message">
     <%= viral_empty(

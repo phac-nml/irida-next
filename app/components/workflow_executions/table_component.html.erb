@@ -1,6 +1,7 @@
 <% if @has_workflow_executions %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <%= render LiveRegionComponent.new(controller: "selection", data: { selection_target: "status" }) %>
       <table
         class='
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -239,14 +240,6 @@
                   <%= t(".counts.selected") %>:
                   <strong data-selection-target="selected">0</strong>
                 </span>
-                <div
-                  aria-live="polite"
-                  aria-atomic="true"
-                  role="status"
-                  class="sr-only"
-                  data-selection-target="status"
-                >
-                </div>
               </td>
               <td
                 colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"

@@ -1,0 +1,7 @@
+<span
+  role="status"
+  aria-live="<%= politeness %>"
+  <%= 'aria-atomic="true"'.html_safe if atomic %>
+  class="sr-only"
+  <%= tag.attributes(data: data_attributes) %>
+></span>
