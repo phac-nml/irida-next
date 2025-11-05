@@ -767,17 +767,17 @@ export default class extends Controller {
   #updateMetadataColumnHeaderNames() {
     // Update the values for the fields under 'The column header names of the metadata columns'
 
-    let metadataSamplesheetColumns = document.querySelectorAll(
-      '[id^="field-metadata_"]',
+    let metadataSamplesheetColumns = this.element.querySelectorAll(
+      ".metadata_field-header",
     );
 
-    metadataSamplesheetColumns.forEach(function (metadataSamplesheetColumn) {
+    metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
       const columnName = metadataSamplesheetColumn.getAttribute(
         "data-metadata-header",
       );
       const metadataField = metadataSamplesheetColumn.value;
 
-      let metadataParameter = document.querySelector(
+      let metadataParameter = this.element.querySelector(
         `input[data-metadata-header-name="${columnName}"]`,
       );
 

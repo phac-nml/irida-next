@@ -5,7 +5,7 @@ module Nextflow
     # Renders a header in the sample sheet table
     class HeaderComponent < Component
       attr_reader :namespace_id, :header, :property, :samples, :metadata_fields, :required_properties, :workflow_params,
-                  :selected
+                  :selected, :metadata_field_options
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required_properties:,
@@ -18,6 +18,7 @@ module Nextflow
         @required_properties = required_properties
         @workflow_params = workflow_params
         @selected = default_header
+        @metadata_field_options = metadata_fields_for_field
       end
 
       # rubocop:enable Metrics/ParameterLists
@@ -27,8 +28,8 @@ module Nextflow
       def metadata_fields_for_field
         field = default_header
         options = @metadata_fields.include?(field) ? @metadata_fields : [field].concat(@metadata_fields)
-        label = t('components.nextflow.samplesheet.header_component.default', label: field)
-        options.map { |f| [f.eql?(field) ? label : f, f] }
+        default_label = I18n.t('components.nextflow.samplesheet.header_component.default', label: field)
+        options.map { |f| [f.eql?(field) ? default_label : f, f] }
       end
 
       def default_header
