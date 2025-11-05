@@ -110,7 +110,7 @@ module Projects
                  when 'params'
                    [workflow_header, t(:'workflow_executions.show.tabs.params'), @project.full_name].join(' · ')
                  when 'samplesheet'
-                   [workflow_header,t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
+                   [workflow_header, t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
                  when 'files'
                    [workflow_header, t(:'workflow_executions.show.tabs.files'), @project.full_name].join(' · ')
                  else

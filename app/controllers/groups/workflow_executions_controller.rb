@@ -99,7 +99,7 @@ module Groups
                  when 'params'
                    [workflow_header, t(:'workflow_executions.show.tabs.params'), @group.full_name].join(' · ')
                  when 'samplesheet'
-                   [workflow_header,t(:'workflow_executions.show.tabs.samplesheet'), @group.full_name].join(' · ')
+                   [workflow_header, t(:'workflow_executions.show.tabs.samplesheet'), @group.full_name].join(' · ')
                  when 'files'
                    [workflow_header, t(:'workflow_executions.show.tabs.files'), @group.full_name].join(' · ')
                  else
