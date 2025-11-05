@@ -8,56 +8,57 @@
   <% end %>
 <% end %>
 
-<div class="flex flex-col">
-  <%= render Pathogen::TabsPanel.new(id: "dashboard-projects-tabs") do |tabs_panel| %>
-    <% tabs_panel.with_tab(
-      id: "all",
-      text: t(".all"),
-      href: dashboard_projects_url(),
-      selected: !params[:personal],
-    ) %>
-    <% tabs_panel.with_tab(
-      id: "personal",
-      text: t(".personal"),
-      href: dashboard_projects_url(personal: "true"),
-      selected: params[:personal],
-    ) %>
-    <% tabs_panel.with_right_content do %>
-      <div class="flex flex-wrap gap-2 mb-2 justify-end">
-        <% if @has_projects %>
-          <%= render SearchComponent.new(
-            query: @q,
-            url: dashboard_projects_url(**request.query_parameters),
-            search_attribute: :namespace_name_or_namespace_puid_cont,
+<%= render Pathogen::TabsNav.new(id: "dashboard-projects-tabs", label: t(".tabs_label")) do |nav| %>
+  <% nav.with_tab(
+    id: "all",
+    text: t(".all"),
+    href: dashboard_projects_url(),
+    selected: !params[:personal]
+  ) %>
+  <% nav.with_tab(
+    id: "personal",
+    text: t(".personal"),
+    href: dashboard_projects_url(personal: "true"),
+    selected: params[:personal]
+  ) %>
+  <% nav.with_right_content do %>
+    <div class="flex flex-wrap gap-2 mb-2 justify-end">
+      <% if @has_projects %>
+        <%= render SearchComponent.new(
+          query: @q,
+          url: dashboard_projects_url(**request.query_parameters),
+          search_attribute: :namespace_name_or_namespace_puid_cont,
           label: t('common.controls.search'),
-            placeholder: t(".search.placeholder"),
-            total_count: @pagy.count,
-            class: "max-sm:grow",
-            value: @q.namespace_name_or_namespace_puid_cont,
-          ) do %>
-            <% if params[:personal] == 'true' %>
-              <input type="hidden" name="personal" value="true">
-            <% end %>
+          placeholder: t(".search.placeholder"),
+          total_count: @pagy.count,
+          class: "max-sm:grow",
+          value: @q.namespace_name_or_namespace_puid_cont,
+        ) do %>
+          <% if params[:personal] == 'true' %>
+            <input type="hidden" name="personal" value="true">
           <% end %>
-
-          <%= render Ransack::SortDropdownComponent.new(
-            @q,
-            "projects",
-            [
-              { name: "updated_at", dir: "desc" },
-              { name: "updated_at", dir: "asc" },
-              { name: "namespace_name", dir: "asc" },
-              { name: "namespace_name", dir: "desc" },
-              { name: "created_at", dir: "desc" },
-              { name: "created_at", dir: "asc" },
-            ],
-          ) %>
         <% end %>
-      </div>
-    <% end %>
 
-    <% if @has_projects %>
-      <div class="flex flex-col gap-2" id="groups_tree">
+        <%= render Ransack::SortDropdownComponent.new(
+          @q,
+          "projects",
+          [
+            { name: "updated_at", dir: "desc" },
+            { name: "updated_at", dir: "asc" },
+            { name: "namespace_name", dir: "asc" },
+            { name: "namespace_name", dir: "desc" },
+            { name: "created_at", dir: "desc" },
+            { name: "created_at", dir: "asc" },
+          ],
+        ) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="flex flex-col mt-4">
+  <% if @has_projects %>
+    <div class="flex flex-col gap-2" id="groups_tree">
 
         <%= render TreegridComponent.new do | component | %>
           <% @projects.each_with_index do |project, project_index| %>
@@ -80,15 +81,14 @@
             description: t("components.viral.pagy.empty_state.description"),
           ) %>
         <% end %>
-      </div>
-    <% else %>
-      <div class="empty_state_message">
-        <%= viral_empty(
-          icon_name: Project.icon,
-          title: t(".no_projects"),
-          description: t(".no_projects_description"),
-        ) %>
-      </div>
-    <% end %>
+    </div>
+  <% else %>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        icon_name: Project.icon,
+        title: t(".no_projects"),
+        description: t(".no_projects_description"),
+      ) %>
+    </div>
   <% end %>
 </div>

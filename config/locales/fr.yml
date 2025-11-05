@@ -400,7 +400,7 @@ fr:
         all: Tous
         create_project_button: Nouveau projet
         no_projects: Aucun projet
-        no_projects_description: Vous n’avez actuellement aucun projet.
+        no_projects_description: Vous n'avez actuellement aucun projet.
         pagy_item: Projets
         personal: Personnel
         search:
@@ -412,6 +412,7 @@ fr:
           namespace_name_desc: Nom, décroissant
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
+        tabs_label: Filtres de projet
         title: Projets
   data_exports:
     create:

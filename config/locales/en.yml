@@ -412,6 +412,7 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
+        tabs_label: Project filters
         title: Projects
   data_exports:
     create:

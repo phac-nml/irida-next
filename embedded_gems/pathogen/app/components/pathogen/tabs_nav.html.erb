@@ -1,0 +1,23 @@
+<nav <%= tag.attributes(@system_arguments) %>>
+  <%# Tab list container - matches Pathogen::Tabs layout %>
+  <div
+    class="<%= class_names(
+      'w-full flex flex-wrap -mb-px border-b',
+      'text-sm font-medium text-center',
+      'text-slate-500 dark:text-slate-400',
+      'border-slate-200 dark:border-slate-700',
+      'flex-grow min-w-0 sm:border-b-0 sm:-mb-px'
+    ) %>"
+  >
+    <% tabs.each do |tab| %>
+      <%= tab %>
+    <% end %>
+  </div>
+
+  <%# Right content area - matches Pathogen::Tabs right_content positioning %>
+  <% if right_content? %>
+    <div class="items-center shrink-0 mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:-mb-px">
+      <%= right_content %>
+    </div>
+  <% end %>
+</nav>
