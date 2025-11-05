@@ -105,19 +105,16 @@ module Projects
       when 'show'
         workflow_execution_identifier =
           @workflow_execution.name.nil? ? @workflow_execution.id : @workflow_execution.name
+        workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
         @title = case @tab
                  when 'params'
-                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                    t(:'workflow_executions.show.tabs.params'), @project.full_name].join(' · ')
+                   [workflow_header, t(:'workflow_executions.show.tabs.params'), @project.full_name].join(' · ')
                  when 'samplesheet'
-                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                    t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
+                   [workflow_header,t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
                  when 'files'
-                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                    t(:'workflow_executions.show.tabs.files'), @project.full_name].join(' · ')
+                   [workflow_header, t(:'workflow_executions.show.tabs.files'), @project.full_name].join(' · ')
                  else
-                   ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                    t(:'workflow_executions.show.tabs.summary'), @project.full_name].join(' · ')
+                   [workflow_header, t(:'workflow_executions.show.tabs.summary'), @project.full_name].join(' · ')
                  end
       end
     end

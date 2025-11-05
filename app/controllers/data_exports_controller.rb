@@ -197,11 +197,11 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
              when 'show'
                data_export_identifier = @data_export.name.nil? ? @data_export.id : @data_export.name
                if @tab == 'preview'
-                 ["#{data_export_identifier}", t(:'data_exports.show.tabs.preview'),
-                  "#{t(:'data_exports.show.page_title')}"].join(' · ')
+                 [data_export_identifier, t(:'data_exports.show.tabs.preview'),
+                  t(:'data_exports.show.page_title')].join(' · ')
                else
-                 ["#{data_export_identifier}", t(:'data_exports.show.tabs.summary'),
-                  "#{t(:'data_exports.show.page_title')}"].join(' · ')
+                 [data_export_identifier, t(:'data_exports.show.tabs.summary'),
+                  t(:'data_exports.show.page_title')].join(' · ')
                end
              else
                t(:'general.default_sidebar.data_exports')

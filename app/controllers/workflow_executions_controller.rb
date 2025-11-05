@@ -114,19 +114,16 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       @title = t(:'general.default_sidebar.workflows').to_s
     when 'show'
       workflow_execution_identifier = @workflow_execution.name.nil? ? @workflow_execution.id : @workflow_execution.name
+      workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
       @title = case @tab
                when 'params'
-                 ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                  t(:'workflow_executions.show.tabs.params')].join(' · ')
+                 [workflow_header, t(:'workflow_executions.show.tabs.params')].join(' · ')
                when 'samplesheet'
-                 ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                  t(:'workflow_executions.show.tabs.samplesheet')].join(' · ')
+                 [workflow_header, t(:'workflow_executions.show.tabs.samplesheet')].join(' · ')
                when 'files'
-                 ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                  t(:'workflow_executions.show.tabs.files')].join(' · ')
+                 [workflow_header, t(:'workflow_executions.show.tabs.files')].join(' · ')
                else
-                 ["#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}",
-                  t(:'workflow_executions.show.tabs.summary')].join(' · ')
+                 [workflow_header, t(:'workflow_executions.show.tabs.summary')].join(' · ')
                end
     end
   end
