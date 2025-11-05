@@ -72,7 +72,7 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
               'x-irida-next-selected': 'new_isolates_date'
             },
             metadata_2: { # rubocop:disable Naming/VariableNumber
-              'x-irida-next-selected': 'prediceted_primary_identification_name'
+              'x-irida-next-selected': 'predicted_primary_identification_name'
             }
           },
           required: %w[
