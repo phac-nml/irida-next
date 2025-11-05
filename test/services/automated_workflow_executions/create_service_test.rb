@@ -13,7 +13,7 @@ module AutomatedWorkflowExecutions
     test 'create automated workflow execution with valid params and authorized namespace' do
       valid_params = {
         namespace: @project_namespace,
-        metadata: { workflow_name: 'phac-nml/iridanextexample', pipeline_id: 'phac-nml/iridanextexample',
+        metadata: { pipeline_id: 'phac-nml/iridanextexample',
                     workflow_version: '1.0.2' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,
@@ -28,7 +28,7 @@ module AutomatedWorkflowExecutions
     test 'create automated workflow execution with invalid params and authorized namespace' do
       invalid_params = {
         namespace: @project_namespace,
-        metadata: { workflow_name: 'phac-nml/iridanextexample', pipeline_id: 'phac-nml/iridanextexample' },
+        metadata: { pipeline_id: 'phac-nml/iridanextexample' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,
         update_samples: true
@@ -44,7 +44,7 @@ module AutomatedWorkflowExecutions
     test 'create automated workflow execution with valid params but unauthorized namespace' do
       valid_params = {
         namespace: @project_namespace,
-        metadata: { workflow_name: 'phac-nml/iridanextexample', pipeline_id: 'phac-nml/iridanextexample',
+        metadata: { pipeline_id: 'phac-nml/iridanextexample',
                     workflow_version: '1.0.2' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,

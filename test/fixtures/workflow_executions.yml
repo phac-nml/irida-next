@@ -8,7 +8,6 @@ DEFAULTS: &DEFAULTS
   metadata:
     {
       pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
       workflow_version: "1.0.2",
     }
 
@@ -36,8 +35,6 @@ workflow_execution_gasclustering:
 
 irida_next_example:
   <<: *DEFAULTS
-  metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: { "assembler": "stub" }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
@@ -64,7 +61,6 @@ irida_next_example_prepared:
   <<: *DEFAULTS
   metadata:
     {
-      workflow_name: "irida_next_example_prepared",
       pipeline_id: "irida_next_example_prepared",
       workflow_version: "1.0dev",
     }
@@ -84,12 +80,6 @@ irida_next_example_prepared:
 
 irida_next_example_submitted:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -106,12 +96,6 @@ irida_next_example_submitted:
 
 irida_next_example_completed:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/nextflow/samplesheet_schema.json",
@@ -129,12 +113,6 @@ irida_next_example_completed:
 
 irida_next_example_completed_2_files:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -152,12 +130,6 @@ irida_next_example_completed_2_files:
 
 irida_next_example_completed_unclean:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -175,12 +147,6 @@ irida_next_example_completed_unclean:
 
 irida_next_example_error:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -197,12 +163,6 @@ irida_next_example_error:
 
 irida_next_example_error_unclean:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -219,12 +179,6 @@ irida_next_example_error_unclean:
 
 irida_next_example_canceling:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -243,7 +197,6 @@ irida_next_example_canceled:
   <<: *DEFAULTS
   metadata:
     {
-      workflow_name: "irida_next_example_canceled",
       pipeline_id: "irida_next_example_canceled",
       workflow_version: "1.0dev",
     }
@@ -263,12 +216,6 @@ irida_next_example_canceled:
 
 irida_next_example_canceled_unclean:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -285,12 +232,6 @@ irida_next_example_canceled_unclean:
 
 irida_next_example_running:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -307,12 +248,6 @@ irida_next_example_running:
 
 irida_next_example_new:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -329,12 +264,6 @@ irida_next_example_new:
 
 irida_next_example_completing_a:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -353,12 +282,6 @@ irida_next_example_completing_a:
 
 irida_next_example_completing_b:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -376,12 +299,6 @@ irida_next_example_completing_b:
 
 irida_next_example_completing_c:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -400,12 +317,6 @@ irida_next_example_completing_c:
 
 irida_next_example_completing_d:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -423,12 +334,6 @@ irida_next_example_completing_d:
 
 irida_next_example_completing_e:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -446,12 +351,6 @@ irida_next_example_completing_e:
 
 irida_next_example_completing_f:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -471,12 +370,6 @@ irida_next_example_completing_f:
 
 irida_next_example_completing_g:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -496,12 +389,6 @@ irida_next_example_completing_g:
 
 irida_next_example_completing_h:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -520,12 +407,6 @@ irida_next_example_completing_h:
 
 irida_next_example_completed_with_output:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -543,12 +424,6 @@ irida_next_example_completed_with_output:
 
 automated_workflow_execution:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -567,12 +442,6 @@ automated_workflow_execution:
 <% (1..25).each do |n| %>
 workflow_execution<%= (n) %>:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -590,12 +459,6 @@ workflow_execution<%= (n) %>:
 
 workflow_execution_existing:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -610,12 +473,6 @@ workflow_execution_existing:
 
 automated_example_prepared:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -633,12 +490,6 @@ automated_example_prepared:
 
 automated_example_submitted:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -655,12 +506,6 @@ automated_example_submitted:
 
 automated_example_completed:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -678,12 +523,6 @@ automated_example_completed:
 
 automated_example_error:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -700,12 +539,6 @@ automated_example_error:
 
 automated_example_canceling:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -722,12 +555,6 @@ automated_example_canceling:
 
 automated_example_canceled:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -744,12 +571,6 @@ automated_example_canceled:
 
 automated_example_running:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -766,12 +587,6 @@ automated_example_running:
 
 automated_example_new:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -788,12 +603,6 @@ automated_example_new:
 
 automated_workflow_execution_existing:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -809,12 +618,6 @@ automated_workflow_execution_existing:
 
 irida_next_example_end_to_end:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -830,12 +633,6 @@ irida_next_example_end_to_end:
 
 irida_next_example_completed_DELETE:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -853,7 +650,6 @@ irida_next_example_completed_DELETE:
 
 irida_next_example_error_DELETE:
   <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -871,7 +667,6 @@ irida_next_example_error_DELETE:
 
 irida_next_example_canceled_DELETE:
   <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -889,7 +684,6 @@ irida_next_example_canceled_DELETE:
 
 irida_next_example_completed_unclean_DELETE:
   <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -907,7 +701,6 @@ irida_next_example_completed_unclean_DELETE:
 
 irida_next_example_error_unclean_DELETE:
   <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -925,7 +718,6 @@ irida_next_example_error_unclean_DELETE:
 
 irida_next_example_canceled_unclean_DELETE:
   <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -992,12 +784,6 @@ workflow_execution_shared3:
 
 workflow_execution_completed_shared1:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -1016,12 +802,6 @@ workflow_execution_completed_shared1:
 
 workflow_execution_completed_shared2:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -1040,12 +820,6 @@ workflow_execution_completed_shared2:
 
 workflow_execution_group_shared1:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -1061,12 +835,6 @@ workflow_execution_group_shared1:
 
 workflow_execution_group_shared2:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -1097,7 +865,6 @@ workflow_execution_completed_group_shared1:
   metadata:
     {
       pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
       workflow_version: "1.0.3",
     }
   workflow_params:
@@ -1121,7 +888,6 @@ workflow_execution_completed_group_shared2:
   metadata:
     {
       pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
       workflow_version: "1.0.3",
     }
   workflow_params:
@@ -1212,12 +978,6 @@ workflow_execution_group_shared_running:
 
 workflow_execution_group_shared_error:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -1235,12 +995,6 @@ workflow_execution_group_shared_error:
 
 workflow_execution_group_shared_canceling:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",
@@ -1258,12 +1012,6 @@ workflow_execution_group_shared_canceling:
 
 workflow_execution_group_shared_canceled:
   <<: *DEFAULTS
-  metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_name: "phac-nml/iridanextexample",
-      workflow_version: "1.0.2",
-    }
   workflow_params:
     {
       input: "/blah/samplesheet.csv",

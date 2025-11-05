@@ -62,7 +62,7 @@ Résultat
 }
 ```
 
-Les champs `name` et `version` seront utilisés dans la prochaine étape. Dans cet exemple, la version `1.0.3`.
+Les champs `pipelineId` et `version` seront utilisés dans la prochaine étape. Dans cet exemple, la version `1.0.3`.
 
 ### 2. Interroger les informations sur le pipeline
 
@@ -70,10 +70,7 @@ Nous sommes capables d'obtenir toutes les informations sur un pipeline avec cett
 
 ```graphql
 query getPipelineInfo {
-  pipeline(
-    workflowName: "phac-nml/iridanextexample"
-    workflowVersion: "1.0.3"
-  ) {
+  pipeline(pipelineId: "phac-nml/iridanextexample", workflowVersion: "1.0.3") {
     automatable
     description
     executable
@@ -87,11 +84,112 @@ query getPipelineInfo {
 
 Résultat : (tronqué pour la brièveté - voir fichier d'origine pour le résultat complet)
 
+```json
+{
+  "data": {
+    "pipeline": {
+      "automatable": false,
+      "description": "IRIDA Next Example Pipeline",
+      "executable": true,
+      "metadata": {
+        "pipeline_id": "phac-nml/iridanextexample",
+        "workflow_version": {
+          "name": "1.0.3"
+        }
+      },
+      "name": "phac-nml/iridanextexample",
+      "version": "1.0.3",
+      "workflowParams": {
+        "input_output_options": {
+          "title": "Input/output options",
+          "description": "Define where the pipeline should find input data and save output data.",
+          "properties": {
+            "input": {
+              "type": "string",
+              "format": "file-path",
+              "exists": true,
+              "mimetype": "text/csv",
+              "pattern": "^\\S+\\.csv$",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema",
+                "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample/main/assets/schema_input.json",
+                "title": "phac-nml/iridanextexample pipeline - params.input schema",
+                "description": "Schema for the file provided with params.input",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sample": {
+                      "type": "string",
+                      "pattern": "^\\S+$",
+                      "meta": ["id"],
+                      "unique": true,
+                      "errorMessage": "Sample name must be provided and cannot contain spaces"
+                    },
+                    "fastq_1": {
+                      "type": "string",
+                      "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
+                      "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'"
+                    },
+                    "fastq_2": {
+                      "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["sample", "fastq_1"]
+                }
+              },
+              "description": "Path to comma-separated file containing information about the samples in the experiment.",
+              "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+              "fa_icon": "fas fa-file-csv",
+              "required": false
+            },
+            "project_name": {
+              "type": "string",
+              "default": "assembly",
+              "pattern": "^\\S+$",
+              "description": "The name of the project.",
+              "fa_icon": "fas fa-tag",
+              "required": false
+            },
+            "assembler": {
+              "type": "string",
+              "default": "stub",
+              "fa_icon": "fas fa-desktop",
+              "description": "The sequence assembler to use for sequence assembly.",
+              "enum": ["default", "stub", "experimental"],
+              "required": false
+            },
+            "random_seed": {
+              "type": "integer",
+              "default": 1,
+              "fa_icon": "fas fa-dice-six",
+              "description": "The random seed to use for sequence assembly.",
+              "minimum": 1,
+              "required": false
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
 La sortie nous informe de la structure des champs que nous fournirons pour exécuter le pipeline.
 
 Spécifiquement, nous utiliserons les champs suivants du résultat :
 
-- `workflowName`
+- `pipelineId`
 - `workflowVersion`
 - `workflowParams`
   - `assembler`
@@ -185,7 +283,7 @@ mutation submitWorkflowExecution {
       projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
       updateSamples: false
       emailNotification: false
-      workflowName: "phac-nml/iridanextexample"
+      pipelineId: "phac-nml/iridanextexample"
       workflowVersion: "1.0.3"
       workflowParams: {
         assembler: "stub"

@@ -61,7 +61,6 @@ module Projects
       post namespace_project_automated_workflow_executions_path(@namespace, project),
            params: { workflow_execution: {
              metadata: { pipeline_id: '/phac-nml/iridanextexample',
-                         workflow_name: '/phac-nml/iridanextexample',
                          workflow_version: '1.0.2' },
              workflow_params: { assembler: 'stub' },
              email_notification: true,

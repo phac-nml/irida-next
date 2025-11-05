@@ -14,7 +14,6 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
         projectId: $project_id
         updateSamples: false
         emailNotification: false
-        workflowName: "phac-nml/iridanextexample"
         pipelineId: "phac-nml/iridanextexample"
         workflowVersion: "1.0.3"
         workflowParams: {

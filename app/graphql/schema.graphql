@@ -2611,11 +2611,6 @@ input SubmitWorkflowExecutionInput {
   updateSamples: Boolean = false
 
   """
-  Name of the pipeline to be run on this workflow execution
-  """
-  workflowName: String!
-
-  """
   Parameters to be passed to the pipeline.
   """
   workflowParams: JSON!

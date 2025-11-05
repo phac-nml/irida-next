@@ -21,7 +21,6 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
              workflow_execution: {
                metadata: {
                  pipeline_id: 'phac-nml/iridanextexample',
-                 workflow_name: 'phac-nml/iridanextexample',
                  workflow_version: '1.0.2'
                },
                workflow_params: { assembler: 'stub' },

@@ -19,7 +19,6 @@ module Mutations
              required: false,
              default_value: false,
              description: 'Set true for samples to be updated from this workflow execution'
-    argument :workflow_name, String, description: 'Name of the pipeline to be run on this workflow execution' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_params, GraphQL::Types::JSON, description: 'Parameters to be passed to the pipeline.' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_version, String, description: 'Version of the pipeline to be run on this workflow execution' # rubocop:disable GraphQL/ExtractInputType
 
