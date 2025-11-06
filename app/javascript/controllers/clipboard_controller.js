@@ -15,7 +15,10 @@ import { Controller } from "@hotwired/stimulus";
  * @extends Controller
  */
 export default class extends Controller {
-  static targets = ["button", "content"];
+  static targets = ["button", "content", "ariaLive"];
+  static values = {
+    copied: String,
+  };
 
   #tooltip;
 
@@ -66,7 +69,7 @@ export default class extends Controller {
 
     this.#tooltip.show();
     this.buttonTarget.setAttribute("disabled", "");
-
+    this.ariaLiveTarget.innerText = this.copiedValue;
     // Change the button to a checkmark for 1 second
     const originalContent = this.buttonTarget.innerHTML;
     this.buttonTarget.innerHTML = `
@@ -90,6 +93,7 @@ export default class extends Controller {
       this.#tooltip.hide();
       this.buttonTarget.removeAttribute("disabled");
       this.buttonTarget.innerHTML = originalContent;
+      this.ariaLiveTarget.innerText = "";
     }, 1000);
   }
 }
