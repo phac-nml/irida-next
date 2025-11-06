@@ -97,6 +97,7 @@
         tab: "summary",
       ),
     selected: @tab == "summary" || @tab == nil,
+    panel_id: "summary-panel"
   ) %>
 
   <% tabs.with_tab(
@@ -109,6 +110,7 @@
         tab: "params",
       ),
     selected: @tab == "params",
+    panel_id: "params-panel"
   ) %>
 
   <% tabs.with_tab(
@@ -121,6 +123,7 @@
         tab: "samplesheet",
       ),
     selected: @tab == "samplesheet",
+    panel_id: "samplesheet-panel"
   ) %>
 
   <% tabs.with_tab(
@@ -133,17 +136,22 @@
         tab: "files",
       ),
     selected: @tab == "files",
+    panel_id: "files-panel"
   ) %>
-<% end %>
 
-<div class="mt-4">
-  <% if @tab == 'summary' || @tab == nil %>
+  <% tabs.with_panel(id: "summary-panel", tab_id: "summary-tab", selected: @tab == "summary" || @tab == nil) do %>
     <%= render partial: "workflow_executions/summary" %>
-  <% elsif @tab == 'params' %>
+  <% end %>
+
+  <% tabs.with_panel(id: "params-panel", tab_id: "params-tab", selected: @tab == "params") do %>
     <%= render partial: "workflow_executions/params" %>
-  <% elsif @tab == 'samplesheet' %>
+  <% end %>
+
+  <% tabs.with_panel(id: "samplesheet-panel", tab_id: "samplesheet-tab", selected: @tab == "samplesheet") do %>
     <%= render partial: "workflow_executions/samplesheet" %>
-  <% elsif @tab == 'files' %>
+  <% end %>
+
+  <% tabs.with_panel(id: "files-panel", tab_id: "files-tab", selected: @tab == "files") do %>
     <%= render partial: "workflow_executions/files",
     locals: {
       pagy: @pagy,
@@ -154,4 +162,4 @@
       has_attachments: @has_attachments,
     } %>
   <% end %>
-</div>
+<% end %>
