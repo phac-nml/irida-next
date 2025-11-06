@@ -125,5 +125,15 @@ class CreateDirectUploadTest < ActiveSupport::TestCase
                                               byteSize: 2_233_006_136 })
 
     assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createDirectUpload']
+
+    assert_not_empty data, 'createDirectUpload should be populated when no authorization errors'
+    assert_not_empty data['directUpload']
+
+    assert_equal '{"Content-Type":"image/jpeg"}', data['directUpload']['headers']
+    assert_not_empty data['directUpload']['blobId']
+    assert_not_empty data['directUpload']['url']
+    assert_not_empty data['directUpload']['signedBlobId']
   end
 end
