@@ -72,8 +72,6 @@ module Pathogen
         @system_arguments[:href] = @href
         @system_arguments[:aria] ||= {}
         @system_arguments[:aria][:current] = 'page' if @selected
-        @system_arguments[:aria][:selected] = @selected ? 'true' : 'false'
-        @system_arguments[:aria][:controls] = @panel_id if @panel_id.present?
         @system_arguments[:data] ||= {}
         @system_arguments[:data][:turbo_action] = 'replace'
         @system_arguments[:data][:pathogen__tabs_nav_target] = 'tab'

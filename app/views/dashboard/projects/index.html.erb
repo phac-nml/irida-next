@@ -13,13 +13,15 @@
     id: "all",
     text: t(".all"),
     href: dashboard_projects_url(),
-    selected: !params[:personal]
+    selected: !params[:personal],
+    panel_id: "all-projects-panel"
   ) %>
   <% nav.with_tab(
     id: "personal",
     text: t(".personal"),
     href: dashboard_projects_url(personal: "true"),
-    selected: params[:personal]
+    selected: params[:personal],
+    panel_id: "personal-projects-panel"
   ) %>
   <% nav.with_right_content do %>
     <div class="flex flex-wrap gap-2 mb-2 justify-end">
@@ -54,41 +56,22 @@
       <% end %>
     </div>
   <% end %>
-<% end %>
 
-<div class="flex flex-col mt-4">
-  <% if @has_projects %>
-    <div class="flex flex-col gap-2" id="groups_tree">
-
-        <%= render TreegridComponent.new do | component | %>
-          <% @projects.each_with_index do |project, project_index| %>
-            <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: @projects.size, aria: { label: namespace_row_aria_label(project.namespace) }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: @projects.size }) } }, id: dom_id(project)) do %>
-              <%= render NamespaceRow::ContentsComponent.new(
-                namespace: project.namespace,
-                full_name: true,
-                icon_size: :medium,
-              ) %>
-            <% end %>
-          <% end %>
-        <% end %>
-
-        <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
-          <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy_item")) %>
-        <% else %>
-          <%= viral_empty(
-            icon_name: :magnifying_glass,
-            title: t("components.viral.pagy.empty_state.title"),
-            description: t("components.viral.pagy.empty_state.description"),
-          ) %>
-        <% end %>
-    </div>
-  <% else %>
-    <div class="empty_state_message">
-      <%= viral_empty(
-        icon_name: Project.icon,
-        title: t(".no_projects"),
-        description: t(".no_projects_description"),
-      ) %>
-    </div>
+  <% nav.with_panel(id: "all-projects-panel", tab_id: "all", selected: !params[:personal]) do %>
+    <%= render partial: "projects_list", locals: {
+      projects: @projects,
+      pagy: @pagy,
+      has_projects: @has_projects,
+      q: @q
+    } %>
   <% end %>
-</div>
+
+  <% nav.with_panel(id: "personal-projects-panel", tab_id: "personal", selected: params[:personal]) do %>
+    <%= render partial: "projects_list", locals: {
+      projects: @projects,
+      pagy: @pagy,
+      has_projects: @has_projects,
+      q: @q
+    } %>
+  <% end %>
+<% end %>

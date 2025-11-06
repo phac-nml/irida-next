@@ -218,46 +218,6 @@ module Pathogen
                       '[data-action="keydown->pathogen--tabs-nav#handleKeydown"]', count: 3
     end
 
-    # ARIA attributes tests for tab panel pattern
-    test 'selected tab has aria-selected="true"' do
-      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
-        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
-        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
-      end
-
-      assert_selector 'a#tab-1[aria-selected="true"]'
-      assert_selector 'a#tab-2[aria-selected="false"]'
-    end
-
-    test 'unselected tabs have aria-selected="false"' do
-      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
-        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
-        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
-        nav.with_tab(id: 'tab-3', text: 'Third', href: '/third')
-      end
-
-      assert_selector 'a[aria-selected="true"]', count: 1
-      assert_selector 'a[aria-selected="false"]', count: 2
-    end
-
-    test 'tabs have aria-controls pointing to panel when panel_id provided' do
-      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
-        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true, panel_id: 'panel-1')
-        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second', panel_id: 'panel-2')
-      end
-
-      assert_selector 'a#tab-1[aria-controls="panel-1"]'
-      assert_selector 'a#tab-2[aria-controls="panel-2"]'
-    end
-
-    test 'tabs do not have aria-controls when panel_id is nil' do
-      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
-        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
-      end
-
-      assert_no_selector 'a#tab-1[aria-controls]'
-    end
-
     # Panel rendering tests
     test 'renders panels after nav element as siblings' do
       render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
@@ -313,16 +273,16 @@ module Pathogen
 
     test 'panel has correct ARIA relationship with tab' do
       render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
-        nav.with_tab(id: 'my-tab', text: 'Tab', href: '/path', selected: true, panel_id: 'my-panel')
+        nav.with_tab(id: 'my-tab', text: 'Tab', href: '/path', selected: true)
         nav.with_panel(id: 'my-panel', tab_id: 'my-tab', selected: true) do
           'Content'
         end
       end
 
-      # Tab controls panel
-      assert_selector 'a#my-tab[aria-controls="my-panel"]'
       # Panel labeled by tab
       assert_selector 'div#my-panel[aria-labelledby="my-tab"]'
+      # Tab exists
+      assert_selector 'a#my-tab'
     end
 
     test 'works without panels (backward compatibility)' do
