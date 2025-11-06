@@ -80,9 +80,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       assert_field 'The header name of metadata column 3.', with: 'metadata_3'
 
       select('age', from: 'field-metadata_3')
-      # find('.metadata_field_header')[2].find('option',
-      #                                        text: 'age').select_option
-      # find("select[id$='[field-metadata_3]']").find("option[value='age']").select_option
       assert_field 'The header name of metadata column 3.', with: 'age'
     end
   end
