@@ -4,7 +4,7 @@ require 'test_helper'
 
 class CreateDirectUploadTest < ActiveSupport::TestCase
   CREATE_DIRECT_UPLOAD_MUTATION = <<~GRAPHQL
-    mutation($filename: String!, $contentType: String!, $checksum: String!, $byteSize: Int!) {
+    mutation($filename: String!, $contentType: String!, $checksum: String!, $byteSize: BigInt!) {
       createDirectUpload(input: {
         filename: $filename,
         contentType: $contentType,
@@ -114,5 +114,26 @@ class CreateDirectUploadTest < ActiveSupport::TestCase
     error_message = result['errors'][0]['message']
 
     assert_equal 'byteSize must be greater than 0', error_message
+  end
+
+  test 'createDirectUpload mutation should work with bytesize which overflows 32 bits (type: BigInt!)' do
+    result = IridaSchema.execute(CREATE_DIRECT_UPLOAD_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { filename: 'dev.to',
+                                              contentType: 'image/jpeg',
+                                              checksum: 'asZ3Yzc2Q5iA5eXIgeTJndf',
+                                              byteSize: 2_233_006_136 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createDirectUpload']
+
+    assert_not_empty data, 'createDirectUpload should be populated when no authorization errors'
+    assert_not_empty data['directUpload']
+
+    assert_equal '{"Content-Type":"image/jpeg"}', data['directUpload']['headers']
+    assert_not_empty data['directUpload']['blobId']
+    assert_not_empty data['directUpload']['url']
+    assert_not_empty data['directUpload']['signedBlobId']
   end
 end
