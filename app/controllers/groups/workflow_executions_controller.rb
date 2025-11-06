@@ -92,8 +92,7 @@ module Groups
       when 'index'
         @title = "#{t(:'general.default_sidebar.workflows')} · #{@group.full_name}"
       when 'show'
-        workflow_execution_identifier =
-          @workflow_execution.name.present? ? @workflow_execution.name : @workflow_execution.id
+        workflow_execution_identifier = @workflow_execution.name.presence || @workflow_execution.id
         workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
         @title = case @tab
                  when 'params'
