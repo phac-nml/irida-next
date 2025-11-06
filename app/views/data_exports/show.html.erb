@@ -43,35 +43,29 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-slate-800">
-  <div class="flex flex-row">
-    <%= render Pathogen::TabsPanel.new(
-      id: "data-export-tabs",
-      label: t(:"data_exports.show.tabs.title")
-    ) do |tabs| %>
-      <% tabs.with_tab(
-        id: "summary-tab",
-        text: t(:"data_exports.show.tabs.summary"),
-        href: data_export_path(@data_export, tab: "summary"),
-        selected: @tab == "summary" || @tab.nil?,
-      ) %>
+<%= render Pathogen::TabsNav.new(
+  id: "data-export-tabs",
+  label: t(:"data_exports.show.tabs.title")
+) do |tabs| %>
+  <% tabs.with_tab(
+    id: "summary-tab",
+    text: t(:"data_exports.show.tabs.summary"),
+    href: data_export_path(@data_export, tab: "summary"),
+    selected: @tab == "summary" || @tab.nil?,
+  ) %>
 
-      <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
-        <% tabs.with_tab(
-          id: "preview-tab",
-          text: t(:"data_exports.show.tabs.preview"),
-          href: data_export_path(@data_export, tab: "preview"),
-          selected: @tab == "preview",
-        ) %>
-      <% end %>
-    <% end %>
-  </div>
+  <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
+    <% tabs.with_tab(
+      id: "preview-tab",
+      text: t(:"data_exports.show.tabs.preview"),
+      href: data_export_path(@data_export, tab: "preview"),
+      selected: @tab == "preview",
+    ) %>
+  <% end %>
+<% end %>
 
-  <div id="data-export-content" class="mt-4">
-    <% if @tab == "preview" %>
-      <%= render partial: "preview" %>
-    <% else %>
-      <%= render partial: "summary" %>
-    <% end %>
-  </div>
-</div>
+<% if @tab == "preview" %>
+  <%= render partial: "preview" %>
+<% else %>
+  <%= render partial: "summary" %>
+<% end %>
