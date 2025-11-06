@@ -16,9 +16,7 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   static targets = ["button", "content"];
-  static values = {
-    copiedMessage: String,
-  };
+
   #tooltip;
 
   disconnect() {
@@ -52,8 +50,6 @@ export default class extends Controller {
 
     try {
       await navigator.clipboard.writeText(e.target.value);
-
-      this.contentTarget.innerText = this.copiedMessageValue;
       this.#notify();
     } catch (err) {
       console.error("Failed to copy text: ", err);
@@ -94,7 +90,6 @@ export default class extends Controller {
       this.#tooltip.hide();
       this.buttonTarget.removeAttribute("disabled");
       this.buttonTarget.innerHTML = originalContent;
-      this.contentTarget.innerText = "";
     }, 1000);
   }
 }
