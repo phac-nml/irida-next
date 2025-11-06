@@ -75,7 +75,9 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       end
 
       assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-      select('age', from: 'field-metadata_3')
+      # select('age', from: 'field-metadata_3')
+      find('#field-metadata_3').find('option',
+                                     text: 'age').select_option
 
       assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
       assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
