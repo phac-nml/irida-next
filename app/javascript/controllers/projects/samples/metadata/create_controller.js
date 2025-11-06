@@ -523,7 +523,7 @@ export default class extends Controller {
     errorMessage,
   ) {
     if (errorContainer) {
-      errorContainer.classList.remove("hidden");
+      errorContainer.classList.remove("hidden", "invisible");
       // Also make sure the parent span is visible
       const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
@@ -546,7 +546,9 @@ export default class extends Controller {
    */
   #hideErrorElements(errorContainer, helpTextComponent, inputContainer) {
     if (errorContainer) {
-      errorContainer.classList.add("hidden");
+      // Use invisible instead of hidden to maintain space for alignment
+      errorContainer.classList.add("invisible");
+      errorContainer.classList.remove("hidden");
       // Also hide the parent span
       const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
