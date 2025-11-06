@@ -156,28 +156,18 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   setOption(option) {
-    if (option) {
-      this.option = option;
-      this.setActiveDescendant(option);
+    this.option = option;
+    this.setActiveDescendant(option);
 
-      for (var i = 0; i < this.filteredOptions.length; i++) {
-        var opt = this.filteredOptions[i];
-        if (opt === option) {
-          opt.setAttribute("aria-selected", "true");
-          if (
-            this.listboxTarget.scrollTop + this.listboxTarget.offsetHeight <
-            opt.offsetTop + opt.offsetHeight
-          ) {
-            this.listboxTarget.scrollTop =
-              opt.offsetTop +
-              opt.offsetHeight -
-              this.listboxTarget.offsetHeight;
-          } else if (this.listboxTarget.scrollTop > opt.offsetTop + 2) {
-            this.listboxTarget.scrollTop = opt.offsetTop;
-          }
-        } else {
-          opt.removeAttribute("aria-selected");
+    for (var i = 0; i < this.filteredOptions.length; i++) {
+      var opt = this.filteredOptions[i];
+      if (opt === option) {
+        opt.setAttribute("aria-selected", "true");
+        if (!this.isOptionInView(option)) {
+          option.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
+      } else {
+        opt.removeAttribute("aria-selected");
       }
     }
   }
@@ -250,9 +240,9 @@ export default class SelectWithAutoCompleteController extends Controller {
               this.open();
             }
             if (this.filteredOptions.length > 1) {
-              this.setOption(this.getNextOption(this.option), true);
+              this.setOption(this.getNextOption(this.option));
             } else {
-              this.setOption(this.firstOption, true);
+              this.setOption(this.firstOption);
             }
           }
         }
@@ -263,11 +253,11 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "ArrowUp":
         if (this.hasOptions()) {
           if (this.isOpen()) {
-            this.setOption(this.getPreviousOption(this.option), true);
+            this.setOption(this.getPreviousOption(this.option));
           } else {
             this.open();
             if (!altKey) {
-              this.setOption(this.lastOption, true);
+              this.setOption(this.lastOption);
             }
           }
         }
@@ -367,10 +357,6 @@ export default class SelectWithAutoCompleteController extends Controller {
             } else {
               this.setOption(null);
             }
-          } else {
-            const noResults = document.createElement("div");
-            noResults.textContent = "No results found";
-            this.listboxTarget.appendChild(noResults);
           }
         }
 
