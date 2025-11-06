@@ -93,11 +93,13 @@
         </div>
       </template>
       <div data-projects--samples--metadata--create-target="fieldsContainer" class="space-y-3"></div>
-      <div class="flex flex-col sm:flex-row gap-3 pt-2">
+      <div class="text-center">
         <%= form.button t(".create_field_button"),
                     type: "button",
-                    class: "button button-secondary",
+                    class: "button button-secondary mr-2",
                     "data-action": "projects--samples--metadata--create#addField" %>
+      </div>
+      <div>
         <%= form.submit t(".submit_button"),
                     class: "button button-primary",
                     "data-action": "projects--samples--metadata--create#buildMetadata" %>
