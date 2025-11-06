@@ -4,9 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 /**
  * Tabs Controller
  *
- * Implements W3C ARIA Authoring Practices Guide tab pattern with automatic activation.
+ * Implements W3C ARIA Authoring Practices Guide tab pattern with MANUAL activation.
  * Provides keyboard navigation (arrow keys, Home, End) and accessible tab switching.
  * Supports optional URL hash syncing for bookmarkable tabs and browser back/forward navigation.
+ *
+ * Key differences from automatic activation:
+ * - Arrow keys move focus but DO NOT activate tabs
+ * - Space/Enter keys are required to activate the focused tab
+ * - Reduces risk of accidental navigation during keyboard exploration
  *
  * @class TabsController
  * @extends Controller
@@ -168,8 +173,9 @@ export default class extends Controller {
 
   /**
    * Handles keyboard navigation
-   * Supports Arrow Left/Right (horizontal) or Up/Down (vertical), Home, End keys
+   * Supports Arrow Left/Right (horizontal) or Up/Down (vertical), Home, End, Space, Enter keys
    * Navigation direction adapts to aria-orientation attribute
+   * Manual activation: arrow keys move focus, Space/Enter activate
    *
    * @param {KeyboardEvent} event - The keyboard event
    * @returns {void}
@@ -186,6 +192,8 @@ export default class extends Controller {
           this.#navigateToNext(event),
         Home: () => this.#navigateToFirst(event),
         End: () => this.#navigateToLast(event),
+        " ": () => this.#activateFocusedTab(event),
+        Enter: () => this.#activateFocusedTab(event),
       };
 
       const handler = handlers[event.key];
@@ -412,7 +420,7 @@ export default class extends Controller {
     const currentIndex = this.tabTargets.indexOf(event.currentTarget);
     const targetIndex =
       currentIndex === 0 ? this.tabTargets.length - 1 : currentIndex - 1;
-    this.#focusAndSelectTab(targetIndex);
+    this.#focusTab(targetIndex);
   }
 
   /**
@@ -424,7 +432,7 @@ export default class extends Controller {
   #navigateToNext(event) {
     const currentIndex = this.tabTargets.indexOf(event.currentTarget);
     const targetIndex = (currentIndex + 1) % this.tabTargets.length;
-    this.#focusAndSelectTab(targetIndex);
+    this.#focusTab(targetIndex);
   }
 
   /**
@@ -434,7 +442,7 @@ export default class extends Controller {
    * @returns {void}
    */
   #navigateToFirst(event) {
-    this.#focusAndSelectTab(0);
+    this.#focusTab(0);
   }
 
   /**
@@ -444,27 +452,47 @@ export default class extends Controller {
    * @returns {void}
    */
   #navigateToLast(event) {
-    this.#focusAndSelectTab(this.tabTargets.length - 1);
+    this.#focusTab(this.tabTargets.length - 1);
   }
 
   /**
-   * Focuses a tab and selects it (automatic activation pattern)
+   * Moves focus to a tab at the specified index
+   * Does NOT activate the tab (manual activation pattern)
+   * User must press Space or Enter to activate
    * @private
    * @param {number} index - The tab index
    * @returns {void}
    */
-  #focusAndSelectTab(index) {
+  #focusTab(index) {
     if (index < 0 || index >= this.tabTargets.length) {
       return;
     }
 
     const tab = this.tabTargets[index];
 
-    // Move focus to the tab
+    // Only move focus - do NOT activate the tab
+    // Space/Enter will activate via #activateFocusedTab
     tab.focus();
+  }
 
-    // Select the tab (automatic activation)
-    this.#selectTabByIndex(index);
+  /**
+   * Activates the currently focused tab (manual activation)
+   * Called when Space or Enter is pressed on a focused tab
+   * @private
+   * @param {KeyboardEvent} event - The keyboard event
+   * @returns {void}
+   */
+  #activateFocusedTab(event) {
+    const focusedTab = event.currentTarget;
+    const tabIndex = this.tabTargets.indexOf(focusedTab);
+
+    if (tabIndex === -1) {
+      console.error("[pathogen--tabs] Focused tab not found in targets");
+      return;
+    }
+
+    // Activate the focused tab
+    this.#selectTabByIndex(tabIndex);
   }
 
   /**
