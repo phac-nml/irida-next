@@ -82,42 +82,52 @@
     id: "summary-tab",
     text: t(:"workflow_executions.show.tabs.summary"),
     href: workflow_execution_path(@workflow_execution, tab: "summary"),
-    selected: @tab == "summary" || @tab == nil
+    selected: @tab == "summary" || @tab == nil,
+    panel_id: "summary-panel"
   ) %>
   <% nav.with_tab(
     id: "params-tab",
     text: t(:"workflow_executions.show.tabs.params"),
     href: workflow_execution_path(@workflow_execution, tab: "params"),
-    selected: @tab == "params"
+    selected: @tab == "params",
+    panel_id: "params-panel"
   ) %>
   <% nav.with_tab(
     id: "samplesheet-tab",
     text: t(:"workflow_executions.show.tabs.samplesheet"),
     href: workflow_execution_path(@workflow_execution, tab: "samplesheet"),
-    selected: @tab == "samplesheet"
+    selected: @tab == "samplesheet",
+    panel_id: "samplesheet-panel"
   ) %>
   <% nav.with_tab(
     id: "files-tab",
     text: t(:"workflow_executions.show.tabs.files"),
     href: workflow_execution_path(@workflow_execution, tab: "files"),
-    selected: @tab == "files"
+    selected: @tab == "files",
+    panel_id: "files-panel"
   ) %>
-<% end %>
 
-<% if @tab == 'summary' || @tab == nil %>
-  <%= render partial: "summary" %>
-<% elsif @tab == "params" %>
-  <%= render partial: "params" %>
-<% elsif @tab == 'samplesheet' %>
-  <%= render partial: "samplesheet" %>
-<% elsif @tab == 'files' %>
-  <%= render partial: "workflow_executions/files",
-  locals: {
-    pagy: @pagy,
-    q: @q,
-    search_url: workflow_execution_path(@workflow_execution),
-    attachments: @attachments,
-    workflow_execution: @workflow_execution,
-    has_attachments: @has_attachments,
-  } %>
+  <% nav.with_panel(id: "summary-panel", tab_id: "summary-tab", selected: @tab == "summary" || @tab == nil) do %>
+    <%= render partial: "summary" %>
+  <% end %>
+
+  <% nav.with_panel(id: "params-panel", tab_id: "params-tab", selected: @tab == "params") do %>
+    <%= render partial: "params" %>
+  <% end %>
+
+  <% nav.with_panel(id: "samplesheet-panel", tab_id: "samplesheet-tab", selected: @tab == "samplesheet") do %>
+    <%= render partial: "samplesheet" %>
+  <% end %>
+
+  <% nav.with_panel(id: "files-panel", tab_id: "files-tab", selected: @tab == "files") do %>
+    <%= render partial: "workflow_executions/files",
+    locals: {
+      pagy: @pagy,
+      q: @q,
+      search_url: workflow_execution_path(@workflow_execution),
+      attachments: @attachments,
+      workflow_execution: @workflow_execution,
+      has_attachments: @has_attachments,
+    } %>
+  <% end %>
 <% end %>
