@@ -16,6 +16,7 @@ class SelectWithAutoCompleteComponent < Component
 
   def combobox_arguments # rubocop:disable Metrics/AbcSize
     { tag: 'input' }.deep_merge(@combobox_arguments).tap do |args|
+      args[:autocomplete] = 'off'
       args[:id] = @combobox_id
       args[:type] = 'text'
       args[:value] = @selected_option[:name]
