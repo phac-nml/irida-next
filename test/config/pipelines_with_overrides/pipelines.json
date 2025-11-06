@@ -49,7 +49,7 @@
             "x-irida-next-selected": "new_isolates_date"
           },
           "metadata_2": {
-            "x-irida-next-selected": "prediceted_primary_identification_name"
+            "x-irida-next-selected": "predicted_primary_identification_name"
           }
         },
         "required": [

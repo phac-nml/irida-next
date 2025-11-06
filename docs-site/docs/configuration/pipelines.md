@@ -279,7 +279,7 @@ In the below example, we will override the default selected metadata fields. Not
                 "x-irida-next-selected": "new_isolates_date"
             },
             "metadata_2": {
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
             },
             .........
         },
@@ -345,7 +345,7 @@ In the below example, we will override the default selected metadata fields. Not
               "errorMessage": "Metadata associated with the sample (metadata_2).",
               "default": "",
               "pattern": "^[^\\n\\t\"]+$",
-              "x-irida-next-selected": "prediceted_primary_identification_name"
+              "x-irida-next-selected": "predicted_primary_identification_name"
           },
          ........
       },
@@ -372,7 +372,7 @@ In the below example, we will override the default selected metadata fields. Not
                 "x-irida-next-selected": "new_isolates_date"
               },
               "metadata_2": {
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
               },
             .........
             },
@@ -444,7 +444,7 @@ In the below example, we will override the default selected metadata fields. Not
                 "errorMessage": "Metadata associated with the sample (metadata_2).",
                 "default": "",
                 "pattern": "^[^\\n\\t\"]+$",
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
             },
           ........
         },

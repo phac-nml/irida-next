@@ -279,7 +279,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
                 "x-irida-next-selected": "new_isolates_date"
             },
             "metadata_2": {
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
             },
             .........
         },
@@ -345,7 +345,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
               "errorMessage": "Métadonnée associée à l'échantillon (metadata_2).",
               "default": "",
               "pattern": "^[^\\n\\t\"]+$",
-              "x-irida-next-selected": "prediceted_primary_identification_name"
+              "x-irida-next-selected": "predicted_primary_identification_name"
           },
          ........
       },
@@ -372,7 +372,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
                 "x-irida-next-selected": "new_isolates_date"
               },
               "metadata_2": {
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
               },
             .........
             },
@@ -444,7 +444,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
                 "errorMessage": "Métadonnée associée à l'échantillon (metadata_2).",
                 "default": "",
                 "pattern": "^[^\\n\\t\"]+$",
-                "x-irida-next-selected": "prediceted_primary_identification_name"
+                "x-irida-next-selected": "predicted_primary_identification_name"
             },
           ........
         },

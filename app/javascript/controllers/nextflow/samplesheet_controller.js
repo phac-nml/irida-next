@@ -104,8 +104,10 @@ export default class extends Controller {
   connect() {
     if (this.hasWorkflowAttributesTarget) {
       this.#setSamplesheetParametersAndData();
+      this.#updateMetadataColumnHeaderNames();
       this.#disableProcessingState();
     }
+    this.element.setAttribute("data-controller-connected", "true");
   }
 
   #setSamplesheetParametersAndData() {
@@ -760,6 +762,29 @@ export default class extends Controller {
 
     this.element.lastElementChild.requestSubmit();
     this.element.lastElementChild.remove();
+  }
+
+  #updateMetadataColumnHeaderNames() {
+    // Update the values for the fields under 'The column header names of the metadata columns'
+
+    let metadataSamplesheetColumns = this.element.querySelectorAll(
+      ".metadata_field-header",
+    );
+
+    metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
+      const columnName = metadataSamplesheetColumn.getAttribute(
+        "data-metadata-header",
+      );
+      const metadataField = metadataSamplesheetColumn.value;
+
+      let metadataParameter = this.element.querySelector(
+        `input[data-metadata-header-name="${columnName}"]`,
+      );
+
+      if (metadataParameter && metadataParameter.value !== metadataField) {
+        metadataParameter.value = metadataField;
+      }
+    });
   }
 
   #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
