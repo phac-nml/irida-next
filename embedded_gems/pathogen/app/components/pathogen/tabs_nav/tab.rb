@@ -72,6 +72,8 @@ module Pathogen
         @system_arguments[:aria][:current] = 'page' if @selected
         @system_arguments[:data] ||= {}
         @system_arguments[:data][:turbo_action] = 'replace'
+        @system_arguments[:data][:pathogen__tabs_nav_target] = 'tab'
+        @system_arguments[:data][:action] = 'keydown->pathogen--tabs-nav#handleKeydown'
 
         setup_css_classes
       end

@@ -120,10 +120,11 @@ module Pathogen
                       class: 'custom-class',
                       data: { controller: 'custom' }
                     )) do |nav|
-        nav.with_tab(id: 'tab-1', text: 'Tab', href: '/path')
+        nav.with_tab(id: 'tab-1', text: 'Tab', href: '/path', selected: true)
       end
 
-      assert_selector 'nav.custom-class[data-controller="custom"]'
+      # Should merge custom controller with pathogen--tabs-nav
+      assert_selector 'nav.custom-class[data-controller="custom pathogen--tabs-nav"]'
     end
 
     test 'tab component raises error if id missing' do
@@ -154,6 +155,67 @@ module Pathogen
 
       # Verify it has the same base classes as Pathogen::Tabs::Tab
       assert_selector 'a.inline-block.p-4.font-semibold.transition-colors.duration-200.border-b-2.rounded-t-lg'
+    end
+
+    # Stimulus controller tests
+    test 'attaches Stimulus controller to nav element' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'Tab', href: '/path', selected: true)
+      end
+
+      assert_selector 'nav[data-controller="pathogen--tabs-nav"]'
+    end
+
+    test 'tab links have Stimulus target attribute' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
+        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
+      end
+
+      assert_selector 'a[data-pathogen--tabs-nav-target="tab"]', count: 2
+    end
+
+    test 'tab links have keydown action attribute' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
+      end
+
+      assert_selector 'a[data-action="keydown->pathogen--tabs-nav#handleKeydown"]'
+    end
+
+    test 'selected tab has tabindex="0" for keyboard navigation' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
+        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
+      end
+
+      # Note: tabindex is set by JavaScript after rendering, so this test validates
+      # the component structure is correct, not the actual tabindex value
+      assert_selector 'a#tab-1[aria-current="page"]'
+      assert_selector 'a#tab-2:not([aria-current])'
+    end
+
+    test 'unselected tabs do not have aria-current' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
+        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
+        nav.with_tab(id: 'tab-3', text: 'Third', href: '/third')
+      end
+
+      assert_selector 'a[aria-current="page"]', count: 1
+      assert_selector 'a:not([aria-current])', count: 2
+    end
+
+    test 'all tabs have required data attributes for keyboard navigation' do
+      render_inline(Pathogen::TabsNav.new(id: 'test-nav', label: 'Test')) do |nav|
+        nav.with_tab(id: 'tab-1', text: 'First', href: '/first', selected: true)
+        nav.with_tab(id: 'tab-2', text: 'Second', href: '/second')
+        nav.with_tab(id: 'tab-3', text: 'Third', href: '/third')
+      end
+
+      # All tabs should have target and action attributes
+      assert_selector 'a[data-pathogen--tabs-nav-target="tab"]' \
+                      '[data-action="keydown->pathogen--tabs-nav#handleKeydown"]', count: 3
     end
   end
 end

@@ -14,7 +14,13 @@ module Pathogen
   # == Accessibility
   # - Uses semantic <nav> element
   # - aria-current="page" on active link (WCAG 2.4.8)
-  # - No JavaScript required for core functionality
+  # - Keyboard navigation via Stimulus controller:
+  #   - Arrow Left/Right: Move focus between tabs (does NOT activate)
+  #   - Home: Move focus to first tab
+  #   - End: Move focus to last tab
+  #   - Space/Enter: Follow link (activate tab)
+  # - Manual activation pattern: focus does not activate tabs
+  # - Roving tabindex for single tab stop
   # - Server-side state management
   #
   # @example Basic usage with two navigation tabs
@@ -95,10 +101,25 @@ module Pathogen
       @system_arguments[:id] = @id
       @system_arguments[:aria] ||= {}
       @system_arguments[:aria][:label] = @label
+      @system_arguments[:data] ||= {}
+      @system_arguments[:data][:controller] = merge_controllers(
+        @system_arguments[:data][:controller],
+        'pathogen--tabs-nav'
+      )
       @system_arguments[:class] = class_names(
         'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700',
         @system_arguments[:class]
       )
+    end
+
+    # Merges controller names, handling nil and string values
+    # @param existing [String, nil] Existing controller(s)
+    # @param new_controller [String] New controller to add
+    # @return [String] Merged controller names
+    def merge_controllers(existing, new_controller)
+      return new_controller if existing.blank?
+
+      "#{existing} #{new_controller}"
     end
 
     # Validates that at least one tab is present
