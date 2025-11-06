@@ -203,7 +203,7 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 
 ### Remplacements de la feuille d'échantillons
 
-La section Remplacements de la feuille d'échantillons peut être utilisée pour modifier n'importe quoi dans la samplesheet d'origine du pipeline. Tout ce qui se trouve dans "samplesheet_overrides": {<json data>} écrasera la samplesheet d'origine avec <json data> en commençant au niveau le plus élevé.
+La section Remplacements de la feuille d'échantillons peut être utilisée pour modifier n'importe quoi dans la samplesheet d'origine du pipeline. Tout ce qui se trouve dans `"samplesheet_overrides": {<json data>}` écrasera la samplesheet d'origine avec `<json data>` en commençant au niveau le plus élevé.
 
 Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées sélectionnés par défaut. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par la samplesheet par défaut reste le même.
 
