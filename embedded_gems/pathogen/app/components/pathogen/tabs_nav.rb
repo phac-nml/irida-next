@@ -54,20 +54,37 @@ module Pathogen
     # @param text [String] Text label for the tab
     # @param href [String] URL for the navigation link
     # @param selected [Boolean] Whether this tab is currently active (default: false)
+    # @param panel_id [String, nil] Optional ID of the panel this tab controls (for aria-controls)
     # @param system_arguments [Hash] Additional HTML attributes
     # @return [Pathogen::TabsNav::Tab] A new tab link instance
-    renders_many :tabs, lambda { |id:, text:, href:, selected: false, **system_arguments|
+    renders_many :tabs, lambda { |id:, text:, href:, selected: false, panel_id: nil, **system_arguments|
       Pathogen::TabsNav::Tab.new(
         id: id,
         text: text,
         href: href,
         selected: selected,
+        panel_id: panel_id,
         **system_arguments
       )
     }
 
     # Renders optional content aligned to the right of the tabs
     renders_one :right_content
+
+    # Renders tab panels that display content based on selected state
+    # @param id [String] Unique identifier for the panel (required)
+    # @param tab_id [String] ID of the tab that controls this panel (required)
+    # @param selected [Boolean] Whether this panel is currently visible (default: false)
+    # @param system_arguments [Hash] Additional HTML attributes
+    # @return [Pathogen::TabsNav::Panel] A new panel instance
+    renders_many :panels, lambda { |id:, tab_id:, selected: false, **system_arguments|
+      Pathogen::TabsNav::Panel.new(
+        id: id,
+        tab_id: tab_id,
+        selected: selected,
+        **system_arguments
+      )
+    }
 
     # Initialize a new TabsNav component
     # @param id [String] Unique identifier for the navigation element (required)

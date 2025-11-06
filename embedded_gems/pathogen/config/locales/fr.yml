@@ -43,4 +43,7 @@ fr:
       required_indicator: "*"
       title: obligatoire
     link:
-      aria-label: "%{content} (s’ouvre dans une nouvelle fenêtre)"
+      aria-label: "%{content} (s'ouvre dans une nouvelle fenêtre)"
+    tabs_nav:
+      panel:
+        loading: Chargement du contenu...

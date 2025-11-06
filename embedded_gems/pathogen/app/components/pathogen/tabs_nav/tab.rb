@@ -46,9 +46,10 @@ module Pathogen
       # @param text [String] Text label for the tab (required)
       # @param href [String] URL for the navigation link (required)
       # @param selected [Boolean] Whether this tab is currently active (default: false)
+      # @param panel_id [String, nil] Optional ID of the panel this tab controls (for aria-controls)
       # @param system_arguments [Hash] Additional HTML attributes
       # @raise [ArgumentError] if id, text, or href is missing
-      def initialize(id:, text:, href:, selected: false, **system_arguments)
+      def initialize(id:, text:, href:, selected: false, panel_id: nil, **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'text is required' if text.blank?
         raise ArgumentError, 'href is required' if href.blank?
@@ -57,6 +58,7 @@ module Pathogen
         @text = text
         @href = href
         @selected = selected
+        @panel_id = panel_id
         @system_arguments = system_arguments
 
         setup_link_attributes
@@ -70,6 +72,8 @@ module Pathogen
         @system_arguments[:href] = @href
         @system_arguments[:aria] ||= {}
         @system_arguments[:aria][:current] = 'page' if @selected
+        @system_arguments[:aria][:selected] = @selected ? 'true' : 'false'
+        @system_arguments[:aria][:controls] = @panel_id if @panel_id.present?
         @system_arguments[:data] ||= {}
         @system_arguments[:data][:turbo_action] = 'replace'
         @system_arguments[:data][:pathogen__tabs_nav_target] = 'tab'

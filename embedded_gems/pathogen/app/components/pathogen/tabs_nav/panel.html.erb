@@ -1,0 +1,7 @@
+<div <%= tag.attributes(@system_arguments) %>>
+  <% if @selected %>
+    <%= content %>
+  <% else %>
+    <%= render SpinnerComponent.new(message: t(".loading")) %>
+  <% end %>
+</div>

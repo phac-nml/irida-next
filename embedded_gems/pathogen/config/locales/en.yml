@@ -44,3 +44,6 @@ en:
       title: required
     link:
       aria-label: "%{content} (opens in a new window)"
+    tabs_nav:
+      panel:
+        loading: Content loading...

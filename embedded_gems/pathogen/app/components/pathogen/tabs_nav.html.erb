@@ -21,3 +21,8 @@
     </div>
   <% end %>
 </nav>
+
+<%# Tab panels render after nav as siblings %>
+<% panels.each do |panel| %>
+  <%= panel %>
+<% end %>
