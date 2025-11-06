@@ -34,68 +34,70 @@
       <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
       <template data-projects--samples--metadata--create-target="fieldTemplate">
         <div class="metadata-field-wrapper">
-          <div class="flex space-x-2 inputField items-start">
-            <div
-              id="key[PLACEHOLDER]_key_input"
-              class="w-full form-field"
-            >
-              <%= form.label(
-                "key_PLACEHOLDER",
-                t("projects.samples.metadata.form.key"),
-                class: "keyLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5",
-                data: { required: "true" }
-              ) %>
-              <%= form.text_field(
-                "key_PLACEHOLDER",
-                class: "keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600",
-              ) %>
-              <div id="sample_key_PLACEHOLDER_error" class="text-sm relative z-0 w-full min-h-[1.5rem] invisible">
-                <%= viral_help_text(state: :error, classes: "hidden") %>
+          <div class="inputField relative p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+            <div class="flex items-start gap-3">
+              <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div
+                  id="key[PLACEHOLDER]_key_input"
+                  class="form-field"
+                >
+                  <%= form.label(
+                    "key_PLACEHOLDER",
+                    t("projects.samples.metadata.form.key"),
+                    class: "keyLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2",
+                    data: { required: "true" }
+                  ) %>
+                  <%= form.text_field(
+                    "key_PLACEHOLDER",
+                    class: "keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-md border border-slate-300 appearance-none dark:text-white dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600 transition-colors",
+                  ) %>
+                  <div id="sample_key_PLACEHOLDER_error" class="text-sm relative z-0 w-full min-h-[1.5rem] mt-1 invisible">
+                    <%= viral_help_text(state: :error, classes: "hidden") %>
+                  </div>
+                </div>
+                <div
+                  id="value[PLACEHOLDER]_value_input"
+                  class="form-field"
+                >
+                  <%= form.label(
+                    "value_PLACEHOLDER",
+                    t("projects.samples.metadata.form.value"),
+                    class: "valueLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2",
+                    data: { required: "true" }
+                  ) %>
+                  <%= form.text_field(
+                    "value_PLACEHOLDER",
+                    class: "valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-md border border-slate-300 appearance-none dark:text-white dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600 transition-colors",
+                    required: true
+                  ) %>
+                  <div id="sample_value_PLACEHOLDER_error" class="text-sm relative z-0 w-full min-h-[1.5rem] mt-1 invisible">
+                    <%= viral_help_text(state: :error, classes: "hidden") %>
+                  </div>
+                </div>
               </div>
+              <button
+                type="button"
+                data-action="projects--samples--metadata--create#removeField"
+                class="
+                  flex-shrink-0 inline-flex items-center justify-center w-8 h-8
+                  text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300
+                  hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md
+                  transition-colors cursor-pointer self-start mt-7
+                "
+                aria-label="<%= t(".remove_field")%>"
+              >
+                <%= pathogen_icon(:x, size: :sm) %>
+              </button>
             </div>
-            <div
-              id="value[PLACEHOLDER]_value_input"
-              class="w-full form-field"
-            >
-              <%= form.label(
-                "value_PLACEHOLDER",
-                t("projects.samples.metadata.form.value"),
-                class: "valueLabel block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5",
-                data: { required: "true" }
-              ) %>
-              <%= form.text_field(
-                "value_PLACEHOLDER",
-                class: "valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-lg border border-slate-300 appearance-none dark:text-white dark:bg-slate-800 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600",
-                required: true
-              ) %>
-              <div id="sample_value_PLACEHOLDER_error" class="text-sm relative z-0 w-full min-h-[1.5rem] invisible">
-                <%= viral_help_text(state: :error, classes: "hidden") %>
-              </div>
-            </div>
-            <button
-              type="button"
-              data-action="projects--samples--metadata--create#removeField"
-              class="
-                bg-white text-slate-400 hover:text-slate-900 rounded-lg p-1.5
-                hover:bg-slate-100 inline-flex items-center justify-center h-9 w-9
-                dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-                dark:hover:bg-slate-700 cursor-pointer flex-shrink-0
-              "
-              aria-label="<%= t(".remove_field")%>"
-            >
-              <%= pathogen_icon(:x, size: :sm) %>
-            </button>
           </div>
         </div>
       </template>
-      <div data-projects--samples--metadata--create-target="fieldsContainer"></div>
-      <div class="text-center">
+      <div data-projects--samples--metadata--create-target="fieldsContainer" class="space-y-3"></div>
+      <div class="flex flex-col sm:flex-row gap-3 pt-2">
         <%= form.button t(".create_field_button"),
                     type: "button",
-                    class: "button button-secondary mr-2",
+                    class: "button button-secondary",
                     "data-action": "projects--samples--metadata--create#addField" %>
-      </div>
-      <div>
         <%= form.submit t(".submit_button"),
                     class: "button button-primary",
                     "data-action": "projects--samples--metadata--create#buildMetadata" %>
