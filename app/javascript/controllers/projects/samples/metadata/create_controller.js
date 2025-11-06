@@ -188,10 +188,10 @@ export default class extends Controller {
   /**
    * Find the field container element from event target
    * @param {Element} target - Event target element
-   * @returns {Element} Field container element
+   * @returns {Element} Field container element (wrapper)
    */
   #findFieldContainer(target) {
-    const container = target.closest(".inputField");
+    const container = target.closest(".metadata-field-wrapper");
     if (!container) {
       throw new Error("Could not find field container");
     }
@@ -209,15 +209,12 @@ export default class extends Controller {
 
   /**
    * Remove field and associated error elements from DOM
-   * @param {Element} fieldContainer - Container to remove
-   * @param {string} keyId - Key ID for error cleanup
+   * @param {Element} fieldContainer - Wrapper container to remove
+   * @param {string} keyId - Key ID (unused, kept for compatibility)
    */
   #removeFieldFromDOM(fieldContainer, keyId) {
+    // Remove the wrapper container, which includes both the inputField and error div
     fieldContainer.remove();
-
-    // Clean up associated error div
-    const errorDiv = document.getElementById(`${keyId}_field_errors`);
-    errorDiv?.remove();
   }
 
   /**
@@ -232,7 +229,9 @@ export default class extends Controller {
    * Ensure at least one field exists in the form
    */
   #ensureMinimumFields() {
-    const remainingFields = document.querySelectorAll(".inputField");
+    const remainingFields = document.querySelectorAll(
+      ".metadata-field-wrapper",
+    );
     if (remainingFields.length === 0) {
       this.addField();
     }
@@ -255,10 +254,10 @@ export default class extends Controller {
 
   /**
    * Get all input field containers
-   * @returns {NodeList} All field containers
+   * @returns {NodeList} All field wrapper containers
    */
   #getAllInputFields() {
-    return document.querySelectorAll(".inputField");
+    return document.querySelectorAll(".metadata-field-wrapper");
   }
 
   /**
