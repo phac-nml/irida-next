@@ -87,16 +87,28 @@ export default class extends Controller {
     try {
       const fieldContainer = this.#findFieldContainer(event.target);
       const keyInput = this.#findKeyInput(fieldContainer);
+      const valueInput = fieldContainer.querySelector(
+        "input[id^='sample_value_']",
+      );
 
       if (!keyInput) {
         console.warn("Could not find key input for field removal");
         return;
       }
 
-      const keyId = keyInput.id;
+      // Hide errors for both inputs before removing
+      this.#hideFieldError(keyInput);
+      if (valueInput) {
+        this.#hideFieldError(valueInput);
+      }
 
-      this.#removeFieldFromDOM(fieldContainer, keyId);
-      this.#removeFieldFromErrors(keyId);
+      // Remove both input IDs from error tracking
+      this.#removeFieldFromErrors(keyInput.id);
+      if (valueInput) {
+        this.#removeFieldFromErrors(valueInput.id);
+      }
+
+      this.#removeFieldFromDOM(fieldContainer, keyInput.id);
       this.#ensureMinimumFields();
     } catch (error) {
       console.error("Error removing field:", error);
@@ -301,7 +313,7 @@ export default class extends Controller {
 
     if (!hasValueValue) {
       this.#showFieldError(valueInput, this.valueMissingValue);
-      this.#addFieldIdToErrors(keyInput.id);
+      this.#addFieldIdToErrors(valueInput.id);
     } else {
       this.#hideFieldError(valueInput);
     }
@@ -313,10 +325,15 @@ export default class extends Controller {
    * @param {Element} valueInput - Value input element
    */
   #handleValidField(keyInput, valueInput) {
-    if (this.#isFieldInError(keyInput.id)) {
+    // Clear errors for both inputs if either is in error state
+    if (
+      this.#isFieldInError(keyInput.id) ||
+      this.#isFieldInError(valueInput.id)
+    ) {
       this.#hideFieldError(keyInput);
       this.#hideFieldError(valueInput);
       this.#removeFieldIdFromErrors(keyInput.id);
+      this.#removeFieldIdFromErrors(valueInput.id);
     }
     this.#createHiddenMetadataInput(keyInput, valueInput);
   }
