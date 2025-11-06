@@ -25,8 +25,7 @@ module WorkflowExecutions
     test 'test create new workflow execution' do
       workflow_params1 = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -36,8 +35,7 @@ module WorkflowExecutions
 
       workflow_params2 = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -118,34 +116,10 @@ module WorkflowExecutions
       assert_equal 'completed', @workflow_execution_completing.reload.state
     end
 
-    test 'test create new workflow execution with missing required workflow name' do
-      workflow_params = {
-        metadata:
-          { pipeline_id: 'phac-nml/iridanextexample',
-            workflow_version: '1.0.2' },
-        workflow_params:
-        {
-          input: '/blah/samplesheet.csv',
-          outdir: '/blah/output'
-        },
-        submitter_id: @user.id,
-        namespace_id: @project.namespace.id,
-        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
-      }
-
-      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
-
-      assert @workflow_execution.errors.full_messages.include?(
-        'Metadata object at root is missing required properties: workflow_name'
-      )
-      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
-    end
-
     test 'test create new workflow execution with missing required pipeline id' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            workflow_version: '1.0.2' },
+          { workflow_version: '1.0.2' },
         workflow_params:
         {
           input: '/blah/samplesheet.csv',
@@ -167,8 +141,7 @@ module WorkflowExecutions
     test 'test create new workflow execution with missing required workflow version' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample' },
+          { pipeline_id: 'phac-nml/iridanextexample' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes
@@ -184,8 +157,7 @@ module WorkflowExecutions
     test 'test workflow execution canceled' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -218,8 +190,7 @@ module WorkflowExecutions
     test 'test workflow execution error' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -252,8 +223,7 @@ module WorkflowExecutions
     test 'test create new workflow execution sanitizes params' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         workflow_params:
         {
@@ -281,8 +251,7 @@ module WorkflowExecutions
       test_name = 'test_workflow'
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -308,8 +277,7 @@ module WorkflowExecutions
       test_name = 'test_workflow'
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -352,8 +320,7 @@ module WorkflowExecutions
       workflow_params = {
         namespace_id: @project.namespace.id,
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: user.id,
         samples_workflow_executions_attributes: @samples_workflow_executions_attributes
@@ -382,8 +349,7 @@ module WorkflowExecutions
 
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -413,8 +379,7 @@ module WorkflowExecutions
 
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample',
-            pipeline_id: 'phac-nml/iridanextexample',
+          { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,

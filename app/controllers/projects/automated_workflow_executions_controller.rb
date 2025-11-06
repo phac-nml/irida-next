@@ -48,7 +48,7 @@ module Projects
       end
     end
 
-    def create # rubocop:disable Metrics/MethodLength
+    def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       @automated_workflow_execution = AutomatedWorkflowExecutions::CreateService.new(
         current_user, automated_workflow_execution_params.merge(namespace:)
       ).execute
@@ -59,12 +59,13 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
           else
             render status: :unprocessable_content,
                    locals: {
-                     type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                     type: 'alert',
+                     message: t('.error',
+                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end
@@ -94,14 +95,17 @@ module Projects
         format.turbo_stream do
           if @automated_workflow_execution.destroyed?
             render status: :ok,
-                   locals: { type: 'success',
-                             message: t('.success',
-                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
+                   locals: {
+                     type: 'success',
+                     message: t('.success',
+                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
+                   }
           else
             render status: :unprocessable_content,
                    locals: {
-                     type: 'alert', message: t('.error',
-                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                     type: 'alert',
+                     message: t('.error',
+                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
                    }
           end
         end

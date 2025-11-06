@@ -6,8 +6,17 @@ class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
   def setup
     @valid_automated_workflow_execution =
       automated_workflow_executions(:valid_automated_workflow_execution)
-    @invalid_metadata_automated_workflow_execution =
-      automated_workflow_executions(:invalid_metadata_automated_workflow_execution)
+    @invalid_metadata_automated_workflow_execution = AutomatedWorkflowExecution.new(
+      namespace_id: namespaces_project_namespaces(:project1_namespace).id,
+      created_by_id: users(:john_doe).id,
+      metadata: {
+        pipeline_id: 'phac-nml/iridanextexample',
+        'missing a param here': 'invalid'
+      },
+      workflow_params: { assembler: 'stub' },
+      email_notification: true,
+      update_samples: false
+    )
   end
 
   test 'valid automated workflow execution' do

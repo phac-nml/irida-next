@@ -490,7 +490,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within first('dl') do
       assert_text @workflow_execution1.run_id
-      assert_text @workflow_execution1.metadata['workflow_name']
+      assert_text @workflow_execution1.workflow.name
       assert_text @workflow_execution1.metadata['workflow_version']
     end
 
@@ -528,7 +528,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @workflow_execution1.id
       assert_text @workflow_execution1.run_id
-      assert_text @workflow_execution1.metadata['workflow_name']
+      assert_text @workflow_execution1.workflow.name
       assert_text @workflow_execution1.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -568,7 +568,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @shared_workflow_execution1.id
       assert_text @shared_workflow_execution1.run_id
-      assert_text @shared_workflow_execution1.metadata['workflow_name']
+      assert_text @shared_workflow_execution1.workflow.name
       assert_text @shared_workflow_execution1.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -608,7 +608,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @group_shared_workflow_execution1.id
       assert_text @group_shared_workflow_execution1.run_id
-      assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution1.workflow.name
       assert_text @group_shared_workflow_execution1.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -648,7 +648,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @shared_workflow_execution1.id
       assert_text @shared_workflow_execution1.run_id
-      assert_text @shared_workflow_execution1.metadata['workflow_name']
+      assert_text @shared_workflow_execution1.workflow.name
       assert_text @shared_workflow_execution1.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -688,7 +688,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @group_shared_workflow_execution1.id
       assert_text @group_shared_workflow_execution1.run_id
-      assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution1.workflow.name
       assert_text @group_shared_workflow_execution1.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -728,7 +728,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @shared_workflow_execution2.id
       assert_text @shared_workflow_execution2.run_id
-      assert_text @shared_workflow_execution2.metadata['workflow_name']
+      assert_text @shared_workflow_execution2.workflow.name
       assert_text @shared_workflow_execution2.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -768,7 +768,7 @@ class DataExportsTest < ApplicationSystemTestCase
       )
       assert_text @group_shared_workflow_execution2.id
       assert_text @group_shared_workflow_execution2.run_id
-      assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution2.workflow.name
       assert_text @group_shared_workflow_execution2.metadata['workflow_version']
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -792,7 +792,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within first('dl') do
       assert_text @shared_workflow_execution2.run_id
-      assert_text @shared_workflow_execution2.metadata['workflow_name']
+      assert_text @shared_workflow_execution2.workflow.name
       assert_text @shared_workflow_execution2.metadata['workflow_version']
     end
 
@@ -816,7 +816,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within first('dl') do
       assert_text @shared_workflow_execution2.run_id
-      assert_text @shared_workflow_execution2.metadata['workflow_name']
+      assert_text @shared_workflow_execution2.workflow.name
       assert_text @shared_workflow_execution2.metadata['workflow_version']
     end
 
@@ -840,7 +840,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within first('dl') do
       assert_text @group_shared_workflow_execution2.run_id
-      assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution2.workflow.name
       assert_text @group_shared_workflow_execution2.metadata['workflow_version']
     end
 
@@ -1361,11 +1361,11 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @workflow_execution1.id
         assert_text @workflow_execution1.run_id
-        assert_text @workflow_execution1.metadata['workflow_name']
+        assert_text @workflow_execution1.workflow.name
         assert_text @workflow_execution1.metadata['workflow_version']
         assert_text @workflow_execution2.id
         assert_text @workflow_execution2.run_id
-        assert_text @workflow_execution2.metadata['workflow_name']
+        assert_text @workflow_execution2.workflow.name
         assert_text @workflow_execution2.metadata['workflow_version']
       end
 
@@ -1415,7 +1415,7 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @workflow_execution4.id
         assert_text @workflow_execution4.run_id
-        assert_text @workflow_execution4.metadata['workflow_name']
+        assert_text @workflow_execution4.workflow.name
         assert_text @workflow_execution4.metadata['workflow_version']
       end
 
@@ -1469,7 +1469,7 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @shared_workflow_execution1.id
         assert_text @shared_workflow_execution1.run_id
-        assert_text @shared_workflow_execution1.metadata['workflow_name']
+        assert_text @shared_workflow_execution1.workflow.name
         assert_text @shared_workflow_execution1.metadata['workflow_version']
       end
 
@@ -1529,11 +1529,11 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @shared_workflow_execution1.id
         assert_text @shared_workflow_execution1.run_id
-        assert_text @shared_workflow_execution1.metadata['workflow_name']
+        assert_text @shared_workflow_execution1.workflow.name
         assert_text @shared_workflow_execution1.metadata['workflow_version']
         assert_text @shared_workflow_execution2.id
         assert_text @shared_workflow_execution2.run_id
-        assert_text @shared_workflow_execution2.metadata['workflow_name']
+        assert_text @shared_workflow_execution2.workflow.name
         assert_text @shared_workflow_execution2.metadata['workflow_version']
       end
 
@@ -1584,7 +1584,7 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @group_shared_workflow_execution1.id
         assert_text @group_shared_workflow_execution1.run_id
-        assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution1.workflow.name
         assert_text @group_shared_workflow_execution1.metadata['workflow_version']
       end
 
@@ -1637,11 +1637,11 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @group_shared_workflow_execution1.id
         assert_text @group_shared_workflow_execution1.run_id
-        assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution1.workflow.name
         assert_text @group_shared_workflow_execution1.metadata['workflow_version']
         assert_text @group_shared_workflow_execution2.id
         assert_text @group_shared_workflow_execution2.run_id
-        assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution2.workflow.name
         assert_text @group_shared_workflow_execution2.metadata['workflow_version']
       end
 
@@ -1693,11 +1693,11 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @workflow_execution1.id
         assert_text @workflow_execution1.run_id
-        assert_text @workflow_execution1.metadata['workflow_name']
+        assert_text @workflow_execution1.workflow.name
         assert_text @workflow_execution1.metadata['workflow_version']
         assert_text @workflow_execution3.id
         assert_text @workflow_execution3.run_id
-        assert_text @workflow_execution3.metadata['workflow_name']
+        assert_text @workflow_execution3.workflow.name
         assert_text @workflow_execution3.metadata['workflow_version']
       end
 
@@ -1747,11 +1747,11 @@ class DataExportsTest < ApplicationSystemTestCase
       within %(turbo-frame[id="list_selections"]) do
         assert_text @workflow_execution4.id
         assert_text @workflow_execution4.run_id
-        assert_text @workflow_execution4.metadata['workflow_name']
+        assert_text @workflow_execution4.workflow.name
         assert_text @workflow_execution4.metadata['workflow_version']
         assert_text @workflow_execution5.id
         assert_text @workflow_execution5.run_id
-        assert_text @workflow_execution5.metadata['workflow_name']
+        assert_text @workflow_execution5.workflow.name
         assert_text @workflow_execution5.metadata['workflow_version']
       end
 

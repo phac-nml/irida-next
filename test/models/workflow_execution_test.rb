@@ -5,10 +5,6 @@ require 'test_helper'
 class WorkflowExecutionTest < ActiveSupport::TestCase
   def setup
     @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
-    @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
-    @workflow_execution_invalid_workflow = workflow_executions(:workflow_execution_invalid_workflow)
-    @workflow_execution_invalid_namespace = workflow_executions(:workflow_execution_invalid_namespace)
-    @workflow_execution_missing_namespace = workflow_executions(:workflow_execution_missing_namespace)
   end
 
   test 'workflow execution has a namespace_id' do
@@ -17,6 +13,21 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   end
 
   test 'workflow execution with an invalid namespace_id' do
+    @workflow_execution_invalid_namespace = WorkflowExecution.new(
+      workflow_type: 'NFL',
+      workflow_type_version: 'DSL2',
+      workflow_engine: 'nextflow',
+      workflow_engine_version: '23.10.0',
+      metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.3' },
+      workflow_params: { 'assembler' => 'stub' },
+      workflow_engine_parameters: { '-r' => 'dev' },
+      workflow_url: 'my_workflow_url',
+      run_id: 'my_run_id',
+      submitter_id: users(:john_doe).id,
+      namespace_id: namespaces_user_namespaces(:john_doe_namespace).id,
+      name: 'Invalid Namespace Workflow Execution'
+    )
+
     assert_not @workflow_execution_invalid_namespace.valid?
     assert_not_nil @workflow_execution_invalid_namespace.errors[:namespace]
     assert_includes @workflow_execution_invalid_namespace.errors[:namespace],
@@ -24,6 +35,21 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   end
 
   test 'workflow execution with an missing namespace' do
+    @workflow_execution_missing_namespace = WorkflowExecution.new(
+      workflow_type: 'NFL',
+      workflow_type_version: 'DSL2',
+      workflow_engine: 'nextflow',
+      workflow_engine_version: '23.10.0',
+      metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.3' },
+      workflow_params: { 'assembler' => 'stub' },
+      workflow_engine_parameters: { '-r' => 'dev' },
+      workflow_url: 'my_workflow_url',
+      run_id: 'my_run_id',
+      submitter_id: users(:steve_doe).id,
+      namespace_id: 'This namespace has been deleted',
+      name: 'Invalid Namespace Workflow Execution'
+    )
+
     assert_not @workflow_execution_missing_namespace.valid?
     assert_not_nil @workflow_execution_missing_namespace.errors[:namespace]
     assert_includes @workflow_execution_missing_namespace.errors[:namespace],
@@ -40,6 +66,21 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   end
 
   test 'invalid metadata' do
+    @workflow_execution_invalid_metadata = WorkflowExecution.new(
+      workflow_type: 'NFL',
+      workflow_type_version: 'DSL2',
+      workflow_engine: 'nextflow',
+      workflow_engine_version: '23.10.0',
+      metadata: { pipeline_id: 'phac-nml/iridanextexample', 'missing a param here': 'invalid' },
+      workflow_params: { 'assembler' => 'stub' },
+      workflow_engine_parameters: { '-r' => 'dev' },
+      workflow_url: 'my_workflow_url',
+      run_id: 'my_run_id',
+      submitter_id: users(:john_doe).id,
+      namespace_id: namespaces_project_namespaces(:project1_namespace).id,
+      name: 'Invalid Metadata Workflow Execution'
+    )
+
     assert_not @workflow_execution_invalid_metadata.valid?
     assert_not_nil @workflow_execution_invalid_metadata.errors[:metadata]
     assert_includes @workflow_execution_invalid_metadata.errors.full_messages,
@@ -47,11 +88,25 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   end
 
   test 'invalid workflow specified' do
+    @workflow_execution_invalid_workflow = WorkflowExecution.new(
+      workflow_type: 'NFL',
+      workflow_type_version: 'DSL2',
+      workflow_engine: 'nextflow',
+      workflow_engine_version: '23.10.0',
+      metadata: { pipeline_id: 'wn1', workflow_version: 'invalid' },
+      workflow_params: { 'assembler' => 'stub' },
+      workflow_engine_parameters: { '-r' => 'dev' },
+      workflow_url: 'my_workflow_url',
+      run_id: 'my_run_id',
+      submitter_id: users(:james_doe).id,
+      namespace_id: namespaces_project_namespaces(:project1_namespace).id,
+      name: 'Invalid Workflow Workflow Execution'
+    )
+
     assert_not @workflow_execution_invalid_workflow.valid?
     assert_not_nil @workflow_execution_invalid_workflow.errors[:base]
     assert_includes @workflow_execution_invalid_workflow.errors[:base],
                     I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
-                           workflow_name: @workflow_execution_invalid_workflow.metadata['workflow_name'],
                            pipeline_id: @workflow_execution_invalid_workflow.metadata['pipeline_id'],
                            workflow_version: @workflow_execution_invalid_workflow.metadata['workflow_version'])
   end

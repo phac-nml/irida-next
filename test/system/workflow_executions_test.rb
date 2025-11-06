@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 class WorkflowExecutionsTest < ApplicationSystemTestCase
-  WORKFLOW_EXECUTION_COUNT = 20
+  WORKFLOW_EXECUTION_COUNT = 18
 
   setup do
     @user = users(:john_doe)
@@ -40,7 +40,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_selector '#workflow-executions-table table tbody tr', count: 20
 
     assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     assert_no_selector 'a',
@@ -52,13 +52,12 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_no_selector 'a',
                        exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_selector '#workflow-executions-table table tbody tr', count: 20
   end
 
   test 'should sort a list of workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
     workflow_execution1 = workflow_executions(:workflow_execution_valid)
-    workflow_execution2 = workflow_executions(:workflow_execution_invalid_metadata)
     workflow_execution8 = workflow_executions(:irida_next_example_canceling)
     workflow_execution9 = workflow_executions(:irida_next_example_canceled)
     workflow_execution12 = workflow_executions(:irida_next_example_new)
@@ -94,11 +93,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution9.metadata['workflow_name']
+                      text: workflow_execution9.workflow.name
       assert_selector "tr:nth-child(3) td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution8.metadata['workflow_name']
+                      text: workflow_execution8.workflow.name
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution2.metadata['workflow_name']
+                      text: workflow_execution_shared1.workflow.name
     end
 
     click_on 'Workflow Name'
@@ -107,11 +106,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution2.metadata['workflow_name']
-      assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_shared1.metadata['workflow_name']
+                      text: workflow_execution_shared1.workflow.name
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution9.metadata['workflow_name']
+                      text: workflow_execution9.workflow.name
     end
   end
 
@@ -159,7 +156,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
         :'concerns.workflow_execution_actions.cancel.success',
-        workflow_name: workflow_execution.metadata['workflow_name']
+        workflow_name: workflow_execution.workflow.name
       )
     end
 
@@ -244,7 +241,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
         :'concerns.workflow_execution_actions.destroy.success',
-        workflow_name: @workflow_execution1.metadata['workflow_name']
+        workflow_name: @workflow_execution1.workflow.name
       )
     end
 
@@ -358,7 +355,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
 
     click_on I18n.t('workflow_executions.show.tabs.files')
@@ -384,7 +381,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_text @workflow_execution3.id
     assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution3.state}")
-    assert_text @workflow_execution3.metadata['workflow_name']
+    assert_text @workflow_execution3.workflow.name
     assert_text @workflow_execution3.metadata['workflow_version']
 
     click_on I18n.t('workflow_executions.show.tabs.files')
@@ -576,7 +573,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
 
     assert_selector 'button[disabled]', text: I18n.t(:'workflow_executions.show.create_export_button')

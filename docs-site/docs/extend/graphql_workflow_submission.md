@@ -28,10 +28,10 @@ Query the list of pipelines to find the one you want to use.
 
 ```graphql
 query getPipelines {
-    pipelines(workflowType: "available"){
-    		pipelineId
-        name
-        version
+  pipelines(workflowType: "available") {
+    pipelineId
+    name
+    version
   }
 }
 ```
@@ -75,7 +75,7 @@ We are able to get all the information about a pipeline with this query.
 
 ```graphql
 query getPipelineInfo {
-    pipeline(pipelineId:"phac-nml/iridanextexample",workflowVersion:"1.0.3"){
+  pipeline(pipelineId: "phac-nml/iridanextexample", workflowVersion: "1.0.3") {
     automatable
     description
     executable
@@ -98,7 +98,6 @@ Result:
       "executable": true,
       "metadata": {
         "pipeline_id": "phac-nml/iridanextexample",
-        "workflow_name": "phac-nml/iridanextexample",
         "workflow_version": {
           "name": "1.0.3"
         }
@@ -128,9 +127,7 @@ Result:
                     "sample": {
                       "type": "string",
                       "pattern": "^\\S+$",
-                      "meta": [
-                        "id"
-                      ],
+                      "meta": ["id"],
                       "unique": true,
                       "errorMessage": "Sample name must be provided and cannot contain spaces"
                     },
@@ -153,10 +150,7 @@ Result:
                       ]
                     }
                   },
-                  "required": [
-                    "sample",
-                    "fastq_1"
-                  ]
+                  "required": ["sample", "fastq_1"]
                 }
               },
               "description": "Path to comma-separated file containing information about the samples in the experiment.",
@@ -177,11 +171,7 @@ Result:
               "default": "stub",
               "fa_icon": "fas fa-desktop",
               "description": "The sequence assembler to use for sequence assembly.",
-              "enum": [
-                "default",
-                "stub",
-                "experimental"
-              ],
+              "enum": ["default", "stub", "experimental"],
               "required": false
             },
             "random_seed": {
@@ -204,13 +194,12 @@ The output informs us of the structure of the fields we will provide to run the 
 
 Specifically, We will be using the following fields from the result
 
-* `pipelineId`
-* `workflowName`
-* `workflowVersion`
-* `workflowParams`
-  * `assembler`
-  * `random_seed`
-  * `project_name`
+- `pipelineId`
+- `workflowVersion`
+- `workflowParams`
+  - `assembler`
+  - `random_seed`
+  - `project_name`
 
 The output also informs us of the structure for the `samplesWorkflowExecutionAttributes` (`sample_id`) and `samplesheet_params` (`sample`, `fastq_1`, `fastq_2`) in our final submission query.
 
@@ -220,8 +209,8 @@ Query to find the Project containing the samples you want to use in the pipeline
 
 ```graphql
 query getProjects {
-  projects(first: 1){
-    nodes{
+  projects(first: 1) {
+    nodes {
       fullName
       id
       fullPath
@@ -256,21 +245,21 @@ Using the `fullPath` from the previous step, we will query for the sample and fi
 
 Step 2 informed us that for each sample we need:
 
-* the sample `id`
-* the sample `puid`,
-* the file (attachment) `id`'s
+- the sample `id`
+- the sample `puid`,
+- the file (attachment) `id`'s
 
 In this example we will only use 1 sample.
 
 ```graphql
-query getProjectInfo{
+query getProjectInfo {
   project(fullPath: "borrelia/borrelia-burgdorferi/outbreak-2024") {
-    samples(first:1){
-      nodes{
+    samples(first: 1) {
+      nodes {
         id
         puid
-        attachments{
-          nodes{
+        attachments {
+          nodes {
             filename
             id
           }
@@ -326,36 +315,37 @@ Since this is a Mutation, we also include the `workflowExecution` and `error` bl
 
 ```graphql
 mutation submitWorkflowExecution {
-  submitWorkflowExecution (input:{
-    name:"My Workflow Submission from GraphQL"
-    projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
-    updateSamples: false
-    emailNotification: false
-    pipelineId: "phac-nml/iridanextexample"
-    workflowName: "phac-nml/iridanextexample"
-    workflowVersion:"1.0.3"
-    workflowParams: {
-      assembler: "stub",
-      random_seed: 1,
-      project_name: "assembly"
-    }
-    samplesWorkflowExecutionsAttributes:[
-      {
-        sample_id:"gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
-        samplesheet_params:{
-          sample: "INXT_SAM_AZCMYRDHEJ",
-          fastq_1:"gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390",
-          fastq_2:"gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
-        }
+  submitWorkflowExecution(
+    input: {
+      name: "My Workflow Submission from GraphQL"
+      projectId: "gid://irida/Project/2bd03791-2213-444d-8df3-fdda40fc262a"
+      updateSamples: false
+      emailNotification: false
+      pipelineId: "phac-nml/iridanextexample"
+      workflowVersion: "1.0.3"
+      workflowParams: {
+        assembler: "stub"
+        random_seed: 1
+        project_name: "assembly"
       }
-    ]
-  }){
-    workflowExecution{
+      samplesWorkflowExecutionsAttributes: [
+        {
+          sample_id: "gid://irida/Sample/c9f3806d-4bf1-4462-bc46-7b547338cc11"
+          samplesheet_params: {
+            sample: "INXT_SAM_AZCMYRDHEJ"
+            fastq_1: "gid://irida/Attachment/f2fad21f-f68f-4871-990f-b47880bed390"
+            fastq_2: "gid://irida/Attachment/cad0ae33-0c82-4960-8580-92358686609f"
+          }
+        }
+      ]
+    }
+  ) {
+    workflowExecution {
       name
       state
       id
     }
-    errors{
+    errors {
       message
       path
     }
