@@ -700,8 +700,13 @@ a.pill-focus-reset:focus-visible {
   white-space: nowrap;
 }
 
-.ts-control {
+.ts-control,
+.ts-control input {
   @apply text-slate-900 dark:text-white;
+}
+
+.ts-control > input {
+  @apply !border !border-white dark:!border-slate-800;
 }
 
 .field_with_errors .ts-wrapper.single .ts-control {
