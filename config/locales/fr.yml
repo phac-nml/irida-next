@@ -1441,7 +1441,7 @@ fr:
       attachments:
         concatenations:
           create:
-            basename_help: Le nom de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
+            basename_help: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
             success: Les dossiers ont été concaténés avec succès.
           modal:
             description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'

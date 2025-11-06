@@ -1437,7 +1437,7 @@ en:
       attachments:
         concatenations:
           create:
-            basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
+            basename_help: The base filename can contain only letters, digits, '-', '.', and '_'
             success: Files were successfully concatenated.
           modal:
             description: 'The following files were selected to be concatenated:'
