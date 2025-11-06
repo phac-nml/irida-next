@@ -77,47 +77,47 @@
     </div>
   <% end %>
 <% end %>
-<%= render Pathogen::TabsPanel.new(id: "workflow-executions-tabs") do |tabs| %>
-  <% tabs.with_tab(
+<%= render Pathogen::TabsNav.new(id: "workflow-executions-tabs", label: t(:"projects.workflow_executions.show.tabs.label")) do |nav| %>
+  <% nav.with_tab(
     id: "summary-tab",
     text: t(:"workflow_executions.show.tabs.summary"),
     href: workflow_execution_path(@workflow_execution, tab: "summary"),
-    selected: @tab == "summary" || @tab == nil,
+    selected: @tab == "summary" || @tab == nil
   ) %>
-  <% tabs.with_tab(
+  <% nav.with_tab(
     id: "params-tab",
     text: t(:"workflow_executions.show.tabs.params"),
     href: workflow_execution_path(@workflow_execution, tab: "params"),
-    selected: @tab == "params",
+    selected: @tab == "params"
   ) %>
-  <% tabs.with_tab(
+  <% nav.with_tab(
     id: "samplesheet-tab",
     text: t(:"workflow_executions.show.tabs.samplesheet"),
     href: workflow_execution_path(@workflow_execution, tab: "samplesheet"),
-    selected: @tab == "samplesheet",
+    selected: @tab == "samplesheet"
   ) %>
-  <% tabs.with_tab(
+  <% nav.with_tab(
     id: "files-tab",
     text: t(:"workflow_executions.show.tabs.files"),
     href: workflow_execution_path(@workflow_execution, tab: "files"),
-    selected: @tab == "files",
+    selected: @tab == "files"
   ) %>
+<% end %>
 
-  <% if @tab == 'summary' || @tab == nil %>
-    <%= render partial: "summary" %>
-  <% elsif @tab == "params" %>
-    <%= render partial: "params" %>
-  <% elsif @tab == 'samplesheet' %>
-    <%= render partial: "samplesheet" %>
-  <% elsif @tab == 'files' %>
-    <%= render partial: "workflow_executions/files",
-    locals: {
-      pagy: @pagy,
-      q: @q,
-      search_url: workflow_execution_path(@workflow_execution),
-      attachments: @attachments,
-      workflow_execution: @workflow_execution,
-      has_attachments: @has_attachments,
-    } %>
-  <% end %>
+<% if @tab == 'summary' || @tab == nil %>
+  <%= render partial: "summary" %>
+<% elsif @tab == "params" %>
+  <%= render partial: "params" %>
+<% elsif @tab == 'samplesheet' %>
+  <%= render partial: "samplesheet" %>
+<% elsif @tab == 'files' %>
+  <%= render partial: "workflow_executions/files",
+  locals: {
+    pagy: @pagy,
+    q: @q,
+    search_url: workflow_execution_path(@workflow_execution),
+    attachments: @attachments,
+    workflow_execution: @workflow_execution,
+    has_attachments: @has_attachments,
+  } %>
 <% end %>
