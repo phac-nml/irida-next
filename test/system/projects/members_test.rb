@@ -591,15 +591,22 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
       wait_for_network_idle
 
-      # Press ArrowRight to move to groups tab
+      # Press ArrowRight to move focus to groups tab (manual activation - does not select yet)
       find('[role="tab"]#members-tab').native.send_keys(:right)
 
-      # Groups tab should now be selected (automatic activation)
+      # Groups tab should now be focused (but not selected yet due to manual activation)
+      # Press Enter to activate the focused tab
+      page.driver.browser.keyboard.type(:enter)
+
+      # Groups tab should now be selected
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
       assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
 
-      # Press ArrowLeft to move back to members tab
+      # Press ArrowLeft to move focus back to members tab
       find('[role="tab"]#groups-tab').native.send_keys(:left)
+
+      # Press Enter to activate the focused members tab
+      page.driver.browser.keyboard.type(:enter)
 
       # Members tab should be selected again
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
@@ -610,20 +617,25 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
       wait_for_network_idle
 
-      # Navigate to groups tab first
+      # Navigate to groups tab first (manual activation - arrow + enter)
       find('[role="tab"]#members-tab').native.send_keys(:right)
+      page.driver.browser.keyboard.type(:enter)
 
       # Should be on groups tab now
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
 
-      # Press Home key to go to first tab
+      # Press Home key to move focus to first tab
       find('[role="tab"]#groups-tab').native.send_keys(:home)
+      # Press Enter to activate the focused first tab
+      page.driver.browser.keyboard.type(:enter)
 
       # Should be on members tab (first tab)
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
 
-      # Press End key to go to last tab
+      # Press End key to move focus to last tab
       find('[role="tab"]#members-tab').native.send_keys(:end)
+      # Press Enter to activate the focused last tab
+      page.driver.browser.keyboard.type(:enter)
 
       # Should be on groups tab (last tab)
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
