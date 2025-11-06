@@ -2007,6 +2007,7 @@ en:
       create_export_button: Create Export
       tabs:
         files: Files
+        label: Workflow execution details
         params: Parameters
         samplesheet: Samplesheet
         summary: Summary

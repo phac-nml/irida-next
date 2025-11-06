@@ -2011,8 +2011,9 @@ fr:
       create_export_button: Créer une exportation
       tabs:
         files: Fichiers
+        label: Détails de l'exécution du flux de travail
         params: Paramètres
-        samplesheet: Fiche d’échantillonnage
+        samplesheet: Fiche d'échantillonnage
         summary: Résumé
     state:
       canceled: Annulé
