@@ -110,22 +110,31 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.addListboxOptionEventListeners(option);
           if (
             filter.length === 0 ||
-            this.getLowercaseContent(option).indexOf(filter) === 0
+            this.getLowercaseContent(option).indexOf(filter) >= 0
           ) {
             flag = true;
+            var regex = new RegExp(`(${this.filter})`, "gi");
+            option.innerHTML = option.textContent.replace(
+              regex,
+              "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
+            );
             this.filteredOptions.push(option);
           } else {
             optionCategory.removeChild(option);
           }
         }
       } else {
-        // assume presentation & option role
         this.addListboxOptionEventListeners(optionCategory);
         if (
           filter.length === 0 ||
-          this.getLowercaseContent(optionCategory).indexOf(filter) === 0
+          this.getLowercaseContent(optionCategory).indexOf(filter) >= 0
         ) {
           flag = true;
+          var regex = new RegExp(`(${this.filter})`, "gi");
+          optionCategory.innerHTML = optionCategory.textContent.replace(
+            regex,
+            "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
+          );
           this.filteredOptions.push(optionCategory);
         }
       }
@@ -351,7 +360,7 @@ export default class SelectWithAutoCompleteController extends Controller {
             if (
               this.getLowercaseContent(option).indexOf(
                 this.comboboxTarget.value.toLowerCase(),
-              ) === 0
+              ) >= 0
             ) {
               this.setOption(option);
             } else {
@@ -392,7 +401,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
-      this.close.bind(this, true);
+      this.close();
     }
   }
 
