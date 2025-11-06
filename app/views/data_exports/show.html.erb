@@ -52,6 +52,7 @@
     text: t(:"data_exports.show.tabs.summary"),
     href: data_export_path(@data_export, tab: "summary"),
     selected: @tab == "summary" || @tab.nil?,
+    panel_id: "summary-panel"
   ) %>
 
   <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
@@ -60,12 +61,17 @@
       text: t(:"data_exports.show.tabs.preview"),
       href: data_export_path(@data_export, tab: "preview"),
       selected: @tab == "preview",
+      panel_id: "preview-panel"
     ) %>
   <% end %>
-<% end %>
 
-<% if @tab == "preview" %>
-  <%= render partial: "preview" %>
-<% else %>
-  <%= render partial: "summary" %>
+  <% tabs.with_panel(id: "summary-panel", tab_id: "summary-tab", selected: @tab == "summary" || @tab.nil?) do %>
+    <%= render partial: "summary" %>
+  <% end %>
+
+  <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
+    <% tabs.with_panel(id: "preview-panel", tab_id: "preview-tab", selected: @tab == "preview") do %>
+      <%= render partial: "preview" %>
+    <% end %>
+  <% end %>
 <% end %>
