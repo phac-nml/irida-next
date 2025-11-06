@@ -74,13 +74,15 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
         table.assert_selector 'tbody tr:last-of-type td:nth-of-type(1)', text: @sample2.name
       end
 
-      assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-      # select('age', from: 'field-metadata_3')
-      find('#field-metadata_3').find('option',
-                                     text: 'age').select_option
-
       assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
       assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
+
+      assert_field 'The header name of metadata column 3.', with: 'metadata_3'
+
+      select('age', from: 'field-metadata_3')
+      # find('.metadata_field_header')[2].find('option',
+      #                                        text: 'age').select_option
+      # find("select[id$='[field-metadata_3]']").find("option[value='age']").select_option
       assert_field 'The header name of metadata column 3.', with: 'age'
     end
   end
