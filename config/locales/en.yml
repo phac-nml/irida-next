@@ -941,7 +941,7 @@ en:
   helpers:
     label:
       concatenation:
-        basename: Filename
+        basename: Base filename
         delete_originals: Delete originals
     select:
       prompt: Please select
@@ -1688,9 +1688,9 @@ en:
   services:
     attachments:
       concatenation:
-        filename_missing: Base file name not provided. Please provide a base name for the concatenated file.
+        filename_missing: Base filename can't be blank.
         incorrect_attachable: All or some of then selected files do not belong to the sample.
-        incorrect_basename: The base file name can only contain letters, numbers, hyphens, periods, and underscores
+        incorrect_basename: The base filename can contain only letters, digits, '-', '.', and '_'
         incorrect_fastq_file_types: Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files
         incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
         incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
