@@ -107,7 +107,7 @@ module Pathogen
         'pathogen--tabs-nav'
       )
       @system_arguments[:class] = class_names(
-        'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700',
+        'flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700 mb-2',
         @system_arguments[:class]
       )
     end
