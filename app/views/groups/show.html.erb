@@ -110,6 +110,7 @@
                     total_count: @pagy.count,
                     class: "max-sm:grow",
                     value: @q.name_or_puid_cont,
+                    data: {}
                   ) %>
                 </div>
               <% end %>
@@ -138,6 +139,7 @@
                     total_count: @pagy.count,
                     class: "max-sm:grow",
                     value: @q.name_or_puid_cont,
+                    data: {}
                   ) do %>
                     <input type="hidden" name="tab" value="shared_namespaces">
                   <% end %>

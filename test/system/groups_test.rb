@@ -484,13 +484,13 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     assert_selector 'h1', text: @group.name
 
-    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
     assert_selector 'div.treegrid-row', count: 20
     click_on I18n.t(:'components.viral.pagy.pagination_component.next')
     assert_selector 'div.treegrid-row', count: 1
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
-    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'div.treegrid-row', count: 1
   end
 
