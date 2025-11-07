@@ -503,7 +503,6 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'create analysis export from show page' do
-    skip 'test is flaky on ci builds' if ENV['CI']
     visit workflow_execution_path(@workflow_execution1)
 
     click_button I18n.t('workflow_executions.show.create_export_button')
@@ -806,8 +805,6 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'clicking links in preview tab for analysis data export from project shared workflow execution' do
-    skip 'test is flaky on ci builds' if ENV['CI']
-
     login_as users(:james_doe)
     data_export12 = data_exports(:data_export_twelve)
     visit data_export_path(data_export12, tab: 'preview')
@@ -869,8 +866,6 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'data export type analysis on summary tab' do
-    skip 'test is flaky on ci builds' if ENV['CI']
-
     visit data_export_path(@data_export7, tab: 'summary')
 
     assert_selector 'div:first-child dd', text: @data_export7.id

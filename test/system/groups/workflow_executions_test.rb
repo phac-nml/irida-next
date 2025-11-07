@@ -214,8 +214,6 @@ module Groups
     end
 
     test 'can search workflow execution files by puid & filename' do
-      skip 'test is flaky on ci builds' if ENV['CI']
-
       Flipper.enable(:workflow_execution_attachments_searching)
       user = users(:joan_doe)
       login_as user
@@ -314,8 +312,6 @@ module Groups
     end
 
     test 'submitter can edit workflow execution post launch from workflow execution page' do
-      skip 'test is flaky on ci builds' if ENV['CI']
-
       user = users(:joan_doe)
       login_as users(:joan_doe)
       visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
@@ -382,8 +378,6 @@ module Groups
     end
 
     test 'should delete a completed workflow' do
-      skip 'test is flaky on ci builds' if ENV['CI']
-
       user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
@@ -404,8 +398,6 @@ module Groups
     end
 
     test 'should delete an errored workflow' do
-      skip 'test is flaky on ci builds' if ENV['CI']
-
       user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_error)

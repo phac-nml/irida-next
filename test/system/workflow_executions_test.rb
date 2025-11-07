@@ -411,8 +411,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet' do
-    skip 'test is flaky on ci builds' if ENV['CI']
-
     visit workflow_execution_path(@workflow_execution1)
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
