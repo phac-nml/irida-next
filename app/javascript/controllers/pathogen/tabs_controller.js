@@ -514,7 +514,7 @@ export default class extends Controller {
         const hash = this.#getTabHash(index);
         const url = new URL(window.location.href);
         // Clear stale tab query params so subsequent submissions don't carry outdated values
-        url.searchParams.delete("tab");
+        // url.searchParams.delete("tab");
         url.hash = hash;
 
         // Use Turbo's history API to properly integrate with Turbo navigation
