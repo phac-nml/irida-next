@@ -23,7 +23,7 @@ en:
         wednesday: Wed
       errors:
         invalid_date: Invalid date.
-        min_date_error: "Earliest allowed date: "
+        min_date_error: 'Earliest allowed date: '
       months:
         april: April
         august: August
