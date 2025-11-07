@@ -44,3 +44,6 @@ fr:
       title: obligatoire
     link:
       aria-label: "%{content} (s’ouvre dans une nouvelle fenêtre)"
+    tabs:
+      loading_spinner:
+        loading_content: Chargement du contenu
