@@ -73,7 +73,7 @@ export default class SelectWithAutoCompleteController extends Controller {
         option.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     } else {
-      this.comboboxTarget.setAttribute("aria-activedescendant", "");
+      this.comboboxTarget.removeAttribute("aria-activedescendant");
     }
   }
 
