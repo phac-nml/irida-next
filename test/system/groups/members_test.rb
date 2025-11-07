@@ -21,7 +21,7 @@ module Groups
     test 'can see the list of group members' do
       namespace = groups(:group_seven)
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -54,7 +54,7 @@ module Groups
     test 'can see list of group members for subgroup which are inherited from parent group' do
       namespace = groups(:subgroup1)
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -69,7 +69,7 @@ module Groups
     through a group' do
       namespace = groups(:subgroup_one_group_three)
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
 
       group_member = members(:group_three_member_micha_doe)
       subgroup_member = members(:subgroup_one_group_three_member_micha_doe)
@@ -92,13 +92,13 @@ module Groups
     test 'cannot access group members' do
       login_as users(:user_no_access)
 
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       assert_text I18n.t(:'action_policy.policy.group.member_listing?', name: @namespace.name)
     end
 
     test 'can add a member to the group' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
       user_to_add = users(:jane_doe)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
@@ -127,7 +127,7 @@ module Groups
     end
 
     test 'can remove a member from the group' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       group_member = members(:group_one_member_joan_doe)
 
@@ -147,7 +147,7 @@ module Groups
     end
 
     test 'can remove themselves as a member from the group' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       table_row = find(:table_row, { 'Username' => @user.email })
 
@@ -164,7 +164,7 @@ module Groups
 
     test 'can not add a member to the group' do
       login_as users(:ryan_doe)
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 0
@@ -175,7 +175,7 @@ module Groups
       group_member = members(:group_five_member_michelle_doe)
 
       Timecop.travel(Time.zone.now + 5) do
-        visit group_members_url(namespace)
+        visit group_members_path(namespace, anchor: 'members-tab')
 
         assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -191,7 +191,7 @@ module Groups
       namespace = groups(:subgroup_one_group_five)
       group_member = members(:subgroup_one_group_five_member_james_doe)
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -208,7 +208,7 @@ module Groups
     test 'can see the list of namespace group links' do
       namespace_group_link = namespace_group_links(:namespace_group_link6)
 
-      visit group_members_url(namespace_group_link.namespace)
+      visit group_members_path(namespace_group_link.namespace, anchor: 'members-tab')
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -229,7 +229,7 @@ module Groups
     end
 
     test 'tabs component has proper accessibility attributes and keyboard navigation' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       # Verify tablist has proper ARIA attributes
       tablist = find('[role="tablist"]')
@@ -299,7 +299,7 @@ module Groups
     end
 
     test 'tabs component supports keyboard navigation' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       # Verify controller handles keyboard events
       members_tab = find('#members-tab')
@@ -330,7 +330,7 @@ module Groups
 
     test 'tabs component loads lazy turbo frames when tab is activated' do
       namespace_group_link = namespace_group_links(:namespace_group_link6)
-      visit group_members_url(namespace_group_link.namespace)
+      visit group_members_path(namespace_group_link.namespace, anchor: 'members-tab')
 
       # Initially on members tab - members frame should exist
       assert_selector 'turbo-frame#members'
@@ -352,7 +352,7 @@ module Groups
       group_member = members(:group_one_member_joan_doe)
       expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
 
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
@@ -378,7 +378,7 @@ module Groups
     test 'cannot update member expiration' do
       login_as users(:ryan_doe)
 
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       within('table') do
@@ -393,7 +393,7 @@ module Groups
       namespace = groups(:user30_group_one)
       members_count = members.select { |member| member.namespace == namespace }.count
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
       user_to_add = namespace_bot.user
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
@@ -424,7 +424,7 @@ module Groups
       namespace_bot = namespace_bots(:project1_bot0)
       namespace = groups(:user30_group_one)
 
-      visit group_members_url(namespace)
+      visit group_members_path(namespace, anchor: 'members-tab')
       user_to_add = namespace_bot.user
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
@@ -443,7 +443,7 @@ module Groups
 
     test 'can search members by username' do
       username_col = 1
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
@@ -466,7 +466,7 @@ module Groups
     end
 
     test 'can sort members by column' do
-      visit group_members_url(@namespace)
+      visit group_members_path(@namespace, anchor: 'members-tab')
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5

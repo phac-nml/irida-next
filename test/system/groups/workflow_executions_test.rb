@@ -218,7 +218,7 @@ module Groups
       user = users(:joan_doe)
       login_as user
 
-      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
+      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1, anchor: 'summary-tab')
 
       assert_text @workflow_execution_group_shared1.id
       assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}", locale: user.locale)
@@ -292,7 +292,7 @@ module Groups
       login_as users(:joan_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared1)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
@@ -314,7 +314,7 @@ module Groups
     test 'submitter can edit workflow execution post launch from workflow execution page' do
       user = users(:joan_doe)
       login_as users(:joan_doe)
-      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
+      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1, anchor: 'summary-tab')
       dt_value = 'Nom'
       new_we_name = 'New Name'
 
@@ -360,7 +360,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_no_button I18n.t('common.actions.remove', locale: user.locale)
@@ -371,7 +371,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_no_button I18n.t('common.actions.remove', locale: user.locale)
