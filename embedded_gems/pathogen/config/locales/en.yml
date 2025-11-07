@@ -44,6 +44,3 @@ en:
       title: required
     link:
       aria-label: "%{content} (opens in a new window)"
-    tabs:
-      loading_skeleton:
-        loading_content: Loading content
