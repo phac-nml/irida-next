@@ -414,6 +414,14 @@ en:
           updated_at_desc: Updated At
         tabs_label: Projects navigation
         title: Projects
+      projects_list:
+        sorting:
+          created_at_asc: Oldest created
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          updated_at_desc: Updated At
   data_exports:
     create:
       error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'

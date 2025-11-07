@@ -414,6 +414,14 @@ fr:
           updated_at_desc: Mis à jour à
         tabs_label: Navigation des projets
         title: Projets
+      projects_list:
+        sorting:
+          created_at_asc: Plus ancien créé
+          created_at_desc: Dernier créé
+          namespace_name_asc: Nom
+          namespace_name_desc: Nom, décroissant
+          updated_at_asc: Plus ancien mis à jour
+          updated_at_desc: Mis à jour à
   data_exports:
     create:
       error: Une erreur est survenue lors de la création de l’exportation des données. Veuillez communiquer avec votre administrateur système si cette erreur persiste.

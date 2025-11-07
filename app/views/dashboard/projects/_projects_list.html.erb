@@ -1,0 +1,63 @@
+<% if @has_projects %>
+  <div class="flex flex-wrap space-x-2 justify-end mb-4">
+    <%= render SearchComponent.new(
+      query: @q,
+      url: dashboard_projects_url(**request.query_parameters),
+      search_attribute: :namespace_name_or_namespace_puid_cont,
+      label: t('common.controls.search'),
+      placeholder: t("dashboard.projects.index.search.placeholder"),
+      total_count: @pagy.count,
+      class: "max-sm:grow",
+      value: @q.namespace_name_or_namespace_puid_cont,
+    ) do %>
+      <% if params[:personal] == 'true' %>
+        <input type="hidden" name="personal" value="true">
+      <% end %>
+    <% end %>
+
+    <%= render Ransack::SortDropdownComponent.new(
+      @q,
+      "projects",
+      [
+        { name: "updated_at", dir: "desc" },
+        { name: "updated_at", dir: "asc" },
+        { name: "namespace_name", dir: "asc" },
+        { name: "namespace_name", dir: "desc" },
+        { name: "created_at", dir: "desc" },
+        { name: "created_at", dir: "asc" },
+      ],
+    ) %>
+  </div>
+
+  <div class="flex flex-col gap-2" id="groups_tree">
+    <%= render TreegridComponent.new do | component | %>
+      <% @projects.each_with_index do |project, project_index| %>
+        <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: @projects.size, aria: { label: namespace_row_aria_label(project.namespace) }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: @projects.size }) } }, id: dom_id(project)) do %>
+          <%= render NamespaceRow::ContentsComponent.new(
+            namespace: project.namespace,
+            full_name: true,
+            icon_size: :medium,
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
+      <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("dashboard.projects.index.pagy_item")) %>
+    <% else %>
+      <%= viral_empty(
+        icon_name: :magnifying_glass,
+        title: t("components.viral.pagy.empty_state.title"),
+        description: t("components.viral.pagy.empty_state.description"),
+      ) %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      icon_name: Project.icon,
+      title: t("dashboard.projects.index.no_projects"),
+      description: t("dashboard.projects.index.no_projects_description"),
+    ) %>
+  </div>
+<% end %>
