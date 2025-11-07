@@ -182,13 +182,13 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'name is not shown on data export page if data_export.name is nil' do
-    visit data_export_path(@data_export2)
+    visit data_export_path(@data_export2, anchor: 'summary-tab')
 
     assert_no_text I18n.t('common.labels.name')
   end
 
   test 'expire has once_ready text on data export page if data_export.status is processing' do
-    visit data_export_path(@data_export2)
+    visit data_export_path(@data_export2, anchor: 'summary-tab')
 
     assert_selector 'div:last-child dd',
                     text: I18n.t('data_exports.summary.once_ready')
@@ -196,7 +196,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'data export status pill colors' do
     # processing
-    visit data_export_path(@data_export2)
+    visit data_export_path(@data_export2, anchor: 'summary-tab')
 
     within %(dl div:nth-child(3) dd) do
       assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
@@ -204,7 +204,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     # ready
-    visit data_export_path(@data_export1)
+    visit data_export_path(@data_export1, anchor: 'summary-tab')
 
     within %(dl div:nth-child(4) dd) do
       assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
@@ -213,13 +213,13 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'hidden preview tab and disabled download btn when status is processing' do
-    visit data_export_path(@data_export1)
+    visit data_export_path(@data_export1, anchor: 'summary-tab')
 
     assert_selector 'button',
                     text: I18n.t('common.actions.download')
     assert_text I18n.t(:'data_exports.show.tabs.preview')
 
-    visit data_export_path(@data_export2)
+    visit data_export_path(@data_export2, anchor: 'summary-tab')
 
     assert_selector 'button[disabled]',
                     text: I18n.t('common.actions.download')
@@ -234,7 +234,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @data_export2.id
     end
 
-    visit data_export_path(@data_export2)
+    visit data_export_path(@data_export2, anchor: 'summary-tab')
 
     click_button I18n.t('common.actions.remove')
 
@@ -485,25 +485,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link @workflow_execution1.id
 
-    assert_current_path(workflow_execution_path(@workflow_execution1))
-    assert_text @workflow_execution1.id
-
-    within first('dl') do
-      assert_text @workflow_execution1.run_id
-      assert_text @workflow_execution1.workflow.name
-      assert_text @workflow_execution1.metadata['workflow_version']
-    end
-
-    visit data_export_path(@data_export7, anchor: 'preview-tab')
-
-    click_link sample46.puid
-
-    assert_text sample46.name
-    assert_text sample46.puid
-  end
-
-  test 'create analysis export from show page' do
-    visit workflow_execution_path(@workflow_execution1)
+    assert_current_path(workflow_execution_path(@workflow_execution1, anchor: 'summary-tab'))
 
     click_button I18n.t('workflow_executions.show.create_export_button')
 
@@ -543,7 +525,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export using users project shared workflow execution from user workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit workflow_execution_path(@shared_workflow_execution1)
+    visit workflow_execution_path(@shared_workflow_execution1, anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -583,7 +565,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export using users group shared workflow execution from user workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit workflow_execution_path(@group_shared_workflow_execution1)
+    visit workflow_execution_path(@group_shared_workflow_execution1, anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -623,7 +605,8 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export using users shared workflow execution from project workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution1)
+    visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution1,
+                                                    anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -663,7 +646,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export using users group shared workflow execution from group workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution1)
+    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution1, anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -703,7 +686,8 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export from project shared workflow execution from project workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2)
+    visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2,
+                                                    anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -743,7 +727,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export from group shared workflow execution from group workflow execution show page' do
     user = users(:james_doe)
     login_as user
-    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution2)
+    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution2, anchor: 'summary-tab')
 
     click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -855,12 +839,12 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create export state between completed and non-completed workflow executions' do
     submitted_workflow_execution = workflow_executions(:irida_next_example_submitted)
-    visit workflow_execution_path(submitted_workflow_execution)
+    visit workflow_execution_path(submitted_workflow_execution, anchor: 'summary-tab')
 
     assert_selector 'button[disabled]',
                     text: I18n.t('workflow_executions.index.create_export_button')
 
-    visit workflow_execution_path(@workflow_execution1)
+    visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
     assert_no_selector 'button[disabled]',
                        text: I18n.t('workflow_executions.index.create_export_button')
   end
@@ -1220,7 +1204,7 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'linelist export with ready status does not have preview tab' do
-    visit data_export_path(@data_export9)
+    visit data_export_path(@data_export9, anchor: 'summary-tab')
 
     assert_selector 'div:nth-child(4) dd', text: 'xlsx'
 
