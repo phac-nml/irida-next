@@ -58,15 +58,26 @@ module Pathogen
       # @param system_arguments [Hash] Additional HTML attributes passed to turbo_frame_tag
       # Content block is automatically captured by ViewComponent and available via `content` helper
       def initialize(frame_id:, src_path:, selected:, refresh: 'morph', **system_arguments)
-        raise ArgumentError, 'frame_id is required' if frame_id.blank?
-        raise ArgumentError, 'src_path is required' if src_path.blank?
-        raise ArgumentError, 'selected must be a boolean' unless [true, false].include?(selected)
+        validate_arguments!(frame_id:, src_path:, selected:)
 
         @frame_id = frame_id
         @src_path = src_path
         @selected = selected
         @refresh = refresh
         @system_arguments = system_arguments
+      end
+
+      private
+
+      # Validates required arguments for LazyPanel initialization
+      # @param frame_id [String] Unique identifier for the turbo frame
+      # @param src_path [String] URL to lazy-load content from
+      # @param selected [Boolean] Whether this is the currently active tab
+      # @raise [ArgumentError] if any validation fails
+      def validate_arguments!(frame_id:, src_path:, selected:)
+        raise ArgumentError, 'frame_id is required' if frame_id.blank?
+        raise ArgumentError, 'src_path is required' if src_path.blank?
+        raise ArgumentError, 'selected must be a boolean' unless [true, false].include?(selected)
       end
 
       # Whether to render content immediately (eager) or defer (lazy)
