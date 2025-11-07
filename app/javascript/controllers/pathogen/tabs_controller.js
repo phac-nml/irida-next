@@ -103,12 +103,15 @@ export default class extends Controller {
 
       // Determine initial tab index
       let initialIndex = this.defaultIndexValue;
+      let shouldUpdateUrl = true;
 
       // If URL sync is enabled, check for hash in URL
       if (this.syncUrlValue) {
         const hashIndex = this.#getTabIndexFromHash();
         if (hashIndex !== -1) {
           initialIndex = hashIndex;
+          // If hash already points to this tab, don't update URL
+          shouldUpdateUrl = false;
         }
 
         // Listen for hash changes (back/forward navigation)
@@ -122,9 +125,13 @@ export default class extends Controller {
       }
 
       // Select the initial tab
-      // Use replaceState for initial selection to avoid creating unnecessary history entry
+      // Only update URL if the selected tab isn't already the current tab
       const validatedIndex = this.#validateDefaultIndex(initialIndex);
-      this.#selectTabByIndex(validatedIndex, true, history.replaceState);
+      this.#selectTabByIndex(
+        validatedIndex,
+        shouldUpdateUrl,
+        history.replaceState,
+      );
 
       // Add initialization markers
       this.element.classList.add("tabs-initialized");
@@ -514,7 +521,7 @@ export default class extends Controller {
         const hash = this.#getTabHash(index);
         const url = new URL(window.location.href);
         // Clear stale tab query params so subsequent submissions don't carry outdated values
-        // url.searchParams.delete("tab");
+        url.searchParams.delete("tab");
         url.hash = hash;
 
         // Use Turbo's history API to properly integrate with Turbo navigation
