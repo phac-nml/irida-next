@@ -19,6 +19,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
+    @tab = params[:tab] || 'subgroups_and_projects'
+    @tab_index = @tab == 'shared_namespaces' ? 1 : 0
     @search_params = search_params
     @render_flat_list = @search_params[:name_or_puid_cont].present?
 

@@ -13,6 +13,9 @@ module Dashboard
       set_default_sort
       @pagy, @projects = pagy(@q.result)
 
+      @tab = params[:personal] == 'true' ? 'personal' : 'all'
+      @tab_index = @tab == 'personal' ? 1 : 0
+
       respond_to do |format|
         format.html
       end

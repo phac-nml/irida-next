@@ -43,7 +43,16 @@ module Projects
       redirect_to namespace_project_sample_path unless !params.key?(:tab) || params[:tab].in?(%w[files metadata
                                                                                                  history])
 
-      @tab = params[:tab]
+      @tab = params[:tab] || 'files'
+      @tab_index = case @tab
+                   when 'metadata'
+                     1
+                   when 'history'
+                     2
+                   else
+                     0
+                   end
+
       if @tab == 'metadata'
         @sample_metadata = @sample.metadata_with_provenance
       elsif @tab == 'history'
