@@ -5,28 +5,31 @@
   data-pathogen--tabs-sync-url-value="<%= @system_arguments[:data]['pathogen--tabs-sync-url-value'] %>"
   class="<%= @orientation == :vertical ? 'flex' : '' %>"
 >
-  <nav
-    id="<%= @id %>"
-    role="tablist"
-    aria-label="<%= @label %>"
-    aria-orientation="<%= @orientation %>"
-    <%= tag.attributes(@system_arguments.except(:id, :data)) %>
-    class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700', @system_arguments[:class]) %>"
-  >
-    <%# Tab list container %>
-    <div
-      class="<%= class_names(
-        'text-sm font-medium text-center text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700',
-        @orientation == :vertical ? 'flex flex-col border-r min-w-[200px]' : 'w-full flex flex-wrap -mb-px border-b'
-      ) %>"
-      role="presentation"
+  <%# Wrapper for nav and right content to maintain layout %>
+  <div class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700') %>">
+    <nav
+      id="<%= @id %>"
+      role="tablist"
+      aria-label="<%= @label %>"
+      aria-orientation="<%= @orientation %>"
+      <%= tag.attributes(@system_arguments.except(:id, :data, :class)) %>
+      class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:flex-grow', @system_arguments[:class]) %>"
     >
-      <% tabs.each do |tab| %>
-        <%= tab %>
-      <% end %>
-    </div>
+      <%# Tab list container %>
+      <div
+        class="<%= class_names(
+          'text-sm font-medium text-center text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+          @orientation == :vertical ? 'flex flex-col border-r min-w-[200px]' : 'w-full flex flex-wrap -mb-px border-b'
+        ) %>"
+        role="presentation"
+      >
+        <% tabs.each do |tab| %>
+          <%= tab %>
+        <% end %>
+      </div>
+    </nav>
 
-    <%# Right content area %>
+    <%# Right content area - moved outside nav for ARIA compliance %>
     <% if right_content? %>
       <div
         class="<%= class_names('flex items-center shrink-0', @orientation == :vertical ? 'ml-auto pl-4 pr-4' : 'mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:mr-4 sm:-mb-px sm:py-4') %>"
@@ -34,7 +37,7 @@
         <%= right_content %>
       </div>
     <% end %>
-  </nav>
+  </div>
 
   <%# Panel container %>
   <div class="<%= @orientation == :vertical ? 'flex-1 pl-6' : 'mt-4' %>">

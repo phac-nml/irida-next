@@ -27,7 +27,7 @@
     ) %>
 
     <% tabs.with_right_content do %>
-      <div class="flex flex-wrap gap-2 mb-2 justify-end">
+      <div class="flex flex-wrap space-x-2 justify-end">
         <% if @has_projects %>
           <%= render SearchComponent.new(
             query: @q,
