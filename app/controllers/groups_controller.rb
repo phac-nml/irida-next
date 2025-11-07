@@ -9,6 +9,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :current_page
   before_action :edit_view_authorizations, only: %i[edit]
   before_action :show_view_authorizations, only: %i[show]
+  before_action :tab, only: %i[show]
   before_action :page_title, only: %i[show edit activity new create]
 
   def index
@@ -18,7 +19,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
-    @tab = params[:tab]
     @search_params = search_params
     @render_flat_list = @search_params[:name_or_puid_cont].present?
 
@@ -157,6 +157,10 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
+  def tab
+    @tab = params[:tab]
+  end
+
   def shared_namespaces_or_sub_namespaces
     namespaces = if @tab == 'shared_namespaces'
                    @group.shared_namespaces
@@ -251,9 +255,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @title = case action_name
              when 'show'
                if @tab == 'shared_namespaces'
-                 [t(:'groups.show.tabs.shared_namespaces'), @group.full_name].join(' · ')
+                 [@group.full_name, t(:'groups.show.tabs.shared_namespaces')].join(' · ')
                else
-                 [t(:'groups.show.tabs.subgroups_and_projects'), @group.full_name].join(' · ')
+                 [@group.full_name, t(:'groups.show.tabs.subgroups_and_projects')].join(' · ')
                end
              when 'activity'
                [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')

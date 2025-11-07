@@ -251,16 +251,16 @@ module Projects
       when 'show'
         @tab = params[:tab]
         @title = if @tab == 'metadata'
-                   [t(:'projects.samples.show.tabs.metadata'),
-                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    t(:'projects.samples.show.tabs.metadata'),
                     @project.full_name].join(' · ')
                  elsif @tab == 'history'
-                   [t(:'projects.samples.show.tabs.history'),
-                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    t(:'projects.samples.show.tabs.history'),
                     @project.full_name].join(' · ')
                  else
-                   [t(:'projects.samples.show.tabs.files'),
-                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    t(:'projects.samples.show.tabs.files'),
                     @project.full_name].join(' · ')
                  end
       else
