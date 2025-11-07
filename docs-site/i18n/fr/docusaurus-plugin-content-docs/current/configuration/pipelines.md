@@ -26,7 +26,7 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
   - `automatable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être automatisé.
   - `executable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
 - **overrides** _(Optionnel)_ pour le pipeline
-- **samplesheet_overrides** _(Optional)_ pour le pipeline
+- **samplesheet_schema_overrides** _(Optional)_ pour le pipeline
 
 #### Exemple
 
@@ -201,9 +201,9 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 }
 ```
 
-### Remplacements de la feuille d'échantillons
+### Remplacements du schéma de la feuille d'échantillons
 
-La section Remplacements de la feuille d'échantillons peut être utilisée pour modifier n'importe quoi dans la samplesheet d'origine du pipeline. Tout ce qui se trouve dans `"samplesheet_overrides": {<json data>}` écrasera la samplesheet d'origine avec `<json data>` en commençant au niveau le plus élevé.
+La section « Samplesheet Schema Overrides » peut être utilisée pour modifier n’importe quel élément de la samplesheet originale du pipeline. Tout contenu placé dans `"samplesheet_schema_overrides": {<json data>}` écrasera la samplesheet originale avec `<json data>`, en l’appliquant au niveau racine.
 
 Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées sélectionnés par défaut. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par la samplesheet par défaut reste le même.
 
@@ -214,7 +214,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "Mon schéma d'exemple",
-  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de schéma de feuilles d'échantillons",
   "items": {
         "type": "object",
         "properties": {
@@ -264,7 +264,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
 }
 ```
 
-#### Exemple — remplacement de la samplesheet au niveau de l'entrée du pipeline
+#### Exemple de remplacement de schéma de feuilles d'échantillons au niveau de l'entrée du pipeline
 
 ```json
 {
@@ -272,7 +272,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
-    "samplesheet_overrides": {
+    "samplesheet_schema_overrides": {
       "items": {
         "properties": {
             "metadata_1": {
@@ -301,7 +301,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "Mon schéma d'exemple",
-  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de schéma de feuilles d'échantillons",
   "type": "object",
    "items": {
       "type": "object",
@@ -354,7 +354,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
 }
 ```
 
-#### Exemple — remplacement de la samplesheet au niveau de la version du pipeline
+#### Exemple de remplacement de schéma de feuilles d'échantillons au niveau de la version du pipeline
 
 ```json
 {
@@ -365,7 +365,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
     "versions": [
       {
         "name": "1.0.3",
-        "samplesheet_overrides": {
+        "samplesheet_schema_overrides": {
           "items": {
             "properties": {
               "metadata_1": {
@@ -397,7 +397,7 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "Mon schéma d'exemple",
-  "description": "Schéma d'exemple : pour démontrer les remplacements de la feuille d'échantillons",
+  "description": "Schéma d'exemple : pour démontrer les remplacements de schéma de feuilles d'échantillons",
   "type": "object",
   "versions": [
     {

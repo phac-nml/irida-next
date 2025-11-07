@@ -26,7 +26,7 @@ This `pipelines.json` file should be in the format below and can include the fol
   - `automatable`: _(Optional)_ `true` or `false` to specify if the pipeline can be automated.
   - `executable`: _(Optional)_ `true` or `false` to specify if the pipeline is able to be executed. When set to `false`, the pipeline will not be listed to the user.
 - **overrides** _(Optional)_ for the pipeline
-- **samplesheet_overrides** _(Optional)_ for the pipeline
+- **samplesheet_schema_overrides** _(Optional)_ for the pipeline
 
 #### Example
 
@@ -201,9 +201,9 @@ In the below example, we will override the database connection options so we can
 }
 ```
 
-### Samplesheet Overrides
+### Samplesheet Schema Overrides
 
-The Samplesheet Overrides section can be used to change anything within the original pipeline samplesheet. Anything within the `"samplesheet_overrides": {<json data>}` will overwrite the original samplesheet with `<json data>` starting at the highest level.
+The Samplesheet Schema Overrides section can be used to change anything within the original pipeline samplesheet. Anything within the `"samplesheet_schema_overrides": {<json data>}` will overwrite the original samplesheet with `<json data>` starting at the highest level.
 
 In the below example, we will override the default selected metadata fields. Note that only the overridden fields need to be provided, as everything else provided by the default samplesheet stays the same.
 
@@ -214,7 +214,7 @@ In the below example, we will override the default selected metadata fields. Not
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "My Example Schema",
-  "description": "Example Schema: for demonstrating samplesheet overrides",
+  "description": "Example Schema: for demonstrating samplesheet schema overrides",
   "items": {
         "type": "object",
         "properties": {
@@ -264,7 +264,7 @@ In the below example, we will override the default selected metadata fields. Not
 }
 ```
 
-#### Example pipeline entry level samplesheet override
+#### Example pipeline entry level samplesheet schema override
 
 ```json
 {
@@ -272,7 +272,7 @@ In the below example, we will override the default selected metadata fields. Not
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
-    "samplesheet_overrides": {
+    "samplesheet_schema_overrides": {
       "items": {
         "properties": {
             "metadata_1": {
@@ -301,7 +301,7 @@ In the below example, we will override the default selected metadata fields. Not
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "My Example Schema",
-  "description": "Example Schema: for demonstrating samplesheet overrides",
+  "description": "Example Schema: for demonstrating samplesheet schema overrides",
   "type": "object",
    "items": {
       "type": "object",
@@ -354,7 +354,7 @@ In the below example, we will override the default selected metadata fields. Not
 }
 ```
 
-#### Example pipeline version level samplesheet override
+#### Example pipeline version level samplesheet schema override
 
 ```json
 {
@@ -365,7 +365,7 @@ In the below example, we will override the default selected metadata fields. Not
     "versions": [
       {
         "name": "1.0.3",
-        "samplesheet_overrides": {
+        "samplesheet_schema_overrides": {
           "items": {
             "properties": {
               "metadata_1": {
@@ -397,7 +397,7 @@ In the below example, we will override the default selected metadata fields. Not
   "$schema": "http://example.com/schema",
   "$id": "https://example.com/nextflow_schema.json",
   "title": "My Example Schema",
-  "description": "Example Schema: for demonstrating samplesheet overrides",
+  "description": "Example Schema: for demonstrating samplesheet schema overrides",
   "type": "object",
   "versions": [
     {
