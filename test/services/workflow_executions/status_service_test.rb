@@ -43,9 +43,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'completing', @workflow_execution.state
+      assert_equal 'completing', @workflow_execution.reload.state
 
       assert_no_enqueued_emails
     end
@@ -84,9 +84,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'running', @workflow_execution.state
+      assert_equal 'running', @workflow_execution.reload.state
 
       assert_no_enqueued_emails
     end
@@ -125,9 +125,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'canceled', @workflow_execution.state
+      assert_equal 'canceled', @workflow_execution.reload.state
 
       assert_no_enqueued_emails
     end
@@ -166,9 +166,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'error', @workflow_execution.state
+      assert_equal 'error', @workflow_execution.reload.state
 
       assert @workflow_execution.email_notification
       assert_enqueued_emails 1
@@ -211,9 +211,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'error', @workflow_execution.state
+      assert_equal 'error', @workflow_execution.reload.state
 
       assert @workflow_execution.email_notification
       assert_enqueued_emails 2

@@ -57,14 +57,14 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+      WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
 
       assert_raises(ActiveStorage::FileNotFoundError) { @output_file_blob.download }
       assert_raises(ActiveStorage::FileNotFoundError) { @input_file_blob.download }
       assert_raises(ActiveStorage::FileNotFoundError) { @samplesheet_file_blob.download }
       assert_nothing_raised { @unrelated_file_blob.download }
 
-      assert @workflow_execution.cleaned?
+      assert @workflow_execution.reload.cleaned?
     end
 
     test 'do not clean an already cleaned workflow execution' do
@@ -102,7 +102,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+      WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
 
       assert_nothing_raised do
         @output_file_blob.download
@@ -111,7 +111,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      assert @workflow_execution.cleaned?
+      assert @workflow_execution.reload.cleaned?
     end
 
     test 'do not clean if blob_run_directory is an empty string' do
@@ -127,7 +127,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+      WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
 
       assert_nothing_raised do
         @output_file_blob.download
@@ -136,7 +136,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      assert @workflow_execution.cleaned?
+      assert @workflow_execution.reload.cleaned?
     end
 
     test 'do not clean if workflow execution is nil' do
