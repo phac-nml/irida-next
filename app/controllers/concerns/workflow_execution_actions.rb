@@ -199,6 +199,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                  when 'files'
                    3
                  else
+                   @tab = 'summary'
                    0
                  end
   end
