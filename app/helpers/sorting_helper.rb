@@ -10,15 +10,12 @@ module SortingHelper
     true
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil)
+  def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil, data: { turbo: true, turbo_action: 'replace' })
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
                        icon_name: active_sort(ransack_obj, field, dir) ? :check : :blank,
                        prefix:,
-                       data: {
-                         turbo: true,
-                         turbo_action: 'replace'
-                       },
+                       data:,
                        **add_aria_current(ransack_obj, field, dir))
   end
 

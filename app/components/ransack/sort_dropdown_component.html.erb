@@ -7,6 +7,7 @@
       sort[:name],
       sort[:dir],
       t("components.ransack.sort_dropdown_component.prefix"),
+      **(@turbo ? {} : {data: {}})
     ) %>
   <% end %>
 <% end %>

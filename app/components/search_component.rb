@@ -8,7 +8,7 @@ class SearchComponent < Component
 
   # rubocop:disable Metrics/ParameterLists
   def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil,
-                 search_field_arguments: {}, **kwargs)
+                 search_field_arguments: {}, data: { turbo_action: 'replace' }, **kwargs)
     @query = query
     @url = url
     @search_attribute = search_attribute
@@ -16,6 +16,7 @@ class SearchComponent < Component
     @placeholder = placeholder
     @total_count = total_count
     @value = value
+    @data = data
     @kwargs = kwargs
     @search_field_arguments = search_field_arguments
   end
@@ -24,7 +25,7 @@ class SearchComponent < Component
   def kwargs
     @kwargs.tap do |args|
       args[:data] ||= {}
-      args[:data]['turbo-action'] = 'replace'
+      args[:data].merge!(@data)
     end
   end
 
