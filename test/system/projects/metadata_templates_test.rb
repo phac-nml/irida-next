@@ -535,5 +535,96 @@ module Projects
         assert_selector 'button', text: I18n.t('common.actions.edit'), focused: true
       end
     end
+
+    test 'removing metadata field completely removes wrapper container and all contents' do
+      project = projects(:project29)
+      sample = samples(:sample32)
+      group = groups(:subgroup_twelve_a)
+
+      visit namespace_project_sample_url(group, project, sample)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.metadata.table.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        # Add multiple fields
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+
+        # Fill in the fields
+        all('input.keyInput')[0].fill_in with: 'testkey1'
+        all('input.valueInput')[0].fill_in with: 'testvalue1'
+        all('input.keyInput')[1].fill_in with: 'testkey2'
+        all('input.valueInput')[1].fill_in with: 'testvalue2'
+        all('input.keyInput')[2].fill_in with: 'testkey3'
+        all('input.valueInput')[2].fill_in with: 'testvalue3'
+
+        # Get the ID of the second field's key input before removal
+        second_field_key_input = all('input.keyInput')[1]
+        key_input_id = second_field_key_input[:id]
+
+        # Find the wrapper container that contains this input
+        wrapper = second_field_key_input.find(:xpath, 'ancestor::div[contains(@class, "metadata-field-wrapper")]')
+        wrapper_id = wrapper[:id] if wrapper[:id]
+
+        # Extract the field ID from the input ID (e.g., "sample_key_1" -> "1")
+        field_id_match = key_input_id.match(/key_(\d+)/)
+        field_id = field_id_match ? field_id_match[1] : nil
+
+        # Verify the wrapper container exists before removal
+        assert_selector '.metadata-field-wrapper', count: 3
+
+        # Verify the inputField div exists within the wrapper
+        within wrapper do
+          assert_selector '.inputField', count: 1
+        end
+
+        # Verify the error div exists
+        if field_id
+          key_error_div_id = "sample_key_#{field_id}_error"
+          value_error_div_id = "sample_value_#{field_id}_error"
+          assert_selector "##{key_error_div_id}", count: 1, visible: :all
+          assert_selector "##{value_error_div_id}", count: 1, visible: :all
+        end
+
+        # Verify the inputs exist within the wrapper
+        within wrapper do
+          assert_selector "input##{key_input_id}", count: 1
+        end
+
+        # Remove the second field (index 1)
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[1].click
+
+        # Verify the wrapper container is completely gone
+        assert_no_selector "##{wrapper_id}" if wrapper_id.present?
+        assert_selector '.metadata-field-wrapper', count: 2
+
+        # Verify the key and value inputs are gone
+        assert_no_selector "input##{key_input_id}"
+
+        # Verify the error div is gone
+        if field_id
+          key_error_div_id = "sample_key_#{field_id}_error"
+          value_error_div_id = "sample_value_#{field_id}_error"
+          assert_no_selector "##{key_error_div_id}", visible: :all
+          assert_no_selector "##{value_error_div_id}", visible: :all
+        end
+
+        # Verify only 2 fields remain (indices 0 and 1, which were originally 0 and 2)
+        assert_selector 'input.keyInput', count: 2
+        assert_selector 'input.valueInput', count: 2
+        assert_selector '.metadata-field-wrapper', count: 2
+
+        # Verify the remaining fields still have their values
+        assert_equal 'testkey1', all('input.keyInput')[0].value
+        assert_equal 'testvalue1', all('input.valueInput')[0].value
+        assert_equal 'testkey3', all('input.keyInput')[1].value
+        assert_equal 'testvalue3', all('input.valueInput')[1].value
+
+        # Verify no trace of the removed field's inputs or error divs exist
+        assert_no_selector "input[id*='testkey2']"
+        assert_no_selector "input[value='testvalue2']"
+      end
+    end
   end
 end

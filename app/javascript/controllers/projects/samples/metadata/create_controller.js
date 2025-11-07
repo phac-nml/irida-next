@@ -87,16 +87,28 @@ export default class extends Controller {
     try {
       const fieldContainer = this.#findFieldContainer(event.target);
       const keyInput = this.#findKeyInput(fieldContainer);
+      const valueInput = fieldContainer.querySelector(
+        "input[id^='sample_value_']",
+      );
 
       if (!keyInput) {
         console.warn("Could not find key input for field removal");
         return;
       }
 
-      const keyId = keyInput.id;
+      // Hide errors for both inputs before removing
+      this.#hideFieldError(keyInput);
+      if (valueInput) {
+        this.#hideFieldError(valueInput);
+      }
 
-      this.#removeFieldFromDOM(fieldContainer, keyId);
-      this.#removeFieldFromErrors(keyId);
+      // Remove both input IDs from error tracking
+      this.#removeFieldFromErrors(keyInput.id);
+      if (valueInput) {
+        this.#removeFieldFromErrors(valueInput.id);
+      }
+
+      this.#removeFieldFromDOM(fieldContainer, keyInput.id);
       this.#ensureMinimumFields();
     } catch (error) {
       console.error("Error removing field:", error);
@@ -176,10 +188,10 @@ export default class extends Controller {
   /**
    * Find the field container element from event target
    * @param {Element} target - Event target element
-   * @returns {Element} Field container element
+   * @returns {Element} Field container element (wrapper)
    */
   #findFieldContainer(target) {
-    const container = target.closest(".inputField");
+    const container = target.closest(".metadata-field-wrapper");
     if (!container) {
       throw new Error("Could not find field container");
     }
@@ -197,15 +209,12 @@ export default class extends Controller {
 
   /**
    * Remove field and associated error elements from DOM
-   * @param {Element} fieldContainer - Container to remove
-   * @param {string} keyId - Key ID for error cleanup
+   * @param {Element} fieldContainer - Wrapper container to remove
+   * @param {string} keyId - Key ID (unused, kept for compatibility)
    */
   #removeFieldFromDOM(fieldContainer, keyId) {
+    // Remove the wrapper container, which includes both the inputField and error div
     fieldContainer.remove();
-
-    // Clean up associated error div
-    const errorDiv = document.getElementById(`${keyId}_field_errors`);
-    errorDiv?.remove();
   }
 
   /**
@@ -220,7 +229,9 @@ export default class extends Controller {
    * Ensure at least one field exists in the form
    */
   #ensureMinimumFields() {
-    const remainingFields = document.querySelectorAll(".inputField");
+    const remainingFields = document.querySelectorAll(
+      ".metadata-field-wrapper",
+    );
     if (remainingFields.length === 0) {
       this.addField();
     }
@@ -243,10 +254,10 @@ export default class extends Controller {
 
   /**
    * Get all input field containers
-   * @returns {NodeList} All field containers
+   * @returns {NodeList} All field wrapper containers
    */
   #getAllInputFields() {
-    return document.querySelectorAll(".inputField");
+    return document.querySelectorAll(".metadata-field-wrapper");
   }
 
   /**
@@ -301,7 +312,7 @@ export default class extends Controller {
 
     if (!hasValueValue) {
       this.#showFieldError(valueInput, this.valueMissingValue);
-      this.#addFieldIdToErrors(keyInput.id);
+      this.#addFieldIdToErrors(valueInput.id);
     } else {
       this.#hideFieldError(valueInput);
     }
@@ -313,10 +324,15 @@ export default class extends Controller {
    * @param {Element} valueInput - Value input element
    */
   #handleValidField(keyInput, valueInput) {
-    if (this.#isFieldInError(keyInput.id)) {
+    // Clear errors for both inputs if either is in error state
+    if (
+      this.#isFieldInError(keyInput.id) ||
+      this.#isFieldInError(valueInput.id)
+    ) {
       this.#hideFieldError(keyInput);
       this.#hideFieldError(valueInput);
       this.#removeFieldIdFromErrors(keyInput.id);
+      this.#removeFieldIdFromErrors(valueInput.id);
     }
     this.#createHiddenMetadataInput(keyInput, valueInput);
   }
@@ -507,7 +523,7 @@ export default class extends Controller {
     errorMessage,
   ) {
     if (errorContainer) {
-      errorContainer.classList.remove("hidden");
+      errorContainer.classList.remove("hidden", "invisible");
       // Also make sure the parent span is visible
       const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
@@ -530,7 +546,9 @@ export default class extends Controller {
    */
   #hideErrorElements(errorContainer, helpTextComponent, inputContainer) {
     if (errorContainer) {
-      errorContainer.classList.add("hidden");
+      // Use invisible instead of hidden to maintain space for alignment
+      errorContainer.classList.add("invisible");
+      errorContainer.classList.remove("hidden");
       // Also hide the parent span
       const parentSpan = errorContainer.querySelector("span");
       if (parentSpan) {
