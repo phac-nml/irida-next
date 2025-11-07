@@ -810,6 +810,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_export_path(data_export12, tab: 'preview')
 
     click_link @shared_workflow_execution2.id
+    wait_for_network_idle # Should be when the tab is loaded
 
     assert_current_path(namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2))
     assert_text @shared_workflow_execution2.id

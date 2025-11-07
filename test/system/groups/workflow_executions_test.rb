@@ -390,6 +390,7 @@ module Groups
         click_button I18n.t('common.controls.confirm', locale: user.locale)
       end
 
+      wait_for_network_idle
       within %(#workflow-executions-table table tbody) do
         assert_selector 'tr', count: 10
         assert_no_text workflow_execution.id
