@@ -1,4 +1,5 @@
 <%= form_with(url: "#") do |form| %>
+  <label for="<%=form.field_id(:field)%>">Metadata field</label>
   <%= render SelectWithAutoCompleteComponent.new(
     form: form,
     field: :field,
