@@ -322,49 +322,6 @@ module Pathogen
       assert_match(/Got: :invalid/, error.message)
     end
 
-    # Right content slot tests
-    test 'renders without right_content slot' do
-      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
-        t.with_tab(id: 'tab-1', label: 'First')
-        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
-      end
-
-      render_inline(tabs)
-
-      # Should render successfully without right_content
-      assert_selector '[role="tablist"]'
-    end
-
-    test 'renders with right_content slot' do
-      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
-        t.with_tab(id: 'tab-1', label: 'First')
-        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
-        t.with_right_content { '<button>Action</button>'.html_safe }
-      end
-
-      render_inline(tabs)
-
-      # Should render the right content
-      assert_selector 'button', text: 'Action'
-    end
-
-    test 'right_content renders alongside tabs' do
-      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
-        t.with_tab(id: 'tab-1', label: 'First')
-        t.with_tab(id: 'tab-2', label: 'Second')
-        t.with_panel(id: 'panel-1', tab_id: 'tab-1') { 'Content 1' }
-        t.with_panel(id: 'panel-2', tab_id: 'tab-2') { 'Content 2' }
-        t.with_right_content { '<span class="badge">New</span>'.html_safe }
-      end
-
-      render_inline(tabs)
-
-      # Both tabs and right content should be present
-      assert_selector '[role="tab"]', text: 'First'
-      assert_selector '[role="tab"]', text: 'Second'
-      assert_selector '.badge', text: 'New'
-    end
-
     test 'works with lazy_panels slot' do
       tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
         t.with_tab(id: 'tab-1', label: 'First', selected: true)

@@ -164,9 +164,6 @@ module Pathogen
                    )
                  }
 
-    # Renders optional content aligned to the right of the tabs
-    renders_one :right_content
-
     # Initialize a new Tabs component
     # @param id [String] Unique identifier for the tablist (required)
     # @param label [String] Accessible label for the tablist (required)
