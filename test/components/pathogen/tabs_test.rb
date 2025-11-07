@@ -364,6 +364,54 @@ module Pathogen
       assert_selector '[role="tab"]', text: 'Second'
       assert_selector '.badge', text: 'New'
     end
+
+    test 'works with lazy_panels slot' do
+      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+        t.with_tab(id: 'tab-1', label: 'First', selected: true)
+        t.with_tab(id: 'tab-2', label: 'Second')
+        t.with_lazy_panel(
+          id: 'panel-1',
+          tab_id: 'tab-1',
+          frame_id: 'frame-1',
+          src_path: '/path/to/content',
+          selected: true
+        ) { 'Content 1' }
+        t.with_lazy_panel(
+          id: 'panel-2',
+          tab_id: 'tab-2',
+          frame_id: 'frame-2',
+          src_path: '/path/to/content2',
+          selected: false
+        ) { 'Content 2' }
+      end
+      render_inline(tabs)
+
+      # Should render tabs and panels
+      assert_selector '[role="tab"]', count: 2
+      assert_selector '[role="tabpanel"]', count: 2
+      # Both turbo frames should be present (lazy_panels create turbo-frames inside TabPanels)
+      assert_selector 'turbo-frame', count: 2
+      # First panel's turbo-frame should be eager (no src attribute) with content inside
+      assert_selector '[role="tabpanel"]#panel-1 turbo-frame#frame-1:not([src])', text: 'Content 1'
+      # Second panel's turbo-frame should be lazy (has src attribute)
+      assert_selector '[role="tabpanel"]#panel-2 turbo-frame#frame-2[src="/path/to/content2"]'
+    end
+
+    test 'lazy_panels count toward panel validation' do
+      tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
+        t.with_tab(id: 'tab-1', label: 'First')
+        t.with_lazy_panel(
+          id: 'panel-1',
+          tab_id: 'tab-1',
+          frame_id: 'frame-1',
+          src_path: '/path',
+          selected: true
+        ) { 'Content' }
+      end
+      # Should not raise validation error
+      render_inline(tabs)
+      assert_selector '[role="tabpanel"]'
+    end
   end
   # rubocop:enable Metrics/ClassLength
 end

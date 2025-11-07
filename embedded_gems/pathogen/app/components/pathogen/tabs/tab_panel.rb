@@ -92,15 +92,18 @@ module Pathogen
       # Initialize a new TabPanel component
       # @param id [String] Unique identifier for the panel (required)
       # @param tab_id [String] ID of the associated tab (required)
+      # @param lazy_panel [Pathogen::Tabs::LazyPanel, nil] Optional LazyPanel component to render
       # @param system_arguments [Hash] Additional HTML attributes
       # @raise [ArgumentError] if id or tab_id is missing
-      def initialize(id:, tab_id:, initially_hidden: DEFAULT_INITIALLY_HIDDEN, **system_arguments, &block)
+      def initialize(id:, tab_id:, initially_hidden: DEFAULT_INITIALLY_HIDDEN, lazy_panel: nil, **system_arguments,
+                     &block)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'tab_id is required' if tab_id.blank?
 
         @id = id
         @tab_id = tab_id
         @initially_hidden = initially_hidden
+        @lazy_panel = lazy_panel
         @system_arguments = system_arguments
         @block = block
 
@@ -118,6 +121,10 @@ module Pathogen
         update_aria_hidden
         update_hidden_class
       end
+
+      # Returns the LazyPanel component if this is a lazy panel
+      # @return [Pathogen::Tabs::LazyPanel, nil]
+      attr_reader :lazy_panel
 
       private
 

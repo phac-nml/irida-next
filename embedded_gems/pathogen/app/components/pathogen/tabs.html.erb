@@ -28,7 +28,9 @@
 
     <%# Right content area %>
     <% if right_content? %>
-      <div class="<%= class_names('flex items-center shrink-0', @orientation == :vertical ? 'ml-auto pl-4 pr-4' : 'mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:mr-4 sm:-mb-px sm:py-4') %>">
+      <div
+        class="<%= class_names('flex items-center shrink-0', @orientation == :vertical ? 'ml-auto pl-4 pr-4' : 'mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:mr-4 sm:-mb-px sm:py-4') %>"
+      >
         <%= right_content %>
       </div>
     <% end %>
@@ -37,6 +39,9 @@
   <%# Panel container %>
   <div class="<%= @orientation == :vertical ? 'flex-1 pl-6' : 'mt-4' %>">
     <% panels.each do |panel| %>
+      <%= panel %>
+    <% end %>
+    <% lazy_panels.each do |panel| %>
       <%= panel %>
     <% end %>
   </div>

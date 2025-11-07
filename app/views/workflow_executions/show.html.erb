@@ -109,67 +109,51 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
     selected: @tab == "files",
   ) %>
 
-  <% tabs.with_panel(id: "summary-panel", tab_id: "summary-tab") do %>
-    <% if @tab == "summary" %>
-      <%= turbo_frame_tag "summary-panel-content"  do %>
-        <%= render partial: "workflow_executions/summary" %>
-      <% end %>
-    <% else %>
-      <%= turbo_frame_tag "summary-panel-content",
-          src: workflow_execution_path(@workflow_execution, tab: "summary"),
-            loading: :lazy,
-          refresh: "morph" do %>
-      <% end %>
-    <% end %>
+  <% tabs.with_lazy_panel(
+    id: "summary-panel",
+    tab_id: "summary-tab",
+    frame_id: "summary-panel-content",
+    src_path: workflow_execution_path(@workflow_execution, tab: "summary"),
+    selected: @tab == "summary"
+  ) do %>
+    <%= render partial: "workflow_executions/summary" %>
   <% end %>
 
-  <% tabs.with_panel(id: "params-panel", tab_id: "params-tab") do %>
-    <% if @tab == "params" %>
-      <%= turbo_frame_tag "params-panel-content" do %>
-        <%= render partial: "workflow_executions/params" %>
-      <% end %>
-    <% else %>
-      <%= turbo_frame_tag "params-panel-content",
-          src: workflow_execution_path(@workflow_execution, tab: "params"),
-          loading: :lazy,
-          refresh: "morph" do %>
-      <% end %>
-    <% end %>
+  <% tabs.with_lazy_panel(
+    id: "params-panel",
+    tab_id: "params-tab",
+    frame_id: "params-panel-content",
+    src_path: workflow_execution_path(@workflow_execution, tab: "params"),
+    selected: @tab == "params"
+  ) do %>
+    <%= render partial: "workflow_executions/params" %>
   <% end %>
 
-  <% tabs.with_panel(id: "samplesheet-panel", tab_id: "samplesheet-tab") do %>
-    <% if @tab == "samplesheet" %>
-      <%= turbo_frame_tag "samplesheet-panel-content" do %>
-        <%= render partial: "workflow_executions/samplesheet" %>
-      <% end %>
-    <% else %>
-      <%= turbo_frame_tag "samplesheet-panel-content",
-          src: workflow_execution_path(@workflow_execution, tab: "samplesheet"),
-          loading: :lazy,
-          refresh: "morph" do %>
-      <% end %>
-    <% end %>
+  <% tabs.with_lazy_panel(
+    id: "samplesheet-panel",
+    tab_id: "samplesheet-tab",
+    frame_id: "samplesheet-panel-content",
+    src_path: workflow_execution_path(@workflow_execution, tab: "samplesheet"),
+    selected: @tab == "samplesheet"
+  ) do %>
+    <%= render partial: "workflow_executions/samplesheet" %>
   <% end %>
 
-  <% tabs.with_panel(id: "files-panel", tab_id: "files-tab") do %>
-    <% if @tab == "files" %>
-      <%= turbo_frame_tag "files-panel-content" do %>
-        <%= render partial: "workflow_executions/files",
-        locals: {
-          pagy: @pagy,
-          q: @q,
-          search_url: workflow_execution_path(@workflow_execution),
-          attachments: @attachments,
-          workflow_execution: @workflow_execution,
-          has_attachments: @has_attachments,
-        } %>
-      <% end %>
-    <% else %>
-      <%= turbo_frame_tag "files-panel-content",
-          src: workflow_execution_path(@workflow_execution, tab: "files"),
-          loading: :lazy,
-          refresh: "morph" do %>
-      <% end %>
-    <% end %>
+  <% tabs.with_lazy_panel(
+    id: "files-panel",
+    tab_id: "files-tab",
+    frame_id: "files-panel-content",
+    src_path: workflow_execution_path(@workflow_execution, tab: "files"),
+    selected: @tab == "files"
+  ) do %>
+    <%= render partial: "workflow_executions/files",
+    locals: {
+      pagy: @pagy,
+      q: @q,
+      search_url: workflow_execution_path(@workflow_execution),
+      attachments: @attachments,
+      workflow_execution: @workflow_execution,
+      has_attachments: @has_attachments,
+    } %>
   <% end %>
 <% end %>

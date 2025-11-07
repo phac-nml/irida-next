@@ -1,0 +1,10 @@
+<% if render_eager? %>
+  <%= helpers.turbo_frame_tag(@frame_id) { content } %>
+<% else %>
+  <%= helpers.turbo_frame_tag(
+    @frame_id,
+    src: @src_path,
+    loading: :lazy,
+    refresh: @refresh,
+  ) %>
+<% end %>
