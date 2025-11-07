@@ -203,7 +203,7 @@ Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base
 
 ### Remplacements du schéma de la feuille d'échantillons
 
-La section « Samplesheet Schema Overrides » peut être utilisée pour modifier n’importe quel élément de la samplesheet originale du pipeline. Tout contenu placé dans `"samplesheet_schema_overrides": {<json data>}` écrasera la samplesheet originale avec `<json data>`, en l’appliquant au niveau racine.
+La section des remplacements de schéma de la feuille d'échantillons peut être utilisée pour modifier n'importe quel élément du schéma de feuille d'échantillons d'origine. Tout ce qui se trouve dans `"samplesheet_schema_overrides": {<json data>}` remplacera la feuille d'échantillons d'origine par `<json data>` en commençant par le niveau le plus élevé.
 
 Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées sélectionnés par défaut. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par la samplesheet par défaut reste le même.
 
