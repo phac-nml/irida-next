@@ -1,4 +1,4 @@
-<div class="flex items-center wrap-anywhere" data-controller="clipboard">
+<div class="flex items-center wrap-anywhere" data-controller="clipboard" data-clipboard-copied-value="<%= t("components.clipboard.copied") %>">
   <span id="<%= button_name %>-content">
     <% if content.present? %>
       <%= content %>
@@ -23,7 +23,6 @@
     id="<%= button_name %>-tooltip"
     data-clipboard-target="content"
     role="tooltip"
-    aria-live="polite"
     class="
       absolute z-10 invisible inline-block px-3 py-2 text-sm text-white
       transition-opacity bg-green-800 rounded-lg shadow-lg opacity-95 duration-300
@@ -33,4 +32,5 @@
   >
     <%= t("components.clipboard.copied") %>
   </div>
+  <div class="sr-only" aria-live="polite" data-clipboard-target="ariaLive"></div>
 </div>
