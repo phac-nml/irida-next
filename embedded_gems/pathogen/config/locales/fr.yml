@@ -23,7 +23,7 @@ fr:
         wednesday: mer
       errors:
         invalid_date: Date non valide
-        min_date_error: 'Date la plus ancienne autorisée : '
+        min_date_error: "Date la plus ancienne autorisée : "
       months:
         april: avril
         august: août
@@ -45,5 +45,5 @@ fr:
     link:
       aria-label: "%{content} (s’ouvre dans une nouvelle fenêtre)"
     tabs:
-      loading_spinner:
+      loading_skeleton:
         loading_content: Chargement du contenu
