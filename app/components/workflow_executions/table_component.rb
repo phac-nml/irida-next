@@ -4,7 +4,7 @@ require 'ransack/helpers/form_helper'
 
 module WorkflowExecutions
   # Component for rendering a table of Samples
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
 
     # 🧊 Fields within the 'metadata' JSONB column that require prefixing for sorting.
@@ -32,7 +32,7 @@ module WorkflowExecutions
       @search_params = search_params
       @row_actions = row_actions
       @empty = empty
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @system_arguments = system_arguments
 
       @columns = columns
@@ -43,12 +43,7 @@ module WorkflowExecutions
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'workflow-executions-table'
         args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
-        if @abilities[:select_workflow_executions]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
-        end
+        add_selection_data_attributes(args) if @abilities[:select_workflow_executions]
       end
     end
 
@@ -70,6 +65,40 @@ module WorkflowExecutions
 
     def render_cell(**arguments, &)
       render(Viral::BaseComponent.new(**arguments), &)
+    end
+
+    # 💡 Determines the actual database column name for sorting purposes.
+    #    Certain display columns (like workflow name/version) are stored
+    #    within a JSONB 'metadata' column and need prefixing for Ransack.
+    #
+    # @param column [Symbol] The symbolic name of the column used in the view.
+    # @return [String] The corresponding database column name suitable for Ransack sorting.
+    def sort_column_name(column)
+      # 🛡️ Return the column name directly if it's not a special metadata field.
+      return column.to_s unless METADATA_FIELDS.include?(column)
+
+      # special handling for workflow_name as we are actually sorting on pipeline_id
+      return 'metadata_pipeline_id' if column == :workflow_name
+
+      # 🔧 Prefix metadata fields stored in the JSONB column.
+      "metadata_#{column}"
+    end
+
+    private
+
+    def add_selection_data_attributes(args)
+      args[:data] ||= {}
+      args[:data][:controller] = 'selection'
+      args[:data][:'selection-total-value'] = @pagy.count
+      args[:data][:'selection-action-button-outlet'] = '.action-button'
+      args[:data][:'selection-count-message-one-value'] =
+        I18n.t('components.workflow_executions.table_component.counts.one')
+      args[:data][:'selection-count-message-other-value'] =
+        I18n.t('components.workflow_executions.table_component.counts.other')
+    end
+
+    def columns
+      %i[id name state run_id workflow_name workflow_version created_at updated_at]
     end
 
     def individual_path(workflow_execution)
@@ -106,29 +135,6 @@ module WorkflowExecutions
       else
         destroy_confirmation_workflow_execution_path(workflow_execution)
       end
-    end
-
-    # 💡 Determines the actual database column name for sorting purposes.
-    #    Certain display columns (like workflow name/version) are stored
-    #    within a JSONB 'metadata' column and need prefixing for Ransack.
-    #
-    # @param column [Symbol] The symbolic name of the column used in the view.
-    # @return [String] The corresponding database column name suitable for Ransack sorting.
-    def sort_column_name(column)
-      # 🛡️ Return the column name directly if it's not a special metadata field.
-      return column.to_s unless METADATA_FIELDS.include?(column)
-
-      # special handling for workflow_name as we are actually sorting on pipeline_id
-      return 'metadata_pipeline_id' if column == :workflow_name
-
-      # 🔧 Prefix metadata fields stored in the JSONB column.
-      "metadata_#{column}"
-    end
-
-    private
-
-    def columns
-      %i[id name state run_id workflow_name workflow_version created_at updated_at]
     end
   end
 end

@@ -361,3 +361,8 @@ en:
           up: Up
       sortable_lists_component:
         no_template: No template
+    workflow_executions:
+      table_component:
+        counts:
+          one: 1 workflow execution selected
+          other: "%{selected} of %{total} workflow executions selected"

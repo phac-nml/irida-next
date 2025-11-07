@@ -163,24 +163,26 @@
                   method: :get,
                   id: "select-all-form",
                   class: "max-sm:grow",
+                  data: { turbo_frame: "selected" },
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
           <%= f.submit t('common.controls.select_all'),
-                   class: "button button-default w-full",
-                   title: t(".select_all_tooltip") %>
+                  id: "select-all-button",
+                  class: "button button-default w-full",
+                  title: t(".select_all_tooltip") %>
         <% end %>
         <%= form_with(
                   url: select_group_samples_url,
                   method: :get,
                   id: "deselect-all-form",
                   class: "max-sm:grow",
+                  data: { turbo_frame: "selected" },
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
           <%= f.submit t('common.controls.deselect_all'),
-                   class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip") %>
+                  id: "deselect-all-button",
+                  class: "button button-default w-full",
+                  title: t(".deselect_all_tooltip") %>
         <% end %>
       <% end %>
       <div class="sm:grow max-sm:hidden" role="presentation"></div>
