@@ -92,7 +92,7 @@
   <% tabs.with_tab(
     id: "summary-tab",
     label: t(:"workflow_executions.show.tabs.summary"),
-    selected: @tab == "summary" || @tab == nil
+    selected: @tab == "summary"
   ) %>
 
   <% tabs.with_tab(
@@ -118,7 +118,7 @@
     tab_id: "summary-tab",
     frame_id: "summary-panel-content",
     src_path: group_workflow_execution_path(@namespace, @workflow_execution, tab: "summary"),
-    selected: @tab == "summary" || @tab == nil
+    selected: @tab == "summary"
   ) do %>
     <%= render partial: "workflow_executions/summary" %>
   <% end %>
