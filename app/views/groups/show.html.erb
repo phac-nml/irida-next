@@ -92,26 +92,6 @@
               selected: @tab == "shared_namespaces"
             ) %>
 
-            <% if @has_namespaces %>
-              <div class="flex justify-end mb-2">
-                <%= render SearchComponent.new(
-                  query: @q,
-                  url: group_path(@group),
-                  search_attribute: :name_or_puid_cont,
-                label: t('common.controls.search'),
-                  placeholder: t(".search.placeholder"),
-                  total_count: @pagy.count,
-                  class: "max-sm:grow",
-                  value: @q.name_or_puid_cont,
-                ) do %>
-
-                  <% if @tab == "shared_namespaces" %>
-                    <input type="hidden" name="tab" value="shared_namespaces">
-                  <% end %>
-                <% end %>
-              </div>
-            <% end %>
-
             <% tabs.with_lazy_panel(
               id: "subgroups_and_projects_panel",
               tab_id: "subgroups_and_projects_tab",
@@ -119,6 +99,20 @@
               src_path: group_path(@group),
               selected: @tab == "subgroups_and_projects"
             ) do %>
+              <% if @has_namespaces %>
+                <div class="flex justify-end mb-2">
+                  <%= render SearchComponent.new(
+                    query: @q,
+                    url: group_path(@group),
+                    search_attribute: :name_or_puid_cont,
+                  label: t('common.controls.search'),
+                    placeholder: t(".search.placeholder"),
+                    total_count: @pagy.count,
+                    class: "max-sm:grow",
+                    value: @q.name_or_puid_cont,
+                  ) %>
+                </div>
+              <% end %>
               <%= render "groups/subgroups_and_projects",
               locals: {
                 namespaces: @namespaces,
@@ -133,6 +127,22 @@
               src_path: group_path(@group, tab: "shared_namespaces"),
               selected: @tab == "shared_namespaces"
             ) do %>
+              <% if @has_namespaces %>
+                <div class="flex justify-end mb-2">
+                  <%= render SearchComponent.new(
+                    query: @q,
+                    url: group_path(@group),
+                    search_attribute: :name_or_puid_cont,
+                  label: t('common.controls.search'),
+                    placeholder: t(".search.placeholder"),
+                    total_count: @pagy.count,
+                    class: "max-sm:grow",
+                    value: @q.name_or_puid_cont,
+                  ) do %>
+                    <input type="hidden" name="tab" value="shared_namespaces">
+                  <% end %>
+                </div>
+              <% end %>
               <%= render "groups/shared_namespaces",
               locals: {
                 namespaces: @namespaces,
