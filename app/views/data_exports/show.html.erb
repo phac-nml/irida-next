@@ -47,7 +47,7 @@
   <%= render Pathogen::Tabs.new(
     id: "data-export-tabs",
     label: t(:"data_exports.show.tabs.title"),
-    default_index: @tab == "preview" ? 1 : 0,
+    default_index: @tab_index,
     sync_url: true
   ) do |tabs| %>
     <% tabs.with_tab(
