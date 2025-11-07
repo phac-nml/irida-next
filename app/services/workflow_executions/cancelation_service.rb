@@ -18,8 +18,6 @@ module WorkflowExecutions
       @workflow_execution.state = :canceled
 
       @workflow_execution.save
-
-      @workflow_execution
     end
   end
 end

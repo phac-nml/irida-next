@@ -30,10 +30,10 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     end
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
-    workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
+    result = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
-    if workflow_execution
-      queue_next_job(workflow_execution)
+    if result
+      queue_next_job(workflow_execution.reload)
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end

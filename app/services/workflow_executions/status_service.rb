@@ -27,9 +27,9 @@ module WorkflowExecutions
                     :error
                   end
 
-      @workflow_execution.update(state: new_state) unless new_state.nil?
+      @workflow_execution.state = new_state unless new_state.nil?
 
-      @workflow_execution
+      @workflow_execution.save
     end
   end
 end

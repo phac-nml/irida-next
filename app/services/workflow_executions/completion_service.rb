@@ -44,8 +44,6 @@ module WorkflowExecutions
       @workflow_execution.state = :completed
 
       @workflow_execution.save
-
-      @workflow_execution
     end
 
     private

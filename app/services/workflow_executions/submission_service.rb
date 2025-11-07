@@ -20,8 +20,6 @@ module WorkflowExecutions
       @workflow_execution.state = :submitted
 
       @workflow_execution.save
-
-      @workflow_execution
     end
   end
 end

@@ -30,10 +30,10 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     end
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
-    workflow_execution = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
+    result = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
 
-    if workflow_execution
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    if result
+      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution.reload)
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end

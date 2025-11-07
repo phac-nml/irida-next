@@ -19,8 +19,6 @@ module WorkflowExecutions
       @workflow_execution.cleaned = true
 
       @workflow_execution.save
-
-      @workflow_execution
     end
   end
 end
