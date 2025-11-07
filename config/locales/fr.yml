@@ -943,7 +943,7 @@ fr:
   helpers:
     label:
       concatenation:
-        basename: Nom du fichier
+        basename: Nom du fichier de base
         delete_originals: Supprimer les fichiers originaux
     select:
       prompt: Veuillez sélectionner
@@ -1441,7 +1441,7 @@ fr:
       attachments:
         concatenations:
           create:
-            basename_help: Le nom de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
+            basename_help: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
             success: Les dossiers ont été concaténés avec succès.
           modal:
             description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
@@ -1692,9 +1692,9 @@ fr:
   services:
     attachments:
       concatenation:
-        filename_missing: Nom du fichier de base non fourni. Veuillez fournir un nom de base pour le fichier concaténé.
+        filename_missing: Le nom de fichier de base doit exister.
         incorrect_attachable: Tous ou certains des fichiers sélectionnés n’appartiennent pas à l’échantillon.
-        incorrect_basename: Le nom du fichier de base ne peut contenir que des lettres, des chiffres, des traits d’union, des points et des traits de soulignement
+        incorrect_basename: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
         incorrect_fastq_file_types: Types de fichiers incorrects. Les fichiers '.fastq' ne peuvent être concaténés qu’avec d’autres fichiers '.fastq'. Les fichiers '.fastq.gz' ne peuvent être concaténés qu’avec d’autres fichiers '.fastq.gz'
         incorrect_file_pairs: Jumelage de fichiers incorrect. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
         incorrect_file_types: Les dossiers ne sont pas du même type. Les fichiers jumelés ne peuvent être concaténés qu’avec d’autres fichiers jumelés, et les fichiers uniques ne peuvent être concaténés qu’avec d’autres fichiers uniques.
