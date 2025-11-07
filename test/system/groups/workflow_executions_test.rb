@@ -382,7 +382,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
@@ -402,7 +402,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_error)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
@@ -421,7 +421,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_canceling)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_no_button I18n.t('common.actions.remove', locale: user.locale)
@@ -432,7 +432,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       click_button I18n.t('common.actions.remove', locale: user.locale)
 
@@ -451,7 +451,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_no_button I18n.t('common.actions.remove', locale: user.locale)
@@ -462,7 +462,7 @@ module Groups
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
 
-      visit group_workflow_execution_path(@group, workflow_execution)
+      visit group_workflow_execution_path(@group, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_no_button I18n.t('common.actions.remove', locale: user.locale)
