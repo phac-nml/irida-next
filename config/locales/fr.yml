@@ -2019,7 +2019,7 @@ fr:
       create_export_button: Créer une exportation
       tabs:
         files: Fichiers
-        label: Navigation de l'exécution du flux de travail
+        label: Navigation des exécutions de flux de travail
         params: Paramètres
         samplesheet: Fiche d'échantillonnage
         summary: Résumé

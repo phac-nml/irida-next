@@ -1610,7 +1610,7 @@ en:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         tabs:
-          label: Workflow Execution Details
+          label: Workflow execution navigation
       table:
         empty:
           description: There are no automated pipelines associated with this project.
