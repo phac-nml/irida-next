@@ -485,7 +485,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link @workflow_execution1.id
 
-    assert_current_path(workflow_execution_path(@workflow_execution1, anchor: 'summary-tab'))
+    assert_current_path(workflow_execution_path(@workflow_execution1))
 
     click_button I18n.t('workflow_executions.show.create_export_button')
 
