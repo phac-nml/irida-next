@@ -40,8 +40,6 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
 
-      redirect_to namespace_project_sample_path unless valid_tab?
-
       set_tab_and_index
       load_tab_data
     end
