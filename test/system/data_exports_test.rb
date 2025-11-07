@@ -439,7 +439,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'zip file contents in preview tab for sample data export' do
     attachment1 = attachments(:attachment1)
     attachment2 = attachments(:attachment2)
-    visit data_export_path(@data_export1, tab: 'preview')
+    visit data_export_path(@data_export1, anchor: 'preview-tab')
 
     assert_text @data_export1.file.filename.to_s
     assert_text I18n.t('data_exports.preview.manifest_json')
@@ -457,14 +457,14 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'clicking links in preview tab for sample data export' do
     attachment1 = attachments(:attachment1)
     attachment2 = attachments(:attachment2)
-    visit data_export_path(@data_export1, tab: 'preview')
+    visit data_export_path(@data_export1, anchor: 'preview-tab')
 
     click_link @project1.namespace.puid
 
     assert_current_path(namespace_project_path(@project1.parent, @project1))
     assert_selector 'h1', text: @project1.name
 
-    visit data_export_path(@data_export1, tab: 'preview')
+    visit data_export_path(@data_export1, anchor: 'preview-tab')
 
     click_link @sample1.puid
 
@@ -481,7 +481,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'clicking links in preview tab for analysis data export' do
     sample46 = samples(:sample46)
-    visit data_export_path(@data_export7, tab: 'preview')
+    visit data_export_path(@data_export7, anchor: 'preview-tab')
 
     click_link @workflow_execution1.id
 
@@ -494,7 +494,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @workflow_execution1.metadata['workflow_version']
     end
 
-    visit data_export_path(@data_export7, tab: 'preview')
+    visit data_export_path(@data_export7, anchor: 'preview-tab')
 
     click_link sample46.puid
 
@@ -783,7 +783,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'clicking links in preview tab for analysis data export from user shared workflow execution' do
     login_as users(:micha_doe)
     data_export11 = data_exports(:data_export_eleven)
-    visit data_export_path(data_export11, tab: 'preview')
+    visit data_export_path(data_export11, anchor: 'preview-tab')
 
     click_link @shared_workflow_execution2.id
 
@@ -796,7 +796,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @shared_workflow_execution2.metadata['workflow_version']
     end
 
-    visit data_export_path(data_export11, tab: 'preview')
+    visit data_export_path(data_export11, anchor: 'preview-tab')
 
     click_link @sample47.puid
 
@@ -807,7 +807,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'clicking links in preview tab for analysis data export from project shared workflow execution' do
     login_as users(:james_doe)
     data_export12 = data_exports(:data_export_twelve)
-    visit data_export_path(data_export12, tab: 'preview')
+    visit data_export_path(data_export12, anchor: 'preview-tab')
 
     click_link @shared_workflow_execution2.id
     wait_for_network_idle # Should be when the tab is loaded
@@ -821,7 +821,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @shared_workflow_execution2.metadata['workflow_version']
     end
 
-    visit data_export_path(data_export12, tab: 'preview')
+    visit data_export_path(data_export12, anchor: 'preview-tab')
 
     click_link @sample47.puid
 
@@ -832,7 +832,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'clicking links in preview tab for analysis data export from group shared workflow execution' do
     login_as users(:james_doe)
     data_export13 = data_exports(:data_export_thirteen)
-    visit data_export_path(data_export13, tab: 'preview')
+    visit data_export_path(data_export13, anchor: 'preview-tab')
 
     click_link @group_shared_workflow_execution2.id
 
@@ -845,7 +845,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @group_shared_workflow_execution2.metadata['workflow_version']
     end
 
-    visit data_export_path(data_export13, tab: 'preview')
+    visit data_export_path(data_export13, anchor: 'preview-tab')
 
     click_link @sample47.puid
 
@@ -866,7 +866,7 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'data export type analysis on summary tab' do
-    visit data_export_path(@data_export7, tab: 'summary')
+    visit data_export_path(@data_export7, anchor: 'summary-tab')
 
     assert_selector 'div:first-child dd', text: @data_export7.id
     assert_selector 'div:nth-child(2) dd', text: @data_export7.name
@@ -882,7 +882,7 @@ class DataExportsTest < ApplicationSystemTestCase
     we_output = attachments(:workflow_execution_completed_output_attachment)
     swe_output = attachments(:samples_workflow_execution_completed_output_attachment)
     sample46 = samples(:sample46)
-    visit data_export_path(@data_export7, tab: 'preview')
+    visit data_export_path(@data_export7, anchor: 'preview-tab')
 
     assert_text @data_export7.file.filename.to_s
     assert_text I18n.t('data_exports.preview.manifest_json')
