@@ -10,7 +10,7 @@ module SortingHelper
     true
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil, data: { turbo: true, turbo_action: 'replace' })
+  def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil, data: { turbo: true, turbo_action: 'replace' }) # rubocop:disable Metrics/ParameterLists
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
                        icon_name: active_sort(ransack_obj, field, dir) ? :check : :blank,
