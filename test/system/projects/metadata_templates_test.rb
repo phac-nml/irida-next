@@ -581,8 +581,10 @@ module Projects
 
         # Verify the error div exists
         if field_id
-          error_div_id = "key_#{field_id}_field_errors"
-          assert_selector "##{error_div_id}", count: 1
+          key_error_div_id = "sample_key_#{field_id}_error"
+          value_error_div_id = "sample_value_#{field_id}_error"
+          assert_selector "##{key_error_div_id}", count: 1, visible: :all
+          assert_selector "##{value_error_div_id}", count: 1, visible: :all
         end
 
         # Verify the inputs exist within the wrapper
@@ -602,8 +604,10 @@ module Projects
 
         # Verify the error div is gone
         if field_id
-          error_div_id = "key_#{field_id}_field_errors"
-          assert_no_selector "##{error_div_id}"
+          key_error_div_id = "sample_key_#{field_id}_error"
+          value_error_div_id = "sample_value_#{field_id}_error"
+          assert_no_selector "##{key_error_div_id}", visible: :all
+          assert_no_selector "##{value_error_div_id}", visible: :all
         end
 
         # Verify only 2 fields remain (indices 0 and 1, which were originally 0 and 2)
