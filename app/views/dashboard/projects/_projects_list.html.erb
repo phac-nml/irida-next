@@ -9,7 +9,8 @@
       total_count: @pagy.count,
       class: "max-sm:grow",
       value: @q.namespace_name_or_namespace_puid_cont,
-      data: {}
+      data: {},
+      as: (params[:personal] == 'true' ? :personal_projects_q : :all_projects_q)
     ) do %>
       <% if params[:personal] == 'true' %>
         <input type="hidden" name="personal" value="true">
@@ -27,7 +28,7 @@
         { name: "created_at", dir: "desc" },
         { name: "created_at", dir: "asc" },
       ],
-      turbo: false
+      turbo: false,
     ) %>
   </div>
 
@@ -45,7 +46,10 @@
     <% end %>
 
     <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
-      <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("dashboard.projects.index.pagy_item")) %>
+      <%= render Viral::Pagy::FullComponent.new(
+        @pagy,
+        item: t("dashboard.projects.index.pagy_item"),
+      ) %>
     <% else %>
       <%= viral_empty(
         icon_name: :magnifying_glass,

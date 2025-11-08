@@ -9,12 +9,19 @@ module Dashboard
     def index
       all_projects = authorized_projects(params)
       @has_projects = all_projects.count.positive?
-      @q = all_projects.ransack(params[:q])
+      @q = if params[:personal] == 'true'
+             all_projects.ransack(params[:personal_projects_q], search_key: :personal_projects_q)
+           else
+             all_projects.ransack(params[:all_projects_q], search_key: :all_projects_q)
+           end
       set_default_sort
       @pagy, @projects = pagy(@q.result)
 
       @tab = params[:personal] == 'true' ? 'personal' : 'all'
       @tab_index = @tab == 'personal' ? 1 : 0
+
+      set_default_sort
+      @pagy, @projects = pagy(@q.result)
 
       respond_to do |format|
         format.html
