@@ -10,6 +10,7 @@
         total_count: @pagy.count,
         class: "max-sm:grow",
         value: @q.group_name_cont,
+        as: :group_links_q
       ) do %>
         <input type="hidden" name="format" value="turbo_stream"/>
       <% end %>

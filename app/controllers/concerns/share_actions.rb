@@ -15,7 +15,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :member_listing?
-    @q = load_namespace_group_links.ransack(params[:q])
+    @q = load_namespace_group_links.ransack(params[:group_links_q], search_key: :group_links_q)
     @has_group_links = load_namespace_group_links.size.positive?
     set_default_sort
     @pagy, @namespace_group_links = pagy(@q.result)
