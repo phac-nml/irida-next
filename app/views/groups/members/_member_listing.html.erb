@@ -9,7 +9,8 @@
         placeholder: t(".search.placeholder"),
         value: @q.user_email_cont,
         class: "max-sm:grow",
-        total_count: @pagy.count
+        total_count: @pagy.count,
+        as: :members_q
       ) do %>
         <input type="hidden" name="format" value="turbo_stream"/>
       <% end %>
