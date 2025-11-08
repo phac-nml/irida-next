@@ -19,6 +19,7 @@ class SearchComponent < Component
     @data = data
     @kwargs = kwargs
     @search_field_arguments = search_field_arguments
+    @search_key = @kwargs.fetch(:as, :q)
   end
   # rubocop:enable Metrics/ParameterLists
 
@@ -31,16 +32,16 @@ class SearchComponent < Component
 
   def results_message
     if @total_count.zero?
-      I18n.t(:'components.search.results_message.zero', search_term: params[:q][@search_attribute])
+      I18n.t(:'components.search.results_message.zero', search_term: params[@search_key][@search_attribute])
     elsif @total_count == 1
-      I18n.t(:'components.search.results_message.singular', search_term: params[:q][@search_attribute])
+      I18n.t(:'components.search.results_message.singular', search_term: params[@search_key][@search_attribute])
     else
       I18n.t(:'components.search.results_message.plural', total_count: @total_count,
-                                                          search_term: params[:q][@search_attribute])
+                                                          search_term: params[@search_key][@search_attribute])
     end
   end
 
   def search_term?
-    defined?(params[:q][@search_attribute]) && params[:q][@search_attribute].present?
+    defined?(params[@search_key][@search_attribute]) && params[@search_key][@search_attribute].present?
   end
 end
