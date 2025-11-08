@@ -16,7 +16,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show
+  def show # rubocop:disable Metrics/AbcSize
     authorize! @group, to: :read?
 
     @tab = params[:tab] || 'subgroups_and_projects'
@@ -26,7 +26,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
     all_namespaces = shared_namespaces_or_sub_namespaces
     @has_namespaces = all_namespaces.count.positive?
-    @q = all_namespaces.ransack(params[:q])
+    @q = if @tab == 'shared_namespaces'
+           all_namespaces.ransack(params[:shared_namespaces_q], search_key: :shared_namespaces_q)
+         else
+           all_namespaces.ransack(params[:subgroups_and_projects_q], search_key: :subgroups_and_projects_q)
+         end
 
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
