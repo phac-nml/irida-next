@@ -1,12 +1,14 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
   class="
-    flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-start rounded-lg
-    border border-slate-300 dark:border-slate-600 text-sm text-slate-500
-    dark:text-slate-400
+    relative p-3 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/30
+    hover:border-slate-300 dark:hover:border-slate-600 transition-colors flex @max-xl:flex-col
+    @max-xl:space-y-2 space-x-2 items-start
   "
 >
-  <legend><%= t("components.advanced_search_component.condition", index: @condition_number) %></legend>
+  <legend class="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    <%= t("components.advanced_search_component.condition", index: @condition_number) %>
+  </legend>
   <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
     <div
@@ -78,9 +80,10 @@
   <button
     type="button"
     class="
-      mt-auto ml-auto text-slate-400 rounded-lg p-1.5 hover:bg-slate-100 inline-flex
-      items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white
-      dark:bg-slate-800 dark:hover:bg-slate-700 cursor-pointer
+      flex-shrink-0 inline-flex items-center justify-center w-8 h-8
+      text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300
+      hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md
+      transition-colors cursor-pointer self-start mt-auto ml-auto
     "
     title="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
     aria-label="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
