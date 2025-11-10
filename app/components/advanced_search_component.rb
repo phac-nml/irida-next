@@ -1,31 +1,47 @@
 # frozen_string_literal: true
 
-# View component for advanced search component
+# View component for advanced search functionality.
+# This component provides a modal interface for building complex search queries
+# with multiple conditions and groups. It supports both entity-specific fields
+# and JSONB metadata fields.
 class AdvancedSearchComponent < Component
-  def initialize(form:, search:, sample_fields: [], metadata_fields: [], open: false, status: true) # rubocop: disable Metrics/ParameterLists
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(form:, search:, entity_fields: [], jsonb_fields: [], sample_fields: [], metadata_fields: [],
+                 field_label_namespace: 'samples.table_component', open: false, status: true)
     @form = form
     @search = search
-    @sample_fields = sample_field_options(sample_fields)
-    @metadata_fields = metadata_field_options(metadata_fields)
+    @field_label_namespace = field_label_namespace
+
+    # Support both new generic parameters and legacy sample-specific parameters for backward compatibility
+    fields = entity_fields.presence || sample_fields
+    jsonb = jsonb_fields.presence || metadata_fields
+
+    @entity_fields = entity_field_options(fields)
+    @jsonb_fields = jsonb_field_options(jsonb)
     @operations = operation_options
     @open = open
     @status = status
+
+    # Determine the search model classes based on the search object
+    @search_group_class = search_class_map(search.class.name, :group)
+    @search_condition_class = search_class_map(search.class.name, :condition)
   end
+  # rubocop:enable Metrics/ParameterLists
 
   private
 
-  def sample_field_options(sample_fields)
-    sample_fields.map do |sample_field|
-      [I18n.t("samples.table_component.#{sample_field}"), sample_field]
+  def entity_field_options(fields)
+    fields.map do |field|
+      [I18n.t("#{@field_label_namespace}.#{field}"), field]
     end
   end
 
-  def metadata_field_options(metadata_fields)
-    metadata_field_options = metadata_fields.map do |metadata_field|
-      [metadata_field, "metadata.#{metadata_field}"]
+  def jsonb_field_options(fields)
+    jsonb_options = fields.map do |field|
+      [field, "metadata.#{field}"]
     end
     {
-      I18n.t('components.advanced_search_component.operation.metadata_fields') => metadata_field_options
+      I18n.t('components.advanced_search_component.operation.metadata_fields') => jsonb_options
     }
   end
 
@@ -41,5 +57,21 @@ class AdvancedSearchComponent < Component
       I18n.t('components.advanced_search_component.operation.in') => 'in',
       I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
     }
+  end
+
+  def search_class_map(query_class_name, type)
+    class_mappings = {
+      'Sample::Query' => {
+        group: Sample::SearchGroup,
+        condition: Sample::SearchCondition
+      },
+      'WorkflowExecution::Query' => {
+        group: WorkflowExecution::SearchGroup,
+        condition: WorkflowExecution::SearchCondition
+      }
+    }
+
+    # Default to Sample classes for backward compatibility
+    class_mappings.fetch(query_class_name, class_mappings['Sample::Query'])[type]
   end
 end
