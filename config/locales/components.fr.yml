@@ -129,8 +129,11 @@ fr:
         not_in: not in (pas dans)
       remove_condition_aria_label: Supprimer la condition
       remove_group_button: Supprimer le groupe
-      rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+      rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d'un groupe plus d'une fois, à l'exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
       title: Recherche avancée
+      validation_error:
+        one: Il y a 1 erreur de validation. Veuillez examiner le formulaire.
+        other: Il y a %{count} erreurs de validation. Veuillez examiner le formulaire.
     attachments:
       dialogs:
         delete_attachment_component:

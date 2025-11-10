@@ -9,5 +9,11 @@ module AdvancedSearch
       @condition = condition
       @condition_index = condition_index
     end
+
+    private
+
+    def translation_key(attribute)
+      "activemodel.attributes.#{@condition.class.name.underscore}.#{attribute}"
+    end
   end
 end
