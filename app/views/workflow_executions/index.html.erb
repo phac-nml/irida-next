@@ -33,6 +33,16 @@
         },
         class: "button button-destructive action-button w-full" %>
       <% end %>
+        <%# todo add fflag %>
+        <%= button_to "cancel",
+        cancel_multiple_confirmation_workflow_executions_path,
+        method: :get,
+        data: {
+          turbo_stream: true,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button-destructive action-button w-full" %>
     <% end %>
   <% end %>
 <% end %>
