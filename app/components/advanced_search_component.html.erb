@@ -2,6 +2,8 @@
   data-controller="advanced-search"
   data-advanced-search-open-value="<%= @open %>"
   data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
+  data-advanced-search-validation-error-one-value='<%= t("components.advanced_search_component.validation_error.one") %>'
+  data-advanced-search-validation-error-other-value='<%= t("components.advanced_search_component.validation_error.other", count: 2) %>'
   data-advanced-search-list-filter-outlet=".list-filter"
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
@@ -42,6 +44,12 @@
       </div>
 
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
+        <%= render LiveRegionComponent.new(
+          controller: "advanced-search",
+          target: "validationStatus",
+          politeness: :assertive,
+          atomic: true
+        ) %>
       </div>
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>

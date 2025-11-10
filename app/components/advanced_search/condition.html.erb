@@ -29,7 +29,7 @@
                              {
                                "aria-label":
                                  t(
-                                   "activemodel.attributes.sample/search_condition.field",
+                                   translation_key(:field),
                                  ),
                                "aria-invalid": invalid_field,
                                "aria-describedby":
@@ -57,7 +57,7 @@
                                "data-action": "advanced-search#handleOperatorChange",
                                "aria-label":
                                  t(
-                                   "activemodel.attributes.sample/search_condition.operator",
+                                   translation_key(:operator),
                                  ),
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
@@ -83,6 +83,7 @@
       dark:bg-slate-800 dark:hover:bg-slate-700 cursor-pointer
     "
     title="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
+    aria-label="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
     data-action="advanced-search#removeCondition"
   >
     <%= pathogen_icon(:x, size: :sm) %>
