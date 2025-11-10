@@ -9,16 +9,20 @@ export default class extends Controller {
     "listValueTemplate",
     "searchGroupsContainer",
     "searchGroupsTemplate",
+    "validationStatus",
     "valueTemplate",
   ];
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
+    validationErrorOne: String,
+    validationErrorOther: String,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
 
   connect() {
     this.idempotentConnect();
+    this.#announceValidationErrors();
   }
 
   idempotentConnect() {
@@ -223,5 +227,21 @@ export default class extends Controller {
       });
     }
     return dirty;
+  }
+
+  #announceValidationErrors() {
+    if (!this.hasValidationStatusTarget) return;
+
+    const errorElements = this.element.querySelectorAll(
+      '[aria-invalid="true"], .invalid',
+    );
+    if (errorElements.length > 0) {
+      const errorCount = errorElements.length;
+      const errorMessage =
+        errorCount === 1
+          ? this.validationErrorOneValue
+          : this.validationErrorOtherValue.replace("%{count}", String(errorCount));
+      this.validationStatusTarget.textContent = errorMessage;
+    }
   }
 }
