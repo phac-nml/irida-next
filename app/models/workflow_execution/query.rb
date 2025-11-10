@@ -115,14 +115,19 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   def advanced_query_scope(base_scope = nil)
     query_base = base_scope || @base_scope || WorkflowExecution.where(namespace_id:)
-    query_base.and(advanced_query_groups)
+    groups_scope = advanced_query_groups
+    return query_base unless groups_scope
+
+    query_base.and(groups_scope)
   end
 
   def advanced_query_groups
     adv_query_scope = nil
     groups.each do |group|
-      group_scope = WorkflowExecution
-      group.conditions.map do |condition|
+      next if group.empty?
+
+      group_scope = WorkflowExecution.all
+      group.conditions.each do |condition|
         group_scope = add_condition(group_scope, condition)
       end
       adv_query_scope = if adv_query_scope.nil?
@@ -231,8 +236,16 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     end
   end
 
-  def handle_contains(scope, condition, node, _field)
-    scope.where(node.matches("%#{condition.value}%"))
+  def handle_contains(scope, condition, node, field)
+    return scope if condition.value.blank?
+
+    # UUID fields need to be cast to text before using ILIKE
+    if field == 'id'
+      text_node = Arel::Nodes::NamedFunction.new('CAST', [node.as(Arel::Nodes::SqlLiteral.new('TEXT'))])
+      scope.where(text_node.matches("%#{condition.value}%"))
+    else
+      scope.where(node.matches("%#{condition.value}%"))
+    end
   end
 
   def handle_exists(scope, _condition, node, _field)
