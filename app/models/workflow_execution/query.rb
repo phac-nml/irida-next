@@ -78,6 +78,18 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     end
   end
 
+  OPERATOR_HANDLERS = {
+    '=' => ->(scope, condition, node) { handle_equals(scope, condition, node) },
+    'in' => ->(scope, condition, node) { handle_in(scope, condition, node) },
+    '!=' => ->(scope, condition, node) { handle_not_equals(scope, condition, node) },
+    'not_in' => ->(scope, condition, node) { handle_not_in(scope, condition, node) },
+    '<=' => ->(scope, condition, node) { handle_less_than_equal(scope, condition, node) },
+    '>=' => ->(scope, condition, node) { handle_greater_than_equal(scope, condition, node) },
+    'contains' => ->(scope, condition, node) { scope.where(node.matches("%#{condition.value}%")) },
+    'exists' => ->(scope, _condition, node) { scope.where(node.not_eq(nil)) },
+    'not_exists' => ->(scope, _condition, node) { scope.where(node.eq(nil)) }
+  }.freeze
+
   private
 
   def pagy_results(limit, page)
@@ -137,17 +149,10 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def apply_operator(scope, condition, node)
-    case condition.operator
-    when '=' then handle_equals(scope, condition, node)
-    when 'in' then handle_in(scope, condition, node)
-    when '!=' then handle_not_equals(scope, condition, node)
-    when 'not_in' then handle_not_in(scope, condition, node)
-    when '<=' then handle_less_than_equal(scope, condition, node)
-    when '>=' then handle_greater_than_equal(scope, condition, node)
-    when 'contains' then scope.where(node.matches("%#{condition.value}%"))
-    when 'exists' then scope.where(node.not_eq(nil))
-    when 'not_exists' then scope.where(node.eq(nil))
-    end
+    operator_handler = OPERATOR_HANDLERS[condition.operator]
+    return scope unless operator_handler
+
+    operator_handler.call(scope, condition, node)
   end
 
   def handle_equals(scope, condition, node)
