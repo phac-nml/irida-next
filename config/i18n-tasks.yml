@@ -164,6 +164,7 @@ ignore_unused:
   - "activity.*"
   - "components.viral.data_table_component.*"
   - "components.workflow_executions.table_component.counts*"
+  - "components.advanced_search_component.validation_error*"
   - "samples.table_component.namespaces.puid"
   - "local_time.*"
 
