@@ -106,6 +106,18 @@
       value: @q.name_or_id_cont,
       class: "max-sm:grow",
     ) %>
+    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: namespace_project_workflow_executions_path(**request.query_parameters), method: :get, class: "max-sm:grow" do |f| %>
+      <%= render AdvancedSearchComponent.new(
+        form: f,
+        search: @query,
+        entity_fields: ['id', 'name', 'state', 'run_id', 'created_at', 'updated_at'],
+        jsonb_fields: ['workflow_name', 'workflow_version'],
+        field_label_namespace: 'workflow_executions.table_component',
+        open: @query.errors.any?,
+        status: @query.advanced_query?,
+      ) %>
+      <%= f.submit hidden: true %>
+    <% end %>
   </div>
 <% end %>
 

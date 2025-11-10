@@ -87,7 +87,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
               sort_workflow_executions
             end
 
-    scope.ransack(ransack_params).result
+    scope.includes(:workflow, namespace: :parent).ransack(ransack_params).result
   end
 
   def advanced_query_scope

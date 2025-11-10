@@ -35,8 +35,8 @@
                   id: "select-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
-      <input type="hidden" name="select" value="on" />
+      <input type="hidden" name="format" value="turbo_stream">
+      <input type="hidden" name="select" value="on">
 
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
@@ -47,7 +47,7 @@
                   id: "deselect-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
+      <input type="hidden" name="format" value="turbo_stream">
 
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
@@ -68,6 +68,19 @@
         "search-field-selection-outlet": "#workflow-executions-table",
       },
     ) %>
+    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: group_workflow_executions_path(**request.query_parameters), method: :get, class: "max-sm:grow" do |f| %>
+      <%= render AdvancedSearchComponent.new(
+        form: f,
+        search: @query,
+        entity_fields: ['id', 'name', 'state', 'run_id', 'created_at', 'updated_at'],
+        jsonb_fields: ['workflow_name', 'workflow_version'],
+        field_label_namespace: 'workflow_executions.table_component',
+        open: @query.errors.any?,
+        status: @query.advanced_query?,
+      ) %>
+      <%= f.submit hidden: true %>
+    <% end %>
+
   </div>
 <% end %>
 

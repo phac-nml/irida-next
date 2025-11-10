@@ -20,15 +20,27 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   TABS = %w[summary params samplesheet files].freeze
 
-  def index
+  def index # rubocop:disable Metrics/MethodLength
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    @q = load_workflows.ransack(params[:q])
-    @has_workflow_executions = load_workflows.count.positive?
     @search_params = search_params
+    @query = WorkflowExecution::Query.new(
+      @search_params.merge(namespace_id: @namespace&.id || current_user.namespace.id)
+    )
 
+    @has_workflow_executions = load_workflows.count.positive?
+
+    if @query.valid?
+      @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    else
+      # Handle validation errors - set empty results
+      @pagy = Pagy.new(count: 0, page: 1)
+      @workflow_executions = WorkflowExecution.none
+    end
+
+    # For backward compatibility with SearchComponent that expects Ransack
+    @q = load_workflows.ransack(params[:q])
     set_default_sort
-    @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
   end
 
   def edit
@@ -330,8 +342,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    search_params = {}
-    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params
+    return {} unless params[:q]
+
+    search_params = params[:q].permit(:name_or_id_cont, :sort, groups_attributes: {})
+    search_params.to_h.with_indifferent_access
   end
 end
