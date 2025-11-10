@@ -108,6 +108,11 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     @destroy_path = destroy_multiple_workflow_executions_path
   end
 
+  def cancel_multiple_paths
+    @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
+    @cancel_path = cancel_multiple_workflow_executions_path
+  end
+
   def page_title # rubocop:disable Metrics/MethodLength
     case action_name
     when 'index'
