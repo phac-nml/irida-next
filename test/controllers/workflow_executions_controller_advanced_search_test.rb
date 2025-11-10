@@ -81,4 +81,236 @@ class WorkflowExecutionsControllerAdvancedSearchTest < ActionDispatch::Integrati
 
     assert_response :success
   end
+
+  test 'index action with advanced search by state field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'completed' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by run_id field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'run_id', operator: '=', value: @workflow_execution.run_id }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by id field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'id', operator: '=', value: @workflow_execution.id.to_s }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by created_at field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'created_at', operator: '>=', value: '2024-01-01' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by updated_at field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'updated_at', operator: '<=', value: '2024-12-31' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by workflow_name JSONB field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'workflow_name', operator: '=', value: 'phac-nml/iridanextexample' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search by workflow_version JSONB field' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'workflow_version', operator: '=', value: '1.0.0' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search using in operator' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: 'in', value: ['completed', 'running'] }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search using not_in operator' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: 'not_in', value: ['canceled', 'error'] }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search using exists operator' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'workflow_name', operator: 'exists', value: '' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search using not_exists operator' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'workflow_version', operator: 'not_exists', value: '' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with multiple conditions in same group' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'completed' },
+              '1' => { field: 'id', operator: '>=', value: '1' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with multiple groups (OR logic)' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'completed' }
+            }
+          },
+          '1' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'running' }
+            }
+          }
+        }
+      }
+    }
+
+    assert_response :success
+  end
+
+  test 'index action with advanced search and pagination' do
+    get workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'completed' }
+            }
+          }
+        }
+      },
+      page: 1,
+      limit: 10
+    }
+
+    assert_response :success
+  end
 end

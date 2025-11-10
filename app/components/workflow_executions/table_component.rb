@@ -116,22 +116,27 @@ module WorkflowExecutions
     end
 
     def cancel_path(workflow_execution)
-      if @namespace
+      if @namespace&.project_namespace?
         cancel_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
           workflow_execution
         )
+      elsif @namespace&.group_namespace?
+        cancel_group_workflow_execution_path(@namespace, workflow_execution)
       else
         cancel_workflow_execution_path(workflow_execution)
       end
     end
 
     def destroy_confirmation_path(workflow_execution)
-      if @namespace
+      if @namespace&.project_namespace?
         destroy_confirmation_namespace_project_workflow_execution_path(@namespace.parent,
                                                                        @namespace.project,
                                                                        workflow_execution)
+      elsif @namespace&.group_namespace?
+        # Groups don't have destroy_confirmation route, use destroy directly
+        group_workflow_execution_path(@namespace, workflow_execution)
       else
         destroy_confirmation_workflow_execution_path(workflow_execution)
       end
