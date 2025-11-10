@@ -56,8 +56,8 @@
             group_index: group_index,
             group_number: group_index + 1,
             show_remove_group_button: @search.groups.count > 1,
-            sample_fields: @sample_fields,
-            metadata_fields: @metadata_fields,
+            entity_fields: @entity_fields,
+            jsonb_fields: @jsonb_fields,
             operations: @operations,
           ) %>
         <% end %>
@@ -73,8 +73,8 @@
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "in") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "in") %>
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -86,8 +86,8 @@
     <% end %>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "=") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "=") %>
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -99,15 +99,15 @@
     <% end %>
   </template>
   <template data-advanced-search-target="conditionTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <%= render AdvancedSearch::Condition.new(
         groups_form: group_form,
         group_index: "GROUP_INDEX_PLACEHOLDER",
-        condition: Sample::SearchCondition.new,
+        condition: @search_condition_class.new,
         condition_index: "CONDITION_INDEX_PLACEHOLDER",
         condition_number: "CONDITION_LEGEND_INDEX_PLACEHOLDER",
-        sample_fields: @sample_fields,
-        metadata_fields: @metadata_fields,
+        entity_fields: @entity_fields,
+        jsonb_fields: @jsonb_fields,
         operations: @operations,
       ) %>
     <% end %>
@@ -115,12 +115,12 @@
   <template data-advanced-search-target="groupTemplate">
     <%= render AdvancedSearch::Group.new(
       form: @form,
-      group: Sample::SearchGroup.new,
+      group: @search_group_class.new,
       group_index: "GROUP_INDEX_PLACEHOLDER",
       group_number: "GROUP_LEGEND_INDEX_PLACEHOLDER",
       show_remove_group_button: true,
-      sample_fields: @sample_fields,
-      metadata_fields: @metadata_fields,
+      entity_fields: @entity_fields,
+      jsonb_fields: @jsonb_fields,
       operations: @operations,
     ) %>
   </template>

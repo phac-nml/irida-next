@@ -17,11 +17,11 @@
       <%= conditions_form.label :field, data: { required: true } %>
       <%= conditions_form.select :field,
                              options_for_select(
-                               @sample_fields,
+                               @entity_fields,
                                selected_key = @condition.field,
                              ).concat(
                                grouped_options_for_select(
-                                 @metadata_fields,
+                                 @jsonb_fields,
                                  selected_key = @condition.field,
                                ),
                              ),
