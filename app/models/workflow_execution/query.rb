@@ -79,15 +79,15 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   OPERATOR_HANDLERS = {
-    '=' => ->(scope, condition, node) { handle_equals(scope, condition, node) },
-    'in' => ->(scope, condition, node) { handle_in(scope, condition, node) },
-    '!=' => ->(scope, condition, node) { handle_not_equals(scope, condition, node) },
-    'not_in' => ->(scope, condition, node) { handle_not_in(scope, condition, node) },
-    '<=' => ->(scope, condition, node) { handle_less_than_equal(scope, condition, node) },
-    '>=' => ->(scope, condition, node) { handle_greater_than_equal(scope, condition, node) },
-    'contains' => ->(scope, condition, node) { scope.where(node.matches("%#{condition.value}%")) },
-    'exists' => ->(scope, _condition, node) { scope.where(node.not_eq(nil)) },
-    'not_exists' => ->(scope, _condition, node) { scope.where(node.eq(nil)) }
+    '=' => :handle_equals,
+    'in' => :handle_in,
+    '!=' => :handle_not_equals,
+    'not_in' => :handle_not_in,
+    '<=' => :handle_less_than_equal,
+    '>=' => :handle_greater_than_equal,
+    'contains' => :handle_contains,
+    'exists' => :handle_exists,
+    'not_exists' => :handle_not_exists
   }.freeze
 
   private
@@ -135,72 +135,74 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def add_condition(scope, condition)
-    node = build_arel_node(condition)
-    apply_operator(scope, condition, node)
+    field = normalized_field(condition)
+    return scope if field.blank?
+
+    node = build_arel_node(field)
+    apply_operator(scope, condition, node, field)
   end
 
-  def build_arel_node(condition)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    return WorkflowExecution.arel_table[condition.field] unless jsonb_field
+  def build_arel_node(field)
+    return WorkflowExecution.arel_table[field] unless jsonb_field?(field)
 
-    jsonb_key = condition.field == 'workflow_name' ? 'pipeline_id' : 'workflow_version'
+    jsonb_key = field == 'workflow_name' ? 'pipeline_id' : 'workflow_version'
     Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
                                     Arel::Nodes::Quoted.new(jsonb_key))
   end
 
-  def apply_operator(scope, condition, node)
-    operator_handler = OPERATOR_HANDLERS[condition.operator]
-    return scope unless operator_handler
+  def apply_operator(scope, condition, node, field)
+    handler_method = OPERATOR_HANDLERS[condition.operator]
+    return scope unless handler_method
 
-    operator_handler.call(scope, condition, node)
+    send(handler_method, scope, condition, node, field)
   end
 
-  def handle_equals(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    if jsonb_field || condition.field == 'name'
+  def handle_equals(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
+    if jsonb_field || field == 'name'
       scope.where(node.matches(condition.value))
-    elsif condition.field == 'run_id'
+    elsif field == 'run_id'
       scope.where(node.eq(condition.value.upcase))
     else
       scope.where(node.eq(condition.value))
     end
   end
 
-  def handle_in(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    if jsonb_field || condition.field == 'name'
+  def handle_in(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
+    if jsonb_field || field == 'name'
       scope.where(node.matches_any(condition.value))
-    elsif condition.field == 'run_id'
+    elsif field == 'run_id'
       scope.where(node.in(condition.value.map(&:upcase)))
     else
       scope.where(node.in(condition.value))
     end
   end
 
-  def handle_not_equals(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    if jsonb_field || condition.field == 'name'
+  def handle_not_equals(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
+    if jsonb_field || field == 'name'
       scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
-    elsif condition.field == 'run_id'
+    elsif field == 'run_id'
       scope.where(node.not_eq(condition.value.upcase))
     else
       scope.where(node.not_eq(condition.value))
     end
   end
 
-  def handle_not_in(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    if jsonb_field || condition.field == 'name'
+  def handle_not_in(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
+    if jsonb_field || field == 'name'
       scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
-    elsif condition.field == 'run_id'
+    elsif field == 'run_id'
       scope.where(node.not_in(condition.value.map(&:upcase)))
     else
       scope.where(node.not_in(condition.value))
     end
   end
 
-  def handle_less_than_equal(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+  def handle_less_than_equal(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
     if jsonb_field
       scope
         .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
@@ -214,8 +216,8 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     end
   end
 
-  def handle_greater_than_equal(scope, condition, node)
-    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+  def handle_greater_than_equal(scope, condition, node, field)
+    jsonb_field = jsonb_field?(field)
     if jsonb_field
       scope
         .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
@@ -227,6 +229,18 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     else
       scope.where(node.gteq(condition.value))
     end
+  end
+
+  def handle_contains(scope, condition, node, _field)
+    scope.where(node.matches("%#{condition.value}%"))
+  end
+
+  def handle_exists(scope, _condition, node, _field)
+    scope.where(node.not_eq(nil))
+  end
+
+  def handle_not_exists(scope, _condition, node, _field)
+    scope.where(node.eq(nil))
   end
 
   def ransack_params
@@ -244,5 +258,13 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     else
       scope.order("#{column} #{direction}")
     end
+  end
+
+  def normalized_field(condition)
+    condition.field.to_s.sub(/\Ametadata\./, '')
+  end
+
+  def jsonb_field?(field)
+    %w[workflow_name workflow_version].include?(field)
   end
 end

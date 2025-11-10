@@ -38,7 +38,8 @@ class WorkflowExecutionSearchGroupValidator < ActiveModel::Validator
 
   def validate_key(condition)
     allowed_fields = %w[id name workflow_name workflow_version state run_id created_at updated_at]
-    return if allowed_fields.include?(condition.field)
+    field = sanitized_field(condition.field)
+    return if field.blank? || allowed_fields.include?(field)
 
     condition.errors.add :field, :not_allowed
   end
@@ -102,5 +103,9 @@ class WorkflowExecutionSearchGroupValidator < ActiveModel::Validator
       common_field_conditions.collect(&:operator).sort == %w[>= <=].sort)
       unique_field_condition.errors.add :operator, :taken
     end
+  end
+
+  def sanitized_field(field)
+    field.to_s.sub(/\Ametadata\./, '')
   end
 end

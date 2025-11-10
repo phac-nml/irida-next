@@ -56,6 +56,19 @@ class WorkflowExecutionSearchGroupValidatorTest < ActiveSupport::TestCase
     assert query.valid?
   end
 
+  test 'valid advanced query with metadata prefixed workflow field' do
+    namespace = groups(:group_one)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'metadata.workflow_name', operator: 'contains', value: 'irida' } }
+                      } },
+                      namespace_id: namespace.id }
+    query = WorkflowExecution::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+  end
+
   test 'invalid advanced query with contains operator on date field' do
     namespace = groups(:group_one)
     search_params = { sort: 'updated_at desc',
