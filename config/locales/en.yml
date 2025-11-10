@@ -10,6 +10,14 @@ en:
         value: Value
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Group
+      workflow_execution/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:
@@ -20,6 +28,16 @@ en:
               not_a_date_operator: cannot be used on dates
             value:
               not_a_date: must be formatted YYYY-MM-DD
+        workflow_execution/search_condition:
+          attributes:
+            field:
+              not_allowed: is not allowed
+            operator:
+              not_a_date_operator: cannot be used on dates
+              taken: has already been taken
+            value:
+              not_a_date: must be formatted YYYY-MM-DD
+              not_a_number: is not a number
   activerecord:
     attributes:
       attachment:
@@ -2086,6 +2104,7 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
+      name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions
       state: State

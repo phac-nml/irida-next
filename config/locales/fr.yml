@@ -10,6 +10,14 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Groupe
+      workflow_execution/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:
@@ -20,6 +28,16 @@ fr:
               not_a_date_operator: ne peut pas être utilisé sur les dates
             value:
               not_a_date: doit être formaté AAAA-MM-JJ
+        workflow_execution/search_condition:
+          attributes:
+            field:
+              not_allowed: n'est pas autorisé
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+              taken: a déjà été pris
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
+              not_a_number: n'est pas un nombre
   activerecord:
     attributes:
       attachment:
@@ -2090,7 +2108,8 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
-      run_id: Exécuter l’identifiant
+      name: Nom
+      run_id: Exécuter l'identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles
       state: État
       updated_at: Dernière mise à jour
