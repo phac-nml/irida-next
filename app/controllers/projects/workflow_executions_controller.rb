@@ -88,6 +88,12 @@ module Projects
       @destroy_path = destroy_multiple_namespace_project_workflow_executions_path(@project.parent, @project)
     end
 
+    def cancel_multiple_paths
+      @list_path = list_namespace_project_workflow_executions_path(@project.parent, @project,
+                                                                   list_class: 'workflow_execution')
+      @cancel_path = cancel_multiple_namespace_project_workflow_executions_path(@project.parent, @project)
+    end
+
     protected
 
     def layout_fixed

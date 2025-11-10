@@ -15,6 +15,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action proc { show_view_authorizations }, only: %i[show]
     before_action proc { destroy_paths }, only: %i[destroy_confirmation]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
+    before_action proc { cancel_multiple_paths }, only: %i[cancel_multiple_confirmation cancel_multiple]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -97,7 +98,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def cancel # rubocop:disable Metrics/MethodLength
-    result = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
+    result = WorkflowExecutions::CancelService.new(
+      current_user,
+      { workflow_execution: @workflow_execution, namespace: @namespace }
+    ).execute
 
     respond_to do |format|
       format.turbo_stream do
@@ -165,8 +169,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           }
         # Partial workflow deletion
         elsif deleted_workflows_count.positive? && deleted_workflows_count != workflows_to_delete_count
-          multi_status_messages = set_multi_status_destroy_multiple_message(deleted_workflows_count,
-                                                                            workflows_to_delete_count)
+          multi_status_messages = set_multi_status_message_for_multiple_action(deleted_workflows_count,
+                                                                               workflows_to_delete_count,
+                                                                               "destroy_multiple")
           render status: :multi_status,
                  locals: { messages: multi_status_messages }
         # All workflows deleted successfully
@@ -174,6 +179,49 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.destroy_multiple.success') }
+        end
+      end
+    end
+  end
+
+  def cancel_multiple_confirmation
+    authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
+    render turbo_stream: turbo_stream.update(
+      'workflow_execution_dialog',
+      partial: 'shared/workflow_executions/cancel_multiple_confirmation_dialog',
+      locals: {
+        open: true
+      }
+    ), status: :ok
+  end
+
+  def cancel_multiple # rubocop:disable Metrics/MethodLength
+    workflows_to_cancel_count = cancel_multiple_params['workflow_execution_ids'].count
+
+    canceled_workflows_count = ::WorkflowExecutions::CancelService.new(
+      current_user,
+      { workflow_execution_ids: cancel_multiple_params[:workflow_execution_ids],
+        namespace: @namespace }
+    ).execute
+    respond_to do |format|
+      format.turbo_stream do
+        # No selected workflows canceled
+        if canceled_workflows_count.zero?
+          render status: :unprocessable_content, locals: {
+            type: 'alert', message: t('concerns.workflow_execution_actions.cancel_multiple.error')
+          }
+        # Partial workflow cancellation
+        elsif canceled_workflows_count.positive? && canceled_workflows_count != workflows_to_cancel_count
+          multi_status_messages = set_multi_status_message_for_multiple_action(canceled_workflows_count,
+                                                                               workflows_to_cancel_count,
+                                                                               "cancel_multiple")
+          render status: :multi_status,
+                 locals: { messages: multi_status_messages }
+        # All workflows canceled successfully
+        else
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('concerns.workflow_execution_actions.cancel_multiple.success') }
         end
       end
     end
@@ -212,17 +260,21 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     params.expect(destroy_multiple: { workflow_execution_ids: [] })
   end
 
-  def set_multi_status_destroy_multiple_message(deleted_workflows_count, workflows_to_delete_count)
+  def cancel_multiple_params
+    params.expect(cancel_multiple: { workflow_execution_ids: [] })
+  end
+
+  def set_multi_status_message_for_multiple_action(confirmed_count, expected_count, action)
     [
       {
         type: 'success',
-        message: t('concerns.workflow_execution_actions.destroy_multiple.partial_success',
-                   deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}")
+        message: t("concerns.workflow_execution_actions.#{action}.partial_success",
+                   successful: "#{confirmed_count}/#{expected_count}")
       },
       {
         type: 'alert',
-        message: t('concerns.workflow_execution_actions.destroy_multiple.partial_error',
-                   not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
+        message: t("concerns.workflow_execution_actions.#{action}.partial_error",
+                   unsuccessful: "#{expected_count - confirmed_count}/#{expected_count}")
       }
     ]
   end
@@ -233,15 +285,15 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     raise NotImplementedError
   end
 
-  # Paths that are needed for the destroy confirmation.
-  #
-  # @return @index_path [String] Sets the selection storage key, so the workflow id can be removed from local storage.
-  # @return @destroy_path [String] Deletes the workflow execution on a successful confirmation.
   def destroy_paths
     raise NotImplementedError
   end
 
   def destroy_multiple_paths
+    raise NotImplementedError
+  end
+
+  def cancel_multiple_paths
     raise NotImplementedError
   end
 
