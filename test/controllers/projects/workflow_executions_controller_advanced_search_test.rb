@@ -106,6 +106,24 @@ module Projects
       assert_response :success
     end
 
+    test 'index action with advanced search by id field using contains operator' do
+      # Extract a portion of the UUID to test partial matching
+      id_substring = @workflow_execution.id.to_s[0..5]
+      get namespace_project_workflow_executions_path(@namespace, @project), params: {
+        q: {
+          groups_attributes: {
+            '0' => {
+              'conditions_attributes' => {
+                '0' => { field: 'id', operator: 'contains', value: id_substring }
+              }
+            }
+          }
+        }
+      }
+
+      assert_response :success
+    end
+
     test 'index action with advanced search by created_at field' do
       get namespace_project_workflow_executions_path(@namespace, @project), params: {
         q: {
