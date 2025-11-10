@@ -139,10 +139,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def project
     return unless params[:project_id]
+    return @project if defined?(@project)
 
     path = [params[:namespace_id], params[:project_id]].join('/')
-    @project ||= Project.includes({ namespace: [{ parent: :route }, :route] })
-                        .find_by(namespace_id: Namespaces::ProjectNamespace.find_by_full_path(path).id) # rubocop:disable Rails/DynamicFindBy
+    @project = Project.includes({ namespace: [{ parent: :route }, :route] })
+                      .find_by(namespace_id: Namespaces::ProjectNamespace.find_by_full_path(path).id) # rubocop:disable Rails/DynamicFindBy
   end
 
   def authorized_namespaces

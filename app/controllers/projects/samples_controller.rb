@@ -40,7 +40,7 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
 
-      set_tab_and_index
+      set_tab_variables
       load_tab_data
     end
 
@@ -102,7 +102,7 @@ module Projects
       !params.key?(:tab) || params[:tab].in?(%w[files metadata history])
     end
 
-    def set_tab_and_index
+    def set_tab_variables
       @tab = params[:tab] || 'files'
       @tab_index = case @tab
                    when 'metadata'

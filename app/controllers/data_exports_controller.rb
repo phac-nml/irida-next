@@ -10,7 +10,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   before_action :data_exports, only: %i[destroy]
   before_action :namespace, only: :new
   before_action :current_page
-  before_action :set_tab_and_index, only: :show
+  before_action :set_tab_variables, only: :show
   before_action :page_title
 
   TABS = %w[summary preview].freeze
@@ -117,7 +117,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     @current_page = t(:'general.default_sidebar.data_exports')
   end
 
-  def set_tab_and_index
+  def set_tab_variables
     requested_tab = params[:tab]
 
     @tab = if requested_tab == 'preview' && preview_tab_available?
