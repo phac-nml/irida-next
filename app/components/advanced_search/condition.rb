@@ -18,5 +18,11 @@ module AdvancedSearch
       @operations = operations
     end
     # rubocop:enable Metrics/ParameterLists
+
+    private
+
+    def translation_key(attribute)
+      "activemodel.attributes.#{@condition.class.name.underscore}.#{attribute}"
+    end
   end
 end

@@ -122,86 +122,105 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     adv_query_scope
   end
 
-  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    # Map workflow_name to metadata->>'pipeline_id' and workflow_version to metadata->>'workflow_version'
+  def add_condition(scope, condition)
+    node = build_arel_node(condition)
+    apply_operator(scope, condition, node)
+  end
+
+  def build_arel_node(condition)
     jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
-    jsonb_key = if condition.field == 'workflow_name'
-                  'pipeline_id'
-                elsif condition.field == 'workflow_version'
-                  'workflow_version'
-                end
+    return WorkflowExecution.arel_table[condition.field] unless jsonb_field
 
-    node = if jsonb_field
-             Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
-                                             Arel::Nodes::Quoted.new(jsonb_key))
-           else
-             WorkflowExecution.arel_table[condition.field]
-           end
+    jsonb_key = condition.field == 'workflow_name' ? 'pipeline_id' : 'workflow_version'
+    Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
+                                    Arel::Nodes::Quoted.new(jsonb_key))
+  end
 
-    # TODO: Refactor each case into it's own method
+  def apply_operator(scope, condition, node)
     case condition.operator
-    when '='
-      if jsonb_field || condition.field == 'name'
-        scope.where(node.matches(condition.value))
-      elsif condition.field == 'run_id'
-        scope.where(node.eq(condition.value.upcase))
-      else
-        scope.where(node.eq(condition.value))
-      end
-    when 'in'
-      if jsonb_field || condition.field == 'name'
-        scope.where(node.matches_any(condition.value))
-      elsif condition.field == 'run_id'
-        scope.where(node.in(condition.value.map(&:upcase)))
-      else
-        scope.where(node.in(condition.value))
-      end
-    when '!='
-      if jsonb_field || condition.field == 'name'
-        scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
-      elsif condition.field == 'run_id'
-        scope.where(node.not_eq(condition.value.upcase))
-      else
-        scope.where(node.not_eq(condition.value))
-      end
-    when 'not_in'
-      if jsonb_field || condition.field == 'name'
-        scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
-      elsif condition.field == 'run_id'
-        scope.where(node.not_in(condition.value.map(&:upcase)))
-      else
-        scope.where(node.not_in(condition.value))
-      end
-    when '<='
-      if jsonb_field
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).lteq(condition.value)
-          )
-      else
-        scope.where(node.lteq(condition.value))
-      end
-    when '>='
-      if jsonb_field
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).gteq(condition.value)
-          )
-      else
-        scope.where(node.gteq(condition.value))
-      end
-    when 'contains'
-      scope.where(node.matches("%#{condition.value}%"))
-    when 'exists'
-      scope.where(node.not_eq(nil))
-    when 'not_exists'
-      scope.where(node.eq(nil))
+    when '=' then handle_equals(scope, condition, node)
+    when 'in' then handle_in(scope, condition, node)
+    when '!=' then handle_not_equals(scope, condition, node)
+    when 'not_in' then handle_not_in(scope, condition, node)
+    when '<=' then handle_less_than_equal(scope, condition, node)
+    when '>=' then handle_greater_than_equal(scope, condition, node)
+    when 'contains' then scope.where(node.matches("%#{condition.value}%"))
+    when 'exists' then scope.where(node.not_eq(nil))
+    when 'not_exists' then scope.where(node.eq(nil))
+    end
+  end
+
+  def handle_equals(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field || condition.field == 'name'
+      scope.where(node.matches(condition.value))
+    elsif condition.field == 'run_id'
+      scope.where(node.eq(condition.value.upcase))
+    else
+      scope.where(node.eq(condition.value))
+    end
+  end
+
+  def handle_in(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field || condition.field == 'name'
+      scope.where(node.matches_any(condition.value))
+    elsif condition.field == 'run_id'
+      scope.where(node.in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.in(condition.value))
+    end
+  end
+
+  def handle_not_equals(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field || condition.field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
+    elsif condition.field == 'run_id'
+      scope.where(node.not_eq(condition.value.upcase))
+    else
+      scope.where(node.not_eq(condition.value))
+    end
+  end
+
+  def handle_not_in(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field || condition.field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+    elsif condition.field == 'run_id'
+      scope.where(node.not_in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.not_in(condition.value))
+    end
+  end
+
+  def handle_less_than_equal(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field
+      scope
+        .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
+        .where(
+          Arel::Nodes::NamedFunction.new(
+            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+          ).lteq(condition.value)
+        )
+    else
+      scope.where(node.lteq(condition.value))
+    end
+  end
+
+  def handle_greater_than_equal(scope, condition, node)
+    jsonb_field = %w[workflow_name workflow_version].include?(condition.field)
+    if jsonb_field
+      scope
+        .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
+        .where(
+          Arel::Nodes::NamedFunction.new(
+            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+          ).gteq(condition.value)
+        )
+    else
+      scope.where(node.gteq(condition.value))
     end
   end
 
