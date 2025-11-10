@@ -20,15 +20,26 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   TABS = %w[summary params samplesheet files].freeze
 
-  def index # rubocop:disable Metrics/MethodLength
+  def index # rubocop:disable Metrics/AbcSize
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
     @search_params = search_params
-    @query = WorkflowExecution::Query.new(
-      @search_params.merge(namespace_id: @namespace&.id || current_user.namespace.id)
-    )
+    base_workflows = load_workflows
 
-    @has_workflow_executions = load_workflows.count.positive?
+    # For global workflow executions (no namespace), use the authorized scope directly
+    # For project/group workflow executions, use namespace_id filtering
+    @query = if @namespace.nil?
+               WorkflowExecution::Query.new(
+                 base_scope: base_workflows,
+                 **@search_params
+               )
+             else
+               WorkflowExecution::Query.new(
+                 @search_params.merge(namespace_id: @namespace.id)
+               )
+             end
+
+    @has_workflow_executions = base_workflows.any?
 
     if @query.valid?
       @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -39,7 +50,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
 
     # For backward compatibility with SearchComponent that expects Ransack
-    @q = load_workflows.ransack(params[:q])
+    @q = base_workflows.ransack(params[:q])
     set_default_sort
   end
 

@@ -21,10 +21,12 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
-  validates :namespace_id, presence: true
+  validates :namespace_id, presence: true, unless: -> { @base_scope.present? }
   validates_with WorkflowExecutionSearchGroupValidator
 
-  def initialize(...)
+  def initialize(attributes = {})
+    attributes = attributes.dup
+    @base_scope = attributes.delete(:base_scope) || attributes.delete('base_scope')
     super
     self.sort = sort
     self.advanced_query = advanced_query?
@@ -49,7 +51,15 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     super
     # use rpartition to split on the first space encountered from the right side
     # this allows us to sort by metadata fields which contain spaces
-    column, _space, direction = sort.rpartition(' ')
+    sort_value = sort.presence || 'updated_at desc'
+    column, _space, direction = sort_value.rpartition(' ')
+
+    # Fallback to default if column is empty (e.g., if sort was just "desc")
+    if column.blank?
+      column = 'updated_at'
+      direction = direction.presence || 'desc'
+    end
+
     column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
     assign_attributes(column:, direction:)
   end
@@ -81,17 +91,19 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   def ransack_results
     return WorkflowExecution.none unless valid?
 
+    base_scope = @base_scope || WorkflowExecution.where(namespace_id:)
     scope = if advanced_query
-              sort_workflow_executions(advanced_query_scope)
+              sort_workflow_executions(advanced_query_scope(base_scope))
             else
-              sort_workflow_executions
+              sort_workflow_executions(base_scope)
             end
 
     scope.includes(namespace: :parent).ransack(ransack_params).result
   end
 
-  def advanced_query_scope
-    WorkflowExecution.where(namespace_id:).and(advanced_query_groups)
+  def advanced_query_scope(base_scope = nil)
+    query_base = base_scope || @base_scope || WorkflowExecution.where(namespace_id:)
+    query_base.and(advanced_query_groups)
   end
 
   def advanced_query_groups
@@ -199,7 +211,9 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     }.compact
   end
 
-  def sort_workflow_executions(scope = WorkflowExecution.where(namespace_id:))
+  def sort_workflow_executions(scope)
+    return scope unless column.present? && direction.present?
+
     if column.starts_with? 'metadata.'
       field = column.gsub('metadata.', '')
       scope.order(WorkflowExecution.metadata_sort(field, direction))

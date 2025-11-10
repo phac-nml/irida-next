@@ -106,7 +106,7 @@
       value: @q.name_or_id_cont,
       class: "max-sm:grow",
     ) %>
-    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: namespace_project_workflow_executions_path(**request.query_parameters), method: :get, class: "max-sm:grow" do |f| %>
+    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: namespace_project_workflow_executions_path(**request.query_parameters), method: :get, data: { controller: "filters" }, class: "max-sm:grow" do |f| %>
       <%= render AdvancedSearchComponent.new(
         form: f,
         search: @query,

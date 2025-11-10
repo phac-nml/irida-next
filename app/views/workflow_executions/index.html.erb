@@ -111,7 +111,7 @@
         },
       },
     ) %>
-    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: workflow_executions_path, method: :get, class: "max-sm:grow" do |f| %>
+    <%= form_with model: @query, html: { role: "search" }, scope: :q, url: workflow_executions_path, method: :get, data: { controller: "filters" }, class: "max-sm:grow" do |f| %>
       <%= render AdvancedSearchComponent.new(
         form: f,
         search: @query,
