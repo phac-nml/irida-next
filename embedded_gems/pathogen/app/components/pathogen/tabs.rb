@@ -75,6 +75,32 @@ module Pathogen
   #       <% end %>
   #     <% end %>
   #   <% end %>
+  #
+  # @example With LazyPanel for conditional lazy loading (recommended)
+  #   <%= render Pathogen::Tabs.new(id: "demo-tabs", label: "Content sections") do |tabs| %>
+  #     <% tabs.with_tab(id: "tab-1", label: "Overview", selected: @tab == "overview") %>
+  #     <% tabs.with_tab(id: "tab-2", label: "Details", selected: @tab == "details") %>
+  #
+  #     <% tabs.with_lazy_panel(
+  #       id: "panel-1",
+  #       tab_id: "tab-1",
+  #       frame_id: "overview-content",
+  #       src_path: overview_path(@resource),
+  #       selected: @tab == "overview"
+  #     ) do %>
+  #       <%= render partial: "overview" %>
+  #     <% end %>
+  #
+  #     <% tabs.with_lazy_panel(
+  #       id: "panel-2",
+  #       tab_id: "tab-2",
+  #       frame_id: "details-content",
+  #       src_path: details_path(@resource),
+  #       selected: @tab == "details"
+  #     ) do %>
+  #       <%= render partial: "details" %>
+  #     <% end %>
+  #   <% end %>
   class Tabs < Pathogen::Component
     # Orientation options for the tablist
     ORIENTATION_OPTIONS = %i[horizontal vertical].freeze
@@ -110,8 +136,33 @@ module Pathogen
       )
     }
 
-    # Renders optional content aligned to the right of the tabs
-    renders_one :right_content
+    # Renders tab panels with conditional Turbo Frame lazy loading
+    # Simplifies the pattern of conditionally rendering eager/lazy turbo frames
+    # @param id [String] Unique identifier for the panel
+    # @param tab_id [String] ID of the associated tab
+    # @param frame_id [String] Unique identifier for the turbo frame
+    # @param src_path [String] URL to lazy-load content from
+    # @param selected [Boolean] Whether this is the currently active tab
+    # @param refresh [String] Turbo refresh strategy (default: \"morph\")
+    # @param system_arguments [Hash] Additional HTML attributes
+    # @return [Pathogen::Tabs::TabPanel] A new panel instance wrapping LazyPanel
+    renders_many :lazy_panels,
+                 lambda { |id:, tab_id:, frame_id:, src_path:, selected:, refresh: 'morph', **system_arguments, &block|
+                   lazy_panel_instance = Pathogen::Tabs::LazyPanel.new(
+                     frame_id: frame_id,
+                     src_path: src_path,
+                     selected: selected,
+                     refresh: refresh
+                   )
+
+                   Pathogen::Tabs::TabPanel.new(
+                     id: id,
+                     tab_id: tab_id,
+                     lazy_panel: lazy_panel_instance,
+                     **system_arguments,
+                     &block
+                   )
+                 }
 
     # Initialize a new Tabs component
     # @param id [String] Unique identifier for the tablist (required)
@@ -163,8 +214,10 @@ module Pathogen
     # @raise [ArgumentError] if validation fails
     def validate_tabs_and_panels!
       raise ArgumentError, 'At least one tab is required' if tabs.empty?
-      raise ArgumentError, 'At least one panel is required' if panels.empty?
-      raise ArgumentError, 'Tab and panel counts must match' if tabs.count != panels.count
+
+      total_panels = panels.count + lazy_panels.count
+      raise ArgumentError, 'At least one panel is required' if total_panels.zero?
+      raise ArgumentError, 'Tab and panel counts must match' if tabs.count != total_panels
     end
 
     # Validates the default_index parameter
@@ -181,8 +234,8 @@ module Pathogen
       tab_ids = tabs.map(&:id)
       raise ArgumentError, 'Duplicate tab IDs found' if tab_ids.uniq.length != tab_ids.length
 
-      panel_ids = panels.map(&:id)
-      return unless panel_ids.uniq.length != panel_ids.length
+      all_panel_ids = panels.map(&:id) + lazy_panels.map(&:id)
+      return unless all_panel_ids.uniq.length != all_panel_ids.length
 
       raise ArgumentError, 'Duplicate panel IDs found'
     end
@@ -191,7 +244,8 @@ module Pathogen
     # @raise [ArgumentError] if a panel references a non-existent tab
     def validate_panel_associations!
       tab_ids = tabs.map(&:id)
-      panels.each do |panel|
+      all_panels = panels + lazy_panels
+      all_panels.each do |panel|
         unless tab_ids.include?(panel.tab_id)
           raise ArgumentError, "Panel #{panel.id} references non-existent tab #{panel.tab_id}"
         end
@@ -199,7 +253,8 @@ module Pathogen
     end
 
     def apply_initial_panel_visibility
-      panels.each_with_index do |panel, index|
+      all_panels = panels + lazy_panels
+      all_panels.each_with_index do |panel, index|
         panel.set_initial_visibility(hidden: index != @default_index)
       end
     end

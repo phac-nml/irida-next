@@ -10,8 +10,8 @@
     role="tablist"
     aria-label="<%= @label %>"
     aria-orientation="<%= @orientation %>"
-    <%= tag.attributes(@system_arguments.except(:id, :data)) %>
-    class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200 sm:dark:border-slate-700', @system_arguments[:class]) %>"
+    <%= tag.attributes(@system_arguments.except(:id, :data, :class)) %>
+    class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:flex-grow', @system_arguments[:class]) %>"
   >
     <%# Tab list container %>
     <div
@@ -25,18 +25,14 @@
         <%= tab %>
       <% end %>
     </div>
-
-    <%# Right content area %>
-    <% if right_content? %>
-      <div class="<%= class_names('flex items-center shrink-0', @orientation == :vertical ? 'ml-auto pl-4 pr-4' : 'mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:mr-4 sm:-mb-px sm:py-4') %>">
-        <%= right_content %>
-      </div>
-    <% end %>
   </nav>
 
   <%# Panel container %>
   <div class="<%= @orientation == :vertical ? 'flex-1 pl-6' : 'mt-4' %>">
     <% panels.each do |panel| %>
+      <%= panel %>
+    <% end %>
+    <% lazy_panels.each do |panel| %>
       <%= panel %>
     <% end %>
   </div>

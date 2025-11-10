@@ -83,62 +83,73 @@
   <% end %>
 <% end %>
 
-<%= render Pathogen::TabsPanel.new(id: "workflow-executions-tabs") do |tabs| %>
+<%= render Pathogen::Tabs.new(
+  id: "workflow-executions-tabs",
+  label: t(:"workflow_executions.show.tabs.label"),
+  default_index: @tab_index,
+  sync_url: true
+) do |tabs| %>
   <% tabs.with_tab(
     id: "summary-tab",
-    text: t(:"workflow_executions.show.tabs.summary"),
-    href:
-      group_workflow_execution_path(
-        @namespace,
-        @workflow_execution,
-        tab: "summary",
-      ),
-    selected: @tab == "summary" || @tab == nil,
+    label: t(:"workflow_executions.show.tabs.summary"),
+    selected: @tab == "summary"
   ) %>
 
   <% tabs.with_tab(
     id: "params-tab",
-    text: t(:"workflow_executions.show.tabs.params"),
-    href:
-      group_workflow_execution_path(
-        @namespace,
-        @workflow_execution,
-        tab: "params",
-      ),
-    selected: @tab == "params",
+    label: t(:"workflow_executions.show.tabs.params"),
+    selected: @tab == "params"
   ) %>
 
   <% tabs.with_tab(
     id: "samplesheet-tab",
-    text: t(:"workflow_executions.show.tabs.samplesheet"),
-    href:
-      group_workflow_execution_path(
-        @namespace,
-        @workflow_execution,
-        tab: "samplesheet",
-      ),
-    selected: @tab == "samplesheet",
+    label: t(:"workflow_executions.show.tabs.samplesheet"),
+    selected: @tab == "samplesheet"
   ) %>
 
   <% tabs.with_tab(
     id: "files-tab",
-    text: t(:"workflow_executions.show.tabs.files"),
-    href:
-      group_workflow_execution_path(
-        @namespace,
-        @workflow_execution,
-        tab: "files",
-      ),
-    selected: @tab == "files",
+    label: t(:"workflow_executions.show.tabs.files"),
+    selected: @tab == "files"
   ) %>
 
-  <% if @tab == 'summary' || @tab == nil %>
+  <% tabs.with_lazy_panel(
+    id: "summary-panel",
+    tab_id: "summary-tab",
+    frame_id: "summary-panel-content",
+    src_path: group_workflow_execution_path(@namespace, @workflow_execution, tab: "summary"),
+    selected: @tab == "summary"
+  ) do %>
     <%= render partial: "workflow_executions/summary" %>
-  <% elsif @tab == 'params' %>
+  <% end %>
+
+  <% tabs.with_lazy_panel(
+    id: "params-panel",
+    tab_id: "params-tab",
+    frame_id: "params-panel-content",
+    src_path: group_workflow_execution_path(@namespace, @workflow_execution, tab: "params"),
+    selected: @tab == "params"
+  ) do %>
     <%= render partial: "workflow_executions/params" %>
-  <% elsif @tab == 'samplesheet' %>
+  <% end %>
+
+  <% tabs.with_lazy_panel(
+    id: "samplesheet-panel",
+    tab_id: "samplesheet-tab",
+    frame_id: "samplesheet-panel-content",
+    src_path: group_workflow_execution_path(@namespace, @workflow_execution, tab: "samplesheet"),
+    selected: @tab == "samplesheet"
+  ) do %>
     <%= render partial: "workflow_executions/samplesheet" %>
-  <% elsif @tab == 'files' %>
+  <% end %>
+
+  <% tabs.with_lazy_panel(
+    id: "files-panel",
+    tab_id: "files-tab",
+    frame_id: "files-panel-content",
+    src_path: group_workflow_execution_path(@namespace, @workflow_execution, tab: "files"),
+    selected: @tab == "files"
+  ) do %>
     <%= render partial: "workflow_executions/files",
     locals: {
       pagy: @pagy,

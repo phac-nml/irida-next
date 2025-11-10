@@ -1,5 +1,3 @@
-<%= fields_for ransack_obj do |ransack_fields| %>
-  <%= ransack_fields.hidden_field :s,
-                              value:
-                                "#{ransack_obj.sorts.first.name} #{ransack_obj.sorts.first.dir}" %>
-<% end %>
+<%= form.hidden_field :s,
+                  value:
+                    "#{ransack_obj.sorts.first.name} #{ransack_obj.sorts.first.dir}" %>

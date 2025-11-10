@@ -351,7 +351,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can view a workflow execution' do
     workflow_execution = workflow_executions(:workflow_execution_existing)
 
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -377,7 +377,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'can search workflow execution files by puid & filename' do
     Flipper.enable(:workflow_execution_attachments_searching)
-    visit workflow_execution_path(@workflow_execution3)
+    visit workflow_execution_path(@workflow_execution3, anchor: 'summary-tab')
 
     assert_text @workflow_execution3.id
     assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution3.state}")
@@ -411,7 +411,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet' do
-    visit workflow_execution_path(@workflow_execution1)
+    visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -422,7 +422,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet with multiple files' do
-    visit workflow_execution_path(@workflow_execution2)
+    visit workflow_execution_path(@workflow_execution2, anchor: 'summary-tab')
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -448,7 +448,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
     end
 
-    visit workflow_execution_path(@workflow_execution1)
+    visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
 
     click_button I18n.t('common.actions.remove')
 
@@ -521,7 +521,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     ### SETUP START ###
     Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
     dt_value = I18n.t('common.labels.name', locale: @user.locale)
     new_we_name = 'New Name'
     ### SETUP END ###
@@ -569,7 +569,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can view a shared workflow execution that the current user submitted' do
     workflow_execution = workflow_executions(:workflow_execution_shared1)
 
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")

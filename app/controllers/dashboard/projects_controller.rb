@@ -8,10 +8,11 @@ module Dashboard
 
     def index
       all_projects = authorized_projects(params)
-      @has_projects = all_projects.count.positive?
-      @q = all_projects.ransack(params[:q])
+      @has_projects = all_projects.any?
+      @q = build_ransack_query(all_projects)
       set_default_sort
       @pagy, @projects = pagy(@q.result)
+      set_tab_variables
 
       respond_to do |format|
         format.html
@@ -19,6 +20,19 @@ module Dashboard
     end
 
     private
+
+    def build_ransack_query(all_projects)
+      if params[:personal] == 'true'
+        all_projects.ransack(params[:personal_projects_q], search_key: :personal_projects_q)
+      else
+        all_projects.ransack(params[:all_projects_q], search_key: :all_projects_q)
+      end
+    end
+
+    def set_tab_variables
+      @tab = params[:personal] == 'true' ? 'personal' : 'all'
+      @tab_index = @tab == 'personal' ? 1 : 0
+    end
 
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?

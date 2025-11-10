@@ -4,9 +4,8 @@ module Viral
   module Pagy
     # Pagy pagination component
     class PaginationComponent < Viral::Component
-      def initialize(pagy, data_string: 'data-turbo-action="replace"')
+      def initialize(pagy)
         @pagy = pagy
-        @data_string = data_string
       end
 
       def render?

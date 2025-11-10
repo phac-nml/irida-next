@@ -2,7 +2,7 @@
   class="mt-4 flex items-center justify-center space-x-2"
   role="navigation"
   aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
-  aria-describedby="pagination-info"
+  aria-describedby="<%= info_id %>"
   aria-live="polite"
 >
   <% if prev_url %>
@@ -39,7 +39,7 @@
 </nav>
 
 <div
-  id="pagination-info"
+  id="<%= info_id %>"
   class="m-4 text-center text-slate-700 dark:text-slate-200"
 >
   <%== info %>

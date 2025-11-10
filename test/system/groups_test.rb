@@ -210,13 +210,13 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'show errors when group description is too long when editing' do
-    group_descrtiption = 'a' * 300
+    group_description = 'a' * 300
     visit group_url(groups(:group_one))
 
     click_on I18n.t('common.labels.settings')
     click_link I18n.t('common.labels.general')
 
-    fill_in I18n.t('activerecord.attributes.group.description'), with: group_descrtiption
+    fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
     click_on I18n.t('groups.edit.details.submit')
 
     assert_text 'Description is too long (maximum is 255 characters)'
@@ -484,13 +484,13 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     assert_selector 'h1', text: @group.name
 
-    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
     assert_selector 'div.treegrid-row', count: 20
     click_on I18n.t(:'components.viral.pagy.pagination_component.next')
     assert_selector 'div.treegrid-row', count: 1
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
-    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'div.treegrid-row', count: 1
   end
 

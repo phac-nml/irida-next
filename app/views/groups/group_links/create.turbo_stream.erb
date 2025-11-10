@@ -1,4 +1,4 @@
-<% if @group_invited && @tab == 'invited_groups' %>
+<% if @group_invited %>
   <%= turbo_stream.replace "invited_groups" do %>
     <%= turbo_frame_tag "invited_groups",
     src: group_group_links_path(@group, format: :turbo_stream) do %>

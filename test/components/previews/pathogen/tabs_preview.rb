@@ -23,7 +23,7 @@ module Pathogen
     def url_sync; end
 
     # @label Advanced Features
-    # Right content slot, default selection, and edge cases
+    # Default selection, edge cases, and lazy loading patterns
     def advanced_features; end
 
     # @label Integration Examples

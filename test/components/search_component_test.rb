@@ -263,9 +263,9 @@ class SearchComponentTest < ViewComponent::TestCase
       value: @value
     )
 
-    kwargs = component.kwargs
+    data = component.kwargs[:data]
 
-    assert_equal 'replace', kwargs[:data]['turbo-action']
+    assert_equal 'replace', data[:turbo_action]
   end
 
   test 'kwargs method handles custom data attributes' do

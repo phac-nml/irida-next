@@ -10,9 +10,7 @@
               total_count: pagy.count,
               value: q.puid_or_file_blob_filename_cont,
               class: "max-sm:grow",
-              html: {
-                "data-turbo-action": "replace",
-              }
+              data: {}
             ) do %>
       <%= hidden_field_tag :limit, @pagy.limit %>
       <%= hidden_field_tag :tab, @tab %>

@@ -5,11 +5,12 @@ module Ransack
   class SortDropdownComponent < Component
     attr_reader :ransack_obj, :sort_item, :sort_options, :disableable
 
-    def initialize(ransack_obj, sort_item, sort_options, disableable: false)
+    def initialize(ransack_obj, sort_item, sort_options, disableable: false, turbo: true)
       @ransack_obj = ransack_obj
       @sort_item = sort_item
       @sort_options = sort_options
       @disableable = disableable
+      @turbo = turbo
     end
   end
 end

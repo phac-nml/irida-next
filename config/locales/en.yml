@@ -412,7 +412,16 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
+        tabs_label: Projects navigation
         title: Projects
+      projects_list:
+        sorting:
+          created_at_asc: Oldest created
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          updated_at_desc: Updated At
   data_exports:
     create:
       error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'
@@ -1601,7 +1610,7 @@ en:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         tabs:
-          label: Workflow Execution Details
+          label: Workflow execution navigation
       table:
         empty:
           description: There are no automated pipelines associated with this project.
@@ -2006,6 +2015,7 @@ en:
       create_export_button: Create Export
       tabs:
         files: Files
+        label: Workflow execution navigation
         params: Parameters
         samplesheet: Samplesheet
         summary: Summary

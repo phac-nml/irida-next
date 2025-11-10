@@ -5,11 +5,12 @@
                 query: @q,
                 url: namespace_project_members_url(**request.query_parameters),
                 search_attribute: :user_email_cont,
-        label: t('common.controls.search'),
+                label: t('common.controls.search'),
                 placeholder: t(".search.placeholder"),
                 value: @q.user_email_cont,
-                total_count: @pagy.count,
                 class: "max-sm:grow",
+                total_count: @pagy.count,
+                as: :members_q
               ) do %>
         <input type="hidden" name="tab" value=""/>
         <input type="hidden" name="format" value="turbo_stream"/>

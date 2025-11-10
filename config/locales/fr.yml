@@ -400,7 +400,7 @@ fr:
         all: Tous
         create_project_button: Nouveau projet
         no_projects: Aucun projet
-        no_projects_description: Vous n’avez actuellement aucun projet.
+        no_projects_description: Vous n'avez actuellement aucun projet.
         pagy_item: Projets
         personal: Personnel
         search:
@@ -412,7 +412,16 @@ fr:
           namespace_name_desc: Nom, décroissant
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
+        tabs_label: Navigation des projets
         title: Projets
+      projects_list:
+        sorting:
+          created_at_asc: Plus ancien créé
+          created_at_desc: Dernier créé
+          namespace_name_asc: Nom
+          namespace_name_desc: Nom, décroissant
+          updated_at_asc: Plus ancien mis à jour
+          updated_at_desc: Mis à jour à
   data_exports:
     create:
       error: Une erreur est survenue lors de la création de l’exportation des données. Veuillez communiquer avec votre administrateur système si cette erreur persiste.
@@ -2010,8 +2019,9 @@ fr:
       create_export_button: Créer une exportation
       tabs:
         files: Fichiers
+        label: Navigation des exécutions de flux de travail
         params: Paramètres
-        samplesheet: Fiche d’échantillonnage
+        samplesheet: Fiche d'échantillonnage
         summary: Résumé
     state:
       canceled: Annulé

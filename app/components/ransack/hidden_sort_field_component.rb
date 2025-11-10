@@ -3,10 +3,11 @@
 module Ransack
   # Component to render the hidden sort field within the ransack search form
   class HiddenSortFieldComponent < Component
-    attr_reader :ransack_obj
+    attr_reader :ransack_obj, :form
 
-    def initialize(ransack_obj)
+    def initialize(ransack_obj, form)
       @ransack_obj = ransack_obj
+      @form = form
     end
 
     def render?

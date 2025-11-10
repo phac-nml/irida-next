@@ -9,7 +9,6 @@
     method="get"
     action="<%= current_url_without_params %>"
     class="@max-md:space-y-4"
-    data-turbo-action="replace"
   >
     <% current_url_query_params_without_limit.each do |param| %>
       <input type="hidden" name="<%= param[0] %>" value="<%= param[1] %>"/>

@@ -529,9 +529,9 @@ module Projects
         end
 
         within "nav[aria-label='#{I18n.t('projects.samples.show.nav_aria_label')}']" do
-          click_link I18n.t('projects.samples.show.tabs.metadata')
+          click_button I18n.t('projects.samples.show.tabs.metadata')
 
-          click_link I18n.t('projects.samples.show.tabs.files')
+          click_button I18n.t('projects.samples.show.tabs.files')
         end
 
         within '#sample-attachments' do

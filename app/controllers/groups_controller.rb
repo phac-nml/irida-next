@@ -19,12 +19,21 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
-    @search_params = search_params
+    @tab = params[:tab] || 'subgroups_and_projects'
+    @tab_index = @tab == 'shared_namespaces' ? 1 : 0
+
+    search_key = if @tab == 'shared_namespaces'
+                   :shared_namespaces_q
+                 else
+                   :subgroups_and_projects_q
+                 end
+
+    @search_params = search_params(search_key)
     @render_flat_list = @search_params[:name_or_puid_cont].present?
 
     all_namespaces = shared_namespaces_or_sub_namespaces
     @has_namespaces = all_namespaces.count.positive?
-    @q = all_namespaces.ransack(params[:q])
+    @q = all_namespaces.ransack(params[search_key], search_key:)
 
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
@@ -239,9 +248,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                     end
   end
 
-  def search_params
+  def search_params(search_key)
     search_params = {}
-    search_params[:name_or_puid_cont] = params.dig(:q, :name_or_puid_cont)
+    search_params[:name_or_puid_cont] = params.dig(search_key, :name_or_puid_cont)
     search_params
   end
 

@@ -10,7 +10,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   before_action :data_exports, only: %i[destroy]
   before_action :namespace, only: :new
   before_action :current_page
-  before_action :set_default_tab, only: :show
+  before_action :set_tab_variables, only: :show
   before_action :page_title
 
   TABS = %w[summary preview].freeze
@@ -117,14 +117,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     @current_page = t(:'general.default_sidebar.data_exports')
   end
 
-  def set_default_tab
-    @tab = 'summary'
+  def set_tab_variables
+    requested_tab = params[:tab]
 
-    return if params[:tab].nil? || (params[:tab] == 'preview' && @data_export.manifest.empty?)
+    @tab = if requested_tab == 'preview' && preview_tab_available?
+             'preview'
+           else
+             'summary'
+           end
 
-    redirect_to @data_export, tab: 'summary' unless TABS.include?(params[:tab])
-
-    @tab = params[:tab]
+    @tab_index = @tab == 'preview' ? 1 : 0
   end
 
   def context_crumbs
@@ -206,5 +208,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
              else
                t(:'general.default_sidebar.data_exports')
              end
+  end
+
+  def preview_tab_available?
+    @data_export.manifest.present? && @data_export.status == 'ready' && @data_export.export_type != 'linelist'
   end
 end

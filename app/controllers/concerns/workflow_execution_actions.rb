@@ -189,13 +189,19 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_default_tab
-    @tab = 'summary'
-
-    return if params[:tab].nil?
-
-    redirect_to workflow_execution_path unless TABS.include? params[:tab]
-
     @tab = params[:tab]
+
+    @tab_index = case @tab
+                 when 'params'
+                   1
+                 when 'samplesheet'
+                   2
+                 when 'files'
+                   3
+                 else
+                   @tab = 'summary'
+                   0
+                 end
   end
 
   def set_default_sort

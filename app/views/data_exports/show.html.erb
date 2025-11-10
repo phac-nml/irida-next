@@ -44,34 +44,46 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <div class="flex flex-row">
-    <%= render Pathogen::TabsPanel.new(
-      id: "data-export-tabs",
-      label: t(:"data_exports.show.tabs.title")
-    ) do |tabs| %>
+  <%= render Pathogen::Tabs.new(
+    id: "data-export-tabs",
+    label: t(:"data_exports.show.tabs.title"),
+    default_index: @tab_index,
+    sync_url: true
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "summary-tab",
+      label: t(:"data_exports.show.tabs.summary"),
+      selected: @tab == "summary"
+    ) %>
+
+    <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
       <% tabs.with_tab(
-        id: "summary-tab",
-        text: t(:"data_exports.show.tabs.summary"),
-        href: data_export_path(@data_export, tab: "summary"),
-        selected: @tab == "summary" || @tab.nil?,
+        id: "preview-tab",
+        label: t(:"data_exports.show.tabs.preview"),
+        selected: @tab == "preview"
       ) %>
-
-      <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
-        <% tabs.with_tab(
-          id: "preview-tab",
-          text: t(:"data_exports.show.tabs.preview"),
-          href: data_export_path(@data_export, tab: "preview"),
-          selected: @tab == "preview",
-        ) %>
-      <% end %>
     <% end %>
-  </div>
 
-  <div id="data-export-content" class="mt-4">
-    <% if @tab == "preview" %>
-      <%= render partial: "preview" %>
-    <% else %>
+    <% tabs.with_lazy_panel(
+      id: "summary-panel",
+      tab_id: "summary-tab",
+      frame_id: "summary-panel-content",
+      src_path: data_export_path(@data_export, tab: "summary"),
+      selected: @tab == "summary"
+    ) do %>
       <%= render partial: "summary" %>
     <% end %>
-  </div>
+
+    <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
+      <% tabs.with_lazy_panel(
+        id: "preview-panel",
+        tab_id: "preview-tab",
+        frame_id: "preview-panel-content",
+        src_path: data_export_path(@data_export, tab: "preview"),
+        selected: @tab == "preview"
+      ) do %>
+        <%= render partial: "preview" %>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>

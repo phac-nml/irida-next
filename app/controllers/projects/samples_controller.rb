@@ -40,17 +40,8 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
 
-      redirect_to namespace_project_sample_path unless !params.key?(:tab) || params[:tab].in?(%w[files metadata
-                                                                                                 history])
-
-      @tab = params[:tab]
-      if @tab == 'metadata'
-        @sample_metadata = @sample.metadata_with_provenance
-      elsif @tab == 'history'
-        @log_data = @sample.log_data_without_changes
-      else
-        list_sample_attachments
-      end
+      set_tab_variables
+      load_tab_data
     end
 
     def view_history_version
@@ -106,6 +97,33 @@ module Projects
     end
 
     private
+
+    def valid_tab?
+      !params.key?(:tab) || params[:tab].in?(%w[files metadata history])
+    end
+
+    def set_tab_variables
+      @tab = params[:tab] || 'files'
+      @tab_index = case @tab
+                   when 'metadata'
+                     1
+                   when 'history'
+                     2
+                   else
+                     0
+                   end
+    end
+
+    def load_tab_data
+      case @tab
+      when 'metadata'
+        @sample_metadata = @sample.metadata_with_provenance
+      when 'history'
+        @log_data = @sample.log_data_without_changes
+      else
+        list_sample_attachments
+      end
+    end
 
     def index_view_authorizations
       @allowed_to = {

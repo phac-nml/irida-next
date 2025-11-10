@@ -11,11 +11,9 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 
-  <% if @tab != "invited_groups" %>
-    <%= turbo_stream.replace "members" do %>
-      <%= turbo_frame_tag "members", src: group_members_path(@group, format: :turbo_stream) do %>
-        <%= render partial: "shared/loading/table" %>
-      <% end %>
+  <%= turbo_stream.replace "members" do %>
+    <%= turbo_frame_tag "members", src: group_members_path(@group, format: :turbo_stream) do %>
+      <%= render partial: "shared/loading/table" %>
     <% end %>
   <% end %>
 <% end %>

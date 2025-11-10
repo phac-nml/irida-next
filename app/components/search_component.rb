@@ -8,7 +8,7 @@ class SearchComponent < Component
 
   # rubocop:disable Metrics/ParameterLists
   def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil,
-                 search_field_arguments: {}, **kwargs)
+                 search_field_arguments: {}, data: { turbo_action: 'replace' }, **kwargs)
     @query = query
     @url = url
     @search_attribute = search_attribute
@@ -16,30 +16,32 @@ class SearchComponent < Component
     @placeholder = placeholder
     @total_count = total_count
     @value = value
+    @data = data
     @kwargs = kwargs
     @search_field_arguments = search_field_arguments
+    @search_key = @kwargs.fetch(:as, :q)
   end
   # rubocop:enable Metrics/ParameterLists
 
   def kwargs
     @kwargs.tap do |args|
       args[:data] ||= {}
-      args[:data]['turbo-action'] = 'replace'
+      args[:data].merge!(@data)
     end
   end
 
   def results_message
     if @total_count.zero?
-      I18n.t(:'components.search.results_message.zero', search_term: params[:q][@search_attribute])
+      I18n.t(:'components.search.results_message.zero', search_term: params[@search_key][@search_attribute])
     elsif @total_count == 1
-      I18n.t(:'components.search.results_message.singular', search_term: params[:q][@search_attribute])
+      I18n.t(:'components.search.results_message.singular', search_term: params[@search_key][@search_attribute])
     else
       I18n.t(:'components.search.results_message.plural', total_count: @total_count,
-                                                          search_term: params[:q][@search_attribute])
+                                                          search_term: params[@search_key][@search_attribute])
     end
   end
 
   def search_term?
-    defined?(params[:q][@search_attribute]) && params[:q][@search_attribute].present?
+    defined?(params[@search_key][@search_attribute]) && params[@search_key][@search_attribute].present?
   end
 end

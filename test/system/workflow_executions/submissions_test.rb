@@ -1480,7 +1480,7 @@ module WorkflowExecutions
 
       assert_text I18n.t(:'workflow_executions.show.tabs.params')
       # click parameters tab
-      click_link I18n.t(:'workflow_executions.show.tabs.params')
+      click_button I18n.t(:'workflow_executions.show.tabs.params')
       ### ACTIONS END ###
 
       ### VERIFY START ###
