@@ -22,6 +22,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :namespace_id, presence: true
+  validates_with WorkflowExecutionSearchGroupValidator
 
   def initialize(...)
     super
