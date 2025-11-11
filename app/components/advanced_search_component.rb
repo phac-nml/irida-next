@@ -38,7 +38,9 @@ class AdvancedSearchComponent < Component
 
   def jsonb_field_options(fields)
     jsonb_options = fields.map do |field|
-      [I18n.t("#{@field_label_namespace}.#{field}"), field]
+      # Keep the field label as-is but prefix the value with 'metadata.' for JSONB field detection
+      # The Query model strips the 'metadata.' prefix in normalized_field() method
+      [I18n.t("#{@field_label_namespace}.#{field}"), "metadata.#{field}"]
     end
     {
       I18n.t('components.advanced_search_component.operation.metadata_fields') => jsonb_options
