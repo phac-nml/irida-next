@@ -21,7 +21,6 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
-  validates :namespace_id, presence: true, unless: -> { @base_scope.present? }
   validates_with WorkflowExecutionSearchGroupValidator
 
   def initialize(attributes = {})
