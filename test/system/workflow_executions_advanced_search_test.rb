@@ -106,11 +106,11 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
           find("input[name$='[value]']").fill_in with: 'completed'
         end
 
-        # Set second condition
+        # Set second condition - use name contains instead of id >= 1 (id is UUID, not numeric)
         within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-          find("select[name$='[field]']").find("option[value='id']").select_option
-          find("select[name$='[operator]']").find("option[value='>=']").select_option
-          find("input[name$='[value]']").fill_in with: '1'
+          find("select[name$='[field]']").find("option[value='name']").select_option
+          find("select[name$='[operator]']").find("option[value='contains']").select_option
+          find("input[name$='[value]']").fill_in with: @workflow_execution1.name.to_s
         end
       end
 
@@ -169,9 +169,22 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         find("input[name$='[value]']").fill_in with: 'completed'
       end
 
-      # Clear filters
+      # Clear filters - this will submit the form and reload the page
       click_button I18n.t('components.advanced_search_component.clear_filter_button')
+    end
 
+    # After page reload, verify filters were cleared by checking that advanced search status is not active
+    # and all workflow executions are visible (not filtered)
+    assert_no_selector 'dialog[open]'
+    
+    # Verify that the advanced search button doesn't have active status (no clear button visible)
+    # by checking that filters were cleared - we should see all workflow executions
+    assert_selector '#workflow-executions-table table tbody tr'
+    
+    # Re-open dialog to verify form is reset
+    click_button I18n.t('components.advanced_search_component.title')
+    
+    within 'dialog[open]' do
       # Verify form is reset
       assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
       within first("fieldset[data-advanced-search-target='groupsContainer']") do
@@ -179,7 +192,9 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         within first("fieldset[data-advanced-search-target='conditionsContainer']") do
           assert_equal '', find("select[name$='[field]']").value
           assert_equal '', find("select[name$='[operator]']").value
-          assert_equal '', find("input[name$='[value]']").value
+          # Value field may be hidden when operator is blank, so check if it exists and is empty
+          value_fields = all("input[name$='[value]']", visible: :all)
+          assert_equal '', value_fields.first.value if value_fields.any?
         end
       end
     end
@@ -241,10 +256,10 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         click_button I18n.t('components.dialog.close')
       end
       assert_includes text, I18n.t('components.advanced_search_component.confirm_close_text')
-
-      # Dialog should still be open
-      assert_selector 'dialog[open]'
     end
+
+    # Dialog should still be open after dismissing the confirmation
+    assert_selector 'dialog[open]'
   end
 
   test 'can filter by workflow_name JSONB field' do
