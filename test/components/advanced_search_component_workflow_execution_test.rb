@@ -77,12 +77,12 @@ class AdvancedSearchComponentWorkflowExecutionTest < ViewComponentTestCase
       status: false
     )
 
-    # Test initialization - JSONB fields are prefixed with metadata.
+    # Test initialization - JSONB fields are stored as-is (without metadata. prefix)
     jsonb_fields = component.instance_variable_get(:@jsonb_fields)
     assert_equal 1, jsonb_fields.keys.length
     jsonb_options = jsonb_fields.values.first
-    assert(jsonb_options.any? { |f| f[1] == 'metadata.workflow_name' })
-    assert(jsonb_options.any? { |f| f[1] == 'metadata.workflow_version' })
+    assert(jsonb_options.any? { |f| f[1] == 'workflow_name' })
+    assert(jsonb_options.any? { |f| f[1] == 'workflow_version' })
   end
 
   test 'component initializes with workflow execution field labels' do
