@@ -38,7 +38,7 @@ class AdvancedSearchComponent < Component
 
   def jsonb_field_options(fields)
     jsonb_options = fields.map do |field|
-      [field, "metadata.#{field}"]
+      [I18n.t("#{@field_label_namespace}.#{field}"), field]
     end
     {
       I18n.t('components.advanced_search_component.operation.metadata_fields') => jsonb_options
