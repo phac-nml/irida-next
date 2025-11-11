@@ -20,34 +20,20 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   TABS = %w[summary params samplesheet files].freeze
 
-  def index # rubocop:disable Metrics/AbcSize
+  def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
     @search_params = search_params
     base_workflows = load_workflows
 
-    # For global workflow executions (no namespace), use the authorized scope directly
-    # For project/group workflow executions, use namespace_id filtering
-    @query = if @namespace.nil?
-               WorkflowExecution::Query.new(
-                 base_scope: base_workflows,
-                 **@search_params
-               )
-             else
-               WorkflowExecution::Query.new(
-                 @search_params.merge(namespace_id: @namespace.id)
-               )
-             end
+    # Always use base_scope to ensure proper authorization filtering
+    @query = WorkflowExecution::Query.new(
+      base_scope: base_workflows,
+      **@search_params
+    )
 
     @has_workflow_executions = base_workflows.any?
-
-    if @query.valid?
-      @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
-    else
-      # Handle validation errors - set empty results
-      @pagy = Pagy.new(count: 0, page: 1)
-      @workflow_executions = WorkflowExecution.none
-    end
+    set_query_results
 
     # For backward compatibility with SearchComponent that expects Ransack
     @q = base_workflows.ransack(params[:q])
@@ -278,6 +264,16 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
+  def set_query_results
+    if @query.valid?
+      @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    else
+      # Handle validation errors - set empty results
+      @pagy = Pagy.new(count: 0, page: 1)
+      @workflow_executions = WorkflowExecution.none
+    end
+  end
+
   def destroy_multiple_params
     params.expect(destroy_multiple: { workflow_execution_ids: [] })
   end
@@ -355,7 +351,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     return {} unless params[:q]
 
-    search_params = params[:q].permit(:name_or_id_cont, :sort, groups_attributes: {})
+    search_params = params[:q].permit(:name_or_id_cont, :sort, :s, groups_attributes: {})
+    # Convert Ransack's :s parameter to :sort for our Query model
+    if search_params[:s].present? && search_params[:sort].blank?
+      search_params[:sort] = search_params.delete(:s)
+    else
+      search_params.delete(:s)
+    end
     search_params.to_h.with_indifferent_access
   end
 end
