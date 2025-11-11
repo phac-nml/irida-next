@@ -149,6 +149,10 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   def build_arel_node(field)
     return WorkflowExecution.arel_table[field] unless jsonb_field?(field)
 
+    # Map user-facing field names to actual JSONB keys in the metadata column.
+    # 'workflow_name' maps to 'pipeline_id' (the actual field name in the metadata JSONB)
+    # 'workflow_version' maps to 'workflow_version' (same name in metadata JSONB)
+    # This mapping provides user-friendly field names in the UI while querying the correct JSONB keys.
     jsonb_key = field == 'workflow_name' ? 'pipeline_id' : 'workflow_version'
     Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
                                     Arel::Nodes::Quoted.new(jsonb_key))

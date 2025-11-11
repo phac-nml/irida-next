@@ -176,14 +176,14 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
     # After page reload, verify filters were cleared by checking that advanced search status is not active
     # and all workflow executions are visible (not filtered)
     assert_no_selector 'dialog[open]'
-    
+
     # Verify that the advanced search button doesn't have active status (no clear button visible)
     # by checking that filters were cleared - we should see all workflow executions
     assert_selector '#workflow-executions-table table tbody tr'
-    
+
     # Re-open dialog to verify form is reset
     click_button I18n.t('components.advanced_search_component.title')
-    
+
     within 'dialog[open]' do
       # Verify form is reset
       assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
@@ -270,7 +270,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
     within 'dialog[open]' do
       within first("fieldset[data-advanced-search-target='conditionsContainer']") do
         # Select workflow_name from metadata fields optgroup
-        find("select[name$='[field]']").find("option[value='workflow_name']").select_option
+        find("select[name$='[field]']").find("option[value='metadata.workflow_name']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
         find("input[name$='[value]']").fill_in with: 'phac-nml/iridanextexample'
       end
@@ -289,7 +289,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
 
     within 'dialog[open]' do
       within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-        find("select[name$='[field]']").find("option[value='workflow_version']").select_option
+        find("select[name$='[field]']").find("option[value='metadata.workflow_version']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
         find("input[name$='[value]']").fill_in with: '1.0.0'
       end
