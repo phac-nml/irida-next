@@ -171,7 +171,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         elsif deleted_workflows_count.positive? && deleted_workflows_count != workflows_to_delete_count
           multi_status_messages = set_multi_status_message_for_multiple_action(deleted_workflows_count,
                                                                                workflows_to_delete_count,
-                                                                               "destroy_multiple")
+                                                                               'destroy_multiple')
           render status: :multi_status,
                  locals: { messages: multi_status_messages }
         # All workflows deleted successfully
@@ -214,7 +214,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         elsif canceled_workflows_count.positive? && canceled_workflows_count != workflows_to_cancel_count
           multi_status_messages = set_multi_status_message_for_multiple_action(canceled_workflows_count,
                                                                                workflows_to_cancel_count,
-                                                                               "cancel_multiple")
+                                                                               'cancel_multiple')
           render status: :multi_status,
                  locals: { messages: multi_status_messages }
         # All workflows canceled successfully
@@ -264,17 +264,17 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     params.expect(cancel_multiple: { workflow_execution_ids: [] })
   end
 
-  def set_multi_status_message_for_multiple_action(confirmed_count, expected_count, action)
+  def set_multi_status_message_for_multiple_action(successful_count, expected_count, action)
     [
       {
         type: 'success',
         message: t("concerns.workflow_execution_actions.#{action}.partial_success",
-                   successful: "#{confirmed_count}/#{expected_count}")
+                   successful: "#{successful_count}/#{expected_count}")
       },
       {
         type: 'alert',
         message: t("concerns.workflow_execution_actions.#{action}.partial_error",
-                   unsuccessful: "#{expected_count - confirmed_count}/#{expected_count}")
+                   unsuccessful: "#{expected_count - successful_count}/#{expected_count}")
       }
     ]
   end
