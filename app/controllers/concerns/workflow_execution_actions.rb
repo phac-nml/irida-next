@@ -362,7 +362,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     updated_params = update_store(search_key,
                                   params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
-    updated_params.slice!('name_or_id_cont', 'groups_attributes', 'sort')
+    convert_ransack_sort_param(updated_params)
+    updated_params.slice!(:name_or_id_cont, :groups_attributes, :sort)
 
     updated_params
   end
