@@ -5,6 +5,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
+  include AdvancedQuerySearchable
 
   ResultTypeError = Class.new(StandardError)
 
@@ -77,18 +78,6 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     end
   end
 
-  OPERATOR_HANDLERS = {
-    '=' => :handle_equals,
-    'in' => :handle_in,
-    '!=' => :handle_not_equals,
-    'not_in' => :handle_not_in,
-    '<=' => :handle_less_than_equal,
-    '>=' => :handle_greater_than_equal,
-    'contains' => :handle_contains,
-    'exists' => :handle_exists,
-    'not_exists' => :handle_not_exists
-  }.freeze
-
   private
 
   def pagy_results(limit, page)
@@ -158,105 +147,16 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
                                     Arel::Nodes::Quoted.new(jsonb_key))
   end
 
-  def apply_operator(scope, condition, node, field)
-    handler_method = OPERATOR_HANDLERS[condition.operator]
-    return scope unless handler_method
-
-    send(handler_method, scope, condition, node, field)
+  def text_match_field?(field)
+    jsonb_field?(field) || field == 'name'
   end
 
-  def handle_equals(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field || field == 'name'
-      scope.where(node.matches(condition.value))
-    elsif field == 'run_id'
-      scope.where(node.eq(condition.value.upcase))
-    else
-      scope.where(node.eq(condition.value))
-    end
+  def uppercase_field?(field)
+    field == 'run_id'
   end
 
-  def handle_in(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field || field == 'name'
-      scope.where(node.matches_any(condition.value))
-    elsif field == 'run_id'
-      scope.where(node.in(condition.value.map(&:upcase)))
-    else
-      scope.where(node.in(condition.value))
-    end
-  end
-
-  def handle_not_equals(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field || field == 'name'
-      scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
-    elsif field == 'run_id'
-      scope.where(node.not_eq(condition.value.upcase))
-    else
-      scope.where(node.not_eq(condition.value))
-    end
-  end
-
-  def handle_not_in(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field || field == 'name'
-      scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
-    elsif field == 'run_id'
-      scope.where(node.not_in(condition.value.map(&:upcase)))
-    else
-      scope.where(node.not_in(condition.value))
-    end
-  end
-
-  def handle_less_than_equal(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field
-      scope
-        .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-        .where(
-          Arel::Nodes::NamedFunction.new(
-            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-          ).lteq(condition.value)
-        )
-    else
-      scope.where(node.lteq(condition.value))
-    end
-  end
-
-  def handle_greater_than_equal(scope, condition, node, field)
-    jsonb_field = jsonb_field?(field)
-    if jsonb_field
-      scope
-        .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-        .where(
-          Arel::Nodes::NamedFunction.new(
-            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-          ).gteq(condition.value)
-        )
-    else
-      scope.where(node.gteq(condition.value))
-    end
-  end
-
-  def handle_contains(scope, condition, node, field)
-    return scope if condition.value.blank?
-
-    # UUID fields need to be cast to text before using ILIKE
-    if field == 'id'
-      text_node = Arel::Nodes::NamedFunction.new('CAST', [node.as(Arel::Nodes::SqlLiteral.new('TEXT'))])
-      scope.where(text_node.matches("%#{condition.value}%"))
-    else
-      scope.where(node.matches("%#{condition.value}%"))
-    end
-  end
-
-  def handle_exists(scope, _condition, node, _field)
-    scope.where(node.not_eq(nil))
-  end
-
-  def handle_not_exists(scope, _condition, node, _field)
-    scope.where(node.eq(nil))
+  def uuid_field?(field)
+    field == 'id'
   end
 
   def ransack_params
