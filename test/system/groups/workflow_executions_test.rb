@@ -27,7 +27,7 @@ module Groups
     test 'should display a list of workflow executions' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       assert_selector '#workflow-executions-table table tbody tr', count: 11
@@ -39,7 +39,7 @@ module Groups
       workflow_execution_submitted = workflow_executions(:workflow_execution_group_shared_submitted)
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -154,7 +154,7 @@ module Groups
 
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector '#workflow-executions-table'
 
       assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared1)}']"
@@ -178,7 +178,7 @@ module Groups
       login_as user
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: user.locale)
       within("tr[id='#{dom_id(@workflow_execution_group_shared1)}'] th") do
         click_link @workflow_execution_group_shared1.id
       end
@@ -253,7 +253,7 @@ module Groups
     test 'can view a shared workflow execution that was shared by a different user' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       within("tr[id='#{dom_id(@workflow_execution_group_shared2)}'] th") do
         click_link @workflow_execution_group_shared2.id
       end
@@ -345,7 +345,7 @@ module Groups
     test 'should not have any actions available for all workflow executions on the groups workflow executions page' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
       within('#workflow-executions-table table tbody') do
