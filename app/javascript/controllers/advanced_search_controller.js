@@ -164,6 +164,27 @@ export default class extends Controller {
     this.addGroup();
   }
 
+  handleFieldChange(event) {
+    let condition = event.target.parentElement.closest(
+      "fieldset[data-advanced-search-target='conditionsContainer']",
+    );
+    let operatorSelect = condition.querySelector("select[name$='[operator]']");
+    let operator = operatorSelect ? operatorSelect.value : "";
+    let selectedField = event.target.value;
+
+    // Update operator dropdown based on field type
+    this.#updateOperatorDropdown(condition, selectedField);
+
+    // If there's an operator selected, trigger the value field update
+    if (operator && !["", "exists", "not_exists"].includes(operator)) {
+      let value = condition.querySelector(".value");
+
+      if (value && selectedField) {
+        this.#updateValueFieldForEnum(value, condition, selectedField, operator);
+      }
+    }
+  }
+
   handleOperatorChange(event) {
     let operator = event.target.value;
     let condition = event.target.parentElement.closest(
@@ -178,6 +199,10 @@ export default class extends Controller {
       ),
     ].indexOf(condition);
 
+    // Get the selected field value
+    let fieldSelect = condition.querySelector("select[name$='[field]']");
+    let selectedField = fieldSelect ? fieldSelect.value : "";
+
     if (["", "exists", "not_exists"].includes(operator)) {
       value.classList.add(...this.#hidden_classes);
       let inputs = value.querySelectorAll("input");
@@ -186,14 +211,168 @@ export default class extends Controller {
       });
     } else if (["in", "not_in"].includes(operator)) {
       value.classList.remove(...this.#hidden_classes);
-      value.outerHTML = this.listValueTemplateTarget.innerHTML
+      let newHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+      value.outerHTML = newHTML;
+
+      // After replacing, update the new value element with field information
+      let newValue = group.querySelectorAll(
+        "fieldset[data-advanced-search-target='conditionsContainer']"
+      )[condition_index].querySelector(".value");
+      this.#updateValueFieldForEnum(newValue, condition, selectedField, operator);
     } else {
       value.classList.remove(...this.#hidden_classes);
-      value.outerHTML = this.valueTemplateTarget.innerHTML
+      let newHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+      value.outerHTML = newHTML;
+
+      // After replacing, update the new value element with field information
+      let newValue = group.querySelectorAll(
+        "fieldset[data-advanced-search-target='conditionsContainer']"
+      )[condition_index].querySelector(".value");
+      this.#updateValueFieldForEnum(newValue, condition, selectedField, operator);
+    }
+  }
+
+  #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
+    // Get enum fields configuration from data attribute
+    let enumFieldsJSON = condition.dataset.enumFields;
+
+    if (!enumFieldsJSON || !selectedField) {
+      return;
+    }
+
+    try {
+      let enumFields = JSON.parse(enumFieldsJSON);
+      let enumConfig = enumFields[selectedField];
+
+      if (!enumConfig) {
+        return; // Not an enum field
+      }
+
+      // Get the input/select element to replace
+      let isListOperator = ["in", "not_in"].includes(operator);
+      let currentInput = isListOperator
+        ? valueContainer.querySelector("div[data-controller='list-filter']")
+        : valueContainer.querySelector("input[name$='[value]']");
+
+      if (!currentInput) {
+        return;
+      }
+
+      // Get the correct name attribute from existing input
+      let inputName;
+      if (isListOperator) {
+        // For list operators, find the hidden input inside the list-filter div
+        let hiddenInput = currentInput.querySelector("input[name$='[value][]']");
+        inputName = hiddenInput ? hiddenInput.name.replace('[]', '') : null;
+      } else {
+        inputName = currentInput.name;
+      }
+
+      if (!inputName) {
+        return;
+      }
+
+      // Create a select element with enum options
+      let select = document.createElement("select");
+      select.name = inputName;
+      select.id = currentInput.id || inputName.replace(/\[/g, '_').replace(/\]/g, '');
+      select.className = currentInput.className || "";
+
+      // Get aria-label from the label element
+      let label = valueContainer.querySelector("label");
+      if (label) {
+        select.setAttribute("aria-label", label.textContent.trim());
+      }
+
+      if (isListOperator) {
+        select.setAttribute("multiple", "multiple");
+        select.name = inputName + "[]"; // Add brackets for multiple values
+      }
+
+      // Add blank option for single select
+      if (!isListOperator) {
+        let blankOption = document.createElement("option");
+        blankOption.value = "";
+        blankOption.text = "";
+        select.appendChild(blankOption);
+      }
+
+      // Add enum options with translations
+      enumConfig.values.forEach((value) => {
+        let option = document.createElement("option");
+        option.value = value;
+        // Use translated labels if available, otherwise fallback to value
+        option.text = enumConfig.labels && enumConfig.labels[value]
+          ? enumConfig.labels[value]
+          : value.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+        select.appendChild(option);
+      });
+
+      // Replace the input with the select
+      currentInput.replaceWith(select);
+    } catch (e) {
+      console.error("Error parsing enum fields:", e);
+    }
+  }
+
+  #updateOperatorDropdown(condition, selectedField) {
+    // Get enum and operation configurations from data attributes
+    let enumFieldsJSON = condition.dataset.enumFields;
+    let enumOperationsJSON = condition.dataset.enumOperations;
+    let standardOperationsJSON = condition.dataset.standardOperations;
+
+    if (!enumFieldsJSON || !enumOperationsJSON || !standardOperationsJSON || !selectedField) {
+      return;
+    }
+
+    try {
+      let enumFields = JSON.parse(enumFieldsJSON);
+      let enumOperations = JSON.parse(enumOperationsJSON);
+      let standardOperations = JSON.parse(standardOperationsJSON);
+
+      // Determine if this is an enum field
+      let isEnumField = enumFields.hasOwnProperty(selectedField);
+
+      // Choose the appropriate operations list
+      let operations = isEnumField ? enumOperations : standardOperations;
+
+      // Find the operator select element
+      let operatorSelect = condition.querySelector("select[name$='[operator]']");
+      if (!operatorSelect) {
+        return;
+      }
+
+      // Store current value
+      let currentValue = operatorSelect.value;
+
+      // Clear existing options
+      operatorSelect.innerHTML = "";
+
+      // Add blank option
+      let blankOption = document.createElement("option");
+      blankOption.value = "";
+      blankOption.text = "";
+      operatorSelect.appendChild(blankOption);
+
+      // Add new options
+      Object.entries(operations).forEach(([label, value]) => {
+        let option = document.createElement("option");
+        option.value = value;
+        option.text = label;
+        operatorSelect.appendChild(option);
+      });
+
+      // Restore previous value if it's still valid (check if value exists in operations values)
+      let validValues = Object.values(operations);
+      if (currentValue && validValues.includes(currentValue)) {
+        operatorSelect.value = currentValue;
+      }
+    } catch (e) {
+      console.error("Error updating operator dropdown:", e);
     }
   }
 

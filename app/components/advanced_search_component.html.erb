@@ -66,7 +66,9 @@
             show_remove_group_button: @search.groups.count > 1,
             entity_fields: @entity_fields,
             jsonb_fields: @jsonb_fields,
+            enum_fields: @enum_fields,
             operations: @operations,
+            enum_operations: @enum_operations,
           ) %>
         <% end %>
       </template>
@@ -89,6 +91,7 @@
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
           condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          enum_fields: @enum_fields,
         ) %>
       <% end %>
     <% end %>
@@ -102,6 +105,7 @@
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
           condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          enum_fields: @enum_fields,
         ) %>
       <% end %>
     <% end %>
@@ -116,7 +120,9 @@
         condition_number: "CONDITION_LEGEND_INDEX_PLACEHOLDER",
         entity_fields: @entity_fields,
         jsonb_fields: @jsonb_fields,
+        enum_fields: @enum_fields,
         operations: @operations,
+        enum_operations: @enum_operations,
       ) %>
     <% end %>
   </template>
@@ -129,7 +135,9 @@
       show_remove_group_button: true,
       entity_fields: @entity_fields,
       jsonb_fields: @jsonb_fields,
+      enum_fields: @enum_fields,
       operations: @operations,
+      enum_operations: @enum_operations,
     ) %>
   </template>
 </div>

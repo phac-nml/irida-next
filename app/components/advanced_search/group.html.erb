@@ -1,3 +1,4 @@
+<!-- DEBUG GROUP: enum_fields = <%= @enum_fields.inspect %> -->
 <fieldset
   data-advanced-search-target="groupsContainer"
   class="
@@ -18,7 +19,9 @@
         condition_number: condition_index + 1,
         entity_fields: @entity_fields,
         jsonb_fields: @jsonb_fields,
+        enum_fields: @enum_fields,
         operations: @operations,
+        enum_operations: @enum_operations,
       ) %>
     <% end %>
   <% end %>
