@@ -3,13 +3,16 @@
 require 'view_component_test_case'
 
 # Tests for generalized AdvancedSearchComponent
-class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
+class AdvancedSearchComponentGeneralizedTest < ViewComponentTestCase
+  setup do
+    @action_view_template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil)
+  end
+
   test 'component initializes with entity_fields and jsonb_fields for WorkflowExecution' do
     query = WorkflowExecution::Query.new
     query.groups << WorkflowExecution::SearchGroup.new
 
-    # Mock form object
-    form = Object.new
+    form = build_form_for(query)
 
     component = AdvancedSearchComponent.new(
       form: form,
@@ -33,8 +36,7 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     query = Sample::Query.new
     query.groups << Sample::SearchGroup.new
 
-    # Mock form object
-    form = Object.new
+    form = build_form_for(query)
 
     component = AdvancedSearchComponent.new(
       form: form,
@@ -55,8 +57,7 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     query = Sample::Query.new
     query.groups << Sample::SearchGroup.new
 
-    # Mock form object
-    form = Object.new
+    form = build_form_for(query)
 
     component = AdvancedSearchComponent.new(
       form: form,
@@ -83,8 +84,7 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     query = Sample::Query.new
     query.groups << Sample::SearchGroup.new
 
-    # Mock form object
-    form = Object.new
+    form = build_form_for(query)
 
     # Don't specify field_label_namespace - should default to samples.table_component
     component = AdvancedSearchComponent.new(
@@ -104,7 +104,7 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     query = Sample::Query.new
     query.groups << Sample::SearchGroup.new
 
-    form = Object.new
+    form = build_form_for(query)
 
     component = AdvancedSearchComponent.new(
       form: form,
@@ -120,15 +120,13 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
   end
 
   test 'determines correct search model classes based on search object type' do
-    # Mock form object
-    form = Object.new
-
     # Test with Sample::Query
     sample_query = Sample::Query.new
     sample_query.groups << Sample::SearchGroup.new
+    sample_form = build_form_for(sample_query)
 
     sample_component = AdvancedSearchComponent.new(
-      form: form,
+      form: sample_form,
       search: sample_query,
       entity_fields: %w[name],
       jsonb_fields: [],
@@ -143,9 +141,10 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     # Test with WorkflowExecution::Query
     we_query = WorkflowExecution::Query.new
     we_query.groups << WorkflowExecution::SearchGroup.new
+    workflow_form = build_form_for(we_query)
 
     we_component = AdvancedSearchComponent.new(
-      form: form,
+      form: workflow_form,
       search: we_query,
       entity_fields: %w[name],
       jsonb_fields: [],
@@ -156,5 +155,16 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     # Should use WorkflowExecution::SearchGroup and WorkflowExecution::SearchCondition
     assert_equal WorkflowExecution::SearchGroup, we_component.instance_variable_get(:@search_group_class)
     assert_equal WorkflowExecution::SearchCondition, we_component.instance_variable_get(:@search_condition_class)
+  end
+
+  private
+
+  def build_form_for(query)
+    ActionView::Helpers::FormBuilder.new(
+      'q',
+      query,
+      @action_view_template,
+      {}
+    )
   end
 end
