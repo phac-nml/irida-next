@@ -34,7 +34,7 @@ class AdvancedSearchComponent < Component
 
   def entity_field_options(fields)
     fields.map do |field|
-      [I18n.t("#{@field_label_namespace}.#{field}"), field]
+      [translated_field_label(field), field]
     end
   end
 
@@ -42,7 +42,7 @@ class AdvancedSearchComponent < Component
     jsonb_options = fields.map do |field|
       # Keep the field label as-is but prefix the value with 'metadata.' for JSONB field detection
       # The Query model strips the 'metadata.' prefix in normalized_field() method
-      [I18n.t("#{@field_label_namespace}.#{field}"), "metadata.#{field}"]
+      [translated_field_label(field), "metadata.#{field}"]
     end
     {
       I18n.t('components.advanced_search_component.operation.metadata_fields') => jsonb_options
@@ -86,5 +86,15 @@ class AdvancedSearchComponent < Component
 
     # Default to Sample classes for backward compatibility
     class_mappings.fetch(query_class_name, class_mappings['Sample::Query'])[type]
+  end
+
+  def translated_field_label(field)
+    key = field.to_s
+    I18n.t(
+      "#{@field_label_namespace}.#{key}",
+      default: [:"metadata.fields.#{key}", key.tr('.', ' ').humanize]
+    )
+  rescue I18n::ArgumentError
+    key.tr('.', ' ').humanize
   end
 end

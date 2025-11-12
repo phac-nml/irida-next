@@ -100,6 +100,25 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponent::TestCase
     assert_equal 'samples.table_component', component.instance_variable_get(:@field_label_namespace)
   end
 
+  test 'falls back to humanized label when translation is missing' do
+    query = Sample::Query.new
+    query.groups << Sample::SearchGroup.new
+
+    form = Object.new
+
+    component = AdvancedSearchComponent.new(
+      form: form,
+      search: query,
+      entity_fields: %w[name],
+      jsonb_fields: %w[custom_field],
+      open: false,
+      status: false
+    )
+
+    jsonb_entries = component.instance_variable_get(:@jsonb_fields).values.flatten(1)
+    assert_equal ['Custom Field', 'metadata.custom_field'], jsonb_entries.first
+  end
+
   test 'determines correct search model classes based on search object type' do
     # Mock form object
     form = Object.new
