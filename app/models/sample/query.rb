@@ -5,6 +5,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
+  include AdvancedQuerySearchable
 
   ResultTypeError = Class.new(StandardError)
 
@@ -109,102 +110,112 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     adv_query_scope
   end
 
-  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    metadata_field = condition.field.starts_with? 'metadata.'
-    metadata_key = (condition.field.gsub(/^metadata./, '') if metadata_field)
-    node = if metadata_field
-             Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata],
-                                             Arel::Nodes::Quoted.new(metadata_key))
-           else
-             Sample.arel_table[condition.field]
-           end
+  def add_condition(scope, condition)
+    is_metadata = condition.field.starts_with?('metadata.')
+    field = is_metadata ? condition.field.gsub(/^metadata./, '') : condition.field
+    return scope if field.blank?
 
-    # TODO: Refactor each case into it's own method
-    case condition.operator
-    when '='
-      if metadata_field || condition.field == 'name'
-        scope.where(node.matches(condition.value))
-      elsif condition.field == 'puid'
-        scope.where(node.eq(condition.value.upcase))
+    node = build_arel_node(condition)
+    apply_operator(scope, condition, node, field)
+  end
+
+  def build_arel_node(condition)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata],
+                                      Arel::Nodes::Quoted.new(metadata_key))
+    else
+      Sample.arel_table[condition.field]
+    end
+  end
+
+  def text_match_field?(field)
+    field == 'name'
+  end
+
+  def uppercase_field?(field)
+    field == 'puid'
+  end
+
+  def jsonb_field?(field)
+    # Field has already been normalized at this point
+    # We need to track this separately in add_condition
+    @is_jsonb_field ||= false
+  end
+
+  def date_field?(field)
+    field.end_with?('_date')
+  end
+
+  # Override to handle metadata field detection properly
+  def handle_less_than_equal(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      if metadata_key.end_with?('_date')
+        handle_jsonb_date_comparison(scope, node, condition.value, :lteq)
       else
-        scope.where(node.eq(condition.value))
+        handle_jsonb_numeric_comparison(scope, node, condition.value, :lteq)
       end
-    when 'in'
-      if metadata_field
-        scope.where(Arel::Nodes::NamedFunction.new('LOWER',
-                                                   [node]).in(condition.value.map(&:downcase)))
-      elsif condition.field == 'name'
-        scope.where(node.lower.in(condition.value.map(&:downcase)))
-      elsif condition.field == 'puid'
-        scope.where(node.in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.lteq(condition.value))
+    end
+  end
+
+  # Override to handle metadata field detection properly
+  def handle_greater_than_equal(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      if metadata_key.end_with?('_date')
+        handle_jsonb_date_comparison(scope, node, condition.value, :gteq)
       else
-        scope.where(node.in(condition.value))
+        handle_jsonb_numeric_comparison(scope, node, condition.value, :gteq)
       end
-    when '!='
-      if metadata_field || condition.field == 'name'
-        scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
-      elsif condition.field == 'puid'
-        scope.where(node.not_eq(condition.value.upcase))
-      else
-        scope.where(node.not_eq(condition.value))
-      end
-    when 'not_in'
-      if metadata_field
-        scope.where(node.eq(nil).or(Arel::Nodes::NamedFunction.new('LOWER',
-                                                                   [node]).not_in(condition.value.map(&:downcase))))
-      elsif condition.field == 'name'
-        scope.where(node.lower.not_in(condition.value.map(&:downcase)))
-      elsif condition.field == 'puid'
-        scope.where(node.not_in(condition.value.map(&:upcase)))
-      else
-        scope.where(node.not_in(condition.value))
-      end
-    when '<='
-      if !metadata_field
-        scope.where(node.lteq(condition.value))
-      elsif metadata_key.end_with?('_date')
-        scope
-          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-            ).lteq(condition.value)
-          )
-      else
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).lteq(condition.value)
-          )
-      end
-    when '>='
-      if !metadata_field
-        scope.where(node.gteq(condition.value))
-      elsif metadata_key.end_with?('_date')
-        scope
-          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-            ).gteq(condition.value)
-          )
-      else
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).gteq(condition.value)
-          )
-      end
-    when 'contains'
-      scope.where(node.matches("%#{condition.value}%"))
-    when 'exists'
-      scope.where(node.not_eq(nil))
-    when 'not_exists'
-      scope.where(node.eq(nil))
+    else
+      scope.where(node.gteq(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_equals(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.matches(condition.value))
+    elsif field == 'puid'
+      scope.where(node.eq(condition.value.upcase))
+    else
+      scope.where(node.eq(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_in(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.matches_any(condition.value))
+    elsif field == 'puid'
+      scope.where(node.in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.in(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_not_equals(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
+    elsif field == 'puid'
+      scope.where(node.not_eq(condition.value.upcase))
+    else
+      scope.where(node.not_eq(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_not_in(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+    elsif field == 'puid'
+      scope.where(node.not_in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.not_in(condition.value))
     end
   end
 
