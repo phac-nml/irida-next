@@ -24,38 +24,39 @@ module WorkflowExecutions
         assert_accessible
 
         # Select state field
-        within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-          find("select[name$='[field]']").find("option[value='state']").select_option
+        within first("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible) do
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='state']", text: I18n.t('workflow_executions.table_component.state'))
+            .select_option
 
           # Wait for operator dropdown to update with enum operators
-          operator_select = find("select[name$='[operator]']")
+          operator_select = find("select[name$='[operator]']", visible: :visible)
           # Wait until the '=' option is available (enum-specific operators)
-          assert_selector "select[name$='[operator]'] option[value='=']", wait: 5
+          assert_selector "select[name$='[operator]'] option[value='=']", wait: 5, visible: :visible
 
           # Select equals operator
           operator_select.find("option[value='=']").select_option
 
           # Verify that a select dropdown appears for state value (not text input)
-          assert_selector "select[name$='[value]']", count: 1
-          assert_no_selector "input[type='text'][name$='[value]']"
+          assert_selector "select[name$='[value]']", count: 1, visible: :visible, wait: 5
+          assert_no_selector "input[type='text'][name$='[value]']", visible: :visible
 
-          # Verify all state options are present with translated labels
-          within "select[name$='[value]']" do
-            assert_text I18n.t('workflow_executions.state.initial')
-            assert_text I18n.t('workflow_executions.state.prepared')
-            assert_text I18n.t('workflow_executions.state.submitted')
-            assert_text I18n.t('workflow_executions.state.running')
-            assert_text I18n.t('workflow_executions.state.completing')
-            assert_text I18n.t('workflow_executions.state.completed')
-            assert_text I18n.t('workflow_executions.state.error')
-            assert_text I18n.t('workflow_executions.state.canceling')
-            assert_text I18n.t('workflow_executions.state.canceled')
+          %w[
+            initial prepared submitted running completing completed error canceling canceled
+          ].each do |state|
+            assert_selector(
+              "select[name$='[value]'] option[value='#{state}']",
+              text: I18n.t("workflow_executions.state.#{state}"),
+              visible: :visible,
+              wait: 5
+            )
           end
 
           # Select completed state
-          find("select[name$='[value]']").find(
-            "option[value='completed']",
-            text: I18n.t('workflow_executions.state.completed')
+          find(
+            "select[name$='[value]'] option[value='completed']",
+            text: I18n.t('workflow_executions.state.completed'),
+            visible: :visible
           ).select_option
         end
 
@@ -67,12 +68,8 @@ module WorkflowExecutions
       # This assertion will depend on your fixture data
       # Adjust based on actual workflow execution fixtures
       within 'table' do
-        if @workflow_execution1.completed?
-          assert_text @workflow_execution1.name
-        end
-        if @workflow_execution2.running?
-          assert_no_text @workflow_execution2.name
-        end
+        assert_text @workflow_execution1.name if @workflow_execution1.completed?
+        assert_no_text @workflow_execution2.name if @workflow_execution2.running?
       end
     end
 
@@ -87,23 +84,33 @@ module WorkflowExecutions
         assert_accessible
 
         # Select state field
-        within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-          find("select[name$='[field]']").find("option[value='state']").select_option
+        within first("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible) do
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='state']", text: I18n.t('workflow_executions.table_component.state'))
+            .select_option
 
           # Wait for operator dropdown to update with enum operators
-          assert_selector "select[name$='[operator]'] option[value='in']", wait: 5
+          assert_selector "select[name$='[operator]'] option[value='in']", wait: 5, visible: :visible
 
           # Select 'in' operator
-          find("select[name$='[operator]']").find("option[value='in']").select_option
+          find("select[name$='[operator]']", visible: :visible).find("option[value='in']").select_option
 
           # Verify that a multi-select dropdown appears
-          assert_selector "select[name$='[value]'][multiple='multiple']", count: 1
+          assert_selector "select[name$='[value][]'][multiple='multiple']", count: 1, visible: :visible, wait: 5
 
           # Verify translated state options are available
-          within "select[name$='[value]'][multiple='multiple']" do
-            assert_text I18n.t('workflow_executions.state.completed')
-            assert_text I18n.t('workflow_executions.state.error')
-          end
+          assert_selector(
+            "select[name$='[value][]'][multiple='multiple'] option[value='completed']",
+            text: I18n.t('workflow_executions.state.completed'),
+            visible: :visible,
+            wait: 5
+          )
+          assert_selector(
+            "select[name$='[value][]'][multiple='multiple'] option[value='error']",
+            text: I18n.t('workflow_executions.state.error'),
+            visible: :visible,
+            wait: 5
+          )
         end
       end
     end
@@ -119,33 +126,35 @@ module WorkflowExecutions
         assert_accessible
 
         # Select name field (non-enum)
-        within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-          find("select[name$='[field]']").find("option[value='name']").select_option
+        within first("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible) do
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='name']", text: I18n.t('workflow_executions.table_component.name'))
+            .select_option
 
           # Select equals operator
-          find("select[name$='[operator]']").find("option[value='=']").select_option
+          find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
 
           # Verify that a text input appears (not select dropdown)
-          assert_selector "input[type='text'][name$='[value]']", count: 1
-          assert_no_selector "select[name$='[value]']"
+          assert_selector "input[type='text'][name$='[value]']", count: 1, visible: :visible, wait: 5
+          assert_no_selector "select[name$='[value]']", visible: :visible
         end
       end
     end
 
     test 'can search workflow executions by state using dropdown' do
       # Create test workflow executions with known states
-      namespace = @user.namespace
+      namespace = namespaces_project_namespaces(:project1_namespace)
       completed_we = WorkflowExecution.create!(
         name: 'Completed Search Test',
         submitter: @user,
-        namespace: namespace,
+        namespace:,
         state: :completed,
         metadata: { pipeline_id: 'test', workflow_version: '1.0' }
       )
       error_we = WorkflowExecution.create!(
         name: 'Error Search Test',
         submitter: @user,
-        namespace: namespace,
+        namespace:,
         state: :error,
         metadata: { pipeline_id: 'test', workflow_version: '1.0' }
       )
@@ -157,16 +166,19 @@ module WorkflowExecutions
 
       within 'dialog' do
         # Configure search for completed state
-        within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-          find("select[name$='[field]']").find("option[value='state']").select_option
+        within first("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible) do
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='state']", text: I18n.t('workflow_executions.table_component.state'))
+            .select_option
 
           # Wait for operator dropdown to update with enum operators
-          assert_selector "select[name$='[operator]'] option[value='=']", wait: 5
+          assert_selector "select[name$='[operator]'] option[value='=']", wait: 5, visible: :visible
 
-          find("select[name$='[operator]']").find("option[value='=']").select_option
-          find("select[name$='[value]']").find(
-            "option[value='completed']",
-            text: I18n.t('workflow_executions.state.completed')
+          find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+          find(
+            "select[name$='[value]'] option[value='completed']",
+            text: I18n.t('workflow_executions.state.completed'),
+            visible: :visible
           ).select_option
         end
 
