@@ -28,19 +28,22 @@ module WorkflowExecutions
         workflow_execution.state = :canceling
         workflow_execution.save
         WorkflowExecutionCancelationJob.perform_later(workflow_execution, current_user)
+        return true
       elsif workflow_execution.initial?
         # No files to clean up, mark as cleaned and do not create a cleanup job.
         workflow_execution.state = :canceled
         workflow_execution.cleaned = true
         workflow_execution.save
+        return true
       else # state = :prepared
         # Files were generated but not sent to ga4gh, schedule a cleanup job
         workflow_execution.state = :canceled
         workflow_execution.save
         WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+        return true
       end
 
-      workflow_execution
+      false
     end
 
     def cancel_multiple
@@ -51,13 +54,13 @@ module WorkflowExecutions
         id: @workflow_execution_ids
       ).where.not(state: %w[completed canceled error])
 
-      cancellable_count = cancellable_workflow_executions.count
-
+      successful_cancellations_count = 0
       cancellable_workflow_executions.each do |workflow_execution|
-        cancel_workflow(workflow_execution)
+        success = cancel_workflow(workflow_execution)
+        successful_cancellations_count += 1 if success
       end
 
-      cancellable_count
+      successful_cancellations_count
     end
   end
 end
