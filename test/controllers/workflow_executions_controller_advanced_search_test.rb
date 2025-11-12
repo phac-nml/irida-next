@@ -200,7 +200,7 @@ class WorkflowExecutionsControllerAdvancedSearchTest < ActionDispatch::Integrati
         groups_attributes: {
           '0' => {
             'conditions_attributes' => {
-              '0' => { field: 'state', operator: 'in', value: ['completed', 'running'] }
+              '0' => { field: 'state', operator: 'in', value: %w[completed running] }
             }
           }
         }
@@ -216,7 +216,7 @@ class WorkflowExecutionsControllerAdvancedSearchTest < ActionDispatch::Integrati
         groups_attributes: {
           '0' => {
             'conditions_attributes' => {
-              '0' => { field: 'state', operator: 'not_in', value: ['canceled', 'error'] }
+              '0' => { field: 'state', operator: 'not_in', value: %w[canceled error] }
             }
           }
         }
@@ -310,6 +310,43 @@ class WorkflowExecutionsControllerAdvancedSearchTest < ActionDispatch::Integrati
       page: 1,
       limit: 10
     }
+
+    assert_response :success
+  end
+
+  test 'search action redirects to index with search params' do
+    post search_workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'name', operator: 'contains', value: 'example' }
+            }
+          }
+        }
+      }
+    }, as: :turbo_stream
+
+    assert_response :success
+  end
+
+  test 'search action with multiple groups redirects to index' do
+    post search_workflow_executions_path, params: {
+      q: {
+        groups_attributes: {
+          '0' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'completed' }
+            }
+          },
+          '1' => {
+            'conditions_attributes' => {
+              '0' => { field: 'state', operator: '=', value: 'running' }
+            }
+          }
+        }
+      }
+    }, as: :turbo_stream
 
     assert_response :success
   end
