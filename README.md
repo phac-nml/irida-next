@@ -84,11 +84,6 @@ This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automat
   bundle exec erb-format --write '**/*.erb'
   ```
 
-### CI checks
-
-- The CI workflow (`.github/workflows/linting.yml`) runs RuboCop, Prettier, and erb-formatter on every pull request
-- PRs will fail if formatting or linting issues are detected
-
 ### Ignore files
 
 - `.prettierignore` excludes build outputs, dependencies, and generated files from Prettier formatting
