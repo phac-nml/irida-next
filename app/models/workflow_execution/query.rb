@@ -33,17 +33,17 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def groups_attributes=(attributes)
-    groups ||= []
-    attributes.each_value do |group_attributes|
-      conditions ||= []
-      group_attributes.each_value do |conditions_attributes|
-        conditions_attributes.each_value do |condition_params|
-          conditions.push(WorkflowExecution::SearchCondition.new(condition_params))
+    parsed_groups = attributes.each_value.map do |group_attributes|
+      parsed_conditions = group_attributes.each_value.flat_map do |conditions_attributes|
+        conditions_attributes.each_value.map do |condition_params|
+          WorkflowExecution::SearchCondition.new(condition_params)
         end
       end
-      groups.push(WorkflowExecution::SearchGroup.new(conditions:))
+
+      WorkflowExecution::SearchGroup.new(conditions: parsed_conditions)
     end
-    assign_attributes(groups:)
+
+    assign_attributes(groups: parsed_groups)
   end
 
   def sort=(value)
