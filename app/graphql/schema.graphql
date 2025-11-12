@@ -604,12 +604,12 @@ input CloneSamplesInput {
   newProjectPuid: ID
 
   """
-  The Node ID of the project to copy to. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
+  The Node ID of the project to copy from. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
   """
   projectId: ID
 
   """
-  Persistent Unique Identifier of the project to copy to. For example, `INXT_PRJ_AAAAAAAAAA`.
+  Persistent Unique Identifier of the project to copy from. For example, `INXT_PRJ_AAAAAAAAAA`.
   """
   projectPuid: ID
 
@@ -2667,12 +2667,12 @@ input TransferSamplesInput {
   newProjectPuid: ID
 
   """
-  The Node ID of the project to transfer to. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
+  The Node ID of the project to transfer from. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
   """
   projectId: ID
 
   """
-  Persistent Unique Identifier of the project to transfer to. For example, `INXT_PRJ_AAAAAAAAAA`.
+  Persistent Unique Identifier of the project to transfer from. For example, `INXT_PRJ_AAAAAAAAAA`.
   """
   projectPuid: ID
 
