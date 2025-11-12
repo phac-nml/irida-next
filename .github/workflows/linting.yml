@@ -26,3 +26,38 @@ jobs:
           reporter: github-pr-check
           skip_install: true
           use_bundler: true
+
+  prettier:
+    name: runner / prettier
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run Prettier (check)
+        run: pnpm run format:check
+
+  erb_formatter:
+    name: runner / erb-formatter
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Run erb-formatter (check)
+        run: bundle exec erb-format --check '**/*.erb'

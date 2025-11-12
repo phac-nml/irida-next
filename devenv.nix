@@ -96,7 +96,37 @@ lib.mkMerge [
     '';
 
     # https://devenv.sh/git-hooks/
-    # git-hooks.hooks.shellcheck.enable = true;
+    git-hooks.hooks = {
+      # RuboCop for Ruby files
+      rubocop = {
+        enable = true;
+        name = "RuboCop";
+        description = "Run RuboCop on changed Ruby files";
+        entry = "bundle exec rubocop -a --force-exclusion";
+        files = "\\.rb$";
+        pass_filenames = true;
+      };
+
+      # Prettier for JS, CSS, config files
+      prettier = {
+        enable = true;
+        name = "Prettier";
+        description = "Format JS, CSS, and config files";
+        entry = "pnpm exec prettier --write";
+        files = "\\.(js|jsx|ts|tsx|css|json|md|yml|yaml)$";
+        pass_filenames = true;
+      };
+
+      # erb-formatter for ERB templates
+      erb_formatter = {
+        enable = true;
+        name = "ERB Formatter";
+        description = "Format ERB templates";
+        entry = "bundle exec erb-format --write";
+        files = "\\.erb$";
+        pass_filenames = true;
+      };
+    };
 
     # See full reference at https://devenv.sh/reference/options/
   }

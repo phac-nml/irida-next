@@ -59,3 +59,36 @@ Open `coverage/index.html`
 ## Documentation
 
 See [docs](https://phac-nml.github.io/irida-next/).
+
+## Pre-commit Hooks & Formatting
+
+This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automatically format and lint code before each commit. The following tools are run on staged files:
+
+- **RuboCop**: Ruby files (`.rb`) are auto-corrected and linted
+- **Prettier**: JavaScript, TypeScript, CSS, Markdown, YAML, and config files are formatted
+- **erb-formatter**: ERB templates (`.erb`) are formatted for consistent style
+
+### How it works
+
+- Hooks are configured in `devenv.nix` and activated automatically when you run `direnv reload` or enter the devenv shell
+- On commit, only staged files matching the patterns are checked and auto-fixed
+- You can bypass hooks with `git commit --no-verify` (not recommended)
+
+### Manual formatting
+
+- Run all formatters manually:
+
+  ```bash
+  bundle exec rubocop -a
+  pnpm run format
+  bundle exec erb-format --write '**/*.erb'
+  ```
+
+### CI checks
+
+- The CI workflow (`.github/workflows/linting.yml`) runs RuboCop, Prettier, and erb-formatter on every pull request
+- PRs will fail if formatting or linting issues are detected
+
+### Ignore files
+
+- `.prettierignore` excludes build outputs, dependencies, and generated files from Prettier formatting
