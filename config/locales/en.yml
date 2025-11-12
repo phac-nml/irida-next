@@ -941,10 +941,7 @@ en:
         title: Edit workflow execution
       index:
         create_export_button: Create Export
-        search:
-          placeholder: Search by name or ID
         subtitle: These are the workflow executions that have been shared within this group
-        title: Workflow Executions
       show:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export

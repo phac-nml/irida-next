@@ -1468,7 +1468,7 @@ module WorkflowExecutions
       end
 
       # verify redirection to workflow executions page
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       # click the submitted workflow execution from above
       within('table tbody tr:first-child th:first-child') do

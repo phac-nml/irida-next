@@ -370,6 +370,11 @@ fr:
       cancel:
         error: Impossible d’annuler le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été annulé avec succès
+      cancel_multiple:
+        error: Impossible de annuler les flux de travail sélectionnés
+        partial_error: Les flux de travail %{unsuccessful} n'ont pas pu être annulées.
+        partial_success: Les flux de travail %{successful} ont été annulées avec succès.
+        success: Tous les flux de travail sélectionnés ont été annulées avec succès.
       destroy:
         error: Impossible de supprimer le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été supprimé avec succès
@@ -938,10 +943,7 @@ fr:
         title: Modifier l’exécution du flux de travail
       index:
         create_export_button: Créer une exportation
-        search:
-          placeholder: Rechercher par nom ou ID
         subtitle: Ce sont les exécutions du flux de travail qui ont été partagées au sein de ce groupe.
-        title: Exécutions de flux de travail
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
@@ -1930,6 +1932,15 @@ fr:
         delete_workflow_executions: Supprimer les exécutions de flux de travail
         export: Exportation
         label: Actions liées à l'exécution des flux de travail
+      cancel_multiple_confirmation_dialog:
+        description:
+          plural: Les exécutions de flux de travail COUNT_PLACEHOLDER sélectionnées seront annulées.
+          singular: L’exécution des flux de travail sélectionnés sera annulée.
+          zero: L’exécution des flux de travail 0 sélectionnés sera annulée.
+        state_warning_html: À noter que seules les exécutions des flux de travail non partagées qui <b>n'ont pas</b> un statut <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Terminé</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Annulé</span> et <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Erreur</span> seront supprimées.
+        submit_button: Confirmer
+        title: Annuler les exécutions de flux de travail
+        workflow_executions: Exécutions de flux de travail
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
         submit_button: Confirmer

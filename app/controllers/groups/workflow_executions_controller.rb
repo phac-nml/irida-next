@@ -61,7 +61,7 @@ module Groups
       super
       @context_crumbs +=
         [{
-          name: I18n.t('groups.workflow_executions.index.title'),
+          name: I18n.t('shared.workflow_executions.index.title'),
           path: group_workflow_executions_path
         }]
       return unless action_name == 'show' && !@workflow_execution.nil?

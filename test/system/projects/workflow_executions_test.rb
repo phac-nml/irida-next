@@ -29,7 +29,7 @@ module Projects
     test 'should display a list of workflow executions' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -44,7 +44,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -104,7 +104,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_selector "tr[id='#{dom_id(workflow_execution1)}']"
       within("tr[id='#{dom_id(workflow_execution1)}'] td:last-child") do
@@ -133,7 +133,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -164,7 +164,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -181,7 +181,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -196,7 +196,7 @@ module Projects
     test 'should delete a completed workflow' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
@@ -243,7 +243,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -266,7 +266,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -283,7 +283,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -306,7 +306,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -323,7 +323,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -367,7 +367,7 @@ module Projects
     test 'can remove workflow execution from workflow execution page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
@@ -559,7 +559,7 @@ module Projects
     test 'can successfully delete multiple workflows at once' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -597,7 +597,7 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -637,7 +637,7 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -669,7 +669,7 @@ module Projects
 
     test 'user with access level >= Maintainer can view delete workflows link' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -682,7 +682,7 @@ module Projects
       project26 = projects(:project26)
       login_as users(:user0)
       visit namespace_project_workflow_executions_path(namespace, project26)
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_no_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
     end
