@@ -108,7 +108,7 @@ module Groups
         assert_text @workflow_execution_group_shared3.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution_group_shared1.id
       find('input.t-search-component').native.send_keys(:return)
 
@@ -124,14 +124,14 @@ module Groups
         assert_no_text @workflow_execution_group_shared3.name
       end
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Displaying 11 items'
       assert_selector 'table tbody tr', count: 11
 
-      fill_in placeholder: I18n.t(:'groups.workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution_group_shared2.name
       find('input.t-search-component').native.send_keys(:return)
 

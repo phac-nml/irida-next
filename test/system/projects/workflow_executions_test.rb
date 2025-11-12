@@ -415,7 +415,7 @@ module Projects
         assert_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution1.id
       find('input.t-search-component').native.send_keys(:return)
 
@@ -429,14 +429,14 @@ module Projects
         assert_no_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
       find('input.t-search-component').native.send_keys(:return)
 
