@@ -38,6 +38,15 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     # For backward compatibility with SearchComponent that expects Ransack
     @q = base_workflows.ransack(params[:q])
     set_default_sort
+
+    # Configure enum fields for advanced search
+    @workflow_execution_enum_fields = {
+      'state' => {
+        values: WorkflowExecution.states.keys,
+        translation_key: 'workflow_executions.state',
+        labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
+      }
+    }
   end
 
   def edit

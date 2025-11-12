@@ -1,5 +1,8 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
+  data-enum-fields='<%= @enum_fields.to_json %>'
+  data-enum-operations='<%= @enum_operations.to_json %>'
+  data-standard-operations='<%= @operations.to_json %>'
   class="
     relative p-3 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/30
     hover:border-slate-300 dark:hover:border-slate-600 transition-colors flex @max-xl:flex-col
@@ -29,6 +32,7 @@
                              ),
                              { include_blank: true },
                              {
+                               "data-action": "advanced-search#handleFieldChange",
                                "aria-label":
                                  t(
                                    translation_key(:field),
@@ -75,6 +79,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
+      enum_fields: @enum_fields,
     ) %>
   <% end %>
   <button

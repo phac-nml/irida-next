@@ -112,6 +112,7 @@
         search: @query,
         entity_fields: ['id', 'name', 'state', 'run_id', 'created_at', 'updated_at'],
         jsonb_fields: ['workflow_name', 'workflow_version'],
+        enum_fields: @workflow_execution_enum_fields,
         field_label_namespace: 'workflow_executions.table_component',
         open: @query.errors.any?,
         status: @query.advanced_query?,

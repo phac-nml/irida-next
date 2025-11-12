@@ -10,7 +10,42 @@
   "
 >
   <%= @conditions_form.label :value, data: { required: true } %>
-  <% if %w[in not_in].include?(@condition.operator) %>
+  <% if render_enum_select? %>
+    <%= @conditions_form.select :value,
+                            options_for_select(
+                              enum_options,
+                              selected = @condition.value,
+                            ),
+                            { include_blank: true },
+                            {
+                              "aria-label":
+                                t(
+                                  translation_key(:value),
+                                ),
+                              "aria-invalid": invalid_value,
+                              "aria-describedby":
+                                @conditions_form.field_id(:value, "error"),
+                              autofocus: invalid_value,
+                            } %>
+  <% elsif render_enum_multiselect? %>
+    <%= @conditions_form.select :value,
+                            options_for_select(
+                              enum_options,
+                              selected = @condition.value,
+                            ),
+                            {},
+                            {
+                              multiple: true,
+                              "aria-label":
+                                t(
+                                  translation_key(:value),
+                                ),
+                              "aria-invalid": invalid_value,
+                              "aria-describedby":
+                                @conditions_form.field_id(:value, "error"),
+                              autofocus: invalid_value,
+                            } %>
+  <% elsif %w[in not_in].include?(@condition.operator) %>
     <div
       data-controller="list-filter"
       data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
