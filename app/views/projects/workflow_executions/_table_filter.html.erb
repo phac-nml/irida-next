@@ -1,0 +1,13 @@
+<%= form_with model: @query, html: { role: "search" }, scope: :q, url: search_namespace_project_workflow_executions_path, method: :post, data: { turbo_stream: true, turbo_action: 'replace', controller: "filters", "filters-selection-outlet": "#workflow-executions-table" }, class: "max-sm:grow" do |f| %>
+  <%= render AdvancedSearchComponent.new(
+    form: f,
+    search: @query,
+    entity_fields: ['id', 'name', 'state', 'run_id', 'created_at', 'updated_at'],
+    jsonb_fields: ['workflow_name', 'workflow_version'],
+    enum_fields: @workflow_execution_enum_fields,
+    field_label_namespace: 'workflow_executions.table_component',
+    open: @query.errors.any?,
+    status: @query.advanced_query?,
+  ) %>
+  <%= f.submit hidden: true %>
+<% end %>

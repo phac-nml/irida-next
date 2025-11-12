@@ -195,7 +195,7 @@ module Groups
           groups_attributes: {
             '0' => {
               'conditions_attributes' => {
-                '0' => { field: 'state', operator: 'in', value: ['completed', 'running'] }
+                '0' => { field: 'state', operator: 'in', value: %w[completed running] }
               }
             }
           }
@@ -211,7 +211,7 @@ module Groups
           groups_attributes: {
             '0' => {
               'conditions_attributes' => {
-                '0' => { field: 'state', operator: 'not_in', value: ['canceled', 'error'] }
+                '0' => { field: 'state', operator: 'not_in', value: %w[canceled error] }
               }
             }
           }
@@ -331,6 +331,43 @@ module Groups
           sort: 'name asc'
         }
       }
+
+      assert_response :success
+    end
+
+    test 'search action redirects to index with search params' do
+      post search_group_workflow_executions_path(@group), params: {
+        q: {
+          groups_attributes: {
+            '0' => {
+              'conditions_attributes' => {
+                '0' => { field: 'name', operator: 'contains', value: 'example' }
+              }
+            }
+          }
+        }
+      }, as: :turbo_stream
+
+      assert_response :success
+    end
+
+    test 'search action with multiple groups redirects to index' do
+      post search_group_workflow_executions_path(@group), params: {
+        q: {
+          groups_attributes: {
+            '0' => {
+              'conditions_attributes' => {
+                '0' => { field: 'state', operator: '=', value: 'completed' }
+              }
+            },
+            '1' => {
+              'conditions_attributes' => {
+                '0' => { field: 'state', operator: '=', value: 'running' }
+              }
+            }
+          }
+        }
+      }, as: :turbo_stream
 
       assert_response :success
     end

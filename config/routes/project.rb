@@ -42,6 +42,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           end
           collection do
             get :select
+            post :search
             get :destroy_multiple_confirmation
             post :destroy_multiple
             post :list

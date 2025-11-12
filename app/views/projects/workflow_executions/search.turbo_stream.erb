@@ -1,0 +1,9 @@
+<%= turbo_stream.update "table-filter", partial: "table_filter" %>
+
+<% if @query.valid? %>
+  <%= turbo_stream.append "workflow-executions-table" do %>
+    <%= render SpinnerComponent.new(message: t("projects.workflow_executions.index.loading")) %>
+  <% end %>
+
+  <turbo-stream action="refresh"></turbo-stream>
+<% end %>

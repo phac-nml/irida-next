@@ -6,6 +6,7 @@ module Groups
     include BreadcrumbNavigation
     include Metadata
     include WorkflowExecutionActions
+    include Storable
 
     before_action :namespace
     before_action :ensure_enabled

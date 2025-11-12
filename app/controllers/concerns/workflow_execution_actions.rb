@@ -31,6 +31,26 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     configure_enum_fields
   end
 
+  def search
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+
+    @search_params = search_params
+    base_workflows = load_workflows
+
+    setup_workflow_query(base_workflows)
+    configure_enum_fields
+
+    respond_to do |format|
+      format.turbo_stream do
+        if @query.valid?
+          render status: :ok
+        else
+          render status: :unprocessable_content
+        end
+      end
+    end
+  end
+
   def edit
     authorize! @workflow_execution
 
@@ -340,11 +360,21 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    return {} unless params[:q]
+    updated_params = update_store(search_key,
+                                  params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
+    updated_params.slice!('name_or_id_cont', 'groups_attributes', 'sort')
 
-    permitted_params = permit_search_params
-    convert_ransack_sort_param(permitted_params)
-    permitted_params.to_h.with_indifferent_access
+    updated_params
+  end
+
+  def search_key
+    if @namespace.is_a?(Project)
+      "project_workflow_executions_#{@namespace.id}"
+    elsif @namespace.is_a?(Group)
+      "group_workflow_executions_#{@namespace.id}"
+    else
+      'workflow_executions'
+    end
   end
 
   def permit_search_params
