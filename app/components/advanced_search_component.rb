@@ -7,10 +7,11 @@
 class AdvancedSearchComponent < Component
   # rubocop:disable Metrics/ParameterLists
   def initialize(form:, search:, entity_fields: [], jsonb_fields: [], sample_fields: [], metadata_fields: [],
-                 field_label_namespace: 'samples.table_component', open: false, status: true)
+                 enum_fields: {}, field_label_namespace: 'samples.table_component', open: false, status: true)
     @form = form
     @search = search
     @field_label_namespace = field_label_namespace
+    @enum_fields = enum_fields
 
     # Support both new generic parameters and legacy sample-specific parameters for backward compatibility
     fields = entity_fields.presence || sample_fields
@@ -19,6 +20,7 @@ class AdvancedSearchComponent < Component
     @entity_fields = entity_field_options(fields)
     @jsonb_fields = jsonb_field_options(jsonb)
     @operations = operation_options
+    @enum_operations = enum_operation_options
     @open = open
     @status = status
 
@@ -56,6 +58,15 @@ class AdvancedSearchComponent < Component
       I18n.t('components.advanced_search_component.operation.contains') => 'contains',
       I18n.t('components.advanced_search_component.operation.exists') => 'exists',
       I18n.t('components.advanced_search_component.operation.not_exists') => 'not_exists',
+      I18n.t('components.advanced_search_component.operation.in') => 'in',
+      I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
+    }
+  end
+
+  def enum_operation_options
+    {
+      I18n.t('components.advanced_search_component.operation.equals') => '=',
+      I18n.t('components.advanced_search_component.operation.not_equals') => '!=',
       I18n.t('components.advanced_search_component.operation.in') => 'in',
       I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
     }
