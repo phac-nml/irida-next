@@ -375,8 +375,8 @@ fr:
         success: Le flux de travail %{workflow_name} a été supprimé avec succès
       destroy_multiple:
         error: Impossible de supprimer les flux de travail sélectionnés
-        partial_error: Les flux de travail %{not_deleted} n’ont pas pu être supprimés.
-        partial_success: Les flux de travail %{deleted} ont été supprimés avec succès.
+        partial_error: Les flux de travail %{unsuccessful} n’ont pas pu être supprimés.
+        partial_success: Les flux de travail %{successful} ont été supprimés avec succès.
         success: Tous les flux de travail sélectionnés ont été supprimés avec succès.
       update:
         success: Le flux de travail %{workflow_name} a été mis à jour avec succès
@@ -1615,12 +1615,7 @@ fr:
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
       index:
-        create_export_button: Créer une exportation
-        delete_workflows_button: Supprimer les exécutions de flux de travail
-        search:
-          placeholder: Rechercher par ID ou nom
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
-        title: Exécutions de flux de travail
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         create_export_button: Créer une exportation
@@ -1929,6 +1924,12 @@ fr:
         move_up: L’option OPTION_PLACEHOLDER a été déplacée vers le haut.
         removed: 'Les options suivantes ont été retirées : '
     workflow_executions:
+      actions_dropdown:
+        cancel_workflow_executions: Annuler les exécutions de flux de travail
+        create_export: Créer une exportation
+        delete_workflow_executions: Supprimer les exécutions de flux de travail
+        export: Exportation
+        label: Actions liées à l'exécution des flux de travail
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
         submit_button: Confirmer
@@ -1942,6 +1943,10 @@ fr:
         submit_button: Confirmer
         title: Supprimer les exécutions de flux de travail
         workflow_executions: Exécutions de flux de travail
+      index:
+        search:
+          placeholder: Rechercher par ID ou nom
+        title: Exécutions de flux de travail
       list_workflow_execution:
         id: 'ID :'
         name: 'Nom :'
@@ -2017,12 +2022,6 @@ fr:
         title: Aucun fichier
       search:
         placeholder: Rechercher par PUID ou nom de fichier
-    index:
-      create_export_button: Créer une exportation
-      delete_workflows_button: Supprimer les exécutions de flux de travail
-      search:
-        placeholder: Rechercher par ID ou nom
-      title: Exécutions de flux de travail
     samples:
       empty: Aucun échantillon n’a pu être trouvé pour cette exécution de flux de travail
     show:

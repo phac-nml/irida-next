@@ -65,7 +65,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   def context_crumbs
     @context_crumbs =
       [{
-        name: I18n.t('workflow_executions.index.title'),
+        name: I18n.t('shared.workflow_executions.index.title'),
         path: workflow_executions_path
       }]
     return unless action_name == 'show' && !@workflow_execution.nil?
