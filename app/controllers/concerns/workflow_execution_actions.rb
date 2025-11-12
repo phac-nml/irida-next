@@ -360,7 +360,21 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     return {} unless params[:q]
 
-    search_params = params[:q].permit(:name_or_id_cont, :sort, :s, groups_attributes: {})
+    search_params = params[:q].permit(
+      :name_or_id_cont,
+      :sort,
+      :s,
+      groups_attributes: [
+        {
+          conditions_attributes: [
+            :field,
+            :operator,
+            :value,
+            { value: [] }
+          ]
+        }
+      ]
+    )
     # Convert Ransack's :s parameter to :sort for our Query model
     if search_params[:s].present? && search_params[:sort].blank?
       search_params[:sort] = search_params.delete(:s)
