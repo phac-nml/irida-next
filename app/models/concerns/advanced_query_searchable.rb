@@ -3,11 +3,11 @@
 # Shared concern for advanced query search functionality across different models.
 # This concern provides common operator handling and query building logic that can be
 # customized by including classes through configuration and hook methods.
-module AdvancedQuerySearchable
-  extend ActiveSupport::Concern
 
-  # Mapping of operator symbols to handler method names
-  OPERATOR_HANDLERS = {
+# Mapping of operator symbols to handler method names (kept separate to reduce
+# Metrics/ModuleLength noise in the main concern while remaining easy to reference).
+module AdvancedQuerySearchableOperators
+  HANDLERS = {
     '=' => :handle_equals,
     'in' => :handle_in,
     '!=' => :handle_not_equals,
@@ -18,12 +18,47 @@ module AdvancedQuerySearchable
     'exists' => :handle_exists,
     'not_exists' => :handle_not_exists
   }.freeze
+end
+
+# JSONB helpers extracted to keep concern concise and under RuboCop length limits.
+module AdvancedQuerySearchableJsonb
+  private
+
+  # Helper method for JSONB numeric comparison
+  def handle_jsonb_numeric_comparison(scope, node, value, operator)
+    scope
+      .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
+      .where(
+        Arel::Nodes::NamedFunction.new(
+          'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+        ).send(operator, value)
+      )
+  end
+
+  # Helper method for JSONB date comparison
+  def handle_jsonb_date_comparison(scope, node, value, operator)
+    scope
+      .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
+      .where(
+        Arel::Nodes::NamedFunction.new(
+          'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
+        ).send(operator, value)
+      )
+  end
+end
+
+# Concern adding reusable operator-based advanced filtering to AR models.
+# Includes predicate hooks (e.g., text_match_field?) for customizing behavior
+# in including classes and delegates JSONB/date parsing to helpers above.
+module AdvancedQuerySearchable
+  extend ActiveSupport::Concern
+  include AdvancedQuerySearchableJsonb
 
   private
 
   # Apply the appropriate operator handler for the given condition
   def apply_operator(scope, condition, node, field)
-    handler_method = OPERATOR_HANDLERS[condition.operator]
+    handler_method = AdvancedQuerySearchableOperators::HANDLERS[condition.operator]
     return scope unless handler_method
 
     send(handler_method, scope, condition, node, field)
@@ -121,51 +156,32 @@ module AdvancedQuerySearchable
   end
 
   # Helper method for JSONB numeric comparison
-  def handle_jsonb_numeric_comparison(scope, node, value, operator)
-    scope
-      .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-      .where(
-        Arel::Nodes::NamedFunction.new(
-          'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-        ).send(operator, value)
-      )
-  end
-
-  # Helper method for JSONB date comparison
-  def handle_jsonb_date_comparison(scope, node, value, operator)
-    scope
-      .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
-      .where(
-        Arel::Nodes::NamedFunction.new(
-          'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-        ).send(operator, value)
-      )
-  end
+  # (moved to AdvancedQuerySearchableJsonb)
 
   # Hook methods to be overridden by including classes
 
   # Returns true if the field should use text matching (ILIKE) instead of exact matching
-  def text_match_field?(field)
+  def text_match_field?(_field)
     false
   end
 
   # Returns true if the field values should be uppercased before comparison
-  def uppercase_field?(field)
+  def uppercase_field?(_field)
     false
   end
 
   # Returns true if the field is a JSONB field
-  def jsonb_field?(field)
+  def jsonb_field?(_field)
     false
   end
 
   # Returns true if the field is a date field (for special date handling)
-  def date_field?(field)
+  def date_field?(_field)
     false
   end
 
   # Returns true if the field is a UUID field (needs text casting for ILIKE)
-  def uuid_field?(field)
+  def uuid_field?(_field)
     false
   end
 end
