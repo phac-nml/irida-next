@@ -55,7 +55,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
       within first("fieldset[data-advanced-search-target='conditionsContainer']") do
         find("select[name$='[field]']").find("option[value='state']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
-        find("input[name$='[value]']").fill_in with: 'completed'
+        find("select[name$='[value]']").find("option[value='completed']").select_option
       end
 
       # Apply the filter
@@ -103,7 +103,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
           find("select[name$='[field]']").find("option[value='state']").select_option
           find("select[name$='[operator]']").find("option[value='=']").select_option
-          find("input[name$='[value]']").fill_in with: 'completed'
+          find("select[name$='[value]']").find("option[value='completed']").select_option
         end
 
         # Set second condition - use name contains instead of id >= 1 (id is UUID, not numeric)
@@ -136,7 +136,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         within first("fieldset[data-advanced-search-target='conditionsContainer']") do
           find("select[name$='[field]']").find("option[value='state']").select_option
           find("select[name$='[operator]']").find("option[value='=']").select_option
-          find("input[name$='[value]']").fill_in with: 'completed'
+          find("select[name$='[value]']").find("option[value='completed']").select_option
         end
       end
 
@@ -145,7 +145,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         within first("fieldset[data-advanced-search-target='conditionsContainer']") do
           find("select[name$='[field]']").find("option[value='state']").select_option
           find("select[name$='[operator]']").find("option[value='=']").select_option
-          find("input[name$='[value]']").fill_in with: 'running'
+          find("select[name$='[value]']").find("option[value='running']").select_option
         end
       end
 
@@ -166,7 +166,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
       within first("fieldset[data-advanced-search-target='conditionsContainer']") do
         find("select[name$='[field]']").find("option[value='state']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
-        find("input[name$='[value]']").fill_in with: 'completed'
+        find("select[name$='[value]']").find("option[value='completed']").select_option
       end
 
       # Clear filters - this will submit the form and reload the page
@@ -193,8 +193,14 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
           assert_equal '', find("select[name$='[field]']").value
           assert_equal '', find("select[name$='[operator]']").value
           # Value field may be hidden when operator is blank, so check if it exists and is empty
-          value_fields = all("input[name$='[value]']", visible: :all)
-          assert_equal '', value_fields.first.value if value_fields.any?
+          value_selects = all("select[name$='[value]']", visible: :all)
+          value_inputs = all("input[name$='[value]']", visible: :all)
+
+          if value_selects.any?
+            assert_equal '', value_selects.first.value
+          elsif value_inputs.any?
+            assert_equal '', value_inputs.first.value
+          end
         end
       end
     end
