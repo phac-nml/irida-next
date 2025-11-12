@@ -4,7 +4,7 @@
 <%= turbo_frame_tag "selected" %>
 
 <%= render Viral::PageHeaderComponent.new(
-  title: t(".title"),
+  title: t("shared.workflow_executions.index.title"),
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
@@ -56,7 +56,7 @@
       url: group_workflow_executions_path(**request.query_parameters),
       search_attribute: :name_or_id_cont,
       label: t("common.controls.search"),
-      placeholder: t(".search.placeholder"),
+      placeholder: t("shared.workflow_executions.index.search.placeholder"),
       total_count: @pagy.count,
       class: "max-sm:grow",
       value: @q.name_or_id_cont,

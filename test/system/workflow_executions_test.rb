@@ -27,7 +27,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'should display a list of workflow executions' do
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -38,7 +38,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_selector '#workflow-executions-table table tbody tr', count: 20
 
@@ -65,7 +65,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     click_on 'Run ID'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-up-icon"
@@ -117,7 +117,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_selector "tr[id='#{dom_id(workflow_execution)}']"
     within("tr[id='#{dom_id(workflow_execution)}'] td:last-child") do
@@ -139,7 +139,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -169,7 +169,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -185,7 +185,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -201,7 +201,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -215,7 +215,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'should delete a completed workflow' do
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     # Select all workflow executions within the table
     click_button I18n.t('common.controls.select_all')
@@ -261,7 +261,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -283,7 +283,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -299,7 +299,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -321,7 +321,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -337,7 +337,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     tr = find('a', text: workflow_execution.id).ancestor('tr')
 
@@ -437,7 +437,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can remove workflow execution from workflow execution page' do
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     # Select all workflow executions within the table
     click_button I18n.t('common.controls.select_all')
@@ -587,7 +587,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     canceled_workflow = workflow_executions(:irida_next_example_canceled)
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -626,7 +626,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     # attempt to destroy deletable and non-deletable workflows
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -666,7 +666,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     workflow_execution1 = workflow_executions(:irida_next_example_completed_unclean)
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
