@@ -682,8 +682,8 @@ module Projects
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
         find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
-        find("input[type='checkbox'][value='#{@workflow_execution5.id}']").click
       end
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
@@ -697,8 +697,8 @@ module Projects
           I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
         )
         within('#list_selections') do
+          assert_text "ID: #{@workflow_execution3.id}"
           assert_text "ID: #{@workflow_execution4.id}"
-          assert_text "ID: #{@workflow_execution5.id}"
         end
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
@@ -722,8 +722,8 @@ module Projects
 
       within 'table' do
         find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
         find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
-        find("input[type='checkbox'][value='#{@workflow_execution5.id}']").click
       end
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
@@ -738,8 +738,8 @@ module Projects
         )
         within('#list_selections') do
           assert_text "ID: #{@workflow_execution1.id}"
+          assert_text "ID: #{@workflow_execution3.id}"
           assert_text "ID: #{@workflow_execution4.id}"
-          assert_text "ID: #{@workflow_execution5.id}"
         end
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
@@ -774,7 +774,7 @@ module Projects
           I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
         )
         within('#list_selections') do
-          assert_text "ID: #{new_workflow.id}"
+          assert_text "ID: #{@workflow_execution1.id}"
         end
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
