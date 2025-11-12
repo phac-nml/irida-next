@@ -43,13 +43,29 @@
         <%= render partial: "shared/form/required_field_legend" %>
       </div>
 
-      <div class="space-y-3" data-advanced-search-target="searchGroupsContainer">
+      <div class="space-y-3">
         <%= render LiveRegionComponent.new(
           controller: "advanced-search",
           target: "validationStatus",
           politeness: :assertive,
           atomic: true
         ) %>
+        <div class="space-y-3" data-advanced-search-target="searchGroupsContainer">
+          <% @search.groups.each_with_index do |group, group_index| %>
+            <%= render AdvancedSearch::Group.new(
+              form: @form,
+              group: group,
+              group_index: group_index,
+              group_number: group_index + 1,
+              show_remove_group_button: @search.groups.count > 1,
+              entity_fields: @entity_fields,
+              jsonb_fields: @jsonb_fields,
+              enum_fields: @enum_fields,
+              operations: @operations,
+              enum_operations: @enum_operations,
+            ) %>
+          <% end %>
+        </div>
       </div>
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
