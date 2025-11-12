@@ -13,10 +13,10 @@ module Mutations
              description: 'Persistent Unique Identifier of the project to copy to. For example, `INXT_PRJ_AAAAAAAAAA`.'
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
-             description: 'The Node ID of the project to copy to. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.' # rubocop:disable Layout/LineLength
+             description: 'The Node ID of the project to copy from. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.' # rubocop:disable Layout/LineLength
     argument :project_puid, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
-             description: 'Persistent Unique Identifier of the project to copy to. For example, `INXT_PRJ_AAAAAAAAAA`.'
+             description: 'Persistent Unique Identifier of the project to copy from. For example, `INXT_PRJ_AAAAAAAAAA`.'
 
     argument :sample_ids, [ID], required: true, description: 'List of samples to copy.' # rubocop:disable GraphQL/ExtractInputType
     validates required: { one_of: %i[new_project_id new_project_puid] }
