@@ -7,6 +7,11 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   include Pagy::Backend
   include AdvancedQuerySearchable
 
+  METADATA_FIELD_MAP = {
+    'workflow_name' => 'pipeline_id',
+    'workflow_version' => 'workflow_version'
+  }.freeze
+
   ResultTypeError = Class.new(StandardError)
 
   attribute :column, :string
@@ -128,7 +133,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def add_condition(scope, condition)
-    field = normalized_field(condition)
+    field = normalized_field(condition.field)
     return scope if field.blank?
 
     node = build_arel_node(field)
@@ -136,15 +141,14 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def build_arel_node(field)
-    return WorkflowExecution.arel_table[field] unless jsonb_field?(field)
-
-    # Map user-facing field names to actual JSONB keys in the metadata column.
-    # 'workflow_name' maps to 'pipeline_id' (the actual field name in the metadata JSONB)
-    # 'workflow_version' maps to 'workflow_version' (same name in metadata JSONB)
-    # This mapping provides user-friendly field names in the UI while querying the correct JSONB keys.
-    jsonb_key = field == 'workflow_name' ? 'pipeline_id' : 'workflow_version'
-    Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
-                                    Arel::Nodes::Quoted.new(jsonb_key))
+    if jsonb_field?(field)
+      jsonb_key = METADATA_FIELD_MAP.fetch(field)
+      Arel::Nodes::InfixOperation.new(
+        '->>', WorkflowExecution.arel_table[:metadata], Arel::Nodes::Quoted.new(jsonb_key)
+      )
+    else
+      WorkflowExecution.arel_table[field.to_sym]
+    end
   end
 
   def text_match_field?(field)
@@ -176,11 +180,11 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     end
   end
 
-  def normalized_field(condition)
-    condition.field.to_s.sub(/\Ametadata\./, '')
+  def normalized_field(field)
+    field.to_s.sub(/\Ametadata\./, '')
   end
 
   def jsonb_field?(field)
-    %w[workflow_name workflow_version].include?(field)
+    METADATA_FIELD_MAP.key?(field)
   end
 end
