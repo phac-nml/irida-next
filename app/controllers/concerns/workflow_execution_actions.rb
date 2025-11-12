@@ -26,27 +26,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @search_params = search_params
     base_workflows = load_workflows
 
-    # Always use base_scope to ensure proper authorization filtering
-    @query = WorkflowExecution::Query.new(
-      base_scope: base_workflows,
-      **@search_params
-    )
-
-    @has_workflow_executions = base_workflows.any?
-    set_query_results
-
-    # For backward compatibility with SearchComponent that expects Ransack
-    @q = base_workflows.ransack(params[:q])
-    set_default_sort
-
-    # Configure enum fields for advanced search
-    @workflow_execution_enum_fields = {
-      'state' => {
-        values: WorkflowExecution.states.keys,
-        translation_key: 'workflow_executions.state',
-        labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
-      }
-    }
+    setup_workflow_query(base_workflows)
+    setup_backward_compatibility(base_workflows)
+    configure_enum_fields
   end
 
   def edit
@@ -360,7 +342,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     return {} unless params[:q]
 
-    search_params = params[:q].permit(
+    permitted_params = permit_search_params
+    convert_ransack_sort_param(permitted_params)
+    permitted_params.to_h.with_indifferent_access
+  end
+
+  def permit_search_params
+    params[:q].permit(
       :name_or_id_cont,
       :sort,
       :s,
@@ -375,12 +363,42 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         }
       ]
     )
+  end
+
+  def convert_ransack_sort_param(search_params)
     # Convert Ransack's :s parameter to :sort for our Query model
     if search_params[:s].present? && search_params[:sort].blank?
       search_params[:sort] = search_params.delete(:s)
     else
       search_params.delete(:s)
     end
-    search_params.to_h.with_indifferent_access
+  end
+
+  def setup_workflow_query(base_workflows)
+    # Always use base_scope to ensure proper authorization filtering
+    @query = WorkflowExecution::Query.new(
+      base_scope: base_workflows,
+      **@search_params
+    )
+
+    @has_workflow_executions = base_workflows.any?
+    set_query_results
+  end
+
+  def setup_backward_compatibility(base_workflows)
+    # For backward compatibility with SearchComponent that expects Ransack
+    @q = base_workflows.ransack(params[:q])
+    set_default_sort
+  end
+
+  def configure_enum_fields
+    # Configure enum fields for advanced search
+    @workflow_execution_enum_fields = {
+      'state' => {
+        values: WorkflowExecution.states.keys,
+        translation_key: 'workflow_executions.state',
+        labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
+      }
+    }
   end
 end
