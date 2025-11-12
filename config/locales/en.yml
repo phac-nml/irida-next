@@ -954,6 +954,7 @@ en:
         title: Edit workflow execution
       index:
         create_export_button: Create Export
+        loading: Loading search results...
         search:
           placeholder: Search by name or ID
         subtitle: These are the workflow executions that have been shared within this group
@@ -1621,6 +1622,7 @@ en:
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
+        loading: Loading search results...
         search:
           placeholder: Search by ID or name
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
@@ -2024,6 +2026,7 @@ en:
     index:
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
+      loading: Loading search results...
       search:
         placeholder: Search by ID or name
       title: Workflow Executions
