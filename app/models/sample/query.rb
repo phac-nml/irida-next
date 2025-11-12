@@ -111,51 +111,112 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def add_condition(scope, condition)
-    field = condition.field.to_s
+    is_metadata = condition.field.starts_with?('metadata.')
+    field = is_metadata ? condition.field.gsub(/^metadata./, '') : condition.field
     return scope if field.blank?
-    return scope if metadata_field?(field) && metadata_key(field).blank?
 
-    node = build_arel_node(field)
+    node = build_arel_node(condition)
     apply_operator(scope, condition, node, field)
   end
 
-  def build_arel_node(field)
-    if metadata_field?(field)
-      Arel::Nodes::InfixOperation.new(
-        '->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key(field))
-      )
+  def build_arel_node(condition)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata],
+                                      Arel::Nodes::Quoted.new(metadata_key))
     else
-      Sample.arel_table[field.to_sym]
+      Sample.arel_table[condition.field]
     end
   end
 
   def text_match_field?(field)
-    metadata_field?(field) || field == 'name'
+    field == 'name'
   end
 
   def uppercase_field?(field)
     field == 'puid'
   end
 
-  def jsonb_field?(field)
-    metadata_field?(field)
+  def jsonb_field?(_field)
+    # Field has already been normalized at this point
+    # We need to track this separately in add_condition
+    false
   end
 
   def date_field?(field)
-    target_field = metadata_field?(field) ? metadata_key(field) : field
-    target_field.end_with?('_date')
+    field.end_with?('_date')
   end
 
-  def metadata_field?(field)
-    field.to_s.starts_with?('metadata.')
+  # Override to handle metadata field detection properly
+  def handle_less_than_equal(scope, condition, node, _field)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      if metadata_key.end_with?('_date')
+        handle_jsonb_date_comparison(scope, node, condition.value, :lteq)
+      else
+        handle_jsonb_numeric_comparison(scope, node, condition.value, :lteq)
+      end
+    else
+      scope.where(node.lteq(condition.value))
+    end
   end
 
-  def metadata_key(field)
-    field_without_metadata(field)
+  # Override to handle metadata field detection properly
+  def handle_greater_than_equal(scope, condition, node, _field)
+    if condition.field.starts_with?('metadata.')
+      metadata_key = condition.field.gsub(/^metadata./, '')
+      if metadata_key.end_with?('_date')
+        handle_jsonb_date_comparison(scope, node, condition.value, :gteq)
+      else
+        handle_jsonb_numeric_comparison(scope, node, condition.value, :gteq)
+      end
+    else
+      scope.where(node.gteq(condition.value))
+    end
   end
 
-  def field_without_metadata(field)
-    field.to_s.gsub(/\Ametadata\./, '')
+  # Override to also check metadata fields
+  def handle_equals(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.matches(condition.value))
+    elsif field == 'puid'
+      scope.where(node.eq(condition.value.upcase))
+    else
+      scope.where(node.eq(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_in(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.matches_any(condition.value))
+    elsif field == 'puid'
+      scope.where(node.in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.in(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_not_equals(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
+    elsif field == 'puid'
+      scope.where(node.not_eq(condition.value.upcase))
+    else
+      scope.where(node.not_eq(condition.value))
+    end
+  end
+
+  # Override to also check metadata fields
+  def handle_not_in(scope, condition, node, field)
+    if condition.field.starts_with?('metadata.') || field == 'name'
+      scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+    elsif field == 'puid'
+      scope.where(node.not_in(condition.value.map(&:upcase)))
+    else
+      scope.where(node.not_in(condition.value))
+    end
   end
 
   def ransack_params
