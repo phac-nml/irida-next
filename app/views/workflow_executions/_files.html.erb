@@ -12,8 +12,8 @@
               class: "max-sm:grow",
               data: {}
             ) do %>
-      <%= hidden_field_tag :limit, @pagy.limit %>
-      <%= hidden_field_tag :tab, @tab %>
+      <%= hidden_field_tag :limit, pagy.limit %>
+      <%= hidden_field_tag :tab, 'files' %>
     <% end %>
   <% end %>
 </div>

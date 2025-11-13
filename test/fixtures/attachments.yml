@@ -240,7 +240,7 @@ workflow_execution_completed_output_attachment:
   puid: INXT_ATT_AAAAAAAAAT
 
 samples_workflow_execution_completed_output_attachment:
-  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
+  metadata: { "type": "assembly", "format": "fasta", "compression": "none" }
   attachable: sample46_irida_next_example_completed_with_output (SamplesWorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAU
 

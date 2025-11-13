@@ -695,4 +695,22 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
+
+  test 'can preview workflow execution files' do
+    Flipper.enable(:attachments_preview)
+    Flipper.enable(:workflow_execution_attachments_searching)
+
+    visit workflow_execution_path(@workflow_execution3, anchor: 'summary-tab')
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    within 'tbody' do
+      assert_link I18n.t('components.attachments.table_component.preview')
+      click_link I18n.t('components.attachments.table_component.preview'), match: :first
+    end
+
+    # Should navigate to attachment preview page
+    assert_current_path(%r{/attachments/\d+})
+    assert_selector 'h1'
+  end
 end
