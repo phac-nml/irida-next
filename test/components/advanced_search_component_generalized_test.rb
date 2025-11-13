@@ -116,7 +116,7 @@ class AdvancedSearchComponentGeneralizedTest < ViewComponentTestCase
     )
 
     jsonb_entries = component.instance_variable_get(:@jsonb_fields).values.flatten(1)
-    assert_equal ['Custom Field', 'metadata.custom_field'], jsonb_entries.first
+    assert_equal ['Custom field', 'metadata.custom_field'], jsonb_entries.first
   end
 
   test 'determines correct search model classes based on search object type' do
