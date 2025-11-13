@@ -13,7 +13,8 @@ module WorkflowExecutions
 
       assert 'submitted', @workflow_execution.state
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution: @workflow_execution }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
@@ -26,7 +27,8 @@ module WorkflowExecutions
 
       assert 'running', @workflow_execution.state
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution: @workflow_execution }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
@@ -39,7 +41,8 @@ module WorkflowExecutions
 
       assert 'prepared', @workflow_execution.state
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution: @workflow_execution }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
@@ -56,7 +59,8 @@ module WorkflowExecutions
       assert_equal 1, @workflow_execution.log_data.version
       assert_equal 1, @workflow_execution.log_data.size
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution: @workflow_execution }).execute
 
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
 
@@ -67,6 +71,25 @@ module WorkflowExecutions
       assert 'canceled', @workflow_execution.state
       assert_equal 2, @workflow_execution.log_data.version
       assert_equal 2, @workflow_execution.log_data.size
+    end
+
+    test 'cancel multiple workflows at once' do
+      workflow_execution1 = workflow_executions(:irida_next_example_submitted)
+      workflow_execution2 = workflow_executions(:irida_next_example_running)
+
+      assert 'submitted', @workflow_execution.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [workflow_execution1.id, workflow_execution2.id] }).execute
+
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', workflow_execution1.reload.state
+      assert_not workflow_execution1.cleaned?
+
+
+      assert_equal 'canceling', workflow_execution1.reload.state
+      assert_not workflow_execution1.cleaned?
     end
   end
 end
