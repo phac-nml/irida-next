@@ -5,7 +5,7 @@ module Irida
   class Pipeline # rubocop:disable Metrics/ClassLength
     attr_accessor :pipeline_id, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
-                  :default_params, :default_workflow_params
+                  :default_params, :default_workflow_params, :settings
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
@@ -25,6 +25,7 @@ module Irida
       @executable = version['executable'].nil? || version['executable']
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
+      @settings = settings_for_entry(entry, version)
       @default_params = default_params_for_entry
       @default_workflow_params = default_workflow_params_for_entry
       @unknown = unknown
@@ -144,6 +145,13 @@ module Irida
         )
 
       overrides
+    end
+
+    def settings_for_entry(entry, version)
+      settings = entry['settings'].deep_dup || {}
+      version_settings = version['settings'] || {}
+      settings.deep_merge!(version_settings)
+      settings
     end
 
     def samplesheet_schema_overrides_for_entry(entry, version)
