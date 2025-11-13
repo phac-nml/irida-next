@@ -247,6 +247,84 @@ module Projects
                                                                                                   [sample24.id])
         end
       end
+
+      test 'metadata summary batch transfer handles count going negative during batch' do
+        # REGRESSION TEST for production bug:
+        # When batch transferring samples where metadata field count < number of samples,
+        # the subtract operation crashes on nil after the count reaches zero and key is deleted.
+        #
+        # Scenario: Parent has count=1 for 'field1', but we transfer 3 samples with 'field1'
+        # Expected: Should handle gracefully (delete key, log warning for attempts on missing keys)
+        # Actual (before fix): Crashes on line 303 with NoMethodError: undefined method `-' for nil:NilClass
+
+        # Use john_doe_project2 (in user namespace) to avoid overlapping parent namespaces
+        target_project = @john_doe_project2
+
+        # Create test samples in project30 (under subgroup12b and group12)
+        sample_a = Sample.create!(
+          name: 'Batch Race Condition Test A',
+          project: @project30,
+          metadata: { 'race_field' => 'a' },
+          metadata_provenance: {
+            'race_field' => { 'id' => @john_doe.id, 'source' => 'user', 'updated_at' => DateTime.now }
+          }
+        )
+
+        sample_b = Sample.create!(
+          name: 'Batch Race Condition Test B',
+          project: @project30,
+          metadata: { 'race_field' => 'b' },
+          metadata_provenance: {
+            'race_field' => { 'id' => @john_doe.id, 'source' => 'user', 'updated_at' => DateTime.now }
+          }
+        )
+
+        sample_c = Sample.create!(
+          name: 'Batch Race Condition Test C',
+          project: @project30,
+          metadata: { 'race_field' => 'c' },
+          metadata_provenance: {
+            'race_field' => { 'id' => @john_doe.id, 'source' => 'user', 'updated_at' => DateTime.now }
+          }
+        )
+
+        # At this point, metadata_summary should have race_field: 3
+        # Now simulate production scenario where count is wrong (data inconsistency)
+        # Set count to 1 even though we have 3 samples with this field
+        @subgroup12b.update_column(:metadata_summary,
+                                   @subgroup12b.metadata_summary.merge('race_field' => 1))
+        @group12.update_column(:metadata_summary,
+                               @group12.metadata_summary.merge('race_field' => 1))
+
+        # Verify setup - intentional data inconsistency for testing
+        assert_equal 1, @subgroup12b.reload.metadata_summary['race_field']
+        assert_equal 1, @group12.reload.metadata_summary['race_field']
+
+        # Transfer all 3 samples to a user namespace project - this should NOT crash
+        # Sample 1: 1 - 1 = 0 → delete key
+        # Sample 2: nil - 1 → (BEFORE FIX: CRASH, AFTER FIX: skip with warning)
+        # Sample 3: nil - 1 → (BEFORE FIX: CRASH, AFTER FIX: skip with warning)
+        assert_nothing_raised do
+          Projects::Samples::TransferService.new(@project30.namespace, @john_doe).execute(
+            target_project.id,
+            [sample_a.id, sample_b.id, sample_c.id]
+          )
+        end
+
+        # Verify: race_field should be removed from source namespaces after first sample
+        # The subsequent samples with missing keys are skipped with warnings (data inconsistency handled)
+        @subgroup12b.reload
+        @group12.reload
+        assert_nil @subgroup12b.metadata_summary['race_field'],
+                   'race_field should be deleted from source parent after count reaches zero'
+        assert_nil @group12.metadata_summary['race_field'],
+                   'race_field should be deleted from source grandparent after count reaches zero'
+
+        # Verify samples were transferred
+        assert_equal target_project.id, sample_a.reload.project_id
+        assert_equal target_project.id, sample_b.reload.project_id
+        assert_equal target_project.id, sample_c.reload.project_id
+      end
     end
   end
 end
