@@ -67,7 +67,7 @@ gem 'openssl', '~> 3.3', '>= 3.3.1'
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'tailwindcss-rails', '~> 4.0'
-gem 'view_component', '~> 3.21.0'
+gem 'view_component', '~> 4.1.1'
 
 # Pagy
 gem 'pagy', '~> 9.3.3'

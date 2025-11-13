@@ -5,6 +5,8 @@ module Viral
     module Prefixed
       # Select2 component with a prefix
       class Select2Component < ViewComponent::Base
+        include Pathogen::ViewHelper
+
         attr_reader :form, :id, :name, :selected_value, :placeholder, :required, :path_separator, :aria
 
         renders_many :options, Viral::Select2OptionComponent
