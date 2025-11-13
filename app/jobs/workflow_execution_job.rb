@@ -29,4 +29,12 @@ class WorkflowExecutionJob < ApplicationJob
     Rails.logger.error(error_message)
     handle_error_state_and_clean(workflow_execution)
   end
+
+  def status_check_interval(workflow_execution)
+    if workflow_execution.workflow.settings.key?('status_check_interval')
+      return workflow_execution.workflow.settings['status_check_interval'].to_i
+    end
+
+    30
+  end
 end

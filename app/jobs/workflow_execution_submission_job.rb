@@ -37,5 +37,9 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end
+
+    WorkflowExecutionStatusJob.set(
+      wait_until: status_check_interval(workflow_execution).seconds.from_now
+    ).perform_later(workflow_execution)
   end
 end
