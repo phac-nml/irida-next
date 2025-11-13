@@ -2,6 +2,18 @@
 
 # Validator for workflow execution advanced search group validator
 class WorkflowExecutionSearchGroupValidator < ActiveModel::Validator
+  # Allowed fields for workflow execution search conditions
+  ALLOWED_FIELDS = %w[
+    id
+    name
+    workflow_name
+    workflow_version
+    state
+    run_id
+    created_at
+    updated_at
+  ].freeze
+
   def validate(record)
     return if empty_search?(record)
 
@@ -37,9 +49,8 @@ class WorkflowExecutionSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_key(condition)
-    allowed_fields = %w[id name workflow_name workflow_version state run_id created_at updated_at]
     field = sanitized_field(condition.field)
-    return if field.blank? || allowed_fields.include?(field)
+    return if field.blank? || ALLOWED_FIELDS.include?(field)
 
     condition.errors.add :field, :not_allowed
   end

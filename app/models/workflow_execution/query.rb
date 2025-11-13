@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
-# model to represent workflow execution search form
+# Model representing an advanced search query for workflow executions.
+#
+# This query builder supports both simple text-based searches and complex advanced searches
+# with multiple conditions and groups. It handles JSONB metadata fields, enum fields,
+# date fields, and provides pagination support.
+#
+# @example Simple search by name or ID
+#   query = WorkflowExecution::Query.new(name_or_id_cont: 'example')
+#   pagy, results = query.results(limit: 20, page: 1)
+#
+# @example Advanced search with conditions
+#   query = WorkflowExecution::Query.new(
+#     groups_attributes: {
+#       '0': {
+#         conditions_attributes: {
+#           '0': { field: 'state', operator: '=', value: 'completed' },
+#           '1': { field: 'workflow_name', operator: 'contains', value: 'iridanext' }
+#         }
+#       }
+#     }
+#   )
+#   pagy, results = query.results(limit: 20, page: 1)
+#
+# @see WorkflowExecution::SearchGroup
+# @see WorkflowExecution::SearchCondition
+# @see AdvancedQuerySearchable
 class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -103,6 +128,9 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
               sort_workflow_executions(base_scope)
             end
 
+    # Eager load associations to prevent N+1 queries in the table view
+    # - namespace and parent: for namespace display
+    # Note: workflow is not an association but a method that looks up from Irida::Pipelines
     scope.includes(namespace: :parent).ransack(ransack_params).result
   end
 

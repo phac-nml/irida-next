@@ -182,16 +182,33 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
     assert_selector '#workflow-executions-table table tbody tr'
 
     # Re-open dialog to verify form is reset
+    # Wait for page to be fully loaded after clear/reload
+    assert_selector '#workflow-executions-table', wait: 5
     click_button I18n.t('components.advanced_search_component.title')
 
+    # Wait for dialog to be fully open and rendered
+    assert_selector 'dialog[open]', wait: 5
+
     within 'dialog[open]' do
-      # Verify form is reset
-      assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
-      within first("fieldset[data-advanced-search-target='groupsContainer']") do
-        assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
-        within first("fieldset[data-advanced-search-target='conditionsContainer']") do
-          assert_equal '', find("select[name$='[field]']").value
-          assert_equal '', find("select[name$='[operator]']").value
+      # Verify form is reset - wait for groups to be rendered
+      assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1, wait: 5
+
+      # Use find with wait to ensure element is stable before interacting
+      groups_container = find("fieldset[data-advanced-search-target='groupsContainer']", wait: 5)
+
+      within groups_container do
+        assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1, wait: 5
+
+        conditions_container = find("fieldset[data-advanced-search-target='conditionsContainer']", wait: 5)
+
+        within conditions_container do
+          # Wait for selects to be stable before checking values
+          field_select = find("select[name$='[field]']", wait: 5)
+          operator_select = find("select[name$='[operator]']", wait: 5)
+
+          assert_equal '', field_select.value
+          assert_equal '', operator_select.value
+
           # Value field may be hidden when operator is blank, so check if it exists and is empty
           value_selects = all("select[name$='[value]']", visible: :all)
           value_inputs = all("input[name$='[value]']", visible: :all)
