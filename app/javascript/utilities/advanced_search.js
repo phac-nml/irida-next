@@ -90,10 +90,11 @@ export function reindexConditions(group) {
   conditions.forEach((condition, index) => {
     const legend = condition.querySelector("legend");
     if (legend) {
-      legend.innerHTML = legend.innerHTML.replace(
-        /(Condition\s)\d+/,
-        `$1${index + 1}`,
-      );
+      const template = legend.dataset.labelTemplate;
+      legend.textContent = template
+        ? template.replace("%{index}", String(index + 1))
+        : legend.textContent.replace(/\d+$/, String(index + 1));
+      legend.dataset.index = String(index + 1);
     }
 
     condition.querySelectorAll("[name]").forEach((input) => {
@@ -119,10 +120,11 @@ export function reindexGroups(groups) {
     );
 
     if (legend) {
-      legend.innerHTML = legend.innerHTML.replace(
-        /(Group\s)\d+/,
-        `$1${index + 1}`,
-      );
+      const template = legend.dataset.labelTemplate;
+      legend.textContent = template
+        ? template.replace("%{index}", String(index + 1))
+        : legend.textContent.replace(/\d+$/, String(index + 1));
+      legend.dataset.index = String(index + 1);
     }
 
     group.querySelectorAll("[name]").forEach((input) => {
@@ -180,19 +182,17 @@ export function createEnumSelect({
   name,
   id,
   className = "",
-  ariaLabel,
   multiple = false,
   labels = {},
   values = [],
+  attributes = {},
 }) {
   const select = document.createElement("select");
   select.name = multiple ? `${name}[]` : name;
   select.id =
     id || name.replace(/\[/g, "_").replace(/\]/g, "").replace(/__+/g, "_");
-  select.className = className;
-
-  if (ariaLabel) {
-    select.setAttribute("aria-label", ariaLabel);
+  if (className) {
+    select.className = className;
   }
 
   if (multiple) {
@@ -211,6 +211,17 @@ export function createEnumSelect({
       labels[value] ||
       value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
     select.appendChild(option);
+  });
+
+  Object.entries(attributes).forEach(([attribute, value]) => {
+    if (attribute === "required") {
+      if (value) select.required = true;
+      return;
+    }
+
+    if (value === undefined || value === null) return;
+
+    select.setAttribute(attribute, value);
   });
 
   return select;
