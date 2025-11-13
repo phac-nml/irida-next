@@ -5,7 +5,7 @@
               query: q,
               search_attribute: :puid_or_file_blob_filename_cont,
               label: t('common.controls.search'),
-              placeholder: t(".search.placeholder"),
+              placeholder: t("workflow_executions.files.search.placeholder"),
               url: search_url,
               total_count: pagy.count,
               value: q.puid_or_file_blob_filename_cont,
@@ -32,7 +32,7 @@
   },
   empty: {
     icon_name: Attachment.icon,
-    title: t(".empty.title"),
-    description: t(".empty.description"),
+    title: t("workflow_executions.files.empty.title"),
+    description: t("workflow_executions.files.empty.description"),
   },
 ) %>

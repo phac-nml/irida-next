@@ -6,7 +6,7 @@
         url: group_group_links_url(**request.query_parameters),
         search_attribute: :group_name_cont,
         label: t('common.controls.search'),
-        placeholder: t(".search.placeholder"),
+        placeholder: t("groups.group_links.invited_groups.search.placeholder"),
         total_count: @pagy.count,
         class: "max-sm:grow",
         value: @q.group_name_cont,
