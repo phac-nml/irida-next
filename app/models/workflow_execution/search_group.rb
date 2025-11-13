@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
-# model to represent workflow execution search group
+# Model representing a group of search conditions in an advanced workflow execution query.
+#
+# A search group contains multiple conditions that are combined with AND logic.
+# Multiple search groups are combined with OR logic, allowing for complex queries like:
+# (state = completed AND workflow_name contains 'iridanext') OR (state = error)
+#
+# @example Creating a group with multiple conditions
+#   group = WorkflowExecution::SearchGroup.new(
+#     conditions: [
+#       WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+#       WorkflowExecution::SearchCondition.new(field: 'workflow_name', operator: 'contains', value: 'example')
+#     ]
+#   )
+#
+# @see WorkflowExecution::SearchCondition
+# @see WorkflowExecution::Query
 class WorkflowExecution::SearchGroup # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes

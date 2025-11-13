@@ -248,4 +248,57 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
     assert query.groups[0].errors.added? :conditions, :invalid
     assert query.groups[0].conditions[0].errors.added? :value, :not_a_number
   end
+
+  test 'simple query completes within acceptable time' do
+    project = projects(:project1)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: '', operator: '', value: '' } }
+                      } },
+                      name_or_id_cont: 'workflow',
+                      namespace_id: project.namespace.id }
+
+    query = WorkflowExecution::Query.new(search_params)
+
+    start_time = Time.current
+    _pagy, _results = query.results(limit: 20, page: 1)
+    duration = Time.current - start_time
+
+    assert duration < 2.seconds, "Simple query took #{duration}s, expected < 2s"
+  end
+
+  test 'complex multi-group query completes within acceptable time' do
+    project = projects(:project1)
+    # Build a complex query with multiple groups and conditions
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: {
+                        '0': {
+                          conditions_attributes: {
+                            '0': { field: 'state', operator: '=', value: 'completed' },
+                            '1': { field: 'workflow_name', operator: 'contains', value: 'example' }
+                          }
+                        },
+                        '1': {
+                          conditions_attributes: {
+                            '0': { field: 'state', operator: '=', value: 'error' }
+                          }
+                        },
+                        '2': {
+                          conditions_attributes: {
+                            '0': { field: 'name', operator: 'contains', value: 'test' },
+                            '1': { field: 'created_at', operator: '>=', value: 1.month.ago.to_date.to_s }
+                          }
+                        }
+                      },
+                      namespace_id: project.namespace.id }
+
+    query = WorkflowExecution::Query.new(search_params)
+
+    start_time = Time.current
+    _pagy, _results = query.results(limit: 20, page: 1)
+    duration = Time.current - start_time
+
+    assert duration < 3.seconds, "Complex query took #{duration}s, expected < 3s"
+  end
 end
