@@ -39,6 +39,10 @@ development:
     <<: *default
     database: irida_next_jobs_development
     migrations_paths: db/jobs_migrate
+  cable:
+    <<: *default
+    database: irida_next_cable_development
+    migrations_paths: db/cable_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -51,6 +55,10 @@ test:
     <<: *default
     database: irida_next_jobs_test
     migrations_paths: db/jobs_migrate
+  cable:
+    <<: *default
+    database: irida_next_cable_test
+    migrations_paths: db/cable_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -83,3 +91,7 @@ production:
     <<: *primary_production
     database: irida_next_jobs_production
     migrations_paths: db/jobs_migrate
+  cable:
+    <<: *primary_production
+    database: irida_next_cable_production
+    migrations_paths: db/cable_migrate

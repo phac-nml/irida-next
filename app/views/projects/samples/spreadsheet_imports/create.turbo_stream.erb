@@ -8,7 +8,8 @@
                       } %>
 
   <%= turbo_stream.update "import_spreadsheet_dialog_content" do %>
-    <%= render partial: "shared/progress_bar", locals: { percentage: 0 } %>
+    <%= render partial: "shared/progress_bar",
+               locals: { percentage: 0, dom_id: ProgressBarStream.dom_id_for(@broadcast_target) } %>
   <% end %>
 <% else %>
   <%= turbo_stream.append "import_spreadsheet_dialog_content" do %>
