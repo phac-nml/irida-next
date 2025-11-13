@@ -9,8 +9,8 @@
 }, class: "filters contents" do |f| %>
   <div class="max-sm:grow">
     <%= render SearchFieldComponent.new(
-      label: t("common.controls.search"),
-      placeholder: t(".search.placeholder"),
+      label: t('common.controls.search'),
+      placeholder: t("projects.samples.table_filter.search.placeholder"),
       form: f,
       field_name: :name_or_puid_cont,
       value: @search_params[:name_or_puid_cont],
@@ -18,9 +18,11 @@
         "search-field-selection-outlet": "#samples-table",
       },
     ) %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="limit" value="<%=@pagy&.limit%>"/>
+
+    <input type="hidden" name="format" value="turbo_stream" />
+    <input type="hidden" name="limit" value="<%= @pagy&.limit %>" />
   </div>
+
   <div class="max-sm:grow">
     <%= render AdvancedSearchComponent.new(
       form: f,
@@ -30,6 +32,7 @@
       open: @query.errors.any?,
       status: @query.advanced_query?,
     ) %>
+
     <%= f.submit hidden: true %>
   </div>
 <% end %>

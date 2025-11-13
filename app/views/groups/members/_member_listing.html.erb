@@ -6,7 +6,7 @@
         url: group_members_url(**request.query_parameters),
         search_attribute: :user_email_cont,
         label: t('common.controls.search'),
-        placeholder: t(".search.placeholder"),
+        placeholder: t("groups.members.member_listing.search.placeholder"),
         value: @q.user_email_cont,
         class: "max-sm:grow",
         total_count: @pagy.count,
