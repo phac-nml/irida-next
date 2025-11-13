@@ -842,11 +842,11 @@ class DataExportsTest < ApplicationSystemTestCase
     visit workflow_execution_path(submitted_workflow_execution, anchor: 'summary-tab')
 
     assert_selector 'button[disabled]',
-                    text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
+                    text: I18n.t('workflow_executions.show.create_export_button')
 
     visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
     assert_no_selector 'button[disabled]',
-                       text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
+                       text: I18n.t('workflow_executions.show.create_export_button')
   end
 
   test 'data export type analysis on summary tab' do
@@ -1547,18 +1547,16 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as users(:micha_doe)
     visit group_workflow_executions_path(@group5)
 
-    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
     assert_selector 'button[disabled]',
-                    text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
+                    text: I18n.t('groups.workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
       find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
     end
 
-    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
     assert_no_selector 'button[disabled]',
-                       text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
-    click_button I18n.t('shared.workflow_executions.actions_dropdown.create_export')
+                       text: I18n.t('groups.workflow_executions.index.create_export_button')
+    click_button I18n.t('groups.workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1656,7 +1654,6 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'cannot create analysis export with non-completed workflow executions from user WE index page' do
     visit workflow_executions_path
-
 
     click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
     assert_selector 'button[disabled]',
