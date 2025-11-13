@@ -1423,7 +1423,8 @@ class DataExportsTest < ApplicationSystemTestCase
     user = users(:james_doe)
     login_as user
     visit workflow_executions_path
-    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.label', locale: user.locale)
     assert_selector 'button[disabled]',
                     text: I18n.t('shared.workflow_executions.actions_dropdown.create_export', locale: user.locale)
 
@@ -1431,7 +1432,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@shared_workflow_execution1.id}']").click
     end
 
-    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.label', locale: user.locale)
     assert_no_selector 'button[disabled]',
                        text: I18n.t('shared.workflow_executions.actions_dropdown.create_export', locale: user.locale)
     click_button I18n.t('shared.workflow_executions.actions_dropdown.create_export', locale: user.locale)

@@ -105,7 +105,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
   end
 
   test 'workflow launched on sample and workflow execution deleted activity' do
-    ::WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+    ::WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
     ::WorkflowExecutions::DestroyService.new(@user, { workflow_execution: @workflow_execution }).execute
     activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
 
@@ -130,7 +130,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
   end
 
   test 'workflow launched on sample and both sample and workflow execution deleted activity' do
-    ::WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+    ::WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
     ::WorkflowExecutions::DestroyService.new(@user, { workflow_execution: @workflow_execution }).execute
 
     Projects::Samples::DestroyService.new(@project.namespace, @user, { sample_ids: [@sample1.id] }).execute
