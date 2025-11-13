@@ -794,9 +794,9 @@ module Projects
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       assert_selector 'button',
-                       text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+                      text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
       assert_selector 'button',
-                       text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+                      text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
     end
 
     test 'user with access level Analyst cannot view cancel and delete workflows buttons' do
@@ -808,9 +808,9 @@ module Projects
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       assert_no_selector 'button',
-                          text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+                         text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
       assert_no_selector 'button',
-                          text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+                         text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
     end
   end
 end

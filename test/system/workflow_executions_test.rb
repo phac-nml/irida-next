@@ -744,8 +744,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
       )
       within('#list_selections') do
-        assert_text "ID: #{error_workflow.id}"
-        assert_text "ID: #{canceled_workflow.id}"
+        assert_text "ID: #{@workflow_execution4.id}"
+        assert_text "ID: #{@workflow_execution5.id}"
       end
       click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
     end
