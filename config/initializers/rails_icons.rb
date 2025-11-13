@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RailsIcons.configure do |config|
-  config.default_library = 'phosphor'
-  # config.default_variant = "" # Set a default variant for all libraries
+  config.default_library = :phosphor
+  config.default_variant = :regular
 
   # Override Phosphor defaults - explicitly set data to nil to prevent empty data attributes
   config.libraries.phosphor.regular.default.data = nil
