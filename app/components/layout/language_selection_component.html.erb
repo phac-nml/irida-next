@@ -43,7 +43,7 @@
     hidden="hidden"
   >
     <% @locale_options.each do |locale_name, locale_value| %>
-      <% if @user.locale.to_sym == locale_value %>
+      <% if locale.to_sym == locale_value %>
         <li
           role="menuitemradio"
           aria-checked="true"

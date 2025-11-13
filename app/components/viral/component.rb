@@ -2,11 +2,6 @@
 
 module Viral
   # Base component structure for Viral Components
-  class Component < ViewComponent::Base
-    attr_reader :system_arguments
-
-    include ClassNameHelper
-    include ViewHelper
-    include Pathogen::ViewHelper
+  class Component < ::Component
   end
 end
