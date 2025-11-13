@@ -32,6 +32,8 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
 
-    WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    WorkflowExecutionStatusJob.set(
+      wait_until: status_check_interval(workflow_execution).seconds.from_now
+    ).perform_later(workflow_execution)
   end
 end

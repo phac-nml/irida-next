@@ -23,4 +23,12 @@ class WorkflowExecutionJob < ApplicationJob
     workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
     WorkflowExecutionCleanupJob.perform_later(workflow_execution)
   end
+
+  def status_check_interval(workflow_execution)
+    if workflow_execution.workflow.settings.key?('status_check_interval')
+      return workflow_execution.workflow.settings['status_check_interval'].to_i
+    end
+
+    30
+  end
 end
