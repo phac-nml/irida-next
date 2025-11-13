@@ -341,7 +341,7 @@ module Projects
     test 'can view a workflow execution' do
       workflow_execution = workflow_executions(:automated_workflow_execution_existing)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -382,7 +382,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
       end
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
+      visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1, anchor: 'summary-tab')
 
       click_button I18n.t('common.actions.remove')
 
@@ -456,7 +456,7 @@ module Projects
       user = users(:james_doe)
       login_as user
       workflow_execution = workflow_executions(:automated_workflow_execution)
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
       dt_value = I18n.t('common.labels.name', locale: user.locale)
       new_we_name = 'New Name'
       ### SETUP END ###
@@ -494,7 +494,7 @@ module Projects
     test 'can view a shared workflow execution that was shared by a different user' do
       workflow_execution = workflow_executions(:workflow_execution_shared2)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -522,7 +522,7 @@ module Projects
       Flipper.enable(:workflow_execution_attachments_searching)
       workflow_execution = workflow_executions(:workflow_execution_shared2)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -712,7 +712,6 @@ module Projects
 
     test 'can partially cancel multiple workflows at once' do
       # attempt to cancel cancellable and non-cancellable workflows
-      new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
@@ -748,8 +747,8 @@ module Projects
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', unsuccessful: '1/3')
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', successful: '2/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '2/3')
     end
 
     test 'cannot cancel non-cancellable workflows' do
@@ -795,9 +794,9 @@ module Projects
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       assert_selector 'button',
-        text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+                       text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
       assert_selector 'button',
-        text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+                       text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
     end
 
     test 'user with access level Analyst cannot view cancel and delete workflows buttons' do
@@ -809,9 +808,9 @@ module Projects
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       assert_no_selector 'button',
-        text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+                          text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
       assert_no_selector 'button',
-        text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+                          text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
     end
   end
 end
