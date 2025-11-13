@@ -74,7 +74,8 @@ module WorkflowExecutions
       workflow_execution1 = workflow_executions(:irida_next_example_submitted)
       workflow_execution2 = workflow_executions(:irida_next_example_running)
 
-      assert 'submitted', @workflow_execution.state
+      assert 'submitted', workflow_execution1.state
+      assert 'running', workflow_execution2.state
 
       assert WorkflowExecutions::CancelService.new(
         @user, { workflow_execution_ids: [workflow_execution1.id, workflow_execution2.id] }

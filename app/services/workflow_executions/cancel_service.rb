@@ -18,7 +18,7 @@ module WorkflowExecutions
 
     private
 
-    def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength
+    def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength, Naming/PredicateMethod
       return false unless workflow_execution.cancellable?
 
       authorize! workflow_execution, to: :cancel?
