@@ -381,14 +381,31 @@ export default class extends Controller {
     const inputName = this.#enumInputName(currentInput, isListOperator);
     if (!inputName) return;
 
+    const attributeSource = this.#enumAttributeSource(
+      currentInput,
+      isListOperator,
+    );
+    const labelElement = valueContainer.querySelector("label");
+    const attributes = this.#enumAttributes({
+      valueContainer,
+      attributeSource,
+      ariaLabel: this.#valueAriaLabel(valueContainer),
+      labelElement,
+    });
+    const className = this.#enumClassName(attributeSource, isListOperator);
+    const fieldId =
+      labelElement?.getAttribute("for") ||
+      attributeSource?.id ||
+      currentInput.id;
+
     const select = createEnumSelect({
       name: inputName,
-      id: currentInput.id,
-      className: currentInput.className || "",
-      ariaLabel: this.#valueAriaLabel(valueContainer),
+      id: fieldId,
+      className,
       multiple: isListOperator,
       labels: enumConfig.labels || {},
       values: enumConfig.values || [],
+      attributes,
     });
 
     currentInput.replaceWith(select);
@@ -413,9 +430,31 @@ export default class extends Controller {
    */
   #currentEnumInput(valueContainer, isListOperator) {
     if (isListOperator) {
-      return valueContainer.querySelector("div[data-controller='list-filter']");
+      return (
+        valueContainer.querySelector("select[name$='[value][]']") ||
+        valueContainer.querySelector("div[data-controller='list-filter']")
+      );
     }
-    return valueContainer.querySelector("input[name$='[value]']");
+
+    return (
+      valueContainer.querySelector("select[name$='[value]']") ||
+      valueContainer.querySelector("input[name$='[value]']")
+    );
+  }
+
+  /**
+   * Determine the element to inspect for attribute transfer when swapping enum inputs.
+   * @param {HTMLElement} currentInput
+   * @param {boolean} isListOperator
+   * @returns {HTMLElement|null}
+   */
+  #enumAttributeSource(currentInput, isListOperator) {
+    if (!currentInput) return null;
+    if (currentInput.matches?.("select")) return currentInput;
+    if (isListOperator) {
+      return currentInput.querySelector("input[name$='[value][]']");
+    }
+    return currentInput;
   }
 
   /**
@@ -426,13 +465,86 @@ export default class extends Controller {
    */
   #enumInputName(currentInput, isListOperator) {
     if (isListOperator) {
+      if (currentInput.matches?.("select")) {
+        return currentInput.name.replace(/\[\]$/, "");
+      }
+
       const hiddenInput = currentInput.querySelector(
         "input[name$='[value][]']",
       );
       return hiddenInput ? hiddenInput.name.replace(/\[\]$/, "") : null;
     }
 
+    if (currentInput.matches?.("select")) {
+      return currentInput.name || null;
+    }
+
     return currentInput.name || null;
+  }
+
+  /**
+   * Determine the CSS classes to apply to the generated select element.
+   * @param {HTMLElement|null} attributeSource
+   * @param {boolean} isListOperator
+   * @returns {string}
+   */
+  #enumClassName(attributeSource, isListOperator) {
+    if (!attributeSource || !attributeSource.className) return "";
+
+    if (isListOperator && !attributeSource.matches?.("select")) return "";
+
+    return attributeSource.className
+      .split(" ")
+      .filter(
+        (token) =>
+          token.trim().length > 0 &&
+          !["bg-transparent!", "border-none", "grow"].includes(token),
+      )
+      .join(" ");
+  }
+
+  /**
+   * Collect accessibility-related attributes to transfer to the generated select.
+   * @param {Object} options
+   * @param {HTMLElement} options.valueContainer
+   * @param {HTMLElement|null} options.attributeSource
+   * @param {string|undefined} options.ariaLabel
+   * @param {HTMLElement|null} options.labelElement
+   * @returns {Record<string, string|boolean>}
+   */
+  #enumAttributes({ valueContainer, attributeSource, ariaLabel, labelElement }) {
+    const attributes = {};
+
+    const sourceDescribedBy =
+      attributeSource?.getAttribute?.("aria-describedby");
+    const errorId = this.#valueErrorId(valueContainer);
+    if (sourceDescribedBy || errorId) {
+      attributes["aria-describedby"] = sourceDescribedBy || errorId;
+    }
+
+    const sourceAriaInvalid =
+      attributeSource?.getAttribute?.("aria-invalid");
+    if (sourceAriaInvalid) {
+      attributes["aria-invalid"] = sourceAriaInvalid;
+    } else if (valueContainer.classList.contains("invalid")) {
+      attributes["aria-invalid"] = "true";
+    }
+
+    const sourceAriaLabel = attributeSource?.getAttribute?.("aria-label");
+    if (sourceAriaLabel) {
+      attributes["aria-label"] = sourceAriaLabel;
+    } else if (ariaLabel) {
+      attributes["aria-label"] = ariaLabel;
+    }
+
+    if (
+      attributeSource?.hasAttribute?.("required") ||
+      this.#isRequiredField(labelElement)
+    ) {
+      attributes.required = true;
+    }
+
+    return attributes;
   }
 
   /**
@@ -443,6 +555,24 @@ export default class extends Controller {
   #valueAriaLabel(valueContainer) {
     const label = valueContainer.querySelector("label");
     return label ? label.textContent.trim() : undefined;
+  }
+
+  /**
+   * Determine whether the field is marked as required.
+   * @param {HTMLElement|null} labelElement
+   * @returns {boolean}
+   */
+  #isRequiredField(labelElement) {
+    return labelElement?.dataset?.required === "true";
+  }
+
+  /**
+   * Retrieve the id of the associated error element, if present.
+   * @param {HTMLElement} valueContainer
+   * @returns {string|undefined}
+   */
+  #valueErrorId(valueContainer) {
+    return valueContainer.querySelector("[id$='_error']")?.id;
   }
 
   /**
