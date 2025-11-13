@@ -5,6 +5,27 @@
 # with multiple conditions and groups. It supports both entity-specific fields
 # and JSONB metadata fields.
 class AdvancedSearchComponent < Component
+  # Standard operation definitions - maps translation keys to operator values
+  STANDARD_OPERATION_KEYS = {
+    'equals' => '=',
+    'not_equals' => '!=',
+    'less_than' => '<=',
+    'greater_than' => '>=',
+    'contains' => 'contains',
+    'exists' => 'exists',
+    'not_exists' => 'not_exists',
+    'in' => 'in',
+    'not_in' => 'not_in'
+  }.freeze
+
+  # Enum operation definitions (subset of standard operations)
+  ENUM_OPERATION_KEYS = {
+    'equals' => '=',
+    'not_equals' => '!=',
+    'in' => 'in',
+    'not_in' => 'not_in'
+  }.freeze
+
   # rubocop:disable Metrics/ParameterLists
   def initialize(form:, search:, entity_fields: [], jsonb_fields: [], sample_fields: [], metadata_fields: [],
                  enum_fields: {}, field_label_namespace: 'samples.table_component', open: false, status: true)
@@ -49,27 +70,21 @@ class AdvancedSearchComponent < Component
     }
   end
 
+  # Build operation options with translated labels
   def operation_options
-    {
-      I18n.t('components.advanced_search_component.operation.equals') => '=',
-      I18n.t('components.advanced_search_component.operation.not_equals') => '!=',
-      I18n.t('components.advanced_search_component.operation.less_than') => '<=',
-      I18n.t('components.advanced_search_component.operation.greater_than') => '>=',
-      I18n.t('components.advanced_search_component.operation.contains') => 'contains',
-      I18n.t('components.advanced_search_component.operation.exists') => 'exists',
-      I18n.t('components.advanced_search_component.operation.not_exists') => 'not_exists',
-      I18n.t('components.advanced_search_component.operation.in') => 'in',
-      I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
-    }
+    build_operation_hash(STANDARD_OPERATION_KEYS)
   end
 
+  # Build enum operation options with translated labels
   def enum_operation_options
-    {
-      I18n.t('components.advanced_search_component.operation.equals') => '=',
-      I18n.t('components.advanced_search_component.operation.not_equals') => '!=',
-      I18n.t('components.advanced_search_component.operation.in') => 'in',
-      I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
-    }
+    build_operation_hash(ENUM_OPERATION_KEYS)
+  end
+
+  # Helper to build operation hash from keys
+  def build_operation_hash(operation_keys)
+    operation_keys.transform_keys do |key|
+      I18n.t("components.advanced_search_component.operation.#{key}")
+    end
   end
 
   def search_class_map(query_class_name, type)
