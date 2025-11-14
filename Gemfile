@@ -81,8 +81,8 @@ gem 'graphiql-rails'
 gem 'graphql'
 
 # postgresql
-gem 'actioncable-enhanced-postgresql-adapter'
 gem 'pg'
+gem 'solid_cable'
 
 # Authorization
 gem 'action_policy'
