@@ -800,7 +800,8 @@ module Projects
     end
 
     test 'user with access level Analyst cannot view cancel and delete workflows buttons' do
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
       visit namespace_project_workflow_executions_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: user.locale)
 
