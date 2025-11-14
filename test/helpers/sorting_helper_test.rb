@@ -51,16 +51,13 @@ class SortingHelperTest < ActionView::TestCase
       @item = args
     end
 
-    def t(key)
-      { '.sorting.email_asc' => 'Email (A-Z)' }[key]
-    end
+    @ransack_obj.sorts << Sort.new('name', 'asc')
 
-    @ransack_obj.sorts << Sort.new('email', 'asc')
+    sorting_item(dropdown, @ransack_obj, :name, :asc)
 
-    sorting_item(dropdown, @ransack_obj, :email, :asc)
-
-    assert_equal 'Email (A-Z)', dropdown.instance_variable_get(:@item)[:label]
-    assert_equal '/sort/email/asc', dropdown.instance_variable_get(:@item)[:url]
+    expected_label = I18n.t('components.ransack.sort_dropdown_component.sorting.name_asc')
+    assert_equal expected_label, dropdown.instance_variable_get(:@item)[:label]
+    assert_equal '/sort/name/asc', dropdown.instance_variable_get(:@item)[:url]
     assert_equal :check, dropdown.instance_variable_get(:@item)[:icon_name]
     assert_equal({ turbo: true, turbo_action: 'replace' }, dropdown.instance_variable_get(:@item)[:data])
   end
