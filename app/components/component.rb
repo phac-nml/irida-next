@@ -10,8 +10,6 @@ class Component < ViewComponent::Base
   include Pathogen::FormHelper
   include Pathogen::FormTagHelper
 
-  delegate :locale, to: :I18n
-
   # Icon color variations 🎨.
   # Keys: color scheme symbols. Values: Tailwind CSS classes.
   ICON_COLOR_MAP = {
