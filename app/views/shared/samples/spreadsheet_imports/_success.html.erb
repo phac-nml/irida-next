@@ -15,7 +15,9 @@
       <% end %>
       <% table.with_column("Messages") do |row| %>
         <% row[:message].each do |msg| %>
-          <%= t(".problem_message", path: msg[:path].join(" "), message: msg[:message]) %>
+          <%= t("shared.samples.spreadsheet_imports.success.problem_message",
+                 path: msg[:path].join(" "),
+                 message: msg[:message]) %>
         <% end %>
       <% end %>
     <% end %>
