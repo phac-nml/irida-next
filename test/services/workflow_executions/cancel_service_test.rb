@@ -56,8 +56,7 @@ module WorkflowExecutions
       assert_equal 1, @workflow_execution.log_data.version
       assert_equal 1, @workflow_execution.log_data.size
 
-      assert WorkflowExecutions::CancelService.new(
-        @user, { workflow_execution: @workflow_execution }).execute
+      assert WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
 
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
 

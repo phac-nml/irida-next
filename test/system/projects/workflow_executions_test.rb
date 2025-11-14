@@ -800,7 +800,7 @@ module Projects
     end
 
     test 'user with access level Analyst cannot view cancel and delete workflows buttons' do
-      namespace = namespaces_user_namespaces(:project1_namespace)
+      namespace = namespaces_project_namespaces(:project1_namespace)
       project = projects(:project1)
       login_as users(:james_doe)
       visit namespace_project_workflow_executions_path(namespace, project)
