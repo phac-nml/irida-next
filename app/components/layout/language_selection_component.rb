@@ -5,9 +5,8 @@ module Layout
   class LanguageSelectionComponent < Component
     attr_reader :locale
 
-    def initialize(user: Current.user)
-      @user = user
-      @locale = sanitized_locale(@user&.locale)
+    def initialize(user:)
+      @locale = sanitized_locale(user&.locale)
       @locale_options = I18n.available_locales.map { |locale| [I18n.t(:"locales.#{locale}", locale: locale), locale] }
     end
 
