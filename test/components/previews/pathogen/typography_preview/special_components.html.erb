@@ -1,0 +1,256 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:sparkle, color: :primary, size: :xl, class: "inline mr-3") %>
+      Special Typography Components
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Specialized components for lead paragraphs, eyebrow text, code snippets, and lists.
+    <% end %>
+  </div>
+
+  <!-- Lead Paragraphs -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
+        Lead Paragraphs
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        Lead paragraphs are larger introductory paragraphs (20px) used at the start of sections to draw
+        attention and provide context. They have a comfortable 1.5 line-height for optimal readability.
+      <% end %>
+
+      <div class="space-y-6 max-w-3xl">
+        <%= pathogen_lead do %>
+          This is a lead paragraph. It's larger than standard body text (20px vs 16px) and is perfect for
+          introducing sections, articles, or important content. Use lead paragraphs to draw attention
+          and set the tone for what follows.
+        <% end %>
+
+        <%= pathogen_text do %>
+          This is regular body text that follows the lead paragraph. Notice how the lead paragraph
+          creates a visual hierarchy and draws the reader's attention first.
+        <% end %>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <%= pathogen_eyebrow do %>
+          Example Section
+        <% end %>
+        <%= pathogen_heading(level: 2, class: "mt-2") do %>
+          Section Title
+        <% end %>
+        <%= pathogen_lead do %>
+          This lead paragraph introduces the section content with emphasis.
+        <% end %>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <%= pathogen_eyebrow do %>
+          Another Example
+        <% end %>
+        <%= pathogen_heading(level: 3, class: "mt-2") do %>
+          Subsection Title
+        <% end %>
+        <%= pathogen_lead do %>
+          Lead paragraphs work well with smaller headings too.
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eyebrow Text -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:tag, color: :primary, class: "mr-3") %>
+        Eyebrow Text
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        Eyebrow text is small (12px), uppercase text that appears above headings. It's perfect for
+        categories, labels, or context that helps users understand the content hierarchy.
+      <% end %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_eyebrow do %>
+            Featured Article
+          <% end %>
+          <%= pathogen_heading(level: 2, class: "mt-2") do %>
+            Understanding Typography Systems
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_eyebrow do %>
+            Tutorial
+          <% end %>
+          <%= pathogen_heading(level: 3, class: "mt-2") do %>
+            Getting Started with Components
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_eyebrow do %>
+            Case Study
+          <% end %>
+          <%= pathogen_heading(level: 2, class: "mt-2") do %>
+            Real-World Implementation
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- Inline Code -->
+      <div class="mb-12">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+          <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+            <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+            Inline Code
+          <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        Use inline code for short code snippets, variable names, or technical terms within paragraphs.
+        Features monospace font, background color, and rounded corners.
+      <% end %>
+
+      <div class="space-y-4 max-w-3xl">
+        <%= pathogen_text do %>
+          Use the <%= pathogen_code do %>pathogen_heading<% end %> component to render semantic headings.
+        <% end %>
+
+        <%= pathogen_text do %>
+          The variable <%= pathogen_code do %>current_user<% end %> contains the authenticated user object.
+        <% end %>
+
+        <%= pathogen_text do %>
+          Call <%= pathogen_code do %>render pathogen_text<% end %> to display body text paragraphs.
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Blocks -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:file_code, color: :primary, class: "mr-3") %>
+        Code Blocks
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        Code blocks are perfect for multi-line code snippets. They feature a dark background, monospace
+        font, and scrollable overflow for long code examples.
+      <% end %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            Ruby Example
+          <% end %>
+          <%= pathogen_code_block(language: "ruby") do %>
+def render_heading(level, content)
+  content_tag("h#{level}", content, class: "heading-#{level}")
+end
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            JavaScript Example
+          <% end %>
+          <%= pathogen_code_block(language: "javascript") do %>
+const heading = renderHeading(1, 'Hello World');
+console.log(heading);
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            ERB Template Example
+          <% end %>
+          <%= pathogen_code_block(language: "erb") do %>
+<%%= render pathogen_heading(level: 1) do %>
+  Page Title
+<%% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lists -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:list, color: :primary, class: "mr-3") %>
+        Lists
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        List components support both ordered and unordered lists with consistent spacing and styling.
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            Unordered List
+          <% end %>
+          <%= pathogen_list(items: [
+            "First item in the list",
+            "Second item with more content",
+            "Third item",
+            "Fourth item completes the list"
+          ]) %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            Ordered List
+          <% end %>
+          <%= pathogen_list(ordered: true, items: [
+            "Step one: Prepare the ingredients",
+            "Step two: Mix everything together",
+            "Step three: Cook for 20 minutes",
+            "Step four: Serve and enjoy"
+          ]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- Usage Examples -->
+      <div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+          <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+            <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+            Usage Examples
+          <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 overflow-x-auto">
+        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render pathogen_lead do %>
+  Introductory paragraph text
+<%% end %>
+
+<%%= render pathogen_eyebrow do %>
+  Category Label
+<%% end %>
+
+<%%= render pathogen_code do %>variable_name<%% end %>
+
+<%%= render pathogen_code_block(language: "ruby") do %>
+def example
+  puts "Hello"
+end
+<%% end %>
+
+<%%= render pathogen_list(items: ["Item 1", "Item 2", "Item 3"]) %></code></pre>
+      </div>
+    </div>
+  </div>
+</div>

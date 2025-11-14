@@ -1,0 +1,194 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:text_h_one, color: :primary, size: :xl, class: "inline mr-3") %>
+      Heading Components
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Semantic headings (h1-h6) with responsive sizing, color variants, and proper accessibility.
+    <% end %>
+  </div>
+
+  <!-- All Heading Levels -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:list_numbers, color: :primary, class: "mr-3") %>
+        All Heading Levels
+      <% end %>
+
+      <div class="space-y-4">
+        <%= pathogen_heading(level: 1) do %>
+          Heading Level 1 (h1)
+        <% end %>
+
+        <%= pathogen_heading(level: 2) do %>
+          Heading Level 2 (h2)
+        <% end %>
+
+        <%= pathogen_heading(level: 3) do %>
+          Heading Level 3 (h3)
+        <% end %>
+
+        <%= pathogen_heading(level: 4) do %>
+          Heading Level 4 (h4)
+        <% end %>
+
+        <%= pathogen_heading(level: 5) do %>
+          Heading Level 5 (h5)
+        <% end %>
+
+        <%= pathogen_heading(level: 6) do %>
+          Heading Level 6 (h6)
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Variants -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+        Color Variants
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <%= pathogen_heading(level: 3, variant: :default) do %>
+            Default Variant
+          <% end %>
+          <%= pathogen_text(variant: :muted, class: "text-sm mt-2") do %>
+            Primary text color for headings
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, variant: :muted) do %>
+            Muted Variant
+          <% end %>
+          <%= pathogen_text(variant: :muted, class: "text-sm mt-2") do %>
+            Secondary text color for less emphasis
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, variant: :subdued) do %>
+            Subdued Variant
+          <% end %>
+          <%= pathogen_text(variant: :muted, class: "text-sm mt-2") do %>
+            Medium contrast for balanced emphasis
+          <% end %>
+        </div>
+
+        <div class="p-4 bg-slate-900 dark:bg-slate-100 rounded-lg">
+          <%= pathogen_heading(level: 3, variant: :inverse) do %>
+            Inverse Variant
+          <% end %>
+          <%= pathogen_text(variant: :muted, class: "text-sm mt-2 dark:text-slate-600") do %>
+            Light text for dark backgrounds
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive Behavior -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:device_mobile, color: :primary, class: "mr-3") %>
+        Responsive Sizing
+      <% end %>
+
+      <%= pathogen_text(class: "mb-6") do %>
+        Headings automatically scale between mobile and desktop sizes. On mobile devices (below 640px),
+        headings use smaller sizes for better fit. On desktop, they scale up for better visual hierarchy.
+      <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+              <%= pathogen_icon(:device_mobile, class: "mr-2") %>
+              Mobile (< 640px)
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H1:</span>
+                <span class="font-mono text-slate-900 dark:text-white">31px</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H2:</span>
+                <span class="font-mono text-slate-900 dark:text-white">25px</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H3:</span>
+                <span class="font-mono text-slate-900 dark:text-white">20px</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+              <%= pathogen_icon(:desktop, class: "mr-2") %>
+              Desktop (≥ 640px)
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H1:</span>
+                <span class="font-mono text-slate-900 dark:text-white">49px</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H2:</span>
+                <span class="font-mono text-slate-900 dark:text-white">39px</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600 dark:text-slate-400">H3:</span>
+                <span class="font-mono text-slate-900 dark:text-white">31px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div>
+            <div class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Disable Responsive Sizing</div>
+            <div class="text-sm text-blue-800 dark:text-blue-200">
+              Set <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">responsive: false</code> to use
+              mobile size on all screen sizes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Example -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+        Usage Example
+      <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 overflow-x-auto">
+        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render pathogen_heading(level: 1) do %>
+  Main Page Title
+<%% end %>
+
+<%%= render pathogen_heading(level: 2, variant: :muted) do %>
+  Section Heading
+<%% end %>
+
+<%%= render pathogen_heading(level: 3, responsive: false) do %>
+  Fixed Size Heading
+<%% end %></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
