@@ -34,6 +34,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         end
         collection do
           get :select
+          post :search
         end
       end
     end

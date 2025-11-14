@@ -1,6 +1,8 @@
 <div
   data-controller="advanced-search"
   data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
+  data-advanced-search-validation-error-one-value='<%= t("components.advanced_search_component.validation_error.one") %>'
+  data-advanced-search-validation-error-other-value='<%= t("components.advanced_search_component.validation_error.other") %>'
   data-advanced-search-list-filter-outlet=".list-filter"
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
@@ -40,7 +42,29 @@
         <%= render partial: "shared/form/required_field_legend" %>
       </div>
 
-      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
+      <div class="space-y-3">
+        <%= render LiveRegionComponent.new(
+          controller: "advanced-search",
+          target: "validationStatus",
+          politeness: :assertive,
+          atomic: true
+        ) %>
+        <div class="space-y-3" data-advanced-search-target="searchGroupsContainer">
+          <% @search.groups.each_with_index do |group, group_index| %>
+            <%= render AdvancedSearch::Group.new(
+              form: @form,
+              group: group,
+              group_index: group_index,
+              group_number: group_index + 1,
+              show_remove_group_button: @search.groups.count > 1,
+              entity_fields: @entity_fields,
+              jsonb_fields: @jsonb_fields,
+              enum_fields: @enum_fields,
+              operations: @operations,
+              enum_operations: @enum_operations,
+            ) %>
+          <% end %>
+        </div>
       </div>
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
@@ -55,9 +79,11 @@
             group_index: group_index,
             group_number: group_index + 1,
             show_remove_group_button: @search.groups.count > 1,
-            sample_fields: @sample_fields,
-            metadata_fields: @metadata_fields,
+            entity_fields: @entity_fields,
+            jsonb_fields: @jsonb_fields,
+            enum_fields: @enum_fields,
             operations: @operations,
+            enum_operations: @enum_operations,
           ) %>
         <% end %>
       </template>
@@ -72,55 +98,61 @@
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "in") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "in") %>
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
           condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          enum_fields: @enum_fields,
         ) %>
       <% end %>
     <% end %>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "=") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "=") %>
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
           condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          enum_fields: @enum_fields,
         ) %>
       <% end %>
     <% end %>
   </template>
   <template data-advanced-search-target="conditionTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <%= render AdvancedSearch::Condition.new(
         groups_form: group_form,
         group_index: "GROUP_INDEX_PLACEHOLDER",
-        condition: Sample::SearchCondition.new,
+        condition: @search_condition_class.new,
         condition_index: "CONDITION_INDEX_PLACEHOLDER",
         condition_number: "CONDITION_LEGEND_INDEX_PLACEHOLDER",
-        sample_fields: @sample_fields,
-        metadata_fields: @metadata_fields,
+        entity_fields: @entity_fields,
+        jsonb_fields: @jsonb_fields,
+        enum_fields: @enum_fields,
         operations: @operations,
+        enum_operations: @enum_operations,
       ) %>
     <% end %>
   </template>
   <template data-advanced-search-target="groupTemplate">
     <%= render AdvancedSearch::Group.new(
       form: @form,
-      group: Sample::SearchGroup.new,
+      group: @search_group_class.new,
       group_index: "GROUP_INDEX_PLACEHOLDER",
       group_number: "GROUP_LEGEND_INDEX_PLACEHOLDER",
       show_remove_group_button: true,
-      sample_fields: @sample_fields,
-      metadata_fields: @metadata_fields,
+      entity_fields: @entity_fields,
+      jsonb_fields: @jsonb_fields,
+      enum_fields: @enum_fields,
       operations: @operations,
+      enum_operations: @enum_operations,
     ) %>
   </template>
 </div>
