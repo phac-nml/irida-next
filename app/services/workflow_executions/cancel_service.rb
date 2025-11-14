@@ -18,7 +18,7 @@ module WorkflowExecutions
 
     private
 
-    def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength, Naming/PredicateMethod
+    def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength
       return false unless workflow_execution.cancellable?
 
       authorize! workflow_execution, to: :cancel?
@@ -53,7 +53,7 @@ module WorkflowExecutions
 
       cancellable_count = cancellable_workflow_executions.count
       cancellable_workflow_executions.each do |workflow_execution|
-        success = cancel_workflow(workflow_execution)
+        cancel_workflow(workflow_execution)
       end
 
       cancellable_count
