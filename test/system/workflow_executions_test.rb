@@ -153,8 +153,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button 'Cancel'
     end
 
-    assert_text I18n.t('shared.workflow_executions.cancel_confirmation_dialog.title')
-    click_button I18n.t('shared.workflow_executions.cancel_confirmation_dialog.submit_button')
+    assert_text I18n.t('workflow_executions.actions.cancel_confirm')
+    click_button I18n.t('common.controls.confirm')
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
