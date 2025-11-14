@@ -40,7 +40,7 @@ module WorkflowExecutions
         WorkflowExecutionCleanupJob.perform_later(workflow_execution)
       end
 
-      true
+      workflow_execution
     end
 
     def cancel_multiple
@@ -51,13 +51,12 @@ module WorkflowExecutions
         id: @workflow_execution_ids
       ).where.not(state: %w[completed canceled error])
 
-      successful_cancellations_count = 0
+      cancellable_count = cancellable_workflow_executions.count
       cancellable_workflow_executions.each do |workflow_execution|
         success = cancel_workflow(workflow_execution)
-        successful_cancellations_count += 1 if success
       end
 
-      successful_cancellations_count
+      cancellable_count
     end
   end
 end
