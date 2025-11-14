@@ -97,11 +97,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def cancel # rubocop:disable Metrics/MethodLength
-    WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
+    result = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @workflow_execution.canceled? || @workflow_execution.canceling?
+        if result && (@workflow_execution.canceled? || @workflow_execution.canceling?)
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.cancel.success',

@@ -9,7 +9,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false if @workflow_execution.nil? || @workflow_execution.cleaned? # TODO: returning false needs rework
+      return if @workflow_execution.nil? || @workflow_execution.cleaned? # no further work needed
 
       # This check is for safety as passing nil or an empty string into deleted_prefixed will delete all blobs
       if @workflow_execution.blob_run_directory.present?
@@ -19,8 +19,6 @@ module WorkflowExecutions
       @workflow_execution.cleaned = true
 
       @workflow_execution.save
-
-      @workflow_execution
     end
   end
 end

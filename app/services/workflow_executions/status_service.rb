@@ -11,7 +11,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false if @workflow_execution.run_id.nil? # TODO: returning false needs rework
+      return false if @workflow_execution.run_id.nil?
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
 
@@ -27,9 +27,9 @@ module WorkflowExecutions
                     :error
                   end
 
-      @workflow_execution.update(state: new_state) unless new_state.nil?
+      @workflow_execution.state = new_state unless new_state.nil?
 
-      @workflow_execution
+      @workflow_execution.save
     end
   end
 end

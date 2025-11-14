@@ -23,4 +23,10 @@ class WorkflowExecutionJob < ApplicationJob
     workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
     WorkflowExecutionCleanupJob.perform_later(workflow_execution)
   end
+
+  def handle_unable_to_process_job(workflow_execution, job_name)
+    error_message = I18n.t('activerecord.errors.models.workflow_execution.invalid_job_state', job_name:)
+    Rails.logger.error(error_message)
+    handle_error_state_and_clean(workflow_execution)
+  end
 end

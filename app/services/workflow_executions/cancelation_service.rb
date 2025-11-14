@@ -10,7 +10,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.canceling? # TODO: returning false needs rework
+      return false unless @workflow_execution.canceling?
 
       @wes_client.cancel_run(@workflow_execution.run_id)
 
@@ -18,11 +18,6 @@ module WorkflowExecutions
       @workflow_execution.state = :canceled
 
       @workflow_execution.save
-
-      # TODO: job queuing should be handled by the job that called this service
-      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
-
-      @workflow_execution
     end
   end
 end

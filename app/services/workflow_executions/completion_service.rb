@@ -16,7 +16,7 @@ module WorkflowExecutions
     end
 
     def execute # rubocop:disable Metrics/MethodLength
-      return false unless @workflow_execution.completing? # TODO: returning false needs rework
+      return false unless @workflow_execution.completing?
 
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
 
@@ -44,11 +44,6 @@ module WorkflowExecutions
       @workflow_execution.state = :completed
 
       @workflow_execution.save
-
-      # TODO: job queuing should be handled by the job that called this service
-      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
-
-      @workflow_execution
     end
 
     private

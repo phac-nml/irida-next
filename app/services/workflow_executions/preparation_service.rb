@@ -18,7 +18,7 @@ module WorkflowExecutions
 
     def execute # rubocop:disable Metrics/MethodLength
       # confirm pipeline found
-      return false unless validate_pipeline # TODO: returning false needs rework
+      return false unless validate_pipeline
 
       @samplesheet_headers = @pipeline.samplesheet_headers
 
