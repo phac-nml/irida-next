@@ -163,7 +163,11 @@
     <% end %>
   <% end %>
 
-  <%= render RefreshNoticeComponent.new(streamable: @project, stream_name: :samples, message: t(".refresh_notice.message")) %>
+  <%= render RefreshNoticeComponent.new(
+    streamable: @project,
+    stream_name: :samples,
+    message: t(".refresh_notice.message"),
+  ) %>
 
   <% if @has_samples %>
     <div class="flex flex-wrap gap-2 mb-4">
@@ -180,7 +184,10 @@
           <%= f.submit t("common.controls.select_all"),
                    id: "select-all-button",
                    class: "button button-default w-full",
-                   title: t(".select_all_tooltip") %>
+                   title: t(".select_all_tooltip"),
+                   aria: {
+                     label: t(".select_all_tooltip"),
+                   } %>
         <% end %>
         <%= form_with(
                     url: select_namespace_project_samples_url,
@@ -192,7 +199,10 @@
           <%= f.submit t("common.controls.deselect_all"),
                    id: "deselect-all-button",
                    class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip") %>
+                   title: t(".deselect_all_tooltip"),
+                   aria: {
+                     label: t(".deselect_all_tooltip"),
+                   } %>
         <% end %>
       <% end %>
       <div class="sm:grow max-sm:hidden" role="presentation"></div>
