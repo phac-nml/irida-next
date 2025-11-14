@@ -44,6 +44,7 @@
                         label: t(".select_all.aria_label"),
                       },
                       data: {
+                        table: true,
                         action: "input->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
@@ -114,6 +115,7 @@
                           label: t(".row.aria_label", name: sample.name),
                         },
                         data: {
+                          table: true,
                           action: "input->selection#toggle",
                           selection_target: "rowSelection",
                         },

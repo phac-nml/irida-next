@@ -37,6 +37,7 @@
                         label: t("components.attachments.table_component.select_page"),
                       },
                       data: {
+                        table: true,
                         action: "input->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
@@ -150,6 +151,7 @@
                           label: attachment.file.filename.to_s,
                         },
                         data: {
+                          table: true,
                           action: "input->selection#toggle",
                           selection_target: "rowSelection",
                         },

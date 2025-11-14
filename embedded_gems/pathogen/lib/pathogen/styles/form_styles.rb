@@ -40,24 +40,35 @@ module Pathogen
       # @param options [Hash] Options for the checkbox
       # @return [Hash] Options with Pathogen styling applied
       def apply_pathogen_styling(options)
-        # Start with a copy of the base checkbox classes
-        pathogen_classes = CHECKBOX_CLASSES.dup
-
-        # Handle table context if specified
-        if options[:table]
-          pathogen_classes.concat(CHECKBOX_TABLE_CLASSES)
-          options = options.except(:table)
-        end
-
-        # Merge custom classes with Pathogen classes
-        if options[:class].present?
-          user_classes = options[:class].is_a?(Array) ? options[:class] : [options[:class].to_s]
-          options[:class] = pathogen_classes + user_classes
-        else
-          options[:class] = pathogen_classes
-        end
-
+        pathogen_classes = build_checkbox_classes(options)
+        options = remove_table_marker(options)
+        options[:class] = merge_classes(pathogen_classes, options[:class])
         options
+      end
+
+      private
+
+      # Build the list of checkbox classes based on context
+      def build_checkbox_classes(options)
+        classes = CHECKBOX_CLASSES.dup
+        classes.concat(CHECKBOX_TABLE_CLASSES) if options.dig(:data, :table)
+        classes
+      end
+
+      # Remove table marker from data attributes
+      def remove_table_marker(options)
+        return options unless options.dig(:data, :table)
+
+        options[:data] = options[:data].except(:table)
+        options
+      end
+
+      # Merge user classes with Pathogen classes
+      def merge_classes(pathogen_classes, user_classes)
+        return pathogen_classes if user_classes.blank?
+
+        user_array = user_classes.is_a?(Array) ? user_classes : [user_classes.to_s]
+        pathogen_classes + user_array
       end
     end
   end
