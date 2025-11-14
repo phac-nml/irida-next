@@ -81,7 +81,7 @@ module WorkflowExecutions
         @user, { workflow_execution_ids: [workflow_execution1.id, workflow_execution2.id] }
       ).execute
 
-      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+      assert_enqueued_jobs(2, except: Turbo::Streams::BroadcastStreamJob)
 
       assert_equal 'canceling', workflow_execution1.reload.state
       assert_not workflow_execution1.cleaned?
