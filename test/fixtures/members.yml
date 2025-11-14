@@ -114,7 +114,7 @@ project_one_member_ryan_doe:
   access_level: <%= Member::AccessLevel::GUEST %>
 
 project_one_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::ANALYST %>
