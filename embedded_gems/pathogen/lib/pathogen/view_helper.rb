@@ -8,7 +8,15 @@ module Pathogen
       datepicker: 'Pathogen::Datepicker',
       icon: 'Pathogen::Icon',
       link: 'Pathogen::Link',
-      radio_button: 'Pathogen::Form::RadioButton'
+      radio_button: 'Pathogen::Form::RadioButton',
+      heading: 'Pathogen::Typography::Heading',
+      text: 'Pathogen::Typography::Text',
+      supporting: 'Pathogen::Typography::Supporting',
+      lead: 'Pathogen::Typography::Lead',
+      eyebrow: 'Pathogen::Typography::Eyebrow',
+      code: 'Pathogen::Typography::Code',
+      code_block: 'Pathogen::Typography::CodeBlock',
+      list: 'Pathogen::Typography::List'
     }.freeze
 
     # Define helper methods for components
