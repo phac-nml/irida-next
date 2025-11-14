@@ -1,0 +1,113 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:file_text, color: :primary, size: :xl, class: "inline mr-3") %>
+      Body Text Components
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Standard body text for paragraphs and main content with consistent 16px sizing and optimal readability.
+    <% end %>
+  </div>
+
+  <!-- Standard Body Text -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
+        Standard Paragraphs
+      <% end %>
+
+      <div class="space-y-6 max-w-3xl">
+        <%= pathogen_text do %>
+          This is standard body text at 16px. It's designed for optimal readability with a comfortable
+          line-height of 1.5. Use this component for paragraphs, descriptions, and main content throughout
+          your application.
+        <% end %>
+
+        <%= pathogen_text do %>
+          Multiple paragraphs are automatically spaced for readability. The typography system ensures
+          consistent spacing and visual hierarchy across all text elements.
+        <% end %>
+
+        <%= pathogen_text do %>
+          Body text components always render at 16px regardless of screen size. Unlike headings, body
+          text maintains its size for consistent reading experience across devices.
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Variants -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+        Color Variants
+      <% end %>
+
+      <div class="space-y-4 max-w-3xl">
+        <%= pathogen_text(variant: :default) do %>
+          Default variant - Primary text color for main content
+        <% end %>
+
+        <%= pathogen_text(variant: :muted) do %>
+          Muted variant - Secondary text color for less important information
+        <% end %>
+
+        <%= pathogen_text(variant: :subdued) do %>
+          Subdued variant - Medium contrast for balanced emphasis
+        <% end %>
+
+        <div class="p-4 bg-slate-900 dark:bg-slate-100 rounded-lg">
+          <%= pathogen_text(variant: :inverse) do %>
+            Inverse variant - Light text for dark backgrounds
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Tags -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:tag, color: :primary, class: "mr-3") %>
+        Custom HTML Tags
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        You can specify a custom HTML tag instead of the default paragraph tag.
+      <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 overflow-x-auto">
+        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render pathogen_text(tag: :div) do %>
+  Text rendered as a div instead of paragraph
+<%% end %>
+
+<%%= render pathogen_text(tag: :span) do %>
+  Text rendered as a span
+<%% end %></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Size Reference -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:ruler, color: :primary, class: "mr-3") %>
+        Size Reference
+      <% end %>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <%= pathogen_text do %>
+            Body Text: 16px
+          <% end %>
+          <div class="text-sm text-slate-600 dark:text-slate-400">Standard paragraph size</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

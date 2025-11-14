@@ -1,0 +1,143 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:tag, color: :primary, size: :xl, class: "inline mr-3") %>
+      Supporting Text Components
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Captions, labels, and supporting text at 14px for secondary information and metadata.
+    <% end %>
+  </div>
+
+  <!-- Basic Usage -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
+        Basic Usage
+      <% end %>
+
+      <div class="space-y-6 max-w-3xl">
+        <div>
+          <%= pathogen_heading(level: 3) do %>
+            Form Field Label
+          <% end %>
+          <%= pathogen_supporting do %>
+            Enter your full name as it appears on your identification document
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3) do %>
+            Image Caption
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            A beautiful sunset over the mountains, captured during golden hour.
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3) do %>
+            Metadata
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            Published on January 15, 2024 • 5 min read • 234 views
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Size Reference -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:ruler, color: :primary, class: "mr-3") %>
+        Size Reference
+      <% end %>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <%= pathogen_supporting do %>
+            Supporting Text: 14px
+          <% end %>
+          <div class="text-sm text-slate-600 dark:text-slate-400">Smaller than body text for secondary information</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Variants -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+        Color Variants
+      <% end %>
+
+      <div class="space-y-4 max-w-3xl">
+        <%= pathogen_supporting(variant: :default) do %>
+          Default variant - Standard supporting text color
+        <% end %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          Muted variant - Lighter color for less emphasis
+        <% end %>
+
+        <%= pathogen_supporting(variant: :subdued) do %>
+          Subdued variant - Medium contrast
+        <% end %>
+
+        <div class="p-4 bg-slate-900 dark:bg-slate-100 rounded-lg">
+          <%= pathogen_supporting(variant: :inverse) do %>
+            Inverse variant - Light text for dark backgrounds
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-World Examples -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:sparkle, color: :primary, class: "mr-3") %>
+        Real-World Examples
+      <% end %>
+
+      <div class="space-y-8">
+        <!-- Form Example -->
+        <div class="max-w-md">
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            Form Field with Supporting Text
+          <% end %>
+          <div class="space-y-2">
+            <%= pathogen_supporting do %>
+              Email Address
+            <% end %>
+            <input type="email" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="you@example.com">
+            <%= pathogen_supporting(variant: :muted) do %>
+              We'll never share your email with anyone else.
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Card Example -->
+        <div class="max-w-md border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-slate-50 dark:bg-slate-700/50">
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            <%= pathogen_heading(level: 4) do %>
+              Article Title
+            <% end %>
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            Published on January 15, 2024 • 5 min read
+          <% end %>
+          <%= pathogen_text(class: "mt-4") do %>
+            Article content goes here...
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

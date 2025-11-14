@@ -1,0 +1,218 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %>
+      Typography In Context
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Realistic page layouts demonstrating typography components working together in real-world scenarios.
+    <% end %>
+  </div>
+
+  <!-- Article Layout -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
+        Article/Blog Post Layout
+      <% end %>
+
+      <article class="max-w-4xl mx-auto">
+        <%= pathogen_eyebrow do %>
+          Featured Article
+        <% end %>
+        <%= pathogen_heading(level: 1, class: "mt-2 mb-4") do %>
+          Understanding Typography Systems in Modern Web Design
+        <% end %>
+        <%= pathogen_supporting(variant: :muted) do %>
+          Published on January 15, 2024 • 5 min read • By Jane Doe
+        <% end %>
+
+        <%= pathogen_lead(class: "mt-6 mb-6") do %>
+          Typography is one of the most fundamental aspects of web design. A well-designed typography
+          system creates visual hierarchy, improves readability, and enhances the overall user experience.
+        <% end %>
+
+        <%= pathogen_heading(level: 2, class: "mt-8 mb-4") do %>
+          The Importance of Typography Scale
+        <% end %>
+        <%= pathogen_text do %>
+          A modular typography scale ensures consistent sizing across your application. The scale includes
+          sizes from 12px (eyebrow text) up to 49px (desktop h1 headings). Each size serves a specific
+          purpose and creates visual hierarchy.
+        <% end %>
+
+        <%= pathogen_heading(level: 3, class: "mt-6 mb-3") do %>
+          Responsive Typography
+        <% end %>
+        <%= pathogen_text do %>
+          Headings automatically scale between mobile and desktop sizes. For example, an h1 heading
+          displays at 31px on mobile and scales up to 49px on desktop screens. This ensures optimal
+          readability across all devices.
+        <% end %>
+
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 mt-6">
+          <%= pathogen_code_block(language: "erb") do %>
+<%%= render pathogen_heading(level: 1) do %>
+  Page Title
+<%% end %>
+          <% end %>
+        </div>
+
+        <%= pathogen_heading(level: 2, class: "mt-8 mb-4") do %>
+          Color Variants for Context
+        <% end %>
+        <%= pathogen_text do %>
+          Typography components support multiple color variants to convey different levels of importance
+          and context. Use default for primary content, muted for secondary information, and inverse
+          for text on dark backgrounds.
+        <% end %>
+      </article>
+    </div>
+  </div>
+
+  <!-- Dashboard Card -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:squares_four, color: :primary, class: "mr-3") %>
+        Dashboard Card Layout
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-6 border border-slate-200 dark:border-slate-600">
+          <%= pathogen_supporting(variant: :muted) do %>
+            Total Users
+          <% end %>
+          <%= pathogen_heading(level: 2) do %>
+            12,345
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            +12% from last month
+          <% end %>
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-6 border border-slate-200 dark:border-slate-600">
+          <%= pathogen_supporting(variant: :muted) do %>
+            Active Sessions
+          <% end %>
+          <%= pathogen_heading(level: 2) do %>
+            8,901
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            +5% from last month
+          <% end %>
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-6 border border-slate-200 dark:border-slate-600">
+          <%= pathogen_supporting(variant: :muted) do %>
+            Revenue
+          <% end %>
+          <%= pathogen_heading(level: 2) do %>
+            $45,678
+          <% end %>
+          <%= pathogen_supporting(variant: :muted) do %>
+            +23% from last month
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documentation Page -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:book_open, color: :primary, class: "mr-3") %>
+        Documentation Page Layout
+      <% end %>
+
+      <div class="max-w-4xl mx-auto">
+        <%= pathogen_heading(level: 1, class: "mb-2") do %>
+          Component API Reference
+        <% end %>
+        <%= pathogen_supporting(variant: :muted, class: "mb-8") do %>
+          Complete reference for all typography components
+        <% end %>
+
+        <%= pathogen_heading(level: 2, class: "mt-8 mb-4") do %>
+          Pathogen::Typography::Heading
+        <% end %>
+        <%= pathogen_text do %>
+          Renders semantic heading elements (h1-h6) with responsive sizing and color variants.
+        <% end %>
+
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 mt-4">
+          <%= pathogen_code_block(language: "erb") do %>
+<%%= render pathogen_heading(level: 1, variant: :default) do %>
+  Page Title
+<%% end %>
+          <% end %>
+        </div>
+
+        <%= pathogen_heading(level: 3, class: "mt-6 mb-3") do %>
+          Parameters
+        <% end %>
+        <%= pathogen_list(items: [
+          "level: Integer (1-6) - The heading level",
+          "variant: Symbol (:default, :muted, :subdued, :inverse) - Color variant",
+          "responsive: Boolean (default: true) - Enable responsive sizing"
+        ]) %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Layout -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:clipboard, color: :primary, class: "mr-3") %>
+        Form Layout Example
+      <% end %>
+
+      <div class="max-w-2xl mx-auto">
+        <%= pathogen_heading(level: 1, class: "mb-2") do %>
+          Create New Project
+        <% end %>
+        <%= pathogen_text(variant: :muted, class: "mb-8") do %>
+          Fill out the form below to create a new project in your workspace.
+        <% end %>
+
+        <form class="space-y-6">
+          <div>
+            <%= pathogen_supporting do %>
+              Project Name
+            <% end %>
+            <input type="text" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="Enter project name">
+            <%= pathogen_supporting(variant: :muted, class: "mt-1") do %>
+              Choose a descriptive name for your project
+            <% end %>
+          </div>
+
+          <div>
+            <%= pathogen_supporting do %>
+              Description
+            <% end %>
+            <textarea class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" rows="4" placeholder="Enter project description"></textarea>
+          </div>
+
+          <div>
+            <%= pathogen_supporting do %>
+              Project Type
+            <% end %>
+            <%= pathogen_list(items: [
+              "Research Project",
+              "Clinical Trial",
+              "Data Analysis",
+              "Other"
+            ]) %>
+            <%= pathogen_supporting(variant: :muted, class: "mt-2") do %>
+              Select the type that best describes your project
+            <% end %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
