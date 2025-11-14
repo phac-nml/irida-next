@@ -7,6 +7,8 @@ class Component < ViewComponent::Base
   include ViewHelper
   include ClassNameHelper
   include Pathogen::ViewHelper
+  include Pathogen::FormHelper
+  include Pathogen::FormTagHelper
 
   delegate :locale, to: :I18n
 
