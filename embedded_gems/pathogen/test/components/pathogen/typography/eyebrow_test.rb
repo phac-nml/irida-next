@@ -4,12 +4,13 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for Eyebrow component
     class EyebrowTest < ViewComponent::TestCase
       test 'renders paragraph tag by default with uppercase class' do
         render_inline(Eyebrow.new) { 'Category' }
 
         assert_selector 'p.uppercase'
-        # Note: CSS transforms don't apply in test environment
+        # NOTE: CSS transforms don't apply in test environment
         assert_selector 'p', text: 'Category'
       end
 

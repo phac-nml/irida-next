@@ -35,7 +35,8 @@ module Pathogen
       # @param parent_level [Integer, nil] Parent section's heading level (for validation)
       # @param validate [Boolean] Enable hierarchy validation (default: true in development)
       # @param system_arguments [Hash] Additional HTML attributes for wrapper
-      def initialize(level: 2, spacing: :default, parent_level: nil, validate: Rails.env.development?, **system_arguments)
+      def initialize(level: 2, spacing: :default, parent_level: nil, validate: Rails.env.development?,
+                     **system_arguments)
         @level = level
         @spacing = spacing
         @parent_level = parent_level
@@ -56,7 +57,7 @@ module Pathogen
       private
 
       def spacing_class
-        section_spacing_key = "section_#{@spacing}".to_sym
+        section_spacing_key = :"section_#{@spacing}"
         Constants::SPACING_CLASSES[section_spacing_key] || Constants::SPACING_CLASSES[:section_default]
       end
 
@@ -73,9 +74,9 @@ module Pathogen
 
         # Warn about hierarchy violations
         Rails.logger.warn(
-          "[Pathogen::Typography::Section] Heading hierarchy violation: " \
+          '[Pathogen::Typography::Section] Heading hierarchy violation: ' \
           "Expected level #{expected_level} (parent: h#{@parent_level}), got level #{@level}. " \
-          "This may cause accessibility issues. Consider adjusting heading levels."
+          'This may cause accessibility issues. Consider adjusting heading levels.'
         )
       end
     end

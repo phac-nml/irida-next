@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for Text component
     class TextTest < ViewComponent::TestCase
       test 'renders paragraph tag by default' do
         render_inline(Text.new) { 'Test text' }
