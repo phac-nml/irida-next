@@ -96,18 +96,20 @@ module Pathogen
         assert_selector 'h1#main-heading[data-controller="tooltip"]'
       end
 
-      test 'normalizes invalid levels to valid range' do
-        render_inline(Heading.new(level: 0)) { 'Test' }
-        assert_selector 'h1'
+      test 'raises error for invalid levels in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Heading.new(level: 0)
+        end
 
-        render_inline(Heading.new(level: 10)) { 'Test' }
-        assert_selector 'h6'
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Heading.new(level: 10)
+        end
       end
 
-      test 'falls back to default variant for invalid variant' do
-        render_inline(Heading.new(level: 1, variant: :invalid)) { 'Test' }
-
-        assert_selector 'h1.text-slate-900.dark\\:text-white'
+      test 'raises error for invalid variant in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Heading.new(level: 1, variant: :invalid)
+        end
       end
 
       test 'responsive h1 uses correct mobile and desktop sizes' do
