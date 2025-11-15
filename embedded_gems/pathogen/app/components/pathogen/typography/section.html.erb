@@ -1,7 +1,7 @@
-<section <%= tag.attributes(@system_arguments) %>>
+<%= tag.section(**@system_arguments) do %>
   <% if heading? %>
     <%= heading %>
   <% end %>
 
   <%= content %>
-</section>
+<% end %>

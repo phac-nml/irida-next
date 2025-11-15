@@ -41,6 +41,16 @@ module Pathogen
         widest: 'tracking-widest'
       }.freeze
 
+      # Spacing classes for component groups (HeadingGroup, Section, etc.)
+      SPACING_CLASSES = {
+        compact: 'space-y-1',
+        default: 'space-y-2',
+        spacious: 'space-y-4',
+        section_compact: 'space-y-2',
+        section_default: 'space-y-4',
+        section_spacious: 'space-y-6'
+      }.freeze
+
       # Responsive size mappings for headings
       # Format: { level => { mobile: 'class', desktop: 'class' } }
       RESPONSIVE_SIZES = {
