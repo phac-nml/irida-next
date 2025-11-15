@@ -42,7 +42,8 @@ module Pathogen
           'uppercase',
           Constants::LETTER_SPACING[:wider],
           color_classes_for_variant(@variant),
-          Constants::LINE_HEIGHTS[:tight],
+          Constants::LINE_HEIGHTS[:body],
+          'font-semibold',
           Constants::FONT_FAMILIES[:ui]
         )
       end

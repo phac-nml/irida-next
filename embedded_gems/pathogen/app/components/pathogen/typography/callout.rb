@@ -5,33 +5,29 @@ require_relative 'shared'
 
 module Pathogen
   module Typography
-    # Component for rendering body text paragraphs (16px)
+    # Component for rendering callout text (18px)
     #
-    # Standard body text component for paragraphs and main content with consistent
-    # sizing and optimal readability. Supports optional responsive sizing.
+    # Callout text sits between body (16px) and lead (20px), perfect for emphasized
+    # paragraphs, pull quotes, or sidebar content that needs more prominence than
+    # body text but isn't quite a lead paragraph. Supports optional responsive sizing.
     #
-    # @example Basic paragraph
-    #   <%= render Pathogen::Typography::Text.new do %>
-    #     This is body text at 16px.
-    #   <% end %>
-    #
-    # @example With color variant
-    #   <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
-    #     Secondary information
+    # @example Basic callout
+    #   <%= render Pathogen::Typography::Callout.new do %>
+    #     This is an important callout that draws attention.
     #   <% end %>
     #
     # @example Responsive sizing
-    #   <%= render Pathogen::Typography::Text.new(responsive: true) do %>
-    #     Text that scales from 14px (mobile) to 16px (desktop)
+    #   <%= render Pathogen::Typography::Callout.new(responsive: true, variant: :muted) do %>
+    #     Scales from 16px (mobile) to 18px (desktop)
     #   <% end %>
-    class Text < Component
+    class Callout < Component
       include Shared
 
       DEFAULT_TAG = :p
 
       attr_reader :tag, :variant, :responsive
 
-      # Initialize a new Text component
+      # Initialize a new Callout component
       #
       # @param tag [Symbol] HTML tag to use (default: :p)
       # @param variant [Symbol] Color variant (:default, :muted, :subdued, :inverse)
@@ -56,10 +52,10 @@ module Pathogen
 
       def size_classes
         if @responsive
-          responsive_sizes = Constants::TEXT_RESPONSIVE_SIZES[:text]
+          responsive_sizes = Constants::TEXT_RESPONSIVE_SIZES[:callout]
           "#{responsive_sizes[:mobile]} sm:#{responsive_sizes[:desktop]}"
         else
-          Constants::TYPOGRAPHY_SCALE[16]
+          'text-lg'  # 18px - between base (16px) and xl (20px)
         end
       end
 
