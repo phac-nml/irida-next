@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for Lead component
     class LeadTest < ViewComponent::TestCase
       test 'renders paragraph tag by default' do
         render_inline(Lead.new) { 'Lead paragraph' }

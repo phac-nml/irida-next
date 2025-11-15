@@ -21,8 +21,8 @@ module Pathogen
 
       # Font family classes
       FONT_FAMILIES = {
-        ui: 'font-sans',      # UI font stack (Inter, system fonts)
-        mono: 'font-mono'      # Monospace for code
+        ui: 'font-sans', # UI font stack (Inter, system fonts)
+        mono: 'font-mono' # Monospace for code
       }.freeze
 
       # Line height classes
@@ -59,7 +59,7 @@ module Pathogen
         3 => { mobile: 'text-xl', desktop: 'text-3xl' },   # 20px → 31px
         4 => { mobile: 'text-lg', desktop: 'text-2xl' },   # 18px → 25px
         5 => { mobile: 'text-base', desktop: 'text-xl' },  # 16px → 20px
-        6 => { mobile: 'text-sm', desktop: 'text-lg' }      # 14px → 18px
+        6 => { mobile: 'text-sm', desktop: 'text-lg' } # 14px → 18px
       }.freeze
 
       # Responsive size mappings for text components
