@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for List component
     class ListTest < ViewComponent::TestCase
       test 'renders unordered list by default' do
         render_inline(List.new) do |list|
@@ -37,83 +38,37 @@ module Pathogen
         assert_selector 'li', text: 'Cherry'
       end
 
-      test 'applies base text size' do
+      test 'applies typography and layout classes' do
         render_inline(List.new) do |list|
           list.with_item { 'Test' }
         end
+        assert_selector 'ul.text-base.leading-normal.list-disc.pl-6.space-y-2'
 
-        assert_selector 'ul.text-base'
-      end
-
-      test 'applies normal leading' do
-        render_inline(List.new) do |list|
-          list.with_item { 'Test' }
-        end
-
-        assert_selector 'ul.leading-normal'
-      end
-
-      test 'applies list disc style to unordered lists' do
-        render_inline(List.new) do |list|
-          list.with_item { 'Test' }
-        end
-
-        assert_selector 'ul.list-disc'
-      end
-
-      test 'applies list decimal style to ordered lists' do
         render_inline(List.new(ordered: true)) do |list|
           list.with_item { 'Test' }
         end
-
         assert_selector 'ol.list-decimal'
       end
 
-      test 'applies left padding for list markers' do
+      test 'applies variant color classes' do
         render_inline(List.new) do |list|
           list.with_item { 'Test' }
         end
-
-        assert_selector 'ul.pl-6'
-      end
-
-      test 'applies spacing between items' do
-        render_inline(List.new) do |list|
-          list.with_item { 'Test' }
-        end
-
-        assert_selector 'ul.space-y-2'
-      end
-
-      test 'applies default variant color classes' do
-        render_inline(List.new) do |list|
-          list.with_item { 'Test' }
-        end
-
         assert_selector 'ul.text-slate-900.dark\\:text-white'
-      end
 
-      test 'applies muted variant color classes' do
         render_inline(List.new(variant: :muted)) do |list|
           list.with_item { 'Test' }
         end
-
         assert_selector 'ul.text-slate-500.dark\\:text-slate-400'
-      end
 
-      test 'applies subdued variant color classes' do
         render_inline(List.new(variant: :subdued)) do |list|
           list.with_item { 'Test' }
         end
-
         assert_selector 'ul.text-slate-700.dark\\:text-slate-300'
-      end
 
-      test 'applies inverse variant color classes' do
         render_inline(List.new(variant: :inverse)) do |list|
           list.with_item { 'Test' }
         end
-
         assert_selector 'ul.text-white.dark\\:text-slate-900'
       end
 
@@ -139,30 +94,15 @@ module Pathogen
         end
       end
 
-      test 'handles empty list gracefully' do
+      test 'handles edge cases correctly' do
         render_inline(List.new)
-
         assert_selector 'ul'
         assert_no_selector 'li'
-      end
 
-      test 'preserves HTML entities in list items' do
         render_inline(List.new) do |list|
           list.with_item { 'Item with & ampersand' }
         end
-
         assert_selector 'li', text: 'Item with & ampersand'
-      end
-
-      test 'ordered list uses correct numbering' do
-        render_inline(List.new(ordered: true)) do |list|
-          list.with_item { 'First' }
-          list.with_item { 'Second' }
-          list.with_item { 'Third' }
-        end
-
-        assert_selector 'ol.list-decimal'
-        assert_selector 'li', count: 3
       end
     end
   end
