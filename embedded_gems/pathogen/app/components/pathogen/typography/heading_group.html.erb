@@ -1,0 +1,13 @@
+<div <%= tag.attributes(@system_arguments) %>>
+  <% if eyebrow? %>
+    <%= eyebrow %>
+  <% end %>
+
+  <% if heading? %>
+    <%= heading %>
+  <% end %>
+
+  <% if metadata? %>
+    <%= metadata %>
+  <% end %>
+</div>

@@ -11,6 +11,7 @@ module Pathogen
         12 => 'text-xs',    # Eyebrow text
         14 => 'text-sm',    # Supporting text
         16 => 'text-base',  # Body text
+        18 => 'text-lg',    # Callout text (emphasized paragraphs)
         20 => 'text-xl',    # Lead paragraphs
         25 => 'text-2xl',   # H6 / Mobile H5
         31 => 'text-3xl',   # H5 / Mobile H4 / Desktop H1
@@ -51,12 +52,62 @@ module Pathogen
         6 => { mobile: 'text-sm', desktop: 'text-lg' }      # 14px → 18px
       }.freeze
 
+      # Responsive size mappings for text components
+      # Format: { component_name => { mobile: 'class', desktop: 'class' } }
+      TEXT_RESPONSIVE_SIZES = {
+        text: { mobile: 'text-sm', desktop: 'text-base' },         # 14px → 16px
+        supporting: { mobile: 'text-xs', desktop: 'text-sm' },     # 12px → 14px
+        lead: { mobile: 'text-lg', desktop: 'text-xl' },           # 18px → 20px
+        callout: { mobile: 'text-base', desktop: 'text-lg' }       # 16px → 18px
+      }.freeze
+
       # Color variants for typography components
       COLOR_VARIANTS = {
         default: 'text-slate-900 dark:text-white',
         muted: 'text-slate-500 dark:text-slate-400',
         subdued: 'text-slate-700 dark:text-slate-300',
         inverse: 'text-white dark:text-slate-900'
+      }.freeze
+
+      # Typography presets for common UI patterns
+      # Each preset defines a configuration for HeadingGroup and related components
+      PRESETS = {
+        article: {
+          heading_level: 1,
+          heading_variant: :default,
+          heading_responsive: true,
+          eyebrow_variant: :muted,
+          metadata_variant: :muted,
+          spacing: :default
+        },
+        card: {
+          heading_level: 3,
+          heading_variant: :default,
+          heading_responsive: false,
+          eyebrow_variant: :muted,
+          metadata_variant: :muted,
+          spacing: :compact
+        },
+        section: {
+          heading_level: 2,
+          heading_variant: :default,
+          heading_responsive: true,
+          metadata_variant: :muted,
+          spacing: :default
+        },
+        dialog: {
+          heading_level: 2,
+          heading_variant: :default,
+          heading_responsive: false,
+          spacing: :compact
+        },
+        form_section: {
+          heading_level: 3,
+          heading_variant: :default,
+          heading_responsive: false,
+          metadata_variant: :muted,
+          spacing: :compact
+        }
       }.freeze
     end
   end
