@@ -1,0 +1,257 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:lightbulb, color: :primary, size: :xl, class: "inline mr-3") %>
+      Do's and Don'ts
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Best practices and common mistakes when using typography components.
+    <% end %>
+  </div>
+
+  <!-- Heading Hierarchy -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:list_numbers, color: :primary, class: "mr-3") %>
+        Heading Hierarchy
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Do -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+            <span class="font-semibold text-green-700 dark:text-green-400">Do</span>
+          </div>
+          <div class="space-y-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Use Sequential Levels
+            <% end %>
+            <%= pathogen_heading(level: 1) do %>
+              Main Title
+            <% end %>
+            <%= pathogen_heading(level: 2) do %>
+              Section
+            <% end %>
+            <%= pathogen_heading(level: 3) do %>
+              Subsection
+            <% end %>
+            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+              Use headings in order (h1 → h2 → h3) without skipping levels
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Don't -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:x_circle, color: :danger, size: :lg) %>
+            <span class="font-semibold text-red-700 dark:text-red-400">Don't</span>
+          </div>
+          <div class="space-y-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Skip Heading Levels
+            <% end %>
+            <%= pathogen_heading(level: 1) do %>
+              Main Title
+            <% end %>
+            <%= pathogen_heading(level: 3) do %>
+              Skipped H2
+            <% end %>
+            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+              Never skip heading levels - it breaks accessibility and SEO
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Usage -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+        Color Variants
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Do -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+            <span class="font-semibold text-green-700 dark:text-green-400">Do</span>
+          </div>
+          <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Use Variants Appropriately
+            <% end %>
+            <%= pathogen_text(variant: :default) do %>
+              Default for primary content
+            <% end %>
+            <%= pathogen_text(variant: :muted) do %>
+              Muted for secondary information
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Don't -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:x_circle, color: :danger, size: :lg) %>
+            <span class="font-semibold text-red-700 dark:text-red-400">Don't</span>
+          </div>
+          <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Overuse Muted Text
+            <% end %>
+            <%= pathogen_text(variant: :muted) do %>
+              Don't make everything muted - it reduces readability
+            <% end %>
+            <%= pathogen_text(variant: :muted) do %>
+              Use muted sparingly for less important content
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Usage -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+        Code Component Usage
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Do -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+            <span class="font-semibold text-green-700 dark:text-green-400">Do</span>
+          </div>
+          <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Use Appropriate Component
+            <% end %>
+            <%= pathogen_text do %>
+              Use <%= pathogen_code do %>inline code<% end %> for short snippets
+            <% end %>
+            <%= pathogen_code_block(language: "ruby") do %>
+def example
+  # Use code_block for multi-line code
+end
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Don't -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:x_circle, color: :danger, size: :lg) %>
+            <span class="font-semibold text-red-700 dark:text-red-400">Don't</span>
+          </div>
+          <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Mix Inline and Block
+            <% end %>
+            <%= pathogen_text do %>
+              Don't use code_block for single words - use inline code instead
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive Sizing -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:device_mobile, color: :primary, class: "mr-3") %>
+        Responsive Behavior
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Do -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+            <span class="font-semibold text-green-700 dark:text-green-400">Do</span>
+          </div>
+          <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Let Headings Scale
+            <% end %>
+            <%= pathogen_text(variant: :muted, class: "text-sm") do %>
+              Allow headings to scale responsively by default for better mobile experience
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Don't -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <%= pathogen_icon(:x_circle, color: :danger, size: :lg) %>
+            <span class="font-semibold text-red-700 dark:text-red-400">Don't</span>
+          </div>
+          <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <%= pathogen_heading(level: 3) do %>
+              Disable Responsive Unnecessarily
+            <% end %>
+            <%= pathogen_heading(level: 1, responsive: false) do %>
+              Fixed Size Heading
+            <% end %>
+            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+              Only disable responsive sizing when you have a specific design requirement
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Best Practices Summary -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:star, color: :warning, class: "mr-3") %>
+        Best Practices Summary
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <div class="font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center">
+            <%= pathogen_icon(:check_circle, color: :success, class: "mr-2") %>
+            Do's
+          </div>
+          <%= pathogen_list(items: [
+            'Maintain proper heading hierarchy (h1 → h2 → h3)',
+            'Choose appropriate components for content type',
+            'Let headings scale responsively by default',
+            'Use semantic HTML elements',
+            'Test with screen readers'
+          ]) %>
+        </div>
+
+        <div>
+          <div class="font-semibold text-red-700 dark:text-red-400 mb-3 flex items-center">
+            <%= pathogen_icon(:x_circle, color: :danger, class: "mr-2") %>
+            Don'ts
+          </div>
+          <%= pathogen_list(items: [
+            "Don't skip heading levels",
+            "Don't overuse muted text variants",
+            "Don't disable responsive sizing unnecessarily",
+            "Don't use divs instead of semantic elements",
+            "Don't ignore accessibility requirements"
+          ]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

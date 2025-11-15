@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-6xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_heading_group(level: 1) do |group| %>
+        <%= group.with_eyebrow { "Typography Components" } %>
+        <%= group.with_heading { "Body Text" } %>
+        <%= group.with_metadata { "Text, Lead, and Callout components with responsive sizing" } %>
+      <% end %>
+    </div>
+
+    <!-- Text Components -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 3, class: "mb-4") { "Text (16px)" } %>
+        <%= pathogen_text { "Standard body text for paragraphs and main content. Optimized for readability." } %>
+        <%= pathogen_code(class: "mt-4") { "pathogen_text" } %>
+      </div>
+
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 3, class: "mb-4") { "Callout (18px)" } %>
+        <%= pathogen_callout { "Emphasized paragraphs between body and lead. Perfect for pull quotes." } %>
+        <%= pathogen_code(class: "mt-4") { "pathogen_callout" } %>
+      </div>
+
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 3, class: "mb-4") { "Lead (20px)" } %>
+        <%= pathogen_lead { "Larger introductory paragraphs that draw attention and provide context." } %>
+        <%= pathogen_code(class: "mt-4") { "pathogen_lead" } %>
+      </div>
+    </div>
+
+    <!-- Responsive Sizing -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Responsive Sizing" } %>
+      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Enable responsive sizing to scale text from mobile to desktop" } %>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Fixed Size (Default)" } %>
+          <%= pathogen_text { "This text stays at 16px on all screen sizes. Consistent across devices." } %>
+          <%= pathogen_code(class: "mt-3") { "responsive: false" } %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Responsive" } %>
+          <%= pathogen_text(responsive: true) { "This text scales from 14px (mobile) to 16px (desktop). Better mobile readability." } %>
+          <%= pathogen_code(class: "mt-3") { "responsive: true" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Color Variants" } %>
+      <div class="space-y-4">
+        <%= pathogen_text(variant: :default) { "Default variant - Primary text color for maximum readability" } %>
+        <%= pathogen_text(variant: :muted) { "Muted variant - Secondary text color for less emphasis" } %>
+        <%= pathogen_text(variant: :subdued) { "Subdued variant - Medium contrast for subtle information" } %>
+        <div class="rounded-lg bg-slate-900 p-4 dark:bg-slate-50">
+          <%= pathogen_text(variant: :inverse) { "Inverse variant - Light text for dark backgrounds" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article Example -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Article Example" } %>
+
+      <%= pathogen_lead(class: "mb-6") { "IRIDA Next is a comprehensive bioinformatics platform designed for genomic analysis and pathogen surveillance. This lead paragraph introduces the article." } %>
+
+      <%= pathogen_text(class: "mb-4") { "The platform provides researchers with powerful tools for sample management, workflow execution, and data visualization. IRIDA Next integrates seamlessly with existing laboratory information management systems." } %>
+
+      <%= pathogen_callout(class: "mb-4") { "\"IRIDA Next has transformed how we handle genomic data in our lab, reducing analysis time by 60%\" - Research Team Lead" } %>
+
+      <%= pathogen_text { "With support for multiple sequencing platforms and automated quality control, IRIDA Next streamlines the entire genomic analysis pipeline from sample receipt to final report generation." } %>
+    </div>
+
+    <!-- Usage Example -->
+    <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
+      <%= pathogen_heading(level: 3, class: "mb-4") { "Usage Example" } %>
+      <%= pathogen_code_block(language: "erb") do %><%%= pathogen_lead do %>
+  Introductory paragraph
+<%% end %>
+
+<%%= pathogen_text(responsive: true) do %>
+  Body paragraph
+<%% end %>
+
+<%%= pathogen_callout(variant: :muted) do %>
+  Pull quote or callout
+<%% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
