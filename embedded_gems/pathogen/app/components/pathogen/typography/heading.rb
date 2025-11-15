@@ -57,20 +57,13 @@ module Pathogen
       #
       # @return [Symbol] The heading tag (:h1, :h2, etc.)
       def heading_tag
-        "h#{@level}".to_sym
+        :"h#{@level}"
       end
 
       private
 
       def normalize_level(level)
-        normalized = case level
-                      when Integer
-                        level
-                      when String
-                        level.to_i
-                      else
-                        level
-                      end
+        normalized = level.is_a?(String) ? level.to_i : level
         fetch_or_fallback((1..6).to_a, normalized, DEFAULT_LEVEL)
       end
 
