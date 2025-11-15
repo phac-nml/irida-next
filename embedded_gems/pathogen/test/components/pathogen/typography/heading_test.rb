@@ -112,6 +112,24 @@ module Pathogen
         end
       end
 
+      test 'handles string level input by converting to integer' do
+        render_inline(Heading.new(level: '2')) { 'Test' }
+
+        assert_selector 'h2', text: 'Test'
+      end
+
+      test 'handles negative level by raising error in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Heading.new(level: -1)
+        end
+      end
+
+      test 'handles non-numeric string level by raising error in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Heading.new(level: 'invalid')
+        end
+      end
+
       test 'responsive h1 uses correct mobile and desktop sizes' do
         render_inline(Heading.new(level: 1)) { 'Test' }
 

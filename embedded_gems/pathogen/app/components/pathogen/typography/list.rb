@@ -31,7 +31,7 @@ module Pathogen
     class List < Component
       include Shared
 
-      renders_many :items, ->(&block) { block }
+      renders_many :items
 
       DEFAULT_TAG = :ul
 
@@ -46,6 +46,10 @@ module Pathogen
         @ordered = ordered
         @variant = variant
         @system_arguments = system_arguments
+
+        # Add role="list" for accessibility when list styling might be removed
+        # This ensures screen readers announce it as a list even with custom styles
+        @system_arguments[:role] ||= 'list'
 
         @system_arguments[:class] = class_names(
           system_arguments[:class],
