@@ -43,5 +43,9 @@ module Pathogen
     # @label In Context
     # Real-world examples showing typography components in actual page layouts
     def in_context; end
+
+    # @label Presets
+    # Pre-configured typography patterns for common UI scenarios (article, card, section, dialog, form)
+    def presets; end
   end
 end
