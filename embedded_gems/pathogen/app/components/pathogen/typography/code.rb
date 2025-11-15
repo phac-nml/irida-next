@@ -43,16 +43,6 @@ module Pathogen
           'inline-flex items-center gap-1'
         )
       end
-
-      private
-
-      def class_names(*classes)
-        classes
-          .flatten
-          .compact
-          .reject(&:empty?)
-          .join(' ')
-      end
     end
   end
 end

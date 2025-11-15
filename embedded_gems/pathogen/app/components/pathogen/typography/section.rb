@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'constants'
+
 module Pathogen
   module Typography
     # Component for wrapping sections with automatic heading hierarchy validation
@@ -54,14 +56,8 @@ module Pathogen
       private
 
       def spacing_class
-        case @spacing
-        when :compact
-          'space-y-2'
-        when :spacious
-          'space-y-6'
-        else
-          'space-y-4'
-        end
+        section_spacing_key = "section_#{@spacing}".to_sym
+        Constants::SPACING_CLASSES[section_spacing_key] || Constants::SPACING_CLASSES[:section_default]
       end
 
       def validate_heading_hierarchy
@@ -81,10 +77,6 @@ module Pathogen
           "Expected level #{expected_level} (parent: h#{@parent_level}), got level #{@level}. " \
           "This may cause accessibility issues. Consider adjusting heading levels."
         )
-      end
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
       end
     end
   end

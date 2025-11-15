@@ -9,6 +9,12 @@ module Pathogen
     # Perfect for multi-line code snippets. Features a dark background, monospace font,
     # and scrollable overflow for long code examples.
     #
+    # **Note on syntax highlighting**: The `language` parameter adds a CSS class
+    # (`language-{language}`) to the `<code>` element. To enable syntax highlighting,
+    # you must integrate a syntax highlighting library like Prism.js or Highlight.js
+    # that uses these classes. Without a highlighting library, the code will display
+    # as plain text with consistent styling.
+    #
     # @example Code block
     #   <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") do %>
     #     def example
@@ -16,7 +22,7 @@ module Pathogen
     #     end
     #   <% end %>
     #
-    # @example With language class
+    # @example With language class for syntax highlighting
     #   <%= render Pathogen::Typography::CodeBlock.new(language: "javascript") do %>
     #     const example = () => {
     #       console.log("Hello");
@@ -27,10 +33,13 @@ module Pathogen
 
       # Initialize a new CodeBlock component
       #
-      # @param language [String, Symbol, nil] Programming language for syntax highlighting class
+      # @param language [String, Symbol, nil] Programming language identifier (e.g., "ruby", "javascript").
+      #   Adds a `language-{language}` CSS class for syntax highlighting libraries.
+      #   Requires Prism.js, Highlight.js, or similar library to be integrated for actual highlighting.
       # @param system_arguments [Hash] Additional HTML attributes applied to the wrapper
       def initialize(language: nil, **system_arguments)
         @language = language
+        @system_arguments = system_arguments
 
         @wrapper_classes = class_names(
           system_arguments[:class],
@@ -43,7 +52,7 @@ module Pathogen
         )
 
         @pre_classes = class_names(
-          Constants::FONT_FAMILIES[:code],
+          Constants::FONT_FAMILIES[:mono],
           Constants::TYPOGRAPHY_SCALE[14],
           'leading-relaxed',
           'text-inherit',
@@ -62,16 +71,6 @@ module Pathogen
           'tracking-tight',
           "language-#{language}"
         )
-      end
-
-      private
-
-      def class_names(*classes)
-        classes
-          .flatten
-          .compact
-          .reject(&:empty?)
-          .join(' ')
       end
     end
   end
