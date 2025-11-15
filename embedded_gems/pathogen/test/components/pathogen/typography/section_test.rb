@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for Section component
     class SectionTest < ViewComponent::TestCase
       test 'renders section with heading and content' do
         render_inline(Section.new(level: 2)) do |section|

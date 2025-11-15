@@ -46,7 +46,7 @@ module Pathogen
     #   <%= pathogen_typography_preset(:card, heading_variant: :subdued) do |group| %>
     #     <%= group.with_heading { "Card Title" } %>
     #   <% end %>
-    def pathogen_typography_preset(preset, **overrides, &block)
+    def pathogen_typography_preset(preset, **overrides, &)
       preset_config = Pathogen::Typography::Constants::PRESETS[preset]
       raise ArgumentError, "Unknown typography preset: #{preset}" unless preset_config
 
@@ -54,12 +54,12 @@ module Pathogen
       config = preset_config.merge(overrides)
 
       # Build HeadingGroup with preset configuration
-      render Pathogen::Typography::HeadingGroup.new(
-        level: config[:heading_level],
-        heading_variant: config[:heading_variant],
-        responsive: config[:heading_responsive],
-        spacing: config[:spacing]
-      ), &block
+      render(Pathogen::Typography::HeadingGroup.new(
+               level: config[:heading_level],
+               heading_variant: config[:heading_variant],
+               responsive: config[:heading_responsive],
+               spacing: config[:spacing]
+             ), &)
     end
   end
 end

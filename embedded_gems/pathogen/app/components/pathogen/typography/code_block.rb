@@ -41,8 +41,16 @@ module Pathogen
         @language = language
         @system_arguments = system_arguments
 
-        @wrapper_classes = class_names(
-          system_arguments[:class],
+        @wrapper_classes = build_wrapper_classes(system_arguments[:class])
+        @pre_classes = build_pre_classes
+        @code_classes = build_code_classes(language)
+      end
+
+      private
+
+      def build_wrapper_classes(custom_class)
+        class_names(
+          custom_class,
           'rounded-2xl',
           'bg-slate-900 dark:bg-slate-950',
           'text-slate-100',
@@ -50,8 +58,10 @@ module Pathogen
           'shadow-inner',
           'overflow-hidden'
         )
+      end
 
-        @pre_classes = class_names(
+      def build_pre_classes
+        class_names(
           Constants::FONT_FAMILIES[:mono],
           Constants::TYPOGRAPHY_SCALE[14],
           'leading-relaxed',
@@ -61,8 +71,10 @@ module Pathogen
           'whitespace-pre-wrap',
           'overflow-x-auto'
         )
+      end
 
-        @code_classes = class_names(
+      def build_code_classes(language)
+        class_names(
           'block',
           'min-w-full',
           'font-mono',

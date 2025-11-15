@@ -55,7 +55,7 @@ module Pathogen
           responsive_sizes = Constants::TEXT_RESPONSIVE_SIZES[:callout]
           "#{responsive_sizes[:mobile]} sm:#{responsive_sizes[:desktop]}"
         else
-          'text-lg'  # 18px - between base (16px) and xl (20px)
+          'text-lg' # 18px - between base (16px) and xl (20px)
         end
       end
     end

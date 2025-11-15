@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for Code component
     class CodeTest < ViewComponent::TestCase
       test 'renders code tag' do
         render_inline(Code.new) { 'variable_name' }

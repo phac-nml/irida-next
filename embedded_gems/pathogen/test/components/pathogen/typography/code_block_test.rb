@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Pathogen
   module Typography
+    # Test suite for CodeBlock component
     class CodeBlockTest < ViewComponent::TestCase
       test 'renders pre and code tags' do
         render_inline(CodeBlock.new) { 'code content' }
