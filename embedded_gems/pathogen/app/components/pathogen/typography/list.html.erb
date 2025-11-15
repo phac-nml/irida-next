@@ -1,13 +1,5 @@
 <%= content_tag(list_tag, @system_arguments) do %>
-  <% if @array_items %>
-    <%# Array-based API for backward compatibility %>
-    <% @array_items.each do |item| %>
-      <li><%= item %></li>
-    <% end %>
-  <% else %>
-    <%# Slots-based API supporting rich HTML content %>
-    <% items.each do |item_block| %>
-      <li><%= capture(&item_block) if item_block.is_a?(Proc) %></li>
-    <% end %>
+  <% items.each do |item| %>
+    <li><%= item.call %></li>
   <% end %>
 <% end %>

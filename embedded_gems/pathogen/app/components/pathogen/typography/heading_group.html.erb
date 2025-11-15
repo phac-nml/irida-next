@@ -1,4 +1,4 @@
-<div <%= tag.attributes(@system_arguments) %>>
+<%= tag.div(**@system_arguments) do %>
   <% if eyebrow? %>
     <%= eyebrow %>
   <% end %>
@@ -10,4 +10,4 @@
   <% if metadata? %>
     <%= metadata %>
   <% end %>
-</div>
+<% end %>

@@ -92,10 +92,6 @@ module Pathogen
           Constants::LETTER_SPACING[:normal]
         end
       end
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
-      end
     end
   end
 end

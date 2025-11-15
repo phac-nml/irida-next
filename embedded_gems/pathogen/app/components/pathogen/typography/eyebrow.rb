@@ -47,12 +47,6 @@ module Pathogen
           Constants::FONT_FAMILIES[:ui]
         )
       end
-
-      private
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
-      end
     end
   end
 end

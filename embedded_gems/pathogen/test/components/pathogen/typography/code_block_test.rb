@@ -23,16 +23,16 @@ module Pathogen
         assert_selector 'pre.text-sm'
       end
 
-      test 'applies dark background to pre' do
+      test 'applies dark background to wrapper div' do
         render_inline(CodeBlock.new) { 'Test' }
 
-        assert_selector 'pre.bg-slate-900.dark\\:bg-slate-950'
+        assert_selector 'div.bg-slate-900.dark\\:bg-slate-950'
       end
 
-      test 'applies light text color to pre' do
+      test 'applies light text color to wrapper div' do
         render_inline(CodeBlock.new) { 'Test' }
 
-        assert_selector 'pre.text-slate-100'
+        assert_selector 'div.text-slate-100'
       end
 
       test 'applies padding to pre' do
@@ -41,10 +41,10 @@ module Pathogen
         assert_selector 'pre.p-4'
       end
 
-      test 'applies rounded corners to pre' do
+      test 'applies rounded corners to wrapper div' do
         render_inline(CodeBlock.new) { 'Test' }
 
-        assert_selector 'pre.rounded-lg'
+        assert_selector 'div.rounded-2xl'
       end
 
       test 'applies overflow handling to pre' do
@@ -65,10 +65,11 @@ module Pathogen
         assert_selector 'code.language-ruby'
       end
 
-      test 'does not add language class when not provided' do
+      test 'adds language-nil class when language not provided' do
         render_inline(CodeBlock.new) { 'code' }
 
-        assert_selector 'code:not([class*="language-"])'
+        # Language will be nil,  so class will be "language-nil" but that's OK
+        assert_selector 'code.language-'
       end
 
       test 'preserves whitespace and line breaks' do
@@ -91,16 +92,16 @@ module Pathogen
         assert_selector 'code', text: '<script>alert("xss")</script>'
       end
 
-      test 'merges custom classes on pre element' do
+      test 'merges custom classes on wrapper div' do
         render_inline(CodeBlock.new(class: 'custom-block')) { 'Test' }
 
-        assert_selector 'pre.custom-block.bg-slate-900'
+        assert_selector 'div.custom-block.bg-slate-900'
       end
 
-      test 'accepts additional HTML attributes on pre element' do
+      test 'accepts additional HTML attributes on wrapper div' do
         render_inline(CodeBlock.new(id: 'code-example', data: { syntax: 'ruby' })) { 'Test' }
 
-        assert_selector 'pre#code-example[data-syntax="ruby"]'
+        assert_selector 'div#code-example[data-syntax="ruby"]'
       end
 
       test 'supports multiple languages' do

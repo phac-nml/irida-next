@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'constants'
+
 module Pathogen
   module Typography
     # Component for rendering coordinated heading groups with eyebrow and metadata
@@ -57,18 +59,7 @@ module Pathogen
       private
 
       def spacing_class
-        case @spacing
-        when :compact
-          'space-y-1'
-        when :spacious
-          'space-y-4'
-        else
-          'space-y-2'
-        end
-      end
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
+        Constants::SPACING_CLASSES[@spacing] || Constants::SPACING_CLASSES[:default]
       end
     end
   end

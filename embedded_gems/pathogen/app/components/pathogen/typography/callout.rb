@@ -58,10 +58,6 @@ module Pathogen
           'text-lg'  # 18px - between base (16px) and xl (20px)
         end
       end
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
-      end
     end
   end
 end

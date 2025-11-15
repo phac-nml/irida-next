@@ -86,10 +86,10 @@ module Pathogen
         assert_selector 'p#category[role="heading"]'
       end
 
-      test 'falls back to default variant for invalid variant' do
-        render_inline(Eyebrow.new(variant: :invalid)) { 'Test' }
-
-        assert_selector 'p.text-slate-900.dark\\:text-white'
+      test 'raises error for invalid variant in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Eyebrow.new(variant: :invalid)
+        end
       end
 
       test 'applies uppercase CSS class' do

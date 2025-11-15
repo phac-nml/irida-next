@@ -66,10 +66,10 @@ module Pathogen
         assert_selector 'p#intro[data-test="value"]'
       end
 
-      test 'falls back to default variant for invalid variant' do
-        render_inline(Text.new(variant: :invalid)) { 'Test' }
-
-        assert_selector 'p.text-slate-900.dark\\:text-white'
+      test 'raises error for invalid variant in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Text.new(variant: :invalid)
+        end
       end
 
       test 'supports span tag for inline text' do

@@ -66,10 +66,10 @@ module Pathogen
         assert_selector 'p#help-text[role="note"]'
       end
 
-      test 'falls back to default variant for invalid variant' do
-        render_inline(Supporting.new(variant: :invalid)) { 'Test' }
-
-        assert_selector 'p.text-slate-900.dark\\:text-white'
+      test 'raises error for invalid variant in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Supporting.new(variant: :invalid)
+        end
       end
 
       test 'supports label tag for form labels' do

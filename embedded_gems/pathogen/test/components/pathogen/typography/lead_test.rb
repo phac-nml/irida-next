@@ -66,10 +66,10 @@ module Pathogen
         assert_selector 'p#intro[data-component="lead"]'
       end
 
-      test 'falls back to default variant for invalid variant' do
-        render_inline(Lead.new(variant: :invalid)) { 'Test' }
-
-        assert_selector 'p.text-slate-900.dark\\:text-white'
+      test 'raises error for invalid variant in development' do
+        assert_raises(Pathogen::FetchOrFallbackHelper::InvalidValueError) do
+          Lead.new(variant: :invalid)
+        end
       end
     end
   end
