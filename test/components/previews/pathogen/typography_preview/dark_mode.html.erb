@@ -43,10 +43,10 @@
             <%= pathogen_icon(:moon, color: :primary) %>
             <span class="font-semibold text-white">Dark Mode</span>
           </div>
-          <%= pathogen_heading(level: 3) do %>
+          <%= pathogen_heading(level: 3, variant: :inverse) do %>
             Heading in Dark Mode
           <% end %>
-          <%= pathogen_text do %>
+          <%= pathogen_text(variant: :inverse) do %>
             Body text automatically adjusts to white in dark mode for optimal readability.
           <% end %>
         </div>
