@@ -1,143 +1,132 @@
-<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
-  <!-- Header -->
-  <div class="mb-12 text-center">
-    <%= pathogen_heading(level: 1, class: "mb-4") do %>
-      <%= pathogen_icon(:tag, color: :primary, size: :xl, class: "inline mr-3") %>
-      Supporting Text Components
-    <% end %>
-    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
-      Captions, labels, and supporting text at 14px for secondary information and metadata.
-    <% end %>
-  </div>
-
-  <!-- Basic Usage -->
-  <div class="mb-12">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
-        <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
-        Basic Usage
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-6xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_heading_group(level: 1) do |group| %>
+        <%= group.with_eyebrow { "Typography Components" } %>
+        <%= group.with_heading { "Supporting Text" } %>
+        <%= group.with_metadata { "Captions, labels, eyebrow text, and metadata with responsive sizing" } %>
       <% end %>
+    </div>
 
-      <div class="space-y-6 max-w-3xl">
+    <!-- Component Grid -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 3, class: "mb-4") { "Supporting (14px)" } %>
+        <%= pathogen_supporting { "Captions, labels, and secondary information at 14px" } %>
+        <%= pathogen_code(class: "mt-4") { "pathogen_supporting" } %>
+      </div>
+
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 3, class: "mb-4") { "Eyebrow (12px)" } %>
+        <%= pathogen_eyebrow { "Category Label" } %>
+        <%= pathogen_supporting(variant: :muted, class: "mt-4") { "Small uppercase text above headings" } %>
+        <%= pathogen_code(class: "mt-2") { "pathogen_eyebrow" } %>
+      </div>
+    </div>
+
+    <!-- Responsive Sizing -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Responsive Supporting Text" } %>
+      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Scale from 12px (mobile) to 14px (desktop)" } %>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <%= pathogen_heading(level: 3) do %>
-            Form Field Label
-          <% end %>
-          <%= pathogen_supporting do %>
-            Enter your full name as it appears on your identification document
-          <% end %>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Fixed (Default)" } %>
+          <%= pathogen_supporting { "This supporting text stays at 14px on all screen sizes." } %>
+          <%= pathogen_code(class: "mt-3") { "responsive: false" } %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3) do %>
-            Image Caption
-          <% end %>
-          <%= pathogen_supporting(variant: :muted) do %>
-            A beautiful sunset over the mountains, captured during golden hour.
-          <% end %>
-        </div>
-
-        <div>
-          <%= pathogen_heading(level: 3) do %>
-            Metadata
-          <% end %>
-          <%= pathogen_supporting(variant: :muted) do %>
-            Published on January 15, 2024 • 5 min read • 234 views
-          <% end %>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Responsive" } %>
+          <%= pathogen_supporting(responsive: true) { "This supporting text scales from 12px to 14px for better mobile readability." } %>
+          <%= pathogen_code(class: "mt-3") { "responsive: true" } %>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Size Reference -->
-  <div class="mb-12">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
-        <%= pathogen_icon(:ruler, color: :primary, class: "mr-3") %>
-        Size Reference
-      <% end %>
-
+    <!-- Color Variants -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Color Variants" } %>
       <div class="space-y-4">
-        <div class="flex items-center gap-4">
-          <%= pathogen_supporting do %>
-            Supporting Text: 14px
-          <% end %>
-          <div class="text-sm text-slate-600 dark:text-slate-400">Smaller than body text for secondary information</div>
+        <%= pathogen_supporting(variant: :default) { "Default variant - Standard supporting text color" } %>
+        <%= pathogen_supporting(variant: :muted) { "Muted variant - Most common for captions and metadata" } %>
+        <%= pathogen_supporting(variant: :subdued) { "Subdued variant - Medium emphasis supporting information" } %>
+        <div class="rounded-lg bg-slate-900 p-4 dark:bg-slate-50">
+          <%= pathogen_supporting(variant: :inverse) { "Inverse variant - Light text for dark backgrounds" } %>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Color Variants -->
-  <div class="mb-12">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
-        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
-        Color Variants
-      <% end %>
-
-      <div class="space-y-4 max-w-3xl">
-        <%= pathogen_supporting(variant: :default) do %>
-          Default variant - Standard supporting text color
-        <% end %>
-
-        <%= pathogen_supporting(variant: :muted) do %>
-          Muted variant - Lighter color for less emphasis
-        <% end %>
-
-        <%= pathogen_supporting(variant: :subdued) do %>
-          Subdued variant - Medium contrast
-        <% end %>
-
-        <div class="p-4 bg-slate-900 dark:bg-slate-100 rounded-lg">
-          <%= pathogen_supporting(variant: :inverse) do %>
-            Inverse variant - Light text for dark backgrounds
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Real-World Examples -->
-  <div>
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
-        <%= pathogen_icon(:sparkle, color: :primary, class: "mr-3") %>
-        Real-World Examples
-      <% end %>
+    <!-- Use Cases -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Common Use Cases" } %>
 
       <div class="space-y-8">
-        <!-- Form Example -->
-        <div class="max-w-md">
-          <%= pathogen_heading(level: 3, class: "mb-4") do %>
-            Form Field with Supporting Text
-          <% end %>
-          <div class="space-y-2">
-            <%= pathogen_supporting do %>
-              Email Address
-            <% end %>
-            <input type="email" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="you@example.com">
-            <%= pathogen_supporting(variant: :muted) do %>
-              We'll never share your email with anyone else.
-            <% end %>
-          </div>
+        <!-- Image caption -->
+        <div>
+          <div class="mb-2 h-48 rounded-lg bg-gradient-to-r from-primary-100 to-primary-200 dark:from-primary-900/40 dark:to-primary-800/40"></div>
+          <%= pathogen_supporting(variant: :muted) { "Figure 1: Genomic analysis workflow showing sample intake through final report generation" } %>
         </div>
 
-        <!-- Card Example -->
-        <div class="max-w-md border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-slate-50 dark:bg-slate-700/50">
-          <%= pathogen_heading(level: 3, class: "mb-4") do %>
-            <%= pathogen_heading(level: 4) do %>
-              Article Title
-            <% end %>
-          <% end %>
-          <%= pathogen_supporting(variant: :muted) do %>
-            Published on January 15, 2024 • 5 min read
-          <% end %>
-          <%= pathogen_text(class: "mt-4") do %>
-            Article content goes here...
-          <% end %>
+        <!-- Metadata -->
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-2") { "Research Article" } %>
+          <%= pathogen_supporting(variant: :muted) { "Published January 15, 2024 · 12 min read · Research Team" } %>
+        </div>
+
+        <!-- Form label helper -->
+        <div>
+          <label class="mb-1 block text-sm font-medium">Sample Name</label>
+          <%= pathogen_supporting(variant: :muted) { "Enter a unique identifier for this sample" } %>
+        </div>
+
+        <!-- Card metadata -->
+        <div class="rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+          <%= pathogen_eyebrow(class: "mb-2") { "Workflow" } %>
+          <%= pathogen_heading(level: 4) { "COVID-19 Analysis" } %>
+          <%= pathogen_supporting(variant: :muted, class: "mt-2") { "Last run 2 hours ago · 45 samples processed" } %>
         </div>
       </div>
+    </div>
+
+    <!-- Eyebrow Examples -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Eyebrow Text Examples" } %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_eyebrow { "Tutorial" } %>
+          <%= pathogen_heading(level: 3) { "Getting Started with IRIDA Next" } %>
+        </div>
+
+        <div>
+          <%= pathogen_eyebrow(variant: :subdued) { "Case Study" } %>
+          <%= pathogen_heading(level: 3) { "Pathogen Surveillance in Action" } %>
+        </div>
+
+        <div>
+          <%= pathogen_eyebrow { "Documentation" } %>
+          <%= pathogen_heading(level: 3) { "API Reference Guide" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usage Example -->
+    <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
+      <%= pathogen_heading(level: 3, class: "mb-4") { "Usage Example" } %>
+      <%= pathogen_code_block(language: "erb") do %><%%= pathogen_eyebrow do %>
+  Category
+<%% end %>
+
+<%%= pathogen_heading(level: 2) do %>
+  Article Title
+<%% end %>
+
+<%%= pathogen_supporting(variant: :muted, responsive: true) do %>
+  Published Jan 15, 2024
+<%% end %>
+      <% end %>
     </div>
   </div>
 </div>
