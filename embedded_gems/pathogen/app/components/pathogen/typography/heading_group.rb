@@ -9,6 +9,13 @@ module Pathogen
     # Automatically manages spacing and hierarchy for common patterns like article headers,
     # card titles, and section headings with supporting information.
     #
+    # Presets are available in Constants::PRESETS for common UI patterns:
+    # - :article - Large headings with eyebrow and metadata (H1, responsive, default spacing)
+    # - :card - Compact card headers (H3, non-responsive, compact spacing)
+    # - :section - Section headers (H2, responsive, default spacing)
+    # - :dialog - Dialog/modal headers (H2, non-responsive, compact spacing)
+    # - :form_section - Form section headers (H3, non-responsive, compact spacing)
+    #
     # @example Article header
     #   <%= render Pathogen::Typography::HeadingGroup.new(level: 1) do |group| %>
     #     <%= group.with_eyebrow { "Blog Post" } %>
@@ -20,6 +27,18 @@ module Pathogen
     #   <%= render Pathogen::Typography::HeadingGroup.new(level: 3, spacing: :compact) do |group| %>
     #     <%= group.with_heading { "Card Title" } %>
     #     <%= group.with_metadata(variant: :muted) { "3 items" } %>
+    #   <% end %>
+    #
+    # @example Section header with all slots
+    #   <%= render Pathogen::Typography::HeadingGroup.new(level: 2, spacing: :spacious) do |group| %>
+    #     <%= group.with_eyebrow(variant: :muted) { "Chapter 3" } %>
+    #     <%= group.with_heading { "Advanced Typography" } %>
+    #     <%= group.with_metadata { "Last updated: March 2025" } %>
+    #   <% end %>
+    #
+    # @example Dialog header (minimal, compact)
+    #   <%= render Pathogen::Typography::HeadingGroup.new(level: 2, spacing: :compact, responsive: false) do |group| %>
+    #     <%= group.with_heading { "Confirm Action" } %>
     #   <% end %>
     class HeadingGroup < Component
       renders_one :eyebrow, lambda { |variant: :muted, **system_arguments|
