@@ -58,10 +58,6 @@ module Pathogen
           Constants::TYPOGRAPHY_SCALE[20]
         end
       end
-
-      def class_names(*classes)
-        classes.compact.reject(&:empty?).join(' ')
-      end
     end
   end
 end
