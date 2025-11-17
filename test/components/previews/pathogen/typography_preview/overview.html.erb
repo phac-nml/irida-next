@@ -149,7 +149,11 @@
 
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
           <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">List</div>
-          <%= pathogen_list(items: ["Feature one", "Feature two", "Feature three"]) %>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { "Feature one" } %>
+            <%= list.with_item { "Feature two" } %>
+            <%= list.with_item { "Feature three" } %>
+          <% end %>
         </div>
       </div>
     </div>
