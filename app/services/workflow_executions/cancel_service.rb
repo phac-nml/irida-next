@@ -16,7 +16,7 @@ module WorkflowExecutions
       if @workflow_execution.nil?
         cancel_multiple
       else
-        authorize! workflow_execution, to: :cancel?
+        authorize! @workflow_execution, to: :cancel?
 
         cancel_workflow(@workflow_execution)
       end
@@ -56,6 +56,7 @@ module WorkflowExecutions
       ).where.not(state: %w[completed canceled error])
 
       cancellable_count = cancellable_workflow_executions.count
+
       cancellable_workflow_executions.each do |workflow_execution|
         cancel_workflow(workflow_execution)
       end
