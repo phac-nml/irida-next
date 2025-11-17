@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   DAYS_IN_MONTH,
   CALENDAR_CLASSES,
-} from "controllers/pathogen/datepicker/constants";
+} from "./constants";
 
 import {
   getDayOfWeek,
@@ -10,7 +10,7 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
-} from "controllers/pathogen/datepicker/utils";
+} from "./utils";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--input"];

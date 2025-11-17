@@ -22,6 +22,9 @@ module Pathogen
         #{root}/app/lib
       ]
 
+      # Configure asset paths to include JavaScript assets
+      config.assets.paths << root.join('app/assets/javascripts')
+
       # Set options for ViewComponent
       config.view_component.raise_on_invalid_options = false
       config.view_component.silence_deprecations = false
@@ -35,6 +38,7 @@ module Pathogen
           include Pathogen::FormTagHelper
         end
       end
+
     end
   end
 end

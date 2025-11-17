@@ -13,6 +13,11 @@ pin '@sindresorhus/transliterate', to: '@sindresorhus--transliterate.js' # @1.6.
 pin 'escape-string-regexp' # @5.0.0
 pin '@rails/activestorage', to: '@rails--activestorage.js' # @7.2.201
 pin_all_from 'app/javascript/controllers', under: 'controllers'
+
+# Pathogen controllers (from embedded gem or external gem)
+# Use a single pin_all_from to expose all controllers under "controllers/pathogen"
+pin_all_from Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers'), under: 'controllers/pathogen'
+
 pin 'xlsx' # @0.18.5
 pin_all_from 'app/javascript/utilities', under: 'utilities'
 pin 'sortablejs' # @1.15.2

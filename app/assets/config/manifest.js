@@ -6,3 +6,4 @@
 //= link_tree ../../components .js
 //= link graphiql/rails/application.css
 //= link graphiql/rails/application.js
+//= link_tree ../../../embedded_gems/pathogen/app/assets/javascripts .js
