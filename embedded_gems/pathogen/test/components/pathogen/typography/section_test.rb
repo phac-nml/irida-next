@@ -65,6 +65,24 @@ module Pathogen
         assert_selector 'section.custom-class'
       end
 
+      test 'derives heading id from wrapper id for aria-labelledby' do
+        render_inline(Section.new(level: 2, id: 'overview')) do |section|
+          section.with_heading { 'Overview' }
+        end
+
+        assert_selector 'section#overview[aria-labelledby="overview-heading"]'
+        assert_selector 'h2#overview-heading', text: 'Overview'
+      end
+
+      test 'accepts explicit heading_id' do
+        render_inline(Section.new(level: 2, heading_id: 'custom-heading')) do |section|
+          section.with_heading { 'Custom Heading' }
+        end
+
+        assert_selector 'section[aria-labelledby="custom-heading"]'
+        assert_selector 'h2#custom-heading', text: 'Custom Heading'
+      end
+
       test 'passes heading attributes to Heading component' do
         render_inline(Section.new(level: 3)) do |section|
           section.with_heading(variant: :muted) { 'Muted Title' }
