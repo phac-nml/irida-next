@@ -33,12 +33,12 @@
         <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
           <%= section.with_heading { "Key Features" } %>
 
-          <%= pathogen_list(class: "mb-6", items: [
-            "Automated sample intake and tracking",
-            "Workflow orchestration and execution",
-            "Real-time quality control monitoring",
-            "Interactive data visualization"
-          ]) %>
+          <%= pathogen_list(class: "mb-6") do |list| %>
+            <%= list.with_item { "Automated sample intake and tracking" } %>
+            <%= list.with_item { "Workflow orchestration and execution" } %>
+            <%= list.with_item { "Real-time quality control monitoring" } %>
+            <%= list.with_item { "Interactive data visualization" } %>
+          <% end %>
 
           <%= pathogen_callout(class: "my-6") { "IRIDA Next processes over 10,000 samples per month across research institutions worldwide, enabling rapid response to emerging health threats." } %>
         <% end %>
