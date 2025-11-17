@@ -17,12 +17,14 @@ class BaseService
   private
 
   def update_progress_bar(current_count, total_count, broadcast_target)
-    return unless broadcast_target
+    return unless broadcast_target.present? && total_count.to_i.positive?
 
-    percentage = current_count.to_f / total_count * 100
+    percentage = (current_count.to_f / total_count * 100).clamp(0, 100)
+    dom_id = ProgressBarStream.dom_id_for(broadcast_target)
+
     Turbo::StreamsChannel.broadcast_replace_to broadcast_target,
                                                partial: 'shared/progress_bar',
-                                               locals: { percentage: },
-                                               target: 'progress-bar'
+                                               locals: { percentage:, dom_id: },
+                                               target: dom_id
   end
 end

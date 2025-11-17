@@ -1,10 +1,18 @@
 development:
-  adapter: enhanced_postgresql
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
 
 test:
   adapter: test
 
 production:
-  adapter: enhanced_postgresql
-  url: <%= ENV['DATABASE_URL'] %>
-  channel_prefix:
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
