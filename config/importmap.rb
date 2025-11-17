@@ -20,7 +20,8 @@ pin_all_from 'app/javascript/controllers', under: 'controllers'
 pathogen_controllers_path = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers')
 Dir.glob(pathogen_controllers_path.join('**/*.js')).each do |file|
   name = file.delete_prefix("#{pathogen_controllers_path}/").delete_suffix('.js')
-  # Map Stimulus identifier pathogen--foo--bar => controllers/pathogen/foo/bar_controller
+  # Map Stimulus identifier pathogen--foo => controllers/pathogen/foo_controller
+  # The name already includes "_controller" suffix from the file, so we keep it as-is
   pin "controllers/pathogen/#{name}", to: "pathogen/controllers/#{name}.js", preload: false
 end
 
