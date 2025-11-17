@@ -24,7 +24,7 @@ module WorkflowExecutions
 
     private
 
-    def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength
+    def cancel_workflow(workflow_execution)
       return false unless workflow_execution.cancellable?
 
       if workflow_execution.sent_to_ga4gh?
@@ -52,8 +52,8 @@ module WorkflowExecutions
 
       workflow_executions_scope = query_workflow_executions(@namespace)
       cancellable_workflow_executions = workflow_executions_scope.where(
-        id: @workflow_execution_ids
-      ).where.not(state: %w[completed canceled error])
+        id: @workflow_execution_ids, state: %w[initial prepared submitted running]
+      )
 
       cancellable_count = cancellable_workflow_executions.count
 
