@@ -81,8 +81,14 @@ module Pathogen
           'text-inherit',
           'bg-transparent',
           'tracking-tight',
-          "language-#{language}"
+          language_class(language)
         )
+      end
+
+      def language_class(language)
+        return if language.blank?
+
+        "language-#{language}"
       end
     end
   end
