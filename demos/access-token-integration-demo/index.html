@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<button type="button" class="btn btn-primary" id="inxt-btn">
+Connect to INXT
+</button>
+
+<script>
+    // inxt connect
+    $('#inxt-btn').on('click', () => {
+        console.log('button clicked')
+        const inxt_window = window.open("http://localhost:3000/integration_access_token?caller=bdip_sheets", "access token popup", "width=500,height=800" )
+        window.addEventListener("message", receiveMessage, false)
+    });
+
+    function receiveMessage(event){
+        if (event.origin !== 'http://localhost:3000') {
+            // this check is necessary because the `message` handler accepts messages from any URI
+            console.log('invalid message origin:', event.origin)
+            return;
+        }
+        console.log('response origin:', event.origin)
+        console.log('response token:',event.data);
+    }
+</script>
