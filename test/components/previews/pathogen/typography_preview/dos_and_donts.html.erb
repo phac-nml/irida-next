@@ -229,13 +229,13 @@ end
             <%= pathogen_icon(:check_circle, color: :success, class: "mr-2") %>
             Do's
           </div>
-          <%= pathogen_list(items: [
-            'Maintain proper heading hierarchy (h1 → h2 → h3)',
-            'Choose appropriate components for content type',
-            'Let headings scale responsively by default',
-            'Use semantic HTML elements',
-            'Test with screen readers'
-          ]) %>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { 'Maintain proper heading hierarchy (h1 → h2 → h3)' } %>
+            <%= list.with_item { 'Choose appropriate components for content type' } %>
+            <%= list.with_item { 'Let headings scale responsively by default' } %>
+            <%= list.with_item { 'Use semantic HTML elements' } %>
+            <%= list.with_item { 'Test with screen readers' } %>
+          <% end %>
         </div>
 
         <div>
@@ -243,13 +243,13 @@ end
             <%= pathogen_icon(:x_circle, color: :danger, class: "mr-2") %>
             Don'ts
           </div>
-          <%= pathogen_list(items: [
-            "Don't skip heading levels",
-            "Don't overuse muted text variants",
-            "Don't disable responsive sizing unnecessarily",
-            "Don't use divs instead of semantic elements",
-            "Don't ignore accessibility requirements"
-          ]) %>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { "Don't skip heading levels" } %>
+            <%= list.with_item { "Don't overuse muted text variants" } %>
+            <%= list.with_item { "Don't disable responsive sizing unnecessarily" } %>
+            <%= list.with_item { "Don't use divs instead of semantic elements" } %>
+            <%= list.with_item { "Don't ignore accessibility requirements" } %>
+          <% end %>
         </div>
       </div>
     </div>
