@@ -13,15 +13,19 @@ module WorkflowExecutions
     end
 
     def execute
-      @workflow_execution.nil? ? cancel_multiple : cancel_workflow(@workflow_execution)
+      if @workflow_execution.nil?
+        cancel_multiple
+      else
+        authorize! workflow_execution, to: :cancel?
+
+        cancel_workflow(@workflow_execution)
+      end
     end
 
     private
 
     def cancel_workflow(workflow_execution) # rubocop:disable Metrics/MethodLength
       return false unless workflow_execution.cancellable?
-
-      authorize! workflow_execution, to: :cancel?
 
       if workflow_execution.sent_to_ga4gh?
         # Schedule a job to cancel the run on the ga4gh wes server
