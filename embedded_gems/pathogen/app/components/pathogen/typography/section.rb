@@ -23,6 +23,7 @@ module Pathogen
     #   <% end %>
     class Section < Component
       renders_one :heading, lambda { |**system_arguments|
+        system_arguments[:id] ||= heading_dom_id
         Heading.new(level: @level, **system_arguments)
       }
 
@@ -31,34 +32,58 @@ module Pathogen
       # Initialize a new Section component
       #
       # @param level [Integer] Heading level (1-6) for this section
-      # @param spacing [Symbol] Spacing between elements (:compact, :default, :spacious)
       # @param parent_level [Integer, nil] Parent section's heading level (for validation)
+      # @param spacing [Symbol] Spacing between elements (:compact, :default, :spacious)
       # @param validate [Boolean] Enable hierarchy validation (default: true in development)
-      # @param system_arguments [Hash] Additional HTML attributes for wrapper
-      def initialize(level: 2, spacing: :default, parent_level: nil, validate: Rails.env.development?,
-                     **system_arguments)
+      # @param heading_id [String, nil] Explicit DOM id for the heading slot
+      # @param options [Hash] Additional HTML attributes for wrapper plus overrides listed above
+      def initialize(level: 2, parent_level: nil, **options)
         @level = level
-        @spacing = spacing
         @parent_level = parent_level
-        @validate = validate
-        @system_arguments = system_arguments
+        assign_options(options)
 
         validate_heading_hierarchy if @validate
 
         @system_arguments[:class] = class_names(
-          system_arguments[:class],
+          @system_arguments[:class],
           spacing_class
         )
 
         @system_arguments[:role] = 'region' if @level == 2
-        @system_arguments[:'aria-labelledby'] = system_arguments[:id] if system_arguments[:id]
+        assign_labelledby
       end
 
       private
 
+      attr_reader :heading_id
+
+      def assign_options(options)
+        @spacing = options.key?(:spacing) ? options.delete(:spacing) : :default
+        @validate = options.key?(:validate) ? options.delete(:validate) : Rails.env.development?
+        @heading_id = options.delete(:heading_id)
+        @system_arguments = options
+        @heading_id = derive_heading_id if @heading_id.nil?
+      end
+
+      def heading_dom_id
+        @heading_id
+      end
+
       def spacing_class
         section_spacing_key = :"section_#{@spacing}"
         Constants::SPACING_CLASSES[section_spacing_key] || Constants::SPACING_CLASSES[:section_default]
+      end
+
+      def derive_heading_id
+        return unless @system_arguments[:id]
+
+        "#{@system_arguments[:id]}-heading"
+      end
+
+      def assign_labelledby
+        return unless heading_dom_id
+
+        @system_arguments[:'aria-labelledby'] ||= heading_dom_id
       end
 
       def validate_heading_hierarchy
