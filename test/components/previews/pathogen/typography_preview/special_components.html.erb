@@ -84,28 +84,35 @@ end
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
           <%= pathogen_heading(level: 4, class: "mb-3") { "Unordered List" } %>
-          <%= pathogen_list(items: [
-            "Sample management",
-            "Workflow execution",
-            "Data visualization",
-            "Quality control"
-          ]) %>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { "Sample management" } %>
+            <%= list.with_item { "Workflow execution" } %>
+            <%= list.with_item { "Data visualization" } %>
+            <%= list.with_item { "Quality control" } %>
+          <% end %>
         </div>
 
         <div>
           <%= pathogen_heading(level: 4, class: "mb-3") { "Ordered List" } %>
-          <%= pathogen_list(ordered: true, items: [
-            "Upload samples",
-            "Select workflow",
-            "Configure parameters",
-            "Run analysis"
-          ]) %>
+          <%= pathogen_list(ordered: true) do |list| %>
+            <%= list.with_item { "Upload samples" } %>
+            <%= list.with_item { "Select workflow" } %>
+            <%= list.with_item { "Configure parameters" } %>
+            <%= list.with_item { "Run analysis" } %>
+          <% end %>
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_list(items: ["Item 1", "Item 2", "Item 3"]) %>
+      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_list do |list| %>
+  <%%= list.with_item { "Item 1" } %>
+  <%%= list.with_item { "Item 2" } %>
+  <%%= list.with_item { "Item 3" } %>
+<%% end %>
 
-<%%= pathogen_list(ordered: true, items: ["Step 1", "Step 2"]) %>
+<%%= pathogen_list(ordered: true) do |list| %>
+  <%%= list.with_item { "Step 1" } %>
+  <%%= list.with_item { "Step 2" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -119,19 +126,19 @@ end
         <%= pathogen_lead(class: "mb-6") { "Follow these steps to set up IRIDA Next in your environment." } %>
 
         <%= pathogen_heading(level: 4, class: "mb-3") { "Prerequisites" } %>
-        <%= pathogen_list(items: [
-          "Ruby 3.4.4 or higher",
-          "PostgreSQL 14 or higher",
-          "Node.js 20 LTS or higher"
-        ]) %>
+        <%= pathogen_list do |list| %>
+          <%= list.with_item { "Ruby 3.4.4 or higher" } %>
+          <%= list.with_item { "PostgreSQL 14 or higher" } %>
+          <%= list.with_item { "Node.js 20 LTS or higher" } %>
+        <% end %>
 
         <%= pathogen_heading(level: 4, class: "mb-3 mt-6") { "Installation Steps" } %>
-        <%= pathogen_list(ordered: true, items: [
-          "Clone the repository",
-          "Install dependencies with bundle install",
-          "Set up the database with bin/setup",
-          "Start the server with bin/dev"
-        ]) %>
+        <%= pathogen_list(ordered: true) do |list| %>
+          <%= list.with_item { "Clone the repository" } %>
+          <%= list.with_item { "Install dependencies with bundle install" } %>
+          <%= list.with_item { "Set up the database with bin/setup" } %>
+          <%= list.with_item { "Start the server with bin/dev" } %>
+        <% end %>
 
         <%= pathogen_callout(class: "mt-6") { "Note: Make sure all prerequisites are installed before proceeding with the installation." } %>
       <% end %>
