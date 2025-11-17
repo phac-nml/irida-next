@@ -66,11 +66,10 @@ module Pathogen
         assert_selector 'code.language-ruby'
       end
 
-      test 'adds language-nil class when language not provided' do
+      test 'does not add language class when language not provided' do
         render_inline(CodeBlock.new) { 'code' }
 
-        # Language will be nil,  so class will be "language-nil" but that's OK
-        assert_selector 'code.language-'
+        assert_no_selector 'code[class*="language-"]'
       end
 
       test 'preserves whitespace and line breaks' do
