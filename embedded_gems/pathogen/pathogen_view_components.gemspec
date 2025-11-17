@@ -11,7 +11,16 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Pathogen View Components'
   spec.license       = 'MIT'
   spec.files         = Dir.chdir(File.expand_path(__dir__)) do
-    Dir['{app,config,lib}/**/*', 'MIT-LICENSE', 'README.md']
+    Dir[
+      'app/assets/javascripts/**/*.js',
+      'app/components/**/*.{rb,erb,css}',
+      'app/helpers/**/*.rb',
+      'config/**/*',
+      'lib/**/*.rb',
+      'MIT-LICENSE',
+      'README.md',
+      'JAVASCRIPT_SETUP.md'
+    ]
   end
   spec.require_paths = ['lib']
   spec.required_ruby_version = Gem::Requirement.new('>= 3.3.0')
