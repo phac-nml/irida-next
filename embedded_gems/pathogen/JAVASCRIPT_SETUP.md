@@ -38,11 +38,15 @@ Or for a standalone gem installation:
 
 ### 3. Importmap Configuration
 
-Pin the Pathogen controllers in your `config/importmap.rb` using a single directory pin:
+Pin the Pathogen controllers in your `config/importmap.rb` explicitly (recommended for engine/gem compatibility):
 
 ```ruby
 # Pathogen gem controllers (embedded or external gem)
-pin_all_from Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers'), under: 'controllers/pathogen'
+pathogen_controllers_path = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers')
+Dir.glob(pathogen_controllers_path.join('**/*.js')).each do |file|
+  name = file.delete_prefix(pathogen_controllers_path.to_s + '/').delete_suffix('.js')
+  pin "controllers/pathogen/#{name}", to: "pathogen/controllers/#{name}.js", preload: false
+end
 ```
 
 ### 4. Dependencies
