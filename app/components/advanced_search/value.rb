@@ -26,10 +26,18 @@ module AdvancedSearch
 
       enum_config = @enum_fields[@condition.field]
       values = enum_config[:values]
-      translation_key = enum_config[:translation_key]
+      labels = enum_config[:labels]
 
       values.map do |value|
-        [I18n.t("#{translation_key}.#{value}"), value]
+        # Use labels if provided (for pre-translated values like workflow names),
+        # otherwise fall back to translation key
+        label = if labels&.key?(value)
+                  labels[value]
+                else
+                  translation_key = enum_config[:translation_key]
+                  I18n.t("#{translation_key}.#{value}")
+                end
+        [label, value]
       end
     end
 

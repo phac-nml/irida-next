@@ -37,6 +37,9 @@ module WorkflowExecutions
           # Select equals operator
           operator_select.find("option[value='=']").select_option
 
+          # Wait for JavaScript to update the value field
+          sleep 1
+
           # Verify that a select dropdown appears for state value (not text input)
           assert_selector "select[name$='[value]']", count: 1, visible: :visible, wait: 5
           assert_no_selector "input[type='text'][name$='[value]']", visible: :visible

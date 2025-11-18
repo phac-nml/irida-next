@@ -215,4 +215,90 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   def jsonb_field?(field)
     METADATA_FIELD_MAP.key?(field)
   end
+
+  # Override handle_equals to convert workflow names to pipeline_ids
+  def handle_equals(scope, condition, node, field)
+    if field == 'workflow_name'
+      pipeline_id = workflow_name_to_pipeline_id(condition.value)
+      return scope if pipeline_id.nil?
+
+      scope.where(node.eq(pipeline_id))
+    else
+      super
+    end
+  end
+
+  # Override handle_in to convert workflow names to pipeline_ids
+  def handle_in(scope, condition, node, field)
+    if field == 'workflow_name'
+      pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+      return scope if pipeline_ids.empty?
+
+      scope.where(node.in(pipeline_ids))
+    else
+      super
+    end
+  end
+
+  # Override handle_not_equals to convert workflow names to pipeline_ids
+  def handle_not_equals(scope, condition, node, field)
+    if field == 'workflow_name'
+      pipeline_id = workflow_name_to_pipeline_id(condition.value)
+      return scope if pipeline_id.nil?
+
+      scope.where(node.not_eq(pipeline_id))
+    else
+      super
+    end
+  end
+
+  # Override handle_not_in to convert workflow names to pipeline_ids
+  def handle_not_in(scope, condition, node, field)
+    if field == 'workflow_name'
+      pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+      return scope if pipeline_ids.empty?
+
+      scope.where(node.not_in(pipeline_ids))
+    else
+      super
+    end
+  end
+
+  # Override handle_contains to search workflow names and convert to pipeline_ids
+  def handle_contains(scope, condition, node, field)
+    if field == 'workflow_name'
+      return scope if condition.value.blank?
+
+      # Find all pipeline_ids whose names contain the search term
+      pipelines = Irida::Pipelines.instance.pipelines('executable')
+      search_term = condition.value.downcase
+      matching_pipeline_ids = pipelines.filter_map do |_pipeline_id, p|
+        next unless p.name.is_a?(Hash)
+
+        # Check all locale values for matches
+        p.pipeline_id if p.name.values.any? { |name| name&.downcase&.include?(search_term) }
+      end
+
+      return scope if matching_pipeline_ids.empty?
+
+      scope.where(node.in(matching_pipeline_ids))
+    else
+      super
+    end
+  end
+
+  # Convert workflow name to pipeline_id
+  def workflow_name_to_pipeline_id(workflow_name)
+    return nil if workflow_name.blank?
+
+    pipelines = Irida::Pipelines.instance.pipelines('executable')
+    pipeline = pipelines.find do |_pipeline_id, p|
+      next false unless p.name.is_a?(Hash)
+
+      # Check current locale first, then all locales as fallback
+      p.name[I18n.locale.to_s] == workflow_name || p.name.values.include?(workflow_name)
+    end
+
+    pipeline&.last&.pipeline_id
+  end
 end
