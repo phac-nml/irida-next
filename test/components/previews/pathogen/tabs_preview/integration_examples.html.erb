@@ -1,23 +1,40 @@
-<div class="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950 min-h-screen">
+<div
+  class="
+    p-8 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900
+    dark:to-emerald-950 min-h-screen
+  "
+>
   <!-- Header -->
   <div class="mb-12 text-center">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
       <%= pathogen_icon(:puzzle_piece, color: :primary, size: :xl, class: "inline mr-3") %>
       Integration Examples
     </h1>
+
     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-      Real-world patterns for integrating tabs with forms, navigation, data tables, and content organization.
+      Real-world patterns for integrating tabs with forms, navigation, data
+      tables, and content organization.
     </p>
   </div>
 
   <!-- User Profile Example -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
+      "
+    >
       <%= pathogen_icon(:user_circle_plus, color: :primary, class: "mr-3") %>
       User Profile with Settings
     </h2>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
+        border-slate-200 dark:border-slate-700 overflow-hidden
+      "
+    >
       <%= render(Pathogen::Tabs.new(
         id: 'profile-tabs',
         label: 'User profile sections',
@@ -31,11 +48,24 @@
         <% tabs.with_panel(id: 'panel-profile', tab_id: 'tab-profile') do %>
           <div class="p-6 space-y-6">
             <div class="flex items-center gap-6">
-              <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+              <div
+                class="
+                  w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500
+                  rounded-full flex items-center justify-center text-white
+                  text-3xl font-bold
+                "
+              >
                 JD
               </div>
+
               <div>
-                <button class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors text-sm">
+                <button
+                  class="
+                    px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700
+                    dark:text-slate-300 rounded-md hover:bg-slate-200
+                    dark:hover:bg-slate-600 transition-colors text-sm
+                  "
+                >
                   Change Photo
                 </button>
               </div>
@@ -43,24 +73,107 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">First Name</label>
-                <input type="text" value="John" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                <label
+                  class="
+                    block text-sm font-medium text-slate-700
+                    dark:text-slate-300 mb-2
+                  "
+                >
+                  First Name
+                </label>
+
+                <input
+                  type="text"
+                  value="John"
+                  class="
+                    w-full px-3 py-2 border border-slate-300
+                    dark:border-slate-600 rounded-md bg-white
+                    dark:bg-slate-700 text-slate-900 dark:text-white
+                  "
+                >
               </div>
+
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
-                <input type="text" value="Doe" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                <label
+                  class="
+                    block text-sm font-medium text-slate-700
+                    dark:text-slate-300 mb-2
+                  "
+                >
+                  Last Name
+                </label>
+
+                <input
+                  type="text"
+                  value="Doe"
+                  class="
+                    w-full px-3 py-2 border border-slate-300
+                    dark:border-slate-600 rounded-md bg-white
+                    dark:bg-slate-700 text-slate-900 dark:text-white
+                  "
+                >
               </div>
+
               <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Bio</label>
-                <textarea rows="3" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">Software developer passionate about open source and accessibility.</textarea>
+                <label
+                  class="
+                    block text-sm font-medium text-slate-700
+                    dark:text-slate-300 mb-2
+                  "
+                >
+                  Bio
+                </label>
+
+                <textarea
+                  rows="3"
+                  class="
+                    w-full px-3 py-2 border border-slate-300
+                    dark:border-slate-600 rounded-md bg-white
+                    dark:bg-slate-700 text-slate-900 dark:text-white
+                  "
+                >Software developer passionate about open source and accessibility.</textarea>
               </div>
+
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Location</label>
-                <input type="text" value="San Francisco, CA" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                <label
+                  class="
+                    block text-sm font-medium text-slate-700
+                    dark:text-slate-300 mb-2
+                  "
+                >
+                  Location
+                </label>
+
+                <input
+                  type="text"
+                  value="San Francisco, CA"
+                  class="
+                    w-full px-3 py-2 border border-slate-300
+                    dark:border-slate-600 rounded-md bg-white
+                    dark:bg-slate-700 text-slate-900 dark:text-white
+                  "
+                >
               </div>
+
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Website</label>
-                <input type="url" value="https://johndoe.dev" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                <label
+                  class="
+                    block text-sm font-medium text-slate-700
+                    dark:text-slate-300 mb-2
+                  "
+                >
+                  Website
+                </label>
+
+                <input
+                  type="url"
+                  value="https://johndoe.dev"
+                  class="
+                    w-full px-3 py-2 border border-slate-300
+                    dark:border-slate-600 rounded-md bg-white
+                    dark:bg-slate-700 text-slate-900 dark:text-white
+                  "
+                >
               </div>
             </div>
           </div>
@@ -69,34 +182,102 @@
         <% tabs.with_panel(id: 'panel-account', tab_id: 'tab-account') do %>
           <div class="p-6 space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Account Information</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Account Information
+              </h3>
+
               <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
-                  <input type="email" value="john.doe@example.com" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Email Address
+                  </label>
+
+                  <input
+                    type="email"
+                    value="john.doe@example.com"
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                 </div>
+
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Username</label>
-                  <input type="text" value="johndoe" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Username
+                  </label>
+
+                  <input
+                    type="text"
+                    value="johndoe"
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                 </div>
               </div>
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-600 pt-6">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Language & Region</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Language & Region
+              </h3>
+
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Language</label>
-                  <select class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Language
+                  </label>
+
+                  <select
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                     <option>English (US)</option>
                     <option>Español</option>
                     <option>Français</option>
                     <option>Deutsch</option>
                   </select>
                 </div>
+
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Timezone</label>
-                  <select class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Timezone
+                  </label>
+
+                  <select
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                     <option>Pacific Time (PT)</option>
                     <option>Mountain Time (MT)</option>
                     <option>Central Time (CT)</option>
@@ -111,31 +292,105 @@
         <% tabs.with_panel(id: 'panel-security', tab_id: 'tab-security') do %>
           <div class="p-6 space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Change Password</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Change Password
+              </h3>
+
               <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Current Password</label>
-                  <input type="password" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Current Password
+                  </label>
+
+                  <input
+                    type="password"
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                 </div>
+
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">New Password</label>
-                  <input type="password" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    New Password
+                  </label>
+
+                  <input
+                    type="password"
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                 </div>
+
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Confirm New Password</label>
-                  <input type="password" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                  <label
+                    class="
+                      block text-sm font-medium text-slate-700
+                      dark:text-slate-300 mb-2
+                    "
+                  >
+                    Confirm New Password
+                  </label>
+
+                  <input
+                    type="password"
+                    class="
+                      w-full px-3 py-2 border border-slate-300
+                      dark:border-slate-600 rounded-md bg-white
+                      dark:bg-slate-700 text-slate-900 dark:text-white
+                    "
+                  >
                 </div>
               </div>
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-600 pt-6">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Two-Factor Authentication</h3>
-              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Two-Factor Authentication
+              </h3>
+
+              <div
+                class="
+                  p-4 bg-green-50 dark:bg-green-900/20 border
+                  border-green-200 dark:border-green-800 rounded-lg flex
+                  items-start gap-3
+                "
+              >
                 <%= pathogen_icon(:check_circle, color: :success) %>
+
                 <div>
-                  <div class="font-semibold text-green-900 dark:text-green-100 mb-1">Enabled</div>
-                  <div class="text-sm text-green-800 dark:text-green-200 mb-3">Two-factor authentication is currently enabled for your account.</div>
-                  <button class="px-3 py-1.5 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors text-sm">
+                  <div class="font-semibold text-green-900 dark:text-green-100 mb-1">
+                    Enabled
+                  </div>
+
+                  <div class="text-sm text-green-800 dark:text-green-200 mb-3">
+                    Two-factor authentication is currently enabled for your
+                    account.
+                  </div>
+
+                  <button
+                    class="
+                      px-3 py-1.5 bg-white dark:bg-slate-700 text-slate-700
+                      dark:text-slate-300 border border-slate-300
+                      dark:border-slate-600 rounded-md hover:bg-slate-50
+                      dark:hover:bg-slate-600 transition-colors text-sm
+                    "
+                  >
                     Manage Settings
                   </button>
                 </div>
@@ -143,21 +398,64 @@
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-600 pt-6">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Active Sessions</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Active Sessions
+              </h3>
+
               <div class="space-y-3">
-                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 flex justify-between items-center">
+                <div
+                  class="
+                    p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border
+                    border-slate-200 dark:border-slate-600 flex
+                    justify-between items-center
+                  "
+                >
                   <div>
-                    <div class="font-semibold text-slate-900 dark:text-white">Chrome on macOS</div>
-                    <div class="text-sm text-slate-600 dark:text-slate-400">San Francisco, CA • Last active: Now</div>
+                    <div class="font-semibold text-slate-900 dark:text-white">
+                      Chrome on macOS
+                    </div>
+
+                    <div class="text-sm text-slate-600 dark:text-slate-400">
+                      San Francisco, CA • Last active: Now
+                    </div>
                   </div>
-                  <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs font-medium">Current</span>
+
+                  <span
+                    class="
+                      px-2 py-1 bg-green-100 dark:bg-green-900
+                      text-green-800 dark:text-green-200 rounded text-xs
+                      font-medium
+                    "
+                  >
+                    Current
+                  </span>
                 </div>
-                <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 flex justify-between items-center">
+
+                <div
+                  class="
+                    p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border
+                    border-slate-200 dark:border-slate-600 flex
+                    justify-between items-center
+                  "
+                >
                   <div>
-                    <div class="font-semibold text-slate-900 dark:text-white">Safari on iPhone</div>
-                    <div class="text-sm text-slate-600 dark:text-slate-400">San Francisco, CA • Last active: 2 hours ago</div>
+                    <div class="font-semibold text-slate-900 dark:text-white">
+                      Safari on iPhone
+                    </div>
+
+                    <div class="text-sm text-slate-600 dark:text-slate-400">
+                      San Francisco, CA • Last active: 2 hours ago
+                    </div>
                   </div>
-                  <button class="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">Revoke</button>
+
+                  <button
+                    class="
+                      text-sm text-red-600 dark:text-red-400
+                      hover:text-red-700 dark:hover:text-red-300
+                    "
+                  >
+                    Revoke
+                  </button>
                 </div>
               </div>
             </div>
@@ -167,7 +465,10 @@
         <% tabs.with_panel(id: 'panel-notifications', tab_id: 'tab-notifications') do %>
           <div class="p-6 space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Email Notifications</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Email Notifications
+              </h3>
+
               <div class="space-y-3">
                 <% [
                   { label: 'Comments on your posts', description: 'Receive emails when someone comments on your content', checked: true },
@@ -175,11 +476,25 @@
                   { label: 'Direct messages', description: 'Email notifications for new direct messages', checked: false },
                   { label: 'Weekly digest', description: 'Summary of activity from the past week', checked: true }
                 ].each do |setting| %>
-                  <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+                  <label
+                    class="
+                      flex items-start gap-3 p-3 bg-slate-50
+                      dark:bg-slate-700 rounded-lg border border-slate-200
+                      dark:border-slate-600 cursor-pointer
+                      hover:bg-slate-100 dark:hover:bg-slate-600
+                      transition-colors
+                    "
+                  >
                     <%= tag.input(type: "checkbox", checked: setting[:checked], class: "mt-1 w-4 h-4 text-blue-600 rounded") %>
+
                     <div>
-                      <div class="font-medium text-slate-900 dark:text-white"><%= setting[:label] %></div>
-                      <div class="text-sm text-slate-600 dark:text-slate-400"><%= setting[:description] %></div>
+                      <div class="font-medium text-slate-900 dark:text-white">
+                        <%= setting[:label] %>
+                      </div>
+
+                      <div class="text-sm text-slate-600 dark:text-slate-400">
+                        <%= setting[:description] %>
+                      </div>
                     </div>
                   </label>
                 <% end %>
@@ -187,13 +502,35 @@
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-600 pt-6">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Push Notifications</h3>
-              <div class="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg flex items-start gap-3">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+                Push Notifications
+              </h3>
+
+              <div
+                class="
+                  p-4 bg-amber-50 dark:bg-amber-900/20 border
+                  border-amber-200 dark:border-amber-800 rounded-lg flex
+                  items-start gap-3
+                "
+              >
                 <%= pathogen_icon(:bell_slash, color: :warning) %>
+
                 <div>
-                  <div class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Not Enabled</div>
-                  <div class="text-sm text-amber-800 dark:text-amber-200 mb-3">Enable push notifications to get real-time updates on your device.</div>
-                  <button class="px-3 py-1.5 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors text-sm">
+                  <div class="font-semibold text-amber-900 dark:text-amber-100 mb-1">
+                    Not Enabled
+                  </div>
+
+                  <div class="text-sm text-amber-800 dark:text-amber-200 mb-3">
+                    Enable push notifications to get real-time updates on your
+                    device.
+                  </div>
+
+                  <button
+                    class="
+                      px-3 py-1.5 bg-amber-600 text-white rounded-md
+                      hover:bg-amber-700 transition-colors text-sm
+                    "
+                  >
                     Enable Push Notifications
                   </button>
                 </div>
@@ -207,12 +544,22 @@
 
   <!-- Data Dashboard Example -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
+      "
+    >
       <%= pathogen_icon(:chart_bar_horizontal, color: :primary, class: "mr-3") %>
       Analytics Dashboard
     </h2>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
+        border-slate-200 dark:border-slate-700 overflow-hidden
+      "
+    >
       <%= render(Pathogen::Tabs.new(
         id: 'dashboard-tabs',
         label: 'Analytics dashboard sections'
@@ -231,9 +578,20 @@
                 { label: 'Avg. Duration', value: '4m 32s', change: '-2.1%', trend: :down },
                 { label: 'Bounce Rate', value: '42.3%', change: '-5.4%', trend: :up }
               ].each do |metric| %>
-                <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
-                  <div class="text-sm text-slate-600 dark:text-slate-400 mb-1"><%= metric[:label] %></div>
-                  <div class="text-2xl font-bold text-slate-900 dark:text-white mb-1"><%= metric[:value] %></div>
+                <div
+                  class="
+                    p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border
+                    border-slate-200 dark:border-slate-600
+                  "
+                >
+                  <div class="text-sm text-slate-600 dark:text-slate-400 mb-1">
+                    <%= metric[:label] %>
+                  </div>
+
+                  <div class="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+                    <%= metric[:value] %>
+                  </div>
+
                   <div class="text-sm <%= metric[:trend] == :up ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' %> flex items-center gap-1">
                     <%= pathogen_icon(metric[:trend] == :up ? :trending_up : :trending_down, size: :sm, color: metric[:trend] == :up ? :success : :danger) %>
                     <span><%= metric[:change] %></span>
@@ -242,9 +600,16 @@
               <% end %>
             </div>
 
-            <div class="h-64 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center">
+            <div
+              class="
+                h-64 bg-slate-50 dark:bg-slate-700 rounded-lg border
+                border-slate-200 dark:border-slate-600 flex items-center
+                justify-center
+              "
+            >
               <div class="text-center text-slate-600 dark:text-slate-400">
                 <%= pathogen_icon(:chart_line_up, color: :primary, size: :xl) %>
+
                 <p class="mt-2">Traffic Chart Visualization</p>
               </div>
             </div>
@@ -253,7 +618,10 @@
 
         <% tabs.with_panel(id: 'panel-traffic', tab_id: 'tab-traffic') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Traffic Sources</h3>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+              Traffic Sources
+            </h3>
+
             <div class="space-y-3">
               <% [
                 { source: 'Organic Search', visitors: '45,234', percentage: 36 },
@@ -261,13 +629,27 @@
                 { source: 'Social Media', visitors: '28,912', percentage: 23 },
                 { source: 'Referral', visitors: '18,280', percentage: 15 }
               ].each do |source| %>
-                <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
+                <div
+                  class="
+                    p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border
+                    border-slate-200 dark:border-slate-600
+                  "
+                >
                   <div class="flex justify-between items-center mb-2">
-                    <span class="font-semibold text-slate-900 dark:text-white"><%= source[:source] %></span>
-                    <span class="text-slate-600 dark:text-slate-400"><%= source[:visitors] %> visitors</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">
+                      <%= source[:source] %>
+                    </span>
+
+                    <span class="text-slate-600 dark:text-slate-400">
+                      <%= source[:visitors] %> visitors
+                    </span>
                   </div>
+
                   <div class="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-2">
-                    <div class="bg-blue-600 h-2 rounded-full" style="width: <%= source[:percentage] %>%"></div>
+                    <div
+                      class="bg-blue-600 h-2 rounded-full"
+                      style="width: <%= source[:percentage] %>%"
+                    ></div>
                   </div>
                 </div>
               <% end %>
@@ -277,15 +659,26 @@
 
         <% tabs.with_panel(id: 'panel-engagement', tab_id: 'tab-engagement') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">User Engagement</h3>
-            <p class="text-slate-600 dark:text-slate-400">Engagement metrics and user interaction data would be displayed here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+              User Engagement
+            </h3>
+
+            <p class="text-slate-600 dark:text-slate-400">
+              Engagement metrics and user interaction data would be displayed
+              here.
+            </p>
           </div>
         <% end %>
 
         <% tabs.with_panel(id: 'panel-conversions', tab_id: 'tab-conversions') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Conversion Tracking</h3>
-            <p class="text-slate-600 dark:text-slate-400">Conversion funnel and goal tracking would be displayed here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+              Conversion Tracking
+            </h3>
+
+            <p class="text-slate-600 dark:text-slate-400">
+              Conversion funnel and goal tracking would be displayed here.
+            </p>
           </div>
         <% end %>
       <% end %>
@@ -294,12 +687,22 @@
 
   <!-- Documentation Navigation Example -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
+      "
+    >
       <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
       Documentation Navigation
     </h2>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
+        border-slate-200 dark:border-slate-700 overflow-hidden
+      "
+    >
       <%= render(Pathogen::Tabs.new(
         id: 'docs-tabs',
         label: 'Documentation sections',
@@ -315,15 +718,28 @@
 
         <% tabs.with_panel(id: 'panel-getting-started', tab_id: 'tab-getting-started') do %>
           <div class="p-6 prose dark:prose-invert max-w-none">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Getting Started</h3>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">
+              Getting Started
+            </h3>
+
             <p class="text-slate-700 dark:text-slate-300">
-              Welcome to the documentation! This guide will help you get up and running quickly with our platform.
+              Welcome to the documentation! This guide will help you get up and
+              running quickly with our platform.
             </p>
-            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg mt-4">
+
+            <div
+              class="
+                p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200
+                dark:border-blue-800 rounded-lg mt-4
+              "
+            >
               <div class="flex items-start gap-3">
                 <%= pathogen_icon(:lightbulb, color: :primary) %>
+
                 <div class="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>Tip:</strong> Use the vertical navigation on the left to explore different sections. The URL will update so you can bookmark specific pages.
+                  <strong>Tip:</strong> Use the vertical navigation on the left
+                  to explore different sections. The URL will update so you can
+                  bookmark specific pages.
                 </div>
               </div>
             </div>
@@ -332,46 +748,71 @@
 
         <% tabs.with_panel(id: 'panel-installation', tab_id: 'tab-installation') do %>
           <div class="p-6 space-y-4">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Installation</h3>
-            <p class="text-slate-700 dark:text-slate-300">Install the package using your preferred package manager:</p>
-            <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"># Using npm
-npm install @pathogen/tabs
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">
+              Installation
+            </h3>
 
-# Using yarn
-yarn add @pathogen/tabs
+            <p class="text-slate-700 dark:text-slate-300">
+              Install the package using your preferred package manager:
+            </p>
 
-# Using pnpm
-pnpm add @pathogen/tabs</code></pre>
+            <div
+              class="
+                bg-slate-50 dark:bg-slate-900 border border-slate-200
+                dark:border-slate-700 rounded-lg p-4 shadow-sm
+                overflow-x-auto
+              "
+            >
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"># Using npm npm install @pathogen/tabs # Using yarn yarn add @pathogen/tabs # Using pnpm pnpm add @pathogen/tabs              </code></pre>
             </div>
           </div>
         <% end %>
 
         <% tabs.with_panel(id: 'panel-configuration', tab_id: 'tab-configuration') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Configuration</h3>
-            <p class="text-slate-700 dark:text-slate-300">Configuration options and setup instructions would go here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+              Configuration
+            </h3>
+
+            <p class="text-slate-700 dark:text-slate-300">
+              Configuration options and setup instructions would go here.
+            </p>
           </div>
         <% end %>
 
         <% tabs.with_panel(id: 'panel-api-reference', tab_id: 'tab-api-reference') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">API Reference</h3>
-            <p class="text-slate-700 dark:text-slate-300">Complete API documentation and method references would go here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+              API Reference
+            </h3>
+
+            <p class="text-slate-700 dark:text-slate-300">
+              Complete API documentation and method references would go here.
+            </p>
           </div>
         <% end %>
 
         <% tabs.with_panel(id: 'panel-examples', tab_id: 'tab-examples') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Examples</h3>
-            <p class="text-slate-700 dark:text-slate-300">Code examples and usage patterns would go here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+              Examples
+            </h3>
+
+            <p class="text-slate-700 dark:text-slate-300">
+              Code examples and usage patterns would go here.
+            </p>
           </div>
         <% end %>
 
         <% tabs.with_panel(id: 'panel-troubleshooting', tab_id: 'tab-troubleshooting') do %>
           <div class="p-6">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Troubleshooting</h3>
-            <p class="text-slate-700 dark:text-slate-300">Common issues and solutions would go here.</p>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+              Troubleshooting
+            </h3>
+
+            <p class="text-slate-700 dark:text-slate-300">
+              Common issues and solutions would go here.
+            </p>
           </div>
         <% end %>
       <% end %>
@@ -380,103 +821,197 @@ pnpm add @pathogen/tabs</code></pre>
 
   <!-- Best Practices -->
   <div>
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
+      "
+    >
       <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
       Integration Best Practices
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Do: Organize by Purpose</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Do: Organize by Purpose
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Group related content together logically. Profile settings, account settings, and security settings make sense as separate tabs.
+              Group related content together logically. Profile settings,
+              account settings, and security settings make sense as separate
+              tabs.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Do: Use URL Sync for Navigation</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Do: Use URL Sync for Navigation
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Enable <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">sync_url</code> for pages where users might want to bookmark or share specific tabs.
+              Enable
+              <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">sync_url</code>
+              for pages where users might want to bookmark or share specific
+              tabs.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Do: Lazy Load Heavy Content</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Do: Lazy Load Heavy Content
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Use Turbo Frames with <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">loading: :lazy</code> for tabs with expensive queries or large data sets.
+              Use Turbo Frames with
+              <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">loading: :lazy</code>
+              for tabs with expensive queries or large data sets.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:check_circle, color: :success, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Do: Add Contextual Actions</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Do: Add Contextual Actions
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Use the <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">right_content</code> slot for actions relevant to the entire tab group, like Save or Export.
+              Use the
+              <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">right_content</code>
+              slot for actions relevant to the entire tab group, like Save or
+              Export.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:x, color: :danger, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Don't: Nest Tabs Too Deeply</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Don't: Nest Tabs Too Deeply
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Avoid putting tabs inside tabs. This creates confusing navigation and accessibility issues. Use a different organizational pattern instead.
+              Avoid putting tabs inside tabs. This creates confusing navigation
+              and accessibility issues. Use a different organizational pattern
+              instead.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:x, color: :danger, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Don't: Use Too Many Tabs</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Don't: Use Too Many Tabs
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              More than 7-8 tabs becomes overwhelming. Consider using vertical tabs, a sidebar navigation, or a different organizational structure.
+              More than 7-8 tabs becomes overwhelming. Consider using vertical
+              tabs, a sidebar navigation, or a different organizational
+              structure.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:x, color: :danger, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Don't: Use for Sequential Steps</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Don't: Use for Sequential Steps
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              For multi-step forms with enforced order, use a stepper component instead. Tabs suggest users can jump freely between sections.
+              For multi-step forms with enforced order, use a stepper component
+              instead. Tabs suggest users can jump freely between sections.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border
+          border-slate-200 dark:border-slate-700
+        "
+      >
         <div class="flex items-start gap-3 mb-4">
           <%= pathogen_icon(:x, color: :danger, size: :lg) %>
+
           <div>
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Don't: Hide Critical Info</h3>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Don't: Hide Critical Info
+            </h3>
+
             <p class="text-sm text-slate-600 dark:text-slate-400">
-              Don't hide essential information in non-default tabs. Users may not discover it. Make important content visible or provide clear indicators.
+              Don't hide essential information in non-default tabs. Users may
+              not discover it. Make important content visible or provide clear
+              indicators.
             </p>
           </div>
         </div>

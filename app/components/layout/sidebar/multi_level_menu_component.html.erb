@@ -24,11 +24,14 @@
   >
     <span
       class="
-        w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
-        transition-colors duration-200 <%= @selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/90' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' %>
+        <%= class_names(
+        'w-8 h-8 flex items-center justify-center rounded-lg mr-3 shrink-0 transition-colors duration-200',
+        { 'bg-primary-300 dark:bg-slate-700/90' => @selected,
+        'bg-slate-100 dark:bg-slate-800 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' => !@selected }
+        ) %>
       "
     >
-      <%= create_icon %>
+      > <%= create_icon %>
     </span>
 
     <span class="text-sm font-medium transition-opacity duration-200 ease-in-out flex-1">
@@ -57,6 +60,7 @@
             'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50' => !menu_item.selected
           }
         ) %>
+
         <%= link_to menu_item.url, { class: link_classes, **(menu_item.selected ? { aria: { current: 'page' } } : {}) } do %>
           <span class="grow"><%= menu_item.label %></span>
           <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
