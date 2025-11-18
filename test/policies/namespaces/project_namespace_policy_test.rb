@@ -85,5 +85,13 @@ module Namespaces
     test '#view_metadata_templates?' do
       assert @policy.apply(:view_metadata_templates?)
     end
+
+    test '#destroy_workflow_executions?' do
+      assert @policy.apply(:destroy_workflow_executions?)
+    end
+
+    test '#cancel_workflow_executions?' do
+      assert @policy.apply(:cancel_workflow_executions?)
+    end
   end
 end

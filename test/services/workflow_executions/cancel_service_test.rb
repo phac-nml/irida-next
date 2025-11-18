@@ -94,7 +94,7 @@ module WorkflowExecutions
     end
 
     # cancel through action link on table
-    test 'maintainer can cancel a single project workflow executions' do
+    test 'maintainer can cancel a single project workflow execution' do
       valid_params = { 'namespace' => @project1.namespace,
                        'workflow_execution' => @project_workflow_running}
       user = users(:joan_doe)
@@ -104,7 +104,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'analyst cannot cancel a single project workflow executions' do
+    test 'analyst cannot cancel a single project workflow execution' do
       valid_params = { 'namespace' => @project1.namespace,
                        'workflow_execution' => @project_workflow_running}
       user = users(:michelle_doe)
@@ -119,7 +119,37 @@ module WorkflowExecutions
       assert_equal :cancel?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel',
-                            namespace_type: @project1.namespace.type,
+                            id: @project_workflow_running.id),
+                    exception.result.message
+    end
+
+    # cancel through dropdown action
+    test 'maintainer can cancel multiple project workflow executions' do
+      valid_params = { 'namespace' => @project1.namespace,
+                       'workflow_executions' => [@project_workflow_running.id, @project_workflow_submitted.id] }
+      user = users(:joan_doe)
+
+      assert_authorized_to(:cancel_workflow_executions?, @workflow_execution, with: WorkflowExecutionPolicy,
+                           context: { user: }) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+    end
+
+    test 'analyst cannot cancel a single project workflow executions' do
+      valid_params = { 'namespace' => @project1.namespace,
+                       'workflow_executions' => [@project_workflow_running.id, @project_workflow_submitted.id] }
+      user = users(:michelle_doe)
+
+      assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+
+      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal :cancel_workflow_executions?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
                             name: @project1.namespace.name),
                     exception.result.message
     end
