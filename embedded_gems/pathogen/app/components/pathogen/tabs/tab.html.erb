@@ -1,15 +1,16 @@
-<button
-  id="<%= @id %>"
-  type="<%= @system_arguments[:type] %>"
-  role="<%= @system_arguments[:role] %>"
-  aria-selected="<%= @system_arguments[:aria][:selected] %>"
-  <% if @system_arguments[:aria][:controls].present? %>aria-controls="<%= @system_arguments[:aria][:controls] %>"<% end %>
-  tabindex="<%= @system_arguments[:tabindex] %>"
-  data-pathogen--tabs-target="<%= @system_arguments[:data]['pathogen--tabs-target'] %>"
-  data-action="<%= @system_arguments[:data][:action] %>"
-  class="<%= @system_arguments[:class] %>"
-  <%= tag.attributes(@system_arguments.except(:id, :type, :role, :aria, :tabindex, :data, :class)) %>
->
+<%= tag.button(
+  id: @id,
+  type: @system_arguments[:type],
+  role: @system_arguments[:role],
+  aria: {
+    selected: @system_arguments[:aria][:selected],
+    controls: @system_arguments[:aria][:controls].presence
+  },
+  tabindex: @system_arguments[:tabindex],
+  data: @system_arguments[:data],
+  class: @system_arguments[:class],
+  **@system_arguments.except(:id, :type, :role, :aria, :tabindex, :data, :class)
+) do %>
   <span class="flex items-center">
     <%# Icon placeholder - will be added in US3 %>
 
@@ -18,4 +19,4 @@
 
     <%# Count badge placeholder - will be added in US4 %>
   </span>
-</button>
+<% end %>
