@@ -13,10 +13,39 @@ import {
   createEnumSelect,
 } from "utilities/advanced_search";
 
+/**
+ * Advanced Search Controller
+ *
+ * Manages dynamic form building for advanced search queries with groups
+ * and conditions. Supports enum fields with dynamic operator options.
+ *
+ * Features:
+ * - Dynamic group and condition management
+ * - Enum field support with operator-specific value inputs
+ * - Screen reader announcements for accessibility
+ * - Form dirty state tracking
+ * - Validation error announcements
+ *
+ * @example
+ * <div data-controller="advanced-search"
+ *      data-advanced-search-confirm-close-text-value="Discard changes?">
+ *   ...
+ * </div>
+ *
+ * @see AdvancedSearchComponent for the server-side component
+ */
 export default class extends Controller {
   // ====================================================================
   // Stimulus Configuration
   // ====================================================================
+  static SELECTORS = {
+    operatorSelect: "select[name$='[operator]']",
+    fieldSelect: "select[name$='[field]']",
+    valueInput: "[name$='[value]']",
+    groupInputs: "[id^='q_groups_attributes_']",
+    removeGroupButton: "div > button[data-action='advanced-search#removeGroup']",
+  };
+
   static targets = [
     "conditionsContainer",
     "conditionTemplate",
@@ -29,16 +58,20 @@ export default class extends Controller {
     "valueTemplate",
   ];
 
-  static outlets = ["list-filter"];
-
   static values = {
     confirmCloseText: String,
     open: Boolean,
     validationErrorOne: String,
     validationErrorOther: String,
+    conditionAdded: String,
+    conditionRemoved: String,
+    groupAdded: String,
+    groupRemoved: String,
+    searchCleared: String,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
+  #boundBeforeCache = null;
 
   // ====================================================================
   // Lifecycle
@@ -49,6 +82,15 @@ export default class extends Controller {
       this.renderSearch();
     }
     this.#announceValidationErrors();
+
+    this.#boundBeforeCache = this.#beforeCache.bind(this);
+    document.addEventListener("turbo:before-cache", this.#boundBeforeCache);
+  }
+
+  disconnect() {
+    if (this.#boundBeforeCache) {
+      document.removeEventListener("turbo:before-cache", this.#boundBeforeCache);
+    }
   }
 
   renderSearch() {
@@ -57,11 +99,21 @@ export default class extends Controller {
     this.#toggleRemoveGroupButtons();
   }
 
+  /**
+   * Reset state before Turbo caches the page.
+   */
+  #beforeCache() {
+    if (this.hasValidationStatusTarget) {
+      this.validationStatusTarget.textContent = "";
+    }
+  }
+
   // ====================================================================
   // Public Actions
   // ====================================================================
   clear() {
     this.searchGroupsContainerTarget.innerHTML = "";
+    this.#announce(this.searchClearedValue);
   }
 
   clearForm() {
@@ -123,6 +175,8 @@ export default class extends Controller {
     } else {
       conditions.at(-1)?.querySelector("select")?.focus();
     }
+
+    this.#announce(this.conditionRemovedValue);
   }
 
   /**
@@ -153,6 +207,7 @@ export default class extends Controller {
     group.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
+    this.#announce(this.groupAddedValue);
   }
 
   /**
@@ -172,6 +227,7 @@ export default class extends Controller {
     groups.at(-1)?.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
+    this.#announce(this.groupRemovedValue);
   }
 
   /**
@@ -186,7 +242,7 @@ export default class extends Controller {
     this.#updateOperatorDropdown(condition, selectedField);
 
     const operatorSelect = condition.querySelector(
-      "select[name$='[operator]']",
+      this.constructor.SELECTORS.operatorSelect,
     );
     const operator = operatorSelect?.value || "";
 
@@ -284,6 +340,8 @@ export default class extends Controller {
 
     const conditions = getConditions(group);
     conditions[conditionIndex]?.querySelector("select")?.focus();
+
+    this.#announce(this.conditionAddedValue);
   }
 
   /**
@@ -333,7 +391,7 @@ export default class extends Controller {
       parseJSONDataAttribute(condition, "standardOperations") || {};
 
     const operatorSelect = condition.querySelector(
-      "select[name$='[operator]']",
+      this.constructor.SELECTORS.operatorSelect,
     );
     if (!operatorSelect) return;
 
@@ -424,8 +482,13 @@ export default class extends Controller {
    * @returns {Object|null}
    */
   #enumConfig(condition, selectedField) {
-    const enumFields = parseJSONDataAttribute(condition, "enumFields") || {};
-    return enumFields[selectedField] || null;
+    try {
+      const enumFields = parseJSONDataAttribute(condition, "enumFields") || {};
+      return enumFields[selectedField] || null;
+    } catch (error) {
+      console.error("Failed to parse enum configuration:", error);
+      return null;
+    }
   }
 
   /**
@@ -606,11 +669,13 @@ export default class extends Controller {
 
     this.groupsContainerTargets.forEach((group) => {
       const button = group.querySelector(
-        "div > button[data-action='advanced-search#removeGroup']",
+        this.constructor.SELECTORS.removeGroupButton,
       );
       if (!button) return;
 
       button.classList.toggle("hidden", !multipleGroups);
+      button.setAttribute("aria-hidden", !multipleGroups);
+      button.tabIndex = multipleGroups ? 0 : -1;
     });
   }
 
@@ -620,7 +685,9 @@ export default class extends Controller {
    * @returns {string}
    */
   #selectedField(condition) {
-    const fieldSelect = condition.querySelector("select[name$='[field]']");
+    const fieldSelect = condition.querySelector(
+      this.constructor.SELECTORS.fieldSelect,
+    );
     return fieldSelect?.value || "";
   }
 
@@ -629,28 +696,49 @@ export default class extends Controller {
    * @returns {boolean}
    */
   #dirty() {
-    if (
+    if (!this.#htmlContentMatches()) {
+      return true;
+    }
+    return this.#inputValuesChanged();
+  }
+
+  /**
+   * Check if the HTML content matches between container and template.
+   * @returns {boolean}
+   */
+  #htmlContentMatches() {
+    return (
       this.searchGroupsContainerTarget.innerHTML.trim() ===
       this.searchGroupsTemplateTarget.innerHTML.trim()
-    ) {
-      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
-        "[id^='q_groups_attributes_']",
+    );
+  }
+
+  /**
+   * Check if any input values have changed from the original template.
+   * @returns {boolean}
+   */
+  #inputValuesChanged() {
+    const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
+      this.constructor.SELECTORS.groupInputs,
+    );
+    const originalInputs =
+      this.searchGroupsTemplateTarget.content.querySelectorAll(
+        this.constructor.SELECTORS.groupInputs,
       );
-      const originalInputs =
-        this.searchGroupsTemplateTarget.content.querySelectorAll(
-          "[id^='q_groups_attributes_']",
-        );
 
-      for (let index = 0; index < originalInputs.length; index += 1) {
-        if (originalInputs[index].value !== currentInputs[index].value) {
-          return true;
-        }
-      }
+    return Array.from(originalInputs).some(
+      (original, index) =>
+        currentInputs[index] && original.value !== currentInputs[index].value,
+    );
+  }
 
-      return false;
-    }
-
-    return true;
+  /**
+   * Announce a message to screen readers via the live region.
+   * @param {string} message
+   */
+  #announce(message) {
+    if (!this.hasValidationStatusTarget || !message) return;
+    this.validationStatusTarget.textContent = message;
   }
 
   /**
