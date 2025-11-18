@@ -167,10 +167,13 @@
                 ) do |f| %>
           <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
-          <%= f.submit t('common.controls.select_all'),
-                  id: "select-all-button",
-                  class: "button button-default w-full",
-                  title: t(".select_all_tooltip") %>
+          <%= f.submit t("common.controls.select_all"),
+                   id: "select-all-button",
+                   class: "button button-default w-full",
+                   aria: {
+                     label: t(".select_all_tooltip"),
+                   },
+                   title: t(".select_all_tooltip") %>
         <% end %>
         <%= form_with(
                   url: select_group_samples_url,
@@ -179,10 +182,13 @@
                   class: "max-sm:grow",
                   data: { turbo_frame: "selected" },
                 ) do |f| %>
-          <%= f.submit t('common.controls.deselect_all'),
-                  id: "deselect-all-button",
-                  class: "button button-default w-full",
-                  title: t(".deselect_all_tooltip") %>
+          <%= f.submit t("common.controls.deselect_all"),
+                   id: "deselect-all-button",
+                   class: "button button-default w-full",
+                   title: t(".deselect_all_tooltip"),
+                   aria: {
+                     label: t(".deselect_all_tooltip"),
+                   } %>
         <% end %>
       <% end %>
       <div class="sm:grow max-sm:hidden" role="presentation"></div>
