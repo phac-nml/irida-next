@@ -49,7 +49,7 @@ Les tâches rake peuvent être précédées de `info`, `debug` ou `verbose` pour
 rake debug db:seed
 ```
 
-### Format translation files
+### Formater les fichiers de traduction
 
 ```bash
 i18n-tasks normalize
