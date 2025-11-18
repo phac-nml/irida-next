@@ -2,7 +2,7 @@
   <template>
     <div
       data-controller="table-selection"
-      data-table-selection-ids-value="<%= @sample_attachment_ids %>"
+      data-table-selection-ids-value="<%= @sample_attachment_ids.map(&:to_s).to_json %>"
       data-table-selection-selection-outlet="#attachments-table"
     ></div>
   </template>
