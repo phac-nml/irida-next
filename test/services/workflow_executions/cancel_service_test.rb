@@ -6,6 +6,10 @@ module WorkflowExecutions
   class CancelServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
+      @project1 = projects(:project1)
+      @project_workflow_running = workflow_executions(:automated_example_running)
+      @project_workflow_submitted = workflow_executions(:automated_example_submitted)
+      @project_workflow_completed = workflow_executions(:automated_example_completed)
     end
 
     test 'cancel submitted workflow_execution' do
@@ -87,6 +91,37 @@ module WorkflowExecutions
 
       assert_equal 'canceling', workflow_execution2.reload.state
       assert_not workflow_execution1.cleaned?
+    end
+
+    # cancel through action link on table
+    test 'maintainer can cancel a single project workflow executions' do
+      valid_params = { 'namespace' => @project1.namespace,
+                       'workflow_execution' => @project_workflow_running}
+      user = users(:joan_doe)
+
+      assert_authorized_to(:cancel?, @workflow_execution, with: WorkflowExecutionPolicy, context: { user: }) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+    end
+
+    test 'analyst cannot cancel a single project workflow executions' do
+      valid_params = { 'namespace' => @project1.namespace,
+                       'workflow_execution' => @project_workflow_running}
+      user = users(:michelle_doe)
+
+      assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+
+      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal :cancel?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel',
+                            namespace_type: @project1.namespace.type,
+                            name: @project1.namespace.name),
+                    exception.result.message
     end
   end
 end
