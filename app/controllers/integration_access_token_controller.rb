@@ -12,29 +12,15 @@ class IntegrationAccessTokenController < ApplicationController
     @personal_access_token = PersonalAccessToken.new(scopes: [])
   end
 
-  def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    respond_to do |format| # rubocop:disable Metrics/BlockLength
+  def create
+    respond_to do |format|
       if integration_host_allow_list.include? caller_identifier
         @personal_access_token = PersonalAccessTokens::CreateService.new(
           current_user,
           personal_access_token_params
         ).execute
 
-        if @personal_access_token.persisted?
-          format.turbo_stream do
-            render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
-                             new_personal_access_token: @personal_access_token,
-                             encoded_token: encoded_token,
-                             target_host: caller_url }
-          end
-        else
-          format.turbo_stream do
-            error = I18n.t('integration_access_tokens.create.error', error: error_message(@personal_access_token))
-            render status: :unprocessable_entity, locals: {
-              new_personal_access_token: nil, message: error
-            }
-          end
-        end
+        handle_token_creation(format)
       else # caller identifier not in allow list
         format.turbo_stream do
           render status: :unprocessable_entity, locals: { new_personal_access_token: nil,
@@ -45,6 +31,24 @@ class IntegrationAccessTokenController < ApplicationController
   end
 
   private
+
+  def handle_token_creation(format)
+    if @personal_access_token.persisted?
+      format.turbo_stream do
+        render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
+                         new_personal_access_token: @personal_access_token,
+                         encoded_token: encoded_token,
+                         target_host: caller_url }
+      end
+    else
+      format.turbo_stream do
+        error = I18n.t('integration_access_tokens.create.error', error: error_message(@personal_access_token))
+        render status: :unprocessable_entity, locals: {
+          new_personal_access_token: nil, message: error
+        }
+      end
+    end
+  end
 
   def ensure_enabled
     not_found unless Flipper.enabled?(:integration_access_token_generation)
