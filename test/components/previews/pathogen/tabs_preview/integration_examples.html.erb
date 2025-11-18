@@ -176,7 +176,7 @@
                   { label: 'Weekly digest', description: 'Summary of activity from the past week', checked: true }
                 ].each do |setting| %>
                   <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
-                    <input type="checkbox" <%= 'checked' if setting[:checked] %> class="mt-1 w-4 h-4 text-blue-600 rounded">
+                    <%= tag.input(type: "checkbox", checked: setting[:checked], class: "mt-1 w-4 h-4 text-blue-600 rounded") %>
                     <div>
                       <div class="font-medium text-slate-900 dark:text-white"><%= setting[:label] %></div>
                       <div class="text-sm text-slate-600 dark:text-slate-400"><%= setting[:description] %></div>

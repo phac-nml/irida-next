@@ -50,21 +50,17 @@
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item list-none p-1 pr-2">
-        <a
-          href="<%= menu_item.url %>"
-          class="
-            flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
-            focus-visible:z-10 rounded-lg group min-h-[44px] pl-10
-            <%= class_names({
-            'bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-50': menu_item.selected,
-            'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
-            }) %>
-          "
-          <%= tag.attributes(aria: { current: ('page' if menu_item.selected) }) %>
-        >
+        <% link_classes = class_names(
+          "flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75 focus-visible:z-10 rounded-lg group min-h-11 pl-10",
+          {
+            'bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-50' => menu_item.selected,
+            'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50' => !menu_item.selected
+          }
+        ) %>
+        <%= link_to menu_item.url, { class: link_classes, **(menu_item.selected ? { aria: { current: 'page' } } : {}) } do %>
           <span class="grow"><%= menu_item.label %></span>
           <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
-        </a>
+        <% end %>
       </li>
     <% end %>
   </ul>
