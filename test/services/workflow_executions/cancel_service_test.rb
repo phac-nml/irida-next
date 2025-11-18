@@ -129,7 +129,7 @@ module WorkflowExecutions
                        'workflow_executions' => [@project_workflow_running.id, @project_workflow_submitted.id] }
       user = users(:joan_doe)
 
-      assert_authorized_to(:cancel_workflow_executions?, @workflow_execution, with: WorkflowExecutionPolicy,
+      assert_authorized_to(:cancel_workflow_executions?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
                            context: { user: }) do
         WorkflowExecutions::CancelService.new(user, valid_params).execute
       end
@@ -146,7 +146,7 @@ module WorkflowExecutions
         WorkflowExecutions::CancelService.new(user, valid_params).execute
       end
 
-      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :cancel_workflow_executions?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
