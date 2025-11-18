@@ -2,15 +2,7 @@
 
 module WorkflowExecutions
   # Service used to initiate the cancelation of a WorkflowExecution
-  class CancelService < BaseService
-    include QueryWorkflowExecutionsHelper
-
-    def initialize(user = nil, params = {})
-      super(user, {})
-      @workflow_execution = params[:workflow_execution] if params[:workflow_execution]
-      @workflow_execution_ids = params[:workflow_execution_ids] if params[:workflow_execution_ids]
-      @namespace = params[:namespace] if params[:namespace]
-    end
+  class CancelService < BaseWorkflowExecutionService
 
     def execute
       if @workflow_execution.nil?
@@ -50,7 +42,7 @@ module WorkflowExecutions
     def cancel_multiple
       authorize! @namespace, to: :cancel_workflow_executions? unless @namespace.nil?
 
-      workflow_executions_scope = query_workflow_executions(@namespace)
+      workflow_executions_scope = query_workflow_executions
       cancellable_workflow_executions = workflow_executions_scope.where(
         id: @workflow_execution_ids, state: %w[initial prepared submitted running]
       )
