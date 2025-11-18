@@ -174,7 +174,7 @@ module WorkflowExecutions
     # cancel through action link on table
     test 'maintainer can cancel a single project workflow execution' do
       valid_params = { 'namespace' => @namespace,
-                       'workflow_execution' => @project_workflow_running}
+                       'workflow_execution' => @project_workflow_running }
       user = users(:joan_doe)
 
       assert_authorized_to(:cancel?, @workflow_execution, with: WorkflowExecutionPolicy, context: { user: }) do
@@ -184,7 +184,7 @@ module WorkflowExecutions
 
     test 'analyst cannot cancel a single project workflow execution' do
       valid_params = { 'namespace' => @namespace,
-                       'workflow_execution' => @project_workflow_running}
+                       'workflow_execution' => @project_workflow_running }
       user = users(:michelle_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
