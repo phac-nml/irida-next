@@ -4,7 +4,11 @@
   data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
   data-advanced-search-validation-error-one-value='<%= t("components.advanced_search_component.validation_error.one") %>'
   data-advanced-search-validation-error-other-value='<%= t("components.advanced_search_component.validation_error.other") %>'
-  data-advanced-search-list-filter-outlet=".list-filter"
+  data-advanced-search-condition-added-value='<%= t("components.advanced_search_component.announcements.condition_added") %>'
+  data-advanced-search-condition-removed-value='<%= t("components.advanced_search_component.announcements.condition_removed") %>'
+  data-advanced-search-group-added-value='<%= t("components.advanced_search_component.announcements.group_added") %>'
+  data-advanced-search-group-removed-value='<%= t("components.advanced_search_component.announcements.group_removed") %>'
+  data-advanced-search-search-cleared-value='<%= t("components.advanced_search_component.announcements.search_cleared") %>'
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>

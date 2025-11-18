@@ -131,6 +131,12 @@ en:
       remove_group_button: Remove group
       rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
       title: Advanced search
+      announcements:
+        condition_added: Condition added
+        condition_removed: Condition removed
+        group_added: Group added
+        group_removed: Group removed
+        search_cleared: Search cleared
       validation_error:
         one: There is 1 validation error. Please review the form.
         other: There are %{count} validation errors. Please review the form.
