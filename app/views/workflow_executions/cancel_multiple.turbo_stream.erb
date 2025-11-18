@@ -1,5 +1,1 @@
-<% if defined?(messages) %>
-  <%= render partial: "shared/workflow_executions/cancel_multiple", locals: { messages: } %>
-<% else %>
-  <%= render partial: "shared/workflow_executions/cancel_multiple", locals: { type:, message: } %>
-<% end %>
+<%= render partial: "shared/workflow_executions/cancel_multiple", locals: { messages: } %>
