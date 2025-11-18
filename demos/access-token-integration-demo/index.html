@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Access Token Demo</title>
+  </head>
+  <body>
+    <button
+      id="inxt-btn"
+      type="button"
+      style="padding:0.65rem 1.1rem;background:#2563eb;color:#fff;font-weight:600;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;border:none;border-radius:0.5rem;cursor:pointer;letter-spacing:.25px;"
+    >
+      Connect to INXT
+    </button>
+    <script>
+      // Opens the integration access token popup and logs the returned token.
+      const ORIGIN = 'http://localhost:3000';
+      const URL = ORIGIN + '/integration_access_token?caller=bdip_sheets';
 
-<button type="button" class="btn btn-primary" id="inxt-btn">
-Connect to INXT
-</button>
+      document.getElementById('inxt-btn').addEventListener('click', () => {
+        var x = (window.screenX || window.screenLeft || 0);
+        var y = (window.screenY || window.screenTop || 0);
+        const options = `width=500,height=800,top=${y},left=${x}`
+        const popup = window.open(URL, 'access-token-popup', options);
+        if (!popup) console.warn('Popup blocked');
+      });
 
-<script>
-    // inxt connect
-    $('#inxt-btn').on('click', () => {
-        console.log('button clicked')
-        const inxt_window = window.open("http://localhost:3000/integration_access_token?caller=bdip_sheets", "access token popup", "width=500,height=800" )
-        window.addEventListener("message", receiveMessage, false)
-    });
-
-    function receiveMessage(event){
-        if (event.origin !== 'http://localhost:3000') {
-            // this check is necessary because the `message` handler accepts messages from any URI
-            console.log('invalid message origin:', event.origin)
-            return;
-        }
-        console.log('response origin:', event.origin)
-        console.log('response token:',event.data);
-    }
-</script>
+      window.addEventListener('message', (event) => {
+        if (event.origin !== ORIGIN) return; // basic origin check
+        console.log('Received token:', event.data);
+      });
+    </script>
+  </body>
+</html>
