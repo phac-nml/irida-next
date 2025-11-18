@@ -1,7 +1,16 @@
-<span
-  role="status"
-  aria-live="<%= politeness %>"
-  <%= 'aria-atomic="true"'.html_safe if atomic %>
-  class="sr-only"
-  <%= tag.attributes(data: data_attributes) %>
-></span>
+<% if atomic %>
+  <span
+    role="status"
+    aria-live="<%= politeness %>"
+    aria-atomic="true"
+    class="sr-only"
+    data-announcement-target="region"
+  ></span>
+<% else %>
+  <span
+    role="status"
+    aria-live="<%= politeness %>"
+    class="sr-only"
+    data-announcement-target="region"
+  ></span>
+<% end %>
