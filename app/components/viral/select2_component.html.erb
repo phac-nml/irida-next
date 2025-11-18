@@ -13,11 +13,14 @@
       required: aria_required,
     }
   } %>
+
   <% input_attrs[:required] = true if required %>
   <% input_attrs[:value] = selected_value if selected_value.present? %>
+
   <% if aria_describedby.present? %>
     <% input_attrs[:aria][:describedby] = aria_describedby %>
   <% end %>
+
   <%= tag.input(**input_attrs) %>
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
@@ -39,6 +42,7 @@
       <% options.each do |option| %>
         <%= option %>
       <% end %>
+
       <% if empty_state? %>
         <li
           role="option"
