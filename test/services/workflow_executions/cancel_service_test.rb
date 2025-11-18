@@ -85,7 +85,7 @@ module WorkflowExecutions
       assert_equal 'canceling', workflow_execution1.reload.state
       assert_not workflow_execution1.cleaned?
 
-      assert_equal 'canceling', workflow_execution1.reload.state
+      assert_equal 'canceling', workflow_execution2.reload.state
       assert_not workflow_execution1.cleaned?
     end
   end
