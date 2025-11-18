@@ -207,21 +207,19 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       format.turbo_stream do
         # No selected workflows canceled
         if canceled_workflows_count.zero?
-          render status: :unprocessable_content, locals: {
-            type: 'alert', message: t('concerns.workflow_execution_actions.cancel_multiple.error')
-          }
+          @messages = [{ type: 'alert', message: t('concerns.workflow_execution_actions.cancel_multiple.error') }]
+          render status: :unprocessable_content
+
         # Partial workflow cancellation
         elsif canceled_workflows_count.positive? && canceled_workflows_count != workflows_to_cancel_count
           multi_status_messages = set_multi_status_message_for_multiple_action(canceled_workflows_count,
                                                                                workflows_to_cancel_count,
                                                                                'cancel_multiple')
-          render status: :multi_status,
-                 locals: { messages: multi_status_messages }
+          render status: :multi_status
         # All workflows canceled successfully
         else
-          render status: :ok,
-                 locals: { type: 'success',
-                           message: t('concerns.workflow_execution_actions.cancel_multiple.success') }
+          @messages = [{type: 'success', message: t('concerns.workflow_execution_actions.cancel_multiple.success')}]
+          render status: :ok
         end
       end
     end
@@ -265,7 +263,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_multi_status_message_for_multiple_action(successful_count, expected_count, action)
-    [
+    @messages = [
       {
         type: 'success',
         message: t("concerns.workflow_execution_actions.#{action}.partial_success",
