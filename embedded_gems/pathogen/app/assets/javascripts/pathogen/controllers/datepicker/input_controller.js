@@ -47,6 +47,7 @@ export default class extends Controller {
       this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+    this.boundHandleTurboSubmitEnd = this.#handleTurboSubmitEnd.bind(this);
 
     this.idempotentConnect();
   }
@@ -65,6 +66,14 @@ export default class extends Controller {
       this.boundHandleDatepickerInputFocus,
     );
 
+    // Listen for Turbo form submission completion when autosubmit is enabled
+    if (this.autosubmitValue) {
+      const form = this.element.closest("form");
+      if (form) {
+        form.addEventListener("turbo:submit-end", this.boundHandleTurboSubmitEnd);
+      }
+    }
+
     this.#findNextFocusableElement();
   }
 
@@ -73,6 +82,14 @@ export default class extends Controller {
       "focus",
       this.boundHandleDatepickerInputFocus,
     );
+
+    // Remove Turbo form submission listener if it was added
+    if (this.autosubmitValue) {
+      const form = this.element.closest("form");
+      if (form) {
+        form.removeEventListener("turbo:submit-end", this.boundHandleTurboSubmitEnd);
+      }
+    }
 
     this.#calendar.remove();
     this.#calendar = null;
@@ -267,11 +284,14 @@ export default class extends Controller {
       } else {
         if (this.autosubmitValue) {
           this.submitDate();
+          this.#setSelectedDate();
+          // Don't focus next element immediately - Turbo will update DOM asynchronously
+          // The focus will be handled by turbo:submit-end event listener
         } else {
           this.#disableInputErrorState();
+          this.#setSelectedDate();
+          this.focusNextFocusableElement();
         }
-        this.#setSelectedDate();
-        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
@@ -365,6 +385,20 @@ export default class extends Controller {
       `Pathogen--Datepicker--InputController error in ${source}:`,
       error,
     );
+  }
+
+  // Handle focus after Turbo form submission completes
+  #handleTurboSubmitEnd(event) {
+    if (event.detail.success) {
+      // Wait for Turbo to process stream actions and update DOM
+      // requestAnimationFrame ensures paint cycle, setTimeout allows stream processing
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          this.#findNextFocusableElement();
+          this.focusNextFocusableElement();
+        }, 0);
+      });
+    }
   }
 
   // used by pathogen/datepicker/calendar.js
