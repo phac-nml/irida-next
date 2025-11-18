@@ -139,6 +139,9 @@ gem 'caxlsx'
 # renders client's local time zone
 gem 'local_time', '~> 3.0', '>= 3.0.2'
 
+# reactionview
+gem 'reactionview'
+
 # OpenTelemetry
 gem 'opentelemetry-api'
 gem 'opentelemetry-common'
@@ -179,7 +182,6 @@ group :development do
   gem 'faker'
 
   gem 'herb'
-  gem 'reactionview'
 
   # LookBook
   gem 'actioncable'
