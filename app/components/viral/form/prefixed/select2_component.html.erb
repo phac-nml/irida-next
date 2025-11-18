@@ -12,24 +12,20 @@
     </div>
     <div class="grow">
       <div data-action="keydown->viral--select2#keydown" class="select2">
-        <input
-          type="text"
-          id="<%= id %>"
-          name="<%= id %>"
-          data-viral--select2-target="input"
-          placeholder="<%= placeholder %>"
-          <%= "required" if required %>
-          autocomplete="off"
-          class="
-            select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
-            rounded-l-lg @min-md:rounded-l-none! block w-full p-2 dark:bg-slate-800
-            dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
-            text-ellipsis overflow-hidden
-          "
-          value="<%= selected_value %>"
-          data-action="input->viral--select2#input"
-          <%= tag.attributes(aria: aria) if aria.present? %>
-        >
+        <% input_attrs = {
+          type: "text",
+          id: id,
+          name: id,
+          "data-viral--select2-target": "input",
+          placeholder: placeholder,
+          autocomplete: "off",
+          class: "select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg rounded-l-lg @min-md:rounded-l-none! block w-full p-2 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 text-ellipsis overflow-hidden",
+          "data-action": "input->viral--select2#input"
+        } %>
+        <% input_attrs[:required] = true if required %>
+        <% input_attrs[:value] = selected_value if selected_value.present? %>
+        <% input_attrs[:aria] = aria if defined?(aria) && aria.present? %>
+        <%= tag.input(**input_attrs) %>
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
         <div
