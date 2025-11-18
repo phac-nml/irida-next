@@ -16,9 +16,7 @@
     <% if selected_value.present? %>
     value="<%= selected_value %>"
     <% end %>
-    <% if aria_describedby.present? %>
-    aria-describedby="<%= aria_describedby %>"
-    <% end %>
+    <%= "aria-describedby=\"#{aria_describedby}\"" if aria_describedby.present? %>
     aria-invalid="<%= aria_invalid %>"
     aria-required="<%= aria_required %>"
   >
