@@ -33,6 +33,34 @@ module AdvancedSearch
       assert_includes options.map(&:last), 'completed'
     end
 
+    test 'enum_options uses labels when provided instead of translation' do
+      @condition.field = 'metadata.workflow_name'
+      workflow_names = ['IRIDA NEXT EXAMPLE', 'Another Workflow']
+      enum_fields = {
+        'metadata.workflow_name' => {
+          values: workflow_names,
+          translation_key: 'pipelines.name',
+          labels: workflow_names.index_with { |name| name }
+        }
+      }
+
+      component = AdvancedSearch::Value.new(
+        conditions_form: nil,
+        group_index: 0,
+        condition: @condition,
+        condition_index: 0,
+        enum_fields: enum_fields
+      )
+
+      options = component.send(:enum_options)
+
+      assert_equal workflow_names.length, options.length
+      assert_includes options.map(&:first), 'IRIDA NEXT EXAMPLE'
+      assert_includes options.map(&:first), 'Another Workflow'
+      assert_includes options.map(&:last), 'IRIDA NEXT EXAMPLE'
+      assert_includes options.map(&:last), 'Another Workflow'
+    end
+
     test 'enum_field? returns true for configured enum field' do
       enum_fields = {
         'state' => {

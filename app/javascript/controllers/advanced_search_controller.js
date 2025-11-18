@@ -369,14 +369,20 @@ export default class extends Controller {
    * @param {string} operator
    */
   #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
-    if (!valueContainer || !selectedField) return;
+    if (!valueContainer || !selectedField) {
+      return;
+    }
 
     const enumConfig = this.#enumConfig(condition, selectedField);
-    if (!enumConfig) return;
+    if (!enumConfig) {
+      return;
+    }
 
     const isListOperator = ["in", "not_in"].includes(operator);
     const currentInput = this.#currentEnumInput(valueContainer, isListOperator);
-    if (!currentInput) return;
+    if (!currentInput) {
+      return;
+    }
 
     const inputName = this.#enumInputName(currentInput, isListOperator);
     if (!inputName) return;
@@ -512,7 +518,12 @@ export default class extends Controller {
    * @param {HTMLElement|null} options.labelElement
    * @returns {Record<string, string|boolean>}
    */
-  #enumAttributes({ valueContainer, attributeSource, ariaLabel, labelElement }) {
+  #enumAttributes({
+    valueContainer,
+    attributeSource,
+    ariaLabel,
+    labelElement,
+  }) {
     const attributes = {};
 
     const sourceDescribedBy =
@@ -522,8 +533,7 @@ export default class extends Controller {
       attributes["aria-describedby"] = sourceDescribedBy || errorId;
     }
 
-    const sourceAriaInvalid =
-      attributeSource?.getAttribute?.("aria-invalid");
+    const sourceAriaInvalid = attributeSource?.getAttribute?.("aria-invalid");
     if (sourceAriaInvalid) {
       attributes["aria-invalid"] = sourceAriaInvalid;
     } else if (valueContainer.classList.contains("invalid")) {

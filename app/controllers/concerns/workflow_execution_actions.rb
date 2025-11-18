@@ -425,11 +425,29 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def configure_enum_fields
     # Configure enum fields for advanced search
     @workflow_execution_enum_fields = {
-      'state' => {
-        values: WorkflowExecution.states.keys,
-        translation_key: 'workflow_executions.state',
-        labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
-      }
+      'state' => state_enum_fields,
+      'metadata.workflow_name' => workflow_name_enum_fields
+    }
+  end
+
+  def state_enum_fields
+    {
+      values: WorkflowExecution.states.keys.map(&:downcase),
+      translation_key: 'workflow_executions.state',
+      labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
+    }
+  end
+
+  def workflow_name_enum_fields
+    workflows = Irida::Pipelines.instance.pipelines('executable')
+    workflow_names = workflows.map do |_pipeline_id, pipeline|
+      pipeline.name[I18n.locale.to_s]
+    end
+
+    {
+      values: workflow_names,
+      translation_key: 'pipelines.name',
+      labels: workflow_names.index_with { |name| name }
     }
   end
 end
