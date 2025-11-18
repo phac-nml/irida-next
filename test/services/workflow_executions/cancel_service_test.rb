@@ -135,7 +135,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'analyst cannot cancel a single project workflow executions' do
+    test 'analyst cannot cancel a multiple project workflow executions' do
       valid_params = { 'namespace' => @project1.namespace,
                        'workflow_executions' => [@project_workflow_running.id, @project_workflow_submitted.id] }
       user = users(:michelle_doe)
