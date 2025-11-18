@@ -197,7 +197,7 @@ module WorkflowExecutions
       assert_equal :cancel?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel',
-                            id: @project_workflow_running.id),
+                          id: @project_workflow_running.id),
                     exception.result.message
     end
 
@@ -228,7 +228,7 @@ module WorkflowExecutions
       assert_equal :cancel_workflow_executions?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
-                            name: @namespace.name),
+                          name: @namespace.name),
                     exception.result.message
     end
   end
