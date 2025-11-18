@@ -1,16 +1,8 @@
-<% if atomic %>
-  <span
-    role="status"
-    aria-live="<%= politeness %>"
-    aria-atomic="true"
-    class="sr-only"
-    data-announcement-target="region"
-  ></span>
-<% else %>
-  <span
-    role="status"
-    aria-live="<%= politeness %>"
-    class="sr-only"
-    data-announcement-target="region"
-  ></span>
-<% end %>
+<% span_attrs = {
+  role: "status",
+  "aria-live": politeness,
+  class: "sr-only",
+  data: data_attributes
+} %>
+<% span_attrs["aria-atomic"] = true if atomic %>
+<%= tag.span(**span_attrs) %>
