@@ -15,19 +15,21 @@
         button_to("Retry", content_path, class: "button")
       end
     end %>
-  <div
-    id="<%= @id %>"
-    role="<%= @system_arguments[:role] %>"
-    aria-labelledby="<%= @system_arguments[:aria][:labelledby] %>"
-    aria-hidden="<%= @system_arguments[:aria][:hidden] %>"
-    tabindex="<%= @system_arguments[:tabindex] %>"
-    data-pathogen--tabs-target="<%= @system_arguments[:data]['pathogen--tabs-target'] %>"
-    class="<%= @system_arguments[:class] %>"
-    <%= tag.attributes(@system_arguments.except(:id, :role, :aria, :tabindex, :data, :class)) %>
-  >
-    <% if @lazy_panel %>
-      <%= render @lazy_panel, &@block %>
-    <% else %>
-      <%= content %>
-    <% end %>
-  </div>
+<%= tag.div(
+  id: @id,
+  role: @system_arguments[:role],
+  aria: {
+    labelledby: @system_arguments[:aria][:labelledby],
+    hidden: @system_arguments[:aria][:hidden]
+  },
+  tabindex: @system_arguments[:tabindex],
+  data: @system_arguments[:data],
+  class: @system_arguments[:class],
+  **@system_arguments.except(:id, :role, :aria, :tabindex, :data, :class)
+) do %>
+  <% if @lazy_panel %>
+    <%= render @lazy_panel, &@block %>
+  <% else %>
+    <%= content %>
+  <% end %>
+<% end %>

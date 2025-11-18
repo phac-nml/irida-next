@@ -1,39 +1,40 @@
-<div
-  id="<%= @id %>-container"
-  data-controller="<%= @system_arguments[:data][:controller] %>"
-  data-pathogen--tabs-default-index-value="<%= @system_arguments[:data]['pathogen--tabs-default-index-value'] %>"
-  data-pathogen--tabs-sync-url-value="<%= @system_arguments[:data]['pathogen--tabs-sync-url-value'] %>"
-  class="<%= @orientation == :vertical ? 'flex' : '' %>"
->
-  <nav
-    id="<%= @id %>"
-    role="tablist"
-    aria-label="<%= @label %>"
-    aria-orientation="<%= @orientation %>"
-    <%= tag.attributes(@system_arguments.except(:id, :data, :class)) %>
-    class="<%= class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:flex-grow', @system_arguments[:class]) %>"
-  >
+<%= tag.div(
+  id: "#{@id}-container",
+  data: {
+    controller: @system_arguments[:data][:controller],
+    'pathogen--tabs-default-index-value': @system_arguments[:data]['pathogen--tabs-default-index-value'],
+    'pathogen--tabs-sync-url-value': @system_arguments[:data]['pathogen--tabs-sync-url-value']
+  },
+  class: @orientation == :vertical ? 'flex' : ''
+) do %>
+  <%= tag.nav(
+    id: @id,
+    role: "tablist",
+    aria: { label: @label, orientation: @orientation },
+    **@system_arguments.except(:id, :data, :class),
+    class: class_names('flex', @orientation == :vertical ? 'flex-col' : 'flex-col sm:flex-row sm:flex-grow', @system_arguments[:class])
+  ) do %>
     <%# Tab list container %>
-    <div
-      class="<%= class_names(
+    <%= tag.div(
+      class: class_names(
         'text-sm font-medium text-center text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700',
         @orientation == :vertical ? 'flex flex-col border-r min-w-[200px]' : 'w-full flex flex-wrap -mb-px border-b'
-      ) %>"
-      role="presentation"
-    >
+      ),
+      role: "presentation"
+    ) do %>
       <% tabs.each do |tab| %>
         <%= tab %>
       <% end %>
-    </div>
-  </nav>
+    <% end %>
+  <% end %>
 
   <%# Panel container %>
-  <div class="<%= @orientation == :vertical ? 'flex-1 pl-6' : 'mt-4' %>">
+  <%= tag.div(class: @orientation == :vertical ? 'flex-1 pl-6' : 'mt-4') do %>
     <% panels.each do |panel| %>
       <%= panel %>
     <% end %>
     <% lazy_panels.each do |panel| %>
       <%= panel %>
     <% end %>
-  </div>
-</div>
+  <% end %>
+<% end %>

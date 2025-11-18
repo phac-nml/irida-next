@@ -1,5 +1,6 @@
 <%# filepath: /home/josh/Development/irida-next/app/components/viral/pagy/pagination_component.html.erb %>
 <% a = helpers.pagy_anchor(@pagy) %>
+
 <nav
   class="pagy nav flex-none"
   aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
@@ -24,9 +25,12 @@
             border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
             dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-s-lg
           "
-        ><%= t("components.viral.pagy.pagination_component.previous") %></span>
+        >
+          <%= t("components.viral.pagy.pagination_component.previous") %>
+        </span>
       <% end %>
     </li>
+
     <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
     <% @pagy.series.each do |item| %>
       <li>
@@ -50,7 +54,9 @@
               leading-tight border border-primary-600 bg-primary-600 text-white
               dark:border-primary-600 dark:text-white font-medium text-sm cursor-default
             "
-          ><%= item %></a>
+          >
+            <%= item %>
+          </a>
         <% elsif item == :gap %>
           <span
             class="
@@ -58,10 +64,13 @@
               border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
               dark:text-slate-400 dark:border-slate-700 cursor-default
             "
-          >...</span>
+          >
+            ...
+          </span>
         <% end %>
       </li>
     <% end %>
+
     <%# Next page link %>
     <li>
       <% if @pagy.next %>
@@ -79,7 +88,9 @@
             border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
             dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-e-lg
           "
-        ><%= t("components.viral.pagy.pagination_component.next") %></span>
+        >
+          <%= t("components.viral.pagy.pagination_component.next") %>
+        </span>
       <% end %>
     </li>
   </ul>
@@ -103,7 +114,9 @@
           bg-slate-100 dark:bg-slate-800 dark:text-slate-400 cursor-not-allowed border
           border-slate-300 dark:border-slate-600 rounded-l-lg
         "
-      ><%= t("components.viral.pagy.pagination_component.previous") %></span>
+      >
+        <%= t("components.viral.pagy.pagination_component.previous") %>
+      </span>
     <% end %>
 
     <%# Page dropdown %>
@@ -117,18 +130,13 @@
       onchange="window.location.href = this.options[this.selectedIndex].dataset.url"
     >
       <% (1..@pagy.pages).each do |page_num| %>
-        <option
-          value="<%= page_num %>"
-          <%= 'selected' if page_num == @pagy.page %>
-          data-url="<%= helpers.pagy_url_for(@pagy, page_num) %>"
-          aria-label="<%= page_num == @pagy.page ? t('components.viral.pagy.pagination_component.current_page_aria_label', number: page_num) : t('components.viral.pagy.pagination_component.item_aria_label', number: page_num) %>"
-        >
-          <%= if page_num == @pagy.page
-            t("components.viral.pagy.pagination_component.current_page", number: page_num)
-          else
-            t("components.viral.pagy.pagination_component.page_number", number: page_num)
-          end %>
-        </option>
+        <%= tag.option(
+          page_num == @pagy.page ? t("components.viral.pagy.pagination_component.current_page", number: page_num) : t("components.viral.pagy.pagination_component.page_number", number: page_num),
+          value: page_num,
+          selected: page_num == @pagy.page,
+          data: { url: helpers.pagy_url_for(@pagy, page_num) },
+          aria: { label: page_num == @pagy.page ? t("components.viral.pagy.pagination_component.current_page_aria_label", number: page_num) : t("components.viral.pagy.pagination_component.item_aria_label", number: page_num) }
+        ) %>
       <% end %>
     </select>
 
@@ -148,7 +156,9 @@
           bg-slate-100 dark:bg-slate-800 dark:text-slate-400 cursor-not-allowed border
           border-slate-300 dark:border-slate-600 rounded-r-lg
         "
-      ><%= t("components.viral.pagy.pagination_component.next") %></span>
+      >
+        <%= t("components.viral.pagy.pagination_component.next") %>
+      </span>
     <% end %>
   </div>
 </nav>
