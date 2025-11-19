@@ -62,33 +62,4 @@ class WorkflowExecutionJob < ApplicationJob
 
     nil
   end
-
-  def minimum_run_time(workflow_execution)
-    min_run_time = workflow_execution.workflow.settings.fetch('min_run_time', 0)
-
-    return min_run_time.to_i if min_run_time.is_a?(Integer)
-
-    calculator = Dentaku::Calculator.new
-    calculator.evaluate(min_run_time, SAMPLE_COUNT: workflow_execution.samples.count)
-  end
-
-  def maximum_run_time(workflow_execution)
-    max_run_time = workflow_execution.workflow.settings.fetch('max_run_time', 0)
-
-    return max_run_time.to_i if max_run_time.is_a?(Integer)
-
-    calculator = Dentaku::Calculator.new
-    calculator.evaluate(max_run_time, SAMPLE_COUNT: workflow_execution.samples.count)
-  end
-
-  # Calculate time spent in state till now in seconds
-  def state_time_calculation(workflow_execution, state)
-    change_version = workflow_execution.reload_log_data.data['h'].find do |log|
-      log['c']['state'] == WorkflowExecution.states[state]
-    end
-    # log change version timestamps are in milliseconds
-    return Time.zone.now.to_i - (change_version['ts'].to_i / 1000) if change_version
-
-    0
-  end
 end
