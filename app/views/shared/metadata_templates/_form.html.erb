@@ -1,16 +1,17 @@
-<div
-  data-controller="viral--sortable-lists--two-lists-selection"
-  data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-  data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-  data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
-  class="font-normal text-slate-500 dark:text-slate-400"
->
+<%= tag.div data: {
+  controller: "viral--sortable-lists--two-lists-selection",
+  viral__sortable_lists__two_lists_selection_selected_list_value: "selected-list",
+  viral__sortable_lists__two_lists_selection_available_list_value: "available-list",
+  viral__sortable_lists__two_lists_selection_field_name_value: "metadata_template[fields][]"
+}, class: "font-normal text-slate-500 dark:text-slate-400" do %>
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
     <%= render partial: "shared/form/required_field_legend" %>
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
+
     <div class="grid gap-4">
       <div class="mt-2 form-field <%= 'invalid' if invalid_name %>">
         <%= form.label :name, data: { required: true } %>
+
         <%= form.text_field :name,
                         required: true,
                         class: "form-control",
@@ -27,15 +28,19 @@
                           required: true,
                         },
                         autofocus: invalid_name %>
+
         <% if invalid_name %>
           <%= render "shared/form/field_errors",
           id: form.field_id(:name, "error"),
           errors: @metadata_template.errors.full_messages_for(:name) %>
         <% end %>
       </div>
+
       <% invalid_description = @metadata_template.errors&.include?(:description) %>
+
       <div class="mt-2 form-field <%= 'invalid' if invalid_description %>">
         <%= form.label :description %>
+
         <%= form.text_area :description,
                        class: "form-control",
                        aria: {
@@ -50,16 +55,19 @@
                          invalid: invalid_description,
                        },
                        autofocus: invalid_description %>
+
         <% if invalid_description %>
           <%= render "shared/form/field_errors",
           id: form.field_id(:description, "error"),
           errors: @metadata_template.errors.full_messages_for(:description) %>
         <% end %>
       </div>
+
       <div
         class="hidden"
         data-viral--sortable-lists--two-lists-selection-target="field"
       ></div>
+
       <%= viral_sortable_lists(
                   title: t("metadata_templates.form.metadata"),
                   description: t("metadata_templates.form.description"),
@@ -70,6 +78,7 @@
           list_items: @available_metadata_fields,
           group: "metadata_selection",
         ) %>
+
         <%= sortable_lists.with_list(
           id: "selected-list",
           title: t("metadata_templates.form.selected"),
@@ -78,6 +87,7 @@
           required: true,
         ) %>
       <% end %>
+
       <div class="mt-4">
         <%= form.submit submit_button_text,
                     data: {
@@ -91,4 +101,4 @@
       </div>
     </div>
   <% end %>
-</div>
+<% end %>
