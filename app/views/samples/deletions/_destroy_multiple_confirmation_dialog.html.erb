@@ -1,8 +1,9 @@
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <div
     data-controller="infinite-scroll"
-    data-infinite-scroll-selection-outlet='#samples-table'
+    data-infinite-scroll-selection-outlet='[id="samples-table"]'
     data-infinite-scroll-paged-field-name-value="sample_ids[]"
     data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
@@ -13,19 +14,24 @@
       ) do %>
       <div data-infinite-scroll-target="pageFormContent"></div>
     <% end %>
+
     <div class="grid gap-4">
       <p
         data-infinite-scroll-target="summary"
         class="text-base leading-relaxed text-slate-500 dark:text-slate-400"
-      ><%= t(".description.zero") %></p>
+      >
+        <%= t(".description.zero") %>
+      </p>
+
       <div>
         <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
           <%= t(".samples") %>
         </div>
+
         <div
           class="
-            overflow-y-auto max-h-[300px] border border-slate-300 rounded-lg block w-full
-            p-2.5 dark:bg-slate-800 dark:border-slate-600
+            overflow-y-auto max-h-[300px] border border-slate-300 rounded-lg
+            block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
           "
           data-action="scroll->infinite-scroll#scroll"
           data-infinite-scroll-target="scrollable"
@@ -39,7 +45,7 @@
       <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id),
             data: {
               controller: "spinner form--json-submission",
-              "form--json-submission-selection-outlet": '#samples-table',
+              "form--json-submission-selection-outlet": '[id="samples-table"]',
               "form--json-submission-field-name-value": "destroy[sample_ids][]",
               "form--json-submission-clear-selection-value": "true",
               "form--json-submission-target": "form",
@@ -60,6 +66,7 @@
         </div>
       <% end %>
     </div>
+
     <div
       role="status"
       id="spinner"

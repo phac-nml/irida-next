@@ -2,17 +2,21 @@
   <% dialog.with_header(
     title: t(:"workflow_executions.submissions.pipeline_selection.title"),
   ) %>
-  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_ids[]" }) do %>
+
+  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "[id='samples-table']", "workflow-selection-field-name-value": "sample_ids[]" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :pipeline_id,
                         data: {
                           "workflow-selection-target": "pipelineId",
                         } %>
+
       <%= form.hidden_field :workflow_version,
                         data: {
                           "workflow-selection-target": "workflowVersion",
                         } %>
+
       <%= form.hidden_field :namespace_id, value: @namespace_id %>
+
       <ul class="space-y-2">
         <% workflows.each do |key, workflow| %>
           <li>
@@ -34,16 +38,20 @@
                     "dark:text-slate-500 group-hover:-rotate-45 transition-rotate-45 delay-150 duration-300 ease-in-out",
                 ) %>
               </span>
+
               <span class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
                 <span class="flex items-center space-x-2">
-                  <span class=" font-medium text-slate-900 truncate dark:text-white ">
+                  <span class="font-medium text-slate-900 truncate dark:text-white">
                     <%= workflow.name %>
                   </span>
+
                   <%= viral_pill(text: workflow.version, color: :primary) %>
                 </span>
+
                 <span
                   class="
-                    text-sm font-normal text-slate-500 dark:text-slate-400 text-wrap
+                    text-sm font-normal text-slate-500 dark:text-slate-400
+                    text-wrap
                   "
                 >
                   <%= workflow.description %>
@@ -53,6 +61,7 @@
           </li>
         <% end %>
       </ul>
+
       <div id="pipeline-spinner" class="hidden flex items-center p-4 space-x-4">
         <%= render SpinnerComponent.new(
           message: t("workflow_executions.submissions.pipeline_selection.loading_html"),

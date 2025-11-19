@@ -1,10 +1,11 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("samples.transfers.dialog.title")) %>
   <%= turbo_stream_from @broadcast_target %>
+
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
       data-controller="infinite-scroll viral--select2"
-      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-selection-outlet='[id="samples-table"]'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t("samples.transfers.dialog.description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t("samples.transfers.dialog.description.plural") %>"
@@ -13,7 +14,7 @@
         url: path_with_params(list_samples_path, { list_class: 'sample' }),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
-        <input type="hidden" name="format" value="turbo_stream"/>
+        <input type="hidden" name="format" value="turbo_stream">
         <div data-infinite-scroll-target="pageFormContent"></div>
       <% end %>
 
@@ -24,14 +25,17 @@
         >
           <%= t("samples.transfers.dialog.description.zero") %>
         </p>
+
         <div>
           <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
             <%= t("samples.transfers.dialog.samples") %>
           </div>
+
           <div
             class="
-              overflow-y-auto max-h-[300px] border border-slate-300 rounded-lg block w-full
-              p-2.5 dark:bg-slate-800 dark:border-slate-600
+              overflow-y-auto max-h-[300px] border border-slate-300
+              rounded-lg block w-full p-2.5 dark:bg-slate-800
+              dark:border-slate-600
             "
             data-action="scroll->infinite-scroll#scroll"
             data-infinite-scroll-target="scrollable"
@@ -47,16 +51,22 @@
         <%= form_for(:transfer, url: samples_transfer_path(namespace_id: @namespace.id), method: :post,
               data: {
                 controller: "form--json-submission",
-                "form--json-submission-selection-outlet": '#samples-table',
+                "form--json-submission-selection-outlet": '[id="samples-table"]',
                 "form--json-submission-field-name-value": "transfer[sample_ids][]",
                 "form--json-submission-clear-selection-value": "true",
                 "form--json-submission-target": "form",
               }
             ) do |form| %>
-          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
+          <input
+            type="hidden"
+            name="broadcast_target"
+            value="<%= @broadcast_target %>"
+          >
+
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "transfer-project-select" %>
+
               <%= form.label :new_project_id,
                          t("samples.transfers.dialog.new_project_id"),
                          for: form_id,
@@ -65,14 +75,16 @@
                          data: {
                            required: true,
                          } %>
+
               <% if @projects.empty? %>
                 <input
                   disabled
-                  placeholder="<%= t("samples.transfers.dialog.no_available_projects")%>"
+                  placeholder="<%= t("samples.transfers.dialog.no_available_projects") %>"
                   type="text"
                   class="
-                    border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5
-                    dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+                    border-slate-300 text-slate-800 sm:text-sm rounded-lg
+                    block w-full p-2.5 dark:bg-slate-800
+                    dark:border-slate-600 dark:text-slate-50
                   "
                 >
               <% else %>
@@ -84,23 +96,27 @@
                     ) do %>
                       <span
                         class="
-                          text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                          text-slate-900 dark:text-slate-400 font-semibold
+                          block pointer-events-none
                         "
                       >
                         <%= project.name %>
                         <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
                       </span>
+
                       <span class="text-slate-600 dark:text-white block pointer-events-none">
                         <%= project.full_path %>
                       </span>
                     <% end %>
                   <% end %>
+
                   <%= select.with_empty_state do %>
                     <%= t("samples.transfers.dialog.empty_state") %>
                   <% end %>
                 <% end %>
               <% end %>
             </div>
+
             <div>
               <%= form.submit t("samples.transfers.dialog.submit_button"),
                           class: "button button-primary",

@@ -1,12 +1,13 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
       data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
       data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][attachment_formats][]"
-      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-selection-outlet='[id="samples-table"]'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
@@ -26,14 +27,18 @@
             <button
               type="button"
               class="
-                flex items-center justify-between w-full p-3 font-medium rtl:text-right
-                text-black dark:text-white border border-slate-200 dark:border-slate-700
-                hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t-lg
+                flex items-center justify-between w-full p-3 font-medium
+                rtl:text-right text-black dark:text-white border
+                border-slate-200 dark:border-slate-700 hover:bg-slate-100
+                dark:hover:bg-slate-800 gap-3 rounded-t-lg
               "
               data-collapsible-target="button"
               data-action="collapsible#toggle"
             >
-              <span data-infinite-scroll-target="selectionCount"><%= t(".samples") %></span>
+              <span data-infinite-scroll-target="selectionCount">
+                <%= t(".samples") %>
+              </span>
+
               <span
                 data-collapsible-target="icon"
                 class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
@@ -52,19 +57,25 @@
           >
             <div
               class="
-                text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
-                border-t-0 border-slate-200 dark:border-slate-700
+                text-base leading-relaxed text-slate-500 dark:text-slate-400
+                p-2.5 border border-t-0 border-slate-200
+                dark:border-slate-700
               "
             >
               <span data-infinite-scroll-target="summary">
                 <%= t(:"data_exports.new.sample_description.zero") %>
               </span>
-              <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+
+              <span>
+                <%= t(:"data_exports.new.after_submission_description_html") %>
+              </span>
             </div>
+
             <div
               class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-200 rounded-b-lg
-                block w-full p-2.5 dark:bg-slate-800 dark:border-slate-700
+                overflow-y-auto max-h-[200px] border border-t-0
+                border-slate-200 rounded-b-lg block w-full p-2.5
+                dark:bg-slate-800 dark:border-slate-700
               "
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
@@ -87,6 +98,7 @@
             title: t(".available"),
             group: "format_selection",
           ) %>
+
           <%= sortable_lists.with_list(
             id: "selected-list",
             title: t(".selected"),
@@ -95,10 +107,11 @@
             required: true,
           ) %>
         <% end %>
+
         <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--json-submission",
-                "form--json-submission-selection-outlet": '#samples-table',
+                "form--json-submission-selection-outlet": '[id="samples-table"]',
                 "form--json-submission-field-name-value": "data_export[export_parameters][ids][]",
                 "form--json-submission-clear-selection-value": "true",
                 "form--json-submission-target": "form",
@@ -106,16 +119,20 @@
             ) do |form| %>
           <div class="grid gap-4">
             <%= render partial: "name_and_email", locals: { form: } %>
+
             <div>
               <%= form.hidden_field :export_type, value: "sample" %>
+
               <%= form.fields_for :export_parameters do |export_parameters| %>
                 <%= export_parameters.hidden_field :namespace_id, value: namespace_id %>
               <% end %>
             </div>
+
             <div
               class="hidden"
               data-viral--sortable-lists--two-lists-selection-target="field"
             ></div>
+
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
                           data: {
