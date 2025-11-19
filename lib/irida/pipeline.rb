@@ -89,6 +89,16 @@ module Irida
       sample_sheet['items']['properties'][property_name]['pattern']
     end
 
+    def estimated_cost_formula(sample_count)
+      cost = @settings.fetch('estimated_cost_formula', nil)
+
+      return nil if cost.nil?
+      return cost if cost.is_a?(Integer) || cost.is_a?(Float)
+
+      calculator = Dentaku::Calculator.new
+      calculator.evaluate(run_time, SAMPLE_COUNT: sample_count).round(2)
+    end
+
     private
 
     def text_for(value)
