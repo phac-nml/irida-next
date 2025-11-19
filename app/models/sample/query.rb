@@ -130,8 +130,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
         scope.where(node.eq(condition.value))
       end
     when 'in'
-      if metadata_field || condition.field == 'name'
-        scope.where(node.matches_any(condition.value))
+      if metadata_field
+        scope.where(Arel::Nodes::NamedFunction.new('LOWER',
+                                                   [node]).in(condition.value.map(&:downcase)))
+      elsif condition.field == 'name'
+        scope.where(node.lower.in(condition.value.map(&:downcase)))
       elsif condition.field == 'puid'
         scope.where(node.in(condition.value.map(&:upcase)))
       else
@@ -146,8 +149,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
         scope.where(node.not_eq(condition.value))
       end
     when 'not_in'
-      if metadata_field || condition.field == 'name'
-        scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+      if metadata_field
+        scope.where(node.eq(nil).or(Arel::Nodes::NamedFunction.new('LOWER',
+                                                                   [node]).not_in(condition.value.map(&:downcase))))
+      elsif condition.field == 'name'
+        scope.where(node.lower.not_in(condition.value.map(&:downcase)))
       elsif condition.field == 'puid'
         scope.where(node.not_in(condition.value.map(&:upcase)))
       else
