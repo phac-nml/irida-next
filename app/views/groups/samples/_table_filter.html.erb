@@ -4,7 +4,7 @@
   turbo_action: 'replace',
   controller: "form--json-submission filters metadata-toggle",
   "metadata-toggle-page-value": @pagy&.page,
-  "filters-selection-outlet": "#samples-table",
+  "filters-selection-outlet": "[id='samples-table']",
   "form--json-submission-target": "form",
 }, class: "filters contents" do |f| %>
   <div class="max-sm:grow">
@@ -15,12 +15,12 @@
       field_name: :name_or_puid_cont,
       value: @search_params[:name_or_puid_cont],
       data: {
-        "search-field-selection-outlet": "#samples-table",
+        "search-field-selection-outlet": "[id='samples-table']",
       },
     ) %>
 
-    <input type="hidden" name="format" value="turbo_stream" />
-    <input type="hidden" name="limit" value="<%= @pagy&.limit %>" />
+    <input type="hidden" name="format" value="turbo_stream">
+    <input type="hidden" name="limit" value="<%= @pagy&.limit %>">
   </div>
 
   <div class="max-sm:grow">

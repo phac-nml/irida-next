@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "selected" do %>
   <%= tag.div data: {
     controller: "table-selection",
-    table_selection_ids_value: @sample_ids.map(&:to_s),
-    table_selection_selection_outlet: "#samples-table"
+    table_selection_ids_value: @sample_ids,
+    table_selection_selection_outlet: "[id='samples-table']"
   } %>
 <% end %>
