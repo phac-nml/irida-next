@@ -122,12 +122,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def select
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
-    @workflow_executions = []
+    @workflow_execution_ids = []
 
     return if params[:select].blank?
 
     @q = load_workflows.ransack(params[:q])
-    @workflow_executions = @q.result.select(:id)
+    @workflow_execution_ids = @q.result.pluck(:id)
   end
 
   def destroy_confirmation
