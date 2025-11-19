@@ -15,15 +15,17 @@ class WorkflowExecutionMinimumRuntimeJob < WorkflowExecutionJob
 
     time_elapsed = Time.now.to_i - workflow_execution.created_at.to_i
 
+    interval = status_check_interval(workflow_execution)
+
     # Check if the condition is met
     if !min_run_time.nil? && running_state && (time_elapsed >= min_run_time)
       # Condition met: process the object
       WorkflowExecutionStatusJob.set(
-        wait_until: status_check_interval(workflow_execution).seconds.from_now
+        wait_until: interval.seconds.from_now
       ).perform_later(workflow_execution)
     else
       # Condition not met: re-enqueue the job with a delay
-      delay = min_run_time - time_elapsed
+      delay = [min_run_time - time_elapsed, interval]
       WorkflowExecutionMinimumRuntimeJob.set(wait_until: delay.seconds.from_now).perform_later(workflow_execution)
     end
   end
