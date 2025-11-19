@@ -25,7 +25,7 @@ class WorkflowExecutionMinimumRuntimeJob < WorkflowExecutionJob
       ).perform_later(workflow_execution)
     else
       # Condition not met: re-enqueue the job with a delay
-      delay = [min_run_time - time_elapsed, interval]
+      delay = [min_run_time - time_elapsed, interval].max
       WorkflowExecutionMinimumRuntimeJob.set(wait_until: delay.seconds.from_now).perform_later(workflow_execution)
     end
   end

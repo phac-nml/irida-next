@@ -54,6 +54,7 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     run_time = state_time_calculation(workflow_execution, :running)
     maximum_run_time = maximum_run_time(workflow_execution)
 
+    # Max runtime for pipeline has exceeded so we sent a cancellation request to WES
     if !maximum_run_time.nil? && run_time.nil? && !workflow_execution.completed? && (run_time > maximum_run_time)
       workflow_execution.state = :canceling
       workflow_execution.save
