@@ -1,9 +1,9 @@
 <turbo-stream action="update" target="selected">
   <template>
-    <%= tag.div data: {
-      controller: "table-selection",
-      table_selection_ids_value: @sample_attachment_ids.map(&:to_s),
-      table_selection_selection_outlet: "#attachments-table"
-    } %>
+    <div
+      data-controller="table-selection"
+      data-table-selection-ids-value="<%= @sample_attachment_ids %>"
+      data-table-selection-selection-outlet="#attachments-table"
+    ></div>
   </template>
 </turbo-stream>
