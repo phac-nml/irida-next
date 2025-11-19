@@ -26,11 +26,7 @@
                   <%- I18n.available_locales.each do |locale| %>
                     <%= dropdown.with_item(
                       label: t(:"locales.#{locale}", locale: locale),
-                      url:
-                        url_for(
-                          locale: locale,
-                          **(params[:local].present? ? { local: params[:local] } : {}),
-                        ),
+                      url: url_for(locale: locale, **params.to_unsafe_h.except(:locale)),
                       lang: locale,
                       hreflang: locale,
                     ) %>
