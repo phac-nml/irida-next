@@ -8,8 +8,16 @@ export default class extends Controller {
 
   connect() {
     setTimeout(() => {
-      window.opener.postMessage(this.tokenValue, this.targetValue)
-      window.close()
+      try {
+        if (window.opener && !window.opener.closed) {
+          window.opener.postMessage(this.tokenValue, this.targetValue)
+        } else {
+          console.error('Parent window unavailable')
+        }
+        window.close()
+      } catch (error) {
+        console.error('Failed to send token:', error)
+      }
     }, 3000)
   }
 }
