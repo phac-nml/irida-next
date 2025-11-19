@@ -33,17 +33,15 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     result = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
 
     if result
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution.reload)
+      if minimum_run_time(workflow_execution).nil?
+        WorkflowExecutionStatusJob.set(
+          wait_until: status_check_interval(workflow_execution).seconds.from_now
+        ).perform_later(workflow_execution)
+      else
+        WorkflowExecutionMinimumRuntimeJob.perform_later(workflow_execution)
+      end
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
-    end
-
-    if minimum_run_time(workflow_execution).nil?
-      WorkflowExecutionStatusJob.set(
-        wait_until: status_check_interval(workflow_execution).seconds.from_now
-      ).perform_later(workflow_execution)
-    else
-      WorkflowExecutionMinimumRuntimeJob.perform_later(workflow_execution)
     end
   end
 end
