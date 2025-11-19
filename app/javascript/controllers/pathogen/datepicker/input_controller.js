@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FOCUSABLE_ELEMENTS } from "controllers/pathogen/datepicker/constants";
+import { parseDate } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
@@ -8,6 +9,7 @@ export default class extends Controller {
     "calendarTemplate",
     "inputError",
     "minDate",
+    "calendarButton",
   ];
 
   static values = {
@@ -31,8 +33,6 @@ export default class extends Controller {
 
   // calendar DOM element once appended
   #calendar;
-  // retrieves next focusable element in DOM after date input
-  #nextFocusableElementAfterInput;
 
   #dropdown;
 
@@ -43,8 +43,6 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
-    this.boundHandleDatepickerInputFocus =
-      this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
@@ -59,21 +57,9 @@ export default class extends Controller {
 
     // Position the calendar
     this.#initializeDropdown();
-
-    this.datepickerInputTarget.addEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
-    this.#findNextFocusableElement();
   }
 
   disconnect() {
-    this.datepickerInputTarget.removeEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
     this.#calendar.remove();
     this.#calendar = null;
   }
@@ -85,36 +71,33 @@ export default class extends Controller {
           "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
         );
       }
-      this.#dropdown = new Dropdown(
-        this.#calendar,
-        this.datepickerInputTarget,
-        {
-          placement: "top",
-          triggerType: "none", // handle via handleDatepickerInputFocus instead
-          offsetSkidding: 0,
-          offsetDistance: 10,
-          delay: 300,
-          onShow: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-            this.#calendar.addEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-          onHide: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-            document.removeEventListener(
-              "keydown",
-              this.boundHandleGlobalKeydown,
-            );
-            this.#calendar.removeEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
+      this.#dropdown = new Dropdown(this.#calendar, this.calendarButtonTarget, {
+        placement: "top",
+        triggerType: "click",
+        offsetSkidding: 0,
+        offsetDistance: 10,
+        delay: 300,
+        onShow: () => {
+          this.calendarButtonTarget.setAttribute("aria-expanded", "true");
+          document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+          this.#calendar.addEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
+          this.pathogenDatepickerCalendarOutlet.setFocusOnTabbableDate();
         },
-      );
+        onHide: () => {
+          this.calendarButtonTarget.setAttribute("aria-expanded", "false");
+          document.removeEventListener(
+            "keydown",
+            this.boundHandleGlobalKeydown,
+          );
+          this.#calendar.removeEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
+        },
+      });
     } catch (error) {
       this.#handleError(error, "initializeDropdown");
     }
@@ -166,16 +149,6 @@ export default class extends Controller {
     }
   }
 
-  // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
-  // tabbing through the calendar, we'd focus on the next element after the date input
-  #findNextFocusableElement() {
-    const focusable = Array.from(
-      document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
-    );
-    let index = focusable.indexOf(this.datepickerInputTarget);
-    this.#nextFocusableElementAfterInput = focusable[index + 1];
-  }
-
   // append datepicker to dialog if in dialog, otherwise append to body
   #findCalendarContainer() {
     let nextParentElement = this.datepickerInputTarget.parentElement;
@@ -193,12 +166,6 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  handleDatepickerInputFocus() {
-    if (!this.#dropdown.isVisible()) {
-      this.#dropdown.show();
-    }
-  }
-
   handleCalendarFocus(event) {
     const parentElement = this.#calendar.parentElement;
     if (parentElement.tagName === "DIALOG") {
@@ -214,7 +181,11 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      if (this.#dropdown) {
+        this.#dropdown.hide();
+        this.calendarButtonTarget.focus();
+        if (this.autosubmitValue) this.submitDate();
+      }
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -224,36 +195,9 @@ export default class extends Controller {
   handleGlobalKeydown(event) {
     // Escape: close calendar
     if (event.key === "Escape") {
-      this.hideCalendar();
-      this.setInputValue(this.#selectedDate);
-      return;
-    }
-
-    // If we tab off the last datepicker element, we want to force focus onto the next focusable element after
-    // the datepicker input
-    if (
-      event.key === "Tab" &&
-      event.target ===
-        this.pathogenDatepickerCalendarOutlet.getLastFocusableElement() &&
-      !event.shiftKey
-    ) {
       event.preventDefault();
       this.hideCalendar();
-      this.focusNextFocusableElement();
       return;
-    }
-
-    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
-    // while Tab focuses on the first focusable element within the calendar
-    if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
-      if (event.shiftKey) {
-        this.hideCalendar();
-      } else if (!event.shiftKey) {
-        event.preventDefault();
-        this.pathogenDatepickerCalendarOutlet
-          .getFirstFocusableElement()
-          .focus();
-      }
     }
   }
 
@@ -271,20 +215,17 @@ export default class extends Controller {
           this.#disableInputErrorState();
         }
         this.#setSelectedDate();
-        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
     }
-    this.hideCalendar();
   }
 
   // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
   #validateDateInput(dateInput) {
     let year, month, day;
     if (dateInput.match(this.dateFormatRegexValue)) {
-      [year, month, day] = dateInput.split("-").map(Number);
-      month--;
+      [year, month, day] = parseDate(dateInput);
       const date = new Date(year, month, day);
       return (
         date.getFullYear() === year &&
@@ -325,19 +266,17 @@ export default class extends Controller {
   // submits the selected date
   submitDate() {
     this.#disableInputErrorState();
-    this.element.closest("form").requestSubmit();
-    this.#setSelectedDate();
+    // submit the date only if it differs from original selected date; prevents unnecessary submissions for unchanged
+    // values
+    if (this.#selectedDate !== this.datepickerInputTarget.value) {
+      this.element.closest("form").requestSubmit();
+      this.#setSelectedDate();
+    }
   }
 
-  // handles filling in the date input with the date
-  // use cases:
-  // 1. Add the newly selected date from the datepicker
-  // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
-  // 3. If user entered an invalid date, resets to original value
+  // handles filling in the date input with the date after selection
   setInputValue(date) {
     this.datepickerInputTarget.value = date;
-    this.#selectedDate = date;
-    this.#setSelectedDate();
   }
 
   // passes all shared variables required by the calendar, avoids processing or passing values twice
@@ -352,7 +291,6 @@ export default class extends Controller {
       selectedMonthIndex: this.#selectedMonthIndex,
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
-      autosubmit: this.autosubmitValue,
     };
     this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
@@ -367,12 +305,8 @@ export default class extends Controller {
     );
   }
 
-  // used by pathogen/datepicker/calendar.js
-  focusDatepickerInput() {
-    this.datepickerInputTarget.focus();
-  }
-
-  focusNextFocusableElement() {
-    this.#nextFocusableElementAfterInput.focus();
+  setCalendarButtonAriaAttributes(ariaLabel, calendarId) {
+    this.calendarButtonTarget.setAttribute("aria-label", ariaLabel);
+    this.calendarButtonTarget.setAttribute("aria-controls", calendarId);
   }
 }

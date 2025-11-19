@@ -4,13 +4,16 @@ en:
     datepicker:
       aria_label:
         calendar: Calendar
+        change_date: Change date
+        choose_date: Choose date
         clear_selection: Clear date selection
+        close_datepicker: Close datepicker
         next_month_button: Navigate to next month
         previous_month_button: Navigate to previous month
         select_month: Select month
         select_year: Select year
-        show_today: Show today
       clear_selection: Clear selection
+      close: Close
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Date Selection
       days_of_week:
@@ -38,7 +41,6 @@ en:
         october: October
         september: September
       placeholder: YYYY-MM-DD
-      show_today: Show Today
     label:
       required_indicator: "*"
       title: required
