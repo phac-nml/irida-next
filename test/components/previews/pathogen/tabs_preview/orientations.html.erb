@@ -62,13 +62,13 @@
           <div class="p-6 space-y-4">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Usage</h3>
             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200">&lt;%= render(Pathogen::Tabs.new(
   id: "my-tabs",
   label: "Content sections",
   orientation: :horizontal # Default, can be omitted
-)) do |tabs| %>
-  <!-- tabs and panels here -->
-<%% end %></code></pre>
+)) do |tabs| %&gt;
+  &lt;!-- tabs and panels here --&gt;
+&lt;% end %&gt;</code></pre>
             </div>
           </div>
         <% end %>
@@ -171,22 +171,22 @@
           <div class="p-6 space-y-4">
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Usage Example</h3>
             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
-              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render(Pathogen::Tabs.new(
+              <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200">&lt;%= render(Pathogen::Tabs.new(
   id: "sidebar-tabs",
   label: "Sidebar navigation",
   orientation: :vertical
-)) do |tabs| %>
-  <%% tabs.with_tab(id: "tab-1", label: "Dashboard") %>
-  <%% tabs.with_tab(id: "tab-2", label: "Settings") %>
+)) do |tabs| %&gt;
+  &lt;% tabs.with_tab(id: "tab-1", label: "Dashboard") %&gt;
+  &lt;% tabs.with_tab(id: "tab-2", label: "Settings") %&gt;
 
-  <%% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %>
+  &lt;% tabs.with_panel(id: "panel-1", tab_id: "tab-1") do %&gt;
     Dashboard content
-  <%% end %>
+  &lt;% end %&gt;
 
-  <%% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %>
+  &lt;% tabs.with_panel(id: "panel-2", tab_id: "tab-2") do %&gt;
     Settings content
-  <%% end %>
-<%% end %></code></pre>
+  &lt;% end %&gt;
+&lt;% end %&gt;</code></pre>
             </div>
           </div>
         <% end %>
