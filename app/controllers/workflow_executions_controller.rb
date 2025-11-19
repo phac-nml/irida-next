@@ -14,7 +14,10 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     if @workflow_execution.persisted?
       redirect_to workflow_executions_path
     else
-      render locals: { message: "Workflow execution failed: due to: #{@workflow_execution.errors[:samples].join(',')}", type: 'alert' },
+      render locals: {
+               message: "#{t('.error_message')} #{@workflow_execution.errors.messages.values.flatten.join(',')}",
+               type: 'alert'
+             },
              status: :unprocessable_content
     end
   end
