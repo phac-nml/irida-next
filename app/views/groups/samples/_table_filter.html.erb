@@ -2,13 +2,14 @@
 
 <%= form_with model: @query, html: { role: "search" }, scope: :q, url: search_group_samples_url, method: :post, data: {
   turbo_action: 'replace',
-  controller: "filters metadata-toggle",
+  controller: "form--json-submission filters metadata-toggle",
   "metadata-toggle-page-value": @pagy&.page,
   "filters-selection-outlet": "#samples-table",
+  "form--json-submission-target": "form",
 }, class: "filters contents" do |f| %>
   <div class="max-sm:grow">
     <%= render SearchFieldComponent.new(
-      label: t('common.controls.search'),
+      label: t("common.controls.search"),
       placeholder: t(".search.placeholder"),
       form: f,
       field_name: :name_or_puid_cont,
