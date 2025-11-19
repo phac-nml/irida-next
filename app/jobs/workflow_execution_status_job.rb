@@ -21,8 +21,8 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
   end
 
   def perform(workflow_execution)
-    # User signaled to cancel or workflow execution has completed
-    return if workflow_execution.canceling? || workflow_execution.canceled? || workflow_execution.completed?
+    # User signaled to cancel
+    return if workflow_execution.canceling? || workflow_execution.canceled?
 
     # validate workflow_execution object is fit to run jobs on
     unless validate_initial_state(workflow_execution, nil, validate_run_id: true)
