@@ -82,8 +82,8 @@ module WorkflowExecutions
       in { max_samples: }
         if params['samples_workflow_executions_attributes'].keys.length > max_samples
           @workflow_execution.errors.add(:samples,
-                                         t('services.workflow_executions.create.max_samples_exceeded',
-                                           max_samples: max_samples))
+                                         I18n.t('services.workflow_executions.create.max_samples_exceeded',
+                                                max_samples: max_samples))
         end
       else
         # No max_samples set for pipeline
