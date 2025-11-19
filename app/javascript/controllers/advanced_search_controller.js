@@ -14,8 +14,16 @@ export default class extends Controller {
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
+    open: Boolean,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
+
+  connect() {
+    // Render the search if openValue is true on connect
+    if (this.openValue) {
+      this.renderSearch();
+    }
+  }
 
   renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
