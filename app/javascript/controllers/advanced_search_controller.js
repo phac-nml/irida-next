@@ -17,11 +17,7 @@ export default class extends Controller {
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
 
-  connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
+  renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
