@@ -1,7 +1,12 @@
 {
   "name": "irida-next",
+  "scripts": {
+    "herb:format": "herb-format",
+    "herb:format:check": "herb-format --check"
+  },
   "private": true,
   "devDependencies": {
+    "@herb-tools/formatter": "^0.8.2",
     "axe-core": "^4.11.0",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2"

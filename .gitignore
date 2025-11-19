@@ -90,3 +90,6 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
+
+# Ignore Herb log files
+*_erb_parsing_result_*.log

@@ -1,9 +1,9 @@
 {
   "recommendations": [
-    "elia.erb-formatter",
     "esbenp.prettier-vscode",
     "shopify.ruby-lsp",
     "streetsidesoftware.code-spell-checker",
-    "mkhl.direnv"
+    "mkhl.direnv",
+    "marcoroth.herb-lsp"
   ]
 }

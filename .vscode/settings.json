@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[erb]": {
-    "editor.defaultFormatter": "elia.erb-formatter"
+    "editor.defaultFormatter": "marcoroth.herb-lsp"
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
