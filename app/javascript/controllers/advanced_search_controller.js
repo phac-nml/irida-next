@@ -14,14 +14,18 @@ export default class extends Controller {
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
+    open: Boolean,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
 
   connect() {
-    this.idempotentConnect();
+    // Render the search if openValue is true on connect
+    if (this.openValue) {
+      this.renderSearch();
+    }
   }
 
-  idempotentConnect() {
+  renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
