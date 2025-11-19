@@ -34,9 +34,10 @@
                   method: :get,
                   id: "select-all-form",
                   class: "max-sm:grow",
+                  data: { turbo_frame: "selected" },
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
-      <input type="hidden" name="select" value="on" />
+      <input type="hidden" name="format" value="turbo_stream">
+      <input type="hidden" name="select" value="on">
 
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
@@ -46,8 +47,9 @@
                   method: :get,
                   id: "deselect-all-form",
                   class: "max-sm:grow",
+                  data: { turbo_frame: "selected" },
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
+      <input type="hidden" name="format" value="turbo_stream">
 
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
