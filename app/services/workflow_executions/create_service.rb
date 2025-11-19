@@ -27,12 +27,9 @@ module WorkflowExecutions
         @workflow_execution.workflow_params = sanitized_workflow_params
       end
 
-      if @workflow_execution.workflow.settings.key?('max_samples')
-        max_samples = @workflow_execution.workflow.settings['max_samples']
-        if params['samples_workflow_executions_attributes'].keys.length > max_samples
-          @workflow_execution.errors.add(:samples, "Maximum number of samples (#{max_samples}) exceeded")
-        end
-      end
+      # Check if max samples is set for pipeline and set error to
+      # non persisted workflow execution object if selected samples exceeds this setting
+      validate_max_samples_for_pipeline
 
       if @workflow_execution.errors.empty? && @workflow_execution.save
         create_activities
@@ -77,6 +74,20 @@ module WorkflowExecutions
         ActiveModel::Type::Boolean.new.cast(value)
       else
         value
+      end
+    end
+
+    def validate_max_samples_for_pipeline
+      case @workflow_execution.workflow.settings.transform_keys(&:to_sym)
+      in { max_samples: }
+        if params['samples_workflow_executions_attributes'].keys.length > max_samples
+          @workflow_execution.errors.add(:samples,
+                                         t('services.workflow_executions.create.max_samples_exceeded',
+                                           max_samples: max_samples))
+        end
+      else
+        # No max_samples set for pipeline
+        nil
       end
     end
 

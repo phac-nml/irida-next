@@ -35,11 +35,11 @@ class WorkflowExecutionJob < ApplicationJob
   end
 
   def minimum_run_time(workflow_execution)
-    run_time_calculation(workflow_execution, 'min_run_time')
+    run_time_calculation(workflow_execution, 'min_runtime')
   end
 
   def maximum_run_time(workflow_execution)
-    run_time_calculation(workflow_execution, 'max_run_time')
+    run_time_calculation(workflow_execution, 'max_runtime')
   end
 
   def run_time_calculation(workflow_execution, run_time_key)
