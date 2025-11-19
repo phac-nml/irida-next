@@ -1805,6 +1805,9 @@ fr:
       missing_data_row: Le fichier ne comporte aucune ligne de données. Veuillez ajouter des lignes de données au fichier et réessayer le téléchargement.
       missing_field: La ligne avec l’index '%{index}' ne contient pas de champs obligatoires
       missing_header: Le fichier ne contient pas d’en-têtes '%{header_title}'
+    workflow_executions:
+      create:
+        max_samples_exceeded: Le nombre maximal d'échantillons pour le pipeline (%{max_samples}) a été dépassé
   shared:
     alert:
       list:
