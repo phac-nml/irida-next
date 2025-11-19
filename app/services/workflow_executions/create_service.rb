@@ -27,7 +27,7 @@ module WorkflowExecutions
         @workflow_execution.workflow_params = sanitized_workflow_params
       end
 
-      if @workflow_execution.workflow.settings&.key?('max_samples')
+      if @workflow_execution.workflow.settings.key?('max_samples')
         max_samples = @workflow_execution.workflow.settings['max_samples']
         if params['samples_workflow_executions_attributes'].keys.length > max_samples
           @workflow_execution.errors.add(:samples, "Maximum number of samples (#{max_samples}) exceeded")

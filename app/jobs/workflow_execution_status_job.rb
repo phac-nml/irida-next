@@ -46,39 +46,21 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     when :completing
       WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     else
-      run_time = running_state_time_calculation(workflow_execution)
-
-      if run_time.positive? && run_time > max_run_time(workflow_execution)
-        WorkflowExecutionCancelationJob.perform_later(@workflow_execution, current_user)
-      else
-        WorkflowExecutionStatusJob.set(wait_until: status_check_interval(workflow_execution).seconds.from_now)
-                                  .perform_later(workflow_execution)
-
-      end
+      requeue_or_cancel(workflow_execution)
     end
   end
 
-  # Calculate time spent in running state in seconds
-  def running_state_time_calculation(workflow_execution)
-    change_version = workflow_execution.reload_log_data.data['h'].find do |log|
-      log['c']['state'] == WorkflowExecution.states[:running]
+  def requeue_or_cancel(workflow_execution)
+    run_time = state_time_calculation(workflow_execution, :running)
+    maximum_run_time = maximum_run_time(workflow_execution)
+
+    if !maximum_run_time.nil? && run_time.nil? && !workflow_execution.completed? && (run_time > maximum_run_time)
+      workflow_execution.state = :canceling
+      workflow_execution.save
+      WorkflowExecutionCancelationJob.perform_later(workflow_execution, workflow_execution.submitter)
+    else
+      WorkflowExecutionStatusJob.set(wait_until: status_check_interval(workflow_execution).seconds.from_now)
+                                .perform_later(workflow_execution)
     end
-    # log change version timestamps are in milliseconds
-    return Time.zone.now.to_i - (change_version['ts'].to_i / 1000) if change_version
-
-    0
-  end
-
-  def max_run_time(workflow_execution)
-    max_run_time = workflow_execution.workflow.settings['max_runtime']
-
-    return max_run_time if max_run_time.is_a?(Integer)
-
-    formula = workflow_execution.workflow.settings['max_runtime'].gsub! 'SAMPLE_COUNT',
-                                                                        workflow_execution.samples.count
-
-    #### UPDATE THIS TO A SAFE EVAL METHOD ####
-    eval(formula)
-    ##########################################
   end
 end

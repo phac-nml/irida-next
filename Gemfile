@@ -157,6 +157,9 @@ flipper_version = '~> 1.3.2'
 gem 'flipper-active_record', flipper_version
 gem 'flipper-ui', flipper_version
 
+# Expression calculator
+gem 'dentaku'
+
 group :development, :rubocop do
   # rubocop
   gem 'rubocop', require: false
