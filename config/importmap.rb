@@ -19,7 +19,9 @@ pin_all_from 'app/javascript/controllers', under: 'controllers'
 # Pathogen gem controllers - explicit pinning to ensure asset path resolution across engines
 pathogen_controllers_path = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers')
 Dir.glob(pathogen_controllers_path.join('**/*.js')).each do |file|
-  name = file.delete_prefix("#{pathogen_controllers_path}/").delete_suffix('.js')
+  # Use Pathname for reliable relative path calculation across different OS
+  relative_path = Pathname.new(file).relative_path_from(pathogen_controllers_path)
+  name = relative_path.to_s.delete_suffix('.js')
   # Map Stimulus identifier pathogen--foo => controllers/pathogen/foo_controller
   # The name already includes "_controller" suffix from the file, so we keep it as-is
   pin "controllers/pathogen/#{name}", to: "pathogen/controllers/#{name}.js", preload: false
