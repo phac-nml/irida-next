@@ -565,7 +565,7 @@ module Projects
       assert_selector '[role="tab"]#groups-tab[aria-selected="false"]'
       # Groups panel should have hidden class
       groups_panel = find('[role="tabpanel"]#groups-panel', visible: :all)
-      assert groups_panel[:class].include?('hidden'), 'Groups panel should have hidden class'
+      assert (groups_panel[:class] || '').include?('hidden'), 'Groups panel should have hidden class'
 
       # Click groups tab
       find('[role="tab"]#groups-tab').click
@@ -577,7 +577,7 @@ module Projects
       assert_selector '[role="tab"]#members-tab[aria-selected="false"]'
       # Members panel should have hidden class
       members_panel = find('[role="tabpanel"]#members-panel', visible: :all)
-      assert members_panel[:class].include?('hidden'), 'Members panel should have hidden class'
+      assert (members_panel[:class] || '').include?('hidden'), 'Members panel should have hidden class'
 
       # Click members tab again
       find('[role="tab"]#members-tab').click
