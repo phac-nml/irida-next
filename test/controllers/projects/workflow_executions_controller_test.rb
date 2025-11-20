@@ -424,5 +424,19 @@ module Projects
       }
       assert_response :unauthorized
     end
+
+    test 'should not cancel shared workflow' do
+      running_workflow = workflow_executions(:automated_example_running)
+      shared_workflow = workflow_executions(:workflow_execution_shared4)
+
+      post cancel_multiple_namespace_project_workflow_executions_path(
+        @namespace,
+        @project,
+        format: :turbo_stream
+      ), params: {
+        cancel_multiple: { workflow_execution_ids: [running_workflow.id, shared_workflow.id] }
+      }
+      assert_response :multi_status
+    end
   end
 end

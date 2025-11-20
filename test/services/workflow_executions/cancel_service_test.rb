@@ -159,6 +159,28 @@ module WorkflowExecutions
       assert workflow_execution2.cleaned?
     end
 
+    test 'cannot cancel shared workflows to project' do
+      workflow_execution1 = workflow_executions(:automated_example_submitted)
+      workflow_execution2 = workflow_executions(:workflow_execution_shared4)
+
+      assert 'submitted', workflow_execution1.state
+      assert 'running', workflow_execution2.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [workflow_execution1.id, workflow_execution2.id], namespace: @namespace }
+      ).execute
+
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', workflow_execution1.reload.state
+      assert_not workflow_execution1.cleaned?
+
+      workflow_execution2.reload.state
+      assert_not_equal 'canceling', workflow_execution2.state
+      assert_not_equal 'canceled', workflow_execution2.state
+      assert_equal 'running', workflow_execution2.state
+    end
+
     # cancel through action link on table
     test 'maintainer can cancel a single project workflow execution' do
       valid_params = { namespace: @namespace,
