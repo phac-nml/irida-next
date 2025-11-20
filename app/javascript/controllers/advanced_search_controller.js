@@ -22,9 +22,7 @@ import {
  * Features:
  * - Dynamic group and condition management
  * - Enum field support with operator-specific value inputs
- * - Screen reader announcements for accessibility
  * - Form dirty state tracking
- * - Validation error announcements
  *
  * @example
  * <div data-controller="advanced-search"
@@ -62,64 +60,48 @@ export default class extends Controller {
   static values = {
     confirmCloseText: String,
     open: Boolean,
-    validationErrorOne: String,
-    validationErrorOther: String,
-    conditionAdded: String,
-    conditionRemoved: String,
-    groupAdded: String,
-    groupRemoved: String,
-    searchCleared: String,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
-  #boundBeforeCache = null;
 
   // ====================================================================
   // Lifecycle
   // ====================================================================
+
+  /**
+   * Initialize the controller on connection.
+   * Renders the search form if the dialog should be open on mount.
+   */
   connect() {
-    // Render the search if openValue is true on connect
     if (this.openValue) {
       this.renderSearch();
     }
   }
 
-  disconnect() {
-    if (this.#boundBeforeCache) {
-      document.removeEventListener(
-        "turbo:before-cache",
-        this.#boundBeforeCache,
-      );
-    }
-  }
-
+  /**
+   * Render the search groups from the template into the container.
+   * Updates remove group button visibility based on group count.
+   */
   renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
     this.#toggleRemoveGroupButtons();
-    this.#announceValidationErrors();
-
-    this.#boundBeforeCache = this.#beforeCache.bind(this);
-    document.addEventListener("turbo:before-cache", this.#boundBeforeCache);
-  }
-
-  /**
-   * Reset state before Turbo caches the page.
-   */
-  #beforeCache() {
-    if (this.hasValidationStatusTarget) {
-      this.validationStatusTarget.textContent = "";
-    }
   }
 
   // ====================================================================
   // Public Actions
   // ====================================================================
+
+  /**
+   * Clear all search groups from the container.
+   */
   clear() {
     this.searchGroupsContainerTarget.innerHTML = "";
-    this.#announce(this.searchClearedValue);
   }
 
+  /**
+   * Clear the form and reset to a single empty group with one condition.
+   */
   clearForm() {
     this.clear();
     this.addGroup();
@@ -127,7 +109,10 @@ export default class extends Controller {
 
   /**
    * Close the advanced search dialog, confirming if the form is dirty.
-   * @param {Event} event
+   * Prevents non-keyboard events from triggering keydown handlers.
+   * If the form has unsaved changes, prompts the user before closing.
+   *
+   * @param {Event} event - The closing event (typically keydown or click)
    */
   close(event) {
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
@@ -150,8 +135,10 @@ export default class extends Controller {
   }
 
   /**
-   * Add a new condition to the target group.
-   * @param {Event} event
+   * Add a new condition to the group containing the trigger element.
+   * Focuses the newly added condition's field select.
+   *
+   * @param {Event} event - Event triggered by the add condition button
    */
   addCondition(event) {
     const group = findGroup(event.currentTarget);
@@ -161,8 +148,11 @@ export default class extends Controller {
   }
 
   /**
-   * Remove the condition fieldset and reindex remaining conditions.
-   * @param {Event} event
+   * Remove a condition from its group and reindex remaining conditions.
+   * If the group becomes empty, adds a new condition to maintain at least one.
+   * Focuses the last condition's select after removal.
+   *
+   * @param {Event} event - Event triggered by the remove condition button
    */
   removeCondition(event) {
     const condition = findCondition(event.currentTarget);
@@ -179,12 +169,12 @@ export default class extends Controller {
     } else {
       conditions.at(-1)?.querySelector("select")?.focus();
     }
-
-    this.#announce(this.conditionRemovedValue);
   }
 
   /**
-   * Append a new group to the search builder dialog.
+   * Append a new search group to the dialog.
+   * Each new group starts with one condition and focuses the field select.
+   * Updates remove group button visibility after addition.
    */
   addGroup() {
     const groupIndex = this.groupsContainerTargets.length;
@@ -211,12 +201,14 @@ export default class extends Controller {
     group.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
-    this.#announce(this.groupAddedValue);
   }
 
   /**
-   * Remove a group if multiple groups exist.
-   * @param {Event} event
+   * Remove a search group if more than one group exists.
+   * Prevents removal of the last group to maintain at least one group.
+   * Reindexes remaining groups and focuses the last group's select.
+   *
+   * @param {Event} event - Event triggered by the remove group button
    */
   removeGroup(event) {
     if (this.groupsContainerTargets.length <= 1) return;
@@ -231,12 +223,14 @@ export default class extends Controller {
     groups.at(-1)?.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
-    this.#announce(this.groupRemovedValue);
   }
 
   /**
-   * Update operator and value inputs when the field select changes.
-   * @param {Event} event
+   * Handle field selection changes.
+   * Updates the operator dropdown based on field type (enum vs standard).
+   * If an operator is already selected, updates the value input accordingly.
+   *
+   * @param {Event} event - Change event from the field select element
    */
   handleFieldChange(event) {
     const condition = findCondition(event.currentTarget);
@@ -264,8 +258,12 @@ export default class extends Controller {
   }
 
   /**
-   * Adjust value inputs when the operator changes.
-   * @param {Event} event
+   * Handle operator selection changes.
+   * Swaps value input templates for list operators (in, not_in) vs single value operators.
+   * Hides value inputs for operators that don't require values (exists, not_exists).
+   * Updates enum field inputs if applicable.
+   *
+   * @param {Event} event - Change event from the operator select element
    */
   handleOperatorChange(event) {
     const condition = findCondition(event.currentTarget);
@@ -325,7 +323,9 @@ export default class extends Controller {
 
   /**
    * Insert a new condition into the provided group.
-   * @param {HTMLElement} group
+   * Renders the condition template with proper indexing and focuses the field select.
+   *
+   * @param {HTMLElement} group - The group element to add the condition to
    */
   #addConditionToGroup(group) {
     const groupIndex = getGroupIndex(group, this.groupsContainerTargets);
@@ -344,16 +344,19 @@ export default class extends Controller {
 
     const conditions = getConditions(group);
     conditions[conditionIndex]?.querySelector("select")?.focus();
-
-    this.#announce(this.conditionAddedValue);
   }
 
   /**
    * Swap the markup inside a condition's value container with a rendered template.
-   * @param {HTMLElement} condition
-   * @param {HTMLElement} templateTarget
-   * @param {{groupIndex: number, conditionIndex: number}} context
-   * @returns {HTMLElement|null}
+   * Used when switching between single-value and list-value input types.
+   * Removes hidden classes from the new value container before returning it.
+   *
+   * @param {HTMLElement} condition - The condition fieldset element
+   * @param {HTMLElement} templateTarget - The Stimulus target containing the template
+   * @param {Object} context - Index information for template placeholder replacement
+   * @param {number} context.groupIndex - The group's index
+   * @param {number} context.conditionIndex - The condition's index within the group
+   * @returns {HTMLElement|null} The new value container element, or null if not found
    */
   #swapValueTemplate(
     condition,
@@ -381,9 +384,12 @@ export default class extends Controller {
   }
 
   /**
-   * Update the operator select with the appropriate options for the field.
-   * @param {HTMLElement} condition
-   * @param {string} selectedField
+   * Update the operator select dropdown with options appropriate for the selected field.
+   * Uses enum-specific operations for enum fields, standard operations otherwise.
+   * Preserves the current operator value if it's valid for the new field type.
+   *
+   * @param {HTMLElement} condition - The condition fieldset element
+   * @param {string} selectedField - The field identifier that was selected
    */
   #updateOperatorDropdown(condition, selectedField) {
     if (!selectedField) return;
@@ -424,11 +430,14 @@ export default class extends Controller {
   }
 
   /**
-   * Convert enum field configuration into a select element when necessary.
-   * @param {HTMLElement} valueContainer
-   * @param {HTMLElement} condition
-   * @param {string} selectedField
-   * @param {string} operator
+   * Convert a value input to an enum select element when the field is an enum type.
+   * Preserves accessibility attributes, classes, and form field identifiers.
+   * Supports both single-select and multi-select based on the operator.
+   *
+   * @param {HTMLElement} valueContainer - Container element holding the value input
+   * @param {HTMLElement} condition - The condition fieldset element
+   * @param {string} selectedField - The field identifier that is an enum type
+   * @param {string} operator - The selected operator (determines single vs multi-select)
    */
   #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
     if (!valueContainer || !selectedField) {
@@ -480,10 +489,11 @@ export default class extends Controller {
   }
 
   /**
-   * Retrieve enum configuration for the selected field.
-   * @param {HTMLElement} condition
-   * @param {string} selectedField
-   * @returns {Object|null}
+   * Retrieve enum field configuration from the condition's data attributes.
+   *
+   * @param {HTMLElement} condition - The condition fieldset element
+   * @param {string} selectedField - The field identifier to look up
+   * @returns {Object|null} Enum configuration object with labels and values, or null if not found
    */
   #enumConfig(condition, selectedField) {
     try {
@@ -496,10 +506,13 @@ export default class extends Controller {
   }
 
   /**
-   * Locate the current input element to replace with a select.
-   * @param {HTMLElement} valueContainer
-   * @param {boolean} isListOperator
-   * @returns {HTMLElement|null}
+   * Locate the current input element that needs to be replaced with an enum select.
+   * For list operators, checks for list-filter controller or multi-select.
+   * For single-value operators, checks for select or text input.
+   *
+   * @param {HTMLElement} valueContainer - Container element holding the value input
+   * @param {boolean} isListOperator - Whether the operator requires multiple values
+   * @returns {HTMLElement|null} The input element to replace, or null if not found
    */
   #currentEnumInput(valueContainer, isListOperator) {
     if (isListOperator) {
@@ -516,10 +529,12 @@ export default class extends Controller {
   }
 
   /**
-   * Determine the element to inspect for attribute transfer when swapping enum inputs.
-   * @param {HTMLElement} currentInput
-   * @param {boolean} isListOperator
-   * @returns {HTMLElement|null}
+   * Determine which element to use as the source for attribute transfer when creating enum selects.
+   * Prioritizes the input element itself, or nested inputs for list operators with controllers.
+   *
+   * @param {HTMLElement} currentInput - The input element being replaced
+   * @param {boolean} isListOperator - Whether the operator requires multiple values
+   * @returns {HTMLElement|null} The element to extract attributes from, or null if invalid
    */
   #enumAttributeSource(currentInput, isListOperator) {
     if (!currentInput) return null;
@@ -531,10 +546,13 @@ export default class extends Controller {
   }
 
   /**
-   * Determine the correct name attribute to apply to the generated select.
-   * @param {HTMLElement} currentInput
-   * @param {boolean} isListOperator
-   * @returns {string|null}
+   * Extract or derive the correct name attribute for the generated enum select.
+   * For list operators, removes the trailing array brackets if present.
+   * Preserves the original name pattern for Rails nested attributes.
+   *
+   * @param {HTMLElement} currentInput - The input element being replaced
+   * @param {boolean} isListOperator - Whether the operator requires multiple values
+   * @returns {string|null} The name attribute to use, or null if unable to determine
    */
   #enumInputName(currentInput, isListOperator) {
     if (isListOperator) {
@@ -556,10 +574,13 @@ export default class extends Controller {
   }
 
   /**
-   * Determine the CSS classes to apply to the generated select element.
-   * @param {HTMLElement|null} attributeSource
-   * @param {boolean} isListOperator
-   * @returns {string}
+   * Extract CSS classes from the source element to apply to the generated enum select.
+   * Filters out classes that shouldn't be transferred (e.g., transparency, border overrides).
+   * For list operators with controllers, returns empty string if source isn't a select.
+   *
+   * @param {HTMLElement|null} attributeSource - Element to extract classes from
+   * @param {boolean} isListOperator - Whether the operator requires multiple values
+   * @returns {string} Space-separated CSS class names, or empty string if none applicable
    */
   #enumClassName(attributeSource, isListOperator) {
     if (!attributeSource || !attributeSource.className) return "";
@@ -577,13 +598,15 @@ export default class extends Controller {
   }
 
   /**
-   * Collect accessibility-related attributes to transfer to the generated select.
-   * @param {Object} options
-   * @param {HTMLElement} options.valueContainer
-   * @param {HTMLElement|null} options.attributeSource
-   * @param {string|undefined} options.ariaLabel
-   * @param {HTMLElement|null} options.labelElement
-   * @returns {Record<string, string|boolean>}
+   * Collect accessibility and form-related attributes to transfer to the generated enum select.
+   * Preserves ARIA attributes, error associations, validation states, and required flags.
+   *
+   * @param {Object} options - Configuration object
+   * @param {HTMLElement} options.valueContainer - Container element for context
+   * @param {HTMLElement|null} options.attributeSource - Source element for existing attributes
+   * @param {string|undefined} options.ariaLabel - Label text for aria-label attribute
+   * @param {HTMLElement|null} options.labelElement - Label element to check for required state
+   * @returns {Record<string, string|boolean>} Object of attribute name-value pairs
    */
   #enumAttributes({
     valueContainer,
@@ -625,9 +648,10 @@ export default class extends Controller {
   }
 
   /**
-   * Extract an accessible label for the generated select element.
-   * @param {HTMLElement} valueContainer
-   * @returns {string|undefined}
+   * Extract text content from the label element to use as aria-label.
+   *
+   * @param {HTMLElement} valueContainer - Container element that may contain a label
+   * @returns {string|undefined} The trimmed label text, or undefined if no label found
    */
   #valueAriaLabel(valueContainer) {
     const label = valueContainer.querySelector("label");
@@ -635,26 +659,31 @@ export default class extends Controller {
   }
 
   /**
-   * Determine whether the field is marked as required.
-   * @param {HTMLElement|null} labelElement
-   * @returns {boolean}
+   * Check if a field is marked as required via data attribute on the label.
+   *
+   * @param {HTMLElement|null} labelElement - The label element to check
+   * @returns {boolean} True if the field is required, false otherwise
    */
   #isRequiredField(labelElement) {
     return labelElement?.dataset?.required === "true";
   }
 
   /**
-   * Retrieve the id of the associated error element, if present.
-   * @param {HTMLElement} valueContainer
-   * @returns {string|undefined}
+   * Find the associated error element's ID for aria-describedby attribute.
+   * Looks for elements with IDs ending in '_error'.
+   *
+   * @param {HTMLElement} valueContainer - Container element to search within
+   * @returns {string|undefined} The error element's ID, or undefined if not found
    */
   #valueErrorId(valueContainer) {
     return valueContainer.querySelector("[id$='_error']")?.id;
   }
 
   /**
-   * Reset value inputs when operators without value requirements are selected.
-   * @param {HTMLElement} valueContainer
+   * Clear all value inputs within the container.
+   * Resets text inputs to empty string and select elements to no selection.
+   *
+   * @param {HTMLElement} valueContainer - Container element holding value inputs
    */
   #clearValueInputs(valueContainer) {
     valueContainer.querySelectorAll("input, select").forEach((element) => {
@@ -666,7 +695,9 @@ export default class extends Controller {
   }
 
   /**
-   * Toggle remove group button visibility based on group count.
+   * Toggle remove group button visibility and accessibility based on group count.
+   * Hides buttons when only one group exists to prevent removing the last group.
+   * Updates aria-hidden and tabIndex attributes accordingly.
    */
   #toggleRemoveGroupButtons() {
     const multipleGroups = this.groupsContainerTargets.length > 1;
@@ -684,9 +715,10 @@ export default class extends Controller {
   }
 
   /**
-   * Helper to get the currently selected field for a condition.
-   * @param {HTMLElement} condition
-   * @returns {string}
+   * Get the currently selected field value from a condition's field select.
+   *
+   * @param {HTMLElement} condition - The condition fieldset element
+   * @returns {string} The selected field identifier, or empty string if none selected
    */
   #selectedField(condition) {
     const fieldSelect = condition.querySelector(
@@ -696,8 +728,10 @@ export default class extends Controller {
   }
 
   /**
-   * Determine if the form contents differ from the original template.
-   * @returns {boolean}
+   * Check if the form has been modified from its original state.
+   * Compares both HTML structure and input values to detect changes.
+   *
+   * @returns {boolean} True if the form has unsaved changes, false otherwise
    */
   #dirty() {
     if (!this.#htmlContentMatches()) {
@@ -707,8 +741,10 @@ export default class extends Controller {
   }
 
   /**
-   * Check if the HTML content matches between container and template.
-   * @returns {boolean}
+   * Compare the rendered HTML content with the original template.
+   * Used to detect structural changes (added/removed groups or conditions).
+   *
+   * @returns {boolean} True if HTML content matches the template, false otherwise
    */
   #htmlContentMatches() {
     return (
@@ -718,8 +754,10 @@ export default class extends Controller {
   }
 
   /**
-   * Check if any input values have changed from the original template.
-   * @returns {boolean}
+   * Compare current input values with the original template values.
+   * Checks group input elements for any value changes.
+   *
+   * @returns {boolean} True if any input values differ from the template, false otherwise
    */
   #inputValuesChanged() {
     const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
@@ -734,37 +772,5 @@ export default class extends Controller {
       (original, index) =>
         currentInputs[index] && original.value !== currentInputs[index].value,
     );
-  }
-
-  /**
-   * Announce a message to screen readers via the live region.
-   * @param {string} message
-   */
-  #announce(message) {
-    if (!this.hasValidationStatusTarget || !message) return;
-    this.validationStatusTarget.textContent = message;
-  }
-
-  /**
-   * Announce validation errors in the dialog via the live region.
-   */
-  #announceValidationErrors() {
-    if (!this.hasValidationStatusTarget) return;
-
-    const errorElements = this.element.querySelectorAll(
-      '[aria-invalid="true"], .invalid',
-    );
-
-    if (errorElements.length === 0) return;
-
-    const message =
-      errorElements.length === 1
-        ? this.validationErrorOneValue
-        : this.validationErrorOtherValue.replace(
-            "%{count}",
-            String(errorElements.length),
-          );
-
-    this.validationStatusTarget.textContent = message;
   }
 }
