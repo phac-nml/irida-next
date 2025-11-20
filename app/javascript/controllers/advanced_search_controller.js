@@ -43,7 +43,8 @@ export default class extends Controller {
     fieldSelect: "select[name$='[field]']",
     valueInput: "[name$='[value]']",
     groupInputs: "[id^='q_groups_attributes_']",
-    removeGroupButton: "div > button[data-action='advanced-search#removeGroup']",
+    removeGroupButton:
+      "div > button[data-action='advanced-search#removeGroup']",
   };
 
   static targets = [
@@ -81,15 +82,14 @@ export default class extends Controller {
     if (this.openValue) {
       this.renderSearch();
     }
-    this.#announceValidationErrors();
-
-    this.#boundBeforeCache = this.#beforeCache.bind(this);
-    document.addEventListener("turbo:before-cache", this.#boundBeforeCache);
   }
 
   disconnect() {
     if (this.#boundBeforeCache) {
-      document.removeEventListener("turbo:before-cache", this.#boundBeforeCache);
+      document.removeEventListener(
+        "turbo:before-cache",
+        this.#boundBeforeCache,
+      );
     }
   }
 
@@ -97,6 +97,10 @@ export default class extends Controller {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
     this.#toggleRemoveGroupButtons();
+    this.#announceValidationErrors();
+
+    this.#boundBeforeCache = this.#beforeCache.bind(this);
+    document.addEventListener("turbo:before-cache", this.#boundBeforeCache);
   }
 
   /**
