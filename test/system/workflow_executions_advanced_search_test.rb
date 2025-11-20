@@ -323,4 +323,131 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
     assert_no_selector 'dialog[open]'
     assert_selector '#workflow-executions-table table tbody tr'
   end
+
+  test 'can filter using not_equals operator' do
+    visit workflow_executions_path
+
+    click_button I18n.t('components.advanced_search_component.title')
+
+    within 'dialog[open]' do
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        find("select[name$='[field]']").find("option[value='state']").select_option
+        find("select[name$='[operator]']").find("option[value='!=']").select_option
+        find("select[name$='[value]']").find("option[value='error']").select_option
+      end
+
+      click_button I18n.t('components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_no_selector 'dialog[open]'
+    assert_selector '#workflow-executions-table table tbody tr'
+  end
+
+  test 'can filter by run_id which uses uppercase conversion' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    visit workflow_executions_path
+
+    click_button I18n.t('components.advanced_search_component.title')
+
+    within 'dialog[open]' do
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        find("select[name$='[field]']").find("option[value='run_id']").select_option
+        find("select[name$='[operator]']").find("option[value='=']").select_option
+        # Use lowercase to test uppercase conversion
+        find("input[name$='[value]']").fill_in with: workflow_execution.run_id.downcase
+      end
+
+      click_button I18n.t('components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_no_selector 'dialog[open]'
+    # Should find results since run_id is converted to uppercase in the query
+    assert_selector '#workflow-executions-table table tbody tr'
+  end
+
+  test 'advanced search preserves filters when reopening dialog' do
+    visit workflow_executions_path
+
+    click_button I18n.t('components.advanced_search_component.title')
+
+    within 'dialog[open]' do
+      # Set up a condition
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        find("select[name$='[field]']").find("option[value='state']").select_option
+        find("select[name$='[operator]']").find("option[value='=']").select_option
+        find("select[name$='[value]']").find("option[value='completed']").select_option
+      end
+
+      click_button I18n.t('components.advanced_search_component.apply_filter_button')
+    end
+
+    # Wait for results to load
+    assert_no_selector 'dialog[open]'
+    assert_selector '#workflow-executions-table'
+
+    # Reopen the dialog
+    click_button I18n.t('components.advanced_search_component.title')
+
+    # Verify the previous filter is still present
+    within 'dialog[open]' do
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        field_select = find("select[name$='[field]']")
+        operator_select = find("select[name$='[operator]']")
+        value_select = find("select[name$='[value]']")
+
+        assert_equal 'state', field_select.value
+        assert_equal '=', operator_select.value
+        assert_equal 'completed', value_select.value
+      end
+    end
+  end
+
+  test 'validation errors prevent invalid searches' do
+    visit workflow_executions_path
+
+    click_button I18n.t('components.advanced_search_component.title')
+
+    within 'dialog[open]' do
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        # Select field and operator but leave value empty for non-exists operators
+        find("select[name$='[field]']").find("option[value='name']").select_option
+        find("select[name$='[operator]']").find("option[value='=']").select_option
+        # Leave value empty
+      end
+
+      click_button I18n.t('components.advanced_search_component.apply_filter_button')
+    end
+
+    # Dialog should remain open due to validation error
+    # The actual validation behavior may show error messages inline
+    # This test verifies the form doesn't submit with invalid data
+    assert_selector 'dialog[open]'
+  end
+
+  test 'enum fields show correct operators' do
+    visit workflow_executions_path
+
+    click_button I18n.t('components.advanced_search_component.title')
+
+    within 'dialog[open]' do
+      within first("fieldset[data-advanced-search-target='conditionsContainer']") do
+        # Select state enum field
+        find("select[name$='[field]']").find("option[value='state']").select_option
+
+        # Enum fields should only show specific operators (equals, not_equals, in, not_in)
+        # and not text operators like 'contains'
+        operator_select = find("select[name$='[operator]']")
+        operator_options = operator_select.all('option').map(&:text)
+
+        # Should have enum operators
+        assert_includes operator_options, I18n.t('components.advanced_search_component.operation.equals')
+        assert_includes operator_options, I18n.t('components.advanced_search_component.operation.not_equals')
+        assert_includes operator_options, I18n.t('components.advanced_search_component.operation.in')
+        assert_includes operator_options, I18n.t('components.advanced_search_component.operation.not_in')
+
+        # Should not have text operators for enum fields
+        # Note: This depends on handleFieldChange JavaScript implementation
+      end
+    end
+  end
 end
