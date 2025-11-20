@@ -10,7 +10,7 @@
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
-        >
+      >
         <thead class='@2xl:sticky @2xl:top-0 z-10 uppercase'>
           <tr
             class="
@@ -39,7 +39,7 @@
                         label: t(".select_all.aria_label"),
                       },
                       data: {
-                        action: "input->selection#togglePage",
+                        action: "click->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
                       },
@@ -107,7 +107,7 @@
                           label: t(".row.aria_label", name: sample.name),
                         },
                         data: {
-                          action: "input->selection#toggle",
+                          action: "click->selection#toggle",
                           selection_target: "rowSelection",
                         },
                       } %>

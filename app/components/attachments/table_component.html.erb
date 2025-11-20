@@ -38,7 +38,7 @@
                         label: t("components.attachments.table_component.select_page"),
                       },
                       data: {
-                        action: "input->selection#togglePage",
+                        action: "click->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
                       },
@@ -114,7 +114,7 @@
                 scope: 'col',
                 classes: class_names('px-3 py-3')
               ) do %>
-                <%= t('common.labels.actions') %>
+                <%= t("common.labels.actions") %>
               <% end %>
             <% end %>
           </tr>
@@ -152,7 +152,7 @@
                           label: attachment.file.filename.to_s,
                         },
                         data: {
-                          action: "input->selection#toggle",
+                          action: "click->selection#toggle",
                           selection_target: "rowSelection",
                         },
                       } %>
@@ -289,7 +289,7 @@
                   <% end %>
                   <% if @row_actions[:destroy] %>
                     <%= button_to(
-                      t('common.actions.delete'),
+                      t("common.actions.delete"),
                       destroy_path(attachment.id),
                       aria: {
                         label:

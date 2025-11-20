@@ -37,7 +37,7 @@
                         label: t(:".select_page"),
                       },
                       data: {
-                        action: "input->selection#togglePage",
+                        action: "click->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
                       },
@@ -122,7 +122,7 @@
                           label: workflow_execution.name.presence || workflow_execution.id,
                         },
                         data: {
-                          action: "input->selection#toggle",
+                          action: "click->selection#toggle",
                           selection_target: "rowSelection",
                         },
                       } %>

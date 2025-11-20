@@ -13,6 +13,8 @@ export default class extends Controller {
     countMessageOther: String,
   };
 
+  #lastActiveCheckbox;
+
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
 
@@ -32,29 +34,34 @@ export default class extends Controller {
   }
 
   togglePage(event) {
-    const newStorageValue = this.getOrCreateStoredItems();
-    this.rowSelectionTargets.map((row) => {
-      if (row.checked !== event.target.checked) {
-        row.checked = event.target.checked;
-        if (row.checked) {
-          newStorageValue.push(row.value);
-        } else {
-          const index = newStorageValue.indexOf(row.value);
-          if (index > -1) {
-            newStorageValue.splice(index, 1);
-          }
-        }
-      }
-    });
-    this.update(newStorageValue);
+    const valuesToToggle = this.rowSelectionTargets.map((row) => row.value);
+    this.#addOrRemove(event.target.checked, valuesToToggle);
   }
 
   toggle(event) {
-    this.#addOrRemove(event.target.checked, event.target.value);
+    let valuesToToggle = [event.target.value];
+    if (event.shiftKey && typeof this.#lastActiveCheckbox !== "undefined") {
+      const startCheckbox = this.rowSelectionTargets.findIndex(
+        (row) => row.id === this.#lastActiveCheckbox,
+      );
+      const endCheckbox = this.rowSelectionTargets.findIndex(
+        (row) => row.id === event.target.id,
+      );
+      const [from, to] =
+        startCheckbox < endCheckbox
+          ? [startCheckbox, endCheckbox]
+          : [endCheckbox, startCheckbox];
+      valuesToToggle = this.rowSelectionTargets
+        .slice(from, to + 1)
+        .map((row) => row.value);
+    }
+
+    this.#addOrRemove(event.target.checked, valuesToToggle);
+    this.#lastActiveCheckbox = event.target.id;
   }
 
   remove({ params: { id } }) {
-    this.#addOrRemove(false, id);
+    this.#addOrRemove(false, [id]);
   }
 
   clear() {
@@ -88,15 +95,14 @@ export default class extends Controller {
     return [];
   }
 
-  #addOrRemove(add, storageValue) {
-    const newStorageValue = this.getOrCreateStoredItems();
+  #addOrRemove(add, values) {
+    let newStorageValue = this.getOrCreateStoredItems();
     if (add) {
-      newStorageValue.push(storageValue);
+      newStorageValue = [...new Set([...newStorageValue, ...values])];
     } else {
-      const index = newStorageValue.indexOf(storageValue);
-      if (index > -1) {
-        newStorageValue.splice(index, 1);
-      }
+      newStorageValue = newStorageValue.filter(
+        (value) => !values.includes(value),
+      );
     }
     this.update(newStorageValue);
   }
