@@ -782,6 +782,20 @@ workflow_execution_shared3:
   shared_with_namespace: true
   name: "workflow_execution_shared3"
 
+workflow_execution_shared4:
+  <<: *DEFAULTS
+  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_shared_4"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_shared4"
+  state: "running"
+  cleaned: false
+  shared_with_namespace: true
+
 workflow_execution_completed_shared1:
   <<: *DEFAULTS
   workflow_params:

@@ -810,5 +810,46 @@ module Projects
       assert_no_selector 'button',
                          text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
     end
+
+    test 'cannot cancel shared workflow' do
+      shared_workflow = workflow_executions(:workflow_execution_shared4)
+
+      # attempt to cancel cancellable and non-cancellable workflows
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
+        find("input[type='checkbox'][value='#{shared_workflow.id}']").click
+      end
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
+                        .gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text ActionController::Base.helpers.strip_tags(
+          I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
+        )
+        within('#list_selections') do
+          assert_text "ID: #{@workflow_execution3.id}"
+          assert_text "ID: #{@shared_workflow.id}"
+        end
+        click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+      end
+
+      assert_no_selector '#dialog'
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/2')
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '1/2')
+    end
   end
 end
