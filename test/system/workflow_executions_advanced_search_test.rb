@@ -286,6 +286,12 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
   end
 
   test 'can filter by workflow_name JSONB field' do
+    # Check if workflow names are available (requires pipelines to be configured)
+    workflows = Irida::Pipelines.instance.pipelines('executable')
+    workflow_names = workflows.map { |_pipeline_id, pipeline| pipeline.name[I18n.locale.to_s] }.compact_blank
+
+    skip 'Workflow names not available in test environment' if workflow_names.empty?
+
     visit workflow_executions_path
 
     click_button I18n.t('components.advanced_search_component.title')
@@ -295,7 +301,8 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
         # Select workflow_name from metadata fields optgroup
         find("select[name$='[field]']").find("option[value='metadata.workflow_name']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
-        find("input[name$='[value]']").fill_in with: 'phac-nml/iridanextexample'
+        # workflow_name is an enum field, so it renders as a select dropdown
+        find("select[name$='[value]']", wait: 5).find('option', text: workflow_names.first, match: :first).select_option
       end
 
       click_button I18n.t('components.advanced_search_component.apply_filter_button')
@@ -314,7 +321,8 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
       within first("fieldset[data-advanced-search-target='conditionsContainer']") do
         find("select[name$='[field]']").find("option[value='metadata.workflow_version']").select_option
         find("select[name$='[operator]']").find("option[value='=']").select_option
-        find("input[name$='[value]']").fill_in with: '1.0.0'
+        # Wait for the value input to become visible after operator selection
+        find("input[name$='[value]']", visible: :visible, wait: 5).fill_in with: '1.0.0'
       end
 
       click_button I18n.t('components.advanced_search_component.apply_filter_button')
