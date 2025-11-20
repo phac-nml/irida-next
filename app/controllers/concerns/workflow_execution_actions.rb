@@ -213,13 +213,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         # Partial workflow cancellation
         elsif canceled_workflows_count.positive? && canceled_workflows_count != workflows_to_cancel_count
           @messages = set_multi_status_message_for_multiple_action(canceled_workflows_count,
-                                                                    workflows_to_cancel_count,
-                                                                    'cancel_multiple')
+                                                                   workflows_to_cancel_count,
+                                                                   'cancel_multiple')
           render status: :multi_status
 
         # All workflows canceled successfully
         else
-          @messages = [{type: 'success', message: t('concerns.workflow_execution_actions.cancel_multiple.success')}]
+          @messages = [{ type: 'success', message: t('concerns.workflow_execution_actions.cancel_multiple.success') }]
           render status: :ok
         end
       end

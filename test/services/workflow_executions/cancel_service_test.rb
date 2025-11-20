@@ -159,18 +159,6 @@ module WorkflowExecutions
       assert workflow_execution2.cleaned?
     end
 
-    test 'cannot cancel workflow that does not belong to user when namespace is nil' do
-      user = users(:michelle_doe)
-      workflow_execution = workflow_executions(:irida_next_example_running)
-
-      assert 'running', workflow_execution.state
-
-      assert WorkflowExecutions::CancelService.new(user, { workflow_execution: }).execute
-
-      workflow_execution.reload
-      assert 'running', workflow_execution.state
-    end
-
     # cancel through action link on table
     test 'maintainer can cancel a single project workflow execution' do
       valid_params = { namespace: @namespace,
@@ -230,6 +218,23 @@ module WorkflowExecutions
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
                           name: @namespace.name),
+                   exception.result.message
+    end
+
+    test 'cannot cancel workflow that does not belong to user when namespace is nil' do
+      user = users(:michelle_doe)
+      workflow_execution = workflow_executions(:irida_next_example_running)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, { workflow_execution: }).execute
+      end
+
+      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal :cancel?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel?',
+                          namespace_type: workflow_execution.namespace.type,
+                          name: workflow_execution.namespace.name),
                    exception.result.message
     end
   end
