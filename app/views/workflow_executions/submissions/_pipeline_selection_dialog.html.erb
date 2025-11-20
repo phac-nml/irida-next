@@ -21,7 +21,7 @@
               class="group w-full button button-default"
               data-workflow-selection-target="workflow"
               data-workflow-selection-pipelineId-param="<%= workflow.pipeline_id %>"
-              data-workflow-selection-workflowName-param="<%= text_for(workflow.name) %>"
+              data-workflow-selection-workflowName-param="<%= workflow.name %>"
               data-workflow-selection-workflowVersion-param="<%= workflow.version %>"
               data-workflow-selection-namespaceId-param="<%= @namespace_id %>"
               data-action="click->workflow-selection#selectWorkflow"
@@ -37,7 +37,7 @@
               <span class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
                 <span class="flex items-center space-x-2">
                   <span class=" font-medium text-slate-900 truncate dark:text-white ">
-                    <%= text_for(workflow.name) %>
+                    <%= workflow.name %>
                   </span>
                   <%= viral_pill(text: workflow.version, color: :primary) %>
                 </span>
@@ -46,7 +46,7 @@
                     text-sm font-normal text-slate-500 dark:text-slate-400 text-wrap
                   "
                 >
-                  <%= text_for(workflow.description) %>
+                  <%= workflow.description %>
                 </span>
               </span>
             </button>
