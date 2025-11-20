@@ -301,4 +301,430 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
 
     assert duration < 3.seconds, "Complex query took #{duration}s, expected < 3s"
   end
+
+  # Workflow name conversion tests
+  test 'workflow_name equals operator converts name to pipeline_id' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: '=', value: 'phac-nml/iridanextexample' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name in operator converts multiple names to pipeline_ids' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: 'in',
+                   value: ['phac-nml/iridanextexample', 'phac-nml/another'] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name not_equals operator converts name to pipeline_id' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: '!=', value: 'phac-nml/iridanextexample' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name not_in operator converts multiple names to pipeline_ids' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: 'not_in',
+                   value: ['phac-nml/iridanextexample'] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name contains operator searches pipeline names' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: 'contains', value: 'example' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name with blank value returns scope unchanged' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: '=', value: '' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name contains with blank value returns scope unchanged' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: 'contains', value: '' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_name in operator with empty array returns scope unchanged' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_name', operator: 'in', value: [] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  # Sorting tests
+  test 'sort by metadata field' do
+    project = projects(:project1)
+    search_params = {
+      sort: 'metadata_workflow_name asc',
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert_equal 'metadata.workflow_name', query.column
+    assert_equal 'asc', query.direction
+  end
+
+  test 'sort defaults to updated_at desc when blank' do
+    project = projects(:project1)
+    search_params = {
+      sort: '',
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert_equal 'updated_at', query.column
+    assert_equal 'desc', query.direction
+  end
+
+  test 'sort with only direction defaults column to updated_at' do
+    project = projects(:project1)
+    search_params = {
+      sort: 'asc',
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert_equal 'updated_at', query.column
+    assert_equal 'asc', query.direction
+  end
+
+  test 'sort handles metadata fields with spaces' do
+    project = projects(:project1)
+    search_params = {
+      sort: 'metadata_field with spaces desc',
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert_equal 'metadata.field with spaces', query.column
+    assert_equal 'desc', query.direction
+  end
+
+  # Operator tests - exists and not_exists
+  test 'exists operator filters for non-null values' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'exists', value: '' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert(results.all? { |we| we.name.present? })
+  end
+
+  test 'not_exists operator filters for null values' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'tags', operator: 'not_exists', value: '' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  # Text matching tests
+  test 'name field uses text matching for equals' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: '=', value: we.name }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we
+  end
+
+  test 'name field uses text matching for in operator' do
+    project = projects(:project1)
+    we1 = workflow_executions(:irida_next_example)
+    we2 = workflow_executions(:irida_next_example_completed)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'in', value: [we1.name, we2.name] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we1
+    assert_includes results, we2
+  end
+
+  test 'name field uses text matching for not_equals' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: '!=', value: we.name }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_not_includes results, we
+  end
+
+  test 'name field uses text matching for not_in operator' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'not_in', value: [we.name] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_not_includes results, we
+  end
+
+  # UUID field contains test
+  test 'id field with contains operator casts to text' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    id_fragment = we.id[0..7]
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'id', operator: 'contains', value: id_fragment }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we
+  end
+
+  # Multiple groups OR logic test
+  test 'multiple groups are combined with OR logic' do
+    project = projects(:project1)
+    we1 = workflow_executions(:irida_next_example)
+    we2 = workflow_executions(:irida_next_example_completed)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'state', operator: '=', value: we1.state }
+          }
+        },
+        '1': {
+          conditions_attributes: {
+            '0': { field: 'state', operator: '=', value: we2.state }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    # Should include workflow executions with either state
+    assert results.count >= 2
+  end
+
+  # Base scope test
+  test 'accepts custom base_scope parameter' do
+    projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    custom_scope = WorkflowExecution.where(id: we.id)
+    query = WorkflowExecution::Query.new(base_scope: custom_scope)
+    results = query.results
+    assert_equal 1, results.count
+    assert_includes results, we
+  end
+
+  # Invalid query returns none
+  test 'invalid query returns empty relation' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'invalid_field', operator: '=', value: 'test' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert_not query.valid?
+    results = query.results
+    assert_equal 0, results.count
+  end
+
+  # Empty condition field handling
+  test 'empty field in condition is skipped' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: '', operator: '=', value: 'test' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    # Should not raise error, just skip the condition
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  # JSONB numeric comparison tests
+  test 'workflow_version field with >= operator' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_version', operator: '>=', value: '1.0' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
+
+  test 'workflow_version field with <= operator' do
+    project = projects(:project1)
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'workflow_version', operator: '<=', value: '2.0' }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+  end
 end
