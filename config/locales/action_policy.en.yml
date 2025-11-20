@@ -46,6 +46,7 @@ en:
         destroy_metadata_template?: You are not authorized to destroy metadata templates for group %{name} on this server.
         update_metadata_template?: You are not authorized to update metadata templates for group %{name} on this server.
       namespaces/project_namespace:
+        cancel_workflow_executions?: You are not authorized to cancel workflow executions for project %{name} on this server.
         create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
