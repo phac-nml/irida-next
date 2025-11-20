@@ -440,9 +440,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def workflow_name_enum_fields
     workflows = Irida::Pipelines.instance.pipelines('executable')
-    workflow_names = workflows.map do |_pipeline_id, pipeline|
-      pipeline.name[I18n.locale.to_s]
-    end
+    workflow_names = workflows.map { |_pipeline_id, pipeline| pipeline.name[I18n.locale.to_s] }
+                                .compact_blank
 
     {
       values: workflow_names,

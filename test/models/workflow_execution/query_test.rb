@@ -540,6 +540,25 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
     assert_includes results, we
   end
 
+  test 'name field equals is case-insensitive' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    mixed_case = we.name.swapcase
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: '=', value: mixed_case }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we
+  end
+
   test 'name field uses text matching for in operator' do
     project = projects(:project1)
     we1 = workflow_executions(:irida_next_example)
@@ -549,6 +568,27 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
         '0': {
           conditions_attributes: {
             '0': { field: 'name', operator: 'in', value: [we1.name, we2.name] }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we1
+    assert_includes results, we2
+  end
+
+  test 'name field IN is case-insensitive' do
+    project = projects(:project1)
+    we1 = workflow_executions(:irida_next_example)
+    we2 = workflow_executions(:irida_next_example_completed)
+    values = [we1.name.upcase, we2.name.downcase]
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'in', value: values }
           }
         }
       },
@@ -578,6 +618,25 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
     assert_not_includes results, we
   end
 
+  test 'name field NOT EQUALS is case-insensitive' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    value = we.name.swapcase
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: '!=', value: value }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_not_includes results, we
+  end
+
   test 'name field uses text matching for not_in operator' do
     project = projects(:project1)
     we = workflow_executions(:irida_next_example)
@@ -594,6 +653,71 @@ class WorkflowExecutionQueryTest < ActiveSupport::TestCase
     query = WorkflowExecution::Query.new(search_params)
     results = query.results
     assert_not_includes results, we
+  end
+
+  test 'name field NOT IN is case-insensitive' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    values = [we.name.upcase]
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'not_in', value: values }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_not_includes results, we
+  end
+
+  test 'name field CONTAINS is case-insensitive' do
+    project = projects(:project1)
+    we = workflow_executions(:irida_next_example)
+    fragment = we.name[0..3].swapcase
+    search_params = {
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'name', operator: 'contains', value: fragment }
+          }
+        }
+      },
+      namespace_id: project.namespace.id
+    }
+    query = WorkflowExecution::Query.new(search_params)
+    results = query.results
+    assert_includes results, we
+  end
+
+  test 'advanced query results are ANDed with base scope' do
+    # Build a base scope limited to projectA namespace
+    project_a_ns = Namespace.find(ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid))
+    base_scope = WorkflowExecution.where(namespace_id: project_a_ns.id)
+
+    # Groups would normally match completed or error across all namespaces
+    search_params = {
+      sort: 'workflow_executions.id asc',
+      groups_attributes: {
+        '0': {
+          conditions_attributes: {
+            '0': { field: 'state', operator: '=', value: 'completed' }
+          }
+        },
+        '1': {
+          conditions_attributes: {
+            '0': { field: 'state', operator: '=', value: 'error' }
+          }
+        }
+      }
+    }
+    query = WorkflowExecution::Query.new(search_params.merge(base_scope:))
+    results = query.results
+    # Ensure all results are within the base scope namespace
+    assert results.pluck(:namespace_id).uniq == [project_a_ns.id]
   end
 
   # UUID field contains test

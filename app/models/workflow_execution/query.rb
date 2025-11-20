@@ -127,6 +127,9 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   def advanced_query_scope(base_scope = nil)
     query_base = base_scope || @base_scope || WorkflowExecution.where(namespace_id:)
+    # Build the OR-composed groups independently of the authorization/base scope to
+    # keep the intent clear: (OR groups) AND (base scope). We intentionally start
+    # each group from an unscoped relation and apply the base scope once below.
     groups_scope = advanced_query_groups
     return query_base unless groups_scope
 
@@ -135,7 +138,8 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   def advanced_query_groups
     groups.reject(&:empty?).reduce(nil) do |acc_scope, group|
-      group_scope = group.conditions.reduce(WorkflowExecution.all) { |scope, cond| add_condition(scope, cond) }
+      # Start from an unscoped relation for each group and compose conditions with AND
+      group_scope = group.conditions.reduce(WorkflowExecution.unscoped) { |scope, cond| add_condition(scope, cond) }
       acc_scope ? acc_scope.or(group_scope) : group_scope
     end
   end

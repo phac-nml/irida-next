@@ -311,4 +311,27 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                                                                @workflow_execution_error.id] } }
     assert_response :unprocessable_content
   end
+
+  test 'workflow_name enum values compact blank and nil names' do
+    # Build fake pipelines with one blank localized name
+    fake_pipeline_class = Struct.new(:name)
+    pipeline_with_name = fake_pipeline_class.new({ 'en' => 'Alpha' })
+    pipeline_with_blank = fake_pipeline_class.new({ 'en' => '' })
+
+    fake_instance = Class.new do
+      def initialize(map) = @map = map
+      def pipelines(type) = @map
+    end.new({ 'p1' => pipeline_with_name, 'p2' => pipeline_with_blank })
+
+    controller = WorkflowExecutionsController.new
+    previous = Irida::Pipelines.instance
+    Irida::Pipelines.instance = fake_instance
+    begin
+      result = controller.send(:workflow_name_enum_fields)
+      assert_equal ['Alpha'], result[:values]
+      assert_equal({ 'Alpha' => 'Alpha' }, result[:labels])
+    ensure
+      Irida::Pipelines.instance = previous
+    end
+  end
 end
