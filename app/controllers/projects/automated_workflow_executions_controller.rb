@@ -48,7 +48,7 @@ module Projects
       end
     end
 
-    def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def create # rubocop:disable Metrics/MethodLength
       @automated_workflow_execution = AutomatedWorkflowExecutions::CreateService.new(
         current_user, automated_workflow_execution_params.merge(namespace:)
       ).execute
@@ -59,13 +59,13 @@ module Projects
             render status: :ok,
                    locals: { type: 'success',
                              message: t('.success',
-                                        workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name)) }
+                                        workflow_name: @automated_workflow_execution.workflow.name) }
           else
             render status: :unprocessable_content,
                    locals: {
                      type: 'alert',
                      message: t('.error',
-                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
+                                workflow_name: @automated_workflow_execution.workflow.name)
                    }
           end
         end
@@ -98,14 +98,14 @@ module Projects
                    locals: {
                      type: 'success',
                      message: t('.success',
-                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
+                                workflow_name: @automated_workflow_execution.workflow.name)
                    }
           else
             render status: :unprocessable_content,
                    locals: {
                      type: 'alert',
                      message: t('.error',
-                                workflow_name: helpers.text_for(@automated_workflow_execution.workflow.name))
+                                workflow_name: @automated_workflow_execution.workflow.name)
                    }
           end
         end

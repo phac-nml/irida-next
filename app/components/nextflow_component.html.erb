@@ -20,13 +20,13 @@
       mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900
       md:text-5xl lg:text-4xl dark:text-white
     "
-  ><%= text_for(@workflow.name) %></h1>
+  ><%= @workflow.name %></h1>
   <p
     class="
       mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400
     "
   >
-    <%= text_for(@workflow.description) %>
+    <%= @workflow.description %>
   </p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
@@ -97,10 +97,10 @@
       <%= workflow.fields_for "workflow_params" do |fields| %>
         <% @workflow.workflow_params.each do |item, definition| %>
           <h2 class="text-lg font-extrabold dark:text-white">
-            <%= text_for(definition[:title]) %>
+            <%= definition[:title] %>
           </h2>
           <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
-            <%= text_for(definition[:description]) %>
+            <%= definition[:description] %>
           </p>
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
@@ -121,7 +121,7 @@
                 <div>
                   <% if property[:type] != 'boolean' %>
                     <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-                      <%= text_for(property[:description]) %>
+                      <%= property[:description] %>
                       <% if property[:required] %>
                         <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                       <% end %>
@@ -141,7 +141,7 @@
                         <%= format_name_as_arg(name) %>
                       <% end %>
                       <%= input.with_legend(classes: 'block mb-2 text-sm font-medium text-slate-900 dark:text-white') do %>
-                        <%= text_for(property[:description]) %>
+                        <%= property[:description] %>
                         <% if property[:required] %>
                           <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                         <% end %>
@@ -150,7 +150,7 @@
                   <% end %>
                   <% if property[:help_text].present? %>
                     <%= viral_help_text do %>
-                      <%= text_for(property[:help_text]) %>
+                      <%= property[:help_text] %>
                     <% end %>
                   <% end %>
                 </div>

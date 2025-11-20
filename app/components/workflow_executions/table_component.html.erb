@@ -149,7 +149,7 @@
                         border: true,
                       ) %>
                     <% elsif column == :workflow_name %>
-                      <%= helpers.text_for(workflow_execution.workflow&.name || "") %>
+                      <%= workflow_execution.workflow&.name || "" %>
                     <% elsif column == :workflow_version %>
                       <%= workflow_execution.metadata[column.to_s] %>
                     <% elsif column == :created_at %>

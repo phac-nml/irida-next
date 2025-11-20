@@ -28,16 +28,6 @@ module NextflowHelper
     name.length > 1 ? "--#{name}" : "-#{name}"
   end
 
-  def text_for(value)
-    return '' if value.nil?
-
-    if value.instance_of?(String)
-      value
-    else
-      value[I18n.locale.to_s] || value[I18n.locale]
-    end
-  end
-
   def formatted_workflow_param(property, original_value)
     if !property.key?(:enum) || property[:enum].include?(original_value)
       original_value
