@@ -44,6 +44,7 @@ module Projects
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
       workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
       workflow_execution_shared2 = workflow_executions(:workflow_execution_shared2)
+      workflow_execution_shared4 = workflow_executions(:workflow_execution_shared4)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
@@ -58,7 +59,7 @@ module Projects
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -839,7 +840,7 @@ module Projects
         )
         within('#list_selections') do
           assert_text "ID: #{@workflow_execution3.id}"
-          assert_text "ID: #{@shared_workflow.id}"
+          assert_text "ID: #{shared_workflow.id}"
         end
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
