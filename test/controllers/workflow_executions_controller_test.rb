@@ -305,4 +305,31 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :unprocessable_content
   end
+
+  test 'should cancel multiple workflows' do
+    running_workflow = workflow_executions(:irida_next_example_running)
+    new_workflow = workflow_executions(:irida_next_example_new)
+    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+         params: { cancel_multiple: { workflow_execution_ids: [running_workflow.id,
+                                                               new_workflow.id] } }
+    assert_response :success
+  end
+
+  test 'should partially cancel multiple workflows' do
+    running_workflow = workflow_executions(:irida_next_example_running)
+    error_workflow = workflow_executions(:irida_next_example_error)
+    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+         params: { cancel_multiple: { workflow_execution_ids: [running_workflow.id,
+                                                               error_workflow.id] } }
+    assert_response :multi_status
+  end
+
+  test 'should not cancel multiple un-cancellable workflows' do
+    canceled_workflow = workflow_executions(:irida_next_example_canceled)
+    error_workflow = workflow_executions(:irida_next_example_error)
+    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+         params: { cancel_multiple: { workflow_execution_ids: [canceled_workflow.id,
+                                                               error_workflow.id] } }
+    assert_response :unprocessable_content
+  end
 end

@@ -364,5 +364,65 @@ module Projects
       end
       assert_response :unauthorized
     end
+
+    test 'should cancel multiple workflows at once' do
+      running_workflow = workflow_executions(:automated_example_running)
+      new_workflow = workflow_executions(:automated_example_new)
+      post cancel_multiple_namespace_project_workflow_executions_path(
+        @namespace,
+        @project,
+        format: :turbo_stream
+      ), params: { cancel_multiple:
+                      { workflow_execution_ids: [running_workflow.id, new_workflow.id],
+                        namespace: @namespace } }
+
+      assert_response :success
+    end
+
+    test 'should partially cancel multiple workflows at once' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+      running_workflow = workflow_executions(:automated_example_running)
+
+      post cancel_multiple_namespace_project_workflow_executions_path(
+        @namespace,
+        @project,
+        format: :turbo_stream
+      ), params: {
+        cancel_multiple: {
+          workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
+                                   running_workflow.id], namespace: @namespace
+        }
+      }
+      assert_response :multi_status
+    end
+
+    test 'should not cancel multiple un-cancellable workflows' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+      post cancel_multiple_namespace_project_workflow_executions_path(
+        @namespace,
+        @project,
+        format: :turbo_stream
+      ), params: {
+        cancel_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id], namespace: @namespace }
+      }
+      assert_response :unprocessable_content
+    end
+
+    test 'should not cancel workflows if unauthorized' do
+      sign_in users(:michelle_doe)
+      running_workflow = workflow_executions(:automated_example_running)
+      new_workflow = workflow_executions(:automated_example_new)
+
+      post cancel_multiple_namespace_project_workflow_executions_path(
+        @namespace,
+        @project,
+        format: :turbo_stream
+      ), params: {
+        cancel_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
+      }
+      assert_response :unauthorized
+    end
   end
 end

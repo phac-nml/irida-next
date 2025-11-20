@@ -173,18 +173,18 @@ module WorkflowExecutions
 
     # cancel through action link on table
     test 'maintainer can cancel a single project workflow execution' do
-      valid_params = { 'namespace' => @namespace,
-                       'workflow_execution' => @project_workflow_running }
+      valid_params = { namespace: @namespace,
+                       workflow_execution: @project_workflow_running }
       user = users(:joan_doe)
 
-      assert_authorized_to(:cancel?, @workflow_execution, with: WorkflowExecutionPolicy, context: { user: }) do
+      assert_authorized_to(:cancel?, @project_workflow_running, with: WorkflowExecutionPolicy, context: { user: }) do
         WorkflowExecutions::CancelService.new(user, valid_params).execute
       end
     end
 
     test 'analyst cannot cancel a single project workflow execution' do
-      valid_params = { 'namespace' => @namespace,
-                       'workflow_execution' => @project_workflow_running }
+      valid_params = { namespace: @namespace,
+                       workflow_execution: @project_workflow_running }
       user = users(:michelle_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
@@ -196,26 +196,27 @@ module WorkflowExecutions
       assert_equal WorkflowExecutionPolicy, exception.policy
       assert_equal :cancel?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel',
-                          id: @project_workflow_running.id),
-                    exception.result.message
+      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel?',
+                          namespace_type: @project_workflow_running.namespace.type,
+                          name: @project_workflow_running.namespace.name),
+                   exception.result.message
     end
 
     # cancel through dropdown action
     test 'authorized maintainer can cancel multiple project workflow executions' do
-      valid_params = { 'namespace' => @namespace,
-                       'workflow_execution_ids' => [@project_workflow_running.id, @project_workflow_submitted.id] }
+      valid_params = { namespace: @namespace,
+                       workflow_execution_ids: [@project_workflow_running.id, @project_workflow_submitted.id] }
       user = users(:joan_doe)
 
       assert_authorized_to(:cancel_workflow_executions?, @namespace, with: Namespaces::ProjectNamespacePolicy,
-                           context: { user: }) do
+                                                                     context: { user: }) do
         WorkflowExecutions::CancelService.new(user, valid_params).execute
       end
     end
 
     test 'unauthorized analyst cannot cancel multiple project workflow executions policy test' do
-      valid_params = { 'namespace' => @namespace,
-                       'workflow_execution_ids' => [@project_workflow_running.id, @project_workflow_submitted.id] }
+      valid_params = { namespace: @namespace,
+                       workflow_execution_ids: [@project_workflow_running.id, @project_workflow_submitted.id] }
       user = users(:michelle_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
@@ -229,7 +230,7 @@ module WorkflowExecutions
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
                           name: @namespace.name),
-                    exception.result.message
+                   exception.result.message
     end
   end
 end
