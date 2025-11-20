@@ -7,7 +7,11 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
     @sample1 = samples(:sample1)
     @attachment1 = attachments(:attachment1)
-    @workflow_execution = workflow_executions(:irida_next_example_completed)
+    @workflow_execution_completed = workflow_executions(:irida_next_example_completed)
+    @workflow_execution_error = workflow_executions(:irida_next_example_error)
+    @workflow_execution_canceled = workflow_executions(:irida_next_example_canceled)
+    @workflow_execution_running = workflow_executions(:irida_next_example_running)
+    @workflow_execution_new = workflow_executions(:irida_next_example_new)
     Flipper.enable(:delete_multiple_workflows)
   end
 
@@ -61,12 +65,10 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should cancel a new workflow with valid params' do
-    workflow_execution = workflow_executions(:irida_next_example_new)
-
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    put cancel_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
     assert_response :success
     # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-    assert_equal 'canceled', workflow_execution.reload.state
+    assert_equal 'canceled', @workflow_execution_new.reload.state
   end
 
   test 'should cancel a prepared workflow with valid params' do
@@ -130,11 +132,10 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should delete an errored workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_error)
-    assert workflow_execution.error?
+    assert @workflow_execution_error.error?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_error, format: :turbo_stream)
     end
     assert_response :redirect
     assert_redirected_to workflow_executions_path
@@ -151,48 +152,44 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should delete a canceled workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_canceled)
-    assert workflow_execution.canceled?
+    assert @workflow_execution_canceled.canceled?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_canceled, format: :turbo_stream)
     end
     assert_response :redirect
     assert_redirected_to workflow_executions_path
   end
 
   test 'should not delete a running workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_running)
-    assert workflow_execution.running?
+    assert @workflow_execution_running.running?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
     end
     assert_response :unprocessable_content
   end
 
   test 'should cancel a running workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_running)
-    assert workflow_execution.running?
+    assert @workflow_execution_running.running?
 
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    put cancel_workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
     assert_response :success
     # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-    assert_equal 'canceling', workflow_execution.reload.state
+    assert_equal 'canceling', @workflow_execution_running.reload.state
   end
 
   test 'should not delete a new workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_new)
-    assert workflow_execution.initial?
+    assert @workflow_execution_new.initial?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
     end
     assert_response :unprocessable_content
   end
 
   test 'should show the workflow' do
-    get workflow_execution_path(@workflow_execution)
+    get workflow_execution_path(@workflow_execution_completed)
     assert_response :success
 
     w3c_validate 'Workflow Execution Show Page'
@@ -205,13 +202,12 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not cancel a cancelable workflow with incorrect permissions' do
     sign_in users(:jane_doe)
-    workflow_execution = workflow_executions(:irida_next_example_running)
-    assert workflow_execution.running?
+    assert @workflow_execution_running.running?
 
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    put cancel_workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
     assert_response :not_found
 
-    assert_equal 'running', workflow_execution.reload.state
+    assert_equal 'running', @workflow_execution_running.reload.state
   end
 
   test 'redirect to global workflow executions page when workflow execution is deleted' do
@@ -225,21 +221,17 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Submitter can update workflow execution name post launch' do
-    workflow_execution = workflow_executions(:irida_next_example_new)
-
     update_params = { workflow_execution: { name: 'New Name' } }
 
-    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
 
     assert_response :success
   end
 
   test 'Submitter can share the pipeline results post launch' do
-    workflow_execution = workflow_executions(:irida_next_example_new)
-
     update_params = { workflow_execution: { shared_with_namespace: true } }
 
-    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
 
     assert_response :success
   end
@@ -247,17 +239,15 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   test 'Cannot update another user\'s personal workflow execution name' do
     sign_in users(:ryan_doe)
 
-    workflow_execution = workflow_executions(:irida_next_example_new)
-
     update_params = { workflow_execution: { name: 'New Name' } }
 
-    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
 
     assert_response :not_found
   end
 
   test 'should open destroy_confirmation' do
-    get destroy_confirmation_workflow_execution_path(@workflow_execution, format: :turbo_stream)
+    get destroy_confirmation_workflow_execution_path(@workflow_execution_completed, format: :turbo_stream)
 
     assert_response :success
   end
@@ -269,67 +259,56 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy multiple workflows at once' do
-    error_workflow = workflow_executions(:irida_next_example_error)
-    canceled_workflow = workflow_executions(:irida_next_example_canceled)
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
                         post destroy_multiple_workflow_executions_path(format: :turbo_stream),
                              params: { destroy_multiple: { workflow_execution_ids:
-                                                           [error_workflow.id, canceled_workflow.id] } }
+                                                           [@workflow_execution_error.id,
+                                                            @workflow_execution_canceled.id] } }
                       end
     assert_response :success
   end
 
   test 'should partially destroy multiple workflows at once' do
-    error_workflow = workflow_executions(:irida_next_example_error)
-    canceled_workflow = workflow_executions(:irida_next_example_canceled)
-    new_workflow = workflow_executions(:irida_next_example_new)
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
                         post destroy_multiple_workflow_executions_path(format: :turbo_stream),
                              params: { destroy_multiple: { workflow_execution_ids:
-                                                           [error_workflow.id, canceled_workflow.id,
-                                                            new_workflow.id] } }
+                                                           [@workflow_execution_error.id,
+                                                            @workflow_execution_canceled.id,
+                                                            @workflow_execution_new.id] } }
                       end
     assert_response :multi_status
   end
 
   test 'should not destroy multiple non-deletable workflows' do
-    running_workflow = workflow_executions(:irida_next_example_running)
-    new_workflow = workflow_executions(:irida_next_example_new)
     assert_no_difference -> { WorkflowExecution.count },
                          -> { SamplesWorkflowExecution.count } do
       post destroy_multiple_workflow_executions_path(format: :turbo_stream),
-           params: { destroy_multiple: { workflow_execution_ids: [running_workflow.id,
-                                                                  new_workflow.id] } }
+           params: { destroy_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
+                                                                  @workflow_execution_new.id] } }
     end
     assert_response :unprocessable_content
   end
 
   test 'should cancel multiple workflows' do
-    running_workflow = workflow_executions(:irida_next_example_running)
-    new_workflow = workflow_executions(:irida_next_example_new)
     post cancel_multiple_workflow_executions_path(format: :turbo_stream),
-         params: { cancel_multiple: { workflow_execution_ids: [running_workflow.id,
-                                                               new_workflow.id] } }
+         params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
+                                                               @workflow_execution_new.id] } }
     assert_response :success
   end
 
   test 'should partially cancel multiple workflows' do
-    running_workflow = workflow_executions(:irida_next_example_running)
-    error_workflow = workflow_executions(:irida_next_example_error)
     post cancel_multiple_workflow_executions_path(format: :turbo_stream),
-         params: { cancel_multiple: { workflow_execution_ids: [running_workflow.id,
-                                                               error_workflow.id] } }
+         params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
+                                                               @workflow_execution_error.id] } }
     assert_response :multi_status
   end
 
   test 'should not cancel multiple un-cancellable workflows' do
-    canceled_workflow = workflow_executions(:irida_next_example_canceled)
-    error_workflow = workflow_executions(:irida_next_example_error)
     post cancel_multiple_workflow_executions_path(format: :turbo_stream),
-         params: { cancel_multiple: { workflow_execution_ids: [canceled_workflow.id,
-                                                               error_workflow.id] } }
+         params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_canceled.id,
+                                                               @workflow_execution_error.id] } }
     assert_response :unprocessable_content
   end
 end

@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module Projects
   class WorkflowExecutionsTest < ApplicationSystemTestCase
-    WORKFLOW_EXECUTION_COUNT = 12
+    WORKFLOW_EXECUTION_COUNT = 13
 
     setup do
       @user = users(:john_doe)
