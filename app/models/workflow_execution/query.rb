@@ -289,14 +289,18 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       pipelines = cached_executable_pipelines
       pipeline = pipelines.find do |_pipeline_id, p|
-        next false unless p.name.is_a?(Hash)
-
-        # Check current locale first, then all locales as fallback
-        p.name[I18n.locale.to_s] == workflow_name || p.name.values.include?(workflow_name)
+        match_pipeline_name?(p, workflow_name)
       end
 
       pipeline&.last&.pipeline_id
     end
+  end
+
+  def match_pipeline_name?(pipeline_def, workflow_name)
+    return false unless pipeline_def.name.is_a?(Hash)
+
+    # Check current locale first, then all locales as fallback
+    pipeline_def.name[I18n.locale.to_s] == workflow_name || pipeline_def.name.values.include?(workflow_name)
   end
 
   # Cache executable pipelines to avoid repeated lookups
@@ -310,13 +314,15 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   def cached_pipeline_name_matches(search_term)
     cache_key = "workflow_execution:pipeline_name_matches:#{search_term}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      pipelines = cached_executable_pipelines
-      pipelines.filter_map do |_pipeline_id, p|
-        next unless p.name.is_a?(Hash)
-
-        # Check all locale values for matches
-        p.pipeline_id if p.name.values.any? { |name| name&.downcase&.include?(search_term) }
+      cached_executable_pipelines.filter_map do |_pipeline_id, p|
+        pipeline_matches_search?(p, search_term)
       end
     end
+  end
+
+  def pipeline_matches_search?(pipeline, search_term)
+    return false unless pipeline.name.is_a?(Hash)
+
+    pipeline.name.values.any? { |name| name&.downcase&.include?(search_term) }
   end
 end
