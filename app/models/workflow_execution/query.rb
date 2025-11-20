@@ -64,16 +64,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def groups_attributes=(attributes)
-    parsed_groups = attributes.each_value.map do |group_attributes|
-      parsed_conditions = group_attributes.each_value.flat_map do |conditions_attributes|
-        conditions_attributes.each_value.map do |condition_params|
-          WorkflowExecution::SearchCondition.new(condition_params)
-        end
-      end
-
-      WorkflowExecution::SearchGroup.new(conditions: parsed_conditions)
-    end
-
+    parsed_groups = attributes.each_value.map { |group_attrs| parse_group(group_attrs) }
     assign_attributes(groups: parsed_groups)
   end
 
@@ -90,7 +81,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
       direction = direction.presence || 'desc'
     end
 
-    column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
+    column = column.gsub('metadata_', 'metadata.') if column.include?('metadata_')
     assign_attributes(column:, direction:)
   end
 
@@ -143,21 +134,10 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def advanced_query_groups
-    adv_query_scope = nil
-    groups.each do |group|
-      next if group.empty?
-
-      group_scope = WorkflowExecution.all
-      group.conditions.each do |condition|
-        group_scope = add_condition(group_scope, condition)
-      end
-      adv_query_scope = if adv_query_scope.nil?
-                          group_scope
-                        else
-                          adv_query_scope.or(group_scope)
-                        end
+    groups.reject(&:empty?).reduce(nil) do |acc_scope, group|
+      group_scope = group.conditions.reduce(WorkflowExecution.all) { |scope, cond| add_condition(scope, cond) }
+      acc_scope ? acc_scope.or(group_scope) : group_scope
     end
-    adv_query_scope
   end
 
   def add_condition(scope, condition)
@@ -216,84 +196,78 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     METADATA_FIELD_MAP.key?(field)
   end
 
+  def workflow_name_field?(field)
+    field == 'workflow_name'
+  end
+
+  def parse_group(group_attributes)
+    conditions = group_attributes.each_value.flat_map do |conditions_attrs|
+      conditions_attrs.each_value.map { |params| WorkflowExecution::SearchCondition.new(params) }
+    end
+    WorkflowExecution::SearchGroup.new(conditions:)
+  end
+
   # Override handle_equals to convert workflow names to pipeline_ids
   def handle_equals(scope, condition, node, field)
-    if field == 'workflow_name'
-      pipeline_id = workflow_name_to_pipeline_id(condition.value)
-      return scope if pipeline_id.nil?
+    return super unless workflow_name_field?(field)
 
-      scope.where(node.eq(pipeline_id))
-    else
-      super
-    end
+    pipeline_id = workflow_name_to_pipeline_id(condition.value)
+    return scope if pipeline_id.nil?
+
+    scope.where(node.eq(pipeline_id))
   end
 
   # Override handle_in to convert workflow names to pipeline_ids
   def handle_in(scope, condition, node, field)
-    if field == 'workflow_name'
-      pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
-      return scope if pipeline_ids.empty?
+    return super unless workflow_name_field?(field)
 
-      scope.where(node.in(pipeline_ids))
-    else
-      super
-    end
+    pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+    return scope if pipeline_ids.empty?
+
+    scope.where(node.in(pipeline_ids))
   end
 
   # Override handle_not_equals to convert workflow names to pipeline_ids
   def handle_not_equals(scope, condition, node, field)
-    if field == 'workflow_name'
-      pipeline_id = workflow_name_to_pipeline_id(condition.value)
-      return scope if pipeline_id.nil?
+    return super unless workflow_name_field?(field)
 
-      scope.where(node.not_eq(pipeline_id))
-    else
-      super
-    end
+    pipeline_id = workflow_name_to_pipeline_id(condition.value)
+    return scope if pipeline_id.nil?
+
+    scope.where(node.not_eq(pipeline_id))
   end
 
   # Override handle_not_in to convert workflow names to pipeline_ids
   def handle_not_in(scope, condition, node, field)
-    if field == 'workflow_name'
-      pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
-      return scope if pipeline_ids.empty?
+    return super unless workflow_name_field?(field)
 
-      scope.where(node.not_in(pipeline_ids))
-    else
-      super
-    end
+    pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+    return scope if pipeline_ids.empty?
+
+    scope.where(node.not_in(pipeline_ids))
   end
 
   # Override handle_contains to search workflow names and convert to pipeline_ids
   def handle_contains(scope, condition, node, field)
-    if field == 'workflow_name'
-      return scope if condition.value.blank?
+    return super unless workflow_name_field?(field)
+    return scope if condition.value.blank?
 
-      # Find all pipeline_ids whose names contain the search term
-      search_term = condition.value.downcase
-      matching_pipeline_ids = cached_pipeline_name_matches(search_term)
+    # Find all pipeline_ids whose names contain the search term
+    search_term = condition.value.downcase
+    matching_pipeline_ids = cached_pipeline_name_matches(search_term)
 
-      return scope if matching_pipeline_ids.empty?
+    return scope if matching_pipeline_ids.empty?
 
-      scope.where(node.in(matching_pipeline_ids))
-    else
-      super
-    end
+    scope.where(node.in(matching_pipeline_ids))
   end
 
   # Convert workflow name to pipeline_id
   def workflow_name_to_pipeline_id(workflow_name)
     return nil if workflow_name.blank?
 
-    cache_key = "workflow_execution:pipeline_id:#{workflow_name}:#{I18n.locale}"
-    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      pipelines = cached_executable_pipelines
-      pipeline = pipelines.find do |_pipeline_id, p|
-        match_pipeline_name?(p, workflow_name)
-      end
-
-      pipeline&.last&.pipeline_id
-    end
+    pipelines = cached_executable_pipelines
+    pipeline = pipelines.find { |_pipeline_id, p| match_pipeline_name?(p, workflow_name) }
+    pipeline&.last&.pipeline_id
   end
 
   def match_pipeline_name?(pipeline_def, workflow_name)
@@ -321,8 +295,6 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def pipeline_matches_search?(pipeline, search_term)
-    return false unless pipeline.name.is_a?(Hash)
-
-    pipeline.name.values.any? { |name| name&.downcase&.include?(search_term) }
+    pipeline.name.is_a?(Hash) && pipeline.name.values.any? { |name| name&.downcase&.include?(search_term) }
   end
 end
