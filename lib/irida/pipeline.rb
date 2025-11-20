@@ -120,6 +120,8 @@ module Irida
 
       processed_property[:schema] = process_samplesheet_schema if key == :input_output_options && name == :input
 
+      processed_property[:description] = text_for(processed_property[:description])
+
       processed_property
     end
 
@@ -159,7 +161,7 @@ module Irida
 
         definition['properties'].each do |name, property|
           property.each do |key, value|
-            default_workflow_params.merge!({ name => text_for(value) }) if key == 'default'
+            default_workflow_params.merge!({ name => value }) if key == 'default'
           end
         end
       end
