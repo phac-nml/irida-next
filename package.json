@@ -2,11 +2,29 @@
   "name": "irida-next",
   "private": true,
   "devDependencies": {
+    "autoprefixer": "^10.4.22",
     "axe-core": "^4.10.2",
+    "esbuild": "^0.27.0",
+    "esbuild-plugin-postcss": "^0.3.0",
+    "postcss": "^8.5.6",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11"
   },
   "dependencies": {
-    "flowbite": "^3.1.2"
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.20",
+    "@popperjs/core": "^2.11.8",
+    "@rails/activestorage": "^8.1.100",
+    "@sindresorhus/slugify": "^3.0.0",
+    "@sindresorhus/transliterate": "^2.2.0",
+    "escape-string-regexp": "^5.0.0",
+    "flowbite": "^3.1.2",
+    "focus-trap": "^7.6.6",
+    "local-time": "^3.0.3",
+    "lodash": "^4.17.21",
+    "sortablejs": "^1.15.6",
+    "tabbable": "^6.3.0",
+    "uuid": "^13.0.0",
+    "xlsx": "^0.18.5"
   }
 }
