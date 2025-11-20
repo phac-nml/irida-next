@@ -38,7 +38,6 @@ module Pathogen
           include Pathogen::FormTagHelper
         end
       end
-
     end
   end
 end
