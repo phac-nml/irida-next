@@ -3,13 +3,11 @@
 module WorkflowExecutions
   # Service used to initiate the cancelation of a WorkflowExecution
   class CancelService < BaseWorkflowExecutionService
-
     def execute
       if @workflow_execution.nil?
         cancel_multiple
       else
         authorize! @workflow_execution, to: :cancel?
-
         cancel_workflow(@workflow_execution)
       end
     end
@@ -47,13 +45,14 @@ module WorkflowExecutions
         id: @workflow_execution_ids, state: %w[initial prepared submitted running]
       )
 
-      cancellable_count = cancellable_workflow_executions.count
+      # keep an ongoing count during iteration in case there are state changes before cancel can be completed
+      success_count = 0
 
       cancellable_workflow_executions.each do |workflow_execution|
-        cancel_workflow(workflow_execution)
+        success_count += 1 if cancel_workflow(workflow_execution)
       end
 
-      cancellable_count
+      success_count
     end
   end
 end
