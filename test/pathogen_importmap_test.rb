@@ -4,8 +4,9 @@ require 'test_helper'
 
 # Tests that Pathogen Stimulus controllers are properly configured in the importmap.
 # These smoke tests ensure controllers can be lazy-loaded by Stimulus without resolution errors.
+# Utility files (constants, utils) are imported via relative paths and don't need importmap pins.
 class PathogenImportmapTest < ActiveSupport::TestCase
-  test 'all pathogen controllers and utilities are pinned' do
+  test 'all pathogen controllers are pinned' do
     specifiers = Rails.application.importmap.packages.keys
 
     expected_files = %w[
@@ -13,8 +14,6 @@ class PathogenImportmapTest < ActiveSupport::TestCase
       controllers/pathogen/tooltip_controller
       controllers/pathogen/datepicker/input_controller
       controllers/pathogen/datepicker/calendar_controller
-      controllers/pathogen/datepicker/constants
-      controllers/pathogen/datepicker/utils
     ]
 
     expected_files.each do |file|

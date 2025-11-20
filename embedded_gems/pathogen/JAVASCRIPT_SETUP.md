@@ -42,8 +42,9 @@ Pin the Pathogen controllers in your `config/importmap.rb` explicitly (recommend
 
 ```ruby
 # Pathogen gem controllers (embedded or external gem)
+# Only pin controller files (*_controller.js); utilities use relative imports
 pathogen_controllers_path = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers')
-Dir.glob(pathogen_controllers_path.join('**/*.js')).each do |file|
+Dir.glob(pathogen_controllers_path.join('**/*_controller.js')).each do |file|
   # Use Pathname for reliable relative path calculation across different OS
   relative_path = Pathname.new(file).relative_path_from(pathogen_controllers_path)
   name = relative_path.to_s.delete_suffix('.js')

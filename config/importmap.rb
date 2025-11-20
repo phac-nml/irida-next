@@ -18,7 +18,7 @@ pin_all_from 'app/javascript/controllers', under: 'controllers'
 # Use a single pin_all_from to expose all controllers under "controllers/pathogen"
 # Pathogen gem controllers - explicit pinning to ensure asset path resolution across engines
 pathogen_controllers_path = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen/controllers')
-Dir.glob(pathogen_controllers_path.join('**/*.js')).each do |file|
+Dir.glob(pathogen_controllers_path.join('**/*_controller.js')).each do |file|
   # Use Pathname for reliable relative path calculation across different OS
   relative_path = Pathname.new(file).relative_path_from(pathogen_controllers_path)
   name = relative_path.to_s.delete_suffix('.js')
