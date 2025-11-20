@@ -56,6 +56,11 @@ module AdvancedQuerySearchable
 
   private
 
+  # Build a LOWER() Arel node for case-insensitive comparisons
+  def lower(node)
+    Arel::Nodes::NamedFunction.new('LOWER', [node])
+  end
+
   # Apply the appropriate operator handler for the given condition
   def apply_operator(scope, condition, node, field)
     handler_method = AdvancedQuerySearchableOperators::HANDLERS[condition.operator]
@@ -68,7 +73,8 @@ module AdvancedQuerySearchable
   # Subclasses should override text_match_fields and uppercase_fields for custom behavior
   def handle_equals(scope, condition, node, field)
     if text_match_field?(field)
-      scope.where(node.matches(condition.value))
+      # Case-insensitive exact match using LOWER(column) = LOWER(value)
+      scope.where(lower(node).eq(condition.value.to_s.downcase))
     elsif uppercase_field?(field)
       scope.where(node.eq(condition.value.upcase))
     else
@@ -79,7 +85,9 @@ module AdvancedQuerySearchable
   # Handle IN operator for multiple values
   def handle_in(scope, condition, node, field)
     if text_match_field?(field)
-      scope.where(node.matches_any(condition.value))
+      # Case-insensitive IN using LOWER(column) IN LOWER(values)
+      values = Array(condition.value).map { |v| v.to_s.downcase }
+      scope.where(lower(node).in(values))
     elsif uppercase_field?(field)
       scope.where(node.in(condition.value.map(&:upcase)))
     else
@@ -90,7 +98,8 @@ module AdvancedQuerySearchable
   # Handle inequality operator (!=)
   def handle_not_equals(scope, condition, node, field)
     if text_match_field?(field)
-      scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
+      # Include NULLs and values whose LOWER(column) != LOWER(value)
+      scope.where(node.eq(nil).or(lower(node).not_eq(condition.value.to_s.downcase)))
     elsif uppercase_field?(field)
       scope.where(node.not_eq(condition.value.upcase))
     else
@@ -101,7 +110,9 @@ module AdvancedQuerySearchable
   # Handle NOT IN operator
   def handle_not_in(scope, condition, node, field)
     if text_match_field?(field)
-      scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+      # Include NULLs and values whose LOWER(column) NOT IN LOWER(values)
+      values = Array(condition.value).map { |v| v.to_s.downcase }
+      scope.where(node.eq(nil).or(lower(node).not_in(values)))
     elsif uppercase_field?(field)
       scope.where(node.not_in(condition.value.map(&:upcase)))
     else
@@ -139,9 +150,9 @@ module AdvancedQuerySearchable
     # UUID fields need to be cast to text before using ILIKE
     if uuid_field?(field)
       text_node = Arel::Nodes::NamedFunction.new('CAST', [node.as(Arel::Nodes::SqlLiteral.new('TEXT'))])
-      scope.where(text_node.matches("%#{condition.value}%"))
+      scope.where(lower(text_node).matches("%#{condition.value.to_s.downcase}%"))
     else
-      scope.where(node.matches("%#{condition.value}%"))
+      scope.where(lower(node).matches("%#{condition.value.to_s.downcase}%"))
     end
   end
 
