@@ -109,12 +109,6 @@ en:
     advanced_search_component:
       add_condition_button: Add Condition
       add_group_button: Add Group
-      announcements:
-        condition_added: Condition added
-        condition_removed: Condition removed
-        group_added: Group added
-        group_removed: Group removed
-        search_cleared: Search cleared
       apply_filter_button: Apply filter
       clear_aria_label: Clear Advanced Search
       clear_filter_button: Clear filter

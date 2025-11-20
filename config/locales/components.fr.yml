@@ -109,12 +109,6 @@ fr:
     advanced_search_component:
       add_condition_button: Ajouter une condition
       add_group_button: Ajouter un groupe
-      announcements:
-        condition_added: Condition ajoutée
-        condition_removed: Condition supprimée
-        group_added: Groupe ajouté
-        group_removed: Groupe supprimé
-        search_cleared: Recherche effacée
       apply_filter_button: Appliquer un filtre
       clear_aria_label: Terminer la recherche avancée
       clear_filter_button: Effacer le filtre
