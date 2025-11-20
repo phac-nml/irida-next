@@ -14,7 +14,12 @@ export default class extends Controller {
   };
 
   #lastActiveCheckbox;
-
+  /**
+   * Called when the Stimulus controller connects to the DOM.
+   * - Marks the element as connected for debugging/automation.
+   * - Restores any stored selection from sessionStorage.
+   * - Listens for Turbo "morph" events to re-sync UI after partial updates.
+   */
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
 
@@ -33,35 +38,78 @@ export default class extends Controller {
     this.update(this.getOrCreateStoredItems(), false);
   }
 
+  /**
+   * Toggle selection state for all rows on the current page.
+   * When the page checkbox is checked, all row values are added to the selection;
+   * when unchecked they are removed.
+   * @param {Event} event - Change event from the page-level checkbox
+   */
   togglePage(event) {
     const valuesToToggle = this.rowSelectionTargets.map((row) => row.value);
-    this.#addOrRemove(event.target.checked, valuesToToggle);
+    this.#modifySelection(event.target.checked, valuesToToggle);
   }
 
+  /**
+   * Toggle a single row selection. Supports shift-click range selection.
+   * - If shiftKey is pressed and there is a last active checkbox id recorded,
+   *   calculate the range between the previous checkbox and the clicked one and
+   *   toggle every checkbox in that range.
+   * @param {Event} event - Change event from an individual row checkbox
+   */
   toggle(event) {
     let valuesToToggle = [event.target.value];
+
+    // Shift-click range selection — only when the previous active checkbox still exists
     if (event.shiftKey && typeof this.#lastActiveCheckbox !== "undefined") {
-      const startCheckbox = this.rowSelectionTargets.findIndex(
+      const startIndex = this.rowSelectionTargets.findIndex(
         (row) => row.id === this.#lastActiveCheckbox,
       );
-      const endCheckbox = this.rowSelectionTargets.findIndex(
+      const endIndex = this.rowSelectionTargets.findIndex(
         (row) => row.id === event.target.id,
       );
-      const [from, to] =
-        startCheckbox < endCheckbox
-          ? [startCheckbox, endCheckbox]
-          : [endCheckbox, startCheckbox];
-      valuesToToggle = this.rowSelectionTargets
-        .slice(from, to + 1)
-        .map((row) => row.value);
+
+      // Only perform range selection when both indices are valid.
+      // This prevents an out-of-range slice if the stored lastActiveCheckbox
+      // no longer exists in the current rowSelectionTargets (e.g. after a partial update).
+      if (startIndex > -1 && endIndex > -1) {
+        // Determine lower/higher bounds for the range
+        let low = Math.min(startIndex, endIndex);
+        let high = Math.max(startIndex, endIndex);
+
+        // If the clicked checkbox is being checked, exclude the clicked
+        // checkbox from the range by moving the boundary inward.
+        if (event.target.checked === false) {
+          if (endIndex > startIndex) {
+            high = high - 1;
+          } else {
+            low = low + 1;
+          }
+        }
+
+        // Only build the list when the adjusted range is non-empty
+        if (low <= high) {
+          const indices = [];
+          for (let i = low; i <= high; i++) indices.push(i);
+          valuesToToggle = indices.map(
+            (i) => this.rowSelectionTargets[i].value,
+          );
+        } else {
+          valuesToToggle = [];
+        }
+      }
     }
 
-    this.#addOrRemove(event.target.checked, valuesToToggle);
+    this.#modifySelection(event.target.checked, valuesToToggle);
     this.#lastActiveCheckbox = event.target.id;
   }
 
+  /**
+   * Remove a single id from the selection (used by action buttons or other code).
+   * Receives a Stimulus action parameter object: { params: { id } }
+   * @param {{params: {id: string}}} param0
+   */
   remove({ params: { id } }) {
-    this.#addOrRemove(false, [id]);
+    this.#modifySelection(false, [id]);
   }
 
   clear() {
@@ -73,7 +121,7 @@ export default class extends Controller {
       console.warn("SelectionController: ids must be an array");
       return;
     }
-
+    // Persist selection and reflect changes in the UI
     sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
     this.#updateUI(ids, announce);
   }
@@ -95,9 +143,17 @@ export default class extends Controller {
     return [];
   }
 
-  #addOrRemove(add, values) {
+  /**
+   * Modify the stored selection by adding or removing provided values, then
+   * persist and update the UI.
+   * @param {boolean} add - true to add values, false to remove
+   * @param {Array<string>} values - array of ids to add or remove
+   * @private
+   */
+  #modifySelection(add, values) {
     let newStorageValue = this.getOrCreateStoredItems();
     if (add) {
+      // Use a Set to deduplicate values
       newStorageValue = [...new Set([...newStorageValue, ...values])];
     } else {
       newStorageValue = newStorageValue.filter(
@@ -107,11 +163,21 @@ export default class extends Controller {
     this.update(newStorageValue);
   }
 
+  /**
+   * Update all UI elements to reflect the current selection state.
+   * This updates row checkboxes, action buttons, counts and the page-level
+   * select-all checkbox state.
+   * @param {Array<string>} ids - current selection ids
+   * @param {boolean} announce - whether to announce via aria-live region
+   * @private
+   */
   #updateUI(ids, announce) {
     try {
-      this.rowSelectionTargets.map((row) => {
+      // Set checkbox checked states based on whether their value is included
+      this.rowSelectionTargets.forEach((row) => {
         row.checked = ids.indexOf(row.value) > -1;
       });
+
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue();
@@ -121,7 +187,12 @@ export default class extends Controller {
   }
 
   #updateActionButtons(count) {
+    // Ensure outlets exist before iterating
+    if (!this.actionButtonOutlets) return;
+
     this.actionButtonOutlets.forEach((outlet) => {
+      // Outlet's setDisabled expects the number of selected items to decide
+      // whether to enable/disable action buttons.
       outlet.setDisabled(count);
     });
   }
