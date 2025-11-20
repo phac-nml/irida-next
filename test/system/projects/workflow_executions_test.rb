@@ -68,7 +68,7 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
