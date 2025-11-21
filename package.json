@@ -20,6 +20,7 @@
     "local-time": "^3.0.3",
     "lodash": "^4.17.21",
     "sortablejs": "^1.15.6",
+    "tabbable": "^6.3.0",
     "uuid": "^13.0.0",
     "xlsx": "^0.18.5"
   },

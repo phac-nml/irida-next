@@ -41,6 +41,9 @@ importers:
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
+      tabbable:
+        specifier: ^6.3.0
+        version: 6.3.0
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
