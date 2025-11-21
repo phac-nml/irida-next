@@ -9,27 +9,31 @@ import * as ActiveStorage from "@rails/activestorage";
 ActiveStorage.start();
 
 // Configure LocalTime from meta tag data
+let LocalTime;
+
 function configureLocalTime() {
+  if (!LocalTime) return;
+
   const meta = document.querySelector('meta[name="local-time-i18n"]');
   if (!meta) return;
 
   const locale = meta.dataset.locale || document.documentElement.lang;
-  const i18nData = meta.getAttribute('content');
+  const i18nData = meta.getAttribute("content");
 
   try {
-    if (i18nData && i18nData !== '{}') {
+    if (i18nData && i18nData !== "{}") {
       LocalTime.config.i18n[locale] = JSON.parse(i18nData);
     }
     LocalTime.config.locale = locale;
     LocalTime.start();
   } catch (error) {
-    console.error('Failed to configure LocalTime:', error);
+    console.error("Failed to configure LocalTime:", error);
   }
 }
 
 // Wait for LocalTime to be available, then configure
-import("local-time").then(module => {
-  window.LocalTime = module.default;
+import("local-time").then((module) => {
+  LocalTime = module.default;
   configureLocalTime();
 });
 
@@ -64,7 +68,9 @@ document.addEventListener("turbo:before-stream-render", (event) => {
     fallbackToDefaultActions(streamElement);
 
     // process new time elements added via turbo streams
-    LocalTime.run();
+    if (LocalTime) {
+      LocalTime.run();
+    }
   };
 });
 
