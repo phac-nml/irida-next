@@ -10,9 +10,16 @@ ActiveStorage.start();
 
 // Configure LocalTime from meta tag data
 let LocalTime;
+let localTimePromise = import("local-time").then((module) => {
+  LocalTime = module.default;
+  return LocalTime;
+});
 
-function configureLocalTime() {
-  if (!LocalTime) return;
+async function configureLocalTime() {
+  // Wait for LocalTime to be available if not yet loaded
+  if (!LocalTime) {
+    await localTimePromise;
+  }
 
   const meta = document.querySelector('meta[name="local-time-i18n"]');
   if (!meta) return;
@@ -20,22 +27,23 @@ function configureLocalTime() {
   const locale = meta.dataset.locale || document.documentElement.lang;
   const i18nData = meta.getAttribute("content");
 
+  // Parse i18n data separately so parsing errors don't prevent LocalTime from starting
   try {
     if (i18nData && i18nData !== "{}") {
       LocalTime.config.i18n[locale] = JSON.parse(i18nData);
     }
-    LocalTime.config.locale = locale;
-    LocalTime.start();
-  } catch (error) {
-    console.error("Failed to configure LocalTime:", error);
+  } catch (parseError) {
+    console.error("Failed to parse LocalTime i18n data:", parseError);
+    // Continue with default configuration
   }
+
+  // Always configure locale and start LocalTime, even if parsing failed
+  LocalTime.config.locale = locale;
+  LocalTime.start();
 }
 
-// Wait for LocalTime to be available, then configure
-import("local-time").then((module) => {
-  LocalTime = module.default;
-  configureLocalTime();
-});
+// Initial configuration
+configureLocalTime();
 
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
