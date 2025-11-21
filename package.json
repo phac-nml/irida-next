@@ -2,6 +2,11 @@
   "name": "irida-next",
   "private": true,
   "type": "module",
+  "scripts": {
+    "dev": "node esbuild.config.dev.js",
+    "build": "node esbuild.config.prod.js",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}'"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
     "axe-core": "^4.10.2",
