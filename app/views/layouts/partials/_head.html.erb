@@ -13,7 +13,7 @@
 
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
-  <%= javascript_importmap_tags %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 
   <%= render "shared/dark_mode_check" %>
   <%= render "shared/local_time" %>

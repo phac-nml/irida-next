@@ -1,12 +1,17 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+// Entry point for the build script in your package.json
 import "@hotwired/turbo-rails";
-import "controllers";
+import "./controllers";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
 
 import * as ActiveStorage from "@rails/activestorage";
+import LocalTimeModule from "local-time";
 
 ActiveStorage.start();
+
+// Make LocalTime globally available and dispatch ready event
+window.LocalTime = LocalTimeModule;
+window.dispatchEvent(new CustomEvent('localtimeready'));
 
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
