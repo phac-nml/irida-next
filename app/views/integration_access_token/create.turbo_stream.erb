@@ -1,0 +1,16 @@
+<% if new_personal_access_token %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: :success,
+      data: t("integration_access_tokens.create.success", name: new_personal_access_token.name),
+    ) %>
+  <% end %>
+  <%= turbo_stream.update "access-token-data-frame" do %>
+    <div data-controller="integration-access-token" data-integration-access-token-token-value="<%= encoded_token %>" data-integration-access-token-target-value="<%= target_host %>" >
+    </div>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: :error, data: message) %>
+  <% end %>
+<% end %>

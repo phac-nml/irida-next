@@ -1,0 +1,40 @@
+development:
+  # origins 'localhost:3000', '127.0.0.1:3000',
+  #            /\Ahttp:\/\/192\.168\.0\.\d{1,3}(:\d+)?\z/
+  # Regular expressions allowed.
+  origins: '*'
+  resources:
+    - resource: '*'
+      headers: any
+      methods: [get, post]
+  # Make sure to include trailing '/'
+  allowed_hosts:
+    - url: 'http://localhost:8081/'
+      identifier: bdip_sheets
+      token_lifespan_days: 1
+    - url: 'http://localhost:8082/'
+      identifier: bdip_drop
+      token_lifespan_days: 2
+
+test:
+  origins: '*'
+  resources:
+    - resource: '*'
+      headers: any
+      methods: [get, post]
+  allowed_hosts:
+    - url: 'http://testintegration:8081/'
+      identifier: test_integration_identifier
+      token_lifespan_days: 3
+
+production:
+  # do not use wildcards '*' in production
+  origins: ''
+  resources:
+    - resource: ''
+      headers: ''
+      methods: []
+  allowed_hosts:
+    - url: ''
+      identifier: nil
+      token_lifespan_days: 0

@@ -48,3 +48,9 @@ Les tâches rake peuvent être précédées de `info`, `debug` ou `verbose` pour
 # Exemple
 rake debug db:seed
 ```
+
+### Formater les fichiers de traduction
+
+```bash
+i18n-tasks normalize
+```

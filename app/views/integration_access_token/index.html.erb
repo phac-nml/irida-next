@@ -1,0 +1,21 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t("integration_access_tokens.index.title"),
+  subtitle: t("integration_access_tokens.index.subtitle"),
+) %>
+
+<div class="grid gap-4 grid-cols-1" data-turbo="true">
+  <%= turbo_frame_tag "access-token-data-frame" %>
+
+  <%= turbo_frame_tag "integration_access_token_form" do %>
+    <%= form_with() do |f| %>
+        <%= f.submit t("integration_access_tokens.create.submit"), class: "button button-primary" %>
+      <% end %>
+  <% end %>
+
+  <div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
+  <% flash.each do |key, value| %>
+    <%= viral_flash(type: key, data: value) %>
+  <% end %>
+  </div>
+</div>

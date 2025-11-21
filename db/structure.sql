@@ -431,6 +431,19 @@ CREATE FUNCTION public.logidze_version(v bigint, data jsonb, ts timestamp with t
 $$;
 
 
+--
+-- Name: action_cable_large_payloads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.action_cable_large_payloads_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -763,7 +776,9 @@ CREATE TABLE public.personal_access_tokens (
     log_data jsonb,
     deleted_at timestamp(6) without time zone,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
-    user_id uuid NOT NULL
+    user_id uuid NOT NULL,
+    integration boolean DEFAULT false NOT NULL,
+    integration_host character varying
 );
 
 
@@ -2037,6 +2052,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251022175801'),
 ('20251006195129'),
 ('20250826161932'),
+('20250716174346'),
 ('20250605171908'),
 ('20250424155356'),
 ('20250416191422'),

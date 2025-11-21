@@ -44,6 +44,9 @@ gem 'thruster', require: false
 # Use devise for auth
 gem 'devise', '~> 4.9.4'
 
+# Use CORS for specifying safe urls for integrations that request access tokens
+gem 'rack-cors'
+
 # Use OmniAuth auth
 gem 'omniauth'
 gem 'omniauth-entra-id'
