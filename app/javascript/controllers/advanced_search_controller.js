@@ -239,21 +239,10 @@ export default class extends Controller {
     const selectedField = event.currentTarget.value;
     this.#updateOperatorDropdown(condition, selectedField);
 
-    const operatorSelect = condition.querySelector(
-      this.constructor.SELECTORS.operatorSelect,
-    );
-    const operator = operatorSelect?.value || "";
-
-    if (operator && !["", "exists", "not_exists"].includes(operator)) {
-      const valueContainer = condition.querySelector(".value");
-      if (valueContainer && selectedField) {
-        this.#updateValueFieldForEnum(
-          valueContainer,
-          condition,
-          selectedField,
-          operator,
-        );
-      }
+    const valueContainer = condition.querySelector(".value");
+    if (valueContainer) {
+      this.#clearValueInputs(valueContainer);
+      valueContainer.classList.add(...this.#hiddenClasses);
     }
   }
 
@@ -409,7 +398,6 @@ export default class extends Controller {
       ? enumOperations
       : standardOperations;
 
-    const currentValue = operatorSelect.value;
     operatorSelect.innerHTML = "";
 
     const blankOption = document.createElement("option");
@@ -423,10 +411,6 @@ export default class extends Controller {
       option.text = label;
       operatorSelect.appendChild(option);
     });
-
-    if (currentValue && Object.values(operations).includes(currentValue)) {
-      operatorSelect.value = currentValue;
-    }
   }
 
   /**

@@ -195,5 +195,42 @@ module WorkflowExecutions
         assert_no_text error_we.name
       end
     end
+
+    test 'changing field resets operator and value' do
+      visit workflow_executions_url
+
+      # Open advanced search dialog
+      click_button I18n.t('components.advanced_search_component.title')
+
+      within 'dialog' do
+        # Select state field
+        within first("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible) do
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='state']", text: I18n.t('workflow_executions.table_component.state'))
+            .select_option
+
+          # Select equals operator
+          find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+
+          # Select completed state
+          find(
+            "select[name$='[value]'] option[value='completed']",
+            text: I18n.t('workflow_executions.state.completed'),
+            visible: :visible
+          ).select_option
+
+          # Change field to name
+          find("select[name$='[field]']", visible: :visible)
+            .find("option[value='name']", text: I18n.t('workflow_executions.table_component.name'))
+            .select_option
+
+          # Verify operator is reset to blank
+          assert_equal '', find("select[name$='[operator]']", visible: :visible).value
+
+          # Verify value input is hidden/cleared
+          assert_selector '.value.invisible', visible: :all
+        end
+      end
+    end
   end
 end
