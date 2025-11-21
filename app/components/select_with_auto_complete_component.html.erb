@@ -9,9 +9,7 @@
     <%= render Viral::BaseComponent.new(**combobox_arguments) %>
     <div
       id="<%= @listbox_id %>"
-      tabindex="0"
       role="listbox"
-      aria-label="<%= @label %>"
       data-select-with-auto-complete-target="listbox"
     >
       <%= @listbox_options %>
