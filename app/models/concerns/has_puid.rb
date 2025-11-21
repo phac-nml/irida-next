@@ -19,6 +19,7 @@ module HasPuid
     def create_or_update(**options, &)
       return super unless new_record?
 
+      retry_count = 0
       begin
         ActiveRecord::Base.transaction(requires_new: true) do
           return super
@@ -26,11 +27,16 @@ module HasPuid
       rescue ActiveRecord::RecordNotUnique => e
         raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
 
+        retry_count += 1
+        raise e if retry_count > 10 # Prevent infinite loops
+
         Rails.logger.info(
           "PUID conflict encountered for #{self.class}, regenerating PUID and attempting to save again."
         )
 
-        generate_puid(force: true)
+        # Add a small time offset to ensure we generate a different PUID on retry
+        time_offset = retry_count * 0.01 # 10 milliseconds per retry
+        generate_puid(force: true, time_offset:)
         retry
       end
     end
@@ -42,9 +48,10 @@ module HasPuid
     end
   end
 
-  def generate_puid(force: false)
+  def generate_puid(force: false, time_offset: 0)
     return unless force || puid.nil?
 
-    self.puid = Irida::PersistentUniqueId.generate(self)
+    time = Time.now.utc + time_offset
+    self.puid = Irida::PersistentUniqueId.generate(self, time:)
   end
 end
