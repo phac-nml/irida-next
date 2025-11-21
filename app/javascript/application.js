@@ -1,9 +1,11 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+// Application entry point for esbuild bundling
+// All dependencies are bundled from npm packages via esbuild
+
 import "@hotwired/turbo-rails";
-import "controllers";
+import "./controllers/index.js";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
-
+import LocalTime from "local-time";
 import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
