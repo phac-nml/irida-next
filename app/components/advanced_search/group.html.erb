@@ -1,7 +1,7 @@
 <fieldset
   data-advanced-search-target="groupsContainer"
   class="
-    relative p-4 rounded-lg border-2 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50
+    relative p-4 rounded-lg border-2 border-slate-300 dark:border-slate-600
     hover:border-slate-400 dark:hover:border-slate-500 transition-colors space-y-3
   "
 >
@@ -11,6 +11,7 @@
   >
     <%= t("components.advanced_search_component.group", index: @group_number) %>
   </legend>
+
   <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::Condition.new(
@@ -27,10 +28,12 @@
       ) %>
     <% end %>
   <% end %>
+
   <div class="flex justify-end my-4">
     <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
       <%= t("components.advanced_search_component.add_condition_button") %>
     <% end %>
+
     <%= viral_button(classes: class_names("ml-2", "hidden": !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
       <%= t("components.advanced_search_component.remove_group_button") %>
     <% end %>
