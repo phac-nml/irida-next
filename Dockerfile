@@ -49,7 +49,7 @@ RUN bundle install && \
 
 # Install node modules
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod=false
 
 # Copy application code
 COPY . .
