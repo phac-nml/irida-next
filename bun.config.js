@@ -1,8 +1,10 @@
 import path from 'path';
 import fs from 'fs';
+import { bunStimulusPlugin } from 'bun-stimulus-plugin';
 
 const config = {
   sourcemap: "external",
+  plugins: [bunStimulusPlugin()],
   entrypoints: ["app/javascript/application.js"],
   outdir: path.join(process.cwd(), "app/assets/builds"),
 };
