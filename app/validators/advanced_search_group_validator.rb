@@ -6,6 +6,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     return if empty_search?(record)
 
     record.groups.each do |group|
+      group.errors.clear
       validate_fields(group)
     end
 
@@ -24,6 +25,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   def validate_fields(group)
     group.conditions.each_with_index do |condition, condition_index|
+      condition.errors.clear
       validate_key(condition)
       validate_blank_field(condition)
       validate_date_and_numeric_field(condition)
