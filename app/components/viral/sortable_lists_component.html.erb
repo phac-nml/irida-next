@@ -2,50 +2,54 @@
   <div class="block text-sm font-medium text-slate-900 dark:text-white">
     <%= title %>
   </div>
-  <div
-    class="
-      text-base font-medium leading-relaxed text-slate-500 dark:text-slate-400
-    "
-  >
+
+  <div class="text-base font-medium leading-relaxed text-slate-500 dark:text-slate-400">
     <%= description %>
   </div>
 </div>
+
 <% unless templates.empty? %>
   <div>
     <label
       for="template-selector"
       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-    ><%= template_label %></label>
+    >
+      <%= template_label %>
+    </label>
+
     <select
       id="template-selector"
       data-action="viral--sortable-lists--two-lists-selection#setTemplate"
       data-viral--sortable-lists--two-lists-selection-target="templateSelector"
       class="
-        bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
-        w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
-        dark:text-white
+        bg-slate-50 border border-slate-300 text-slate-900 text-sm
+        rounded-lg block w-full p-2.5 dark:bg-slate-700
+        dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
       "
     >
-      <option value="none"><%= t("components.viral.sortable_lists_component.no_template") %></option>
-      <%= templates.each do |template| %>
-        <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
+      <option value="none">
+        <%= t("components.viral.sortable_lists_component.no_template") %>
+      </option>
+
+      <% templates.each do |template| %>
+        <%= tag.option template[:name], value: template[:id], data: { fields: template[:fields] } %>
       <% end %>
     </select>
   </div>
 <% end %>
+
 <div class="grid sm:grid-cols-2 max-sm:grid-cols-1 gap-2">
   <% lists.each do |list| %>
     <%= list %>
   <% end %>
 </div>
 
-<div
-  class="sr-only"
-  aria-live="polite"
-  data-viral--sortable-lists--two-lists-selection-target="ariaLiveUpdate"
-  data-translations="<%= aria_live_translations %>"
->
-</div>
+<%= tag.div class: "sr-only",
+            aria: { live: "polite" },
+            data: {
+              viral__sortable_lists__two_lists_selection_target: "ariaLiveUpdate",
+              translations: aria_live_translations
+            } %>
 
 <template
   data-viral--sortable-lists--two-lists-selection-target="checkmarkTemplate"

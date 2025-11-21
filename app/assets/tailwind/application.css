@@ -687,3 +687,15 @@ a.pill-focus-reset:focus-visible {
 [data-controller="pathogen--tabs"] [role="tab"][aria-selected="false"] {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
+
+/* Tabs Component - Use default browser focus styles
+   Allow tabs to use native browser focus indicators instead of custom focus-visible styles */
+[data-controller="pathogen--tabs"] [role="tab"]:focus-visible {
+  /* Universal custom focus ring (keyboard + high contrast)
+     Note: Removed :not(.pill-focus-reset) for simpler, faster matching.
+     The reset for .pill-focus-reset remains defined later and will override this. */
+  @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+  /* Remove default UA focus visuals (e.g., WebKit blue glow, Firefox inner focus ring) */
+  box-shadow: none !important;
+  outline: auto !important;
+}
