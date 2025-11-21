@@ -8,6 +8,31 @@ import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
 
+// Configure LocalTime from meta tag data
+function configureLocalTime() {
+  const meta = document.querySelector('meta[name="local-time-i18n"]');
+  if (!meta) return;
+
+  const locale = meta.dataset.locale || document.documentElement.lang;
+  const i18nData = meta.getAttribute('content');
+
+  try {
+    if (i18nData && i18nData !== '{}') {
+      LocalTime.config.i18n[locale] = JSON.parse(i18nData);
+    }
+    LocalTime.config.locale = locale;
+    LocalTime.start();
+  } catch (error) {
+    console.error('Failed to configure LocalTime:', error);
+  }
+}
+
+// Wait for LocalTime to be available, then configure
+import("local-time").then(module => {
+  window.LocalTime = module.default;
+  configureLocalTime();
+});
+
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
 
@@ -24,9 +49,8 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
-  LocalTime.config.locale = document.documentElement.lang;
-  // reprocess each time element regardless if it has been already processed
-  LocalTime.start();
+  // Reconfigure LocalTime with updated locale and i18n data
+  configureLocalTime();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
