@@ -35,17 +35,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Set up PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - name: Use Node.js 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: "pnpm"
+      - name: Set up bun
+        uses: oven-sh/setup-bun@v2
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
+        with:
+          bun-version: 1.2.22
       - name: Download Sapporo
         uses: actions/checkout@v3
         with:

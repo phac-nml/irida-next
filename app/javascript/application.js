@@ -1,9 +1,9 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails";
-import "controllers";
+import "./controllers";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
-
+import LocalTime from "local-time";
 import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
@@ -24,7 +24,12 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
-  LocalTime.config.locale = document.documentElement.lang;
+  const locale = document.documentElement.lang;
+  if (typeof window.local_time_i18n !== 'undefined' && locale in window.local_time_i18n) {
+    LocalTime.config.i18n[locale] = window.local_time_i18n[locale];
+  }
+
+  LocalTime.config.locale = locale;
   // reprocess each time element regardless if it has been already processed
   LocalTime.start();
   // ensure focused element is scrolled into view if out of view

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { formDataToJsonParams, normalizeParams } from "utilities/form";
+import { formDataToJsonParams, normalizeParams } from "../utilities/form";
 
 function preventEscapeListener(event) {
   if (event.key === "Escape") {

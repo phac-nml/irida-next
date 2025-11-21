@@ -1,3 +1,4 @@
 web: GOOD_JOB_EXECUTION_MODE=external bin/rails server -p 3000 -b 0.0.0.0
 css: bin/rails tailwindcss:watch
 worker: bundle exec good_job --queues="+transactional_messages,*"
+js: bun run build --watch

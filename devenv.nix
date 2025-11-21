@@ -14,6 +14,7 @@ lib.mkMerge [
       nextflow
       nodejs_24
       pnpm_10
+      bun
       jq
       file
     ];

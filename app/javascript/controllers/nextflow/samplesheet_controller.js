@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
-import { formDataToJsonParams } from "utilities/form";
-import { FIELD_CLASSES } from "utilities/styles";
+import { formDataToJsonParams } from "../../utilities/form";
+import { FIELD_CLASSES } from "../../utilities/styles";
 
 export default class extends Controller {
   static targets = [
