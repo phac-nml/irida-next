@@ -3,6 +3,10 @@
 require 'application_system_test_case'
 
 class AdvancedSearchComponentTest < ApplicationSystemTestCase
+  def setup
+    Flipper.enable(:advanced_search_with_auto_complete)
+  end
+
   test 'default' do
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
