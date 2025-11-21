@@ -32,9 +32,9 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.addComboboxEventListeners(this.comboboxTarget);
 
     this.attachOptionEvents(this.listboxTarget, true);
-    var categories = this.listboxTarget.querySelectorAll('[role="group"]');
-    for (var i = 0; i < categories.length; i++) {
-      var category = categories[i];
+    const categories = this.listboxTarget.querySelectorAll('[role="group"]');
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i];
       this.allOptions.push(category);
       this.attachOptionEvents(category);
     }
@@ -51,17 +51,17 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.removeComboboxEventListeners(this.comboboxTarget);
 
     this.removeOptionEvents(this.listboxTarget);
-    var categories = this.listboxTarget.querySelectorAll('[role="group"]');
-    for (var i = 0; i < categories.length; i++) {
-      var category = categories[i];
+    const categories = this.listboxTarget.querySelectorAll('[role="group"]');
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i];
       this.removeOptionEvents(category);
     }
   }
 
   attachOptionEvents(category, add = false) {
-    var categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    for (var i = 0; i < categoryItems.length; i++) {
-      var categoryItem = categoryItems[i];
+    const categoryItems = category.querySelectorAll(':scope > [role="option"]');
+    for (let i = 0; i < categoryItems.length; i++) {
+      const categoryItem = categoryItems[i];
       if (add) {
         this.allOptions.push(categoryItem);
       }
@@ -70,9 +70,9 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   removeOptionEvents(category) {
-    var categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    for (var i = 0; i < categoryItems.length; i++) {
-      var categoryItem = categoryItems[i];
+    const categoryItems = category.querySelectorAll(':scope > [role="option"]');
+    for (let i = 0; i < categoryItems.length; i++) {
+      const categoryItem = categoryItems[i];
       this.removeListboxOptionEventListeners(categoryItem);
     }
   }
@@ -82,7 +82,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   isOptionInView(option) {
-    var bounding = option.getBoundingClientRect();
+    const bounding = option.getBoundingClientRect();
     return (
       bounding.top >= 0 &&
       bounding.left >= 0 &&
@@ -123,20 +123,20 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   filterOptions() {
-    var option = null;
-    var currentOption = this.option;
-    var filter = this.filter.toLowerCase();
+    let option = null;
+    const currentOption = this.option;
+    const filter = this.filter.toLowerCase();
 
     this.filteredOptions = [];
     this.listboxTarget.innerHTML = "";
 
-    for (var i = 0; i < this.allOptions.length; i++) {
-      var flag = false;
-      var optionCategory = this.allOptions[i].cloneNode(true);
+    for (let i = 0; i < this.allOptions.length; i++) {
+      let flag = false;
+      const optionCategory = this.allOptions[i].cloneNode(true);
 
       if (optionCategory.role === "group") {
-        var options = optionCategory.querySelectorAll('[role="option"]');
-        for (var j = 0; j < options.length; j++) {
+        const options = optionCategory.querySelectorAll('[role="option"]');
+        for (let j = 0; j < options.length; j++) {
           option = options[j];
           this.addListboxOptionEventListeners(option);
           if (
@@ -144,7 +144,10 @@ export default class SelectWithAutoCompleteController extends Controller {
             this.getLowercaseContent(option).indexOf(filter) >= 0
           ) {
             flag = true;
-            var regex = new RegExp(`(${this.escapeRegExp(this.filter)})`, "gi");
+            const regex = new RegExp(
+              `(${this.escapeRegExp(this.filter)})`,
+              "gi",
+            );
             option.innerHTML = option.textContent.replace(
               regex,
               "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
@@ -161,7 +164,7 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.getLowercaseContent(optionCategory).indexOf(filter) >= 0
         ) {
           flag = true;
-          var regex = new RegExp(`(${this.escapeRegExp(this.filter)})`, "gi");
+          const regex = new RegExp(`(${this.escapeRegExp(this.filter)})`, "gi");
           optionCategory.innerHTML = optionCategory.textContent.replace(
             regex,
             "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
@@ -176,7 +179,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
 
     // Populate firstOption and lastOption
-    var numItems = this.filteredOptions.length;
+    const numItems = this.filteredOptions.length;
     if (numItems > 0) {
       this.firstOption = this.filteredOptions[0];
       this.lastOption = this.filteredOptions[numItems - 1];
@@ -199,8 +202,8 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.option = option;
     this.setActiveDescendant(option);
 
-    for (var i = 0; i < this.filteredOptions.length; i++) {
-      var opt = this.filteredOptions[i];
+    for (let i = 0; i < this.filteredOptions.length; i++) {
+      const opt = this.filteredOptions[i];
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
         if (!this.isOptionInView(option)) {
@@ -214,7 +217,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   getPreviousOption(currentOption) {
     if (currentOption !== this.firstOption) {
-      var index = this.filteredOptions.indexOf(currentOption);
+      const index = this.filteredOptions.indexOf(currentOption);
       return this.filteredOptions[index - 1];
     }
     return this.lastOption;
@@ -222,7 +225,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   getNextOption(currentOption) {
     if (currentOption !== this.lastOption) {
-      var index = this.filteredOptions.indexOf(currentOption);
+      const index = this.filteredOptions.indexOf(currentOption);
       return this.filteredOptions[index + 1];
     }
     return this.firstOption;
@@ -256,7 +259,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Combobox events
 
   onComboboxKeyDown(event) {
-    var flag = false,
+    let flag = false,
       altKey = event.altKey;
 
     if (event.ctrlKey || event.shiftKey) {
@@ -327,7 +330,7 @@ export default class SelectWithAutoCompleteController extends Controller {
         break;
 
       case "End":
-        var length = this.comboboxTarget.value.length;
+        const length = this.comboboxTarget.value.length;
         this.comboboxTarget.setSelectionRange(length, length);
         flag = true;
         break;
@@ -347,7 +350,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   onComboboxKeyUp(event) {
-    var flag = false,
+    let flag = false,
       option = null,
       char = event.key;
 
