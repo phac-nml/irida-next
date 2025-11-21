@@ -28,6 +28,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.onBackgroundPointerUp.bind(this),
       true,
     );
+
     this.addComboboxEventListeners(this.comboboxTarget);
 
     this.attachOptionEvents(this.listboxTarget, true);
@@ -39,6 +40,24 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
+  disconnect() {
+    // Remove event handlers
+    document.body.removeEventListener(
+      "pointerup",
+      this.onBackgroundPointerUp.bind(this),
+      true,
+    );
+
+    this.removeComboboxEventListeners(this.comboboxTarget);
+
+    this.removeOptionEvents(this.listboxTarget);
+    var categories = this.listboxTarget.querySelectorAll('[role="group"]');
+    for (var i = 0; i < categories.length; i++) {
+      var category = categories[i];
+      this.removeOptionEvents(category);
+    }
+  }
+
   attachOptionEvents(category, add = false) {
     var categoryItems = category.querySelectorAll(':scope > [role="option"]');
     for (var i = 0; i < categoryItems.length; i++) {
@@ -47,6 +66,14 @@ export default class SelectWithAutoCompleteController extends Controller {
         this.allOptions.push(categoryItem);
       }
       this.addListboxOptionEventListeners(categoryItem);
+    }
+  }
+
+  removeOptionEvents(category) {
+    var categoryItems = category.querySelectorAll(':scope > [role="option"]');
+    for (var i = 0; i < categoryItems.length; i++) {
+      var categoryItem = categoryItems[i];
+      this.removeListboxOptionEventListeners(categoryItem);
     }
   }
 
@@ -422,7 +449,19 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("blur", this.onComboboxBlur.bind(this));
   }
 
+  removeComboboxEventListeners(combobox) {
+    combobox.removeEventListener("keydown", this.onComboboxKeyDown.bind(this));
+    combobox.removeEventListener("keyup", this.onComboboxKeyUp.bind(this));
+    combobox.removeEventListener("click", this.onComboboxClick.bind(this));
+    combobox.removeEventListener("focus", this.onComboboxFocus.bind(this));
+    combobox.removeEventListener("blur", this.onComboboxBlur.bind(this));
+  }
+
   addListboxOptionEventListeners(option) {
     option.addEventListener("click", this.onOptionClick.bind(this));
+  }
+
+  removeListboxOptionEventListeners(option) {
+    option.removeEventListener("click", this.onOptionClick.bind(this));
   }
 }
