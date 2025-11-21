@@ -20,6 +20,9 @@ importers:
       '@rails/activestorage':
         specifier: ^8.1.100
         version: 8.1.100
+      '@rails/request.js':
+        specifier: ^0.0.12
+        version: 0.0.12
       '@sindresorhus/slugify':
         specifier: ^3.0.0
         version: 3.0.0
@@ -347,6 +350,9 @@ packages:
 
   '@rails/activestorage@8.1.100':
     resolution: {integrity: sha512-rlZg23KYT7JFYXl1tj1WD9nm/yvtUvZT6pzNMVX+HaOjPyGq8xpEv1ADrrhawkbMktKxRj3xDVZ3d/qy0akHvw==}
+
+  '@rails/request.js@0.0.12':
+    resolution: {integrity: sha512-g3//JBja1s04Zflj7IoMLQuXza9i4ZvtLmm0r0dMwh1QQUs6rL2iKUOGGyERfLsd81SnXC5ucfVV//rtsDlEEA==}
 
   '@rollup/plugin-node-resolve@15.3.0':
     resolution: {integrity: sha512-9eO5McEICxMzJpDW9OnMYSv4Sta3hmt7VtBFz5zR9273suNOydOyq/FrGeGy+KsTRFm8w0SLVhzig2ILFT63Ag==}
@@ -977,6 +983,8 @@ snapshots:
   '@rails/activestorage@8.1.100':
     dependencies:
       spark-md5: 3.0.2
+
+  '@rails/request.js@0.0.12': {}
 
   '@rollup/plugin-node-resolve@15.3.0':
     dependencies:
