@@ -11,3 +11,6 @@ vendor/* linguist-vendored
 * text=auto eol=lf
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
+
+# See https://bun.sh/docs/install/lockfile
+*.lockb diff=lockb

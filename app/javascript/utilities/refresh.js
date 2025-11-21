@@ -7,7 +7,7 @@
  *
  * @param {Controller} controller - A Stimulus controller instance that has refresh outlets
  * @example
- *   import { notifyRefreshControllers } from "utilities/refresh";
+ *   import { notifyRefreshControllers } from "./utilities/refresh";
  *
  *   export default class extends Controller {
  *     static outlets = ["refresh"];
