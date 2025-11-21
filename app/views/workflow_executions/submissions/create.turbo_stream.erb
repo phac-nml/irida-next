@@ -1,6 +1,6 @@
 <%= turbo_stream.update "samples_dialog" do %>
   <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
-    <% dialog.with_header(title: t(:".title", workflow: text_for(@workflow.name))) %>
+    <% dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
     <%= render NextflowComponent.new(
       workflow: @workflow,
       url: workflow_executions_path,
