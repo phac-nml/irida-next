@@ -14,7 +14,6 @@
         form-field w-1/3 @max-xl:w-full <%= 'invalid' if invalid_field %>
       "
     >
-      <%= conditions_form.label :field, data: { required: true } %>
       <% options =
         options_for_select(@sample_fields, selected_key = @condition.field).concat(
           grouped_options_for_select(
@@ -22,15 +21,32 @@
             selected_key = @condition.field,
           ),
         ) %>
-      <%= render SelectWithAutoCompleteComponent.new(
-        form: conditions_form,
-        field: :field,
-        options: options,
-        "aria-label": t("activemodel.attributes.sample/search_condition.field"),
-        "aria-invalid": invalid_field,
-        "aria-describedby": conditions_form.field_id(:field, "error"),
-        autofocus: invalid_field,
-      ) %>
+      <%= conditions_form.label :field, data: { required: true } %>
+      <% unless Flipper.enabled?(:advanced_search_with_auto_complete) %>
+        <%= conditions_form.select :field,
+                               options,
+                               { include_blank: true },
+                               {
+                                 "aria-label":
+                                   t(
+                                     "activemodel.attributes.sample/search_condition.field",
+                                   ),
+                                 "aria-invalid": invalid_field,
+                                 "aria-describedby":
+                                   conditions_form.field_id(:field, "error"),
+                                 autofocus: invalid_field,
+                               } %>
+      <% else %>
+        <%= render SelectWithAutoCompleteComponent.new(
+          form: conditions_form,
+          field: :field,
+          options: options,
+          "aria-label": t("activemodel.attributes.sample/search_condition.field"),
+          "aria-invalid": invalid_field,
+          "aria-describedby": conditions_form.field_id(:field, "error"),
+          autofocus: invalid_field,
+        ) %>
+      <% end %>
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:field),
       id: conditions_form.field_id(:field, "error") %>

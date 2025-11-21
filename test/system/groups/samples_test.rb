@@ -9,6 +9,7 @@ module Groups
     def setup # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       Flipper.enable(:metadata_import_field_selection)
       Flipper.enable(:batch_sample_spreadsheet_import)
+      Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)
       login_as @user
