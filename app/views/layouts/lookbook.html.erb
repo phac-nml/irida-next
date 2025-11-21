@@ -7,7 +7,7 @@
     <title>Lookbook Preview</title>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= render "shared/local_time" %>
+    <meta name="local-time-i18n" content="<%= local_time_i18n_config %>" data-locale="<%= I18n.locale %>" />
   </head>
   <body class="bg-white dark:bg-slate-900">
     <main
