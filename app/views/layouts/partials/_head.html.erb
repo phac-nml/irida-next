@@ -16,6 +16,6 @@
   <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 
   <%= render "shared/dark_mode_check" %>
-  <%= render "shared/local_time" %>
+  <meta name="local-time-i18n" content="<%= local_time_i18n_config %>" data-locale="<%= I18n.locale %>" />
   <%= yield :head %>
 </head>
