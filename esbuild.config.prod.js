@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 await esbuild.build({
   // Entry points for JavaScript only (CSS handled by Tailwind CLI)
   entryPoints: [
-    'app/javascript/irida.js',
+    'app/javascript/application.js',
   ],
 
   // Output configuration

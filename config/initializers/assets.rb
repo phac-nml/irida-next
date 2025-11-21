@@ -18,4 +18,4 @@ Rails.application.config.assets.paths << Rails.root.join('app/assets/builds')
 Rails.application.config.assets.precompile += ['app/components/**/*.js']
 
 # Add esbuild-generated assets
-Rails.application.config.assets.precompile += %w[irida.js irida.css]
+Rails.application.config.assets.precompile += %w[application.js application.css]

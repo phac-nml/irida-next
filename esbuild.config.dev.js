@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 // Build context for development with watch mode
 const ctx = await esbuild.context({
   // Entry points for JavaScript only (CSS handled by Tailwind CLI)
-  entryPoints: ["app/javascript/irida.js"],
+  entryPoints: ["app/javascript/application.js"],
 
   // Output configuration
   bundle: true,

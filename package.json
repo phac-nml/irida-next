@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "node esbuild.config.dev.js",
     "build": "node esbuild.config.prod.js",
-    "build:css": "tailwindcss -i ./app/assets/tailwind/irida.css -o ./app/assets/builds/irida.css --minify",
-    "watch:css": "tailwindcss -i ./app/assets/tailwind/irida.css -o ./app/assets/builds/irida.css --watch",
+    "build:css": "tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/application.css --minify",
+    "watch:css": "tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/application.css --watch",
     "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}'"
   },
   "devDependencies": {
