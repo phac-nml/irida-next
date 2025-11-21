@@ -24,10 +24,6 @@
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
 }
 
-body {
-  background-color: orange !important;
-}
-
 /* Hide search clear button across all browsers */
 /* For Webkit browsers (Chrome, Safari, Edge) */
 input[type="search"]::-webkit-search-decoration,
