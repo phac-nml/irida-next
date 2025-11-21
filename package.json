@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "node esbuild.config.dev.js",
     "build": "node esbuild.config.prod.js",
+    "build:css": "tailwindcss -i ./app/assets/tailwind/irida.css -o ./app/assets/builds/irida.css --minify",
+    "watch:css": "tailwindcss -i ./app/assets/tailwind/irida.css -o ./app/assets/builds/irida.css --watch",
     "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}'"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.22",
+    "@tailwindcss/cli": "^4.1.17",
     "axe-core": "^4.10.2",
     "esbuild": "^0.27.0",
-    "esbuild-plugin-postcss": "^0.3.0",
-    "postcss": "^8.5.6",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.1.17"

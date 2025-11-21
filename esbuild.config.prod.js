@@ -1,24 +1,20 @@
 // esbuild Production Configuration
-// This configuration handles JavaScript and CSS bundling for production
+// This configuration handles JavaScript bundling for production
 // with separate source maps, code splitting, minification, and aggressive optimization.
+// CSS is handled separately by Tailwind CLI for better performance and compatibility.
 
 import * as esbuild from 'esbuild';
-import { createRequire } from 'module';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
-const require = createRequire(import.meta.url);
-const postcssPlugin = require('esbuild-plugin-postcss').default;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Build configuration for production
 await esbuild.build({
-  // Entry points for JavaScript and CSS
+  // Entry points for JavaScript only (CSS handled by Tailwind CLI)
   entryPoints: [
-    'app/javascript/application.js',
-    'app/assets/tailwind/application.css',
+    'app/javascript/irida.js',
   ],
 
   // Output configuration
@@ -51,14 +47,6 @@ await esbuild.build({
     controllers: path.resolve(__dirname, 'app/javascript/controllers'),
     utilities: path.resolve(__dirname, 'app/javascript/utilities'),
   },
-
-  // Plugins
-  plugins: [
-    postcssPlugin({
-      // PostCSS will use postcss.config.js for Tailwind CSS 4.0 processing
-      postcssPlugin: [],
-    }),
-  ],
 
   // Code splitting for vendor bundles (better caching)
   splitting: true,
