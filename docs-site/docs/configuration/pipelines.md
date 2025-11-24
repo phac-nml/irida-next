@@ -28,6 +28,7 @@ This `pipelines.json` file should be in the format below and can include the fol
 - **overrides** _(Optional)_ for the pipeline
 - **samplesheet_schema_overrides** _(Optional)_ for the pipeline
 - **settings**
+  - `min_samples`: _(Optional)_ `number` to specify the minimum number of samples required for analysis by the pipeline
   - `max_samples`: _(Optional)_ `number` to specify the maximum number of samples allowed to be analyzed by the pipeline
   - `min_runtime`: _(Optional)_ `number` or `string (formula)` to specify minimum allowed runtime in seconds for the pipeline
   - `max_runtime`: _(Optional)_ `number` or `string (formula)` to specify maximum allowed runtime in seconds for the pipeline
@@ -475,6 +476,7 @@ In the below example, we will set the available pipeline specific settings at th
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
     "settings": {
+      "min_samples": 1,
       "max_samples": 100,
       "min_runtime": 60,
       "max_runtime": 600,
@@ -507,6 +509,7 @@ In the below example, we will set the available pipeline specific settings at th
       {
         "name": "1.0.3",
         "settings": {
+          "min_samples": 1,
           "max_samples": 100,
           "min_runtime": 60,
           "max_runtime": 600,
@@ -533,6 +536,7 @@ In the below example, we will set the available pipeline specific settings at th
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
     "settings": {
+      "min_samples": 1,
       "max_samples": 100,
       "min_runtime": 60,
       "max_runtime": 600,
