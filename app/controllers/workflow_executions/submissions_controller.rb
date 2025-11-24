@@ -7,7 +7,7 @@ module WorkflowExecutions
 
     respond_to :turbo_stream
     before_action :workflows
-    before_action :samples, only: %i[create]
+    before_action :sample_count, only: %i[create]
     before_action :workflow, only: %i[create]
     before_action :namespace_id, only: %i[create pipeline_selection]
     before_action :allowed_to_update_samples, only: %i[create]
@@ -38,9 +38,8 @@ module WorkflowExecutions
       @workflow = Irida::Pipelines.instance.find_pipeline_by(pipeline_id, workflow_version)
     end
 
-    def samples
-      sample_ids = params[:sample_ids]
-      @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: sample_ids)
+    def sample_count
+      @sample_count = params[:sample_count]
     end
 
     def namespace_id
