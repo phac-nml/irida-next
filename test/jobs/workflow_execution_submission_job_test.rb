@@ -29,10 +29,15 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
         WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
       end
+
+      perform_enqueued_jobs(only: WorkflowExecutionMinimumRuntimeJob) do
+        WorkflowExecutionMinimumRuntimeJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert_performed_jobs(1, only: WorkflowExecutionMinimumRuntimeJob)
     assert @workflow_execution.reload.submitted?
   end
 
