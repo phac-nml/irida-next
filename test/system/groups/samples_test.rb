@@ -657,6 +657,57 @@ module Groups
       end
     end
 
+    test 'filter samples with advanced search and autocomplete disabled' do
+      Flipper.disable(:advanced_search_with_auto_complete)
+
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample9)}']"
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+             find("select[name$='[field]']").find("option[value='puid']").select_option
+            find("select[name$='[operator]']").find("option[value='in']").select_option
+            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+          end
+        end
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        # sample1 & sample2 found
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample9)}']"
+      end
+    end
+
     test 'filter samples with advanced search using metadata fields names with extra periods' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,

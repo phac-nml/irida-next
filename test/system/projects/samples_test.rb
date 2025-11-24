@@ -3558,6 +3558,62 @@ module Projects
       ### actions and VERIFY END ###
     end
 
+    test 'filter samples with advanced search and autocomplete disabled' do
+      Flipper.disable(:advanced_search_with_auto_complete)
+
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+        # sample30 found
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### actions and VERIFY END ###
+    end
+
     test 'filter samples with advanced search using between dates' do
       ### SETUP START ###
       user = users(:metadata_doe)
