@@ -21,24 +21,25 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.firstOption = null;
     this.lastOption = null;
 
-    // Set up debounced filtering for typing
-    this.debouncedFilterOptions = _.debounce(() => this.filterOptions(), 300);
+    // Set up debounced keyboard input typing
+    this.debouncedOnComboboxKeyDown = _.debounce(this.#onComboboxKeyDown, 300);
+    this.debouncedOnComboboxKeyUp = _.debounce(this.#onComboboxKeyUp, 300);
 
     // Add event handlers
     document.body.addEventListener(
       "pointerup",
-      this.onBackgroundPointerUp.bind(this),
+      this.#onBackgroundPointerUp.bind(this),
       true,
     );
 
-    this.addComboboxEventListeners(this.comboboxTarget);
+    this.#addComboboxEventListeners(this.comboboxTarget);
 
-    this.attachOptionEvents(this.listboxTarget, true);
+    this.#attachOptionEvents(this.listboxTarget, true);
     const categories = this.listboxTarget.querySelectorAll('[role="group"]');
     for (let i = 0; i < categories.length; i++) {
       const category = categories[i];
       this.allOptions.push(category);
-      this.attachOptionEvents(category);
+      this.#attachOptionEvents(category);
     }
   }
 
@@ -46,44 +47,44 @@ export default class SelectWithAutoCompleteController extends Controller {
     // Remove event handlers
     document.body.removeEventListener(
       "pointerup",
-      this.onBackgroundPointerUp.bind(this),
+      this.#onBackgroundPointerUp.bind(this),
       true,
     );
 
-    this.removeComboboxEventListeners(this.comboboxTarget);
+    this.#removeComboboxEventListeners(this.comboboxTarget);
 
-    this.removeOptionEvents(this.listboxTarget);
+    this.#removeOptionEvents(this.listboxTarget);
     const categories = this.listboxTarget.querySelectorAll('[role="group"]');
     for (let i = 0; i < categories.length; i++) {
       const category = categories[i];
-      this.removeOptionEvents(category);
+      this.#removeOptionEvents(category);
     }
   }
 
-  attachOptionEvents(category, add = false) {
+  #attachOptionEvents(category, add = false) {
     const categoryItems = category.querySelectorAll(':scope > [role="option"]');
     for (let i = 0; i < categoryItems.length; i++) {
       const categoryItem = categoryItems[i];
       if (add) {
         this.allOptions.push(categoryItem);
       }
-      this.addListboxOptionEventListeners(categoryItem);
+      this.#addListboxOptionEventListeners(categoryItem);
     }
   }
 
-  removeOptionEvents(category) {
+  #removeOptionEvents(category) {
     const categoryItems = category.querySelectorAll(':scope > [role="option"]');
     for (let i = 0; i < categoryItems.length; i++) {
       const categoryItem = categoryItems[i];
-      this.removeListboxOptionEventListeners(categoryItem);
+      this.#removeListboxOptionEventListeners(categoryItem);
     }
   }
 
-  getLowercaseContent(node) {
+  #getLowercaseContent(node) {
     return node.textContent.toLowerCase();
   }
 
-  isOptionInView(option) {
+  #isOptionInView(option) {
     const bounding = option.getBoundingClientRect();
     return (
       bounding.top >= 0 &&
@@ -95,10 +96,10 @@ export default class SelectWithAutoCompleteController extends Controller {
     );
   }
 
-  setActiveDescendant(option) {
+  #setActiveDescendant(option) {
     if (option) {
       this.comboboxTarget.setAttribute("aria-activedescendant", option.id);
-      if (!this.isOptionInView(option)) {
+      if (!this.#isOptionInView(option)) {
         option.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     } else {
@@ -106,7 +107,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  setValue(option) {
+  #setValue(option) {
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
     this.filter = option ? option.textContent : "";
     this.comboboxTarget.value = this.filter;
@@ -114,17 +115,17 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter.length,
       this.filter.length,
     );
-    this.debouncedFilterOptions();
-    this.setOption(null);
+    this.#filterOptions();
+    this.#setOption(null);
   }
 
   // ComboboxAutocomplete events
 
-  escapeRegExp(string) {
+  #escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  filterOptions() {
+  #filterOptions() {
     let option = null;
     const currentOption = this.option;
     const filter = this.filter.toLowerCase();
@@ -140,14 +141,14 @@ export default class SelectWithAutoCompleteController extends Controller {
         const options = optionCategory.querySelectorAll('[role="option"]');
         for (let j = 0; j < options.length; j++) {
           option = options[j];
-          this.addListboxOptionEventListeners(option);
+          this.#addListboxOptionEventListeners(option);
           if (
             filter.length === 0 ||
-            this.getLowercaseContent(option).indexOf(filter) >= 0
+            this.#getLowercaseContent(option).indexOf(filter) >= 0
           ) {
             flag = true;
             const regex = new RegExp(
-              `(${this.escapeRegExp(this.filter)})`,
+              `(${this.#escapeRegExp(this.filter)})`,
               "gi",
             );
             option.innerHTML = option.textContent.replace(
@@ -160,13 +161,16 @@ export default class SelectWithAutoCompleteController extends Controller {
           }
         }
       } else {
-        this.addListboxOptionEventListeners(optionCategory);
+        this.#addListboxOptionEventListeners(optionCategory);
         if (
           filter.length === 0 ||
-          this.getLowercaseContent(optionCategory).indexOf(filter) >= 0
+          this.#getLowercaseContent(optionCategory).indexOf(filter) >= 0
         ) {
           flag = true;
-          const regex = new RegExp(`(${this.escapeRegExp(this.filter)})`, "gi");
+          const regex = new RegExp(
+            `(${this.#escapeRegExp(this.filter)})`,
+            "gi",
+          );
           optionCategory.innerHTML = optionCategory.textContent.replace(
             regex,
             "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
@@ -200,15 +204,16 @@ export default class SelectWithAutoCompleteController extends Controller {
     return option;
   }
 
-  setOption(option) {
+  #setOption(option) {
     this.option = option;
-    this.setActiveDescendant(option);
+    this.#setActiveDescendant(option);
 
     for (let i = 0; i < this.filteredOptions.length; i++) {
       const opt = this.filteredOptions[i];
+
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
-        if (!this.isOptionInView(option)) {
+        if (!this.#isOptionInView(option)) {
           option.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
       } else {
@@ -217,7 +222,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  getPreviousOption(currentOption) {
+  #getPreviousOption(currentOption) {
     if (currentOption !== this.firstOption) {
       const index = this.filteredOptions.indexOf(currentOption);
       return this.filteredOptions[index - 1];
@@ -225,7 +230,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     return this.lastOption;
   }
 
-  getNextOption(currentOption) {
+  #getNextOption(currentOption) {
     if (currentOption !== this.lastOption) {
       const index = this.filteredOptions.indexOf(currentOption);
       return this.filteredOptions[index + 1];
@@ -235,32 +240,32 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   // Menu display methods
 
-  isOpen() {
+  #isOpen() {
     return this.listboxTarget.style.display === "block";
   }
 
-  isClosed() {
+  #isClosed() {
     return this.listboxTarget.style.display !== "block";
   }
 
-  hasOptions() {
+  #hasOptions() {
     return this.filteredOptions.length;
   }
 
-  open() {
+  #open() {
     this.listboxTarget.style.display = "block";
     this.comboboxTarget.setAttribute("aria-expanded", "true");
   }
 
-  close() {
-    this.setOption(null);
+  #close() {
+    this.#setOption(null);
     this.listboxTarget.style.display = "none";
     this.comboboxTarget.setAttribute("aria-expanded", "false");
   }
 
   // Combobox events
 
-  onComboboxKeyDown(event) {
+  #onComboboxKeyDown(event) {
     let flag = false,
       altKey = event.altKey;
 
@@ -270,24 +275,24 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Enter":
-        this.setValue(this.option);
-        this.close();
+        this.#setValue(this.option);
+        this.#close();
         flag = true;
         break;
 
       case "Down":
       case "ArrowDown":
         if (this.filteredOptions.length > 0) {
-          if (altKey && this.isClosed()) {
-            this.open();
+          if (altKey && this.#isClosed()) {
+            this.#open();
           } else {
-            if (this.isClosed()) {
-              this.open();
+            if (this.#isClosed()) {
+              this.#open();
             }
             if (this.filteredOptions.length > 1) {
-              this.setOption(this.getNextOption(this.option));
+              this.#setOption(this.#getNextOption(this.option));
             } else {
-              this.setOption(this.firstOption);
+              this.#setOption(this.firstOption);
             }
           }
         }
@@ -296,13 +301,13 @@ export default class SelectWithAutoCompleteController extends Controller {
 
       case "Up":
       case "ArrowUp":
-        if (this.hasOptions()) {
-          if (this.isOpen()) {
-            this.setOption(this.getPreviousOption(this.option));
+        if (this.#hasOptions()) {
+          if (this.#isOpen()) {
+            this.#setOption(this.#getPreviousOption(this.option));
           } else {
-            this.open();
+            this.#open();
             if (!altKey) {
-              this.setOption(this.lastOption);
+              this.#setOption(this.lastOption);
             }
           }
         }
@@ -311,18 +316,18 @@ export default class SelectWithAutoCompleteController extends Controller {
 
       case "Esc":
       case "Escape":
-        if (this.isOpen()) {
-          this.close();
+        if (this.#isOpen()) {
+          this.#close();
         } else {
-          this.setValue();
+          this.#setValue();
         }
         flag = true;
         break;
 
       case "Tab":
-        this.close();
+        this.#close();
         if (this.option) {
-          this.setValue(this.option);
+          this.#setValue(this.option);
         }
         break;
 
@@ -347,16 +352,16 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  isPrintableCharacter(str) {
+  #isPrintableCharacter(str) {
     return str.length === 1 && str.match(/\S| /);
   }
 
-  onComboboxKeyUp(event) {
+  #onComboboxKeyUp(event) {
     let flag = false,
       option = null,
       char = event.key;
 
-    if (this.isPrintableCharacter(char)) {
+    if (this.#isPrintableCharacter(char)) {
       this.filter += char;
     }
 
@@ -367,8 +372,8 @@ export default class SelectWithAutoCompleteController extends Controller {
     switch (event.key) {
       case "Backspace":
         this.filter = this.comboboxTarget.value;
-        this.debouncedFilterOptions();
-        this.setOption(null);
+        this.#filterOptions();
+        this.#setOption(null);
         flag = true;
         break;
 
@@ -378,29 +383,29 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "ArrowRight":
       case "Home":
       case "End":
-        this.setOption(null);
+        this.#setOption(null);
         flag = true;
         break;
 
       default:
-        if (this.isPrintableCharacter(char)) {
-          this.setOption(null);
+        if (this.#isPrintableCharacter(char)) {
+          this.#setOption(null);
           flag = true;
 
-          option = this.debouncedFilterOptions();
+          option = this.#filterOptions();
           if (option) {
-            if (this.isClosed() && this.comboboxTarget.value.length) {
-              this.open();
+            if (this.#isClosed() && this.comboboxTarget.value.length) {
+              this.#open();
             }
 
             if (
-              this.getLowercaseContent(option).indexOf(
+              this.#getLowercaseContent(option).indexOf(
                 this.comboboxTarget.value.toLowerCase(),
               ) >= 0
             ) {
-              this.setOption(option);
+              this.#setOption(option);
             } else {
-              this.setOption(null);
+              this.#setOption(null);
             }
           }
         }
@@ -414,63 +419,75 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  onComboboxClick() {
-    if (this.isOpen()) {
-      this.close();
+  #onComboboxClick() {
+    if (this.#isOpen()) {
+      this.#close();
     } else {
-      this.open();
+      this.#open();
     }
   }
 
-  onComboboxFocus() {
+  #onComboboxFocus() {
     this.filter = this.comboboxTarget.value;
-    this.debouncedFilterOptions();
-    this.setOption(null);
+    this.#filterOptions();
+    this.#setOption(null);
   }
 
-  onComboboxBlur() {
-    this.setOption(null);
+  #onComboboxBlur() {
+    this.#setOption(null);
   }
 
-  onBackgroundPointerUp(event) {
+  #onBackgroundPointerUp(event) {
     if (
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
-      this.close();
+      this.#close();
     }
   }
 
   // Listbox Option events
 
-  onOptionClick(event) {
-    this.setValue(event.target);
-    this.close();
+  #onOptionClick(event) {
+    this.#setValue(event.target);
+    this.#close();
   }
 
   // Event handlers
 
-  addComboboxEventListeners(combobox) {
-    combobox.addEventListener("keydown", this.onComboboxKeyDown.bind(this));
-    combobox.addEventListener("keyup", this.onComboboxKeyUp.bind(this));
-    combobox.addEventListener("click", this.onComboboxClick.bind(this));
-    combobox.addEventListener("focus", this.onComboboxFocus.bind(this));
-    combobox.addEventListener("blur", this.onComboboxBlur.bind(this));
+  #addComboboxEventListeners(combobox) {
+    combobox.addEventListener(
+      "keydown",
+      this.debouncedOnComboboxKeyDown.bind(this),
+    );
+    combobox.addEventListener(
+      "keyup",
+      this.debouncedOnComboboxKeyUp.bind(this),
+    );
+    combobox.addEventListener("click", this.#onComboboxClick.bind(this));
+    combobox.addEventListener("focus", this.#onComboboxFocus.bind(this));
+    combobox.addEventListener("blur", this.#onComboboxBlur.bind(this));
   }
 
-  removeComboboxEventListeners(combobox) {
-    combobox.removeEventListener("keydown", this.onComboboxKeyDown.bind(this));
-    combobox.removeEventListener("keyup", this.onComboboxKeyUp.bind(this));
-    combobox.removeEventListener("click", this.onComboboxClick.bind(this));
-    combobox.removeEventListener("focus", this.onComboboxFocus.bind(this));
-    combobox.removeEventListener("blur", this.onComboboxBlur.bind(this));
+  #removeComboboxEventListeners(combobox) {
+    combobox.removeEventListener(
+      "keydown",
+      this.debouncedOnComboboxKeyDown.bind(this),
+    );
+    combobox.removeEventListener(
+      "keyup",
+      this.debouncedOnComboboxKeyUp.bind(this),
+    );
+    combobox.removeEventListener("click", this.#onComboboxClick.bind(this));
+    combobox.removeEventListener("focus", this.#onComboboxFocus.bind(this));
+    combobox.removeEventListener("blur", this.#onComboboxBlur.bind(this));
   }
 
-  addListboxOptionEventListeners(option) {
-    option.addEventListener("click", this.onOptionClick.bind(this));
+  #addListboxOptionEventListeners(option) {
+    option.addEventListener("click", this.#onOptionClick.bind(this));
   }
 
-  removeListboxOptionEventListeners(option) {
-    option.removeEventListener("click", this.onOptionClick.bind(this));
+  #removeListboxOptionEventListeners(option) {
+    option.removeEventListener("click", this.#onOptionClick.bind(this));
   }
 }
