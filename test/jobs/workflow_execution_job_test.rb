@@ -55,4 +55,17 @@ class WorkflowExecutionJobTest < ActiveJobTestCase
       @workflow_execution_submitted, %i[prepared submitted], validate_run_id: true
     )
   end
+
+  test 'minimum_run_time is integer' do
+    @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
+
+    Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
+                         pipeline_schema_file_dir: @pipeline_schema_file_dir)
+
+    assert WorkflowExecutionJob.new.run_time_calculation(@workflow_execution_submitted, 'min_runtime')
+  end
+
+  test 'maximum_run_time is string (formula)' do
+    assert WorkflowExecutionJob.new.run_time_calculation(@workflow_execution_submitted, 'max_runtime')
+  end
 end

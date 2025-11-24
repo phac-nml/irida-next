@@ -1804,6 +1804,7 @@ en:
     workflow_executions:
       create:
         max_samples_exceeded: Maximum number of samples for pipeline (%{max_samples}) exceeded"
+        min_samples_required: Minimum number of samples that the pipeline requires for analysis (%{min_samples}).
   shared:
     alert:
       list:

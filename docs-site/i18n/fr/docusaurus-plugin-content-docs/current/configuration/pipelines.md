@@ -28,11 +28,12 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
 - **overrides** _(Optionnel)_ pour le pipeline
 - **samplesheet_schema_overrides** _(Optional)_ pour le pipeline
 - **settings**
+  - `min_samples` : _(Optionnel)_ `number` pour spécifier le nombre minimal d'échantillons requis pour l'analyse par le pipeline
   - `max_samples` : _(Optionnel)_ `number` pour spécifier le nombre maximal d'échantillons pouvant être analysés par le pipeline
-  - `min_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution minimum autorisé en secondes pour le pipeline
-  - `max_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution maximum autorisé en secondes pour le pipeline
-  - `status_check_interval` : _(Optionnel)_ `number` spécifie l'intervalle en secondes entre les vérifications d'état envoyées au WES. Par défaut : `30` secondes.
-  - `estimated_cost_formula` : _(Optionnel)_ `string (formula)` spécifie le coût estimé en dollars pour l'analyse
+  - `min_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution minimal autorisé (en secondes) pour le pipeline
+  - `max_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution maximal autorisé (en secondes) pour le pipeline
+  - `status_check_interval` : _(Optionnel)_ `number` spécifiant l'intervalle (en secondes) entre les vérifications d'état envoyées au WES. Par défaut : `30` secondes.
+  - `estimated_cost_formula` : _(Optionnel)_ `string (formula)` spécifiant le coût estimé (en dollars) pour l'analyse
 
 #### Exemple
 
@@ -475,6 +476,7 @@ Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au p
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
     "settings": {
+      "min_samples": 1,
       "max_samples": 100,
       "min_runtime": 60,
       "max_runtime": 600,
@@ -507,6 +509,7 @@ Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au p
       {
         "name": "1.0.3",
         "settings": {
+          "min_samples": 1,
           "max_samples": 100,
           "min_runtime": 60,
           "max_runtime": 600,
@@ -533,6 +536,7 @@ Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au p
     "name": "phac-nml/iridanextexample",
     "description": "Pipeline d'exemple IRIDA Next",
     "settings": {
+      "min_samples": 1,
       "max_samples": 100,
       "min_runtime": 60,
       "max_runtime": 600,

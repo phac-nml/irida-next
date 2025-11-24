@@ -78,6 +78,22 @@ irida_next_example_prepared:
   cleaned: false
   name: "irida_next_example_prepared"
 
+irida_next_example_prepared_settings:
+  <<: *DEFAULTS
+  workflow_params:
+    {
+      input: "/blah/samplesheet.csv",
+      outdir: "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_prepared_settings"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "prepared"
+  email_notification: true
+  cleaned: false
+  name: "irida_next_example_prepared_settings"
+
 irida_next_example_submitted:
   <<: *DEFAULTS
   workflow_params:

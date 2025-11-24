@@ -1807,7 +1807,8 @@ fr:
       missing_header: Le fichier ne contient pas d’en-têtes '%{header_title}'
     workflow_executions:
       create:
-        max_samples_exceeded: Le nombre maximal d'échantillons pour le pipeline (%{max_samples}) a été dépassé
+        max_samples_exceeded: Le nombre maximal d'échantillons autorisé pour le pipeline (%{max_samples}) a été dépassé
+        min_samples_required: Le nombre minimum d'échantillons requis pour que le pipeline puisse effectuer l’analyse (%{min_samples})
   shared:
     alert:
       list:
