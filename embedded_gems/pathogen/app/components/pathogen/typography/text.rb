@@ -10,9 +10,17 @@ module Pathogen
     # Standard body text component for paragraphs and main content with consistent
     # sizing and optimal readability. Supports optional responsive sizing.
     #
+    # **I18n Note:** For user-facing content, always pass I18n-translated strings.
+    # Lookbook previews may use hardcoded text for demonstration purposes only.
+    #
     # @example Basic paragraph
     #   <%= render Pathogen::Typography::Text.new do %>
     #     This is body text at 16px.
+    #   <% end %>
+    #
+    # @example With I18n (required for user-facing content)
+    #   <%= render Pathogen::Typography::Text.new do %>
+    #     <%= t('.description') %>
     #   <% end %>
     #
     # @example With color variant

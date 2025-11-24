@@ -10,9 +10,17 @@ module Pathogen
     # Small, uppercase text that appears above headings. Perfect for categories,
     # labels, or context that helps users understand content hierarchy.
     #
+    # **I18n Note:** For user-facing content, always pass I18n-translated strings.
+    # Lookbook previews may use hardcoded text for demonstration purposes only.
+    #
     # @example Basic eyebrow
     #   <%= render Pathogen::Typography::Eyebrow.new do %>
     #     Featured Article
+    #   <% end %>
+    #
+    # @example With I18n (required for user-facing content)
+    #   <%= render Pathogen::Typography::Eyebrow.new(variant: :muted) do %>
+    #     <%= t('.category') %>
     #   <% end %>
     #
     # @example With variant
