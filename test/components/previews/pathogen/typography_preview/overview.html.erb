@@ -116,7 +116,7 @@
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
           <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Section</div>
           <%= pathogen_section(level: 3, spacing: :compact) do |section| %>
-            <%= section.with_heading { "Section Wrapper" } %>
+            <% section.with_heading { "Section Wrapper" } %>
             <%= pathogen_supporting(variant: :muted) { "With hierarchy validation" } %>
           <% end %>
         </div>
