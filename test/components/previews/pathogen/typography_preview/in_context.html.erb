@@ -23,7 +23,7 @@
         <%= pathogen_lead(class: "mt-8 mb-6") { "Genomic surveillance has become an essential tool in tracking and understanding pathogen evolution, particularly in the context of emerging infectious diseases." } %>
 
         <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
-          <%= section.with_heading { "Introduction" } %>
+          <% section.with_heading { "Introduction" } %>
 
           <%= pathogen_text(class: "mb-4") { "IRIDA Next provides researchers with comprehensive tools for genomic analysis and pathogen surveillance. The platform integrates sample management, workflow execution, and data visualization in a unified interface." } %>
 
@@ -31,7 +31,7 @@
         <% end %>
 
         <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
-          <%= section.with_heading { "Key Features" } %>
+          <% section.with_heading { "Key Features" } %>
 
           <%= pathogen_list(class: "mb-6") do |list| %>
             <%= list.with_item { "Automated sample intake and tracking" } %>
@@ -44,7 +44,7 @@
         <% end %>
 
         <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
-          <%= section.with_heading { "Technical Implementation" } %>
+          <% section.with_heading { "Technical Implementation" } %>
 
           <%= pathogen_text(class: "mb-4") { "The platform is built on Ruby on Rails 8.0 with a modern ViewComponent-based architecture. Here's an example of how to render a sample list:" } %>
 
@@ -152,7 +152,7 @@ end
       <%= pathogen_heading(level: 2, class: "mb-6") { "List Page Layout" } %>
 
       <%= pathogen_section(level: 2) do |section| %>
-        <%= section.with_heading { "Recent Samples" } %>
+        <% section.with_heading { "Recent Samples" } %>
 
         <div class="mt-6 space-y-4">
           <div class="flex items-center justify-between rounded-lg border border-slate-200 p-4 dark:border-slate-700">
