@@ -29,6 +29,8 @@ module Pathogen
 
       attr_reader :level, :spacing
 
+      DEFAULT_LEVEL = 2
+
       # Initialize a new Section component
       #
       # @param level [Integer] Heading level (1-6) for this section
@@ -38,8 +40,8 @@ module Pathogen
       # @param heading_id [String, nil] Explicit DOM id for the heading slot
       # @param options [Hash] Additional HTML attributes for wrapper plus overrides listed above
       def initialize(level: 2, parent_level: nil, **options)
-        @level = level
-        @parent_level = parent_level
+        @level = normalize_level(level)
+        @parent_level = normalize_level(parent_level) if parent_level
         assign_options(options)
 
         validate_heading_hierarchy if @validate
@@ -56,6 +58,13 @@ module Pathogen
       private
 
       attr_reader :heading_id
+
+      def normalize_level(level)
+        return nil if level.nil?
+
+        normalized = level.is_a?(String) ? level.to_i : level
+        fetch_or_fallback((1..6).to_a, normalized, DEFAULT_LEVEL)
+      end
 
       def assign_options(options)
         @spacing = options.key?(:spacing) ? options.delete(:spacing) : :default
