@@ -8,7 +8,7 @@
   data-nextflow--samplesheet-processing-request-value="<%= t("components.nextflow_component.processing_request")%>"
   data-nextflow--samplesheet-filtering-samples-value="<%= t("components.nextflow_component.filtering_samples")%>"
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
-  data-nextflow--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
+  data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
@@ -61,7 +61,7 @@
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <div id="workflow_execution_name_field" class="form-field">
-          <% label = label_attributes(!@samples.empty?) %>
+          <% label = label_attributes(!@sample_count.nil?) %>
 
           <%= workflow.label :name,
                          label[:name],
@@ -71,7 +71,7 @@
           <%= workflow.text_field :name,
                               value: instance.present? ? instance.name : nil,
                               aria: {
-                                required: !@samples.empty?,
+                                required: !@sample_count.nil?,
                               },
                               class:
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
@@ -105,10 +105,10 @@
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
-                <% unless @samples.empty? %>
+                <% unless @sample_count.nil? %>
                   <%= render Nextflow::SamplesheetComponent.new(
                     schema: property[:schema],
-                    samples:,
+                    sample_count:,
                     namespace_id:,
                     fields: metadata_fields,
                     workflow_params: {
@@ -199,7 +199,7 @@
     <button
       class="button button-primary"
       data-nextflow--samplesheet-target="submit"
-      <% if @samples.empty? %>
+      <% if @sample_count.nil? %>
       type="submit"
       <% else %>
       type="button"
@@ -214,9 +214,9 @@
       <% end %>
     </button>
   <% end %>
-  <% unless @samples.empty? %>
+  <% unless @sample_count.nil? %>
     <div
-      class="flex items-center p-4 space-x-4"
+      class="flex items-center p-4 space-x-4 hidden"
       data-nextflow--samplesheet-target="spinner"
     >
       <%= render SpinnerComponent.new(

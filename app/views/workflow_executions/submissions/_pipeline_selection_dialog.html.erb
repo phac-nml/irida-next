@@ -2,7 +2,7 @@
   <% dialog.with_header(
     title: t(:"workflow_executions.submissions.pipeline_selection.title"),
   ) %>
-  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_ids[]" }) do %>
+  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_count" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :pipeline_id,
                         data: {
