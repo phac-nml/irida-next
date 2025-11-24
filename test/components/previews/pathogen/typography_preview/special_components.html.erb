@@ -41,7 +41,7 @@
       <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Semantic wrapper with heading hierarchy validation" } %>
 
       <%= pathogen_section(level: 3) do |section| %>
-        <%= section.with_heading { "Section with Heading" } %>
+        <% section.with_heading { "Section with Heading" } %>
         <%= pathogen_text { "Section content goes here. The Section component validates heading hierarchy in development mode." } %>
       <% end %>
 
@@ -121,7 +121,7 @@ end
       <%= pathogen_heading(level: 2, class: "mb-6") { "Combined Example" } %>
 
       <%= pathogen_section(level: 3, spacing: :default) do |section| %>
-        <%= section.with_heading { "Installation Guide" } %>
+        <% section.with_heading { "Installation Guide" } %>
 
         <%= pathogen_lead(class: "mb-6") { "Follow these steps to set up IRIDA Next in your environment." } %>
 
