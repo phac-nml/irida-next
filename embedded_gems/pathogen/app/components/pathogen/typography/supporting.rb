@@ -10,9 +10,17 @@ module Pathogen
     # Smaller than body text, used for captions, labels, and secondary information.
     # Supports optional responsive sizing.
     #
+    # **I18n Note:** For user-facing content, always pass I18n-translated strings.
+    # Lookbook previews may use hardcoded text for demonstration purposes only.
+    #
     # @example Caption
     #   <%= render Pathogen::Typography::Supporting.new do %>
     #     Image caption text
+    #   <% end %>
+    #
+    # @example With I18n (required for user-facing content)
+    #   <%= render Pathogen::Typography::Supporting.new(variant: :muted) do %>
+    #     <%= t('.metadata_label') %>
     #   <% end %>
     #
     # @example Responsive sizing

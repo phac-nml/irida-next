@@ -10,9 +10,17 @@ module Pathogen
     # Headings automatically scale between mobile and desktop sizes, use semantic HTML,
     # and support color variants for different contexts.
     #
+    # **I18n Note:** For user-facing content, always pass I18n-translated strings.
+    # Lookbook previews may use hardcoded text for demonstration purposes only.
+    #
     # @example Basic heading
     #   <%= render Pathogen::Typography::Heading.new(level: 1) do %>
     #     Page Title
+    #   <% end %>
+    #
+    # @example With I18n (required for user-facing content)
+    #   <%= render Pathogen::Typography::Heading.new(level: 1) do %>
+    #     <%= t('.page_title') %>
     #   <% end %>
     #
     # @example With color variant

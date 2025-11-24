@@ -11,9 +11,17 @@ module Pathogen
     # and provide context. Has a comfortable line-height for optimal readability.
     # Supports optional responsive sizing.
     #
+    # **I18n Note:** For user-facing content, always pass I18n-translated strings.
+    # Lookbook previews may use hardcoded text for demonstration purposes only.
+    #
     # @example Lead paragraph
     #   <%= render Pathogen::Typography::Lead.new do %>
     #     This is a lead paragraph that introduces the section.
+    #   <% end %>
+    #
+    # @example With I18n (required for user-facing content)
+    #   <%= render Pathogen::Typography::Lead.new do %>
+    #     <%= t('.introduction') %>
     #   <% end %>
     #
     # @example Responsive sizing
