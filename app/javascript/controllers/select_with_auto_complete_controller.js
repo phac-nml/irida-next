@@ -21,9 +21,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.firstOption = null;
     this.lastOption = null;
 
-    // Set up debounced keyboard input typing
-    this.debouncedOnComboboxKeyDown = _.debounce(this.#onComboboxKeyDown, 300);
-
     // Add event handlers
     document.body.addEventListener(
       "pointerup",
@@ -455,10 +452,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Event handlers
 
   #addComboboxEventListeners(combobox) {
-    combobox.addEventListener(
-      "keydown",
-      this.debouncedOnComboboxKeyDown.bind(this),
-    );
+    combobox.addEventListener("keydown", this.#onComboboxKeyDown.bind(this));
     combobox.addEventListener("keyup", this.#onComboboxKeyUp.bind(this));
     combobox.addEventListener("click", this.#onComboboxClick.bind(this));
     combobox.addEventListener("focus", this.#onComboboxFocus.bind(this));
@@ -466,10 +460,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #removeComboboxEventListeners(combobox) {
-    combobox.removeEventListener(
-      "keydown",
-      this.debouncedOnComboboxKeyDown.bind(this),
-    );
+    combobox.removeEventListener("keydown", this.#onComboboxKeyDown.bind(this));
     combobox.removeEventListener("keyup", this.#onComboboxKeyUp.bind(this));
     combobox.removeEventListener("click", this.#onComboboxClick.bind(this));
     combobox.removeEventListener("focus", this.#onComboboxFocus.bind(this));
