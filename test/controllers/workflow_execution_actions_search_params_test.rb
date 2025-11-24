@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'minitest/mock'
 
 class WorkflowExecutionActionsSearchParamsTest < ActiveSupport::TestCase
   class FakeController
@@ -58,5 +59,29 @@ class WorkflowExecutionActionsSearchParamsTest < ActiveSupport::TestCase
     assert_equal 'updated_at desc', search_params[:sort]
     assert_equal 'example', search_params[:name_or_id_cont]
     assert_nil search_params[:s]
+  end
+
+  test 'workflow_name_enum_fields handles both string and hash names' do
+    pipeline_struct = Struct.new(:name)
+    pipelines = {
+      'p1' => pipeline_struct.new('String Name'),
+      'p2' => pipeline_struct.new({ 'en' => 'Translated Name' })
+    }
+
+    mock_pipelines = Minitest::Mock.new
+    mock_pipelines.expect :pipelines, pipelines, ['executable']
+
+    original_instance = Irida::Pipelines.instance
+    Irida::Pipelines.instance = mock_pipelines
+
+    begin
+      controller = FakeController.new
+      enum_fields = controller.send(:workflow_name_enum_fields)
+
+      assert_includes enum_fields[:values], 'String Name'
+      assert_includes enum_fields[:values], 'Translated Name'
+    ensure
+      Irida::Pipelines.instance = original_instance
+    end
   end
 end
