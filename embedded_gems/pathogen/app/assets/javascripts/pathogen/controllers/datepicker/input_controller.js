@@ -392,11 +392,12 @@ export default class extends Controller {
     if (event.detail.success) {
       // Wait for Turbo to process stream actions and update DOM
       // requestAnimationFrame ensures paint cycle, setTimeout allows stream processing
+      // Increased timeout from 0 to 100ms to provide more headroom for CI timing variability
       requestAnimationFrame(() => {
         setTimeout(() => {
           this.#findNextFocusableElement();
           this.focusNextFocusableElement();
-        }, 0);
+        }, 100);
       });
     }
   }
