@@ -3,7 +3,7 @@
   <%= render NextflowComponent.new(
     workflow: @workflow,
     url: namespace_project_automated_workflow_executions_path,
-    samples: Sample.none,
+    sample_count: nil,
     allowed_to_update_samples: true,
     namespace_id: @project.namespace.id,
     fields: nil,
