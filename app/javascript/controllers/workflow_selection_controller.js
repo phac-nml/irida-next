@@ -16,6 +16,8 @@ export default class extends Controller {
     fieldName: String,
   };
 
+  #sampleCount;
+
   connect() {
     this.boundAmendForm = this.amendForm.bind(this);
     this.boundOnSuccess = this.onSuccess.bind(this);
@@ -28,6 +30,8 @@ export default class extends Controller {
     this.formTarget.addEventListener("turbo:submit-end", this.boundOnSuccess);
 
     document.addEventListener("turbo:submit-end", preventEscapeListener);
+
+    this.#sampleCount = this.selectionOutlet.getOrCreateStoredItems().length;
   }
 
   disconnect() {
@@ -77,35 +81,9 @@ export default class extends Controller {
     spinner.classList.remove("hidden");
     // Update the text inside spinner dialog
     spinner.innerHTML = spinner.innerHTML
-      .replace(
-        "COUNT_PLACEHOLDER",
-        this.selectionOutlet.getOrCreateStoredItems().length,
-      )
+      .replace("COUNT_PLACEHOLDER", this.#sampleCount)
       .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
       .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
-
-    const submitStart = Date.now();
-
-    // for accessibility, show the spinner for a minimum of 3500ms
-    const A11Y_TIMEOUT = 3500;
-    document.addEventListener(
-      "turbo:before-stream-render",
-      (event) => {
-        const ms = Date.now() - submitStart;
-
-        // delay render for up to 3500ms
-        if (ms < A11Y_TIMEOUT) {
-          const defaultRender = event.detail.render;
-
-          event.detail.render = function (streamElement) {
-            setTimeout(() => {
-              defaultRender(streamElement);
-            }, A11Y_TIMEOUT - ms);
-          };
-        }
-      },
-      { once: true },
-    );
 
     this.formTarget.requestSubmit();
   }
@@ -114,12 +92,7 @@ export default class extends Controller {
     const params = formDataToJsonParams(formData);
 
     // add sample_ids under the fieldNameValue key to the params
-    normalizeParams(
-      params,
-      this.fieldNameValue,
-      this.selectionOutlet.getOrCreateStoredItems(),
-      0,
-    );
+    normalizeParams(params, this.fieldNameValue, this.#sampleCount, 0);
 
     return params;
   }
