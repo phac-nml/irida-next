@@ -5,7 +5,7 @@ require 'test_helper'
 module Pathogen
   module Typography
     # Test suite for Section component
-    class SectionTest < ViewComponent::TestCase
+    class SectionTest < ViewComponent::TestCase # rubocop:disable Metrics/ClassLength
       test 'renders section with heading and content' do
         render_inline(Section.new(level: 2)) do |section|
           section.with_heading { 'Section Title' }
@@ -124,6 +124,32 @@ module Pathogen
         end
 
         assert_selector 'h2', text: 'Sibling section'
+      end
+
+      test 'normalizes string level to integer' do
+        render_inline(Section.new(level: '2')) do |section|
+          section.with_heading { 'String Level' }
+        end
+
+        assert_selector 'section[role="region"]'
+        assert_selector 'h2', text: 'String Level'
+      end
+
+      test 'normalizes string parent_level for hierarchy validation' do
+        # Should not warn when string parent_level is normalized correctly
+        render_inline(Section.new(level: 3, parent_level: '2', validate: true)) do |section|
+          section.with_heading { 'Child section' }
+        end
+
+        assert_selector 'h3', text: 'Child section'
+      end
+
+      test 'normalizes both level and parent_level as strings' do
+        render_inline(Section.new(level: '3', parent_level: '2', validate: true)) do |section|
+          section.with_heading { 'Both normalized' }
+        end
+
+        assert_selector 'h3', text: 'Both normalized'
       end
     end
   end
