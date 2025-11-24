@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import _ from "lodash";
 
 /**
  * SelectWithAutoCompleteController
@@ -13,14 +14,15 @@ export default class SelectWithAutoCompleteController extends Controller {
   static targets = ["combobox", "listbox", "hidden"];
 
   connect() {
+    this.filter = "";
+    this.filteredOptions = [];
     this.allOptions = [];
-
     this.option = null;
     this.firstOption = null;
     this.lastOption = null;
 
-    this.filteredOptions = [];
-    this.filter = "";
+    // Set up debounced filtering for typing
+    this.debouncedFilterOptions = _.debounce(() => this.filterOptions(), 300);
 
     // Add event handlers
     document.body.addEventListener(
@@ -112,7 +114,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.filter.length,
       this.filter.length,
     );
-    this.filterOptions();
+    this.debouncedFilterOptions();
     this.setOption(null);
   }
 
@@ -365,7 +367,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     switch (event.key) {
       case "Backspace":
         this.filter = this.comboboxTarget.value;
-        this.filterOptions();
+        this.debouncedFilterOptions();
         this.setOption(null);
         flag = true;
         break;
@@ -385,7 +387,7 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.setOption(null);
           flag = true;
 
-          option = this.filterOptions();
+          option = this.debouncedFilterOptions();
           if (option) {
             if (this.isClosed() && this.comboboxTarget.value.length) {
               this.open();
@@ -422,7 +424,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   onComboboxFocus() {
     this.filter = this.comboboxTarget.value;
-    this.filterOptions();
+    this.debouncedFilterOptions();
     this.setOption(null);
   }
 
