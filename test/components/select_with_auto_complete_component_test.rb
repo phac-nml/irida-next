@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
-  def test_default # rubocop:disable Metrics/MethodLength
+  def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
       combobox = find("input[role='combobox']")
@@ -18,6 +18,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='presentation']", text: 'Metadata fields'
           assert_selector "div[role='option'][data-value='metadata.age']"
           assert_selector "div[role='option'][data-value='metadata.patient_age']"
+          find("div[role='option'][data-value='metadata.patient_age']").click
+          assert_equal 'patient_age', combobox.value
         end
       end
     end
@@ -76,9 +78,9 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
       combobox.click
       listbox = find("div[role='listbox']")
       assert_matches_style(listbox, 'display' => 'block')
-      combobox.send_keys(:escape)
+      assert_equal 'age', combobox.value
+      combobox.send_keys(:escape, :escape)
       assert_matches_style(listbox, 'display' => 'none')
-      combobox.send_keys(:escape)
       assert_empty combobox.value
     end
   end

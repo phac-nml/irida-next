@@ -698,8 +698,7 @@ a.pill-focus-reset:focus-visible {
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 0.75em 0.75em;
-    @apply relative m-0 box-border w-full cursor-pointer px-3 py-2 align-bottom outline-none focus-visible:shadow-none focus-visible:outline;
-    @apply rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-800;
+    @apply relative m-0 box-border w-full cursor-pointer rounded-lg border border-slate-300 px-3 py-2 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
   }
 
   input[aria-invalid="true"] {
@@ -707,11 +706,13 @@ a.pill-focus-reset:focus-visible {
   }
 
   input:focus-visible {
-    @apply outline-3 shadow-none outline outline-offset-2 outline-black dark:outline-white;
+    @apply outline-solid outline-3 outline-offset-2 outline-black dark:outline-white;
+    box-shadow: none !important;
   }
 
   input[aria-invalid="true"]:focus-visible {
-    @apply outline-3 shadow-none outline outline-offset-2 outline-red-700 dark:outline-red-400;
+    @apply outline-solid outline-3 outline-offset-2 outline-red-700 dark:outline-red-400;
+    box-shadow: none !important;
   }
 
   [role="listbox"] {
