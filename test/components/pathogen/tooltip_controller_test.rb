@@ -48,14 +48,14 @@ module Pathogen
       assert_selector 'div[data-placement="bottom"]'
     end
 
-    test 'tooltip has absolute positioning for CSS anchor support' do
+    test 'tooltip has fixed positioning for proper viewport placement' do
       render_inline(Pathogen::Tooltip.new(
                       text: 'Helpful tooltip text',
                       id: 'test-tooltip'
                     ))
 
-      # Verify absolute positioning class
-      assert_selector 'div.absolute.z-10'
+      # Verify fixed positioning class (uses fixed to position relative to viewport)
+      assert_selector 'div.fixed.z-50'
     end
 
     test 'tooltip has correct transform-origin based on placement' do
