@@ -21,15 +21,16 @@ module Pathogen
 
     # The tooltip that appears on mouse hover or keyboard focus over the link. (optional)
     #
+    # @param placement [Symbol] Position of tooltip (:top, :bottom, :left, :right)
     # @param system_arguments [Hash] HTML attributes to be included in the tooltip root element
-    renders_one :tooltip, lambda { |**system_arguments|
+    renders_one :tooltip, lambda { |placement: :top, **system_arguments|
       @tooltip_id = Pathogen::Tooltip.generate_id
       @link_system_arguments[:aria] ||= {}
       @link_system_arguments[:aria][:describedby] = @tooltip_id
       @link_system_arguments[:data] ||= {}
       @link_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
 
-      Pathogen::Tooltip.new(id: @tooltip_id, **system_arguments)
+      Pathogen::Tooltip.new(id: @tooltip_id, placement: placement, **system_arguments)
     }
 
     def before_render

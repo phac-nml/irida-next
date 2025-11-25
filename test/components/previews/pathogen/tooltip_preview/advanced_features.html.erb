@@ -1,0 +1,334 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:lightbulb, color: :warning, size: :xl, class: "inline mr-3") %>
+      Advanced Features & Edge Cases
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Exploring edge cases, long text handling, animations, and advanced tooltip behaviors
+    </p>
+  </div>
+
+  <!-- Long Text Handling -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
+      Long Text & Max-Width Constraint
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        Tooltips automatically wrap long text and enforce a max-width of 320px (max-w-xs) to prevent excessively wide tooltips.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Short Text -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Short Text</h3>
+          <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "Brief tooltip", placement: :top) %>
+              Hover me (short tooltip)
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Short tooltips size to fit their content tightly.
+          </p>
+        </div>
+
+        <!-- Long Text -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Long Text</h3>
+          <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "This is a very long tooltip text that demonstrates how the tooltip component automatically wraps text and enforces a maximum width constraint to prevent excessively wide tooltips that would be hard to read.", placement: :top) %>
+              Hover me (long tooltip)
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Long text wraps naturally within the 320px max-width.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div class="text-sm">
+            <p class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Content-Adaptive Design</p>
+            <p class="text-blue-800 dark:text-blue-200">
+              Tooltips use <code>inline-block</code> display to wrap tightly around short content, while
+              <code>max-w-xs</code> ensures long text doesn't create unwieldy wide tooltips.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animation Demonstration -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:play, color: :primary, class: "mr-3") %>
+      Smooth Fade-In/Scale Animation
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        Tooltips feature a polished 200ms animation combining opacity fade-in and subtle scale transition (0.9 → 1.0).
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Top Animation -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Top Placement Animation</h3>
+          <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from bottom", placement: :top) %>
+              <%= pathogen_icon(:arrow_up, color: :primary, class: "inline mr-2") %>
+              Hover to see animation
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Scales from <code>origin-bottom</code> (appears to grow from trigger)
+          </p>
+        </div>
+
+        <!-- Bottom Animation -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Bottom Placement Animation</h3>
+          <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from top", placement: :bottom) %>
+              <%= pathogen_icon(:arrow_down, color: :primary, class: "inline mr-2") %>
+              Hover to see animation
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Scales from <code>origin-top</code> (appears to grow from trigger)
+          </p>
+        </div>
+
+        <!-- Left Animation -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Left Placement Animation</h3>
+          <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from right", placement: :left) %>
+              <%= pathogen_icon(:arrow_left, color: :primary, class: "inline mr-2") %>
+              Hover to see animation
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Scales from <code>origin-right</code> (appears to grow from trigger)
+          </p>
+        </div>
+
+        <!-- Right Animation -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Right Placement Animation</h3>
+          <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from left", placement: :right) %>
+              <%= pathogen_icon(:arrow_right, color: :primary, class: "inline mr-2") %>
+              Hover to see animation
+            <% end %>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
+            Scales from <code>origin-left</code> (appears to grow from trigger)
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+          <div class="text-sm">
+            <p class="font-semibold text-green-900 dark:text-green-100 mb-1">Smooth & Natural Animation</p>
+            <p class="text-green-800 dark:text-green-200">
+              The <code>ease-out</code> timing function creates a natural deceleration, while the subtle scale (0.9 to 1.0)
+              combined with opacity fade creates a polished, professional feel inspired by Primer's design system.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edge Case: Viewport Boundaries -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:arrows_out, color: :primary, class: "mr-3") %>
+      Viewport Boundary Handling
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        CSS anchor positioning with position-try-fallbacks automatically adjusts tooltip placement when near viewport edges.
+        Try hovering on links near the edges of this preview window.
+      </p>
+
+      <div class="relative border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 min-h-[400px]">
+        <!-- Top Edge -->
+        <div class="absolute top-4 left-1/2 -translate-x-1/2">
+          <%= render Pathogen::Link.new(href: "#") do |link| %>
+            <% link.with_tooltip(text: "Near top edge - may flip to bottom", placement: :top) %>
+            Top Edge Link
+          <% end %>
+        </div>
+
+        <!-- Bottom Edge -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <%= render Pathogen::Link.new(href: "#") do |link| %>
+            <% link.with_tooltip(text: "Near bottom edge - may flip to top", placement: :bottom) %>
+            Bottom Edge Link
+          <% end %>
+        </div>
+
+        <!-- Left Edge -->
+        <div class="absolute left-4 top-1/2 -translate-y-1/2">
+          <%= render Pathogen::Link.new(href: "#") do |link| %>
+            <% link.with_tooltip(text: "Near left edge - may flip to right", placement: :left) %>
+            Left Edge Link
+          <% end %>
+        </div>
+
+        <!-- Right Edge -->
+        <div class="absolute right-4 top-1/2 -translate-y-1/2">
+          <%= render Pathogen::Link.new(href: "#") do |link| %>
+            <% link.with_tooltip(text: "Near right edge - may flip to left", placement: :right) %>
+            Right Edge Link
+          <% end %>
+        </div>
+
+        <!-- Center -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <%= render Pathogen::Link.new(href: "#") do |link| %>
+            <% link.with_tooltip(text: "Center position - no collision", placement: :top) %>
+            Center Link
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div class="text-sm">
+            <p class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Automatic Collision Detection</p>
+            <p class="text-purple-800 dark:text-purple-200">
+              When a tooltip would overflow the viewport, CSS anchor positioning automatically tries alternative placements
+              to keep the tooltip visible and readable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiple Tooltips -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:grid_four, color: :primary, class: "mr-3") %>
+      Multiple Tooltips in Close Proximity
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        Multiple tooltips can coexist on the same page without conflicts. Each has a unique ID for proper ARIA connections.
+      </p>
+
+      <div class="flex flex-wrap gap-3 p-6 bg-slate-50 dark:bg-slate-900 rounded-lg">
+        <%= render Pathogen::Link.new(href: "#1") do |link| %>
+          <% link.with_tooltip(text: "First tooltip", placement: :top) %>
+          Link 1
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#2") do |link| %>
+          <% link.with_tooltip(text: "Second tooltip", placement: :top) %>
+          Link 2
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#3") do |link| %>
+          <% link.with_tooltip(text: "Third tooltip", placement: :top) %>
+          Link 3
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#4") do |link| %>
+          <% link.with_tooltip(text: "Fourth tooltip", placement: :top) %>
+          Link 4
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#5") do |link| %>
+          <% link.with_tooltip(text: "Fifth tooltip", placement: :top) %>
+          Link 5
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#6") do |link| %>
+          <% link.with_tooltip(text: "Sixth tooltip", placement: :top) %>
+          Link 6
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#7") do |link| %>
+          <% link.with_tooltip(text: "Seventh tooltip", placement: :top) %>
+          Link 7
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#8") do |link| %>
+          <% link.with_tooltip(text: "Eighth tooltip", placement: :top) %>
+          Link 8
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Details -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:gear, color: :primary, class: "mr-3") %>
+      Technical Implementation
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">CSS Classes</h3>
+        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">transition-all duration-200 ease-out</code> - Smooth animation</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">opacity-0 scale-90 invisible</code> - Hidden state</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">opacity-100 scale-100 visible</code> - Visible state</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">max-w-xs inline-block</code> - Content-adaptive sizing</li>
+        </ul>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Positioning</h3>
+        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">position-anchor</code> - Links tooltip to trigger</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">anchor()</code> function - Positions relative to trigger</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">position-try-fallbacks</code> - Collision detection</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">transform-origin</code> - Scale animation origin</li>
+        </ul>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Event Listeners</h3>
+        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">mouseenter</code> - Show on hover</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">mouseleave</code> - Hide on hover out</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">focusin</code> - Show on focus</li>
+          <li><code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">focusout</code> - Hide on blur</li>
+        </ul>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Design Philosophy</h3>
+        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li>Primer-inspired visual design</li>
+          <li>No arrow indicator (simplified)</li>
+          <li>Dark background for contrast</li>
+          <li>Content-adaptive width</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

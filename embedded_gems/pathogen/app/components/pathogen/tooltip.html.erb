@@ -1,12 +1,21 @@
 <div
-  id="<%=id%>"
+  id="<%= id %>"
   data-pathogen--tooltip-target="target"
+  data-placement="<%= placement %>"
   role="tooltip"
   class="
-    absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
-    bg-slate-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-slate-700
+    fixed z-50
+    bg-slate-900 dark:bg-slate-700
+    text-white
+    px-3 py-2
+    text-sm font-medium
+    rounded-lg
+    shadow-sm
+    max-w-xs inline-block
+    opacity-0 scale-90 invisible
+    transition-all duration-200 ease-out
+    <%= case placement when :top then 'origin-bottom' when :bottom then 'origin-top' when :left then 'origin-right' when :right then 'origin-left' end %>
   "
 >
   <%= text %>
-  <div class="tooltip-arrow" data-popper-arrow=""></div>
 </div>
