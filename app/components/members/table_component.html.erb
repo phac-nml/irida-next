@@ -96,7 +96,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <%= pathogen_link(href: member_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
                 }) do |component| %>
-                  <% component.with_tooltip(text: t(".inherited_from")) %>
+                  <%= component.with_tooltip(text: t(".inherited_from")) %>
                   <%= member_source[:label] %>
                 <% end %>
               <% end %>
