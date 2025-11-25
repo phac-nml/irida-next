@@ -17,14 +17,14 @@ module Pathogen
   #    - Visibility control for active panels
   #    - Dynamic tab styling based on aria-selected
   #
-  # 3. **JavaScript controller**: app/javascript/controllers/pathogen/tabs_controller.js
+  # 3. **JavaScript controller**: embedded_gems/pathogen/app/javascript/controllers/pathogen/tabs_controller.js
   #    - Handles ARIA state management
   #    - Keyboard navigation (Arrow keys, Home, End)
   #    - Optional URL hash syncing
   #    - Turbo Frame lazy loading integration
   #
   # @see app/assets/tailwind/application.css for required CSS rules
-  # @see app/javascript/controllers/pathogen/tabs_controller.js for controller implementation
+  # @see embedded_gems/pathogen/app/javascript/controllers/pathogen/tabs_controller.js for controller implementation
   #
   # @example Basic usage
   #   <%= render Pathogen::Tabs.new(id: "demo-tabs", label: "Content sections") do |tabs| %>
