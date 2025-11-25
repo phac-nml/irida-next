@@ -23,7 +23,7 @@
         <div class="text-center">
           <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Top Placement (Default)</p>
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "This tooltip appears above the link", placement: :top) %>
+            <%= link.with_tooltip(text: "This tooltip appears above the link", placement: :top) %>
             Hover or focus me (top)
           <% end %>
         </div>
@@ -33,7 +33,7 @@
           <div class="text-center">
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Left Placement</p>
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <% link.with_tooltip(text: "This tooltip appears to the left", placement: :left) %>
+              <%= link.with_tooltip(text: "This tooltip appears to the left", placement: :left) %>
               Hover or focus me (left)
             <% end %>
           </div>
@@ -42,7 +42,7 @@
           <div class="text-center">
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Right Placement</p>
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <% link.with_tooltip(text: "This tooltip appears to the right", placement: :right) %>
+              <%= link.with_tooltip(text: "This tooltip appears to the right", placement: :right) %>
               Hover or focus me (right)
             <% end %>
           </div>
@@ -52,7 +52,7 @@
         <div class="text-center">
           <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Bottom Placement</p>
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "This tooltip appears below the link", placement: :bottom) %>
+            <%= link.with_tooltip(text: "This tooltip appears below the link", placement: :bottom) %>
             Hover or focus me (bottom)
           <% end %>
         </div>
@@ -73,13 +73,13 @@
         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Default Tooltip</h3>
         <div class="mb-4 p-4 bg-slate-50 dark:bg-slate-900 rounded">
           <%= render Pathogen::Link.new(href: "/samples") do |link| %>
-            <% link.with_tooltip(text: "View all samples") %>
+            <%= link.with_tooltip(text: "View all samples") %>
             Samples
           <% end %>
         </div>
         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 text-sm overflow-x-auto">
           <pre><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::Link.new(href: "/samples") do |link| %>
-  <%% link.with_tooltip(text: "View all samples") %>
+  <%%=  link.with_tooltip(text: "View all samples") %>
   Samples
 <%% end %></code></pre>
         </div>
@@ -90,13 +90,13 @@
         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Custom Placement</h3>
         <div class="mb-4 p-4 bg-slate-50 dark:bg-slate-900 rounded">
           <%= render Pathogen::Link.new(href: "/projects") do |link| %>
-            <% link.with_tooltip(text: "Manage your projects", placement: :bottom) %>
+            <%= link.with_tooltip(text: "Manage your projects", placement: :bottom) %>
             Projects
           <% end %>
         </div>
         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 text-sm overflow-x-auto">
           <pre><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::Link.new(href: "/projects") do |link| %>
-  <%% link.with_tooltip(text: "Manage your projects", placement: :bottom) %>
+  <%%=  link.with_tooltip(text: "Manage your projects", placement: :bottom) %>
   Projects
 <%% end %></code></pre>
         </div>
@@ -107,13 +107,13 @@
         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Left Placement</h3>
         <div class="mb-4 p-4 bg-slate-50 dark:bg-slate-900 rounded">
           <%= render Pathogen::Link.new(href: "/settings") do |link| %>
-            <% link.with_tooltip(text: "Configure application settings", placement: :left) %>
+            <%= link.with_tooltip(text: "Configure application settings", placement: :left) %>
             Settings
           <% end %>
         </div>
         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 text-sm overflow-x-auto">
           <pre><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::Link.new(href: "/settings") do |link| %>
-  <%% link.with_tooltip(text: "Configure application settings", placement: :left) %>
+  <%%=  link.with_tooltip(text: "Configure application settings", placement: :left) %>
   Settings
 <%% end %></code></pre>
         </div>
@@ -124,13 +124,13 @@
         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Right Placement</h3>
         <div class="mb-4 p-4 bg-slate-50 dark:bg-slate-900 rounded">
           <%= render Pathogen::Link.new(href: "/help") do |link| %>
-            <% link.with_tooltip(text: "Get help and documentation", placement: :right) %>
+            <%= link.with_tooltip(text: "Get help and documentation", placement: :right) %>
             Help
           <% end %>
         </div>
         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 text-sm overflow-x-auto">
           <pre><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::Link.new(href: "/help") do |link| %>
-  <%% link.with_tooltip(text: "Get help and documentation", placement: :right) %>
+  <%%=  link.with_tooltip(text: "Get help and documentation", placement: :right) %>
   Help
 <%% end %></code></pre>
         </div>

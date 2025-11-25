@@ -21,25 +21,25 @@
       <nav class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
         <div class="flex items-center space-x-6">
           <%= render Pathogen::Link.new(href: "/dashboard") do |link| %>
-            <% link.with_tooltip(text: "View your dashboard", placement: :bottom) %>
+            <%= link.with_tooltip(text: "View your dashboard", placement: :bottom) %>
             <%= pathogen_icon(:house, color: :primary, class: "inline mr-2") %>
             Dashboard
           <% end %>
 
           <%= render Pathogen::Link.new(href: "/samples") do |link| %>
-            <% link.with_tooltip(text: "Browse and manage samples", placement: :bottom) %>
+            <%= link.with_tooltip(text: "Browse and manage samples", placement: :bottom) %>
             <%= pathogen_icon(:flask, color: :primary, class: "inline mr-2") %>
             Samples
           <% end %>
 
           <%= render Pathogen::Link.new(href: "/projects") do |link| %>
-            <% link.with_tooltip(text: "View all projects", placement: :bottom) %>
+            <%= link.with_tooltip(text: "View all projects", placement: :bottom) %>
             <%= pathogen_icon(:folder, color: :primary, class: "inline mr-2") %>
             Projects
           <% end %>
 
           <%= render Pathogen::Link.new(href: "/workflows") do |link| %>
-            <% link.with_tooltip(text: "Manage analysis workflows", placement: :bottom) %>
+            <%= link.with_tooltip(text: "Manage analysis workflows", placement: :bottom) %>
             <%= pathogen_icon(:play, color: :primary, class: "inline mr-2") %>
             Workflows
           <% end %>
@@ -47,12 +47,12 @@
 
         <div class="flex items-center space-x-4">
           <%= render Pathogen::Link.new(href: "/settings") do |link| %>
-            <% link.with_tooltip(text: "Configure settings", placement: :bottom) %>
+            <%= link.with_tooltip(text: "Configure settings", placement: :bottom) %>
             <%= pathogen_icon(:gear, color: :primary) %>
           <% end %>
 
           <%= render Pathogen::Link.new(href: "/help") do |link| %>
-            <% link.with_tooltip(text: "Get help and documentation", placement: :bottom) %>
+            <%= link.with_tooltip(text: "Get help and documentation", placement: :bottom) %>
             <%= pathogen_icon(:question, color: :primary) %>
           <% end %>
         </div>
@@ -82,17 +82,17 @@
           </div>
           <div class="flex items-center space-x-3">
             <%= render Pathogen::Link.new(href: "/samples/1/view") do |link| %>
-              <% link.with_tooltip(text: "View sample details", placement: :top) %>
+              <%= link.with_tooltip(text: "View sample details", placement: :top) %>
               <%= pathogen_icon(:eye, color: :primary) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/samples/1/edit") do |link| %>
-              <% link.with_tooltip(text: "Edit sample metadata", placement: :top) %>
+              <%= link.with_tooltip(text: "Edit sample metadata", placement: :top) %>
               <%= pathogen_icon(:pencil, color: :primary) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/samples/1/download") do |link| %>
-              <% link.with_tooltip(text: "Download sample files", placement: :top) %>
+              <%= link.with_tooltip(text: "Download sample files", placement: :top) %>
               <%= pathogen_icon(:download, color: :primary) %>
             <% end %>
           </div>
@@ -105,17 +105,17 @@
           </div>
           <div class="flex items-center space-x-3">
             <%= render Pathogen::Link.new(href: "/samples/2/view") do |link| %>
-              <% link.with_tooltip(text: "View sample details", placement: :top) %>
+              <%= link.with_tooltip(text: "View sample details", placement: :top) %>
               <%= pathogen_icon(:eye, color: :primary) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/samples/2/edit") do |link| %>
-              <% link.with_tooltip(text: "Edit sample metadata", placement: :top) %>
+              <%= link.with_tooltip(text: "Edit sample metadata", placement: :top) %>
               <%= pathogen_icon(:pencil, color: :primary) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/samples/2/download") do |link| %>
-              <% link.with_tooltip(text: "Download sample files", placement: :top) %>
+              <%= link.with_tooltip(text: "Download sample files", placement: :top) %>
               <%= pathogen_icon(:download, color: :primary) %>
             <% end %>
           </div>
@@ -146,21 +146,21 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
       <nav class="flex items-center space-x-2 text-sm">
         <%= render Pathogen::Link.new(href: "/") do |link| %>
-          <% link.with_tooltip(text: "Go to home page", placement: :bottom) %>
+          <%= link.with_tooltip(text: "Go to home page", placement: :bottom) %>
           <%= pathogen_icon(:house, color: :primary, class: "inline") %>
         <% end %>
 
         <span class="text-slate-400 dark:text-slate-600">/</span>
 
         <%= render Pathogen::Link.new(href: "/projects") do |link| %>
-          <% link.with_tooltip(text: "View all projects", placement: :bottom) %>
+          <%= link.with_tooltip(text: "View all projects", placement: :bottom) %>
           Projects
         <% end %>
 
         <span class="text-slate-400 dark:text-slate-600">/</span>
 
         <%= render Pathogen::Link.new(href: "/projects/irida-next") do |link| %>
-          <% link.with_tooltip(text: "View project details", placement: :bottom) %>
+          <%= link.with_tooltip(text: "View project details", placement: :bottom) %>
           IRIDA Next
         <% end %>
 
@@ -196,27 +196,27 @@
         <aside class="w-16 bg-slate-100 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
           <nav class="flex flex-col items-center py-4 space-y-4">
             <%= render Pathogen::Link.new(href: "/dashboard") do |link| %>
-              <% link.with_tooltip(text: "Dashboard", placement: :right) %>
+              <%= link.with_tooltip(text: "Dashboard", placement: :right) %>
               <%= pathogen_icon(:house, color: :primary, size: :lg) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/samples") do |link| %>
-              <% link.with_tooltip(text: "Samples", placement: :right) %>
+              <%= link.with_tooltip(text: "Samples", placement: :right) %>
               <%= pathogen_icon(:flask, color: :primary, size: :lg) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/projects") do |link| %>
-              <% link.with_tooltip(text: "Projects", placement: :right) %>
+              <%= link.with_tooltip(text: "Projects", placement: :right) %>
               <%= pathogen_icon(:folder, color: :primary, size: :lg) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/workflows") do |link| %>
-              <% link.with_tooltip(text: "Workflows", placement: :right) %>
+              <%= link.with_tooltip(text: "Workflows", placement: :right) %>
               <%= pathogen_icon(:play, color: :primary, size: :lg) %>
             <% end %>
 
             <%= render Pathogen::Link.new(href: "/settings") do |link| %>
-              <% link.with_tooltip(text: "Settings", placement: :right) %>
+              <%= link.with_tooltip(text: "Settings", placement: :right) %>
               <%= pathogen_icon(:gear, color: :primary, size: :lg) %>
             <% end %>
           </nav>

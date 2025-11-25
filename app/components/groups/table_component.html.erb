@@ -1,24 +1,24 @@
 <% if @has_group_links %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <table
-      class='
+      class="
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
         whitespace-nowrap
-      '
+      "
       data-controller="table"
       data-action="focusin->table#handleCellFocus"
     >
       <thead
-        class='
+        class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
-        '
+        "
       >
         <tr
-          class='
+          class="
             border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
             text-slate-900 uppercase
-          '
+          "
         >
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
@@ -35,6 +35,7 @@
               ) %>
             <% end %>
           <% end %>
+
           <%= render_cell(
           tag: 'th',
           scope: 'col',
@@ -44,22 +45,26 @@
           <% end %>
         </tr>
       </thead>
+
       <tbody
-        class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-        '
+        class="
+          bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
+        "
       >
         <% @namespace_group_links.each do | namespace_group_link | %>
           <%= render Viral::BaseComponent.new(**row_arguments(namespace_group_link)) do %>
             <% namespace_group_link_source =
               helpers.namespace_group_link_source(@namespace, namespace_group_link) %>
+
             <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
+
             <td class="px-6 py-4">
               <% if namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= pathogen_link(href: namespace_group_link_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
                 }) do |component| %>
-                  <% component.with_tooltip(text: t(:"projects.group_links.index.inherited_from")) %>
+                  <%= component.with_tooltip(text: t(:"projects.group_links.index.inherited_from")) %>
                   <%= namespace_group_link_source[:label] %>
                 <% end %>
               <% else %>
@@ -68,11 +73,13 @@
                 </div>
               <% end %>
             </td>
+
             <td class="px-6 py-4">
               <div>
                 <%= helpers.local_time_ago(namespace_group_link.created_at) %>
               </div>
             </td>
+
             <td class="px-6 py-4">
               <div class="form-field">
                 <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
@@ -88,7 +95,8 @@
                           t(:"projects.group_links.index.aria_labels.group_access_level"),
                       },
                     ) %>
-                    <input type="hidden" name="format" value="turbo_stream"/>
+
+                    <input type="hidden" name="format" value="turbo_stream" />
                   <% end %>
                 <% else %>
                   <%= t(
@@ -97,6 +105,7 @@
                 <% end %>
               </div>
             </td>
+
             <td class="px-6 py-4">
               <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
@@ -112,6 +121,7 @@
                 <%= helpers.local_date(namespace_group_link.expires_at, :long) %>
               <% end %>
             </td>
+
             <td class="px-6 py-4 space-x-2">
               <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= button_to t(
@@ -141,7 +151,6 @@
                 },
                 class:
                   "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
-
               <% end %>
             </td>
           <% end %>
