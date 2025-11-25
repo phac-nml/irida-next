@@ -27,5 +27,6 @@ resources :workflow_executions, only: %i[index create show destroy edit update] 
     get :destroy_multiple_confirmation
     post :destroy_multiple
     post :list
+    post :samplesheet_samples
   end
 end
