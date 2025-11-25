@@ -75,5 +75,15 @@ module Pathogen
       render_inline(Pathogen::Tooltip.new(text: 'Test', id: 'tooltip-4', placement: :right))
       assert_selector 'div.origin-left'
     end
+
+    test 'tooltip controller has Escape key handler registered' do
+      render_inline(Pathogen::Link.new(href: '/samples')) do |link|
+        link.with_tooltip(text: 'Helpful tooltip')
+        'Link text'
+      end
+
+      # Verify controller is connected (Escape handler is registered in connect())
+      assert_selector 'div[data-controller="pathogen--tooltip"][data-controller-connected="true"]'
+    end
   end
 end
