@@ -4,14 +4,14 @@
 
 <div style="padding: 200px;">
   <%= render Pathogen::Link.new(href: "#") do |link| %>
-    <%= link.with_tooltip(text: "This is a test tooltip", placement: :top) %>
+    <% link.with_tooltip(text: "This is a test tooltip", placement: :top) %>
     Hover or focus me (top)
   <% end %>
 </div>
 
 <div style="padding: 200px;">
   <%= render Pathogen::Link.new(href: "#") do |link| %>
-    <%= link.with_tooltip(text: "This tooltip is on the bottom", placement: :bottom) %>
+    <% link.with_tooltip(text: "This tooltip is on the bottom", placement: :bottom) %>
     Hover or focus me (bottom)
   <% end %>
 </div>

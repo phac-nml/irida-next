@@ -55,7 +55,7 @@
 
           <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "I appear on mouse hover!", placement: :top) %>
+              <% link.with_tooltip(text: "I appear on mouse hover!", placement: :top) %>
 
               <%= pathogen_icon(:hand_pointing, color: :primary, class: "inline mr-2") %>
               Hover over me
@@ -82,7 +82,7 @@
 
           <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "I appear on keyboard focus!", placement: :top) %>
+              <% link.with_tooltip(text: "I appear on keyboard focus!", placement: :top) %>
 
               <%= pathogen_icon(:keyboard, color: :primary, class: "inline mr-2") %>
               Tab to focus me
@@ -258,22 +258,22 @@
 
       <div class="flex flex-wrap gap-4 p-6 bg-slate-50 dark:bg-slate-900 rounded-lg">
         <%= render Pathogen::Link.new(href: "#first") do |link| %>
-          <%= link.with_tooltip(text: "First link in the sequence", placement: :top) %>
+          <% link.with_tooltip(text: "First link in the sequence", placement: :top) %>
           First Link
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#second") do |link| %>
-          <%= link.with_tooltip(text: "Second link in the sequence", placement: :top) %>
+          <% link.with_tooltip(text: "Second link in the sequence", placement: :top) %>
           Second Link
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#third") do |link| %>
-          <%= link.with_tooltip(text: "Third link in the sequence", placement: :top) %>
+          <% link.with_tooltip(text: "Third link in the sequence", placement: :top) %>
           Third Link
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#fourth") do |link| %>
-          <%= link.with_tooltip(text: "Fourth link in the sequence", placement: :top) %>
+          <% link.with_tooltip(text: "Fourth link in the sequence", placement: :top) %>
           Fourth Link
         <% end %>
       </div>
