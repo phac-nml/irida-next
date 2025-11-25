@@ -21,6 +21,25 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.firstOption = null;
     this.lastOption = null;
 
+    // Add debounced filter for search input
+    this.debouncedFilterAndUpdate = _.debounce(() => {
+      const option = this.#filterOptions();
+      if (option) {
+        if (this.#isClosed() && this.comboboxTarget.value.length) {
+          this.#open();
+        }
+        if (
+          this.#getLowercaseContent(option).indexOf(
+            this.comboboxTarget.value.toLowerCase(),
+          ) >= 0
+        ) {
+          this.#setOption(option);
+        } else {
+          this.#setOption(null);
+        }
+      }
+    }, 300);
+
     // Add event handlers
     document.body.addEventListener(
       "pointerup",
@@ -271,6 +290,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Enter":
+        this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.option);
         this.#close();
         flag = true;
@@ -385,25 +405,8 @@ export default class SelectWithAutoCompleteController extends Controller {
 
       default:
         if (this.#isPrintableCharacter(char)) {
-          this.#setOption(null);
+          this.debouncedFilterAndUpdate();
           flag = true;
-
-          option = this.#filterOptions();
-          if (option) {
-            if (this.#isClosed() && this.comboboxTarget.value.length) {
-              this.#open();
-            }
-
-            if (
-              this.#getLowercaseContent(option).indexOf(
-                this.comboboxTarget.value.toLowerCase(),
-              ) >= 0
-            ) {
-              this.#setOption(option);
-            } else {
-              this.#setOption(null);
-            }
-          }
         }
 
         break;
