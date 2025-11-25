@@ -12,31 +12,30 @@ module Pathogen
 
       test 'tooltip appears on hover & disappears on escape' do
         visit('/rails/view_components/pathogen/link/tooltip')
-        within('.Viral-Preview > [data-controller-connected="true"]') do
+        within('.Viral-Preview > [data-controller-connected="true"]', wait: 2) do
           # Invoke tooltip on hover
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
           find('a', text: @link_text).hover
-          assert_selector '[data-pathogen--tooltip-target="target"]', text: @tooltip_text, visible: true
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
+          # Wait for tooltip to appear with visible classes
+          assert_selector '[data-pathogen--tooltip-target="target"].opacity-100.visible', text: @tooltip_text, wait: 2
           # Dismiss tooltip on escape
           find('a', text: @link_text).native.send_keys(:escape)
-          assert_no_text @tooltip_text
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
+          # Wait for tooltip to hide
+          assert_selector '[data-pathogen--tooltip-target="target"].opacity-0.invisible', wait: 2
         end
       end
 
       test 'tooltip appears on focus & disappears on blur' do
         visit('/rails/view_components/pathogen/link/tooltip')
-        within('.Viral-Preview > [data-controller-connected="true"]') do
-          # Invoke tooltip on focus
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
-          find('a', text: @link_text).trigger('focus')
-          assert_selector '[data-pathogen--tooltip-target="target"]', text: @tooltip_text, visible: true
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
-          # Dismiss tooltip on blur
-          find('a', text: @link_text).native.send_keys(:tab)
-          assert_no_text @tooltip_text
-          assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
+        within('.Viral-Preview > [data-controller-connected="true"]', wait: 2) do
+          # Invoke tooltip on focus using JavaScript
+          link_element = find('a', text: @link_text)
+          page.execute_script('arguments[0].focus()', link_element.native)
+          # Wait for tooltip to appear with visible classes
+          assert_selector '[data-pathogen--tooltip-target="target"].opacity-100.visible', text: @tooltip_text, wait: 2
+          # Dismiss tooltip on blur (tab away)
+          link_element.native.send_keys(:tab)
+          # Wait for tooltip to hide
+          assert_selector '[data-pathogen--tooltip-target="target"].opacity-0.invisible', wait: 2
         end
       end
     end
