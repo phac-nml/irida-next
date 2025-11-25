@@ -6,10 +6,14 @@ import { Controller } from "@hotwired/stimulus";
  * Implements custom tooltip show/hide behavior with JavaScript positioning.
  * Supports hover and focus triggers for accessibility.
  *
+ * Follows W3C ARIA Authoring Practices Guide (APG) tooltip pattern:
+ * - Tooltip remains open when cursor is over trigger OR tooltip
+ * - Dismisses on Escape key press
+ * - Dismisses on focus loss (blur) when triggered by focus
+ *
  * @example
  * <div data-controller="pathogen--tooltip">
  *   <a data-pathogen--tooltip-target="trigger"
- *      data-action="mouseenter->pathogen--tooltip#show mouseleave->pathogen--tooltip#hide focusin->pathogen--tooltip#show focusout->pathogen--tooltip#hide"
  *      aria-describedby="tooltip-id">
  *     Hover or focus me
  *   </a>
@@ -34,6 +38,10 @@ export default class extends Controller {
   }
 
   triggerTargetConnected(element) {
+    // Validate W3C ARIA APG requirement: trigger must have aria-describedby
+    // pointing to the tooltip element
+    this.#validateAriaDescribedBy(element);
+
     // Add data-action attributes to trigger for Stimulus event handling
     const actions = [
       "mouseenter->pathogen--tooltip#show",
@@ -47,13 +55,21 @@ export default class extends Controller {
       ? `${existingActions} ${actions}`
       : actions;
     element.setAttribute("data-action", newActions);
+  }
 
-    // Set anchor-name for CSS anchor positioning (future enhancement)
-    const existingStyle = element.getAttribute("style") || "";
-    element.setAttribute(
-      "style",
-      existingStyle + "; anchor-name: --tooltip-trigger;",
-    );
+  targetTargetConnected(element) {
+    // Add mouse event handlers to tooltip itself to keep it open when cursor
+    // moves from trigger to tooltip (W3C ARIA APG compliance)
+    const actions = [
+      "mouseenter->pathogen--tooltip#show",
+      "mouseleave->pathogen--tooltip#hide",
+    ].join(" ");
+
+    const existingActions = element.getAttribute("data-action") || "";
+    const newActions = existingActions
+      ? `${existingActions} ${actions}`
+      : actions;
+    element.setAttribute("data-action", newActions);
   }
 
   /**
@@ -213,6 +229,46 @@ export default class extends Controller {
           this.targetTarget.style.left = `${triggerRect.left + triggerRect.width / 2}px`;
         }
       }
+    }
+  }
+
+  /**
+   * Validates that the trigger element has aria-describedby pointing to the tooltip.
+   * This enforces W3C ARIA APG tooltip pattern requirement.
+   * @param {HTMLElement} triggerElement - The trigger element
+   * @private
+   */
+  #validateAriaDescribedBy(triggerElement) {
+    if (!this.hasTargetTarget) return;
+
+    const tooltipId = this.targetTarget.id;
+    if (!tooltipId) {
+      console.warn(
+        "[Pathogen::Tooltip] Tooltip element must have an id attribute for aria-describedby connection.",
+      );
+      return;
+    }
+
+    const describedBy = triggerElement.getAttribute("aria-describedby");
+    if (!describedBy) {
+      console.error(
+        `[Pathogen::Tooltip] Trigger element must have aria-describedby="${tooltipId}" ` +
+          `pointing to the tooltip element (W3C ARIA APG requirement). ` +
+          `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
+      );
+      return;
+    }
+
+    // Check if aria-describedby includes the tooltip ID
+    const describedByIds = describedBy
+      .split(/\s+/)
+      .filter((id) => id.trim().length > 0);
+    if (!describedByIds.includes(tooltipId)) {
+      console.error(
+        `[Pathogen::Tooltip] Trigger element's aria-describedby must include the tooltip ID "${tooltipId}". ` +
+          `Current value: "${describedBy}". ` +
+          `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
+      );
     }
   }
 }
