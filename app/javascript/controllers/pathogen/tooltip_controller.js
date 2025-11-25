@@ -74,35 +74,100 @@ export default class extends Controller {
   }
 
   /**
-   * Position tooltip using JavaScript
+   * Position tooltip using JavaScript with viewport boundary detection
    */
   positionTooltip() {
     if (!this.hasTriggerTarget || !this.hasTargetTarget) return;
 
-    const placement = this.targetTarget.dataset.placement || "top";
+    const preferredPlacement = this.targetTarget.dataset.placement || "top";
     const triggerRect = this.triggerTarget.getBoundingClientRect();
     const tooltipRect = this.targetTarget.getBoundingClientRect();
     const spacing = 8; // 0.5rem
+    const viewportPadding = 8; // Minimum distance from viewport edge
 
-    let top, left;
+    // Calculate position for a given placement
+    const calculatePosition = (placement) => {
+      let top, left;
 
-    switch (placement) {
-      case "top":
-        top = triggerRect.top - tooltipRect.height - spacing;
-        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-        break;
-      case "bottom":
-        top = triggerRect.bottom + spacing;
-        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-        break;
-      case "left":
-        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-        left = triggerRect.left - tooltipRect.width - spacing;
-        break;
-      case "right":
-        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-        left = triggerRect.right + spacing;
-        break;
+      switch (placement) {
+        case "top":
+          top = triggerRect.top - tooltipRect.height - spacing;
+          left =
+            triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+          break;
+        case "bottom":
+          top = triggerRect.bottom + spacing;
+          left =
+            triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+          break;
+        case "left":
+          top =
+            triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
+          left = triggerRect.left - tooltipRect.width - spacing;
+          break;
+        case "right":
+          top =
+            triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
+          left = triggerRect.right + spacing;
+          break;
+      }
+
+      return { top, left };
+    };
+
+    // Check if tooltip fits within viewport for a given placement
+    const fitsInViewport = (placement) => {
+      const { top, left } = calculatePosition(placement);
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      return (
+        top >= viewportPadding &&
+        left >= viewportPadding &&
+        top + tooltipRect.height <= viewportHeight - viewportPadding &&
+        left + tooltipRect.width <= viewportWidth - viewportPadding
+      );
+    };
+
+    // Get opposite placement for flipping
+    const getOppositePlacement = (placement) => {
+      const opposites = {
+        top: "bottom",
+        bottom: "top",
+        left: "right",
+        right: "left",
+      };
+      return opposites[placement];
+    };
+
+    // Determine best placement (prefer original, flip if needed)
+    let placement = preferredPlacement;
+    if (!fitsInViewport(preferredPlacement)) {
+      const opposite = getOppositePlacement(preferredPlacement);
+      if (fitsInViewport(opposite)) {
+        placement = opposite;
+      }
+      // If neither fits, stick with preferred and clamp to viewport
+    }
+
+    let { top, left } = calculatePosition(placement);
+
+    // Clamp position to viewport bounds
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Horizontal clamping
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    } else if (left + tooltipRect.width > viewportWidth - viewportPadding) {
+      left = viewportWidth - tooltipRect.width - viewportPadding;
+    }
+
+    // Vertical clamping
+    if (top < viewportPadding) {
+      top = viewportPadding;
+    } else if (top + tooltipRect.height > viewportHeight - viewportPadding) {
+      top = viewportHeight - tooltipRect.height - viewportPadding;
     }
 
     // Apply calculated position (tooltip has fixed positioning from template)
