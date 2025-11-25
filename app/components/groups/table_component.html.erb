@@ -64,7 +64,7 @@
                 <%= pathogen_link(href: namespace_group_link_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
                 }) do |component| %>
-                  <%= component.with_tooltip(text: t(:"projects.group_links.index.inherited_from")) %>
+                  <% component.with_tooltip(text: t(:"projects.group_links.index.inherited_from")) %>
                   <%= namespace_group_link_source[:label] %>
                 <% end %>
               <% else %>
@@ -96,7 +96,7 @@
                       },
                     ) %>
 
-                    <input type="hidden" name="format" value="turbo_stream" />
+                    <input type="hidden" name="format" value="turbo_stream">
                   <% end %>
                 <% else %>
                   <%= t(
