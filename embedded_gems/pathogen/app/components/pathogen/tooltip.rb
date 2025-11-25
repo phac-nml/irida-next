@@ -46,11 +46,25 @@ module Pathogen
   #   <% end %>
   #
   # @example Direct component usage (advanced)
-  #   <%= render Pathogen::Tooltip.new(
-  #     text: "Helpful information",
-  #     id: "tooltip-123",
-  #     placement: :bottom
-  #   ) %>
+  #   <div data-controller="pathogen--tooltip">
+  #     <button
+  #       aria-describedby="tooltip-123"
+  #       data-pathogen--tooltip-target="trigger">
+  #       Hover me
+  #     </button>
+  #     <%= render Pathogen::Tooltip.new(
+  #       text: "Helpful information",
+  #       id: "tooltip-123",
+  #       placement: :bottom
+  #     ) %>
+  #   </div>
+  #
+  # @note When using directly, you MUST:
+  #   - Wrap trigger and tooltip in a container with `data-controller="pathogen--tooltip"`
+  #   - Add `aria-describedby="<tooltip-id>"` to the trigger element (W3C ARIA APG requirement)
+  #   - Add `data-pathogen--tooltip-target="trigger"` to the trigger element
+  #   - Add `data-pathogen--tooltip-target="target"` to the tooltip element (automatic)
+  #   The Stimulus controller will validate these requirements at runtime and log errors if missing.
   #
   # ## Browser Compatibility
   #
