@@ -60,6 +60,10 @@ class BaseSampleTransferService < BaseSampleService
                                                                      old_namespaces, new_namespaces)
   end
 
+  def update_metadata_summary_counts(metadata_payload, old_project, old_namespaces, new_namespaces)
+    old_project.namespace.update_metadata_summary_counts(metadata_payload, old_namespaces, new_namespaces)
+  end
+
   def update_samples_count(old_project, new_project, transferred_samples_count)
     if old_project.parent.type == 'Group'
       old_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)

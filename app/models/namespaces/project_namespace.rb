@@ -63,6 +63,11 @@ module Namespaces
       add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
     end
 
+    def update_metadata_summary_counts(metadata_payload, old_namespaces, new_namespaces)
+      subtract_from_metadata_summary_count(old_namespaces, metadata_payload, false)
+      add_to_metadata_summary_count(new_namespaces, metadata_payload, false)
+    end
+
     def update_metadata_summary_by_sample_deletion(sample)
       return if sample.metadata.empty?
 

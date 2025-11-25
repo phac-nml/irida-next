@@ -186,7 +186,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     user_namespace? || project_namespace?
   end
 
-  def has_parent? # rubocop:disable Naming/PredicateName
+  def has_parent?
     parent_id.present? || parent.present?
   end
 

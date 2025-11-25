@@ -27,6 +27,7 @@ module Samples
     def bulk_create
       authorize! @project, to: :update_sample?
       @allowed_to = { update_sample: true }
+
       create_metadata_fields =
         ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user,
                                                        create_field_params['create_fields']).execute
