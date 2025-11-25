@@ -76,15 +76,6 @@ export default class extends Controller {
     this.pipelineIdTarget.value = params.pipelineid;
     this.workflowVersionTarget.value = params.workflowversion;
 
-    const spinner = document.getElementById("pipeline-spinner");
-
-    spinner.classList.remove("hidden");
-    // Update the text inside spinner dialog
-    spinner.innerHTML = spinner.innerHTML
-      .replace("COUNT_PLACEHOLDER", this.#sampleCount)
-      .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
-      .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
-
     this.formTarget.requestSubmit();
   }
 

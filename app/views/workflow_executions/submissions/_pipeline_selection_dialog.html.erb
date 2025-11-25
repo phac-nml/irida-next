@@ -53,11 +53,6 @@
           </li>
         <% end %>
       </ul>
-      <div id="pipeline-spinner" class="hidden flex items-center p-4 space-x-4">
-        <%= render SpinnerComponent.new(
-          message: t("workflow_executions.submissions.pipeline_selection.loading_html"),
-        ) %>
-      </div>
     <% end %>
   <% end %>
 <% end %>

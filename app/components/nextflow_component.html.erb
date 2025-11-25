@@ -10,6 +10,7 @@
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  data-nextflow--samplesheet-selection-outlet="#samples-table"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -106,6 +107,8 @@
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @sample_count.nil? %>
+                  <%= helpers.turbo_frame_tag "samplesheet" %>
+
                   <%= render Nextflow::SamplesheetComponent.new(
                     schema: property[:schema],
                     sample_count:,
@@ -224,5 +227,12 @@
         id: "nextflow-spinner",
       ) %>
     </div>
+
+    <%= form_with url:
+      samplesheet_samples_workflow_executions_path(format: :turbo_stream),
+    method: :post,
+    data: {
+      "nextflow--samplesheet-target": "samplesheetSamplesForm",
+    } %>
   <% end %>
 </div>
