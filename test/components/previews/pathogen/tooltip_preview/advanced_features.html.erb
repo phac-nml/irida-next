@@ -49,7 +49,7 @@
 
           <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "Brief tooltip", placement: :top) %>
+              <% link.with_tooltip(text: "Brief tooltip", placement: :top) %>
               Hover me (short tooltip)
             <% end %>
           </div>
@@ -67,7 +67,7 @@
 
           <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "This is a very long tooltip text that demonstrates how the tooltip component automatically wraps text and enforces a maximum width constraint to prevent excessively wide tooltips that would be hard to read.", placement: :top) %>
+              <% link.with_tooltip(text: "This is a very long tooltip text that demonstrates how the tooltip component automatically wraps text and enforces a maximum width constraint to prevent excessively wide tooltips that would be hard to read.", placement: :top) %>
               Hover me (long tooltip)
             <% end %>
           </div>
@@ -135,7 +135,7 @@
 
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "Watch me fade in and scale from bottom", placement: :top) %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from bottom", placement: :top) %>
 
               <%= pathogen_icon(:arrow_up, color: :primary, class: "inline mr-2") %>
               Hover to see animation
@@ -156,7 +156,7 @@
 
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "Watch me fade in and scale from top", placement: :bottom) %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from top", placement: :bottom) %>
 
               <%= pathogen_icon(:arrow_down, color: :primary, class: "inline mr-2") %>
               Hover to see animation
@@ -176,7 +176,7 @@
 
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "Watch me fade in and scale from right", placement: :left) %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from right", placement: :left) %>
 
               <%= pathogen_icon(:arrow_left, color: :primary, class: "inline mr-2") %>
               Hover to see animation
@@ -197,7 +197,7 @@
 
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
-              <%= link.with_tooltip(text: "Watch me fade in and scale from left", placement: :right) %>
+              <% link.with_tooltip(text: "Watch me fade in and scale from left", placement: :right) %>
 
               <%= pathogen_icon(:arrow_right, color: :primary, class: "inline mr-2") %>
               Hover to see animation
@@ -270,7 +270,7 @@
         <!-- Top Edge -->
         <div class="absolute top-4 left-1/2 -translate-x-1/2">
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <%= link.with_tooltip(text: "Near top edge - may flip to bottom", placement: :top) %>
+            <% link.with_tooltip(text: "Near top edge - may flip to bottom", placement: :top) %>
             Top Edge Link
           <% end %>
         </div>
@@ -278,7 +278,7 @@
         <!-- Bottom Edge -->
         <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <%= link.with_tooltip(text: "Near bottom edge - may flip to top", placement: :bottom) %>
+            <% link.with_tooltip(text: "Near bottom edge - may flip to top", placement: :bottom) %>
             Bottom Edge Link
           <% end %>
         </div>
@@ -286,7 +286,7 @@
         <!-- Left Edge -->
         <div class="absolute left-4 top-1/2 -translate-y-1/2">
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <%= link.with_tooltip(text: "Near left edge - may flip to right", placement: :left) %>
+            <% link.with_tooltip(text: "Near left edge - may flip to right", placement: :left) %>
             Left Edge Link
           <% end %>
         </div>
@@ -294,7 +294,7 @@
         <!-- Right Edge -->
         <div class="absolute right-4 top-1/2 -translate-y-1/2">
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <%= link.with_tooltip(text: "Near right edge - may flip to left", placement: :right) %>
+            <% link.with_tooltip(text: "Near right edge - may flip to left", placement: :right) %>
             Right Edge Link
           <% end %>
         </div>
@@ -302,7 +302,7 @@
         <!-- Center -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <%= link.with_tooltip(text: "Center position - no collision", placement: :top) %>
+            <% link.with_tooltip(text: "Center position - no collision", placement: :top) %>
             Center Link
           <% end %>
         </div>
@@ -358,42 +358,42 @@
 
       <div class="flex flex-wrap gap-3 p-6 bg-slate-50 dark:bg-slate-900 rounded-lg">
         <%= render Pathogen::Link.new(href: "#1") do |link| %>
-          <%= link.with_tooltip(text: "First tooltip", placement: :top) %> Link
+          <% link.with_tooltip(text: "First tooltip", placement: :top) %> Link
           1
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#2") do |link| %>
-          <%= link.with_tooltip(text: "Second tooltip", placement: :top) %>
+          <% link.with_tooltip(text: "Second tooltip", placement: :top) %>
           Link 2
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#3") do |link| %>
-          <%= link.with_tooltip(text: "Third tooltip", placement: :top) %> Link
+          <% link.with_tooltip(text: "Third tooltip", placement: :top) %> Link
           3
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#4") do |link| %>
-          <%= link.with_tooltip(text: "Fourth tooltip", placement: :top) %>
+          <% link.with_tooltip(text: "Fourth tooltip", placement: :top) %>
           Link 4
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#5") do |link| %>
-          <%= link.with_tooltip(text: "Fifth tooltip", placement: :top) %> Link
+          <% link.with_tooltip(text: "Fifth tooltip", placement: :top) %> Link
           5
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#6") do |link| %>
-          <%= link.with_tooltip(text: "Sixth tooltip", placement: :top) %> Link
+          <% link.with_tooltip(text: "Sixth tooltip", placement: :top) %> Link
           6
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#7") do |link| %>
-          <%= link.with_tooltip(text: "Seventh tooltip", placement: :top) %>
+          <% link.with_tooltip(text: "Seventh tooltip", placement: :top) %>
           Link 7
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#8") do |link| %>
-          <%= link.with_tooltip(text: "Eighth tooltip", placement: :top) %>
+          <% link.with_tooltip(text: "Eighth tooltip", placement: :top) %>
           Link 8
         <% end %>
       </div>
