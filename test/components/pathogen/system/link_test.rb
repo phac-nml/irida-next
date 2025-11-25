@@ -16,11 +16,11 @@ module Pathogen
           # Invoke tooltip on hover
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
           find('a', text: @link_text).hover
-          assert_text @tooltip_text
+          assert_selector '[data-pathogen--tooltip-target="target"]', text: @tooltip_text, visible: true
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on escape
-          find('a', text: @link_text).send_keys(:escape)
-          assert_no_text  @tooltip_text
+          find('a', text: @link_text).native.send_keys(:escape)
+          assert_no_text @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
       end
@@ -31,11 +31,11 @@ module Pathogen
           # Invoke tooltip on focus
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
           find('a', text: @link_text).trigger('focus')
-          assert_text @tooltip_text
+          assert_selector '[data-pathogen--tooltip-target="target"]', text: @tooltip_text, visible: true
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on blur
-          find('a', text: @link_text).trigger('blur')
-          assert_no_text  @tooltip_text
+          find('a', text: @link_text).native.send_keys(:tab)
+          assert_no_text @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
       end
