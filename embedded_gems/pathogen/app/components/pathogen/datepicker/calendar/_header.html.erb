@@ -17,7 +17,7 @@
       "
       data-action="
         click->pathogen--datepicker--calendar#previousMonth
-        keydown->pathogen--datepicker--calendar#tabBackToInput
+        keydown->pathogen--datepicker--calendar#tabBackToCloseButton
       "
       data-pathogen--datepicker--calendar-target="backButton"
       aria-label="<%= t("pathogen.datepicker.aria_label.previous_month_button")%>"
@@ -26,7 +26,7 @@
     </button>
     <div
       data-pathogen--datepicker--calendar-target="monthSelectContainer"
-      data-action="keydown->pathogen--datepicker--calendar#tabBackToInput"
+      data-action="keydown->pathogen--datepicker--calendar#tabBackToCloseButton"
     >
     </div>
     <div>

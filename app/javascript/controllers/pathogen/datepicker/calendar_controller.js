@@ -9,7 +9,7 @@ import {
   verifyDateIsInMonth,
   getDateNode,
   getFirstOfMonthNode,
-  focusDate,
+  parseDate,
 } from "controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
@@ -25,12 +25,14 @@ export default class extends Controller {
     "inMonthDateTemplate",
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
-    "clearButton",
+    "closeButton",
     "minDateMessage",
+    "ariaLive",
   ];
 
   static values = {
     months: Array,
+    ariaControlLabels: Object,
   };
 
   // today's date attributes for quick access
@@ -46,11 +48,12 @@ export default class extends Controller {
 
   #minDate;
   #minDateMessage;
-  #autosubmit;
 
   idempotentConnect() {
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
+
+    this.#generateCalendarButtonAriaLabel();
     // set the month and year inputs
     this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
@@ -58,6 +61,10 @@ export default class extends Controller {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
     }
     this.#loadCalendar();
+    // announces current calendar's month/year
+    this.#updateAriaLive(
+      `${this.monthSelectTarget.value} ${this.#selectedYear}`,
+    );
   }
 
   setMonths() {
@@ -80,6 +87,22 @@ export default class extends Controller {
     this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
+  #generateCalendarButtonAriaLabel() {
+    let ariaLabel = "";
+    if (this.#selectedDate) {
+      let year, month, day;
+      [year, month, day] = parseDate(this.#selectedDate);
+      ariaLabel = `${this.ariaControlLabelsValue["change_date"]} ${this.monthsValue[month]} ${day}, ${year}`;
+    } else {
+      ariaLabel = this.ariaControlLabelsValue["choose_date"];
+    }
+
+    this.pathogenDatepickerInputOutlet.setCalendarButtonAriaAttributes(
+      ariaLabel,
+      this.element.id,
+    );
+  }
+
   // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
   shareParamsWithCalendarByInput(params) {
     this.#todaysYear = params["todaysYear"];
@@ -91,7 +114,6 @@ export default class extends Controller {
     this.#selectedMonthIndex = params["selectedMonthIndex"];
     this.#minDate = params["minDate"];
     this.#minDateMessage = params["minDateMessage"];
-    this.#autosubmit = params["autosubmit"];
     this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
@@ -216,7 +238,14 @@ export default class extends Controller {
     const nextYM = this.#getRelativeYearAndMonth("next");
 
     // 🛠️ Helper to render and append a date cell from a <template>.
-    const appendCell = (row, templateTarget, year, monthIndex, day) => {
+    const appendCell = (
+      row,
+      templateTarget,
+      year,
+      monthIndex,
+      day,
+      ariaLabel,
+    ) => {
       const fragment = templateTarget.content.cloneNode(true);
       const cell = fragment.querySelector("td");
       cell.innerText = day;
@@ -224,6 +253,7 @@ export default class extends Controller {
         "data-date",
         this.#getFormattedStringDate(year, monthIndex, day),
       );
+      cell.setAttribute("aria-label", ariaLabel);
       row.appendChild(fragment);
     };
 
@@ -246,6 +276,7 @@ export default class extends Controller {
           this.#selectedYear,
           this.#selectedMonthIndex,
           day,
+          `${this.monthSelectTarget.value} ${day}, ${this.#selectedYear}`,
         );
       } else if (isPrev) {
         appendCell(
@@ -254,6 +285,7 @@ export default class extends Controller {
           prevYM.year,
           prevYM.month,
           day,
+          `${this.monthsValue[prevYM.month]} ${day}, ${prevYM.year}`,
         );
       } else {
         appendCell(
@@ -262,6 +294,7 @@ export default class extends Controller {
           nextYM.year,
           nextYM.month,
           day,
+          `${this.monthsValue[nextYM.month]} ${day}, ${nextYM.year}`,
         );
       }
 
@@ -285,14 +318,6 @@ export default class extends Controller {
   // get February's last date based on leap year
   #getFebLastDate(year) {
     return new Date(year, 1, 29).getDate() === 29 ? 29 : 28;
-  }
-
-  #onLastDate() {
-    const lastDate =
-      this.#todaysMonthIndex === 1
-        ? this.#getFebLastDate(this.#todaysYear)
-        : DAYS_IN_MONTH[this.#todaysMonthIndex];
-    return this.#todaysDate === lastDate;
   }
 
   #getRelativeYearAndMonth(relativePosition) {
@@ -367,11 +392,15 @@ export default class extends Controller {
   }
 
   // handles changing the date styling (today, selected and disabled dates)
-  #replaceDateStyling(date, classes) {
-    if (verifyDateIsInMonth(date)) {
+  #replaceDateStyling(date, classes, removePreviousClasses = null) {
+    if (verifyDateIsInMonth(date) && !removePreviousClasses) {
       date.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
     } else {
       date.classList.remove(...CALENDAR_CLASSES["OUT_OF_MONTH"]);
+    }
+
+    if (removePreviousClasses) {
+      date.classList.remove(...removePreviousClasses);
     }
     date.classList.add(...classes);
   }
@@ -427,7 +456,6 @@ export default class extends Controller {
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -439,7 +467,6 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
@@ -476,30 +503,37 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
-  // show today on calendar via show today button
-  showToday() {
-    this.#selectedYear = this.#todaysYear;
-    if (this.#onLastDate()) {
-      this.#selectedMonthIndex = this.#todaysMonthIndex + 1;
-    } else {
-      this.#selectedMonthIndex = this.#todaysMonthIndex;
-    }
-
-    this.idempotentConnect();
-  }
-
-  // handles Shift+Tab out of calendar into datepicker input
-  tabBackToInput(event) {
+  // handles Shift+Tab from first tabbable element to close button (eg: stay within datepicker)
+  tabBackToCloseButton(event) {
     if (event.key !== "Tab" || !event.shiftKey) return;
-    // if we're on the back button, or on the month select when back button is disabled, tab to the datepicker input
+    // if we're on the back button, or on the month select when back button is disabled, tab to the close button
     if (
       event.target === this.backButtonTarget ||
       (event.target === this.monthSelectTarget &&
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerInputOutlet.focusDatepickerInput();
+      this.closeButtonTarget.focus();
+    }
+  }
+
+  handleCloseByClick(event) {
+    event.preventDefault();
+    this.pathogenDatepickerInputOutlet.hideCalendar();
+  }
+
+  handleKeydownOnCloseButton(event) {
+    // when tabbing from close button, focus first focusable element in datepicker (back button or month select)
+    if (event.key === "Tab" && !event.shiftKey) {
+      event.preventDefault();
+      this.getFirstFocusableElement().focus();
+      return;
+    }
+
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
       this.pathogenDatepickerInputOutlet.hideCalendar();
+      return;
     }
   }
 
@@ -529,34 +563,59 @@ export default class extends Controller {
   }
 
   // select date either by click or Enter/Space
+  // By click: clicked date is selected and calendar is hidden
+  // By keydown: When date is selected, calendar is not closed, and instead the user is able to select date
+  // multiple times. Calendar is hidden and selection finalized when they select the close button or Escape out
   selectDate(event) {
     const selectedDate = event.target;
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.pathogenDatepickerInputOutlet.setInputValue(
-      selectedDate.getAttribute("data-date"),
-    );
-
-    // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
-    if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
+    const selectedDateString = selectedDate.getAttribute("data-date");
+    this.pathogenDatepickerInputOutlet.setInputValue(selectedDateString);
+    if (event.type === "click") {
+      this.pathogenDatepickerInputOutlet.hideCalendar();
+    } else if (event.type === "keydown") {
+      // move the selected date styling to the current selected date
+      this.#removeSelectedDateAttributes();
+      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      this.#selectedDate = selectedDateString;
+      this.#generateCalendarButtonAriaLabel();
     }
-
-    this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
-  clearSelection() {
+  // datepicker input value is cleared and calendar hidden
+  handleClearSelectionByClick() {
     this.pathogenDatepickerInputOutlet.setInputValue("");
-
-    if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
-    }
-
     this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
+  }
+
+  // datepicker input is cleared but calendar remains open
+  handleClearSelectionByKeydown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.#removeSelectedDateAttributes();
+      this.pathogenDatepickerInputOutlet.setInputValue("");
+    }
+  }
+
+  // when navigating and selecting by keyboard, selected classes will be added to newly selected dates prior to submission
+  #removeSelectedDateAttributes() {
+    const oldSelectedDate = getDateNode(
+      this.calendarTarget,
+      this.#selectedDate,
+    );
+    if (oldSelectedDate) {
+      const defaultClasses = verifyDateIsInMonth(oldSelectedDate)
+        ? CALENDAR_CLASSES["IN_MONTH"]
+        : CALENDAR_CLASSES["OUT_OF_MONTH"];
+      this.#replaceDateStyling(
+        oldSelectedDate,
+        defaultClasses,
+        CALENDAR_CLASSES["SELECTED_DATE"],
+      );
+    }
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -592,7 +651,7 @@ export default class extends Controller {
       direction === "left" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(this.calendarTarget, targetDateNode);
+    this.#focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handle ArrowUp/Down keyboard navigation
@@ -631,7 +690,7 @@ export default class extends Controller {
       direction === "up" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
-    focusDate(this.calendarTarget, targetDateNode);
+    this.#focusDate(this.calendarTarget, targetDateNode);
   }
 
   // handles Home keypress
@@ -641,12 +700,12 @@ export default class extends Controller {
     const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
 
     if (firstDateNode.getAttribute("aria-disabled")) {
-      focusDate(
+      this.#focusDate(
         this.calendarTarget,
         getDateNode(this.calendarTarget, this.#minDate),
       );
     } else {
-      focusDate(this.calendarTarget, firstDateNode);
+      this.#focusDate(this.calendarTarget, firstDateNode);
     }
   }
 
@@ -659,7 +718,7 @@ export default class extends Controller {
       ),
     );
 
-    focusDate(
+    this.#focusDate(
       this.calendarTarget,
       allInMonthDatesNodes[allInMonthDatesNodes.length - 1],
     );
@@ -677,17 +736,23 @@ export default class extends Controller {
       // if there's a minimum date and it exists in the calendar, focus that
       // else focus 1st
       if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-        focusDate(this.calendarTarget, minDateNode);
+        this.#focusDate(this.calendarTarget, minDateNode);
         return;
       }
     }
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+    this.#focusDate(
+      this.calendarTarget,
+      getFirstOfMonthNode(this.calendarTarget),
+    );
   }
 
   // load next month and focus 1st of the month
   #nextMonthByPageDown() {
     this.nextMonth();
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+    this.#focusDate(
+      this.calendarTarget,
+      getFirstOfMonthNode(this.calendarTarget),
+    );
   }
 
   // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
@@ -700,14 +765,31 @@ export default class extends Controller {
     return false;
   }
 
-  // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
+  // getFirst/LastFocusableElement is used for Tab logic
   getFirstFocusableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget
       : this.backButtonTarget;
   }
 
-  getLastFocusableElement() {
-    return this.clearButtonTarget;
+  // used by input_controller to set focus when datepicker is opened
+  setFocusOnTabbableDate() {
+    this.calendarTarget.querySelectorAll("[tabindex='0']")[0].focus();
+  }
+
+  #focusDate(calendar, dateNode) {
+    // find current tabbable node, and remove tabIndex
+    const currentTabbableDate = calendar.querySelectorAll('[tabindex="0"]')[0];
+    currentTabbableDate.tabIndex = -1;
+
+    // assign tabindex and focus to the current target date
+    dateNode.tabIndex = 0;
+    dateNode.focus();
+    this.#updateAriaLive(dateNode.getAttribute("aria-label"));
+  }
+
+  #updateAriaLive(string) {
+    this.ariaLiveTarget.innerText = "";
+    this.ariaLiveTarget.innerText = string;
   }
 }
