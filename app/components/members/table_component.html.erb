@@ -1,14 +1,14 @@
 <% if @has_members %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <table
-      class='
+      class="
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
         whitespace-nowrap
-      '
+      "
       data-controller="table"
       data-action="focusin->table#handleCellFocus"
     >
-      <thead class='sticky top-0 z-10 text-xs uppercase'>
+      <thead class="sticky top-0 z-10 text-xs uppercase">
         <tr
           class="
             border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -30,6 +30,7 @@
               ) %>
             <% end %>
           <% end %>
+
           <%= render_cell(
               tag: 'th',
               scope: 'col',
@@ -39,6 +40,7 @@
           <% end %>
         </tr>
       </thead>
+
       <tbody
         id="members-table-body"
         class="
@@ -48,13 +50,17 @@
       >
         <% @members.each do |member| %>
           <% member_source = membership_source(@namespace, member) %>
+
           <%= render Viral::BaseComponent.new(**row_arguments(member)) do %>
             <td
               class="
-                px-6 py-3 @2xl:sticky left-0 z-5 min-w-56 truncate bg-slate-50 dark:bg-slate-900
+                px-6 py-3 @2xl:sticky left-0 z-5 min-w-56 truncate
+                bg-slate-50 dark:bg-slate-900
               "
             >
-              <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>
+              <div class="text-slate-900 dark:text-slate-100 font-semibold">
+                <%= member.user.email %>
+
                 <% if @current_user == member.user %>
                   <%= viral_pill(
                     text: t("activerecord.models.member.its_you"),
@@ -74,10 +80,11 @@
                 <% end %>
               </div>
             </td>
+
             <td class="p-3">
               <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                <turbo-frame id="<%="member-#{member.id}-access-level"%>">
+                <turbo-frame id="<%= "member-#{member.id}-access-level" %>">
                   <%= render partial: access_level,
                   locals: {
                     namespace: @namespace,
@@ -89,9 +96,12 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <%= t("members.access_levels.level_#{member.access_level}") %>
               <% end %>
             </td>
+
             <td class="p-3">
               <% if !member_source.key?(:inherited_namespace_path) %>
-                <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
+                <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
+                  <%= member_source[:label] %>
+                </div>
               <% else %>
                 <%= pathogen_link(href: member_source[:inherited_namespace_path], data: {
                   turbo_frame: "_top",
@@ -101,6 +111,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <% end %>
               <% end %>
             </td>
+
             <td class="px-6 py-4">
               <div>
                 <% if member.user.email != member.created_by.email %>
@@ -117,6 +128,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <% end %>
               </div>
             </td>
+
             <td class="px-6 py-4">
               <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
@@ -133,6 +145,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 <%= helpers.local_date(member.expires_at, :long) %>
               <% end %>
             </td>
+
             <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
               <td class="p-3 dark:bg-slate-800 z-10 space-x-2 text-right">
                 <% if @current_user == member.user %>
