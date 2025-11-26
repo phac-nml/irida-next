@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { formDataToJsonParams, createHiddenInput } from "utilities/form";
+import { formDataToJsonParams } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
 import { focusWhenVisible } from "utilities/focus";
 
@@ -36,7 +36,6 @@ export default class extends Controller {
     "filterSearchButton",
     "samplesheetSamplesForm",
   ];
-  static outlets = ["selection"];
 
   static values = {
     dataMissingError: { type: String },
@@ -49,6 +48,8 @@ export default class extends Controller {
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
   };
+
+  static outlets = ["nextflow--samplesheet--params"];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -105,29 +106,12 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
-    if (this.hasSamplesheetSamplesFormTarget) {
-      this.#fetchSampleData();
-    }
     // if (this.hasWorkflowAttributesTarget) {
     //   this.#setSamplesheetParametersAndData();
     //   this.#updateMetadataColumnHeaderNames();
     //   this.#disableProcessingState();
     // }
     this.element.setAttribute("data-controller-connected", "true");
-  }
-
-  #fetchSampleData() {
-    try {
-      const ids = this.selectionOutlet.getOrCreateStoredItems();
-      const fragment = document.createDocumentFragment();
-      for (const id of ids) {
-        fragment.appendChild(createHiddenInput("sample_ids[]", id));
-      }
-      this.samplesheetSamplesFormTarget.appendChild(fragment);
-      this.samplesheetSamplesFormTarget.submit();
-    } catch (err) {
-      console.error("Error retrieving samples: ", err);
-    }
   }
 
   #setSamplesheetParametersAndData() {
