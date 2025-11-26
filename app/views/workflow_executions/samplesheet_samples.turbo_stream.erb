@@ -1,0 +1,6 @@
+<%= turbo_stream.update "samplesheet",
+                    partial: "samplesheet_samples",
+                    locals: {
+                      params: params,
+                      samples: @samples,
+                    } %>
