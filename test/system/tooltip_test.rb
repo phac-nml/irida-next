@@ -20,11 +20,11 @@ class TooltipTest < ApplicationSystemTestCase
     # Wait for tooltip to appear
     assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
 
-    # Move mouse away
-    tooltip_trigger.native.send_keys(:escape)
+    # Move mouse away by hovering over a different element (body)
+    page.find('body').hover
 
-    # Wait for tooltip to hide
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', wait: 2
+    # Wait for tooltip to hide (don't use visible: filter since element is invisible)
+    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip appears on focus and hides on blur' do
@@ -33,17 +33,17 @@ class TooltipTest < ApplicationSystemTestCase
     # Find a link with tooltip
     tooltip_trigger = page.find('a[aria-describedby]', match: :first)
 
-    # Focus on trigger
-    tooltip_trigger.focus
+    # Focus on trigger using JavaScript
+    page.execute_script('arguments[0].focus()', tooltip_trigger)
 
     # Wait for tooltip to appear
     assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
 
-    # Blur trigger
-    tooltip_trigger.send_keys(:tab)
+    # Blur trigger by focusing on body
+    page.execute_script('document.body.focus()')
 
-    # Wait for tooltip to hide
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', wait: 2
+    # Wait for tooltip to hide (don't use visible: filter since element is invisible)
+    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip dismisses with Escape key' do
@@ -52,24 +52,24 @@ class TooltipTest < ApplicationSystemTestCase
     # Find a link with tooltip
     tooltip_trigger = page.find('a[aria-describedby]', match: :first)
 
-    # Focus on trigger to show tooltip
-    tooltip_trigger.focus
+    # Focus on trigger to show tooltip using JavaScript
+    page.execute_script('arguments[0].focus()', tooltip_trigger)
 
     # Wait for tooltip to appear
     assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
 
-    # Press Escape key
-    tooltip_trigger.send_keys(:escape)
+    # Press Escape key (send to body since the handler is on document)
+    page.find('body').send_keys(:escape)
 
-    # Wait for tooltip to hide
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', wait: 2
+    # Wait for tooltip to hide (don't use visible: filter since element is invisible)
+    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip respects viewport boundaries and flips when needed' do
     visit '/-/groups/group-1'
 
-    # Resize window to small size to test boundary detection
-    page.driver.browser.manage.window.resize_to(400, 300)
+    # Resize window to small size to test boundary detection (Cuprite syntax)
+    page.driver.resize(400, 300)
 
     # Find a link with tooltip near edge
     tooltip_trigger = page.find('a[aria-describedby]', match: :first)
@@ -82,13 +82,13 @@ class TooltipTest < ApplicationSystemTestCase
 
     # Get tooltip position
     tooltip = page.find('div[role="tooltip"].opacity-100.visible', match: :first)
-    tooltip_rect = tooltip.native.rect
+    tooltip_rect = page.evaluate_script('arguments[0].getBoundingClientRect().toJSON()', tooltip)
 
     # Verify tooltip is within viewport bounds (with padding)
-    assert tooltip_rect.x >= 0, 'Tooltip should be within viewport left edge'
-    assert tooltip_rect.y >= 0, 'Tooltip should be within viewport top edge'
-    assert tooltip_rect.x + tooltip_rect.width <= 400, 'Tooltip should be within viewport right edge'
-    assert tooltip_rect.y + tooltip_rect.height <= 300, 'Tooltip should be within viewport bottom edge'
+    assert tooltip_rect['x'].to_f >= 0, 'Tooltip should be within viewport left edge'
+    assert tooltip_rect['y'].to_f >= 0, 'Tooltip should be within viewport top edge'
+    assert tooltip_rect['x'].to_f + tooltip_rect['width'].to_f <= 400, 'Tooltip should be within viewport right edge'
+    assert tooltip_rect['y'].to_f + tooltip_rect['height'].to_f <= 300, 'Tooltip should be within viewport bottom edge'
   end
 
   test 'tooltip has proper ARIA relationship' do
@@ -100,11 +100,11 @@ class TooltipTest < ApplicationSystemTestCase
     # Get the tooltip ID from aria-describedby
     tooltip_id = tooltip_trigger['aria-describedby']
 
-    # Verify tooltip exists with that ID
-    assert_selector "div##{tooltip_id}[role='tooltip']"
+    # Verify tooltip exists with that ID (check all elements, not just visible)
+    assert_selector "div##{tooltip_id}[role='tooltip']", visible: :all
 
-    # Focus to show tooltip
-    tooltip_trigger.focus
+    # Hover to show tooltip (use hover instead of focus since it's more reliable)
+    tooltip_trigger.hover
 
     # Verify tooltip is visible
     assert_selector "div##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
