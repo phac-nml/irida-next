@@ -87,18 +87,14 @@ export default class extends Controller {
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
     this.announcementElement.textContent =
-      this.announcementElement.dataset.changedText.replace(
-        "%{theme}",
-        themeText,
-      );
+      this.element.dataset.changedText.replace("%{theme}", themeText);
   }
 
   /**
    * Announce errors to screen readers
    */
   announceError() {
-    this.announcementElement.textContent =
-      this.announcementElement.dataset.errorText;
+    this.announcementElement.textContent = this.element.dataset.errorText;
   }
 
   /**
@@ -120,9 +116,9 @@ export default class extends Controller {
 
   getThemeText(theme) {
     const themeMap = {
-      system: this.announcementElement.dataset.systemText,
-      light: this.announcementElement.dataset.lightText,
-      dark: this.announcementElement.dataset.darkText,
+      system: this.element.dataset.systemText,
+      light: this.element.dataset.lightText,
+      dark: this.element.dataset.darkText,
     };
     return themeMap[theme] || theme;
   }
