@@ -182,25 +182,6 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update metadata summary by sample transfer with empty metadata' do
-    project29 = namespaces_project_namespaces(:project29_namespace)
-    sample32 = samples(:sample32)
-    sample32.metadata = {}
-    sample32.metadata_provenance = {}
-    sample32.save
-
-    new_namespaces = @project_namespace.self_and_ancestors_of_type([Group.sti_name])
-    old_namespaces = project29.self_and_ancestors_of_type([Group.sti_name])
-
-    assert_no_changes -> { @project_namespace.reload.metadata_summary } do
-      assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
-        assert_no_changes -> { project29.reload.metadata_summary } do
-          project29.update_metadata_summary_by_sample_transfer(sample32.id, old_namespaces, new_namespaces)
-        end
-      end
-    end
-  end
-
   test 'update metadata summary by sample deletion with valid metadata' do
     sample = samples(:sample30)
 

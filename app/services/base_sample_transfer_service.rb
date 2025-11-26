@@ -51,8 +51,7 @@ class BaseSampleTransferService < BaseSampleService
   end
 
   def namespaces_for_transfer(project_namespace)
-    [project_namespace] +
-      project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+    project_namespace.self_and_ancestors_of_type(Group.sti_name)
   end
 
   def update_metadata_summary(sample, old_namespaces, new_namespaces)

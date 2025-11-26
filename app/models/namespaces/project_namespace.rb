@@ -48,19 +48,11 @@ module Namespaces
 
     def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
       namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
-      Namespace.subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
+      unless deleted_metadata.empty?
+        Namespace.subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata,
+                                                       true)
+      end
       Namespace.add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
-    end
-
-    # transferred_sample_id = sample being transferred
-    # old_namespaces = namespaces sample originally belonged to
-    # new_namespaces = namespaces sample are being transferred to
-    def update_metadata_summary_by_sample_transfer(transferred_sample_id, old_namespaces, new_namespaces)
-      sample = Sample.find(transferred_sample_id)
-      return if sample.metadata.empty?
-
-      Namespace.subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
-      Namespace.add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
     end
 
     def update_metadata_summary_by_sample_deletion(sample)
