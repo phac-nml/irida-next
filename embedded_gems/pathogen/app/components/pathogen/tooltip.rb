@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # Pathogen::Tooltip renders an accessible tooltip using native CSS anchor positioning.
+  # Pathogen::Tooltip renders an accessible tooltip using JavaScript-based positioning.
   #
   # This component implements a custom tooltip solution with Primer-inspired design,
-  # removing the previous Flowbite dependency. It uses CSS anchor positioning for
-  # modern browsers and provides smooth fade-in/scale animations.
+  # removing the previous Flowbite dependency. It uses JavaScript positioning via a
+  # Stimulus controller for precise placement with viewport boundary detection.
   #
   # ## Features
   #
-  # - **Native CSS Anchor Positioning**: Positions tooltip relative to trigger element
-  #   using CSS `anchor()` function (requires modern browser support: Chrome 125+, Edge 125+)
+  # - **JavaScript-Based Positioning**: Calculates optimal position using `getBoundingClientRect()`
+  #   with sophisticated viewport boundary detection
+  # - **Viewport Boundary Detection**: Automatically detects viewport edges and flips
+  #   placement (top ↔ bottom, left ↔ right) to keep tooltips visible
+  # - **Position Clamping**: Clamps tooltip position to viewport bounds with 8px padding
+  #   to prevent overflow
   # - **Multiple Placements**: Supports `:top`, `:bottom`, `:left`, and `:right` positioning
   # - **Smooth Animations**: Fade-in and scale transition (200ms ease-out timing)
   # - **Accessibility**: Maintains `role="tooltip"` and `aria-describedby` connection
@@ -68,14 +72,13 @@ module Pathogen
   #
   # ## Browser Compatibility
   #
-  # This component uses CSS anchor positioning, which requires modern browser support:
-  # - Chrome 125+ (May 2024)
-  # - Edge 125+ (May 2024)
-  # - Firefox: Not yet supported (as of January 2025)
-  # - Safari: Not yet supported (as of January 2025)
+  # This component uses JavaScript-based positioning for broad browser compatibility:
+  # - Works in all modern browsers (Chrome, Firefox, Safari, Edge)
+  # - No reliance on cutting-edge CSS features
+  # - Requires ES6+ JavaScript support (universally available in modern browsers)
   #
-  # For browsers without anchor positioning support, the tooltip uses absolute positioning
-  # with inline styles as a fallback. The positioning may not be as precise but remains functional.
+  # The JavaScript approach provides sophisticated features like viewport boundary
+  # detection and automatic placement flipping that aren't available in CSS-only solutions.
   #
   # ## Design Philosophy
   #
@@ -93,7 +96,10 @@ module Pathogen
   # - Listens for `mouseenter`/`mouseleave` events for hover trigger
   # - Listens for `focusin`/`focusout` events for keyboard accessibility
   # - Toggles visibility classes for smooth animation
-  # - Sets `anchor-name` CSS property on trigger element
+  # - Calculates optimal position using `getBoundingClientRect()`
+  # - Detects viewport boundaries and flips placement when needed (top ↔ bottom, left ↔ right)
+  # - Clamps position to viewport bounds to prevent overflow
+  # - Applies positioning via inline `top` and `left` styles on the tooltip element
   #
   # @param text [String] The tooltip text content
   # @param id [String] Unique identifier for the tooltip element (required for aria-describedby)
@@ -110,6 +116,17 @@ module Pathogen
       @placement = placement
 
       validate_placement!
+    end
+
+    # Returns the CSS transform-origin class based on placement
+    # @return [String] Tailwind CSS class for transform origin
+    def origin_class
+      {
+        top: 'origin-bottom',
+        bottom: 'origin-top',
+        left: 'origin-right',
+        right: 'origin-left'
+      }[placement]
     end
 
     private

@@ -87,5 +87,45 @@ module Pathogen
       assert_selector 'div.opacity-0.scale-90.invisible'
       assert_selector 'div.transition-all.duration-200.ease-out'
     end
+
+    test 'renders with correct origin class for top placement' do
+      render_inline(Pathogen::Tooltip.new(
+                      text: 'Sample tooltip',
+                      id: 'tooltip-123',
+                      placement: :top
+                    ))
+
+      assert_selector 'div.origin-bottom'
+    end
+
+    test 'renders with correct origin class for bottom placement' do
+      render_inline(Pathogen::Tooltip.new(
+                      text: 'Sample tooltip',
+                      id: 'tooltip-123',
+                      placement: :bottom
+                    ))
+
+      assert_selector 'div.origin-top'
+    end
+
+    test 'renders with correct origin class for left placement' do
+      render_inline(Pathogen::Tooltip.new(
+                      text: 'Sample tooltip',
+                      id: 'tooltip-123',
+                      placement: :left
+                    ))
+
+      assert_selector 'div.origin-right'
+    end
+
+    test 'renders with correct origin class for right placement' do
+      render_inline(Pathogen::Tooltip.new(
+                      text: 'Sample tooltip',
+                      id: 'tooltip-123',
+                      placement: :right
+                    ))
+
+      assert_selector 'div.origin-left'
+    end
   end
 end
