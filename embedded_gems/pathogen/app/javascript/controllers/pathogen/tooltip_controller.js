@@ -147,153 +147,69 @@ export default class extends Controller {
 
     try {
       const preferredPlacement = this.targetTarget.dataset.placement || "top";
+      const spacing = this.#spacing();
+      const viewportPadding = this.#viewportPadding();
       const triggerRect = this.triggerTarget.getBoundingClientRect();
       const tooltipRect = this.targetTarget.getBoundingClientRect();
-      const spacing = 8; // 0.5rem
-      const viewportPadding = 8; // Minimum distance from viewport edge
 
       // Validate dimensions to prevent invalid calculations
-      if (
-        !tooltipRect ||
-        !triggerRect ||
-        tooltipRect.width <= 0 ||
-        tooltipRect.height <= 0 ||
-        triggerRect.width <= 0 ||
-        triggerRect.height <= 0
-      ) {
+      if (!this.#isValidRect(triggerRect) || !this.#isValidRect(tooltipRect)) {
         // If dimensions are invalid, fall back to error handler logic
         throw new Error("Invalid tooltip or trigger dimensions");
       }
 
-      // Calculate position for a given placement
-      const calculatePosition = (placement) => {
-        let top, left;
-
-        switch (placement) {
-          case "top":
-            top = triggerRect.top - tooltipRect.height - spacing;
-            left =
-              triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-            break;
-          case "bottom":
-            top = triggerRect.bottom + spacing;
-            left =
-              triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-            break;
-          case "left":
-            top =
-              triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-            left = triggerRect.left - tooltipRect.width - spacing;
-            break;
-          case "right":
-            top =
-              triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-            left = triggerRect.right + spacing;
-            break;
-        }
-
-        return { top, left };
-      };
-
-      // Check if tooltip fits within viewport for a given placement
-      const fitsInViewport = (placement) => {
-        const { top, left } = calculatePosition(placement);
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        return (
-          top >= viewportPadding &&
-          left >= viewportPadding &&
-          top + tooltipRect.height <= viewportHeight - viewportPadding &&
-          left + tooltipRect.width <= viewportWidth - viewportPadding
-        );
-      };
-
-      // Get opposite placement for flipping
-      const getOppositePlacement = (placement) => {
-        const opposites = {
-          top: "bottom",
-          bottom: "top",
-          left: "right",
-          right: "left",
-        };
-        return opposites[placement];
-      };
-
       // Determine best placement (prefer original, flip if needed)
       let placement = preferredPlacement;
-      if (!fitsInViewport(preferredPlacement)) {
-        const opposite = getOppositePlacement(preferredPlacement);
-        if (fitsInViewport(opposite)) {
+      if (
+        !this.#fitsInViewport(
+          triggerRect,
+          tooltipRect,
+          preferredPlacement,
+          spacing,
+          viewportPadding,
+        )
+      ) {
+        const opposite = this.#getOppositePlacement(preferredPlacement);
+        if (
+          opposite &&
+          this.#fitsInViewport(
+            triggerRect,
+            tooltipRect,
+            opposite,
+            spacing,
+            viewportPadding,
+          )
+        ) {
           placement = opposite;
         }
         // If neither fits, stick with preferred and clamp to viewport
       }
 
-      let { top, left } = calculatePosition(placement);
-
-      // Clamp position to viewport bounds
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-
-      // Horizontal clamping
-      left = Math.max(
-        viewportPadding,
-        Math.min(left, viewportWidth - tooltipRect.width - viewportPadding),
+      const { top, left } = this.#calculatePosition(
+        triggerRect,
+        tooltipRect,
+        placement,
+        spacing,
       );
 
-      // Vertical clamping
-      top = Math.max(
+      const { top: clampedTop, left: clampedLeft } = this.#clampToViewport(
+        top,
+        left,
+        tooltipRect,
         viewportPadding,
-        Math.min(top, viewportHeight - tooltipRect.height - viewportPadding),
       );
 
-      // Apply calculated position (tooltip has fixed positioning from template)
-      this.targetTarget.style.top = `${top}px`;
-      this.targetTarget.style.left = `${left}px`;
+      this.#applyPosition(clampedTop, clampedLeft);
     } catch (error) {
       // Log error but don't break the UI - tooltip will use default positioning
-      console.warn("Tooltip positioning error:", error);
+      console.warn("[Pathogen::Tooltip] Tooltip positioning error:", error);
+
       // Fallback to default top positioning with viewport boundary clamping
       if (this.hasTargetTarget && this.hasTriggerTarget) {
         const triggerRect = this.triggerTarget.getBoundingClientRect();
         const tooltipRect = this.targetTarget.getBoundingClientRect();
-        const spacing = 8; // 0.5rem - matches spacing constant above
-        const viewportPadding = 8; // Minimum distance from viewport edge
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        // Validate tooltip dimensions (prevent division by zero or invalid calculations)
-        if (
-          tooltipRect.width > 0 &&
-          tooltipRect.height > 0 &&
-          triggerRect.width > 0 &&
-          triggerRect.height > 0
-        ) {
-          // Calculate default position (centered above trigger)
-          let top = triggerRect.top - tooltipRect.height - spacing;
-          let left =
-            triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-
-          // Clamp position to viewport bounds (same logic as main positioning)
-          // Horizontal clamping
-          left = Math.max(
-            viewportPadding,
-            Math.min(left, viewportWidth - tooltipRect.width - viewportPadding),
-          );
-
-          // Vertical clamping
-          top = Math.max(
-            viewportPadding,
-            Math.min(
-              top,
-              viewportHeight - tooltipRect.height - viewportPadding,
-            ),
-          );
-
-          // Apply clamped position
-          this.targetTarget.style.top = `${top}px`;
-          this.targetTarget.style.left = `${left}px`;
+        if (this.#isValidRect(triggerRect) && this.#isValidRect(tooltipRect)) {
+          this.#fallbackPosition(triggerRect, tooltipRect);
         }
       }
     }
@@ -337,5 +253,123 @@ export default class extends Controller {
           `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
       );
     }
+  }
+
+  #spacing() {
+    // 0.5rem spacing between trigger and tooltip
+    return 8;
+  }
+
+  #viewportPadding() {
+    // Minimum distance from viewport edge to tooltip
+    return 8;
+  }
+
+  #isValidRect(rect) {
+    return rect && rect.width > 0 && rect.height > 0;
+  }
+
+  #calculatePosition(triggerRect, tooltipRect, placement, spacing) {
+    let top;
+    let left;
+
+    switch (placement) {
+      case "bottom":
+        top = triggerRect.bottom + spacing;
+        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+        break;
+      case "left":
+        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
+        left = triggerRect.left - tooltipRect.width - spacing;
+        break;
+      case "right":
+        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
+        left = triggerRect.right + spacing;
+        break;
+      case "top":
+      default:
+        top = triggerRect.top - tooltipRect.height - spacing;
+        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+        break;
+    }
+
+    return { top, left };
+  }
+
+  #fitsInViewport(
+    triggerRect,
+    tooltipRect,
+    placement,
+    spacing,
+    viewportPadding,
+  ) {
+    const { top, left } = this.#calculatePosition(
+      triggerRect,
+      tooltipRect,
+      placement,
+      spacing,
+    );
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    return (
+      top >= viewportPadding &&
+      left >= viewportPadding &&
+      top + tooltipRect.height <= viewportHeight - viewportPadding &&
+      left + tooltipRect.width <= viewportWidth - viewportPadding
+    );
+  }
+
+  #getOppositePlacement(placement) {
+    const opposites = {
+      top: "bottom",
+      bottom: "top",
+      left: "right",
+      right: "left",
+    };
+    return opposites[placement];
+  }
+
+  #clampToViewport(top, left, tooltipRect, viewportPadding) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    const clampedLeft = Math.max(
+      viewportPadding,
+      Math.min(left, viewportWidth - tooltipRect.width - viewportPadding),
+    );
+
+    const clampedTop = Math.max(
+      viewportPadding,
+      Math.min(top, viewportHeight - tooltipRect.height - viewportPadding),
+    );
+
+    return { top: clampedTop, left: clampedLeft };
+  }
+
+  #applyPosition(top, left) {
+    this.targetTarget.style.top = `${top}px`;
+    this.targetTarget.style.left = `${left}px`;
+  }
+
+  #fallbackPosition(triggerRect, tooltipRect) {
+    const spacing = this.#spacing();
+    const viewportPadding = this.#viewportPadding();
+
+    const { top, left } = this.#calculatePosition(
+      triggerRect,
+      tooltipRect,
+      "top",
+      spacing,
+    );
+
+    const { top: clampedTop, left: clampedLeft } = this.#clampToViewport(
+      top,
+      left,
+      tooltipRect,
+      viewportPadding,
+    );
+
+    this.#applyPosition(clampedTop, clampedLeft);
   }
 }
