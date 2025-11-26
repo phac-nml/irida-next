@@ -47,34 +47,26 @@ module Namespaces
     end
 
     def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
-      add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
-    end
-
-    # transferred_sample_id = sample being transferred
-    # old_namespaces = namespaces sample originally belonged to
-    # new_namespaces = namespaces sample are being transferred to
-    def update_metadata_summary_by_sample_transfer(transferred_sample_id, old_namespaces, new_namespaces)
-      sample = Sample.find(transferred_sample_id)
-      return if sample.metadata.empty?
-
-      subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
-      add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
+      namespaces_to_update = self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+      unless deleted_metadata.empty?
+        Namespace.subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata,
+                                                       true)
+      end
+      Namespace.add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
     def update_metadata_summary_by_sample_deletion(sample)
       return if sample.metadata.empty?
 
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      subtract_from_metadata_summary_count(namespaces_to_update, sample.metadata, true)
+      namespaces_to_update = self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+      Namespace.subtract_from_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
 
     def update_metadata_summary_by_sample_addition(sample)
       return if sample.metadata.empty?
 
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
+      namespaces_to_update = self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+      Namespace.add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
 
     def self.model_prefix

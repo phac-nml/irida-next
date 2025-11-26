@@ -19,8 +19,7 @@ module Projects
           sample.update!(project_id: new_project.id)
           transferred_samples_ids << sample.id
           add_transfer_sample_to_activity_data(sample, transferred_samples_data)
-          update_metadata_summary(sample, @namespace.project, old_namespaces, new_namespaces)
-          # @namespace.update_metadata_summary_by_sample_transfer(sample.id, old_namespaces, new_namespaces)
+          update_metadata_summary(sample, old_namespaces, new_namespaces)
         rescue ActiveRecord::RecordInvalid
           @namespace.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
                                                  sample_name: sample.name, sample_puid: sample.puid))

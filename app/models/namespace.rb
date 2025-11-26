@@ -111,6 +111,87 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def ransackable_associations(_auth_object = nil)
       %w[]
     end
+
+    def subtract_from_metadata_summary_count(namespaces, metadata_summary, by_one)
+      return if metadata_summary.empty?
+
+      update_metadata_summary_counts(namespaces, metadata_summary, by_one: by_one, addition: false)
+    end
+
+    def add_to_metadata_summary_count(namespaces, metadata_summary, by_one)
+      return if metadata_summary.empty?
+
+      update_metadata_summary_counts(namespaces, metadata_summary, by_one: by_one, addition: true)
+    end
+
+    private
+
+    def update_metadata_summary_counts(namespaces, metadata_summary, by_one: false, addition: true)
+      metadata_summary_update_sql = build_metadata_summary_update_sql(metadata_summary,
+                                                                      addition ? Arel::Nodes::Addition : Arel::Nodes::Subtraction,
+                                                                      by_one:)
+
+      jsonb_each_function = Arel::Nodes::NamedFunction.new(
+        'jsonb_each',
+        [Namespace.arel_table[:metadata_summary].concat(metadata_summary_update_sql)]
+      )
+
+      sm = Arel::SelectManager.new(jsonb_each_function.as('entry'))
+      sm.project(
+        Arel::Nodes::SqlLiteral.new("coalesce(jsonb_object_agg(entry.key, entry.value), '{}'::jsonb) as filtered_jsonb")
+      ).where(Arel::Nodes::SqlLiteral.new('entry.value::integer > 0'))
+
+      Namespace.transaction do
+        locked_namespaces = Namespace.where(id: namespaces.pluck(:id)).lock
+        locked_namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(sm)) # rubocop:disable Rails/SkipsModelValidations
+      end
+    end
+
+    def build_metadata_summary_update_sql(metadata_summary, operation = Arel::Nodes::Addition, by_one: false)
+      new_metadata_summary = nil
+      metadata_summary.each do |metadata_field, count|
+        field_metadata_summary = single_field_metadata_summary_jsonb(metadata_field, by_one ? 1 : count, operation)
+
+        new_metadata_summary = if new_metadata_summary.nil?
+                                 field_metadata_summary
+                               else
+                                 Arel::Nodes::InfixOperation.new('||', new_metadata_summary, field_metadata_summary)
+                               end
+      end
+
+      new_metadata_summary
+    end
+
+    def single_field_metadata_summary_jsonb(metadata_field, count, operation) # rubocop:disable Metrics/MethodLength
+      Arel::Nodes::InfixOperation.new(
+        '::',
+        Arel::Nodes::NamedFunction.new(
+          'concat', [
+            Arel::Nodes::Quoted.new('{'),
+            Arel::Nodes::Quoted.new("\"#{metadata_field}\": "),
+            operation.new(
+              Arel::Nodes::NamedFunction.new(
+                'coalesce',
+                [
+                  Arel::Nodes::InfixOperation.new(
+                    '::',
+                    Arel::Nodes::Grouping.new(
+                      Arel::Nodes::InfixOperation.new(
+                        '->>', Namespace.arel_table[:metadata_summary], Arel::Nodes::Quoted.new(metadata_field)
+                      )
+                    ),
+                    Arel::Nodes::SqlLiteral.new('integer')
+                  ),
+                  Arel::Nodes::SqlLiteral.new('0')
+                ]
+              ),
+              count
+            ),
+            Arel::Nodes::Quoted.new('}')
+          ]
+        ), Arel::Nodes::SqlLiteral.new('jsonb')
+      )
+    end
   end
 
   def ancestors
@@ -135,6 +216,13 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
             )
           )
         )
+  end
+
+  def self_and_ancestors_of_type(types)
+    Namespace.joins(:route).where(Arel.sql(format(
+                                             "(select concat(path,'/') from routes where source_id = '%s') like concat(routes.path, '/%%')", id
+                                           )))
+             .where(type: types)
   end
 
   def self_and_ancestor_ids
@@ -186,7 +274,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     user_namespace? || project_namespace?
   end
 
-  def has_parent? # rubocop:disable Naming/PredicateName
+  def has_parent? # rubocop:disable Naming/PredicatePrefix
     parent_id.present? || parent.present?
   end
 
@@ -239,18 +327,18 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if metadata_to_update.empty?
 
     unless old_namespace.nil? || old_namespace.type == Namespaces::UserNamespace.sti_name
-      subtract_from_metadata_summary_count(old_namespace.self_and_ancestors, metadata_to_update, false)
+      Namespace.subtract_from_metadata_summary_count(old_namespace.self_and_ancestors, metadata_to_update, false)
     end
 
     return unless type != Namespaces::UserNamespace.sti_name
 
-    add_to_metadata_summary_count(self_and_ancestors, metadata_to_update, false)
+    Namespace.add_to_metadata_summary_count(self_and_ancestors, metadata_to_update, false)
   end
 
   def update_metadata_summary_by_namespace_deletion
     return if metadata_summary.empty?
 
-    subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
+    Namespace.subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
   end
 
   def self.model_prefix
@@ -270,59 +358,5 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Method to restore namespace routes when the namespace is restored
   def restore_routes
     Route.restore(Route.only_deleted.find_by(source_id: id)&.id, recursive: true)
-  end
-
-  # The add and subtract_from_metadata_summary count functions are used by all update_metadata_summary functions
-  # (update_service, namespace_transfer, namespace_deletion, sample_transfer, sample_deletion)
-  # to update parental namespace metadata_summary attributes.
-  #
-  # When a sample is transferred, deleted, or updated, namespaces are the non-user parental namespaces, metadata is
-  # equal to sample.metadata, and update_by_one is assigned true. Because we are passing actual metadata values
-  # (ie: sample.metadata = {metadatafield1: metadatavalue1}), we assign true to update_by_one and value = 1 when
-  # calling these functions because we will update the samples' parents by a count of 1, regardless of what the actual
-  # metadata value is (ie: sample.metadata above with a value of metadatavalue1 will result in
-  # metadata_summary['metadatafield1'] += 1 for all parental namespaces).
-  #
-  # When namespaces are transferred or deleted, namespaces are the non-user parental namespaces, metadata is equal to
-  # the namespace.metadata_summary, and update_by_one is false. With namespaces, we will pass metadata_summary
-  # (ie: project.namespace.metadata_summary = {metadatafield1: 5, metadatafield2: 10}), and we can iterate over the
-  # summary and utilize the hash values to update all parental namespaces, so setting value = 1 is unnecessary and
-  # we assign false to update_by_one (ie: all parental namespaces will have their metadata_summary updated by
-  # 5 for metadatafield1 and 10 for metadatafield2).
-  #
-  # Subtract will be called for namespace_transfer (original parents), namespace_deletion,
-  # sample_transfer (original parents), sample_deletion, and update_service when metadata is deleted from a sample.
-  def subtract_from_metadata_summary_count(namespaces, metadata, update_by_one)
-    namespaces.each do |namespace|
-      namespace.with_lock do
-        metadata.each do |metadata_field, value|
-          value = 1 if update_by_one
-          if namespace.metadata_summary[metadata_field] == value
-            namespace.metadata_summary.delete(metadata_field)
-          else
-            namespace.metadata_summary[metadata_field] -= value
-          end
-        end
-        namespace.save
-      end
-    end
-  end
-
-  # Add will be called for namespace_transfer (new parents), sample_transfer (new parents),
-  # and update_service when metadata is added to a sample.
-  def add_to_metadata_summary_count(namespaces, metadata, update_by_one)
-    namespaces.each do |namespace|
-      namespace.with_lock do
-        metadata.each do |metadata_field, value|
-          value = 1 if update_by_one
-          if namespace.metadata_summary.key?(metadata_field)
-            namespace.metadata_summary[metadata_field] += value
-          else
-            namespace.metadata_summary[metadata_field] = value
-          end
-        end
-        namespace.save
-      end
-    end
   end
 end

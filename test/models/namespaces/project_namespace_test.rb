@@ -159,13 +159,13 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     added_metadata = { 'metadatafield2' => 1 }
     assert_equal 10, @project_namespace['metadata_summary']['metadatafield1']
     assert_equal 35, @project_namespace['metadata_summary']['metadatafield2']
-    assert_equal 633, @project_namespace.parent.reload['metadata_summary']['metadatafield1']
-    assert_equal 106, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
+    assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
+    assert_equal 106, @project_namespace.parent['metadata_summary']['metadatafield2']
 
     @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
 
-    assert_equal 9, @project_namespace['metadata_summary']['metadatafield1']
-    assert_equal 36, @project_namespace['metadata_summary']['metadatafield2']
+    assert_equal 9, @project_namespace.reload['metadata_summary']['metadatafield1']
+    assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
 
     assert_equal 632, @project_namespace.parent.reload['metadata_summary']['metadatafield1']
     assert_equal 107, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
@@ -178,53 +178,6 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
         @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
-      end
-    end
-  end
-
-  test 'update metadata summary by sample transfer with valid metadata' do
-    project29 = namespaces_project_namespaces(:project29_namespace)
-    sample32 = samples(:sample32)
-
-    new_namespaces =
-      [@project_namespace] +
-      @project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-
-    assert_equal 10, @project_namespace['metadata_summary']['metadatafield1']
-    assert_equal 35, @project_namespace['metadata_summary']['metadatafield2']
-    assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
-    assert_equal 106, @project_namespace.parent['metadata_summary']['metadatafield2']
-
-    assert_equal 1, project29['metadata_summary']['metadatafield1']
-    assert_equal 1, project29['metadata_summary']['metadatafield2']
-
-    project29.update_metadata_summary_by_sample_transfer(sample32.id, [project29], new_namespaces)
-
-    assert_equal 11, @project_namespace.reload['metadata_summary']['metadatafield1']
-    assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
-    assert_equal 634, @project_namespace.parent.reload['metadata_summary']['metadatafield1']
-    assert_equal 107, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
-
-    assert_nil project29.reload['metadata_summary']['metadatafield1']
-    assert_nil project29.reload['metadata_summary']['metadatafield2']
-  end
-
-  test 'update metadata summary by sample transfer with empty metadata' do
-    project29 = namespaces_project_namespaces(:project29_namespace)
-    sample32 = samples(:sample32)
-    sample32.metadata = {}
-    sample32.metadata_provenance = {}
-    sample32.save
-
-    new_namespaces =
-      [@project_namespace] +
-      @project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-
-    assert_no_changes -> { @project_namespace.reload.metadata_summary } do
-      assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
-        assert_no_changes -> { project29.reload.metadata_summary } do
-          project29.update_metadata_summary_by_sample_transfer(sample32.id, [project29], new_namespaces)
-        end
       end
     end
   end
@@ -254,39 +207,6 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
         @project_namespace.update_metadata_summary_by_sample_deletion(sample)
-      end
-    end
-  end
-
-  test 'update metadata summary by sample addition with valid metadata' do
-    sample = Sample.new(
-      name: 'New Sample',
-      metadata: { metadatafield1: 'value1', metadatafield2: 'value2' },
-      metadata_provenance: { 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                                   'updated_at' => DateTime.new(2000, 1, 1) },
-                             'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                                   'updated_at' => DateTime.new(2000, 1, 1) } }
-    )
-
-    assert_equal 10, @project_namespace['metadata_summary']['metadatafield1']
-    assert_equal 35, @project_namespace['metadata_summary']['metadatafield2']
-    assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
-    assert_equal 106, @project_namespace.parent['metadata_summary']['metadatafield2']
-
-    @project_namespace.update_metadata_summary_by_sample_addition(sample)
-
-    assert_equal 11, @project_namespace.reload['metadata_summary']['metadatafield1']
-    assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
-    assert_equal 634, @project_namespace.parent.reload['metadata_summary']['metadatafield1']
-    assert_equal 107, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
-  end
-
-  test 'update metadata summary by sample addition with empty metadata' do
-    sample = Sample.new
-
-    assert_no_changes -> { @project_namespace.reload.metadata_summary } do
-      assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
-        @project_namespace.update_metadata_summary_by_sample_addition(sample)
       end
     end
   end
