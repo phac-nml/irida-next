@@ -12,19 +12,21 @@
     </h1>
 
     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-      Exploring edge cases, long text handling, animations, and advanced
-      tooltip behaviors
+      Exploring edge cases, long text handling, animations, and advanced tooltip
+      behaviors
     </p>
   </div>
+
   <!-- Long Text Handling -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
       "
     >
-      <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %>
-      Long Text & Max-Width Constraint
+      <%= pathogen_icon(:file_text, color: :primary, class: "mr-3") %> Long
+      Text & Max-Width Constraint
     </h2>
 
     <div
@@ -56,6 +58,7 @@
             Short tooltips size to fit their content tightly.
           </p>
         </div>
+
         <!-- Long Text -->
         <div>
           <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
@@ -94,26 +97,26 @@
             </p>
 
             <p class="text-blue-800 dark:text-blue-200">
-              Tooltips use
-              <code>inline-block</code>
-              display to wrap tightly around short content, while
-              <code>max-w-xs</code>
-              ensures long text doesn't create unwieldy wide tooltips.
+              Tooltips use <code>inline-block</code> display to wrap tightly
+              around short content, while <code>max-w-xs</code> ensures long
+              text doesn't create unwieldy wide tooltips.
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <!-- Animation Demonstration -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
       "
     >
-      <%= pathogen_icon(:play, color: :primary, class: "mr-3") %>
-      Smooth Fade-In/Scale Animation
+      <%= pathogen_icon(:play, color: :primary, class: "mr-3") %> Smooth
+      Fade-In/Scale Animation
     </h2>
 
     <div
@@ -137,7 +140,7 @@
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
               <% link.with_tooltip(
-                text: "Watch me fade in and scale from bottom",
+                text: "Fade in and scale from bottom",
                 placement: :top,
               ) %>
 
@@ -147,11 +150,11 @@
           </div>
 
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
-            Scales from
-            <code>origin-bottom</code>
-            (appears to grow from trigger)
+            Scales from <code>origin-bottom</code> (appears to grow from
+            trigger)
           </p>
         </div>
+
         <!-- Bottom Animation -->
         <div>
           <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
@@ -161,7 +164,7 @@
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
               <% link.with_tooltip(
-                text: "Watch me fade in and scale from top",
+                text: "Fade in and scale from top",
                 placement: :bottom,
               ) %>
 
@@ -171,11 +174,10 @@
           </div>
 
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
-            Scales from
-            <code>origin-top</code>
-            (appears to grow from trigger)
+            Scales from <code>origin-top</code> (appears to grow from trigger)
           </p>
         </div>
+
         <!-- Left Animation -->
         <div>
           <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
@@ -185,7 +187,7 @@
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
               <% link.with_tooltip(
-                text: "Watch me fade in and scale from right",
+                text: "Fade in and scale from right",
                 placement: :left,
               ) %>
 
@@ -195,11 +197,11 @@
           </div>
 
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
-            Scales from
-            <code>origin-right</code>
-            (appears to grow from trigger)
+            Scales from <code>origin-right</code> (appears to grow from
+            trigger)
           </p>
         </div>
+
         <!-- Right Animation -->
         <div>
           <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
@@ -209,7 +211,7 @@
           <div class="p-8 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
             <%= render Pathogen::Link.new(href: "#") do |link| %>
               <% link.with_tooltip(
-                text: "Watch me fade in and scale from left",
+                text: "Fade in and scale from left",
                 placement: :right,
               ) %>
 
@@ -219,9 +221,8 @@
           </div>
 
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-3">
-            Scales from
-            <code>origin-left</code>
-            (appears to grow from trigger)
+            Scales from <code>origin-left</code> (appears to grow from
+            trigger)
           </p>
         </div>
       </div>
@@ -241,22 +242,23 @@
             </p>
 
             <p class="text-green-800 dark:text-green-200">
-              The
-              <code>ease-out</code>
-              timing function creates a natural deceleration, while the subtle
-              scale (0.9 to 1.0) combined with opacity fade creates a polished,
-              professional feel inspired by Primer's design system.
+              The <code>ease-out</code> timing function creates a natural
+              deceleration, while the subtle scale (0.9 to 1.0) combined with
+              opacity fade creates a polished, professional feel inspired by
+              Primer's design system.
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <!-- Edge Case: Viewport Boundaries -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
       "
     >
       <%= pathogen_icon(:arrows_out, color: :primary, class: "mr-3") %>
@@ -294,20 +296,25 @@
               positioning algorithm automatically:
             </p>
 
-            <ul class="list-disc list-inside text-purple-800 dark:text-purple-200 space-y-1 ml-2">
+            <ul
+              class="
+                list-disc list-inside text-purple-800 dark:text-purple-200
+                space-y-1 ml-2
+              "
+            >
               <li>
-                <strong>Flips placement</strong>
-                - Switches from top ↔ bottom or left ↔ right when approaching
-                viewport edges
+                <strong>Flips placement</strong> - Switches from top ↔ bottom
+                or left ↔ right when approaching viewport edges
               </li>
+
               <li>
-                <strong>Clamps position</strong>
-                - Keeps tooltips within viewport bounds with 8px padding to
-                prevent overflow
+                <strong>Clamps position</strong> - Keeps tooltips within
+                viewport bounds with 8px padding to prevent overflow
               </li>
+
               <li>
-                <strong>Maintains readability</strong>
-                - Ensures tooltip content remains fully visible and accessible
+                <strong>Maintains readability</strong> - Ensures tooltip
+                content remains fully visible and accessible
               </li>
             </ul>
 
@@ -321,15 +328,17 @@
       </div>
     </div>
   </div>
+
   <!-- Multiple Tooltips -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
       "
     >
-      <%= pathogen_icon(:grid_four, color: :primary, class: "mr-3") %>
-      Multiple Tooltips in Close Proximity
+      <%= pathogen_icon(:grid_four, color: :primary, class: "mr-3") %> Multiple
+      Tooltips in Close Proximity
     </h2>
 
     <div
@@ -345,33 +354,33 @@
 
       <div class="flex flex-wrap gap-3 p-6 bg-slate-50 dark:bg-slate-900 rounded-lg">
         <%= render Pathogen::Link.new(href: "#1") do |link| %>
-          <% link.with_tooltip(text: "First tooltip", placement: :top) %>
-          Link 1
+          <% link.with_tooltip(text: "First tooltip", placement: :top) %> Link
+          1
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#2") do |link| %>
-          <% link.with_tooltip(text: "Second tooltip", placement: :top) %>
-          Link 2
+          <% link.with_tooltip(text: "Second tooltip", placement: :top) %> Link
+          2
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#3") do |link| %>
-          <% link.with_tooltip(text: "Third tooltip", placement: :top) %>
-          Link 3
+          <% link.with_tooltip(text: "Third tooltip", placement: :top) %> Link
+          3
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#4") do |link| %>
-          <% link.with_tooltip(text: "Fourth tooltip", placement: :top) %>
-          Link 4
+          <% link.with_tooltip(text: "Fourth tooltip", placement: :top) %> Link
+          4
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#5") do |link| %>
-          <% link.with_tooltip(text: "Fifth tooltip", placement: :top) %>
-          Link 5
+          <% link.with_tooltip(text: "Fifth tooltip", placement: :top) %> Link
+          5
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#6") do |link| %>
-          <% link.with_tooltip(text: "Sixth tooltip", placement: :top) %>
-          Link 6
+          <% link.with_tooltip(text: "Sixth tooltip", placement: :top) %> Link
+          6
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#7") do |link| %>
@@ -380,21 +389,23 @@
         <% end %>
 
         <%= render Pathogen::Link.new(href: "#8") do |link| %>
-          <% link.with_tooltip(text: "Eighth tooltip", placement: :top) %>
-          Link 8
+          <% link.with_tooltip(text: "Eighth tooltip", placement: :top) %> Link
+          8
         <% end %>
       </div>
     </div>
   </div>
+
   <!-- Technical Details -->
   <div>
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
+        items-center
       "
     >
-      <%= pathogen_icon(:gear, color: :primary, class: "mr-3") %>
-      Technical Implementation
+      <%= pathogen_icon(:gear, color: :primary, class: "mr-3") %> Technical
+      Implementation
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
