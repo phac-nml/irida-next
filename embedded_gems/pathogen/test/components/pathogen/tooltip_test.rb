@@ -127,5 +127,68 @@ module Pathogen
 
       assert_selector 'div.origin-left'
     end
+
+    test 'forwards custom classes via system_arguments' do
+      render_inline(
+        Pathogen::Tooltip.new(
+          text: 'Sample tooltip',
+          id: 'tooltip-123',
+          class: 'custom-tooltip-class'
+        )
+      )
+
+      assert_selector 'div#tooltip-123.custom-tooltip-class'
+      # Should still have base classes
+      assert_selector 'div.bg-slate-900'
+    end
+
+    test 'forwards custom data attributes via system_arguments' do
+      render_inline(
+        Pathogen::Tooltip.new(
+          text: 'Sample tooltip',
+          id: 'tooltip-123',
+          data: {
+            controller: 'custom-controller',
+            action: 'click->custom#action'
+          }
+        )
+      )
+
+      assert_selector 'div[data-controller="custom-controller"]'
+      assert_selector 'div[data-action="click->custom#action"]'
+      # Should still have required data attributes
+      assert_selector 'div[data-pathogen--tooltip-target="target"]'
+      assert_selector 'div[data-placement="top"]'
+    end
+
+    test 'forwards custom ARIA attributes via system_arguments' do
+      render_inline(
+        Pathogen::Tooltip.new(
+          text: 'Sample tooltip',
+          id: 'tooltip-123',
+          aria: {
+            label: 'Additional info',
+            live: 'polite'
+          }
+        )
+      )
+
+      assert_selector 'div[aria-label="Additional info"]'
+      assert_selector 'div[aria-live="polite"]'
+      # Should still have role attribute
+      assert_selector 'div[role="tooltip"]'
+    end
+
+    test 'allows overriding role via system_arguments' do
+      render_inline(
+        Pathogen::Tooltip.new(
+          text: 'Sample tooltip',
+          id: 'tooltip-123',
+          role: 'status'
+        )
+      )
+
+      assert_selector 'div[role="status"]'
+    end
   end
 end
