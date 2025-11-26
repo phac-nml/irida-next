@@ -159,6 +159,16 @@ module Viral
     end
 
     # 🏗️ Build system arguments for the dropdown trigger
+    #
+    # Uses deep_merge to combine base dropdown arguments with custom system_arguments.
+    # This allows composing the dropdown with other Stimulus controllers (e.g., tooltips)
+    # while preserving the dropdown's core functionality.
+    #
+    # Example:
+    #   system_arguments: {
+    #     data: { 'pathogen--tooltip-target': 'trigger' },  # Preserves viral--dropdown-target
+    #     aria: { describedby: 'tooltip-id' }               # Preserves aria-expanded, aria-haspopup
+    #   }
     def build_system_arguments
       data = build_data_attributes
       base_args = {
@@ -172,19 +182,9 @@ module Viral
         'aria-controls': @dd_id
       }
       system_args = @params[:system_arguments] || {}
-      # Deep merge data attributes to preserve both viral--dropdown and other data attributes
-      if system_args[:data].present? && base_args[:data].present?
-        base_args[:data] = base_args[:data].merge(system_args[:data])
-        system_args = system_args.dup
-        system_args.delete(:data)
-      end
-      # Deep merge aria attributes to preserve both existing and new aria attributes
-      if system_args[:aria].present?
-        base_args[:aria] = (base_args[:aria] || {}).merge(system_args[:aria])
-        system_args = system_args.dup
-        system_args.delete(:aria)
-      end
-      base_args.merge(system_args)
+
+      # Deep merge to preserve nested hash attributes (data, aria, etc.)
+      base_args.deep_merge(system_args)
     end
 
     # 🏗️ Build data attributes for the dropdown trigger
