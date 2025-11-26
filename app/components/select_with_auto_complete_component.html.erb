@@ -1,4 +1,7 @@
-<div data-controller="select-with-auto-complete">
+<div
+  data-controller="select-with-auto-complete"
+  data-select-with-auto-complete-no-results-text-value="<%= t(".no_results_text") %>"
+>
   <%= @form.hidden_field @field,
                      value: @selected_option[:value],
                      id: "#{@combobox_id}_hidden",

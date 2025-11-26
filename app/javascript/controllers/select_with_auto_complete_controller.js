@@ -12,6 +12,9 @@ import _ from "lodash";
  */
 export default class SelectWithAutoCompleteController extends Controller {
   static targets = ["combobox", "listbox", "hidden"];
+  static values = {
+    noResultsText: String,
+  };
 
   connect() {
     this.boundOnBackgroundPointerUp = this.#onBackgroundPointerUp.bind(this);
@@ -32,20 +35,10 @@ export default class SelectWithAutoCompleteController extends Controller {
     // Add debounced filter for search input
     this.debouncedFilterAndUpdate = _.debounce(() => {
       const option = this.#filterOptions();
-      if (option) {
-        if (this.#isClosed() && this.comboboxTarget.value.length) {
-          this.#open();
-        }
-        if (
-          this.#getLowercaseContent(option).indexOf(
-            this.comboboxTarget.value.toLowerCase(),
-          ) >= 0
-        ) {
-          this.#setOption(option);
-        } else {
-          this.#setOption(null);
-        }
+      if (this.#isClosed() && this.comboboxTarget.value.length) {
+        this.#open();
       }
+      this.#setOption(option);
     }, 300);
 
     // Add event handlers
@@ -142,6 +135,19 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#setOption(null);
   }
 
+  #renderNoResults() {
+    const noResultsOption = document.createElement("div");
+    noResultsOption.setAttribute("role", "option");
+    noResultsOption.setAttribute("aria-disabled", "true");
+    noResultsOption.className =
+      "px-3 py-2 text-sm text-slate-500 dark:text-slate-300";
+    noResultsOption.textContent =
+      this.hasNoResultsTextValue && this.noResultsTextValue
+        ? this.noResultsTextValue
+        : "No results found";
+    this.listboxTarget.appendChild(noResultsOption);
+  }
+
   // ComboboxAutocomplete events
 
   #escapeRegExp(string) {
@@ -222,6 +228,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.firstOption = null;
       option = null;
       this.lastOption = null;
+      this.#renderNoResults();
     }
 
     return option;
@@ -381,9 +388,8 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #onComboboxKeyUp(event) {
-    let flag = false,
-      option = null,
-      char = event.key;
+    let flag = false;
+    const char = event.key;
 
     if (this.#isPrintableCharacter(char)) {
       this.filter += char;
@@ -396,8 +402,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     switch (event.key) {
       case "Backspace":
         this.filter = this.comboboxTarget.value;
-        this.#filterOptions();
-        this.#setOption(null);
+        this.debouncedFilterAndUpdate();
         flag = true;
         break;
 
