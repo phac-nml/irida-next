@@ -7,8 +7,8 @@ module Nextflow
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
 
-    def initialize(schema:, sample_count:, fields:, namespace_id:, workflow_params:)
-      @sample_count = sample_count
+    def initialize(schema:, samples:, fields:, namespace_id:, workflow_params:)
+      @samples = samples
       @namespace_id = namespace_id
       @metadata_fields = fields
       @required_properties = schema['items']['required'] || []

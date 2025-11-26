@@ -24,13 +24,11 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def samplesheet_samples
-    puts params
-    # puts params[:sample_ids]
-    # puts @samples
-    puts hi
     respond_to do |format|
       format.turbo_stream do
-        render status: :ok
+        render status: :ok, locals: {
+          params: params
+        }
       end
     end
   end

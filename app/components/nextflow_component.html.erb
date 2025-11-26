@@ -1,5 +1,6 @@
 <div
-  data-controller="nextflow--samplesheet"
+  id="nextflow-container"
+  data-controller="nextflow--samplesheet nextflow--samplesheet--params"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
   data-nextflow--samplesheet-submission-error-value="<%= t("components.nextflow_component.submission_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
@@ -10,7 +11,11 @@
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
-  data-nextflow--samplesheet-selection-outlet="#samples-table"
+  data-nextflow--samplesheet--params-selection-outlet="#samples-table"
+  data-nextflow--samplesheet--params-namespace-id-value="<%= namespace_id %>"
+  data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
+  data-nextflow--samplesheet--params-workflow-name-value="<%= @workflow.name %>"
+  data-nextflow--samplesheet--params-workflow-version-value="<%= @workflow.version %>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -109,16 +114,13 @@
                 <% unless @sample_count.nil? %>
                   <%= helpers.turbo_frame_tag "samplesheet" %>
 
-                  <%= render Nextflow::SamplesheetComponent.new(
-                    schema: property[:schema],
-                    sample_count:,
-                    namespace_id:,
-                    fields: metadata_fields,
-                    workflow_params: {
-                      name: @workflow.name,
-                      version: @workflow.version,
-                    },
-                  ) %>
+                  <div
+                    class="hidden"
+                    data-controller="nextflow--samplesheet--params--schema"
+                    data-nextflow--samplesheet--params--schema-nextflow--samplesheet--params-outlet="#nextflow-container"
+                    data-nextflow--samplesheet--params--schema-schema-value="<%= property[:schema].to_json %>"
+                  >
+                  </div>
                 <% end %>
               <% else %>
                 <div>
@@ -232,7 +234,7 @@
       samplesheet_samples_workflow_executions_path(format: :turbo_stream),
     method: :post,
     data: {
-      "nextflow--samplesheet-target": "samplesheetSamplesForm",
+      "nextflow--samplesheet--params-target": "samplesheetParamsForm",
     } %>
   <% end %>
 </div>
