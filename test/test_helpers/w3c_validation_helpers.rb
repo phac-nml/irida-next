@@ -86,6 +86,7 @@ module W3cValidationHelpers
     arerr = @validator.validate_text(content).errors
     arerr = _may_ignore_autocomplete_errors_for_hidden(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -198,11 +199,57 @@ module W3cValidationHelpers
     removeds = []
     errs.map{ |es|
       # Example of an Error:
-      #   ERROR; line 640: Attribute “aria-posinset” not allowed on element “div” at this point.
-      #   ERROR; line 640: Attribute “aria-setsize” not allowed on element “div” at this point.
+      #   ERROR; line 640: Attribute "aria-posinset" not allowed on element "div" at this point.
+      #   ERROR; line 640: Attribute "aria-setsize" not allowed on element "div" at this point.
       if (/\AERROR\b.+\baria-(posinset|setsize)\b.*\bnot\b\s\ballowed\b\s\bon\b\s\belement\b.*\bdiv\b/i =~ es.to_s &&
         /treegrid-row/i =~ es.source
       )
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for importmap with integrity property
+  #
+  # The Import Maps specification supports an "integrity" property for Subresource Integrity (SRI),
+  # but the W3C Nu HTML Checker has not been updated to recognize this yet. The spec allows:
+  #
+  #   {
+  #     "imports": { ... },
+  #     "scopes": { ... },
+  #     "integrity": { ... }
+  #   }
+  #
+  # This routine takes a W3C-validation error object (Array) and
+  # return the same Array where the specific errors are deleted
+  # so that one could still test the other potential errors with the W3C validation.
+  # The said errors are recorded with +logger.warn+ (if +prefix+ is given).
+  #
+  # == References
+  #
+  # * Import Maps Spec: https://github.com/WICG/import-maps
+  # * JSPM Integrity with Import Maps: https://jspm.org/js-integrity-with-import-maps
+  # * Rails importmap-rails: https://github.com/rails/importmap-rails
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_importmap_integrity_error(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 194: A "script" element with a "type" attribute whose value is "importmap" must contain a JSON object with no properties other than "imports" and "scopes".
+      if /\AERROR\b.+\bscript\b.*\belement.+\btype\b.*\bimportmap\b.+\bJSON\b\s\bobject\b.+\bimports\b.*\bscopes\b/i =~ es.to_s
         removeds << es
         nil
       else
