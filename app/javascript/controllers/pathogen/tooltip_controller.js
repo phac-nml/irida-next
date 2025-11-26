@@ -10,7 +10,7 @@ import { Controller } from "@hotwired/stimulus";
  * ## Positioning Strategy
  * - Calculates position based on trigger element's bounding rect
  * - Detects viewport boundaries and flips placement if needed (top ↔ bottom, left ↔ right)
- * - Clamps position to viewport bounds with 8px padding to prevent overflow
+ * - Clamps position to viewport bounds with configurable padding to prevent overflow
  * - Applies position via inline top/left styles on tooltip element (position: fixed)
  *
  * ## Accessibility
@@ -18,10 +18,16 @@ import { Controller } from "@hotwired/stimulus";
  * - Tooltip remains open when cursor is over trigger OR tooltip
  * - Dismisses on Escape key press
  * - Dismisses on focus loss (blur) when triggered by focus
+ * - Dismisses on touch outside (mobile support)
  * - Requires aria-describedby connection from trigger to tooltip
+ * - Validates trigger is keyboard-accessible
+ * - Respects prefers-reduced-motion for animations
+ * - Prevents multiple simultaneous tooltips
  *
  * @example
- * <div data-controller="pathogen--tooltip">
+ * <div data-controller="pathogen--tooltip"
+ *      data-pathogen--tooltip-spacing-value="8"
+ *      data-pathogen--tooltip-viewport-padding-value="8">
  *   <a data-pathogen--tooltip-target="trigger"
  *      aria-describedby="tooltip-id">
  *     Hover or focus me
@@ -33,17 +39,44 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   static targets = ["trigger", "target"];
+  static values = {
+    spacing: { type: Number, default: 8 },
+    viewportPadding: { type: Number, default: 8 },
+    touchDismissDelay: { type: Number, default: 3000 },
+  };
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
+
+    // Store touch dismiss timeout for cleanup
+    this.touchDismissTimeout = null;
+
+    // Check for reduced motion preference
+    this.prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
     // Add Escape key handler for keyboard dismissal
     this.boundHandleEscape = this.handleEscape.bind(this);
     document.addEventListener("keydown", this.boundHandleEscape);
+
+    // Add touch outside handler for mobile dismissal
+    this.boundHandleTouchOutside = this.handleTouchOutside.bind(this);
+    document.addEventListener("touchstart", this.boundHandleTouchOutside);
   }
 
   disconnect() {
     // Clean up Escape key listener
     document.removeEventListener("keydown", this.boundHandleEscape);
+
+    // Clean up touch outside listener
+    document.removeEventListener("touchstart", this.boundHandleTouchOutside);
+
+    // Clean up any pending touch dismiss timeout
+    if (this.touchDismissTimeout) {
+      clearTimeout(this.touchDismissTimeout);
+      this.touchDismissTimeout = null;
+    }
   }
 
   triggerTargetConnected(element) {
@@ -51,19 +84,19 @@ export default class extends Controller {
     // pointing to the tooltip element
     this.#validateAriaDescribedBy(element);
 
+    // Validate trigger is keyboard-accessible
+    this.#validateKeyboardAccessibility(element);
+
     // Add data-action attributes to trigger for Stimulus event handling
     const actions = [
       "mouseenter->pathogen--tooltip#show",
       "mouseleave->pathogen--tooltip#hide",
       "focusin->pathogen--tooltip#show",
       "focusout->pathogen--tooltip#hide",
-    ].join(" ");
+      "touchstart->pathogen--tooltip#handleTouch",
+    ];
 
-    const existingActions = element.getAttribute("data-action") || "";
-    const newActions = existingActions
-      ? `${existingActions} ${actions}`
-      : actions;
-    element.setAttribute("data-action", newActions);
+    this.#addEventActions(element, actions);
   }
 
   targetTargetConnected(element) {
@@ -72,48 +105,67 @@ export default class extends Controller {
     const actions = [
       "mouseenter->pathogen--tooltip#show",
       "mouseleave->pathogen--tooltip#hide",
-    ].join(" ");
+    ];
 
-    const existingActions = element.getAttribute("data-action") || "";
-    const newActions = existingActions
-      ? `${existingActions} ${actions}`
-      : actions;
-    element.setAttribute("data-action", newActions);
+    this.#addEventActions(element, actions);
   }
 
   /**
-   * Shows the tooltip with fade-in and scale animation
+   * Shows the tooltip with fade-in and scale animation.
+   * Respects prefers-reduced-motion and hides other visible tooltips.
    */
   show() {
     if (!this.hasTargetTarget) return;
 
-    // Temporarily make tooltip visible but transparent for accurate measurement
-    // This ensures the browser calculates proper dimensions for inline-block elements
-    this.targetTarget.classList.remove("scale-90", "invisible");
-    this.targetTarget.classList.add("scale-100", "visible");
+    // Hide any other visible tooltips to prevent multiple simultaneous tooltips
+    this.#hideOtherTooltips();
 
-    // Position tooltip using JavaScript (tooltip is visible but transparent)
+    if (this.prefersReducedMotion) {
+      // Skip scale animation for users who prefer reduced motion
+      this.targetTarget.classList.remove("invisible", "opacity-0");
+      this.targetTarget.classList.add("visible", "opacity-100");
+    } else {
+      // Temporarily make tooltip visible but transparent for accurate measurement
+      // This ensures the browser calculates proper dimensions for inline-block elements
+      this.targetTarget.classList.remove("scale-90", "invisible");
+      this.targetTarget.classList.add("scale-100", "visible");
+
+      // Now reveal tooltip with fade-in animation (remove opacity-0)
+      this.targetTarget.classList.remove("opacity-0");
+      this.targetTarget.classList.add("opacity-100");
+    }
+
+    // Position tooltip using JavaScript (tooltip is visible but transparent/animating)
     this.positionTooltip();
-
-    // Now reveal tooltip with fade-in animation (remove opacity-0)
-    this.targetTarget.classList.remove("opacity-0");
-    this.targetTarget.classList.add("opacity-100");
   }
 
   /**
-   * Hides the tooltip with fade-out and scale animation
+   * Hides the tooltip with fade-out and scale animation.
+   * Respects prefers-reduced-motion.
    */
   hide() {
     if (!this.hasTargetTarget) return;
 
-    // Remove visible state classes and add hidden state classes
-    this.targetTarget.classList.remove("opacity-100", "scale-100", "visible");
-    this.targetTarget.classList.add("opacity-0", "scale-90", "invisible");
+    // Clear any pending touch dismiss timeout
+    if (this.touchDismissTimeout) {
+      clearTimeout(this.touchDismissTimeout);
+      this.touchDismissTimeout = null;
+    }
+
+    if (this.prefersReducedMotion) {
+      // Skip scale animation for users who prefer reduced motion
+      this.targetTarget.classList.remove("visible", "opacity-100");
+      this.targetTarget.classList.add("invisible", "opacity-0");
+    } else {
+      // Remove visible state classes and add hidden state classes with animation
+      this.targetTarget.classList.remove("opacity-100", "scale-100", "visible");
+      this.targetTarget.classList.add("opacity-0", "scale-90", "invisible");
+    }
   }
 
   /**
-   * Handles Escape key press to dismiss tooltip
-   * @param {KeyboardEvent} event
+   * Handles Escape key press to dismiss tooltip.
+   * @param {KeyboardEvent} event - The keyboard event
    */
   handleEscape(event) {
     if (event.key === "Escape" && this.hasTargetTarget) {
@@ -132,12 +184,61 @@ export default class extends Controller {
   }
 
   /**
+   * Handles touch events on trigger element for mobile support.
+   * Shows tooltip and sets auto-dismiss timer.
+   * @param {TouchEvent} event - The touch event
+   */
+  handleTouch(event) {
+    // Prevent default to avoid triggering mouse events
+    event.preventDefault();
+
+    // Show tooltip
+    this.show();
+
+    // Set auto-dismiss timeout for better mobile UX
+    if (this.touchDismissTimeout) {
+      clearTimeout(this.touchDismissTimeout);
+    }
+
+    this.touchDismissTimeout = setTimeout(() => {
+      this.hide();
+      this.touchDismissTimeout = null;
+    }, this.touchDismissDelayValue);
+  }
+
+  /**
+   * Handles touch outside tooltip or trigger to dismiss on mobile.
+   * @param {TouchEvent} event - The touch event
+   */
+  handleTouchOutside(event) {
+    if (!this.hasTargetTarget || !this.hasTriggerTarget) return;
+
+    // Check if tooltip is currently visible
+    const isVisible =
+      this.targetTarget.classList.contains("opacity-100") &&
+      this.targetTarget.classList.contains("visible");
+
+    if (!isVisible) return;
+
+    // Check if touch is outside both tooltip and trigger
+    const touchedElement = event.target;
+    const isTouchOutside =
+      !this.targetTarget.contains(touchedElement) &&
+      !this.triggerTarget.contains(touchedElement) &&
+      !this.element.contains(touchedElement);
+
+    if (isTouchOutside) {
+      this.hide();
+    }
+  }
+
+  /**
    * Position tooltip using JavaScript with viewport boundary detection.
    *
    * This method calculates the optimal position for the tooltip based on:
    * 1. Preferred placement (top, bottom, left, right) from data-placement attribute
    * 2. Viewport boundaries - flips placement if tooltip would overflow viewport edge
-   * 3. Position clamping - ensures tooltip stays within viewport with 8px padding
+   * 3. Position clamping - ensures tooltip stays within viewport with configurable padding
    *
    * Uses getBoundingClientRect() for precise element positioning calculations.
    * Applies position via inline top and left styles (tooltip has position: fixed).
@@ -147,8 +248,8 @@ export default class extends Controller {
 
     try {
       const preferredPlacement = this.targetTarget.dataset.placement || "top";
-      const spacing = this.#spacing();
-      const viewportPadding = this.#viewportPadding();
+      const spacing = this.spacingValue;
+      const viewportPadding = this.viewportPaddingValue;
       const triggerRect = this.triggerTarget.getBoundingClientRect();
       const tooltipRect = this.targetTarget.getBoundingClientRect();
 
@@ -216,6 +317,22 @@ export default class extends Controller {
   }
 
   /**
+   * Adds event action attributes to an element.
+   * Merges new actions with existing data-action attribute.
+   * @param {HTMLElement} element - The element to add actions to
+   * @param {string[]} actions - Array of action strings to add
+   * @private
+   */
+  #addEventActions(element, actions) {
+    const actionString = actions.join(" ");
+    const existingActions = element.getAttribute("data-action") || "";
+    const newActions = existingActions
+      ? `${existingActions} ${actionString}`
+      : actionString;
+    element.setAttribute("data-action", newActions);
+  }
+
+  /**
    * Validates that the trigger element has aria-describedby pointing to the tooltip.
    * This enforces W3C ARIA APG tooltip pattern requirement.
    * @param {HTMLElement} triggerElement - The trigger element
@@ -255,20 +372,72 @@ export default class extends Controller {
     }
   }
 
-  #spacing() {
-    // 0.5rem spacing between trigger and tooltip
-    return 8;
+  /**
+   * Validates that the trigger element is keyboard-accessible.
+   * Logs a warning if trigger cannot receive keyboard focus.
+   * @param {HTMLElement} triggerElement - The trigger element
+   * @private
+   */
+  #validateKeyboardAccessibility(triggerElement) {
+    // Check if element is inherently focusable or has tabindex
+    const isFocusable = triggerElement.matches(
+      'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+
+    if (!isFocusable) {
+      console.warn(
+        `[Pathogen::Tooltip] Trigger element should be keyboard-focusable for accessibility. ` +
+          `Consider adding tabindex="0" if needed. ` +
+          `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
+      );
+    }
   }
 
-  #viewportPadding() {
-    // Minimum distance from viewport edge to tooltip
-    return 8;
+  /**
+   * Hides any other visible tooltips to prevent multiple simultaneous tooltips.
+   * @private
+   */
+  #hideOtherTooltips() {
+    // Find all visible tooltips except this one
+    document
+      .querySelectorAll('[data-pathogen--tooltip-target="target"].visible')
+      .forEach((tooltip) => {
+        if (
+          tooltip !== this.targetTarget &&
+          tooltip.classList.contains("visible")
+        ) {
+          // Get the controller for this tooltip and hide it
+          const controller =
+            this.application.getControllerForElementAndIdentifier(
+              tooltip.closest("[data-controller*='pathogen--tooltip']"),
+              "pathogen--tooltip",
+            );
+          if (controller) {
+            controller.hide();
+          }
+        }
+      });
   }
 
+  /**
+   * Validates that a DOMRect has valid dimensions.
+   * @param {DOMRect} rect - The rectangle to validate
+   * @returns {boolean} True if rect has positive width and height
+   * @private
+   */
   #isValidRect(rect) {
     return rect && rect.width > 0 && rect.height > 0;
   }
 
+  /**
+   * Calculates tooltip position based on trigger rect and placement.
+   * @param {DOMRect} triggerRect - The trigger element's bounding rectangle
+   * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
+   * @param {string} placement - Desired placement (top, bottom, left, right)
+   * @param {number} spacing - Space between trigger and tooltip in pixels
+   * @returns {{top: number, left: number}} Calculated top and left positions
+   * @private
+   */
   #calculatePosition(triggerRect, tooltipRect, placement, spacing) {
     let top;
     let left;
@@ -296,6 +465,16 @@ export default class extends Controller {
     return { top, left };
   }
 
+  /**
+   * Checks if tooltip would fit in viewport with given placement.
+   * @param {DOMRect} triggerRect - The trigger element's bounding rectangle
+   * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
+   * @param {string} placement - Desired placement to test
+   * @param {number} spacing - Space between trigger and tooltip in pixels
+   * @param {number} viewportPadding - Minimum padding from viewport edges
+   * @returns {boolean} True if tooltip fits within viewport boundaries
+   * @private
+   */
   #fitsInViewport(
     triggerRect,
     tooltipRect,
@@ -320,6 +499,12 @@ export default class extends Controller {
     );
   }
 
+  /**
+   * Gets the opposite placement for tooltip flipping.
+   * @param {string} placement - Current placement
+   * @returns {string} Opposite placement (top↔bottom, left↔right)
+   * @private
+   */
   #getOppositePlacement(placement) {
     const opposites = {
       top: "bottom",
@@ -330,6 +515,15 @@ export default class extends Controller {
     return opposites[placement];
   }
 
+  /**
+   * Clamps tooltip position to viewport boundaries with padding.
+   * @param {number} top - Calculated top position
+   * @param {number} left - Calculated left position
+   * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
+   * @param {number} viewportPadding - Minimum padding from viewport edges
+   * @returns {{top: number, left: number}} Clamped positions
+   * @private
+   */
   #clampToViewport(top, left, tooltipRect, viewportPadding) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -347,14 +541,27 @@ export default class extends Controller {
     return { top: clampedTop, left: clampedLeft };
   }
 
+  /**
+   * Applies calculated position to tooltip element via inline styles.
+   * @param {number} top - Top position in pixels
+   * @param {number} left - Left position in pixels
+   * @private
+   */
   #applyPosition(top, left) {
     this.targetTarget.style.top = `${top}px`;
     this.targetTarget.style.left = `${left}px`;
   }
 
+  /**
+   * Fallback positioning when normal positioning fails.
+   * Defaults to top placement with viewport clamping.
+   * @param {DOMRect} triggerRect - The trigger element's bounding rectangle
+   * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
+   * @private
+   */
   #fallbackPosition(triggerRect, tooltipRect) {
-    const spacing = this.#spacing();
-    const viewportPadding = this.#viewportPadding();
+    const spacing = this.spacingValue;
+    const viewportPadding = this.viewportPaddingValue;
 
     const { top, left } = this.#calculatePosition(
       triggerRect,
