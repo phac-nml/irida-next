@@ -109,4 +109,25 @@ class TooltipTest < ApplicationSystemTestCase
     # Verify tooltip is visible
     assert_selector "div##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
   end
+
+  test 'touch interaction allows navigation on second tap' do
+    visit '/-/groups/group-1'
+
+    assert_selector 'a[aria-describedby]', match: :first
+
+    touch_results = page.evaluate_script(<<~JS)
+      (function () {
+        var trigger = document.querySelector('a[aria-describedby]');
+        var dispatchTouch = function () {
+          var event = new Event('touchstart', { bubbles: true, cancelable: true });
+          return trigger.dispatchEvent(event);
+        };
+
+        return [dispatchTouch(), dispatchTouch()];
+      })();
+    JS
+
+    # dispatchEvent returns false when preventDefault was called
+    assert_equal [false, true], touch_results
+  end
 end
