@@ -28,62 +28,120 @@
             color: nil,
             class: "rotate-12 text-primary-600 dark:text-primary-400",
           ) %>
+
           <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
             <%= t(:"general.name") %>
           </span>
         </a>
+
         <div class="flex flex-row items-center gap-x-1">
-          <button
-            type="button"
-            data-action="click->layout#collapse"
-            data-layout-target="collapseButton"
-            title="<%= t(:'general.navbar.toggle_sidebar') %>"
-            class="
-              navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-              dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200
-            "
-            aria-label="<%= t(:'general.navbar.toggle_sidebar') %>"
-            aria-controls="sidebar"
-            aria-expanded="true"
-          >
-            <%= pathogen_icon :sidebar %>
-          </button>
+          <% collapse_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-collapse") %>
+
+          <div data-controller="pathogen--tooltip">
+            <button
+              type="button"
+              data-action="click->layout#collapse"
+              data-layout-target="collapseButton"
+              data-pathogen--tooltip-target="trigger"
+              aria-describedby="<%= collapse_tooltip_id %>"
+              class="
+                navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
+                dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
+                dark:hover:text-slate-200
+              "
+              aria-label="<%= t(:'general.navbar.toggle_sidebar') %>"
+              aria-controls="sidebar"
+              aria-expanded="true"
+            >
+              <%= pathogen_icon :sidebar %>
+            </button>
+
+            <%= render Pathogen::Tooltip.new(
+              text: t(:'general.navbar.toggle_sidebar'),
+              id: collapse_tooltip_id,
+              placement: :bottom
+            ) %>
+          </div>
+
           <!-- Add new items -->
-          <%= viral_dropdown(icon: :plus, styles: { button: "
-              navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-              dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200
-            " }, title: t('general.navbar.new_dropdown.label'), aria: { label: t(:'general.navbar.new_dropdown.label') }) do |dropdown| %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.new_dropdown.project"),
-              url: new_project_path,
-            ) %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.new_dropdown.group"),
-              url: new_group_path,
-            ) %>
-          <% end %>
-          <!-- Profile menu -->
-          <%= viral_dropdown(icon: User.icon, styles: { button: "
-              navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-              dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200
-            "}, title: t(:'general.navbar.account_dropdown.label'), aria: { label: t(:'general.navbar.account_dropdown.label') }) do |dropdown| %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.account_dropdown.profile"),
-              url: profile_path,
-            ) %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.account_dropdown.sign_out"),
-              url: destroy_user_session_path,
-              data: {
-                turbo_method: :delete,
+          <% new_dropdown_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-new-dropdown") %>
+
+          <div data-controller="pathogen--tooltip">
+            <%= viral_dropdown(
+              icon: :plus,
+              styles: {
+                button: "
+                  navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
+                  dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
+                  dark:hover:text-slate-200
+                "
               },
+              aria: { label: t(:'general.navbar.new_dropdown.label') },
+              system_arguments: {
+                data: { 'pathogen--tooltip-target': 'trigger' },
+                aria: { describedby: new_dropdown_tooltip_id }
+              }
+            ) do |dropdown| %>
+              <%= dropdown.with_item(
+                label: t(:"general.navbar.new_dropdown.project"),
+                url: new_project_path,
+              ) %>
+
+              <%= dropdown.with_item(
+                label: t(:"general.navbar.new_dropdown.group"),
+                url: new_group_path,
+              ) %>
+            <% end %>
+
+            <%= render Pathogen::Tooltip.new(
+              text: t('general.navbar.new_dropdown.label'),
+              id: new_dropdown_tooltip_id,
+              placement: :bottom
             ) %>
-          <% end %>
+          </div>
+
+          <!-- Profile menu -->
+          <% profile_dropdown_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-profile-dropdown") %>
+
+          <div data-controller="pathogen--tooltip">
+            <%= viral_dropdown(
+              icon: User.icon,
+              styles: {
+                button: "
+                  navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
+                  dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
+                  dark:hover:text-slate-200
+                "
+              },
+              aria: { label: t(:'general.navbar.account_dropdown.label') },
+              system_arguments: {
+                data: { 'pathogen--tooltip-target': 'trigger' },
+                aria: { describedby: profile_dropdown_tooltip_id }
+              }
+            ) do |dropdown| %>
+              <%= dropdown.with_item(
+                label: t(:"general.navbar.account_dropdown.profile"),
+                url: profile_path,
+              ) %>
+
+              <%= dropdown.with_item(
+                label: t(:"general.navbar.account_dropdown.sign_out"),
+                url: destroy_user_session_path,
+                data: {
+                  turbo_method: :delete,
+                },
+              ) %>
+            <% end %>
+
+            <%= render Pathogen::Tooltip.new(
+              text: t(:'general.navbar.account_dropdown.label'),
+              id: profile_dropdown_tooltip_id,
+              placement: :bottom
+            ) %>
+          </div>
         </div>
       </div>
+
       <div
         class="p-2 pt shrink-0"
         data-controller="viral--dropdown"
@@ -102,11 +160,14 @@
             dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
             disabled:dark:text-slate-400 w-full
           "
-          data-viral--dropdown-target='trigger'
+          data-viral--dropdown-target="trigger"
           aria-haspopup="true"
           aria-controls="sidebar-dd-menu"
           aria-expanded="false"
-        ><%= t(:"general.default_sidebar.goto") %></button>
+        >
+          <%= t(:"general.default_sidebar.goto") %>
+        </button>
+
         <ul
           id="sidebar-dd-menu"
           data-viral--dropdown-target="menu"
@@ -125,6 +186,7 @@
             >
               <%= t(:"general.default_sidebar.title") %>
             </div>
+
             <ul
               class="py-2 w-full text-sm text-slate-700 dark:text-slate-200"
               aria-labelledby="sidebar-dd-your-work-group"
@@ -137,26 +199,36 @@
                 class:
                   "px-4 py-2 relative focus-visible:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
               </li>
-              <li role="presentation"><%= link_to t(:"general.default_sidebar.groups"),
+
+              <li role="presentation">
+                <%= link_to t(:"general.default_sidebar.groups"),
                 groups_path,
                 role: "menuitem",
                 class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
-              <li role="presentation"><%= link_to t(:"general.default_sidebar.workflows"),
+                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+              </li>
+
+              <li role="presentation">
+                <%= link_to t(:"general.default_sidebar.workflows"),
                 workflow_executions_path,
                 role: "menuitem",
                 class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
-              <li role="presentation"><%= link_to t(:"general.default_sidebar.data_exports"),
+                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+              </li>
+
+              <li role="presentation">
+                <%= link_to t(:"general.default_sidebar.data_exports"),
                 data_exports_path,
                 role: "menuitem",
                 class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %></li>
+                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+              </li>
             </ul>
           </li>
         </ul>
       </div>
     </header>
+
     <div class="flex-1 flex flex-col sm:overflow-hidden pt-4 grow">
       <%# Render the header slot if it's provided %>
       <turbo-frame id="sidebar-header" class="shrink-0">
@@ -164,13 +236,12 @@
       </turbo-frame>
 
       <%# Main navigation area %>
-      <div
-        class="pt-1 space-y-1 sm:overflow-y-auto flex-1"
-      >
+      <div class="pt-1 space-y-1 sm:overflow-y-auto flex-1">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
         <% end %>
+
         <%# Iterate over items and render them %>
         <% if items.present? %>
           <ul class="space-y-1">
@@ -181,6 +252,7 @@
         <% end %>
       </div>
     </div>
+
     <div class="p-2 border-t border-slate-200 dark:border-slate-800">
       <a
         href="https://phac-nml.github.io/irida-next/docs/intro"
@@ -199,6 +271,7 @@
     </div>
   </div>
 </nav>
+
 <div
   class="
     fixed xl:invisible xl:hidden sidebar-overlay h-screen w-screen backdrop-blur-xs
@@ -207,5 +280,4 @@
   data-layout-target="sidebarOverlay"
   tabindex="0"
   data-action="focus->layout#handleContentFocus"
->
-</div>
+></div>

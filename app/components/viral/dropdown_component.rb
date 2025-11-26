@@ -161,7 +161,7 @@ module Viral
     # 🏗️ Build system arguments for the dropdown trigger
     def build_system_arguments
       data = build_data_attributes
-      {
+      base_args = {
         id: "dd-#{SecureRandom.hex(10)}",
         data: data,
         tag: :button,
@@ -170,7 +170,21 @@ module Viral
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id
-      }.merge(@params[:system_arguments] || {})
+      }
+      system_args = @params[:system_arguments] || {}
+      # Deep merge data attributes to preserve both viral--dropdown and other data attributes
+      if system_args[:data].present? && base_args[:data].present?
+        base_args[:data] = base_args[:data].merge(system_args[:data])
+        system_args = system_args.dup
+        system_args.delete(:data)
+      end
+      # Deep merge aria attributes to preserve both existing and new aria attributes
+      if system_args[:aria].present?
+        base_args[:aria] = (base_args[:aria] || {}).merge(system_args[:aria])
+        system_args = system_args.dup
+        system_args.delete(:aria)
+      end
+      base_args.merge(system_args)
     end
 
     # 🏗️ Build data attributes for the dropdown trigger
