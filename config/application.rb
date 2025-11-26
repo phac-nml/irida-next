@@ -34,6 +34,10 @@ module Irida
       g.skip_routes true
     end
 
+    # Sets the algorithm used for asset integrity hashes (Subresource Integrity, SRI)
+    #  - ensures browsers verify assets via SHA-256 hash
+    config.assets.integrity_hash_algorithm = 'sha256'
+
     # Sweep importmap cache for components
     config.importmap.cache_sweepers << Rails.root.join('app/components')
 
