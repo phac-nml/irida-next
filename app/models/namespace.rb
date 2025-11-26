@@ -35,9 +35,9 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :path, namespace_path: true
 
-  validate :validate_type
-  validate :validate_parent_type
-  validate :validate_nesting_level
+  validate :validate_type, if: -> { new_record? || type_changed? }
+  validate :validate_parent_type, if: -> { new_record? || parent_id_changed? }
+  validate :validate_nesting_level, if: -> { new_record? || parent_id_changed? }
 
   scope :include_route, -> { includes(:route) }
 
@@ -142,7 +142,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       ).where(Arel::Nodes::SqlLiteral.new('entry.value::integer > 0'))
 
       Namespace.transaction do
-        locked_namespaces = Namespace.where(id: namespaces.pluck(:id)).lock
+        locked_namespaces = namespaces.lock('FOR UPDATE')
         locked_namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(sm)) # rubocop:disable Rails/SkipsModelValidations
       end
     end

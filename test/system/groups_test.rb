@@ -587,7 +587,7 @@ class GroupsTest < ApplicationSystemTestCase
       end
 
       subgroup_num = 3
-      8.times do
+      7.times do
         assert_no_text "Subgroup #{subgroup_num}"
         subgroup_num += 1
       end
@@ -598,11 +598,11 @@ class GroupsTest < ApplicationSystemTestCase
     input_field.native.send_keys(:return)
 
     within('div.treegrid-container') do
-      assert_selector 'div.treegrid-row', count: 9
+      assert_selector 'div.treegrid-row', count: 8
       assert_text @subgroup2.name
 
       subgroup_num = 3
-      8.times do
+      7.times do
         assert_text "Subgroup #{subgroup_num}"
         subgroup_num += 1
       end

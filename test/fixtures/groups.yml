@@ -24,7 +24,7 @@ subgroup1:
   puid: INXT_GRP_AAAAAAAAAB
   samples_count: 2
 
-<% (Namespace::MAX_ANCESTORS-1).times do |n| %>
+<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
 subgroup<%= (n+2) %>:
   <<: *DEFAULTS
   name: <%= "Subgroup #{n+2}" %>
