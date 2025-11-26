@@ -690,7 +690,7 @@ a.pill-focus-reset:focus-visible {
 
 /* SelectWithAutoCompleteComponent */
 
-.select-with-autocomplete {
+[data-controller="select-with-auto-complete"] {
   @apply relative text-slate-900 dark:text-white;
 
   input {
