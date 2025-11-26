@@ -111,8 +111,7 @@ module Pathogen
       # Verify link has aria-describedby pointing to tooltip ID
       # This is a W3C ARIA APG requirement enforced at runtime by the Stimulus controller
       assert_selector "a[aria-describedby='#{tooltip_id}']",
-                      text: 'Link text',
-                      message: 'Trigger element must have aria-describedby pointing to tooltip (W3C ARIA APG requirement)'
+                      text: 'Link text'
     end
   end
 end

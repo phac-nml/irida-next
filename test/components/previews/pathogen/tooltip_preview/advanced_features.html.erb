@@ -270,60 +270,14 @@
       "
     >
       <p class="text-slate-600 dark:text-slate-400 mb-6">
-        JavaScript-based positioning with viewport detection automatically
-        adjusts tooltip placement when near viewport edges. Try hovering on
-        links near the edges of this preview window.
+        The tooltip component includes sophisticated viewport boundary detection
+        that automatically adjusts tooltip placement when near the edges of the
+        browser window.
       </p>
 
       <div
         class="
-          relative border-2 border-dashed border-slate-300 dark:border-slate-600
-          rounded-lg p-8 min-h-[400px]
-        "
-      >
-        <!-- Top Edge -->
-        <div class="absolute top-4 left-1/2 -translate-x-1/2">
-          <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "Near top edge - may flip to bottom", placement: :top) %>
-            Top Edge Link
-          <% end %>
-        </div>
-        <!-- Bottom Edge -->
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(
-              text: "Near bottom edge - may flip to top",
-              placement: :bottom,
-            ) %>
-            Bottom Edge Link
-          <% end %>
-        </div>
-        <!-- Left Edge -->
-        <div class="absolute left-4 top-1/2 -translate-y-1/2">
-          <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "Near left edge - may flip to right", placement: :left) %>
-            Left Edge Link
-          <% end %>
-        </div>
-        <!-- Right Edge -->
-        <div class="absolute right-4 top-1/2 -translate-y-1/2">
-          <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "Near right edge - may flip to left", placement: :right) %>
-            Right Edge Link
-          <% end %>
-        </div>
-        <!-- Center -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <%= render Pathogen::Link.new(href: "#") do |link| %>
-            <% link.with_tooltip(text: "Center position - no collision", placement: :top) %>
-            Center Link
-          <% end %>
-        </div>
-      </div>
-
-      <div
-        class="
-          mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200
+          p-6 bg-purple-50 dark:bg-purple-900/20 border border-purple-200
           dark:border-purple-800 rounded-lg
         "
       >
@@ -331,15 +285,36 @@
           <%= pathogen_icon(:info, color: :primary) %>
 
           <div class="text-sm">
-            <p class="font-semibold text-purple-900 dark:text-purple-100 mb-1">
+            <p class="font-semibold text-purple-900 dark:text-purple-100 mb-2">
               Automatic Collision Detection
             </p>
 
-            <p class="text-purple-800 dark:text-purple-200">
+            <p class="text-purple-800 dark:text-purple-200 mb-3">
               When a tooltip would overflow the viewport, the JavaScript
-              positioning algorithm automatically flips placement (top ↔
-              bottom, left ↔ right) and clamps position to keep the tooltip
-              visible and readable.
+              positioning algorithm automatically:
+            </p>
+
+            <ul class="list-disc list-inside text-purple-800 dark:text-purple-200 space-y-1 ml-2">
+              <li>
+                <strong>Flips placement</strong>
+                - Switches from top ↔ bottom or left ↔ right when approaching
+                viewport edges
+              </li>
+              <li>
+                <strong>Clamps position</strong>
+                - Keeps tooltips within viewport bounds with 8px padding to
+                prevent overflow
+              </li>
+              <li>
+                <strong>Maintains readability</strong>
+                - Ensures tooltip content remains fully visible and accessible
+              </li>
+            </ul>
+
+            <p class="text-purple-800 dark:text-purple-200 mt-3 italic">
+              Note: This feature works automatically in the application. Test it
+              by hovering over links near the edges of your browser window while
+              using IRIDA Next.
             </p>
           </div>
         </div>
