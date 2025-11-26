@@ -237,18 +237,16 @@ export default class extends Controller {
       const viewportHeight = window.innerHeight;
 
       // Horizontal clamping
-      if (left < viewportPadding) {
-        left = viewportPadding;
-      } else if (left + tooltipRect.width > viewportWidth - viewportPadding) {
-        left = viewportWidth - tooltipRect.width - viewportPadding;
-      }
+      left = Math.max(
+        viewportPadding,
+        Math.min(left, viewportWidth - tooltipRect.width - viewportPadding),
+      );
 
       // Vertical clamping
-      if (top < viewportPadding) {
-        top = viewportPadding;
-      } else if (top + tooltipRect.height > viewportHeight - viewportPadding) {
-        top = viewportHeight - tooltipRect.height - viewportPadding;
-      }
+      top = Math.max(
+        viewportPadding,
+        Math.min(top, viewportHeight - tooltipRect.height - viewportPadding),
+      );
 
       // Apply calculated position (tooltip has fixed positioning from template)
       this.targetTarget.style.top = `${top}px`;
@@ -279,24 +277,19 @@ export default class extends Controller {
 
           // Clamp position to viewport bounds (same logic as main positioning)
           // Horizontal clamping
-          if (left < viewportPadding) {
-            left = viewportPadding;
-          } else if (
-            left + tooltipRect.width >
-            viewportWidth - viewportPadding
-          ) {
-            left = viewportWidth - tooltipRect.width - viewportPadding;
-          }
+          left = Math.max(
+            viewportPadding,
+            Math.min(left, viewportWidth - tooltipRect.width - viewportPadding),
+          );
 
           // Vertical clamping
-          if (top < viewportPadding) {
-            top = viewportPadding;
-          } else if (
-            top + tooltipRect.height >
-            viewportHeight - viewportPadding
-          ) {
-            top = viewportHeight - tooltipRect.height - viewportPadding;
-          }
+          top = Math.max(
+            viewportPadding,
+            Math.min(
+              top,
+              viewportHeight - tooltipRect.height - viewportPadding,
+            ),
+          );
 
           // Apply clamped position
           this.targetTarget.style.top = `${top}px`;
