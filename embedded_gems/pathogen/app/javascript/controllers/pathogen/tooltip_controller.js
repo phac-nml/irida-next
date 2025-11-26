@@ -50,6 +50,7 @@ export default class extends Controller {
 
     // Store touch dismiss timeout for cleanup
     this.touchDismissTimeout = null;
+    this.touchPrimed = false;
 
     // Check for reduced motion preference
     this.prefersReducedMotion = window.matchMedia(
@@ -180,6 +181,7 @@ export default class extends Controller {
       clearTimeout(this.touchDismissTimeout);
       this.touchDismissTimeout = null;
     }
+    this.touchPrimed = false;
 
     if (this.prefersReducedMotion) {
       // Skip scale animation for users who prefer reduced motion
@@ -218,21 +220,22 @@ export default class extends Controller {
    * @param {TouchEvent} event - The touch event
    */
   handleTouch(event) {
-    // Prevent default to avoid triggering mouse events
-    event.preventDefault();
+    if (!this.hasTargetTarget || !this.hasTriggerTarget) return;
 
-    // Show tooltip
-    this.show();
+    const tooltipVisible = this.#isTooltipVisible();
 
-    // Set auto-dismiss timeout for better mobile UX
-    if (this.touchDismissTimeout) {
-      clearTimeout(this.touchDismissTimeout);
-    }
-
-    this.touchDismissTimeout = setTimeout(() => {
+    if (tooltipVisible && this.touchPrimed) {
+      // Second tap: allow navigation and hide tooltip
+      this.touchPrimed = false;
       this.hide();
-      this.touchDismissTimeout = null;
-    }, this.touchDismissDelayValue);
+      // Do not prevent default so click event can proceed
+    } else {
+      // First tap: show tooltip and prevent navigation
+      this.touchPrimed = true;
+      event.preventDefault();
+      this.show();
+      this.#startTouchDismissTimer();
+    }
   }
 
   /**
@@ -243,9 +246,7 @@ export default class extends Controller {
     if (!this.hasTargetTarget || !this.hasTriggerTarget) return;
 
     // Check if tooltip is currently visible
-    const isVisible =
-      this.targetTarget.classList.contains("opacity-100") &&
-      this.targetTarget.classList.contains("visible");
+    const isVisible = this.#isTooltipVisible();
 
     if (!isVisible) return;
 
@@ -448,6 +449,14 @@ export default class extends Controller {
       });
   }
 
+  #isTooltipVisible() {
+    return (
+      this.hasTargetTarget &&
+      this.targetTarget.classList.contains("opacity-100") &&
+      this.targetTarget.classList.contains("visible")
+    );
+  }
+
   /**
    * Validates that a DOMRect has valid dimensions.
    * @param {DOMRect} rect - The rectangle to validate
@@ -570,6 +579,18 @@ export default class extends Controller {
     );
 
     return { top: clampedTop, left: clampedLeft };
+  }
+
+  #startTouchDismissTimer() {
+    if (this.touchDismissTimeout) {
+      clearTimeout(this.touchDismissTimeout);
+    }
+
+    this.touchDismissTimeout = setTimeout(() => {
+      this.hide();
+      this.touchPrimed = false;
+      this.touchDismissTimeout = null;
+    }, this.touchDismissDelayValue);
   }
 
   /**
