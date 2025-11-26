@@ -47,9 +47,9 @@ module Namespaces
     end
 
     def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
-      add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
+      namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
+      Namespace.subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
+      Namespace.add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
     # transferred_sample_id = sample being transferred
@@ -59,22 +59,22 @@ module Namespaces
       sample = Sample.find(transferred_sample_id)
       return if sample.metadata.empty?
 
-      subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
-      add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
+      Namespace.subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
+      Namespace.add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
     end
 
     def update_metadata_summary_by_sample_deletion(sample)
       return if sample.metadata.empty?
 
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      subtract_from_metadata_summary_count(namespaces_to_update, sample.metadata, true)
+      namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
+      Namespace.subtract_from_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
 
     def update_metadata_summary_by_sample_addition(sample)
       return if sample.metadata.empty?
 
-      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
+      namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
+      Namespace.add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
 
     def self.model_prefix
