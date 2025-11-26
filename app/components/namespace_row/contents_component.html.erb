@@ -1,6 +1,10 @@
 <span class="h-8 mr-2 shrink-0 mt-3 inline-block"><%= avatar_icon %></span>
 
-<div class="flex flex-wrap grow items-center place-content-start gap-2 overflow-hidden">
+<div
+  class="
+    flex flex-wrap grow items-center place-content-start gap-2 overflow-hidden
+  "
+>
   <%= viral_avatar(
     name: @namespace.name,
     size: @icon_size,
@@ -12,7 +16,8 @@
 
   <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name && @namespace.parent %>
-      <span><%= @namespace.parent.full_name %> /</span>
+      <span><%= @namespace.parent.full_name %>
+        /</span>
       <span class="font-semibold">
         <%= highlight(
           @namespace.name,
@@ -46,8 +51,7 @@
 
   <div
     class="
-      ml-auto flex flex-row flex-wrap gap-2 text-slate-500
-      dark:text-slate-400 mr-2
+      ml-auto flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400 mr-2
     "
   >
     <% if @namespace.group_namespace? %>
@@ -59,7 +63,7 @@
               count: @namespace.children.count,
               namespace_name: @namespace.human_name,
             ),
-            placement: :left,
+          placement: :left,
         ) %>
 
         <span class="<%= count_pill_classes(:groups) %>">
@@ -78,7 +82,7 @@
               count: @namespace.project_namespaces.count,
               namespace_name: @namespace.human_name,
             ),
-            placement: :left,
+          placement: :left,
         ) %>
 
         <span class="<%= count_pill_classes(:projects) %>">
@@ -97,7 +101,7 @@
               count: @namespace.aggregated_samples_count,
               namespace_name: @namespace.human_name,
             ),
-            placement: :left,
+          placement: :left,
         ) %>
 
         <span
@@ -122,7 +126,7 @@
               count: @namespace.project.samples.size,
               namespace_name: @namespace.name,
             ),
-            placement: :left,
+          placement: :left,
         ) %>
 
         <span

@@ -3,13 +3,22 @@ import { Controller } from "@hotwired/stimulus";
 /**
  * Pathogen::Tooltip Stimulus Controller
  *
- * Implements custom tooltip show/hide behavior with JavaScript positioning.
- * Supports hover and focus triggers for accessibility.
+ * Implements tooltip positioning using JavaScript for broad browser compatibility.
+ * Calculates optimal position using getBoundingClientRect() with viewport boundary
+ * detection, automatic placement flipping, and position clamping.
  *
+ * ## Positioning Strategy
+ * - Calculates position based on trigger element's bounding rect
+ * - Detects viewport boundaries and flips placement if needed (top ↔ bottom, left ↔ right)
+ * - Clamps position to viewport bounds with 8px padding to prevent overflow
+ * - Applies position via inline top/left styles on tooltip element (position: fixed)
+ *
+ * ## Accessibility
  * Follows W3C ARIA Authoring Practices Guide (APG) tooltip pattern:
  * - Tooltip remains open when cursor is over trigger OR tooltip
  * - Dismisses on Escape key press
  * - Dismisses on focus loss (blur) when triggered by focus
+ * - Requires aria-describedby connection from trigger to tooltip
  *
  * @example
  * <div data-controller="pathogen--tooltip">
@@ -118,7 +127,15 @@ export default class extends Controller {
   }
 
   /**
-   * Position tooltip using JavaScript with viewport boundary detection
+   * Position tooltip using JavaScript with viewport boundary detection.
+   *
+   * This method calculates the optimal position for the tooltip based on:
+   * 1. Preferred placement (top, bottom, left, right) from data-placement attribute
+   * 2. Viewport boundaries - flips placement if tooltip would overflow viewport edge
+   * 3. Position clamping - ensures tooltip stays within viewport with 8px padding
+   *
+   * Uses getBoundingClientRect() for precise element positioning calculations.
+   * Applies position via inline top and left styles (tooltip has position: fixed).
    */
   positionTooltip() {
     if (!this.hasTriggerTarget || !this.hasTargetTarget) return;
@@ -222,12 +239,13 @@ export default class extends Controller {
       // Log error but don't break the UI - tooltip will use default positioning
       console.warn("Tooltip positioning error:", error);
       // Fallback to default top positioning
-      if (this.hasTargetTarget) {
-        const triggerRect = this.triggerTarget?.getBoundingClientRect();
-        if (triggerRect) {
-          this.targetTarget.style.top = `${triggerRect.top - 40}px`;
-          this.targetTarget.style.left = `${triggerRect.left + triggerRect.width / 2}px`;
-        }
+      if (this.hasTargetTarget && this.hasTriggerTarget) {
+        const triggerRect = this.triggerTarget.getBoundingClientRect();
+        const tooltipRect = this.targetTarget.getBoundingClientRect();
+        const spacing = 8; // 0.5rem - matches spacing constant above
+        // Center tooltip above trigger
+        this.targetTarget.style.top = `${triggerRect.top - tooltipRect.height - spacing}px`;
+        this.targetTarget.style.left = `${triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2}px`;
       }
     }
   }
