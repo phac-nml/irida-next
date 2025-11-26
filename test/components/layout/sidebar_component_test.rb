@@ -10,7 +10,6 @@ module Layout
       end
 
       assert_selector("nav#sidebar[aria-label='#{I18n.t('general.default_sidebar.aria_label')}']")
-      assert_selector("button[title=\"#{I18n.t('general.navbar.toggle_sidebar')}\"]")
       assert_selector('.sidebar-overlay', visible: :all)
     end
 
@@ -122,6 +121,108 @@ module Layout
       end
 
       assert_selector('a[aria-label="Help - Opens in new tab"]', text: 'Help')
+    end
+
+    test 'navbar buttons have tooltips instead of title attributes' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      # Collapse button should not have title attribute
+      collapse_label = I18n.t('general.navbar.toggle_sidebar')
+      collapse_button = page.find(
+        "button[aria-label='#{collapse_label}'][data-pathogen--tooltip-target='trigger']"
+      )
+      assert_not collapse_button['title'], 'Collapse button should not have title attribute'
+
+      # Collapse button should have aria-describedby pointing to tooltip
+      tooltip_id = collapse_button['aria-describedby']
+      assert tooltip_id.present?, 'Collapse button should have aria-describedby'
+
+      # Tooltip should exist with correct ID and text
+      assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: collapse_label)
+    end
+
+    test 'new dropdown has tooltip integration' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      # Find the new dropdown trigger button
+      new_label = I18n.t('general.navbar.new_dropdown.label')
+      new_button = page.find(
+        "button[aria-label='#{new_label}'][data-pathogen--tooltip-target='trigger']"
+      )
+
+      # Should have aria-describedby pointing to tooltip
+      tooltip_id = new_button['aria-describedby']
+      assert tooltip_id.present?, 'New dropdown button should have aria-describedby'
+
+      # Tooltip should exist with correct ID and text
+      assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: new_label)
+
+      # Should still have viral--dropdown functionality
+      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+    end
+
+    test 'profile dropdown has tooltip integration' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      # Find the profile dropdown trigger button
+      profile_label = I18n.t('general.navbar.account_dropdown.label')
+      profile_button = page.find(
+        "button[aria-label='#{profile_label}'][data-pathogen--tooltip-target='trigger']"
+      )
+
+      # Should have aria-describedby pointing to tooltip
+      tooltip_id = profile_button['aria-describedby']
+      assert tooltip_id.present?, 'Profile dropdown button should have aria-describedby'
+
+      # Tooltip should exist with correct ID and text
+      assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: profile_label)
+
+      # Should still have viral--dropdown functionality
+      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+    end
+
+    test 'tooltip IDs are unique across navbar buttons' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      # Collect all tooltip IDs from buttons with tooltips
+      buttons = page.all('button[data-pathogen--tooltip-target="trigger"]')
+      # rubocop:disable Rails/Pluck
+      tooltip_ids = buttons.map { |button| button['aria-describedby'] }
+      # rubocop:enable Rails/Pluck
+
+      # All IDs should be present
+      assert tooltip_ids.all?(&:present?), 'All tooltip buttons should have aria-describedby'
+
+      # All IDs should be unique
+      assert_equal tooltip_ids.uniq.length, tooltip_ids.length, 'All tooltip IDs should be unique'
+    end
+
+    test 'dropdown buttons preserve both viral--dropdown and pathogen--tooltip targets' do
+      render_inline(Layout::SidebarComponent.new) do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+
+      # New dropdown should have both targets
+      new_dropdown = page.find("button[aria-label='#{I18n.t('general.navbar.new_dropdown.label')}']")
+      assert new_dropdown['data-viral--dropdown-target'] == 'trigger',
+             'New dropdown should have viral--dropdown-target'
+      assert new_dropdown['data-pathogen--tooltip-target'] == 'trigger',
+             'New dropdown should have pathogen--tooltip-target'
+
+      # Profile dropdown should have both targets
+      profile_dropdown = page.find("button[aria-label='#{I18n.t('general.navbar.account_dropdown.label')}']")
+      assert profile_dropdown['data-viral--dropdown-target'] == 'trigger',
+             'Profile dropdown should have viral--dropdown-target'
+      assert profile_dropdown['data-pathogen--tooltip-target'] == 'trigger',
+             'Profile dropdown should have pathogen--tooltip-target'
     end
   end
 end
