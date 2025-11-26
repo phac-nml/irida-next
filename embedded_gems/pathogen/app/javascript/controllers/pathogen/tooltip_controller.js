@@ -56,6 +56,12 @@ export default class extends Controller {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
+    // Cache viewport dimensions and update on resize for performance
+    this.viewportCache = this.#getViewportDimensions();
+    this.boundHandleResize = this.#handleResize.bind(this);
+    window.addEventListener("resize", this.boundHandleResize);
+    this.resizeRAF = null;
+
     // Add Escape key handler for keyboard dismissal
     this.boundHandleEscape = this.handleEscape.bind(this);
     document.addEventListener("keydown", this.boundHandleEscape);
@@ -71,6 +77,13 @@ export default class extends Controller {
 
     // Clean up touch outside listener
     document.removeEventListener("touchstart", this.boundHandleTouchOutside);
+
+    // Clean up resize listener
+    window.removeEventListener("resize", this.boundHandleResize);
+    if (this.resizeRAF) {
+      cancelAnimationFrame(this.resizeRAF);
+      this.resizeRAF = null;
+    }
 
     // Clean up any pending touch dismiss timeout
     if (this.touchDismissTimeout) {
@@ -112,6 +125,14 @@ export default class extends Controller {
 
   /**
    * Shows the tooltip with fade-in and scale animation.
+   *
+   * IMPORTANT: Animation Timing
+   * - Duration: 200ms (duration-200 CSS class in tooltip.html.erb)
+   * - Easing: ease-out
+   * - Properties: opacity (fade), scale (zoom)
+   * - Tests must wait 200ms + buffer before asserting visible state
+   * - Recommended Capybara wait: `wait: 0.3` (300ms for reliability)
+   *
    * Respects prefers-reduced-motion and hides other visible tooltips.
    */
   show() {
@@ -141,6 +162,14 @@ export default class extends Controller {
 
   /**
    * Hides the tooltip with fade-out and scale animation.
+   *
+   * IMPORTANT: Animation Timing
+   * - Duration: 200ms (duration-200 CSS class in tooltip.html.erb)
+   * - Hidden tooltips remain in DOM with 'invisible' + 'opacity-0' classes
+   * - Tests must wait 200ms + buffer before asserting hidden state
+   * - Use `visible: :all` in Capybara selectors to find hidden tooltips
+   * - Example: `assert_selector 'div[role="tooltip"].invisible', visible: :all, wait: 0.3`
+   *
    * Respects prefers-reduced-motion.
    */
   hide() {
@@ -242,6 +271,7 @@ export default class extends Controller {
    *
    * Uses getBoundingClientRect() for precise element positioning calculations.
    * Applies position via inline top and left styles (tooltip has position: fixed).
+   * Uses cached viewport dimensions for performance (updated on resize).
    */
   positionTooltip() {
     if (!this.hasTriggerTarget || !this.hasTargetTarget) return;
@@ -302,9 +332,6 @@ export default class extends Controller {
 
       this.#applyPosition(clampedTop, clampedLeft);
     } catch (error) {
-      // Log error but don't break the UI - tooltip will use default positioning
-      console.warn("[Pathogen::Tooltip] Tooltip positioning error:", error);
-
       // Fallback to default top positioning with viewport boundary clamping
       if (this.hasTargetTarget && this.hasTriggerTarget) {
         const triggerRect = this.triggerTarget.getBoundingClientRect();
@@ -335,6 +362,7 @@ export default class extends Controller {
   /**
    * Validates that the trigger element has aria-describedby pointing to the tooltip.
    * This enforces W3C ARIA APG tooltip pattern requirement.
+   * Uses standardized console error levels for ARIA violations.
    * @param {HTMLElement} triggerElement - The trigger element
    * @private
    */
@@ -343,8 +371,9 @@ export default class extends Controller {
 
     const tooltipId = this.targetTarget.id;
     if (!tooltipId) {
-      console.warn(
-        "[Pathogen::Tooltip] Tooltip element must have an id attribute for aria-describedby connection.",
+      console.error(
+        "[Pathogen::Tooltip] CRITICAL: Tooltip element must have an id attribute. " +
+          "This violates W3C ARIA APG tooltip pattern requirements.",
       );
       return;
     }
@@ -352,8 +381,8 @@ export default class extends Controller {
     const describedBy = triggerElement.getAttribute("aria-describedby");
     if (!describedBy) {
       console.error(
-        `[Pathogen::Tooltip] Trigger element must have aria-describedby="${tooltipId}" ` +
-          `pointing to the tooltip element (W3C ARIA APG requirement). ` +
+        `[Pathogen::Tooltip] CRITICAL: Trigger element missing aria-describedby="${tooltipId}". ` +
+          `This violates W3C ARIA APG requirements. ` +
           `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
       );
       return;
@@ -365,7 +394,7 @@ export default class extends Controller {
       .filter((id) => id.trim().length > 0);
     if (!describedByIds.includes(tooltipId)) {
       console.error(
-        `[Pathogen::Tooltip] Trigger element's aria-describedby must include the tooltip ID "${tooltipId}". ` +
+        `[Pathogen::Tooltip] CRITICAL: aria-describedby must include tooltip ID "${tooltipId}". ` +
           `Current value: "${describedBy}". ` +
           `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
       );
@@ -374,7 +403,7 @@ export default class extends Controller {
 
   /**
    * Validates that the trigger element is keyboard-accessible.
-   * Logs a warning if trigger cannot receive keyboard focus.
+   * Logs a warning for accessibility best practice violations.
    * @param {HTMLElement} triggerElement - The trigger element
    * @private
    */
@@ -386,8 +415,8 @@ export default class extends Controller {
 
     if (!isFocusable) {
       console.warn(
-        `[Pathogen::Tooltip] Trigger element should be keyboard-focusable for accessibility. ` +
-          `Consider adding tabindex="0" if needed. ` +
+        `[Pathogen::Tooltip] WARNING: Trigger element is not keyboard-focusable. ` +
+          `Consider adding tabindex="0" for better accessibility. ` +
           `Trigger: ${triggerElement.tagName}${triggerElement.id ? `#${triggerElement.id}` : ""}`,
       );
     }
@@ -467,6 +496,7 @@ export default class extends Controller {
 
   /**
    * Checks if tooltip would fit in viewport with given placement.
+   * Uses cached viewport dimensions for performance.
    * @param {DOMRect} triggerRect - The trigger element's bounding rectangle
    * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
    * @param {string} placement - Desired placement to test
@@ -488,8 +518,8 @@ export default class extends Controller {
       placement,
       spacing,
     );
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    // Use cached viewport dimensions instead of window.innerWidth/innerHeight
+    const { width: viewportWidth, height: viewportHeight } = this.viewportCache;
 
     return (
       top >= viewportPadding &&
@@ -517,6 +547,7 @@ export default class extends Controller {
 
   /**
    * Clamps tooltip position to viewport boundaries with padding.
+   * Uses cached viewport dimensions for performance.
    * @param {number} top - Calculated top position
    * @param {number} left - Calculated left position
    * @param {DOMRect} tooltipRect - The tooltip element's bounding rectangle
@@ -525,8 +556,8 @@ export default class extends Controller {
    * @private
    */
   #clampToViewport(top, left, tooltipRect, viewportPadding) {
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    // Use cached viewport dimensions instead of window.innerWidth/innerHeight
+    const { width: viewportWidth, height: viewportHeight } = this.viewportCache;
 
     const clampedLeft = Math.max(
       viewportPadding,
@@ -578,5 +609,43 @@ export default class extends Controller {
     );
 
     this.#applyPosition(clampedTop, clampedLeft);
+  }
+
+  /**
+   * Handles window resize events and updates viewport cache.
+   * Uses requestAnimationFrame for throttling to avoid layout thrashing.
+   * Repositions visible tooltips automatically.
+   * @private
+   */
+  #handleResize() {
+    if (this.resizeRAF) {
+      cancelAnimationFrame(this.resizeRAF);
+    }
+
+    this.resizeRAF = requestAnimationFrame(() => {
+      this.viewportCache = this.#getViewportDimensions();
+
+      // Reposition tooltip if currently visible
+      if (
+        this.hasTargetTarget &&
+        this.targetTarget.classList.contains("visible")
+      ) {
+        this.positionTooltip();
+      }
+
+      this.resizeRAF = null;
+    });
+  }
+
+  /**
+   * Gets current viewport dimensions.
+   * @returns {{width: number, height: number}} Viewport dimensions
+   * @private
+   */
+  #getViewportDimensions() {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
   }
 }
