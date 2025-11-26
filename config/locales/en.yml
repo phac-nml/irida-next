@@ -1706,6 +1706,8 @@ en:
         spinner_message: Transferring samples, this might take a while...
         submit_button: Submit
         title: Transfer Samples
+  select_with_auto_complete_component:
+    no_results_text: No results found
   services:
     attachments:
       concatenation:
