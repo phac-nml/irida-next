@@ -87,12 +87,17 @@ export default class extends Controller {
   show() {
     if (!this.hasTargetTarget) return;
 
-    // Position tooltip using JavaScript
+    // Temporarily make tooltip visible but transparent for accurate measurement
+    // This ensures the browser calculates proper dimensions for inline-block elements
+    this.targetTarget.classList.remove("scale-90", "invisible");
+    this.targetTarget.classList.add("scale-100", "visible");
+
+    // Position tooltip using JavaScript (tooltip is visible but transparent)
     this.positionTooltip();
 
-    // Remove hidden state classes and add visible state classes
-    this.targetTarget.classList.remove("opacity-0", "scale-90", "invisible");
-    this.targetTarget.classList.add("opacity-100", "scale-100", "visible");
+    // Now reveal tooltip with fade-in animation (remove opacity-0)
+    this.targetTarget.classList.remove("opacity-0");
+    this.targetTarget.classList.add("opacity-100");
   }
 
   /**
@@ -146,6 +151,19 @@ export default class extends Controller {
       const tooltipRect = this.targetTarget.getBoundingClientRect();
       const spacing = 8; // 0.5rem
       const viewportPadding = 8; // Minimum distance from viewport edge
+
+      // Validate dimensions to prevent invalid calculations
+      if (
+        !tooltipRect ||
+        !triggerRect ||
+        tooltipRect.width <= 0 ||
+        tooltipRect.height <= 0 ||
+        triggerRect.width <= 0 ||
+        triggerRect.height <= 0
+      ) {
+        // If dimensions are invalid, fall back to error handler logic
+        throw new Error("Invalid tooltip or trigger dimensions");
+      }
 
       // Calculate position for a given placement
       const calculatePosition = (placement) => {
@@ -238,14 +256,52 @@ export default class extends Controller {
     } catch (error) {
       // Log error but don't break the UI - tooltip will use default positioning
       console.warn("Tooltip positioning error:", error);
-      // Fallback to default top positioning
+      // Fallback to default top positioning with viewport boundary clamping
       if (this.hasTargetTarget && this.hasTriggerTarget) {
         const triggerRect = this.triggerTarget.getBoundingClientRect();
         const tooltipRect = this.targetTarget.getBoundingClientRect();
         const spacing = 8; // 0.5rem - matches spacing constant above
-        // Center tooltip above trigger
-        this.targetTarget.style.top = `${triggerRect.top - tooltipRect.height - spacing}px`;
-        this.targetTarget.style.left = `${triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2}px`;
+        const viewportPadding = 8; // Minimum distance from viewport edge
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Validate tooltip dimensions (prevent division by zero or invalid calculations)
+        if (
+          tooltipRect.width > 0 &&
+          tooltipRect.height > 0 &&
+          triggerRect.width > 0 &&
+          triggerRect.height > 0
+        ) {
+          // Calculate default position (centered above trigger)
+          let top = triggerRect.top - tooltipRect.height - spacing;
+          let left =
+            triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+
+          // Clamp position to viewport bounds (same logic as main positioning)
+          // Horizontal clamping
+          if (left < viewportPadding) {
+            left = viewportPadding;
+          } else if (
+            left + tooltipRect.width >
+            viewportWidth - viewportPadding
+          ) {
+            left = viewportWidth - tooltipRect.width - viewportPadding;
+          }
+
+          // Vertical clamping
+          if (top < viewportPadding) {
+            top = viewportPadding;
+          } else if (
+            top + tooltipRect.height >
+            viewportHeight - viewportPadding
+          ) {
+            top = viewportHeight - tooltipRect.height - viewportPadding;
+          }
+
+          // Apply clamped position
+          this.targetTarget.style.top = `${top}px`;
+          this.targetTarget.style.left = `${left}px`;
+        }
       }
     }
   }
