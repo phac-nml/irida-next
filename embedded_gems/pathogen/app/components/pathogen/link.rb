@@ -34,6 +34,10 @@ module Pathogen
     }
 
     def before_render
+      # Ensure tooltip slot is instantiated before rendering so that it can
+      # modify @link_system_arguments with aria-describedby and data attributes
+      tooltip if tooltip?
+
       raise ArgumentError, 'href is required' if @link_system_arguments[:href].blank?
       raise ArgumentError, "invalid href format: #{@link_system_arguments[:href]}" unless validate_href_format!
 
