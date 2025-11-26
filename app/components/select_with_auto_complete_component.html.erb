@@ -1,18 +1,16 @@
 <div data-controller="select-with-auto-complete">
-  <div class="select-with-autocomplete">
-    <%= @form.hidden_field @field,
-                       value: @selected_option[:value],
-                       id: "#{@combobox_id}_hidden",
-                       data: {
-                         "select-with-auto-complete-target": "hidden",
-                       } %>
-    <%= render Viral::BaseComponent.new(**combobox_arguments) %>
-    <div
-      id="<%= @listbox_id %>"
-      role="listbox"
-      data-select-with-auto-complete-target="listbox"
-    >
-      <%= @listbox_options %>
-    </div>
+  <%= @form.hidden_field @field,
+                     value: @selected_option[:value],
+                     id: "#{@combobox_id}_hidden",
+                     data: {
+                       "select-with-auto-complete-target": "hidden",
+                     } %>
+  <%= render Viral::BaseComponent.new(**combobox_arguments) %>
+  <div
+    id="<%= @listbox_id %>"
+    role="listbox"
+    data-select-with-auto-complete-target="listbox"
+  >
+    <%= @listbox_options %>
   </div>
 </div>
