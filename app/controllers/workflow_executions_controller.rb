@@ -7,6 +7,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   include WorkflowExecutionActions
 
   before_action :page_title
+  before_action :samples, only: %i[samplesheet_samples]
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
@@ -19,7 +20,21 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     end
   end
 
+  def samplesheet_samples
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok, locals: {
+          params: params
+        }
+      end
+    end
+  end
+
   private
+
+  def samples
+    @samples = Sample.find_by(id: params[:sample_ids])
+  end
 
   def workflow_execution
     @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: current_user)

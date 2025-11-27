@@ -33,6 +33,7 @@ export default class extends Controller {
     "metadataHeaderForm",
     "filterClearButton",
     "filterSearchButton",
+    "samplesheetSamplesForm",
   ];
 
   static values = {
@@ -46,6 +47,8 @@ export default class extends Controller {
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
   };
+
+  static outlets = ["nextflow--samplesheet--params"];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -102,11 +105,11 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
-    if (this.hasWorkflowAttributesTarget) {
-      this.#setSamplesheetParametersAndData();
-      this.#updateMetadataColumnHeaderNames();
-      this.#disableProcessingState();
-    }
+    // if (this.hasWorkflowAttributesTarget) {
+    //   this.#setSamplesheetParametersAndData();
+    //   this.#updateMetadataColumnHeaderNames();
+    //   this.#disableProcessingState();
+    // }
     this.element.setAttribute("data-controller-connected", "true");
   }
 

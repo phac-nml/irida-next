@@ -4,10 +4,14 @@
     <%= render NextflowComponent.new(
       workflow: @workflow,
       url: workflow_executions_path,
-      samples: @samples,
+      sample_count: @sample_count,
       allowed_to_update_samples: @allowed_to_update_samples,
       namespace_id: @namespace_id,
       fields: @fields,
     ) %>
   <% end %>
+<% end %>
+<%# TODO Add to focus trap %>
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type: :success, data: t(".loading", sample_count: @sample_count)) %>
 <% end %>
