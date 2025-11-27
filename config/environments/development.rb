@@ -99,4 +99,8 @@ Rails.application.configure do
   # the following settings allow us to forward ports securely using vscode remote port forwarding
   config.hosts << /.*\.devtunnels\.ms/
   config.action_controller.forgery_protection_origin_check = false
+
+  # Use EventedFileUpdateChecker to watch files for changes
+  # fixes performance issues with propshaft in development
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
