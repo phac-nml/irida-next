@@ -1707,7 +1707,9 @@ en:
         submit_button: Submit
         title: Transfer Samples
   select_with_auto_complete_component:
+    multiple_results_text: "%{num} results found"
     no_results_text: No results found
+    single_result_text: 1 result found
   services:
     attachments:
       concatenation:

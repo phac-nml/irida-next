@@ -1711,7 +1711,9 @@ fr:
         submit_button: Envoyer
         title: Transférer des échantillons
   select_with_auto_complete_component:
+    multiple_results_text: "%{num} résultats trouvés"
     no_results_text: Aucun résultat trouvé
+    single_result_text: 1 résultat trouvé
   services:
     attachments:
       concatenation:
