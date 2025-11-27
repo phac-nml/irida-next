@@ -14,6 +14,8 @@ export default class SelectWithAutoCompleteController extends Controller {
   static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
   static values = {
     noResultsText: String,
+    singleResultText: String,
+    multipleResultsText: String,
   };
 
   connect() {
@@ -148,9 +150,20 @@ export default class SelectWithAutoCompleteController extends Controller {
         : "No results found";
     noResultsOption.textContent = noResultsMessage;
     this.listboxTarget.appendChild(noResultsOption);
-    // Announce the no results message
+  }
+
+  #announceNumberOfResults() {
+    // Announce the number of results
     if (this.hasAriaLiveUpdateTarget) {
-      this.ariaLiveUpdateTarget.textContent = noResultsMessage;
+      const numItems = this.filteredOptions.length;
+      if (numItems === 0) {
+        this.ariaLiveUpdateTarget.textContent = this.noResultsTextValue;
+      } else if (numItems === 1) {
+        this.ariaLiveUpdateTarget.textContent = this.singleResultTextValue;
+      } else {
+        this.ariaLiveUpdateTarget.textContent =
+          this.multipleResultsTextValue.replace("%{num}", String(numItems));
+      }
     }
   }
 
@@ -236,6 +249,8 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.lastOption = null;
       this.#renderNoResults();
     }
+
+    this.#announceNumberOfResults();
 
     return option;
   }
