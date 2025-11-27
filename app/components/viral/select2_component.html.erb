@@ -1,27 +1,27 @@
 <div data-action="keydown->viral--select2#keydown" class="select2">
-  <input
-    type="text"
-    id="<%= id %>"
-    name="<%= id %>"
-    data-viral--select2-target="input"
-    data-action="input->viral--select2#input"
-    placeholder="<%= placeholder %>"
-    <%= "required" if required %>
-    autocomplete="off"
-    class="
-      select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full
-      p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400
-      dark:text-slate-50
-    "
-    <% if selected_value.present? %>
-    value="<%= selected_value %>"
-    <% end %>
-    <% if aria_describedby.present? %>
-    aria-describedby="<%= aria_describedby %>"
-    <% end %>
-    aria-invalid="<%= aria_invalid %>"
-    aria-required="<%= aria_required %>"
-  >
+  <% input_attrs = {
+    type: "text",
+    id: id,
+    name: id,
+    "data-viral--select2-target": "input",
+    "data-action": "input->viral--select2#input",
+    placeholder: placeholder,
+    autocomplete: "off",
+    class: "select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50",
+    aria: {
+      invalid: aria_invalid,
+      required: aria_required,
+    }
+  } %>
+
+  <% input_attrs[:required] = true if required %>
+  <% input_attrs[:value] = selected_value if selected_value.present? %>
+
+  <% if aria_describedby.present? %>
+    <% input_attrs[:aria][:describedby] = aria_describedby %>
+  <% end %>
+
+  <%= tag.input(**input_attrs) %>
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
   <div
@@ -42,6 +42,7 @@
       <% options.each do |option| %>
         <%= option %>
       <% end %>
+
       <% if empty_state? %>
         <li
           role="option"
