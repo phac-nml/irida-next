@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module Projects
   class WorkflowExecutionsTest < ApplicationSystemTestCase
-    WORKFLOW_EXECUTION_COUNT = 12
+    WORKFLOW_EXECUTION_COUNT = 13
 
     setup do
       @user = users(:john_doe)
@@ -13,6 +13,8 @@ module Projects
       @project = projects(:project1)
       @workflow_execution1 = workflow_executions(:automated_example_completed)
       @workflow_execution2 = workflow_executions(:automated_example_canceled)
+      @workflow_execution3 = workflow_executions(:automated_example_running)
+      @workflow_execution4 = workflow_executions(:automated_example_new)
 
       @id_col = '1'
       @name_col = '2'
@@ -24,12 +26,13 @@ module Projects
 
       Flipper.enable(:delete_multiple_workflows)
       Flipper.enable(:attachments_preview)
+      Flipper.enable(:cancel_multiple_workflows)
     end
 
     test 'should display a list of workflow executions' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -41,10 +44,11 @@ module Projects
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
       workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
       workflow_execution_shared2 = workflow_executions(:workflow_execution_shared2)
+      workflow_execution_shared4 = workflow_executions(:workflow_execution_shared4)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -55,7 +59,7 @@ module Projects
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -64,8 +68,8 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
+        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
 
@@ -104,7 +108,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_selector "tr[id='#{dom_id(workflow_execution1)}']"
       within("tr[id='#{dom_id(workflow_execution1)}'] td:last-child") do
@@ -133,7 +137,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -164,7 +168,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -181,7 +185,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -196,7 +200,7 @@ module Projects
     test 'should delete a completed workflow' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
@@ -243,7 +247,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -266,7 +270,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -283,7 +287,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -306,7 +310,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -323,7 +327,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       tr = find('a', text: workflow_execution.id).ancestor('tr')
@@ -367,7 +371,7 @@ module Projects
     test 'can remove workflow execution from workflow execution page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
@@ -412,7 +416,7 @@ module Projects
         assert_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution1.id
       find('input.t-search-component').native.send_keys(:return)
 
@@ -426,14 +430,14 @@ module Projects
         assert_no_text @workflow_execution2.name
       end
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
-      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
       find('input.t-search-component').native.send_keys(:return)
 
@@ -559,7 +563,7 @@ module Projects
     test 'can successfully delete multiple workflows at once' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -569,7 +573,8 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_button I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -597,7 +602,7 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -608,7 +613,8 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_button I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -629,15 +635,15 @@ module Projects
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', unsuccessful: '1/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', successful: '2/3')
     end
 
     test 'cannot delete non-deletable workflows' do
       new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
@@ -646,7 +652,8 @@ module Projects
         find("input[type='checkbox'][value='#{new_workflow.id}']").click
       end
 
-      click_button I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -667,24 +674,183 @@ module Projects
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
     end
 
-    test 'user with access level >= Maintainer can view delete workflows link' do
+    test 'can successfully cancel multiple workflows at once' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
-      assert_selector 'button', text: I18n.t('workflow_executions.index.delete_workflows_button')
+      within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
+        find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
+      end
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
+                        .gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text ActionController::Base.helpers.strip_tags(
+          I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
+        )
+        within('#list_selections') do
+          assert_text "ID: #{@workflow_execution3.id}"
+          assert_text "ID: #{@workflow_execution4.id}"
+        end
+        click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+      end
+
+      assert_no_selector '#dialog'
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
     end
 
-    test 'user with access level Analyst cannot view delete workflows link' do
-      namespace = namespaces_user_namespaces(:john_doe_namespace)
-      project26 = projects(:project26)
-      login_as users(:user0)
-      visit namespace_project_workflow_executions_path(namespace, project26)
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    test 'can partially cancel multiple workflows at once' do
+      # attempt to cancel cancellable and non-cancellable workflows
+      visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_no_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
+        find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
+      end
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
+                        .gsub! 'COUNT_PLACEHOLDER', '3'
+        assert_text ActionController::Base.helpers.strip_tags(
+          I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
+        )
+        within('#list_selections') do
+          assert_text "ID: #{@workflow_execution1.id}"
+          assert_text "ID: #{@workflow_execution3.id}"
+          assert_text "ID: #{@workflow_execution4.id}"
+        end
+        click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+      end
+
+      assert_no_selector '#dialog'
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '2/3')
+    end
+
+    test 'cannot cancel non-cancellable workflows' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
+      end
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.singular')
+        assert_text ActionController::Base.helpers.strip_tags(
+          I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
+        )
+        within('#list_selections') do
+          assert_text "ID: #{@workflow_execution1.id}"
+        end
+        click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+      end
+
+      assert_no_selector '#dialog'
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
+    end
+
+    test 'user with access level >= Maintainer can view cancel and delete workflows buttons' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      assert_selector 'button',
+                      text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+      assert_selector 'button',
+                      text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+    end
+
+    test 'user with access level Analyst cannot view cancel and delete workflows buttons' do
+      login_as users(:michelle_doe)
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      assert_no_selector 'button',
+                         text: I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+      assert_no_selector 'button',
+                         text: I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+    end
+
+    test 'cannot cancel shared workflow' do
+      shared_workflow = workflow_executions(:workflow_execution_shared4)
+
+      # attempt to cancel cancellable and non-cancellable workflows
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
+        find("input[type='checkbox'][value='#{shared_workflow.id}']").click
+      end
+
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+      click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
+                        .gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text ActionController::Base.helpers.strip_tags(
+          I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
+        )
+        within('#list_selections') do
+          assert_text "ID: #{@workflow_execution3.id}"
+          assert_text "ID: #{shared_workflow.id}"
+        end
+        click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+      end
+
+      assert_no_selector '#dialog'
+
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/2')
+      assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '1/2')
     end
   end
 end

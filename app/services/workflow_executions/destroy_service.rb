@@ -2,13 +2,7 @@
 
 module WorkflowExecutions
   # Service used to delete a WorkflowExecution
-  class DestroyService < BaseService
-    def initialize(user = nil, params = {})
-      super
-      @workflow_execution = params[:workflow_execution] if params[:workflow_execution]
-      @workflow_execution_ids = params[:workflow_execution_ids] if params[:workflow_execution_ids]
-      @namespace = params[:namespace] if params[:namespace]
-    end
+  class DestroyService < BaseWorkflowExecutionService
 
     def execute
       @workflow_execution.nil? ? destroy_multiple : destroy_single
@@ -47,16 +41,6 @@ module WorkflowExecutions
       create_activities(deletable_workflow_data) if deletable_workflow_data.count.positive? && !@namespace.nil?
 
       deletable_workflow_data.count
-    end
-
-    def query_workflow_executions
-      if @namespace
-        authorized_scope(WorkflowExecution, type: :relation, as: :automated,
-                                            scope_options: { project: @namespace.project })
-      else
-        authorized_scope(WorkflowExecution, type: :relation, as: :user,
-                                            scope_options: { user: current_user })
-      end
     end
 
     def create_activities(deleted_workflow_executions_data)
