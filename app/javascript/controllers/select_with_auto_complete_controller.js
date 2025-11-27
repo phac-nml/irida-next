@@ -489,32 +489,26 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Event handlers
 
   #addComboboxEventListeners(combobox) {
-    combobox.addEventListener(
-      "keydown",
-      this.boundOnComboboxKeyDown.bind(this),
-    );
-    combobox.addEventListener("keyup", this.boundOnComboboxKeyUp.bind(this));
-    combobox.addEventListener("click", this.boundOnComboboxClick.bind(this));
-    combobox.addEventListener("focus", this.boundOnComboboxFocus.bind(this));
-    combobox.addEventListener("blur", this.boundOnComboboxBlur.bind(this));
+    combobox.addEventListener("keydown", this.boundOnComboboxKeyDown);
+    combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
+    combobox.addEventListener("click", this.boundOnComboboxClick);
+    combobox.addEventListener("focus", this.boundOnComboboxFocus);
+    combobox.addEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #removeComboboxEventListeners(combobox) {
-    combobox.removeEventListener(
-      "keydown",
-      this.boundOnComboboxKeyDown.bind(this),
-    );
-    combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp.bind(this));
-    combobox.removeEventListener("click", this.boundOnComboboxClick.bind(this));
-    combobox.removeEventListener("focus", this.boundOnComboboxFocus.bind(this));
-    combobox.removeEventListener("blur", this.boundOnComboboxBlur.bind(this));
+    combobox.removeEventListener("keydown", this.boundOnComboboxKeyDown);
+    combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
+    combobox.removeEventListener("click", this.boundOnComboboxClick);
+    combobox.removeEventListener("focus", this.boundOnComboboxFocus);
+    combobox.removeEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #addListboxOptionEventListeners(option) {
-    option.addEventListener("click", this.boundOnOptionClick.bind(this));
+    option.addEventListener("click", this.boundOnOptionClick);
   }
 
   #removeListboxOptionEventListeners(option) {
-    option.removeEventListener("click", this.boundOnOptionClick.bind(this));
+    option.removeEventListener("click", this.boundOnOptionClick);
   }
 }
