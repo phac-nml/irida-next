@@ -54,7 +54,7 @@ class SelectWithAutoCompleteComponent < Component
       listbox_group_option = Nokogiri::XML::Node.new('div', listbox_group)
       listbox_group_option['id'] = listbox_group_option_id
       listbox_group_option['role'] = 'presentation'
-      listbox_group_option.inner_html = group['label']
+      listbox_group_option.content = group['label']
       listbox_group.add_child(listbox_group_option)
       group.children.each do |child|
         listbox_group.add_child(child.dup)
@@ -70,7 +70,7 @@ class SelectWithAutoCompleteComponent < Component
       listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
       listbox_group_option['role'] = 'option'
       listbox_group_option['data-value'] = option['value']
-      listbox_group_option.inner_html = option.text
+      listbox_group_option.content = option.text
       option.replace(listbox_group_option)
     end
     fragment
