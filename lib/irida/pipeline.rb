@@ -3,7 +3,7 @@
 module Irida
   # Class to store pipeline values
   class Pipeline # rubocop:disable Metrics/ClassLength
-    attr_accessor :pipeline_id, :name, :description, :type, :type_version,
+    attr_accessor :pipeline_id, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
                   :default_params, :default_workflow_params
 
@@ -46,6 +46,14 @@ module Irida
       unknown? || !automatable? || !executable?
     end
 
+    def name
+      text_for(@name)
+    end
+
+    def description
+      text_for(@description)
+    end
+
     def workflow_params # rubocop:disable Metrics/AbcSize
       return {} if schema_loc.nil?
 
@@ -59,7 +67,9 @@ module Irida
 
         key = key.to_sym
 
-        workflow_params[key] = { title: definition['title'], description: definition['description'], properties: {} }
+        workflow_params[key] =
+          { title: text_for(definition['title']), description: text_for(definition['description']),
+            properties: {} }
 
         workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
       end
@@ -80,6 +90,16 @@ module Irida
 
     private
 
+    def text_for(value)
+      return '' if value.nil?
+
+      if value.instance_of?(String)
+        value
+      else
+        value[I18n.locale.to_s] || value[I18n.locale]
+      end
+    end
+
     def process_section(key, properties, required)
       processed_section = {}
 
@@ -99,6 +119,8 @@ module Irida
       processed_property[:required] = required
 
       processed_property[:schema] = process_samplesheet_schema if key == :input_output_options && name == :input
+
+      processed_property[:description] = text_for(processed_property[:description])
 
       processed_property
     end
