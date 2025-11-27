@@ -1,6 +1,8 @@
 <div
   data-controller="select-with-auto-complete"
   data-select-with-auto-complete-no-results-text-value="<%= t(".no_results_text") %>"
+  data-select-with-auto-complete-single-result-text-value="<%= t(".single_result_text") %>"
+  data-select-with-auto-complete-multiple-results-text-value="<%= t(".multiple_results_text") %>"
 >
   <%= @form.hidden_field @field,
                      value: @selected_option[:value],
