@@ -467,6 +467,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #onComboboxBlur() {
+    this.filter = this.comboboxTarget.value;
     this.#setOption(null);
   }
 
