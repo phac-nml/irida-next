@@ -4,72 +4,80 @@
   data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
   data-advanced-search-list-filter-outlet=".list-filter"
 >
-  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
-    <% dialog.with_trigger do %>
-      <div class="flex flex-row rounded-lg w-full grow" role="group">
-        <button
-          type="button"
-          class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
-          data-viral--dialog-target="trigger"
-          data-action="advanced-search#renderSearch viral--dialog#open"
-          aria-label="<%= t("components.advanced_search_component.title") %>"
-        >
-          <%= t("components.advanced_search_component.title") %>
-        </button>
-        <% if @status %>
-          <button
-            type="button"
-            class="button button-default rounded-s-none"
-            data-action="advanced-search#clearForm filters#submit"
-            aria-label="<%= t("components.advanced_search_component.clear_aria_label") %>"
-          >
-            <%= pathogen_icon(:x, size: :sm) %>
-          </button>
-        <% end %>
+  <div class="flex flex-row rounded-lg w-full grow" role="group">
+    <button
+      type="button"
+      class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
+      data-action="advanced-search#openDialog"
+      aria-label="<%= t("components.advanced_search_component.title") %>"
+    >
+      <%= t("components.advanced_search_component.title") %>
+    </button>
+    <% if @status %>
+      <button
+        type="button"
+        class="button button-default rounded-s-none"
+        data-action="advanced-search#clearForm filters#submit"
+        aria-label="<%= t("components.advanced_search_component.clear_aria_label") %>"
+      >
+        <%= render Pathogen::Icon.new(:x_mark, size: :sm, library: :heroicons) %>
+      </button>
+    <% end %>
+  </div>
+
+  <%= pathogen_dialog(id: 'advanced-search-dialog', size: :large, dismissible: true) do |dialog| %>
+    <% dialog.with_header do %>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">
+        <%= t("components.advanced_search_component.title") %>
+      </h2>
+    <% end %>
+
+    <% dialog.with_body do %>
+      <div class="space-y-4">
+        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t("components.advanced_search_component.description") %>
+        </p>
+        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t("components.advanced_search_component.rules") %>
+        </p>
+
+        <div class="mb-4">
+          <%= render partial: "shared/form/required_field_legend" %>
+        </div>
+
+        <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
+            <%= t("components.advanced_search_component.add_group_button") %>
+          <% end %>
+        </div>
+        <template data-advanced-search-target="searchGroupsTemplate">
+          <% @search.groups.each_with_index do |group, group_index| %>
+            <%= render AdvancedSearch::Group.new(
+              form: @form,
+              group: group,
+              group_index: group_index,
+              group_number: group_index + 1,
+              show_remove_group_button: @search.groups.count > 1,
+              sample_fields: @sample_fields,
+              metadata_fields: @metadata_fields,
+              operations: @operations,
+            ) %>
+          <% end %>
+        </template>
       </div>
     <% end %>
-    <% dialog.with_header(title: t("components.advanced_search_component.title")) %>
-    <div class="space-y-4">
-      <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-        <%= t("components.advanced_search_component.description") %>
-      </p>
-      <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-        <%= t("components.advanced_search_component.rules") %>
-      </p>
 
-      <div class="mb-4">
-        <%= render partial: "shared/form/required_field_legend" %>
-      </div>
-
-      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
-      </div>
+    <% dialog.with_footer do %>
       <div class="flex justify-end space-x-2">
-        <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
-          <%= t("components.advanced_search_component.add_group_button") %>
+        <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+          <%= t("components.advanced_search_component.clear_filter_button") %>
+        <% end %>
+        <%= viral_button(state: :primary, data: { action: "filters#submit" }) do %>
+          <%= t("components.advanced_search_component.apply_filter_button") %>
         <% end %>
       </div>
-      <template data-advanced-search-target="searchGroupsTemplate">
-        <% @search.groups.each_with_index do |group, group_index| %>
-          <%= render AdvancedSearch::Group.new(
-            form: @form,
-            group: group,
-            group_index: group_index,
-            group_number: group_index + 1,
-            show_remove_group_button: @search.groups.count > 1,
-            sample_fields: @sample_fields,
-            metadata_fields: @metadata_fields,
-            operations: @operations,
-          ) %>
-        <% end %>
-      </template>
-    </div>
-    <% dialog.with_primary_action("data-action": "filters#submit") do
-      t("components.advanced_search_component.apply_filter_button")
-    end %>
-    <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
-        <%= t("components.advanced_search_component.clear_filter_button") %>
-      <% end %>
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">

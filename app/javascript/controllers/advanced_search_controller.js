@@ -25,6 +25,23 @@ export default class extends Controller {
     }
   }
 
+  openDialog(event) {
+    // Render the search content
+    this.renderSearch();
+
+    // Find the dialog controller and open it
+    const dialogElement = this.element.querySelector('[data-controller*="pathogen--dialog"]');
+    if (dialogElement) {
+      const dialogController = this.application.getControllerForElementAndIdentifier(
+        dialogElement,
+        "pathogen--dialog"
+      );
+      if (dialogController) {
+        dialogController.open(event);
+      }
+    }
+  }
+
   renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
