@@ -11,7 +11,7 @@ import _ from "lodash";
  * - Dropdown positioning and focus management
  */
 export default class SelectWithAutoCompleteController extends Controller {
-  static targets = ["combobox", "listbox", "hidden"];
+  static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
   static values = {
     noResultsText: String,
   };
@@ -139,13 +139,19 @@ export default class SelectWithAutoCompleteController extends Controller {
     const noResultsOption = document.createElement("div");
     noResultsOption.setAttribute("role", "option");
     noResultsOption.setAttribute("aria-disabled", "true");
+    noResultsOption.setAttribute("aria-selected", "false");
     noResultsOption.className =
       "px-3 py-2 text-sm text-slate-500 dark:text-slate-300";
-    noResultsOption.textContent =
+    const noResultsMessage =
       this.hasNoResultsTextValue && this.noResultsTextValue
         ? this.noResultsTextValue
         : "No results found";
+    noResultsOption.textContent = noResultsMessage;
     this.listboxTarget.appendChild(noResultsOption);
+    // Announce the no results message
+    if (this.hasAriaLiveUpdateTarget) {
+      this.ariaLiveUpdateTarget.textContent = noResultsMessage;
+    }
   }
 
   // ComboboxAutocomplete events
