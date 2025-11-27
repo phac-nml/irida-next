@@ -54,11 +54,10 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.#attachOptionEvents(this.listboxTarget, true);
     const categories = this.listboxTarget.querySelectorAll('[role="group"]');
-    for (let i = 0; i < categories.length; i++) {
-      const category = categories[i];
+    categories.forEach((category) => {
       this.allOptions.push(category);
       this.#attachOptionEvents(category);
-    }
+    });
   }
 
   disconnect() {
@@ -73,29 +72,26 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.#removeOptionEvents(this.listboxTarget);
     const categories = this.listboxTarget.querySelectorAll('[role="group"]');
-    for (let i = 0; i < categories.length; i++) {
-      const category = categories[i];
+    categories.forEach((category) => {
       this.#removeOptionEvents(category);
-    }
+    });
   }
 
   #attachOptionEvents(category, add = false) {
     const categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    for (let i = 0; i < categoryItems.length; i++) {
-      const categoryItem = categoryItems[i];
+    categoryItems.forEach((categoryItem) => {
       if (add) {
         this.allOptions.push(categoryItem);
       }
       this.#addListboxOptionEventListeners(categoryItem);
-    }
+    });
   }
 
   #removeOptionEvents(category) {
     const categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    for (let i = 0; i < categoryItems.length; i++) {
-      const categoryItem = categoryItems[i];
+    categoryItems.forEach((categoryItem) => {
       this.#removeListboxOptionEventListeners(categoryItem);
-    }
+    });
   }
 
   #getLowercaseContent(node) {
@@ -169,10 +165,6 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   // ComboboxAutocomplete events
 
-  #escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
   #filterOptions() {
     let option = null;
     const currentOption = this.option;
@@ -181,56 +173,39 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.filteredOptions = [];
     this.listboxTarget.innerHTML = "";
 
-    for (let i = 0; i < this.allOptions.length; i++) {
+    this.allOptions.forEach((allOption) => {
       let flag = false;
-      const optionCategory = this.allOptions[i].cloneNode(true);
+      const category = allOption.cloneNode(true);
 
-      if (optionCategory.role === "group") {
-        const options = optionCategory.querySelectorAll('[role="option"]');
-        for (let j = 0; j < options.length; j++) {
-          option = options[j];
-          this.#addListboxOptionEventListeners(option);
+      if (category.role === "group") {
+        const categoryOptions = category.querySelectorAll('[role="option"]');
+        categoryOptions.forEach((categoryOption) => {
+          this.#addListboxOptionEventListeners(categoryOption);
           if (
             filter.length === 0 ||
-            this.#getLowercaseContent(option).indexOf(filter) >= 0
+            this.#getLowercaseContent(categoryOption).indexOf(filter) >= 0
           ) {
             flag = true;
-            const regex = new RegExp(
-              `(${this.#escapeRegExp(this.filter)})`,
-              "gi",
-            );
-            option.innerHTML = option.textContent.replace(
-              regex,
-              "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
-            );
-            this.filteredOptions.push(option);
+            this.filteredOptions.push(this.#highlightOption(categoryOption));
           } else {
-            optionCategory.removeChild(option);
+            category.removeChild(categoryOption);
           }
-        }
+        });
       } else {
-        this.#addListboxOptionEventListeners(optionCategory);
+        this.#addListboxOptionEventListeners(category);
         if (
           filter.length === 0 ||
-          this.#getLowercaseContent(optionCategory).indexOf(filter) >= 0
+          this.#getLowercaseContent(category).indexOf(filter) >= 0
         ) {
           flag = true;
-          const regex = new RegExp(
-            `(${this.#escapeRegExp(this.filter)})`,
-            "gi",
-          );
-          optionCategory.innerHTML = optionCategory.textContent.replace(
-            regex,
-            "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
-          );
-          this.filteredOptions.push(optionCategory);
+          this.filteredOptions.push(this.#highlightOption(category));
         }
       }
 
       if (flag) {
-        this.listboxTarget.appendChild(optionCategory);
+        this.listboxTarget.appendChild(category);
       }
-    }
+    });
 
     // Populate firstOption and lastOption
     const numItems = this.filteredOptions.length;
@@ -255,13 +230,24 @@ export default class SelectWithAutoCompleteController extends Controller {
     return option;
   }
 
+  #escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  #highlightOption(option) {
+    const regex = new RegExp(`(${this.#escapeRegExp(this.filter)})`, "gi");
+    option.innerHTML = option.textContent.replace(
+      regex,
+      "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
+    );
+    return option;
+  }
+
   #setOption(option) {
     this.option = option;
     this.#setActiveDescendant(option);
 
-    for (let i = 0; i < this.filteredOptions.length; i++) {
-      const opt = this.filteredOptions[i];
-
+    this.filteredOptions.forEach((opt) => {
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
         if (!this.#isOptionInView(option)) {
@@ -270,7 +256,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       } else {
         opt.removeAttribute("aria-selected");
       }
-    }
+    });
   }
 
   #getPreviousOption(currentOption) {
