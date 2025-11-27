@@ -1707,6 +1707,7 @@ en:
         submit_button: Submit
         title: Transfer Samples
   select_with_auto_complete_component:
+    list_aria_label: Field list
     no_results_text: No results found
   services:
     attachments:

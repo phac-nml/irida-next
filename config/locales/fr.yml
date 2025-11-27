@@ -1711,6 +1711,7 @@ fr:
         submit_button: Envoyer
         title: Transférer des échantillons
   select_with_auto_complete_component:
+    list_aria_label: Liste des champs
     no_results_text: Aucun résultat trouvé
   services:
     attachments:
