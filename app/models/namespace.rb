@@ -297,7 +297,20 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       namespace.with_lock do
         metadata.each do |metadata_field, value|
           value = 1 if update_by_one
-          if namespace.metadata_summary[metadata_field] == value
+
+          # Defensive: Check if field exists before subtraction
+          unless namespace.metadata_summary.key?(metadata_field)
+            Rails.logger.warn(
+              "Attempted to subtract from missing metadata_summary field '#{metadata_field}' " \
+              "in namespace #{namespace.id} (#{namespace.name}). This may indicate a data inconsistency."
+            )
+            next
+          end
+
+          current_count = namespace.metadata_summary[metadata_field]
+
+          # If subtracting would result in zero or negative, delete the field
+          if current_count <= value
             namespace.metadata_summary.delete(metadata_field)
           else
             namespace.metadata_summary[metadata_field] -= value
