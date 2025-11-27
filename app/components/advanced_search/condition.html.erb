@@ -41,9 +41,11 @@
           form: conditions_form,
           field: :field,
           options: options,
-          "aria-label": t("activemodel.attributes.sample/search_condition.field"),
-          "aria-invalid": invalid_field,
-          "aria-describedby": conditions_form.field_id(:field, "error"),
+          aria: {
+            label: t("activemodel.attributes.sample/search_condition.field"),
+            invalid: invalid_field,
+            describedby: conditions_form.field_id(:field, "error"),
+          },
           autofocus: invalid_field,
         ) %>
       <% end %>
