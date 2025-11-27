@@ -126,24 +126,32 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     private
 
-    def update_metadata_summary_counts(namespaces, metadata_summary, by_one: false, addition: true)
+    def update_metadata_summary_counts(namespaces, metadata_summary, by_one: false, addition: true) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       metadata_summary_update_sql = build_metadata_summary_update_sql(metadata_summary,
                                                                       addition ? Arel::Nodes::Addition : Arel::Nodes::Subtraction,
                                                                       by_one:)
 
-      jsonb_each_function = Arel::Nodes::NamedFunction.new(
-        'jsonb_each',
-        [Namespace.arel_table[:metadata_summary].concat(metadata_summary_update_sql)]
+      entry_table = Arel::Table.new(
+        Arel::Nodes::NamedFunction.new(
+          'jsonb_each',
+          [Namespace.arel_table[:metadata_summary].concat(metadata_summary_update_sql)]
+        ),
+        as: 'entry'
       )
 
-      sm = Arel::SelectManager.new(jsonb_each_function.as('entry'))
-      sm.project(
-        Arel::Nodes::SqlLiteral.new("coalesce(jsonb_object_agg(entry.key, entry.value), '{}'::jsonb) as filtered_jsonb")
-      ).where(Arel::Nodes::SqlLiteral.new('entry.value::integer > 0'))
+      updated_metadata_summary = entry_table.project(
+        Arel::Nodes::NamedFunction.new(
+          'coalesce',
+          [
+            Arel::Nodes::NamedFunction.new('jsonb_object_agg', [entry_table[:key], entry_table[:value]]),
+            Arel::Nodes::InfixOperation.new('::', Arel::Nodes::Quoted.new('{}'), Arel::Nodes::SqlLiteral.new('jsonb'))
+          ]
+        )
+      ).where(Arel::Nodes::InfixOperation.new('::', entry_table[:value], Arel::Nodes::SqlLiteral.new('integer')).gt(0))
 
       Namespace.transaction do
         locked_namespaces = namespaces.lock('FOR UPDATE')
-        locked_namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(sm)) # rubocop:disable Rails/SkipsModelValidations
+        locked_namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(updated_metadata_summary)) # rubocop:disable Rails/SkipsModelValidations
       end
     end
 
