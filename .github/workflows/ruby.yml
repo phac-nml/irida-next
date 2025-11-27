@@ -29,7 +29,7 @@ jobs:
           --health-retries 5
 
       validator:
-        image: ghcr.io/validator/validator:4385ac10743b1ccc4920f1458f3fc0f05785553bf312169c0ea4cb54b0fd103d
+        image: ghcr.io/validator/validator:24.10.17
         env:
           VALIDATOR_HOST: validator
         ports:
