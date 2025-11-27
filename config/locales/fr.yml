@@ -10,6 +10,14 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Groupe
+      workflow_execution/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:
@@ -20,6 +28,16 @@ fr:
               not_a_date_operator: ne peut pas être utilisé sur les dates
             value:
               not_a_date: doit être formaté AAAA-MM-JJ
+        workflow_execution/search_condition:
+          attributes:
+            field:
+              not_allowed: n'est pas autorisé
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+              taken: a déjà été pris
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
+              not_a_number: n'est pas un nombre
   activerecord:
     attributes:
       attachment:
@@ -932,12 +950,13 @@ fr:
       success: Le groupe %{group_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
-        name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+        description: Vous modifiez l'exécution du flux de travail '%{workflow_execution_id}'
+        name_placeholder: Entrez le nom d'exécution du flux de travail (facultatif)
         submit_button: Envoyer
-        title: Modifier l’exécution du flux de travail
+        title: Modifier l'exécution du flux de travail
       index:
         create_export_button: Créer une exportation
+        loading: Chargement des résultats de recherche...
         search:
           placeholder: Rechercher par nom ou ID
         subtitle: Ce sont les exécutions du flux de travail qui ont été partagées au sein de ce groupe.
@@ -1610,16 +1629,17 @@ fr:
       success: Le projet %{project_name} a été mis à jour avec succès
     workflow_executions:
       edit_dialog:
-        description: Vous modifiez l’exécution automatisée du flux de travail '%{workflow_execution_id}'
-        name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+        description: Vous modifiez l'exécution automatisée du flux de travail '%{workflow_execution_id}'
+        name_placeholder: Entrez le nom d'exécution du flux de travail (facultatif)
         submit_button: Envoyer
-        title: Modifier l’exécution automatisée du flux de travail
+        title: Modifier l'exécution automatisée du flux de travail
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Supprimer les exécutions de flux de travail
+        loading: Chargement des résultats de recherche...
         search:
           placeholder: Rechercher par ID ou nom
-        subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
+        subtitle: Il s'agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l'un de ses membres.
         title: Exécutions de flux de travail
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
@@ -2020,6 +2040,7 @@ fr:
     index:
       create_export_button: Créer une exportation
       delete_workflows_button: Supprimer les exécutions de flux de travail
+      loading: Chargement des résultats de recherche...
       search:
         placeholder: Rechercher par ID ou nom
       title: Exécutions de flux de travail
@@ -2075,7 +2096,8 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
-      run_id: Exécuter l’identifiant
+      name: Nom
+      run_id: Exécuter l'identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles
       state: État
       updated_at: Dernière mise à jour

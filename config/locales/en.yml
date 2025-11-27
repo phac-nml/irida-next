@@ -10,6 +10,14 @@ en:
         value: Value
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Group
+      workflow_execution/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:
@@ -20,6 +28,16 @@ en:
               not_a_date_operator: cannot be used on dates
             value:
               not_a_date: must be formatted YYYY-MM-DD
+        workflow_execution/search_condition:
+          attributes:
+            field:
+              not_allowed: is not allowed
+            operator:
+              not_a_date_operator: cannot be used on dates
+              taken: has already been taken
+            value:
+              not_a_date: must be formatted YYYY-MM-DD
+              not_a_number: is not a number
   activerecord:
     attributes:
       attachment:
@@ -936,6 +954,7 @@ en:
         title: Edit workflow execution
       index:
         create_export_button: Create Export
+        loading: Loading search results...
         search:
           placeholder: Search by name or ID
         subtitle: These are the workflow executions that have been shared within this group
@@ -1613,6 +1632,7 @@ en:
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
+        loading: Loading search results...
         search:
           placeholder: Search by ID or name
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
@@ -2016,6 +2036,7 @@ en:
     index:
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
+      loading: Loading search results...
       search:
         placeholder: Search by ID or name
       title: Workflow Executions
@@ -2071,6 +2092,7 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
+      name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions
       state: State
