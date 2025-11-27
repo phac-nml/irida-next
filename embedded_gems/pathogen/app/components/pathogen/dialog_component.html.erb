@@ -1,0 +1,79 @@
+<%= tag.div class: class_names("fixed inset-0 z-50 flex items-center justify-center", { "hidden" => !initially_open }),
+            data: wrapper_data_attributes.merge({ pathogen__dialog_target: "backdrop" }) do %>
+  <%# Backdrop overlay %>
+  <%= tag.div class: "fixed inset-0 bg-black/50 dark:bg-black/70 transition-opacity",
+              data: { action: dismissible ? "click->pathogen--dialog#closeOnBackdrop" : nil } %>
+
+  <%# Dialog container %>
+  <%= tag.div **@system_arguments,
+              id: id,
+              role: "dialog",
+              aria: { modal: true, labelledby: "#{id}-title" },
+              class: class_names(
+                "relative z-10 flex flex-col",
+                "bg-white dark:bg-slate-800",
+                "rounded-lg shadow-xl",
+                "w-full",
+                size_class,
+                "h-auto max-h-[90vh]",
+                "overflow-hidden",
+                "transform transition-all",
+                { "hidden" => !initially_open },
+                @system_arguments[:class]
+              ),
+              data: {
+                pathogen__dialog_target: "dialog",
+                **(@system_arguments[:data] || {})
+              } do %>
+
+    <%# Header section %>
+    <% if header.present? %>
+      <%= tag.div class: "flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0" do %>
+        <%= tag.div id: "#{id}-title", class: "flex-1" do %>
+          <%= header %>
+        <% end %>
+
+        <%# Close button for dismissible dialogs %>
+        <% if dismissible %>
+          <%= tag.button type: "button",
+                         class: "ml-4 p-1 rounded-md text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors",
+                         aria: { label: I18n.t('pathogen.dialog_component.close_button') },
+                         data: {
+                           action: "click->pathogen--dialog#close",
+                           pathogen__dialog_target: "closeButton"
+                         } do %>
+            <%= render Pathogen::Icon.new(:x_mark, size: :md, color: nil, library: :heroicons, class: "size-5") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%# Body section with scroll shadows %>
+    <%= tag.div class: "relative flex-1 min-h-0 flex flex-col" do %>
+      <%# Top scroll shadow %>
+      <%= tag.div class: "absolute top-0 left-0 right-0 h-4 pointer-events-none opacity-0 transition-opacity z-10 bg-gradient-to-b from-black/10 dark:from-black/30 to-transparent",
+                  data: { pathogen__dialog_target: "topShadow" } %>
+
+      <%# Scrollable content %>
+      <%= tag.div class: "flex-1 overflow-y-auto px-6 py-4 min-h-0",
+                  data: {
+                    pathogen__dialog_target: "body",
+                    action: "scroll->pathogen--dialog#updateScrollShadows"
+                  } do %>
+        <%= body %>
+      <% end %>
+
+      <%# Bottom scroll shadow %>
+      <%= tag.div class: "absolute bottom-0 left-0 right-0 h-4 pointer-events-none opacity-0 transition-opacity z-10 bg-gradient-to-t from-black/10 dark:from-black/30 to-transparent",
+                  data: { pathogen__dialog_target: "bottomShadow" } %>
+    <% end %>
+
+    <%# Footer section (conditional) %>
+    <% if render_footer? %>
+      <%= tag.div class: "flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex-shrink-0",
+                  data: { dialog_footer: true } do %>
+        <%= footer %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

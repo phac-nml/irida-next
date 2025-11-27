@@ -8,8 +8,8 @@ fr:
         next_month_button: Naviguer au prochain mois
         previous_month_button: Naviguer au mois précédent
         select_month: Sélectionner le mois
-        select_year: Sélectionner l’année
-        show_today: Montrer aujourd’hui
+        select_year: Sélectionner l'année
+        show_today: Montrer aujourd'hui
       clear_selection: Effacer la sélection
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Sélection de la date
@@ -23,7 +23,7 @@ fr:
         wednesday: mer
       errors:
         invalid_date: Date non valide
-        min_date_error: 'Date la plus ancienne autorisée : '
+        min_date_error: 'Date la plus ancienne autorisée : '
       months:
         april: avril
         august: août
@@ -38,9 +38,11 @@ fr:
         october: octobre
         september: septembre
       placeholder: AAAA-MM-JJ
-      show_today: Montrer aujourd’hui
+      show_today: Montrer aujourd'hui
+    dialog_component:
+      close_button: Fermer la boîte de dialogue
     label:
       required_indicator: "*"
       title: obligatoire
     link:
-      aria-label: "%{content} (s’ouvre dans une nouvelle fenêtre)"
+      aria-label: "%{content} (s'ouvre dans une nouvelle fenêtre)"

@@ -39,6 +39,8 @@ en:
         september: September
       placeholder: YYYY-MM-DD
       show_today: Show Today
+    dialog_component:
+      close_button: Close dialog
     label:
       required_indicator: "*"
       title: required
