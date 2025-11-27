@@ -8,6 +8,43 @@ import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
 
+// Configure LocalTime from meta tag data
+let LocalTime;
+let localTimePromise = import("local-time").then((module) => {
+  LocalTime = module.default;
+  return LocalTime;
+});
+
+async function configureLocalTime() {
+  // Wait for LocalTime to be available if not yet loaded
+  if (!LocalTime) {
+    await localTimePromise;
+  }
+
+  const meta = document.querySelector('meta[name="local-time-i18n"]');
+  if (!meta) return;
+
+  const locale = meta.dataset.locale || document.documentElement.lang;
+  const i18nData = meta.getAttribute("content");
+
+  // Parse i18n data separately so parsing errors don't prevent LocalTime from starting
+  try {
+    if (i18nData && i18nData !== "{}") {
+      LocalTime.config.i18n[locale] = JSON.parse(i18nData);
+    }
+  } catch (parseError) {
+    console.error("Failed to parse LocalTime i18n data:", parseError);
+    // Continue with default configuration
+  }
+
+  // Always configure locale and start LocalTime, even if parsing failed
+  LocalTime.config.locale = locale;
+  LocalTime.start();
+}
+
+// Initial configuration
+configureLocalTime();
+
 function isElementInViewport(el) {
   var rect = el.getBoundingClientRect();
 
@@ -24,9 +61,8 @@ function isElementInViewport(el) {
 }
 
 document.addEventListener("turbo:render", () => {
-  LocalTime.config.locale = document.documentElement.lang;
-  // reprocess each time element regardless if it has been already processed
-  LocalTime.start();
+  // Reconfigure LocalTime with updated locale and i18n data
+  configureLocalTime();
   // ensure focused element is scrolled into view if out of view
   if (!isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
@@ -40,7 +76,9 @@ document.addEventListener("turbo:before-stream-render", (event) => {
     fallbackToDefaultActions(streamElement);
 
     // process new time elements added via turbo streams
-    LocalTime.run();
+    if (LocalTime) {
+      LocalTime.run();
+    }
   };
 });
 
