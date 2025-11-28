@@ -120,15 +120,13 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
 
   def add_to_samples_count(namespaces, addition_amount)
     namespaces.each do |namespace|
-      namespace.samples_count += addition_amount
-      namespace.save
+      Group.increment_counter(:samples_count, namespace.id, by: addition_amount) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
   def subtract_from_samples_count(namespaces, subtraction_amount)
     namespaces.each do |namespace|
-      namespace.samples_count -= subtraction_amount
-      namespace.save
+      Group.decrement_counter(:samples_count, namespace.id, by: subtraction_amount) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
@@ -143,7 +141,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   end
 
   def update_samples_count_by_transfer_service(destination, transferred_samples_count, destination_type = 'Project')
-    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
     subtract_from_samples_count(namespaces_to_update, transferred_samples_count)
 
     case destination_type

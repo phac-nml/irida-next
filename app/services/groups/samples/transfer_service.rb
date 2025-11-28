@@ -28,7 +28,7 @@ module Groups
 
           add_transfer_sample_to_activity_data(sample, old_project, new_project, transferred_samples_data)
 
-          update_metadata_summary(sample, old_project, old_namespaces, new_namespaces)
+          update_metadata_summary(sample, old_namespaces, new_namespaces)
         rescue ActiveRecord::RecordInvalid
           @namespace.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
                                                  sample_name: sample.name, sample_puid: sample.puid))
