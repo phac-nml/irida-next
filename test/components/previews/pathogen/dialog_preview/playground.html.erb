@@ -1,0 +1,315 @@
+<div class="p-8 bg-gradient-to-br from-sky-50 to-indigo-50 dark:from-sky-950 dark:to-indigo-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:circles_four, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dialog Playground
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Interactive playground to explore different dialog configurations and content variations.
+    </p>
+  </div>
+
+  <!-- Configuration Controls -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:sliders_horizontal, color: :primary, class: "mr-3") %>
+      Configuration Options
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Size Selection -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Size</h3>
+          <div class="space-y-2">
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_size" value="small" class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Small</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">28rem / 448px - Brief messages</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_size" value="medium" checked class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Medium (Default)</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">40rem / 640px - Standard forms</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_size" value="large" class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Large</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">56rem / 896px - Detailed forms</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_size" value="xlarge" class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">XLarge</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">72rem / 1152px - Complex interfaces</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Dialog Options -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Dialog Options</h3>
+          <div class="space-y-3">
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+              <input type="checkbox" name="dialog_dismissible" checked class="rounded text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Dismissible</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Allow ESC and backdrop click to close</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+              <input type="checkbox" name="dialog_footer" checked class="rounded text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Show Footer</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Include footer with action buttons</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+              <input type="checkbox" name="dialog_show_button" checked class="rounded text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Use Show Button</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Use with_show_button slot</div>
+              </div>
+            </label>
+          </div>
+
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3 mt-6">Content Length</h3>
+          <div class="space-y-2">
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_content" value="short" checked class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Short Content</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Brief message, no scrolling</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+              <input type="radio" name="dialog_content" value="long" class="text-blue-600">
+              <div>
+                <div class="font-medium text-slate-900 dark:text-white">Long Scrollable Content</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400">Demonstrates scroll shadows</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          <strong>Note:</strong> This is a static preview. To test different configurations, modify the template code below
+          or use URL parameters in Lookbook (if supported).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Preview Area -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:play, color: :success, class: "mr-3") %>
+      Live Preview
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 text-center">
+      <!-- Configuration: medium, dismissible:true, with footer, with show_button, short content -->
+      <%= render(Pathogen::DialogComponent.new(id: 'playground-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          <%= pathogen_icon(:play_circle, color: nil, class: "mr-2 shrink-0") %>
+          Open Dialog
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Dialog Title</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <!-- Short Content -->
+          <div class="space-y-3">
+            <p class="text-slate-700 dark:text-slate-300">
+              This is a configurable dialog preview. In this example, we're showing a medium-sized,
+              dismissible dialog with a footer and show button.
+            </p>
+            <p class="text-slate-700 dark:text-slate-300">
+              Try interacting with it: press ESC to close, Tab through elements, or click the backdrop.
+            </p>
+          </div>
+
+          <!-- Uncomment for Long Content -->
+          <%# <div class="space-y-4 text-slate-700 dark:text-slate-300">
+            <p>This is long scrollable content that demonstrates scroll shadow behavior.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+            <p>Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+            <p>Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+            <p>This is the last paragraph of the long content example.</p>
+          </div> %>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Cancel
+            <% end %>
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Confirm
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <!-- Alternative: External Trigger (uncomment to use) -->
+      <%# <button type="button"
+              data-action="click->pathogen--dialog#open"
+              class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2">
+        <%= pathogen_icon(:play_circle, class: "size-5") %>
+        Open Dialog (External Trigger)
+      </button> %>
+    </div>
+  </div>
+
+  <!-- Pre-configured Examples -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:stack, color: :primary, class: "mr-3") %>
+      Pre-configured Examples
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Confirmation Dialog -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+          <%= pathogen_icon(:question, color: :primary) %>
+          Confirmation
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Small, dismissible, with footer</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'confirm-example', size: :small, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Try it
+          <% end %>
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Confirm Action?</h2>
+          <% end %>
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">Are you sure you want to proceed?</p>
+          <% end %>
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Cancel" } %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Confirm" } %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Form Dialog -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+          <%= pathogen_icon(:text_columns, color: :success) %>
+          Form
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Medium, dismissible, with footer</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'form-example', size: :medium, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Try it
+          <% end %>
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Contact Form</h2>
+          <% end %>
+          <% dialog.with_body do %>
+            <div class="space-y-3">
+              <input type="text" placeholder="Name" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+              <input type="email" placeholder="Email" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+            </div>
+          <% end %>
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Cancel" } %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Submit" } %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Critical Action -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+          <%= pathogen_icon(:warning, color: :danger) %>
+          Critical
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Small, non-dismissible, with footer</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'critical-example', size: :small, dismissible: false)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :danger, size: :small) do %>
+            Try it
+          <% end %>
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Delete Item?</h2>
+          <% end %>
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">This action cannot be undone.</p>
+          <% end %>
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Cancel" } %>
+              <%= render Pathogen::Button.new(scheme: :danger, size: :small, data: { action: 'click->pathogen--dialog#close' }) { "Delete" } %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Implementation Guide -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:book_open, color: :primary, class: "mr-3") %>
+      How to Customize
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <p class="text-slate-700 dark:text-slate-300 mb-4">
+        To test different configurations, edit the template code directly:
+      </p>
+
+      <div class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+        <div class="flex items-start gap-2">
+          <span class="text-blue-600 dark:text-blue-400">1.</span>
+          <span><strong>Size:</strong> Change <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">size: :medium</code> to <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">:small</code>, <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">:large</code>, or <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">:xlarge</code></span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-blue-600 dark:text-blue-400">2.</span>
+          <span><strong>Dismissible:</strong> Change <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">dismissible: true</code> to <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">false</code></span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-blue-600 dark:text-blue-400">3.</span>
+          <span><strong>Footer:</strong> Comment out the <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">dialog.with_footer</code> block to remove it</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-blue-600 dark:text-blue-400">4.</span>
+          <span><strong>Show Button:</strong> Comment out <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">dialog.with_show_button</code> and uncomment the external trigger button</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-blue-600 dark:text-blue-400">5.</span>
+          <span><strong>Content:</strong> Uncomment the long content section to test scroll shadows</span>
+        </div>
+      </div>
+
+      <div class="mt-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
+        <p class="text-sm text-purple-800 dark:text-purple-200">
+          <strong>Tip:</strong> Visit other preview pages for detailed examples and documentation of each feature
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

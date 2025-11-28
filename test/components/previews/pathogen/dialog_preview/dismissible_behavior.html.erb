@@ -1,0 +1,288 @@
+<div class="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:x_circle, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dismissible Behavior
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Control how users can close dialogs: dismissible for flexible interactions, non-dismissible for critical actions.
+    </p>
+  </div>
+
+  <!-- Dismissible Dialog -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:check_circle, color: :success, class: "mr-3") %>
+      Dismissible Dialog
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="mb-4 space-y-2">
+        <p class="text-slate-700 dark:text-slate-300">
+          A dismissible dialog can be closed in multiple ways:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-4">
+          <li>Pressing the <kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">ESC</kbd> key</li>
+          <li>Clicking the backdrop (area outside the dialog)</li>
+          <li>Clicking the close button in the header</li>
+          <li>Clicking action buttons in the footer</li>
+        </ul>
+      </div>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'dismissible-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          Open Dismissible Dialog
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Optional Action</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <div class="space-y-3">
+            <p class="text-slate-700 dark:text-slate-300">
+              This dialog can be dismissed at any time. Users are not forced to make a decision.
+            </p>
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+              <p class="text-sm text-green-800 dark:text-green-200">
+                <strong>Try it:</strong> Press ESC or click outside to close
+              </p>
+            </div>
+          </div>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Maybe Later
+            <% end %>
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Continue
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Non-Dismissible Dialog -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lock, color: :danger, class: "mr-3") %>
+      Non-Dismissible Dialog
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="mb-4 space-y-2">
+        <p class="text-slate-700 dark:text-slate-300">
+          A non-dismissible dialog requires explicit user action:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-4">
+          <li><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">ESC</kbd> key is disabled</li>
+          <li>Clicking the backdrop does nothing</li>
+          <li>No close button in the header</li>
+          <li>User must click an action button to proceed</li>
+        </ul>
+      </div>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'non-dismissible-dialog', size: :medium, dismissible: false)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :danger, size: :medium) do %>
+          Open Non-Dismissible Dialog
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Delete Project?</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <div class="space-y-3">
+            <p class="text-slate-700 dark:text-slate-300">
+              This action cannot be undone. This will permanently delete your project and remove all associated data.
+            </p>
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+              <p class="text-sm text-red-800 dark:text-red-200">
+                <strong>Notice:</strong> You must make a choice - ESC and backdrop clicks are disabled
+              </p>
+            </div>
+          </div>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Cancel
+            <% end %>
+            <%= render Pathogen::Button.new(scheme: :danger, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Delete Project
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Comparison -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:scales, color: :primary, class: "mr-3") %>
+      When to Use Each Type
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Dismissible Use Cases -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-green-200 dark:border-green-800">
+        <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3 flex items-center gap-2">
+          <%= pathogen_icon(:check, color: :success) %>
+          Use Dismissible (dismissible: true)
+        </h3>
+        <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 dark:text-green-400">✓</span>
+            <span>Informational messages</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 dark:text-green-400">✓</span>
+            <span>Optional actions or settings</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 dark:text-green-400">✓</span>
+            <span>Preview or read-only content</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 dark:text-green-400">✓</span>
+            <span>Non-critical forms with auto-save</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 dark:text-green-400">✓</span>
+            <span>Help or documentation dialogs</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Non-Dismissible Use Cases -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-red-200 dark:border-red-800">
+        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-3 flex items-center gap-2">
+          <%= pathogen_icon(:warning_circle, color: :danger) %>
+          Use Non-Dismissible (dismissible: false)
+        </h3>
+        <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <li class="flex items-start gap-2">
+            <span class="text-red-600 dark:text-red-400">!</span>
+            <span>Destructive actions (delete, remove)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-red-600 dark:text-red-400">!</span>
+            <span>Critical confirmations</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-red-600 dark:text-red-400">!</span>
+            <span>Required input or decisions</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-red-600 dark:text-red-400">!</span>
+            <span>Terms acceptance or legal agreements</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-red-600 dark:text-red-400">!</span>
+            <span>Error states requiring acknowledgment</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Examples -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+      Code Examples
+    </h2>
+
+    <div class="space-y-6">
+      <!-- Dismissible Code -->
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">Dismissible Dialog</h3>
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::DialogComponent.new(id: 'info-dialog', dismissible: true) do |dialog| %>
+  <%% dialog.with_header do %>
+    &lt;h2&gt;Information&lt;/h2&gt;
+  <%% end %>
+  <%% dialog.with_body do %>
+    &lt;p&gt;This dialog can be dismissed with ESC or backdrop click.&lt;/p&gt;
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+
+      <!-- Non-Dismissible Code -->
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">Non-Dismissible Dialog</h3>
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::DialogComponent.new(id: 'confirm-dialog', dismissible: false) do |dialog| %>
+  <%% dialog.with_header do %>
+    &lt;h2&gt;Confirm Delete&lt;/h2&gt;
+  <%% end %>
+  <%% dialog.with_body do %>
+    &lt;p&gt;User must click a button to proceed.&lt;/p&gt;
+  <%% end %>
+  <%% dialog.with_footer do %>
+    &lt;button data-action="click-&gt;pathogen--dialog#close"&gt;Cancel&lt;/button&gt;
+    &lt;button data-action="click-&gt;pathogen--dialog#close"&gt;Confirm&lt;/button&gt;
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Default is Dismissible</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">If you don't specify, dialogs default to dismissible: true for better UX</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:keyboard, color: :success) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">ESC Key Handling</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">The component automatically handles ESC with handleEsc method for non-dismissible dialogs</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:warning, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Use Non-Dismissible Sparingly</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">Only force interaction when absolutely necessary to avoid frustrating users</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:user, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Always Provide Clear Actions</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">Non-dismissible dialogs must have clear, labeled buttons for users to proceed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,326 @@
+<div class="p-8 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:arrows_out, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dialog Sizes & Variants
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Four size variants to fit different content needs: small, medium, large, and xlarge.
+    </p>
+  </div>
+
+  <!-- Size Demonstrations -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:resize, color: :primary, class: "mr-3") %>
+      Size Examples
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Small -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Small (28rem / 448px)</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Perfect for simple confirmations or alerts</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'small-dialog', size: :small, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Open Small Dialog
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Confirm Action</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">
+              Are you sure you want to proceed with this action?
+            </p>
+          <% end %>
+
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Cancel
+              <% end %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Confirm
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Medium -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Medium (40rem / 640px)</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Default size for most use cases</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'medium-dialog', size: :medium, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Open Medium Dialog
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Update Profile</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <div class="space-y-4">
+              <p class="text-slate-700 dark:text-slate-300">
+                Update your profile information below:
+              </p>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Name</label>
+                  <input type="text" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="Enter your name">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                  <input type="email" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="Enter your email">
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Cancel
+              <% end %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Save Changes
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Large -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Large (56rem / 896px)</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">For detailed forms or content-rich views</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'large-dialog', size: :large, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Open Large Dialog
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Advanced Settings</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <div class="space-y-4">
+              <p class="text-slate-700 dark:text-slate-300">
+                Configure advanced options for your application:
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <h4 class="font-medium text-slate-900 dark:text-white">Notifications</h4>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" class="rounded border-slate-300 dark:border-slate-600">
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Email notifications</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" class="rounded border-slate-300 dark:border-slate-600">
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Push notifications</span>
+                  </label>
+                </div>
+                <div class="space-y-2">
+                  <h4 class="font-medium text-slate-900 dark:text-white">Privacy</h4>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" class="rounded border-slate-300 dark:border-slate-600">
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Profile visibility</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" class="rounded border-slate-300 dark:border-slate-600">
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Activity tracking</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Cancel
+              <% end %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Save Settings
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- XLarge -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">XLarge (72rem / 1152px)</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">For complex interfaces or data tables</p>
+        <%= render(Pathogen::DialogComponent.new(id: 'xlarge-dialog', size: :xlarge, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Open XLarge Dialog
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Data Overview</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <div class="space-y-4">
+              <p class="text-slate-700 dark:text-slate-300">
+                Review your data across multiple dimensions:
+              </p>
+              <div class="grid grid-cols-3 gap-4">
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                  <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">1,234</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Total Users</div>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">567</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Active Sessions</div>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                  <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">89%</div>
+                  <div class="text-sm text-slate-600 dark:text-slate-400">Completion Rate</div>
+                </div>
+              </div>
+              <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+                <table class="w-full text-sm">
+                  <thead class="bg-slate-50 dark:bg-slate-700">
+                    <tr>
+                      <th class="px-4 py-2 text-left text-slate-900 dark:text-white">Metric</th>
+                      <th class="px-4 py-2 text-left text-slate-900 dark:text-white">Value</th>
+                      <th class="px-4 py-2 text-left text-slate-900 dark:text-white">Change</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                    <tr>
+                      <td class="px-4 py-2 text-slate-700 dark:text-slate-300">Revenue</td>
+                      <td class="px-4 py-2 text-slate-700 dark:text-slate-300">$45,231</td>
+                      <td class="px-4 py-2 text-green-600 dark:text-green-400">+12%</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 text-slate-700 dark:text-slate-300">Conversions</td>
+                      <td class="px-4 py-2 text-slate-700 dark:text-slate-300">234</td>
+                      <td class="px-4 py-2 text-green-600 dark:text-green-400">+8%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          <% end %>
+
+          <% dialog.with_footer do %>
+            <div class="flex justify-end gap-3">
+              <%= render Pathogen::Button.new(scheme: :slate, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Close
+              <% end %>
+              <%= render Pathogen::Button.new(scheme: :primary, size: :small, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Export Data
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Size Comparison Table -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:table, color: :primary, class: "mr-3") %>
+      Size Specifications
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Size</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Max Width (rem)</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Max Width (px)</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Best For</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">:small</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">28rem</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">448px</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Simple confirmations, alerts, brief messages</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">:medium</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">40rem</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">640px</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Standard forms, moderate content (default)</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">:large</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">56rem</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">896px</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Detailed forms, multi-column layouts</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">:xlarge</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">72rem</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">1152px</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Complex interfaces, data tables, dashboards</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:target, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Choose Based on Content</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">Select the smallest size that comfortably fits your content to maintain focus</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:device_mobile, color: :success) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Mobile Responsive</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">All sizes automatically adjust for mobile viewports with appropriate padding</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:article, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Content Planning</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">Plan your content layout before choosing size - avoid excessive scrolling</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:arrows_in, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Default is Medium</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">If no size is specified, the dialog defaults to :medium (40rem / 640px)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

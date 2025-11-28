@@ -19,10 +19,10 @@ module Pathogen
     }.freeze
 
     SIZES = {
-      sm: 'size-4',
-      md: 'size-6',
-      lg: 'size-8',
-      xl: 'size-10'
+      sm: 'inline-block size-4',
+      md: 'inline-block size-6',
+      lg: 'inline-block size-8',
+      xl: 'inline-block size-10'
     }.freeze
 
     class << self

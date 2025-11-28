@@ -67,11 +67,10 @@ module Pathogen
     # rubocop:enable Metrics/ParameterLists
 
     def before_render
-      return unless leading_visual.present? || trailing_visual.present?
-
+      # Always use inline-flex to properly handle icons in content
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
-        'text-center inline-flex items-center'
+        'inline-flex items-center justify-center'
       )
     end
 

@@ -1,0 +1,276 @@
+<div class="p-8 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950 dark:to-blue-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:cursor_click, color: :primary, size: :xl, class: "inline mr-3") %>
+      Triggering Dialogs
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Two ways to trigger dialogs: built-in show_button slot or external trigger buttons with Stimulus actions.
+    </p>
+  </div>
+
+  <!-- Using with_show_button Slot -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:magic_wand, color: :primary, class: "mr-3") %>
+      Using with_show_button Slot
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="mb-4 space-y-2">
+        <p class="text-slate-700 dark:text-slate-300">
+          The easiest way to trigger a dialog is using the <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-sm font-mono">with_show_button</code> slot:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-4">
+          <li>Automatically wired to the dialog controller</li>
+          <li>Renders a Pathogen::Button component</li>
+          <li>Supports all button schemes and sizes</li>
+          <li>Focus restoration handled automatically</li>
+        </ul>
+      </div>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'show-button-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          <%= pathogen_icon(:chat_circle_text, color: nil, class: "mr-2 shrink-0") %>
+          Open with Show Button
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Show Button Dialog</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <p class="text-slate-700 dark:text-slate-300">
+            This dialog was opened using the with_show_button slot. The button is automatically
+            configured with the correct Stimulus action and focus restoration.
+          </p>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Close
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          <strong>Tip:</strong> Pass <code class="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-800 rounded text-xs font-mono">scheme:</code> and <code class="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-800 rounded text-xs font-mono">size:</code> parameters to customize the button
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Trigger Button Content -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:link, color: :primary, class: "mr-3") %>
+      Custom Button Content
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="mb-4 space-y-2">
+        <p class="text-slate-700 dark:text-slate-300">
+          Customize the show_button content with icons and text:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-4">
+          <li>Add custom content to the show_button block</li>
+          <li>Include icons, text, or other elements</li>
+          <li>Button is automatically wired to open the dialog</li>
+          <li>Focus restoration is handled automatically</li>
+        </ul>
+      </div>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'external-trigger-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :slate, size: :medium) do %>
+          <%= pathogen_icon(:arrow_square_out, color: nil, class: "mr-2 shrink-0") %>
+          Open Dialog
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">External Trigger Dialog</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <p class="text-slate-700 dark:text-slate-300">
+            This dialog was opened with an external trigger button using the
+            <code class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-sm font-mono">data-action</code> attribute.
+            When you close this dialog, focus will return to the trigger button.
+          </p>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Close
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Button Schemes and Sizes -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+      Different Button Styles
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-700 dark:text-slate-300 mb-4">
+        The show_button slot accepts scheme and size parameters to match your design:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <%= render(Pathogen::DialogComponent.new(id: 'primary-button-dialog', size: :small, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+            Primary Button
+          <% end %>
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Primary Scheme</h2>
+          <% end %>
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">This dialog uses a primary button scheme.</p>
+          <% end %>
+        <% end %>
+
+        <%= render(Pathogen::DialogComponent.new(id: 'danger-button-dialog', size: :small, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :danger, size: :medium) do %>
+            Danger Button
+          <% end %>
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Danger Scheme</h2>
+          <% end %>
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">This dialog uses a danger button scheme for destructive actions.</p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Examples -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+      Code Examples
+    </h2>
+
+    <div class="space-y-6">
+      <!-- Basic Show Button Example -->
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">Basic Usage</h3>
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::DialogComponent.new(id: 'my-dialog') do |dialog| %>
+  <%% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+    Open Dialog
+  <%% end %>
+
+  <%% dialog.with_header do %>
+    &lt;h2&gt;Title&lt;/h2&gt;
+  <%% end %>
+
+  <%% dialog.with_body do %>
+    &lt;p&gt;Content&lt;/p&gt;
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+
+      <!-- Custom Button Content Example -->
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">With Custom Button Content</h3>
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::DialogComponent.new(id: 'my-dialog') do |dialog| %>
+  <%% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+    <%%= pathogen_icon(:plus, color: nil, class: "mr-2 shrink-0") %>
+    Create New Item
+  <%% end %>
+
+  <%% dialog.with_header do %>
+    &lt;h2&gt;Create Item&lt;/h2&gt;
+  <%% end %>
+
+  <%% dialog.with_body do %>
+    &lt;p&gt;Form content here&lt;/p&gt;
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+
+      <!-- Different Button Schemes Example -->
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">Different Button Schemes</h3>
+        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+          <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%% # Primary button for main actions %>
+<%%= render Pathogen::DialogComponent.new(id: 'main-action') do |dialog| %>
+  <%% dialog.with_show_button(scheme: :primary) do %>
+    Continue
+  <%% end %>
+<%% end %>
+
+<%% # Danger button for destructive actions %>
+<%%= render Pathogen::DialogComponent.new(id: 'delete-action') do |dialog| %>
+  <%% dialog.with_show_button(scheme: :danger) do %>
+    Delete
+  <%% end %>
+<%% end %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:plug, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Auto-Wired Show Button</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">The show_button slot is automatically connected to the dialog controller</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:arrows_counter_clockwise, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Focus Restoration</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">Focus automatically returns to the trigger button when dialog closes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:palette, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Customizable Button</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">Pass <code class="px-1.5 py-0.5 bg-purple-100 dark:bg-purple-800 rounded text-xs font-mono">scheme:</code> and <code class="px-1.5 py-0.5 bg-purple-100 dark:bg-purple-800 rounded text-xs font-mono">size:</code> to customize appearance</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:sparkle, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Custom Content</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">Add icons, text, or any content inside the show_button block</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

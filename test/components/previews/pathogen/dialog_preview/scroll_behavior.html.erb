@@ -1,0 +1,329 @@
+<div class="p-8 bg-gradient-to-br from-violet-50 to-fuchsia-50 dark:from-violet-950 dark:to-fuchsia-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:arrows_down_up, color: :primary, size: :xl, class: "inline mr-3") %>
+      Scroll Behavior
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Dynamic scroll shadows that indicate scrollable content and fixed header/footer positioning.
+    </p>
+  </div>
+
+  <!-- Scrollable Content Dialog -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:scroll, color: :primary, class: "mr-3") %>
+      Dialog with Scrollable Content
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-700 dark:text-slate-300 mb-4">
+        When dialog content exceeds the available height, scroll shadows automatically appear to indicate
+        there's more content above or below:
+      </p>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'scrollable-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          <%= pathogen_icon(:article, color: nil, class: "mr-2 shrink-0") %>
+          Open Scrollable Dialog
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Terms of Service</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <div class="space-y-4 text-slate-700 dark:text-slate-300">
+            <p class="font-semibold text-slate-900 dark:text-white">1. Acceptance of Terms</p>
+            <p>
+              By accessing and using this service, you accept and agree to be bound by the terms
+              and provision of this agreement. These terms of service are a legally binding
+              agreement between you and the service provider.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">2. Use License</p>
+            <p>
+              Permission is granted to temporarily download one copy of the materials on the
+              service for personal, non-commercial transitory viewing only. This is the grant
+              of a license, not a transfer of title.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">3. Disclaimer</p>
+            <p>
+              The materials on the service are provided on an 'as is' basis. The service makes
+              no warranties, expressed or implied, and hereby disclaims and negates all other
+              warranties including, without limitation, implied warranties or conditions of
+              merchantability, fitness for a particular purpose, or non-infringement of
+              intellectual property or other violation of rights.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">4. Limitations</p>
+            <p>
+              In no event shall the service or its suppliers be liable for any damages
+              (including, without limitation, damages for loss of data or profit, or due to
+              business interruption) arising out of the use or inability to use the materials
+              on the service.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">5. Accuracy of Materials</p>
+            <p>
+              The materials appearing on the service could include technical, typographical,
+              or photographic errors. The service does not warrant that any of the materials
+              on its website are accurate, complete or current.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">6. Links</p>
+            <p>
+              The service has not reviewed all of the sites linked to its website and is not
+              responsible for the contents of any such linked site. The inclusion of any link
+              does not imply endorsement by the service of the site.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">7. Modifications</p>
+            <p>
+              The service may revise these terms of service for its website at any time without
+              notice. By using this website you are agreeing to be bound by the then current
+              version of these terms of service.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">8. Governing Law</p>
+            <p>
+              These terms and conditions are governed by and construed in accordance with the
+              laws and you irrevocably submit to the exclusive jurisdiction of the courts in
+              that location.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">9. Privacy Policy</p>
+            <p>
+              Your use of the service is also governed by our Privacy Policy. Please review
+              our Privacy Policy, which also governs the site and informs users of our data
+              collection practices.
+            </p>
+
+            <p class="font-semibold text-slate-900 dark:text-white">10. Contact Information</p>
+            <p>
+              If you have any questions about these Terms of Service, please contact us at
+              support@example.com. We will respond to your inquiry within 48 hours.
+            </p>
+          </div>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Decline
+            <% end %>
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Accept Terms
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="mt-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
+        <p class="text-sm text-purple-800 dark:text-purple-200">
+          <strong>Try it:</strong> Open the dialog and notice the scroll shadows at top/bottom indicating more content
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- How Scroll Shadows Work -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:info, color: :primary, class: "mr-3") %>
+      How Scroll Shadows Work
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Visual Indicators -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:eye, color: :primary) %>
+            Visual Indicators
+          </h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">▲</span>
+              <span><strong>Top shadow:</strong> Appears when content is scrolled down (more above)</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">▼</span>
+              <span><strong>Bottom shadow:</strong> Appears when more content exists below</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">✓</span>
+              <span><strong>Automatic:</strong> Shadows update dynamically as you scroll</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">✓</span>
+              <span><strong>Smooth:</strong> CSS transitions for subtle, professional appearance</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Technical Details -->
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <%= pathogen_icon(:gear, color: :primary) %>
+            Technical Details
+          </h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">•</span>
+              <span>Header and footer remain fixed during scroll</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">•</span>
+              <span>Body content scrolls independently</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">•</span>
+              <span><code class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">updateScrollShadows()</code> method handles logic</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-600 dark:text-purple-400">•</span>
+              <span>Called on scroll events and when dialog renders</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shadow Behavior States -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:stack, color: :primary, class: "mr-3") %>
+      Shadow Behavior States
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- At Top -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <div class="mb-2 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+            <%= pathogen_icon(:arrow_up, color: :primary) %>
+          </div>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-white text-center mb-2">At Top</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 text-center">
+          No top shadow<br>
+          Bottom shadow visible
+        </p>
+      </div>
+
+      <!-- Middle -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <div class="mb-2 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full">
+            <%= pathogen_icon(:arrows_in_line_vertical, color: :primary) %>
+          </div>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-white text-center mb-2">Middle</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 text-center">
+          Top shadow visible<br>
+          Bottom shadow visible
+        </p>
+      </div>
+
+      <!-- At Bottom -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <div class="mb-2 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full">
+            <%= pathogen_icon(:arrow_down, color: :success) %>
+          </div>
+        </div>
+        <h3 class="font-semibold text-slate-900 dark:text-white text-center mb-2">At Bottom</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 text-center">
+          Top shadow visible<br>
+          No bottom shadow
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Example -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+      Code Example
+    </h2>
+
+    <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm overflow-x-auto">
+      <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render Pathogen::DialogComponent.new(id: 'long-content', size: :medium) do |dialog| %>
+  <%% dialog.with_header do %>
+    &lt;h2&gt;Long Document&lt;/h2&gt;
+  <%% end %>
+
+  <%% dialog.with_body do %>
+    &lt;!-- Long content here that exceeds available height --&gt;
+    &lt;div class="space-y-4"&gt;
+      &lt;p&gt;First paragraph...&lt;/p&gt;
+      &lt;p&gt;Second paragraph...&lt;/p&gt;
+      &lt;!-- ... many more paragraphs ... --&gt;
+      &lt;p&gt;Last paragraph...&lt;/p&gt;
+    &lt;/div&gt;
+  <%% end %>
+
+  <%% dialog.with_footer do %>
+    &lt;!-- Footer actions --&gt;
+  <%% end %>
+<%% end %>
+
+&lt;!-- Scroll shadows appear automatically when content overflows --&gt;</code></pre>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:magic_wand, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Automatic Shadows</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">Scroll shadows appear automatically - no configuration needed</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:anchor, color: :success) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Fixed Header & Footer</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">Header and footer remain visible while body content scrolls</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:arrows_clockwise, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Dynamic Updates</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">Shadows update in real-time as user scrolls through content</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:eye_closed, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">No Shadows When Not Needed</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">If content fits without scrolling, no shadows appear</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

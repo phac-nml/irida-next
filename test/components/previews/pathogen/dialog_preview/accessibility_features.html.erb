@@ -1,0 +1,371 @@
+<div class="p-8 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950 dark:to-orange-950 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:wheelchair, color: :primary, size: :xl, class: "inline mr-3") %>
+      Accessibility Features
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      WCAG AA+ compliant dialog with focus management, keyboard navigation, and screen reader support.
+    </p>
+  </div>
+
+  <!-- Focus Trap Demo -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:target, color: :primary, class: "mr-3") %>
+      Focus Trap Behavior
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <div class="mb-4 space-y-2">
+        <p class="text-slate-700 dark:text-slate-300">
+          When a dialog opens, focus is trapped within it:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300 ml-4">
+          <li>Tab cycles through focusable elements inside the dialog only</li>
+          <li>Cannot Tab out to elements behind the backdrop</li>
+          <li>Shift+Tab moves backward through elements</li>
+          <li>Focus returns to trigger button when dialog closes</li>
+        </ul>
+      </div>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'focus-trap-dialog', size: :medium, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          Test Focus Trap
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Focus Trap Demonstration</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <div class="space-y-4">
+            <p class="text-slate-700 dark:text-slate-300">
+              Try pressing Tab repeatedly. Notice how focus stays within this dialog.
+            </p>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">First Name</label>
+                <input type="text" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Last Name</label>
+                <input type="text" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                <input type="email" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end gap-3">
+            <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Cancel
+            <% end %>
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Submit
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          <strong>Try it:</strong> Open the dialog and press Tab repeatedly - focus cycles only within the dialog
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESC Key Handling -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:keyboard, color: :primary, class: "mr-3") %>
+      ESC Key Handling
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Dismissible -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-green-200 dark:border-green-800">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+          <%= pathogen_icon(:check, color: :success) %>
+          Dismissible (ESC Enabled)
+        </h3>
+        <%= render(Pathogen::DialogComponent.new(id: 'esc-enabled-dialog', size: :small, dismissible: true)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :primary, size: :small) do %>
+            Open Dismissible
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Press ESC to Close</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">
+              This dialog responds to the ESC key. Try pressing it to close.
+            </p>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Non-Dismissible -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-red-200 dark:border-red-800">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+          <%= pathogen_icon(:prohibit, color: :danger) %>
+          Non-Dismissible (ESC Disabled)
+        </h3>
+        <%= render(Pathogen::DialogComponent.new(id: 'esc-disabled-dialog', size: :small, dismissible: false)) do |dialog| %>
+          <% dialog.with_show_button(scheme: :danger, size: :small) do %>
+            Open Non-Dismissible
+          <% end %>
+
+          <% dialog.with_header do %>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">ESC Key Disabled</h2>
+          <% end %>
+
+          <% dialog.with_body do %>
+            <p class="text-slate-700 dark:text-slate-300">
+              ESC key won't close this dialog. You must click a button to proceed.
+            </p>
+          <% end %>
+
+          <% dialog.with_footer do %>
+            <div class="flex justify-end">
+              <%= render Pathogen::Button.new(scheme: :slate, data: { action: 'click->pathogen--dialog#close' }) do %>
+                Close
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARIA Attributes -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:speaker_high, color: :primary, class: "mr-3") %>
+      Screen Reader Attributes
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Attribute</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Value</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Purpose</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">role</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">"dialog"</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Identifies element as a dialog</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">aria-modal</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">"true"</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Indicates content behind dialog is inert</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">aria-labelledby</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Header ID</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Links dialog to its title for screen readers</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">aria-hidden</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">"true" (when closed)</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Hides dialog from assistive technology when not visible</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Navigation -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:command, color: :primary, class: "mr-3") %>
+      Keyboard Navigation Guide
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Key</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Action</th>
+              <th class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4"><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono">ESC</kbd></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Close dialog</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Only works when dismissible: true</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4"><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono">Tab</kbd></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Move to next focusable element</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Cycles within dialog only</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4"><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono">Shift+Tab</kbd></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Move to previous focusable element</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Cycles backward within dialog</td>
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="py-3 px-4"><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono">Enter</kbd></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Activate focused button</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Standard button behavior</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4"><kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono">Space</kbd></td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Activate focused button</td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-400">Standard button behavior</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Focus Restoration -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:arrow_u_up_left, color: :primary, class: "mr-3") %>
+      Focus Restoration
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <p class="text-slate-700 dark:text-slate-300 mb-4">
+        When a dialog closes, focus automatically returns to the element that opened it:
+      </p>
+
+      <%= render(Pathogen::DialogComponent.new(id: 'focus-restore-dialog', size: :small, dismissible: true)) do |dialog| %>
+        <% dialog.with_show_button(scheme: :primary, size: :medium) do %>
+          Open Dialog (Focus Will Return Here)
+        <% end %>
+
+        <% dialog.with_header do %>
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Focus Restoration</h2>
+        <% end %>
+
+        <% dialog.with_body do %>
+          <p class="text-slate-700 dark:text-slate-300">
+            When you close this dialog, focus will return to the button that opened it.
+            This is crucial for keyboard navigation and screen reader users.
+          </p>
+        <% end %>
+
+        <% dialog.with_footer do %>
+          <div class="flex justify-end">
+            <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->pathogen--dialog#close' }) do %>
+              Close (Watch Focus Return)
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+        <p class="text-sm text-green-800 dark:text-green-200">
+          <strong>Try it:</strong> Open the dialog and close it - notice the button regains focus
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3C Compliance -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:seal_check, color: :success, class: "mr-3") %>
+      W3C ARIA Pattern Compliance
+    </h2>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+      <p class="text-slate-700 dark:text-slate-300 mb-4">
+        This dialog component follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/" target="_blank" class="text-blue-600 dark:text-blue-400 underline">W3C ARIA Authoring Practices</a> for modal dialogs:
+      </p>
+      <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+        <li class="flex items-start gap-2">
+          <span class="text-green-600 dark:text-green-400 mt-1">✓</span>
+          <span><strong>Keyboard support:</strong> Full keyboard navigation with Tab, Shift+Tab, ESC, Enter, and Space</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-green-600 dark:text-green-400 mt-1">✓</span>
+          <span><strong>Focus management:</strong> Focus trap, initial focus, and restoration on close</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-green-600 dark:text-green-400 mt-1">✓</span>
+          <span><strong>ARIA attributes:</strong> role="dialog", aria-modal, aria-labelledby</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-green-600 dark:text-green-400 mt-1">✓</span>
+          <span><strong>Screen reader support:</strong> Proper announcement and navigation</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-green-600 dark:text-green-400 mt-1">✓</span>
+          <span><strong>Focus trap library:</strong> Uses focus-trap for reliable focus management</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div>
+    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Quick Tips
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:device_mobile_speaker, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Test with Screen Readers</h3>
+            <p class="text-sm text-blue-800 dark:text-blue-200">Test with NVDA (Windows), VoiceOver (Mac), or JAWS to verify announcements</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:hand_pointing, color: :success) %>
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Keyboard-Only Testing</h3>
+            <p class="text-sm text-green-800 dark:text-green-200">Navigate your entire app using only keyboard to ensure full accessibility</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:git_branch, color: :primary) %>
+          <div>
+            <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Focus Trap Library</h3>
+            <p class="text-sm text-purple-800 dark:text-purple-200">Built with focus-trap for robust, tested focus management behavior</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:seal_check, color: :warning) %>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">WCAG AA+ Compliant</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-200">Meets and exceeds WCAG 2.1 Level AA accessibility standards</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
