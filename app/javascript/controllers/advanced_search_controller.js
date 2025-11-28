@@ -34,7 +34,6 @@ export default class extends Controller {
   }
 
   openDialog(event) {
-    console.log("openDialog", this.hasPathogenDialogOutlet);
     // Open the dialog via outlet first
     if (this.hasPathogenDialogOutlet) {
       this.pathogenDialogOutlet.open(event);
@@ -182,8 +181,9 @@ export default class extends Controller {
   }
 
   clearAndClose() {
-    // Clear the search content
+    // Clear the search content and add an empty group
     this.clear();
+    this.addGroup();
     // Close the dialog via outlet
     if (this.hasPathogenDialogOutlet) {
       this.pathogenDialogOutlet.close();
