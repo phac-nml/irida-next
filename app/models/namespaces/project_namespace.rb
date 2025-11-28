@@ -69,6 +69,11 @@ module Namespaces
       Namespace.add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
 
+    def update_metadata_summary_by_sample_transfer(metadata_payload, old_namespaces, new_namespaces)
+      Namespace.subtract_from_metadata_summary_count(old_namespaces, metadata_payload, false)
+      Namespace.add_to_metadata_summary_count(new_namespaces, metadata_payload, false)
+    end
+
     def self.model_prefix
       'PRJ'
     end
