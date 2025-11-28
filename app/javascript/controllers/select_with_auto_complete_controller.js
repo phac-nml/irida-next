@@ -166,10 +166,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   // ComboboxAutocomplete events
 
   #filterOptions() {
-    let option = null;
-    const currentOption = this.option;
     const filter = this.filter.toLowerCase();
-
     this.filteredOptions = [];
     this.listboxTarget.innerHTML = "";
 
@@ -207,7 +204,18 @@ export default class SelectWithAutoCompleteController extends Controller {
       }
     });
 
-    // Populate firstOption and lastOption
+    const option = this.#populateCurrentFirstLastOptions();
+    if (option === null) {
+      this.#renderNoResults();
+    }
+    this.#announceNumberOfResults();
+
+    return option;
+  }
+
+  #populateCurrentFirstLastOptions() {
+    let option = null;
+    const currentOption = this.option;
     const numItems = this.filteredOptions.length;
     if (numItems > 0) {
       this.firstOption = this.filteredOptions[0];
@@ -222,20 +230,13 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.firstOption = null;
       option = null;
       this.lastOption = null;
-      this.#renderNoResults();
     }
-
-    this.#announceNumberOfResults();
-
     return option;
   }
 
-  #escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
   #highlightOption(option) {
-    const regex = new RegExp(`(${this.#escapeRegExp(this.filter)})`, "gi");
+    const escapeRegExp = this.filter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapeRegExp})`, "gi");
     option.innerHTML = option.textContent.replace(
       regex,
       "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
