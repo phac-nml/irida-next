@@ -25,6 +25,8 @@ module Pathogen
       icon_name = args[:icon]
       args.delete(:icon)
       args[:class] = class_names(args[:class], icon_classes)
+      # Ensure icons inherit button text color unless explicitly overridden
+      args[:color] = nil unless args.key?(:color)
 
       # Use the enhanced Pathogen::Icon component for better functionality
       # (includes debug classes, error handling, accessibility defaults)
