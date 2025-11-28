@@ -16,6 +16,7 @@ module Pathogen
   # - Dynamic scroll shadows for overflow indication
   # - Focus trap with focus restoration
   # - ESC key and backdrop click handling
+  # - Screen reader announcements for open/close events
   # - WCAG AA+ accessibility compliance
   # - Turbo Frame integration support
   #
@@ -139,7 +140,8 @@ module Pathogen
       Pathogen::Button.new(scheme: scheme, size: size, block: block, **system_arguments)
     }
 
-    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_id, :wrapper_data_attributes, :subtitle
+    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_id, :wrapper_data_attributes, :subtitle,
+                :open_announcement, :close_announcement
 
     # Initialize a new Dialog component
     #
@@ -147,12 +149,17 @@ module Pathogen
     # @param dismissible [Boolean] Whether dialog can be dismissed via ESC/backdrop click
     # @param open [Boolean] Whether dialog starts in open state
     # @param subtitle [String] Optional subtitle for additional context (sets aria-describedby)
+    # @param open_announcement [String] Optional I18n key for screen reader announcement when dialog opens
+    # @param close_announcement [String] Optional I18n key for screen reader announcement when dialog closes
     # @param system_arguments [Hash] Additional HTML attributes
-    def initialize(size: SIZE_DEFAULT, dismissible: true, open: false, subtitle: nil, **system_arguments)
+    def initialize(size: SIZE_DEFAULT, dismissible: true, open: false, subtitle: nil, open_announcement: nil,
+                   close_announcement: nil, **system_arguments)
       @size = fetch_or_fallback(SIZE_OPTIONS, size, SIZE_DEFAULT)
       @dismissible = dismissible
       @initially_open = open
       @subtitle = subtitle
+      @open_announcement = open_announcement || default_open_announcement
+      @close_announcement = close_announcement || default_close_announcement
       @id = system_arguments.delete(:id) || self.class.generate_id
 
       @system_arguments = system_arguments
@@ -190,13 +197,22 @@ module Pathogen
       @wrapper_data_attributes['pathogen--dialog-dismissible-value'] = @dismissible
       @wrapper_data_attributes['pathogen--dialog-open-value'] = @initially_open
 
+      # Resolve and add announcement messages (resolve I18n keys server-side)
+      if @open_announcement
+        resolved_open = resolve_announcement(@open_announcement)
+        @wrapper_data_attributes['pathogen--dialog-open-announcement-value'] = resolved_open if resolved_open
+      end
+
+      if @close_announcement
+        resolved_close = resolve_announcement(@close_announcement)
+        @wrapper_data_attributes['pathogen--dialog-close-announcement-value'] = resolved_close if resolved_close
+      end
+
       # Merge outlet data attributes from system_arguments into wrapper_data_attributes
       # This allows parent controllers to connect via Stimulus outlets
-      if @system_arguments[:data]
-        @system_arguments[:data].each do |key, value|
-          # Only merge outlet-related attributes (containing "outlet" in the key)
-          @wrapper_data_attributes[key] = value if key.to_s.include?('outlet')
-        end
+      @system_arguments[:data]&.each do |key, value|
+        # Only merge outlet-related attributes (containing "outlet" in the key)
+        @wrapper_data_attributes[key] = value if key.to_s.include?('outlet')
       end
 
       # For non-dismissible dialogs, prevent ESC key default behavior
@@ -205,6 +221,37 @@ module Pathogen
 
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:action] = 'keydown.esc->pathogen--dialog#handleEsc'
+    end
+
+    # Default I18n key for open announcement
+    #
+    # @return [String] I18n key for dialog open announcement
+    def default_open_announcement
+      'pathogen.dialog_component.announcements.open'
+    end
+
+    # Default I18n key for close announcement
+    #
+    # @return [String] I18n key for dialog close announcement
+    def default_close_announcement
+      'pathogen.dialog_component.announcements.close'
+    end
+
+    # Resolve announcement message from I18n key or return as-is if already a message
+    #
+    # @param [String] key_or_message I18n key or message string
+    # @return [String, nil] Resolved message or nil if key doesn't exist
+    def resolve_announcement(key_or_message)
+      # If it looks like an I18n key (contains dots), try to translate it
+      if key_or_message.include?('.')
+        I18n.t(key_or_message, default: key_or_message)
+      else
+        # Otherwise, treat as plain message
+        key_or_message
+      end
+    rescue I18n::MissingTranslationData
+      # If translation is missing, return the key as fallback
+      key_or_message
     end
 
     # Get the size CSS class

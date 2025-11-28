@@ -40,6 +40,9 @@ en:
       placeholder: YYYY-MM-DD
       show_today: Show Today
     dialog_component:
+      announcements:
+        close: Dialog closed
+        open: Dialog opened
       close_button: Close dialog
     label:
       required_indicator: "*"

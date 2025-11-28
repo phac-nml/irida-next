@@ -40,6 +40,9 @@ fr:
       placeholder: AAAA-MM-JJ
       show_today: Montrer aujourd'hui
     dialog_component:
+      announcements:
+        close: Boîte de dialogue fermée
+        open: Boîte de dialogue ouverte
       close_button: Fermer la boîte de dialogue
     label:
       required_indicator: "*"
