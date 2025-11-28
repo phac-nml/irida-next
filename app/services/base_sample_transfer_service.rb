@@ -67,6 +67,10 @@ class BaseSampleTransferService < BaseSampleService
     end
   end
 
+  def update_metadata_summary_counts(metadata_payload, old_project, old_namespaces, new_namespaces)
+    old_project.namespace.update_metadata_summary_by_sample_transfer(metadata_payload, old_namespaces, new_namespaces)
+  end
+
   def transfer
     raise NotImplementedError
   end
