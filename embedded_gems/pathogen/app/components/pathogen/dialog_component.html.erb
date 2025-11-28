@@ -1,5 +1,9 @@
-<%= tag.div class: class_names("fixed inset-0 z-50 flex items-center justify-center", { "hidden" => !initially_open }),
-            data: wrapper_data_attributes.merge({ pathogen__dialog_target: "backdrop" }) do %>
+<%= tag.div id: wrapper_id, data: wrapper_data_attributes do %>
+  <%# Render show button if provided %>
+  <%= show_button if show_button? %>
+
+  <%= tag.div class: class_names("fixed inset-0 z-50 flex items-center justify-center", { "hidden" => !initially_open }),
+              data: { pathogen__dialog_target: "backdrop" } do %>
   <%# Backdrop overlay %>
   <%= tag.div class: "fixed inset-0 bg-black/50 dark:bg-black/70 transition-opacity",
               data: { action: dismissible ? "click->pathogen--dialog#closeOnBackdrop" : nil } %>
@@ -74,5 +78,6 @@
         <%= footer %>
       <% end %>
     <% end %>
+  <% end %>
   <% end %>
 <% end %>

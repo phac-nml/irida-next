@@ -3296,7 +3296,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
@@ -3319,7 +3319,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
@@ -3357,7 +3357,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.example_date']").select_option
@@ -3387,7 +3387,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
@@ -3423,7 +3423,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.example_float']").select_option
@@ -3451,7 +3451,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
@@ -3487,7 +3487,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.example_integer']").select_option
@@ -3515,7 +3515,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
@@ -3544,7 +3544,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
@@ -3572,7 +3572,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 
@@ -3601,7 +3601,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
@@ -3638,7 +3638,7 @@ module Projects
       ### actions and VERIFY START ###
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='name']").select_option
@@ -3668,7 +3668,7 @@ module Projects
 
       click_button I18n.t(:'components.advanced_search_component.title')
       within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
       end
 

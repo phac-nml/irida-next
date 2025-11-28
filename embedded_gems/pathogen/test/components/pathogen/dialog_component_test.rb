@@ -15,9 +15,11 @@ module Pathogen
         dialog.with_body { 'Content' }
       end
 
-      # Controller should be on the wrapper/backdrop container
-      assert_selector 'div[data-controller="pathogen--dialog"][data-pathogen--dialog-target="backdrop"]'
+      # Controller should be on the wrapper
+      assert_selector 'div[data-controller="pathogen--dialog"]'
       assert_selector 'div[data-pathogen--dialog-dismissible-value="true"]'
+      # Backdrop target should be on inner container
+      assert_selector 'div[data-pathogen--dialog-target="backdrop"]'
       # Dialog element should have proper ARIA
       assert_selector 'div[role="dialog"]'
       assert_selector 'div[aria-modal="true"]'
@@ -177,6 +179,99 @@ module Pathogen
       end
 
       assert_selector 'div[role="dialog"].bg-white.dark\\:bg-slate-800'
+    end
+
+    # Task Group 3: Show Button Slot Tests
+
+    test 'renders show_button slot with correct Stimulus action' do
+      component = Pathogen::DialogComponent.new
+      render_inline(component) do |dialog|
+        dialog.with_show_button { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector 'button[data-action="click->pathogen--dialog#open"]', text: 'Open Dialog'
+    end
+
+    test 'show_button has correct ID format' do
+      component = Pathogen::DialogComponent.new
+      render_inline(component) do |dialog|
+        dialog.with_show_button { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector "button#dialog-show-#{component.id}"
+    end
+
+    test 'show_button accepts scheme parameter' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_show_button(scheme: :primary) { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      # Primary scheme button should have primary background
+      assert_selector 'button.bg-primary-700', text: 'Open Dialog'
+    end
+
+    test 'show_button accepts size parameter' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_show_button(size: :small) { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      # Small size button should have appropriate text size
+      assert_selector 'button.text-xs', text: 'Open Dialog'
+    end
+
+    test 'show_button accepts block parameter for full width' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_show_button(block: true) { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector 'button.block.w-full', text: 'Open Dialog'
+    end
+
+    test 'dialog can be rendered without show_button slot' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector 'div[role="dialog"]'
+      assert_no_selector 'button[data-action="click->pathogen--dialog#open"]'
+    end
+
+    test 'show_button accepts additional system arguments' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_show_button(class: 'custom-class', aria: { label: 'Open custom dialog' }) do
+          'Open Dialog'
+        end
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector 'button.custom-class[aria-label="Open custom dialog"]'
+    end
+
+    test 'dialog accepts custom ID and show_button uses it for button ID' do
+      render_inline(Pathogen::DialogComponent.new(id: 'my-custom-dialog')) do |dialog|
+        dialog.with_show_button { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      assert_selector 'button#dialog-show-my-custom-dialog'
+      assert_selector 'button[data-action="click->pathogen--dialog#open"]'
+      assert_selector 'div[role="dialog"]#my-custom-dialog'
+    end
+
+    test 'show_button appends dialog action to existing actions' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_show_button(data: { action: 'custom#action' }) { 'Open Dialog' }
+        dialog.with_body { 'Content' }
+      end
+
+      # Both actions should be present in the correct order
+      assert_selector 'button[data-action="custom#action click->pathogen--dialog#open"]', text: 'Open Dialog'
     end
   end
   # rubocop:enable Metrics/ClassLength

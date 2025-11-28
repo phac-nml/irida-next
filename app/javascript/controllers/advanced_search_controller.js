@@ -11,7 +11,7 @@ export default class extends Controller {
     "searchGroupsTemplate",
     "valueTemplate",
   ];
-  static outlets = ["list-filter"];
+  static outlets = ["list-filter", "pathogen--dialog"];
   static values = {
     confirmCloseText: String,
     open: Boolean,
@@ -25,20 +25,24 @@ export default class extends Controller {
     }
   }
 
-  openDialog(event) {
-    // Render the search content
-    this.renderSearch();
+  pathogenDialogOutletConnected() {
+    // Outlet connected - dialog is available
+  }
 
-    // Find the dialog controller and open it
-    const dialogElement = this.element.querySelector('[data-controller*="pathogen--dialog"]');
-    if (dialogElement) {
-      const dialogController = this.application.getControllerForElementAndIdentifier(
-        dialogElement,
-        "pathogen--dialog"
-      );
-      if (dialogController) {
-        dialogController.open(event);
-      }
+  pathogenDialogOutletDisconnected() {
+    // Outlet disconnected
+  }
+
+  openDialog(event) {
+    console.log("openDialog", this.hasPathogenDialogOutlet);
+    // Open the dialog via outlet first
+    if (this.hasPathogenDialogOutlet) {
+      this.pathogenDialogOutlet.open(event);
+      // Wait for dialog to be visible, then render search content
+      // Use requestAnimationFrame to ensure dialog is rendered before populating content
+      requestAnimationFrame(() => {
+        this.renderSearch();
+      });
     }
   }
 
@@ -175,6 +179,15 @@ export default class extends Controller {
   clearForm() {
     this.clear();
     this.addGroup();
+  }
+
+  clearAndClose() {
+    // Clear the search content
+    this.clear();
+    // Close the dialog via outlet
+    if (this.hasPathogenDialogOutlet) {
+      this.pathogenDialogOutlet.close();
+    }
   }
 
   handleOperatorChange(event) {

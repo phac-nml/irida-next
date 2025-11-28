@@ -19,8 +19,11 @@ module Pathogen
   #
   # == Usage
   #
-  # @example Basic dialog
+  # @example Basic dialog with show button
   #   <%= render Pathogen::DialogComponent.new(size: :medium, dismissible: true) do |dialog| %>
+  #     <% dialog.with_show_button(scheme: :primary) do %>
+  #       Open Dialog
+  #     <% end %>
   #     <% dialog.with_header do %>
   #       <h2>Dialog Title</h2>
   #     <% end %>
@@ -30,6 +33,17 @@ module Pathogen
   #     <% dialog.with_footer do %>
   #       <%= button_tag "Cancel", type: "button" %>
   #       <%= button_tag "Confirm", type: "button", class: "primary" %>
+  #     <% end %>
+  #   <% end %>
+  #
+  # @example Dialog with external trigger button
+  #   <button type="button" data-action="click->pathogen--dialog#open">Open Dialog</button>
+  #   <%= render Pathogen::DialogComponent.new(size: :medium, dismissible: true) do |dialog| %>
+  #     <% dialog.with_header do %>
+  #       <h2>Dialog Title</h2>
+  #     <% end %>
+  #     <% dialog.with_body do %>
+  #       <p>Dialog content goes here.</p>
   #     <% end %>
   #   <% end %>
   #
@@ -85,7 +99,31 @@ module Pathogen
     # Only rendered if content is provided
     renders_one :footer
 
-    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_data_attributes
+    # Renders the show button that triggers the dialog to open
+    # Automatically wires up the button with Stimulus action
+    # for seamless integration with the dialog controller
+    #
+    # @param scheme [Symbol] Button color scheme (:primary, :default, :slate, :danger)
+    # @param size [Symbol] Button size (:xs, :sm, :md, :lg, :xl)
+    # @param block [Boolean] Whether button should be full-width
+    # @param system_arguments [Hash] Additional HTML attributes
+    renders_one :show_button, lambda { |scheme: :default, size: :medium, block: false, **system_arguments|
+      system_arguments[:id] = "dialog-show-#{@id}"
+      system_arguments[:data] ||= {}
+
+      # Append the dialog open action to any existing actions
+      existing_action = system_arguments[:data][:action]
+      dialog_action = 'click->pathogen--dialog#open'
+      system_arguments[:data][:action] = if existing_action.present?
+                                           "#{existing_action} #{dialog_action}"
+                                         else
+                                           dialog_action
+                                         end
+
+      Pathogen::Button.new(scheme: scheme, size: size, block: block, **system_arguments)
+    }
+
+    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_id, :wrapper_data_attributes
 
     # Initialize a new Dialog component
     #
@@ -97,10 +135,11 @@ module Pathogen
       @size = fetch_or_fallback(SIZE_OPTIONS, size, SIZE_DEFAULT)
       @dismissible = dismissible
       @initially_open = open
-      @id = self.class.generate_id
+      @id = system_arguments.delete(:id) || self.class.generate_id
 
       @system_arguments = system_arguments
       @wrapper_data_attributes = {}
+      @wrapper_id = "#{@id}-wrapper"
       setup_data_attributes
     end
 
@@ -120,6 +159,15 @@ module Pathogen
       @wrapper_data_attributes[:controller] = 'pathogen--dialog'
       @wrapper_data_attributes['pathogen--dialog-dismissible-value'] = @dismissible
       @wrapper_data_attributes['pathogen--dialog-open-value'] = @initially_open
+
+      # Merge outlet data attributes from system_arguments into wrapper_data_attributes
+      # This allows parent controllers to connect via Stimulus outlets
+      if @system_arguments[:data]
+        @system_arguments[:data].each do |key, value|
+          # Only merge outlet-related attributes (containing "outlet" in the key)
+          @wrapper_data_attributes[key] = value if key.to_s.include?('outlet')
+        end
+      end
 
       # For non-dismissible dialogs, prevent ESC key default behavior
       # This goes on the dialog element itself

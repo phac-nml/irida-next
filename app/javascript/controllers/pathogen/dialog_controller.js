@@ -33,7 +33,7 @@ export default class extends Controller {
   static values = { dismissible: Boolean, open: Boolean };
 
   #focusTrap = null;
-  #trigger = null;
+  #triggerId = null;
 
   /**
    * Initialize controller on connection
@@ -57,6 +57,12 @@ export default class extends Controller {
     // Initialize scroll shadows on connect
     this.updateScrollShadows();
 
+    // Listen for Turbo form submission success to close dialog
+    this.element.addEventListener(
+      "turbo:submit-end",
+      this.handleFormSubmit.bind(this),
+    );
+
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -66,9 +72,14 @@ export default class extends Controller {
    */
   disconnect() {
     this.#focusTrap.deactivate();
+    // Remove Turbo event listener
+    this.element.removeEventListener(
+      "turbo:submit-end",
+      this.handleFormSubmit.bind(this),
+    );
     if (this.openValue) {
       this.close();
-      if (this.#trigger) {
+      if (this.#triggerId) {
         // Re-add refocusTrigger on save for Turbo page loads
         savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
       }
@@ -82,16 +93,16 @@ export default class extends Controller {
    * @param {Event} event - Optional event (for trigger button reference)
    */
   open(event) {
-    // Store trigger element for focus restoration
-    if (event && event.currentTarget) {
-      this.#trigger = event.currentTarget;
+    // Store trigger element ID for focus restoration
+    if (event && event.currentTarget && event.currentTarget.id) {
+      this.#triggerId = event.currentTarget.id;
     }
 
     // Mark as turbo-permanent during open state
     this.element.setAttribute("data-turbo-permanent", "");
 
     // Save state for Turbo navigation
-    if (this.#trigger) {
+    if (this.#triggerId) {
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
     }
 
@@ -144,10 +155,13 @@ export default class extends Controller {
       // Restore page scroll
       document.body.style.overflow = "";
 
-      // Restore focus to trigger element
-      if (this.#trigger) {
+      // Restore focus to trigger element by ID
+      if (this.#triggerId) {
         savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
-        this.#trigger.focus();
+        const triggerElement = document.getElementById(this.#triggerId);
+        if (triggerElement) {
+          triggerElement.focus();
+        }
       }
     }, 150); // Match animation duration
   }
@@ -206,20 +220,40 @@ export default class extends Controller {
    */
   restoreFocusState() {
     const state = savedDialogStates.get(this.dialogTarget.id);
-    if (state && state.refocusTrigger && this.#trigger) {
-      this.#trigger.focus();
+    if (state && state.refocusTrigger && this.#triggerId) {
+      const triggerElement = document.getElementById(this.#triggerId);
+      if (triggerElement) {
+        triggerElement.focus();
+      }
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
     }
   }
 
   /**
-   * Update trigger element reference
+   * Update trigger element ID
    * Used for programmatic dialog opening
    *
    * @param {HTMLElement} button - The new trigger element
    */
   updateTrigger(button) {
-    this.#trigger = button;
+    if (button && button.id) {
+      this.#triggerId = button.id;
+    }
+  }
+
+  /**
+   * Handle Turbo form submission completion
+   * Only closes dialog if submission was successful (no validation errors)
+   *
+   * @param {Event} event - Turbo submit-end event
+   */
+  handleFormSubmit(event) {
+    // Check if submission was successful (2xx status code)
+    // If there are validation errors, the server responds with 422 Unprocessable Entity
+    // and re-renders the form with errors, so the dialog should stay open
+    if (event.detail.success) {
+      this.close();
+    }
   }
 
   /**

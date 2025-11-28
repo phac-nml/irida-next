@@ -1,8 +1,9 @@
 <div
   data-controller="advanced-search"
   data-advanced-search-open-value="<%= @open %>"
-  data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
+  data-advanced-search-confirm-close-text-value="<%= t("components.advanced_search_component.confirm_close_text") %>"
   data-advanced-search-list-filter-outlet=".list-filter"
+  data-advanced-search-pathogen--dialog-outlet="#advanced-search-dialog-wrapper"
 >
   <div class="flex flex-row rounded-lg w-full grow" role="group">
     <button
@@ -13,6 +14,7 @@
     >
       <%= t("components.advanced_search_component.title") %>
     </button>
+
     <% if @status %>
       <button
         type="button"
@@ -37,6 +39,7 @@
         <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t("components.advanced_search_component.description") %>
         </p>
+
         <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t("components.advanced_search_component.rules") %>
         </p>
@@ -45,13 +48,17 @@
           <%= render partial: "shared/form/required_field_legend" %>
         </div>
 
-        <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
-        </div>
+        <div
+          class="space-y-4"
+          data-advanced-search-target="searchGroupsContainer"
+        ></div>
+
         <div class="flex justify-end space-x-2">
           <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
             <%= t("components.advanced_search_component.add_group_button") %>
           <% end %>
         </div>
+
         <template data-advanced-search-target="searchGroupsTemplate">
           <% @search.groups.each_with_index do |group, group_index| %>
             <%= render AdvancedSearch::Group.new(
@@ -74,15 +81,18 @@
         <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
           <%= t("components.advanced_search_component.clear_filter_button") %>
         <% end %>
+
         <%= viral_button(state: :primary, data: { action: "filters#submit" }) do %>
           <%= t("components.advanced_search_component.apply_filter_button") %>
         <% end %>
       </div>
     <% end %>
   <% end %>
+
   <template data-advanced-search-target="listValueTemplate">
     <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <% condition = Sample::SearchCondition.new(operator: "in") %>
+
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -93,9 +103,11 @@
       <% end %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="valueTemplate">
     <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <% condition = Sample::SearchCondition.new(operator: "=") %>
+
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -106,6 +118,7 @@
       <% end %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="conditionTemplate">
     <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <%= render AdvancedSearch::Condition.new(
@@ -120,6 +133,7 @@
       ) %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="groupTemplate">
     <%= render AdvancedSearch::Group.new(
       form: @form,
