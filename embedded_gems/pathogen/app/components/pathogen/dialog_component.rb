@@ -145,24 +145,18 @@ module Pathogen
 
     # Initialize a new Dialog component
     #
-    # @param size [Symbol] Size variant (:small, :medium, :large, :xlarge)
-    # @param dismissible [Boolean] Whether dialog can be dismissed via ESC/backdrop click
-    # @param open [Boolean] Whether dialog starts in open state
-    # @param subtitle [String] Optional subtitle for additional context (sets aria-describedby)
-    # @param open_announcement [String] Optional I18n key for screen reader announcement when dialog opens
-    # @param close_announcement [String] Optional I18n key for screen reader announcement when dialog closes
-    # @param system_arguments [Hash] Additional HTML attributes
-    def initialize(size: SIZE_DEFAULT, dismissible: true, open: false, subtitle: nil, open_announcement: nil,
-                   close_announcement: nil, **system_arguments)
-      @size = fetch_or_fallback(SIZE_OPTIONS, size, SIZE_DEFAULT)
-      @dismissible = dismissible
-      @initially_open = open
-      @subtitle = subtitle
-      @open_announcement = open_announcement || default_open_announcement
-      @close_announcement = close_announcement || default_close_announcement
-      @id = system_arguments.delete(:id) || self.class.generate_id
-
-      @system_arguments = system_arguments
+    # Supports both keyword arguments and options hash for backward compatibility
+    #
+    # @param kwargs [Hash] Dialog configuration and HTML attributes
+    # @option kwargs [Symbol] :size Size variant (:small, :medium, :large, :xlarge)
+    # @option kwargs [Boolean] :dismissible Whether dialog can be dismissed via ESC/backdrop click (default: true)
+    # @option kwargs [Boolean] :open Whether dialog starts in open state (default: false)
+    # @option kwargs [String] :subtitle Optional subtitle for additional context (sets aria-describedby)
+    # @option kwargs [Hash] :announcements Optional hash with :open and/or :close I18n keys for announcements
+    def initialize(**kwargs)
+      extract_dialog_options(kwargs)
+      @id = kwargs.delete(:id) || self.class.generate_id
+      @system_arguments = kwargs
       @wrapper_data_attributes = {}
       @wrapper_id = "#{@id}-wrapper"
       setup_data_attributes
@@ -190,33 +184,54 @@ module Pathogen
 
     private
 
+    # Extract dialog-specific options from kwargs
+    def extract_dialog_options(kwargs)
+      size = kwargs.delete(:size) || SIZE_DEFAULT
+      @size = fetch_or_fallback(SIZE_OPTIONS, size, SIZE_DEFAULT)
+      @dismissible = kwargs.delete(:dismissible) { true }
+      @initially_open = kwargs.delete(:open) { false }
+      @subtitle = kwargs.delete(:subtitle)
+      announcements = kwargs.delete(:announcements) || {}
+      @open_announcement = announcements[:open] || default_open_announcement
+      @close_announcement = announcements[:close] || default_close_announcement
+    end
+
     # Sets up data attributes for Stimulus controller integration
     def setup_data_attributes
-      # Set controller and values on the wrapper (backdrop container)
+      setup_controller_attributes
+      setup_announcement_attributes
+      merge_outlet_attributes
+      setup_non_dismissible_behavior
+    end
+
+    # Set controller and values on the wrapper (backdrop container)
+    def setup_controller_attributes
       @wrapper_data_attributes[:controller] = 'pathogen--dialog'
       @wrapper_data_attributes['pathogen--dialog-dismissible-value'] = @dismissible
       @wrapper_data_attributes['pathogen--dialog-open-value'] = @initially_open
+    end
 
-      # Resolve and add announcement messages (resolve I18n keys server-side)
-      if @open_announcement
-        resolved_open = resolve_announcement(@open_announcement)
-        @wrapper_data_attributes['pathogen--dialog-open-announcement-value'] = resolved_open if resolved_open
-      end
+    # Resolve and add announcement messages (resolve I18n keys server-side)
+    def setup_announcement_attributes
+      resolved_open = resolve_announcement(@open_announcement) if @open_announcement
+      @wrapper_data_attributes['pathogen--dialog-open-announcement-value'] = resolved_open if resolved_open
 
-      if @close_announcement
-        resolved_close = resolve_announcement(@close_announcement)
-        @wrapper_data_attributes['pathogen--dialog-close-announcement-value'] = resolved_close if resolved_close
-      end
+      resolved_close = resolve_announcement(@close_announcement) if @close_announcement
+      @wrapper_data_attributes['pathogen--dialog-close-announcement-value'] = resolved_close if resolved_close
+    end
 
-      # Merge outlet data attributes from system_arguments into wrapper_data_attributes
-      # This allows parent controllers to connect via Stimulus outlets
+    # Merge outlet data attributes from system_arguments into wrapper_data_attributes
+    # This allows parent controllers to connect via Stimulus outlets
+    def merge_outlet_attributes
       @system_arguments[:data]&.each do |key, value|
         # Only merge outlet-related attributes (containing "outlet" in the key)
         @wrapper_data_attributes[key] = value if key.to_s.include?('outlet')
       end
+    end
 
-      # For non-dismissible dialogs, prevent ESC key default behavior
-      # This goes on the dialog element itself
+    # For non-dismissible dialogs, prevent ESC key default behavior
+    # This goes on the dialog element itself
+    def setup_non_dismissible_behavior
       return if @dismissible
 
       @system_arguments[:data] ||= {}
