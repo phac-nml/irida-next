@@ -156,18 +156,11 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def build_metadata_summary_update_sql(metadata_summary, operation = Arel::Nodes::Addition, by_one: false)
-      new_metadata_summary = nil
-      metadata_summary.each do |metadata_field, count|
-        field_metadata_summary = single_field_metadata_summary_jsonb(metadata_field, by_one ? 1 : count, operation)
-
-        new_metadata_summary = if new_metadata_summary.nil?
-                                 field_metadata_summary
-                               else
-                                 Arel::Nodes::InfixOperation.new('||', new_metadata_summary, field_metadata_summary)
-                               end
+      metadata_summary_update_sql = metadata_summary.map do |metadata_field, count|
+        single_field_metadata_summary_jsonb(metadata_field, by_one ? 1 : count, operation)
       end
 
-      new_metadata_summary
+      Arel::Nodes::Grouping.new(Arel.sql(metadata_summary_update_sql.map(&:to_sql).join(' || ')))
     end
 
     def single_field_metadata_summary_jsonb(metadata_field, count, operation) # rubocop:disable Metrics/MethodLength
