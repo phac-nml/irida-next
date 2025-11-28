@@ -1,5 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
+import {
+  isPrintableCharacter,
+  getLowercaseContent,
+  isOptionInView,
+  highlightOption,
+  setActiveDescendant,
+} from "controllers/select_with_auto_complete/utils";
 
 /**
  * SelectWithAutoCompleteController
@@ -18,6 +25,13 @@ export default class SelectWithAutoCompleteController extends Controller {
     multipleResultsText: String,
   };
 
+  #filter;
+  #filteredOptions;
+  #allOptions;
+  #option;
+  #firstOption;
+  #lastOption;
+
   connect() {
     this.boundOnBackgroundPointerUp = this.#onBackgroundPointerUp.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
@@ -27,12 +41,12 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.boundOnComboboxBlur = this.#onComboboxBlur.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
 
-    this.filter = "";
-    this.filteredOptions = [];
-    this.allOptions = [];
-    this.option = null;
-    this.firstOption = null;
-    this.lastOption = null;
+    this.#filter = "";
+    this.#filteredOptions = [];
+    this.#allOptions = [];
+    this.#option = null;
+    this.#firstOption = null;
+    this.#lastOption = null;
 
     // Add debounced filter for search input
     this.debouncedFilterAndUpdate = _.debounce(() => {
@@ -55,7 +69,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#attachOptionEvents(this.listboxTarget, true);
     const categories = this.listboxTarget.querySelectorAll('[role="group"]');
     categories.forEach((category) => {
-      this.allOptions.push(category);
+      this.#allOptions.push(category);
       this.#attachOptionEvents(category);
     });
   }
@@ -81,7 +95,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     const categoryItems = category.querySelectorAll(':scope > [role="option"]');
     categoryItems.forEach((categoryItem) => {
       if (add) {
-        this.allOptions.push(categoryItem);
+        this.#allOptions.push(categoryItem);
       }
       this.#addListboxOptionEventListeners(categoryItem);
     });
@@ -94,40 +108,13 @@ export default class SelectWithAutoCompleteController extends Controller {
     });
   }
 
-  #getLowercaseContent(node) {
-    return node.textContent.toLowerCase();
-  }
-
-  #isOptionInView(option) {
-    const bounding = option.getBoundingClientRect();
-    return (
-      bounding.top >= 0 &&
-      bounding.left >= 0 &&
-      bounding.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-      bounding.right <=
-        (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
-
-  #setActiveDescendant(option) {
-    if (option) {
-      this.comboboxTarget.setAttribute("aria-activedescendant", option.id);
-      if (!this.#isOptionInView(option)) {
-        option.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
-    } else {
-      this.comboboxTarget.removeAttribute("aria-activedescendant");
-    }
-  }
-
   #setValue(option) {
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
-    this.filter = option ? option.textContent : "";
-    this.comboboxTarget.value = this.filter;
+    this.#filter = option ? option.textContent : "";
+    this.comboboxTarget.value = this.#filter;
     this.comboboxTarget.setSelectionRange(
-      this.filter.length,
-      this.filter.length,
+      this.#filter.length,
+      this.#filter.length,
     );
     this.#filterOptions();
     this.#setOption(null);
@@ -149,9 +136,8 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #announceNumberOfResults() {
-    // Announce the number of results
     if (this.hasAriaLiveUpdateTarget) {
-      const numItems = this.filteredOptions.length;
+      const numItems = this.#filteredOptions.length;
       if (numItems === 0) {
         this.ariaLiveUpdateTarget.textContent = this.noResultsTextValue;
       } else if (numItems === 1) {
@@ -166,11 +152,11 @@ export default class SelectWithAutoCompleteController extends Controller {
   // ComboboxAutocomplete events
 
   #filterOptions() {
-    const filter = this.filter.toLowerCase();
-    this.filteredOptions = [];
+    const filter = this.#filter.toLowerCase();
+    this.#filteredOptions = [];
     this.listboxTarget.innerHTML = "";
 
-    this.allOptions.forEach((allOption) => {
+    this.#allOptions.forEach((allOption) => {
       let flag = false;
       const category = allOption.cloneNode(true);
 
@@ -180,10 +166,12 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.#addListboxOptionEventListeners(categoryOption);
           if (
             filter.length === 0 ||
-            this.#getLowercaseContent(categoryOption).indexOf(filter) >= 0
+            getLowercaseContent(categoryOption).indexOf(filter) >= 0
           ) {
             flag = true;
-            this.filteredOptions.push(this.#highlightOption(categoryOption));
+            this.#filteredOptions.push(
+              highlightOption(categoryOption, this.#filter),
+            );
           } else {
             category.removeChild(categoryOption);
           }
@@ -192,10 +180,10 @@ export default class SelectWithAutoCompleteController extends Controller {
         this.#addListboxOptionEventListeners(category);
         if (
           filter.length === 0 ||
-          this.#getLowercaseContent(category).indexOf(filter) >= 0
+          getLowercaseContent(category).indexOf(filter) >= 0
         ) {
           flag = true;
-          this.filteredOptions.push(this.#highlightOption(category));
+          this.#filteredOptions.push(highlightOption(category, this.#filter));
         }
       }
 
@@ -215,43 +203,33 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   #populateCurrentFirstLastOptions() {
     let option = null;
-    const currentOption = this.option;
-    const numItems = this.filteredOptions.length;
-    if (numItems > 0) {
-      this.firstOption = this.filteredOptions[0];
-      this.lastOption = this.filteredOptions[numItems - 1];
+    const currentOption = this.#option;
+    const numItems = this.#filteredOptions.length;
 
-      if (currentOption && this.filteredOptions.indexOf(currentOption) >= 0) {
+    if (numItems > 0) {
+      this.#firstOption = this.#filteredOptions[0];
+      this.#lastOption = this.#filteredOptions[numItems - 1];
+
+      if (currentOption && this.#filteredOptions.indexOf(currentOption) >= 0) {
         option = currentOption;
       } else {
-        option = this.firstOption;
+        option = this.#firstOption;
       }
     } else {
-      this.firstOption = null;
+      this.#firstOption = null;
       option = null;
-      this.lastOption = null;
+      this.#lastOption = null;
     }
     return option;
   }
 
-  #highlightOption(option) {
-    const escapeRegExp = this.filter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escapeRegExp})`, "gi");
-    option.innerHTML = option.textContent.replace(
-      regex,
-      "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
-    );
-    return option;
-  }
-
   #setOption(option) {
-    this.option = option;
-    this.#setActiveDescendant(option);
-
-    this.filteredOptions.forEach((opt) => {
+    this.#option = option;
+    setActiveDescendant(option, this.comboboxTarget);
+    this.#filteredOptions.forEach((opt) => {
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
-        if (!this.#isOptionInView(option)) {
+        if (!isOptionInView(option)) {
           option.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
       } else {
@@ -261,19 +239,19 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #getPreviousOption(currentOption) {
-    if (currentOption !== this.firstOption) {
-      const index = this.filteredOptions.indexOf(currentOption);
-      return this.filteredOptions[index - 1];
+    if (currentOption !== this.#firstOption) {
+      const index = this.#filteredOptions.indexOf(currentOption);
+      return this.#filteredOptions[index - 1];
     }
-    return this.lastOption;
+    return this.#lastOption;
   }
 
   #getNextOption(currentOption) {
-    if (currentOption !== this.lastOption) {
-      const index = this.filteredOptions.indexOf(currentOption);
-      return this.filteredOptions[index + 1];
+    if (currentOption !== this.#lastOption) {
+      const index = this.#filteredOptions.indexOf(currentOption);
+      return this.#filteredOptions[index + 1];
     }
-    return this.firstOption;
+    return this.#firstOption;
   }
 
   // Menu display methods
@@ -287,7 +265,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #hasOptions() {
-    return this.filteredOptions.length;
+    return this.#filteredOptions.length;
   }
 
   #open() {
@@ -314,24 +292,24 @@ export default class SelectWithAutoCompleteController extends Controller {
     switch (event.key) {
       case "Enter":
         this.debouncedFilterAndUpdate.flush();
-        this.#setValue(this.option);
+        this.#setValue(this.#option);
         this.#close();
         flag = true;
         break;
 
       case "Down":
       case "ArrowDown":
-        if (this.filteredOptions.length > 0) {
+        if (this.#filteredOptions.length > 0) {
           if (altKey && this.#isClosed()) {
             this.#open();
           } else {
             if (this.#isClosed()) {
               this.#open();
             }
-            if (this.filteredOptions.length > 1) {
-              this.#setOption(this.#getNextOption(this.option));
+            if (this.#filteredOptions.length > 1) {
+              this.#setOption(this.#getNextOption(this.#option));
             } else {
-              this.#setOption(this.firstOption);
+              this.#setOption(this.#firstOption);
             }
           }
         }
@@ -342,11 +320,11 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "ArrowUp":
         if (this.#hasOptions()) {
           if (this.#isOpen()) {
-            this.#setOption(this.#getPreviousOption(this.option));
+            this.#setOption(this.#getPreviousOption(this.#option));
           } else {
             this.#open();
             if (!altKey) {
-              this.#setOption(this.lastOption);
+              this.#setOption(this.#lastOption);
             }
           }
         }
@@ -365,8 +343,8 @@ export default class SelectWithAutoCompleteController extends Controller {
 
       case "Tab":
         this.#close();
-        if (this.option) {
-          this.#setValue(this.option);
+        if (this.#option) {
+          this.#setValue(this.#option);
         }
         break;
 
@@ -391,16 +369,12 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  #isPrintableCharacter(str) {
-    return str.length === 1 && str.match(/\S| /);
-  }
-
   #onComboboxKeyUp(event) {
     let flag = false;
     const char = event.key;
 
-    if (this.#isPrintableCharacter(char)) {
-      this.filter += char;
+    if (isPrintableCharacter(char)) {
+      this.#filter += char;
     }
 
     if (event.key === "Escape" || event.key === "Esc") {
@@ -409,7 +383,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Backspace":
-        this.filter = this.comboboxTarget.value;
+        this.#filter = this.comboboxTarget.value;
         this.debouncedFilterAndUpdate();
         flag = true;
         break;
@@ -425,7 +399,7 @@ export default class SelectWithAutoCompleteController extends Controller {
         break;
 
       default:
-        if (this.#isPrintableCharacter(char)) {
+        if (isPrintableCharacter(char)) {
           this.debouncedFilterAndUpdate();
           flag = true;
         }
@@ -448,13 +422,13 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #onComboboxFocus() {
-    this.filter = this.comboboxTarget.value;
+    this.#filter = this.comboboxTarget.value;
     this.#filterOptions();
     this.#setOption(null);
   }
 
   #onComboboxBlur() {
-    this.filter = this.comboboxTarget.value;
+    this.#filter = this.comboboxTarget.value;
     this.#setOption(null);
   }
 
