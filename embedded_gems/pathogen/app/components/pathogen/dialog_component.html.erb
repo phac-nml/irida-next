@@ -58,7 +58,7 @@
                            action: "click->pathogen--dialog#close",
                            pathogen__dialog_target: "closeButton"
                          } do %>
-            <%= render Pathogen::Icon.new(:x_mark, size: :md, color: nil, library: :heroicons, class: "size-5") %>
+            <%= pathogen_icon(:x, size: :md) %>
           <% end %>
         <% end %>
       <% end %>
