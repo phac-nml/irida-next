@@ -6,55 +6,65 @@ module Projects
     class TransferService < BaseSampleTransferService
       TransferError = Class.new(StandardError)
 
-      def transfer(new_project, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize,Metrics/PerceivedComplexity
-        transferrable_samples = filter_sample_ids(sample_ids, 'transfer').pluck(:id)
+      def transfer(new_project, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        transferrable_samples = filter_sample_ids(sample_ids, 'transfer')
+        sample_ids_to_transfer = transferrable_samples.pluck(:id)
 
-        transferred_samples_ids = []
-        transferred_samples_data = []
+        update_progress_bar(5, 100, broadcast_target)
+
+        conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
+
+        # Transfer samples that do not have name conflicts in the target project
+        Sample.where(id: sample_ids_to_transfer).where.not(
+          id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
+                                                         Arel::Nodes::On.new(
+                                                           conflicting_samples[:name].eq(Sample.arel_table[:name])
+                                                         ), Arel::Nodes::OuterJoin))
+                    .where(
+                      conflicting_samples[:project_id].eq(new_project.id).and(conflicting_samples[:deleted_at].eq(nil))
+                    )
+                    .where(id: transferrable_samples.pluck(:id))
+        ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
+
+        update_progress_bar(95, 100, broadcast_target)
+
+        # Retrieve name and puid of transferred samples
+        transferred_samples_ids = Sample.where(id: sample_ids_to_transfer, project_id: new_project.id).pluck(:id)
+        transferred_samples_data = Sample.where(id: transferred_samples_ids).pluck(:name, :puid).map do |name, puid|
+          { sample_name: name, sample_puid: puid }
+        end
+
+        # Add errors for samples that could not be transferred due to name conflicts
+        Sample.where(id: sample_ids_to_transfer).where.not(project_id: new_project.id).pluck(:name,
+                                                                                             :puid).each do |name, puid|
+          @namespace.errors.add(:samples,
+                                I18n.t('services.samples.transfer.sample_exists', sample_name: name, sample_puid: puid))
+        end
+
+        # If no samples were transferred, return an empty array
+        return [] if transferred_samples_ids.empty?
+
+        # Build metadata summary payload for transferred samples
+        metadata_payload = {}
+        Sample.select(
+          Arel::Nodes::NamedFunction.new('JSONB_OBJECT_KEYS', [Sample.arel_table[:metadata]]).as('key'),
+          Arel.star.count
+        ).where(id: transferred_samples_ids).group(Arel::Nodes::SqlLiteral.new('key')).each do |sample|
+          metadata_payload[sample.key] = sample.count
+        end
+
         old_namespaces = namespaces_for_transfer(@namespace)
         new_namespaces = namespaces_for_transfer(new_project.namespace)
-        total_sample_count = transferrable_samples.count
 
-        Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
-          Sample.suppressing_counter_caches do # rubocop:disable Metrics/BlockLength
-            metadata_payload = {}
-            error_messages = []
+        update_metadata_summary_counts(metadata_payload, @namespace.project, old_namespaces, new_namespaces)
 
-            ApplicationRecord.transaction do
-              dest_project = Project.find_by(id: new_project.id)
-              samples = Sample.where(id: transferrable_samples).lock
+        Project.decrement_counter(:samples_count, @namespace.project.id, by: transferred_samples_ids.count) # rubocop:disable Rails/SkipsModelValidations
+        Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_ids.count) # rubocop:disable Rails/SkipsModelValidations
 
-              samples.each.with_index(1) do |sample, index|
-                if sample.update(project_id: dest_project.id)
-                  sample.metadata.each_key do |key|
-                    if metadata_payload.key?(key)
-                      metadata_payload[key] += 1
-                    else
-                      metadata_payload[key] = 1
-                    end
-                  end
-                  transferred_samples_ids << sample.id
-                  add_transfer_sample_to_activity_data(sample, transferred_samples_data)
-                else
-                  error_messages << I18n.t('services.samples.transfer.sample_exists',
-                                           sample_name: sample.name, sample_puid: sample.puid)
-                end
-                update_progress_bar(index, total_sample_count, broadcast_target)
-              end
-            end
+        update_samples_count(@namespace.project, new_project, transferred_samples_ids.count)
+        create_activities(transferred_samples_data, transferred_samples_ids.count)
 
-            Project.decrement_counter(:samples_count, @namespace.project.id, by: transferred_samples_ids.count) # rubocop:disable Rails/SkipsModelValidations
-            Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_ids.count) # rubocop:disable Rails/SkipsModelValidations
-
-            update_metadata_summary_counts(metadata_payload, @namespace.project, old_namespaces, new_namespaces)
-            @namespace.errors.add(:samples, error_messages) if error_messages.length.positive?
-          end
-        end
-
-        if transferred_samples_ids.any?
-          update_samples_count(@namespace.project, new_project, transferred_samples_ids.count)
-          create_activities(transferred_samples_data, transferred_samples_ids.count)
-        end
+        update_progress_bar(100, 100, broadcast_target)
 
         broadcast_refresh_later_to_samples_table(old_namespaces, new_namespaces, @namespace.project, new_project)
 
