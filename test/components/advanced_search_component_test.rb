@@ -5,14 +5,16 @@ require 'application_system_test_case'
 class AdvancedSearchComponentTest < ApplicationSystemTestCase
   test 'default' do
     visit('rails/view_components/advanced_search_component/default')
-    within 'div[data-controller-connected="true"]' do
+    within 'div[data-controller="advanced-search"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
-      within 'dialog' do
+      # Wait for dialog controller to connect
+      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
@@ -83,41 +85,45 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
   test 'close dialog prompts for confirmation if filters have not been applied' do
     visit('rails/view_components/advanced_search_component/empty')
-    within 'div[data-controller-connected="true"]' do
+    within 'div[data-controller="advanced-search"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
-      within 'dialog' do
+      # Wait for dialog controller to connect
+      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
         end
 
         # verify the dialog has a close button
-        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        assert_selector "button[aria-label='#{I18n.t('pathogen.dialog_component.close_button')}']"
 
         # verify that the dialog closes without a confirm dialog if no unapplied filters
-        click_button I18n.t('components.dialog.close')
-        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t('pathogen.dialog_component.close_button')
+        assert_no_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
       end
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within 'dialog' do
+      # Wait for dialog controller to connect
+      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
         end
 
         # verify the dialog has a close button
-        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        assert_selector "button[aria-label='#{I18n.t('pathogen.dialog_component.close_button')}']"
 
         # add a new filter
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
@@ -130,7 +136,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify that the dialog close action prompts a confirm dialog if unapplied filters
         text = dismiss_confirm do
-          click_button I18n.t('components.dialog.close')
+          click_button I18n.t('pathogen.dialog_component.close_button')
         end
         assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
 
@@ -145,26 +151,28 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify that accepting the confirm discards the unapplied filters and closes the dialog
         text = accept_confirm do
-          click_button I18n.t('components.dialog.close')
+          click_button I18n.t('pathogen.dialog_component.close_button')
         end
         assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
-        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_no_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
       end
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within 'dialog' do
+      # Wait for dialog controller to connect
+      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
         end
 
         # verify the dialog has a close button
-        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        assert_selector "button[aria-label='#{I18n.t('pathogen.dialog_component.close_button')}']"
 
         # select a value for field
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
@@ -175,7 +183,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify that the dialog close action prompts a confirm dialog if unapplied filters
         text = dismiss_confirm do
-          click_button I18n.t('components.dialog.close')
+          click_button I18n.t('pathogen.dialog_component.close_button')
         end
         assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
 
@@ -188,10 +196,10 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify that accepting the confirm discards the unapplied filters and closes the dialog
         text = accept_confirm do
-          click_button I18n.t('components.dialog.close')
+          click_button I18n.t('pathogen.dialog_component.close_button')
         end
         assert_includes text, I18n.t(:'components.advanced_search_component.confirm_close_text')
-        assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        assert_no_selector 'h2', text: I18n.t(:'components.advanced_search_component.title')
       end
     end
   end

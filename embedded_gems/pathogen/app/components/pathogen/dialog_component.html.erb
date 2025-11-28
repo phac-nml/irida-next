@@ -12,7 +12,11 @@
   <%= tag.div **@system_arguments,
               id: id,
               role: "dialog",
-              aria: { modal: true, labelledby: "#{id}-title" },
+              aria: {
+                modal: true,
+                labelledby: "#{id}-title",
+                describedby: subtitle_id
+              }.compact,
               class: class_names(
                 "relative z-10 flex flex-col",
                 "bg-white dark:bg-slate-800",
@@ -31,15 +35,24 @@
 
     <%# Header section %>
     <% if header.present? %>
-      <%= tag.div class: "flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0" do %>
-        <%= tag.div id: "#{id}-title", class: "flex-1" do %>
-          <%= header %>
+      <%= tag.div class: "flex items-start justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0" do %>
+        <%= tag.div class: "flex-1" do %>
+          <%= tag.div id: "#{id}-title" do %>
+            <%= header %>
+          <% end %>
+
+          <%# Subtitle for additional context %>
+          <% if subtitle.present? %>
+            <%= tag.div id: subtitle_id, class: "mt-1 text-sm text-slate-600 dark:text-slate-400" do %>
+              <%= subtitle %>
+            <% end %>
+          <% end %>
         <% end %>
 
         <%# Close button for dismissible dialogs %>
         <% if dismissible %>
           <%= tag.button type: "button",
-                         class: "ml-4 p-1 rounded-md text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors",
+                         class: "ml-4 p-1 rounded-md text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors flex-shrink-0",
                          aria: { label: I18n.t('pathogen.dialog_component.close_button') },
                          data: {
                            action: "click->pathogen--dialog#close",

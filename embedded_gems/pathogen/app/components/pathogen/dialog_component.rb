@@ -9,6 +9,8 @@ module Pathogen
   # == Features
   #
   # - Slot-based API for header, body, and footer content
+  # - Required header for accessibility (aria-labelledby)
+  # - Optional subtitle for additional context (aria-describedby)
   # - Four size variants: small, medium, large, xlarge
   # - Dismissible and non-dismissible modes
   # - Dynamic scroll shadows for overflow indication
@@ -44,6 +46,20 @@ module Pathogen
   #     <% end %>
   #     <% dialog.with_body do %>
   #       <p>Dialog content goes here.</p>
+  #     <% end %>
+  #   <% end %>
+  #
+  # @example Dialog with subtitle for additional context
+  #   <%= render Pathogen::DialogComponent.new(subtitle: "This will permanently delete all data") do |dialog| %>
+  #     <% dialog.with_header do %>
+  #       <h2>Confirm Deletion</h2>
+  #     <% end %>
+  #     <% dialog.with_body do %>
+  #       <p>Are you sure you want to delete this project?</p>
+  #     <% end %>
+  #     <% dialog.with_footer do %>
+  #       <%= button_tag "Cancel" %>
+  #       <%= button_tag "Delete", class: "danger" %>
   #     <% end %>
   #   <% end %>
   #
@@ -123,18 +139,20 @@ module Pathogen
       Pathogen::Button.new(scheme: scheme, size: size, block: block, **system_arguments)
     }
 
-    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_id, :wrapper_data_attributes
+    attr_reader :id, :size, :dismissible, :initially_open, :wrapper_id, :wrapper_data_attributes, :subtitle
 
     # Initialize a new Dialog component
     #
     # @param size [Symbol] Size variant (:small, :medium, :large, :xlarge)
     # @param dismissible [Boolean] Whether dialog can be dismissed via ESC/backdrop click
     # @param open [Boolean] Whether dialog starts in open state
+    # @param subtitle [String] Optional subtitle for additional context (sets aria-describedby)
     # @param system_arguments [Hash] Additional HTML attributes
-    def initialize(size: SIZE_DEFAULT, dismissible: true, open: false, **system_arguments)
+    def initialize(size: SIZE_DEFAULT, dismissible: true, open: false, subtitle: nil, **system_arguments)
       @size = fetch_or_fallback(SIZE_OPTIONS, size, SIZE_DEFAULT)
       @dismissible = dismissible
       @initially_open = open
+      @subtitle = subtitle
       @id = system_arguments.delete(:id) || self.class.generate_id
 
       @system_arguments = system_arguments
@@ -143,12 +161,24 @@ module Pathogen
       setup_data_attributes
     end
 
+    # Validate that header is provided for accessibility
+    def before_render
+      raise ArgumentError, 'Dialog requires a header for accessibility (aria-labelledby)' if header.blank?
+    end
+
     # Check if footer should be rendered
     # Footer only renders if content is provided via slot
     #
     # @return [Boolean] true if footer content exists
     def render_footer?
       footer.present?
+    end
+
+    # Get the subtitle ID for aria-describedby
+    #
+    # @return [String, nil] The subtitle element ID if subtitle is present
+    def subtitle_id
+      "#{id}-subtitle" if subtitle.present?
     end
 
     private

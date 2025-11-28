@@ -35,6 +35,7 @@ module Pathogen
 
       size_mappings.each do |size, expected_class|
         render_inline(Pathogen::DialogComponent.new(size: size)) do |dialog|
+          dialog.with_header { 'Title' }
           dialog.with_body { 'Content' }
         end
 
@@ -89,6 +90,7 @@ module Pathogen
 
     test 'uses medium size as default' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -128,6 +130,7 @@ module Pathogen
 
     test 'renders scroll shadow elements' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -137,6 +140,7 @@ module Pathogen
 
     test 'body section has scroll event handler' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -148,6 +152,7 @@ module Pathogen
 
     test 'renders backdrop with click handler for dismissible dialogs' do
       render_inline(Pathogen::DialogComponent.new(dismissible: true)) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -156,6 +161,7 @@ module Pathogen
 
     test 'renders backdrop without click handler for non-dismissible dialogs' do
       render_inline(Pathogen::DialogComponent.new(dismissible: false)) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -175,10 +181,46 @@ module Pathogen
 
     test 'applies dark mode styling classes' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
       assert_selector 'div[role="dialog"].bg-white.dark\\:bg-slate-800'
+    end
+
+    test 'raises error when header is missing' do
+      error = assert_raises(ArgumentError) do
+        render_inline(Pathogen::DialogComponent.new) do |dialog|
+          dialog.with_body { 'Content' }
+        end
+      end
+
+      assert_equal 'Dialog requires a header for accessibility (aria-labelledby)', error.message
+    end
+
+    test 'renders subtitle with aria-describedby when provided' do
+      component = Pathogen::DialogComponent.new(subtitle: 'Additional context for this dialog')
+      render_inline(component) do |dialog|
+        dialog.with_header { 'Main Title' }
+        dialog.with_body { 'Content' }
+      end
+
+      # Dialog should have aria-describedby pointing to subtitle
+      assert_selector "div[role='dialog'][aria-describedby='#{component.subtitle_id}']"
+      # Subtitle should be rendered with correct ID and text
+      assert_selector "##{component.subtitle_id}", text: 'Additional context for this dialog'
+      # Subtitle should have proper styling
+      assert_selector "##{component.subtitle_id}.text-sm.text-slate-600"
+    end
+
+    test 'does not render aria-describedby when subtitle is not provided' do
+      render_inline(Pathogen::DialogComponent.new) do |dialog|
+        dialog.with_header { 'Title' }
+        dialog.with_body { 'Content' }
+      end
+
+      # Dialog should not have aria-describedby
+      assert_no_selector 'div[role="dialog"][aria-describedby]'
     end
 
     # Task Group 3: Show Button Slot Tests
@@ -187,6 +229,7 @@ module Pathogen
       component = Pathogen::DialogComponent.new
       render_inline(component) do |dialog|
         dialog.with_show_button { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -197,6 +240,7 @@ module Pathogen
       component = Pathogen::DialogComponent.new
       render_inline(component) do |dialog|
         dialog.with_show_button { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -206,6 +250,7 @@ module Pathogen
     test 'show_button accepts scheme parameter' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
         dialog.with_show_button(scheme: :primary) { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -216,6 +261,7 @@ module Pathogen
     test 'show_button accepts size parameter' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
         dialog.with_show_button(size: :small) { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -226,6 +272,7 @@ module Pathogen
     test 'show_button accepts block parameter for full width' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
         dialog.with_show_button(block: true) { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -247,6 +294,7 @@ module Pathogen
         dialog.with_show_button(class: 'custom-class', aria: { label: 'Open custom dialog' }) do
           'Open Dialog'
         end
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -256,6 +304,7 @@ module Pathogen
     test 'dialog accepts custom ID and show_button uses it for button ID' do
       render_inline(Pathogen::DialogComponent.new(id: 'my-custom-dialog')) do |dialog|
         dialog.with_show_button { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 
@@ -267,6 +316,7 @@ module Pathogen
     test 'show_button appends dialog action to existing actions' do
       render_inline(Pathogen::DialogComponent.new) do |dialog|
         dialog.with_show_button(data: { action: 'custom#action' }) { 'Open Dialog' }
+        dialog.with_header { 'Title' }
         dialog.with_body { 'Content' }
       end
 

@@ -17,6 +17,7 @@ export default class extends Controller {
     open: Boolean,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
+  #skipConfirm = false;
 
   connect() {
     // Render the search if openValue is true on connect
@@ -27,10 +28,36 @@ export default class extends Controller {
 
   pathogenDialogOutletConnected() {
     // Outlet connected - dialog is available
+    // Store reference to original close method
+    this.originalDialogClose = this.pathogenDialogOutlet.close.bind(this.pathogenDialogOutlet);
+
+    // Override the dialog's close method to check for unsaved changes
+    this.pathogenDialogOutlet.close = () => {
+      // Skip confirmation if explicitly requested (e.g., Clear button)
+      if (this.#skipConfirm) {
+        this.#skipConfirm = false;
+        this.clear();
+        this.originalDialogClose();
+        return;
+      }
+
+      if (!this.#dirty()) {
+        this.clear();
+        this.originalDialogClose();
+      } else {
+        if (window.confirm(this.confirmCloseTextValue)) {
+          this.clear();
+          this.originalDialogClose();
+        }
+      }
+    };
   }
 
   pathogenDialogOutletDisconnected() {
-    // Outlet disconnected
+    // Outlet disconnected - restore original close method
+    if (this.originalDialogClose && this.hasPathogenDialogOutlet) {
+      this.pathogenDialogOutlet.close = this.originalDialogClose;
+    }
   }
 
   openDialog(event) {
@@ -184,8 +211,9 @@ export default class extends Controller {
     // Clear the search content and add an empty group
     this.clear();
     this.addGroup();
-    // Close the dialog via outlet
+    // Close the dialog via outlet without confirmation
     if (this.hasPathogenDialogOutlet) {
+      this.#skipConfirm = true;
       this.pathogenDialogOutlet.close();
     }
   }

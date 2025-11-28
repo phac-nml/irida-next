@@ -78,11 +78,11 @@
 
     <% dialog.with_footer do %>
       <div class="flex justify-end space-x-2">
-        <%= viral_button(data: { action: "advanced-search#clearAndClose filters#submit" }) do %>
+        <%= viral_button(data: { action: "advanced-search#clearForm" }) do %>
           <%= t("components.advanced_search_component.clear_filter_button") %>
         <% end %>
 
-        <%= viral_button(state: :primary, data: { action: "filters#submit" }) do %>
+        <%= viral_button(state: :primary, data: { action: "filters#submit pathogen--dialog#close" }) do %>
           <%= t("components.advanced_search_component.apply_filter_button") %>
         <% end %>
       </div>
