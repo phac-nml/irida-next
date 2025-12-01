@@ -48,7 +48,10 @@ export default class extends Controller {
     nameMissing: { type: String },
   };
 
-  static outlets = ["nextflow--samplesheet--params"];
+  static outlets = [
+    "nextflow--samplesheet--params",
+    "nextflow--samplesheet--container",
+  ];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -112,6 +115,18 @@ export default class extends Controller {
     //   this.#disableProcessingState();
     // }
     this.element.setAttribute("data-controller-connected", "true");
+  }
+
+  processTest({ detail: { content } }) {
+    console.log("process test");
+    console.log("in if");
+    this.#setSamplesheetParametersAndData();
+    this.#updateMetadataColumnHeaderNames();
+    this.#disableProcessingState();
+  }
+
+  nextflowSamplesheetContainerOutletConnected() {
+    console.log("outlet connected");
   }
 
   #setSamplesheetParametersAndData() {
