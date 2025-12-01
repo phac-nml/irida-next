@@ -93,7 +93,7 @@ module Groups
     end
 
     def metadata_fields(template)
-      fields_for_namespace_or_template(namespace: @group, template:)
+      @fields = fields_for_namespace_or_template(namespace: @group, template:)
     end
 
     def query
