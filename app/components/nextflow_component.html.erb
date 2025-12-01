@@ -16,13 +16,13 @@
   data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-workflow-name-value="<%= @workflow.name %>"
   data-nextflow--samplesheet--params-workflow-version-value="<%= @workflow.version %>"
+  data-nextflow--samplesheet--nextflow--samplesheet--container-outlet="#test"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
+    nextflow--samplesheet--container:test->nextflow--samplesheet#processTest
   "
 >
-
-  <%= helpers.turbo_frame_tag "samplesheet" %>
   <h1
     class="
       mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900
@@ -114,7 +114,7 @@
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @sample_count.nil? %>
-
+                  <%= helpers.turbo_frame_tag "samplesheet" %>
                   <div
                     class="hidden"
                     data-controller="nextflow--samplesheet--params--schema"
