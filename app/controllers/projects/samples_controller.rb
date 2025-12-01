@@ -188,7 +188,7 @@ module Projects
     end
 
     def metadata_fields(template)
-      fields_for_namespace_or_template(
+      @fields = fields_for_namespace_or_template(
         namespace: @project.namespace,
         template: template
       )
