@@ -69,11 +69,27 @@ class BaseSampleTransferService < BaseSampleService
     end
   end
 
-  def update_metadata_summary_counts(metadata_payload, old_project, old_namespaces, new_namespaces)
-    old_project.namespace.update_metadata_summary_by_sample_transfer(metadata_payload, old_namespaces, new_namespaces)
+  def update_metadata_summary_counts(transferred_project_sample_ids, new_project) # rubocop:disable Metrics/AbcSize
+    transferred_project_sample_ids.each do |old_project_id, sample_ids|
+      old_project = Project.find(old_project_id)
+
+      # Build metadata summary payload for transferred samples
+      metadata_payload = {}
+      Sample.select(
+        Arel::Nodes::NamedFunction.new('JSONB_OBJECT_KEYS', [Sample.arel_table[:metadata]]).as('key'),
+        Arel.star.count
+      ).where(id: sample_ids).group(Arel::Nodes::SqlLiteral.new('key')).each do |sample|
+        metadata_payload[sample.key] = sample.count
+      end
+
+      old_namespaces = namespaces_for_transfer(old_project.namespace)
+      new_namespaces = namespaces_for_transfer(new_project.namespace)
+
+      old_project.namespace.update_metadata_summary_by_sample_transfer(metadata_payload, old_namespaces, new_namespaces)
+    end
   end
 
-  def transfer(new_project, sample_ids, broadcast_target)
+  def transfer(new_project, sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     transferrable_samples = filter_sample_ids(sample_ids, 'transfer')
     project_sample_ids_to_transfer = {}
     transferrable_samples.pluck(:id, :project_id).each do |id, project_id|
@@ -110,37 +126,27 @@ class BaseSampleTransferService < BaseSampleService
     transferred_project_sample_ids = {}
     transferred_samples_data = {}
     project_sample_ids_to_transfer.each do |project_id, sample_ids|
-      transferred_project_sample_ids[project_id] = Sample.where(id: sample_ids, project_id: new_project.id).pluck(:id)
+      transferred_project_sample_ids[project_id] = Sample.where(id: sample_ids, project_id: new_project.id)
+                                                         .where.not(id: transferrable_samples.pluck(:id)).pluck(:id)
       retrieve_sample_transfer_activity_data(project_id, new_project, transferred_project_sample_ids[project_id],
                                              transferred_samples_data)
     end
 
     # Add errors for samples that could not be transferred due to name conflicts
-    transferrable_samples.pluck(:name, :puid).each do |name, puid|
-      @namespace.errors.add(:samples,
-                            I18n.t('services.samples.transfer.sample_exists', sample_name: name, sample_puid: puid))
+    transferrable_samples.pluck(:name, :puid, :project_id).each do |name, puid, project_id|
+      if project_id == new_project.id
+        @namespace.errors.add(:samples,
+                              I18n.t('services.samples.transfer.target_project_duplicate', sample_name: name))
+      else
+        @namespace.errors.add(:samples,
+                              I18n.t('services.samples.transfer.sample_exists', sample_name: name, sample_puid: puid))
+      end
     end
 
     # If no samples were transferred, return an empty array
-    return [] unless transferred_project_sample_ids.any? { |_project_id, sample_ids| !sample_ids.empty? }
+    return [] if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
 
-    transferred_project_sample_ids.each do |old_project_id, sample_ids|
-      old_project = Project.find(old_project_id)
-
-      # Build metadata summary payload for transferred samples
-      metadata_payload = {}
-      Sample.select(
-        Arel::Nodes::NamedFunction.new('JSONB_OBJECT_KEYS', [Sample.arel_table[:metadata]]).as('key'),
-        Arel.star.count
-      ).where(id: sample_ids).group(Arel::Nodes::SqlLiteral.new('key')).each do |sample|
-        metadata_payload[sample.key] = sample.count
-      end
-
-      old_namespaces = namespaces_for_transfer(old_project.namespace)
-      new_namespaces = namespaces_for_transfer(new_project.namespace)
-
-      update_metadata_summary_counts(metadata_payload, old_project, old_namespaces, new_namespaces)
-    end
+    update_metadata_summary_counts(transferred_project_sample_ids, new_project)
 
     update_samples_count_and_create_activities(transferred_samples_data, new_project)
 
@@ -196,10 +202,6 @@ class BaseSampleTransferService < BaseSampleService
     end
 
     create_group_activity(transferred_samples_data) if @namespace.group_namespace?
-  end
-
-  def add_transfer_sample_to_activity_data
-    raise NotImplementedError
   end
 
   def create_group_activity
