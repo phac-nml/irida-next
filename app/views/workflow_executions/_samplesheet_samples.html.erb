@@ -1,10 +1,10 @@
 <%= render Nextflow::SamplesheetComponent.new(
-  schema: JSON.parse(params[:schema]),
-  samples: samples,
-  namespace_id: params[:namespace_id],
-  fields: params[:fields],
+  schema:,
+  samples:,
+  namespace_id:,
+  fields:,
   workflow_params: {
-    name: params[:workflow_name],
-    version: params[:workflow_version],
+    name: workflow.name,
+    version: workflow.version,
   },
 ) %>

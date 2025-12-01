@@ -105,6 +105,7 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
+    console.log("hi");
     // if (this.hasWorkflowAttributesTarget) {
     //   this.#setSamplesheetParametersAndData();
     //   this.#updateMetadataColumnHeaderNames();
