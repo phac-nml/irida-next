@@ -14,17 +14,22 @@ module Projects
 
         conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
-        # Transfer samples that do not have name conflicts in the target project
-        Sample.where(id: sample_ids_to_transfer).where.not(
-          id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
-                                                         Arel::Nodes::On.new(
-                                                           conflicting_samples[:name].eq(Sample.arel_table[:name])
-                                                         ), Arel::Nodes::OuterJoin))
-                    .where(
-                      conflicting_samples[:project_id].eq(new_project.id).and(conflicting_samples[:deleted_at].eq(nil))
-                    )
-                    .where(id: transferrable_samples.pluck(:id))
-        ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
+        Sample.transaction do
+          lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
+          Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
+
+          # Transfer samples that do not have name conflicts in the target project
+          transferrable_samples.where.not(
+            id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
+                                                           Arel::Nodes::On.new(
+                                                             conflicting_samples[:name].eq(Sample.arel_table[:name])
+                                                           ), Arel::Nodes::OuterJoin))
+                      .where(
+                        conflicting_samples[:project_id].eq(new_project.id).and(conflicting_samples[:deleted_at].eq(nil))
+                      )
+                      .where(id: transferrable_samples.pluck(:id))
+          ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
+        end
 
         update_progress_bar(95, 100, broadcast_target)
 
@@ -35,8 +40,7 @@ module Projects
         end
 
         # Add errors for samples that could not be transferred due to name conflicts
-        Sample.where(id: sample_ids_to_transfer).where.not(project_id: new_project.id).pluck(:name,
-                                                                                             :puid).each do |name, puid|
+        transferrable_samples.pluck(:name, :puid).each do |name, puid|
           @namespace.errors.add(:samples,
                                 I18n.t('services.samples.transfer.sample_exists', sample_name: name, sample_puid: puid))
         end
