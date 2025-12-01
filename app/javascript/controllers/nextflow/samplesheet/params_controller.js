@@ -13,15 +13,7 @@ export default class extends Controller {
   static targets = ["samplesheetParamsForm"];
   static outlets = ["nextflow--samplesheet--render", "selection"];
 
-  connect() {
-    console.log(this.namespaceIdValue);
-    console.log(this.fieldsValue);
-    console.log(this.workflowNameValue);
-    console.log(this.workflowVersionValue);
-  }
-
   submitSamplesheetParams(schema) {
-    console.log(schema);
     const fragment = document.createDocumentFragment();
     for (const id of this.selectionOutlet.getOrCreateStoredItems()) {
       fragment.appendChild(createHiddenInput("sample_ids[]", id));
@@ -45,6 +37,6 @@ export default class extends Controller {
     fragment.appendChild(createHiddenInput("schema", JSON.stringify(schema)));
 
     this.samplesheetParamsFormTarget.appendChild(fragment);
-    this.samplesheetParamsFormTarget.submit();
+    this.samplesheetParamsFormTarget.requestSubmit();
   }
 }
