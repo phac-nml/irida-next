@@ -115,7 +115,7 @@ class BaseSampleTransferService < BaseSampleService
                     .where(
                       conflicting_samples[:project_id].eq(new_project.id).and(conflicting_samples[:deleted_at].eq(nil))
                     )
-                    .where(id: transferrable_samples.pluck(:id))
+                    .where(id: sample_ids).select(:id)
         ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
       end
     end
