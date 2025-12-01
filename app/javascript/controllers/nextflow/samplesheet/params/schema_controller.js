@@ -9,6 +9,7 @@ export default class extends Controller {
   static outlets = ["nextflow--samplesheet--params"];
 
   nextflowSamplesheetParamsOutletConnected() {
+    console.log("conencted!");
     this.nextflowSamplesheetParamsOutlet.submitSamplesheetParams(
       this.schemaValue,
     );

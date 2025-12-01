@@ -1,6 +1,9 @@
 <%= turbo_stream.update "samplesheet",
                     partial: "samplesheet_samples",
                     locals: {
-                      params: params,
+                      namespace_id: @namespace_id,
+                      fields: @fields,
+                      schema: @schema,
                       samples: @samples,
+                      workflow: @workflow,
                     } %>

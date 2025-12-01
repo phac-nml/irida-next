@@ -21,6 +21,8 @@
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
   "
 >
+
+  <%= helpers.turbo_frame_tag "samplesheet" %>
   <h1
     class="
       mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900
@@ -112,7 +114,6 @@
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @sample_count.nil? %>
-                  <%= helpers.turbo_frame_tag "samplesheet" %>
 
                   <div
                     class="hidden"
@@ -231,10 +232,14 @@
     </div>
 
     <%= form_with url:
-      samplesheet_samples_workflow_executions_path(format: :turbo_stream),
-    method: :post,
+      samplesheet_samples_workflow_executions_path,
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
-    } %>
+
+    } do |f| %>
+
+      <input type="hidden" name="pipeline_id" value="<%= @workflow.pipeline_id %>">
+      <input type="hidden" name="workflow_version" value="<%= @workflow.version %>">
+    <% end %>
   <% end %>
 </div>
