@@ -104,7 +104,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
                                ).self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
                                .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
 
-    samples_count + Project.where(namespace_id: active_shared_namespaces).sum(:samples_count)
+    samples_count + Project.where(namespace_id: active_shared_namespaces.select(:id)).sum(:samples_count)
   end
 
   def retrieve_group_activity

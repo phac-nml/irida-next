@@ -58,37 +58,51 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def by_path(path)
-      find_by('lower(path) = :value', value: path.downcase)
+      find_by(arel_table[:path].lower.eq(path.downcase))
     end
 
     def as_ids
-      select(Arel.sql('namespaces.id'))
+      select(Namespace.arel_table[:id])
     end
 
-    def self_and_ancestors
+    def self_and_ancestors # rubocop:disable Metrics/AbcSize
       # build sql expression to select the route ids of the self and ancestral groups
-      route_id_select =
-        joins(:route)
-        .joins('LEFT JOIN routes ancestral_routes on ancestral_routes.id = routes.id ' \
-               "or concat(routes.path,'/') like concat(ancestral_routes.path,'/%')")
-        .select(Arel.sql('distinct routes.id')).to_sql
+      ancestral_routes = Arel::Table.new(Route.table_name, as: 'ancestral_routes')
+      ancestral_route_ids = Route.arel_table.join(ancestral_routes, Arel::Nodes::OuterJoin).on(
+        ancestral_routes[:id].eq(Route.arel_table[:id]).or(
+          Arel::Nodes::NamedFunction.new('CONCAT', [Route.arel_table[:path], Arel::Nodes::Quoted.new('/')]).matches(
+            Arel::Nodes::NamedFunction.new('CONCAT', [ancestral_routes[:path], Arel::Nodes::Quoted.new('/%')])
+          )
+        )
+      ).where(
+        Route.arel_table[:source_type].eq(Namespace.sti_name).and(
+          Route.arel_table[:source_id].in(select(:id).arel)
+        ).and(Route.arel_table[:deleted_at].eq(nil))
+      ).project(Route.arel_table[:id]).distinct
 
       unscoped
         .joins(:route)
-        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
+        .where(Route.arel_table[:id].in(ancestral_route_ids))
     end
 
-    def self_and_descendants
+    def self_and_descendants # rubocop:disable Metrics/AbcSize
       # build sql expression to select the route ids of the self and descendant groups
-      route_id_select =
-        joins(:route)
-        .joins('LEFT JOIN routes descendant_routes on descendant_routes.id = routes.id ' \
-               "or descendant_routes.path like concat(routes.path,'/%')")
-        .select(Arel.sql('distinct descendant_routes.id')).to_sql
+      descendant_routes = Arel::Table.new(Route.table_name, as: 'descendant_routes')
+      descendant_route_ids = Route.arel_table.join(descendant_routes, Arel::Nodes::OuterJoin).on(
+        descendant_routes[:id].eq(Route.arel_table[:id]).or(
+          descendant_routes[:path].matches(
+            Arel::Nodes::NamedFunction.new('CONCAT', [Route.arel_table[:path], Arel::Nodes::Quoted.new('/%')])
+          )
+        )
+      ).where(
+        Route.arel_table[:source_type].eq(Namespace.sti_name).and(
+          Route.arel_table[:source_id].in(select(:id).arel)
+        ).and(Route.arel_table[:deleted_at].eq(nil))
+      ).project(descendant_routes[:id]).distinct
 
       unscoped
         .joins(:route)
-        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
+        .where(Route.arel_table[:id].in(descendant_route_ids))
     end
 
     def self_and_descendant_ids
@@ -98,10 +112,15 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def without_descendants
       wildcard_path_select =
         joins(:route)
-        .select(Arel.sql("concat(routes.path,'/%')")).to_sql
+        .select(Arel::Nodes::NamedFunction.new('CONCAT', [Route.arel_table[:path], Arel::Nodes::Quoted.new('/%')])).arel
 
       joins(:route)
-        .where(Arel.sql(format('routes.path not ILIKE all(array(%s))', wildcard_path_select)))
+        .where(Route.arel_table[:path].does_not_match(
+                 Arel::Nodes::NamedFunction.new('ALL',
+                                                [Arel::Nodes::NamedFunction.new(
+                                                  'ARRAY', [wildcard_path_select]
+                                                )])
+               ))
     end
 
     def ransackable_attributes(_auth_object = nil)
@@ -208,22 +227,20 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def self_and_ancestors
     return self.class.where(id:) if parent_id.blank?
 
-    self.class
-        .joins(:route)
-        .where(
-          Arel.sql(
-            format(
-              "(select concat(path,'/') from routes where source_id = '%s') like concat(routes.path, '/%%')", id
-            )
-          )
-        )
+    self_and_ancestors_of_type(self.class.sti_name)
   end
 
   def self_and_ancestors_of_type(types)
-    Namespace.joins(:route).where(Arel.sql(format(
-                                             "(select concat(path,'/') from routes where source_id = '%s') like concat(routes.path, '/%%')", id
-                                           )))
-             .where(type: types)
+    Namespace.joins(:route)
+             .where(
+               Arel::Nodes::Grouping.new(
+                 Route.arel_table.project(
+                   Arel::Nodes::NamedFunction.new('CONCAT',
+                                                  [Route.arel_table[:path],
+                                                   Arel::Nodes::Quoted.new('/')])
+                 ).where(Route.arel_table[:source_id].eq(id))
+               ).matches(Arel::Nodes::NamedFunction.new('CONCAT', [Route.arel_table[:path], Arel::Nodes::Quoted.new('/%%')]))
+             ).where(type: types)
   end
 
   def self_and_ancestor_ids
@@ -235,9 +252,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def self_and_descendants
-    route_path = Route.arel_table[:path]
-
-    self.class.joins(:route).where(route_path.matches_any([full_path, "#{full_path}/%"]))
+    self_and_descendants_of_type(self.class.sti_name)
   end
 
   def self_and_descendants_of_type(types)
