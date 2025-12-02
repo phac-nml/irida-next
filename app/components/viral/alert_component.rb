@@ -42,6 +42,12 @@ module Viral
     # Canonical, rendered types
     TYPE_OPTIONS = TYPE_MAPPINGS.values.uniq.freeze
 
+    # Classes for dismiss button
+    DEFAULT_DISMISS_CLASSES = 'inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400
+    focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-slate-500 focus-visible:outline-offset-2
+    transition-colors duration-200 dark:text-slate-500 dark:hover:text-slate-400 dark:focus:ring-slate-400
+    hover:text-slate-600 hover:cursor-pointer'
+
     # Initialize the Alert component.
     #
     # @param type [Symbol, String] logical type or Rails flash key; mapped to {TYPE_OPTIONS}
@@ -112,11 +118,8 @@ module Viral
       end
     end
 
+    # add color specific hover backgrounds to dismiss button
     def classes_for_dismiss
-      default_classes = 'inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400'\
-                        'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-slate-500'\
-                        'focus-visible:outline-offset-2 transition-colors duration-200 dark:text-slate-500 '\
-                        'dark:hover:text-slate-400 dark:focus:ring-slate-400 hover:text-slate-600 hover:cursor-pointer'
       hover_color_classes = case type
                             when :danger
                               'hover:bg-red-200 hover:dark:bg-red-700'
@@ -129,7 +132,7 @@ module Viral
                             else
                               'hover:bg-slate-200 hover:dark:bg-slate-700'
                             end
-      class_names(default_classes, hover_color_classes)
+      class_names(DEFAULT_DISMISS_CLASSES, hover_color_classes)
     end
 
     # Stable ID used to wire the alert element with its dismiss button via data attributes.
