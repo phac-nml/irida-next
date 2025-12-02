@@ -6,8 +6,9 @@ module Viral
     attr_reader :title, :description, :templates, :template_label,
                 :required, :aria_live_translations
 
-    renders_many :lists, lambda { |id:, group:, title:, **system_arguments|
-      Viral::SortableList::ListComponent.new(id:, group:, title:, required: @required, **system_arguments)
+    renders_many :lists, lambda { |id:, group:, title:, max_items: nil, **system_arguments|
+      Viral::SortableList::ListComponent.new(id:, group:, title:, required: @required, max_items:,
+                                             **system_arguments)
     }
 
     def initialize(title: nil, description: nil, templates: [], template_label: nil, required: false)

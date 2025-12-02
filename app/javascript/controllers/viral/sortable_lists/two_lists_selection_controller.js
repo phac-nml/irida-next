@@ -14,6 +14,7 @@ export default class extends Controller {
     "checkmarkTemplate",
     "hiddenCheckmarkTemplate",
     "ariaLiveUpdate",
+    "maxItemsMessage",
   ];
 
   static values = {
@@ -62,6 +63,9 @@ export default class extends Controller {
       // this.selectedList.addEventListener("drop", this.DnDListener);
       // this.availableList.addEventListener("drop", this.DnDListener);
 
+      // Enforce max items limit on initial load - BEFORE setting originalAvailableList
+      this.#enforceMaxItemsLimit();
+
       // Get a handle on the original available list
       this.#originalAvailableList = [
         ...this.availableList.querySelectorAll("li"),
@@ -72,6 +76,43 @@ export default class extends Controller {
       // sets the first element in each list to be tabbable (ie: tabIndex = 0)
       this.#initializeLists();
       this.#checkStates();
+    }
+  }
+
+  #enforceMaxItemsLimit() {
+    // Make sure we have the lists
+    if (!this.selectedList || !this.availableList) {
+      return;
+    }
+
+    const maxItems = this.selectedList.getAttribute(
+      "data-viral--sortable-lists--list-max-items-value",
+    );
+
+    if (!maxItems) {
+      return;
+    }
+
+    const selectedItems = Array.from(this.selectedList.querySelectorAll("li"));
+    const maxItemsInt = parseInt(maxItems);
+
+    if (selectedItems.length > maxItemsInt) {
+      // Move excess items to available list
+      const excessItems = selectedItems.slice(maxItemsInt);
+
+      excessItems.forEach((item) => {
+        // Remove any selection attributes before moving
+        if (
+          item.getAttribute("aria-selected") ===
+          this.constructor.ARIA_SELECTED_TRUE
+        ) {
+          this.#removeSelectedAttributes(item);
+        }
+        this.availableList.appendChild(item);
+      });
+
+      // Update counters after moving items
+      this.#updateCounters();
     }
   }
 
@@ -238,11 +279,32 @@ export default class extends Controller {
       return true;
     };
 
-    // disable add button if no options selected in available list
-    this.#setButtonDisableState(
-      this.addButtonTarget,
-      availableListSelectedOptions.length == 0,
-    );
+    // Check if selected list would exceed max items
+    const wouldExceedMaxItems = () => {
+      const maxItems = this.selectedList.getAttribute(
+        "data-viral--sortable-lists--list-max-items-value",
+      );
+      if (!maxItems) {
+        return false;
+      }
+      const currentCount = this.selectedList.querySelectorAll("li").length;
+      const selectedCount = availableListSelectedOptions.length;
+      return currentCount + selectedCount > parseInt(maxItems);
+    };
+
+    // disable add button if no options selected in available list or if max items would be exceeded
+    const shouldDisableAdd =
+      availableListSelectedOptions.length == 0 || wouldExceedMaxItems();
+    this.#setButtonDisableState(this.addButtonTarget, shouldDisableAdd);
+
+    // Show/hide max items message
+    if (this.hasMaxItemsMessageTarget) {
+      if (availableListSelectedOptions.length > 0 && wouldExceedMaxItems()) {
+        this.maxItemsMessageTarget.classList.remove("hidden");
+      } else {
+        this.maxItemsMessageTarget.classList.add("hidden");
+      }
+    }
 
     // disable remove button if no options selected in selected list
     this.#setButtonDisableState(
@@ -373,7 +435,17 @@ export default class extends Controller {
         (item) => item.lastElementChild.textContent,
       );
 
-      fields.forEach((element) => {
+      // Check max items limit before processing
+      const maxItems = this.selectedList.getAttribute(
+        "data-viral--sortable-lists--list-max-items-value",
+      );
+      const fieldsToAdd = maxItems
+        ? Math.min(fields.length, parseInt(maxItems))
+        : fields.length;
+
+      // Only add items up to the max limit
+      for (let i = 0; i < fieldsToAdd; i++) {
+        const element = fields[i];
         const index = textFields.indexOf(element);
         if (index !== -1) {
           this.selectedList.append(items[index]);
@@ -382,8 +454,11 @@ export default class extends Controller {
         } else {
           this.#createListItem(element, this.selectedList);
         }
-      });
+      }
       this.availableList.append(...items);
+
+      // Enforce max items BEFORE reinitializing
+      this.#enforceMaxItemsLimit();
       this.#reinitializeLists();
     } catch (error) {
       console.error("Error setting template:", error);
@@ -395,6 +470,7 @@ export default class extends Controller {
     this.#removeTabIndexFromList(this.selectedList);
     this.#initializeLists();
     this.#checkButtonStates();
+    this.#updateCounters();
     this.#saveListStates();
   }
 
@@ -427,6 +503,7 @@ export default class extends Controller {
 
     this.#selectOrUnselectOption(option);
     this.#updateListAttributes(option);
+    this.#checkStates();
   }
 
   #selectOrUnselectOption(option) {
@@ -452,6 +529,7 @@ export default class extends Controller {
 
   #addSelectionByListInput(event) {
     if (event.target.parentNode != this.availableList) return;
+    if (!this.#canAddToSelectedList()) return;
     this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
@@ -467,6 +545,18 @@ export default class extends Controller {
         this.selectedList,
       );
     }
+  }
+
+  #canAddToSelectedList() {
+    const maxItems = this.selectedList.getAttribute(
+      "data-viral--sortable-lists--list-max-items-value",
+    );
+    if (!maxItems) {
+      return true;
+    }
+    const currentCount = this.selectedList.querySelectorAll("li").length;
+    const selectedCount = this.#getSelectedOptions(this.availableList).length;
+    return currentCount + selectedCount <= parseInt(maxItems);
   }
 
   #removeSelectionByListInput(event) {
@@ -499,14 +589,32 @@ export default class extends Controller {
     }
     const selectedOptions = this.#getSelectedOptions(sourceList);
 
+    // Enforce max items limit when adding to selected list
+    let optionsToMove = Array.from(selectedOptions);
+    if (targetList === this.selectedList) {
+      const maxItems = this.selectedList.getAttribute(
+        "data-viral--sortable-lists--list-max-items-value",
+      );
+      if (maxItems) {
+        const currentCount = this.selectedList.querySelectorAll("li").length;
+        const maxAllowed = parseInt(maxItems) - currentCount;
+
+        if (maxAllowed <= 0) {
+          // Already at max, don't move any items
+          this.#checkStates();
+          return;
+        }
+        // Only move up to max allowed
+        optionsToMove = optionsToMove.slice(0, maxAllowed);
+      }
+    }
+
     let selectedOptionsText = [];
-    if (selectedOptions.length > 0) {
-      for (let i = 0; i < selectedOptions.length; i++) {
-        selectedOptionsText.push(
-          selectedOptions[i].lastElementChild.textContent,
-        );
-        this.#removeSelectedAttributes(selectedOptions[i]);
-        targetList.appendChild(selectedOptions[i]);
+    if (optionsToMove.length > 0) {
+      for (let i = 0; i < optionsToMove.length; i++) {
+        selectedOptionsText.push(optionsToMove[i].lastElementChild.textContent);
+        this.#removeSelectedAttributes(optionsToMove[i]);
+        targetList.appendChild(optionsToMove[i]);
       }
 
       // if action is keydown but not from within the list (ie: keydown on add/remove btn), focus first list element
@@ -518,7 +626,17 @@ export default class extends Controller {
           ? sourceList.firstElementChild.focus()
           : sourceList.focus();
       }
-      this.#updateListAttributes(selectedOptions[0]);
+      this.#updateListAttributes(optionsToMove[0]);
+    }
+
+    // If we couldn't move all selected items, unselect the ones that couldn't be moved
+    if (optionsToMove.length < selectedOptions.length) {
+      const remainingOptions = Array.from(selectedOptions).slice(
+        optionsToMove.length,
+      );
+      remainingOptions.forEach((option) => {
+        this.#removeSelectedAttributes(option);
+      });
     }
 
     let ariaLiveUpdateString =
@@ -530,6 +648,8 @@ export default class extends Controller {
       ariaLiveUpdateString.concat(selectedOptionsText.join(", ")),
     );
 
+    // Enforce max items after any move operation
+    this.#enforceMaxItemsLimit();
     this.#checkStates();
   }
 
@@ -685,6 +805,35 @@ export default class extends Controller {
     const startingSelectionIndex = listOptions.indexOf(
       this.#shiftSelectionOption,
     );
+
+    // Check if selecting range in available list would exceed max
+    if (list === this.availableList) {
+      const maxItems = this.selectedList.getAttribute(
+        "data-viral--sortable-lists--list-max-items-value",
+      );
+      if (maxItems) {
+        const currentCount = this.selectedList.querySelectorAll("li").length;
+        const lowerIndex = Math.min(
+          startingSelectionIndex,
+          navigatedSelectionIndex,
+        );
+        const higherIndex = Math.max(
+          startingSelectionIndex,
+          navigatedSelectionIndex,
+        );
+        const rangeSize = higherIndex - lowerIndex + 1;
+        const maxAllowed = parseInt(maxItems) - currentCount;
+
+        if (rangeSize > maxAllowed) {
+          // Only select up to max allowed
+          for (let i = lowerIndex; i < lowerIndex + maxAllowed; i++) {
+            this.#addSelectedAttributes(listOptions[i]);
+          }
+          return;
+        }
+      }
+    }
+
     // make selections based on indexes
     this.#selectOptionRange(
       startingSelectionIndex,
@@ -753,7 +902,7 @@ export default class extends Controller {
       this.#selectOrUnselectOption(option);
     }
     this.#updateListAttributes(option);
-    this.#checkButtonStates();
+    this.#checkStates();
   }
 
   #handleShiftClick(option) {
@@ -768,12 +917,61 @@ export default class extends Controller {
       const currentClickedIndex = listOptions.indexOf(option);
 
       this.#unselectListOptions(option.parentNode);
+
+      // Check if selecting range in available list would exceed max
+      if (option.parentNode === this.availableList) {
+        const maxItems = this.selectedList.getAttribute(
+          "data-viral--sortable-lists--list-max-items-value",
+        );
+        if (maxItems) {
+          const currentCount = this.selectedList.querySelectorAll("li").length;
+          const lowerIndex = Math.min(lastClickedIndex, currentClickedIndex);
+          const higherIndex = Math.max(lastClickedIndex, currentClickedIndex);
+          const rangeSize = higherIndex - lowerIndex + 1;
+          const maxAllowed = parseInt(maxItems) - currentCount;
+
+          if (rangeSize > maxAllowed) {
+            // Only select up to max allowed
+            for (let i = lowerIndex; i < lowerIndex + maxAllowed; i++) {
+              this.#addSelectedAttributes(listOptions[i]);
+            }
+            return;
+          }
+        }
+      }
+
       this.#selectOptionRange(
         currentClickedIndex,
         lastClickedIndex,
         listOptions,
       );
     } else {
+      // Check if selecting from top would exceed max
+      if (option.parentNode === this.availableList) {
+        const maxItems = this.selectedList.getAttribute(
+          "data-viral--sortable-lists--list-max-items-value",
+        );
+        if (maxItems) {
+          const currentCount = this.selectedList.querySelectorAll("li").length;
+          const maxAllowed = parseInt(maxItems) - currentCount;
+
+          let selectedCount = 0;
+          for (
+            let i = 0;
+            i < listOptions.length && selectedCount < maxAllowed;
+            i++
+          ) {
+            this.#addSelectedAttributes(listOptions[i]);
+            selectedCount++;
+            if (listOptions[i] === option) {
+              break;
+            }
+          }
+          this.#lastClickedOption = listOptions[0];
+          return;
+        }
+      }
+
       for (let i = 0; i < listOptions.length; i++) {
         this.#addSelectedAttributes(listOptions[i]);
         if (listOptions[i] === option) {
@@ -797,6 +995,36 @@ export default class extends Controller {
     if (unselectedOptions.length == 0) {
       this.#unselectListOptions(listNode);
     } else {
+      // If selecting all in available list, check if it would exceed max
+      if (listNode === this.availableList) {
+        const maxItems = this.selectedList.getAttribute(
+          "data-viral--sortable-lists--list-max-items-value",
+        );
+        if (maxItems) {
+          const currentCount = this.selectedList.querySelectorAll("li").length;
+          const availableCount = allOptions.length;
+          const maxAllowed = parseInt(maxItems) - currentCount;
+
+          // Only select up to the max allowed
+          let selectedCount = 0;
+          for (
+            let i = 0;
+            i < allOptions.length && selectedCount < maxAllowed;
+            i++
+          ) {
+            if (
+              allOptions[i].getAttribute("aria-selected") ===
+              this.constructor.ARIA_SELECTED_FALSE
+            ) {
+              this.#addSelectedAttributes(allOptions[i]);
+              selectedCount++;
+            }
+          }
+          this.#checkStates();
+          return;
+        }
+      }
+
       for (let i = 0; i < allOptions.length; i++) {
         if (
           allOptions[i].getAttribute("aria-selected") ===
@@ -806,6 +1034,7 @@ export default class extends Controller {
         }
       }
     }
+    this.#checkStates();
   }
 
   #unselectListOptions(list) {
@@ -874,18 +1103,31 @@ export default class extends Controller {
     this.availableList.innerHTML = "";
     this.selectedList.innerHTML = "";
 
-    // add new metadata to the selected list
+    // Check max items limit
+    const maxItems = this.selectedList.getAttribute(
+      "data-viral--sortable-lists--list-max-items-value",
+    );
     let selectedMetadata = existingMetadata["selected"].concat(newMetadata);
 
+    // Enforce max items limit - move excess to available list
+    let overflowMetadata = [];
+    if (maxItems && selectedMetadata.length > parseInt(maxItems)) {
+      overflowMetadata = selectedMetadata.splice(parseInt(maxItems));
+    }
+
     // repopulate lists with existing and new metadata
-    existingMetadata["available"].forEach((metadata) => {
-      this.#createListItem(metadata, this.availableList);
-    });
+    existingMetadata["available"]
+      .concat(overflowMetadata)
+      .forEach((metadata) => {
+        this.#createListItem(metadata, this.availableList);
+      });
 
     selectedMetadata.forEach((metadata) => {
       this.#createListItem(metadata, this.selectedList);
     });
 
+    // Enforce max items BEFORE reconnecting
+    this.#enforceMaxItemsLimit();
     this.idempotentConnect();
   }
 
@@ -967,9 +1209,27 @@ export default class extends Controller {
   #checkStates() {
     this.#saveListStates();
     this.#checkButtonStates();
+    this.#updateCounters();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
       this.#cleanupAvailableList();
+    }
+  }
+
+  #updateCounters() {
+    // Update counter for selected list
+    this.#updateListCounter(this.selectedList);
+    // Update counter for available list
+    this.#updateListCounter(this.availableList);
+  }
+
+  #updateListCounter(list) {
+    const counterElement = list.parentElement?.querySelector(
+      '[data-viral--sortable-lists--list-target="currentCount"]',
+    );
+    if (counterElement) {
+      const currentCount = list.querySelectorAll("li").length;
+      counterElement.textContent = currentCount;
     }
   }
 
