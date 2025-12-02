@@ -20,7 +20,7 @@
         data-action="focusin->table#handleCellFocus"
         >
         <%# Target for virtual scroll header manipulation %>
-        <thead class='@2xl:sticky @2xl:top-0 z-10 uppercase' data-virtual-scroll-target="header">
+        <thead class="@2xl:sticky @2xl:top-0 z-10 uppercase" data-virtual-scroll-target="header">
           <tr
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -95,9 +95,9 @@
         <tbody
           id="samples-table-body"
           class="
-            overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
+            bg-white border-slate-200 dark:bg-slate-800
             dark:border-slate-700
-          '
+          "
           data-virtual-scroll-target="body"
         >
           <% @samples.each do |sample| %>
