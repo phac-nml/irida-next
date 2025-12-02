@@ -112,6 +112,26 @@ module Viral
       end
     end
 
+    def classes_for_dismiss
+      default_classes = 'inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400'\
+                        'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-slate-500'\
+                        'focus-visible:outline-offset-2 transition-colors duration-200 dark:text-slate-500 '\
+                        'dark:hover:text-slate-400 dark:focus:ring-slate-400 hover:text-slate-600 hover:cursor-pointer'
+      hover_color_classes = case type
+                            when :danger
+                              'hover:bg-red-200 hover:dark:bg-red-700'
+                            when :info
+                              'hover:bg-blue-200 hover:dark:bg-blue-700'
+                            when :success
+                              'hover:bg-green-200 hover:dark:bg-green-700'
+                            when :warning
+                              'hover:bg-amber-200 hover:dark:bg-amber-700'
+                            else
+                              'hover:bg-slate-200 hover:dark:bg-slate-700'
+                            end
+      class_names(default_classes, hover_color_classes)
+    end
+
     # Stable ID used to wire the alert element with its dismiss button via data attributes.
     # @return [String]
     def alert_id
