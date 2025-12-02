@@ -45,11 +45,6 @@ module Samples
       project_namespace.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
     end
 
-    def update_metadata_summary(sample, old_namespaces, new_namespaces)
-      Namespace.add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
-      Namespace.subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
-    end
-
     def update_samples_count(old_project, new_project, transferred_samples_count)
       Project.decrement_counter(:samples_count, old_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
       Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations

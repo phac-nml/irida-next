@@ -6,7 +6,6 @@ class Sample < ApplicationRecord
   include HasPuid
   include History
   include FileSelector
-  include SuppressibleCounterCache
 
   has_logidze
   acts_as_paranoid
