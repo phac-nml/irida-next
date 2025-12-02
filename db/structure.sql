@@ -1834,7 +1834,7 @@ CREATE TRIGGER logidze_on_namespace_group_links BEFORE INSERT OR UPDATE ON publi
 -- Name: namespaces logidze_on_namespaces; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER logidze_on_namespaces BEFORE INSERT OR UPDATE ON public.namespaces FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION public.logidze_logger('null', 'updated_at', '{created_at,metadata_summary,updated_at,attachments_updated_at}');
+CREATE TRIGGER logidze_on_namespaces BEFORE INSERT OR UPDATE ON public.namespaces FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION public.logidze_logger('null', 'updated_at', '{created_at,metadata_summary,updated_at,attachments_updated_at,samples_count}');
 
 
 --
@@ -2048,6 +2048,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251201162848'),
 ('20251029175823'),
 ('20251022175801'),
 ('20251006195129'),
