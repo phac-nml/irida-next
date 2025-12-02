@@ -21,7 +21,15 @@ export default class extends Controller {
   }
 
   editableCellTargetConnected(element) {
-    element.id = this.#elementId(element);
+    const elementId = this.#elementId(element);
+
+    // Skip initialization if we can't determine element ID
+    if (!elementId) {
+      console.warn("Skipping editable cell initialization - no field ID found", element);
+      return;
+    }
+
+    element.id = elementId;
 
     this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
@@ -70,7 +78,9 @@ export default class extends Controller {
   }
 
   reset(element) {
-    element.innerText = this.#originalCellContent[this.#elementId(element)];
+    const elementId = this.#elementId(element);
+    if (!elementId) return;
+    element.innerText = this.#originalCellContent[elementId];
   }
 
   async blur(event) {
@@ -92,11 +102,13 @@ export default class extends Controller {
   }
 
   async showConfirmDialog(editableCell) {
+    const elementId = this.#elementId(editableCell);
+    if (!elementId) return;
+
+    const originalValue = this.#originalCellContent[elementId] || "";
+
     let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-      .replace(
-        /ORIGINAL_VALUE/g,
-        this.#originalCellContent[this.#elementId(editableCell)],
-      )
+      .replace(/ORIGINAL_VALUE/g, originalValue)
       .replace(/NEW_VALUE/g, editableCell.innerText);
     this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
@@ -106,9 +118,7 @@ export default class extends Controller {
     let messageType = "wov";
     if (editableCell.innerText === "") {
       messageType = "wonv";
-    } else if (
-      this.#originalCellContent[this.#elementId(editableCell)] === ""
-    ) {
+    } else if (originalValue === "") {
       messageType = "woov";
     }
     dialog
@@ -148,16 +158,30 @@ export default class extends Controller {
   }
 
   #unchanged(element) {
-    return (
-      element.innerText === this.#originalCellContent[this.#elementId(element)]
-    );
+    const elementId = this.#elementId(element);
+    if (!elementId) return true; // Treat as unchanged if we can't determine ID
+    return element.innerText === this.#originalCellContent[elementId];
   }
 
   #elementId(element) {
-    const field = element
-      .closest("table")
-      .querySelector(`th:nth-child(${element.cellIndex + 1})`)
-      .dataset.fieldId.replaceAll(" ", "SPACE");
-    return `${field}_${element.parentNode.rowIndex}`;
+    // First try to get field ID directly from cell (for virtualized cells)
+    let field = element.dataset.fieldId;
+
+    // Fall back to finding header by cellIndex (for non-virtualized cells)
+    if (!field) {
+      const header = element
+        .closest("table")
+        .querySelector(`th:nth-child(${element.cellIndex + 1})`);
+      field = header?.dataset.fieldId;
+    }
+
+    // Handle undefined field gracefully
+    if (!field) {
+      console.warn("Could not determine field ID for cell", element);
+      return null;
+    }
+
+    const sanitizedField = field.replaceAll(" ", "SPACE");
+    return `${sanitizedField}_${element.parentNode.rowIndex}`;
   }
 }

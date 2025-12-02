@@ -13,6 +13,9 @@ module Samples
     # Target maximum number of table cells (rows × columns) for optimal performance
     TARGET_MAX_CELLS = 2000
 
+    # Number of sticky columns at @2xl breakpoint and above (2), 1 column below @2xl
+    STICKY_COLUMN_COUNT = 2
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       samples,
@@ -60,6 +63,16 @@ module Samples
       base_args = { tag: 'div' }.deep_merge(@system_arguments)
       base_args[:id] = 'samples-table'
       base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
+      base_args[:data] ||= {}
+
+      # Add virtual-scroll controller and data attributes
+      base_args[:data][:controller] = 'virtual-scroll'
+      base_args[:data][:'virtual-scroll-target'] = 'container'
+      base_args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
+      base_args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
+      base_args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
+      base_args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
+
       apply_selection_data!(base_args) if @abilities[:select_samples]
       base_args
     end
@@ -71,7 +84,9 @@ module Samples
     # @return [void]
     def apply_selection_data!(args)
       args[:data] ||= {}
-      args[:data][:controller] = 'selection'
+      # Append to existing controller value
+      existing_controller = args[:data][:controller] || ''
+      args[:data][:controller] = [existing_controller, 'selection'].join(' ').strip
       args[:data][:'selection-total-value'] = @pagy.count
       args[:data][:'selection-action-button-outlet'] = '.action-button'
       # i18n-driven live region messages
@@ -98,6 +113,9 @@ module Samples
         args[:classes] =
           class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(sample)
+        args[:data] ||= {}
+        args[:data][:sample_id] = sample.id
+        args[:data][:'virtual-scroll-target'] = 'row'
       end
     end
 
