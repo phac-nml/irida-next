@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Base Service used to Transfer Samples
-class BaseSampleTransferService < BaseSampleService
+class BaseSampleTransferService < BaseSampleService # rubocop:disable Metrics/ClassLength
   TransferError = Class.new(StandardError)
 
   def execute(new_project_id, sample_ids, broadcast_target = nil)
