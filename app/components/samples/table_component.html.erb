@@ -18,8 +18,9 @@
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
-      >
-        <thead class="@2xl:sticky @2xl:top-0 z-10 uppercase">
+        >
+        <%# Target for virtual scroll header manipulation %>
+        <thead class='@2xl:sticky @2xl:top-0 z-10 uppercase' data-virtual-scroll-target="header">
           <tr
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -90,13 +91,14 @@
             <% end %>
           </tr>
         </thead>
-
+        <%# Target for virtual scroll body manipulation %>
         <tbody
           id="samples-table-body"
           class="
             overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
             dark:border-slate-700
-          "
+          '
+          data-virtual-scroll-target="body"
         >
           <% @samples.each do |sample| %>
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -166,15 +168,17 @@
                   </div>
                 <% end %>
               <% end %>
-
+              <%# Wrap metadata cells in template tags for virtualization %>
               <% @metadata_fields.each do |field| %>
-                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
-                  <%= render Samples::EditableCell.new(field: field, sample: sample) %>
-                <% else %>
-                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3')) do %>
-                    <%= sample.metadata[field] %>
+                <template data-field="<%= field %>">
+                  <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
+                    <%= render Samples::EditableCell.new(field: field, sample: sample) %>
+                  <% else %>
+                    <%= render_cell(tag: 'td', classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
+                      <%= sample.metadata[field] %>
+                    <% end %>
                   <% end %>
-                <% end %>
+                </template>
               <% end %>
             <% end %>
           <% end %>
