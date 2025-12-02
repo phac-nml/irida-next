@@ -3,6 +3,9 @@
   data-controller="nextflow--samplesheet--container"
   id="test"
 >
+  <div class="hidden" data-nextflow--samplesheet-target="workflowAttributes">
+    <%= samples_workflow_executions_attributes.to_json %>
+  </div>
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
