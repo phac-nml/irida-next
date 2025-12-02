@@ -211,9 +211,9 @@ class SampleTest < ActiveSupport::TestCase
 
   def count_broadcasts_for
     broadcast_calls = []
-    original_method = Sample.instance_method(:broadcast_refresh_later_to)
+    original_method = Project.instance_method(:broadcast_refresh_later_to)
 
-    Sample.class_eval do
+    Project.class_eval do
       define_method(:broadcast_refresh_later_to) do |streamable, stream_name|
         broadcast_calls << [streamable, stream_name]
         nil # Don't actually broadcast in tests
@@ -224,7 +224,7 @@ class SampleTest < ActiveSupport::TestCase
     broadcast_calls
   ensure
     # Restore original method
-    Sample.class_eval do
+    Project.class_eval do
       define_method(:broadcast_refresh_later_to, original_method)
     end
   end
