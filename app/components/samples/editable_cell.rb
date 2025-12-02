@@ -10,6 +10,7 @@ module Samples
       @system_arguments = system_arguments
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:'editable-cell-target'] = 'editableCell'
+      @system_arguments[:data][:'field-id'] = field # Add field-id for editable_cell_controller
     end
   end
 end
