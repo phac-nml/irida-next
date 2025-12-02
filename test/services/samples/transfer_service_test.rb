@@ -486,5 +486,85 @@ module Samples
                                                                        [@sample34.id, @sample35.id])
       end
     end
+
+    # Tests for extracted helper methods
+    test 'organize_samples_by_project groups samples by source project' do
+      # Create a relation with multiple samples from the same project
+      samples = Sample.where(id: [@sample1.id, @sample2.id])
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      organized = service.organize_samples_by_project(samples)
+
+      # Verify grouping by project_id
+      assert_includes organized.keys, @current_project.id
+      # All samples from current_project should be grouped together
+      assert_equal 2, organized[@current_project.id].size
+      assert_includes organized[@current_project.id], @sample1.id
+      assert_includes organized[@current_project.id], @sample2.id
+    end
+
+    test 'build_transferred_project_sample_ids returns empty when no samples transferred' do
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+
+      project_sample_ids_to_transfer = {
+        @current_project.id => [@sample1.id, @sample2.id]
+      }
+      num_transferred_samples_by_project = {
+        @current_project.id => 0
+      }
+
+      result = service.build_transferred_project_sample_ids(
+        project_sample_ids_to_transfer,
+        num_transferred_samples_by_project,
+        @new_project,
+        Sample.where(id: [@sample1.id, @sample2.id])
+      )
+
+      assert_empty result[@current_project.id]
+    end
+
+    test 'build_metadata_payload_from_samples extracts metadata keys and counts' do
+      # Create samples with specific metadata for this test
+      sample_a = Sample.create!(name: "metadata_test_#{SecureRandom.hex}", project: @current_project,
+                                metadata: { 'key1' => 'value1', 'key2' => 'value2' })
+      sample_b = Sample.create!(name: "metadata_test_#{SecureRandom.hex}", project: @current_project,
+                                metadata: { 'key1' => 'value1', 'key3' => 'value3' })
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      payload = service.build_metadata_payload_from_samples([sample_a.id, sample_b.id])
+
+      # key1 appears in both samples, key2 and key3 appear in one each
+      assert_equal 2, payload['key1']
+      assert_equal 1, payload['key2']
+      assert_equal 1, payload['key3']
+
+      # Cleanup
+      sample_a.destroy
+      sample_b.destroy
+    end
+
+    test 'namespaces_for_transfer includes project namespace' do
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      namespaces = service.namespaces_for_transfer(@current_project.namespace)
+
+      # Should include the project namespace itself
+      assert_includes namespaces.pluck(:id), @current_project.namespace.id
+    end
+
+    test 'add_transfer_conflict_errors adds error for duplicate sample in target project' do
+      # Create duplicate sample in target project
+      duplicate = Sample.create!(name: @sample1.name, project: @new_project)
+
+      transferrable_samples = Sample.where(id: [@sample1.id])
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_conflict_errors(transferrable_samples, @new_project)
+
+      # Should have conflict error
+      error_messages = @current_project.namespace.errors.full_messages
+      assert(error_messages.any? { |msg| msg.include?(@sample1.name) })
+
+      duplicate.destroy
+    end
   end
 end
