@@ -22,7 +22,15 @@ export default class extends Controller {
   }
 
   editableCellTargetConnected(element) {
-    element.id = crypto.randomUUID();
+    const elementId = this.#elementId(element);
+
+    // Skip initialization if we can't determine element ID
+    if (!elementId) {
+      console.warn("Skipping editable cell initialization - no field ID found", element);
+      return;
+    }
+
+    element.id = elementId;
 
     this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
@@ -77,7 +85,9 @@ export default class extends Controller {
   }
 
   reset(element) {
-    element.innerText = this.#originalCellContent[element.id];
+    const elementId = this.#elementId(element);
+    if (!elementId) return;
+    element.innerText = this.#originalCellContent[elementId];
   }
 
   async blur(event) {
@@ -99,10 +109,15 @@ export default class extends Controller {
   }
 
   async showConfirmDialog(editableCell) {
+    const elementId = this.#elementId(editableCell);
+    if (!elementId) return;
+
+    const originalValue = this.#originalCellContent[elementId] || "";
+
     const validEntry = this.#validateEntry(editableCell);
     if (validEntry) {
       const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-        .replace(/ORIGINAL_VALUE/g, this.#originalCellContent[editableCell.id])
+        .replace(/ORIGINAL_VALUE/g, originalValue)
         .replace(/NEW_VALUE/g, this.#trimWhitespaces(editableCell.innerText));
       this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
@@ -112,7 +127,7 @@ export default class extends Controller {
       let messageType = "wov";
       if (editableCell.innerText === "") {
         messageType = "wonv";
-      } else if (this.#originalCellContent[editableCell.id] === "") {
+      } else if (originalValue === "") {
         messageType = "woov";
       }
       dialog
@@ -153,15 +168,20 @@ export default class extends Controller {
   }
 
   #unchanged(element) {
-    return element.innerText === this.#originalCellContent[element.id];
+    const elementId = this.#elementId(element);
+    if (!elementId) return true; // Treat as unchanged if we can't determine ID
+    return element.innerText === this.#originalCellContent[elementId];
   }
 
   #validateEntry(metadataCell) {
     const strippedMetadataValue = this.#trimWhitespaces(metadataCell.innerText);
+    const elementId = this.#elementId(metadataCell);
+    if (!elementId) return false;
+
     const entryIsValid =
-      strippedMetadataValue !== this.#originalCellContent[metadataCell.id];
+      strippedMetadataValue !== this.#originalCellContent[elementId];
     if (!entryIsValid) {
-      metadataCell.innerText = this.#originalCellContent[metadataCell.id];
+      metadataCell.innerText = this.#originalCellContent[elementId];
     }
 
     return entryIsValid;
@@ -169,5 +189,27 @@ export default class extends Controller {
 
   #trimWhitespaces(string) {
     return string.replace(/\s+/g, " ").trim();
+  }
+
+  #elementId(element) {
+    // First try to get field ID directly from cell (for virtualized cells)
+    let field = element.dataset.fieldId;
+
+    // Fall back to finding header by cellIndex (for non-virtualized cells)
+    if (!field) {
+      const header = element
+        .closest("table")
+        .querySelector(`th:nth-child(${element.cellIndex + 1})`);
+      field = header?.dataset.fieldId;
+    }
+
+    // Handle undefined field gracefully
+    if (!field) {
+      console.warn("Could not determine field ID for cell", element);
+      return null;
+    }
+
+    const sanitizedField = field.replaceAll(" ", "SPACE");
+    return `${sanitizedField}_${element.parentNode.rowIndex}`;
   }
 }
