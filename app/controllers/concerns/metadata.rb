@@ -4,6 +4,8 @@
 module Metadata
   extend ActiveSupport::Concern
 
+  MAX_METADATA_COLUMNS = 150
+
   # Handles pagination with custom metadata field sorting
   def pagy_with_metadata_sort(result, model = nil) # rubocop:disable Metrics/AbcSize
     model ||= controller_name.classify.constantize
@@ -22,17 +24,17 @@ module Metadata
     if template.blank? || template == 'none' || namespace.nil?
       []
     elsif template == 'all'
-      namespace.metadata_fields
+      namespace.metadata_fields.first(MAX_METADATA_COLUMNS)
     else
       metadata_template = MetadataTemplate.find_by(id: template)
-      metadata_template.present? ? metadata_template.fields : []
+      metadata_template.present? ? metadata_template.fields.first(MAX_METADATA_COLUMNS) : []
     end
   end
 
   # Builds list of fields available for advanced search
   def advanced_search_fields(namespace)
     @sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    @metadata_fields = namespace.metadata_fields
+    @metadata_fields = namespace.metadata_fields.first(MAX_METADATA_COLUMNS)
   end
 
   # Sets default metadata template if none selected
