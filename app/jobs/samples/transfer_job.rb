@@ -8,21 +8,15 @@ module Samples
     queue_as :default
     queue_with_priority 15
 
-    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      service = if namespace.group_namespace?
-                  Groups::Samples::TransferService.new(namespace, current_user)
-                else
-                  Projects::Samples::TransferService.new(namespace, current_user)
-                end
-
-      @transferred_sample_ids = service
-                                .execute(
-                                  new_project_id,
-                                  sample_ids,
-                                  Flipper.enabled?(
-                                    :progress_bars
-                                  ) ? broadcast_target : nil
-                                )
+    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
+      @transferred_sample_ids = Samples::TransferService.new(namespace, current_user)
+                                                        .execute(
+                                                          new_project_id,
+                                                          sample_ids,
+                                                          Flipper.enabled?(
+                                                            :progress_bars
+                                                          ) ? broadcast_target : nil
+                                                        )
 
       if namespace.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(
