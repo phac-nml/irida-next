@@ -17,6 +17,7 @@ export default class extends Controller {
   initialize() {
     this.boundBlur = this.blur.bind(this);
     this.boundKeydown = this.keydown.bind(this);
+    this.boundFocus = this.focus.bind(this);
     this.#originalCellContent = {};
   }
 
@@ -25,7 +26,10 @@ export default class extends Controller {
 
     // Skip initialization if we can't determine element ID
     if (!elementId) {
-      console.warn("Skipping editable cell initialization - no field ID found", element);
+      console.warn(
+        "Skipping editable cell initialization - no field ID found",
+        element,
+      );
       return;
     }
 
@@ -34,6 +38,7 @@ export default class extends Controller {
     this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
+    element.addEventListener("focus", this.boundFocus);
     element.setAttribute("contenteditable", true);
 
     if (element.hasAttribute("data-refocus")) {
@@ -44,9 +49,11 @@ export default class extends Controller {
   editableCellTargetDisconnected(element) {
     element.removeEventListener("blur", this.boundBlur);
     element.removeEventListener("keydown", this.boundKeydown);
+    element.removeEventListener("focus", this.boundFocus);
   }
 
   submit(element) {
+    this.#clearEditingState(element);
     // Remove event listeners on submission, they will be re-added on succesfull update
     element.removeEventListener("blur", this.boundBlur);
     element.removeEventListener("keydown", this.boundKeydown);
@@ -81,10 +88,16 @@ export default class extends Controller {
     const elementId = this.#elementId(element);
     if (!elementId) return;
     element.innerText = this.#originalCellContent[elementId];
+    this.#clearEditingState(element);
   }
 
   async blur(event) {
-    if (event.type === "input" || this.#unchanged(event.target)) return;
+    if (event.type === "input") return;
+
+    if (this.#unchanged(event.target)) {
+      this.#clearEditingState(event.target);
+      return;
+    }
 
     event.preventDefault();
 
@@ -161,6 +174,15 @@ export default class extends Controller {
     const elementId = this.#elementId(element);
     if (!elementId) return true; // Treat as unchanged if we can't determine ID
     return element.innerText === this.#originalCellContent[elementId];
+  }
+
+  focus(event) {
+    event.target.dataset.editing = "true";
+  }
+
+  #clearEditingState(element) {
+    if (!element) return;
+    delete element.dataset.editing;
   }
 
   #elementId(element) {
