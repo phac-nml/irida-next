@@ -7,3 +7,14 @@
                       samples: @samples,
                       workflow: @workflow,
                     } %>
+
+<%= turbo_stream.prepend "workflow_execution_message" do
+  viral_alert(
+    type: "success",
+    message: "updated!",
+    aria: {
+      live: "assertive",
+    },
+    classes: "mb-2",
+  )
+end %>

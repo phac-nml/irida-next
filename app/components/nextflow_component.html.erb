@@ -38,6 +38,18 @@
   </p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
+  <turbo-frame id="workflow_execution_message">
+    <%= viral_alert(
+      message: "updating",
+      aria: {
+        live: "assertive",
+      },
+      auto_dismiss: true,
+      dismissible: true,
+      classes: "mb-2",
+    ) %>
+  </turbo-frame>
+
   <div
     role="alert"
     aria-live="assertive"
@@ -121,6 +133,20 @@
                     data-nextflow--samplesheet--params--schema-nextflow--samplesheet--params-outlet="#nextflow-container"
                     data-nextflow--samplesheet--params--schema-schema-value="<%= property[:schema].to_json %>"
                   >
+                  </div>
+
+                  <div class="flex justify-center">
+                    <div
+                      class="
+                        flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
+                        rounded-lg rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
+                        dark:divide-gray-700 dark:bg-gray-800
+                      "
+                      role="alert"
+                    >
+                      <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+                      <span class="text-sm font-normal">Processing samplesheet</span>
+                    </div>
                   </div>
                 <% end %>
               <% else %>

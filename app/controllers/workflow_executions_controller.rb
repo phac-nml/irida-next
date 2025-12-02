@@ -23,16 +23,13 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def samplesheet_samples
-    puts 'angaerngparnhpaer'
-    puts params
-    puts params[:sample_ids]
-    puts params[:schema]
     @workflow = Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id],
                                                            params[:workflow_version])
     @samples = Sample.where(id: params[:sample_ids])
     @fields = params[:fields]
     @namespace_id = params[:namespace_id]
     @schema = JSON.parse(params[:schema])
+
     render status: :ok
   end
 
