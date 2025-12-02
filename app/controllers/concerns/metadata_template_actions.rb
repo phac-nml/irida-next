@@ -152,6 +152,8 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def metadata_template_fields
+    @max_metadata_columns = Metadata::MAX_METADATA_COLUMNS
+
     @current_template_fields = if params.key?(:metadata_template) && metadata_template_params.key?(:fields)
                                  metadata_template_params[:fields]
                                else

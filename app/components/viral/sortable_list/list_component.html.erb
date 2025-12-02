@@ -15,8 +15,11 @@
         class="text-sm text-slate-500 dark:text-slate-400 ml-2"
         data-viral--sortable-lists--list-target="counter"
       >
-        (<span data-viral--sortable-lists--list-target="currentCount">0</span>/
-        <%= max_items %>)
+        <%= t(
+          'components.viral.sortable_list.list_component.counter',
+          current: content_tag(:span, '0', data: { 'viral--sortable-lists--list-target': 'currentCount' }),
+          max: max_items
+        ).html_safe %>
       </span>
     <% end %>
   </p>
@@ -59,7 +62,7 @@
           role="status"
           aria-live="polite"
         >
-          Maximum items selected
+          <%= t('components.viral.sortable_list.list_component.max_items_message') %>
         </span>
       </div>
     <% end %>

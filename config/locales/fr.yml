@@ -1068,7 +1068,7 @@ fr:
       title: Modifier le modèle de métadonnées
     form:
       available: Disponible
-      description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
+      description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L'ordre des champs du modèle sera déterminé par l'ordre de la liste sélectionnée.
       metadata: Métadonnées
       selected: Sélectionné
     new_template_dialog:

@@ -352,12 +352,14 @@ fr:
         list_component:
           add: Ajouter
           aria_role_description: Glisser-déposer dans la liste %{list}
+          counter: "(%{current}/%{max})"
           down: Bas
           keyboard_shortcuts:
             add: Enter
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
+          max_items_message: Maximum d'éléments sélectionnés
           up: Haut
       sortable_lists_component:
         no_template: Pas de modèle

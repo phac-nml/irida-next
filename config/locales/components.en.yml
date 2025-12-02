@@ -352,12 +352,14 @@ en:
         list_component:
           add: Add
           aria_role_description: "%{list} listbox drag and drop"
+          counter: "(%{current}/%{max})"
           down: Down
           keyboard_shortcuts:
             add: Enter
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
+          max_items_message: Maximum items selected
           up: Up
       sortable_lists_component:
         no_template: No template
