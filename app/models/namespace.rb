@@ -408,24 +408,25 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self_and_ancestors_of_type(self.class.sti_name)
   end
 
+  # Return namespaces whose routes are ancestors of the current namespace
+  # (filtered by the provided STI `types`). This variant accepts an explicit
+  # set of types and is used by `self_and_ancestors` to restrict results to
+  # particular namespace subtypes (e.g. Group, ProjectNamespace).
+  #
+  # Implementation details:
+  # - Projects a CONCAT(path, '/') expression from the `routes` table for the
+  #   current set of routes and matches it against routes whose path begins
+  #   with that projected value using a trailing wildcard (CONCAT(path, '/%')).
+  # - Uses Arel functions to build the CONCAT and LIKE expressions because
+  #   the SQL is Postgres-specific and not modelled directly by Arel.
+  # - We call the helpers on `self.class` because `concat_path_with_slash` and
+  #   `concat_path_with_wildcard` are defined as class-level helpers inside the
+  #   `class << self` block above. Calling them via `self.class` keeps this
+  #   instance-level method concise while reusing the shared Arel builders.
+  #
+  # @param types [Array<String>, String] STI type(s) to filter the namespaces
+  # @return [ActiveRecord::Relation<Namespace>] matching ancestor namespaces of the given types
   def self_and_ancestors_of_type(types)
-    # Return namespaces whose routes are ancestors of the current namespace
-    # (filtered by the provided STI `types`). This variant accepts an explicit
-    # set of types and is used by `self_and_ancestors` to restrict results to
-    # particular namespace subtypes (e.g. Group, ProjectNamespace).
-    #
-    # Implementation details:
-    # - Builds an Arel query that projects a CONCAT(path, '/') expression from
-    #   the routes table and matches it against the current namespace's route
-    #   id and path prefix. The `.matches(... '/%%')` call performs a SQL LIKE
-    #   with a trailing wildcard to find ancestors (note the double-escaping
-    #   in the Arel literal due to '%' being interpreted in the Ruby string
-    #   context).
-    # - Filters by Route.source_id = id and by the provided `types` to scope
-    #   to the desired STI classes.
-    #
-    # Returns an ActiveRecord::Relation of Namespace records of the given
-    # `types` representing the current namespace plus its ancestors.
     Namespace.joins(:route)
              .where(
                Arel::Nodes::Grouping.new(
@@ -448,10 +449,28 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self_and_descendants_of_type(self.class.sti_name)
   end
 
+  # Return namespaces whose routes are descendants of the current namespace
+  # (filtered by the provided STI `types`). This variant accepts an explicit
+  # set of types and is used by `self_and_descendants` to restrict results to
+  # particular namespace subtypes (e.g. Group, ProjectNamespace).
+  #
+  # Implementation details:
+  # - Matches routes whose `path` begins with the current namespace's
+  #   `full_path` (or `full_path/` followed by anything) using SQL `LIKE` with
+  #   a trailing '/%' wildcard. We use Arel's `matches_any` for the OR-style
+  #   pattern matching against both exact path and prefixed descendants.
+  # - This method keeps the Arel expression straightforward by delegating
+  #   the path concatenation and wildcard creation to the class-level helpers
+  #   where appropriate; here we inline a `matches_any` over the two patterns
+  #   since the descendants check is simple and avoids extra subqueries.
+  #
+  # @param types [Array<String>, String] STI type(s) to filter the namespaces
+  # @return [ActiveRecord::Relation<Namespace>] matching descendant namespaces of the given types
   def self_and_descendants_of_type(types)
     route_path = Route.arel_table[:path]
 
-    Namespace.joins(:route).where(route_path.matches_any([full_path, "#{full_path}/%"]))
+    Namespace.joins(:route)
+             .where(route_path.matches_any([full_path, "#{full_path}/%"]))
              .where(type: types)
   end
 
