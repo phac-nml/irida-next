@@ -1,7 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
-import { createHiddenInput } from "utilities/form";
+import {
+  createHiddenInput,
+  formDataToJsonParams,
+  normalizeParams,
+} from "utilities/form";
 
-// Handles sending metadata to samplesheet after metadata selection
+// Handles submitting the samplesheet params to render the samplesheet once the nextflow dialog opens
 export default class extends Controller {
   static values = {
     namespaceId: { type: String },
@@ -11,28 +15,44 @@ export default class extends Controller {
   };
 
   static targets = ["samplesheetParamsForm"];
-  static outlets = ["nextflow--samplesheet--render", "selection"];
+  static outlets = ["selection"];
 
+  connect() {
+    this.boundAmendForm = this.amendForm.bind(this);
+
+    this.samplesheetParamsFormTarget.addEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+  }
+
+  amendForm(event) {
+    const formData = new FormData(this.samplesheetParamsFormTarget);
+    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
+    event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+    event.detail.resume();
+  }
+
+  #toJson(formData) {
+    let params = formDataToJsonParams(formData);
+
+    if (this.hasSelectionOutlet) {
+      normalizeParams(
+        params,
+        "sample_ids[]",
+        this.selectionOutlet.getOrCreateStoredItems(),
+        0,
+      );
+    }
+
+    normalizeParams(params, "fields[]", this.fieldsValue, 0);
+    return params;
+  }
+
+  // triggered when nextflow/samplesheet/params/schema_controller connects
   submitSamplesheetParams(schema) {
     const fragment = document.createDocumentFragment();
-    for (const id of this.selectionOutlet.getOrCreateStoredItems()) {
-      fragment.appendChild(createHiddenInput("sample_ids[]", id));
-    }
-
-    for (const field of this.fieldsValue) {
-      fragment.appendChild(createHiddenInput("fields[]", field));
-    }
-    fragment.appendChild(
-      createHiddenInput("namespace_id", this.namespaceIdValue),
-    );
-
-    fragment.appendChild(
-      createHiddenInput("workflow_name", this.workflowNameValue),
-    );
-
-    fragment.appendChild(
-      createHiddenInput("workflow_version", this.workflowVersionValue),
-    );
 
     fragment.appendChild(createHiddenInput("schema", JSON.stringify(schema)));
 

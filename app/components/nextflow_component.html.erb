@@ -12,15 +12,10 @@
   data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
   data-nextflow--samplesheet--params-selection-outlet="#samples-table"
-  data-nextflow--samplesheet--params-namespace-id-value="<%= namespace_id %>"
-  data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
-  data-nextflow--samplesheet--params-workflow-name-value="<%= @workflow.name %>"
-  data-nextflow--samplesheet--params-workflow-version-value="<%= @workflow.version %>"
-  data-nextflow--samplesheet--nextflow--samplesheet--container-outlet="#samplesheet"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
-    nextflow--samplesheet--container:test->nextflow--samplesheet#processTest
+    nextflow--samplesheet--container:notify->nextflow--samplesheet#processSamplesheet
   "
 >
   <h1
@@ -272,11 +267,11 @@
     <%= form_with url: samplesheet_workflow_executions_path, method: :post,
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
-
     } do |f| %>
-
-      <input type="hidden" name="pipeline_id" value="<%= @workflow.pipeline_id %>">
-      <input type="hidden" name="workflow_version" value="<%= @workflow.version %>">
+      <%= f.hidden_field :namespace_id, value: namespace_id %>
+      <%= f.hidden_field :workflow_name, value: @workflow.name %>
+      <%= f.hidden_field :workflow_version, value: @workflow.version %>
+      <%= f.hidden_field :workflow_version, value: @workflow.version %>
     <% end %>
   <% end %>
 </div>
