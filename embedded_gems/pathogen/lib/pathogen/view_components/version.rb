@@ -11,5 +11,3 @@ module Pathogen
     end
   end
 end
-
-Rails.logger.debug Pathogen::ViewComponents::Version::STRING if __FILE__ == $PROGRAM_NAME

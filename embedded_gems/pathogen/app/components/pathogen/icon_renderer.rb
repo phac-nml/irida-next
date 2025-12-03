@@ -117,8 +117,7 @@ module Pathogen
       fragment = Nokogiri::HTML::DocumentFragment.parse(raw_html)
       remove_svg_data_attributes(fragment)
       ActiveSupport::SafeBuffer.new(fragment.to_html)
-    rescue StandardError => e
-      Rails.logger.debug { "[Pathogen::Icon] Nokogiri cleanup failed: #{e.message}" }
+    rescue StandardError
       nil
     end
 

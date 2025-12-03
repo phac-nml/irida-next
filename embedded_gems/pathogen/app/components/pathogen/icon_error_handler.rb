@@ -40,8 +40,6 @@ module Pathogen
     # @param error [StandardError] The error that occurred
     # @return [ActiveSupport::SafeBuffer, nil] Fallback HTML or nil
     def handle_error(error)
-      log_error(error)
-
       fallback_icon = attempt_fallback_icon
       return fallback_icon if fallback_icon
 
@@ -51,15 +49,6 @@ module Pathogen
     end
 
     private
-
-    # Log the icon rendering error with context
-    #
-    # @param error [StandardError] The error that occurred
-    def log_error(error)
-      Rails.logger.warn "[Pathogen::Icon] Failed to render icon '#{icon_name}' " \
-                        "with options #{rails_icons_options.inspect}: " \
-                        "#{error.message}"
-    end
 
     # Attempt to render fallback icons when primary icon fails
     #
