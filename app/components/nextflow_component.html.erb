@@ -38,25 +38,6 @@
   </p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
-  <turbo-frame
-    id="workflow_execution_message"
-    data-nextflow--samplesheet-target="toastMessageContainer"
-  >
-    <%= viral_alert(
-      message:
-        t(
-          "components.nextflow_component.loading_samplesheet",
-          count: @sample_count,
-        ),
-      aria: {
-        live: "assertive",
-      },
-      auto_dismiss: true,
-      dismissible: true,
-      classes: "mb-2",
-    ) %>
-  </turbo-frame>
-
   <div
     role="alert"
     aria-live="assertive"
@@ -133,7 +114,27 @@
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @sample_count.nil? %>
+                  <turbo-frame
+                    id="samplesheet_message"
+                    data-nextflow--samplesheet-target="samplesheetMessagesContainer"
+                  >
+                    <%= viral_alert(
+                      message:
+                        t(
+                          "components.nextflow_component.loading_samplesheet",
+                          count: @sample_count,
+                        ),
+                      aria: {
+                        live: "assertive",
+                      },
+                      auto_dismiss: true,
+                      dismissible: true,
+                      classes: "mb-2",
+                    ) %>
+                  </turbo-frame>
+
                   <%= helpers.turbo_frame_tag "samplesheet" %>
+
                   <div
                     class="hidden"
                     data-controller="nextflow--samplesheet--params--schema"
