@@ -40,6 +40,67 @@ class NextflowComponentTest < ViewComponentTestCase
   test 'with overrides' do
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'Mikrokondo pipeline',
+      description: 'Mikrokondo pipeline example',
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: 'Databases and Pre-Computed Files',
+            description: 'The location of databases used by mikrokondo',
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: 'Kraken2 database',
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.2.0' },
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    I18n.with_locale :en do
+      render_inline NextflowComponent.new(
+        workflow:,
+        samples: [],
+        url: 'https://github.com/phac-nml/mikrokondo',
+        namespace_id: 'SDSDDFDSFDS',
+        fields: []
+      )
+
+      assert_selector 'form' do
+        assert_selector 'h1', text: 'Mikrokondo pipeline', count: 1
+        assert_text 'Mikrokondo pipeline example'
+        assert_text 'Databases and Pre-Computed Files'
+        assert_text 'The location of databases used by mikrokondo'
+        assert_text 'Kraken2 database'
+        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
+                        text: 'DBNAME'
+      end
+    end
+  end
+
+  test 'with overrides in french' do
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
       name: {
         en: 'Mikrokondo pipeline',
         fr: 'Pipeline Mikrokondo'
@@ -103,7 +164,7 @@ class NextflowComponentTest < ViewComponentTestCase
 
       assert_selector 'form' do
         assert_selector 'h1', text: 'Pipeline Mikrokondo', count: 1
-        assert_text 'Pipeline Mikrokondo'
+        assert_text 'Exemple Pipeline Mikrokondo'
         assert_text 'Bases de données et fichiers pré-calculés'
         assert_text "L'emplacement des bases de données utilisées par mikrokondo"
         assert_text 'Base de données Kraken2'
