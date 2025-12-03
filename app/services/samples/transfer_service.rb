@@ -151,24 +151,19 @@ module Samples
     # @param broadcast_target [String, nil] optional broadcast target for progress updates
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
-    def transfer(new_project, sample_ids, broadcast_target)
+    def transfer(new_project, sample_ids, broadcast_target, _transfer_uuid = SecureRandom.uuid)
       transferrable_samples = filter_sample_ids(sample_ids, 'transfer')
       project_sample_ids_to_transfer = organize_samples_by_project(transferrable_samples)
 
       update_progress_bar(5, 100, broadcast_target)
 
-      num_transferred_samples_by_project = perform_transfer_with_lock(new_project, project_sample_ids_to_transfer)
-
-      # Retrieve ids of transferred samples (delegated to helper for clarity)
-      transferred_project_sample_ids = build_transferred_project_sample_ids(project_sample_ids_to_transfer,
-                                                                            num_transferred_samples_by_project,
-                                                                            new_project,
-                                                                            transferrable_samples)
+      transferred_project_sample_ids = perform_transfer_with_lock(new_project, project_sample_ids_to_transfer,
+                                                                  transferrable_samples)
 
       update_progress_bar(95, 100, broadcast_target)
 
       # Add errors for samples that could not be transferred due to name conflicts
-      add_transfer_conflict_errors(transferrable_samples, new_project)
+      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
 
       # If no samples were transferred, return an empty array
       return [] if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
@@ -204,9 +199,11 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
-    # @return [Hash{Integer => Integer}] number of transferred samples by source project
-    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    # @param transferrable_samples [ActiveRecord::Relation] samples to organize
+    # @return [Hash{Integer => Array<Integer>}] mapping from source project ID to array of transferred sample IDs
+    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transferrable_samples) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       num_transferred_samples_by_project = {}
+      transferred_project_sample_ids = {}
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
       Sample.transaction do
@@ -228,9 +225,15 @@ module Samples
 
           num_transferred_samples_by_project[project_id] = num_transferred
         end
+
+        # Retrieve ids of transferred samples (delegated to helper for clarity)
+        transferred_project_sample_ids = build_transferred_project_sample_ids(project_sample_ids_to_transfer,
+                                                                              num_transferred_samples_by_project,
+                                                                              new_project,
+                                                                              transferrable_samples)
       end
 
-      num_transferred_samples_by_project
+      transferred_project_sample_ids
     end
 
     # Build a mapping of project_id => transferred sample ids for the given
@@ -256,24 +259,72 @@ module Samples
       end
     end
 
-    # Record transfer conflict errors for samples that could not be moved.
+    # Inspect samples that were attempted for transfer and record any errors
+    # on the service namespace for samples that could not be moved.
     #
-    # Samples can fail to transfer if a sample with the same name already exists
-    # in the target project. Distinguishes between conflicts and transfers to the
-    # same project (which are always conflicts).
+    # This method examines the set of sample ids provided for each source
+    # project and compares them to the ids that were actually transferred
+    # (as returned by `perform_transfer_with_lock`). For each sample that was
+    # not transferred it determines one of three outcomes:
+    # - the sample already existed in the target project: add
+    #   `target_project_duplicate` error
+    # - the sample belonged to a different source project than expected:
+    #   treat it as missing (accumulate id for a `samples_not_found` error)
+    # - the sample could not be transferred because a sample with the same
+    #   name already exists in the target project: add `sample_exists` error
     #
-    # @param transferrable_samples [ActiveRecord::Relation] all samples attempted
-    # @param new_project [Project] the target project
-    def add_transfer_conflict_errors(transferrable_samples, new_project)
-      transferrable_samples.pluck(:name, :puid, :project_id).each do |name, puid, project_id|
-        if project_id == new_project.id
-          @namespace.errors.add(:samples,
-                                I18n.t('services.samples.transfer.target_project_duplicate', sample_name: name))
-        else
-          @namespace.errors.add(:samples,
-                                I18n.t('services.samples.transfer.sample_exists', sample_name: name, sample_puid: puid))
+    # The errors are added to `@namespace.errors` so callers can surface them
+    # to the user. If any sample ids appear to be missing entirely (i.e. the
+    # sample's recorded project does not match the project we attempted to
+    # transfer from) a single `samples_not_found` error is added listing the
+    # missing ids.
+    #
+    # @param project_sample_ids_to_transfer [Hash{Integer=>Array<Integer>}]
+    #   mapping from source project id to the array of attempted sample ids
+    # @param transferred_project_sample_ids [Hash{Integer=>Array<Integer>}]
+    #   mapping from source project id to the array of sample ids successfully transferred
+    # @param new_project [Project] the target project receiving samples
+    #
+    # @return [void] side-effects by adding messages to `@namespace.errors`
+    def add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      # Collect sample ids that appear to be missing or inconsistent
+      missing_ids = []
+
+      project_sample_ids_to_transfer.each do |project_id, sample_ids|
+        next if sample_ids.empty?
+
+        # For any sample that was not transferred (i.e. not present in the
+        # `transferred_project_sample_ids` for the project) fetch identifying
+        # attributes so we can classify and report the failure reason.
+        Sample.where(id: sample_ids).where.not(id: transferred_project_sample_ids[project_id]).pluck(
+          :id, :name, :puid, :project_id
+        ).each do |sample_id, name, puid, sample_project_id|
+          if project_id == new_project.id
+            # The attempted transfer targeted the same project the sample
+            # already lives in: report as a target-project duplicate.
+            @namespace.errors.add(:samples,
+                                  I18n.t('services.samples.transfer.target_project_duplicate', sample_name: name))
+          elsif sample_project_id != project_id
+            # The sample's recorded project differs from the project we tried
+            # to transfer from — treat as missing and aggregate ids for a
+            # consolidated error message.
+            missing_ids << sample_id
+          else
+            # Generic conflict: a sample with the same name exists in the
+            # target project and prevented the transfer.
+            @namespace.errors.add(:samples,
+                                  I18n.t('services.samples.transfer.sample_exists', sample_name: name,
+                                                                                    sample_puid: puid))
+          end
         end
       end
+
+      # If we detected any missing ids, add a single error listing them so the
+      # caller can present a concise message to the user.
+      return if missing_ids.empty?
+
+      @namespace.errors.add(:samples, I18n.t('services.samples.transfer.samples_not_found',
+                                             sample_ids: missing_ids.join(', ')))
     end
 
     # Update sample counts and create audit trail activities for the transfer.
@@ -326,7 +377,7 @@ module Samples
     # @param new_project [Project] the target project
     # @param data [Array<Hash>] transferred sample data with :sample_name, :sample_puid
     # @param group_activity_data [Array] accumulator for group-level activities
-    def process_project_transfer_activity(old_project, new_project, data, group_activity_data)
+    def process_project_transfer_activity(old_project, new_project, data, group_activity_data) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       ext_details = ExtendedDetail.create!(details: { transferred_samples_count: data.size,
                                                       transferred_samples_data: data })
 
