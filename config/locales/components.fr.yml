@@ -245,7 +245,6 @@ fr:
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
-      filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
       loading_samplesheet:
         one: Préparation des arguments d’exécution du flux de travail pour 1 échantillon.
         other: La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
@@ -256,7 +255,6 @@ fr:
           optional: Nom (facultatif)
           required: Nom
       processing_request: Le traitement de votre soumission peut prendre un certain temps.
-      processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
       submission_error: Quelque chose s’est mal passé avec la demande de soumission.
     project_dashboard:
       activity_title: Dernière activité
