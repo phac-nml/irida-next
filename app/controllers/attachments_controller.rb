@@ -103,7 +103,7 @@ class AttachmentsController < ApplicationController
   def workflow_execution_crumb(workflow_execution)
     set_workflow_page_context
     [{
-      name: I18n.t('workflow_executions.index.title'),
+      name: I18n.t('shared.workflow_executions.index.title'),
       path: workflow_executions_path
     }, {
       name: workflow_execution.name.presence || workflow_execution.id,

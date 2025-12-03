@@ -19,6 +19,8 @@ module Projects
         destroy: allowed_to?(:update?, namespace),
         update: allowed_to?(:update?, namespace)
       }
+
+      @render_workflow_actions = @allowed_to.slice(:export_data, :cancel, :update, :destroy).value?(true)
     end
 
     def show_view_authorizations
@@ -61,7 +63,7 @@ module Projects
       super
       @context_crumbs +=
         [{
-          name: I18n.t('projects.workflow_executions.index.title'),
+          name: I18n.t('shared.workflow_executions.index.title'),
           path: namespace_project_workflow_executions_path
         }]
       return unless action_name == 'show' && !@workflow_execution.nil?
@@ -86,6 +88,12 @@ module Projects
       @list_path = list_namespace_project_workflow_executions_path(@project.parent, @project,
                                                                    list_class: 'workflow_execution')
       @destroy_path = destroy_multiple_namespace_project_workflow_executions_path(@project.parent, @project)
+    end
+
+    def cancel_multiple_paths
+      @list_path = list_namespace_project_workflow_executions_path(@project.parent, @project,
+                                                                   list_class: 'workflow_execution')
+      @cancel_path = cancel_multiple_namespace_project_workflow_executions_path(@project.parent, @project)
     end
 
     protected

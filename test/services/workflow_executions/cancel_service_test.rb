@@ -6,32 +6,34 @@ module WorkflowExecutions
   class CancelServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
+      @namespace = namespaces_project_namespaces(:project1_namespace)
+      @user_workflow_submitted = workflow_executions(:irida_next_example_submitted)
+      @user_workflow_running = workflow_executions(:irida_next_example_running)
+      @project_workflow_running = workflow_executions(:automated_example_running)
+      @project_workflow_submitted = workflow_executions(:automated_example_submitted)
+      @project_workflow_completed = workflow_executions(:automated_example_completed)
     end
 
     test 'cancel submitted workflow_execution' do
-      @workflow_execution = workflow_executions(:irida_next_example_submitted)
+      assert 'submitted', @user_workflow_submitted.state
 
-      assert 'submitted', @workflow_execution.state
-
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(@user, { workflow_execution: @user_workflow_submitted }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
-      assert_equal 'canceling', @workflow_execution.reload.state
-      assert_not @workflow_execution.cleaned?
+      assert_equal 'canceling', @user_workflow_submitted.reload.state
+      assert_not @user_workflow_submitted.cleaned?
     end
 
     test 'cancel running workflow_execution' do
-      @workflow_execution = workflow_executions(:irida_next_example_running)
+      assert 'running', @user_workflow_running.state
 
-      assert 'running', @workflow_execution.state
-
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(@user, { workflow_execution: @user_workflow_running }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
-      assert_equal 'canceling', @workflow_execution.reload.state
-      assert_not @workflow_execution.cleaned?
+      assert_equal 'canceling', @user_workflow_running.reload.state
+      assert_not @user_workflow_running.cleaned?
     end
 
     test 'cancel prepared workflow_execution' do
@@ -39,7 +41,7 @@ module WorkflowExecutions
 
       assert 'prepared', @workflow_execution.state
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
 
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
@@ -56,7 +58,7 @@ module WorkflowExecutions
       assert_equal 1, @workflow_execution.log_data.version
       assert_equal 1, @workflow_execution.log_data.size
 
-      assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
+      assert WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
 
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
 
@@ -67,6 +69,185 @@ module WorkflowExecutions
       assert 'canceled', @workflow_execution.state
       assert_equal 2, @workflow_execution.log_data.version
       assert_equal 2, @workflow_execution.log_data.size
+    end
+
+    test 'cancel multiple workflows that belong to user at once' do
+      assert 'submitted', @user_workflow_submitted.state
+      assert 'running', @user_workflow_running.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [@user_workflow_submitted.id, @user_workflow_running.id] }
+      ).execute
+
+      assert_enqueued_jobs(2, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', @user_workflow_submitted.reload.state
+      assert_not @user_workflow_submitted.cleaned?
+
+      assert_equal 'canceling', @user_workflow_running.reload.state
+      assert_not @user_workflow_running.cleaned?
+    end
+
+    test 'partially cancel multiple workflows that belong to user at once' do
+      workflow_execution2 = workflow_executions(:irida_next_example_completed)
+
+      assert 'submitted', @user_workflow_submitted.state
+      assert 'completed', workflow_execution2.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [@user_workflow_submitted.id, workflow_execution2.id] }
+      ).execute
+
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', @user_workflow_submitted.reload.state
+      assert_not @user_workflow_submitted.cleaned?
+
+      workflow_execution2.reload.state
+      assert_not_equal 'canceling', workflow_execution2.state
+      assert_not_equal 'canceled', workflow_execution2.state
+      assert_equal 'completed', workflow_execution2.state
+      assert workflow_execution2.cleaned?
+    end
+
+    test 'cancel multiple project workflows at once' do
+      workflow_execution2 = workflow_executions(:automated_example_prepared)
+
+      assert 'submitted', @project_workflow_submitted.state
+      assert 'prepared', workflow_execution2.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [@project_workflow_submitted.id, workflow_execution2.id],
+                 namespace: @namespace }
+      ).execute
+
+      assert_enqueued_jobs(2, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', @project_workflow_submitted.reload.state
+      assert_not @project_workflow_submitted.cleaned?
+
+      assert_equal 'canceled', workflow_execution2.reload.state
+      assert_not workflow_execution2.cleaned?
+    end
+
+    test 'partially cancel multiple project workflows at once' do
+      assert 'submitted', @project_workflow_submitted.state
+      assert 'completed', @project_workflow_completed.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [@project_workflow_submitted.id, @project_workflow_completed.id],
+                 namespace: @namespace }
+      ).execute
+
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', @project_workflow_submitted.reload.state
+      assert_not @project_workflow_submitted.cleaned?
+
+      @project_workflow_completed.reload.state
+      assert_not_equal 'canceling', @project_workflow_completed.state
+      assert_not_equal 'canceled', @project_workflow_completed.state
+      assert_equal 'completed', @project_workflow_completed.state
+      assert @project_workflow_completed.cleaned?
+    end
+
+    test 'cannot cancel shared workflows to project' do
+      workflow_execution2 = workflow_executions(:workflow_execution_shared4)
+
+      assert 'submitted', @project_workflow_submitted.state
+      assert 'running', workflow_execution2.state
+
+      assert WorkflowExecutions::CancelService.new(
+        @user, { workflow_execution_ids: [@project_workflow_submitted.id, workflow_execution2.id],
+                 namespace: @namespace }
+      ).execute
+
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+
+      assert_equal 'canceling', @project_workflow_submitted.reload.state
+      assert_not @project_workflow_submitted.cleaned?
+
+      workflow_execution2.reload.state
+      assert_not_equal 'canceling', workflow_execution2.state
+      assert_not_equal 'canceled', workflow_execution2.state
+      assert_equal 'running', workflow_execution2.state
+    end
+
+    # cancel through action link on table
+    test 'maintainer can cancel a single project workflow execution' do
+      valid_params = { namespace: @namespace,
+                       workflow_execution: @project_workflow_running }
+      user = users(:joan_doe)
+
+      assert_authorized_to(:cancel?, @project_workflow_running, with: WorkflowExecutionPolicy, context: { user: }) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+    end
+
+    test 'analyst cannot cancel a single project workflow execution' do
+      valid_params = { namespace: @namespace,
+                       workflow_execution: @project_workflow_running }
+      user = users(:michelle_doe)
+
+      assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+
+      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal :cancel?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel?',
+                          namespace_type: @project_workflow_running.namespace.type,
+                          name: @project_workflow_running.namespace.name),
+                   exception.result.message
+    end
+
+    # cancel through dropdown action
+    test 'authorized maintainer can cancel multiple project workflow executions' do
+      valid_params = { namespace: @namespace,
+                       workflow_execution_ids: [@project_workflow_running.id, @project_workflow_submitted.id] }
+      user = users(:joan_doe)
+
+      assert_authorized_to(:cancel_workflow_executions?, @namespace, with: Namespaces::ProjectNamespacePolicy,
+                                                                     context: { user: }) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+    end
+
+    test 'unauthorized analyst cannot cancel multiple project workflow executions policy test' do
+      valid_params = { namespace: @namespace,
+                       workflow_execution_ids: [@project_workflow_running.id, @project_workflow_submitted.id] }
+      user = users(:michelle_doe)
+
+      assert_raises(ActionPolicy::Unauthorized) { WorkflowExecutions::CancelService.new(user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, valid_params).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :cancel_workflow_executions?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.cancel_workflow_executions?',
+                          name: @namespace.name),
+                   exception.result.message
+    end
+
+    test 'cannot cancel workflow that does not belong to user when namespace is nil' do
+      user = users(:michelle_doe)
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CancelService.new(user, { workflow_execution: @user_workflow_running }).execute
+      end
+
+      assert_equal WorkflowExecutionPolicy, exception.policy
+      assert_equal :cancel?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.workflow_execution.cancel?',
+                          namespace_type: @user_workflow_running.namespace.type,
+                          name: @user_workflow_running.namespace.name),
+                   exception.result.message
     end
   end
 end

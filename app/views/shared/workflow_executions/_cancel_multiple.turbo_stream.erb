@@ -1,0 +1,16 @@
+<% messages.each do |message| %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: message[:type], data: message[:message]) %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "workflow_execution_dialog",
+                    partial:
+                      "shared/workflow_executions/cancel_multiple_confirmation_dialog",
+                    locals: {
+                      open: false,
+                      list_path: @list_path,
+                      cancel_path: @cancel_path,
+                    } %>
+
+<turbo-stream action="refresh"></turbo-stream>

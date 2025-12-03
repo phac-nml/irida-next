@@ -65,7 +65,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   def context_crumbs
     @context_crumbs =
       [{
-        name: I18n.t('workflow_executions.index.title'),
+        name: I18n.t('shared.workflow_executions.index.title'),
         path: workflow_executions_path
       }]
     return unless action_name == 'show' && !@workflow_execution.nil?
@@ -106,6 +106,11 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   def destroy_multiple_paths
     @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
     @destroy_path = destroy_multiple_workflow_executions_path
+  end
+
+  def cancel_multiple_paths
+    @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
+    @cancel_path = cancel_multiple_workflow_executions_path
   end
 
   def page_title # rubocop:disable Metrics/MethodLength

@@ -46,6 +46,7 @@ fr:
         destroy_metadata_template?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
         update_metadata_template?: Vous n’êtes pas autorisé à mettre à jour les modèles de métadonnées pour le groupe %{name} sur ce serveur.
       namespaces/project_namespace:
+        cancel_workflow_executions?: Vous n’êtes pas autorisé à annuler les exécutions de flux de travail pour le projet %{name} sur ce serveur.
         create_automated_workflow_executions?: Vous n’êtes pas autorisé à créer des pipelines automatisés pour le projet %{name}
         create_bot_accounts?: Vous n’êtes pas autorisé à créer des comptes de bots pour le projet %{name} sur ce serveur.
         create_member?: Vous n’êtes pas autorisé à créer des membres pour l’espace de noms du projet %{name} sur ce serveur.
