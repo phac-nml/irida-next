@@ -117,7 +117,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.#filter.length,
     );
     this.#filterOptions();
-    this.#setOption(null);
   }
 
   #renderNoResults() {
@@ -274,7 +273,6 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #close() {
-    this.#setOption(null);
     this.listboxTarget.style.display = "none";
     this.comboboxTarget.setAttribute("aria-expanded", "false");
   }
@@ -293,6 +291,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Enter":
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
+        this.#setOption(this.#option);
         this.#close();
         flag = true;
         break;
@@ -337,15 +336,15 @@ export default class SelectWithAutoCompleteController extends Controller {
           this.#close();
         } else {
           this.#setValue();
+          this.#setOption(null);
         }
         flag = true;
         break;
 
       case "Tab":
+        this.#setValue(this.#option);
+        this.#setOption(this.#option);
         this.#close();
-        if (this.#option) {
-          this.#setValue(this.#option);
-        }
         break;
 
       case "Home":
@@ -424,12 +423,10 @@ export default class SelectWithAutoCompleteController extends Controller {
   #onComboboxFocus() {
     this.#filter = this.comboboxTarget.value;
     this.#filterOptions();
-    this.#setOption(null);
   }
 
   #onComboboxBlur() {
     this.#filter = this.comboboxTarget.value;
-    this.#setOption(null);
   }
 
   #onBackgroundPointerUp(event) {
@@ -437,6 +434,8 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
+      this.#setValue(this.#option);
+      this.#setOption(this.#option);
       this.#close();
     }
   }
@@ -445,6 +444,7 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   #onOptionClick(event) {
     this.#setValue(event.target);
+    this.#setOption(event.target);
     this.#close();
   }
 
