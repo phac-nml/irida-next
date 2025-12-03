@@ -555,16 +555,92 @@ module Samples
       # Create duplicate sample in target project
       duplicate = Sample.create!(name: @sample1.name, project: @new_project)
 
-      transferrable_samples = Sample.where(id: [@sample1.id])
+      # Build the expected inputs for the new helper signature:
+      # project_sample_ids_to_transfer maps source project => attempted sample ids
+      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
+      # transferred_project_sample_ids maps source project => actually transferred ids (none in this case)
+      transferred_project_sample_ids = { @current_project.id => [] }
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(transferrable_samples, @new_project)
+      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
 
       # Should have conflict error
       error_messages = @current_project.namespace.errors.full_messages
       assert(error_messages.any? { |msg| msg.include?(@sample1.name) })
 
       duplicate.destroy
+    end
+
+    test 'add_transfer_conflict_errors adds sample_exists error when name conflict in target project' do
+      # Create a conflicting sample in the target project (same name as @sample1)
+      conflict = Sample.create!(name: @sample1.name, project: @new_project, puid: SecureRandom.hex)
+
+      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
+      transferred_project_sample_ids = { @current_project.id => [] }
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+
+      # Expect a sample_exists error mentioning the sample name and puid
+      error_messages = @current_project.namespace.errors.full_messages
+      expected = I18n.t('services.samples.transfer.sample_exists', sample_name: @sample1.name,
+                                                                   sample_puid: @sample1.puid)
+      assert(error_messages.any? { |msg| msg.include?(expected) })
+
+      conflict.destroy
+    end
+
+    test 'add_transfer_conflict_errors adds samples_not_found when sample belongs to different project' do
+      # Create a sample that belongs to a different project than the one we will claim
+      other_sample = Sample.create!(name: "mismatch_#{SecureRandom.hex}", project: @project29)
+
+      # Attempt to transfer it from @current_project (wrong source)
+      project_sample_ids_to_transfer = { @current_project.id => [other_sample.id] }
+      transferred_project_sample_ids = { @current_project.id => [] }
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+
+      error_messages = @current_project.namespace.errors.full_messages
+      expected = I18n.t('services.samples.transfer.samples_not_found', sample_ids: other_sample.id.to_s)
+      assert(error_messages.any? { |msg| msg.include?(expected) })
+
+      other_sample.destroy
+    end
+
+    test 'add_transfer_conflict_errors adds target_project_duplicate when sample attempted from target project' do
+      # Edge case: attempting to transfer a sample that already lives in the target project
+      project_sample_ids_to_transfer = { @new_project.id => [@sample1.id] }
+      transferred_project_sample_ids = { @new_project.id => [] }
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+
+      error_messages = @current_project.namespace.errors.full_messages
+      expected = I18n.t('services.samples.transfer.target_project_duplicate', sample_name: @sample1.name)
+      assert(error_messages.any? { |msg| msg.include?(expected) })
+    end
+
+    test 'add_transfer_conflict_errors aggregates multiple missing ids into single error' do
+      # Create two samples belonging to different projects than attempted
+      missing_sample1 = Sample.create!(name: "missing_1_#{SecureRandom.hex}", project: @project29)
+      missing_sample2 = Sample.create!(name: "missing_2_#{SecureRandom.hex}", project: @project30)
+
+      # Attempt to transfer both from @current_project (wrong source for both)
+      project_sample_ids_to_transfer = { @current_project.id => [missing_sample1.id, missing_sample2.id] }
+      transferred_project_sample_ids = { @current_project.id => [] }
+
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+
+      # Both missing ids should be consolidated into a single error message
+      error_messages = @current_project.namespace.errors.full_messages
+      expected_ids = "#{missing_sample1.id}, #{missing_sample2.id}"
+      expected = I18n.t('services.samples.transfer.samples_not_found', sample_ids: expected_ids)
+      assert(error_messages.any? { |msg| msg.include?(expected) })
+
+      missing_sample1.destroy
+      missing_sample2.destroy
     end
   end
 end
