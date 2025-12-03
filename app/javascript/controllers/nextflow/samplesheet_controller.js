@@ -42,11 +42,9 @@ export default class extends Controller {
 
   static values = {
     dataMissingError: { type: String },
-    submissionError: { type: String },
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    filteringSamples: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
   };

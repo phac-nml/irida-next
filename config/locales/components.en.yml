@@ -255,7 +255,6 @@ en:
           optional: Name (Optional)
           required: Name
       processing_request: Processing your submission, this may take some time.
-      submission_error: Something went wrong with the submission request.
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information
