@@ -8,10 +8,7 @@ import {
 // Handles submitting the samplesheet params to render the samplesheet once the nextflow dialog opens
 export default class extends Controller {
   static values = {
-    namespaceId: { type: String },
     fields: { type: Array },
-    workflowName: { type: String },
-    workflowVersion: { type: String },
   };
 
   static targets = ["samplesheetParamsForm"];
@@ -45,8 +42,9 @@ export default class extends Controller {
         0,
       );
     }
-
-    normalizeParams(params, "fields[]", this.fieldsValue, 0);
+    if (this.fieldsValue) {
+      normalizeParams(params, "fields[]", this.fieldsValue, 0);
+    }
     return params;
   }
 
