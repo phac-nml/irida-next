@@ -34,8 +34,6 @@ module Pathogen
         return nil if color.nil?
         return color if COLORS.key?(color)
 
-        Rails.logger.warn "[Pathogen::Icon] Invalid color '#{color}', " \
-                          "falling back to :default. Valid colors: #{COLORS.keys.join(', ')}"
         :default
       end
 
@@ -46,8 +44,6 @@ module Pathogen
       def validate_size(size)
         return size if SIZES.key?(size)
 
-        Rails.logger.warn "[Pathogen::Icon] Invalid size '#{size}', " \
-                          "falling back to :md. Valid sizes: #{SIZES.keys.join(', ')}"
         :md
       end
 
@@ -67,13 +63,12 @@ module Pathogen
 
       private
 
-      # Validate icon name format and log warnings for suspicious names
+      # Validate icon name format for suspicious names
       #
       # @param normalized [String] The normalized icon name
       def validate_icon_name_format(normalized)
-        return unless normalized.length > 50 || normalized.match?(/[^a-z0-9\-_]/)
-
-        Rails.logger.warn "[Pathogen::Icon] Suspicious icon name: '#{normalized}'"
+        # No-op: validation for suspicious icon names (length > 50 or invalid characters)
+        # This method is intentionally empty but kept for potential future use
       end
     end
   end
