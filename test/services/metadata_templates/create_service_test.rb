@@ -44,7 +44,9 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      assert new_template.errors.full_messages.include?('Fields array size at root is less than: 1')
+      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_items',
+                                          min: 1)}"
+      assert new_template.errors.full_messages.include?(expected_message)
     end
 
     test 'raises unauthorized error when user lacks permission' do
@@ -112,7 +114,8 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      assert new_template.errors.full_messages.include?('Fields value at root is not an array')
+      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid')}"
+      assert new_template.errors.full_messages.include?(expected_message)
     end
 
     test 'prevents duplicate template names within same namespace' do
