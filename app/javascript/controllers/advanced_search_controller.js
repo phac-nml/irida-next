@@ -18,6 +18,7 @@ export default class extends Controller {
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
   #skipConfirm = false;
+  #boundHandleDialogBeforeClose = null;
 
   connect() {
     // Render the search if openValue is true on connect
@@ -27,36 +28,50 @@ export default class extends Controller {
   }
 
   pathogenDialogOutletConnected() {
-    // Outlet connected - dialog is available
-    // Store reference to original close method
-    this.originalDialogClose = this.pathogenDialogOutlet.close.bind(this.pathogenDialogOutlet);
-
-    // Override the dialog's close method to check for unsaved changes
-    this.pathogenDialogOutlet.close = () => {
-      // Skip confirmation if explicitly requested (e.g., Clear button)
-      if (this.#skipConfirm) {
-        this.#skipConfirm = false;
-        this.clear();
-        this.originalDialogClose();
-        return;
-      }
-
-      if (!this.#dirty()) {
-        this.clear();
-        this.originalDialogClose();
-      } else {
-        if (window.confirm(this.confirmCloseTextValue)) {
-          this.clear();
-          this.originalDialogClose();
-        }
-      }
-    };
+    // Outlet connected - listen for before-close event
+    // Store bound function reference for proper cleanup
+    this.#boundHandleDialogBeforeClose = this.handleDialogBeforeClose.bind(this);
+    this.pathogenDialogOutlet.element.addEventListener(
+      'pathogen-dialog:before-close',
+      this.#boundHandleDialogBeforeClose
+    );
   }
 
   pathogenDialogOutletDisconnected() {
-    // Outlet disconnected - restore original close method
-    if (this.originalDialogClose && this.hasPathogenDialogOutlet) {
-      this.pathogenDialogOutlet.close = this.originalDialogClose;
+    // Outlet disconnected - remove event listener
+    if (this.#boundHandleDialogBeforeClose && this.hasPathogenDialogOutlet) {
+      this.pathogenDialogOutlet.element.removeEventListener(
+        'pathogen-dialog:before-close',
+        this.#boundHandleDialogBeforeClose
+      );
+      this.#boundHandleDialogBeforeClose = null;
+    }
+  }
+
+  handleDialogBeforeClose(event) {
+    // Skip confirmation if explicitly requested (e.g., Clear button)
+    if (this.#skipConfirm) {
+      this.#skipConfirm = false;
+      this.clear();
+      return; // Allow close
+    }
+
+    // Check if there are unsaved changes
+    if (this.#dirty()) {
+      // Prevent the dialog from closing
+      event.preventDefault();
+
+      // Show confirmation dialog
+      if (window.confirm(this.confirmCloseTextValue)) {
+        this.clear();
+        // User confirmed - set flag to skip confirmation on next close
+        this.#skipConfirm = true;
+        // Close the dialog again - this time it will be allowed
+        this.pathogenDialogOutlet.close();
+      }
+    } else {
+      // No unsaved changes - clear and allow close
+      this.clear();
     }
   }
 

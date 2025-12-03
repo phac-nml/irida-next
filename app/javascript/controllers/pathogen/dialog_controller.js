@@ -112,6 +112,7 @@ export default class extends Controller {
   #focusTrap = null;
   #triggerId = null;
   #animationTimeout = null;
+  #scrollUpdateFrame = null; // RAF ID for scroll shadow debouncing
   #hiddenElements = []; // Track elements hidden for ARIA management
   #bodyScrollPosition = 0; // Store body scroll position before locking
   #bodyStyleOverflow = null; // Store original body overflow style
@@ -122,247 +123,72 @@ export default class extends Controller {
   /**
    * Initialize controller on connection
    * Sets up focus trap and restores state if needed
-   *
-   * Handles:
-   * - Focus trap initialization with error handling
-   * - State restoration from Turbo navigation
-   * - Scroll shadow initialization
-   * - Turbo form submission event listener
-   *
-   * @throws {Error} Logs error if focus trap creation fails (continues gracefully)
    */
   connect() {
-    try {
-      this.#focusTrap = createFocusTrap(this.backdropTarget, {
-        onActivate: () => this.backdropTarget.classList.add("focus-trap"),
-        onDeactivate: () => this.backdropTarget.classList.remove("focus-trap"),
-        clickOutsideDeactivates: false,
-        escapeDeactivates: false,
-      });
-    } catch (error) {
-      console.error("[pathogen--dialog] Failed to create focus trap:", error);
-      // Continue without focus trap (graceful degradation)
-      this.#focusTrap = null;
-    }
-
-    // Check if dialog should be open based on saved state
-    if (this.openValue) {
-      this.open();
-    } else {
-      this.restoreFocusState();
-    }
-
-    // Initialize scroll shadows on connect
+    this.#initializeFocusTrap();
+    this.#restoreState();
     this.updateScrollShadows();
-
-    // Listen for Turbo form submission success to close dialog
-    this.element.addEventListener(
-      "turbo:submit-end",
-      this.handleFormSubmit.bind(this),
-    );
-
+    this.#setupEventListeners();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
   /**
    * Cleanup on disconnect
    * Deactivates focus trap and saves state for Turbo navigation
-   *
-   * Handles:
-   * - Animation timeout cleanup
-   * - Focus trap deactivation with error handling
-   * - ARIA visibility restoration
-   * - Event listener removal
-   * - State persistence for Turbo navigation
-   *
-   * @throws {Error} Logs error if focus trap deactivation fails (continues gracefully)
    */
   disconnect() {
-    // Clear any pending animation timeout
-    if (this.#animationTimeout) {
-      clearTimeout(this.#animationTimeout);
-      this.#animationTimeout = null;
-    }
-
-    // Deactivate focus trap with error handling
-    if (this.#focusTrap) {
-      try {
-        this.#focusTrap.deactivate();
-      } catch (error) {
-        console.error(
-          "[pathogen--dialog] Error deactivating focus trap:",
-          error,
-        );
-      }
-    }
-
-    // Restore ARIA visibility for hidden elements
+    this.#clearAnimationTimeout();
+    this.#cancelScrollUpdate();
+    this.#deactivateFocusTrap();
     this.#restoreAriaVisibility();
-
-    // Remove Turbo event listener
-    this.element.removeEventListener(
-      "turbo:submit-end",
-      this.handleFormSubmit.bind(this),
-    );
-
-    if (this.openValue) {
-      this.close();
-      if (this.#triggerId) {
-        // Re-add refocusTrigger on save for Turbo page loads
-        savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
-      }
-    }
+    this.#removeEventListeners();
+    this.#saveStateForTurbo();
+    this.#cleanupDialogState();
   }
 
   /**
    * Open the dialog with animation
    * Activates focus trap and prevents page scroll
    *
-   * Accessibility features:
-   * - Hides background content from screen readers (aria-hidden)
-   * - Announces dialog opening to screen readers
-   * - Traps focus within dialog
-   * - Prevents page scrolling
-   *
    * @param {Event} [event] - Optional event (for trigger button reference)
-   *   If provided and event.currentTarget has an id, it will be used for focus restoration
-   *
-   * @example
-   * // Open with event (for focus restoration)
-   * button.addEventListener('click', (e) => {
-   *   controller.open(e);
-   * });
-   *
-   * // Open programmatically
-   * controller.open();
    */
   open(event) {
-    // Store trigger element ID for focus restoration
-    if (event && event.currentTarget && event.currentTarget.id) {
-      this.#triggerId = event.currentTarget.id;
-    }
-
-    // Mark as turbo-permanent during open state
-    this.element.setAttribute("data-turbo-permanent", "");
-
-    // Save state for Turbo navigation
-    if (this.#triggerId) {
-      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
-    }
-
-    // Set open state
+    this.#storeTriggerElement(event);
+    this.#markTurboPermanent();
     this.openValue = true;
-
-    // Hide other page content from screen readers
-    this.#setAriaHiddenOnSiblings(true);
-
-    // Show backdrop and dialog
-    this.backdropTarget.classList.remove("hidden");
-
-    // Prevent page scroll while allowing dialog body to scroll
-    this.#lockBodyScroll();
-
-    // Show dialog (we're using div role="dialog" not native <dialog>)
-    this.dialogTarget.classList.remove("hidden");
-
-    // Activate focus trap with error handling
-    if (this.#focusTrap) {
-      try {
-        this.#focusTrap.activate();
-      } catch (error) {
-        console.error(
-          "[pathogen--dialog] Failed to activate focus trap:",
-          error,
-        );
-        // Continue without focus trap (graceful degradation)
-      }
-    }
-
-    // Animate in
+    this.#prepareDialogForOpening();
+    this.#activateFocusTrap();
     this.animateIn();
-
-    // Announce dialog opening to screen readers
-    if (this.hasOpenAnnouncementValue) {
-      announce(this.openAnnouncementValue);
-    }
-
-    // Update scroll shadows after rendering
-    requestAnimationFrame(() => {
-      this.updateScrollShadows();
-    });
+    this.#announceDialogOpened();
+    requestAnimationFrame(() => this.updateScrollShadows());
   }
 
   /**
    * Close the dialog with animation
    * Deactivates focus trap and restores focus to trigger
    *
-   * Accessibility features:
-   * - Announces dialog closing to screen readers
-   * - Restores ARIA visibility for background content
-   * - Restores focus to trigger element (if available)
-   * - Restores page scrolling
-   *
-   * @example
-   * // Close programmatically
-   * controller.close();
-   *
-   * // Close via backdrop click (if dismissible)
-   * // Automatically handled by closeOnBackdrop method
+   * Dispatches a cancelable 'before-close' event before closing.
+   * Call event.preventDefault() in the event handler to cancel closing.
    */
   close() {
-    // Clear any existing timeout
-    if (this.#animationTimeout) {
-      clearTimeout(this.#animationTimeout);
+    // Dispatch cancelable before-close event
+    const event = new CustomEvent('pathogen-dialog:before-close', {
+      cancelable: true,
+      bubbles: true,
+      detail: { controller: this }
+    });
+
+    const shouldClose = this.element.dispatchEvent(event);
+
+    // If event was prevented, don't close
+    if (!shouldClose) {
+      return;
     }
 
-    // Animate out
+    this.#clearAnimationTimeout();
     this.animateOut();
-
-    // Announce dialog closing to screen readers
-    if (this.hasCloseAnnouncementValue) {
-      announce(this.closeAnnouncementValue);
-    }
-
-    // Wait for animation to complete
-    this.#animationTimeout = setTimeout(() => {
-      this.#animationTimeout = null;
-
-      this.element.removeAttribute("data-turbo-permanent");
-      this.openValue = false;
-
-      // Deactivate focus trap with error handling
-      if (this.#focusTrap) {
-        try {
-          this.#focusTrap.deactivate();
-        } catch (error) {
-          console.error(
-            "[pathogen--dialog] Error deactivating focus trap:",
-            error,
-          );
-        }
-      }
-
-      // Hide dialog (we're using div role="dialog" not native <dialog>)
-      this.dialogTarget.classList.add("hidden");
-
-      // Hide backdrop
-      this.backdropTarget.classList.add("hidden");
-
-      // Restore page scroll
-      this.#unlockBodyScroll();
-
-      // Restore ARIA visibility for hidden elements
-      this.#restoreAriaVisibility();
-
-      // Restore focus to trigger element by ID
-      if (this.#triggerId) {
-        savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
-        const triggerElement = document.getElementById(this.#triggerId);
-        if (triggerElement) {
-          triggerElement.focus();
-        }
-      }
-    }, this.constructor.ANIMATION_DURATION);
+    this.#announceDialogClosed();
+    this.#scheduleDialogCleanup();
   }
 
   /**
@@ -405,8 +231,26 @@ export default class extends Controller {
   /**
    * Update scroll shadow indicators based on scroll position
    * Shows top shadow when scrolled down, bottom shadow when more content below
+   * Debounced using requestAnimationFrame for performance
    */
   updateScrollShadows() {
+    // Cancel any pending update
+    if (this.#scrollUpdateFrame) {
+      cancelAnimationFrame(this.#scrollUpdateFrame);
+    }
+
+    // Schedule update on next animation frame
+    this.#scrollUpdateFrame = requestAnimationFrame(() => {
+      this.#scrollUpdateFrame = null;
+      this.#performScrollShadowUpdate();
+    });
+  }
+
+  /**
+   * Perform the actual scroll shadow update
+   * @private
+   */
+  #performScrollShadowUpdate() {
     if (!this.hasBodyTarget) return;
 
     const { scrollTop, scrollHeight, clientHeight } = this.bodyTarget;
@@ -625,5 +469,234 @@ export default class extends Controller {
     this.#bodyStylePosition = null;
     this.#bodyStyleTop = null;
     this.#bodyStyleWidth = null;
+  }
+
+  // Private helper methods for connect()
+
+  /**
+   * Initialize focus trap with error handling
+   * @private
+   */
+  #initializeFocusTrap() {
+    try {
+      this.#focusTrap = createFocusTrap(this.backdropTarget, {
+        onActivate: () => this.backdropTarget.classList.add("focus-trap"),
+        onDeactivate: () => this.backdropTarget.classList.remove("focus-trap"),
+        clickOutsideDeactivates: false,
+        escapeDeactivates: false,
+      });
+    } catch (error) {
+      console.error("[pathogen--dialog] Failed to create focus trap:", error);
+      this.#focusTrap = null;
+    }
+  }
+
+  /**
+   * Restore dialog state from Turbo navigation
+   * @private
+   */
+  #restoreState() {
+    if (this.openValue) {
+      this.open();
+    } else {
+      this.restoreFocusState();
+    }
+  }
+
+  /**
+   * Setup event listeners for Turbo form submissions
+   * @private
+   */
+  #setupEventListeners() {
+    this.element.addEventListener(
+      "turbo:submit-end",
+      this.handleFormSubmit.bind(this),
+    );
+  }
+
+  // Private helper methods for disconnect()
+
+  /**
+   * Clear pending animation timeout
+   * @private
+   */
+  #clearAnimationTimeout() {
+    if (this.#animationTimeout) {
+      clearTimeout(this.#animationTimeout);
+      this.#animationTimeout = null;
+    }
+  }
+
+  /**
+   * Cancel pending scroll shadow update
+   * @private
+   */
+  #cancelScrollUpdate() {
+    if (this.#scrollUpdateFrame) {
+      cancelAnimationFrame(this.#scrollUpdateFrame);
+      this.#scrollUpdateFrame = null;
+    }
+  }
+
+  /**
+   * Deactivate focus trap with error handling
+   * @private
+   */
+  #deactivateFocusTrap() {
+    if (this.#focusTrap) {
+      try {
+        this.#focusTrap.deactivate();
+      } catch (error) {
+        console.error(
+          "[pathogen--dialog] Error deactivating focus trap:",
+          error,
+        );
+      }
+    }
+  }
+
+  /**
+   * Remove event listeners
+   * @private
+   */
+  #removeEventListeners() {
+    this.element.removeEventListener(
+      "turbo:submit-end",
+      this.handleFormSubmit.bind(this),
+    );
+  }
+
+  /**
+   * Save dialog state for Turbo navigation
+   * @private
+   */
+  #saveStateForTurbo() {
+    if (this.openValue) {
+      this.close();
+      if (this.#triggerId) {
+        savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+      }
+    }
+  }
+
+  /**
+   * Cleanup dialog state from savedDialogStates Map
+   * Prevents memory leaks by removing stale entries
+   * @private
+   */
+  #cleanupDialogState() {
+    // Only cleanup if dialog is closed and not being navigated
+    if (!this.openValue && this.dialogTarget && this.dialogTarget.id) {
+      const state = savedDialogStates.get(this.dialogTarget.id);
+      // Remove entry if refocusTrigger is false (focus has been restored)
+      if (state && !state.refocusTrigger) {
+        savedDialogStates.delete(this.dialogTarget.id);
+      }
+    }
+  }
+
+  // Private helper methods for open()
+
+  /**
+   * Store trigger element ID for focus restoration
+   * @private
+   */
+  #storeTriggerElement(event) {
+    if (event && event.currentTarget && event.currentTarget.id) {
+      this.#triggerId = event.currentTarget.id;
+    }
+  }
+
+  /**
+   * Mark dialog as turbo-permanent and save state
+   * @private
+   */
+  #markTurboPermanent() {
+    this.element.setAttribute("data-turbo-permanent", "");
+    if (this.#triggerId) {
+      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
+    }
+  }
+
+  /**
+   * Prepare dialog UI for opening
+   * @private
+   */
+  #prepareDialogForOpening() {
+    this.#setAriaHiddenOnSiblings(true);
+    this.backdropTarget.classList.remove("hidden");
+    this.#lockBodyScroll();
+    this.dialogTarget.classList.remove("hidden");
+  }
+
+  /**
+   * Activate focus trap with error handling
+   * @private
+   */
+  #activateFocusTrap() {
+    if (this.#focusTrap) {
+      try {
+        this.#focusTrap.activate();
+      } catch (error) {
+        console.error(
+          "[pathogen--dialog] Failed to activate focus trap:",
+          error,
+        );
+      }
+    }
+  }
+
+  /**
+   * Announce dialog opened to screen readers
+   * @private
+   */
+  #announceDialogOpened() {
+    if (this.hasOpenAnnouncementValue) {
+      announce(this.openAnnouncementValue);
+    }
+  }
+
+  // Private helper methods for close()
+
+  /**
+   * Announce dialog closed to screen readers
+   * @private
+   */
+  #announceDialogClosed() {
+    if (this.hasCloseAnnouncementValue) {
+      announce(this.closeAnnouncementValue);
+    }
+  }
+
+  /**
+   * Schedule dialog cleanup after animation
+   * @private
+   */
+  #scheduleDialogCleanup() {
+    this.#animationTimeout = setTimeout(() => {
+      this.#animationTimeout = null;
+      this.element.removeAttribute("data-turbo-permanent");
+      this.openValue = false;
+      this.#deactivateFocusTrap();
+      this.dialogTarget.classList.add("hidden");
+      this.backdropTarget.classList.add("hidden");
+      this.#unlockBodyScroll();
+      this.#restoreAriaVisibility();
+      this.#restoreFocusToTrigger();
+    }, this.constructor.ANIMATION_DURATION);
+  }
+
+  /**
+   * Restore focus to trigger element
+   * @private
+   */
+  #restoreFocusToTrigger() {
+    if (this.#triggerId) {
+      savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: false });
+      const triggerElement = document.getElementById(this.#triggerId);
+      if (triggerElement) {
+        triggerElement.focus();
+      }
+    }
   }
 }

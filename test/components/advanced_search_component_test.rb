@@ -7,8 +7,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller="advanced-search"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
-      # Wait for dialog controller to connect
-      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      # Wait for dialog to be visible
+      assert_selector 'div[role="dialog"]', visible: true, wait: 5
       within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
@@ -87,8 +87,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller="advanced-search"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
-      # Wait for dialog controller to connect
-      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      # Wait for dialog to be visible
+      assert_selector 'div[role="dialog"]', visible: true, wait: 5
       within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
@@ -109,8 +109,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      # Wait for dialog controller to connect
-      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      # Wait for dialog to be visible
+      assert_selector 'div[role="dialog"]', visible: true, wait: 5
       within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible
@@ -158,8 +158,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      # Wait for dialog controller to connect
-      assert_selector 'div[data-controller="pathogen--dialog"][data-controller-connected="true"]', wait: 5
+      # Wait for dialog to be visible
+      assert_selector 'div[role="dialog"]', visible: true, wait: 5
       within 'div[role="dialog"]' do
         # verify accessibility
         assert_accessible

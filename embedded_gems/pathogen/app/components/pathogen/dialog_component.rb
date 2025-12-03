@@ -20,6 +20,31 @@ module Pathogen
   # - WCAG AA+ accessibility compliance
   # - Turbo Frame integration support
   #
+  # == Turbo Navigation Integration
+  #
+  # The dialog component is designed to work seamlessly with Turbo Drive navigation:
+  #
+  # - **State Persistence**: Dialog state (open/closed) is preserved during Turbo page visits
+  #   using a global `savedDialogStates` Map that persists across navigation
+  # - **Focus Restoration**: When navigating away from a page with an open dialog, focus
+  #   is automatically restored to the trigger button after navigation completes
+  # - **Turbo Permanent**: Open dialogs are marked with `data-turbo-permanent` to prevent
+  #   Turbo from replacing them during morphing operations
+  # - **Memory Management**: Dialog state is automatically cleaned up when dialogs are
+  #   destroyed to prevent memory leaks in long-running sessions
+  # - **Form Submissions**: Dialogs automatically close on successful Turbo form submissions
+  #   (200-299 status codes) but remain open on validation errors (422 status)
+  #
+  # === Turbo Integration Caveats
+  #
+  # - Dialogs should have stable IDs when used with Turbo permanent to ensure proper
+  #   state restoration across page visits
+  # - The `savedDialogStates` Map is global and shared across all dialog instances
+  # - Dialogs opened immediately before Turbo navigation may experience race conditions
+  #   with state saving; use `turbo:before-visit` event if coordination is needed
+  # - Large numbers of dialog instances may accumulate in `savedDialogStates`; entries
+  #   are cleaned up on dialog disconnect when refocusTrigger is false
+  #
   # == Usage
   #
   # @example Basic dialog with show button
