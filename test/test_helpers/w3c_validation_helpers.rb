@@ -86,6 +86,8 @@ module W3cValidationHelpers
     arerr = @validator.validate_text(content).errors
     arerr = _may_ignore_autocomplete_errors_for_hidden(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_aria_label_on_div_without_role(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -198,11 +200,98 @@ module W3cValidationHelpers
     removeds = []
     errs.map{ |es|
       # Example of an Error:
-      #   ERROR; line 640: Attribute “aria-posinset” not allowed on element “div” at this point.
-      #   ERROR; line 640: Attribute “aria-setsize” not allowed on element “div” at this point.
+      #   ERROR; line 640: Attribute "aria-posinset" not allowed on element "div" at this point.
+      #   ERROR; line 640: Attribute "aria-setsize" not allowed on element "div" at this point.
       if (/\AERROR\b.+\baria-(posinset|setsize)\b.*\bnot\b\s\ballowed\b\s\bon\b\s\belement\b.*\bdiv\b/i =~ es.to_s &&
         /treegrid-row/i =~ es.source
       )
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for importmap with integrity property
+  #
+  # The Import Maps specification supports an "integrity" property for Subresource Integrity (SRI),
+  # but the W3C Nu HTML Checker has not been updated to recognize this yet. The spec allows:
+  #
+  #   {
+  #     "imports": { ... },
+  #     "scopes": { ... },
+  #     "integrity": { ... }
+  #   }
+  #
+  # This routine takes a W3C-validation error object (Array) and
+  # return the same Array where the specific errors are deleted
+  # so that one could still test the other potential errors with the W3C validation.
+  # The said errors are recorded with +logger.warn+ (if +prefix+ is given).
+  #
+  # == References
+  #
+  # * Import Maps Spec: https://github.com/WICG/import-maps
+  # * JSPM Integrity with Import Maps: https://jspm.org/js-integrity-with-import-maps
+  # * Rails importmap-rails: https://github.com/rails/importmap-rails
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_importmap_integrity_error(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 194: A "script" element with a "type" attribute whose value is "importmap" must contain a JSON object with no properties other than "imports" and "scopes".
+      if /\AERROR\b.+\bscript\b.*\belement.+\btype\b.*\bimportmap\b.+\bJSON\b\s\bobject\b.+\bimports\b.*\bscopes\b/i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for aria-label on div elements without appropriate role
+  #
+  # The W3C Nu HTML Checker recently updated its validation rules to enforce that aria-label
+  # attributes should not be used on generic div elements unless they have an appropriate role.
+  # This error commonly occurs with Rails form helpers like button_to which may generate
+  # wrapper divs with aria-label attributes.
+  #
+  # This routine takes a W3C-validation error object (Array) and
+  # return the same Array where the specific errors are deleted
+  # so that one could still test the other potential errors with the W3C validation.
+  # The said errors are recorded with +logger.warn+ (if +prefix+ is given).
+  #
+  # == References
+  #
+  # * ARIA Spec: https://www.w3.org/TR/wai-aria-1.2/
+  # * W3C Validator: https://github.com/validator/validator
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_aria_label_on_div_without_role(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 875: The "aria-label" attribute must not be specified on any "div" element unless the element has a "role" value other than "caption", "code", "deletion", "emphasis", "generic", "insertion", "paragraph", "presentation", "strong", "subscript", or "superscript".
+      if /\AERROR\b.+\baria-label\b.*\battribute\b.*\bmust\b\s\bnot\b\s\bbe\b\s\bspecified\b\s\bon\b\s\bany\b.*\bdiv\b.*\belement\b.*\bunless\b/i =~ es.to_s
         removeds << es
         nil
       else

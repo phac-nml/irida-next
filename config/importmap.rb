@@ -2,6 +2,9 @@
 
 # Pin npm packages by running ./bin/importmap
 
+# Enable integrity calculation for all pins
+enable_integrity!
+
 pin 'application', preload: true
 pin '@hotwired/turbo-rails', to: 'turbo.min.js', preload: true
 pin '@hotwired/stimulus', to: 'stimulus.min.js', preload: true

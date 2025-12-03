@@ -46,13 +46,10 @@
                            checked: pat.scopes.include?(scope.to_s),
                            aria: {
                              describedby:
-                               (
-                                 if invalid_scopes
-                                   form.field_id(:scopes, "error")
-                                 else
-                                   nil
-                                 end
-                               ),
+                               [
+                                 form.field_id(:scopes, scope.to_s, "help-text"),
+                                 (form.field_id(:scopes, "error") if invalid_scopes)
+                               ].compact.join(" "),
                              invalid: invalid_scopes,
                            },
                            include_hidden: false,
@@ -63,7 +60,6 @@
         <div class="ml-2 text-sm">
           <%= label_tag form.field_id(:scopes, scope.to_s),
           scope,
-          "aria-describedby": form.field_id(:scopes, scope.to_s, "help-text"),
           class: "font-medium text-slate-900 dark:text-slate-300" %>
           <p
             id="<%= form.field_id(:scopes, scope.to_s, "help-text") %>"
