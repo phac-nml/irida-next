@@ -5,8 +5,8 @@
     namespace_id: @namespace_id,
     fields: @fields,
     workflow_params: {
-      name: @workflow.name,
-      version: @workflow.version,
+      name: @workflow_params[:name],
+      version: @workflow_params[:version],
     },
   ) %>
 <% end %>

@@ -13,7 +13,7 @@ export default class extends Controller {
     "formFieldError",
     "formFieldErrorMessage",
     "samplesheetMessagesContainer",
-    "processingSpinner",
+    "submissionSpinner",
     "samplesheetSpinner",
     "workflowAttributes",
     "samplesheetProperties",
@@ -46,7 +46,6 @@ export default class extends Controller {
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    processingRequest: { type: String },
     filteringSamples: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
@@ -190,7 +189,7 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState(this.processingRequestValue);
+    this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
       // By default we set nameValid to true
@@ -207,7 +206,7 @@ export default class extends Controller {
 
         const missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {
-          this.#disableProcessingState();
+          this.#disableSubmissionState();
           let errorMsg = this.dataMissingErrorValue;
           for (const sample in missingData) {
             errorMsg =
@@ -236,7 +235,7 @@ export default class extends Controller {
           this.formTarget.requestSubmit();
         }
       } else {
-        this.#disableProcessingState();
+        this.#disableSubmissionState();
         this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
@@ -271,18 +270,19 @@ export default class extends Controller {
     }
   }
 
-  #enableProcessingState(message) {
-    document.getElementById("nextflow-processing-spinner-message").innerHTML =
-      message;
-    this.submitTarget.disabled = true;
-    this.samplesheetSpinnerTarget.classList.remove("hidden");
-    this.samplesheetContainerTarget.classList.add("hidden");
+  #disableProcessingState() {
+    this.submitTarget.disabled = false;
+    this.samplesheetSpinnerTarget.remove();
   }
 
-  #disableProcessingState() {
-    this.samplesheetContainerTarget.classList.remove("hidden");
+  #enableSubmissionState() {
+    this.submitTarget.disabled = true;
+    this.submissionSpinnerTarget.classList.remove("hidden");
+  }
+
+  #disableSubmissionState() {
+    this.submissionSpinnerTarget.classList.add("hidden");
     this.submitTarget.disabled = false;
-    this.samplesheetSpinnerTarget.classList.add("hidden");
   }
 
   #disableErrorState() {

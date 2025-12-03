@@ -6,11 +6,10 @@
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
   data-nextflow--samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
-  data-nextflow--samplesheet-processing-request-value="<%= t("components.nextflow_component.processing_request")%>"
-  data-nextflow--samplesheet-filtering-samples-value="<%= t("components.nextflow_component.filtering_samples")%>"
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-selection-outlet="#samples-table"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
@@ -253,24 +252,24 @@
       <% end %>
     </button>
   <% end %>
-  <% unless @sample_count.nil? %>
-    <div
-      class="flex items-center p-4 space-x-4 hidden"
-      data-nextflow--samplesheet-target="processingSpinner"
-    >
-      <%= render SpinnerComponent.new(
-        message: t("components.nextflow_component.processing_samplesheet"),
-        id: "nextflow-processing-spinner",
-      ) %>
-    </div>
 
+  <div
+    class="flex items-center p-4 space-x-4 hidden"
+    data-nextflow--samplesheet-target="submissionSpinner"
+  >
+    <%= render SpinnerComponent.new(
+      message: t("components.nextflow_component.processing_request"),
+      id: "nextflow-processing-request-spinner",
+    ) %>
+  </div>
+
+  <% unless @sample_count.nil? %>
     <%= form_with url: samplesheet_workflow_executions_path, method: :post,
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
     } do |f| %>
       <%= f.hidden_field :namespace_id, value: namespace_id %>
       <%= f.hidden_field :workflow_name, value: @workflow.name %>
-      <%= f.hidden_field :workflow_version, value: @workflow.version %>
       <%= f.hidden_field :workflow_version, value: @workflow.version %>
     <% end %>
   <% end %>
