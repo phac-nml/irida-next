@@ -11,7 +11,7 @@
   ) %>
 <% end %>
 
-<%= turbo_stream.prepend "workflow_execution_message" do
+<%= turbo_stream.prepend "samplesheet_message" do
   viral_alert(
     type: "success",
     message: t(".loading_complete"),

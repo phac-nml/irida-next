@@ -11,7 +11,7 @@ export default class extends Controller {
     "form",
     "formFieldError",
     "formFieldErrorMessage",
-    "toastMessageContainer",
+    "samplesheetMessagesContainer",
     "processingSpinner",
     "samplesheetSpinner",
     "workflowAttributes",
@@ -309,7 +309,7 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
-    this.toastMessageContainerTarget.innerHTML = "";
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
   }
 
   #disableFormFieldErrorState() {
