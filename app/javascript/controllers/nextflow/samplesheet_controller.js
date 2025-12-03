@@ -12,7 +12,9 @@ export default class extends Controller {
     "form",
     "formFieldError",
     "formFieldErrorMessage",
-    "spinner",
+    "toastMessageContainer",
+    "processingSpinner",
+    "samplesheetSpinner",
     "workflowAttributes",
     "samplesheetProperties",
     "trTemplate",
@@ -35,6 +37,7 @@ export default class extends Controller {
     "filterClearButton",
     "filterSearchButton",
     "samplesheetSamplesForm",
+    "samplesheetContainer",
   ];
 
   static values = {
@@ -109,18 +112,10 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
-    console.log("hi");
-    // if (this.hasWorkflowAttributesTarget) {
-    //   this.#setSamplesheetParametersAndData();
-    //   this.#updateMetadataColumnHeaderNames();
-    //   this.#disableProcessingState();
-    // }
     this.element.setAttribute("data-controller-connected", "true");
   }
 
   processTest({ detail: { content } }) {
-    console.log("process test");
-    console.log("in if");
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState();
@@ -281,14 +276,17 @@ export default class extends Controller {
   }
 
   #enableProcessingState(message) {
-    document.getElementById("nextflow-spinner-message").innerHTML = message;
+    document.getElementById("nextflow-processing-spinner-message").innerHTML =
+      message;
     this.submitTarget.disabled = true;
-    this.spinnerTarget.classList.remove("hidden");
+    this.samplesheetSpinnerTarget.classList.remove("hidden");
+    this.samplesheetContainerTarget.classList.add("hidden");
   }
 
   #disableProcessingState() {
+    this.samplesheetContainerTarget.classList.remove("hidden");
     this.submitTarget.disabled = false;
-    this.spinnerTarget.classList.add("hidden");
+    this.samplesheetSpinnerTarget.classList.add("hidden");
   }
 
   #disableErrorState() {
@@ -312,6 +310,7 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
+    this.toastMessageContainerTarget.innerHTML = "";
   }
 
   #disableFormFieldErrorState() {
