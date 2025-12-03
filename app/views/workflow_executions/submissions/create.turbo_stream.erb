@@ -11,7 +11,3 @@
     ) %>
   <% end %>
 <% end %>
-<%# TODO Add to focus trap %>
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type: :success, data: t(".loading", sample_count: @sample_count)) %>
-<% end %>
