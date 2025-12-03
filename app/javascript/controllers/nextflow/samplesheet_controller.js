@@ -115,14 +115,10 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  processTest({ detail: { content } }) {
+  processSamplesheet() {
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState();
-  }
-
-  nextflowSamplesheetContainerOutletConnected() {
-    console.log("outlet connected");
   }
 
   #setSamplesheetParametersAndData() {
@@ -672,7 +668,6 @@ export default class extends Controller {
   // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
   // we can then easily access each sample's data via its index and still paginate in pages of 5
   filter() {
-    this.#enableProcessingState(this.filteringSamplesValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
     setTimeout(() => {
       if (this.filterTarget.value) {
@@ -698,7 +693,6 @@ export default class extends Controller {
         this.#setCurrentSampleIndexesToAll();
       }
 
-      this.#disableProcessingState();
       this.#setPagination();
       this.#updatePageData();
       this.#updateFilterButtons();
