@@ -16,7 +16,7 @@
   data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-workflow-name-value="<%= @workflow.name %>"
   data-nextflow--samplesheet--params-workflow-version-value="<%= @workflow.version %>"
-  data-nextflow--samplesheet--nextflow--samplesheet--container-outlet="#test"
+  data-nextflow--samplesheet--nextflow--samplesheet--container-outlet="#samplesheet"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -38,7 +38,10 @@
   </p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
-  <turbo-frame id="workflow_execution_message">
+  <turbo-frame
+    id="workflow_execution_message"
+    data-nextflow--samplesheet-target="toastMessageContainer"
+  >
     <%= viral_alert(
       message: "updating",
       aria: {
@@ -135,7 +138,11 @@
                   >
                   </div>
 
-                  <div class="flex justify-center">
+                  <div
+                    class="flex justify-center"
+                    id="samplesheet-spinner"
+                    data-nextflow--samplesheet-target="samplesheetSpinner"
+                  >
                     <div
                       class="
                         flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
@@ -249,16 +256,15 @@
   <% unless @sample_count.nil? %>
     <div
       class="flex items-center p-4 space-x-4 hidden"
-      data-nextflow--samplesheet-target="spinner"
+      data-nextflow--samplesheet-target="processingSpinner"
     >
       <%= render SpinnerComponent.new(
         message: t("components.nextflow_component.processing_samplesheet"),
-        id: "nextflow-spinner",
+        id: "nextflow-processing-spinner",
       ) %>
     </div>
 
-    <%= form_with url:
-      samplesheet_samples_workflow_executions_path,
+    <%= form_with url: samplesheet_samples_workflow_executions_path, method: :post,
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
 

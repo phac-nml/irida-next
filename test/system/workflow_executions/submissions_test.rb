@@ -394,7 +394,7 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'div#samplesheet'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
