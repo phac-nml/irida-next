@@ -246,6 +246,9 @@ fr:
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
       filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
+      loading_samplesheet:
+        one: Preparing samplesheet for 1 sample.
+        other: Preparing samplesheet for %{count} samples, this may take a bit of time.
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
         helper: Un nom personnalisé facilitera la recherche à l’avenir.
