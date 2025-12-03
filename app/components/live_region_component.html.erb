@@ -1,7 +1,8 @@
-<span
-  role="status"
-  aria-live="<%= politeness %>"
-  <%= 'aria-atomic="true"'.html_safe if atomic %>
-  class="sr-only"
-  <%= tag.attributes(data: data_attributes) %>
-></span>
+<% span_attrs = {
+  role: "status",
+  "aria-live": politeness,
+  class: "sr-only",
+  data: data_attributes
+} %>
+<% span_attrs["aria-atomic"] = true if atomic %>
+<%= tag.span(**span_attrs) %>

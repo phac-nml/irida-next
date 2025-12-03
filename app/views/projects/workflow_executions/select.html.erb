@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "selected" do %>
-  <div
-    data-controller="table-selection"
-    data-table-selection-ids-value="<%= @workflow_executions.map { |we| we.id.to_s } %>"
-    data-table-selection-selection-outlet="#workflow-executions-table"
-  ></div>
+  <%= tag.div data: {
+    controller: "table-selection",
+    table_selection_ids_value: @workflow_execution_ids,
+    table_selection_selection_outlet: "[id='workflow-executions-table']"
+  } %>
 <% end %>

@@ -1,4 +1,4 @@
-<div <%= tag.attributes(system_arguments_with_data) %>>
+<%= tag.div(**system_arguments_with_data) do %>
   <%= helpers.turbo_stream_from streamable,
                             stream_name,
                             data: {
@@ -13,8 +13,8 @@
       aria-live="assertive"
       aria-atomic="true"
       class="
-        hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full
-        max-w-xl mx-auto px-4
+        hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl
+        mx-auto px-4
       "
     >
       <div
@@ -32,10 +32,12 @@
         >
           <%= helpers.pathogen_icon(:info, color: :blue, size: :md) %>
         </div>
+
         <!-- Message -->
         <div class="ml-3 text-sm font-medium text-slate-700 dark:text-slate-200 flex-1">
           <%= message %>
         </div>
+
         <!-- Actions -->
         <div class="flex items-center ml-auto pl-3 gap-3">
           <!-- Refresh Button -->
@@ -50,6 +52,7 @@
           >
             <%= link_text %>
           </button>
+
           <!-- Dismiss Button -->
           <button
             type="button"
@@ -67,4 +70,4 @@
       </div>
     </div>
   <% end %>
-</div>
+<% end %>
