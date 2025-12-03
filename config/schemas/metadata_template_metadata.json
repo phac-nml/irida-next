@@ -1,11 +1,12 @@
 {
-    "type": "array",
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "description": "",
-    "minItems": 1,
-    "uniqueItems": true,
-    "items": {
-      "type": "string",
-      "minLength" : 1
-    }
+  "type": "array",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "minItems": 1,
+  "maxItems": 150,
+  "uniqueItems": true,
+  "items": {
+    "type": "string",
+    "minLength": 1
   }
+}
