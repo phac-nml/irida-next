@@ -255,7 +255,6 @@ fr:
           optional: Nom (facultatif)
           required: Nom
       processing_request: Le traitement de votre soumission peut prendre un certain temps.
-      submission_error: Quelque chose s’est mal passé avec la demande de soumission.
     project_dashboard:
       activity_title: Dernière activité
       info_title: Renseignements sur le projet

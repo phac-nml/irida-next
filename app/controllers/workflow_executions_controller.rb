@@ -24,7 +24,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def samplesheet
     @workflow_params = { name: params[:workflow_name], version: params[:workflow_version] }
-    @samples = Sample.where(id: params[:sample_ids])
+    @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: params[:sample_ids])
     @fields = params[:fields]
     @schema = JSON.parse(params[:schema])
 

@@ -1,16 +1,17 @@
 <div
   id="nextflow-container"
-  data-controller="nextflow--samplesheet nextflow--samplesheet--params"
+  data-controller="nextflow--samplesheet <% unless @sample_count.nil? %>nextflow--samplesheet--params<% end %>"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
-  data-nextflow--samplesheet-submission-error-value="<%= t("components.nextflow_component.submission_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
   data-nextflow--samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  <% unless @sample_count.nil? %>
   data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-selection-outlet="#samples-table"
+  <% end %>
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -128,15 +129,15 @@
                   </turbo-frame>
 
                   <%= helpers.turbo_frame_tag "samplesheet" %>
-
-                  <div
-                    class="hidden"
-                    data-controller="nextflow--samplesheet--params--schema"
-                    data-nextflow--samplesheet--params--schema-nextflow--samplesheet--params-outlet="#nextflow-container"
-                    data-nextflow--samplesheet--params--schema-schema-value="<%= property[:schema].to_json %>"
-                  >
-                  </div>
-
+                  <% unless @sample_count.nil? %>
+                    <div
+                      class="hidden"
+                      data-controller="nextflow--samplesheet--params--schema"
+                      data-nextflow--samplesheet--params--schema-nextflow--samplesheet--params-outlet="#nextflow-container"
+                      data-nextflow--samplesheet--params--schema-schema-value="<%= property[:schema].to_json %>"
+                    >
+                    </div>
+                  <% end %>
                   <div
                     class="flex justify-center"
                     id="samplesheet-spinner"
