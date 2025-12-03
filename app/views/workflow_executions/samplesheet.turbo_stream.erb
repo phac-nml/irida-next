@@ -1,0 +1,23 @@
+<%= turbo_stream.update "samplesheet" do %>
+  <%= render Nextflow::SamplesheetComponent.new(
+    schema: @schema,
+    samples: @samples,
+    namespace_id: @namespace_id,
+    fields: @fields,
+    workflow_params: {
+      name: @workflow.name,
+      version: @workflow.version,
+    },
+  ) %>
+<% end %>
+
+<%= turbo_stream.prepend "workflow_execution_message" do
+  viral_alert(
+    type: "success",
+    message: "updated!",
+    aria: {
+      live: "assertive",
+    },
+    classes: "mb-2",
+  )
+end %>
