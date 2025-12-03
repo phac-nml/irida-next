@@ -1,17 +1,23 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
+  <% if @show_metadata_fields_size_warning %>
+    <div class="mb-4">
+      <%= viral_alert(message: @metadata_fields_size_warning_message) %>
+    </div>
+  <% end %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
+
       <table
-        class='
+        class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
-        '
+        "
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
-        >
-        <thead class='@2xl:sticky @2xl:top-0 z-10 uppercase'>
+      >
+        <thead class="@2xl:sticky @2xl:top-0 z-10 uppercase">
           <tr
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -25,9 +31,7 @@
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
-                <div
-                  class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>"
-                >
+                <div class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>">
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
@@ -45,6 +49,7 @@
                       },
                     } %>
                   <% end %>
+
                   <%= render SortComponent.new(
                     sort: @search_params["sort"],
                     label: t(".#{column}"),
@@ -57,6 +62,7 @@
                 </div>
               <% end %>
             <% end %>
+
             <% @metadata_fields.each do |field| %>
               <%= render_cell(
               tag: 'th',
@@ -80,12 +86,13 @@
             <% end %>
           </tr>
         </thead>
+
         <tbody
           id="samples-table-body"
-          class='
+          class="
             overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
             dark:border-slate-700
-          '
+          "
         >
           <% @samples.each do |sample| %>
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -112,6 +119,7 @@
                         },
                       } %>
                     <% end %>
+
                     <% if column == :puid %>
                       <span class="font-mono font-semibold">
                         <%= highlight(
@@ -154,6 +162,7 @@
                   </div>
                 <% end %>
               <% end %>
+
               <% @metadata_fields.each do |field| %>
                 <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
@@ -166,12 +175,14 @@
             <% end %>
           <% end %>
         </tbody>
+
         <% if @abilities[:select_samples] && @has_samples %>
           <tfoot class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
             <tr>
               <td
                 class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
+                  sticky left-0 z-10 px-6 py-3 text-slate-700
+                  dark:text-slate-300
                 "
                 colspan="2"
               >
@@ -179,11 +190,13 @@
                   <%= t(".counts.samples") %>:
                   <strong><%= @pagy.count %></strong>
                 </span>
+
                 <span>
                   <%= t(".counts.selected") %>:
                   <strong data-selection-target="selected">0</strong>
                 </span>
               </td>
+
               <td
                 colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
                 class="p-3 bg-slate-100 dark:bg-slate-900"
@@ -193,7 +206,9 @@
         <% end %>
       </table>
     <% end %>
+
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+
     <% if @abilities[:edit_sample_metadata] %>
       <template data-editable-cell-target="formTemplate">
         <%= form_with(
@@ -210,42 +225,45 @@
         id="editable-cell-form-container"
         class="invisible"
         data-editable-cell-target="formContainer"
-      >
-      </div>
+      ></div>
       <template data-editable-cell-target="confirmDialogTemplate">
         <%= viral_dialog(open: false) do |dialog| %>
           <% dialog.with_header(
             title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
           ) %>
+
           <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
             <span data-message-type="wov" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
               ) %>
             </span>
+
             <span data-message-type="woov" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
               ) %>
             </span>
+
             <span data-message-type="wonv" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
               ) %>
             </span>
           </p>
+
           <% dialog.with_secondary_action do %>
             <%= viral_button(value: "confirm", state: :primary) do
               t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
             end %>
+
             <%= viral_button(value: "cancel", state: :default) do
               t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
             end %>
           <% end %>
         <% end %>
       </template>
-      <div data-editable-cell-target="confirmDialogContainer">
-      </div>
+      <div data-editable-cell-target="confirmDialogContainer"></div>
     <% end %>
   <% end %>
 <% else %>

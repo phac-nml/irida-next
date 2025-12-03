@@ -7,6 +7,8 @@ module Samples
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    MAX_METADATA_FIELDS_SIZE = 150
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       samples,
@@ -24,7 +26,10 @@ module Samples
       @pagy = pagy
       @has_samples = has_samples
       @abilities = abilities
-      @metadata_fields = metadata_fields
+      @metadata_fields = metadata_fields.take(MAX_METADATA_FIELDS_SIZE)
+      @show_metadata_fields_size_warning = metadata_fields.count > MAX_METADATA_FIELDS_SIZE
+      @metadata_fields_size_warning_message = I18n.t('components.samples.table_component.metadata_fields_size_warning',
+                                                     max_metadata_fields_size: MAX_METADATA_FIELDS_SIZE)
       @search_params = search_params
       @empty = empty
       @system_arguments = system_arguments
