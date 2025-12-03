@@ -1,16 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Handles sending metadata to samplesheet after metadata selection
+// Notifies nextflow/samplesheet_controller.js that the samplesheet has rendered
 export default class extends Controller {
   connect() {
-    this.test();
+    this.notify();
   }
 
-  test() {
-    this.dispatch("test", {
-      detail: {
-        content: "hi",
-      },
-    });
+  notify() {
+    this.dispatch("notify");
   }
 }
