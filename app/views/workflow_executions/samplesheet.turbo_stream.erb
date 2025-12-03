@@ -14,7 +14,7 @@
 <%= turbo_stream.prepend "workflow_execution_message" do
   viral_alert(
     type: "success",
-    message: "updated!",
+    message: t(".loading_complete"),
     aria: {
       live: "assertive",
     },
