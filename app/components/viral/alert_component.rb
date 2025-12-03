@@ -43,10 +43,7 @@ module Viral
     TYPE_OPTIONS = TYPE_MAPPINGS.values.uniq.freeze
 
     # Classes for dismiss button
-    DEFAULT_DISMISS_CLASSES = 'inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400
-    focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-slate-500 focus-visible:outline-offset-2
-    transition-colors duration-200 dark:text-slate-500 dark:hover:text-slate-400 dark:focus:ring-slate-400
-    hover:text-slate-600 hover:cursor-pointer'
+    DEFAULT_DISMISS_CLASSES = 'dialog--close cursor-pointer'
 
     # Initialize the Alert component.
     #
