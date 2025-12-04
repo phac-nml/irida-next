@@ -7,7 +7,7 @@
 
           <% if @abilities[:edit_sample_metadata] %>
             <%= link_to t("components.samples.table_component.create_template_link"),
-                        namespace_project_metadata_templates_path,
+                        metadata_template_url,
                         class: "font-semibold underline hover:no-underline",
                         data: { turbo_frame: "top" } %>
           <% end %>

@@ -38,11 +38,11 @@ module Samples
       # Generates the URL for creating a new metadata template.
       #
       # @return [String] the new metadata template URL
-      def new_metadata_template_url
+      def metadata_template_url
         if @namespace.type == 'Group'
-          helpers.new_group_metadata_template_path(@namespace)
+          helpers.group_metadata_templates_path(@namespace)
         else
-          helpers.new_namespace_project_metadata_template_path(@namespace.parent, @namespace.project)
+          helpers.namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
         end
       end
     end
