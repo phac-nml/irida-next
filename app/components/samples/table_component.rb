@@ -6,6 +6,7 @@ module Samples
   # Component for rendering a table of Samples
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
+    include UrlHelpers
 
     # Maximum number of metadata fields to display regardless of sample count
     MAX_METADATA_FIELDS_SIZE = 200
@@ -95,37 +96,6 @@ module Samples
 
     def render_cell(**arguments, &)
       render(Viral::BaseComponent.new(**arguments), &)
-    end
-
-    def select_samples_url(**)
-      if @namespace.type == 'Group'
-        select_group_samples_url(@namespace, **)
-      else
-        select_namespace_project_samples_url(@namespace.parent, @namespace.project, **)
-      end
-    end
-
-    def sort_url(field)
-      sort_string = if field.to_s == @sort_key && @sort_direction == 'asc'
-                      "#{field} desc"
-                    else
-                      "#{field} asc"
-                    end
-
-      if @namespace.type == 'Group'
-        group_samples_url(@namespace, q: { sort: sort_string }, limit: @pagy.limit)
-      else
-        namespace_project_samples_url(@namespace.parent, @namespace.project, q: { sort: sort_string },
-                                                                             limit: @pagy.limit)
-      end
-    end
-
-    def new_metadata_template_url
-      if @namespace.type == 'Group'
-        helpers.new_group_metadata_template_path(@namespace)
-      else
-        helpers.new_namespace_project_metadata_template_path(@namespace.parent, @namespace.project)
-      end
     end
 
     private
