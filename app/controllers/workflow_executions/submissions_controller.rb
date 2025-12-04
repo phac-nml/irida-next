@@ -10,7 +10,7 @@ module WorkflowExecutions
     before_action :sample_count, only: %i[create]
     before_action :workflow, only: %i[create]
     before_action :namespace_id, only: %i[create pipeline_selection]
-    before_action :allowed_to_update_samples, only: %i[create]
+    before_action :samplesheet_params, only: %i[samplesheet]
 
     def pipeline_selection
       render status: :ok
@@ -22,6 +22,10 @@ module WorkflowExecutions
         namespace: @namespace,
         template: 'all'
       )
+      render status: :ok
+    end
+
+    def samplesheet
       render status: :ok
     end
 
@@ -46,9 +50,18 @@ module WorkflowExecutions
       @namespace_id = params[:namespace_id]
     end
 
+    def samplesheet_params
+      @workflow_params = { name: params[:workflow_name], version: params[:workflow_version] }
+      @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: params[:sample_ids])
+      @fields = params[:fields]
+      @schema = JSON.parse(params[:schema])
+
+      allowed_to_update_samples
+    end
+
     def allowed_to_update_samples
       @allowed_to_update_samples = true
-      projects = Project.where(id: Sample.where(id: params[:sample_ids]).select(:project_id))
+      projects = Project.where(id: @samples.select(:project_id))
 
       projects.each do |project|
         @allowed_to_update_samples = allowed_to?(
