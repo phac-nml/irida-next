@@ -81,6 +81,56 @@ module Samples
       end
     end
 
+    test 'Should include create template link when user can edit metadata' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..150).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: { edit_sample_metadata: true },
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should show link to create metadata template within the warning alert
+        assert_selector 'div[role="status"][aria-live="polite"] a[data-turbo-frame="top"]',
+                        text: I18n.t('components.samples.table_component.create_template_link')
+      end
+    end
+
+    test 'Should not include create template link when user cannot edit metadata' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..150).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should NOT show link to create metadata template within the warning alert
+        assert_no_selector 'div[role="status"][aria-live="polite"] a[data-turbo-frame="top"]',
+                           text: I18n.t('components.samples.table_component.create_template_link')
+      end
+    end
+
     test 'Should dynamically limit metadata fields based on sample count with 50 samples' do
       with_request_url '/namespaces/12/projects/1/samples' do
         project = projects(:project1)

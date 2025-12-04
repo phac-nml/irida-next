@@ -291,7 +291,8 @@ fr:
             one: 1 échantillon sélectionné
             other: "%{selected} sur %{total} échantillons sélectionnés"
         create_template_link: créez un modèle de métadonnées avec ces champs
-        metadata_fields_size_warning: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules). Si vous avez besoin de champs,
+        metadata_fields_size_warning: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules).
+        metadata_fields_size_warning_with_link: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules). Si vous avez besoin de champs, %{create_template_link}.
     search:
       advanced:
         results_message:

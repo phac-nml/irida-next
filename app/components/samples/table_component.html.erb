@@ -2,16 +2,7 @@
   <% if @show_metadata_fields_size_warning %>
     <div class="mb-4" role="status" aria-live="polite">
       <%= viral_alert do %>
-        <span class="inline">
-          <%= @metadata_fields_size_warning_message %>
-
-          <% if @abilities[:edit_sample_metadata] %>
-            <%= link_to t("components.samples.table_component.create_template_link"),
-                        metadata_template_url,
-                        class: "font-semibold underline hover:no-underline",
-                        data: { turbo_frame: "top" } %>
-          <% end %>
-        </span>
+        <span class="inline"><%= @metadata_fields_size_warning_message %></span>
       <% end %>
     </div>
   <% end %>
