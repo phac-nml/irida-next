@@ -1,13 +1,13 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: t("samples.clones.dialog.title")) %>
   <%= turbo_stream_from @broadcast_target %>
   <%= turbo_frame_tag "clone_samples_dialog_content" do %>
     <div
       data-controller="infinite-scroll viral--select2"
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
-      data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
-      data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+      data-infinite-scroll-singular-description-value="<%= t("samples.clones.dialog.description.singular") %>"
+      data-infinite-scroll-plural-description-value="<%= t("samples.clones.dialog.description.plural") %>"
     >
       <%= form_with(
         url: list_samples_path(list_class: "sample"),
@@ -21,11 +21,11 @@
           data-infinite-scroll-target="summary"
           class="text-base leading-relaxed text-slate-500 dark:text-slate-400"
         >
-          <%= t(".description.zero") %>
+          <%= t("samples.clones.dialog.description.zero") %>
         </p>
         <div>
           <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
-            <%= t(".samples") %>
+            <%= t("samples.clones.dialog.samples") %>
           </div>
           <div
             class="
@@ -56,14 +56,14 @@
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "clone-project-select" %>
-              <%= form.label :new_project_id, t(".new_project_id"),
+              <%= form.label :new_project_id, t("samples.clones.dialog.new_project_id"),
                              for: form_id,
                              class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                              data: { required: true } %>
               <% if @projects.empty? %>
                 <input
                   disabled
-                  placeholder="<%= t(".no_available_projects")%>"
+                  placeholder="<%= t("samples.clones.dialog.no_available_projects")%>"
                   type="text"
                   class="
                     border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5
@@ -71,7 +71,7 @@
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t(".select_project")) do |select| %>
+                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
@@ -91,13 +91,13 @@
                     <% end %>
                   <% end %>
                   <%= select.with_empty_state do %>
-                    <%= t(:".empty_state") %>
+                    <%= t("samples.clones.dialog.empty_state") %>
                   <% end %>
                 <% end %>
               <% end %>
             </div>
             <div>
-              <%= form.submit t(".submit_button"),
+              <%= form.submit t("samples.clones.dialog.submit_button"),
                           class: "button button-primary",
                           disabled: true,
                           data: {

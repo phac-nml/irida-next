@@ -33,11 +33,11 @@
                     false,
                     {
                       id: "select-page",
-                      table: true,
                       aria: {
                         label: t("components.attachments.table_component.select_page"),
                       },
                       data: {
+                        table: true,
                         action: "input->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
@@ -147,11 +147,11 @@
                       false,
                       {
                         id: dom_id(attachment, "checkbox"),
-                        table: true,
                         aria: {
                           label: attachment.file.filename.to_s,
                         },
                         data: {
+                          table: true,
                           action: "input->selection#toggle",
                           selection_target: "rowSelection",
                         },

@@ -27,6 +27,7 @@
                 "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
             ) %>
         <% end %>
+
         <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
           <% dropdown.with_item(
             label: t("shared.workflow_executions.actions_dropdown.delete_workflow_executions"),
@@ -41,6 +42,7 @@
               "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
           ) %>
         <% end %>
+
         <% if allowed_to?(:export_data?, @project.namespace) %>
           <% dropdown.with_item(
             label: t("shared.workflow_executions.actions_dropdown.export"),
@@ -68,6 +70,7 @@
     <% end %>
   <% end %>
 <% end %>
+
 <% if @has_workflow_executions %>
   <div class="flex flex-wrap gap-2 mb-4">
     <%= form_with(
@@ -77,9 +80,10 @@
                     class: "max-sm:grow",
                     data: { turbo_frame: "selected" },
                   ) do |f| %>
-      <input type="hidden" name="select" value="on"/>
+      <input type="hidden" name="select" value="on" />
       <%= f.submit t("common.controls.select_all"), id: "select-all-button", class: "button button-default w-full" %>
     <% end %>
+
     <%= form_with(
                     url: select_namespace_project_workflow_executions_url,
                     method: :get,
@@ -89,7 +93,9 @@
                   ) do |f| %>
       <%= f.submit t("common.controls.deselect_all"), id: "deselect-all-button", class: "button button-default w-full" %>
     <% end %>
+
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
+
     <%= render SearchComponent.new(
       query: @q,
       url: namespace_project_workflow_executions_path(**request.query_parameters),
