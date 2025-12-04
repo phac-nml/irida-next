@@ -119,7 +119,12 @@ fr:
         metadata_template:
           attributes:
             fields:
+              invalid: 'est invalide (type d''erreur: %{error_type})'
+              max_items: ne peut pas contenir plus de %{max} champs
+              min_items: doit contenir au moins %{min} champ(s)
+              min_length: doit avoir une longueur minimale de %{min} caractère(s)
               taken: Existe déjà dans un autre modèle avec le même ordre
+              unique_items: doit contenir des valeurs uniques
         namespace:
           attributes:
             path:

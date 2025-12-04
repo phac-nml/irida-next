@@ -51,5 +51,199 @@ module Samples
         end
       end
     end
+
+    test 'Should dynamically limit metadata fields based on sample count with 20 samples' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..150).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # 20 samples: 2000/20 = 100 fields max
+        # Should show 100 metadata field columns (150 requested, limited to 100)
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 100
+
+        # Should show warning message
+        assert_selector 'div', text: /limited to 100 for 20 samples/
+      end
+    end
+
+    test 'Should include create template link when user can edit metadata' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..150).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: { edit_sample_metadata: true },
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should show link to create metadata template within the warning alert
+        assert_selector 'div[role="status"][aria-live="polite"] a[data-turbo-frame="top"]',
+                        text: I18n.t('components.samples.table_component.create_template_link')
+      end
+    end
+
+    test 'Should not include create template link when user cannot edit metadata' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..150).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should NOT show link to create metadata template within the warning alert
+        assert_no_selector 'div[role="status"][aria-live="polite"] a[data-turbo-frame="top"]',
+                           text: I18n.t('components.samples.table_component.create_template_link')
+      end
+    end
+
+    test 'Should dynamically limit metadata fields based on sample count with 50 samples' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(50).to_a
+        pagy = Pagy.new(count: 50, page: 1, limit: 50)
+        metadata_fields = (1..100).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # 50 samples: 2000/50 = 40 fields max
+        # Should show 40 metadata field columns (100 requested, limited to 40)
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 40
+
+        # Should show warning message
+        assert_selector 'div', text: /limited to 40 for 50 samples/
+      end
+    end
+
+    test 'Should cap metadata fields at hard maximum of 200 with 5 samples' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(5).to_a
+        pagy = Pagy.new(count: 5, page: 1, limit: 5)
+        metadata_fields = (1..250).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # 5 samples: 2000/5 = 400, but capped at 200
+        # Should show 200 metadata field columns (250 requested, limited to 200)
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 200
+
+        # Should show warning message
+        assert_selector 'div', text: /limited to 200 for 5 samples/
+      end
+    end
+
+    test 'Should not show warning when metadata fields are within limit' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(20).to_a
+        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        metadata_fields = (1..50).map { |i| "field_#{i}" } # Well under the 100 limit for 20 samples
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should show all 50 metadata field columns
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 50
+
+        # Should NOT show warning message
+        assert_no_selector 'div', text: /limited to/
+      end
+    end
+
+    test 'Should handle single sample edge case' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(1).to_a
+        pagy = Pagy.new(count: 1, page: 1, limit: 1)
+        metadata_fields = (1..250).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # 1 sample: 2000/1 = 2000, capped at 200
+        # Should show 200 metadata field columns (250 requested, limited to 200)
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 200
+
+        # Should show warning message
+        assert_selector 'div', text: /limited to 200 for 1 sample/
+      end
+    end
   end
 end

@@ -43,6 +43,13 @@ class MetadataTemplateTest < ActiveSupport::TestCase
     assert_not @valid_metadata_template.valid?
   end
 
+  test 'invalid with more than 150 fields' do
+    @valid_metadata_template.fields = (1..151).map { |i| "field_#{i}" }
+    assert_not @valid_metadata_template.valid?
+    expected_error = I18n.t('activerecord.errors.models.metadata_template.attributes.fields.max_items', max: 150)
+    assert_includes @valid_metadata_template.errors[:fields], expected_error
+  end
+
   # Association Tests
   test 'belongs to namespace' do
     assert_respond_to @valid_metadata_template, :namespace
