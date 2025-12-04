@@ -39,5 +39,45 @@
         "name": "0.4.2"
       }
     ]
+  },
+  "PNC Fast Match": {
+    "url": "https://github.com/phac-nml/fastmatchirida",
+    "name": "PNC Fast Match",
+    "description": "IRIDA Next PNC Fast Match Pipeline",
+    "samplesheet_schema_overrides": {
+      "items": {
+        "properties": {
+          "metadata_1": {
+            "x-irida-next-selected": "new_isolates_date"
+          },
+          "metadata_2": {
+            "x-irida-next-selected": "prediceted_primary_identification_name"
+          }
+        },
+        "required": [
+          "sample",
+          "mlst_alleles"
+        ]
+      }
+    },
+    "versions": [
+      {
+        "name": "0.4.1",
+        "automatable": true
+      },
+      {
+        "name": "0.4.0",
+        "automatable": true,
+        "samplesheet_schema_overrides": {
+          "items": {
+            "properties": {
+              "metadata_2": {
+                "x-irida-next-selected": "overridden_metadata_field"
+              }
+            }
+          }
+        }
+      }
+    ]
   }
 }

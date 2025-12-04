@@ -245,6 +245,7 @@ fr:
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
+      loading_complete: La feuille d’échantillons est prête.
       loading_samplesheet:
         one: Préparation des arguments d’exécution du flux de travail pour 1 échantillon.
         other: La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."

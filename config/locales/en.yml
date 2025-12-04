@@ -2041,8 +2041,6 @@ en:
         placeholder: Search by PUID or filename
     samples:
       empty: No samples could be found for this workflow execution
-    samplesheet:
-      loading_complete: Samplesheet is ready.
     show:
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export

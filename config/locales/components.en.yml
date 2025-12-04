@@ -245,6 +245,7 @@ en:
       update_samples: Update samples with analysis results
     nextflow_component:
       data_missing_error: 'The following samples are missing required data: '
+      loading_complete: Samplesheet is ready.
       loading_samplesheet:
         one: Preparing workflow execution arguments for 1 sample.
         other: Preparing workflow execution arguments for %{count} samples, this may take a bit of time.
