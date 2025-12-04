@@ -59,16 +59,33 @@ class BaseSampleService < BaseService
 
     # We only need to show an unauthorized messages for sample ids that belong to projects in the
     # group since a user can have different access levels
-    if unauthorized_sample_ids.count.positive? && @namespace.group_namespace?
+    if unauthorized_sample_ids.any? && @namespace.group_namespace?
       @namespace.errors.add(:samples,
                             I18n.t("services.samples.#{action_type}.unauthorized",
                                    sample_ids: unauthorized_sample_ids.join(', ')))
     end
-    if invalid_ids.count.positive?
+    if invalid_ids.any?
       @namespace.errors.add(:samples,
                             I18n.t("services.samples.#{action_type}.samples_not_found",
                                    sample_ids: invalid_ids.join(', ')))
     end
     samples
+  end
+
+  # Broadcast all turbo broadcasts for sample services where the broadcasts were suppressed
+  def broadcast_refresh_later_to_samples_table(old_namespaces, new_namespaces, old_project, new_project)
+    return unless Flipper.enabled?(:samples_refresh_notice)
+
+    Turbo::StreamsChannel.broadcast_refresh_later_to old_project, :samples
+
+    old_namespaces.each do |old_namespace|
+      Turbo::StreamsChannel.broadcast_refresh_later_to old_namespace, :samples
+    end
+
+    Turbo::StreamsChannel.broadcast_refresh_later_to new_project, :samples
+
+    new_namespaces.each do |new_namespace|
+      Turbo::StreamsChannel.broadcast_refresh_later_to new_namespace, :samples
+    end
   end
 end

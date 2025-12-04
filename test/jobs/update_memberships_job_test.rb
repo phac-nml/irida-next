@@ -106,7 +106,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
 
   test 'maximum nested memberships' do
     perform_enqueued_jobs do
-      (Namespace::MAX_ANCESTORS - 1).times do |n|
+      (Namespace::MAX_ANCESTORS - 2).times do |n|
         assert_equal Member::AccessLevel::GUEST,
                      groups("subgroup#{n + 1}").group_members.where(user_id: @group_member.user_id).first.access_level
       end
@@ -114,7 +114,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::MAINTAINER }
       Members::UpdateService.new(@group_member, @group_member.namespace, @user, valid_params).execute
 
-      (Namespace::MAX_ANCESTORS - 1).times do |n|
+      (Namespace::MAX_ANCESTORS - 2).times do |n|
         assert_equal Member::AccessLevel::MAINTAINER,
                      groups("subgroup#{n + 1}").group_members.where(user_id: @group_member.user_id).first.access_level
       end

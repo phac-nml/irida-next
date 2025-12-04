@@ -2140,7 +2140,6 @@ module Groups
       # only samples without a matching name to samples in destination project will transfer
 
       ### SETUP START ###
-      group_three = groups(:group_three)
       project4 = projects(:project4)
       samples = []
       @group.project_namespaces.map do |pn|
@@ -2150,16 +2149,16 @@ module Groups
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
       sample28 = samples(:sample28)
-      sample30 = samples(:sample30)
+      sample29 = samples(:sample29)
 
       samples.flatten!
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      # target project has 3 samples prior to transfer
-      visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+      # target project has 2 samples prior to transfer
+      visit namespace_project_samples_url(project4.namespace.parent, project4)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                                       locale: @user.locale))
 
       visit group_samples_url(@group)
@@ -2205,8 +2204,8 @@ module Groups
         assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
 
         # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
-                                                                      sample_name: sample30.name).gsub(':', '')
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
+                                                                      sample_name: sample29.name).gsub(':', '')
 
         click_button I18n.t('shared.samples.errors.ok_button')
       end
@@ -2216,16 +2215,16 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      # verify sample1 and 2 transferred, sample 28, sample 30 did not
+      # verify sample1 and 2 transferred, sample 28, sample 29 did not
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                                       locale: @user.locale))
       assert_no_selector "tr[id='#{dom_id(sample1)}']"
       assert_no_selector "tr[id='#{dom_id(sample2)}']"
-      assert_selector "tr[id='#{dom_id(sample30)}']"
       assert_selector "tr[id='#{dom_id(sample28)}']"
+      assert_selector "tr[id='#{dom_id(sample29)}']"
 
       # destination project
-      visit group_samples_url(group_three)
+      visit namespace_project_samples_url(project4.namespace.parent, project4)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
@@ -2234,7 +2233,7 @@ module Groups
       assert_selector "tr[id='#{dom_id(sample1)}']"
       assert_selector "tr[id='#{dom_id(sample2)}']"
       assert_no_selector "tr[id='#{dom_id(sample28)}']"
-      assert_no_selector "tr[id='#{dom_id(sample30)}']"
+      assert_no_selector "tr[id='#{dom_id(sample29)}']"
       ### VERIFY END ###
     end
 

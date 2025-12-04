@@ -10,7 +10,7 @@ subgroup1_route:
   path: group-1/subgroup-1
   source: subgroup1 (Namespace)
 
-<% (Namespace::MAX_ANCESTORS-1).times do |n| %>
+<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
 subgroup<%= (n+2) %>_route:
   name: Group 1 / <%= (n+2).times.collect{ |i| "Subgroup #{i+1}" }.join(' / ') %>
   path: group-1/<%= (n+2).times.collect{ |i| "subgroup-#{i+1}" }.join('/') %>

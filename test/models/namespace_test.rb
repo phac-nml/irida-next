@@ -54,4 +54,69 @@ class NamespaceTest < ActiveSupport::TestCase
                                groups(:group_one), groups(:group_three)
                              ].map(&:id))).empty?
   end
+
+  test 'subtract_from_metadata_summary_count with valid metadata' do
+    project29 = namespaces_project_namespaces(:project29_namespace)
+    sample32 = samples(:sample32)
+    old_namespaces = project29.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+
+    assert_equal 1, project29['metadata_summary']['metadatafield1']
+    assert_equal 1, project29['metadata_summary']['metadatafield2']
+
+    Namespace.subtract_from_metadata_summary_count(old_namespaces, sample32.metadata, true)
+
+    assert_nil project29.reload['metadata_summary']['metadatafield1']
+    assert_nil project29.reload['metadata_summary']['metadatafield2']
+  end
+
+  test 'add_to_metadata_summary_count with valid metadata' do
+    project1 = namespaces_project_namespaces(:project1_namespace)
+    sample32 = samples(:sample32)
+
+    new_namespaces = project1.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+
+    assert_equal 10, project1['metadata_summary']['metadatafield1']
+    assert_equal 35, project1['metadata_summary']['metadatafield2']
+    assert_equal 633, project1.parent['metadata_summary']['metadatafield1']
+    assert_equal 106, project1.parent['metadata_summary']['metadatafield2']
+
+    Namespace.add_to_metadata_summary_count(new_namespaces, sample32.metadata, true)
+
+    assert_equal 11, project1.reload['metadata_summary']['metadatafield1']
+    assert_equal 36, project1.reload['metadata_summary']['metadatafield2']
+    assert_equal 634, project1.parent.reload['metadata_summary']['metadatafield1']
+    assert_equal 107, project1.parent.reload['metadata_summary']['metadatafield2']
+  end
+
+  test 'add_to_metadata_summary_count with empty metadata' do
+    project1 = namespaces_project_namespaces(:project1_namespace)
+    sample32 = samples(:sample32)
+    sample32.metadata = {}
+    sample32.metadata_provenance = {}
+    sample32.save
+
+    new_namespaces = project1.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+
+    assert_no_changes -> { project1.reload.metadata_summary } do
+      assert_no_changes -> { project1.parent.reload.metadata_summary } do
+        Namespace.add_to_metadata_summary_count(new_namespaces, sample32.metadata, true)
+      end
+    end
+  end
+
+  test 'subtract_from_metadata_summary_count with empty metadata' do
+    project29 = namespaces_project_namespaces(:project29_namespace)
+    sample32 = samples(:sample32)
+    sample32.metadata = {}
+    sample32.metadata_provenance = {}
+    sample32.save
+
+    old_namespaces = project29.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+
+    assert_no_changes -> { project29.reload.metadata_summary } do
+      assert_no_changes -> { project29.parent.reload.metadata_summary } do
+        Namespace.subtract_from_metadata_summary_count(old_namespaces, sample32.metadata, true)
+      end
+    end
+  end
 end

@@ -71,7 +71,7 @@ class Sample < ApplicationRecord
 
   private
 
-  def broadcast_refresh_later_to_samples_table # rubocop:disable Metrics/AbcSize
+  def broadcast_refresh_later_to_samples_table
     return if Sample.suppressed_turbo_broadcasts
 
     projects = [project]
@@ -79,15 +79,6 @@ class Sample < ApplicationRecord
       projects << Project.find(previous_changes['project_id'][0])
     end
 
-    projects.each do |project|
-      broadcast_refresh_later_to project, :samples
-      next unless Flipper.enabled?(:samples_refresh_notice)
-
-      # Broadcast to all ancestor groups since they display samples from child projects/groups.
-      # This ensures group sample views are notified of changes in nested projects.
-      project.namespace.parent.self_and_ancestors.each do |ancestor|
-        broadcast_refresh_later_to ancestor, :samples
-      end
-    end
+    projects.each(&:broadcast_refresh_later_to_samples_table)
   end
 end

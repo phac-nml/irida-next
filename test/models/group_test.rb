@@ -23,8 +23,8 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test 'invalid if more than 9 ancestors' do
-    @subgroup = groups(:subgroup10)
-    assert_not @subgroup.valid?, 'subgroup is valid with more than 9 ancestors'
+    @subgroup = Group.new(name: 'Subgroup 10', path: 'subgroup-10', parent_id: groups(:subgroup9).id, owner: @user)
+    assert_not @subgroup.valid?, 'subgroup is invalid with more than 9 ancestors'
     assert_not_nil @subgroup.errors[:parent_id], 'no validation error for parent'
   end
 
@@ -94,7 +94,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test '#abbreviated_path with nested group' do
-    assert_equal 'g/s/s/s/s/s/s/s/s/s/subgroup-10', groups('subgroup10').abbreviated_path
+    assert_equal 'g/s/s/s/s/s/s/s/s/subgroup-9', groups(:subgroup9).abbreviated_path
   end
 
   test '#destroy removes descendant groups, project namespaces, projects, and members' do

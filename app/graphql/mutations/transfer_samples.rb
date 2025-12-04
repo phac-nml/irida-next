@@ -78,7 +78,7 @@ module Mutations
         next
       end
 
-      samples = Projects::Samples::TransferService.new(
+      samples = Samples::TransferService.new(
         project.namespace, current_user
       ).execute(new_project_id, sample_ids.compact)
 

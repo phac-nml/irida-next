@@ -27,7 +27,7 @@ group_one_member_ryan_doe:
   access_level: <%= Member::AccessLevel::GUEST %>
   expires_at: <%= 12.days.from_now %>
 
-<% (Namespace::MAX_ANCESTORS-1).times do |n| %>
+<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
 subgroup<%= (n+1) %>_member_ryan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
