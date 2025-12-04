@@ -4,7 +4,7 @@ require 'ransack/helpers/form_helper'
 
 module Samples
   # Component for rendering a table of Samples
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
     include UrlHelpers
 
