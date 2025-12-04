@@ -5,10 +5,6 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
-<pre class="text-sm text-gray-500">
-  <%= @allowed_to.inspect %>
-</pre>
-
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
     <% component.with_buttons do %>
