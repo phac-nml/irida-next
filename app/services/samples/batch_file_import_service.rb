@@ -14,8 +14,10 @@ module Samples
         @project_puid_column = params[:project_puid_column]
         required_headers.push @project_puid_column if params[:project_puid_column].present?
         @static_project = params[:static_project_id].blank? ? nil : Project.find(params[:static_project_id])
+        @broadcast_projects = []
       else
         @static_project = namespace.project
+        @broadcast_projects = [namespace.project]
       end
       @imported_samples_data = { project_data: {}, group_data: [] }
       @project_puid_map = {}
@@ -43,39 +45,50 @@ module Samples
 
       # minus 1 to exclude header
       total_sample_count = @spreadsheet.count - 1
-      @spreadsheet.each_with_index(parse_settings) do |data, index|
+      num_samples_for_progress_bar_update = ((total_sample_count * 0.05).floor) # 5% of samples, used by progress bar update
+
+      @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
 
-        update_progress_bar(index, total_sample_count, broadcast_target)
-
-        sample_name = data[@sample_name_column].to_s
-
-        project_puid = data[@project_puid_column]
-        description = data[@sample_description_column]
-        metadata = process_metadata_row(data)
-
-        error = errors_on_sample_row(sample_name, project_puid, response, index)
-        unless error.nil?
-          response["index #{index}"] = error
-          next
+        Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
+        if (index == total_sample_count) || ((index % num_samples_for_progress_bar_update) == 0 )
+          update_progress_bar(index, total_sample_count, broadcast_target)
         end
+          sample_name = data[@sample_name_column].to_s
 
-        if project_puid
-          project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
-          error = errors_with_project(project_puid, project)
+          project_puid = data[@project_puid_column]
+          description = data[@sample_description_column]
+          metadata = process_metadata_row(data)
+
+          error = errors_on_sample_row(sample_name, project_puid, response, index)
           unless error.nil?
-            response[sample_name] = error
+            response["index #{index}"] = error
             next
           end
-        elsif @static_project
-          project = @static_project
-        else
-          next
-        end
 
-        response[sample_name] = process_sample_row(sample_name, project, description, metadata)
+          if project_puid
+            project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
+            error = errors_with_project(project_puid, project)
+            unless error.nil?
+              response[sample_name] = error
+              next
+            end
+          elsif @static_project
+            project = @static_project
+          else
+            next
+          end
+
+          response[sample_name] = process_sample_row(sample_name, project, description, metadata)
+          if @namespace.group_namespace? && response[sample_name].is_a?(Sample) &&
+             @broadcast_projects.exclude?(response[sample_name].project)
+            @broadcast_projects << response[sample_name].project
+          end
+        end
       end
+
       create_activities unless @imported_samples_data[:project_data].empty?
+      @broadcast_projects.each(&:broadcast_refresh_later_to_samples_table)
 
       response
     end
