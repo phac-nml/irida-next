@@ -19,12 +19,24 @@ export function isOptionInView(option) {
 }
 
 export function highlightOption(option, filter) {
-  const escapeRegExp = filter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`(${escapeRegExp})`, "gi");
-  option.innerHTML = option.textContent.replace(
-    regex,
-    "<mark class='bg-primary-300 dark:bg-primary-600 font-semibold'>$1</mark>",
-  );
+  if (!filter) {
+    return option;
+  }
+  const escape = filter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escape})`, "gi");
+  const text = option.textContent;
+  const parts = text.split(regex);
+  option.innerHTML = "";
+  parts.forEach((part) => {
+    if (regex.test(part)) {
+      const mark = document.createElement("mark");
+      mark.className = "bg-primary-300 dark:bg-primary-600 font-semibold";
+      mark.textContent = part;
+      option.appendChild(mark);
+    } else {
+      option.appendChild(document.createTextNode(part));
+    }
+  });
   return option;
 }
 

@@ -269,11 +269,13 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   #open() {
     this.listboxTarget.style.display = "block";
+    this.listboxTarget.removeAttribute("aria-hidden");
     this.comboboxTarget.setAttribute("aria-expanded", "true");
   }
 
   #close() {
     this.listboxTarget.style.display = "none";
+    this.listboxTarget.setAttribute("aria-hidden", "true");
     this.comboboxTarget.setAttribute("aria-expanded", "false");
   }
 
