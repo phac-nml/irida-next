@@ -43,7 +43,8 @@ module Viral
     TYPE_OPTIONS = TYPE_MAPPINGS.values.uniq.freeze
 
     # Classes for dismiss button
-    DEFAULT_DISMISS_CLASSES = 'dialog--close cursor-pointer'
+    DEFAULT_DISMISS_CLASSES = 'inline-flex items-center rounded-md p-1.5 cursor-pointer focus:outline-none
+    transition-colors duration-150'
 
     # Initialize the Alert component.
     #
