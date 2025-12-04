@@ -14,7 +14,7 @@ module Viral
       assert_selector '[role="alert"]', count: 1
       assert_selector '[aria-live="assertive"]', count: 1
       assert_selector '[aria-atomic="true"]', count: 1
-      assert_selector 'svg.text-blue-600', count: 1
+      assert_selector 'svg.text-blue-600', count: 2
     end
 
     test 'success alert renders with correct styling and attributes' do
@@ -23,7 +23,7 @@ module Viral
       assert_text 'This is a success alert'
       assert_selector 'div.text-green-800.border-green-300.bg-green-50', count: 1
       assert_selector '[role="alert"]', count: 1
-      assert_selector 'svg.text-green-600', count: 1
+      assert_selector 'svg.text-green-600', count: 2
     end
 
     test 'warning alert renders with correct styling and attributes' do
@@ -32,7 +32,7 @@ module Viral
       assert_text 'This is a warning alert'
       assert_selector 'div.text-amber-800.border-amber-300.bg-amber-50', count: 1
       assert_selector '[role="alert"]', count: 1
-      assert_selector 'svg.text-yellow-600', count: 1
+      assert_selector 'svg.text-yellow-600', count: 2
     end
 
     test 'danger alert renders with correct styling and attributes' do
@@ -41,7 +41,7 @@ module Viral
       assert_text 'This is a danger alert'
       assert_selector 'div.text-red-800.border-red-300.bg-red-50', count: 1
       assert_selector '[role="alert"]', count: 1
-      assert_selector 'svg.text-red-600', count: 1
+      assert_selector 'svg.text-red-600', count: 2
     end
 
     test 'notice type maps to info styling' do
@@ -49,7 +49,7 @@ module Viral
 
       assert_text 'This is a notice alert'
       assert_selector 'div.text-blue-800.border-blue-300.bg-blue-50', count: 1
-      assert_selector 'svg.text-blue-600', count: 1
+      assert_selector 'svg.text-blue-600', count: 2
     end
 
     test 'alert type maps to danger styling' do
@@ -57,7 +57,7 @@ module Viral
 
       assert_text 'This is an alert alert'
       assert_selector 'div.text-red-800.border-red-300.bg-red-50', count: 1
-      assert_selector 'svg.text-red-600', count: 1
+      assert_selector 'svg.text-red-600', count: 2
     end
 
     test 'default type is info when no type specified' do
@@ -65,7 +65,7 @@ module Viral
 
       assert_text 'This is a default alert'
       assert_selector 'div.text-blue-800.border-blue-300.bg-blue-50', count: 1
-      assert_selector 'svg.text-blue-600', count: 1
+      assert_selector 'svg.text-blue-600', count: 2
     end
 
     # 🎯 INTERACTIVE FEATURES - User control and automation
