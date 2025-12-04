@@ -114,7 +114,8 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid')}"
+      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
+                                          error_type: 'array')}"
       assert new_template.errors.full_messages.include?(expected_message)
     end
 

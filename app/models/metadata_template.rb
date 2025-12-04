@@ -35,6 +35,7 @@ class MetadataTemplate < ApplicationRecord
     %w[created_by namespace]
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
   def self.format_json_error(error)
     case error['type']
     when 'maxItems'
@@ -49,9 +50,15 @@ class MetadataTemplate < ApplicationRecord
       I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_length',
              min: error['schema']['minLength'])
     else
-      error['details'] || error['message'] || I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid')
+      # Provide more context for unexpected errors
+      details = error['details'] || error['message']
+      return details if details.present?
+
+      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
+             error_type: error['type'] || 'unknown')
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
 
   private
 

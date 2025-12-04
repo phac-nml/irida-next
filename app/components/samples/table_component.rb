@@ -7,7 +7,9 @@ module Samples
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    # Maximum number of metadata fields to display regardless of sample count
     MAX_METADATA_FIELDS_SIZE = 200
+    # Target maximum number of table cells (rows × columns) for optimal performance
     TARGET_MAX_CELLS = 2000
 
     # rubocop:disable Metrics/ParameterLists
@@ -28,13 +30,9 @@ module Samples
       @has_samples = has_samples
       @abilities = abilities
 
-      max_fields = calculate_max_metadata_fields
-      @metadata_fields = metadata_fields.take(max_fields)
-      @show_metadata_fields_size_warning = metadata_fields.count > max_fields
-      @metadata_fields_size_warning_message = I18n.t('components.samples.table_component.metadata_fields_size_warning',
-                                                     calculated_limit: max_fields,
-                                                     sample_count: @samples.size,
-                                                     target_max_cells: TARGET_MAX_CELLS)
+      @metadata_fields, @show_metadata_fields_size_warning, @metadata_fields_size_warning_message =
+        apply_metadata_field_limit(metadata_fields)
+
       @search_params = search_params
       @empty = empty
       @system_arguments = system_arguments
@@ -122,6 +120,14 @@ module Samples
       end
     end
 
+    def new_metadata_template_url
+      if @namespace.type == 'Group'
+        helpers.new_group_metadata_template_path(@namespace)
+      else
+        helpers.new_namespace_project_metadata_template_path(@namespace.parent, @namespace.project)
+      end
+    end
+
     private
 
     def columns
@@ -135,6 +141,21 @@ module Samples
       return MAX_METADATA_FIELDS_SIZE if @samples.empty?
 
       (TARGET_MAX_CELLS / @samples.size).floor.clamp(1, MAX_METADATA_FIELDS_SIZE)
+    end
+
+    def apply_metadata_field_limit(metadata_fields)
+      max_fields = calculate_max_metadata_fields
+      limited_fields = metadata_fields.take(max_fields)
+      show_warning = metadata_fields.count > max_fields
+
+      warning_message = if show_warning
+                          I18n.t('components.samples.table_component.metadata_fields_size_warning',
+                                 calculated_limit: max_fields,
+                                 sample_count: @samples.size,
+                                 target_max_cells: TARGET_MAX_CELLS)
+                        end
+
+      [limited_fields, show_warning, warning_message]
     end
   end
 end

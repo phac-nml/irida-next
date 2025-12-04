@@ -25,7 +25,8 @@ module MetadataTemplates
         MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
       end
       assert_includes @metadata_template.errors[:fields],
-                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid')
+                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
+                             error_type: 'array')
     end
 
     test 'fails to update metadata template with numerical fields' do
@@ -35,7 +36,8 @@ module MetadataTemplates
         MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
       end
       assert_includes @metadata_template.errors[:fields],
-                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid')
+                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
+                             error_type: 'string')
     end
 
     test 'fails to update metadata template with incorrect permissions' do

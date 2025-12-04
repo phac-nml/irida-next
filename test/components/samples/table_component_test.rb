@@ -166,5 +166,34 @@ module Samples
         assert_no_selector 'div', text: /limited to/
       end
     end
+
+    test 'Should handle single sample edge case' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(1).to_a
+        pagy = Pagy.new(count: 1, page: 1, limit: 1)
+        metadata_fields = (1..250).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # 1 sample: 2000/1 = 2000, capped at 200
+        # Should show 200 metadata field columns (250 requested, limited to 200)
+        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
+        assert_selector 'table thead th', count: expected_columns + 200
+
+        # Should show warning message
+        assert_selector 'div', text: /limited to 200 for 1 sample/
+      end
+    end
   end
 end
