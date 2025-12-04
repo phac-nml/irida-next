@@ -119,7 +119,7 @@ en:
         metadata_template:
           attributes:
             fields:
-              invalid: "is invalid (error type: %{error_type})"
+              invalid: 'is invalid (error type: %{error_type})'
               max_items: cannot contain more than %{max} fields
               min_items: must contain at least %{min} field(s)
               min_length: must have a minimum length of %{min} character(s)
