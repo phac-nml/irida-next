@@ -320,7 +320,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     fake_instance = Class.new do
       def initialize(map) = @map = map
-      def pipelines(type) = @map
+      def pipelines(_type) = @map
     end.new({ 'p1' => pipeline_with_name, 'p2' => pipeline_with_blank })
 
     controller = WorkflowExecutionsController.new
