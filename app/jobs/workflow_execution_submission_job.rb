@@ -40,12 +40,16 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
   end
 
   def queue_job(workflow_execution)
-    if minimum_run_time(workflow_execution).nil?
-      WorkflowExecutionStatusJob.set(
-        wait_until: status_check_interval(workflow_execution).seconds.from_now
-      ).perform_later(workflow_execution)
-    else
-      WorkflowExecutionMinimumRuntimeJob.perform_later(workflow_execution)
-    end
+    min_run_time = case workflow_execution.workflow.settings.transform_keys(&:to_sym)
+                   in { min_runtime: }
+                     min_runtime.to_i
+                   else
+                     # No minimum run time set for pipeline
+                     nil
+                   end
+
+    WorkflowExecutionStatusJob.set(
+      wait_until: status_check_interval(workflow_execution).seconds.from_now
+    ).perform_later(workflow_execution, min_run_time)
   end
 end

@@ -34,22 +34,14 @@ class WorkflowExecutionJob < ApplicationJob
     workflow_execution.workflow.settings.fetch('status_check_interval', 30).to_i
   end
 
-  def minimum_run_time(workflow_execution)
-    run_time_calculation(workflow_execution, 'min_runtime')
-  end
-
   def maximum_run_time(workflow_execution)
-    run_time_calculation(workflow_execution, 'max_runtime')
-  end
+    max_run_time = workflow_execution.workflow.settings.fetch('max_runtime', nil)
 
-  def run_time_calculation(workflow_execution, run_time_key)
-    run_time = workflow_execution.workflow.settings.fetch(run_time_key, nil)
-
-    return nil if run_time.nil?
-    return run_time.to_i if run_time.is_a?(Integer)
+    return nil if max_run_time.nil?
+    return max_run_time.to_i if max_run_time.is_a?(Integer)
 
     calculator = Dentaku::Calculator.new
-    calculator.evaluate(run_time, SAMPLE_COUNT: workflow_execution.samples.count).to_i
+    calculator.evaluate(max_run_time, SAMPLE_COUNT: workflow_execution.samples.count).to_i
   end
 
   # Calculate time spent in state till now in seconds
