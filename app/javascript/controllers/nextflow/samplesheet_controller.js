@@ -11,7 +11,9 @@ export default class extends Controller {
     "form",
     "formFieldError",
     "formFieldErrorMessage",
-    "spinner",
+    "samplesheetMessagesContainer",
+    "submissionSpinner",
+    "samplesheetSpinner",
     "workflowAttributes",
     "samplesheetProperties",
     "trTemplate",
@@ -33,19 +35,27 @@ export default class extends Controller {
     "metadataHeaderForm",
     "filterClearButton",
     "filterSearchButton",
+    "samplesheetSamplesForm",
+    "samplesheetContainer",
+    "updateSamplesCheckbox",
+    "updateSamplesLabel",
   ];
 
   static values = {
     dataMissingError: { type: String },
-    submissionError: { type: String },
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    processingRequest: { type: String },
-    filteringSamples: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
+    allowedToUpdateSamplesString: { type: String },
+    notAllowedToUpdateSamplesString: { type: String },
   };
+
+  static outlets = [
+    "nextflow--samplesheet--params",
+    "nextflow--samplesheet--container",
+  ];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -102,12 +112,13 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
-    if (this.hasWorkflowAttributesTarget) {
-      this.#setSamplesheetParametersAndData();
-      this.#updateMetadataColumnHeaderNames();
-      this.#disableProcessingState();
-    }
     this.element.setAttribute("data-controller-connected", "true");
+  }
+
+  processSamplesheet({ detail: { content } }) {
+    this.#setSamplesheetParametersAndData();
+    this.#updateMetadataColumnHeaderNames();
+    this.#disableProcessingState(content["allowedToUpdateSamples"]);
   }
 
   #setSamplesheetParametersAndData() {
@@ -179,7 +190,7 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState(this.processingRequestValue);
+    this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
       // By default we set nameValid to true
@@ -196,7 +207,7 @@ export default class extends Controller {
 
         let missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {
-          this.#disableProcessingState();
+          this.#disableSubmissionState();
           let errorMsg = this.dataMissingErrorValue;
           for (const sample in missingData) {
             errorMsg =
@@ -225,7 +236,7 @@ export default class extends Controller {
           this.formTarget.requestSubmit();
         }
       } else {
-        this.#disableProcessingState();
+        this.#disableSubmissionState();
         this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
@@ -260,15 +271,31 @@ export default class extends Controller {
     }
   }
 
-  #enableProcessingState(message) {
-    document.getElementById("nextflow-spinner-message").innerHTML = message;
-    this.submitTarget.disabled = true;
-    this.spinnerTarget.classList.remove("hidden");
+  #disableProcessingState(allowedToUpdateSamples) {
+    this.submitTarget.disabled = false;
+    this.samplesheetSpinnerTarget.remove();
+
+    this.updateSamplesLabelTarget.innerHTML = "";
+    if (allowedToUpdateSamples) {
+      this.updateSamplesLabelTarget.innerText =
+        this.allowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.disabled = false;
+      this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
+    } else {
+      this.updateSamplesLabelTarget.innerText =
+        this.notAllowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.checked = false;
+    }
   }
 
-  #disableProcessingState() {
+  #enableSubmissionState() {
+    this.submitTarget.disabled = true;
+    this.submissionSpinnerTarget.classList.remove("hidden");
+  }
+
+  #disableSubmissionState() {
+    this.submissionSpinnerTarget.classList.add("hidden");
     this.submitTarget.disabled = false;
-    this.spinnerTarget.classList.add("hidden");
   }
 
   #disableErrorState() {
@@ -292,6 +319,7 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
   }
 
   #disableFormFieldErrorState() {
@@ -653,7 +681,6 @@ export default class extends Controller {
   // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
   // we can then easily access each sample's data via its index and still paginate in pages of 5
   filter() {
-    this.#enableProcessingState(this.filteringSamplesValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
     setTimeout(() => {
       if (this.filterTarget.value) {
@@ -679,7 +706,6 @@ export default class extends Controller {
         this.#setCurrentSampleIndexesToAll();
       }
 
-      this.#disableProcessingState();
       this.#setPagination();
       this.#updatePageData();
       this.#updateFilterButtons();
