@@ -293,7 +293,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Enter":
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
-        this.#setOption(this.#option);
         this.#close();
         flag = true;
         break;
@@ -346,7 +345,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Tab":
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
-        this.#setOption(this.#option);
         this.#close();
         break;
 
@@ -431,11 +429,8 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
-      if (this.comboboxTarget.value) {
-        const option = this.#filterOptions();
-        this.#setValue(option);
-        this.#setOption(option);
-      }
+      this.debouncedFilterAndUpdate.flush();
+      this.#setValue(this.#option);
       this.#close();
     }
   }
