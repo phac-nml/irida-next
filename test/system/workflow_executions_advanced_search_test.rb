@@ -13,7 +13,7 @@ class WorkflowExecutionsAdvancedSearchTest < ApplicationSystemTestCase
   test 'can open and use advanced search dialog' do
     visit workflow_executions_path
 
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
     # Open advanced search dialog
     click_button I18n.t('components.advanced_search_component.title')
