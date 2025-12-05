@@ -37,6 +37,8 @@ export default class extends Controller {
     "filterSearchButton",
     "samplesheetSamplesForm",
     "samplesheetContainer",
+    "updateSamplesCheckbox",
+    "updateSamplesLabel",
   ];
 
   static values = {
@@ -46,6 +48,8 @@ export default class extends Controller {
     noSelectedFile: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
+    allowedToUpdateSamplesString: { type: String },
+    notAllowedToUpdateSamplesString: { type: String },
   };
 
   static outlets = [
@@ -111,10 +115,10 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  processSamplesheet() {
+  processSamplesheet({ detail: { content } }) {
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
-    this.#disableProcessingState();
+    this.#disableProcessingState(content["allowedToUpdateSamples"]);
   }
 
   #setSamplesheetParametersAndData() {
@@ -267,9 +271,20 @@ export default class extends Controller {
     }
   }
 
-  #disableProcessingState() {
+  #disableProcessingState(allowedToUpdateSamples) {
     this.submitTarget.disabled = false;
     this.samplesheetSpinnerTarget.remove();
+
+    this.updateSamplesLabelTarget.innerHTML = "";
+    if (allowedToUpdateSamples) {
+      this.updateSamplesLabelTarget.innerHTML =
+        this.allowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.disabled = false;
+    } else {
+      this.updateSamplesLabelTarget.innerHTML =
+        this.notAllowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.checked = false;
+    }
   }
 
   #enableSubmissionState() {
