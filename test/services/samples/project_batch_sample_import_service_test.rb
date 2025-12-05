@@ -348,7 +348,35 @@ module Samples
       assert_equal 1 + ancestors.count, broadcast_calls.count
     end
 
-    test 'progress bar updates only every ~5% of sample count' do
+    test 'progress bar updates only every ~1% for samples <= 20' do
+      # create a large CSV with 100 rows to make 5% increments obvious
+      file = Tempfile.new(['bulk_progress_test', '.csv'])
+      begin
+        file.puts 'sample_name,description,metadata1,metadata2'
+        (1..19).each do |i|
+          file.puts "bulk sample #{i},desc,a,b"
+        end
+        file.rewind
+
+        blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                      filename: 'bulk_progress_test.csv',
+                                                      content_type: 'text/csv')
+
+        # Capture progress bar broadcast calls
+        progress_calls = count_progress_bar_updates_for do
+          Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                              @default_params).execute('dummy_target')
+        end
+
+        # For 19 total samples we expect approx 19 updates including the final update
+        assert_equal 19, progress_calls.count
+      ensure
+        file.close
+        file.unlink
+      end
+    end
+
+    test 'progress bar updates only every ~5% for samples >= 20' do
       # create a large CSV with 100 rows to make 5% increments obvious
       file = Tempfile.new(['bulk_progress_test', '.csv'])
       begin

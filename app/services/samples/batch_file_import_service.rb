@@ -38,16 +38,16 @@ module Samples
       # minus 1 to exclude header
       total_sample_count = @spreadsheet.count - 1
       # 5% of samples, used by progress bar update
-      num_samples_for_progress_bar_update = (total_sample_count * 0.05).floor
+      num_samples_for_progress_bar_update = total_sample_count >=40 ? (total_sample_count * 0.05).floor : 1
 
       @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
 
         Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
-          should_update = (index == total_sample_count) ||
-                          (num_samples_for_progress_bar_update.positive? &&
-                           (index % num_samples_for_progress_bar_update).zero?)
-          update_progress_bar(index, total_sample_count, broadcast_target) if should_update
+          if should_update_progress?(index, total_sample_count, num_samples_for_progress_bar_update)
+            update_progress_bar(index, total_sample_count, broadcast_target)
+          end
+
           sample_name = data[@sample_name_column].to_s
 
           project_puid = data[@project_puid_column]
@@ -88,6 +88,10 @@ module Samples
     end
 
     private
+
+    def should_update_progress?(index, total_sample_count, num_samples_for_update)
+      index == total_sample_count || (index % num_samples_for_update).zero?
+    end
 
     def initialize_namespace_specific_attributes(namespace, params, required_headers)
       if namespace.group_namespace?
