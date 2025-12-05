@@ -38,7 +38,7 @@ module Samples
       # minus 1 to exclude header
       total_sample_count = @spreadsheet.count - 1
       # 5% of samples, used by progress bar update
-      num_samples_for_progress_bar_update = total_sample_count >=40 ? (total_sample_count * 0.05).floor : 1
+      num_samples_for_progress_bar_update = total_sample_count >= 40 ? (total_sample_count * 0.05).floor : 1
 
       @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
