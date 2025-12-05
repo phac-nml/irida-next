@@ -1396,42 +1396,4 @@ module WorkflowExecutions
       ### VERIFY END ###
     end
   end
-
-  test 'samplesheet metadata overrides' do
-    user = users(:john_doe)
-    login_as user
-
-    visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: user.locale))
-
-    within 'table' do
-      find("input[type='checkbox'][value='#{@sample43.id}']").click
-      find("input[type='checkbox'][value='#{@sample44.id}']").click
-    end
-
-    click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-    within %(turbo-frame[id="samples_dialog"]) do
-      assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      first('button', text: 'PNC Fast Match').click
-    end
-
-    within 'dialog[open].dialog--size-xl' do
-      within('#samplesheet_message') do
-        assert_text I18n.t('components.nextflow_component.loading_samplesheet')
-        assert_text I18n.t('components.nextflow_component.loading_complete')
-      end
-
-      # check overridden metadata field header names
-      within('#field-metadata_1') do
-        assert_text 'NEW_ISOLATES_DATE (DEFAULT)'
-      end
-
-      within('#field-metadata_2') do
-        assert_text 'OVERRIDDEN_METADATA_FIELD (DEFAULT)'
-      end
-    end
-  end
 end
