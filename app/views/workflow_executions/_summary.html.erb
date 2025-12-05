@@ -33,35 +33,31 @@
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_version") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_version"] %></dd>
     </div>
-    <% namespace = @workflow_execution.namespace_with_deleted %>
-    <div class="flex flex-col py-3">
-      <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400">
-        <% if @workflow_execution.shared_with_namespace %>
-          <%= t(:".shared_with_namespace.#{namespace.type.downcase}") %>
-        <% else %>
-          <%= t(:".run_from_namespace.#{namespace.type.downcase}") %>
-        <% end %>
-      </dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white ">
-        <div class="flex items-center space-x-2">
-          <% if namespace.deleted? %>
-            <div><%= namespace.name %></div>
-            <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
-            <%= render Viral::PillComponent.new(color: :red) do %>
-              Deleted
-            <% end %>
+    <% if @workflow_execution.namespace %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400">
+          <% if @workflow_execution.shared_with_namespace %>
+            <%= t(:".shared_with_namespace.#{@workflow_execution.namespace.type.downcase}") %>
           <% else %>
-            <%= link_to namespace.name,
+            <%= t(:".run_from_namespace.#{@workflow_execution.namespace.type.downcase}") %>
+          <% end %>
+        </dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white ">
+          <div class="flex items-center space-x-2">
+            <%= link_to @workflow_execution.namespace.name,
             @namespace_path,
             data: {
               turbo: false,
             },
             class: "underline hover:decoration-2" %>
-            <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
-          <% end %>
-        </div>
-      </dd>
-    </div>
+            <%= render PuidComponent.new(
+              puid: @workflow_execution.namespace.puid,
+              show_clipboard: false,
+            ) %>
+          </div>
+        </dd>
+      </div>
+    <% end %>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_date(@workflow_execution.created_at, :long) %></dd>
