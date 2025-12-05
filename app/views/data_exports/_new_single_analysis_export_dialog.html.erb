@@ -57,7 +57,7 @@
             <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.run_id") %>
               <%= workflow_execution.run_id %></div>
             <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.workflow") %>
-              <%= text_for(workflow_execution.workflow.name) %>
+              <%= workflow_execution.workflow.name %>
               <%= workflow_execution.metadata["workflow_version"] %></div>
           </div>
         </div>
