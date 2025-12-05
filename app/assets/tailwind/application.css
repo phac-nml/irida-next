@@ -192,30 +192,30 @@ input[type="search"] {
   & select[multiple] {
     background-image: none !important;
     padding-right: 0.75rem !important;
-    @apply h-auto min-h-[160px] rounded-sm py-2 dark:bg-slate-800 dark:text-white;
+    @apply h-auto min-h-[160px] rounded-sm py-2;
 
     & option {
-      @apply rounded-sm border-none px-3 py-2 dark:bg-slate-800 dark:text-white;
+      @apply rounded-sm border-none px-3 py-2;
     }
 
     & option:checked {
       background-color: theme("colors.primary.600") !important;
       color: white !important;
     }
+  }
 
-    @media (prefers-color-scheme: dark) {
-      & {
-        background-color: theme("colors.slate.800") !important;
-        color: theme("colors.white") !important;
-      }
-      & option {
-        background-color: theme("colors.slate.800") !important;
-        color: theme("colors.white") !important;
-      }
-      & option:checked {
-        background-color: theme("colors.primary.600") !important;
-        color: theme("colors.white") !important;
-      }
+  .dark & select[multiple] {
+    background-color: theme("colors.slate.800") !important;
+    color: theme("colors.white") !important;
+
+    & option {
+      background-color: theme("colors.slate.800") !important;
+      color: theme("colors.white") !important;
+    }
+
+    & option:checked {
+      background-color: theme("colors.primary.600") !important;
+      color: theme("colors.white") !important;
     }
   }
 
