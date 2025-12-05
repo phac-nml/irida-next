@@ -171,6 +171,7 @@ export default class extends Controller {
       this.autoDismissValue && this.typeValue !== "danger";
 
     if (shouldAutoDismiss) {
+      this.#setupAutoDismissPause();
       this.#startAutoDismiss();
     }
   }
@@ -255,9 +256,6 @@ export default class extends Controller {
         this.#clearAutoDismissInterval();
       }
     }, interval);
-
-    // 🎭 Setup pause/resume functionality
-    this.#setupAutoDismissPause();
   }
 
   /**

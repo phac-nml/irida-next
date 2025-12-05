@@ -25,16 +25,10 @@
           type="button"
           id="<%= dismiss_button_id %>"
           data-action="viral--alert#dismiss"
-          class="
-            inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400
-            hover:text-slate-600 focus-visible:outline-none focus-visible:outline-2
-            focus-visible:outline-slate-500 focus-visible:outline-offset-2 transition-colors
-            duration-200 dark:text-slate-500 dark:hover:text-slate-400
-            dark:focus:ring-slate-400
-          "
+          class="<%= classes_for_dismiss %>"
           aria-label="<%= t('general.screen_reader.close') %>"
         >
-          <%= pathogen_icon(:x, size: :sm, class: "w-4 h-4") %>
+          <%= pathogen_icon(:x, size: :sm, color: icon_color) %>
           <span class="sr-only"><%= t("general.screen_reader.close") %></span>
         </button>
       </div>
