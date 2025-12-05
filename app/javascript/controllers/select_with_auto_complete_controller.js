@@ -74,6 +74,8 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   disconnect() {
+    this.debouncedFilterAndUpdate.cancel();
+
     // Remove event handlers
     document.body.removeEventListener(
       "pointerup",
