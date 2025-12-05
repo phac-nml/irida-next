@@ -24,6 +24,11 @@ module Samples
         sample_description_column: 'description',
         metadata_fields: %w[metadata1 metadata2]
       }
+      Flipper.enable(:samples_refresh_notice)
+    end
+
+    def teardown
+      Flipper.disable(:samples_refresh_notice)
     end
 
     test 'import samples with permission for group' do
@@ -356,32 +361,129 @@ module Samples
       ],
                    activity.extended_details.details['imported_samples_data']
       assert_equal 'group_import_samples', activity.parameters[:action]
+    end
 
+    def count_broadcasts_for
+      broadcast_calls = []
+      original_method = Project.instance_method(:broadcast_refresh_later_to)
+
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to) do |streamable, stream_name|
+          broadcast_calls << [streamable, stream_name]
+          nil # Don't actually broadcast in tests
+        end
+      end
+
+      yield
+      broadcast_calls
+    ensure
+      # Restore original method
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to, original_method)
+      end
+    end
+
+    def count_progress_bar_updates_for
+      calls = []
+      original_method = Turbo::StreamsChannel.singleton_class.instance_method(:broadcast_replace_to)
+
+      Turbo::StreamsChannel.singleton_class.class_eval do
+        define_method(:broadcast_replace_to) do |*args|
+          calls << args
+          nil
+        end
+      end
+
+      yield
+      calls
+    ensure
+      Turbo::StreamsChannel.singleton_class.class_eval do
+        define_method(:broadcast_replace_to, original_method)
+      end
+    end
+
+    test 'does not broadcast per sample during group import - broadcasts once per project' do
+      # Use the CSV which includes samples for multiple projects
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join(
+          'test/fixtures/files/batch_sample_import/group/valid_with_multiple_samples_and_project_puids.csv'
+        )
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                    filename: file.original_filename,
+                                                    content_type: file.content_type)
+
+      project1 = @project
+      project2 = @project2
+      ancestors1 = project1.namespace.parent.self_and_ancestors
+      ancestors2 = project2.namespace.parent.self_and_ancestors
+
+      broadcast_calls = count_broadcasts_for do
+        Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
+      end
+
+      expected_count = (1 + ancestors1.count) + (1 + ancestors2.count)
+      assert_equal expected_count, broadcast_calls.count
       # verify project activity 1
       activity = PublicActivity::Activity.where(
-        key: 'namespaces_project_namespace.import_samples.create'
+        key: 'namespaces_project_namespace.import_samples.create',
+        trackable_id: project1.namespace.id
       ).order(created_at: :desc).first
 
       assert_equal 'namespaces_project_namespace.import_samples.create', activity.key
       assert_equal @john_doe, activity.owner
-      assert_equal 1, activity.parameters[:imported_samples_count]
+      assert_equal 2, activity.parameters[:imported_samples_count]
+      sample1 = Sample.find_by(name: 'my new sample 1')
       sample2 = Sample.find_by(name: 'my new sample 2')
-      assert_equal [{ 'sample_name' => sample2.name, 'sample_puid' => sample2.puid }],
+      assert_equal [{ 'sample_name' => sample1.name, 'sample_puid' => sample1.puid },
+                    { 'sample_name' => sample2.name, 'sample_puid' => sample2.puid }],
                    activity.extended_details.details['imported_samples_data']
       assert_equal 'project_import_samples', activity.parameters[:action]
 
       # verify project activity 2
       activity = PublicActivity::Activity.where(
-        key: 'namespaces_project_namespace.import_samples.create'
-      ).order(created_at: :desc).second
+        key: 'namespaces_project_namespace.import_samples.create',
+        trackable_id: project2.namespace.id
+      ).order(created_at: :desc).first
 
       assert_equal 'namespaces_project_namespace.import_samples.create', activity.key
       assert_equal @john_doe, activity.owner
-      assert_equal 1, activity.parameters[:imported_samples_count]
-      sample1 = Sample.find_by(name: 'my new sample 1')
-      assert_equal [{ 'sample_name' => sample1.name, 'sample_puid' => sample1.puid }],
+      assert_equal 2, activity.parameters[:imported_samples_count]
+      sample3 = Sample.find_by(name: 'my new sample 3')
+      sample4 = Sample.find_by(name: 'my new sample 4')
+      assert_equal [{ 'sample_name' => sample3.name, 'sample_puid' => sample3.puid },
+                    { 'sample_name' => sample4.name, 'sample_puid' => sample4.puid }],
                    activity.extended_details.details['imported_samples_data']
       assert_equal 'project_import_samples', activity.parameters[:action]
+    end
+
+    test 'progress bar updates only every ~5% of sample count' do
+      # create a large CSV with 100 rows to make 5% increments obvious
+      file = Tempfile.new(['group_bulk_progress_test', '.csv'])
+      begin
+        file.puts 'sample_name,project_puid,description,metadata1,metadata2'
+        (1..50).each do |i|
+          file.puts "bulk sample #{i},#{@project.puid},desc,a,b"
+          file.puts "bulk sample #{i},#{@project2.puid},desc,a,b"
+        end
+        file.rewind
+
+        blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                      filename: 'bulk_progress_test.csv',
+                                                      content_type: 'text/csv')
+
+        # Capture progress bar broadcast calls
+        progress_calls = count_progress_bar_updates_for do
+          Samples::BatchFileImportService.new(@project.namespace.parent, @john_doe, blob.id,
+                                              @default_params).execute('dummy_target')
+        end
+
+        # For 100 total samples we expect approx 100 * 0.05 = 5, so 20 updates (every 5%) including the final update
+        assert_equal 20, progress_calls.count
+      ensure
+        file.close
+        file.unlink
+      end
     end
   end
 end

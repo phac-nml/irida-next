@@ -4,6 +4,45 @@ require 'test_helper'
 
 module Samples
   class ProjectBatchSampleImportServiceTest < ActiveSupport::TestCase
+    def count_broadcasts_for
+      broadcast_calls = []
+      original_method = Project.instance_method(:broadcast_refresh_later_to)
+
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to) do |streamable, stream_name|
+          broadcast_calls << [streamable, stream_name]
+          nil # Don't actually broadcast in tests
+        end
+      end
+
+      yield
+      broadcast_calls
+    ensure
+      # Restore original method
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to, original_method)
+      end
+    end
+
+    def count_progress_bar_updates_for
+      calls = []
+      original_method = Turbo::StreamsChannel.singleton_class.instance_method(:broadcast_replace_to)
+
+      Turbo::StreamsChannel.singleton_class.class_eval do
+        define_method(:broadcast_replace_to) do |*args|
+          calls << args
+          nil
+        end
+      end
+
+      yield
+      calls
+    ensure
+      Turbo::StreamsChannel.singleton_class.class_eval do
+        define_method(:broadcast_replace_to, original_method)
+      end
+    end
+
     def setup # rubocop:disable Metrics/MethodLength
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
@@ -23,6 +62,11 @@ module Samples
         sample_description_column: 'description',
         metadata_fields: %w[metadata1 metadata2]
       }
+      Flipper.enable(:samples_refresh_notice)
+    end
+
+    def teardown
+      Flipper.disable(:samples_refresh_notice)
     end
 
     test 'import samples with permission for project namespace' do
@@ -289,6 +333,75 @@ module Samples
                     { 'sample_name' => second_sample.name, 'sample_puid' => second_sample.puid }],
                    activity.extended_details.details['imported_samples_data']
       assert_equal 'project_import_samples', activity.parameters[:action]
+    end
+
+    test 'does not broadcast per sample during import - broadcasts once per project' do
+      assert_equal 3, @project.samples.count
+      ancestors = @project.namespace.parent.self_and_ancestors
+
+      # Capture project broadcast calls
+      broadcast_calls = count_broadcasts_for do
+        Samples::BatchFileImportService.new(@project.namespace, @john_doe, @blob.id, @default_params).execute
+      end
+
+      # Expect a single project broadcast with its ancestors only (not per sample)
+      assert_equal 1 + ancestors.count, broadcast_calls.count
+    end
+
+    test 'progress bar updates only every ~1% for samples <= 20' do
+      # create a large CSV with 100 rows to make 5% increments obvious
+      file = Tempfile.new(['bulk_progress_test', '.csv'])
+      begin
+        file.puts 'sample_name,description,metadata1,metadata2'
+        (1..19).each do |i|
+          file.puts "bulk sample #{i},desc,a,b"
+        end
+        file.rewind
+
+        blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                      filename: 'bulk_progress_test.csv',
+                                                      content_type: 'text/csv')
+
+        # Capture progress bar broadcast calls
+        progress_calls = count_progress_bar_updates_for do
+          Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                              @default_params).execute('dummy_target')
+        end
+
+        # For 19 total samples we expect approx 19 updates including the final update
+        assert_equal 19, progress_calls.count
+      ensure
+        file.close
+        file.unlink
+      end
+    end
+
+    test 'progress bar updates only every ~5% for samples >= 20' do
+      # create a large CSV with 100 rows to make 5% increments obvious
+      file = Tempfile.new(['bulk_progress_test', '.csv'])
+      begin
+        file.puts 'sample_name,description,metadata1,metadata2'
+        (1..100).each do |i|
+          file.puts "bulk sample #{i},desc,a,b"
+        end
+        file.rewind
+
+        blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                      filename: 'bulk_progress_test.csv',
+                                                      content_type: 'text/csv')
+
+        # Capture progress bar broadcast calls
+        progress_calls = count_progress_bar_updates_for do
+          Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                              @default_params).execute('dummy_target')
+        end
+
+        # For 100 total samples we expect approx 100 * 0.05 = 5, so 20 updates (every 5%) including the final update
+        assert_equal 20, progress_calls.count
+      ensure
+        file.close
+        file.unlink
+      end
     end
   end
 end
