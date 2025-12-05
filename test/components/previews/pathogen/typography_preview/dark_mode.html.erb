@@ -1,0 +1,174 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:moon, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dark Mode Typography
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      All typography components automatically adapt to light and dark modes with proper contrast ratios
+      and readable colors.
+    <% end %>
+  </div>
+
+  <!-- Side-by-Side Comparison -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:squares_four, color: :primary, class: "mr-3") %>
+        Light vs Dark Mode
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-8") do %>
+        Toggle your system's dark mode preference to see how components adapt. All components maintain
+        WCAG AA contrast ratios in both themes.
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="p-6 bg-white border border-slate-200 rounded-lg">
+          <div class="flex items-center gap-2 mb-4">
+            <%= pathogen_icon(:sun, color: :warning) %>
+            <span class="font-semibold text-slate-900">Light Mode</span>
+          </div>
+          <%= pathogen_heading(level: 3) do %>
+            Heading in Light Mode
+          <% end %>
+          <%= pathogen_text do %>
+            Body text automatically adjusts to dark slate-900 in light mode for optimal readability.
+          <% end %>
+        </div>
+
+        <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+          <div class="flex items-center gap-2 mb-4">
+            <%= pathogen_icon(:moon, color: :primary) %>
+            <span class="font-semibold text-white">Dark Mode</span>
+          </div>
+          <%= pathogen_heading(level: 3, variant: :inverse) do %>
+            Heading in Dark Mode
+          <% end %>
+          <%= pathogen_text(variant: :inverse) do %>
+            Body text automatically adjusts to white in dark mode for optimal readability.
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Variants in Dark Mode -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:palette, color: :primary, class: "mr-3") %>
+        Color Variants
+      <% end %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_heading(level: 3, variant: :default) do %>
+            Default Variant
+          <% end %>
+          <%= pathogen_text(variant: :default) do %>
+            Primary text color - slate-900 in light mode, white in dark mode
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, variant: :muted) do %>
+            Muted Variant
+          <% end %>
+          <%= pathogen_text(variant: :muted) do %>
+            Secondary text color - slate-500 in light mode, slate-400 in dark mode
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, variant: :subdued) do %>
+            Subdued Variant
+          <% end %>
+          <%= pathogen_text(variant: :subdued) do %>
+            Medium contrast - slate-700 in light mode, slate-300 in dark mode
+          <% end %>
+        </div>
+
+        <div class="p-6 bg-slate-900 dark:bg-slate-100 rounded-lg">
+          <%= pathogen_heading(level: 3, variant: :inverse) do %>
+            Inverse Variant
+          <% end %>
+          <%= pathogen_text(variant: :inverse) do %>
+            Light text for dark backgrounds - white in light mode, slate-900 in dark mode
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Components -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+        Code Components
+      <% end %>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            Inline Code
+          <% end %>
+          <%= pathogen_text do %>
+            Use <%= pathogen_code do %>pathogen_code<% end %> for inline code snippets.
+            The background adapts to both themes.
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+            Code Blocks
+          <% end %>
+          <%= pathogen_code_block(language: "ruby") do %>
+def example
+  puts "Code blocks have dark backgrounds"
+  puts "that work in both light and dark mode"
+end
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contrast Ratios -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:check_circle, color: :success, class: "mr-3") %>
+        WCAG AA Compliance
+      <% end %>
+
+      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+        All typography components meet WCAG AA contrast requirements in both light and dark modes.
+      <% end %>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+          <div>
+            <div class="font-semibold text-green-900 dark:text-green-100">Body Text</div>
+            <div class="text-sm text-green-800 dark:text-green-200">
+              Minimum 4.5:1 contrast ratio for normal text (16px)
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+          <div>
+            <div class="font-semibold text-green-900 dark:text-green-100">Headings</div>
+            <div class="text-sm text-green-800 dark:text-green-200">
+              Minimum 3:1 contrast ratio for headings and large text (18px+)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
