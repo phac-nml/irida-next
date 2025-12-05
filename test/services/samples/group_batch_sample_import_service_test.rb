@@ -24,6 +24,11 @@ module Samples
         sample_description_column: 'description',
         metadata_fields: %w[metadata1 metadata2]
       }
+      Flipper.enable(:samples_refresh_notice)
+    end
+
+    def teardown
+      Flipper.disable(:samples_refresh_notice)
     end
 
     test 'import samples with permission for group' do
@@ -356,7 +361,48 @@ module Samples
       ],
                    activity.extended_details.details['imported_samples_data']
       assert_equal 'group_import_samples', activity.parameters[:action]
+    end
 
+    def count_broadcasts_for
+      broadcast_calls = []
+      original_method = Project.instance_method(:broadcast_refresh_later_to)
+
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to) do |streamable, stream_name|
+          broadcast_calls << [streamable, stream_name]
+          nil # Don't actually broadcast in tests
+        end
+      end
+
+      yield
+      broadcast_calls
+    ensure
+      # Restore original method
+      Project.class_eval do
+        define_method(:broadcast_refresh_later_to, original_method)
+      end
+    end
+
+    test 'does not broadcast per sample during group import - broadcasts once per project' do
+      # Use the CSV which includes samples for multiple projects
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/valid_with_multiple_project_puids.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(io: file,
+                                                    filename: file.original_filename,
+                                                    content_type: file.content_type)
+
+      project1 = @project
+      project2 = @project2
+      ancestors1 = project1.namespace.parent.self_and_ancestors
+      ancestors2 = project2.namespace.parent.self_and_ancestors
+
+      broadcast_calls = count_broadcasts_for do
+        Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
+      end
+
+      expected_count = (1 + ancestors1.count) + (1 + ancestors2.count)
+      assert_equal expected_count, broadcast_calls.count
       # verify project activity 1
       activity = PublicActivity::Activity.where(
         key: 'namespaces_project_namespace.import_samples.create'
