@@ -17,7 +17,7 @@ module Groups
     test 'can open and use advanced search dialog' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
 
       # Open advanced search dialog
       assert_selector '#workflow-executions-table', wait: 5
@@ -53,7 +53,7 @@ module Groups
     test 'can filter workflow executions by state using advanced search' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -78,7 +78,7 @@ module Groups
     test 'can filter workflow executions by name using advanced search' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -100,7 +100,7 @@ module Groups
     test 'can add multiple conditions to a group' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -135,7 +135,7 @@ module Groups
     test 'can add multiple groups for OR logic' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -172,7 +172,7 @@ module Groups
     test 'can clear advanced search filters' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -242,7 +242,7 @@ module Groups
     test 'can remove a condition from advanced search' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -265,7 +265,7 @@ module Groups
     test 'can remove a group from advanced search' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -286,7 +286,7 @@ module Groups
     test 'advanced search dialog prompts for confirmation when closing with unapplied changes' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -316,7 +316,7 @@ module Groups
 
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -339,7 +339,7 @@ module Groups
     test 'can filter by workflow_version JSONB field' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -361,7 +361,7 @@ module Groups
     test 'can filter by run_id field' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
@@ -382,7 +382,7 @@ module Groups
     test 'can filter by id field using contains operator' do
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: @user.locale)
+      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title', locale: @user.locale)
       assert_selector '#workflow-executions-table', wait: 5
       click_button I18n.t('components.advanced_search_component.title', locale: @user.locale)
 
