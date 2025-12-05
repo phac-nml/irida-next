@@ -100,6 +100,9 @@
       value: @q.name_or_id_cont,
       class: "max-sm:grow",
     ) %>
+    <div id="table-filter" role="presentation" class="contents">
+      <%= render partial: "table_filter" %>
+    </div>
   </div>
 <% end %>
 

@@ -6,6 +6,7 @@ module Projects
     include BreadcrumbNavigation
     include Metadata
     include WorkflowExecutionActions
+    include Storable
 
     before_action :namespace
     before_action :page_title

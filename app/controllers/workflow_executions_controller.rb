@@ -4,6 +4,7 @@
 class WorkflowExecutionsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   include Metadata
+  include Storable
   include WorkflowExecutionActions
 
   before_action :page_title
