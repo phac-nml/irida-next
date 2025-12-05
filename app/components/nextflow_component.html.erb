@@ -205,34 +205,43 @@
         <%= workflow.check_box :update_samples,
                            {
                              checked: instance.present? && instance["update_samples"],
-                             disabled: true,
+                             disabled: !@sample_count.nil?,
+                             aria: {
+                               disabled: !@sample_count.nil?,
+                             },
                              data: {
                                "nextflow--samplesheet-target": "updateSamplesCheckbox",
                              },
                            } %>
-        <label
-          class="
-            block mb-2 text-sm font-medium text-slate-900 dark:text-white mr-2 text-sm
-            font-medium text-slate-900 dark:text-white
-          "
-          for="workflow_execution_update_samples"
-          data-nextflow--samplesheet-target="updateSamplesLabel"
-        >
-          <div class="flex" id="update-samples-spinner">
-            <div
-              class="
-                flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
-                rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
-                dark:bg-gray-800
-              "
-              role="alert"
-            >
-              <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
-              <span class="text-sm font-medium text-slate-900 dark:text-white">Verifying if you're authorized to update samples with analysis
-                results</span>
+        <% if @sample_count.nil? %>
+          <%= workflow.label :update_samples,
+                         t(:"components.nextflow.update_samples"),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+        <% else %>
+          <label
+            class="
+              block mb-2 text-sm font-medium text-slate-900 dark:text-white mr-2 text-sm
+              font-medium text-slate-900 dark:text-white
+            "
+            for="workflow_execution_update_samples"
+            data-nextflow--samplesheet-target="updateSamplesLabel"
+          >
+            <div class="flex" id="update-samples-spinner">
+              <div
+                class="
+                  flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
+                  rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
+                  dark:bg-gray-800
+                "
+                role="alert"
+              >
+                <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+                <span class="text-sm font-medium text-slate-900 dark:text-white">Verifying if you're authorized to update samples with
+                  analysis results</span>
+              </div>
             </div>
-          </div>
-        </label>
+          </label>
+        <% end %>
       </div>
       <div class="flex items-center h-5 mb-4">
         <%= workflow.check_box :email_notification,
