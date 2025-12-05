@@ -278,11 +278,12 @@ export default class extends Controller {
 
     this.updateSamplesLabelTarget.innerHTML = "";
     if (allowedToUpdateSamples) {
-      this.updateSamplesLabelTarget.innerHTML =
+      this.updateSamplesLabelTarget.innerText =
         this.allowedToUpdateSamplesStringValue;
       this.updateSamplesCheckboxTarget.disabled = false;
+      this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
     } else {
-      this.updateSamplesLabelTarget.innerHTML =
+      this.updateSamplesLabelTarget.innerText =
         this.notAllowedToUpdateSamplesStringValue;
       this.updateSamplesCheckboxTarget.checked = false;
     }
