@@ -405,7 +405,9 @@ module Samples
     test 'does not broadcast per sample during group import - broadcasts once per project' do
       # Use the CSV which includes samples for multiple projects
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import/group/valid_with_multiple_samples_and_project_puids.csv')
+        Rails.root.join(
+          'test/fixtures/files/batch_sample_import/group/valid_with_multiple_samples_and_project_puids.csv'
+        )
       )
       blob = ActiveStorage::Blob.create_and_upload!(io: file,
                                                     filename: file.original_filename,
