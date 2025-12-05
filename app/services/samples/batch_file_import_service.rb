@@ -10,15 +10,7 @@ module Samples
       @sample_description_column = params[:sample_description_column]
       @metadata_fields = params[:metadata_fields] if params[:metadata_fields]
       required_headers = [@sample_name_column]
-      if namespace.group_namespace?
-        @project_puid_column = params[:project_puid_column]
-        required_headers.push @project_puid_column if params[:project_puid_column].present?
-        @static_project = params[:static_project_id].blank? ? nil : Project.find(params[:static_project_id])
-        @broadcast_projects = []
-      else
-        @static_project = namespace.project
-        @broadcast_projects = [namespace.project]
-      end
+      initialize_namespace_specific_attributes(namespace, params, required_headers)
       @imported_samples_data = { project_data: {}, group_data: [] }
       @project_puid_map = {}
       super(namespace, user, blob_id, required_headers, 0, params)
@@ -45,15 +37,17 @@ module Samples
 
       # minus 1 to exclude header
       total_sample_count = @spreadsheet.count - 1
-      num_samples_for_progress_bar_update = ((total_sample_count * 0.05).floor) # 5% of samples, used by progress bar update
+      # 5% of samples, used by progress bar update
+      num_samples_for_progress_bar_update = (total_sample_count * 0.05).floor
 
       @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
 
         Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
-        if (index == total_sample_count) || ((index % num_samples_for_progress_bar_update) == 0 )
-          update_progress_bar(index, total_sample_count, broadcast_target)
-        end
+          should_update = (index == total_sample_count) ||
+                          (num_samples_for_progress_bar_update.positive? &&
+                           (index % num_samples_for_progress_bar_update).zero?)
+          update_progress_bar(index, total_sample_count, broadcast_target) if should_update
           sample_name = data[@sample_name_column].to_s
 
           project_puid = data[@project_puid_column]
@@ -95,11 +89,23 @@ module Samples
 
     private
 
+    def initialize_namespace_specific_attributes(namespace, params, required_headers)
+      if namespace.group_namespace?
+        @project_puid_column = params[:project_puid_column]
+        required_headers.push @project_puid_column if params[:project_puid_column].present?
+        @static_project = params[:static_project_id].blank? ? nil : Project.find(params[:static_project_id])
+        @broadcast_projects = []
+      else
+        @static_project = namespace.project
+        @broadcast_projects = [namespace.project]
+      end
+    end
+
     def accessible_from_namespace?(project)
       if @namespace.project_namespace?
         @namespace.id == project.namespace.id
       elsif @namespace.group_namespace?
-        group_namespace_projects.select { |proj| proj.id == project.id }.count.positive?
+        group_namespace_projects.any? { |proj| proj.id == project.id }
       else
         false
       end
