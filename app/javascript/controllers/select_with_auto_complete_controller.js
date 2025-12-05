@@ -38,7 +38,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
     this.boundOnComboboxClick = this.#onComboboxClick.bind(this);
     this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
-    this.boundOnComboboxBlur = this.#onComboboxBlur.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
 
     this.#filter = "";
@@ -151,6 +150,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   // ComboboxAutocomplete events
 
   #filterOptions() {
+    this.#filter = this.comboboxTarget.value;
     const filter = this.#filter.toLowerCase();
     this.#filteredOptions = [];
     this.listboxTarget.innerHTML = "";
@@ -344,12 +344,9 @@ export default class SelectWithAutoCompleteController extends Controller {
         break;
 
       case "Tab":
-        if (this.comboboxTarget.value) {
-          this.#filter = this.comboboxTarget.value;
-          const option = this.#filterOptions();
-          this.#setValue(option);
-          this.#setOption(option);
-        }
+        this.debouncedFilterAndUpdate.flush();
+        this.#setValue(this.#option);
+        this.#setOption(this.#option);
         this.#close();
         break;
 
@@ -388,7 +385,6 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     switch (event.key) {
       case "Backspace":
-        this.#filter = this.comboboxTarget.value;
         this.debouncedFilterAndUpdate();
         flag = true;
         break;
@@ -427,12 +423,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #onComboboxFocus() {
-    this.#filter = this.comboboxTarget.value;
     this.#filterOptions();
-  }
-
-  #onComboboxBlur() {
-    this.#filter = this.comboboxTarget.value;
   }
 
   #onBackgroundPointerUp(event) {
@@ -441,7 +432,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       !this.listboxTarget.contains(event.target)
     ) {
       if (this.comboboxTarget.value) {
-        this.#filter = this.comboboxTarget.value;
         const option = this.#filterOptions();
         this.#setValue(option);
         this.#setOption(option);
@@ -456,6 +446,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#setValue(event.target);
     this.#setOption(event.target);
     this.#close();
+    this.comboboxTarget.focus();
   }
 
   // Event handlers
@@ -465,7 +456,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.addEventListener("click", this.boundOnComboboxClick);
     combobox.addEventListener("focus", this.boundOnComboboxFocus);
-    combobox.addEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #removeComboboxEventListeners(combobox) {
@@ -473,7 +463,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.removeEventListener("click", this.boundOnComboboxClick);
     combobox.removeEventListener("focus", this.boundOnComboboxFocus);
-    combobox.removeEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #addListboxOptionEventListeners(option) {
