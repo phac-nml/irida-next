@@ -242,6 +242,7 @@ fr:
       shared_with:
         group: Partager les résultats avec les membres du groupe?
         project: Partager les résultats avec les membres du projet?
+      unauthorized_to_update_samples: Vous n’êtes pas autorisé à mettre à jour les échantillons avec les résultats d’analyse.
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '

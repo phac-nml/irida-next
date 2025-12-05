@@ -242,6 +242,7 @@ en:
       shared_with:
         group: Share results with group members?
         project: Share results with project members?
+      unauthorized_to_update_samples: You are not authorized to update samples with analysis results
       update_samples: Update samples with analysis results
     nextflow_component:
       data_missing_error: 'The following samples are missing required data: '
