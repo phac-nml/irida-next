@@ -84,4 +84,32 @@ class WorkflowExecutionActionsSearchParamsTest < ActiveSupport::TestCase
       Irida::Pipelines.instance = original_instance
     end
   end
+
+  test 'workflow_name_enum_fields ensures unique values when duplicate names exist' do
+    pipeline_struct = Struct.new(:name)
+    pipelines = {
+      'p1' => pipeline_struct.new('Assembly'),
+      'p2' => pipeline_struct.new({ 'en' => 'Assembly', 'fr' => 'Assemblage' }),
+      'p3' => pipeline_struct.new('Annotation')
+    }
+
+    mock_pipelines = Minitest::Mock.new
+    mock_pipelines.expect :pipelines, pipelines, ['executable']
+
+    original_instance = Irida::Pipelines.instance
+    Irida::Pipelines.instance = mock_pipelines
+
+    begin
+      controller = FakeController.new
+      enum_fields = controller.send(:workflow_name_enum_fields)
+
+      # Should only have 2 unique values, not 3
+      assert_equal 2, enum_fields[:values].length
+      assert_includes enum_fields[:values], 'Assembly'
+      assert_includes enum_fields[:values], 'Annotation'
+      assert_equal({ 'Assembly' => 'Assembly', 'Annotation' => 'Annotation' }, enum_fields[:labels])
+    ensure
+      Irida::Pipelines.instance = original_instance
+    end
+  end
 end

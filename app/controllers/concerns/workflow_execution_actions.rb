@@ -442,7 +442,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     workflows = Irida::Pipelines.instance.pipelines('executable')
     workflow_names = workflows.map do |_pipeline_id, pipeline|
       pipeline.name.is_a?(Hash) ? pipeline.name[I18n.locale.to_s] : pipeline.name
-    end.compact_blank
+    end.compact_blank.uniq
 
     {
       values: workflow_names,
