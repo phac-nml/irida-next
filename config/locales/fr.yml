@@ -986,6 +986,7 @@ fr:
         unauthorized: Non autorisé
       language_selection:
         aria_label: 'Langue sélectionnée : Français'
+      meta_description: IRIDA Next est une plateforme Web pour la gestion des données d'épidémiologie génomique et l'analyse bioinformatique.
       site_title: IRIDA Next
   locales:
     en: Anglais

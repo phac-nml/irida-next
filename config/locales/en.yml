@@ -982,6 +982,7 @@ en:
         unauthorized: Unauthorized
       language_selection:
         aria_label: 'Selected language: English'
+      meta_description: IRIDA Next is a web-based platform for genomic epidemiology data management and bioinformatics analysis.
       site_title: IRIDA Next
   locales:
     en: English
