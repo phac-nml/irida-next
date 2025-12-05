@@ -326,7 +326,8 @@ module Groups
           find("select[name$='[field]']").find("option[value='metadata.workflow_name']").select_option
           find("select[name$='[operator]']").find("option[value='=']").select_option
           # workflow_name is an enum field, so it renders as a select dropdown
-          find("select[name$='[value]']", wait: 5).find('option', text: workflow_names.first, match: :first).select_option
+          find("select[name$='[value]']", wait: 5).find('option', text: workflow_names.first,
+                                                                  match: :first).select_option
         end
 
         click_button I18n.t('components.advanced_search_component.apply_filter_button', locale: @user.locale)
