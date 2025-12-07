@@ -1,44 +1,56 @@
 <script>
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-  function isSystemTheme() {
-    return localStorage.getItem("theme") !== "dark" && localStorage.getItem("theme") !== "light";
-  }
+  // CRITICAL: This script must execute synchronously before page render to prevent flash
+  (function() {
+    'use strict';
 
-  function isDarkTheme() {
-    return localStorage.getItem("theme") === "dark";
-  }
+    // Cache localStorage theme value for performance
+    const themeValue = localStorage.getItem("theme");
 
-  function isDarkMode() {
-    return (
-      isDarkTheme() ||
-      (isSystemTheme() &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    );
-  }
-
-  function updateTheme(isDark) {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    } else {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
+    function isSystemTheme() {
+      return themeValue !== "dark" && themeValue !== "light";
     }
-  }
+
+    function isDarkTheme() {
+      return themeValue === "dark";
+    }
+
+    function isDarkMode() {
+      return isDarkTheme() || (isSystemTheme() && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+
+    function updateTheme(isDark) {
+      const docEl = document.documentElement;
+      if (isDark) {
+        docEl.classList.add("dark");
+        docEl.classList.remove("light");
+      } else {
+        docEl.classList.add("light");
+        docEl.classList.remove("dark");
+      }
+    }
+
+    // Apply theme immediately (before page render)
+    updateTheme(isDarkMode());
 
     // Set up watcher for system theme changes
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", (e) => {
-      if(isSystemTheme()) {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", function(e) {
+      // Only update if user is using system preference
+      if (isSystemTheme()) {
         updateTheme(e.matches);
       }
     });
 
-  window.addEventListener("storage", function(event) {
-    if (event.key !== "theme") return;
-    updateTheme(isDarkMode());
-  });
-
-  updateTheme(isDarkMode());
+    // Sync theme changes across browser tabs
+    window.addEventListener("storage", function(event) {
+      if (event.key === "theme") {
+        // Re-read the theme value from localStorage
+        const newThemeValue = localStorage.getItem("theme");
+        const isNewDark = newThemeValue === "dark" ||
+          (newThemeValue !== "light" && mediaQuery.matches);
+        updateTheme(isNewDark);
+      }
+    });
+  })();
 </script>

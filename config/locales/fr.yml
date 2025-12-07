@@ -1982,11 +1982,12 @@ fr:
       words_connector: ", "
   theme:
     announcements:
+      activated: Mode %{theme} activé
       changed: Thème changé en mode %{theme}
       error: Le changement de thème a échoué. Veuillez essayer de nouveau.
     modes:
       dark: Foncé
-      light: Pâle
+      light: Clair
       system: Système
   time:
     am: am

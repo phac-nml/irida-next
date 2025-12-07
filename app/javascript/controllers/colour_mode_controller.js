@@ -86,8 +86,8 @@ export default class extends Controller {
    */
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
-    this.announcementElement.textContent =
-      this.element.dataset.changedText.replace("%{theme}", themeText);
+    const activatedText = this.element.dataset.activatedText || this.element.dataset.changedText;
+    this.announcementElement.textContent = activatedText.replace("%{theme}", themeText);
   }
 
   /**

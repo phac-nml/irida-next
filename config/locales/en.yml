@@ -1978,6 +1978,7 @@ en:
       words_connector: ", "
   theme:
     announcements:
+      activated: "%{theme} mode activated"
       changed: Theme changed to %{theme} mode
       error: Failed to change theme. Please try again.
     modes:

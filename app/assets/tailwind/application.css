@@ -19,6 +19,34 @@
   --color-primary: #16a34a;
   --layout-body-columns: 280px 1fr;
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
+
+  /* Semantic color variables for light mode (default) */
+  --color-bg-primary: white;
+  --color-bg-secondary: #f1f5f9; /* slate-100 */
+  --color-bg-surface: #f8fafc; /* slate-50 */
+  --color-text-primary: #0f172a; /* slate-900 */
+  --color-text-secondary: #475569; /* slate-600 */
+  --color-text-muted: #64748b; /* slate-500 */
+  --color-border-default: #e2e8f0; /* slate-200 */
+  --color-border-hover: #cbd5e1; /* slate-300 */
+  --color-surface-hover: #f1f5f9; /* slate-100 */
+  --color-focus-ring: #0f172a; /* slate-900 */
+}
+
+/* Dark mode semantic color overrides using recommended Deep Navy/Slate palette */
+@custom-variant dark (&:where(.dark, .dark *)) {
+  @theme {
+    --color-bg-primary: #020617; /* slate-950 */
+    --color-bg-secondary: #0f172a; /* slate-900 */
+    --color-bg-surface: #1e293b; /* slate-800 */
+    --color-text-primary: #ffffff; /* white */
+    --color-text-secondary: #cbd5e1; /* slate-300 */
+    --color-text-muted: #94a3b8; /* slate-400 */
+    --color-border-default: #334155; /* slate-700 */
+    --color-border-hover: #475569; /* slate-600 */
+    --color-surface-hover: #334155; /* slate-700 */
+    --color-focus-ring: #ffffff; /* white */
+  }
 }
 
 /* Hide search clear button across all browsers */
