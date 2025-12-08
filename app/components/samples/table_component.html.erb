@@ -1,11 +1,4 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
-  <% if @show_metadata_fields_size_warning %>
-    <div class="mb-4" role="status" aria-live="polite">
-      <%= viral_alert do %>
-        <span class="inline"><%= @metadata_fields_size_warning_message %></span>
-      <% end %>
-    </div>
-  <% end %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
