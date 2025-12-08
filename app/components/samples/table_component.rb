@@ -8,11 +8,6 @@ module Samples
     include Ransack::Helpers::FormHelper
     include UrlHelpers
 
-    # Maximum number of metadata fields to display regardless of sample count
-    MAX_METADATA_FIELDS_SIZE = 200
-    # Target maximum number of table cells (rows × columns) for optimal performance
-    TARGET_MAX_CELLS = 2000
-
     # Number of sticky columns at @2xl breakpoint and above (2), 1 column below @2xl
     STICKY_COLUMN_COUNT = 2
 
@@ -34,8 +29,7 @@ module Samples
       @has_samples = has_samples
       @abilities = abilities
 
-      @metadata_fields, @show_metadata_fields_size_warning =
-        apply_metadata_field_limit(metadata_fields)
+      @metadata_fields = metadata_fields
 
       @search_params = search_params
       @empty = empty
@@ -52,13 +46,6 @@ module Samples
     # 📝 Returns the merged system arguments for the table wrapper.
     #
     # @return [Hash] system arguments for the table container
-    def before_render
-      return unless @show_metadata_fields_size_warning
-
-      can_edit = @abilities[:edit_sample_metadata]
-      @metadata_fields_size_warning_message = build_metadata_fields_size_warning_message(can_edit_metadata: can_edit)
-    end
-
     def system_arguments
       base_args = { tag: 'div' }.deep_merge(@system_arguments)
       base_args[:id] = 'samples-table'
@@ -130,58 +117,6 @@ module Samples
       columns << 'namespaces.puid' if @namespace.type == 'Group'
       columns += %i[created_at updated_at attachments_updated_at]
       columns
-    end
-
-    def calculate_max_metadata_fields
-      return MAX_METADATA_FIELDS_SIZE if @samples.empty?
-
-      (TARGET_MAX_CELLS / @samples.size).floor.clamp(1, MAX_METADATA_FIELDS_SIZE)
-    end
-
-    def apply_metadata_field_limit(metadata_fields)
-      max_fields = calculate_max_metadata_fields
-      limited_fields = metadata_fields.take(max_fields)
-      show_warning = metadata_fields.count > max_fields
-      [limited_fields, show_warning]
-    end
-
-    def build_metadata_fields_size_warning_message(can_edit_metadata: false)
-      params = warning_interpolation_params
-
-      if can_edit_metadata
-        warning_message_with_link(params)
-      else
-        I18n.t('components.samples.table_component.metadata_fields_size_warning', **params)
-      end
-    end
-
-    def warning_interpolation_params
-      {
-        calculated_limit: calculate_max_metadata_fields,
-        sample_count: @samples.size,
-        target_max_cells: TARGET_MAX_CELLS
-      }
-    end
-
-    def warning_message_with_link(params)
-      link_markup = create_template_link
-
-      # Using html_safe because we're interpolating a link_to helper result
-      # which is already sanitized by Rails. This is safe as the link_markup
-      # contains no user-provided content - only the translated link text.
-      I18n.t(
-        'components.samples.table_component.metadata_fields_size_warning_with_link',
-        **params, create_template_link: link_markup
-      ).html_safe
-    end
-
-    def create_template_link
-      helpers.link_to(
-        I18n.t('components.samples.table_component.create_template_link'),
-        metadata_template_url,
-        class: 'font-semibold underline hover:no-underline',
-        data: { turbo_frame: 'top' }
-      )
     end
   end
 end
