@@ -58,6 +58,7 @@ gem 'faraday', '~> 2.5'
 gem 'faraday-follow_redirects'
 gem 'faraday-multipart'
 gem 'faraday-net_http_persistent', '~> 2.1'
+gem 'openssl', '~> 3.3', '>= 3.3.1'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

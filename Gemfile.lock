@@ -426,6 +426,7 @@ GEM
     omniauth-saml (2.2.4)
       omniauth (~> 2.1)
       ruby-saml (~> 1.18)
+    openssl (3.3.2)
     opentelemetry-api (1.7.0)
     opentelemetry-common (0.22.0)
       opentelemetry-api (~> 1.0)
@@ -760,6 +761,7 @@ DEPENDENCIES
   omniauth-entra-id
   omniauth-rails_csrf_protection
   omniauth-saml
+  openssl (~> 3.3, >= 3.3.1)
   opentelemetry-api
   opentelemetry-common
   opentelemetry-exporter-otlp
