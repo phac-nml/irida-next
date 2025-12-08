@@ -36,7 +36,6 @@ export default class extends Controller {
     "filterClearButton",
     "filterSearchButton",
     "samplesheetSamplesForm",
-    "samplesheetContainer",
     "updateSamplesCheckbox",
     "updateSamplesLabel",
   ];
@@ -52,10 +51,7 @@ export default class extends Controller {
     notAllowedToUpdateSamplesString: { type: String },
   };
 
-  static outlets = [
-    "nextflow--samplesheet--params",
-    "nextflow--samplesheet--container",
-  ];
+  static outlets = ["nextflow--samplesheet--params"];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -116,6 +112,7 @@ export default class extends Controller {
   }
 
   processSamplesheet({ detail: { content } }) {
+    console.log(content["allowedToUpdateSamples"]);
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
