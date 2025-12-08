@@ -9,7 +9,7 @@
       <%= row[:name] %>
     <% end %>
     <% table.with_column(t(".headers.workflow_name")) do |row| %>
-      <%= text_for(row.workflow.name) %>
+      <%= row.workflow.name %>
     <% end %>
     <% table.with_column(t(".headers.workflow_version")) do |row| %>
       <%= row.metadata["workflow_version"] %>

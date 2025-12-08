@@ -50,7 +50,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.update.success',
-                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
+                                      workflow_name: @workflow_execution.workflow.name) }
 
         else
           render status: :unprocessable_content, locals: {
@@ -76,7 +76,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def destroy # rubocop:disable Metrics/MethodLength
     WorkflowExecutions::DestroyService.new(current_user,
                                            { workflow_execution: @workflow_execution, namespace: @namespace }).execute
 
@@ -85,12 +85,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         if @workflow_execution.deleted?
           flash[:success] =
             t('concerns.workflow_execution_actions.destroy.success',
-              workflow_name: helpers.text_for(@workflow_execution.workflow.name))
+              workflow_name: @workflow_execution.workflow.name)
           redirect_to redirect_path
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
-                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
+                                      workflow_name: @workflow_execution.workflow.name)
           }
         end
       end
@@ -109,11 +109,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.cancel.success',
-                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name)) }
+                                      workflow_name: @workflow_execution.workflow.name) }
         else
           render status: :unprocessable_content, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.cancel.error',
-                                      workflow_name: helpers.text_for(@workflow_execution.workflow.name))
+                                      workflow_name: @workflow_execution.workflow.name)
           }
         end
       end
