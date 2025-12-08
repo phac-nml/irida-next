@@ -4,53 +4,153 @@
   (function() {
     'use strict';
 
-    // Cache localStorage theme value for performance
-    const themeValue = localStorage.getItem("theme");
+    // Constants for theme management
+    const THEME_KEY = 'theme';
+    const THEMES = {
+      DARK: 'dark',
+      LIGHT: 'light',
+      SYSTEM: 'system'
+    };
+    const ALLOWED_THEMES = Object.values(THEMES);
 
-    function isSystemTheme() {
-      return themeValue !== "dark" && themeValue !== "light";
+    /**
+     * Check if localStorage is available and accessible
+     * @returns {boolean} True if localStorage can be used
+     */
+    function isLocalStorageAvailable() {
+      try {
+        const test = '__ls_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
 
-    function isDarkTheme() {
-      return themeValue === "dark";
+    /**
+     * Safely get theme from localStorage with validation
+     * @returns {string} The current theme (validated)
+     */
+    function getCurrentTheme() {
+      if (!isLocalStorageAvailable()) {
+        return THEMES.SYSTEM;
+      }
+
+      try {
+        const stored = localStorage.getItem(THEME_KEY);
+        return ALLOWED_THEMES.includes(stored) ? stored : THEMES.SYSTEM;
+      } catch (e) {
+        console.error('Failed to read theme from localStorage:', e);
+        return THEMES.SYSTEM;
+      }
     }
 
-    function isDarkMode() {
-      return isDarkTheme() || (isSystemTheme() && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    /**
+     * Check if current theme is system preference
+     * @param {string} theme - The theme to check
+     * @returns {boolean} True if using system preference
+     */
+    function isSystemTheme(theme) {
+      return theme === THEMES.SYSTEM;
     }
 
-    function updateTheme(isDark) {
+    /**
+     * Determine if dark mode should be active
+     * @param {string} theme - The theme to evaluate
+     * @returns {boolean} True if dark mode should be active
+     */
+    function isDarkMode(theme) {
+      if (theme === THEMES.DARK) {
+        return true;
+      }
+
+      if (theme === THEMES.LIGHT) {
+        return false;
+      }
+
+      // System preference
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    /**
+     * Apply theme to the document
+     * @param {boolean} isDark - Whether dark mode should be active
+     */
+    function applyTheme(isDark) {
       const docEl = document.documentElement;
-      if (isDark) {
-        docEl.classList.add("dark");
-        docEl.classList.remove("light");
-      } else {
-        docEl.classList.add("light");
-        docEl.classList.remove("dark");
-      }
+
+      // Use toggle for cleaner class management
+      docEl.classList.toggle(THEMES.DARK, isDark);
+      docEl.classList.toggle(THEMES.LIGHT, !isDark);
+
+      // Update color-scheme meta tag for native browser UI elements
+      updateColorSchemeMeta(isDark);
     }
 
-    // Apply theme immediately (before page render)
-    updateTheme(isDarkMode());
+    /**
+     * Update or create color-scheme meta tag
+     * @param {boolean} isDark - Whether dark mode is active
+     */
+    function updateColorSchemeMeta(isDark) {
+      let meta = document.querySelector('meta[name="color-scheme"]');
 
-    // Set up watcher for system theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQuery.addEventListener("change", function(e) {
-      // Only update if user is using system preference
-      if (isSystemTheme()) {
-        updateTheme(e.matches);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'color-scheme';
+        document.head.appendChild(meta);
       }
-    });
+
+      meta.content = isDark ? 'dark' : 'light';
+    }
+
+    /**
+     * Debounce function to prevent rapid consecutive calls
+     * @param {Function} func - The function to debounce
+     * @param {number} wait - Milliseconds to wait
+     * @returns {Function} Debounced function
+     */
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Apply initial theme immediately (before page render)
+    const initialTheme = getCurrentTheme();
+    applyTheme(isDarkMode(initialTheme));
+
+    // Set up watcher for system theme changes (debounced)
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleMediaChange = debounce(function(e) {
+      // Re-read theme to avoid stale closure
+      const currentTheme = getCurrentTheme();
+      if (isSystemTheme(currentTheme)) {
+        applyTheme(e.matches);
+      }
+    }, 150);
+
+    mediaQuery.addEventListener('change', handleMediaChange);
 
     // Sync theme changes across browser tabs
-    window.addEventListener("storage", function(event) {
-      if (event.key === "theme") {
-        // Re-read the theme value from localStorage
-        const newThemeValue = localStorage.getItem("theme");
-        const isNewDark = newThemeValue === "dark" ||
-          (newThemeValue !== "light" && mediaQuery.matches);
-        updateTheme(isNewDark);
+    window.addEventListener('storage', function(event) {
+      if (event.key === THEME_KEY) {
+        // Always re-read from storage to avoid stale closure bug
+        const newTheme = getCurrentTheme();
+        const isNewDark = isDarkMode(newTheme);
+        applyTheme(isNewDark);
       }
     });
+
+    // Cleanup on Turbo navigation (for SPAs)
+    document.addEventListener('turbo:before-render', function() {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    }, { once: true });
   })();
 </script>

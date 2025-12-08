@@ -522,6 +522,15 @@ input[type="search"] {
     height: 100vh;
     overflow: hidden;
   }
+
+  /* Prevent CSS transitions during theme changes to avoid FOUC
+     When data-theme-transition is set, disable all transitions temporarily */
+  html[data-theme-transition] *,
+  html[data-theme-transition] *::before,
+  html[data-theme-transition] *::after {
+    transition: none !important;
+    animation-duration: 0s !important;
+  }
 }
 
 @layer components {

@@ -1,10 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
+import ThemeManager from "lib/theme-manager";
 
 /**
  * Colour Mode Controller
  *
  * Handles theme switching between light, dark, and system preferences.
  * Provides accessibility features for theme changes.
+ * Uses centralized ThemeManager for consistent theme logic.
+ * Automatically syncs theme changes across browser tabs.
+ * Responds to OS-level dark mode preference changes when in system mode.
  *
  * @example
  * <div data-controller="colour-mode">
@@ -17,36 +21,101 @@ export default class extends Controller {
   static targets = ["system", "light", "dark"];
 
   connect() {
-    this.announcementElement = document.createElement("div");
-    this.announcementElement.setAttribute("aria-live", "polite");
-    this.announcementElement.setAttribute("aria-atomic", "true");
-    this.announcementElement.classList.add("sr-only");
-    document.body.appendChild(this.announcementElement);
-
+    // Use singleton announcement element to prevent duplicates
+    this.announcementElement = this.getOrCreateAnnouncementElement();
     this.initializeTheme();
+    this.setupWatchers();
   }
 
   disconnect() {
-    if (this.announcementElement) {
-      this.announcementElement.remove();
+    // Clean up watchers
+    this.cleanupWatchers();
+    // Don't remove announcement element - it may be shared
+    // Let the browser's GC handle cleanup when page unloads
+  }
+
+  /**
+   * Get or create a singleton announcement element
+   * @returns {HTMLElement} The announcement element
+   */
+  getOrCreateAnnouncementElement() {
+    const existingElement = document.getElementById("theme-announcer");
+
+    if (existingElement) {
+      return existingElement;
+    }
+
+    const element = document.createElement("div");
+    element.id = "theme-announcer";
+    element.setAttribute("aria-live", "polite");
+    element.setAttribute("aria-atomic", "true");
+    element.classList.add("sr-only");
+    document.body.appendChild(element);
+
+    return element;
+  }
+
+  /**
+   * Initialize the theme based on ThemeManager
+   */
+  initializeTheme() {
+    try {
+      const theme = ThemeManager.getCurrentTheme();
+      const target = this.getTargetForTheme(theme);
+
+      if (target) {
+        target.checked = true;
+      }
+
+      // Theme is already applied by inline script, no need to reapply
+    } catch (error) {
+      console.error("Failed to initialize theme:", error);
+      // Fallback to system preference
+      if (this.hasSystemTarget) {
+        this.systemTarget.checked = true;
+      }
     }
   }
 
   /**
-   * Initialize the theme based on localStorage or system preference
+   * Set up watchers for system preference and cross-tab sync
    */
-  initializeTheme() {
-    try {
-      const theme = localStorage.getItem("theme");
-      const target = this.getTargetForTheme(theme);
-      if (target) {
-        target.checked = true;
-        this.updateTheme(theme);
+  setupWatchers() {
+    // Watch for system preference changes (only updates when in system mode)
+    this.cleanupSystemWatch = ThemeManager.watchSystemPreference(() => {
+      // Only update UI if we're in system mode
+      if (ThemeManager.isSystemTheme()) {
+        this.updateCheckedState();
       }
-    } catch (error) {
-      console.error("Failed to initialize theme:", error);
-      // Fallback to system preference
-      this.systemTarget.checked = true;
+    });
+
+    // Watch for theme changes in other tabs
+    this.cleanupStorageWatch = ThemeManager.watchStorageChanges((theme) => {
+      this.updateCheckedState();
+      this.announceThemeChange(theme);
+    });
+  }
+
+  /**
+   * Clean up watchers
+   */
+  cleanupWatchers() {
+    if (this.cleanupSystemWatch) {
+      this.cleanupSystemWatch();
+    }
+    if (this.cleanupStorageWatch) {
+      this.cleanupStorageWatch();
+    }
+  }
+
+  /**
+   * Update the checked state of radio buttons based on current theme
+   */
+  updateCheckedState() {
+    const theme = ThemeManager.getCurrentTheme();
+    const target = this.getTargetForTheme(theme);
+    if (target) {
+      target.checked = true;
     }
   }
 
@@ -57,8 +126,17 @@ export default class extends Controller {
   toggleTheme(event) {
     try {
       const theme = event.target.value;
-      localStorage.setItem("theme", theme);
-      this.updateTheme(theme);
+
+      // Validate and set theme using ThemeManager
+      if (!ThemeManager.setTheme(theme)) {
+        this.announceError();
+        return;
+      }
+
+      // Apply theme with transition coordination
+      ThemeManager.applyTheme(theme, true);
+
+      // Announce change to screen readers
       this.announceThemeChange(theme);
     } catch (error) {
       console.error("Failed to toggle theme:", error);
@@ -67,34 +145,42 @@ export default class extends Controller {
   }
 
   /**
-   * Update the theme in the DOM
-   * @param {string} theme - The theme to apply
-   */
-  updateTheme(theme) {
-    const isDarkMode =
-      theme === "dark" ||
-      (theme === "system" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    document.documentElement.classList.toggle("light", !isDarkMode);
-  }
-
-  /**
    * Announce theme changes to screen readers
    * @param {string} theme - The new theme
    */
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
-    const activatedText = this.element.dataset.activatedText || this.element.dataset.changedText;
-    this.announcementElement.textContent = activatedText.replace("%{theme}", themeText);
+
+    if (!themeText) {
+      console.error(`Missing I18n translation for theme: ${theme}`);
+      this.announcementElement.textContent = `${theme} theme activated`;
+      return;
+    }
+
+    const activatedText =
+      this.element.dataset.colourModeActivatedText ||
+      this.element.dataset.colourModeChangedText;
+
+    if (!activatedText) {
+      console.error("Missing I18n translation for activated text");
+      this.announcementElement.textContent = `${themeText} activated`;
+      return;
+    }
+
+    this.announcementElement.textContent = activatedText.replace(
+      "%{theme}",
+      themeText,
+    );
   }
 
   /**
    * Announce errors to screen readers
    */
   announceError() {
-    this.announcementElement.textContent = this.element.dataset.errorText;
+    const errorText =
+      this.element.dataset.colourModeErrorText ||
+      "An error occurred while changing the theme";
+    this.announcementElement.textContent = errorText;
   }
 
   /**
@@ -103,23 +189,33 @@ export default class extends Controller {
    * @returns {HTMLInputElement|null} The target element or null
    */
   getTargetForTheme(theme) {
+    const { THEMES } = ThemeManager;
+
     switch (theme) {
-      case "light":
-        return this.lightTarget;
-      case "dark":
-        return this.darkTarget;
-      case "system":
+      case THEMES.LIGHT:
+        return this.hasLightTarget ? this.lightTarget : null;
+      case THEMES.DARK:
+        return this.hasDarkTarget ? this.darkTarget : null;
+      case THEMES.SYSTEM:
       default:
-        return this.systemTarget;
+        return this.hasSystemTarget ? this.systemTarget : null;
     }
   }
 
+  /**
+   * Get the localized text for a theme
+   * @param {string} theme - The theme to get text for
+   * @returns {string|null} The localized theme text or null
+   */
   getThemeText(theme) {
+    const { THEMES } = ThemeManager;
+
     const themeMap = {
-      system: this.element.dataset.systemText,
-      light: this.element.dataset.lightText,
-      dark: this.element.dataset.darkText,
+      [THEMES.SYSTEM]: this.element.dataset.colourModeSystemText,
+      [THEMES.LIGHT]: this.element.dataset.colourModeLightText,
+      [THEMES.DARK]: this.element.dataset.colourModeDarkText,
     };
-    return themeMap[theme] || theme;
+
+    return themeMap[theme] || null;
   }
 }
