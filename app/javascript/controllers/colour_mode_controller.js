@@ -260,9 +260,12 @@ export default class extends Controller {
   validateTranslationData() {
     const missing = [];
 
-    if (!this.element.dataset.colourModeSystemText) missing.push("colourModeSystemText");
-    if (!this.element.dataset.colourModeLightText) missing.push("colourModeLightText");
-    if (!this.element.dataset.colourModeDarkText) missing.push("colourModeDarkText");
+    if (!this.element.dataset.colourModeSystemText)
+      missing.push("colourModeSystemText");
+    if (!this.element.dataset.colourModeLightText)
+      missing.push("colourModeLightText");
+    if (!this.element.dataset.colourModeDarkText)
+      missing.push("colourModeDarkText");
 
     if (missing.length > 0) {
       console.warn(

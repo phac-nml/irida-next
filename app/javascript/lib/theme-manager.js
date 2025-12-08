@@ -104,7 +104,10 @@ function debounce(func, wait) {
  * @returns {boolean} True if user prefers reduced motion
  */
 function prefersReducedMotion() {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
     return false;
   }
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -230,7 +233,10 @@ class ThemeManager {
    * @returns {Function} Cleanup function to remove listener
    */
   static watchSystemPreference(callback) {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
       return () => {};
     }
 
