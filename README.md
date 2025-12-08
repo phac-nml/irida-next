@@ -4,7 +4,21 @@
 
 ## Contributing
 
-[`devenv`](https://devenv.sh/) is used to provide a reproducible development environment for this project. Follow the [getting started instructions](https://devenv.sh/getting-started/) (note: I recommend going with single-user mode for nix which can be found under the `WSL2` tab).
+[`devenv`](https://devenv.sh/) is used to provide a reproducible development environment for this project. Follow the [getting started instructions](https://devenv.sh/getting-started/) (note: I recommend going with single-user mode for nix which can be found under the `WSL2` tab, and then installing `deven` under the `Nix profiles (requires experimental flags)`).
+
+Note: to use `Nix profiles` you will need to create the following file with the following content
+
+`~/.config/nix/nix.conf`:
+
+```
+experimental-features = nix-command flakes
+```
+
+Note: If using a linux system with ldap auth via sssd, then install the following with nix.
+
+```bash
+nix profile install nixpkgs#sssd
+```
 
 To automatically load the environment you should [install direnv](https://devenv.sh/automatic-shell-activation/) and then load the `direnv`.
 
