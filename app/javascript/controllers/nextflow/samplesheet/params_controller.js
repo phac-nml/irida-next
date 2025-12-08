@@ -42,17 +42,16 @@ export default class extends Controller {
         0,
       );
     }
-    if (this.fieldsValue) {
-      normalizeParams(params, "fields[]", this.fieldsValue, 0);
-    }
     return params;
   }
 
   // triggered when nextflow/samplesheet/params/schema_controller connects
-  submitSamplesheetParams(schema) {
+  submitSamplesheetParams(properties) {
     const fragment = document.createDocumentFragment();
 
-    fragment.appendChild(createHiddenInput("schema", JSON.stringify(schema)));
+    fragment.appendChild(
+      createHiddenInput("properties", JSON.stringify(properties)),
+    );
 
     this.samplesheetParamsFormTarget.appendChild(fragment);
     this.samplesheetParamsFormTarget.requestSubmit();

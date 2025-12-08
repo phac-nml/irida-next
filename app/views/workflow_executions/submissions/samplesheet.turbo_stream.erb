@@ -1,17 +1,3 @@
-<%= turbo_stream.update "samplesheet" do %>
-  <%= render Nextflow::SamplesheetComponent.new(
-    schema: @schema,
-    samples: @samples,
-    namespace_id: @namespace_id,
-    fields: @fields,
-    workflow_params: {
-      name: @workflow_params[:name],
-      version: @workflow_params[:version],
-    },
-    allowed_to_update_samples: @allowed_to_update_samples,
-  ) %>
-<% end %>
-
 <%= turbo_stream.prepend "samplesheet_message" do
   viral_alert(
     type: "success",
@@ -22,3 +8,11 @@
     classes: "mb-2",
   )
 end %>
+
+<%= turbo_stream.append "sample_properties" do %>
+  <%= render Nextflow::Samplesheet::SamplePropertiesComponent.new(
+    properties: @properties,
+    samples: @samples,
+    allowed_to_update_samples: @allowed_to_update_samples,
+  ) %>
+<% end %>
