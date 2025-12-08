@@ -17,7 +17,7 @@
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
-    nextflow--samplesheet--container:notify->nextflow--samplesheet#processSamplesheet
+    nextflow--samplesheet--sample-properties:notify->nextflow--samplesheet#processSamplesheet
   "
 >
   <h1
@@ -130,15 +130,16 @@
                     ) %>
                   </turbo-frame>
 
-                  <%= helpers.turbo_frame_tag "samplesheet" %>
                   <% unless @sample_count.nil? %>
-                    <div
-                      class="hidden"
-                      data-controller="nextflow--samplesheet--params--schema"
-                      data-nextflow--samplesheet--params--schema-nextflow--samplesheet--params-outlet="#nextflow-container"
-                      data-nextflow--samplesheet--params--schema-schema-value="<%= property[:schema].to_json %>"
-                    >
-                    </div>
+                    <%= render Nextflow::SamplesheetComponent.new(
+                      schema: property[:schema],
+                      namespace_id:,
+                      fields: metadata_fields,
+                      workflow_params: {
+                        name: @workflow.name,
+                        version: @workflow.version,
+                      },
+                    ) %>
                   <% end %>
                   <div
                     class="flex justify-center"
@@ -304,9 +305,6 @@
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
     } do |f| %>
-      <%= f.hidden_field :namespace_id, value: namespace_id %>
-      <%= f.hidden_field :workflow_name, value: @workflow.name %>
-      <%= f.hidden_field :workflow_version, value: @workflow.version %>
     <% end %>
   <% end %>
 </div>
