@@ -1,12 +1,13 @@
-<div
-  data-controller="nextflow--samplesheet--container"
-  id="samplesheet"
-  data-nextflow--samplesheet-target="samplesheetContainer"
-  data-nextflow--samplesheet--container-allowed-to-update-samples-value="<%= @allowed_to_update_samples %>"
->
-  <div class="hidden" data-nextflow--samplesheet-target="workflowAttributes">
-    <%= samples_workflow_executions_attributes.to_json %>
+<div id="samplesheet">
+  <div
+    class="hidden"
+    data-controller="nextflow--samplesheet--params--properties"
+    data-nextflow--samplesheet--params--properties-nextflow--samplesheet--params-outlet="#nextflow-container"
+    data-nextflow--samplesheet--params--properties-properties-value="<%= @properties.to_json %>"
+  >
   </div>
+  <%= helpers.turbo_frame_tag "sample_properties" %>
+
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
@@ -85,11 +86,7 @@
     </div>
   </div>
 
-  <div
-    class="
-      @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
-    "
-  >
+  <div class=" @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink mb-2 ">
     <div class="overflow-x-auto relative">
       <table
         data-test-selector="samplesheet-table"
