@@ -23,6 +23,8 @@ export default class extends Controller {
   connect() {
     // Use singleton announcement element to prevent duplicates
     this.announcementElement = this.getOrCreateAnnouncementElement();
+    this.applyAriaAttributes();
+    this.validateTranslationData();
     this.initializeTheme();
     this.setupWatchers();
   }
@@ -32,6 +34,23 @@ export default class extends Controller {
     this.cleanupWatchers();
     // Don't remove announcement element - it may be shared
     // Let the browser's GC handle cleanup when page unloads
+  }
+
+  /**
+   * Ensure base ARIA semantics are present for the radio group
+   */
+  applyAriaAttributes() {
+    if (!this.element.getAttribute("role")) {
+      this.element.setAttribute("role", "radiogroup");
+    }
+
+    const groupLabel = this.element.dataset.colourModeLabel;
+
+    if (groupLabel) {
+      this.element.setAttribute("aria-label", groupLabel);
+    }
+
+    this.updateRadioAria();
   }
 
   /**
@@ -116,6 +135,7 @@ export default class extends Controller {
     const target = this.getTargetForTheme(theme);
     if (target) {
       target.checked = true;
+      this.updateRadioAria();
     }
   }
 
@@ -142,6 +162,21 @@ export default class extends Controller {
       console.error("Failed to toggle theme:", error);
       this.announceError();
     }
+  }
+
+  /**
+   * Synchronize aria-checked with current input state
+   */
+  updateRadioAria() {
+    const targets = [
+      this.hasSystemTarget ? this.systemTarget : null,
+      this.hasLightTarget ? this.lightTarget : null,
+      this.hasDarkTarget ? this.darkTarget : null,
+    ].filter(Boolean);
+
+    targets.forEach((radio) => {
+      radio.setAttribute("aria-checked", radio.checked ? "true" : "false");
+    });
   }
 
   /**
@@ -217,5 +252,23 @@ export default class extends Controller {
     };
 
     return themeMap[theme] || null;
+  }
+
+  /**
+   * Validate that required translation-backed dataset attributes exist
+   */
+  validateTranslationData() {
+    const missing = [];
+
+    if (!this.element.dataset.colourModeSystemText) missing.push("colourModeSystemText");
+    if (!this.element.dataset.colourModeLightText) missing.push("colourModeLightText");
+    if (!this.element.dataset.colourModeDarkText) missing.push("colourModeDarkText");
+
+    if (missing.length > 0) {
+      console.warn(
+        "Missing colour mode translation dataset attributes:",
+        missing.join(", "),
+      );
+    }
   }
 }

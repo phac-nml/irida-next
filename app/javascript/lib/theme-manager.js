@@ -99,6 +99,17 @@ function debounce(func, wait) {
   };
 }
 
+/**
+ * Detect reduced-motion preference
+ * @returns {boolean} True if user prefers reduced motion
+ */
+function prefersReducedMotion() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 class ThemeManager {
   static THEMES = THEMES;
   static THEME_KEY = THEME_KEY;
@@ -161,11 +172,17 @@ class ThemeManager {
    * @param {boolean} withTransition - Whether to coordinate CSS transitions
    */
   static applyTheme(theme, withTransition = false) {
+    if (typeof document === "undefined") {
+      return;
+    }
+
     const isDark = this.isDarkMode(theme);
     const docEl = document.documentElement;
 
     // Prevent CSS transitions during theme change to avoid flash
-    if (withTransition) {
+    const allowTransition = withTransition && !prefersReducedMotion();
+
+    if (allowTransition) {
       docEl.dataset.themeTransition = "true";
     }
 
@@ -184,7 +201,7 @@ class ThemeManager {
     );
 
     // Remove transition flag after CSS transitions complete
-    if (withTransition) {
+    if (allowTransition) {
       setTimeout(() => {
         delete docEl.dataset.themeTransition;
       }, 300);
@@ -213,6 +230,10 @@ class ThemeManager {
    * @returns {Function} Cleanup function to remove listener
    */
   static watchSystemPreference(callback) {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return () => {};
+    }
+
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     // Debounce to prevent rapid updates
@@ -237,6 +258,10 @@ class ThemeManager {
    * @returns {Function} Cleanup function to remove listener
    */
   static watchStorageChanges(callback) {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
+
     const handler = (event) => {
       if (event.key === THEME_KEY) {
         // Re-read theme from storage (avoid stale closure)

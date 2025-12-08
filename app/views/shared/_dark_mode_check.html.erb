@@ -28,6 +28,8 @@
       }
     }
 
+    const hasMatchMedia = typeof window.matchMedia === 'function';
+
     /**
      * Safely get theme from localStorage with validation
      * @returns {string} The current theme (validated)
@@ -70,6 +72,10 @@
       }
 
       // System preference
+      if (!hasMatchMedia) {
+        return false;
+      }
+
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
 
@@ -127,16 +133,20 @@
     applyTheme(isDarkMode(initialTheme));
 
     // Set up watcher for system theme changes (debounced)
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleMediaChange = debounce(function(e) {
-      // Re-read theme to avoid stale closure
-      const currentTheme = getCurrentTheme();
-      if (isSystemTheme(currentTheme)) {
-        applyTheme(e.matches);
-      }
-    }, 150);
+    const mediaQuery = hasMatchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    const handleMediaChange = mediaQuery
+      ? debounce(function(e) {
+          // Re-read theme to avoid stale closure
+          const currentTheme = getCurrentTheme();
+          if (isSystemTheme(currentTheme)) {
+            applyTheme(e.matches);
+          }
+        }, 150)
+      : null;
 
-    mediaQuery.addEventListener('change', handleMediaChange);
+    if (mediaQuery && handleMediaChange) {
+      mediaQuery.addEventListener('change', handleMediaChange);
+    }
 
     // Sync theme changes across browser tabs
     window.addEventListener('storage', function(event) {
@@ -150,7 +160,9 @@
 
     // Cleanup on Turbo navigation (for SPAs)
     document.addEventListener('turbo:before-render', function() {
-      mediaQuery.removeEventListener('change', handleMediaChange);
+      if (mediaQuery && handleMediaChange) {
+        mediaQuery.removeEventListener('change', handleMediaChange);
+      }
     }, { once: true });
   })();
 </script>
