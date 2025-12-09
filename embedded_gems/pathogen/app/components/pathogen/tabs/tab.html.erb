@@ -4,8 +4,8 @@
   role: @system_arguments[:role],
   aria: {
     selected: @system_arguments[:aria][:selected],
-    controls: @system_arguments[:aria][:controls].presence
-  },
+    controls: @system_arguments[:aria][:controls]
+  }.compact,
   tabindex: @system_arguments[:tabindex],
   data: @system_arguments[:data],
   class: @system_arguments[:class],

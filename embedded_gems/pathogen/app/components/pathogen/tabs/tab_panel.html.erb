@@ -14,14 +14,16 @@
         content_tag(:p, "Failed to load content.") +
         button_to("Retry", content_path, class: "button")
       end
-    end %>
+    end
+%>
+
 <%= tag.div(
   id: @id,
   role: @system_arguments[:role],
   aria: {
     labelledby: @system_arguments[:aria][:labelledby],
     hidden: @system_arguments[:aria][:hidden]
-  },
+  }.compact,
   tabindex: @system_arguments[:tabindex],
   data: @system_arguments[:data],
   class: @system_arguments[:class],
