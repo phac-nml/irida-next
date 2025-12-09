@@ -2,7 +2,8 @@
 
 module Nextflow
   module Samplesheet
-    # Accepts and processes the sample properties for samplesheet/workflow submission
+    # Accepts samples and the samplesheet properties and processes the sample properties for samplesheet/workflow
+    # submission, then forwards data to javascript/nextflow/samplesheet_controller.js
     class SamplePropertiesComponent < Component
       attr_reader :properties, :samples
 
