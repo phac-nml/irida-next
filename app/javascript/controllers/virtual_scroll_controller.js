@@ -32,9 +32,16 @@ export default class extends Controller {
     sortKey: String,
   };
 
-  static targets = ["container", "header", "body", "row", "templateContainer"];
+  static targets = [
+    "container",
+    "header",
+    "body",
+    "row",
+    "templateContainer",
+    "loading",
+  ];
 
-  COLUMN_WIDTH = 150; // pixels - fallback for unmeasured columns
+  COLUMN_WIDTH = 250; // pixels - fallback for unmeasured columns
   BUFFER_COLUMNS = 3; // Number of columns to render outside viewport on each side
   TAILWIND_2XL_BREAKPOINT = 1536; // pixels
   measureRetryCount = 0;
@@ -44,6 +51,12 @@ export default class extends Controller {
    * Stimulus lifecycle: Connect controller and initialize
    */
   connect() {
+    this.boundHandleSort = this.handleSort.bind(this);
+    this.element.addEventListener("click", this.boundHandleSort);
+
+    this.boundHideLoading = this.hideLoading.bind(this);
+    document.addEventListener("turbo:before-cache", this.boundHideLoading);
+
     this.boundRender = this.render.bind(this);
     this.boundHandleResize = this.handleResize.bind(this);
     this.hasAutoScrolled = false;
@@ -254,6 +267,9 @@ export default class extends Controller {
    * Stimulus lifecycle: Disconnect and cleanup
    */
   disconnect() {
+    this.element.removeEventListener("click", this.boundHandleSort);
+    document.removeEventListener("turbo:before-cache", this.boundHideLoading);
+
     this.containerTarget.removeEventListener("scroll", this.handleScroll);
     this.handleScroll?.cancel?.();
     this.debouncedResizeHandler?.cancel?.();
@@ -267,6 +283,37 @@ export default class extends Controller {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
+    }
+  }
+
+  /**
+   * Handle sort clicks to show loading overlay
+   * @param {Event} event - Click event
+   */
+  handleSort(event) {
+    const link = event.target.closest("a[href]");
+    if (link && this.headerTarget.contains(link)) {
+      if (link.dataset.turboAction === "replace") {
+        this.showLoading();
+      }
+    }
+  }
+
+  /**
+   * Show loading overlay
+   */
+  showLoading() {
+    if (this.hasLoadingTarget) {
+      this.loadingTarget.classList.remove("hidden");
+    }
+  }
+
+  /**
+   * Hide loading overlay
+   */
+  hideLoading() {
+    if (this.hasLoadingTarget) {
+      this.loadingTarget.classList.add("hidden");
     }
   }
 
