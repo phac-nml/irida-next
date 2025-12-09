@@ -167,18 +167,6 @@
                 <% end %>
               <% end %>
 
-              <%# Wrap metadata cells in template tags for virtualization %>
-              <% @metadata_fields.each do |field| %>
-                <template data-field="<%= field %>">
-                  <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
-                    <%= render Samples::EditableCell.new(field: field, sample: sample) %>
-                  <% else %>
-                    <%= render_cell(tag: 'td', classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
-                      <%= sample.metadata[field] %>
-                    <% end %>
-                  <% end %>
-                </template>
-              <% end %>
             <% end %>
           <% end %>
         </tbody>
@@ -211,6 +199,25 @@
           </tfoot>
         <% end %>
       </table>
+
+      <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
+      <div id="virtual-scroll-templates" class="hidden" aria-hidden="true" data-virtual-scroll-target="templateContainer">
+        <% @samples.each do |sample| %>
+          <div data-sample-id="<%= sample.id %>">
+            <% @metadata_fields.each do |field| %>
+              <template data-field="<%= field %>">
+                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
+                  <%= render Samples::EditableCell.new(field: field, sample: sample) %>
+                <% else %>
+                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
+                    <%= sample.metadata[field] %>
+                  <% end %>
+                <% end %>
+              </template>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
 
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
