@@ -218,6 +218,16 @@
           </div>
         <% end %>
       </div>
+
+      <%# Loading overlay %>
+      <div class="hidden absolute inset-0 bg-white/50 dark:bg-slate-900/50 z-50 backdrop-blur-[1px]" data-virtual-scroll-target="loading">
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="flex flex-col items-center justify-center">
+             <%= pathogen_icon :faded_spinner, library: "animated", color: :primary, size: :xl %>
+            <span class="sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
+          </div>
+        </div>
+      </div>
     <% end %>
 
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
