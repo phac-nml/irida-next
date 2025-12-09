@@ -41,7 +41,9 @@ class WorkflowExecutionJob < ApplicationJob
     return max_run_time.to_i if max_run_time.is_a?(Integer)
 
     calculator = Dentaku::Calculator.new
-    calculator.evaluate(max_run_time, SAMPLE_COUNT: workflow_execution.samples.count).to_i
+    result = calculator.evaluate(max_run_time, SAMPLE_COUNT: workflow_execution.samples.count)
+
+    result.nil? ? result : result.to_i
   end
 
   # Calculate time spent in state till now in seconds

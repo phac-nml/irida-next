@@ -36,7 +36,7 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     result = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
     if result
-      queue_next_job(workflow_execution.reload)
+      queue_next_job(workflow_execution.reload, min_run_time)
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end
@@ -44,27 +44,33 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
 
   # Delay the status check if the workflow is in running state and minimum run time has not been reached
   def delay_status_check?(wes_connection, workflow_execution, min_run_time)
+    return false if workflow_execution.reload.state == 'running'
+
     wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
     status = wes_client.get_run_status(workflow_execution.run_id)
 
     return false unless status[:state] == 'RUNNING'
 
-    WorkflowExecutionStatusJob.set(wait_until: min_run_time.seconds.from_now).perform_later(workflow_execution)
+    workflow_execution.state = :running
+    workflow_execution.save
+
+    WorkflowExecutionStatusJob.set(wait_until: min_run_time.seconds.from_now).perform_later(workflow_execution,
+                                                                                            min_run_time)
     true
   end
 
-  def queue_next_job(workflow_execution)
+  def queue_next_job(workflow_execution, min_run_time = nil)
     case workflow_execution.state.to_sym
     when :canceled, :error
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     when :completing
       WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     else
-      requeue_or_cancel(workflow_execution)
+      requeue_or_cancel(workflow_execution, min_run_time)
     end
   end
 
-  def requeue_or_cancel(workflow_execution)
+  def requeue_or_cancel(workflow_execution, min_run_time = nil)
     run_time = state_time_calculation(workflow_execution, :running)
     maximum_run_time = maximum_run_time(workflow_execution)
 
@@ -75,7 +81,7 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
       WorkflowExecutionCancelationJob.perform_later(workflow_execution, workflow_execution.submitter)
     else
       WorkflowExecutionStatusJob.set(wait_until: status_check_interval(workflow_execution).seconds.from_now)
-                                .perform_later(workflow_execution)
+                                .perform_later(workflow_execution, min_run_time)
     end
   end
 end
