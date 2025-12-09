@@ -6,9 +6,6 @@ class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
     Flipper.enable(:workflow_execution_sharing)
 
-    sample43 = samples(:sample43)
-    sample44 = samples(:sample44)
-
     workflow = Irida::Pipeline.new(
       'phac-nml/iridanextexample',
       {
@@ -23,7 +20,7 @@ class NextflowComponentTest < ViewComponentTestCase
 
     render_inline NextflowComponent.new(
       workflow:,
-      samples: [sample43, sample44],
+      sample_count: 2,
       url: 'https://nf-co.re/testpipeline',
       namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3]
@@ -80,7 +77,7 @@ class NextflowComponentTest < ViewComponentTestCase
     I18n.with_locale :en do
       render_inline NextflowComponent.new(
         workflow:,
-        samples: [],
+        sample_count: nil,
         url: 'https://github.com/phac-nml/mikrokondo',
         namespace_id: 'SDSDDFDSFDS',
         fields: []
@@ -156,7 +153,7 @@ class NextflowComponentTest < ViewComponentTestCase
     I18n.with_locale :fr do
       render_inline NextflowComponent.new(
         workflow:,
-        samples: [],
+        sample_count: nil,
         url: 'https://github.com/phac-nml/mikrokondo',
         namespace_id: 'SDSDDFDSFDS',
         fields: []
@@ -235,7 +232,7 @@ class NextflowComponentTest < ViewComponentTestCase
 
     render_inline NextflowComponent.new(
       workflow:,
-      samples: [],
+      sample_count: nil,
       url: 'https://nf-co.re/testpipeline',
       namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3],
