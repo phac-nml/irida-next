@@ -9,30 +9,40 @@ module Pathogen
 
     test 'check_box_tag applies base pathogen styling classes' do
       html = check_box_tag('test_checkbox')
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should include size-6 class')
-      assert_match(/class="[^"]*bg-white[^"]*"/, html, 'Should include bg-white class')
-      assert_match(/class="[^"]*rounded-sm[^"]*"/, html, 'Should include rounded-sm class')
-      assert_match(/class="[^"]*cursor-pointer[^"]*"/, html, 'Should include cursor-pointer class')
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
+
+      assert_not_nil checkbox
+      classes = checkbox['class'].split
+      assert_includes classes, 'size-6'
+      assert_includes classes, 'bg-white'
+      assert_includes classes, 'rounded-sm'
+      assert_includes classes, 'cursor-pointer'
     end
 
     test 'check_box_tag applies table context styling when data table is true' do
       html = check_box_tag('test_checkbox', '1', false, { data: { table: true } })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
+      classes = checkbox['class'].split
       # Should include base classes
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should include size-6 class')
+      assert_includes classes, 'size-6'
 
       # Should include table-specific classes
-      assert_match(/class="[^"]*-mt-0\.5[^"]*"/, html, 'Should include -mt-0.5 class for table context')
-      assert_match(/class="[^"]*mb-0[^"]*"/, html, 'Should include mb-0 class for table context')
-      assert_match(/class="[^"]*flex-shrink-0[^"]*"/, html, 'Should include flex-shrink-0 class for table context')
-      assert_match(/class="[^"]*self-center[^"]*"/, html, 'Should include self-center class for table context')
+      assert_includes classes, '-mt-0.5'
+      assert_includes classes, 'mb-0'
+      assert_includes classes, 'flex-shrink-0'
+      assert_includes classes, 'self-center'
     end
 
     test 'check_box_tag removes data-table attribute from final HTML' do
       html = check_box_tag('test_checkbox', '1', false, { data: { table: true } })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
       # Should NOT include data-table in the output
-      assert_no_match(/data-table/, html, 'Should not include data-table attribute in HTML output')
+      assert_nil checkbox['data-table']
     end
 
     test 'check_box_tag preserves other data attributes when removing table marker' do
@@ -43,30 +53,38 @@ module Pathogen
                                controller: 'test'
                              }
                            })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
       # Should preserve other data attributes
-      assert_match(/data-action="click-&gt;test#action"/, html, 'Should preserve data-action attribute')
-      assert_match(/data-controller="test"/, html, 'Should preserve data-controller attribute')
+      assert_equal 'click->test#action', checkbox['data-action']
+      assert_equal 'test', checkbox['data-controller']
 
       # Should NOT include data-table
-      assert_no_match(/data-table/, html, 'Should not include data-table attribute')
+      assert_nil checkbox['data-table']
     end
 
     test 'check_box_tag merges custom classes with pathogen classes' do
       html = check_box_tag('test_checkbox', '1', false, { class: 'custom-class' })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
       # Should include both pathogen and custom classes
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should include pathogen class')
-      assert_match(/class="[^"]*custom-class[^"]*"/, html, 'Should include custom class')
+      classes = checkbox['class'].split
+      assert_includes classes, 'size-6'
+      assert_includes classes, 'custom-class'
     end
 
     test 'check_box_tag merges custom classes array with pathogen classes' do
       html = check_box_tag('test_checkbox', '1', false, { class: %w[custom-1 custom-2] })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
       # Should include both pathogen and custom classes
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should include pathogen class')
-      assert_match(/class="[^"]*custom-1[^"]*"/, html, 'Should include first custom class')
-      assert_match(/class="[^"]*custom-2[^"]*"/, html, 'Should include second custom class')
+      classes = checkbox['class'].split
+      assert_includes classes, 'size-6'
+      assert_includes classes, 'custom-1'
+      assert_includes classes, 'custom-2'
     end
 
     test 'check_box_tag with table context and custom classes' do
@@ -74,23 +92,28 @@ module Pathogen
                              data: { table: true },
                              class: 'my-checkbox'
                            })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
+      classes = checkbox['class'].split
       # Should include base classes
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should include base class')
+      assert_includes classes, 'size-6'
 
       # Should include table classes
-      assert_match(/class="[^"]*-mt-0\.5[^"]*"/, html, 'Should include table class')
+      assert_includes classes, '-mt-0.5'
 
       # Should include custom class
-      assert_match(/class="[^"]*my-checkbox[^"]*"/, html, 'Should include custom class')
+      assert_includes classes, 'my-checkbox'
     end
 
     test 'check_box_tag preserves aria attributes' do
       html = check_box_tag('test_checkbox', '1', false, {
                              aria: { label: 'Test Label' }
                            })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
-      assert_match(/aria-label="Test Label"/, html, 'Should preserve aria-label attribute')
+      assert_equal 'Test Label', checkbox['aria-label']
     end
 
     test 'check_box_tag with all options combined' do
@@ -104,26 +127,29 @@ module Pathogen
                              },
                              class: 'additional-class'
                            })
+      doc = Nokogiri::HTML.fragment(html)
+      checkbox = doc.at_css('input[type="checkbox"]')
 
       # Verify ID
-      assert_match(/id="checkbox_sample_123"/, html, 'Should have correct ID')
+      assert_equal 'checkbox_sample_123', checkbox['id']
 
       # Verify name and value
-      assert_match(/name="sample_ids\[\]"/, html, 'Should have correct name')
-      assert_match(/value="sample-123"/, html, 'Should have correct value')
+      assert_equal 'sample_ids[]', checkbox['name']
+      assert_equal 'sample-123', checkbox['value']
 
       # Verify aria
-      assert_match(/aria-label="Sample 123"/, html, 'Should have aria-label')
+      assert_equal 'Sample 123', checkbox['aria-label']
 
       # Verify data attributes (table should be removed)
-      assert_match(/data-action="input-&gt;selection#toggle"/, html, 'Should have data-action')
-      assert_match(/data-selection-target="rowSelection"/, html, 'Should have data-selection-target')
-      assert_no_match(/data-table/, html, 'Should NOT have data-table')
+      assert_equal 'input->selection#toggle', checkbox['data-action']
+      assert_equal 'rowSelection', checkbox['data-selection-target']
+      assert_nil checkbox['data-table']
 
       # Verify classes (pathogen + table + custom)
-      assert_match(/class="[^"]*size-6[^"]*"/, html, 'Should have pathogen class')
-      assert_match(/class="[^"]*-mt-0\.5[^"]*"/, html, 'Should have table class')
-      assert_match(/class="[^"]*additional-class[^"]*"/, html, 'Should have custom class')
+      classes = checkbox['class'].split
+      assert_includes classes, 'size-6'
+      assert_includes classes, '-mt-0.5'
+      assert_includes classes, 'additional-class'
     end
   end
 end
