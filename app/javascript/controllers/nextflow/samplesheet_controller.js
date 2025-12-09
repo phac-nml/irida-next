@@ -121,7 +121,9 @@ export default class extends Controller {
     this.#setSamplesheetParametersAndData();
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
     this.#samplesheetReady = true;
-    this.#handleQueuedMetadataChanges();
+    if (Object.keys(this.#queuedMetadataChanges).length > 0) {
+      this.#handleQueuedMetadataChanges();
+    }
     this.updateMessageTarget.classList.remove("hidden");
   }
 
@@ -382,11 +384,13 @@ export default class extends Controller {
   // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
   updateMetadata({ detail: { content } }) {
     for (const index in content["metadata"]) {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
-        content["metadata"][index],
-      );
-      this.#updateCell(content["property"], index, "metadata_cell", false);
+      for (const header in content["metadata"][index]) {
+        this.#setFormData(
+          `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${header}]`,
+          content["metadata"][index][header],
+        );
+        this.#updateCell(header, index, "metadata_cell", false);
+      }
     }
     this.#clearPayload();
   }
@@ -671,9 +675,9 @@ export default class extends Controller {
   }
 
   #clearPayload() {
-    // if (this.hasDataPayloadTarget) {
-    //   this.dataPayloadTarget.remove();
-    // }
+    if (this.hasDataPayloadTarget) {
+      this.dataPayloadTarget.remove();
+    }
   }
 
   #setCurrentSampleIndexesToAll() {
@@ -765,8 +769,13 @@ export default class extends Controller {
       }, 1000);
     }
 
+    // for large sample batches, users will be able to select metadata headers prior to the samplesheet loading in
+    // we will add those changes to the #queuedMetadataChanges object, and that will be submitted once
+    // the samplesheet is ready
     if (this.#samplesheetReady) {
-      this.#submitMetadataChange(metadataField, metadataSamplesheetColumn);
+      this.#submitMetadataChange({
+        [metadataSamplesheetColumn]: metadataField,
+      });
     } else {
       this.#queuedMetadataChanges[metadataSamplesheetColumn] = metadataField;
     }
@@ -795,7 +804,7 @@ export default class extends Controller {
     });
   }
 
-  #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
+  #appendInputsToMetadataForm(metadataFormContent, metadataParams) {
     // add turbo_stream, which metadata column and the selected metadata field inputs
     const formInputValues = [
       {
@@ -803,12 +812,8 @@ export default class extends Controller {
         value: "turbo_stream",
       },
       {
-        name: "header",
-        value: columnName,
-      },
-      {
-        name: "field",
-        value: metadataField,
+        name: "metadata_fields",
+        value: JSON.stringify(metadataParams),
       },
     ];
 
@@ -829,27 +834,16 @@ export default class extends Controller {
   }
 
   #handleQueuedMetadataChanges() {
-    // we need to space out the submissions as the backend won't receive all metadata changes
-    let timeoutLength = 100;
-    for (let metadataSamplesheetColumn in this.#queuedMetadataChanges) {
-      timeoutLength += 500;
-      setTimeout(() => {
-        this.#submitMetadataChange(
-          this.#queuedMetadataChanges[metadataSamplesheetColumn],
-          metadataSamplesheetColumn,
-        );
-      }, timeoutLength);
-    }
+    this.#submitMetadataChange(this.#queuedMetadataChanges);
   }
 
-  #submitMetadataChange(metadataField, metadataSamplesheetColumn) {
+  #submitMetadataChange(metadataParams) {
     const metadataFormContent =
       this.metadataHeaderFormTarget.content.cloneNode(true);
 
     const filledMetadataForm = this.#appendInputsToMetadataForm(
       metadataFormContent,
-      metadataField,
-      metadataSamplesheetColumn,
+      metadataParams,
     );
     this.element.appendChild(filledMetadataForm);
 
