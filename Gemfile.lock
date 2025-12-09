@@ -796,7 +796,7 @@ DEPENDENCIES
   timecop
   turbo-rails
   tzinfo-data
-  view_component (~> 4.1.1)
+  view_component (>= 4.0, < 5.0)
   w3c_validators
   web-console
   webmock
