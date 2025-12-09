@@ -112,7 +112,6 @@ export default class extends Controller {
   }
 
   processSamplesheet({ detail: { content } }) {
-    console.log(content["allowedToUpdateSamples"]);
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
