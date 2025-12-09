@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+coverage/
+tmp/
+log/
+storage/
+public/assets/
+app/assets/builds/
+
+# Generated files
+db/schema.rb
+db/jobs_schema.rb
+db/structure.sql
+
+# Credentials
+config/credentials.yml.enc
+config/credentials/*
