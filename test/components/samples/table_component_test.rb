@@ -63,19 +63,25 @@ module Samples
     def component_options(namespace)
       {
         has_samples: namespace.has_samples?,
-        abilities: {
-          select_samples: true,
-          edit_sample_metadata: true
-        },
+        abilities: default_abilities,
         metadata_fields: [],
-        search_params: {
-          metadata_template: 'none',
-          sort: 'namespaces.puid asc'
-        }.with_indifferent_access,
-        empty: {
-          title: I18n.t(:'groups.samples.table.no_samples'),
-          description: I18n.t(:'groups.samples.table.no_associated_samples')
-        }
+        search_params: default_search_params,
+        empty: default_empty_messages
+      }
+    end
+
+    def default_abilities
+      { select_samples: true, edit_sample_metadata: true }
+    end
+
+    def default_search_params
+      { metadata_template: 'none', sort: 'namespaces.puid asc' }.with_indifferent_access
+    end
+
+    def default_empty_messages
+      {
+        title: I18n.t(:'groups.samples.table.no_samples'),
+        description: I18n.t(:'groups.samples.table.no_associated_samples')
       }
     end
 

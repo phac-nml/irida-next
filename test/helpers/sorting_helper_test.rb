@@ -22,27 +22,27 @@ class SortingHelperTest < ActionView::TestCase
     "/sort/#{sort_string.to_s.gsub(' ', '/')}"
   end
 
-  test 'active_sort returns true when field and direction match' do
+  test 'active_sort? returns true when field and direction match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert active_sort(@ransack_obj, :email, :asc)
-    assert active_sort(@ransack_obj, 'email', 'asc')
+    assert active_sort?(@ransack_obj, :email, :asc)
+    assert active_sort?(@ransack_obj, 'email', 'asc')
   end
 
-  test 'active_sort returns false when field does not match' do
+  test 'active_sort? returns false when field does not match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert_not active_sort(@ransack_obj, :name, :asc)
+    assert_not active_sort?(@ransack_obj, :name, :asc)
   end
 
-  test 'active_sort returns false when direction does not match' do
+  test 'active_sort? returns false when direction does not match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert_not active_sort(@ransack_obj, :email, :desc)
+    assert_not active_sort?(@ransack_obj, :email, :desc)
   end
 
-  test 'active_sort returns false when sorts is empty' do
-    assert_not active_sort(@ransack_obj, :email, :asc)
+  test 'active_sort? returns false when sorts is empty' do
+    assert_not active_sort?(@ransack_obj, :email, :asc)
   end
 
   test 'sorting_item creates dropdown item with correct attributes' do
