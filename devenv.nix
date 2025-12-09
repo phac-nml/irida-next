@@ -117,12 +117,12 @@ lib.mkMerge [
         pass_filenames = true;
       };
 
-      # erb-formatter for ERB templates
-      erb_formatter = {
-        enable = true;
-        name = "ERB Formatter";
-        description = "Format ERB templates";
-        entry = "bundle exec erb-format --write";
+      # herb formatter for ERB templates
+      herb_formatter = {
+        enable = false;
+        name = "Herb Formatter";
+        description = "Format ERB templates with herb";
+        entry = "bundle exec herb --write";
         files = "\\.erb$";
         pass_filenames = true;
       };
