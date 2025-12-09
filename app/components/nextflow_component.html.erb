@@ -301,10 +301,10 @@
   </div>
 
   <% unless @sample_count.nil? %>
-    <%= form_with url: samplesheet_workflow_executions_submissions_path, method: :post,
+    <%= form_with url: samplesheet_workflow_executions_submissions_path,
+    method: :post,
     data: {
       "nextflow--samplesheet--params-target": "samplesheetParamsForm",
-    } do |f| %>
-    <% end %>
+    } %>
   <% end %>
 </div>
