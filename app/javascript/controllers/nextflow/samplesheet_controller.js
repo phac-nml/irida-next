@@ -122,7 +122,7 @@ export default class extends Controller {
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
     this.#samplesheetReady = true;
     if (Object.keys(this.#queuedMetadataChanges).length > 0) {
-      this.#handleQueuedMetadataChanges();
+      this.#submitMetadataChange(this.#queuedMetadataChanges);
     }
     this.updateMessageTarget.classList.remove("hidden");
   }
@@ -831,10 +831,6 @@ export default class extends Controller {
     });
 
     return metadataFormContent;
-  }
-
-  #handleQueuedMetadataChanges() {
-    this.#submitMetadataChange(this.#queuedMetadataChanges);
   }
 
   #submitMetadataChange(metadataParams) {
