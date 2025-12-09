@@ -12,6 +12,7 @@ module Groups
       @workflow_execution2 = workflow_executions(:workflow_execution_group_shared2)
 
       Flipper.enable(:workflow_execution_sharing)
+      Flipper.enable(:workflow_executions_advanced_search)
     end
 
     test 'can open and use advanced search dialog' do

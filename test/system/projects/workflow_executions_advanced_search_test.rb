@@ -11,6 +11,8 @@ module Projects
       @project = projects(:project1)
       @workflow_execution1 = workflow_executions(:automated_example_completed)
       @workflow_execution2 = workflow_executions(:automated_example_running)
+
+      Flipper.enable(:workflow_executions_advanced_search)
     end
 
     test 'can open and use advanced search dialog' do
