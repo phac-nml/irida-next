@@ -113,12 +113,12 @@ export default class extends Controller {
   #samplesheetReady = false;
 
   connect() {
+    this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
   processSamplesheet({ detail: { content } }) {
     this.#setSamplesheetParametersAndData();
-    this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
     this.#samplesheetReady = true;
     this.#handleQueuedMetadataChanges();
@@ -828,6 +828,7 @@ export default class extends Controller {
   }
 
   #handleQueuedMetadataChanges() {
+    // we need to space out the submissions as the backend won't receive all metadata changes
     let timeoutLength = 100;
     for (let metadataSamplesheetColumn in this.#queuedMetadataChanges) {
       timeoutLength += 500;
