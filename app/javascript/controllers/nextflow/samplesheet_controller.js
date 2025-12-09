@@ -35,9 +35,9 @@ export default class extends Controller {
     "metadataHeaderForm",
     "filterClearButton",
     "filterSearchButton",
-    "samplesheetSamplesForm",
     "updateSamplesCheckbox",
     "updateSamplesLabel",
+    "updateMessage",
   ];
 
   static values = {
@@ -121,6 +121,7 @@ export default class extends Controller {
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
     this.#samplesheetReady = true;
     this.#handleQueuedMetadataChanges();
+    this.updateMessageTarget.classList.remove("hidden");
   }
 
   #setSamplesheetParametersAndData() {
