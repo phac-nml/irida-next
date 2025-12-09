@@ -4,11 +4,12 @@
 class NextflowComponent < Component
   include NextflowHelper
 
-  attr_reader :schema, :url, :workflow, :metadata_fields, :sample_count, :namespace_id, :instance
+  attr_reader :url, :workflow, :metadata_fields, :sample_count, :namespace_id, :instance, :automated_workflow
 
   # rubocop:disable Metrics/ParameterLists
   def initialize(url:, sample_count:, workflow:, fields:, namespace_id:, instance: nil)
     @sample_count = sample_count
+    @automated_workflow = @sample_count.nil?
     @namespace_id = namespace_id
     @url = url
     @workflow = workflow

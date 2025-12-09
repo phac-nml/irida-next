@@ -1,16 +1,16 @@
 <div
   id="nextflow-container"
-  data-controller="nextflow--samplesheet <% unless @sample_count.nil? %>nextflow--samplesheet--params<% end %>"
+  data-controller="nextflow--samplesheet <% unless @automated_workflow %>nextflow--samplesheet--params<% end %>"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
   data-nextflow--samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
-  data-nextflow--samplesheet-automated-workflow-value="<%= @sample_count.nil? %>"
+  data-nextflow--samplesheet-automated-workflow-value="<%= @automated_workflow %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
   data-nextflow--samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
   data-nextflow--samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
-  <% unless @sample_count.nil? %>
+  <% unless @automated_workflow %>
   data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-selection-outlet="#samples-table"
   <% end %>
@@ -66,7 +66,7 @@
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <div id="workflow_execution_name_field" class="form-field">
-          <% label = label_attributes(!@sample_count.nil?) %>
+          <% label = label_attributes(!@automated_workflow) %>
 
           <%= workflow.label :name,
                          label[:name],
@@ -76,7 +76,7 @@
           <%= workflow.text_field :name,
                               value: instance.present? ? instance.name : nil,
                               aria: {
-                                required: !@sample_count.nil?,
+                                required: !@automated_workflow,
                               },
                               class:
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
@@ -110,7 +110,7 @@
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
-                <% unless @sample_count.nil? %>
+                <% unless @automated_workflow %>
                   <turbo-frame
                     id="samplesheet_message"
                     data-nextflow--samplesheet-target="samplesheetMessagesContainer"
@@ -130,7 +130,7 @@
                     ) %>
                   </turbo-frame>
 
-                  <% unless @sample_count.nil? %>
+                  <% unless @automated_workflow %>
                     <%= render Nextflow::SamplesheetComponent.new(
                       schema: property[:schema],
                       namespace_id:,
@@ -206,15 +206,15 @@
         <%= workflow.check_box :update_samples,
                            {
                              checked: instance.present? && instance["update_samples"],
-                             disabled: !@sample_count.nil?,
+                             disabled: !@automated_workflow,
                              aria: {
-                               disabled: !@sample_count.nil?,
+                               disabled: !@automated_workflow,
                              },
                              data: {
                                "nextflow--samplesheet-target": "updateSamplesCheckbox",
                              },
                            } %>
-        <% if @sample_count.nil? %>
+        <% if @automated_workflow %>
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
@@ -274,7 +274,7 @@
     <button
       class="button button-primary"
       data-nextflow--samplesheet-target="submit"
-      <% if @sample_count.nil? %>
+      <% if @automated_workflow %>
       type="submit"
       <% else %>
       type="button"
@@ -300,7 +300,7 @@
     ) %>
   </div>
 
-  <% unless @sample_count.nil? %>
+  <% unless @automated_workflow %>
     <%= form_with url: samplesheet_workflow_executions_submissions_path,
     method: :post,
     data: {
