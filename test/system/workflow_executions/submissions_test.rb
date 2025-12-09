@@ -1328,7 +1328,7 @@ module WorkflowExecutions
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
         assert_text I18n.t('components.nextflow_component.loading_complete')
-        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 3)
+        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 4)
 
         # assert indexes of samples
         within('th[id="0_sample"]') do
