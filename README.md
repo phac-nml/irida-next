@@ -81,7 +81,7 @@ This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automat
   ```bash
   bundle exec rubocop -a
   pnpm run format
-  bundle exec herb format '**/*.erb'
+  bundle exec herb html'
   ```
 
 ### Ignore files

@@ -119,10 +119,10 @@ lib.mkMerge [
 
       # herb formatter for ERB templates
       herb_formatter = {
-        enable = false;
+        enable = true;
         name = "Herb Formatter";
         description = "Format ERB templates with herb";
-        entry = "bundle exec herb --write";
+        entry = "bundle exec herb html";
         files = "\\.erb$";
         pass_filenames = true;
       };
