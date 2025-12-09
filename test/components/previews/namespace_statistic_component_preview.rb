@@ -11,7 +11,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'total-projects',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-        count: 123,
+        value: 123,
         color_scheme: :default
       )
     )
@@ -28,7 +28,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'blue-stats',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-        count: 456,
+        value: 456,
         color_scheme: :blue
       )
     )
@@ -43,7 +43,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'teal-stats',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-        count: 789,
+        value: 789,
         color_scheme: :teal
       )
     )
@@ -58,7 +58,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'indigo-stats',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_members'),
-        count: 101,
+        value: 101,
         color_scheme: :indigo
       )
     )
@@ -73,7 +73,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'fuchsia-stats',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-        count: 202,
+        value: 202,
         color_scheme: :fuchsia
       )
     )
@@ -88,7 +88,7 @@ class NamespaceStatisticComponentPreview < ViewComponent::Preview
         id_prefix: 'amber-stats',
         icon_name: :user_circle,
         label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
-        count: 303,
+        value: 303,
         color_scheme: :amber
       )
     )

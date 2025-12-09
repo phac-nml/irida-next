@@ -24,15 +24,17 @@ module Pathogen
       /heart/ => %w[heart heart-fill]
     }.freeze
 
-    attr_reader :icon_name, :rails_icons_options
+    attr_reader :icon_name, :rails_icons_options, :view_context
 
     # Initialize the error handler
     #
     # @param icon_name [String] The icon name that failed
     # @param rails_icons_options [Hash] The rails_icons options used
-    def initialize(icon_name, rails_icons_options)
+    # @param view_context [ActionView::Base] The view context for rendering helpers
+    def initialize(icon_name, rails_icons_options, view_context)
       @icon_name = icon_name
       @rails_icons_options = rails_icons_options
+      @view_context = view_context
     end
 
     # Handle icon rendering errors with comprehensive fallback strategy
@@ -69,7 +71,7 @@ module Pathogen
     # @return [ActiveSupport::SafeBuffer] The rendered fallback icon
     def render_fallback_icon(fallback_name)
       fallback_options = rails_icons_options.except(:variant, :library)
-      icon(fallback_name, **fallback_options)
+      view_context.icon(fallback_name, **fallback_options)
     end
 
     # Create enhanced development error indicator with icon suggestions

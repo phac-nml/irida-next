@@ -2,13 +2,13 @@
   <div
     class="
       flex items-center justify-between max-[920px]:flex-col max-[920px]:space-y-4
-      mt-2
+      my-2
     "
   >
     <div class="min-[921px]:flex-1 min-[921px]:mr-4">
       <%= render Viral::Pagy::LimitComponent.new(pagy, item: item) %>
     </div>
-    <div class="min-[921px]:flex-shrink-0">
+    <div class="min-[921px]:shrink-0">
       <%= render Viral::Pagy::PaginationComponent.new(pagy) %>
     </div>
   </div>

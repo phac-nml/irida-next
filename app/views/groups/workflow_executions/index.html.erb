@@ -9,7 +9,7 @@
 ) do |component| %>
   <%= component.with_buttons do %>
     <% if @allowed_to[:export_data] && @has_workflow_executions %>
-      <%= button_to t(".create_export_button"),
+      <%= button_to t("groups.workflow_executions.index.create_export_button"),
       new_data_export_path,
       params: {
         export_type: "analysis",
@@ -35,20 +35,24 @@
                   id: "select-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="select" value="on"/>
+      <input type="hidden" name="format" value="turbo_stream" />
+      <input type="hidden" name="select" value="on" />
+
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
+
     <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
                   id: "deselect-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="format" value="turbo_stream" />
+
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
     <% end %>
+
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
 
     <%= render SearchComponent.new(
@@ -64,7 +68,6 @@
         "search-field-selection-outlet": "#workflow-executions-table",
       },
     ) %>
-
   </div>
 <% end %>
 

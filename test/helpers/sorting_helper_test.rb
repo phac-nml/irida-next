@@ -22,27 +22,27 @@ class SortingHelperTest < ActionView::TestCase
     "/sort/#{sort_string.to_s.gsub(' ', '/')}"
   end
 
-  test 'active_sort returns true when field and direction match' do
+  test 'active_sort? returns true when field and direction match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert active_sort(@ransack_obj, :email, :asc)
-    assert active_sort(@ransack_obj, 'email', 'asc')
+    assert active_sort?(@ransack_obj, :email, :asc)
+    assert active_sort?(@ransack_obj, 'email', 'asc')
   end
 
-  test 'active_sort returns false when field does not match' do
+  test 'active_sort? returns false when field does not match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert_not active_sort(@ransack_obj, :name, :asc)
+    assert_not active_sort?(@ransack_obj, :name, :asc)
   end
 
-  test 'active_sort returns false when direction does not match' do
+  test 'active_sort? returns false when direction does not match' do
     @ransack_obj.sorts << Sort.new('email', 'asc')
 
-    assert_not active_sort(@ransack_obj, :email, :desc)
+    assert_not active_sort?(@ransack_obj, :email, :desc)
   end
 
-  test 'active_sort returns false when sorts is empty' do
-    assert_not active_sort(@ransack_obj, :email, :asc)
+  test 'active_sort? returns false when sorts is empty' do
+    assert_not active_sort?(@ransack_obj, :email, :asc)
   end
 
   test 'sorting_item creates dropdown item with correct attributes' do
@@ -51,16 +51,13 @@ class SortingHelperTest < ActionView::TestCase
       @item = args
     end
 
-    def t(key)
-      { '.sorting.email_asc' => 'Email (A-Z)' }[key]
-    end
+    @ransack_obj.sorts << Sort.new('name', 'asc')
 
-    @ransack_obj.sorts << Sort.new('email', 'asc')
+    sorting_item(dropdown, @ransack_obj, :name, :asc)
 
-    sorting_item(dropdown, @ransack_obj, :email, :asc)
-
-    assert_equal 'Email (A-Z)', dropdown.instance_variable_get(:@item)[:label]
-    assert_equal '/sort/email/asc', dropdown.instance_variable_get(:@item)[:url]
+    expected_label = I18n.t('components.ransack.sort_dropdown_component.sorting.name_asc')
+    assert_equal expected_label, dropdown.instance_variable_get(:@item)[:label]
+    assert_equal '/sort/name/asc', dropdown.instance_variable_get(:@item)[:url]
     assert_equal :check, dropdown.instance_variable_get(:@item)[:icon_name]
     assert_equal({ turbo: true, turbo_action: 'replace' }, dropdown.instance_variable_get(:@item)[:data])
   end

@@ -3,7 +3,7 @@
 module Viral
   module Form
     # Component to render form help text can be either default, success or error
-    class HelpTextComponent < ViewComponent::Base
+    class HelpTextComponent < Component
       attr_reader :icon
 
       STATE_MAPPINGS = {
@@ -22,6 +22,17 @@ module Viral
         @state = state
         @arguments = system_arguments
         @icon = ICON_MAPPINGS.key?(@state) ? ICON_MAPPINGS[@state] : ICON_MAPPINGS[:default]
+      end
+
+      def icon_color
+        case @state
+        when :success
+          :success
+        when :error
+          :danger
+        else
+          :neutral
+        end
       end
 
       def system_arguments

@@ -40,11 +40,11 @@
                     false,
                     {
                       id: "select-page",
-                      table: true,
                       aria: {
                         label: t(".select_all.aria_label"),
                       },
                       data: {
+                        table: true,
                         action: "input->selection#togglePage",
                         controller: "filters",
                         selection_target: "selectPage",
@@ -111,11 +111,11 @@
                       false,
                       {
                         id: dom_id(sample, :checkbox),
-                        table: true,
                         aria: {
                           label: t(".row.aria_label", name: sample.name),
                         },
                         data: {
+                          table: true,
                           action: "input->selection#toggle",
                           selection_target: "rowSelection",
                         },

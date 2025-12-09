@@ -137,6 +137,7 @@ module Pathogen
     def self.clean_with_regex(raw_html)
       cleaned = raw_html.gsub(/(<svg\b[^>]*?)\sdata=""/i) { Regexp.last_match(1) }
                         .gsub(/(<svg\b[^>]*?)\sdata(?=\s|>)/i) { Regexp.last_match(1) }
+                        .gsub(/(<svg\b[^>]*?)\sdata="[^"]*"/i) { Regexp.last_match(1) }
       ActiveSupport::SafeBuffer.new(cleaned)
     end
   end

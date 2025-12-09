@@ -4,23 +4,24 @@ require 'ransack/helpers/form_helper'
 
 # Ransack Sorting Helper
 module SortingHelper
-  def active_sort(ransack_obj, field, dir)
+  def active_sort?(ransack_obj, field, dir)
     return false unless ransack_obj.sorts.detect { |s| s && s.name == field.to_s && s.dir == dir.to_s }
 
     true
   end
 
   def sorting_item(dropdown, ransack_obj, field, dir, prefix = nil, data: { turbo: true, turbo_action: 'replace' }) # rubocop:disable Metrics/ParameterLists
-    dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
+    label = t(format('components.ransack.sort_dropdown_component.sorting.%<field>s_%<dir>s', field:, dir:))
+    dropdown.with_item(label: label,
                        url: sorting_url(ransack_obj, field, dir:),
-                       icon_name: active_sort(ransack_obj, field, dir) ? :check : :blank,
+                       icon_name: active_sort?(ransack_obj, field, dir) ? :check : :blank,
                        prefix:,
                        data:,
                        **add_aria_current(ransack_obj, field, dir))
   end
 
   def add_aria_current(ransack_obj, field, dir)
-    if active_sort(ransack_obj, field, dir)
+    if active_sort?(ransack_obj, field, dir)
       { 'aria-current': 'page' }
     else
       {}

@@ -54,7 +54,7 @@ module Pathogen
     #
     # @return [ActiveSupport::SafeBuffer, nil] The rendered icon HTML or error fallback
     def call
-      html = icon(icon_name, **rails_icons_options)
+      html = helpers.icon(icon_name, **rails_icons_options)
       IconRenderer.clean_html(html)
     rescue StandardError => e
       error_handler.handle_error(e)
@@ -82,7 +82,7 @@ module Pathogen
     #
     # @return [IconErrorHandler] The error handler instance
     def error_handler
-      @error_handler ||= IconErrorHandler.new(icon_name, rails_icons_options)
+      @error_handler ||= IconErrorHandler.new(icon_name, rails_icons_options, helpers)
     end
   end
 end
