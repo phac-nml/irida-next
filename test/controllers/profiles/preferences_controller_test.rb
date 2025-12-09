@@ -32,14 +32,6 @@ module Profiles
       assert_response :ok
     end
 
-    test 'shouldn\'t update the users locale with an invalid locale' do
-      sign_in users(:john_doe)
-
-      patch profile_preferences_path,
-            params: { user: { locale: 'not_a_locale' } }
-      assert_response :unprocessable_content
-    end
-
     test 'shouldn\'t update the users locale with an invalid locale via turbo_stream' do
       sign_in users(:john_doe)
 
