@@ -39,7 +39,7 @@
             selected: @current_page == t(:"profiles.sidebar.account"),
           ) %>
         <% end %>
-        <% layout.with_language_selection(user: current_user) %>
+        <% layout.with_language_selection %>
         <% layout.with_body do %>
           <%= yield %>
         <% end %>
