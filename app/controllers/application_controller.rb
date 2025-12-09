@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :error_message
 
+  rescue_from Pagy::OverflowError, with: :redirect_to_first_page
+
   def set_current_user
     Current.user = current_user
     yield
@@ -76,5 +78,10 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(_resource_or_scope)
     params = { locale: I18n.locale } if I18n.locale != I18n.default_locale
     new_user_session_path(params)
+  end
+
+  # Rescues from Pagy::OverflowError by redirecting to the first page
+  def redirect_to_first_page
+    redirect_to url_for(page: 1, limit: params[:limit] || 20)
   end
 end

@@ -15,8 +15,6 @@ module Projects
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
-    rescue_from Pagy::OverflowError, with: :redirect_to_first_page
-
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -222,7 +220,7 @@ module Projects
     def results_message_for_advanced_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.advanced.results_message.zero')
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.advanced.results_message.singular')
       else
         I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
@@ -232,7 +230,7 @@ module Projects
     def results_message_for_quick_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
       else
         I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
@@ -252,10 +250,6 @@ module Projects
         update_store(search_key, updated_params)
       end
       updated_params
-    end
-
-    def redirect_to_first_page
-      redirect_to url_for(page: 1, limit: params[:limit] || 20)
     end
 
     def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

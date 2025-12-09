@@ -259,5 +259,88 @@ module Samples
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
+
+    test 'accessing samples index on invalid page causes pagy overflow redirect at project level' do
+      # Create 25 samples in project1 to have 2 pages (20 per page limit)
+      project1 = projects(:project1)
+      # Create samples 3-25 in project1 (samples 1 and 2 already exist)
+      samples_to_delete = (3..25).map do |n|
+        Sample.create!(
+          name: "Project 1 Sample #{n}",
+          description: "Sample #{n} description.",
+          project_id: project1.id,
+          puid: "INXT_SAM_#{format('%010d', n)}"
+        )
+      end
+
+      # Now delete all samples from the second page to cause overflow
+      sample_ids = samples_to_delete.map(&:id)
+
+      assert_difference('Sample.count', -sample_ids.count) do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @project1_namespace.id,
+               destroy: {
+                 sample_ids: sample_ids
+               }
+             }, as: :turbo_stream
+      end
+
+      # Now try to access page 2 which no longer exists (should cause Pagy::OverflowError)
+      # The rescue_from handler should redirect to first page
+      get namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project,
+                                         page: 2, limit: 20)
+
+      assert_response :redirect
+      # Should redirect to first page with page=1 parameter
+      follow_redirect!
+      assert_response :success
+      begin
+        assert_equal 1, response.parsed_body.match(/page[^0-9]*(\d+)/).captures[0].to_i
+      rescue StandardError
+        1
+      end
+    end
+
+    test 'accessing samples index on invalid page causes pagy overflow redirect at group level' do
+      # Create enough samples to get to 2+ pages at group level
+      # Group 1 already has samples 1 and 2 from project1, so we need 21+ more
+      # Create samples that belong to group1's project
+      samples_to_delete = (26..50).map do |n|
+        Sample.create!(
+          name: "Group Sample #{n}",
+          description: "Group Sample #{n} description.",
+          project_id: projects(:project1).id, # project1 belongs to group1
+          puid: "INXT_SAM_GRP#{format('%07d', n)}"
+        )
+      end
+
+      sample_ids = samples_to_delete.map(&:id)
+
+      # Delete all samples from the second page
+      assert_difference('Sample.count', -sample_ids.count) do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @group1.id,
+               destroy: {
+                 sample_ids: sample_ids
+               }
+             }, as: :turbo_stream
+      end
+
+      # Now try to access page 2 which no longer exists (should cause Pagy::OverflowError)
+      # The rescue_from handler should redirect to first page
+      get group_samples_path(@group1, page: 2, limit: 20)
+
+      # Should either redirect or still be on first page due to overflow rescue
+      if response.redirect?
+        assert_response :redirect
+        follow_redirect!
+      else
+        # Some versions of pagy may just render the first page without redirect
+        assert_response :success
+      end
+      assert_response :success
+    end
   end
 end

@@ -76,5 +76,21 @@ module Groups
              as: :turbo_stream
       assert_response :unauthorized
     end
+
+    test 'accessing attachments index on invalid page causes pagy overflow redirect at group level' do
+      # Accessing page 50 when only 2 pages exist should cause Pagy::OverflowError
+      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      get group_attachments_url(@namespace, page: 50)
+
+      # Should be redirected to first page
+      assert_response :redirect
+      # Check both page and limit are in the redirect URL (order may vary)
+      assert_match(/page=1/, response.location)
+      assert_match(/limit=20/, response.location)
+
+      # Follow the redirect and verify it's successful
+      follow_redirect!
+      assert_response :success
+    end
   end
 end
