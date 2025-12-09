@@ -37,7 +37,6 @@
                 ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream">
       <input type="hidden" name="select" value="on">
-
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
 
@@ -48,7 +47,6 @@
                   class: "max-sm:grow",
                 ) do |f| %>
       <input type="hidden" name="format" value="turbo_stream">
-
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
     <% end %>
@@ -69,9 +67,11 @@
       },
     ) %>
 
-    <div id="table-filter" role="presentation" class="contents">
-      <%= render partial: "table_filter" %>
-    </div>
+    <% if Flipper.enabled?(:workflow_executions_advanced_search) %>
+      <div id="table-filter" role="presentation" class="contents">
+        <%= render partial: "table_filter" %>
+      </div>
+    <% end %>
 
   </div>
 <% end %>

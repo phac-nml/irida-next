@@ -12,22 +12,24 @@
       <%= viral_dropdown(label: t("shared.workflow_executions.actions_dropdown.label"), aria: { label: t('shared.workflow_executions.actions_dropdown.label') }, caret: true, classes: "font-normal button button-default") do |dropdown| %>
         <% if Flipper.enabled?(:cancel_multiple_workflows) %>
           <% dropdown.with_item(
-              label: t("shared.workflow_executions.actions_dropdown.cancel_workflow_executions"),
-              url: cancel_multiple_confirmation_workflow_executions_path,
-              disableable: true,
-              data: {
-                turbo_stream: true,
-                controller: "action-button",
-                action_button_required_value: 1,
-              },
-              class:
-                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
-            ) %>
+            label:
+              t("shared.workflow_executions.actions_dropdown.cancel_workflow_executions"),
+            url: cancel_multiple_confirmation_workflow_executions_path,
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+          ) %>
         <% end %>
 
         <% if Flipper.enabled?(:delete_multiple_workflows) %>
           <% dropdown.with_item(
-            label: t("shared.workflow_executions.actions_dropdown.delete_workflow_executions"),
+            label:
+              t("shared.workflow_executions.actions_dropdown.delete_workflow_executions"),
             url: destroy_multiple_confirmation_workflow_executions_path,
             disableable: true,
             data: {
@@ -75,11 +77,11 @@
               class: "max-sm:grow",
               data: { turbo_frame: "selected" },
                   ) do |f| %>
-      <input type="hidden" name="select" value="on" />
+      <input type="hidden" name="select" value="on" >
 
       <%= f.submit t("common.controls.select_all"),
-                   id: "select-all-button",
-                   class: "button button-default w-full" %>
+               id: "select-all-button",
+               class: "button button-default w-full" %>
     <% end %>
 
     <%= form_with(
@@ -90,8 +92,8 @@
               data: { turbo_frame: "selected" },
                   ) do |f| %>
       <%= f.submit t("common.controls.deselect_all"),
-                   id: "deselect-all-button",
-                   class: "button button-default w-full" %>
+               id: "deselect-all-button",
+               class: "button button-default w-full" %>
     <% end %>
 
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
@@ -111,9 +113,11 @@
         },
       },
     ) %>
-    <div id="table-filter" role="presentation" class="contents">
-      <%= render partial: "table_filter" %>
-    </div>
+    <% if Flipper.enabled?(:workflow_executions_advanced_search) %>
+      <div id="table-filter" role="presentation" class="contents">
+        <%= render partial: "table_filter" %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
