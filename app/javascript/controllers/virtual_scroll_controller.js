@@ -32,7 +32,7 @@ export default class extends Controller {
     sortKey: String,
   };
 
-  static targets = ["container", "header", "body", "row"];
+  static targets = ["container", "header", "body", "row", "templateContainer"];
 
   COLUMN_WIDTH = 150; // pixels - fallback for unmeasured columns
   BUFFER_COLUMNS = 3; // Number of columns to render outside viewport on each side
@@ -145,7 +145,9 @@ export default class extends Controller {
     this.baseColumnWidths = this.baseHeaderElements.map((th, idx) => {
       const width = th.getBoundingClientRect().width;
       // Explicitly set width for base columns to prevent them from resizing
-      th.style.width = `${width}px`;
+      if (width > 0) {
+        th.style.width = `${width}px`;
+      }
       th.style.boxSizing = "border-box";
 
       if (idx < this.numStickyColumns) {
@@ -288,7 +290,11 @@ export default class extends Controller {
 
     // Re-measure base column widths in case they changed
     this.baseColumnWidths = this.baseHeaderElements.map((th) => {
-      return th.offsetWidth;
+      const width = th.offsetWidth;
+      if (width > 0) {
+        th.style.width = `${width}px`;
+      }
+      return width;
     });
     this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
 
@@ -487,15 +493,27 @@ export default class extends Controller {
     });
 
     // --- Render Body Rows ---
+    // Check if templateContainer is available for debugging
+    if (!this.hasTemplateContainerTarget) {
+      console.error(
+        "[virtual-scroll] templateContainer target not found! Templates cannot be loaded.",
+      );
+    }
+
     this.rowTargets.forEach((row, rowIndex) => {
       // Check for the cell currently being edited so we can preserve it
       const editingCellInfo = this.getRowEditingCellInfo(row);
       const editingCellNode = editingCellInfo?.cell ?? null;
 
-      // Keep templates aside so we can reattach them
-      const templates = Array.from(
-        row.querySelectorAll("template[data-field]"),
-      );
+      // Get sample ID from the row's data attribute to look up templates
+      const sampleId = row.dataset.sampleId;
+
+      // Get templates from the template container (stored outside table to avoid HTML5 foster parenting)
+      const templateContainer = this.hasTemplateContainerTarget
+        ? this.templateContainerTarget.querySelector(
+            `[data-sample-id="${sampleId}"]`,
+          )
+        : null;
 
       // Collect all non-template children
       const allChildren = Array.from(row.children).filter(
@@ -579,9 +597,9 @@ export default class extends Controller {
         }
 
         const selector = `template[data-field="${CSS.escape(field)}"]`;
-        const template =
-          row.querySelector(selector) ||
-          templates.find((t) => t.dataset.field === field);
+        const template = templateContainer
+          ? templateContainer.querySelector(selector)
+          : null;
         const reusable = reusableCells.get(field);
         if (reusable) {
           this.applyMetadataCellStyles(reusable, i);
@@ -621,8 +639,8 @@ export default class extends Controller {
         rowFrag.appendChild(endSpacer);
       }
 
-      // Finally reattach templates (they must remain in the row for future clones)
-      templates.forEach((t) => rowFrag.appendChild(t));
+      // Templates are now stored in a separate container outside the table,
+      // so no need to reattach them to the row
 
       // Count how many non-template children we're adding
       const fragChildren = Array.from(rowFrag.childNodes).filter(
