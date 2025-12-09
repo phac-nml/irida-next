@@ -22,16 +22,16 @@
           autocomplete="off"
           class="
             select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
-            rounded-l-lg @min-md:!rounded-l-none block w-full p-2 dark:bg-slate-800
+            rounded-l-lg @min-md:rounded-l-none! block w-full p-2 dark:bg-slate-800
             dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
             text-ellipsis overflow-hidden
           "
           value="<%= selected_value %>"
           data-action="input->viral--select2#input"
           <% if aria.present? %>
-            <% aria.each do |key, value| %>
-              <%= "aria-#{key}=#{value}" %>
-            <% end %>
+          <% aria.each do |key, value| %>
+          <%= "aria-#{key}=#{value}" %>
+          <% end %>
           <% end %>
         >
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
