@@ -24,6 +24,17 @@ module Viral
         @icon = ICON_MAPPINGS.key?(@state) ? ICON_MAPPINGS[@state] : ICON_MAPPINGS[:default]
       end
 
+      def icon_color
+        case @state
+        when :success
+          :success
+        when :error
+          :danger
+        else
+          :neutral
+        end
+      end
+
       def system_arguments
         @arguments.tap do |args|
           args[:tag] = 'span'

@@ -1,6 +1,12 @@
 <%= render Viral::BaseComponent.new(**system_arguments) do %>
   <% if icon.present? %>
-    <%= pathogen_icon(icon, size: :sm, color: :danger, class: "mr-1.5", "aria-hidden": true) %>
+    <%= pathogen_icon(
+      icon,
+      size: :sm,
+      color: icon_color,
+      class: "mr-1.5",
+      "aria-hidden": true,
+    ) %>
   <% end %>
   <span class="grow"><%= content %></span>
 <% end %>
