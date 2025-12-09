@@ -2,10 +2,12 @@
 
 require 'test_helper'
 require 'active_job_test_case'
+require 'webmock/minitest'
 
 class WorkflowExecutionStatusJobTest < ActiveJobTestCase
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
+    @workflow_execution.create_logidze_snapshot!
     @stubs = faraday_test_adapter_stubs
 
     body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
@@ -155,6 +157,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'execution where namespace is removed before status is run' do
     workflow_execution = workflow_executions(:workflow_execution_missing_namespace)
+    workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
     perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
@@ -166,6 +169,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'execution where run_id is missing' do
     workflow_execution = workflow_executions(:workflow_execution_missing_run_id)
+    workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
     perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
@@ -187,6 +191,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'canceled workflow should return early' do
     workflow_execution = workflow_executions(:irida_next_example_canceled)
+    workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
@@ -198,6 +203,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
   test 'min_run_time with running state should delay status check' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 1)
     workflow_execution = workflow_executions(:irida_next_example_running)
+    workflow_execution.create_logidze_snapshot!
     min_run_time = 300 # 5 minutes in seconds
 
     Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
@@ -253,6 +259,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
                          pipeline_schema_file_dir: @pipeline_schema_file_dir)
 
     workflow_execution = workflow_executions(:irida_next_example_running)
+    workflow_execution.create_logidze_snapshot!
     job = WorkflowExecutionStatusJob.new
 
     # Mock state_time_calculation to return a large run time (400 seconds)
