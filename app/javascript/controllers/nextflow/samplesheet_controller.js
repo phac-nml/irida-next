@@ -107,6 +107,10 @@ export default class extends Controller {
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
 
+  #queuedMetadataChanges = {};
+
+  #samplesheetReady = false;
+
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
   }
@@ -115,6 +119,8 @@ export default class extends Controller {
     this.#setSamplesheetParametersAndData();
     this.#updateMetadataColumnHeaderNames();
     this.#disableProcessingState(content["allowedToUpdateSamples"]);
+    this.#samplesheetReady = true;
+    this.#handleQueuedMetadataChanges();
   }
 
   #setSamplesheetParametersAndData() {
@@ -663,9 +669,9 @@ export default class extends Controller {
   }
 
   #clearPayload() {
-    if (this.hasDataPayloadTarget) {
-      this.dataPayloadTarget.remove();
-    }
+    // if (this.hasDataPayloadTarget) {
+    //   this.dataPayloadTarget.remove();
+    // }
   }
 
   #setCurrentSampleIndexesToAll() {
@@ -743,6 +749,7 @@ export default class extends Controller {
       `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
     );
 
+    // updates parameter below samplesheet if it exists
     if (metadataParameter) {
       metadataParameter.value = metadataField;
       metadataParameter.classList.add(
@@ -756,34 +763,11 @@ export default class extends Controller {
       }, 1000);
     }
 
-    const metadataFormContent =
-      this.metadataHeaderFormTarget.content.cloneNode(true);
-
-    const filledMetadataForm = this.#appendInputsToMetadataForm(
-      metadataFormContent,
-      metadataField,
-      metadataSamplesheetColumn,
-    );
-
-    this.element.appendChild(filledMetadataForm);
-
-    this.element.lastElementChild.addEventListener(
-      "turbo:before-fetch-request",
-      (event) => {
-        event.detail.fetchOptions.body = JSON.stringify(
-          formDataToJsonParams(new FormData(this.element.lastElementChild)),
-        );
-        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
-
-        event.detail.resume();
-      },
-      {
-        once: true,
-      },
-    );
-
-    this.element.lastElementChild.requestSubmit();
-    this.element.lastElementChild.remove();
+    if (this.#samplesheetReady) {
+      this.#submitMetadataChange(metadataField, metadataSamplesheetColumn);
+    } else {
+      this.#queuedMetadataChanges[metadataSamplesheetColumn] = metadataField;
+    }
   }
 
   #updateMetadataColumnHeaderNames() {
@@ -840,6 +824,49 @@ export default class extends Controller {
     });
 
     return metadataFormContent;
+  }
+
+  #handleQueuedMetadataChanges() {
+    let timeoutLength = 100;
+    for (let metadataSamplesheetColumn in this.#queuedMetadataChanges) {
+      timeoutLength += 500;
+      setTimeout(() => {
+        this.#submitMetadataChange(
+          this.#queuedMetadataChanges[metadataSamplesheetColumn],
+          metadataSamplesheetColumn,
+        );
+      }, timeoutLength);
+    }
+  }
+
+  #submitMetadataChange(metadataField, metadataSamplesheetColumn) {
+    const metadataFormContent =
+      this.metadataHeaderFormTarget.content.cloneNode(true);
+
+    const filledMetadataForm = this.#appendInputsToMetadataForm(
+      metadataFormContent,
+      metadataField,
+      metadataSamplesheetColumn,
+    );
+    this.element.appendChild(filledMetadataForm);
+
+    this.element.lastElementChild.addEventListener(
+      "turbo:before-fetch-request",
+      (event) => {
+        event.detail.fetchOptions.body = JSON.stringify(
+          formDataToJsonParams(new FormData(this.element.lastElementChild)),
+        );
+        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+        event.detail.resume();
+      },
+      {
+        once: true,
+      },
+    );
+
+    this.element.lastElementChild.requestSubmit();
+    this.element.lastElementChild.remove();
   }
 
   #createMetadataFormInput(inputValue) {
