@@ -96,7 +96,9 @@ module Irida
       return cost if cost.is_a?(Integer) || cost.is_a?(Float)
 
       calculator = Dentaku::Calculator.new
-      calculator.evaluate(cost, SAMPLE_COUNT: sample_count).round(2)
+      result = calculator.evaluate(cost, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.round(2)
     end
 
     private
