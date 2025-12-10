@@ -4,7 +4,7 @@ require 'ransack/helpers/form_helper'
 
 module Samples
   # Component for rendering a table of Samples
-  class TableComponent < Component # rubocop:disable Metrics/ClassLength
+  class TableComponent < Component
     include Ransack::Helpers::FormHelper
     include UrlHelpers
 
@@ -52,16 +52,22 @@ module Samples
       base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
       base_args[:data] ||= {}
 
-      # Add virtual-scroll controller and data attributes
-      base_args[:data][:controller] = 'virtual-scroll'
-      base_args[:data][:'virtual-scroll-target'] = 'container'
-      base_args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
-      base_args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
-      base_args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
-      base_args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
-
+      apply_virtual_scroll_data!(base_args)
       apply_selection_data!(base_args) if @abilities[:select_samples]
       base_args
+    end
+
+    # 🔄 Applies virtual-scroll controller and data attributes.
+    #
+    # @param args [Hash] arguments to mutate
+    # @return [void]
+    def apply_virtual_scroll_data!(args)
+      args[:data][:controller] = 'virtual-scroll'
+      args[:data][:'virtual-scroll-target'] = 'container'
+      args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
+      args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
+      args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
+      args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
     end
 
     # 🚀 Applies selection-related data attributes for interactive selection.
@@ -95,11 +101,12 @@ module Samples
       }
     end
 
-    def row_arguments(sample)
+    def row_arguments(sample, row_index)
       { tag: 'tr' }.tap do |args|
         args[:classes] =
           class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(sample)
+        args[:aria] = { rowindex: @pagy.offset + row_index + 2 } # +2 for 1-based and header row
         args[:data] ||= {}
         args[:data][:sample_id] = sample.id
         args[:data][:'virtual-scroll-target'] = 'row'
