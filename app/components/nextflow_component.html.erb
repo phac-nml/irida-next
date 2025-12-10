@@ -59,8 +59,7 @@
     </div>
   </div>
 
-  <%= form_with url: url, method: (instance.nil? ? :post : :patch),
-                data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
+  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
     <%= hidden_field_tag :format, :turbo_stream, id: "submission_turbo" %>
 
     <%= fields_for :workflow_execution do |workflow| %>
@@ -127,17 +126,15 @@
                     ) %>
                   </turbo-frame>
 
-                  <% unless @automated_workflow %>
-                    <%= render Nextflow::SamplesheetComponent.new(
-                      schema: property[:schema],
-                      namespace_id:,
-                      fields: metadata_fields,
-                      workflow_params: {
-                        name: @workflow.name,
-                        version: @workflow.version,
-                      },
-                    ) %>
-                  <% end %>
+                  <%= render Nextflow::SamplesheetComponent.new(
+                    schema: property[:schema],
+                    namespace_id:,
+                    fields: metadata_fields,
+                    workflow_params: {
+                      name: @workflow.name,
+                      version: @workflow.version,
+                    },
+                  ) %>
                   <div
                     class="flex justify-center"
                     id="samplesheet-spinner"
@@ -305,6 +302,7 @@
       data: {
         "nextflow--samplesheet--params-target": "samplesheetParamsForm",
       },
-    ) %>
+    ) do |f| %>
+    <% end %>
   <% end %>
 </div>
