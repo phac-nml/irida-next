@@ -1,4 +1,4 @@
-<%= turbo_stream.append "samplesheet_message" do
+<%= turbo_stream.prepend "samplesheet_message" do
   viral_alert(
     type: "success",
     message: t("components.nextflow_component.loading_complete"),
