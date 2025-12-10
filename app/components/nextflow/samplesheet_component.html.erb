@@ -243,7 +243,7 @@
 </template>
 
 <template data-nextflow--samplesheet-target="metadataHeaderForm">
-  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+  <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
     <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>
