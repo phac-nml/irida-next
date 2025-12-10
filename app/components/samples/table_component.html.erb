@@ -11,6 +11,9 @@
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
+        aria-label="<%= t('.table_label') %>"
+        aria-colcount="<%= @columns.length + @metadata_fields.length %>"
+        aria-rowcount="<%= @pagy.count + 1 %>"
       >
         <%# Target for virtual scroll header manipulation %>
         <thead
@@ -98,8 +101,8 @@
           "
           data-virtual-scroll-target="body"
         >
-          <% @samples.each do |sample| %>
-            <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
+          <% @samples.each_with_index do |sample, row_index| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(sample, row_index)) do %>
               <% @columns.each_with_index do |column, index| %>
                 <%= render_cell(
                 tag: index.zero? ? 'th' : 'td',
