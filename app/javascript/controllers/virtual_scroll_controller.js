@@ -616,6 +616,7 @@ export default class extends Controller {
         // Use colspan to span all hidden columns - this maintains table column alignment
         startSpacer.colSpan = firstVisibleMetadataColumn;
         startSpacer.dataset.virtualizedCell = "true";
+        startSpacer.setAttribute("role", "gridcell");
         startSpacer.style.padding = "0";
         startSpacer.style.border = "none";
         rowFrag.appendChild(startSpacer);
@@ -681,6 +682,7 @@ export default class extends Controller {
         // Use colspan to span all remaining columns
         endSpacer.colSpan = this.numMetadataColumns - lastVisibleMetadataColumn;
         endSpacer.dataset.virtualizedCell = "true";
+        endSpacer.setAttribute("role", "gridcell");
         endSpacer.style.padding = "0";
         endSpacer.style.border = "none";
         rowFrag.appendChild(endSpacer);

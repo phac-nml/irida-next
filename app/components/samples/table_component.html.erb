@@ -107,6 +107,7 @@
                 <%= render_cell(
                 tag: index.zero? ? 'th' : 'td',
                 scope: index.zero? ? 'row' : nil,
+                role: 'gridcell',
                 aria: { colindex: index + 1 },
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
               ) do %>
@@ -218,7 +219,7 @@
                 <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
-                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
+                  <%= render_cell(tag: 'td', role: 'gridcell', classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
                     <%= sample.metadata[field] %>
                   <% end %>
                 <% end %>
