@@ -196,7 +196,9 @@ export default class SelectWithAutoCompleteController extends Controller {
     if (option === null) {
       this.#renderNoResults();
     }
-    this.#announceNumberOfResults();
+    if (this.#isOpen()) {
+      this.#announceNumberOfResults();
+    }
 
     return option;
   }
