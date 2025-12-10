@@ -106,6 +106,7 @@ module Samples
         args[:classes] =
           class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(sample)
+        args[:role] = 'row'
         args[:aria] = { rowindex: @pagy.offset + row_index + 2 } # +2 for 1-based and header row
         args[:data] ||= {}
         args[:data][:sample_id] = sample.id
