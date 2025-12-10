@@ -88,6 +88,7 @@ user_bot_account<%= (n) %>_valid_pat:
     - api
   name: Valid PAT<%= (n) %>
   revoked: false
+  created_at: <%= Time.zone.now %>
   expires_at: <%= 10.days.from_now.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "DX3wwK3sWCjn#{n}xdCyZtH") %>
   last_used_at: nil
