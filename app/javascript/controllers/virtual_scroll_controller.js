@@ -775,5 +775,9 @@ export default class extends Controller {
     cell.style.width = `${width}px`;
     cell.style.minWidth = `${width}px`;
     cell.style.maxWidth = `${width}px`;
+
+    // Add ARIA colindex for accessibility (1-based, includes base columns)
+    const ariaColindex = this.numBaseColumns + columnIndex + 1;
+    cell.setAttribute("aria-colindex", ariaColindex);
   }
 }
