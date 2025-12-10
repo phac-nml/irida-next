@@ -9,9 +9,11 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   task validate: :environment do
     puts 'Please enter path to pipelines json file to validate:'
     json_file_path_input = $stdin.gets.chomp
+    json_file_path = Rails.root.join(json_file_path_input)
+    json_data = JSON.parse(File.read(json_file_path))
 
     puts "Validating JSON file at: #{json_file_path_input} against the schema..."
-    json_data = validate_schema(json_file_path_input)
+    validate_schema(json_data)
 
     puts 'Verifying singular version entries and URL reachability...'
     verify_singular_version_entry(json_data)
@@ -23,11 +25,9 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
     exit(@errors.empty? ? 0 : 1)
   end
 
-  def validate_schema(json_file_path_input)
+  def validate_schema(json_data)
     schema_path = Rails.root.join('config/schemas/pipelines_schema.json')
-    json_file_path = Rails.root.join(json_file_path_input)
     schema = JSON.parse(File.read(schema_path))
-    json_data = JSON.parse(File.read(json_file_path))
 
     # Validate pipeline json against schema
     schemer = JSONSchemer.schema(schema)
