@@ -3,7 +3,6 @@ import _ from "lodash";
 import {
   isPrintableCharacter,
   getLowercaseContent,
-  isOptionInView,
   highlightOption,
   setActiveDescendant,
 } from "controllers/select_with_auto_complete/utils";
@@ -230,9 +229,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#filteredOptions.forEach((opt) => {
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
-        if (!isOptionInView(option)) {
-          option.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
+        option.scrollIntoView({ behavior: "smooth", block: "nearest" });
       } else {
         opt.removeAttribute("aria-selected");
       }
