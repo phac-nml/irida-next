@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
+class NextflowSamplesheetComponentTest < ViewComponentTestCase
   # samplesheet component testing now has to use the nextflow_component
   # (not nextflow_samplesheet_component) as the samplesheet now requires the nextflow_component to be rendered
   # for stimulus connection.
@@ -34,7 +34,49 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with samplesheet overrides' do
-    visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+    entry = {
+      url: 'https://github.com/phac-nml/fastmatchirida',
+      name: 'PNC Fast Match',
+      description: 'IRIDA Next PNC Fast Match Pipeline',
+      samplesheet_schema_overrides: {
+        items: {
+          properties: {
+            metadata_1: { # rubocop:disable Naming/VariableNumber
+              'x-irida-next-selected': 'new_isolates_date'
+            },
+            metadata_2: { # rubocop:disable Naming/VariableNumber
+              'x-irida-next-selected': 'predicted_primary_identification_name'
+            }
+          },
+          required: %w[
+            sample
+            mlst_alleles
+          ]
+        }
+      },
+      versions: [
+        {
+          name: '0.4.1',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('PNC Fast Match', entry, { name: '0.4.1' },
+                                   Rails.root.join(
+                                     'test/fixtures/files/nextflow/nextflow_schema_fastmatch.json'
+                                   ),
+                                   Rails.root.join(
+                                     'test/fixtures/files/nextflow/samplesheet_schema_fastmatch.json'
+                                   ))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: %w[age gender collection_date]
+    )
 
     within('div[data-controller-connected="true"]') do
       assert_selector 'table' do |table|
