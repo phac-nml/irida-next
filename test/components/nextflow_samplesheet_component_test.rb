@@ -7,8 +7,23 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
   # (not nextflow_samplesheet_component) as the samplesheet now requires the nextflow_component to be rendered
   # for stimulus connection.
   test 'default' do
-    visit('/rails/view_components/nextflow_samplesheet_component/default')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
 
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 5
       table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'STRANDEDNESS (REQUIRED)'
@@ -16,8 +31,23 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
   end
 
   test 'with reference files' do
-    visit('/rails/view_components/nextflow_samplesheet_component/with_reference_files')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
 
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_snvphyl.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
       table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'REFERENCE_ASSEMBLY'
@@ -25,11 +55,29 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
   end
 
   test 'with metadata' do
-    visit('/rails/view_components/nextflow_samplesheet_component/with_metadata')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
+
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
       table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', text: 'pfge_pattern (default)'
+      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select',
+                            text: 'pfge_pattern (default)'
     end
   end
 
