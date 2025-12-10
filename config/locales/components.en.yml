@@ -142,7 +142,7 @@ en:
           title: Delete File
         new_attachment_component:
           files: Files
-          files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+          files_ignored: "fasta and fastq files must be compressed. The following file(s) cannot be uploaded:"
           upload_files: Upload Files
           uploading: Uploading
       table_component:
@@ -153,8 +153,8 @@ en:
           selected: Selected
         created_at: Uploaded
         delete_aria_label:
-          one: 'Delete file: %{name}'
-          other: 'Delete files: %{name}'
+          one: "Delete file: %{name}"
+          other: "Delete files: %{name}"
         delete_confirm: Are you sure you would like to delete attachment '%{name}'?
         filename: Filename
         format: Format
@@ -162,7 +162,7 @@ en:
         limit:
           item: Attachments
         preview: Preview
-        preview_aria_label: 'Preview attachment: %{name}'
+        preview_aria_label: "Preview attachment: %{name}"
         select_page: Select / Deselect visible attachments
         type: Type
     breadcrumb:
@@ -195,7 +195,7 @@ en:
       transferred_by: "%{type} transferred by %{user}"
     history_version:
       current_version: Current (Version %{version})
-      keys_deleted: 'Keys deleted:'
+      keys_deleted: "Keys deleted:"
       previous_version: Previous (Version %{version})
     layout:
       language_selection:
@@ -246,7 +246,8 @@ en:
       update_samples: Update samples with analysis results
       verifying_update_samples: Verifying if you're authorized to update samples with analysis results
     nextflow_component:
-      data_missing_error: 'The following samples are missing required data: '
+      data_missing_error: "The following samples are missing required data: "
+      filtering_samples: Filtering samples, this may take some time.
       loading_complete:
         alert_message_html:
           one: "<div>(Complete) Preparing workflow execution arguments for 1 sample, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
@@ -275,11 +276,11 @@ en:
         number_of_samples: Samples
         statistics_title: Project Statistics
       samples_title: Samples Recently Updated
-      screen_reader_context: 'Dashboard for project: %{project_name}'
+      screen_reader_context: "Dashboard for project: %{project_name}"
       view_more_activity: View more activity
       view_more_samples: View more samples
     puid:
-      title: 'Copy to clipboard value: %{puid}'
+      title: "Copy to clipboard value: %{puid}"
     ransack:
       sort_dropdown_component:
         prefix: Sort by
@@ -304,6 +305,7 @@ en:
         create_template_link: create a metadata template with those fields
         metadata_fields_size_warning: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells).
         metadata_fields_size_warning_with_link: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells). If there are fields you need, %{create_template_link}.
+        table_label: Samples data grid
     search:
       advanced:
         results_message:
@@ -338,8 +340,8 @@ en:
       form:
         prefixed:
           boolean_component:
-            'false': 'False'
-            'true': 'True'
+            "false": "False"
+            "true": "True"
       pagy:
         empty_state:
           description: No items found matching your search
