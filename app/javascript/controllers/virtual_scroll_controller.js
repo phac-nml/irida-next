@@ -54,6 +54,9 @@ export default class extends Controller {
     this.boundHandleSort = this.handleSort.bind(this);
     this.element.addEventListener("click", this.boundHandleSort);
 
+    this.boundHandleKeydown = this.handleKeydown.bind(this);
+    this.element.addEventListener("keydown", this.boundHandleKeydown);
+
     this.boundHideLoading = this.hideLoading.bind(this);
     document.addEventListener("turbo:before-cache", this.boundHideLoading);
 
@@ -290,6 +293,7 @@ export default class extends Controller {
    */
   disconnect() {
     this.element.removeEventListener("click", this.boundHandleSort);
+    this.element.removeEventListener("keydown", this.boundHandleKeydown);
     document.removeEventListener("turbo:before-cache", this.boundHideLoading);
 
     this.containerTarget.removeEventListener("scroll", this.handleScroll);
@@ -775,6 +779,9 @@ export default class extends Controller {
       // Apply sticky styles to base columns
       this.applyStickyStylesToRow(row);
     });
+
+    // Ensure a single focus target is available after render
+    this.applyRovingTabindex();
   }
 
   getActiveEditingColumnIndex() {
@@ -823,6 +830,8 @@ export default class extends Controller {
     spacer.colSpan = colspan;
     spacer.dataset.virtualizedCell = "true";
     spacer.setAttribute("role", "gridcell");
+    spacer.setAttribute("aria-hidden", "true");
+    spacer.tabIndex = -1;
     spacer.style.padding = "0";
     spacer.style.border = "none";
     spacer.style.width = "0";
@@ -878,6 +887,9 @@ export default class extends Controller {
     cell.style.minWidth = `${width}px`;
     cell.style.maxWidth = `${width}px`;
 
+    cell.setAttribute("role", "gridcell");
+    cell.tabIndex = -1;
+
     // Prevent text overflow
     cell.style.overflow = "hidden";
     cell.style.textOverflow = "ellipsis";
@@ -886,5 +898,220 @@ export default class extends Controller {
     // Add ARIA colindex for accessibility (1-based, includes base columns)
     const ariaColindex = this.numBaseColumns + columnIndex + 1;
     cell.setAttribute("aria-colindex", ariaColindex);
+  }
+
+  /**
+   * Sum width of sticky columns for scroll calculations
+   */
+  stickyColumnsWidth() {
+    if (!Array.isArray(this.baseColumnWidths)) return 0;
+    return this.baseColumnWidths
+      .slice(0, this.numStickyColumns)
+      .reduce((acc, width) => acc + (width || 0), 0);
+  }
+
+  /**
+   * Ensure a metadata column is rendered and scrolled into view for focus
+   * @param {number} colIndex 1-based column index across all columns
+   */
+  ensureMetadataColumnVisible(colIndex) {
+    if (colIndex <= this.numBaseColumns) return;
+    const metadataIndex = colIndex - this.numBaseColumns - 1;
+    if (metadataIndex < 0 || metadataIndex >= this.numMetadataColumns) return;
+
+    const stickyWidth = this.stickyColumnsWidth();
+    const targetScrollLeft =
+      this.baseColumnsWidth -
+      stickyWidth +
+      this.cumulativeWidthToColumn(metadataIndex);
+
+    const maxScroll = Math.max(
+      0,
+      this.containerTarget.scrollWidth - this.containerTarget.clientWidth,
+    );
+    const clamped = Math.max(0, Math.min(maxScroll, targetScrollLeft));
+    this.containerTarget.scrollLeft = clamped;
+
+    // Force re-render so the column is materialized
+    this.lastFirstVisible = undefined;
+    this.lastLastVisible = undefined;
+    this.render();
+  }
+
+  /**
+   * Reset all visible gridcells to tabindex=-1 and set a single active cell to tabindex=0
+   */
+  applyRovingTabindex() {
+    // Determine current active cell within the grid if any
+    const activeCell = this.getActiveGridCell();
+    if (activeCell) {
+      this.focusedRowIndex = this.getRowIndexForCell(activeCell);
+      this.focusedColIndex = this.getColIndexForCell(activeCell);
+    }
+
+    const firstRowIndex = this.getFirstDataRowIndex();
+    if (!this.focusedRowIndex) this.focusedRowIndex = firstRowIndex;
+    if (!this.focusedColIndex) this.focusedColIndex = 1;
+
+    this.resetTabStops();
+
+    let targetCell = this.findCellByCoordinates(
+      this.focusedRowIndex,
+      this.focusedColIndex,
+    );
+
+    if (!targetCell) {
+      // Fallback to first visible cell
+      targetCell = this.bodyTarget.querySelector("[aria-colindex]");
+    }
+
+    if (targetCell) {
+      targetCell.tabIndex = 0;
+      this.focusedRowIndex = this.getRowIndexForCell(targetCell);
+      this.focusedColIndex = this.getColIndexForCell(targetCell);
+    }
+  }
+
+  /**
+   * Handle keyboard navigation per APG grid pattern (arrow keys, Home/End, PageUp/PageDown)
+   */
+  handleKeydown(event) {
+    const relevantKeys = [
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown",
+    ];
+
+    if (!relevantKeys.includes(event.key)) return;
+
+    if (
+      event.target.closest(
+        "input, textarea, select, button, [contenteditable='true']",
+      )
+    ) {
+      return;
+    }
+
+    const cell = event.target.closest("[aria-colindex]");
+    if (!cell || !this.bodyTarget.contains(cell)) return;
+
+    const currentRow = this.getRowIndexForCell(cell);
+    const currentCol = this.getColIndexForCell(cell);
+    if (!Number.isInteger(currentRow) || !Number.isInteger(currentCol)) return;
+
+    let targetRow = currentRow;
+    let targetCol = currentCol;
+
+    switch (event.key) {
+      case "ArrowRight":
+        targetCol = Math.min(this.totalColumnCount(), currentCol + 1);
+        break;
+      case "ArrowLeft":
+        targetCol = Math.max(1, currentCol - 1);
+        break;
+      case "ArrowDown":
+        targetRow = Math.min(this.lastDataRowIndex(), currentRow + 1);
+        break;
+      case "ArrowUp":
+        targetRow = Math.max(this.getFirstDataRowIndex(), currentRow - 1);
+        break;
+      case "Home":
+        if (event.ctrlKey) {
+          targetRow = this.getFirstDataRowIndex();
+        }
+        targetCol = 1;
+        break;
+      case "End":
+        if (event.ctrlKey) {
+          targetRow = this.lastDataRowIndex();
+        }
+        targetCol = this.totalColumnCount();
+        break;
+      case "PageUp":
+        targetRow = Math.max(this.getFirstDataRowIndex(), currentRow - 5);
+        break;
+      case "PageDown":
+        targetRow = Math.min(this.lastDataRowIndex(), currentRow + 5);
+        break;
+      default:
+        return;
+    }
+
+    if (targetRow === currentRow && targetCol === currentCol) return;
+
+    event.preventDefault();
+
+    this.focusedRowIndex = targetRow;
+    this.focusedColIndex = targetCol;
+
+    if (targetCol > this.numBaseColumns) {
+      this.ensureMetadataColumnVisible(targetCol);
+    }
+
+    const nextCell = this.findCellByCoordinates(targetRow, targetCol);
+    if (nextCell) {
+      this.resetTabStops();
+      nextCell.tabIndex = 0;
+      nextCell.focus();
+    }
+  }
+
+  totalColumnCount() {
+    return (this.numBaseColumns || 0) + (this.numMetadataColumns || 0);
+  }
+
+  getFirstDataRowIndex() {
+    const firstRow = this.rowTargets[0];
+    const idx = firstRow?.getAttribute("aria-rowindex");
+    const parsed = parseInt(idx, 10);
+    return Number.isInteger(parsed) ? parsed : 1;
+  }
+
+  lastDataRowIndex() {
+    const lastRow = this.rowTargets[this.rowTargets.length - 1];
+    const idx = lastRow?.getAttribute("aria-rowindex");
+    const parsed = parseInt(idx, 10);
+    return Number.isInteger(parsed) ? parsed : this.rowTargets.length;
+  }
+
+  resetTabStops() {
+    this.bodyTarget?.querySelectorAll("[aria-colindex]").forEach((node) => {
+      node.tabIndex = -1;
+    });
+  }
+
+  getActiveGridCell() {
+    const active = document.activeElement;
+    if (!active) return null;
+    return active.closest?.("[aria-colindex]") || null;
+  }
+
+  getRowIndexForCell(cell) {
+    const row = cell?.closest?.("[aria-rowindex]");
+    if (!row) return null;
+    const idx = parseInt(row.getAttribute("aria-rowindex"), 10);
+    return Number.isInteger(idx) ? idx : null;
+  }
+
+  getColIndexForCell(cell) {
+    const idx = parseInt(cell?.getAttribute?.("aria-colindex"), 10);
+    return Number.isInteger(idx) ? idx : null;
+  }
+
+  findCellByCoordinates(rowIndex, colIndex) {
+    const row = this.bodyTarget.querySelector(`[aria-rowindex="${rowIndex}"]`);
+    if (!row) return null;
+
+    let cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+    if (!cell && colIndex > this.numBaseColumns) {
+      this.ensureMetadataColumnVisible(colIndex);
+      cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+    }
+    return cell;
   }
 }
