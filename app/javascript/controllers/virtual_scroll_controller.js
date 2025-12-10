@@ -41,7 +41,7 @@ export default class extends Controller {
     "loading",
   ];
 
-  COLUMN_WIDTH = 250; // pixels - fallback for unmeasured columns
+  COLUMN_WIDTH = 300; // pixels - fallback for unmeasured columns (increased from 250)
   BUFFER_COLUMNS = 3; // Number of columns to render outside viewport on each side
   TAILWIND_2XL_BREAKPOINT = 1536; // pixels
   measureRetryCount = 0;
@@ -69,14 +69,29 @@ export default class extends Controller {
 
     // Initialize metadata column widths array
     this.metadataColumnWidths = [];
+    this.cumulativeWidths = []; // Cache for binary search
 
-    // Debounced handlers
-    this.handleScroll = _.debounce(() => {
-      this.boundRender();
-    }, 50);
+    // Track per-row visible ranges to avoid unnecessary updates
+    this.rowVisibleRanges = new Map();
+
+    // RAF-based scroll handling (no debounce for instant response)
+    this.rafPending = false;
+    this.handleScroll = () => {
+      if (!this.rafPending) {
+        this.rafPending = true;
+        requestAnimationFrame(() => {
+          this.rafPending = false;
+          this.boundRender();
+        });
+      }
+    };
+
+    // Keep debounce for resize (less critical)
     this.debouncedResizeHandler = _.debounce(this.boundHandleResize, 100);
 
-    this.containerTarget.addEventListener("scroll", this.handleScroll);
+    this.containerTarget.addEventListener("scroll", this.handleScroll, {
+      passive: true,
+    });
 
     // Initialize ResizeObserver for responsive behavior
     this.resizeObserver = new ResizeObserver(this.debouncedResizeHandler);
@@ -196,6 +211,10 @@ export default class extends Controller {
       th.style.minWidth = `${width}px`;
       th.style.maxWidth = `${width}px`;
       th.style.boxSizing = "border-box";
+      // Prevent text overflow
+      th.style.overflow = "hidden";
+      th.style.textOverflow = "ellipsis";
+      th.style.whiteSpace = "nowrap";
       return width;
     });
 
@@ -205,6 +224,9 @@ export default class extends Controller {
         this.COLUMN_WIDTH,
       );
     }
+
+    // Build cumulative widths cache for O(log n) binary search
+    this.buildCumulativeWidthsCache();
 
     // Keep all metadata headers in DOM (rendered server-side)
     // No need to virtualize headers - performance impact is minimal for 1000 headers
@@ -271,7 +293,10 @@ export default class extends Controller {
     document.removeEventListener("turbo:before-cache", this.boundHideLoading);
 
     this.containerTarget.removeEventListener("scroll", this.handleScroll);
-    this.handleScroll?.cancel?.();
+
+    // Cancel RAF if pending
+    this.rafPending = false;
+
     this.debouncedResizeHandler?.cancel?.();
 
     // Cleanup Turbo event listener
@@ -284,6 +309,10 @@ export default class extends Controller {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
     }
+
+    // Clear caches
+    this.rowVisibleRanges = null;
+    this.cumulativeWidths = null;
   }
 
   /**
@@ -351,6 +380,12 @@ export default class extends Controller {
       return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
     });
 
+    // Rebuild cumulative widths cache
+    this.buildCumulativeWidthsCache();
+
+    // Clear row visible ranges to force full re-render
+    this.rowVisibleRanges.clear();
+
     // Trigger re-render with new measurements
     this.render();
   }
@@ -367,30 +402,57 @@ export default class extends Controller {
   }
 
   /**
-   * Find column index at a given scroll position using cumulative widths
+   * Build cumulative widths cache for fast binary search
+   * Cache[i] = sum of widths from column 0 to i (inclusive)
+   */
+  buildCumulativeWidthsCache() {
+    this.cumulativeWidths = [];
+    let sum = 0;
+    for (let i = 0; i < this.metadataColumnWidths.length; i++) {
+      sum += this.metadataColumnWidths[i];
+      this.cumulativeWidths.push(sum);
+    }
+  }
+
+  /**
+   * Find column index at a given scroll position using binary search
+   * O(log n) instead of O(n) - critical for 5000 columns
    * @param {number} scrollLeft - Scroll position in pixels
    * @returns {number} Column index at that position
    */
   findColumnIndexAtPosition(scrollLeft) {
-    let cumulative = 0;
-    for (let i = 0; i < this.metadataColumnWidths.length; i++) {
-      cumulative += this.metadataColumnWidths[i];
-      if (cumulative > scrollLeft) {
-        return i;
+    if (!this.cumulativeWidths || this.cumulativeWidths.length === 0) {
+      return 0;
+    }
+
+    // Binary search for the first cumulative width > scrollLeft
+    let left = 0;
+    let right = this.cumulativeWidths.length - 1;
+
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      if (this.cumulativeWidths[mid] <= scrollLeft) {
+        left = mid + 1;
+      } else {
+        right = mid;
       }
     }
-    return this.metadataColumnWidths.length - 1;
+
+    return left;
   }
 
   /**
    * Calculate cumulative width up to a given column index
+   * O(1) lookup using cached cumulative widths
    * @param {number} columnIndex - Column index
    * @returns {number} Cumulative width in pixels
    */
   cumulativeWidthToColumn(columnIndex) {
-    return this.metadataColumnWidths
-      .slice(0, columnIndex)
-      .reduce((a, b) => a + b, 0);
+    if (columnIndex <= 0) return 0;
+    if (columnIndex >= this.cumulativeWidths.length) {
+      return this.cumulativeWidths[this.cumulativeWidths.length - 1] || 0;
+    }
+    return this.cumulativeWidths[columnIndex - 1] || 0;
   }
 
   /**
@@ -511,13 +573,10 @@ export default class extends Controller {
       }
     }
 
-    // Skip re-rendering if the visible column range hasn't changed
-    if (
-      this.lastFirstVisible === firstVisibleMetadataColumn &&
-      this.lastLastVisible === lastVisibleMetadataColumn
-    ) {
-      return;
-    }
+    // Store the global visible range for quick early exit
+    const globalRangeChanged =
+      this.lastFirstVisible !== firstVisibleMetadataColumn ||
+      this.lastLastVisible !== lastVisibleMetadataColumn;
 
     this.lastFirstVisible = firstVisibleMetadataColumn;
     this.lastLastVisible = lastVisibleMetadataColumn;
@@ -548,6 +607,26 @@ export default class extends Controller {
     }
 
     this.rowTargets.forEach((row, rowIndex) => {
+      const rowId = row.dataset.sampleId;
+
+      // Check if this row's visible range changed
+      const cachedRange = this.rowVisibleRanges.get(rowId);
+      const rangeChanged =
+        !cachedRange ||
+        cachedRange.first !== firstVisibleMetadataColumn ||
+        cachedRange.last !== lastVisibleMetadataColumn;
+
+      // Skip this row if visible range unchanged
+      if (!rangeChanged && !globalRangeChanged) {
+        return;
+      }
+
+      // Update cached range
+      this.rowVisibleRanges.set(rowId, {
+        first: firstVisibleMetadataColumn,
+        last: lastVisibleMetadataColumn,
+      });
+
       // Check for the cell currently being edited so we can preserve it
       const editingCellInfo = this.getRowEditingCellInfo(row);
       const editingCellNode = editingCellInfo?.cell ?? null;
@@ -555,7 +634,7 @@ export default class extends Controller {
       // Get sample ID from the row's data attribute to look up templates
       const sampleId = row.dataset.sampleId;
 
-      // Get templates from the template container (stored outside table to avoid HTML5 foster parenting)
+      // Get templates from the template container
       const templateContainer = this.hasTemplateContainerTarget
         ? this.templateContainerTarget.querySelector(
             `[data-sample-id="${sampleId}"]`,
@@ -568,71 +647,83 @@ export default class extends Controller {
       );
 
       // Identify base columns vs virtualized cells
-      // Base columns do NOT have the data-virtualized-cell attribute
-      // and are th/td elements at the start of the row (not spacers or metadata cells)
       const baseColumns = [];
       const virtualizedCells = [];
 
       for (const child of allChildren) {
-        // Check if this is a virtualized cell (spacer or metadata cell we previously added)
         if (child.dataset.virtualizedCell) {
           virtualizedCells.push(child);
         } else if (baseColumns.length < this.numBaseColumns) {
-          // This is a base column (not virtualized, and we haven't collected all base columns yet)
           baseColumns.push(child);
         } else {
-          // This shouldn't happen, but treat it as virtualized
           virtualizedCells.push(child);
         }
       }
 
-      // Index existing virtualized cells by fieldId for reuse to reduce DOM churn
-      const reusableCells = new Map();
+      // Index existing virtualized cells by fieldId for reuse
+      const existingCells = new Map();
       for (const cell of virtualizedCells) {
         const fieldId = cell.dataset.fieldId;
         if (editingCellNode && cell === editingCellNode) continue;
-        if (fieldId) {
-          reusableCells.set(fieldId, cell);
+        if (fieldId && fieldId !== "undefined") {
+          existingCells.set(fieldId, cell);
         }
       }
 
-      // Remove non-reused virtualized cells
-      for (const cell of virtualizedCells) {
-        if (editingCellNode && cell === editingCellNode) continue;
-        if (!reusableCells.has(cell.dataset.fieldId)) {
-          cell.remove();
-        }
-      }
-
-      // Build a fragment: append base columns, then virtualized metadata cells, spacers, and templates
-      const rowFrag = document.createDocumentFragment();
-
-      // Append base column cells back in original order
-      baseColumns.forEach((el) => rowFrag.appendChild(el));
-
-      // Start spacer - use colspan to span hidden columns
-      if (firstVisibleMetadataColumn > 0) {
-        const startSpacer = document.createElement("td");
-        // Use colspan to span all hidden columns - this maintains table column alignment
-        startSpacer.colSpan = firstVisibleMetadataColumn;
-        startSpacer.dataset.virtualizedCell = "true";
-        startSpacer.setAttribute("role", "gridcell");
-        startSpacer.style.padding = "0";
-        startSpacer.style.border = "none";
-        rowFrag.appendChild(startSpacer);
-      }
-
-      // Virtualized metadata cells from templates with measured widths
+      // Build set of fields that should be visible
+      const visibleFields = new Set();
       for (
         let i = firstVisibleMetadataColumn;
         i < lastVisibleMetadataColumn;
         i++
       ) {
         const field = this.metadataFieldsValue[i];
-        if (!field) {
-          continue;
+        if (field) {
+          visibleFields.add(field);
         }
+      }
 
+      // Remove cells that are no longer visible (except editing cell)
+      const cellsToRemove = [];
+      for (const cell of virtualizedCells) {
+        const fieldId = cell.dataset.fieldId;
+        if (editingCellNode && cell === editingCellNode) continue;
+        if (
+          !fieldId ||
+          fieldId === "undefined" ||
+          !visibleFields.has(fieldId)
+        ) {
+          cellsToRemove.push(cell);
+        }
+      }
+
+      // Remove cells in batch
+      for (const cell of cellsToRemove) {
+        cell.remove();
+      }
+
+      // Build fragment with cells in correct order
+      const rowFrag = document.createDocumentFragment();
+
+      // Append base columns
+      baseColumns.forEach((el) => rowFrag.appendChild(el));
+
+      // Start spacer
+      if (firstVisibleMetadataColumn > 0) {
+        const startSpacer = this.createSpacer(firstVisibleMetadataColumn);
+        rowFrag.appendChild(startSpacer);
+      }
+
+      // Add metadata cells in order
+      for (
+        let i = firstVisibleMetadataColumn;
+        i < lastVisibleMetadataColumn;
+        i++
+      ) {
+        const field = this.metadataFieldsValue[i];
+        if (!field) continue;
+
+        // Use editing cell if this is the column being edited
         if (
           editingCellInfo &&
           editingCellInfo.columnIndex === i &&
@@ -644,91 +735,45 @@ export default class extends Controller {
           continue;
         }
 
+        // Reuse existing cell if available
+        const existingCell = existingCells.get(field);
+        if (existingCell) {
+          this.applyMetadataCellStyles(existingCell, i);
+          existingCell.dataset.virtualizedCell = "true";
+          rowFrag.appendChild(existingCell);
+          existingCells.delete(field);
+          continue;
+        }
+
+        // Clone from template
         const selector = `template[data-field="${CSS.escape(field)}"]`;
-        const template = templateContainer
-          ? templateContainer.querySelector(selector)
-          : null;
-        const reusable = reusableCells.get(field);
-        if (reusable) {
-          this.applyMetadataCellStyles(reusable, i);
-          reusable.dataset.virtualizedCell = "true";
-          rowFrag.appendChild(reusable);
-          reusableCells.delete(field);
-          continue;
-        }
+        const template = templateContainer?.querySelector(selector);
+        if (!template) continue;
 
-        if (!template) {
-          continue;
-        }
-
-        // Clone the entire template content as a DocumentFragment, then extract first element
-        // This preserves the original template content properly
         const clonedContent = template.content.cloneNode(true);
         const cellElement = clonedContent.firstElementChild;
-
-        if (!cellElement) {
-          continue;
-        }
+        if (!cellElement) continue;
 
         cellElement.dataset.virtualizedCell = "true";
-        cellElement.dataset.fieldId = field; // Add field ID for editable_cell_controller
+        cellElement.dataset.fieldId = field;
         this.applyMetadataCellStyles(cellElement, i);
         rowFrag.appendChild(cellElement);
       }
 
-      // End spacer - use colspan to span remaining columns
+      // End spacer
       if (lastVisibleMetadataColumn < this.numMetadataColumns) {
-        const endSpacer = document.createElement("td");
-        // Use colspan to span all remaining columns
-        endSpacer.colSpan = this.numMetadataColumns - lastVisibleMetadataColumn;
-        endSpacer.dataset.virtualizedCell = "true";
-        endSpacer.setAttribute("role", "gridcell");
-        endSpacer.style.padding = "0";
-        endSpacer.style.border = "none";
+        const endSpacer = this.createSpacer(
+          this.numMetadataColumns - lastVisibleMetadataColumn,
+        );
         rowFrag.appendChild(endSpacer);
       }
 
-      // Templates are now stored in a separate container outside the table,
-      // so no need to reattach them to the row
-
-      // Count how many non-template children we're adding
-      const fragChildren = Array.from(rowFrag.childNodes).filter(
-        (c) => c.nodeType === 1 && c.tagName.toLowerCase() !== "template",
-      );
-
-      // Replace row children with the fragment
+      // Replace row children with fragment
       while (row.firstChild) row.removeChild(row.firstChild);
       row.appendChild(rowFrag);
 
-      // Re-apply left/position/z-index and width to the sticky cells now at the start
-      const newChildren = Array.from(row.children).filter(
-        (c) => c.tagName.toLowerCase() !== "template",
-      );
-      for (let i = 0; i < this.numStickyColumns; i++) {
-        const child = newChildren[i];
-        if (!child) continue;
-        child.dataset.fixed = "true";
-        child.style.left = `${this.stickyColumnLefts[i]}px`;
-        child.style.width = `${this.baseColumnWidths[i]}px`;
-        child.style.display = "table-cell";
-        child.style.boxSizing = "border-box";
-        child.style.position = "sticky";
-        // body fixed cells should be below header but above virtualized
-        child.style.zIndex = "10";
-      }
-
-      // Ensure remaining base columns (non-sticky) keep their widths but scroll normally
-      for (let i = this.numStickyColumns; i < this.numBaseColumns; i++) {
-        const child = newChildren[i];
-        if (!child) continue;
-        child.dataset.fixed = "false";
-        child.style.position = "";
-        child.style.left = "";
-        child.style.zIndex = "";
-        child.style.width = `${this.baseColumnWidths[i]}px`;
-        child.style.display = "table-cell";
-        child.style.boxSizing = "border-box";
-      }
+      // Apply sticky styles to base columns
+      this.applyStickyStylesToRow(row);
     });
   }
 
@@ -768,15 +813,75 @@ export default class extends Controller {
     return activeElement.closest("[data-field-id]");
   }
 
+  /**
+   * Create a spacer cell with colspan
+   * @param {number} colspan - Number of columns to span
+   * @returns {HTMLElement} Spacer element
+   */
+  createSpacer(colspan) {
+    const spacer = document.createElement("td");
+    spacer.colSpan = colspan;
+    spacer.dataset.virtualizedCell = "true";
+    spacer.setAttribute("role", "gridcell");
+    spacer.style.padding = "0";
+    spacer.style.border = "none";
+    spacer.style.width = "0";
+    return spacer;
+  }
+
+  /**
+   * Apply sticky positioning styles to base columns in a row
+   * @param {HTMLElement} row - The row element
+   */
+  applyStickyStylesToRow(row) {
+    const children = Array.from(row.children).filter(
+      (c) => c.tagName.toLowerCase() !== "template",
+    );
+
+    // Apply sticky styles to sticky columns
+    for (let i = 0; i < this.numStickyColumns; i++) {
+      const child = children[i];
+      if (!child) continue;
+      child.dataset.fixed = "true";
+      child.style.left = `${this.stickyColumnLefts[i]}px`;
+      child.style.width = `${this.baseColumnWidths[i]}px`;
+      child.style.display = "table-cell";
+      child.style.boxSizing = "border-box";
+      child.style.position = "sticky";
+      child.style.zIndex = "10";
+    }
+
+    // Apply non-sticky styles to remaining base columns
+    for (let i = this.numStickyColumns; i < this.numBaseColumns; i++) {
+      const child = children[i];
+      if (!child) continue;
+      child.dataset.fixed = "false";
+      child.style.position = "";
+      child.style.left = "";
+      child.style.zIndex = "";
+      child.style.width = `${this.baseColumnWidths[i]}px`;
+      child.style.display = "table-cell";
+      child.style.boxSizing = "border-box";
+    }
+  }
+
+  /**
+   * Apply styles to metadata cells including overflow handling
+   * @param {HTMLElement} cell - The cell element
+   * @param {number} columnIndex - Column index in metadata fields
+   */
   applyMetadataCellStyles(cell, columnIndex) {
-    // With table-layout: fixed and colspan spacers, widths are inherited from headers
-    // Just ensure proper display and stacking
     cell.style.display = "table-cell";
     cell.style.boxSizing = "border-box";
     const width = this.metadataColumnWidths[columnIndex] ?? this.COLUMN_WIDTH;
     cell.style.width = `${width}px`;
     cell.style.minWidth = `${width}px`;
     cell.style.maxWidth = `${width}px`;
+
+    // Prevent text overflow
+    cell.style.overflow = "hidden";
+    cell.style.textOverflow = "ellipsis";
+    cell.style.whiteSpace = "nowrap";
 
     // Add ARIA colindex for accessibility (1-based, includes base columns)
     const ariaColindex = this.numBaseColumns + columnIndex + 1;

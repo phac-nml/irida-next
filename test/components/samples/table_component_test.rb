@@ -85,7 +85,7 @@ module Samples
       }
     end
 
-    test 'Should dynamically limit metadata fields based on sample count with 20 samples' do
+    test 'Should render all metadata fields with virtualization' do
       with_request_url '/namespaces/12/projects/1/samples' do
         project = projects(:project1)
         namespace = project.namespace
@@ -104,17 +104,16 @@ module Samples
           empty: {}
         )
 
-        # 20 samples: 2000/20 = 100 fields max
-        # Should show 100 metadata field columns (150 requested, limited to 100)
+        # With virtualization, all 150 metadata fields are rendered in headers
         expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
-        assert_selector 'table thead th', count: expected_columns + 100
+        assert_selector 'table thead th', count: expected_columns + 150
 
-        # Should show warning message
-        assert_selector 'div', text: /limited to 100 for 20 samples/
+        # Should NOT show warning message (virtualization handles large field counts)
+        assert_no_selector 'div[role="status"][aria-live="polite"]', text: /limited to/
       end
     end
 
-    test 'Should include create template link when user can edit metadata' do
+    test 'Should render virtualized table with virtual-scroll controller' do
       with_request_url '/namespaces/12/projects/1/samples' do
         project = projects(:project1)
         namespace = project.namespace
@@ -133,13 +132,14 @@ module Samples
           empty: {}
         )
 
-        # Should show link to create metadata template within the warning alert
-        assert_selector 'div[role="status"][aria-live="polite"] a[data-turbo-frame="top"]',
-                        text: I18n.t('components.samples.table_component.create_template_link')
+        # Should have virtual-scroll controller data attributes
+        assert_selector '#samples-table[data-controller~="virtual-scroll"]'
+        assert_selector '#samples-table[data-virtual-scroll-metadata-fields-value]'
+        assert_selector '#samples-table[data-virtual-scroll-target="container"]'
       end
     end
 
-    test 'Should not include create template link when user cannot edit metadata' do
+    test 'Should render all metadata fields without limiting' do
       with_request_url '/namespaces/12/projects/1/samples' do
         project = projects(:project1)
         namespace = project.namespace
