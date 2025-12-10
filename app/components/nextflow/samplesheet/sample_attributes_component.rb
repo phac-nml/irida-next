@@ -4,7 +4,7 @@ module Nextflow
   module Samplesheet
     # Accepts samples and the samplesheet properties and processes the sample properties for samplesheet/workflow
     # submission, then forwards data to javascript/nextflow/samplesheet_controller.js
-    class SamplePropertiesComponent < Component
+    class SampleAttributesComponent < Component
       attr_reader :properties, :samples
 
       def initialize(samples:, properties:, allowed_to_update_samples: true)
@@ -37,8 +37,10 @@ module Nextflow
             [name, { form_value: sample.name }]
           when 'fastq_cell'
             [name,
-             file_samplesheet_values(sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                                                    property['pattern']))]
+             file_samplesheet_values(
+               sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
+                                                                              property['pattern'])
+             )]
           when 'file_cell'
             [name,
              file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
