@@ -73,7 +73,7 @@ module AdvancedQuerySearchable # rubocop:disable Metrics/ModuleLength
 
   # Sanitize SQL wildcards in LIKE/ILIKE patterns
   def sanitize_sql_wildcards(value)
-    value.to_s.gsub(/[%_]/, '\\\\\&')
+    ActiveRecord::Base.sanitize_sql_like(value.to_s)
   end
 
   # Apply the appropriate operator handler for the given condition
