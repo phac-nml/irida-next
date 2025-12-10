@@ -195,23 +195,28 @@ export default class extends Controller {
     // Measure base column widths
     this.baseColumnWidths = this.baseHeaderElements.map((th, idx) => {
       const width = th.getBoundingClientRect().width;
-      // Explicitly set width for base columns to prevent them from resizing
-      if (width > 0) {
-        th.style.width = `${width}px`;
-      }
-      th.style.boxSizing = "border-box";
+
+      // Explicitly set width and box-sizing for base columns
+      Object.assign(th.style, {
+        width: width > 0 ? `${width}px` : "",
+        boxSizing: "border-box",
+      });
 
       if (idx < this.numStickyColumns) {
         // Ensure the sticky header cell keeps its stacking context
-        th.style.position = "sticky";
-        th.style.top = "0px";
-        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX;
+        Object.assign(th.style, {
+          position: "sticky",
+          top: "0px",
+          zIndex: String(this.constructor.constants.STICKY_HEADER_Z_INDEX),
+        });
         th.dataset.fixed = "true";
       } else {
+        Object.assign(th.style, {
+          position: "",
+          left: "",
+          zIndex: "",
+        });
         th.dataset.fixed = "false";
-        th.style.position = "";
-        th.style.left = "";
-        th.style.zIndex = "";
       }
 
       return width;
@@ -231,15 +236,19 @@ export default class extends Controller {
       const width =
         th.getBoundingClientRect().width ||
         this.constructor.constants.COLUMN_WIDTH;
+
       // Explicitly set width for metadata headers to prevent them from resizing
-      th.style.width = `${width}px`;
-      th.style.minWidth = `${width}px`;
-      th.style.maxWidth = `${width}px`;
-      th.style.boxSizing = "border-box";
-      // Prevent text overflow
-      th.style.overflow = "hidden";
-      th.style.textOverflow = "ellipsis";
-      th.style.whiteSpace = "nowrap";
+      // and prevent text overflow
+      Object.assign(th.style, {
+        width: `${width}px`,
+        minWidth: `${width}px`,
+        maxWidth: `${width}px`,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      });
+
       return width;
     });
 
@@ -283,9 +292,15 @@ export default class extends Controller {
     );
     const totalWidth = this.baseColumnsWidth + totalMetadataWidth;
 
-    this.headerRow.style.width = `${totalWidth}px`;
-    table.style.width = `${totalWidth}px`;
-    table.style.tableLayout = "fixed";
+    // Set table and header row dimensions
+    Object.assign(this.headerRow.style, {
+      width: `${totalWidth}px`,
+    });
+
+    Object.assign(table.style, {
+      width: `${totalWidth}px`,
+      tableLayout: "fixed",
+    });
 
     // Apply sticky positioning to base header cells
     this.baseHeaderElements.forEach((th, index) => {
