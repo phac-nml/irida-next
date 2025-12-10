@@ -115,19 +115,6 @@
                     id="samplesheet_message"
                     data-nextflow--samplesheet-target="samplesheetMessagesContainer"
                   >
-                    <%= viral_alert(
-                      message:
-                        t(
-                          "components.nextflow_component.loading_samplesheet",
-                          count: @sample_count,
-                        ),
-                      aria: {
-                        live: "assertive",
-                      },
-                      auto_dismiss: true,
-                      dismissible: true,
-                      classes: "mb-2",
-                    ) %>
                   </turbo-frame>
 
                   <% unless @automated_workflow %>
