@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
+import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
+import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
 
 /**
  * VirtualScrollController
@@ -41,11 +43,17 @@ export default class extends Controller {
     "loading",
   ];
 
-  COLUMN_WIDTH = 300; // pixels - fallback for unmeasured columns (increased from 250)
-  BUFFER_COLUMNS = 3; // Number of columns to render outside viewport on each side
-  TAILWIND_2XL_BREAKPOINT = 1536; // pixels
+  static constants = {
+    COLUMN_WIDTH: 300, // pixels - fallback for unmeasured columns
+    BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
+    TAILWIND_2XL_BREAKPOINT: 1536, // pixels
+    MAX_MEASURE_RETRIES: 5,
+    PAGE_JUMP_SIZE: 5, // Rows to jump on PageUp/PageDown
+    STICKY_HEADER_Z_INDEX: 20,
+    STICKY_BODY_Z_INDEX: 10,
+  };
+
   measureRetryCount = 0;
-  MAX_MEASURE_RETRIES = 5;
 
   /**
    * Stimulus lifecycle: Connect controller and initialize
@@ -72,7 +80,7 @@ export default class extends Controller {
 
     // Initialize metadata column widths array
     this.metadataColumnWidths = [];
-    this.cumulativeWidths = []; // Cache for binary search
+    this.geometry = null; // Will be initialized after measuring column widths
 
     // Track per-row visible ranges to avoid unnecessary updates
     this.rowVisibleRanges = new Map();
@@ -109,6 +117,16 @@ export default class extends Controller {
       this.isInitialized = initialized;
 
       if (initialized) {
+        // Initialize keyboard navigator after dimensions are set
+        this.keyboardNavigator = new GridKeyboardNavigator({
+          gridElement: this.element,
+          bodyElement: this.bodyTarget,
+          numBaseColumns: this.numBaseColumns,
+          totalColumns: this.totalColumnCount(),
+          pageJumpSize: this.constructor.constants.PAGE_JUMP_SIZE,
+          onNavigate: (colIndex) => this.ensureMetadataColumnVisible(colIndex),
+        });
+
         // Render once to clone templates into visible cells
         this.render();
 
@@ -185,7 +203,7 @@ export default class extends Controller {
         // Ensure the sticky header cell keeps its stacking context
         th.style.position = "sticky";
         th.style.top = "0px";
-        th.style.zIndex = "10";
+        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX;
         th.dataset.fixed = "true";
       } else {
         th.dataset.fixed = "false";
@@ -208,7 +226,9 @@ export default class extends Controller {
     // Measure actual metadata column widths from DOM
     const metadataHeaders = headerCells.slice(this.numBaseColumns);
     this.metadataColumnWidths = metadataHeaders.map((th) => {
-      const width = th.getBoundingClientRect().width || this.COLUMN_WIDTH;
+      const width =
+        th.getBoundingClientRect().width ||
+        this.constructor.constants.COLUMN_WIDTH;
       // Explicitly set width for metadata headers to prevent them from resizing
       th.style.width = `${width}px`;
       th.style.minWidth = `${width}px`;
@@ -224,12 +244,12 @@ export default class extends Controller {
     // If no metadata columns measured yet, use COLUMN_WIDTH as fallback
     if (this.metadataColumnWidths.length === 0) {
       this.metadataColumnWidths = Array(this.numMetadataColumns).fill(
-        this.COLUMN_WIDTH,
+        this.constructor.constants.COLUMN_WIDTH,
       );
     }
 
-    // Build cumulative widths cache for O(log n) binary search
-    this.buildCumulativeWidthsCache();
+    // Initialize geometry calculator with measured column widths
+    this.geometry = new VirtualScrollGeometry(this.metadataColumnWidths);
 
     // Keep all metadata headers in DOM (rendered server-side)
     // No need to virtualize headers - performance impact is minimal for 1000 headers
@@ -259,7 +279,7 @@ export default class extends Controller {
         th.style.left = `${this.stickyColumnLefts[index]}px`;
         th.style.position = "sticky";
         th.style.top = "0px";
-        th.style.zIndex = "10";
+        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX;
         th.dataset.fixed = "true";
       } else {
         th.style.left = "";
@@ -276,7 +296,7 @@ export default class extends Controller {
     // If measurements failed because the table is hidden, retry a few times
     if (
       this.baseColumnsWidth === 0 &&
-      this.measureRetryCount < this.MAX_MEASURE_RETRIES
+      this.measureRetryCount < this.constructor.constants.MAX_MEASURE_RETRIES
     ) {
       this.measureRetryCount += 1;
       requestAnimationFrame(() => {
@@ -316,7 +336,8 @@ export default class extends Controller {
 
     // Clear caches
     this.rowVisibleRanges = null;
-    this.cumulativeWidths = null;
+    this.geometry = null;
+    this.keyboardNavigator = null;
   }
 
   /**
@@ -384,8 +405,10 @@ export default class extends Controller {
       return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
     });
 
-    // Rebuild cumulative widths cache
-    this.buildCumulativeWidthsCache();
+    // Update geometry calculator with new measurements
+    if (this.geometry) {
+      this.geometry.updateColumnWidths(this.metadataColumnWidths);
+    }
 
     // Clear row visible ranges to force full re-render
     this.rowVisibleRanges.clear();
@@ -399,64 +422,12 @@ export default class extends Controller {
    * @returns {number} Number of sticky columns (2 at @2xl+, 1 below)
    */
   detectStickyColumnCount() {
-    if (window.innerWidth >= this.TAILWIND_2XL_BREAKPOINT) {
+    if (
+      window.innerWidth >= this.constructor.constants.TAILWIND_2XL_BREAKPOINT
+    ) {
       return Math.min(2, this.numBaseColumns);
     }
     return Math.min(1, this.numBaseColumns);
-  }
-
-  /**
-   * Build cumulative widths cache for fast binary search
-   * Cache[i] = sum of widths from column 0 to i (inclusive)
-   */
-  buildCumulativeWidthsCache() {
-    this.cumulativeWidths = [];
-    let sum = 0;
-    for (let i = 0; i < this.metadataColumnWidths.length; i++) {
-      sum += this.metadataColumnWidths[i];
-      this.cumulativeWidths.push(sum);
-    }
-  }
-
-  /**
-   * Find column index at a given scroll position using binary search
-   * O(log n) instead of O(n) - critical for 5000 columns
-   * @param {number} scrollLeft - Scroll position in pixels
-   * @returns {number} Column index at that position
-   */
-  findColumnIndexAtPosition(scrollLeft) {
-    if (!this.cumulativeWidths || this.cumulativeWidths.length === 0) {
-      return 0;
-    }
-
-    // Binary search for the first cumulative width > scrollLeft
-    let left = 0;
-    let right = this.cumulativeWidths.length - 1;
-
-    while (left < right) {
-      const mid = Math.floor((left + right) / 2);
-      if (this.cumulativeWidths[mid] <= scrollLeft) {
-        left = mid + 1;
-      } else {
-        right = mid;
-      }
-    }
-
-    return left;
-  }
-
-  /**
-   * Calculate cumulative width up to a given column index
-   * O(1) lookup using cached cumulative widths
-   * @param {number} columnIndex - Column index
-   * @returns {number} Cumulative width in pixels
-   */
-  cumulativeWidthToColumn(columnIndex) {
-    if (columnIndex <= 0) return 0;
-    if (columnIndex >= this.cumulativeWidths.length) {
-      return this.cumulativeWidths[this.cumulativeWidths.length - 1] || 0;
-    }
-    return this.cumulativeWidths[columnIndex - 1] || 0;
   }
 
   /**
@@ -537,8 +508,8 @@ export default class extends Controller {
     // Use cumulative width calculation instead of fixed width division
     let firstVisibleMetadataColumn = Math.max(
       0,
-      this.findColumnIndexAtPosition(metadataAreaScrollLeft) -
-        this.BUFFER_COLUMNS,
+      this.geometry.findColumnAtPosition(metadataAreaScrollLeft) -
+        this.constructor.constants.BUFFER_COLUMNS,
     );
 
     // Calculate how many columns fit in viewport using variable widths
@@ -557,7 +528,7 @@ export default class extends Controller {
       if (visibleWidth >= this.containerTarget.clientWidth) break;
     }
 
-    visibleColumnCount += 2 * this.BUFFER_COLUMNS; // Add buffer on both sides
+    visibleColumnCount += 2 * this.constructor.constants.BUFFER_COLUMNS; // Add buffer on both sides
 
     let lastVisibleMetadataColumn = Math.min(
       this.numMetadataColumns,
@@ -592,7 +563,7 @@ export default class extends Controller {
         th.style.left = `${this.stickyColumnLefts[idx]}px`;
         th.style.position = "sticky";
         th.style.top = "0px";
-        th.style.zIndex = "20"; // Highest priority for sticky headers
+        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX; // Highest priority for sticky headers
         th.dataset.fixed = "true";
       } else {
         th.style.left = "";
@@ -857,7 +828,7 @@ export default class extends Controller {
       child.style.display = "table-cell";
       child.style.boxSizing = "border-box";
       child.style.position = "sticky";
-      child.style.zIndex = "10";
+      child.style.zIndex = this.constructor.constants.STICKY_BODY_Z_INDEX;
     }
 
     // Apply non-sticky styles to remaining base columns
@@ -882,7 +853,9 @@ export default class extends Controller {
   applyMetadataCellStyles(cell, columnIndex) {
     cell.style.display = "table-cell";
     cell.style.boxSizing = "border-box";
-    const width = this.metadataColumnWidths[columnIndex] ?? this.COLUMN_WIDTH;
+    const width =
+      this.metadataColumnWidths[columnIndex] ??
+      this.constructor.constants.COLUMN_WIDTH;
     cell.style.width = `${width}px`;
     cell.style.minWidth = `${width}px`;
     cell.style.maxWidth = `${width}px`;
@@ -923,7 +896,7 @@ export default class extends Controller {
     const targetScrollLeft =
       this.baseColumnsWidth -
       stickyWidth +
-      this.cumulativeWidthToColumn(metadataIndex);
+      this.geometry.cumulativeWidthTo(metadataIndex);
 
     const maxScroll = Math.max(
       0,
@@ -940,178 +913,25 @@ export default class extends Controller {
 
   /**
    * Reset all visible gridcells to tabindex=-1 and set a single active cell to tabindex=0
+   * Delegates to GridKeyboardNavigator utility
    */
   applyRovingTabindex() {
-    // Determine current active cell within the grid if any
-    const activeCell = this.getActiveGridCell();
-    if (activeCell) {
-      this.focusedRowIndex = this.getRowIndexForCell(activeCell);
-      this.focusedColIndex = this.getColIndexForCell(activeCell);
-    }
-
-    const firstRowIndex = this.getFirstDataRowIndex();
-    if (!this.focusedRowIndex) this.focusedRowIndex = firstRowIndex;
-    if (!this.focusedColIndex) this.focusedColIndex = 1;
-
-    this.resetTabStops();
-
-    let targetCell = this.findCellByCoordinates(
-      this.focusedRowIndex,
-      this.focusedColIndex,
-    );
-
-    if (!targetCell) {
-      // Fallback to first visible cell
-      targetCell = this.bodyTarget.querySelector("[aria-colindex]");
-    }
-
-    if (targetCell) {
-      targetCell.tabIndex = 0;
-      this.focusedRowIndex = this.getRowIndexForCell(targetCell);
-      this.focusedColIndex = this.getColIndexForCell(targetCell);
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.applyRovingTabindex();
     }
   }
 
   /**
    * Handle keyboard navigation per APG grid pattern (arrow keys, Home/End, PageUp/PageDown)
+   * Delegates to GridKeyboardNavigator utility
    */
   handleKeydown(event) {
-    const relevantKeys = [
-      "ArrowRight",
-      "ArrowLeft",
-      "ArrowUp",
-      "ArrowDown",
-      "Home",
-      "End",
-      "PageUp",
-      "PageDown",
-    ];
-
-    if (!relevantKeys.includes(event.key)) return;
-
-    if (
-      event.target.closest(
-        "input, textarea, select, button, [contenteditable='true']",
-      )
-    ) {
-      return;
-    }
-
-    const cell = event.target.closest("[aria-colindex]");
-    if (!cell || !this.bodyTarget.contains(cell)) return;
-
-    const currentRow = this.getRowIndexForCell(cell);
-    const currentCol = this.getColIndexForCell(cell);
-    if (!Number.isInteger(currentRow) || !Number.isInteger(currentCol)) return;
-
-    let targetRow = currentRow;
-    let targetCol = currentCol;
-
-    switch (event.key) {
-      case "ArrowRight":
-        targetCol = Math.min(this.totalColumnCount(), currentCol + 1);
-        break;
-      case "ArrowLeft":
-        targetCol = Math.max(1, currentCol - 1);
-        break;
-      case "ArrowDown":
-        targetRow = Math.min(this.lastDataRowIndex(), currentRow + 1);
-        break;
-      case "ArrowUp":
-        targetRow = Math.max(this.getFirstDataRowIndex(), currentRow - 1);
-        break;
-      case "Home":
-        if (event.ctrlKey) {
-          targetRow = this.getFirstDataRowIndex();
-        }
-        targetCol = 1;
-        break;
-      case "End":
-        if (event.ctrlKey) {
-          targetRow = this.lastDataRowIndex();
-        }
-        targetCol = this.totalColumnCount();
-        break;
-      case "PageUp":
-        targetRow = Math.max(this.getFirstDataRowIndex(), currentRow - 5);
-        break;
-      case "PageDown":
-        targetRow = Math.min(this.lastDataRowIndex(), currentRow + 5);
-        break;
-      default:
-        return;
-    }
-
-    if (targetRow === currentRow && targetCol === currentCol) return;
-
-    event.preventDefault();
-
-    this.focusedRowIndex = targetRow;
-    this.focusedColIndex = targetCol;
-
-    if (targetCol > this.numBaseColumns) {
-      this.ensureMetadataColumnVisible(targetCol);
-    }
-
-    const nextCell = this.findCellByCoordinates(targetRow, targetCol);
-    if (nextCell) {
-      this.resetTabStops();
-      nextCell.tabIndex = 0;
-      nextCell.focus();
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.handleKeydown(event);
     }
   }
 
   totalColumnCount() {
     return (this.numBaseColumns || 0) + (this.numMetadataColumns || 0);
-  }
-
-  getFirstDataRowIndex() {
-    const firstRow = this.rowTargets[0];
-    const idx = firstRow?.getAttribute("aria-rowindex");
-    const parsed = parseInt(idx, 10);
-    return Number.isInteger(parsed) ? parsed : 1;
-  }
-
-  lastDataRowIndex() {
-    const lastRow = this.rowTargets[this.rowTargets.length - 1];
-    const idx = lastRow?.getAttribute("aria-rowindex");
-    const parsed = parseInt(idx, 10);
-    return Number.isInteger(parsed) ? parsed : this.rowTargets.length;
-  }
-
-  resetTabStops() {
-    this.bodyTarget?.querySelectorAll("[aria-colindex]").forEach((node) => {
-      node.tabIndex = -1;
-    });
-  }
-
-  getActiveGridCell() {
-    const active = document.activeElement;
-    if (!active) return null;
-    return active.closest?.("[aria-colindex]") || null;
-  }
-
-  getRowIndexForCell(cell) {
-    const row = cell?.closest?.("[aria-rowindex]");
-    if (!row) return null;
-    const idx = parseInt(row.getAttribute("aria-rowindex"), 10);
-    return Number.isInteger(idx) ? idx : null;
-  }
-
-  getColIndexForCell(cell) {
-    const idx = parseInt(cell?.getAttribute?.("aria-colindex"), 10);
-    return Number.isInteger(idx) ? idx : null;
-  }
-
-  findCellByCoordinates(rowIndex, colIndex) {
-    const row = this.bodyTarget.querySelector(`[aria-rowindex="${rowIndex}"]`);
-    if (!row) return null;
-
-    let cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
-    if (!cell && colIndex > this.numBaseColumns) {
-      this.ensureMetadataColumnVisible(colIndex);
-      cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
-    }
-    return cell;
   }
 }
