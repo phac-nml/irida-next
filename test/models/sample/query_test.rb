@@ -204,4 +204,103 @@ class QueryTest < ActiveSupport::TestCase
     assert_not_includes results, sample1
     assert_includes results, sample2
   end
+
+  test 'contains operator escapes SQL wildcard % character' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    # Update sample name to include % character
+    original_name = sample1.name
+    sample1.update!(name: '100% Complete Sample')
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: 'contains', value: '100%' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert_includes results, sample1, 'Should match literal % character'
+
+    # Restore original name
+    sample1.update!(name: original_name)
+  end
+
+  test 'contains operator escapes SQL wildcard _ character' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    # Update sample name to include _ character
+    original_name = sample1.name
+    sample1.update!(name: 'test_sample_name')
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: 'contains', value: 'test_sample' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert_includes results, sample1, 'Should match literal _ character'
+
+    # Restore original name
+    sample1.update!(name: original_name)
+  end
+
+  test 'contains operator with metadata field case insensitive' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    # Assuming sample has metadata
+    original_metadata = sample1.metadata
+    sample1.update!(metadata: { 'test_field' => 'Test Value' })
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'metadata.test_field', operator: 'contains', value: 'TEST' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert_includes results, sample1, 'Should match case-insensitively'
+
+    # Restore original metadata
+    sample1.update!(metadata: original_metadata)
+  end
+
+  test 'equals operator with name field case insensitive' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: '=', value: sample1.name.upcase } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    assert_includes results, sample1, 'Should match case-insensitively'
+  end
+
+  test 'not_equals operator with name field includes nulls' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: '!=', value: 'non_existent_sample' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    results = query.results
+    # Should include all samples including those with NULL names (if any)
+    assert_includes results, sample1
+  end
 end

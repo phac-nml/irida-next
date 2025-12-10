@@ -275,10 +275,15 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def match_pipeline_name?(pipeline_def, workflow_name)
-    return false unless pipeline_def.name.is_a?(Hash)
-
-    # Check current locale first, then all locales as fallback
-    pipeline_def.name[I18n.locale.to_s] == workflow_name || pipeline_def.name.values.include?(workflow_name)
+    # Handle both String and Hash name formats
+    if pipeline_def.name.is_a?(Hash)
+      # Check current locale first, then all locales as fallback
+      pipeline_def.name[I18n.locale.to_s] == workflow_name || pipeline_def.name.values.include?(workflow_name)
+    elsif pipeline_def.name.is_a?(String)
+      pipeline_def.name == workflow_name
+    else
+      false
+    end
   end
 
   # Cache executable pipelines to avoid repeated lookups
