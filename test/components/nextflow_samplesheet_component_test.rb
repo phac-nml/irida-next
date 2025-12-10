@@ -26,7 +26,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 5
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'STRANDEDNESS (REQUIRED)'
+      table.assert_selector 'thead tr:first-child th:last-child', text: 'STRANDEDNESS (REQUIRED)'
     end
   end
 
@@ -50,7 +50,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'REFERENCE_ASSEMBLY'
+      table.assert_selector 'thead tr:first-child th:last-child', text: 'REFERENCE_ASSEMBLY'
     end
   end
 
@@ -75,8 +75,8 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
 
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select',
+      table.assert_selector 'thead tr:first-child th:nth-child(2) select', count: 1
+      table.assert_selector 'thead tr:first-child th:nth-child(2) select',
                             text: 'pfge_pattern (default)'
     end
   end
@@ -126,26 +126,24 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
       fields: %w[age gender collection_date]
     )
 
-    within('div[data-controller-connected="true"]') do
-      assert_selector 'table' do |table|
-        table.assert_selector 'thead th', count: 20
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', text: 'new_isolates_date (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select',
-                              text: 'predicted_primary_identification_name (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select',
-                              text: 'metadata_3 (default)'
-      end
-
-      assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
-      assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
-
-      assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-
-      select('age', from: 'field-metadata_3')
-      assert_field 'The header name of metadata column 3.', with: 'age'
+    assert_selector 'table' do |table|
+      table.assert_selector 'thead th', count: 20
+      table.assert_selector 'thead tr:first-child th:nth-child(5) select', count: 1
+      table.assert_selector 'thead tr:first-child th:nth-child(5) select', text: 'new_isolates_date (default)'
+      table.assert_selector 'thead tr:first-child th:nth-child(6) select', count: 1
+      table.assert_selector 'thead tr:first-child th:nth-child(6) select',
+                            text: 'predicted_primary_identification_name (default)'
+      table.assert_selector 'thead tr:first-child th:nth-child(7) select', count: 1
+      table.assert_selector 'thead tr:first-child th:nth-child(7) select',
+                            text: 'metadata_3 (default)'
     end
+
+    assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
+    assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
+
+    assert_field 'The header name of metadata column 3.', with: 'metadata_3'
+
+    select('age', from: 'field-metadata_3')
+    assert_field 'The header name of metadata column 3.', with: 'age'
   end
 end
