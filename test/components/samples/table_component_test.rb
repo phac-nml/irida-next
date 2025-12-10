@@ -38,7 +38,7 @@ module Samples
 
     private
 
-    def render_table_component
+    def render_table_component(metadata_fields: [], abilities: default_abilities)
       with_request_url '/-/groups/group-1/-/samples' do
         namespace = groups(:group_one)
         pagy = build_pagy(namespace)
@@ -47,7 +47,7 @@ module Samples
           @rendered_samples,
           namespace,
           pagy,
-          **component_options(namespace)
+          **component_options(namespace, metadata_fields: metadata_fields, abilities: abilities)
         )
       end
     end
@@ -57,14 +57,15 @@ module Samples
       query = Sample::Query.new({ sort: 'namespaces.puid asc', project_ids: project_ids })
       pagy, samples = query.results(limit: 50, page: 1)
       @rendered_samples = samples.includes(project: { namespace: :parent })
+      @pagy = pagy
       pagy
     end
 
-    def component_options(namespace)
+    def component_options(namespace, metadata_fields: [], abilities: default_abilities)
       {
         has_samples: namespace.has_samples?,
-        abilities: default_abilities,
-        metadata_fields: [],
+        abilities: abilities,
+        metadata_fields: metadata_fields,
         search_params: default_search_params,
         empty: default_empty_messages
       }
@@ -165,6 +166,23 @@ module Samples
         # Should NOT show warning message
         assert_no_selector 'div', text: /limited to/
       end
+    end
+
+    test 'exposes ARIA grid semantics and indices' do
+      render_table_component(metadata_fields: ['field_1'])
+
+      assert_selector 'table[role="grid"][aria-colcount][aria-rowcount]', count: 1
+      assert_selector 'tbody tr[role="row"]', count: @rendered_samples.count
+
+      first_row_index = @pagy.offset + 2
+      assert_selector "tbody tr[aria-rowindex='#{first_row_index}']"
+
+      # Base columns should expose aria-colindex and gridcell role
+      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='1'][role='gridcell']"
+      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='2'][role='gridcell']"
+
+      # Metadata templates should be present for virtualization
+      assert_selector '#virtual-scroll-templates template[data-field="field_1"]', minimum: 1, visible: :all
     end
   end
 end
