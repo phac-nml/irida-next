@@ -15,6 +15,9 @@ db/schema.rb
 db/jobs_schema.rb
 db/structure.sql
 
+# Fixtures with ERB syntax
+test/fixtures/*.yml
+
 # Credentials
 config/credentials.yml.enc
 config/credentials/*
