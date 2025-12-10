@@ -6,18 +6,6 @@ export function getLowercaseContent(node) {
   return node.textContent.toLowerCase();
 }
 
-export function isOptionInView(option) {
-  const bounding = option.getBoundingClientRect();
-  return (
-    bounding.top >= 0 &&
-    bounding.left >= 0 &&
-    bounding.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    bounding.right <=
-      (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
 export function highlightOption(option, filter) {
   if (!filter) {
     return option;
@@ -43,9 +31,6 @@ export function highlightOption(option, filter) {
 export function setActiveDescendant(option, combobox) {
   if (option) {
     combobox.setAttribute("aria-activedescendant", option.id);
-    if (!isOptionInView(option)) {
-      option.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
   } else {
     combobox.removeAttribute("aria-activedescendant");
   }
