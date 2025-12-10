@@ -132,13 +132,13 @@ export default class extends Controller {
       this.samplesheetPropertiesTarget.innerHTML,
     );
     // clear the now unnecessary DOM element
-    this.samplesheetPropertiesTarget.innerText = "";
+    this.samplesheetPropertiesTarget.remove();
 
     this.#samplesheetAttributes = JSON.parse(
       this.sampleAttributesTarget.innerText,
     );
     // clear the now unnecessary DOM element
-    this.sampleAttributesTarget.innerText = "";
+    this.sampleAttributesTarget.remove();
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
