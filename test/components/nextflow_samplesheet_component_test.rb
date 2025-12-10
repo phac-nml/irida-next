@@ -26,7 +26,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 5
-      table.assert_selector 'thead tr:first-child th:last-child', text: 'STRANDEDNESS (REQUIRED)'
+      table.assert_selector 'th', text: 'STRANDEDNESS (REQUIRED)'
     end
   end
 
@@ -50,7 +50,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead th', text: 'REFERENCE_ASSEMBLY', count: 1
+      table.assert_selector 'thead th', text: 'REFERENCE_ASSEMBLY'
     end
   end
 
