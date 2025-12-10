@@ -73,11 +73,10 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
       fields: []
     )
 
+    assert_selector 'select#field-pfge_pattern', text: 'pfge_pattern (default)'
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-child th:nth-child(2) select', count: 1
-      table.assert_selector 'thead tr:first-child th:nth-child(2) select',
-                            text: 'pfge_pattern (default)'
+      table.assert_selector 'select#field-pfge_pattern', text: 'pfge_pattern (default)'
     end
   end
 
