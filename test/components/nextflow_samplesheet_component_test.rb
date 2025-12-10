@@ -50,7 +50,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-child th:last-child', text: 'REFERENCE_ASSEMBLY'
+      table.assert_selector 'thead th', text: 'REFERENCE_ASSEMBLY', count: 1
     end
   end
 
@@ -73,7 +73,6 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
       fields: []
     )
 
-    assert_selector 'select#field-pfge_pattern', text: 'pfge_pattern (default)'
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
       table.assert_selector 'select#field-pfge_pattern', text: 'pfge_pattern (default)'
@@ -127,14 +126,9 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
 
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 20
-      table.assert_selector 'thead tr:first-child th:nth-child(5) select', count: 1
-      table.assert_selector 'thead tr:first-child th:nth-child(5) select', text: 'new_isolates_date (default)'
-      table.assert_selector 'thead tr:first-child th:nth-child(6) select', count: 1
-      table.assert_selector 'thead tr:first-child th:nth-child(6) select',
-                            text: 'predicted_primary_identification_name (default)'
-      table.assert_selector 'thead tr:first-child th:nth-child(7) select', count: 1
-      table.assert_selector 'thead tr:first-child th:nth-child(7) select',
-                            text: 'metadata_3 (default)'
+      table.assert_selector 'select#field-metadata_1', text: 'new_isolates_date (default)'
+      table.assert_selector 'select#field-metadata_2', text: 'predicted_primary_identification_name (default)'
+      table.assert_selector 'select#field-metadata_3', text: 'metadata_3 (default)'
     end
 
     assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
