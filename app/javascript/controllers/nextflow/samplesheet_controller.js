@@ -15,7 +15,7 @@ export default class extends Controller {
     "samplesheetMessagesContainer",
     "submissionSpinner",
     "samplesheetSpinner",
-    "workflowAttributes",
+    "sampleAttributes",
     "samplesheetProperties",
     "trTemplate",
     "thTemplate",
@@ -135,10 +135,10 @@ export default class extends Controller {
     this.samplesheetPropertiesTarget.innerText = "";
 
     this.#samplesheetAttributes = JSON.parse(
-      this.workflowAttributesTarget.innerText,
+      this.sampleAttributesTarget.innerText,
     );
     // clear the now unnecessary DOM element
-    this.workflowAttributesTarget.innerText = "";
+    this.sampleAttributesTarget.innerText = "";
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
