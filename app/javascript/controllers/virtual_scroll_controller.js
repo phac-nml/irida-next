@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
 import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
 import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
+import { StickyColumnManager } from "utilities/sticky_column_manager";
+import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
 
 /**
  * VirtualScrollController
@@ -251,6 +253,22 @@ export default class extends Controller {
     // Initialize geometry calculator with measured column widths
     this.geometry = new VirtualScrollGeometry(this.metadataColumnWidths);
 
+    // Initialize sticky column manager
+    this.stickyManager = new StickyColumnManager({
+      columnWidths: this.baseColumnWidths,
+      stickyCount: this.numStickyColumns,
+      headerZIndex: this.constructor.constants.STICKY_HEADER_Z_INDEX,
+      bodyZIndex: this.constructor.constants.STICKY_BODY_Z_INDEX,
+    });
+
+    // Initialize cell renderer
+    this.cellRenderer = new VirtualScrollCellRenderer({
+      metadataFields: this.metadataFieldsValue,
+      numBaseColumns: this.numBaseColumns,
+      metadataColumnWidths: this.metadataColumnWidths,
+      columnWidthFallback: this.constructor.constants.COLUMN_WIDTH,
+    });
+
     // Keep all metadata headers in DOM (rendered server-side)
     // No need to virtualize headers - performance impact is minimal for 1000 headers
     this.metadataHeaders = metadataHeaders;
@@ -269,24 +287,9 @@ export default class extends Controller {
     table.style.width = `${totalWidth}px`;
     table.style.tableLayout = "fixed";
 
-    // Apply explicit left offsets for the sticky headers so their `left` matches
-    // the computed pixel values instead of relying on CSS variables which can
-    // get out of sync when we set explicit widths.
+    // Apply sticky positioning to base header cells
     this.baseHeaderElements.forEach((th, index) => {
-      th.style.display = "table-cell";
-      th.style.boxSizing = "border-box";
-      if (index < this.numStickyColumns) {
-        th.style.left = `${this.stickyColumnLefts[index]}px`;
-        th.style.position = "sticky";
-        th.style.top = "0px";
-        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX;
-        th.dataset.fixed = "true";
-      } else {
-        th.style.left = "";
-        th.style.position = "";
-        th.style.zIndex = "";
-        th.dataset.fixed = "false";
-      }
+      this.stickyManager.applyToHeaderCell(th, index);
     });
 
     if (this.baseColumnsWidth > 0) {
@@ -334,10 +337,12 @@ export default class extends Controller {
       this.resizeObserver = null;
     }
 
-    // Clear caches
+    // Clear caches and utilities
     this.rowVisibleRanges = null;
     this.geometry = null;
     this.keyboardNavigator = null;
+    this.stickyManager = null;
+    this.cellRenderer = null;
   }
 
   /**
@@ -405,9 +410,16 @@ export default class extends Controller {
       return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
     });
 
-    // Update geometry calculator with new measurements
+    // Update utilities with new measurements
     if (this.geometry) {
       this.geometry.updateColumnWidths(this.metadataColumnWidths);
+    }
+    if (this.stickyManager) {
+      this.stickyManager.updateColumnWidths(this.baseColumnWidths);
+      this.stickyManager.updateStickyCount(this.numStickyColumns);
+    }
+    if (this.cellRenderer) {
+      this.cellRenderer.updateColumnWidths(this.metadataColumnWidths);
     }
 
     // Clear row visible ranges to force full re-render
@@ -559,18 +571,7 @@ export default class extends Controller {
     // --- Update Header Sticky Positioning ---
     // Headers are rendered server-side, just update sticky positioning for base columns
     this.baseHeaderElements.forEach((th, idx) => {
-      if (idx < this.numStickyColumns) {
-        th.style.left = `${this.stickyColumnLefts[idx]}px`;
-        th.style.position = "sticky";
-        th.style.top = "0px";
-        th.style.zIndex = this.constructor.constants.STICKY_HEADER_Z_INDEX; // Highest priority for sticky headers
-        th.dataset.fixed = "true";
-      } else {
-        th.style.left = "";
-        th.style.position = "";
-        th.style.zIndex = "";
-        th.dataset.fixed = "false";
-      }
+      this.stickyManager.applyToHeaderCell(th, idx);
     });
 
     // --- Render Body Rows ---
@@ -602,150 +603,12 @@ export default class extends Controller {
         last: lastVisibleMetadataColumn,
       });
 
-      // Check for the cell currently being edited so we can preserve it
-      const editingCellInfo = this.getRowEditingCellInfo(row);
-      const editingCellNode = editingCellInfo?.cell ?? null;
-
-      // Get sample ID from the row's data attribute to look up templates
-      const sampleId = row.dataset.sampleId;
-
-      // Get templates from the template container
-      const templateContainer = this.hasTemplateContainerTarget
-        ? this.templateContainerTarget.querySelector(
-            `[data-sample-id="${sampleId}"]`,
-          )
-        : null;
-
-      // Collect all non-template children
-      const allChildren = Array.from(row.children).filter(
-        (c) => c.tagName.toLowerCase() !== "template",
-      );
-
-      // Identify base columns vs virtualized cells
-      const baseColumns = [];
-      const virtualizedCells = [];
-
-      for (const child of allChildren) {
-        if (child.dataset.virtualizedCell) {
-          virtualizedCells.push(child);
-        } else if (baseColumns.length < this.numBaseColumns) {
-          baseColumns.push(child);
-        } else {
-          virtualizedCells.push(child);
-        }
-      }
-
-      // Index existing virtualized cells by fieldId for reuse
-      const existingCells = new Map();
-      for (const cell of virtualizedCells) {
-        const fieldId = cell.dataset.fieldId;
-        if (editingCellNode && cell === editingCellNode) continue;
-        if (fieldId && fieldId !== "undefined") {
-          existingCells.set(fieldId, cell);
-        }
-      }
-
-      // Build set of fields that should be visible
-      const visibleFields = new Set();
-      for (
-        let i = firstVisibleMetadataColumn;
-        i < lastVisibleMetadataColumn;
-        i++
-      ) {
-        const field = this.metadataFieldsValue[i];
-        if (field) {
-          visibleFields.add(field);
-        }
-      }
-
-      // Remove cells that are no longer visible (except editing cell)
-      const cellsToRemove = [];
-      for (const cell of virtualizedCells) {
-        const fieldId = cell.dataset.fieldId;
-        if (editingCellNode && cell === editingCellNode) continue;
-        if (
-          !fieldId ||
-          fieldId === "undefined" ||
-          !visibleFields.has(fieldId)
-        ) {
-          cellsToRemove.push(cell);
-        }
-      }
-
-      // Remove cells in batch
-      for (const cell of cellsToRemove) {
-        cell.remove();
-      }
-
-      // Build fragment with cells in correct order
-      const rowFrag = document.createDocumentFragment();
-
-      // Append base columns
-      baseColumns.forEach((el) => rowFrag.appendChild(el));
-
-      // Start spacer
-      if (firstVisibleMetadataColumn > 0) {
-        const startSpacer = this.createSpacer(firstVisibleMetadataColumn);
-        rowFrag.appendChild(startSpacer);
-      }
-
-      // Add metadata cells in order
-      for (
-        let i = firstVisibleMetadataColumn;
-        i < lastVisibleMetadataColumn;
-        i++
-      ) {
-        const field = this.metadataFieldsValue[i];
-        if (!field) continue;
-
-        // Use editing cell if this is the column being edited
-        if (
-          editingCellInfo &&
-          editingCellInfo.columnIndex === i &&
-          editingCellNode
-        ) {
-          this.applyMetadataCellStyles(editingCellNode, i);
-          editingCellNode.dataset.virtualizedCell = "true";
-          rowFrag.appendChild(editingCellNode);
-          continue;
-        }
-
-        // Reuse existing cell if available
-        const existingCell = existingCells.get(field);
-        if (existingCell) {
-          this.applyMetadataCellStyles(existingCell, i);
-          existingCell.dataset.virtualizedCell = "true";
-          rowFrag.appendChild(existingCell);
-          existingCells.delete(field);
-          continue;
-        }
-
-        // Clone from template
-        const selector = `template[data-field="${CSS.escape(field)}"]`;
-        const template = templateContainer?.querySelector(selector);
-        if (!template) continue;
-
-        const clonedContent = template.content.cloneNode(true);
-        const cellElement = clonedContent.firstElementChild;
-        if (!cellElement) continue;
-
-        cellElement.dataset.virtualizedCell = "true";
-        cellElement.dataset.fieldId = field;
-        this.applyMetadataCellStyles(cellElement, i);
-        rowFrag.appendChild(cellElement);
-      }
-
-      // End spacer
-      if (lastVisibleMetadataColumn < this.numMetadataColumns) {
-        const endSpacer = this.createSpacer(
-          this.numMetadataColumns - lastVisibleMetadataColumn,
-        );
-        rowFrag.appendChild(endSpacer);
-      }
-
-      // Replace row children with fragment
-      while (row.firstChild) row.removeChild(row.firstChild);
-      row.appendChild(rowFrag);
+      // Render cells using VirtualScrollCellRenderer utility
+      this.cellRenderer.renderRowCells(row, {
+        firstVisible: firstVisibleMetadataColumn,
+        lastVisible: lastVisibleMetadataColumn,
+        templateContainer: this.templateContainerTarget,
+      });
 
       // Apply sticky styles to base columns
       this.applyStickyStylesToRow(row);
@@ -756,61 +619,25 @@ export default class extends Controller {
   }
 
   getActiveEditingColumnIndex() {
-    const editingCell = this.findEditingCellInElement(this.bodyTarget);
-    if (!editingCell) return null;
+    // Find cell currently being edited in the body
+    const markedEditingCell = this.bodyTarget.querySelector?.(
+      '[data-editing="true"]',
+    );
+    const editingCell =
+      markedEditingCell || document.activeElement?.closest?.("[data-field-id]");
+
+    if (!editingCell || !this.bodyTarget.contains(editingCell)) return null;
+
     const fieldId = editingCell.dataset.fieldId;
     if (!fieldId) return null;
+
     const columnIndex = this.metadataFieldIndex?.get(fieldId);
     return columnIndex ?? null;
   }
 
-  getRowEditingCellInfo(row) {
-    const editingCell = this.findEditingCellInElement(row);
-    if (!editingCell) return null;
-    const fieldId = editingCell.dataset.fieldId;
-    if (!fieldId) return null;
-    const columnIndex = this.metadataFieldIndex?.get(fieldId);
-    if (columnIndex === undefined) return null;
-    return { cell: editingCell, columnIndex };
-  }
-
-  findEditingCellInElement(root) {
-    if (!root) return null;
-    const markedEditingCell = root.querySelector?.('[data-editing="true"]');
-    if (markedEditingCell) {
-      return markedEditingCell;
-    }
-
-    const activeElement = document.activeElement;
-    if (!activeElement || !(activeElement instanceof Element)) {
-      return null;
-    }
-    if (!root.contains(activeElement)) {
-      return null;
-    }
-    return activeElement.closest("[data-field-id]");
-  }
-
-  /**
-   * Create a spacer cell with colspan
-   * @param {number} colspan - Number of columns to span
-   * @returns {HTMLElement} Spacer element
-   */
-  createSpacer(colspan) {
-    const spacer = document.createElement("td");
-    spacer.colSpan = colspan;
-    spacer.dataset.virtualizedCell = "true";
-    spacer.setAttribute("role", "gridcell");
-    spacer.setAttribute("aria-hidden", "true");
-    spacer.tabIndex = -1;
-    spacer.style.padding = "0";
-    spacer.style.border = "none";
-    spacer.style.width = "0";
-    return spacer;
-  }
-
   /**
    * Apply sticky positioning styles to base columns in a row
+   * Delegates to StickyColumnManager utility
    * @param {HTMLElement} row - The row element
    */
   applyStickyStylesToRow(row) {
@@ -818,69 +645,20 @@ export default class extends Controller {
       (c) => c.tagName.toLowerCase() !== "template",
     );
 
-    // Apply sticky styles to sticky columns
-    for (let i = 0; i < this.numStickyColumns; i++) {
+    // Apply sticky styles to all base columns (sticky and non-sticky)
+    for (let i = 0; i < this.numBaseColumns; i++) {
       const child = children[i];
       if (!child) continue;
-      child.dataset.fixed = "true";
-      child.style.left = `${this.stickyColumnLefts[i]}px`;
-      child.style.width = `${this.baseColumnWidths[i]}px`;
-      child.style.display = "table-cell";
-      child.style.boxSizing = "border-box";
-      child.style.position = "sticky";
-      child.style.zIndex = this.constructor.constants.STICKY_BODY_Z_INDEX;
+      this.stickyManager.applyToBodyCell(child, i);
     }
-
-    // Apply non-sticky styles to remaining base columns
-    for (let i = this.numStickyColumns; i < this.numBaseColumns; i++) {
-      const child = children[i];
-      if (!child) continue;
-      child.dataset.fixed = "false";
-      child.style.position = "";
-      child.style.left = "";
-      child.style.zIndex = "";
-      child.style.width = `${this.baseColumnWidths[i]}px`;
-      child.style.display = "table-cell";
-      child.style.boxSizing = "border-box";
-    }
-  }
-
-  /**
-   * Apply styles to metadata cells including overflow handling
-   * @param {HTMLElement} cell - The cell element
-   * @param {number} columnIndex - Column index in metadata fields
-   */
-  applyMetadataCellStyles(cell, columnIndex) {
-    cell.style.display = "table-cell";
-    cell.style.boxSizing = "border-box";
-    const width =
-      this.metadataColumnWidths[columnIndex] ??
-      this.constructor.constants.COLUMN_WIDTH;
-    cell.style.width = `${width}px`;
-    cell.style.minWidth = `${width}px`;
-    cell.style.maxWidth = `${width}px`;
-
-    cell.setAttribute("role", "gridcell");
-    cell.tabIndex = -1;
-
-    // Prevent text overflow
-    cell.style.overflow = "hidden";
-    cell.style.textOverflow = "ellipsis";
-    cell.style.whiteSpace = "nowrap";
-
-    // Add ARIA colindex for accessibility (1-based, includes base columns)
-    const ariaColindex = this.numBaseColumns + columnIndex + 1;
-    cell.setAttribute("aria-colindex", ariaColindex);
   }
 
   /**
    * Sum width of sticky columns for scroll calculations
+   * Delegates to StickyColumnManager utility
    */
   stickyColumnsWidth() {
-    if (!Array.isArray(this.baseColumnWidths)) return 0;
-    return this.baseColumnWidths
-      .slice(0, this.numStickyColumns)
-      .reduce((acc, width) => acc + (width || 0), 0);
+    return this.stickyManager?.getTotalWidth() ?? 0;
   }
 
   /**
