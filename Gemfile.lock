@@ -145,6 +145,9 @@ GEM
     brakeman (7.1.1)
       racc
     builder (3.3.0)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
+      thor (~> 1.0)
     business_time (0.13.0)
       activesupport (>= 3.2.0)
       tzinfo
@@ -502,7 +505,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.2)
+    rack (3.2.4)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
@@ -728,6 +731,7 @@ DEPENDENCIES
   azure-blob!
   bootsnap
   brakeman
+  bundler-audit
   business_time
   capybara
   caxlsx
