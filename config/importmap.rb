@@ -16,7 +16,7 @@ pin '@sindresorhus/transliterate', to: '@sindresorhus--transliterate.js' # @1.6.
 pin 'escape-string-regexp' # @5.0.0
 pin '@rails/activestorage', to: '@rails--activestorage.js' # @7.2.201
 pin_all_from 'app/javascript/controllers', under: 'controllers'
-pin 'xlsx' # @0.18.5
+pin 'xlsx', to: 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs'
 pin_all_from 'app/javascript/utilities', under: 'utilities'
 pin 'sortablejs' # @1.15.2
 pin 'local-time' # @3.0.2
