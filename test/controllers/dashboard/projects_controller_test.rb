@@ -175,7 +175,7 @@ module Dashboard
     test 'accessing projects index on invalid page causes pagy overflow redirect' do
       sign_in users(:john_doe)
 
-      # Accessing page 50 when only 2 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
       get dashboard_projects_path(page: 50)
 
