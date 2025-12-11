@@ -84,6 +84,13 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
+      validator:
+        image: ghcr.io/validator/validator:24.10.17
+        env:
+          VALIDATOR_HOST: validator
+        ports:
+          - 8888:8888
+
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
@@ -99,7 +106,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          TESTOPTS: --exclude test/components/**/*.rb --exclude test/integration/integration_sapporo_test.rb
+          DEFAULT_TEST_EXCLUDE: test/{system,components,integration/sapporo,dummy,fixtures}/**/*_test.rb
         run: bin/rails db:test:prepare test
 
   system-test:
@@ -242,4 +249,4 @@ jobs:
 
       - name: Run tests
         run: |
-          bin/rails test test/integration/integration_sapporo_test.rb
+          bin/rails test test/integration/sapporo/integration_sapporo_test.rb
