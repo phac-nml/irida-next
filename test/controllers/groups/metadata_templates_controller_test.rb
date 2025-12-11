@@ -118,5 +118,21 @@ module Groups
 
       assert_response :unauthorized
     end
+
+    test 'accessing metadata templates index on invalid page causes pagy overflow redirect at group level' do
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
+      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      get group_metadata_templates_path(@group, page: 50)
+
+      # Should be redirected to first page
+      assert_response :redirect
+      # Check both page and limit are in the redirect URL (order may vary)
+      assert_match(/page=1/, response.location)
+      assert_match(/limit=20/, response.location)
+
+      # Follow the redirect and verify it's successful
+      follow_redirect!
+      assert_response :success
+    end
   end
 end

@@ -79,9 +79,9 @@ module Projects
     end
 
     test 'accessing attachments index on invalid page causes pagy overflow redirect at project level' do
-      # Accessing page 50 when only 2 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
-      get namespace_project_attachments_url(@namespace, @project1, page: 50)
+      get namespace_project_attachments_path(@namespace, @project1, page: 50)
 
       # Should be redirected to first page
       assert_response :redirect
