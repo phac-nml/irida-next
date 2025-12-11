@@ -3,7 +3,6 @@
 module WorkflowExecutions
   # Service used to delete a WorkflowExecution
   class DestroyService < BaseWorkflowExecutionService
-
     def execute
       @workflow_execution.nil? ? destroy_multiple : destroy_single
     end
@@ -38,7 +37,7 @@ module WorkflowExecutions
 
       deletable_workflow_executions.destroy_all
 
-      create_activities(deletable_workflow_data) if deletable_workflow_data.count.positive? && !@namespace.nil?
+      create_activities(deletable_workflow_data) if deletable_workflow_data.any? && !@namespace.nil?
 
       deletable_workflow_data.count
     end

@@ -3,7 +3,7 @@
 module Activities
   # Component for rendering an activity of type WorkflowExecution
   class WorkflowExecutionActivityComponent < Activities::BaseActivityComponent # rubocop:disable Metrics/ClassLength
-    def workflow_execution_exists
+    def workflow_execution_exists?
       return false if @activity[:workflow_execution].nil?
 
       if @activity[:automated] == true
@@ -13,7 +13,7 @@ module Activities
       end
     end
 
-    def workflow_execution_sample_exists
+    def workflow_execution_sample_exists?
       return false if @activity[:sample].nil?
 
       !@activity[:sample].deleted?
@@ -22,11 +22,11 @@ module Activities
     def activity_message
       if @activity[:automated] == true
         automated_workflow_execution_activity
-      elsif workflow_execution_exists && workflow_execution_sample_exists
+      elsif workflow_execution_exists? && workflow_execution_sample_exists?
         workflow_execution_and_sample_exists_activity
-      elsif workflow_execution_exists
+      elsif workflow_execution_exists?
         workflow_execution_exists_activity
-      elsif workflow_execution_sample_exists
+      elsif workflow_execution_sample_exists?
         workflow_execution_sample_exists_activity
       else
         href = highlighted_text(@activity[:workflow_id])
@@ -37,7 +37,7 @@ module Activities
     end
 
     def automated_workflow_execution_activity
-      href = if workflow_execution_exists
+      href = if workflow_execution_exists?
                link_to(
                  @activity[:workflow_id],
                  namespace_project_automated_workflow_executions_path(

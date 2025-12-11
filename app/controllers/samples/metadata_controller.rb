@@ -82,9 +82,9 @@ module Samples
     end
 
     def get_create_status(added_keys, existing_keys)
-      if added_keys.count.positive? && existing_keys.count.positive?
+      if added_keys.any? && existing_keys.any?
         :multi_status
-      elsif existing_keys.count.positive?
+      elsif existing_keys.any?
         :unprocessable_content
       else
         :ok
@@ -93,20 +93,20 @@ module Samples
 
     def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
       messages = []
-      if added_keys.count == 1
+      if added_keys.one?
         messages << { type: 'success',
                       message: t('projects.samples.metadata.fields.create.single_success', key: added_keys[0]) }
-      elsif added_keys.count.positive?
+      elsif added_keys.any?
         messages << { type: 'success',
                       message: t('projects.samples.metadata.fields.create.multi_success',
                                  keys: added_keys.join(', ')) }
       end
 
-      if existing_keys.count == 1
+      if existing_keys.one?
         messages << { type: 'error',
                       message: t('projects.samples.metadata.fields.create.single_key_exists',
                                  key: existing_keys[0]) }
-      elsif existing_keys.count.positive?
+      elsif existing_keys.any?
         messages << { type: 'error',
                       message: t('projects.samples.metadata.fields.create.multi_keys_exists',
                                  keys: existing_keys.join(', ')) }
@@ -118,7 +118,7 @@ module Samples
       update_render_params = {}
       modified_metadata = updated_metadata_field[:added] + updated_metadata_field[:updated] +
                           updated_metadata_field[:deleted]
-      if modified_metadata.count.positive?
+      if modified_metadata.any?
         update_render_params[:status] = :ok
         update_render_params[:message] =
           { type: 'success', message: t('projects.samples.metadata.fields.update.success') }

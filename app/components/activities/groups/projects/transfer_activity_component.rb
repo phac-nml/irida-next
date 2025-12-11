@@ -5,14 +5,14 @@ module Activities
     module Projects
       # Component for rendering group project transferred in/out activity
       class TransferActivityComponent < Activities::BaseActivityComponent
-        def project_exists
+        def project_exists?
           return false if @activity[:project].nil?
 
           !@activity[:project].deleted?
         end
 
         def activity_message # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-          href = if project_exists
+          href = if project_exists?
                    link_to(
                      @activity[:project_puid],
                      namespace_project_path(

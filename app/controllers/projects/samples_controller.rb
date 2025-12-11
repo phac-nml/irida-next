@@ -220,9 +220,9 @@ module Projects
     end
 
     def results_message_for_advanced_search
-      if @pagy&.count&.zero?
+      if @pagy&.zero?
         I18n.t(:'components.search.advanced.results_message.zero')
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.advanced.results_message.singular')
       else
         I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
@@ -230,9 +230,9 @@ module Projects
     end
 
     def results_message_for_quick_search
-      if @pagy&.count&.zero?
+      if @pagy&.zero?
         I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
-      elsif @pagy&.count == 1
+      elsif @pagy&.one?
         I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
       else
         I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,

@@ -4,6 +4,7 @@ module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
     include ListActions
+
     before_action :namespace, only: %i[new destroy]
     before_action :confirmation_parameters, :sample, only: :new
 

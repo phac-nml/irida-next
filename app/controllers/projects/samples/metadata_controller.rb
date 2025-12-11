@@ -30,7 +30,7 @@ module Projects
                                                           deletion_params).execute
 
         respond_to do |format|
-          if metadata[:deleted].count.positive?
+          if metadata[:deleted].any?
             format.turbo_stream do
               render status: :ok, locals: { type: 'success',
                                             message: t('.success',

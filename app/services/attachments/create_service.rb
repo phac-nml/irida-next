@@ -32,13 +32,13 @@ module Attachments
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
-      identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.count > 1
+      identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.many?
 
       unidentified_fastq_attachments = valid_fastq_attachments.reject do |attachment|
         attachment.metadata['type'] == 'illumina_pe'
       end
 
-      identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
+      identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.many?
 
       @attachments.each(&:save)
 

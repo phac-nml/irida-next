@@ -18,7 +18,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
 
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
-    @has_attachments = all_attachments.count.positive?
+    @has_attachments = all_attachments.any?
     @q = all_attachments.ransack(params[:q])
     set_default_sort
     @pagy, @attachments = pagy_with_metadata_sort(@q.result)
@@ -39,7 +39,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   def create
     @attachments = ::Attachments::CreateService.new(current_user, @namespace, attachment_params).execute
 
-    status = if !@attachments.count.positive?
+    status = if @attachments.none?
                :unprocessable_content
              elsif @attachments.count(&:persisted?) == @attachments.count
                :ok
@@ -69,7 +69,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   def destroy # rubocop:disable Metrics/MethodLength
     @destroyed_attachments = ::Attachments::DestroyService.new(@namespace, @attachment, current_user).execute
     respond_to do |format|
-      if @destroyed_attachments.count.positive?
+      if @destroyed_attachments.any?
         status = destroy_status(@attachment, @destroyed_attachments.length)
         format.turbo_stream do
           render status:, locals: { destroyed_attachments: @destroyed_attachments }

@@ -14,8 +14,12 @@ module Projects
 
     def project
       path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Project.includes({ namespace: [{ parent: :route }, :route] })
+      if defined?(@project)
+        @project
+      else
+        @project = Project.includes({ namespace: [{ parent: :route }, :route] })
                           .find_by(namespace_id: Namespaces::ProjectNamespace.find_by_full_path(path).id) # rubocop:disable Rails/DynamicFindBy
+      end
     end
 
     def layout_fixed
