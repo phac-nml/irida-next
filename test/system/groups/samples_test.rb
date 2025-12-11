@@ -1962,7 +1962,6 @@ module Groups
 
     test 'transfer samples' do
       ### SETUP START ###
-      group_three = groups(:group_three)
       project4 = projects(:project4)
       samples = []
       @group.project_namespaces.map do |pn|

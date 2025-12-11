@@ -480,7 +480,6 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'clicking links in preview tab for analysis data export' do
-    sample46 = samples(:sample46)
     visit data_export_path(@data_export7, anchor: 'preview-tab')
 
     click_link @workflow_execution1.id

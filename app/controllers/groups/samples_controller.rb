@@ -119,7 +119,7 @@ module Groups
     end
 
     def results_message_for_advanced_search
-      if @pagy&.zero?
+      if @pagy&.count&.zero?
         I18n.t(:'components.search.advanced.results_message.zero')
       elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
         I18n.t(:'components.search.advanced.results_message.singular')
@@ -129,7 +129,7 @@ module Groups
     end
 
     def results_message_for_quick_search
-      if @pagy&.zero?
+      if @pagy&.count&.zero?
         I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
       elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
         I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)

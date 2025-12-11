@@ -18,6 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include CupriteHelpers
   include HTML5Helpers
   include Warden::Test::Helpers
+
   Warden.test_mode!
 
   Minitest::Retry.use!
