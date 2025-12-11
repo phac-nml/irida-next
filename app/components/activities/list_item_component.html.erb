@@ -52,7 +52,7 @@
   <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
     <% if group_link_action? %>
       <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
-    <% elsif metadata_template_action %>
+    <% elsif metadata_template_action? %>
       <%= render Activities::Projects::MetadataTemplateActivityComponent.new(
         activity: activity,
       ) %>

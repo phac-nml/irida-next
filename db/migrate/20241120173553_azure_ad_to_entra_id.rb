@@ -6,7 +6,7 @@ class AzureAdToEntraId < ActiveRecord::Migration[7.2]
     azure_user_list = User.where(provider: 'azure_activedirectory_v2').all
 
     # If there are no AD users in the database, exit early.
-    unless azure_user_list.count.positive?
+    unless azure_user_list.any?
       Rails.logger.info 'No Azure AD users in database. No Migration needed.'
       return
     end

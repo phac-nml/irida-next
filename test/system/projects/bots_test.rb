@@ -5,6 +5,7 @@ require 'application_system_test_case'
 module Projects
   class BotsTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
+
     header_row_count = 1
 
     def setup

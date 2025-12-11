@@ -5,6 +5,7 @@ require 'i18n/tasks/commands'
 
 module I18nCsvTasks # rubocop:disable Style/Documentation
   include ::I18n::Tasks::Command::Collection
+
   cmd :csv_export, desc: 'export translations to CSV'
   def csv_export(opts = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Lint/UnusedMethodArgument
     translations_by_path = {}
