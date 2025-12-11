@@ -49,7 +49,7 @@ module FileSelector
     files = sorted_files.fetch(direction, [])
 
     files.concat(singles) if (direction == :pe_forward && property['pe_only'].blank?) || direction == :none
-    (files.sort_by! { |file| file[:created_at] }).reverse
+    files.sort_by! { |file| file[:created_at] }.reverse
   end
 
   # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end

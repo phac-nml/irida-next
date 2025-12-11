@@ -56,7 +56,7 @@ module Attachments
     private
 
     # Validates params
-    def validate_params # rubocop:disable Metrics/AbcSize
+    def validate_params # rubocop:disable Metrics/AbcSize,Naming/PredicateMethod
       if !concatenation_params.key?(:attachment_ids) || concatenation_params[:attachment_ids].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.no_files_selected')
@@ -67,7 +67,7 @@ module Attachments
               I18n.t('services.attachments.concatenation.filename_missing')
       end
 
-      if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-\.]]*$/)
+      if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-.]]*$/)
         raise AttachmentConcatenationFilenameError,
               I18n.t('services.attachments.concatenation.incorrect_basename')
       end
@@ -100,7 +100,7 @@ module Attachments
     end
 
     # Validates that the single end files are all the same type
-    def validate_single_end_files(attachments)
+    def validate_single_end_files(attachments) # rubocop:disable Naming/PredicateMethod
       attachments.each do |attachment|
         next unless attachment.metadata.key?('type')
 
@@ -111,7 +111,7 @@ module Attachments
     end
 
     # Validates that the paired end files are all the same type
-    def validate_paired_end_files(attachments)
+    def validate_paired_end_files(attachments) # rubocop:disable Naming/PredicateMethod
       attachments.each do |attachment|
         next if attachment.metadata.key?('type') && %w[illumina_pe pe].include?(attachments.first.metadata['type'])
 
@@ -122,7 +122,7 @@ module Attachments
     end
 
     # Validates if the file formats all match for the attachments
-    def validate_file_formats(attachments)
+    def validate_file_formats(attachments) # rubocop:disable Naming/PredicateMethod
       attachments.each do |attachment|
         next unless (attachment.metadata['compression'] != attachments.first.metadata['compression']) ||
                     (attachment.metadata['format'] != attachments.first.metadata['format'])

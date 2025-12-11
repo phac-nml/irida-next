@@ -53,7 +53,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace).not_expired
-                           .where(user:).order('access_level desc').select(:access_level).first&.access_level
+                           .where(user:).order(access_level: :desc).select(:access_level).first&.access_level
 
       access_level = access_level_in_namespace_group_links(user, namespace) if include_group_links && access_level.nil?
 

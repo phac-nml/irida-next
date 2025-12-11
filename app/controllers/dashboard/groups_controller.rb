@@ -9,7 +9,7 @@ module Dashboard
 
     def index
       all_groups = authorized_groups
-      @has_groups = all_groups.count.positive?
+      @has_groups = all_groups.any?
       @q = all_groups.ransack(params[:q])
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)

@@ -11,7 +11,7 @@ module Activities
         @activity[:source_project_puid]
       end
 
-      def project_exists(namespace)
+      def project_exists?(namespace)
         return false if namespace.nil?
 
         !namespace.deleted? && !namespace.project.deleted?

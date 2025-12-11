@@ -41,7 +41,7 @@ module Projects
         end
 
         def get_destroy_status(deleted_keys)
-          if @sample.errors.any? && deleted_keys.count.positive?
+          if @sample.errors.any? && deleted_keys.any?
             :multi_status
           elsif @sample.errors.any?
             :unprocessable_content
@@ -53,11 +53,11 @@ module Projects
         def get_destroy_messages(deleted_keys)
           messages = []
 
-          if deleted_keys.count == 1
+          if deleted_keys.one?
             messages << { type: 'success',
                           message: t('projects.samples.metadata.deletions.destroy.single_success',
                                      deleted_key: deleted_keys[0]) }
-          elsif deleted_keys.count.positive?
+          elsif deleted_keys.any?
             messages << { type: 'success',
                           message: t('projects.samples.metadata.deletions.destroy.multi_success',
                                      deleted_keys: deleted_keys.join(', ')) }

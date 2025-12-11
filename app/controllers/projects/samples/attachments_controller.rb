@@ -26,7 +26,7 @@ module Projects
 
         @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
 
-        status = if !@attachments.count.positive?
+        status = if @attachments.none?
                    :unprocessable_content
                  elsif @attachments.count(&:persisted?) == @attachments.count
                    :ok
@@ -60,7 +60,7 @@ module Projects
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
 
         respond_to do |format|
-          if @destroyed_attachments.count.positive?
+          if @destroyed_attachments.any?
             status = destroy_status(@attachment, @destroyed_attachments.length)
             format.turbo_stream do
               render status:, locals: { destroyed_attachments: @destroyed_attachments }

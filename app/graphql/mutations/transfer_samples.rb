@@ -92,7 +92,7 @@ module Mutations
       end
 
       project_user_errors = []
-      if project.namespace.errors.count.positive?
+      if project.namespace.errors.any?
         project_user_errors = project.namespace.errors.map do |error|
           {
             path: ['samples', error.attribute.to_s.camelize(:lower)],

@@ -131,7 +131,7 @@ module Samples
       # and will be used for a :error flash message in the UI.
       def handle_not_updated_fields
         metadata_fields_not_updated = @metadata_changes[:not_updated]
-        return unless metadata_fields_not_updated.count.positive?
+        return unless metadata_fields_not_updated.any?
 
         raise SampleMetadataUpdateError,
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
@@ -139,7 +139,7 @@ module Samples
       end
 
       def update_metadata_summary
-        return unless @metadata_changes[:added].count.positive? || @metadata_changes[:deleted].count.positive?
+        return unless @metadata_changes[:added].any? || @metadata_changes[:deleted].any?
 
         @project.namespace.update_metadata_summary_by_update_service(@metadata_changes[:deleted],
                                                                      @metadata_changes[:added])

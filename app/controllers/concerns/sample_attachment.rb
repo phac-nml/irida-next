@@ -8,7 +8,7 @@ module SampleAttachment
   def list_sample_attachments
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
-    @has_attachments = all_attachments.count.positive?
+    @has_attachments = all_attachments.any?
     @q = all_attachments.ransack(params[:q])
     set_attachment_default_sort
     @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result, Attachment)
