@@ -13,7 +13,7 @@ FileUtils.chdir APP_ROOT do
   # Add necessary setup steps to this file.
 
   puts "== Installing dependencies =="
-  system("bin/bundle check") || system!("bin/bundle install")
+  system("bundle check") || system!("bundle install")
   system("pnpm install --frozen-lockfile")
   system("bin/rails g rails_icons:sync --libraries=phosphor heroicons")
 
