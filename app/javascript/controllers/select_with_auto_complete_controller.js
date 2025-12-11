@@ -63,13 +63,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     );
 
     this.#addComboboxEventListeners(this.comboboxTarget);
-
-    this.#attachOptionEvents(this.listboxTarget, true);
-    const categories = this.listboxTarget.querySelectorAll('[role="group"]');
-    categories.forEach((category) => {
-      this.#allOptions.push(category);
-      this.#attachOptionEvents(category);
-    });
+    this.#addListboxEventListeners(this.listboxTarget);
   }
 
   disconnect() {
@@ -83,11 +77,15 @@ export default class SelectWithAutoCompleteController extends Controller {
     );
 
     this.#removeComboboxEventListeners(this.comboboxTarget);
+    this.#removeListboxEventListeners(this.listboxTarget);
+  }
 
-    this.#removeOptionEvents(this.listboxTarget);
-    const categories = this.listboxTarget.querySelectorAll('[role="group"]');
+  #addListboxEventListeners(listbox) {
+    this.#attachOptionEvents(listbox, true);
+    const categories = listbox.querySelectorAll('[role="group"]');
     categories.forEach((category) => {
-      this.#removeOptionEvents(category);
+      this.#allOptions.push(category);
+      this.#attachOptionEvents(category);
     });
   }
 
@@ -98,6 +96,14 @@ export default class SelectWithAutoCompleteController extends Controller {
         this.#allOptions.push(categoryItem);
       }
       this.#addListboxOptionEventListeners(categoryItem);
+    });
+  }
+
+  #removeListboxEventListeners(listbox) {
+    this.#removeOptionEvents(listbox);
+    const categories = listbox.querySelectorAll('[role="group"]');
+    categories.forEach((category) => {
+      this.#removeOptionEvents(category);
     });
   }
 
