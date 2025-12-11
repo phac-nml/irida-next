@@ -2,62 +2,143 @@
 
 require 'application_system_test_case'
 
-class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
+class NextflowSamplesheetComponentTest < ViewComponentTestCase
   # samplesheet component testing now has to use the nextflow_component
   # (not nextflow_samplesheet_component) as the samplesheet now requires the nextflow_component to be rendered
   # for stimulus connection.
   test 'default' do
-    visit('/rails/view_components/nextflow_samplesheet_component/default')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
 
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 5
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'STRANDEDNESS (REQUIRED)'
+      table.assert_selector 'th', text: 'STRANDEDNESS (REQUIRED)'
     end
   end
 
   test 'with reference files' do
-    visit('/rails/view_components/nextflow_samplesheet_component/with_reference_files')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
 
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_snvphyl.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'REFERENCE_ASSEMBLY'
+      table.assert_selector 'thead th', text: 'REFERENCE_ASSEMBLY'
     end
   end
 
   test 'with metadata' do
-    visit('/rails/view_components/nextflow_samplesheet_component/with_metadata')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
+
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: []
+    )
+
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', text: 'pfge_pattern (default)'
+      table.assert_selector 'select#field-pfge_pattern', text: 'pfge_pattern (default)'
     end
   end
 
   test 'with samplesheet overrides' do
     Flipper.enable(:update_nextflow_metadata_param)
 
-    visit('/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides')
+    entry = {
+      url: 'https://github.com/phac-nml/fastmatchirida',
+      name: 'PNC Fast Match',
+      description: 'IRIDA Next PNC Fast Match Pipeline',
+      samplesheet_schema_overrides: {
+        items: {
+          properties: {
+            metadata_1: { # rubocop:disable Naming/VariableNumber
+              'x-irida-next-selected': 'new_isolates_date'
+            },
+            metadata_2: { # rubocop:disable Naming/VariableNumber
+              'x-irida-next-selected': 'predicted_primary_identification_name'
+            }
+          },
+          required: %w[
+            sample
+            mlst_alleles
+          ]
+        }
+      },
+      versions: [
+        {
+          name: '0.4.1',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
 
-    within('div[data-controller-connected="true"]') do
-      assert_selector 'table' do |table|
-        table.assert_selector 'thead th', count: 20
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', text: 'new_isolates_date (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select',
-                              text: 'predicted_primary_identification_name (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select',
-                              text: 'metadata_3 (default)'
-      end
+    workflow = Irida::Pipeline.new('PNC Fast Match', entry, { name: '0.4.1' },
+                                   Rails.root.join(
+                                     'test/fixtures/files/nextflow/nextflow_schema_fastmatch.json'
+                                   ),
+                                   Rails.root.join(
+                                     'test/fixtures/files/nextflow/samplesheet_schema_fastmatch.json'
+                                   ))
 
-      assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
-      assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
+    render_inline NextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'a_url',
+      namespace_id: projects(:project1).namespace,
+      fields: %w[age gender collection_date]
+    )
 
-      assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-
-      select('age', from: 'field-metadata_3')
-      assert_field 'The header name of metadata column 3.', with: 'age'
+    assert_selector 'table' do |table|
+      table.assert_selector 'thead th', count: 20
+      table.assert_selector 'select#field-metadata_1', text: 'new_isolates_date (default)'
+      table.assert_selector 'select#field-metadata_2', text: 'predicted_primary_identification_name (default)'
+      table.assert_selector 'select#field-metadata_3', text: 'metadata_3 (default)'
     end
+
+    assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
+    assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
+
+    assert_field 'The header name of metadata column 3.', with: 'metadata_3'
+
+    select('age', from: 'field-metadata_3')
+    assert_field 'The header name of metadata column 3.', with: 'age'
   end
 end
