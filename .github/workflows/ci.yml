@@ -99,7 +99,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          TEST_OPTS: --exclude test/components/**/*.rb --exclude test/integration/integration_sapporo_test.rb
+          TESTOPTS: --exclude test/components/**/*.rb --exclude test/integration/integration_sapporo_test.rb
         run: bin/rails db:test:prepare test
 
   system-test:
