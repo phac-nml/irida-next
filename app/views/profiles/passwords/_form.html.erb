@@ -70,7 +70,7 @@
                           autocomplete: "new-password" %>
       <% if @minimum_password_length %>
         <p id="<%= form.field_id(:password, "hint") %>" class="field-hint">
-          <%== t(
+          <%= t(
             "devise.passwords.edit.password_hint",
             minimum_password_length: @minimum_password_length,
           ) %>
