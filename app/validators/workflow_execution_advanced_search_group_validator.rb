@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-# Validator for advanced search group validator
-class AdvancedSearchGroupValidator < ActiveModel::Validator
+# Validator for workflow execution advanced search groups
+# Validates search conditions including field names, operators, and values
+# Specific to WorkflowExecution attributes and metadata fields
+class WorkflowExecutionAdvancedSearchGroupValidator < ActiveModel::Validator
   def validate(record)
     return if empty_search?(record)
 
@@ -37,8 +39,8 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_key(condition)
-    return if %w[name puid created_at updated_at
-                 attachments_updated_at].include?(condition.field) || /^metadata\..+$/ =~ condition.field
+    return if %w[id name run_id state created_at updated_at].include?(condition.field) ||
+              /^metadata\..+$/ =~ condition.field
 
     condition.errors.add :field, :not_a_metadata
   end
@@ -55,7 +57,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_date_and_numeric_field(condition)
-    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+    if %w[created_at updated_at].include?(condition.field) || condition.field.end_with?('_date')
       validate_date_field_condition(condition)
     elsif %w[>= <=].include?(condition.operator)
       condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
