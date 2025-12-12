@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-# model to represent sample search form
-class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
+# Model to represent workflow execution search form
+# Provides advanced search capabilities for filtering workflow executions
+# Supports groups, conditions, operators, basic search, and pagination
+class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
@@ -12,21 +14,30 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   attribute :column, :string
   attribute :direction, :string
-  attribute :name_or_puid_cont, :string
-  attribute :name_or_puid_in, default: -> { [] }
-  attribute :project_ids, default: -> { [] }
+  attribute :name_or_id_cont, :string
+  attribute :name_or_id_in, default: -> { [] }
+  attribute :namespace_ids, default: -> { [] }
   attribute :groups, default: lambda {
-    [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
+    [WorkflowExecution::SearchGroup.new(
+      conditions: [WorkflowExecution::SearchCondition.new(field: '', operator: '', value: '')]
+    )]
   }
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
-  validates :project_ids, length: { minimum: 1 }
-  validates_with AdvancedSearchGroupValidator
+  validates :namespace_ids, length: { minimum: 1 }
+  validates_with WorkflowExecutionAdvancedSearchGroupValidator
 
-  def initialize(...)
-    super
+  def initialize(attributes = {}, scope: WorkflowExecution, **kwargs)
+    attributes = if attributes.present?
+                   attributes.merge(kwargs)
+                 else
+                   kwargs
+                 end
+
+    super(attributes)
+    @scope = scope
     self.sort = sort
     self.advanced_query = advanced_query?
     self.groups = groups
@@ -51,25 +62,25 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def ransack_results
-    return Sample.none unless valid?
+    return WorkflowExecution.none unless valid?
 
     scope = if advanced_query
-              sort_samples(advanced_query_scope)
+              sort_workflow_executions(advanced_query_scope)
             else
-              sort_samples
+              sort_workflow_executions
             end
 
     scope.ransack(ransack_params).result
   end
 
   def advanced_query_scope
-    Sample.where(project_id: project_ids).and(advanced_query_groups)
+    @scope.where(namespace_id: namespace_ids).and(advanced_query_groups)
   end
 
   def advanced_query_groups
     adv_query_scope = nil
     groups.each do |group|
-      group_scope = Sample
+      group_scope = WorkflowExecution
       group.conditions.map do |condition|
         group_scope = add_condition(group_scope, condition)
       end
@@ -83,8 +94,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
-    node = build_arel_node(condition, Sample)
-    value = condition.value
+    node = build_arel_node(condition, WorkflowExecution)
+    value = convert_state_enum_value(condition)
     metadata_field = condition.field.starts_with? 'metadata.'
 
     case condition.operator
@@ -108,8 +119,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       condition_exists(scope, node)
     when 'not_exists'
       condition_not_exists(scope, node)
-    else
-      scope
     end
   end
 
@@ -123,57 +132,43 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
   end
 
-  def handle_equals_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_equals(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.eq(value.upcase))
+  def convert_state_enum_value(condition)
+    return condition.value unless condition.field == 'state'
+
+    if %w[in not_in].include?(condition.operator)
+      condition.value.map { |v| WorkflowExecution.states[v] || v }
     else
-      scope.where(node.eq(value))
+      WorkflowExecution.states[condition.value] || condition.value
     end
+  end
+
+  def handle_equals_operator(scope, node, value, metadata_field:, field_name:)
+    condition_equals(scope, node, value, metadata_field:, field_name:)
   end
 
   def handle_in_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_in(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.in(value.map(&:upcase)))
-    else
-      scope.where(node.in(value))
-    end
+    condition_in(scope, node, value, metadata_field:, field_name:)
   end
 
   def handle_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_not_equals(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.not_eq(value.upcase))
-    else
-      scope.where(node.not_eq(value))
-    end
+    condition_not_equals(scope, node, value, metadata_field:, field_name:)
   end
 
   def handle_not_in_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_not_in(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.not_in(value.map(&:upcase)))
-    else
-      scope.where(node.not_in(value))
-    end
+    condition_not_in(scope, node, value, metadata_field:, field_name:)
   end
 
   def ransack_params
     {
-      name_or_puid_cont: name_or_puid_cont,
-      name_or_puid_in: name_or_puid_in
+      name_or_id_cont: name_or_id_cont,
+      name_or_id_in: name_or_id_in
     }.compact
   end
 
-  def sort_samples(scope = Sample.where(project_id: project_ids))
+  def sort_workflow_executions(scope = @scope.where(namespace_id: namespace_ids))
     if column.starts_with? 'metadata.'
       field = column.gsub('metadata.', '')
-      scope.order(Sample.metadata_sort(field, direction))
+      scope.order(WorkflowExecution.metadata_sort(field, direction))
     else
       scope.order("#{column} #{direction}")
     end
