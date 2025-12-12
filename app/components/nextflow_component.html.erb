@@ -75,7 +75,7 @@
           <%= workflow.text_field :name,
                               value: instance.present? ? instance.name : nil,
                               aria: {
-                                required: !@automated_workflow,
+                                required: (!@automated_workflow).to_s,
                               },
                               class:
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
@@ -202,7 +202,7 @@
                              checked: instance.present? && instance["update_samples"],
                              disabled: !@automated_workflow,
                              aria: {
-                               disabled: !@automated_workflow,
+                               disabled: (!@automated_workflow).to_s,
                              },
                              data: {
                                "nextflow--samplesheet-target": "updateSamplesCheckbox",
