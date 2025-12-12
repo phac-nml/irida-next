@@ -1,0 +1,191 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-7xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_heading_group(level: 1) do |group| %>
+        <%= group.with_eyebrow { "Typography System" } %>
+        <%= group.with_heading { "In Context" } %>
+        <%= group.with_metadata { "Real-world examples of typography in page layouts" } %>
+      <% end %>
+    </div>
+
+    <!-- Article Page Layout -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Article Page Layout" } %>
+
+      <div class="mx-auto max-w-3xl">
+        <%= pathogen_typography_preset(:article) do |group| %>
+          <%= group.with_eyebrow { "Research" } %>
+          <%= group.with_heading { "Genomic Surveillance in Public Health" } %>
+          <%= group.with_metadata { "Published January 15, 2024 · 12 min read · Dr. Sarah Johnson" } %>
+        <% end %>
+
+        <%= pathogen_lead(class: "mt-8 mb-6") { "Genomic surveillance has become an essential tool in tracking and understanding pathogen evolution, particularly in the context of emerging infectious diseases." } %>
+
+        <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
+          <% section.with_heading { "Introduction" } %>
+
+          <%= pathogen_text(class: "mb-4") { "IRIDA Next provides researchers with comprehensive tools for genomic analysis and pathogen surveillance. The platform integrates sample management, workflow execution, and data visualization in a unified interface." } %>
+
+          <%= pathogen_text(class: "mb-4") { "By leveraging modern bioinformatics approaches, teams can process samples more efficiently and generate actionable insights faster than traditional methods." } %>
+        <% end %>
+
+        <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
+          <% section.with_heading { "Key Features" } %>
+
+          <%= pathogen_list(class: "mb-6") do |list| %>
+            <%= list.with_item { "Automated sample intake and tracking" } %>
+            <%= list.with_item { "Workflow orchestration and execution" } %>
+            <%= list.with_item { "Real-time quality control monitoring" } %>
+            <%= list.with_item { "Interactive data visualization" } %>
+          <% end %>
+
+          <%= pathogen_callout(class: "my-6") { "IRIDA Next processes over 10,000 samples per month across research institutions worldwide, enabling rapid response to emerging health threats." } %>
+        <% end %>
+
+        <%= pathogen_section(level: 2, class: "mt-8") do |section| %>
+          <% section.with_heading { "Technical Implementation" } %>
+
+          <%= pathogen_text(class: "mb-4") { "The platform is built on Ruby on Rails 8.0 with a modern ViewComponent-based architecture. Here's an example of how to render a sample list:" } %>
+
+          <%= pathogen_code_block(language: "ruby", class: "mb-4") do %>
+def index
+  @samples = Sample.includes(:project)
+                   .order(created_at: :desc)
+                   .page(params[:page])
+end
+          <% end %>
+
+          <%= pathogen_text { "This approach ensures optimal performance even with large datasets." } %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Dashboard Layout -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Dashboard Layout" } %>
+
+      <%= pathogen_typography_preset(:section) do |group| %>
+        <%= group.with_heading { "Active Projects" } %>
+        <%= group.with_metadata { "Last updated 2 minutes ago" } %>
+      <% end %>
+
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <%= pathogen_typography_preset(:card) do |group| %>
+            <%= group.with_eyebrow { "Workflow" } %>
+            <%= group.with_heading { "COVID-19 Analysis" } %>
+            <%= group.with_metadata { "45 samples · Running" } %>
+          <% end %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <%= pathogen_typography_preset(:card) do |group| %>
+            <%= group.with_eyebrow { "Project" } %>
+            <%= group.with_heading { "Influenza Study" } %>
+            <%= group.with_metadata { "128 samples · Active" } %>
+          <% end %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <%= pathogen_typography_preset(:card) do |group| %>
+            <%= group.with_eyebrow { "Analysis" } %>
+            <%= group.with_heading { "Pathogen Typing" } %>
+            <%= group.with_metadata { "Completed 1h ago" } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Layout -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Form Layout" } %>
+
+      <div class="mx-auto max-w-2xl space-y-8">
+        <%= pathogen_typography_preset(:form_section) do |group| %>
+          <%= group.with_heading { "Sample Information" } %>
+          <%= group.with_metadata { "All fields marked with * are required" } %>
+        <% end %>
+
+        <div class="space-y-4">
+          <div>
+            <label class="mb-1 block text-sm font-medium">Sample Name *</label>
+            <input type="text" class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700" placeholder="e.g., SAMPLE-2024-001">
+            <%= pathogen_supporting(variant: :muted, class: "mt-1") { "Enter a unique identifier for this sample" } %>
+          </div>
+
+          <div>
+            <label class="mb-1 block text-sm font-medium">Project *</label>
+            <select class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700">
+              <option>COVID-19 Analysis</option>
+              <option>Influenza Study</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="mb-1 block text-sm font-medium">Description</label>
+            <textarea class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700" rows="3" placeholder="Optional description of the sample"></textarea>
+          </div>
+        </div>
+
+        <%= pathogen_typography_preset(:form_section, class: "mt-8") do |group| %>
+          <%= group.with_heading { "Sample Metadata" } %>
+          <%= group.with_metadata { "Additional information for analysis" } %>
+        <% end %>
+
+        <div class="space-y-4">
+          <div>
+            <label class="mb-1 block text-sm font-medium">Collection Date</label>
+            <input type="date" class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700">
+          </div>
+
+          <div>
+            <label class="mb-1 block text-sm font-medium">Organism</label>
+            <input type="text" class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700" placeholder="e.g., SARS-CoV-2">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List Page Layout -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "List Page Layout" } %>
+
+      <%= pathogen_section(level: 2) do |section| %>
+        <% section.with_heading { "Recent Samples" } %>
+
+        <div class="mt-6 space-y-4">
+          <div class="flex items-center justify-between rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+            <div>
+              <%= pathogen_heading(level: 4, class: "mb-1") { "SAMPLE-2024-045" } %>
+              <%= pathogen_supporting(variant: :muted) { "COVID-19 Analysis · Created 2 hours ago" } %>
+            </div>
+            <div class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900/20 dark:text-green-400">
+              Complete
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+            <div>
+              <%= pathogen_heading(level: 4, class: "mb-1") { "SAMPLE-2024-044" } %>
+              <%= pathogen_supporting(variant: :muted) { "Influenza Study · Created 5 hours ago" } %>
+            </div>
+            <div class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+              Processing
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between rounded-lg border border-slate-200 p-4 dark:border-slate-700">
+            <div>
+              <%= pathogen_heading(level: 4, class: "mb-1") { "SAMPLE-2024-043" } %>
+              <%= pathogen_supporting(variant: :muted) { "Pathogen Typing · Created yesterday" } %>
+            </div>
+            <div class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-800 dark:bg-slate-900/20 dark:text-slate-400">
+              Pending
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

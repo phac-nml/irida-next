@@ -1,0 +1,78 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-6xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_heading_group(level: 1) do |group| %>
+        <%= group.with_eyebrow { "Typography Components" } %>
+        <%= group.with_heading { "Headings" } %>
+        <%= group.with_metadata { "Semantic h1-h6 with responsive sizing and color variants" } %>
+      <% end %>
+    </div>
+
+    <!-- All Levels -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Heading Levels (Responsive)" } %>
+      <div class="space-y-6">
+        <%= pathogen_heading(level: 1) { "Heading 1" } %>
+        <%= pathogen_heading(level: 2) { "Heading 2" } %>
+        <%= pathogen_heading(level: 3) { "Heading 3" } %>
+        <%= pathogen_heading(level: 4) { "Heading 4" } %>
+        <%= pathogen_heading(level: 5) { "Heading 5" } %>
+        <%= pathogen_heading(level: 6) { "Heading 6" } %>
+      </div>
+    </div>
+
+    <!-- Responsive vs Fixed -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 2, class: "mb-6") { "Responsive (Default)" } %>
+        <%= pathogen_supporting(variant: :muted, class: "mb-4") { "Scales from mobile to desktop" } %>
+        <%= pathogen_heading(level: 1, responsive: true) { "Responsive H1" } %>
+        <%= pathogen_code(class: "mt-3") { "responsive: true" } %>
+      </div>
+
+      <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <%= pathogen_heading(level: 2, class: "mb-6") { "Fixed Size" } %>
+        <%= pathogen_supporting(variant: :muted, class: "mb-4") { "Same size on all devices" } %>
+        <%= pathogen_heading(level: 1, responsive: false) { "Fixed H1" } %>
+        <%= pathogen_code(class: "mt-3") { "responsive: false" } %>
+      </div>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Color Variants" } %>
+      <div class="space-y-4">
+        <%= pathogen_heading(level: 3, variant: :default) { "Default Heading" } %>
+        <%= pathogen_heading(level: 3, variant: :muted) { "Muted Heading" } %>
+        <%= pathogen_heading(level: 3, variant: :subdued) { "Subdued Heading" } %>
+        <div class="rounded-lg bg-slate-900 p-4 dark:bg-slate-50">
+          <%= pathogen_heading(level: 3, variant: :inverse) { "Inverse Heading" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Options -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Letter Tracking" } %>
+      <div class="space-y-4">
+        <%= pathogen_heading(level: 3, tracking: :tight) { "Tight Tracking" } %>
+        <%= pathogen_heading(level: 3, tracking: :normal) { "Normal Tracking" } %>
+        <%= pathogen_heading(level: 3, tracking: :wide) { "Wide Tracking" } %>
+      </div>
+    </div>
+
+    <!-- Usage Example -->
+    <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
+      <%= pathogen_heading(level: 3, class: "mb-4") { "Usage Example" } %>
+      <%= pathogen_code_block(language: "erb") do %><%%= pathogen_heading(level: 1, responsive: true) do %>
+  Page Title
+<%% end %>
+
+<%%= pathogen_heading(level: 2, variant: :muted) do %>
+  Section Heading
+<%% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
