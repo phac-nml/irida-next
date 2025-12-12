@@ -261,8 +261,8 @@ module Groups
       assert_equal 'groups-tab', groups_panel['aria-labelledby']
 
       # Verify initial panel visibility (uses hidden class, not hidden attribute)
-      assert_not members_panel[:class].include?('hidden')
-      assert groups_panel[:class].include?('hidden')
+      assert_not (members_panel[:class] || '').include?('hidden')
+      assert (groups_panel[:class] || '').include?('hidden')
 
       # Click groups tab and verify state changes
       groups_tab.click
@@ -283,8 +283,8 @@ module Groups
       members_panel = find('#members-panel', visible: :all)
       groups_panel = find('#groups-panel', visible: :all)
 
-      assert members_panel[:class].include?('hidden')
-      assert_not groups_panel[:class].include?('hidden')
+      assert (members_panel[:class] || '').include?('hidden')
+      assert_not (groups_panel[:class] || '').include?('hidden')
 
       # Verify URL hash syncing (with debounce wait)
       sleep 0.2

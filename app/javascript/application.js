@@ -40,6 +40,9 @@ async function configureLocalTime() {
   // Always configure locale and start LocalTime, even if parsing failed
   LocalTime.config.locale = locale;
   LocalTime.start();
+
+  // Reprocess all existing time elements with the new locale
+  LocalTime.run();
 }
 
 // Initial configuration

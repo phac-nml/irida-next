@@ -28,7 +28,7 @@ module Viral
         move_down: I18n.t('shared.sortable_lists.aria_live_update.move_down'),
         move_up: I18n.t('shared.sortable_lists.aria_live_update.move_up'),
         removed: I18n.t('shared.sortable_lists.aria_live_update.removed')
-      }.to_json
+      }
     end
   end
 end

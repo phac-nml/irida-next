@@ -1,14 +1,15 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll <%='viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
+      data-controller="infinite-scroll <%= 'viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
       <% unless @namespace.metadata_fields.empty? %>
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
+        data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
       <% end %>
-      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-selection-outlet='[id="samples-table"]'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
@@ -28,14 +29,18 @@
             <button
               type="button"
               class="
-                flex items-center justify-between w-full gap-3 p-3 font-medium text-black border
-                rounded-t-lg rtl:text-right dark:text-white border-slate-200
-                dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800
+                flex items-center justify-between w-full gap-3 p-3
+                font-medium text-black border rounded-t-lg rtl:text-right
+                dark:text-white border-slate-200 dark:border-slate-700
+                hover:bg-slate-100 dark:hover:bg-slate-800
               "
               data-collapsible-target="button"
               data-action="collapsible#toggle"
             >
-              <span data-infinite-scroll-target="selectionCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
+              <span data-infinite-scroll-target="selectionCount">
+                <%= t(:"data_exports.new.samples_count.zero") %>
+              </span>
+
               <span
                 data-collapsible-target="icon"
                 class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
@@ -54,19 +59,25 @@
           >
             <div
               class="
-                text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
-                border-t-0 border-slate-200 dark:border-slate-700
+                text-base leading-relaxed text-slate-500 dark:text-slate-400
+                p-2.5 border border-t-0 border-slate-200
+                dark:border-slate-700
               "
             >
               <span data-infinite-scroll-target="summary">
                 <%= t(:"data_exports.new.sample_description.zero") %>
               </span>
-              <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+
+              <span>
+                <%= t(:"data_exports.new.after_submission_description_html") %>
+              </span>
             </div>
+
             <div
               class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-200 rounded-b-lg
-                block w-full p-2.5 dark:bg-slate-800 dark:border-slate-700
+                overflow-y-auto max-h-[200px] border border-t-0
+                border-slate-200 rounded-b-lg block w-full p-2.5
+                dark:bg-slate-800 dark:border-slate-700
               "
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
@@ -96,13 +107,13 @@
               list_items: @namespace.metadata_fields,
               group: "metadata_selection",
             ) %>
+
             <%= sortable_lists.with_list(
               id: "selected-list",
               title: t(".selected"),
               group: "metadata_selection",
             ) %>
           <% end %>
-
           <template
             id="sortable-list-item-template"
             data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
@@ -114,7 +125,7 @@
         <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--json-submission",
-                "form--json-submission-selection-outlet": '#samples-table',
+                "form--json-submission-selection-outlet": '[id="samples-table"]',
                 "form--json-submission-field-name-value": "data_export[export_parameters][ids][]",
                 "form--json-submission-clear-selection-value": "true",
                 "form--json-submission-target": "form",
@@ -123,6 +134,7 @@
           <div class="grid gap-4">
             <div class="mt-1 form-field">
               <%= form.label :name, t(".format"), data: { required: true } %>
+
               <div class="flex">
                 <div class="flex items-center">
                   <input
@@ -132,13 +144,18 @@
                     name="data_export[export_parameters][linelist_format]"
                     checked="true"
                   >
+
                   <label
                     for="csv-format"
                     class="
-                      ml-1 mr-2 text-sm font-medium text-slate-900 dark:text-slate-300
+                      ml-1 mr-2 text-sm font-medium text-slate-900
+                      dark:text-slate-300
                     "
-                  ><%= t(".csv") %></label>
+                  >
+                    <%= t(".csv") %>
+                  </label>
                 </div>
+
                 <div class="flex items-center">
                   <input
                     id="xlsx-format"
@@ -146,22 +163,27 @@
                     value="xlsx"
                     name="data_export[export_parameters][linelist_format]"
                   >
+
                   <label
                     for="xlsx-format"
-                    class="
-                      ml-1 text-sm font-medium text-slate-900 dark:text-slate-300
-                    "
-                  ><%= t(".xlsx") %></label>
+                    class="ml-1 text-sm font-medium text-slate-900 dark:text-slate-300"
+                  >
+                    <%= t(".xlsx") %>
+                  </label>
                 </div>
               </div>
             </div>
+
             <%= render partial: "name_and_email", locals: { form: } %>
+
             <div>
               <%= form.hidden_field :export_type, value: "linelist" %>
+
               <%= form.fields_for :export_parameters do |export_parameters| %>
                 <%= export_parameters.hidden_field :namespace_id, value: namespace_id %>
               <% end %>
             </div>
+
             <% unless @namespace.metadata_fields.empty? %>
               <div
                 class="hidden"
@@ -175,6 +197,7 @@
             <% else %>
               <% data = { turbo_frame: "_top" } %>
             <% end %>
+
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
                           data: data,
