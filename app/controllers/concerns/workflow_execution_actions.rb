@@ -23,12 +23,32 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    @q = load_workflows.ransack(params[:q])
-    @has_workflow_executions = load_workflows.count.positive?
     @search_params = search_params
+    base_workflows = load_workflows
 
-    set_default_sort
-    @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
+    setup_workflow_query(base_workflows)
+    setup_backward_compatibility(base_workflows)
+    configure_enum_fields
+  end
+
+  def search
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+
+    @search_params = search_params
+    base_workflows = load_workflows
+
+    setup_workflow_query(base_workflows)
+    configure_enum_fields
+
+    respond_to do |format|
+      format.turbo_stream do
+        if @query.valid?
+          render status: :ok
+        else
+          render status: :unprocessable_content
+        end
+      end
+    end
   end
 
   def edit
@@ -255,6 +275,16 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
+  def set_query_results
+    if @query.valid?
+      @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    else
+      # Handle validation errors - set empty results
+      @pagy = Pagy.new(count: 0, page: 1)
+      @workflow_executions = WorkflowExecution.none
+    end
+  end
+
   def destroy_multiple_params
     params.expect(destroy_multiple: { workflow_execution_ids: [] })
   end
@@ -330,8 +360,94 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    search_params = {}
-    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params
+    updated_params = update_store(search_key,
+                                  params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
+    convert_ransack_sort_param(updated_params)
+    updated_params.slice!(:name_or_id_cont, :groups_attributes, :sort)
+
+    updated_params
+  end
+
+  def search_key
+    if @namespace.is_a?(Project)
+      "project_workflow_executions_#{@namespace.id}"
+    elsif @namespace.is_a?(Group)
+      "group_workflow_executions_#{@namespace.id}"
+    else
+      'workflow_executions'
+    end
+  end
+
+  def permit_search_params
+    params[:q].permit(
+      :name_or_id_cont,
+      :sort,
+      :s,
+      groups_attributes: [
+        {
+          conditions_attributes: [
+            :field,
+            :operator,
+            :value,
+            { value: [] }
+          ]
+        }
+      ]
+    )
+  end
+
+  def convert_ransack_sort_param(search_params)
+    # Convert Ransack's :s parameter to :sort for our Query model
+    if search_params[:s].present? && search_params[:sort].blank?
+      search_params[:sort] = search_params.delete(:s)
+    else
+      search_params.delete(:s)
+    end
+  end
+
+  def setup_workflow_query(base_workflows)
+    # Always use base_scope to ensure proper authorization filtering
+    @query = WorkflowExecution::Query.new(
+      base_scope: base_workflows,
+      **@search_params
+    )
+
+    @has_workflow_executions = base_workflows.any?
+    set_query_results
+  end
+
+  def setup_backward_compatibility(base_workflows)
+    # For backward compatibility with SearchComponent that expects Ransack
+    @q = base_workflows.ransack(params[:q])
+    set_default_sort
+  end
+
+  def configure_enum_fields
+    # Configure enum fields for advanced search
+    @workflow_execution_enum_fields = {
+      'state' => state_enum_fields,
+      'metadata.workflow_name' => workflow_name_enum_fields
+    }
+  end
+
+  def state_enum_fields
+    {
+      values: WorkflowExecution.states.keys.map(&:downcase),
+      translation_key: 'workflow_executions.state',
+      labels: WorkflowExecution.states.keys.index_with { |k| I18n.t("workflow_executions.state.#{k}") }
+    }
+  end
+
+  def workflow_name_enum_fields
+    workflows = Irida::Pipelines.instance.pipelines('executable')
+    workflow_names = workflows.map do |_pipeline_id, pipeline|
+      pipeline.name.is_a?(Hash) ? pipeline.name[I18n.locale.to_s] : pipeline.name
+    end.compact_blank.uniq
+
+    {
+      values: workflow_names,
+      translation_key: 'pipelines.name',
+      labels: workflow_names.index_with { |name| name }
+    }
   end
 end

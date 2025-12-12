@@ -1,0 +1,309 @@
+# frozen_string_literal: true
+
+# Model representing an advanced search query for workflow executions.
+#
+# This query builder supports both simple text-based searches and complex advanced searches
+# with multiple conditions and groups. It handles JSONB metadata fields, enum fields,
+# date fields, and provides pagination support.
+#
+# @example Simple search by name or ID
+#   query = WorkflowExecution::Query.new(name_or_id_cont: 'example')
+#   pagy, results = query.results(limit: 20, page: 1)
+#
+# @example Advanced search with conditions
+#   query = WorkflowExecution::Query.new(
+#     groups_attributes: {
+#       '0': {
+#         conditions_attributes: {
+#           '0': { field: 'state', operator: '=', value: 'completed' },
+#           '1': { field: 'workflow_name', operator: 'contains', value: 'iridanext' }
+#         }
+#       }
+#     }
+#   )
+#   pagy, results = query.results(limit: 20, page: 1)
+#
+# @see WorkflowExecution::SearchGroup
+# @see WorkflowExecution::SearchCondition
+# @see AdvancedQuerySearchable
+class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
+  include ActiveModel::Model
+  include ActiveModel::Attributes
+  include Pagy::Backend
+  include AdvancedQuerySearchable
+
+  METADATA_FIELD_MAP = {
+    'workflow_name' => 'pipeline_id',
+    'workflow_version' => 'workflow_version'
+  }.freeze
+
+  ResultTypeError = Class.new(StandardError)
+
+  attribute :column, :string
+  attribute :direction, :string
+  attribute :name_or_id_cont, :string
+  attribute :namespace_id, :string
+  attribute :groups, default: lambda {
+    [WorkflowExecution::SearchGroup.new(
+      conditions: [WorkflowExecution::SearchCondition.new(field: '', operator: '', value: '')]
+    )]
+  }
+  attribute :sort, :string, default: 'updated_at desc'
+  attribute :advanced_query, :boolean, default: false
+
+  validates :direction, inclusion: { in: %w[asc desc] }
+  validates_with WorkflowExecutionSearchGroupValidator
+
+  def initialize(attributes = {})
+    attributes = attributes.dup
+    @base_scope = attributes.delete(:base_scope) || attributes.delete('base_scope')
+    super
+    self.sort = sort
+    self.advanced_query = advanced_query?
+    self.groups = groups
+  end
+
+  def groups_attributes=(attributes)
+    parsed_groups = attributes.each_value.map { |group_attrs| parse_group(group_attrs) }
+    assign_attributes(groups: parsed_groups)
+  end
+
+  def sort=(value)
+    super
+    # use rpartition to split on the first space encountered from the right side
+    # this allows us to sort by metadata fields which contain spaces
+    sort_value = sort.presence || 'updated_at desc'
+    column, _space, direction = sort_value.rpartition(' ')
+
+    # Fallback to default if column is empty (e.g., if sort was just "desc")
+    if column.blank?
+      column = 'updated_at'
+      direction = direction.presence || 'desc'
+    end
+
+    column = column.gsub('metadata_', 'metadata.') if column.include?('metadata_')
+    assign_attributes(column:, direction:)
+  end
+
+  def advanced_query?
+    return !groups.all?(&:empty?) if groups
+
+    false
+  end
+
+  def results(**results_arguments)
+    if results_arguments[:limit] || results_arguments[:page]
+      pagy_results(results_arguments[:limit], results_arguments[:page])
+    else
+      non_pagy_results
+    end
+  end
+
+  private
+
+  def pagy_results(limit, page)
+    pagy(ransack_results, limit:, page:)
+  end
+
+  def non_pagy_results
+    ransack_results
+  end
+
+  def ransack_results
+    return WorkflowExecution.none unless valid?
+
+    base_scope = @base_scope || WorkflowExecution.where(namespace_id:)
+    scope = if advanced_query
+              sort_workflow_executions(advanced_query_scope(base_scope))
+            else
+              sort_workflow_executions(base_scope)
+            end
+
+    # Eager load associations to prevent N+1 queries in the table view
+    # - namespace and parent: for namespace display
+    # Note: workflow is not an association but a method that looks up from Irida::Pipelines
+    scope.includes(namespace: :parent).ransack(ransack_params).result
+  end
+
+  def advanced_query_scope(base_scope = nil)
+    query_base = base_scope || @base_scope || WorkflowExecution.where(namespace_id:)
+    # Build the OR-composed groups independently of the authorization/base scope to
+    # keep the intent clear: (OR groups) AND (base scope). We intentionally start
+    # each group from an unscoped relation and apply the base scope once below.
+    groups_scope = advanced_query_groups
+    return query_base unless groups_scope
+
+    query_base.and(groups_scope)
+  end
+
+  def advanced_query_groups
+    groups.reject(&:empty?).reduce(nil) do |acc_scope, group|
+      # Start from an unscoped relation for each group and compose conditions with AND
+      group_scope = group.conditions.reduce(WorkflowExecution.unscoped) { |scope, cond| add_condition(scope, cond) }
+      acc_scope ? acc_scope.or(group_scope) : group_scope
+    end
+  end
+
+  def add_condition(scope, condition)
+    field = normalized_field(condition.field)
+    return scope if field.blank?
+
+    node = build_arel_node(field)
+    apply_operator(scope, condition, node, field)
+  end
+
+  def build_arel_node(field)
+    if jsonb_field?(field)
+      jsonb_key = METADATA_FIELD_MAP.fetch(field)
+      Arel::Nodes::InfixOperation.new(
+        '->>', WorkflowExecution.arel_table[:metadata], Arel::Nodes::Quoted.new(jsonb_key)
+      )
+    else
+      WorkflowExecution.arel_table[field.to_sym]
+    end
+  end
+
+  def text_match_field?(field)
+    jsonb_field?(field) || field == 'name'
+  end
+
+  def uppercase_field?(field)
+    field == 'run_id'
+  end
+
+  def uuid_field?(field)
+    field == 'id'
+  end
+
+  def ransack_params
+    {
+      name_or_id_cont: name_or_id_cont
+    }.compact
+  end
+
+  def sort_workflow_executions(scope)
+    return scope unless column.present? && direction.present?
+
+    if column.starts_with? 'metadata.'
+      field = column.gsub('metadata.', '')
+      scope.order(WorkflowExecution.metadata_sort(field, direction))
+    else
+      scope.order("#{column} #{direction}")
+    end
+  end
+
+  def normalized_field(field)
+    field.to_s.sub(/\Ametadata\./, '')
+  end
+
+  def jsonb_field?(field)
+    METADATA_FIELD_MAP.key?(field)
+  end
+
+  def workflow_name_field?(field)
+    field == 'workflow_name'
+  end
+
+  def parse_group(group_attributes)
+    conditions = group_attributes.each_value.flat_map do |conditions_attrs|
+      conditions_attrs.each_value.map { |params| WorkflowExecution::SearchCondition.new(params) }
+    end
+    WorkflowExecution::SearchGroup.new(conditions:)
+  end
+
+  # Override handle_equals to convert workflow names to pipeline_ids
+  def handle_equals(scope, condition, node, field)
+    return super unless workflow_name_field?(field)
+
+    pipeline_id = workflow_name_to_pipeline_id(condition.value)
+    return scope if pipeline_id.nil?
+
+    scope.where(node.eq(pipeline_id))
+  end
+
+  # Override handle_in to convert workflow names to pipeline_ids
+  def handle_in(scope, condition, node, field)
+    return super unless workflow_name_field?(field)
+
+    pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+    return scope if pipeline_ids.empty?
+
+    scope.where(node.in(pipeline_ids))
+  end
+
+  # Override handle_not_equals to convert workflow names to pipeline_ids
+  def handle_not_equals(scope, condition, node, field)
+    return super unless workflow_name_field?(field)
+
+    pipeline_id = workflow_name_to_pipeline_id(condition.value)
+    return scope if pipeline_id.nil?
+
+    scope.where(node.not_eq(pipeline_id))
+  end
+
+  # Override handle_not_in to convert workflow names to pipeline_ids
+  def handle_not_in(scope, condition, node, field)
+    return super unless workflow_name_field?(field)
+
+    pipeline_ids = condition.value.filter_map { |name| workflow_name_to_pipeline_id(name) }
+    return scope if pipeline_ids.empty?
+
+    scope.where(node.not_in(pipeline_ids))
+  end
+
+  # Override handle_contains to search workflow names and convert to pipeline_ids
+  def handle_contains(scope, condition, node, field)
+    return super unless workflow_name_field?(field)
+    return scope if condition.value.blank?
+
+    # Find all pipeline_ids whose names contain the search term
+    search_term = condition.value.downcase
+    matching_pipeline_ids = cached_pipeline_name_matches(search_term)
+
+    return scope if matching_pipeline_ids.empty?
+
+    scope.where(node.in(matching_pipeline_ids))
+  end
+
+  # Convert workflow name to pipeline_id
+  def workflow_name_to_pipeline_id(workflow_name)
+    return nil if workflow_name.blank?
+
+    pipelines = cached_executable_pipelines
+    pipeline = pipelines.find { |_pipeline_id, p| match_pipeline_name?(p, workflow_name) }
+    pipeline&.last&.pipeline_id
+  end
+
+  def match_pipeline_name?(pipeline_def, workflow_name)
+    # Handle both String and Hash name formats
+    if pipeline_def.name.is_a?(Hash)
+      # Check current locale first, then all locales as fallback
+      pipeline_def.name[I18n.locale.to_s] == workflow_name || pipeline_def.name.values.include?(workflow_name)
+    elsif pipeline_def.name.is_a?(String)
+      pipeline_def.name == workflow_name
+    else
+      false
+    end
+  end
+
+  # Cache executable pipelines to avoid repeated lookups
+  def cached_executable_pipelines
+    Rails.cache.fetch('workflow_execution:executable_pipelines', expires_in: 1.hour) do
+      Irida::Pipelines.instance.pipelines('executable')
+    end
+  end
+
+  # Cache pipeline name matches for contains operator
+  def cached_pipeline_name_matches(search_term)
+    cache_key = "workflow_execution:pipeline_name_matches:#{search_term}"
+    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      cached_executable_pipelines.filter_map do |_pipeline_id, p|
+        pipeline_matches_search?(p, search_term)
+      end
+    end
+  end
+
+  def pipeline_matches_search?(pipeline, search_term)
+    pipeline.name.is_a?(Hash) && pipeline.name.values.any? { |name| name&.downcase&.include?(search_term) }
+  end
+end

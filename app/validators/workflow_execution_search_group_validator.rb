@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
-# Validator for advanced search group validator
-class AdvancedSearchGroupValidator < ActiveModel::Validator
+# Validator for workflow execution advanced search group validator
+class WorkflowExecutionSearchGroupValidator < ActiveModel::Validator
+  # Allowed fields for workflow execution search conditions
+  ALLOWED_FIELDS = %w[
+    id
+    name
+    workflow_name
+    workflow_version
+    state
+    run_id
+    created_at
+    updated_at
+  ].freeze
+
   def validate(record)
     return if empty_search?(record)
 
@@ -39,10 +51,10 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_key(condition)
-    return if %w[name puid created_at updated_at
-                 attachments_updated_at].include?(condition.field) || /^metadata\..+$/ =~ condition.field
+    field = sanitized_field(condition.field)
+    return if field.blank? || ALLOWED_FIELDS.include?(field)
 
-    condition.errors.add :field, :not_a_metadata
+    condition.errors.add :field, :not_allowed
   end
 
   def validate_blank_field(condition)
@@ -57,7 +69,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_date_and_numeric_field(condition)
-    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+    if %w[created_at updated_at].include?(condition.field)
       validate_date_field_condition(condition)
     elsif %w[>= <=].include?(condition.operator)
       condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
@@ -104,5 +116,9 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
       common_field_conditions.collect(&:operator).sort == %w[>= <=].sort)
       unique_field_condition.errors.add :operator, :taken
     end
+  end
+
+  def sanitized_field(field)
+    field.to_s.sub(/\Ametadata\./, '')
   end
 end
