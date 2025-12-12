@@ -23,12 +23,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    @q = load_workflows.ransack(params[:q])
+    @query = WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }))
     @has_workflow_executions = load_workflows.any?
     @search_params = search_params
 
-    set_default_sort
-    @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
+    @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+
+    setup_ransack_for_form
   end
 
   def edit
@@ -126,8 +127,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     return if params[:select].blank?
 
-    @q = load_workflows.ransack(params[:q])
-    @workflow_executions = @q.result.select(:id)
+    @query = WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }))
+    @workflow_executions = @query.send(:ransack_results).select(:id)
   end
 
   def destroy_confirmation
@@ -228,6 +229,18 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   private
 
+  def namespace_ids
+    [@namespace.id]
+  end
+
+  def setup_ransack_for_form
+    # Set @q for view compatibility (used in search forms)
+    # Create a minimal ransack object for the form while using @query for actual searching
+    @q = load_workflows.ransack(params[:q])
+    # Copy search values from query to ransack for form display
+    @q.name_or_id_cont = @query.name_or_id_cont
+  end
+
   def workflow_properties
     workflow = @workflow_execution.workflow
     return {} if workflow.workflow_params.empty?
@@ -249,10 +262,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                    @tab = 'summary'
                    0
                  end
-  end
-
-  def set_default_sort
-    @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
   def destroy_multiple_params
@@ -332,6 +341,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     search_params = {}
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params
+    search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
+    search_params[:sort] = params.dig(:q, :s)
+    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
+    search_params.compact
   end
 end
