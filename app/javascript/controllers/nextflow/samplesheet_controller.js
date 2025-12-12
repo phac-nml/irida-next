@@ -11,8 +11,10 @@ export default class extends Controller {
     "form",
     "formFieldError",
     "formFieldErrorMessage",
-    "spinner",
-    "workflowAttributes",
+    "samplesheetMessagesContainer",
+    "submissionSpinner",
+    "samplesheetSpinner",
+    "sampleAttributes",
     "samplesheetProperties",
     "trTemplate",
     "thTemplate",
@@ -33,19 +35,23 @@ export default class extends Controller {
     "metadataHeaderForm",
     "filterClearButton",
     "filterSearchButton",
+    "updateSamplesCheckbox",
+    "updateSamplesLabel",
+    "updateMessage",
   ];
 
   static values = {
     dataMissingError: { type: String },
-    submissionError: { type: String },
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    processingRequest: { type: String },
-    filteringSamples: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
+    allowedToUpdateSamplesString: { type: String },
+    notAllowedToUpdateSamplesString: { type: String },
   };
+
+  static outlets = ["nextflow--samplesheet--params"];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -101,13 +107,24 @@ export default class extends Controller {
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
 
+  #queuedMetadataChanges = {};
+
+  #samplesheetReady = false;
+
   connect() {
-    if (this.hasWorkflowAttributesTarget) {
-      this.#setSamplesheetParametersAndData();
-      this.#updateMetadataColumnHeaderNames();
-      this.#disableProcessingState();
-    }
+    this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
+  }
+
+  processSamplesheet({ detail: { content } }) {
+    this.#setSamplesheetParametersAndData();
+    this.#disableProcessingState(content["allowedToUpdateSamples"]);
+    this.#samplesheetReady = true;
+    if (Object.keys(this.#queuedMetadataChanges).length > 0) {
+      this.#submitMetadataChange(this.#queuedMetadataChanges);
+      this.#queuedMetadataChanges = {};
+    }
+    this.updateMessageTarget.classList.remove("hidden");
   }
 
   #setSamplesheetParametersAndData() {
@@ -118,10 +135,10 @@ export default class extends Controller {
     this.samplesheetPropertiesTarget.remove();
 
     this.#samplesheetAttributes = JSON.parse(
-      this.workflowAttributesTarget.innerText,
+      this.sampleAttributesTarget.innerText,
     );
     // clear the now unnecessary DOM element
-    this.workflowAttributesTarget.remove();
+    this.sampleAttributesTarget.remove();
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
@@ -179,7 +196,7 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState(this.processingRequestValue);
+    this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
       // By default we set nameValid to true
@@ -196,7 +213,7 @@ export default class extends Controller {
 
         let missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {
-          this.#disableProcessingState();
+          this.#disableSubmissionState();
           let errorMsg = this.dataMissingErrorValue;
           for (const sample in missingData) {
             errorMsg =
@@ -225,7 +242,7 @@ export default class extends Controller {
           this.formTarget.requestSubmit();
         }
       } else {
-        this.#disableProcessingState();
+        this.#disableSubmissionState();
         this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
@@ -260,15 +277,31 @@ export default class extends Controller {
     }
   }
 
-  #enableProcessingState(message) {
-    document.getElementById("nextflow-spinner-message").innerHTML = message;
-    this.submitTarget.disabled = true;
-    this.spinnerTarget.classList.remove("hidden");
+  #disableProcessingState(allowedToUpdateSamples) {
+    this.submitTarget.disabled = false;
+    this.samplesheetSpinnerTarget.remove();
+
+    this.updateSamplesLabelTarget.innerHTML = "";
+    if (allowedToUpdateSamples) {
+      this.updateSamplesLabelTarget.innerText =
+        this.allowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.disabled = false;
+      this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
+    } else {
+      this.updateSamplesLabelTarget.innerText =
+        this.notAllowedToUpdateSamplesStringValue;
+      this.updateSamplesCheckboxTarget.checked = false;
+    }
   }
 
-  #disableProcessingState() {
+  #enableSubmissionState() {
+    this.submitTarget.disabled = true;
+    this.submissionSpinnerTarget.classList.remove("hidden");
+  }
+
+  #disableSubmissionState() {
+    this.submissionSpinnerTarget.classList.add("hidden");
     this.submitTarget.disabled = false;
-    this.spinnerTarget.classList.add("hidden");
   }
 
   #disableErrorState() {
@@ -292,6 +325,7 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
   }
 
   #disableFormFieldErrorState() {
@@ -350,11 +384,13 @@ export default class extends Controller {
   // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
   updateMetadata({ detail: { content } }) {
     for (const index in content["metadata"]) {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
-        content["metadata"][index],
-      );
-      this.#updateCell(content["property"], index, "metadata_cell", false);
+      for (const header in content["metadata"][index]) {
+        this.#setFormData(
+          `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${header}]`,
+          content["metadata"][index][header],
+        );
+        this.#updateCell(header, index, "metadata_cell", false);
+      }
     }
     this.#clearPayload();
   }
@@ -653,7 +689,6 @@ export default class extends Controller {
   // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
   // we can then easily access each sample's data via its index and still paginate in pages of 5
   filter() {
-    this.#enableProcessingState(this.filteringSamplesValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
     setTimeout(() => {
       if (this.filterTarget.value) {
@@ -679,7 +714,6 @@ export default class extends Controller {
         this.#setCurrentSampleIndexesToAll();
       }
 
-      this.#disableProcessingState();
       this.#setPagination();
       this.#updatePageData();
       this.#updateFilterButtons();
@@ -721,6 +755,7 @@ export default class extends Controller {
       `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
     );
 
+    // updates parameter below samplesheet if it exists
     if (metadataParameter) {
       metadataParameter.value = metadataField;
       metadataParameter.classList.add(
@@ -734,34 +769,16 @@ export default class extends Controller {
       }, 1000);
     }
 
-    const metadataFormContent =
-      this.metadataHeaderFormTarget.content.cloneNode(true);
-
-    const filledMetadataForm = this.#appendInputsToMetadataForm(
-      metadataFormContent,
-      metadataField,
-      metadataSamplesheetColumn,
-    );
-
-    this.element.appendChild(filledMetadataForm);
-
-    this.element.lastElementChild.addEventListener(
-      "turbo:before-fetch-request",
-      (event) => {
-        event.detail.fetchOptions.body = JSON.stringify(
-          formDataToJsonParams(new FormData(this.element.lastElementChild)),
-        );
-        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
-
-        event.detail.resume();
-      },
-      {
-        once: true,
-      },
-    );
-
-    this.element.lastElementChild.requestSubmit();
-    this.element.lastElementChild.remove();
+    // for large sample batches, users will be able to select metadata headers prior to the samplesheet loading in
+    // we will add those changes to the #queuedMetadataChanges object, and that will be submitted once
+    // the samplesheet is ready
+    if (this.#samplesheetReady) {
+      this.#submitMetadataChange({
+        [metadataSamplesheetColumn]: metadataField,
+      });
+    } else {
+      this.#queuedMetadataChanges[metadataSamplesheetColumn] = metadataField;
+    }
   }
 
   #updateMetadataColumnHeaderNames() {
@@ -787,7 +804,7 @@ export default class extends Controller {
     });
   }
 
-  #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
+  #appendInputsToMetadataForm(metadataFormContent, metadataParams) {
     // add turbo_stream, which metadata column and the selected metadata field inputs
     const formInputValues = [
       {
@@ -795,12 +812,8 @@ export default class extends Controller {
         value: "turbo_stream",
       },
       {
-        name: "header",
-        value: columnName,
-      },
-      {
-        name: "field",
-        value: metadataField,
+        name: "metadata_fields",
+        value: JSON.stringify(metadataParams),
       },
     ];
 
@@ -818,6 +831,35 @@ export default class extends Controller {
     });
 
     return metadataFormContent;
+  }
+
+  #submitMetadataChange(metadataParams) {
+    const metadataFormContent =
+      this.metadataHeaderFormTarget.content.cloneNode(true);
+
+    const filledMetadataForm = this.#appendInputsToMetadataForm(
+      metadataFormContent,
+      metadataParams,
+    );
+    this.element.appendChild(filledMetadataForm);
+
+    this.element.lastElementChild.addEventListener(
+      "turbo:before-fetch-request",
+      (event) => {
+        event.detail.fetchOptions.body = JSON.stringify(
+          formDataToJsonParams(new FormData(this.element.lastElementChild)),
+        );
+        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+        event.detail.resume();
+      },
+      {
+        once: true,
+      },
+    );
+
+    this.element.lastElementChild.requestSubmit();
+    this.element.lastElementChild.remove();
   }
 
   #createMetadataFormInput(inputValue) {

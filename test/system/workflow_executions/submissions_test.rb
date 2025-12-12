@@ -394,7 +394,7 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'div#samplesheet'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
@@ -1110,8 +1110,6 @@ module WorkflowExecutions
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'div#nextflow-spinner'
-        assert_no_selector 'div#nextflow-spinner'
         assert_selector %(input#samplesheet-filter) do |input|
           assert_equal 'inxt_sam_', input['value']
         end
@@ -1329,6 +1327,9 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+        assert_text I18n.t('components.nextflow_component.loading_complete')
+        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 4)
+
         # assert indexes of samples
         within('th[id="0_sample"]') do
           assert_text sample32.puid
@@ -1438,6 +1439,8 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+        assert_text I18n.t('components.nextflow_component.loading_complete')
+        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
 
         find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
 
