@@ -46,7 +46,7 @@ module Nextflow
              file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
           when 'metadata_cell'
             [name, metadata_samplesheet_values(sample, name, property)]
-          when 'dropdown_cell' || 'input_cell'
+          when 'dropdown_cell', 'input_cell'
             [name, { form_value: '' }]
           end
         end

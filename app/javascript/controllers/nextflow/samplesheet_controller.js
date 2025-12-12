@@ -123,6 +123,7 @@ export default class extends Controller {
     this.#samplesheetReady = true;
     if (Object.keys(this.#queuedMetadataChanges).length > 0) {
       this.#submitMetadataChange(this.#queuedMetadataChanges);
+      this.#queuedMetadataChanges = {};
     }
     this.updateMessageTarget.classList.remove("hidden");
   }
