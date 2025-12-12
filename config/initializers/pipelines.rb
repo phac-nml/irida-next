@@ -3,12 +3,14 @@
 require 'irida/pipelines'
 
 Rails.application.config.to_prepare do
-  pipeline_config_file = if Rails.root.join("config/pipelines/#{Rails.env}.json").exist?
-                           "config/pipelines/#{Rails.env}.json"
-                         else
-                           'config/pipelines/pipelines.json'
-                         end
-  Irida::Pipelines.instance = Irida::Pipelines.new(pipeline_config_file:) if Irida::Pipelines.instance.nil?
+  unless defined?(Rake::Task) && Rake::Task.task_defined?('pipeline_json_validator:validate')
+    pipeline_config_file = if Rails.root.join("config/pipelines/#{Rails.env}.json").exist?
+                             "config/pipelines/#{Rails.env}.json"
+                           else
+                             'config/pipelines/pipelines.json'
+                           end
+    Irida::Pipelines.instance = Irida::Pipelines.new(pipeline_config_file:) if Irida::Pipelines.instance.nil?
+  end
 end
 
 Rails.application.config.after_initialize do
