@@ -88,6 +88,7 @@ module W3cValidationHelpers
     arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_label_on_div_without_role(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_anchor_positioning_errors(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -264,6 +265,29 @@ module W3cValidationHelpers
       Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
     end
   end
+
+  def _ignore_anchor_positioning_errors(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 286: CSS: “position-anchor”: Parse Error.
+      #   ERROR; line 285: CSS: “anchor-name”: Parse Error.
+      if /\AERROR\b.+\bposition-anchor\b.*\bParse\b\s\bError\b\./i =~ es.to_s ||
+        /\AERROR\b.+\banchor-name\b.*\bParse\b\s\bError\b\./i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
 
   # Botch fix of W3C validation errors for aria-label on div elements without appropriate role
   #
