@@ -8,6 +8,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   include ActiveModel::Attributes
   include Pagy::Backend
   include AdvancedSearchable
+  include AdvancedSearchConditions
 
   ResultTypeError = Class.new(StandardError)
 
@@ -85,107 +86,69 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     adv_query_scope
   end
 
-  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    node = build_arel_node(condition, WorkflowExecution)
+    value = convert_state_enum_value(condition)
     metadata_field = condition.field.starts_with? 'metadata.'
-    metadata_key = (condition.field.gsub(/^metadata./, '') if metadata_field)
-    node = if metadata_field
-             Arel::Nodes::InfixOperation.new('->>', WorkflowExecution.arel_table[:metadata],
-                                             Arel::Nodes::Quoted.new(metadata_key))
-           else
-             WorkflowExecution.arel_table[condition.field]
-           end
 
-    # Convert state enum string values to integers before building predicates
-    converted_value = condition.value
-    if condition.field == 'state'
-      converted_value = if %w[in not_in].include?(condition.operator)
-                          condition.value.map { |v| WorkflowExecution.states[v] || v }
-                        else
-                          WorkflowExecution.states[condition.value] || condition.value
-                        end
-    end
-
-    # TODO: Refactor each case into it's own method
     case condition.operator
     when '='
-      if metadata_field || condition.field == 'name'
-        scope.where(node.matches(converted_value))
-      else
-        scope.where(node.eq(converted_value))
-      end
+      handle_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
     when 'in'
-      if metadata_field
-        scope.where(Arel::Nodes::NamedFunction.new('LOWER',
-                                                   [node]).in(converted_value.map(&:downcase)))
-      elsif condition.field == 'name'
-        scope.where(node.lower.in(converted_value.map(&:downcase)))
-      else
-        scope.where(node.in(converted_value))
-      end
+      handle_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
     when '!='
-      if metadata_field || condition.field == 'name'
-        scope.where(node.eq(nil).or(node.does_not_match(converted_value)))
-      else
-        scope.where(node.not_eq(converted_value))
-      end
+      handle_not_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
     when 'not_in'
-      if metadata_field
-        scope.where(node.eq(nil).or(Arel::Nodes::NamedFunction.new('LOWER',
-                                                                   [node]).not_in(converted_value.map(&:downcase))))
-      elsif condition.field == 'name'
-        scope.where(node.lower.not_in(converted_value.map(&:downcase)))
-      else
-        scope.where(node.not_in(converted_value))
-      end
+      handle_not_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
     when '<='
-      if !metadata_field
-        scope.where(node.lteq(converted_value))
-      elsif metadata_key.end_with?('_date')
-        scope
-          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-            ).lteq(converted_value)
-          )
-      else
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).lteq(converted_value)
-          )
-      end
+      handle_less_than_or_equal(scope, node, value, condition.field, metadata_field)
     when '>='
-      if !metadata_field
-        scope.where(node.gteq(converted_value))
-      elsif metadata_key.end_with?('_date')
-        scope
-          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-            ).gteq(converted_value)
-          )
-      else
-        scope
-          .where(node.matches_regexp('^-?\d+(\.\d+)?$'))
-          .where(
-            Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-            ).gteq(converted_value)
-          )
-      end
+      handle_greater_than_or_equal(scope, node, value, condition.field, metadata_field)
     when 'contains'
-      scope.where(node.matches("%#{converted_value}%"))
+      condition_contains(scope, node, value)
     when 'not_contains'
-      scope.where(node.does_not_match("%#{converted_value}%"))
+      condition_not_contains(scope, node, value)
     when 'exists'
-      scope.where(node.not_eq(nil))
+      condition_exists(scope, node)
     when 'not_exists'
-      scope.where(node.eq(nil))
+      condition_not_exists(scope, node)
     end
+  end
+
+  def handle_less_than_or_equal(scope, node, value, field, metadata_field)
+    metadata_key = field.gsub(/^metadata./, '')
+    condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
+  end
+
+  def handle_greater_than_or_equal(scope, node, value, field, metadata_field)
+    metadata_key = field.gsub(/^metadata./, '')
+    condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
+  end
+
+  def convert_state_enum_value(condition)
+    return condition.value unless condition.field == 'state'
+
+    if %w[in not_in].include?(condition.operator)
+      condition.value.map { |v| WorkflowExecution.states[v] || v }
+    else
+      WorkflowExecution.states[condition.value] || condition.value
+    end
+  end
+
+  def handle_equals_operator(scope, node, value, metadata_field:, field_name:)
+    condition_equals(scope, node, value, metadata_field:, field_name:)
+  end
+
+  def handle_in_operator(scope, node, value, metadata_field:, field_name:)
+    condition_in(scope, node, value, metadata_field:, field_name:)
+  end
+
+  def handle_not_equals_operator(scope, node, value, metadata_field:, field_name:)
+    condition_not_equals(scope, node, value, metadata_field:, field_name:)
+  end
+
+  def handle_not_in_operator(scope, node, value, metadata_field:, field_name:)
+    condition_not_in(scope, node, value, metadata_field:, field_name:)
   end
 
   def ransack_params
