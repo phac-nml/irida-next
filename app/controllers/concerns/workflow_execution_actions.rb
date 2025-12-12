@@ -230,6 +230,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   private
 
   def namespace_ids
+    return load_workflows.distinct.pluck(:namespace_id) if @namespace.nil?
+
     [@namespace.id]
   end
 
@@ -239,6 +241,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @q = load_workflows.ransack(params[:q])
     # Copy search values from query to ransack for form display
     @q.name_or_id_cont = @query.name_or_id_cont
+    # Set default sort if none provided
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
   def workflow_properties
