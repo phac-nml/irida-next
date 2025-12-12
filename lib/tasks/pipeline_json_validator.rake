@@ -76,23 +76,23 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   # Verify that each pipeline version URL exists and is reachable
   def verify_url_exists_and_reachable(json_data) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     progressbar = ProgressBar.create(title: 'Checking URLs', total: json_data.size, format: '%t: |%B| %p%% %e')
-    json_data.each do |pipeline_key, pipeline_hash|
+    json_data.each_value do |pipeline_hash|
       base_url = pipeline_hash['url']
 
       pipeline_hash['versions'].each do |version|
-        url = base_url
-        if version.key?('name')
-          url = "#{url}/tree/#{version['name']}"
-          begin
-            response = Net::HTTP.get_response(URI(url))
-            unless response.is_a?(Net::HTTPSuccess)
-              @errors << "URL is NOT reachable (Status: #{response.code}): #{url}. Please check if version/branch exists at source." # rubocop:disable Layout/LineLength
-            end
-          rescue StandardError => e
-            @errors << "Error reaching URL #{url}: #{e.message}"
+        next unless version.key?('name')
+
+        filename = 'nextflow_schema.json'
+        uri = URI.parse(base_url)
+        url = URI("https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}")
+
+        begin
+          response = Net::HTTP.get_response(URI(url))
+          unless response.is_a?(Net::HTTPSuccess)
+            @errors << "URL is NOT reachable (Status: #{response.code}): #{url}. Please check if version/branch exists at source." # rubocop:disable Layout/LineLength
           end
-        else
-          @errors << "No URL found for pipeline: #{pipeline_key} version: #{version}"
+        rescue StandardError => e
+          @errors << "Error reaching URL #{url}: #{e.message}"
         end
       end
       progressbar.increment
