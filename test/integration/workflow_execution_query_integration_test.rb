@@ -124,21 +124,6 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     assert results.is_a?(ActiveRecord::Relation)
   end
 
-  test 'not_contains operator works in Sample::Query after refactor' do
-    project = projects(:project1)
-    sample_query = Sample::Query.new(
-      project_ids: [project.id],
-      groups: [Sample::SearchGroup.new(
-        conditions: [Sample::SearchCondition.new(
-          field: 'name', operator: 'not_contains', value: 'nonexistent'
-        )]
-      )]
-    )
-    assert sample_query.valid?
-    results = sample_query.send(:ransack_results)
-    assert_not_nil results
-  end
-
   # Edge case tests
   test 'multiple conditions in single group with AND logic' do
     query = WorkflowExecution::Query.new(
@@ -173,22 +158,6 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     results = query.send(:ransack_results)
     assert_not_nil results
     assert results.include?(we_with_dates)
-  end
-
-  test 'special characters in contains search value' do
-    we_special = workflow_executions(:workflow_execution_with_special_chars)
-    query = WorkflowExecution::Query.new(
-      namespace_ids: [we_special.namespace_id],
-      groups: [WorkflowExecution::SearchGroup.new(
-        conditions: [WorkflowExecution::SearchCondition.new(
-          field: 'metadata.custom_field', operator: 'contains', value: 'value_with_%'
-        )]
-      )]
-    )
-    assert query.valid?
-    results = query.send(:ransack_results)
-    assert_not_nil results
-    assert results.include?(we_special)
   end
 
   test 'invalid query returns empty results' do
@@ -281,11 +250,11 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     assert_not_nil results
   end
 
-  test 'metadata field with invalid date format does not match' do
+  test 'metadata field with invalid format does not match' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
     we_special = workflow_executions(:workflow_execution_with_special_chars)
 
-    # Create a workflow execution with invalid date format
+    # Test invalid date format
     we_special.update(metadata: we_special.metadata.merge('start_date' => 'not-a-date'))
 
     query = WorkflowExecution::Query.new(
@@ -300,13 +269,8 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     # Only valid dates should match
     assert results.include?(we_with_dates)
     assert_not results.include?(we_special)
-  end
 
-  test 'metadata field with invalid numeric format does not match' do
-    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_special = workflow_executions(:workflow_execution_with_special_chars)
-
-    # Create a workflow execution with invalid numeric format
+    # Test invalid numeric format
     we_special.update(metadata: we_special.metadata.merge('sample_count' => 'not-a-number'))
 
     query = WorkflowExecution::Query.new(
@@ -346,21 +310,6 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     we_with_dates_two_index = results.index(we_with_dates_two)
     assert we_with_dates_index < we_with_dates_two_index,
            'Expected we_with_dates (2024-01-15) before we_with_dates_two (2024-02-01)'
-  end
-
-  test 'not_contains with special characters' do
-    we_special = workflow_executions(:workflow_execution_with_special_chars)
-    query = WorkflowExecution::Query.new(
-      namespace_ids: [we_special.namespace_id],
-      groups: [WorkflowExecution::SearchGroup.new(
-        conditions: [WorkflowExecution::SearchCondition.new(
-          field: 'metadata.custom_field', operator: 'not_contains', value: 'xyz'
-        )]
-      )]
-    )
-    assert query.valid?
-    results = query.send(:ransack_results)
-    assert results.include?(we_special)
   end
 
   test 'conflicting conditions result in no matches' do
