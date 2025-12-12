@@ -48,7 +48,7 @@ Rails.application.routes.draw do
       end
     end
     resources :attachments, only: %i[show]
-    draw :workflow_executions unless Irida::Pipelines.instance&.pipelines&.empty?
+    draw :workflow_executions unless Irida::Pipelines.instance.pipelines.empty?
     resources :data_exports, only: %i[index new create destroy show] do
       member do
         get :redirect
