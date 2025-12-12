@@ -27,6 +27,7 @@ class SelectWithAutoCompleteComponent < Component
       args[:aria][:controls] = @listbox_id
       args[:data] ||= {}
       args[:data][:'select-with-auto-complete-target'] = 'combobox'
+      args[:style] = "anchor-name: --anchor-#{@listbox_id};"
     end
   end
 
