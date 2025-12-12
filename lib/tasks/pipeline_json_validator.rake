@@ -2,9 +2,9 @@
 
 # Rake task to validate pipeline JSON configuration files against a JSON schema
 # USAGE:
-#  rake pipeline_json_validator:validate path/to/PIPELINES_JSON_CONFIG_FILE
+#  rake pipeline_json_validator:validate
 #
-#  If no file path is provided as an argument, the task will prompt for user input.
+#  The task will prompt for user input pointing to pipelines configuration file.
 #  Exits with status code 0 if valid, 1 if invalid.
 namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   @errors = []
@@ -12,12 +12,9 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
 
   desc 'Validate JSON files against a JSON schema'
   task validate: :environment do
-    if ARGV[1].nil?
-      puts 'Please enter path to pipelines json configuration file to validate:'
-      json_file_path_input = $stdin.gets.chomp
-    else
-      json_file_path_input = ARGV[1]
-    end
+    puts 'Please enter path to pipelines json configuration file to validate:'
+    json_file_path_input = $stdin.gets.chomp
+
     json_file_path = Rails.root.join(json_file_path_input)
     json_data = JSON.parse(File.read(json_file_path))
 
