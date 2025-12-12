@@ -2463,6 +2463,7 @@ Sample Advanced Search Condition Operator
 """
 enum SampleAdvancedSearchConditionOperator {
   CONTAINS
+  NOT_CONTAINS
   EQUALS
   EXISTS
   GREATER_THAN_EQUALS
