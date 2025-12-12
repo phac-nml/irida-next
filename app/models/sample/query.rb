@@ -179,6 +179,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       scope.where(node.not_eq(nil))
     when 'not_exists'
       scope.where(node.eq(nil))
+    else
+      scope
     end
   end
 

@@ -36,6 +36,7 @@ class AdvancedSearchComponent < Component
       I18n.t('components.advanced_search_component.operation.less_than') => '<=',
       I18n.t('components.advanced_search_component.operation.greater_than') => '>=',
       I18n.t('components.advanced_search_component.operation.contains') => 'contains',
+      I18n.t('components.advanced_search_component.operation.does_not_contain') => 'not_contains',
       I18n.t('components.advanced_search_component.operation.exists') => 'exists',
       I18n.t('components.advanced_search_component.operation.not_exists') => 'not_exists',
       I18n.t('components.advanced_search_component.operation.in') => 'in',
