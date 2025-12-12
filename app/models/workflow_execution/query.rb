@@ -29,8 +29,15 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   validates :namespace_ids, length: { minimum: 1 }
   validates_with WorkflowExecutionAdvancedSearchGroupValidator
 
-  def initialize(...)
-    super
+  def initialize(attributes = {}, scope: WorkflowExecution, **kwargs)
+    attributes = if attributes.present?
+                   attributes.merge(kwargs)
+                 else
+                   kwargs
+                 end
+
+    super(attributes)
+    @scope = scope
     self.sort = sort
     self.advanced_query = advanced_query?
     self.groups = groups
@@ -67,7 +74,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
   end
 
   def advanced_query_scope
-    WorkflowExecution.where(namespace_id: namespace_ids).and(advanced_query_groups)
+    @scope.where(namespace_id: namespace_ids).and(advanced_query_groups)
   end
 
   def advanced_query_groups
@@ -158,7 +165,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
     }.compact
   end
 
-  def sort_workflow_executions(scope = WorkflowExecution.where(namespace_id: namespace_ids))
+  def sort_workflow_executions(scope = @scope.where(namespace_id: namespace_ids))
     if column.starts_with? 'metadata.'
       field = column.gsub('metadata.', '')
       scope.order(WorkflowExecution.metadata_sort(field, direction))
