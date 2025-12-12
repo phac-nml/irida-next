@@ -23,7 +23,7 @@ module Projects
           end
         end
 
-        if cloned_sample_ids.count.positive?
+        if cloned_sample_ids.any?
           update_samples_count(cloned_sample_ids.count) if @new_project.parent.group_namespace?
           create_project_level_activity(cloned_samples_data, @namespace)
         end

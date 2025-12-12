@@ -57,7 +57,7 @@ module WorkflowExecutions
 
     private
 
-    def validate_pipeline
+    def validate_pipeline # rubocop:disable Naming/PredicateMethod
       return true if @pipeline.executable?
 
       @workflow_execution.state = :error

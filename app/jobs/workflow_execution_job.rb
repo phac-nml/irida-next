@@ -2,7 +2,7 @@
 
 # Parent class for Workflow Execution jobs
 class WorkflowExecutionJob < ApplicationJob
-  def validate_initial_state(workflow_execution, expected_states = nil, validate_run_id: false)
+  def validate_initial_state(workflow_execution, expected_states = nil, validate_run_id: false) # rubocop:disable Naming/PredicateMethod
     # check that workflow_execution exists
     return false unless workflow_execution
 

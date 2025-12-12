@@ -92,13 +92,13 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_uniqueness(unique_field_condition, common_field_conditions)
-    return if common_field_conditions.count == 1
+    return if common_field_conditions.one?
 
     unique_field_condition.errors.add :operator, :taken
   end
 
   def validate_between(unique_field_condition, common_field_conditions)
-    unless common_field_conditions.count == 1 || (common_field_conditions.count == 2 &&
+    unless common_field_conditions.one? || (common_field_conditions.count == 2 &&
       common_field_conditions.collect(&:operator).sort == %w[>= <=].sort)
       unique_field_condition.errors.add :operator, :taken
     end

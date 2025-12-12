@@ -40,7 +40,7 @@ class MetadataKeysDowncase < ActiveRecord::Migration[7.1]
 
   def put_failed_migration_list
     @fail_list.each do |puid|
-      puts "Metadata Downcase Migration skipped Sample #{puid}"
+      Rails.logger.debug "Metadata Downcase Migration skipped Sample #{puid}"
     end
   end
 end

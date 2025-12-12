@@ -14,7 +14,7 @@ module AutomatedWorkflowExecutions
     test 'calls AutomatedWorkflowExecutions::LaunchService for each configured AutomatedWorkflowExecution' do
       count = 0
       mock = Minitest::Mock.new
-      def mock.execute(*) = true
+      def mock.execute(*) = true # rubocop:disable Naming/PredicateMethod
 
       AutomatedWorkflowExecutions::LaunchService.stub :new, lambda { |*|
                                                               count += 1
@@ -28,7 +28,7 @@ module AutomatedWorkflowExecutions
     test 'doesn\'t call AutomatedWorkflowExecutions::LaunchService when no configured AutomatedWorkflowExecutions' do
       count = 0
       mock = Minitest::Mock.new
-      def mock.execute(*) = true
+      def mock.execute(*) = true # rubocop:disable Naming/PredicateMethod
 
       AutomatedWorkflowExecutions::LaunchService.stub :new, lambda { |*|
                                                               count += 1

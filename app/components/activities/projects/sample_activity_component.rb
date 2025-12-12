@@ -4,11 +4,11 @@ module Activities
   module Projects
     # Component for rendering an project sample activity
     class SampleActivityComponent < Activities::BaseActivityComponent
-      def sample_destroy_multiple_action
+      def sample_destroy_multiple_action?
         @activity[:action] == 'sample_destroy_multiple'
       end
 
-      def sample_exists(sample)
+      def sample_exists?(sample)
         return false if sample.nil?
         return false if sample&.project&.namespace != @activity[:current_project]
 
@@ -19,7 +19,7 @@ module Activities
         @activity[:action] == 'metadata_update' ? 'metadata' : ''
       end
 
-      def import_samples_action
+      def import_samples_action?
         @activity[:action] == 'project_import_samples'
       end
 
@@ -31,7 +31,7 @@ module Activities
         when 'sample_destroy_multiple'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
         else
-          if sample_exists(@activity[:sample])
+          if sample_exists?(@activity[:sample])
             url = namespace_project_sample_path(
               @activity[:current_project].parent,
               @activity[:current_project].project,
@@ -77,7 +77,7 @@ module Activities
       end
 
       def show_more_details_button?
-        import_samples_action || sample_destroy_multiple_action
+        import_samples_action? || sample_destroy_multiple_action?
       end
     end
   end

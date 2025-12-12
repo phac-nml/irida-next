@@ -96,7 +96,7 @@ module Irida
     # the resource at the url. If not we overwrite the existing etag for the
     # local stored file, otherwise we just write the new etag to the status.json
     # file
-    def resource_etag_exists(resource_url, status_file_location, etag_type)
+    def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Naming/PredicateMethod
       status_file_location = Rails.root.join(status_file_location, @pipeline_schema_status_file)
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)

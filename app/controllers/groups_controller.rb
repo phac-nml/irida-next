@@ -32,7 +32,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @render_flat_list = @search_params[:name_or_puid_cont].present?
 
     all_namespaces = shared_namespaces_or_sub_namespaces
-    @has_namespaces = all_namespaces.count.positive?
+    @has_namespaces = all_namespaces.any?
     @q = all_namespaces.ransack(params[search_key], search_key:)
 
     set_default_sort

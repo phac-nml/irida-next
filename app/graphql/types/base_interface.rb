@@ -4,6 +4,7 @@ module Types
   # Base Interface
   module BaseInterface
     include GraphQL::Schema::Interface
+
     edge_type_class(Types::BaseEdge)
     connection_type_class(Types::BaseConnection)
 

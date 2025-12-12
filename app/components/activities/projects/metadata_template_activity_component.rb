@@ -4,18 +4,19 @@ module Activities
   module Projects
     # Component for rendering a metadata template activity for projects
     class MetadataTemplateActivityComponent < Activities::BaseActivityComponent
-      def destroy_template
+      def destroy_template?
         @activity[:action] == 'metadata_template_destroy'
       end
 
-      def template_exists
+      def template_exists?
         return false if @activity[:template].nil?
 
         !@activity[:template].deleted?
       end
 
       def activity_message
-        href = if template_exists
+        href = if template_exists?
+
                  link_to(
                    @activity[:template_name],
                    namespace_project_metadata_templates_path(
