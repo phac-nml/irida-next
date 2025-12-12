@@ -138,4 +138,259 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
     results = sample_query.send(:ransack_results)
     assert_not_nil results
   end
+
+  # Edge case tests
+  test 'multiple conditions in single group with AND logic' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+          WorkflowExecution::SearchCondition.new(field: 'name', operator: 'contains', value: 'completed')
+        ]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    assert results.include?(@workflow_execution2)
+  end
+
+  test 'three or more conditions in single group' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: '=',
+                                                 value: 'phac-nml/iridanextexample'),
+          WorkflowExecution::SearchCondition.new(field: 'metadata.start_date', operator: '>=', value: '2024-01-01')
+        ]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    assert results.include?(we_with_dates)
+  end
+
+  test 'special characters in contains search value' do
+    we_special = workflow_executions(:workflow_execution_with_special_chars)
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_special.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.custom_field', operator: 'contains', value: 'value_with_%'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    assert results.include?(we_special)
+  end
+
+  test 'invalid query returns empty results' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'invalid_field', operator: '=', value: 'test'
+        )]
+      )]
+    )
+    assert_not query.valid?
+    results = query.send(:ransack_results)
+    assert_equal 0, results.count
+  end
+
+  test 'range query with >= and <= on same field' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.start_date', operator: '>=', value: '2024-01-01'),
+          WorkflowExecution::SearchCondition.new(field: 'metadata.start_date', operator: '<=', value: '2024-01-31')
+        ]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert results.include?(we_with_dates)
+    assert_not results.include?(we_with_dates_two)
+  end
+
+  test 'non-paginated results' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'in', value: %w[completed initial error]
+        )]
+      )]
+    )
+    results = query.results
+    assert results.is_a?(ActiveRecord::Relation)
+    assert_not results.is_a?(Array)
+  end
+
+  test 'ransack integration with name_or_id_cont and advanced search' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution1.namespace_id, @workflow_execution2.namespace_id],
+      name_or_id_cont: 'example',
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: '=', value: 'completed'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    # Should only include completed records with 'example' in name
+    assert results.include?(@workflow_execution2)
+  end
+
+  test 'ransack integration with name_or_id_in' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution1.namespace_id, @workflow_execution2.namespace_id],
+      name_or_id_in: [@workflow_execution1.name, @workflow_execution2.name]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    assert results.include?(@workflow_execution1)
+    assert results.include?(@workflow_execution2)
+  end
+
+  test 'empty array for in operator' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'in', value: []
+        )]
+      )]
+    )
+    # Should handle empty array gracefully
+    results = query.send(:ransack_results)
+    assert_not_nil results
+  end
+
+  test 'metadata field with invalid date format does not match' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    we_special = workflow_executions(:workflow_execution_with_special_chars)
+
+    # Create a workflow execution with invalid date format
+    we_special.update(metadata: we_special.metadata.merge('start_date' => 'not-a-date'))
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id, we_special.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.start_date', operator: '>=', value: '2024-01-01'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    # Only valid dates should match
+    assert results.include?(we_with_dates)
+    assert_not results.include?(we_special)
+  end
+
+  test 'metadata field with invalid numeric format does not match' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    we_special = workflow_executions(:workflow_execution_with_special_chars)
+
+    # Create a workflow execution with invalid numeric format
+    we_special.update(metadata: we_special.metadata.merge('sample_count' => 'not-a-number'))
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id, we_special.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.sample_count', operator: '>=', value: 5
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    # Only valid numbers should match
+    assert results.include?(we_with_dates)
+    assert_not results.include?(we_special)
+  end
+
+  test 'sorting with advanced search' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: '=', value: 'completed'
+        )]
+      )],
+      sort: 'metadata_start_date asc'
+    )
+    assert query.valid?
+    results = query.send(:ransack_results).to_a
+    # Verify both records are in results
+    assert results.include?(we_with_dates)
+    assert results.include?(we_with_dates_two)
+    # Verify results are sorted by start_date
+    we_with_dates_index = results.index(we_with_dates)
+    we_with_dates_two_index = results.index(we_with_dates_two)
+    assert we_with_dates_index < we_with_dates_two_index,
+           'Expected we_with_dates (2024-01-15) before we_with_dates_two (2024-02-01)'
+  end
+
+  test 'not_contains with special characters' do
+    we_special = workflow_executions(:workflow_execution_with_special_chars)
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_special.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.custom_field', operator: 'not_contains', value: 'xyz'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert results.include?(we_special)
+  end
+
+  test 'conflicting conditions result in no matches' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+          WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'error')
+        ]
+      )]
+    )
+    # This should be invalid due to duplicate field conditions
+    assert_not query.valid?
+  end
+
+  test 'results count is accurate for complex query' do
+    we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+          WorkflowExecution::SearchCondition.new(field: 'metadata.sample_count', operator: '>=', value: 10)
+        ]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert_equal 2, results.count
+  end
 end
