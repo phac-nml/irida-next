@@ -23,6 +23,13 @@ export default class extends Controller {
     );
   }
 
+  disconnect() {
+    this.samplesheetParamsFormTarget.removeEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+  }
+
   amendForm(event) {
     const formData = new FormData(this.samplesheetParamsFormTarget);
     event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
