@@ -1062,3 +1062,73 @@ workflow_execution_missing_run_id:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe_namespace, :uuid) %>
   name: "workflow_execution_valid"
+
+# Fixtures for testing metadata date and numeric fields
+workflow_execution_with_metadata_dates:
+  <<: *DEFAULTS
+  metadata:
+    {
+      pipeline_id: "phac-nml/iridanextexample",
+      workflow_version: "1.0.3",
+      start_date: "2024-01-15",
+      end_date: "2024-01-20",
+      sample_count: "10",
+      file_size: "1024.5"
+    }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "metadata_date_run_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_with_metadata_dates"
+  state: "completed"
+
+workflow_execution_with_metadata_dates_2:
+  <<: *DEFAULTS
+  metadata:
+    {
+      pipeline_id: "phac-nml/gasclustering",
+      workflow_version: "0.5.0",
+      start_date: "2024-02-01",
+      end_date: "2024-02-10",
+      sample_count: "25",
+      file_size: "2048.75"
+    }
+  workflow_params: { "key_b": "value_b" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "metadata_date_run_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_with_metadata_dates_2"
+  state: "completed"
+
+workflow_execution_with_null_metadata:
+  <<: *DEFAULTS
+  metadata: { pipeline_id: "phac-nml/test" }
+  workflow_params: { "key_c": "value_c" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "null_metadata_run"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_with_null_metadata"
+  state: "initial"
+
+workflow_execution_with_special_chars:
+  <<: *DEFAULTS
+  metadata:
+    {
+      pipeline_id: "phac-nml/special-chars",
+      workflow_version: "1.0.0",
+      custom_field: "value_with_%_and_underscore"
+    }
+  workflow_params: { "key_d": "value_d" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "special_chars_run"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_with_special_chars"
+  state: "running"
