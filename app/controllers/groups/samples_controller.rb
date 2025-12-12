@@ -13,8 +13,6 @@ module Groups
     before_action :index_view_authorizations, only: %i[index]
     before_action :page_title
 
-    rescue_from Pagy::OverflowError, with: :redirect_to_first_page
-
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -123,7 +121,7 @@ module Groups
     def results_message_for_advanced_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.advanced.results_message.zero')
-      elsif @pagy&.count == 1
+      elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
         I18n.t(:'components.search.advanced.results_message.singular')
       else
         I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
@@ -133,7 +131,7 @@ module Groups
     def results_message_for_quick_search
       if @pagy&.count&.zero?
         I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
-      elsif @pagy&.count == 1
+      elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
         I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
       else
         I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
@@ -155,10 +153,6 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
-    end
-
-    def redirect_to_first_page
-      redirect_to url_for(page: 1, limit: params[:limit] || 20)
     end
 
     def page_title
