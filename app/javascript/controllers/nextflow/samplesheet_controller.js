@@ -138,8 +138,6 @@ export default class extends Controller {
     this.#samplesheetAttributes = JSON.parse(
       this.sampleAttributesTarget.innerText,
     );
-    console.log(this.#samplesheetProperties);
-    console.log(this.#samplesheetAttributes);
     // clear the now unnecessary DOM element
     this.sampleAttributesTarget.remove();
 
