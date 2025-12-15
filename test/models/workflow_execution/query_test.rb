@@ -3,10 +3,13 @@
 require 'test_helper'
 
 class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/ClassAndModuleChildren
+  DEFAULT_METADATA = { 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.0' }.freeze
+
   setup do
     @namespace = groups(:group_one)
     @workflow_execution1 = workflow_executions(:workflow_execution_valid)
     @workflow_execution2 = workflow_executions(:irida_next_example_completed)
+    @user = users(:john_doe)
   end
 
   test 'basic search with name_or_id_cont' do
@@ -500,5 +503,341 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     results = query.send(:ransack_results)
     assert_not results.include?(we_with_dates) # 10
     assert results.include?(we_with_dates_two) # 25
+  end
+
+  # Tests for special characters and SQL injection prevention
+  test 'contains operator with percent wildcard character should be escaped' do
+    # Create a workflow execution with a name containing %
+    we = WorkflowExecution.create!(
+      name: 'Test%Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_percent',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    # Search for literal % character - should only match exact %
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '%'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+
+    # Verify it doesn't match everything (which would happen if % wasn't escaped)
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution1.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '%'
+        )]
+      )]
+    )
+    results2 = query2.send(:ransack_results)
+    # Should not match workflow_execution1 if % is properly escaped
+    assert_not results2.include?(@workflow_execution1)
+  ensure
+    we&.destroy
+  end
+
+  test 'contains operator with underscore wildcard character should be escaped' do
+    # Create a workflow execution with a name containing _
+    we = WorkflowExecution.create!(
+      name: 'Test_Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_underscore',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    # Search for literal _ character - should only match exact _
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '_'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+
+    # Verify it doesn't match single characters (which would happen if _ wasn't escaped)
+    we2 = WorkflowExecution.create!(
+      name: 'TestXWorkflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_no_underscore',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '_'
+        )]
+      )]
+    )
+    results2 = query2.send(:ransack_results)
+    # Should not match we2 if _ is properly escaped
+    assert_not results2.include?(we2)
+  ensure
+    we&.destroy
+    we2&.destroy
+  end
+
+  test 'contains operator with backslash should be escaped' do
+    # Create a workflow execution with a name containing backslash
+    we = WorkflowExecution.create!(
+      name: 'Test\\Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_backslash',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '\\'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+  ensure
+    we&.destroy
+  end
+
+  test 'not_contains operator with percent wildcard should be escaped' do
+    we_with_percent = WorkflowExecution.create!(
+      name: 'Test%Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_with_percent',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+    we_without_percent = WorkflowExecution.create!(
+      name: 'TestWorkflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_without_percent',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'not_contains', value: '%'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert_not results.include?(we_with_percent)
+    assert results.include?(we_without_percent)
+  ensure
+    we_with_percent&.destroy
+    we_without_percent&.destroy
+  end
+
+  test 'contains operator with metadata field and special characters' do
+    we = WorkflowExecution.create!(
+      name: 'Test Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_metadata_special',
+      metadata: DEFAULT_METADATA.merge('special_field' => 'value%with_special\\chars'),
+      submitter_id: @user.id
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.special_field', operator: 'contains', value: '%with_'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+  ensure
+    we&.destroy
+  end
+
+  # Tests for edge cases
+  test 'in operator with empty array should be handled gracefully' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'in', value: []
+        )]
+      )]
+    )
+    # Should not raise an error
+    assert_not query.valid?
+  end
+
+  test 'not_in operator with empty array should be handled gracefully' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'not_in', value: []
+        )]
+      )]
+    )
+    # Should not raise an error
+    assert_not query.valid?
+  end
+
+  test 'contains operator with empty string' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: ''
+        )]
+      )]
+    )
+    # Empty string should not be valid
+    assert_not query.valid?
+  end
+
+  test 'metadata field with null value and exists operator' do
+    we_with_null = WorkflowExecution.create!(
+      name: 'Test Null Metadata',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_null_meta',
+      metadata: DEFAULT_METADATA.merge('field1' => 'value1'),
+      submitter_id: @user.id
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_with_null.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.nonexistent_field', operator: 'not_exists', value: ''
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we_with_null)
+  ensure
+    we_with_null&.destroy
+  end
+
+  test 'in operator with array containing nil values should handle gracefully' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'in', value: ['valid_name', nil, '']
+        )]
+      )]
+    )
+    # Should not raise an error - validator uses compact_blank which removes nil and empty strings
+    # Since there's at least one valid value ('valid_name'), the query should be valid
+    assert query.valid?
+    # The query should execute without errors
+    assert_nothing_raised do
+      query.send(:ransack_results)
+    end
+  end
+
+  test 'contains operator with unicode characters' do
+    we = WorkflowExecution.create!(
+      name: 'Test™Workflow©',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_unicode',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: '™'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+  ensure
+    we&.destroy
+  end
+
+  test 'contains operator with leading and trailing spaces' do
+    we = WorkflowExecution.create!(
+      name: 'Test Workflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_spaces',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'contains', value: ' Workflow'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we)
+  ensure
+    we&.destroy
+  end
+
+  test 'not_contains operator with value that should exclude everything' do
+    we1 = WorkflowExecution.create!(
+      name: 'TestWorkflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_1',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+    we2 = WorkflowExecution.create!(
+      name: 'ProdWorkflow',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_2',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'name', operator: 'not_contains', value: 'Workflow'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    # Both should be excluded since both contain 'Workflow'
+    assert_not results.include?(we1)
+    assert_not results.include?(we2)
+  ensure
+    we1&.destroy
+    we2&.destroy
   end
 end

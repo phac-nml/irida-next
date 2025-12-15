@@ -28,11 +28,11 @@ module AdvancedSearchConditions
 
   def condition_in(scope, node, value, metadata_field:, field_name:)
     if metadata_field
-      scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(value.map(&:downcase)))
+      scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
     elsif field_name == 'name'
-      scope.where(node.lower.in(value.map(&:downcase)))
+      scope.where(node.lower.in(downcase_values(value)))
     else
-      scope.where(node.in(value))
+      scope.where(node.in(value.compact))
     end
   end
 
@@ -46,13 +46,17 @@ module AdvancedSearchConditions
 
   def condition_not_in(scope, node, value, metadata_field:, field_name:)
     if metadata_field
-      lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
-      scope.where(node.eq(nil).or(lower_function.not_in(value.map(&:downcase))))
+      condition_not_in_metadata(scope, node, value)
     elsif field_name == 'name'
-      scope.where(node.lower.not_in(value.map(&:downcase)))
+      scope.where(node.lower.not_in(downcase_values(value)))
     else
-      scope.where(node.not_in(value))
+      scope.where(node.not_in(value.compact))
     end
+  end
+
+  def condition_not_in_metadata(scope, node, value)
+    lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
+    scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
   end
 
   def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
@@ -76,11 +80,18 @@ module AdvancedSearchConditions
   end
 
   def condition_contains(scope, node, value)
-    scope.where(node.matches("%#{value}%"))
+    scope.where(node.matches("%#{escape_like_wildcards(value)}%"))
   end
 
   def condition_not_contains(scope, node, value)
-    scope.where(node.does_not_match("%#{value}%"))
+    scope.where(node.does_not_match("%#{escape_like_wildcards(value)}%"))
+  end
+
+  # Escapes SQL LIKE wildcard characters (%, _) to treat them as literal characters
+  # @param value [String] the value to escape
+  # @return [String] the escaped value
+  def escape_like_wildcards(value)
+    value.gsub(/[%_\\]/) { |char| "\\#{char}" }
   end
 
   def condition_exists(scope, node)
@@ -109,5 +120,9 @@ module AdvancedSearchConditions
           'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
         ).public_send(comparison_method, value)
       )
+  end
+
+  def downcase_values(value)
+    value.compact.map { |v| v.to_s.downcase }
   end
 end
