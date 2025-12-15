@@ -96,6 +96,7 @@ To delete an export:
   * Either:
       * In the **export list**, find the export you would like to delete and select **Delete**.
       * Click either the **ID** or **Name** of the relevant export to open it. Click the **Delete** button.
+
 **Note:** All exports will automatically delete after 3 days.
 
 
