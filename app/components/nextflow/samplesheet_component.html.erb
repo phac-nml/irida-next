@@ -1,14 +1,11 @@
 <div id="samplesheet">
-  <div
-    class="hidden"
-    data-controller="nextflow--samplesheet--params--properties"
-    data-nextflow--samplesheet--params--properties-nextflow--samplesheet--params-outlet="#nextflow-container"
-    data-nextflow--samplesheet--params--properties-properties-value="<%= @properties.to_json %>"
-  >
-  </div>
   <%= helpers.turbo_frame_tag "sample_attributes" %>
 
-  <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
+  <div
+    class="hidden"
+    data-nextflow--samplesheet-target="samplesheetProperties"
+    data-nextflow--samplesheet--params-target="properties"
+  >
     <%= @properties.to_json %>
   </div>
   <div class="flex justify-between mb-2 @max-2xl:flex-col">

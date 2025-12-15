@@ -11,13 +11,22 @@ export default class extends Controller {
     fields: { type: Array },
   };
 
-  static targets = ["samplesheetParamsForm"];
+  static targets = ["samplesheetParamsForm", "properties"];
   static outlets = ["selection"];
 
-  connect() {
+  // properties target connects before the connect() would fire, so removed connect() and added its logic here
+  propertiesTargetConnected() {
     this.boundAmendForm = this.amendForm.bind(this);
 
     this.samplesheetParamsFormTarget.addEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+    this.#submitSamplesheetParams();
+  }
+
+  disconnect() {
+    this.samplesheetParamsFormTarget.removeEventListener(
       "turbo:before-fetch-request",
       this.boundAmendForm,
     );
@@ -40,7 +49,6 @@ export default class extends Controller {
 
   #toJson(formData) {
     let params = formDataToJsonParams(formData);
-
     if (this.hasSelectionOutlet) {
       normalizeParams(
         params,
@@ -53,11 +61,11 @@ export default class extends Controller {
   }
 
   // triggered when nextflow/samplesheet/params/schema_controller connects
-  submitSamplesheetParams(properties) {
+  #submitSamplesheetParams() {
     const fragment = document.createDocumentFragment();
 
     fragment.appendChild(
-      createHiddenInput("properties", JSON.stringify(properties)),
+      createHiddenInput("properties", this.propertiesTarget.innerHTML),
     );
 
     this.samplesheetParamsFormTarget.appendChild(fragment);

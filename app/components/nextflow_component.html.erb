@@ -1,6 +1,6 @@
 <div
   id="nextflow-container"
-  data-controller="nextflow--samplesheet <% unless @automated_workflow %>nextflow--samplesheet--params<% end %>"
+  data-controller="<% unless @automated_workflow %>nextflow--samplesheet--params <% end %>nextflow--samplesheet"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
