@@ -107,7 +107,7 @@ Error states:
 | Canceled  | The workflow execution successfully canceled.                                                                    |
 | Disabled  | The automated workflow will no longer execute when new paired-end files are uploaded to a sample in the project. |
 
-## Delete a User-Launched Workflow Execution
+## Delete User-Launched Workflow Executions
 
 1. Navigate to the relevant **Workflow Executions** page (refer to [View Workflow Executions](../analysis/working-with-workflow-executions.md)).
 2. Locate the relevant workflow execution(s) and click the **checkbox** beside the ID.
@@ -116,7 +116,7 @@ Error states:
 
 **Note:** Deleting completed workflow execution records does not delete the associated results files. Only non-shared workflow executions that are in the Completed, Canceled, and Error states will be deleted.
 
-## Delete an Automated Workflow Execution
+## Delete Automated Workflow Executions
 
 1. Navigate to the relevant **Project**.
 2. From the left sidebar, select **Settings**.
