@@ -76,7 +76,7 @@ To set-up automated workflow executions:
 
 ## View Workflow Execution Progress
 
-While a workflow execution is running, it will go through numerous states to provide feedback on its progress.The current state of any workflow execution is shown on the relevant workflow execution page (refer to [View Workflow Executions](../analysis/working-with-workflow-executions).
+While a workflow execution is running, it will go through numerous states to provide feedback on its progress.The current state of any workflow execution is shown on the relevant workflow execution page (refer to [View Workflow Executions](../analysis/working-with-workflow-executions)).
 
   States for a successful workflow execution (in order):
 
@@ -99,8 +99,21 @@ While a workflow execution is running, it will go through numerous states to pro
   | Disabled  | The automated workflow will no longer execute when new paired-end files are uploaded to a sample in the project.                                                |
 
 
-## Workflow Execution Deletions
+## Delete a User-Launched Workflow Execution
 
-When deleting a workflow execution, there are a couple points to keep in mind:
-  - Deleted errored and canceled runs have no additional considerations
-  - Deleting completed runs does not delete the associated results that have been propogated to the samples
+1.	Navigate to the relevant **Workflow Executions** page (refer to [View Workflow Executions](../analysis/working-with-workflow-executions)).
+2.	Locate the relevant workflow execution(s) and click the **checkbox** beside the ID.
+3.	Click the **Delete Workflow Executions** button.
+4.	In the pop-up window, review the workflow information and click **Confirm**.
+
+**Note:** Deleting completed workflow execution records does not delete the associated results files. Only non-shared workflow executions that are in the Completed, Canceled, and Error states will be deleted.
+
+## Delete an Automated Workflow Execution
+1.	Navigate to the relevant **Project**.
+2.	From the left sidebar, select **Settings**.
+3.	In the **Settings** dropdown menu, select **Automated Pipelines**.
+4.	Locate the workflow execution of interest and select **Delete** under the Actions column.
+5.	Select **Confirm** in the pop-up window.
+
+**Note:** Deleting an automated workflow execution does not delete the associated results files. Only non-shared workflow executions that are in the Completed, Canceled, and Error states will be deleted.
+
