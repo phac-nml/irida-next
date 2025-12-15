@@ -10,6 +10,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   ResultTypeError = Class.new(StandardError)
 
+  ALLOWED_SORT_COLUMNS = %w[name puid created_at updated_at attachments_updated_at].freeze
+
   attribute :column, :string
   attribute :direction, :string
   attribute :name_or_puid_cont, :string
@@ -23,6 +25,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
+  validates :column, inclusion: {
+    in: lambda { |record|
+      ALLOWED_SORT_COLUMNS + [record.column].select { |c| c&.start_with?('metadata.') }
+    }
+  }
   validates_with AdvancedSearchGroupValidator
 
   def initialize(...)
