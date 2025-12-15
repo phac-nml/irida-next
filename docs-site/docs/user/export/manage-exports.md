@@ -62,7 +62,7 @@ Prerequisites:
   * A workflow execution with the completed state.
 
 To create an analysis export from a user-launched workflow execution:
-  1. Navigate to the [Workflow Executions Page](../analysis/working-with-workflow-executions#view-user-workflow-executions).
+  1. Navigate to the [Workflow Executions Page](../analysis/manage-workflow-executions#view-workflow-executions).
   2. Click the workflow execution you would like to export.
   3. Click **Create Export**.
   4. A pop-up will appear asking if you'd like to give the export a name and whether you'd like to receive an e-mail notification when the export is ready to download. Neither of these are required to create the export.
