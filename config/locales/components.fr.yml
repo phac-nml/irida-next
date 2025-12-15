@@ -142,7 +142,7 @@ fr:
           title: Supprimer un fichier
         new_attachment_component:
           files: Fichiers
-          files_ignored: "Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :"
+          files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
           upload_files: Télécharger des fichiers
           uploading: Téléchargement
       table_component:
@@ -153,8 +153,8 @@ fr:
           selected: Sélectionné
         created_at: Créé à
         delete_aria_label:
-          one: "Supprimer le fichier : %{name}"
-          other: "Supprimer les fichiers : %{name}"
+          one: 'Supprimer le fichier : %{name}'
+          other: 'Supprimer les fichiers : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer la pièce jointe '%{name}'?
         filename: Nom du fichier
         format: Format
@@ -162,7 +162,7 @@ fr:
         limit:
           item: Pièces jointes
         preview: Aperçu
-        preview_aria_label: "Voir un aperçu de la pièce jointe : %{name}"
+        preview_aria_label: 'Voir un aperçu de la pièce jointe : %{name}'
         select_page: Sélectionner/Désélectionner les pièces jointes visibles
         type: Type
     breadcrumb:
@@ -195,7 +195,7 @@ fr:
       transferred_by: "%{type} transféré par %{user}"
     history_version:
       current_version: Actuel (Version %{version})
-      keys_deleted: "Clés supprimées :"
+      keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
     layout:
       language_selection:
@@ -244,7 +244,7 @@ fr:
         project: Partager les résultats avec les membres du projet?
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
     nextflow_component:
-      data_missing_error: "Les échantillons suivants manquent de données requises : "
+      data_missing_error: 'Les échantillons suivants manquent de données requises : '
       filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
@@ -265,11 +265,11 @@ fr:
         number_of_samples: Échantillons
         statistics_title: Statistiques du projet
       samples_title: Échantillons récemment mis à jour
-      screen_reader_context: "Tableau de bord du projet: %{project_name}"
+      screen_reader_context: 'Tableau de bord du projet: %{project_name}'
       view_more_activity: Voir plus d'activité
       view_more_samples: Voir plus d'échantillons
     puid:
-      title: "Copier à la valeur du presse-papiers : %{puid}"
+      title: 'Copier à la valeur du presse-papiers : %{puid}'
     ransack:
       sort_dropdown_component:
         prefix: Trier par
@@ -328,8 +328,8 @@ fr:
       form:
         prefixed:
           boolean_component:
-            "false": Faux
-            "true": Vrai
+            'false': Faux
+            'true': Vrai
       pagy:
         empty_state:
           description: Aucun article trouvé correspondant à votre recherche
