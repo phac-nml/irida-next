@@ -12,6 +12,8 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   ResultTypeError = Class.new(StandardError)
 
+  ALLOWED_SORT_COLUMNS = %w[id name run_id state created_at updated_at].freeze
+
   attribute :column, :string
   attribute :direction, :string
   attribute :name_or_id_cont, :string
@@ -27,6 +29,11 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :namespace_ids, length: { minimum: 1 }
+  validates :column, inclusion: {
+    in: lambda { |record|
+      ALLOWED_SORT_COLUMNS + [record.column].select { |c| c&.start_with?('metadata.') }
+    }
+  }
   validates_with WorkflowExecutionAdvancedSearchGroupValidator
 
   def initialize(attributes = {}, scope: WorkflowExecution, **kwargs)
@@ -119,6 +126,8 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
       condition_exists(scope, node)
     when 'not_exists'
       condition_not_exists(scope, node)
+    else
+      scope
     end
   end
 
@@ -170,7 +179,7 @@ class WorkflowExecution::Query # rubocop:disable Style/ClassAndModuleChildren, M
       field = column.gsub('metadata.', '')
       scope.order(WorkflowExecution.metadata_sort(field, direction))
     else
-      scope.order("#{column} #{direction}")
+      scope.order(column => direction)
     end
   end
 end
