@@ -176,7 +176,7 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
 
   test 'range query with >= and <= on same field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -289,7 +289,7 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
 
   test 'sorting with advanced search' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -328,7 +328,7 @@ class WorkflowExecutionQueryIntegrationTest < ActiveSupport::TestCase
 
   test 'results count is accurate for complex query' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
