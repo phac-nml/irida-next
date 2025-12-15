@@ -345,7 +345,7 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
 
   test 'not_in operator with metadata field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -415,7 +415,7 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
 
   test 'less than or equal operator with metadata date field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -432,7 +432,7 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
 
   test 'less than or equal operator with metadata numeric field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -470,7 +470,7 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
 
   test 'greater than or equal operator with metadata date field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
@@ -487,7 +487,7 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
 
   test 'greater than or equal operator with metadata numeric field' do
     we_with_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates_2) # rubocop:disable Naming/VariableNumber
+    we_with_dates_two = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_with_dates.namespace_id, we_with_dates_two.namespace_id],
