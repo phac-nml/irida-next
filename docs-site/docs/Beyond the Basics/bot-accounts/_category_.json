@@ -1,0 +1,9 @@
+{
+  "key": "Bot Accounts",
+  "label": "Bot Accounts",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "work-with-bot-accounts"
+  }
+}
