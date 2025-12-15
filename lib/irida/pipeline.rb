@@ -101,6 +101,53 @@ module Irida
       result.nil? ? result : result.round(2)
     end
 
+    def status_check_interval
+      @settings.fetch('status_check_interval', 30).to_i
+    end
+
+    def minimum_samples
+      @settings.fetch('min_samples', 0).to_i
+    end
+
+    def maximum_samples
+      @settings.fetch('max_samples', 0).to_i
+    end
+
+    def maximum_run_time(sample_count)
+      max_run_time = @settings.fetch('max_runtime', nil)
+
+      return nil if max_run_time.nil?
+      return max_run_time.to_i if max_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(max_run_time, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    def minimum_run_time(samples_count)
+      min_run_time = @settings.fetch('min_runtime', nil)
+
+      return nil if min_run_time.nil?
+      return min_run_time.to_i if min_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(min_run_time, SAMPLE_COUNT: samples_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    # Calculate time spent in state till now in seconds
+    def state_time_calculation(workflow_execution, state)
+      change_version = workflow_execution.reload_log_data.data['h'].find do |log|
+        log['c']['state'] == WorkflowExecution.states[state]
+      end
+      # log change version timestamps are in milliseconds
+      return Time.zone.now.to_i - (change_version['ts'].to_i / 1000) if change_version
+
+      nil
+    end
+
     private
 
     def text_for(value)
@@ -161,8 +208,12 @@ module Irida
 
     def settings_for_entry(entry, version)
       settings = entry['settings'].deep_dup || {}
-      version_settings = version['settings'] || {}
-      settings.deep_merge!(version_settings)
+
+      settings
+        .deep_merge!(
+          version.key?('settings') ? version['settings'] : {}
+        )
+
       settings
     end
 
