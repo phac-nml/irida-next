@@ -71,8 +71,8 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
   end
 
   def requeue_or_cancel(workflow_execution, min_run_time = nil)
-    run_time = state_time_calculation(workflow_execution, :running)
-    maximum_run_time = maximum_run_time(workflow_execution)
+    run_time = workflow_execution.workflow.state_time_calculation(workflow_execution, :running)
+    maximum_run_time = workflow_execution.workflow.maximum_run_time(workflow_execution.samples.count)
 
     # Max runtime for pipeline (in running state) has exceeded so a cancellation request to WES is made
     if workflow_execution.cancellable? && maximum_run_time && run_time && (run_time > maximum_run_time)
@@ -80,8 +80,9 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
       workflow_execution.save
       WorkflowExecutionCancelationJob.perform_later(workflow_execution, workflow_execution.submitter)
     else
-      WorkflowExecutionStatusJob.set(wait_until: status_check_interval(workflow_execution).seconds.from_now)
-                                .perform_later(workflow_execution, min_run_time)
+      WorkflowExecutionStatusJob.set(
+        wait_until: workflow_execution.workflow.status_check_interval.seconds.from_now
+      ).perform_later(workflow_execution, min_run_time)
     end
   end
 end

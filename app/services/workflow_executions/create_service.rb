@@ -77,22 +77,19 @@ module WorkflowExecutions
       end
     end
 
-    def validate_samples_requirement_for_pipeline(workflow_execution)
-      case workflow_execution.workflow.settings.transform_keys(&:to_sym)
-      in { max_samples:, min_samples: }
-        if params[:samples_workflow_executions_attributes].keys.length < min_samples
-          workflow_execution.errors.add(:samples,
-                                        I18n.t('services.workflow_executions.create.min_samples_required',
-                                               min_samples: min_samples))
-        elsif params[:samples_workflow_executions_attributes].keys.length > max_samples
-          workflow_execution.errors.add(:samples,
-                                        I18n.t('services.workflow_executions.create.max_samples_exceeded',
-                                               max_samples: max_samples))
-        end
-      else
-        # No min and/or max_samples set for pipeline
-        nil
+    def validate_samples_requirement_for_pipeline(workflow_execution) # rubocop:disable Metrics/AbcSize
+      min_samples = workflow_execution.workflow.minimum_samples
+      max_samples = workflow_execution.workflow.maximum_samples
+      if params[:samples_workflow_executions_attributes].keys.length < min_samples
+        workflow_execution.errors.add(:samples,
+                                      I18n.t('services.workflow_executions.create.min_samples_required',
+                                             min_samples: min_samples))
       end
+      return unless !max_samples.zero? && (params[:samples_workflow_executions_attributes].keys.length > max_samples)
+
+      workflow_execution.errors.add(:samples,
+                                    I18n.t('services.workflow_executions.create.max_samples_exceeded',
+                                           max_samples: max_samples))
     end
 
     def create_activities

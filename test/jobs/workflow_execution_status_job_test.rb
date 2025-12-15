@@ -264,7 +264,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
     # Mock state_time_calculation to return a large run time (400 seconds)
     # The max_runtime for iridanextexample version 1.0.3 with 1 sample is 35 seconds
-    job.stub :state_time_calculation, 400 do
+    workflow_execution.workflow.stub :state_time_calculation, 400 do
       job.requeue_or_cancel(workflow_execution)
     end
 

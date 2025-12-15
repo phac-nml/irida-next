@@ -210,4 +210,201 @@ class PipelinesTest < ActiveSupport::TestCase
                    pipeline.workflow_params[:databases_and_pre_computed_files][:properties][:kraken2_db][:description]
     end
   end
+
+  test 'maximum_run_time at entry level (Irida Next Example Pipeline)' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_runtime: 30,
+        max_runtime: 150
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 150, pipeline.maximum_run_time(2)
+  end
+
+  test 'minimum_run_time at entry level (Irida Next Example Pipeline)' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_runtime: 30,
+        max_runtime: 150
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 30, pipeline.minimum_run_time(2)
+  end
+
+  test 'maximum_run_time at version level (1.0.3)' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_runtime: 30,
+        max_runtime: 150
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'min_samples' => 2,
+                                     'max_samples' => 2,
+                                     'max_runtime' => '(30 * SAMPLE_COUNT) + 5',
+                                     'status_check_interval' => 45
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 65, pipeline.maximum_run_time(2)
+  end
+
+  test 'minimum_run_time at version level (1.0.3)' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_runtime: 30,
+        max_runtime: 150
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'min_runtime' => '(20 * SAMPLE_COUNT) + 5'
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 45, pipeline.minimum_run_time(2)
+  end
+
+  test 'status_check_interval default' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 30, pipeline.status_check_interval
+  end
+
+  test 'status_check_interval at version level (1.0.3)' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'status_check_interval' => 45
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 45, pipeline.status_check_interval
+  end
+
+  test 'maximum_run_time not set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_nil pipeline.maximum_run_time(2)
+  end
+
+  test 'minimum_run_time not set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_nil pipeline.minimum_run_time(2)
+  end
+
+  test 'minimum_samples set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'min_samples' => 5
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 5, pipeline.minimum_samples
+  end
+
+  test 'minimum_samples not set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 0, pipeline.minimum_samples
+  end
+
+  test 'maximum_samples set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'max_samples' => 6
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 6, pipeline.maximum_samples
+  end
+
+  test 'maximum_samples not set' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal 0, pipeline.maximum_samples
+  end
 end

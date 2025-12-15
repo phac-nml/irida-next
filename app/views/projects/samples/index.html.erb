@@ -4,6 +4,7 @@
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
+<%= turbo_frame_tag("workflow_execution_errors") %>
 
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
@@ -177,7 +178,7 @@
               class: "max-sm:grow",
               data: { turbo_frame: "selected" },
             ) do |f| %>
-          <input type="hidden" name="select" value="on" />
+          <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
 
           <%= f.submit t("common.controls.select_all"),
