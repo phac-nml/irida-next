@@ -80,38 +80,21 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#removeListboxEventListeners(this.listboxTarget);
   }
 
-  #addListboxEventListeners(listbox) {
-    this.#attachOptionEvents(listbox, true);
-    const categories = listbox.querySelectorAll('[role="group"]');
-    categories.forEach((category) => {
-      this.#allOptions.push(category);
-      this.#attachOptionEvents(category);
-    });
+  #addListboxEventListeners(container) {
+    container
+      .querySelectorAll(':scope > [role="option"], [role="group"]')
+      .forEach((item) => {
+        this.#allOptions.push(item);
+        this.#addListboxOptionEventListeners(item);
+      });
   }
 
-  #attachOptionEvents(category, add = false) {
-    const categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    categoryItems.forEach((categoryItem) => {
-      if (add) {
-        this.#allOptions.push(categoryItem);
-      }
-      this.#addListboxOptionEventListeners(categoryItem);
-    });
-  }
-
-  #removeListboxEventListeners(listbox) {
-    this.#removeOptionEvents(listbox);
-    const categories = listbox.querySelectorAll('[role="group"]');
-    categories.forEach((category) => {
-      this.#removeOptionEvents(category);
-    });
-  }
-
-  #removeOptionEvents(category) {
-    const categoryItems = category.querySelectorAll(':scope > [role="option"]');
-    categoryItems.forEach((categoryItem) => {
-      this.#removeListboxOptionEventListeners(categoryItem);
-    });
+  #removeListboxEventListeners(container) {
+    container
+      .querySelectorAll(':scope > [role="option"], [role="group"]')
+      .forEach((item) => {
+        this.#removeListboxOptionEventListeners(item);
+      });
   }
 
   #setValue(option) {
