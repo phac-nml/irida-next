@@ -99,7 +99,7 @@ While a workflow execution is running, it will go through numerous states to pro
   | Disabled  | The automated workflow will no longer execute when new paired-end files are uploaded to a sample in the project.                                                |
 
 
-## Delete a User-Launched Workflow Execution
+## Delete User-Launched Workflow Executions
 
 1.	Navigate to the relevant **Workflow Executions** page (refer to [View Workflow Executions](../analysis/working-with-workflow-executions)).
 2.	Locate the relevant workflow execution(s) and click the **checkbox** beside the ID.
@@ -108,7 +108,7 @@ While a workflow execution is running, it will go through numerous states to pro
 
 **Note:** Deleting completed workflow execution records does not delete the associated results files. Only non-shared workflow executions that are in the Completed, Canceled, and Error states will be deleted.
 
-## Delete an Automated Workflow Execution
+## Delete Automated Workflow Executions
 1.	Navigate to the relevant **Project**.
 2.	From the left sidebar, select **Settings**.
 3.	In the **Settings** dropdown menu, select **Automated Pipelines**.
