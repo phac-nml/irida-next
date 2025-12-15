@@ -840,4 +840,40 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     we1&.destroy
     we2&.destroy
   end
+
+  test 'not_contains operator with nil metadata field should include record' do
+    we_with_field = WorkflowExecution.create!(
+      name: 'WithField',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_with_field',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA.merge('custom_field' => 'contains_value')
+    )
+    we_without_field = WorkflowExecution.create!(
+      name: 'WithoutField',
+      namespace_id: @namespace.id,
+      state: :initial,
+      run_id: 'test_run_without_field',
+      submitter_id: @user.id,
+      metadata: DEFAULT_METADATA
+    )
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@namespace.id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.custom_field', operator: 'not_contains', value: 'value'
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    # Should exclude record with the value
+    assert_not results.include?(we_with_field)
+    # Should include record without the field (nil metadata field)
+    assert results.include?(we_without_field)
+  ensure
+    we_with_field&.destroy
+    we_without_field&.destroy
+  end
 end
