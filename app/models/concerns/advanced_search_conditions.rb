@@ -84,7 +84,7 @@ module AdvancedSearchConditions
   end
 
   def condition_not_contains(scope, node, value)
-    scope.where(node.does_not_match("%#{escape_like_wildcards(value)}%"))
+    scope.where(node.eq(nil).or(node.does_not_match("%#{escape_like_wildcards(value)}%")))
   end
 
   # Escapes SQL LIKE wildcard characters (%, _) to treat them as literal characters
