@@ -113,7 +113,7 @@ lib.mkMerge [
         name = "Prettier";
         description = "Format JS, CSS, and config files";
         entry = "pnpm exec prettier --write";
-        files = "\\.(js|jsx|ts|tsx|css|json|md|yml|yaml)$";
+        files = "\\.(js|jsx|ts|tsx|css|json|md)$";
         pass_filenames = true;
       };
 
