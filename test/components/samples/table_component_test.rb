@@ -177,8 +177,9 @@ module Samples
       first_row_index = @pagy.offset + 2
       assert_selector "tbody tr[aria-rowindex='#{first_row_index}']"
 
-      # Base columns should expose aria-colindex and gridcell role
-      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='1'][role='gridcell']"
+      # First column (puid) should be a rowheader with aria-colindex
+      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='1'][role='rowheader']"
+      # Second column (name) should be a gridcell with aria-colindex
       assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='2'][role='gridcell']"
 
       # Metadata templates should be present for virtualization
