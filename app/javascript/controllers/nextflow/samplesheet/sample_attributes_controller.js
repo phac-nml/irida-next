@@ -1,20 +1,18 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Notifies nextflow/samplesheet_controller.js sample attributes are ready and samplesheet can begin processing
+// Sends sampleAttributes and allowedToUpdateSamples to nextflow/samplesheet_controller.js
 export default class extends Controller {
   static values = {
     allowedToUpdateSamples: { type: Boolean },
+    sampleAttributes: { type: Object },
   };
 
-  connect() {
-    this.notifySamplesReady();
-  }
-
-  notifySamplesReady() {
-    this.dispatch("notifySamplesReady", {
-      detail: {
-        content: { allowedToUpdateSamples: this.allowedToUpdateSamplesValue },
-      },
-    });
+  retrieveSampleAttributes() {
+    // clear the now unneeded DOM element
+    this.element.remove();
+    return {
+      allowedToUpdateSamples: this.allowedToUpdateSamplesValue,
+      sampleAttributes: this.sampleAttributesValue,
+    };
   }
 }
