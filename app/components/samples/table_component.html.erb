@@ -18,10 +18,12 @@
       >
         <%# Target for virtual scroll header manipulation %>
         <thead
+          role="rowgroup"
           class="@2xl:sticky @2xl:top-0 z-10 uppercase"
           data-virtual-scroll-target="header"
         >
           <tr
+            role="row"
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
               text-slate-900 bg-slate-100 dark:bg-slate-900
@@ -30,6 +32,7 @@
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',
+              role: 'columnheader',
               scope: 'col',
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               aria: { colindex: index + 1 },
@@ -72,6 +75,7 @@
             <% @metadata_fields.each_with_index do |field, field_index| %>
               <%= render_cell(
               tag: 'th',
+              role: 'columnheader',
               **helpers.aria_sort("metadata_#{field}", @sort_key, @sort_direction),
               data: {
                 "field-id": field
@@ -96,6 +100,7 @@
 
         <%# Target for virtual scroll body manipulation %>
         <tbody
+          role="rowgroup"
           id="samples-table-body"
           class="
             bg-white border-slate-200 dark:bg-slate-800 dark:border-slate-700
@@ -107,8 +112,8 @@
               <% @columns.each_with_index do |column, index| %>
                 <%= render_cell(
                 tag: index.zero? ? 'th' : 'td',
+                role: index.zero? ? 'rowheader' : 'gridcell',
                 scope: index.zero? ? 'row' : nil,
-                role: 'gridcell',
                 aria: { colindex: index + 1 },
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
               ) do %>
@@ -178,8 +183,11 @@
         </tbody>
 
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
-            <tr>
+          <tfoot
+            role="rowgroup"
+            class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900"
+          >
+            <tr role="row">
               <td
                 class="
                   sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
