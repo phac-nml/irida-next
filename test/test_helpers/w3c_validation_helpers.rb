@@ -89,6 +89,7 @@ module W3cValidationHelpers
     arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_label_on_div_without_role(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_anchor_positioning_errors(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_aria_grid_role_errors_on_table_elements(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -316,6 +317,56 @@ module W3cValidationHelpers
       # Example of an Error:
       #   ERROR; line 875: The "aria-label" attribute must not be specified on any "div" element unless the element has a "role" value other than "caption", "code", "deletion", "emphasis", "generic", "insertion", "paragraph", "presentation", "strong", "subscript", or "superscript".
       if /\AERROR\b.+\baria-label\b.*\battribute\b.*\bmust\b\s\bnot\b\s\bbe\b\s\bspecified\b\s\bon\b\s\bany\b.*\bdiv\b.*\belement\b.*\bunless\b/i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for ARIA grid roles on native HTML table elements
+  #
+  # The W3C HTML validator has a known issue where it incorrectly flags ARIA grid roles
+  # on native HTML table elements. According to the ARIA Authoring Practices Guide (APG),
+  # when using role="grid" on a <table>, explicit ARIA roles ARE required on child elements:
+  # - <thead role="rowgroup">
+  # - <tbody role="rowgroup">
+  # - <tr role="row">
+  # - <th role="columnheader"> or <th role="rowheader">
+  # - <td role="gridcell">
+  #
+  # However, the W3C validator incorrectly reports these as errors, saying:
+  # "The "role" attribute must not be used on a "tr" element which has a "table"
+  #  ancestor with no "role" attribute, or with a "role" attribute whose value is
+  #  "table", "grid", or "treegrid"."
+  #
+  # This is a validator bug that conflicts with actual ARIA specifications and practices.
+  #
+  # == References
+  #
+  # * MDN Grid Role: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/grid_role
+  # * ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/
+  # * W3C Validator Issue #1049: https://github.com/w3c/aria-practices/issues/1049
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_aria_grid_role_errors_on_table_elements(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of Errors:
+      #   ERROR; line 1691: The "role" attribute must not be used on a "tr" element which has a "table" ancestor with no "role" attribute, or with a "role" attribute whose value is "table", "grid", or "treegrid".
+      #   ERROR; line 1692: The "role" attribute must not be used on a "th" element which has a "table" ancestor with no "role" attribute, or with a "role" attribute whose value is "table", "grid", or "treegrid".
+      #   ERROR; line 1697: The "role" attribute must not be used on a "td" element which has a "table" ancestor with no "role" attribute, or with a "role" attribute whose value is "table", "grid", or "treegrid".
+      if /\AERROR\b.+\brole\b.*\battribute\b.*\bmust\b\s\bnot\b\s\bbe\b\s\bused\b\s\bon\b\s\ba\b.*\b(tr|th|td)\b.*\belement\b.*\btable\b.*\bancestor\b/i =~ es.to_s
         removeds << es
         nil
       else
