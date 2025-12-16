@@ -22,7 +22,3 @@ config/credentials/*
 # Github config
 .github/*
 
-
-config/locales/en.yml
-config/locales/fr.yml
-
