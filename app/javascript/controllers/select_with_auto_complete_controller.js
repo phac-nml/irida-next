@@ -148,11 +148,11 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#allOptions.forEach((allOption) => {
       let flag = false;
       const category = allOption.cloneNode(true);
+      this.#addListboxOptionEventListeners(category);
 
       if (category.role === "group") {
         const categoryOptions = category.querySelectorAll('[role="option"]');
         categoryOptions.forEach((categoryOption) => {
-          this.#addListboxOptionEventListeners(categoryOption);
           if (
             filter.length === 0 ||
             getLowercaseContent(categoryOption).indexOf(filter) >= 0
@@ -166,7 +166,6 @@ export default class SelectWithAutoCompleteController extends Controller {
           }
         });
       } else {
-        this.#addListboxOptionEventListeners(category);
         if (
           filter.length === 0 ||
           getLowercaseContent(category).indexOf(filter) >= 0
@@ -428,10 +427,13 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Listbox Option events
 
   #onOptionClick(event) {
-    this.#setValue(event.target);
-    this.#setOption(event.target);
-    this.#close();
-    this.comboboxTarget.focus();
+    const option = event.target.closest('[role="option"]');
+    if (option) {
+      this.#setValue(option);
+      this.#setOption(option);
+      this.#close();
+      this.comboboxTarget.focus();
+    }
   }
 
   // Event handlers
