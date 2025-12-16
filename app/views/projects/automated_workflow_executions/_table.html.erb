@@ -24,7 +24,7 @@
       <% if row[:disabled] %>
         <%= viral_pill(text: t("common.statuses.disabled").upcase, color: "red") %>
       <% else %>
-        <%= viral_pill(text: t(".enabled"), color: "green") %>
+        <%= viral_pill(text: t("common.statuses.enabled"), color: "green") %>
       <% end %>
     <% end %>
     <% table.with_column(t(".headers.actions"),

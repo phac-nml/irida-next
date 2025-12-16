@@ -29,6 +29,7 @@ fr:
       settings: Paramètres
     statuses:
       disabled: Désactivé
+      enabled: Activé
       error: Erreur
       processing: Traitement
       ready: Prêt
