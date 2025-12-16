@@ -39,6 +39,23 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     self.groups = groups
   end
 
+  def sort=(value)
+    super
+    # use rpartition to split on the first space encountered from the right side
+    # this allows us to sort by metadata fields which contain spaces
+    sort_value = sort.presence || 'updated_at desc'
+    column, _space, direction = sort_value.rpartition(' ')
+
+    # Fallback to default if column is empty (e.g., if sort was just "desc")
+    if column.blank?
+      column = 'updated_at'
+      direction = direction.presence || 'desc'
+    end
+
+    column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
+    assign_attributes(column:, direction:)
+  end
+
   def results(**results_arguments)
     if results_arguments[:limit] || results_arguments[:page]
       pagy_results(results_arguments[:limit], results_arguments[:page])
