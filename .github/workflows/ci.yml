@@ -237,7 +237,7 @@ jobs:
         run: pnpm install
 
       - name: Download Sapporo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           repository: phac-nml/sapporo-service
           ref: irida-next
