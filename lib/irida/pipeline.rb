@@ -113,7 +113,7 @@ module Irida
       @settings.fetch('max_samples', 0).to_i
     end
 
-    def maximum_run_time(sample_count)
+    def maximum_run_time(sample_count = 0)
       max_run_time = @settings.fetch('max_runtime', nil)
 
       return nil if max_run_time.nil?
@@ -125,7 +125,7 @@ module Irida
       result.nil? ? result : result.to_i
     end
 
-    def minimum_run_time(samples_count)
+    def minimum_run_time(samples_count = 0)
       min_run_time = @settings.fetch('min_runtime', nil)
 
       return nil if min_run_time.nil?
