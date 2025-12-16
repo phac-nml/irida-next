@@ -202,23 +202,21 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'min_run_time with running state should delay status check' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 1)
-    workflow_execution = workflow_executions(:irida_next_example_running)
-    workflow_execution.create_logidze_snapshot!
-    min_run_time = 300 # 5 minutes in seconds
+    @workflow_execution.create_logidze_snapshot!
 
     Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
-      @stubs.get("/runs/#{workflow_execution.run_id}/status") do |_env|
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
         [
           200,
           { 'Content-Type': 'application/json' },
           {
-            run_id: workflow_execution.run_id,
+            run_id: @workflow_execution.run_id,
             state: 'RUNNING'
           }
         ]
       end
 
-      WorkflowExecutionStatusJob.perform_later(workflow_execution, min_run_time)
+      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
       perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
     end
 
@@ -228,7 +226,6 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'min_run_time with non-running state should proceed normally' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 1)
-    min_run_time = 300 # 5 minutes in seconds
 
     Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
       @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
@@ -243,7 +240,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
-        WorkflowExecutionStatusJob.perform_later(@workflow_execution, min_run_time)
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
       end
     end
 
@@ -253,6 +250,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
   end
 
   test 'workflow execution exceeds maximum runtime should queue cancellation job' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
     # Set up pipeline schema to get max_runtime
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
     Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
@@ -260,12 +258,25 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
     workflow_execution = workflow_executions(:irida_next_example_running)
     workflow_execution.create_logidze_snapshot!
-    job = WorkflowExecutionStatusJob.new
 
-    # Mock state_time_calculation to return a large run time (400 seconds)
-    # The max_runtime for iridanextexample version 1.0.3 with 1 sample is 35 seconds
-    workflow_execution.workflow.stub :state_time_calculation, 400 do
-      job.requeue_or_cancel(workflow_execution)
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+
+      # Mock state_time_calculation to return a large run time (400 seconds)
+      workflow_execution.workflow.stub :state_time_calculation, 400 do
+        perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+          WorkflowExecutionStatusJob.perform_later(workflow_execution)
+        end
+      end
     end
 
     assert workflow_execution.reload.canceling?

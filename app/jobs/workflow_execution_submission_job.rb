@@ -40,10 +40,8 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
   end
 
   def queue_job(workflow_execution)
-    min_run_time = workflow_execution.workflow.minimum_run_time(workflow_execution.samples.count)
-
     WorkflowExecutionStatusJob.set(
       wait_until: workflow_execution.workflow.status_check_interval.seconds.from_now
-    ).perform_later(workflow_execution, min_run_time)
+    ).perform_later(workflow_execution)
   end
 end
