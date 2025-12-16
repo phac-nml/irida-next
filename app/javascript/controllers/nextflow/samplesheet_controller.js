@@ -103,9 +103,12 @@ export default class extends Controller {
   sampleAttributesTargetConnected() {
     const dataAttributes = this.sampleAttributesTarget.dataset;
     this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
+    // turns true/false string into bool
     this.#allowedToUpdateSamples = JSON.parse(
       dataAttributes.allowedToUpdateSamples,
     );
+    // remove node after retrieving data
+    this.sampleAttributesTarget.remove();
     this.#processSamplesheet();
   }
 
