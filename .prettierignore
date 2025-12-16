@@ -21,4 +21,3 @@ config/credentials/*
 
 # Github config
 .github/*
-
