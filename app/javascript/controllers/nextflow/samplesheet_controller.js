@@ -1,5 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-import { formDataToJsonParams } from "utilities/form";
+import {
+  createHiddenInput,
+  formDataToJsonParams,
+  normalizeParams,
+} from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
 import { focusWhenVisible } from "utilities/focus";
 
@@ -39,6 +43,7 @@ export default class extends Controller {
     "updateSamplesLabel",
     "updateMessage",
     "sampleAttributes",
+    "samplesheetParamsForm",
   ];
 
   static values = {
@@ -52,7 +57,7 @@ export default class extends Controller {
     notAllowedToUpdateSamplesString: { type: String },
   };
 
-  static outlets = ["nextflow--samplesheet--params"];
+  static outlets = ["selection"];
 
   #metadata_parameter_updated_state = [
     "ring-2",
@@ -97,6 +102,13 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
   }
 
+  disconnect() {
+    this.samplesheetParamsFormTarget.removeEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+  }
+
   sampleAttributesTargetConnected() {
     const dataAttributes = this.sampleAttributesTarget.dataset;
     this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
@@ -121,12 +133,6 @@ export default class extends Controller {
   }
 
   #setSamplesheetParametersAndData() {
-    this.#samplesheetProperties = JSON.parse(
-      this.samplesheetPropertiesTarget.innerHTML,
-    );
-    // clear the now unnecessary DOM element
-    this.samplesheetPropertiesTarget.remove();
-
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
@@ -914,5 +920,53 @@ export default class extends Controller {
     nameErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.remove("hidden");
     nameField.classList.remove("invalid");
+  }
+
+  samplesheetPropertiesTargetConnected() {
+    this.#samplesheetProperties =
+      this.samplesheetPropertiesTarget.dataset.properties;
+    this.boundAmendForm = this.amendForm.bind(this);
+
+    this.samplesheetParamsFormTarget.addEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+    this.#submitSamplesheetParams();
+  }
+
+  amendForm(event) {
+    const formData = new FormData(this.samplesheetParamsFormTarget);
+    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
+    event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+    event.detail.resume();
+  }
+
+  #toJson(formData) {
+    let params = formDataToJsonParams(formData);
+    if (this.hasSelectionOutlet) {
+      normalizeParams(
+        params,
+        "sample_ids[]",
+        this.selectionOutlet.getOrCreateStoredItems(),
+        0,
+      );
+    }
+    return params;
+  }
+
+  #submitSamplesheetParams() {
+    const fragment = document.createDocumentFragment();
+
+    fragment.appendChild(
+      createHiddenInput("properties", this.#samplesheetProperties),
+    );
+
+    this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
+    // clear the now unnecessary DOM element
+    this.samplesheetPropertiesTarget.remove();
+
+    this.samplesheetParamsFormTarget.appendChild(fragment);
+    this.samplesheetParamsFormTarget.requestSubmit();
   }
 }

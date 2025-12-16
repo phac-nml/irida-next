@@ -4,9 +4,9 @@
   <div
     class="hidden"
     data-nextflow--samplesheet-target="samplesheetProperties"
-    data-nextflow--samplesheet--params-target="properties"
+    data-properties="<%= @properties.to_json %>"
   >
-    <%= @properties.to_json %>
+
   </div>
   <div class="flex justify-between mb-2 @max-2xl:flex-col">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t("components.nextflow.samplesheet_component.label") %></label>
