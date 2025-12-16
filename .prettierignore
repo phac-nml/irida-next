@@ -21,3 +21,6 @@ config/credentials/*
 
 # Github config
 .github/*
+
+# Locales
+config/locales/*

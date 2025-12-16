@@ -1279,7 +1279,6 @@ en:
         empty:
           description: No automated pipelines have been configured for this project
           title: No automated pipelines
-        enabled: ENABLED
         headers:
           actions: Actions
           created_at: Created
