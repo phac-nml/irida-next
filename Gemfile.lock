@@ -473,7 +473,9 @@ GEM
       opentelemetry-api (~> 1.0)
     orm_adapter (0.5.0)
     os (1.1.4)
-    pagy (9.3.5)
+    pagy (43.2.1)
+      json
+      yaml
     parallel (1.27.0)
     paranoia (3.1.0)
       activerecord (>= 7, < 8.2)
@@ -710,6 +712,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yaml (0.4.0)
     yard (0.9.37)
     zeitwerk (2.7.3)
     zip_kit (6.3.3)
@@ -776,7 +779,7 @@ DEPENDENCIES
   opentelemetry-metrics-api
   opentelemetry-metrics-sdk
   opentelemetry-sdk
-  pagy (~> 9.3.3)
+  pagy (~> 43.2.1)
   paranoia
   pathogen_view_components!
   pg

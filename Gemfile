@@ -70,7 +70,7 @@ gem 'tailwindcss-rails', '~> 4.0'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
 # Pagy
-gem 'pagy', '~> 9.3.3'
+gem 'pagy', '~> 43.2.1'
 
 # Ransack
 gem 'ransack', '~> 4.2.1'
