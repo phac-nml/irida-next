@@ -53,7 +53,6 @@ export default class extends Controller {
     return params;
   }
 
-  // triggered when nextflow/samplesheet/params/schema_controller connects
   #submitSamplesheetParams() {
     const fragment = document.createDocumentFragment();
 
