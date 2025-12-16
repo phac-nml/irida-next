@@ -7,11 +7,11 @@ export default class extends Controller {
   };
 
   connect() {
-    this.notify();
+    this.notifySamplesReady();
   }
 
-  notify() {
-    this.dispatch("notify", {
+  notifySamplesReady() {
+    this.dispatch("notifySamplesReady", {
       detail: {
         content: { allowedToUpdateSamples: this.allowedToUpdateSamplesValue },
       },
