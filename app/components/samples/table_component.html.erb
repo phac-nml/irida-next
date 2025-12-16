@@ -35,7 +35,6 @@
               role: 'columnheader',
               scope: 'col',
               **helpers.aria_sort(column, @sort_key, @sort_direction),
-              aria: { colindex: index + 1 },
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
                 <div
@@ -114,7 +113,6 @@
                 tag: index.zero? ? 'th' : 'td',
                 role: index.zero? ? 'rowheader' : 'gridcell',
                 scope: index.zero? ? 'row' : nil,
-                aria: { colindex: index + 1 },
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
               ) do %>
                   <div class="flex items-center gap-3">
