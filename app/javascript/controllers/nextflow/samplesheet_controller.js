@@ -52,10 +52,7 @@ export default class extends Controller {
     notAllowedToUpdateSamplesString: { type: String },
   };
 
-  static outlets = [
-    "nextflow--samplesheet--params",
-    "nextflow--samplesheet--sample-attributes",
-  ];
+  static outlets = ["nextflow--samplesheet--params"];
 
   #metadata_parameter_updated_state = [
     "ring-2",

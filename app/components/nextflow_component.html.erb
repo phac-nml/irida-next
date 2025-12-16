@@ -13,7 +13,6 @@
   <% unless @automated_workflow %>
   data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
   data-nextflow--samplesheet--params-selection-outlet="#samples-table"
-  data-nextflow--samplesheet-nextflow--samplesheet--sample-attributes-outlet="#sample-attributes-container"
   <% end %>
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
