@@ -38,6 +38,7 @@ export default class extends Controller {
     "updateSamplesCheckbox",
     "updateSamplesLabel",
     "updateMessage",
+    "sampleAttributes",
   ];
 
   static values = {
@@ -99,12 +100,12 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  nextflowSamplesheetSampleAttributesOutletConnected() {
-    const sampleAttributes =
-      this.nextflowSamplesheetSampleAttributesOutlet.retrieveSampleAttributes();
-
-    this.#samplesheetAttributes = sampleAttributes["sampleAttributes"];
-    this.#allowedToUpdateSamples = sampleAttributes["allowedToUpdateSamples"];
+  sampleAttributesTargetConnected() {
+    const dataAttributes = this.sampleAttributesTarget.dataset;
+    this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
+    this.#allowedToUpdateSamples = JSON.parse(
+      dataAttributes.allowedToUpdateSamples,
+    );
     this.#processSamplesheet();
   }
 

@@ -1,8 +1,9 @@
 <div
   id="sample-attributes-container"
   class="hidden"
+  data-nextflow--samplesheet-target="sampleAttributes"
   data-controller="nextflow--samplesheet--sample-attributes"
-  data-nextflow--samplesheet--sample-attributes-allowed-to-update-samples-value="<%= @allowed_to_update_samples %>"
-  data-nextflow--samplesheet--sample-attributes-sample-attributes-value="<%= samples_workflow_executions_attributes.to_json %>"
+  data-allowed-to-update-samples="<%= @allowed_to_update_samples %>"
+  data-sample-attributes="<%= samples_workflow_executions_attributes.to_json %>"
 >
 </div>
