@@ -32,11 +32,11 @@ export default class SelectWithAutoCompleteController extends Controller {
   #lastOption;
 
   connect() {
-    this.boundOnBackgroundPointerUp = this.#onBackgroundPointerUp.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
     this.boundOnComboboxClick = this.#onComboboxClick.bind(this);
     this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
+    this.boundOnComboboxBlur = this.#onComboboxBlur.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
 
     this.#filter = "";
@@ -56,12 +56,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     }, 300);
 
     // Add event handlers
-    document.body.addEventListener(
-      "pointerup",
-      this.boundOnBackgroundPointerUp,
-      true,
-    );
-
     this.#addComboboxEventListeners(this.comboboxTarget);
     this.#addListboxEventListeners(this.listboxTarget);
   }
@@ -70,12 +64,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.debouncedFilterAndUpdate.cancel();
 
     // Remove event handlers
-    document.body.removeEventListener(
-      "pointerup",
-      this.boundOnBackgroundPointerUp,
-      true,
-    );
-
     this.#removeComboboxEventListeners(this.comboboxTarget);
     this.#removeListboxEventListeners(this.listboxTarget);
   }
@@ -105,7 +93,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.#filter.length,
       this.#filter.length,
     );
-    this.#filterOptions();
   }
 
   #renderNoResults() {
@@ -331,12 +318,6 @@ export default class SelectWithAutoCompleteController extends Controller {
         flag = true;
         break;
 
-      case "Tab":
-        this.debouncedFilterAndUpdate.flush();
-        this.#setValue(this.#option);
-        this.#close();
-        break;
-
       case "Home":
         this.comboboxTarget.setSelectionRange(0, 0);
         flag = true;
@@ -413,15 +394,14 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#filterOptions();
   }
 
-  #onBackgroundPointerUp(event) {
-    if (
-      !this.comboboxTarget.contains(event.target) &&
-      !this.listboxTarget.contains(event.target)
-    ) {
+  #onComboboxBlur() {
+    // Deferring blur to allow the click event to register first
+    setTimeout(() => {
       this.debouncedFilterAndUpdate.flush();
-      this.#setValue(this.#option);
+      const option = this.#populateCurrentFirstLastOptions();
+      this.#setValue(option);
       this.#close();
-    }
+    }, 300);
   }
 
   // Listbox Option events
@@ -443,6 +423,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.addEventListener("click", this.boundOnComboboxClick);
     combobox.addEventListener("focus", this.boundOnComboboxFocus);
+    combobox.addEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #removeComboboxEventListeners(combobox) {
@@ -450,6 +431,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.removeEventListener("click", this.boundOnComboboxClick);
     combobox.removeEventListener("focus", this.boundOnComboboxFocus);
+    combobox.removeEventListener("blur", this.boundOnComboboxBlur);
   }
 
   #addListboxOptionEventListeners(option) {
