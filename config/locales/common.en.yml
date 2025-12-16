@@ -29,6 +29,7 @@ en:
       settings: Settings
     statuses:
       disabled: Disabled
+      enabled: Enabled
       error: Error
       processing: Processing
       ready: Ready
