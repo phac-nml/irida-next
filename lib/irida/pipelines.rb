@@ -10,6 +10,14 @@ module Irida
   # Class that reads a workflow config file and registers the available pipelines
   class Pipelines # rubocop:disable Metrics/ClassLength
     PipelinesJsonFormatException = Class.new StandardError
+    class PipelinesInvalidUrlException < StandardError # rubocop:disable Style/Documentation
+      attr_reader :code, :previous_etag_exists
+
+      def initialize(code, previous_etag_exists) # rubocop:disable Lint/MissingSuper
+        @code = code
+        @previous_etag_exists = previous_etag_exists
+      end
+    end
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
     UNKNOWN_PIPELINE_ENTRY = {
       'name' => 'UNKNOWN WORKFLOW',
@@ -39,10 +47,27 @@ module Irida
         entry['versions'].each do |version|
           next if @pipelines.key?("#{pipeline_id}_#{version['name']}")
 
-          nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
-          schema_input_location = prepare_schema_download(entry, version, 'schema_input')
+          uri = get_uri_from_entry(entry, pipeline_id)
+          could_not_update = false
+          begin
+            nextflow_schema_location = prepare_schema_download(uri, version, 'nextflow_schema')
+            schema_input_location = prepare_schema_download(uri, version, 'schema_input')
+          rescue PipelinesInvalidUrlException => e
+            raise e if e.code == '503' # re-raise error to force crash
+
+            if e.previous_etag_exists # create error and mark pipeline as non executable
+              Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
+              nextflow_schema_location = nil
+              schema_input_location = nil
+              could_not_update = true
+            else # create error and skip this pipeline
+              Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
+              next
+            end
+          end
 
           pipeline = Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+          pipeline.executable = false if could_not_update
           @pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
         end
       end
@@ -62,9 +87,9 @@ module Irida
 
     # Sets up the file names, paths, and urls to be used
     # by the write_schema_file method
-    def prepare_schema_download(entry, version, type)
+    def prepare_schema_download(uri, version, type)
       filename = "#{type}.json"
-      uri = URI.parse(entry['url'])
+
       pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
 
       schema_file_url = if type == 'nextflow_schema'
@@ -79,6 +104,16 @@ module Irida
       write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
 
       schema_location
+    end
+
+    def get_uri_from_entry(entry, pipeline_id)
+      uri = URI.parse(entry['url'])
+
+      unless uri.scheme == 'https' && uri.host == 'github.com'
+        Rails.logger.warn("Pipeline with id '#{pipeline_id}' specifies a url not hosted on 'https://github.com'")
+      end
+
+      uri
     end
 
     # Create directory if it doesn't exist and write the schema file unless the resource etag matches
@@ -98,47 +133,61 @@ module Irida
     # file
     def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Naming/PredicateMethod
       status_file_location = Rails.root.join(status_file_location, @pipeline_schema_status_file)
+
+      # File etag if it currently exists, false otherwise
+      existing_etag = get_existing_etag(status_file_location, etag_type)
       # File currently at pipeline url
-      current_file_etag = resource_etag(resource_url)
-      existing_etag = false
+      current_file_etag = fetch_resource_etag(resource_url, existing_etag != false)
+
+      return true if current_file_etag == existing_etag
+
       data = {}
-
-      if File.exist?(status_file_location)
-        status_file = File.read(status_file_location)
-        data = JSON.parse(status_file)
-        existing_etag = data[etag_type] if data.key?(etag_type) && data[etag_type].present?
-
-        return true if current_file_etag == existing_etag
-      end
-
       data[etag_type] = current_file_etag
 
       File.open(status_file_location, 'w') { |output_file| output_file << data.to_json }
       false
     end
 
+    # File etag if it currently exists, false otherwise
+    def get_existing_etag(status_file_location, etag_type)
+      if File.exist?(status_file_location)
+        status_file = File.read(status_file_location)
+        data = JSON.parse(status_file)
+        return data[etag_type] if data.key?(etag_type) && data[etag_type].present?
+      end
+      false
+    end
+
     # Get the etag from headers which will be used to check if newer
     # schema files are required to be downloaded for a pipeline
-    def resource_etag(resource_url)
+    def fetch_resource_etag(resource_url, previous_etag_exists)
       url = URI(resource_url)
-      headers = retrieve_headers(url)
+      headers = retrieve_headers(url, previous_etag_exists)
 
       # Handle Redirects
       if headers['location']
         response_location = headers['location'].join
         url = URI("#{url.scheme}://#{url.host}#{response_location}")
 
-        headers = retrieve_headers(url)
+        headers = retrieve_headers(url, previous_etag_exists)
       end
 
       headers['etag'].join.scan(/"([^"]*)"/).join
     end
 
     # Get the headers for the resource
-    def retrieve_headers(url)
+    def retrieve_headers(url, previous_etag_exists)
       request_options = { use_ssl: url.scheme == 'https' }
       Net::HTTP.start(url.host, url.port, request_options) do |http|
-        http.head(url.path).to_hash
+        resp = http.head(url.path)
+
+        unless resp.code == '200'
+          message = "Url `#{url.path}` returned http `#{resp.code}`"
+          Rails.logger.error(message)
+          raise PipelinesInvalidUrlException.new(resp.code, previous_etag_exists), message
+        end
+
+        resp.to_hash
       end
     end
 
