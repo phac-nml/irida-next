@@ -56,27 +56,6 @@ export default class extends Controller {
     "nextflow--samplesheet--sample-attributes",
   ];
 
-  #pagination_button_disabled_state = [
-    "cursor-default",
-    "text-slate-600",
-    "bg-slate-50",
-    "dark:bg-slate-700",
-    "dark:text-slate-400",
-    "pointer-events-none",
-  ];
-  #pagination_button_enabled_state = [
-    "text-slate-500",
-    "bg-white",
-    "hover:bg-slate-100",
-    "hover:text-slate-700",
-    "dark:bg-slate-800",
-    "dark:text-slate-400",
-    "dark:hover:bg-slate-700",
-    "dark:hover:text-white",
-    "cursor",
-    "cursor-pointer",
-  ];
-
   #metadata_parameter_updated_state = [
     "ring-2",
     "ring-primary-500",
@@ -633,27 +612,15 @@ export default class extends Controller {
 
   #verifyPaginationButtonStates() {
     if (this.#currentPage == 1) {
-      this.#disablePaginationButton(this.previousBtnTarget);
-      this.#enablePaginationButton(this.nextBtnTarget);
+      this.previousBtnTarget.disabled = true;
+      this.nextBtnTarget.disabled = false;
     } else if (this.#currentPage == this.#lastPage) {
-      this.#disablePaginationButton(this.nextBtnTarget);
-      this.#enablePaginationButton(this.previousBtnTarget);
+      this.previousBtnTarget.disabled = false;
+      this.nextBtnTarget.disabled = true;
     } else {
-      this.#enablePaginationButton(this.nextBtnTarget);
-      this.#enablePaginationButton(this.previousBtnTarget);
+      this.previousBtnTarget.disabled = false;
+      this.nextBtnTarget.disabled = false;
     }
-  }
-
-  #disablePaginationButton(button) {
-    button.disabled = true;
-    button.classList.remove(...this.#pagination_button_enabled_state);
-    button.classList.add(...this.#pagination_button_disabled_state);
-  }
-
-  #enablePaginationButton(button) {
-    button.disabled = false;
-    button.classList.remove(...this.#pagination_button_disabled_state);
-    button.classList.add(...this.#pagination_button_enabled_state);
   }
 
   #generatePageNumberDropdown() {

@@ -197,10 +197,13 @@
       <li><button
           type="button"
           class="
-            flex items-center justify-center h-10 px-4 leading-tight border cursor-default
-            ms-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-700
-            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-e-0 rounded-s-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
@@ -213,7 +216,7 @@
           style="width: 80px;"
           class="
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-900
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
             dark:hover:bg-slate-700 dark:hover:text-white focus-visible:relative
           "
@@ -224,11 +227,13 @@
       </li>
       <li><button
           class="
-            flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
-            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-l-0 rounded-e-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
           type="button"
           data-nextflow--samplesheet-target="nextBtn"
