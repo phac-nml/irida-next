@@ -26,7 +26,6 @@ module WorkflowExecutions
     end
 
     def samplesheet
-      @properties = JSON.parse(params[:properties])
       render status: :ok
     end
 
@@ -52,6 +51,7 @@ module WorkflowExecutions
     end
 
     def samplesheet_params
+      @properties = JSON.parse(params[:properties])
       @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: params[:sample_ids])
 
       allowed_to_update_samples
