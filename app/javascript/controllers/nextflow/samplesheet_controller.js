@@ -14,7 +14,6 @@ export default class extends Controller {
     "samplesheetMessagesContainer",
     "submissionSpinner",
     "samplesheetSpinner",
-    "sampleAttributes",
     "samplesheetProperties",
     "trTemplate",
     "thTemplate",
@@ -51,7 +50,10 @@ export default class extends Controller {
     notAllowedToUpdateSamplesString: { type: String },
   };
 
-  static outlets = ["nextflow--samplesheet--params"];
+  static outlets = [
+    "nextflow--samplesheet--params",
+    "nextflow--samplesheet--sample-attributes",
+  ];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -110,15 +112,25 @@ export default class extends Controller {
   #queuedMetadataChanges = {};
 
   #samplesheetReady = false;
+  #allowedToUpdateSamples;
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  processSamplesheet({ detail: { content } }) {
+  nextflowSamplesheetSampleAttributesOutletConnected() {
+    const sampleAttributes =
+      this.nextflowSamplesheetSampleAttributesOutlet.retrieveSampleAttributes();
+
+    this.#samplesheetAttributes = sampleAttributes["sampleAttributes"];
+    this.#allowedToUpdateSamples = sampleAttributes["allowedToUpdateSamples"];
+    this.#processSamplesheet();
+  }
+
+  #processSamplesheet() {
     this.#setSamplesheetParametersAndData();
-    this.#disableProcessingState(content["allowedToUpdateSamples"]);
+    this.#disableProcessingState();
     this.#samplesheetReady = true;
     if (Object.keys(this.#queuedMetadataChanges).length > 0) {
       this.#submitMetadataChange(this.#queuedMetadataChanges);
@@ -133,12 +145,6 @@ export default class extends Controller {
     );
     // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
-
-    this.#samplesheetAttributes = JSON.parse(
-      this.sampleAttributesTarget.innerText,
-    );
-    // clear the now unnecessary DOM element
-    this.sampleAttributesTarget.remove();
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
@@ -277,12 +283,12 @@ export default class extends Controller {
     }
   }
 
-  #disableProcessingState(allowedToUpdateSamples) {
+  #disableProcessingState() {
     this.submitTarget.disabled = false;
     this.samplesheetSpinnerTarget.remove();
 
     this.updateSamplesLabelTarget.innerHTML = "";
-    if (allowedToUpdateSamples) {
+    if (this.#allowedToUpdateSamples) {
       this.updateSamplesLabelTarget.innerText =
         this.allowedToUpdateSamplesStringValue;
       this.updateSamplesCheckboxTarget.disabled = false;
