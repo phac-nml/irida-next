@@ -36,7 +36,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
     this.boundOnComboboxClick = this.#onComboboxClick.bind(this);
-    this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
 
     this.#filter = "";
@@ -64,6 +63,9 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.#addComboboxEventListeners(this.comboboxTarget);
     this.#addListboxEventListeners(this.listboxTarget);
+
+    // Initialize
+    this.#setOption(this.#filterOptions());
   }
 
   disconnect() {
@@ -409,10 +411,6 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
-  #onComboboxFocus() {
-    this.#filterOptions();
-  }
-
   #onBackgroundMouseDown(event) {
     if (
       !this.comboboxTarget.contains(event.target) &&
@@ -442,14 +440,12 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.addEventListener("click", this.boundOnComboboxClick);
-    combobox.addEventListener("focus", this.boundOnComboboxFocus);
   }
 
   #removeComboboxEventListeners(combobox) {
     combobox.removeEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.removeEventListener("click", this.boundOnComboboxClick);
-    combobox.removeEventListener("focus", this.boundOnComboboxFocus);
   }
 
   #addListboxOptionEventListeners(option) {
