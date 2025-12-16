@@ -18,7 +18,7 @@ module Projects
                                                    }), status: :ok
         end
 
-        def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        def destroy # rubocop:disable Metrics/MethodLength
           authorize! @sample, to: :destroy_attachment?
 
           attachments_to_delete = get_attachments(deletion_params['attachment_ids'])
@@ -29,11 +29,11 @@ module Projects
           end
 
           # No selected attachments were destroyed
-          if attachments_to_delete.count.positive? && attachments_to_delete.count == attachments_to_delete_count
+          if attachments_to_delete.any? && attachments_to_delete.count == attachments_to_delete_count
             render status: :unprocessable_content,
                    locals: { message: nil, not_deleted_attachments: attachments_to_delete }
           # Only some selected attachments were destroyed
-          elsif attachments_to_delete.count.positive?
+          elsif attachments_to_delete.any?
             render status: :multi_status,
                    locals: { type: :success, message: t('.partial_success'),
                              not_deleted_attachments: attachments_to_delete }

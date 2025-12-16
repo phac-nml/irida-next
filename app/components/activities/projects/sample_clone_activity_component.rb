@@ -11,7 +11,7 @@ module Activities
         @activity[:source_project_puid]
       end
 
-      def project_exists(namespace)
+      def project_exists?(namespace)
         return false if namespace.nil?
 
         !namespace.deleted? && !namespace.project.deleted?
@@ -23,7 +23,7 @@ module Activities
 
       def activity_message # rubocop:disable Metrics/MethodLength
         namespace = activity_namespace
-        href = if project_exists(namespace)
+        href = if project_exists?(namespace)
                  link_to(
                    namespace_puid(namespace),
                    namespace_project_samples_path(namespace.parent, namespace.project),

@@ -11,7 +11,7 @@ module MetadataTemplates
       @metadata_template = metadata_template
       @namespace = namespace
       @row_actions = row_actions
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @columns = columns
     end
 

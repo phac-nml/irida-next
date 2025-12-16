@@ -9,7 +9,7 @@ module Resolvers
 
     type Boolean, null: false
 
-    def resolve(id:)
+    def resolve(id:) # rubocop:disable Naming/PredicateMethod
       id_sections = id.split('_')
       model_prefix = id_sections[1]
       return false unless id_sections.length == 3

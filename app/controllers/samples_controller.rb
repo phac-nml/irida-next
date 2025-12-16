@@ -3,6 +3,7 @@
 # root controller for samples
 class SamplesController < ApplicationController
   include ListActions
+
   before_action :sample, only: %i[show edit]
 
   def show

@@ -4,11 +4,11 @@ module Activities
   module Groups
     # Component for rendering an group sample activity
     class SampleActivityComponent < Activities::BaseActivityComponent
-      def import_samples_action
+      def import_samples_action?
         @activity[:action] == 'group_import_samples'
       end
 
-      def sample_destroy_action
+      def sample_destroy_action?
         @activity[:action] == 'group_samples_destroy'
       end
 
@@ -46,7 +46,7 @@ module Activities
       end
 
       def show_more_details_button?
-        import_samples_action || sample_destroy_action
+        import_samples_action? || sample_destroy_action?
       end
     end
   end

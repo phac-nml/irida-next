@@ -14,14 +14,14 @@ module Activities
       end
     end
 
-    def member_exists
+    def member_exists?
       return false if @activity[:member].nil?
 
       !@activity[:member].deleted?
     end
 
     def activity_message # rubocop:disable Metrics/MethodLength
-      href = if member_exists
+      href = if member_exists?
                link_to(
                  @activity[:member_email],
                  members_page,

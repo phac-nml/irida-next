@@ -4,18 +4,18 @@ module Activities
   module Groups
     # Component for rendering a subgroup transferred into a group activity
     class TransferInActivityComponent < Activities::BaseActivityComponent
-      def existing_group_namespace
+      def existing_group_namespace?
         !@activity[:old_namespace].nil?
       end
 
-      def transferred_group_exists
+      def transferred_group_exists?
         return false if @activity[:transferred_group].nil?
 
         !@activity[:transferred_group].deleted?
       end
 
       def activity_message # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        href = if transferred_group_exists
+        href = if transferred_group_exists?
                  link_to(
                    @activity[:transferred_group_puid],
                    group_path(@activity[:transferred_group]),
@@ -30,7 +30,7 @@ module Activities
                  highlighted_text(@activity[:transferred_group_puid])
                end
 
-        if existing_group_namespace
+        if existing_group_namespace?
           t(
             @activity[:key],
             user: @activity[:user],

@@ -315,7 +315,8 @@ module Viral
       render_inline(Viral::AlertComponent.new(message: 'Linked IDs alert', dismissible: true))
 
       alert_id = page.find('[data-viral--alert-alert-id-value]')['data-viral--alert-alert-id-value']
-      dismiss_button_id = page.find('[data-viral--alert-dismiss-button-id-value]')['data-viral--alert-dismiss-button-id-value']
+      dismiss_button_id =
+        page.find('[data-viral--alert-dismiss-button-id-value]')['data-viral--alert-dismiss-button-id-value']
 
       assert dismiss_button_id.start_with?(alert_id)
       assert dismiss_button_id.end_with?('-dismiss')
@@ -355,7 +356,7 @@ module Viral
       complex_content = '<div class="nested"><ul><li>Item 1</li><li>Item 2</li></ul></div>'
 
       render_inline(Viral::AlertComponent.new(message: 'Complex content alert')) do
-        complex_content.html_safe
+        complex_content.html_safe # rubocop:disable Rails/OutputSafety
       end
 
       assert_text 'Complex content alert'

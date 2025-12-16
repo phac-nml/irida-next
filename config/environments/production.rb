@@ -47,7 +47,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
   config.logger   = ActiveSupport::TaggedLogging.logger($stdout)
 
-  # Change to "debug" to log everything (including potentially personally-identifiable information!)
+  # Change to "debug" to log everything (including potentially personally-identifiable information!).
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Prevent health checks from clogging up the logs.
@@ -70,7 +70,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST', 'example.com'),
                                                protocol: ENV.fetch('RAILS_PROTOCOL', 'http') }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
+  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   unless Rails.application.credentials.action_mailer.nil?
     unless Rails.application.credentials.action_mailer.default_from.nil?
       config.action_mailer.default_options = { from: Rails.application.credentials.action_mailer.default_from }

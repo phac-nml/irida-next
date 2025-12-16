@@ -16,61 +16,61 @@
     "
   ><%= helpers.local_time(activity[:created_at]) %></div>
   <% if activity[:type] == 'Namespace' && activity[:key].include?('group') %>
-    <% if metadata_template_action %>
+    <% if metadata_template_action? %>
       <%= render Activities::Groups::MetadataTemplateActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif transfer_in_action %>
+    <% elsif transfer_in_action? %>
       <%= render Activities::Groups::TransferInActivityComponent.new(activity: activity) %>
-    <% elsif transfer_out_action %>
+    <% elsif transfer_out_action? %>
       <%= render Activities::Groups::TransferOutActivityComponent.new(activity: activity) %>
-    <% elsif subgroup_action %>
+    <% elsif subgroup_action? %>
       <%= render Activities::Groups::SubgroupActivityComponent.new(activity: activity) %>
-    <% elsif sample_transfer_action %>
+    <% elsif sample_transfer_action? %>
       <%= render Activities::Groups::SampleTransferActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif sample_clone_action %>
+    <% elsif sample_clone_action? %>
       <%= render Activities::Groups::SampleCloneActivityComponent.new(activity: activity) %>
-    <% elsif member_action %>
+    <% elsif member_action? %>
       <%= render Activities::MemberActivityComponent.new(activity: activity) %>
-    <% elsif project_crud_action %>
+    <% elsif project_crud_action? %>
       <%= render Activities::Groups::Projects::CrudActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif project_transfer_action %>
+    <% elsif project_transfer_action? %>
       <%= render Activities::Groups::Projects::TransferActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif group_link_action %>
+    <% elsif group_link_action? %>
       <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
-    <% elsif sample_action %>
+    <% elsif sample_action? %>
       <%= render Activities::Groups::SampleActivityComponent.new(activity: activity) %>
     <% else %>
       <%= render Activities::GroupActivityComponent.new(activity: activity) %>
     <% end %>
   <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
-    <% if group_link_action %>
+    <% if group_link_action? %>
       <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
-    <% elsif metadata_template_action %>
+    <% elsif metadata_template_action? %>
       <%= render Activities::Projects::MetadataTemplateActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif sample_action %>
+    <% elsif sample_action? %>
       <%= render Activities::Projects::SampleActivityComponent.new(activity: activity) %>
-    <% elsif sample_transfer_action %>
+    <% elsif sample_transfer_action? %>
       <%= render Activities::Projects::SampleTransferActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif sample_clone_action %>
+    <% elsif sample_clone_action? %>
       <%= render Activities::Projects::SampleCloneActivityComponent.new(
         activity: activity,
       ) %>
-    <% elsif member_action %>
+    <% elsif member_action? %>
       <%= render Activities::MemberActivityComponent.new(activity: activity) %>
-    <% elsif project_namespace_transfer_action %>
+    <% elsif project_namespace_transfer_action? %>
       <%= render Activities::Projects::TransferActivityComponent.new(activity: activity) %>
-    <% elsif project_namespace_workflow_execution_action %>
+    <% elsif project_namespace_workflow_execution_action? %>
       <%= render Activities::Projects::WorkflowExecutionActivityComponent.new(
         activity: activity,
       ) %>

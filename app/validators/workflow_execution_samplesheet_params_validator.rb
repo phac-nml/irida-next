@@ -138,7 +138,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
     nil
   end
 
-  def validate_sample_attachment(record, attachment, property)
+  def validate_sample_attachment(record, attachment, property) # rubocop:disable Naming/PredicateMethod
     return true if attachment.attachable == record.sample
 
     record.errors.add :samplesheet_params,

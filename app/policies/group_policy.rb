@@ -9,7 +9,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     @access_level
   end
 
-  def token_active(access_level)
+  def token_active?(access_level)
     return false unless access_level == Member::AccessLevel::UPLOADER
 
     return false if Current.token.nil?
@@ -77,7 +77,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
-    return true if token_active(effective_access_level) == true
+    return true if token_active?(effective_access_level) == true
 
     details[:name] = record.name
     false
@@ -140,7 +140,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
-    return true if token_active(effective_access_level) == true
+    return true if token_active?(effective_access_level) == true
 
     details[:name] = record.name
     false
@@ -260,7 +260,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def create_attachment?
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
-    return true if token_active(effective_access_level) == true
+    return true if token_active?(effective_access_level) == true
 
     details[:name] = record.name
     false
@@ -268,7 +268,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def destroy_attachment?
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
-    return true if token_active(effective_access_level) == true
+    return true if token_active?(effective_access_level) == true
 
     details[:name] = record.name
     false
