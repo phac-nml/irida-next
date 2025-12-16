@@ -1,6 +1,6 @@
 <div
   id="nextflow-container"
-  data-controller="<% unless @automated_workflow %>nextflow--samplesheet--params <% end %>nextflow--samplesheet"
+  data-controller="nextflow--samplesheet"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
@@ -11,8 +11,7 @@
   data-nextflow--samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
   data-nextflow--samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
   <% unless @automated_workflow %>
-  data-nextflow--samplesheet--params-fields-value="<%= metadata_fields %>"
-  data-nextflow--samplesheet--params-selection-outlet="#samples-table"
+  data-nextflow--samplesheet-selection-outlet="#samples-table"
   <% end %>
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
@@ -299,7 +298,7 @@
       url: samplesheet_workflow_executions_submissions_path,
       method: :post,
       data: {
-        "nextflow--samplesheet--params-target": "samplesheetParamsForm",
+        "nextflow--samplesheet-target": "samplesheetParamsForm",
       },
     ) do |f| %>
     <% end %>
