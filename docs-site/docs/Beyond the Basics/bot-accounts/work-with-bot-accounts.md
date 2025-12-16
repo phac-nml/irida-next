@@ -1,0 +1,7 @@
+---
+id: introduction
+---
+
+# Work with Bot Accounts
+
+Bot accounts are used when performing actions which can't be attributed to an individual user. For example, using an uploader or launching an automated workflow.
