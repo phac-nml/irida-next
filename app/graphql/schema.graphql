@@ -574,7 +574,6 @@ Field to sort the attachments by
 """
 enum AttachmentOrderField {
   created_at
-  filename
   updated_at
 }
 
