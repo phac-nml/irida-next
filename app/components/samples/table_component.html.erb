@@ -223,9 +223,9 @@
       >
         <% @samples.each do |sample| %>
           <div data-sample-id="<%= sample.id %>">
-            <% @metadata_fields.each_with_index do |field, field_index| %>
+            <% @initial_metadata_fields.each_with_index do |field, field_index| %>
               <template data-field="<%= field %>">
-                <% field_colindex = @columns.length + field_index + 1 %>
+                <% field_colindex = @columns.length + @metadata_fields.index(field) + 1 %>
                 <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(
                     field: field,
@@ -244,6 +244,30 @@
           </div>
         <% end %>
       </div>
+
+      <%# Turbo frame for deferred template loading (projects only) %>
+      <% if @namespace.is_a?(Namespaces::ProjectNamespace) && @deferred_metadata_fields.any? %>
+        <% deferred_params = {
+          q: @search_params,
+          limit: @pagy.vars[:limit],
+          page: @pagy.page,
+          format: :turbo_stream,
+        }.to_query %>
+        <% deferred_url =
+          deferred_templates_namespace_project_samples_path(
+            @namespace.parent,
+            @namespace.project,
+          ) + "?#{deferred_params}" %>
+        <%= helpers.turbo_frame_tag "deferred-templates",
+                                src: deferred_url,
+                                loading: "eager",
+                                class: "hidden",
+                                "aria-hidden": "true",
+                                data: {
+                                  "virtual-scroll-target": "deferredFrame",
+                                  turbo_action: "advance",
+                                } %>
+      <% end %>
 
       <%# Loading overlay %>
       <div
