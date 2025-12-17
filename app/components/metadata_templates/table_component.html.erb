@@ -75,11 +75,11 @@
 <% end %>
 <% unless @metadata_templates.empty? %>
   <%= render PaginationComponent.new(
-    info: helpers.pagy_info(@pagy),
+    info: @pagy.info_tag,
     prev_url:
       (
-        if @pagy.prev
-          helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+        if @pagy.previous
+          @pagy.page_url(:previous).gsub(
             "metadata_templates.turbo_stream",
             "metadata_templates",
           )
@@ -90,7 +90,7 @@
     next_url:
       (
         if @pagy.next
-          helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+          @pagy.page_url(:next).gsub(
             "metadata_templates.turbo_stream",
             "metadata_templates",
           )

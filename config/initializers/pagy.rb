@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'pagy/toolbox/helpers/support/series'
+require 'pagy/toolbox/helpers/support/a_lambda'
+
 # Pagy initializer file (43.2.1)
 # See https://ddnexus.github.io/pagy/resources/initializer/
 

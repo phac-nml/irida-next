@@ -23,7 +23,7 @@
         <%= select_tag(
           "limit",
           options_for_select(
-            Pagy::DEFAULT[:limits].map do |limit|
+            LIMITS.map do |limit|
               [
                 limit,
                 limit,

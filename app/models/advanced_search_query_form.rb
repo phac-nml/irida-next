@@ -14,7 +14,7 @@
 class AdvancedSearchQueryForm
   include ActiveModel::Model
   include ActiveModel::Attributes
-  include Pagy::Backend
+  include Pagy::Method
 
   include AdvancedSearch::Form
   include AdvancedSearch::Operators
@@ -26,7 +26,9 @@ class AdvancedSearchQueryForm
   attribute :column, :string
   attribute :direction, :string
   attribute :sort, :string, default: 'updated_at desc'
+  attribute :scope, default: -> {}
   attribute :advanced_query, :boolean, default: false
+  attribute :request, default: -> { {} }
 
   class_attribute :filter_column_attribute, instance_accessor: false, default: nil
   class_attribute :filter_ids_attribute, instance_accessor: false, default: nil
@@ -54,16 +56,12 @@ class AdvancedSearchQueryForm
     self.model_class_attribute = model_class
   end
 
-  def initialize(attributes = nil, scope: nil, **kwargs)
-    attributes = attributes.to_h if attributes.respond_to?(:to_h)
-    attributes ||= {}
-    attributes = attributes.presence ? attributes.merge(kwargs) : kwargs
-
-    super(attributes)
-    @scope = scope
-
+  def initialize(...)
+    super
+    self.scope = scope
     self.sort = sort
     self.advanced_query = advanced_query?
+    self.request = request
     self.groups = groups if respond_to?(:groups=)
   end
 
@@ -95,6 +93,6 @@ class AdvancedSearchQueryForm
   end
 
   def search_scope
-    @scope || model_class
+    scope || model_class
   end
 end
