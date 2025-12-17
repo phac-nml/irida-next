@@ -359,6 +359,8 @@ export class VirtualScrollCellRenderer {
    * @private
    */
   applyMetadataCellStyles(cell, columnIndex) {
+    if (!cell) return;
+
     const width =
       this.metadataColumnWidths[columnIndex] ?? this.columnWidthFallback;
 
