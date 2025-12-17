@@ -23,7 +23,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    @query = WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }), scope: load_workflows)
+    @query = workflow_execution_query
     @has_workflow_executions = load_workflows.any?
     @search_params = search_params
 
@@ -127,7 +127,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     return if params[:select].blank?
 
-    @query = WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }), scope: load_workflows)
+    @query = workflow_execution_query
     @workflow_executions = @query.send(:ransack_results).select(:id)
   end
 
@@ -228,6 +228,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
+
+  def workflow_execution_query
+    WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }), scope: load_workflows)
+  end
 
   def namespace_ids
     return load_workflows.distinct.pluck(:namespace_id) if @namespace.nil?
