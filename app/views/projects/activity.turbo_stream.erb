@@ -7,7 +7,7 @@
 <%= turbo_stream.update "next_link" do %>
   <% if @pagy.next.present? %>
     <%= button_to t(:"components.activity.load_more"),
-    pagy_url_for(@pagy, @pagy.next),
+    @pagy.pagy_url(:next),
     class: "button button-default" %>
   <% end %>
 <% end %>
