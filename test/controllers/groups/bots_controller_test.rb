@@ -140,7 +140,7 @@ module Groups
       sign_in users(:john_doe)
       namespace = groups(:group_one)
 
-      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
       get group_bots_path(namespace, page: 50)
 

@@ -11,7 +11,7 @@ module Dashboard
       @has_projects = all_projects.any?
       @q = build_ransack_query(all_projects)
       set_default_sort
-      @pagy, @projects = pagy(@q.result)
+      @pagy, @projects = pagy(@q.result, raise_range_error: true)
       set_tab_variables
 
       respond_to do |format|
