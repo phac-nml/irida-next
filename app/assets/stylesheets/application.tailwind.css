@@ -64,9 +64,22 @@ input[type="search"] {
   ::file-selector-button {
     border-color: var(--color-slate-200, currentColor);
   }
-  td[contenteditable="true"]:focus-visible {
-    @apply -outline-offset-3!;
+  /* Navigation mode - all table cells when focused but not editing */
+  table[role="grid"] td:focus-visible:not([data-editing="true"]),
+  table[role="grid"] th:focus-visible:not([data-editing="true"]) {
+    @apply outline-2 outline-offset-[-3px] outline-slate-900 dark:outline-white;
   }
+
+  /* Edit mode - actively editing cell */
+  table[role="grid"] td[data-editing="true"] {
+    @apply bg-yellow-50 outline-2 outline-offset-[-2px] outline-green-600 dark:bg-yellow-900/20 dark:outline-green-500;
+    caret-color: theme(colors.slate.900);
+  }
+
+  .dark table[role="grid"] td[data-editing="true"] {
+    caret-color: theme(colors.white);
+  }
+
   td button.file-selector:focus-visible {
     @apply -outline-offset-3!;
   }
