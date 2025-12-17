@@ -511,6 +511,7 @@ export default class extends Controller {
   disconnect() {
     this.element.removeEventListener("click", this.boundHandleSort);
     this.element.removeEventListener("keydown", this.boundHandleKeydown);
+    this.element.removeEventListener("dblclick", this.boundHandleDblClick);
     document.removeEventListener("turbo:before-cache", this.boundHideLoading);
 
     // Cleanup MutationObserver for deferred templates

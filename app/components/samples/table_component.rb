@@ -33,8 +33,7 @@ module Samples
       @abilities = abilities
 
       @metadata_fields = metadata_fields
-      @initial_metadata_fields = metadata_fields.take(INITIAL_TEMPLATE_BATCH_SIZE)
-      @deferred_metadata_fields = metadata_fields.drop(INITIAL_TEMPLATE_BATCH_SIZE)
+      initialize_metadata_batches(metadata_fields)
 
       @search_params = search_params
       @empty = empty
@@ -125,6 +124,17 @@ module Samples
     end
 
     private
+
+    def initialize_metadata_batches(metadata_fields)
+      if @namespace.is_a?(Namespaces::ProjectNamespace)
+        @initial_metadata_fields = metadata_fields.take(INITIAL_TEMPLATE_BATCH_SIZE)
+        @deferred_metadata_fields = metadata_fields.drop(INITIAL_TEMPLATE_BATCH_SIZE)
+      else
+        # Groups do not have a deferred templates endpoint, so render all upfront
+        @initial_metadata_fields = metadata_fields
+        @deferred_metadata_fields = []
+      end
+    end
 
     def columns
       columns = %i[puid name]
