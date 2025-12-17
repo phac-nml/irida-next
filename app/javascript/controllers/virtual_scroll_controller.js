@@ -67,13 +67,11 @@ export default class extends Controller {
    * Stimulus lifecycle: Connect controller and initialize
    */
   connect() {
-    console.log("[VirtualScroll] Controller connecting...", this.element);
     this.boundHandleSort = this.handleSort.bind(this);
     this.element.addEventListener("click", this.boundHandleSort);
 
     this.boundHandleKeydown = this.handleKeydown.bind(this);
     this.element.addEventListener("keydown", this.boundHandleKeydown);
-    console.log("[VirtualScroll] Keydown listener added");
 
     this.boundHandleDblClick = this.handleDblClick.bind(this);
     this.element.addEventListener("dblclick", this.boundHandleDblClick);
@@ -143,9 +141,6 @@ export default class extends Controller {
           onNavigate: (rowIndex, colIndex) =>
             this.ensureCellReady(rowIndex, colIndex),
         });
-        console.log(
-          "[VirtualScroll] GridKeyboardNavigator initialized successfully",
-        );
 
         // Render once to clone templates into visible cells
         this.render();
@@ -184,30 +179,15 @@ export default class extends Controller {
    * Supports variable-width columns instead of fixed COLUMN_WIDTH
    */
   initializeDimensions() {
-    console.log("[VirtualScroll] initializeDimensions starting...", {
-      hasHeaderTarget: !!this.headerTarget,
-      hasBodyTarget: !!this.bodyTarget,
-      metadataFieldsValue: this.metadataFieldsValue,
-      fixedColumnsValue: this.fixedColumnsValue,
-    });
-
-    if (!this.headerTarget || !this.bodyTarget) {
-      console.warn("[VirtualScroll] Missing header or body target");
-      return false;
-    }
+    if (!this.headerTarget || !this.bodyTarget) return false;
     if (
       !Array.isArray(this.metadataFieldsValue) ||
       !Array.isArray(this.fixedColumnsValue)
-    ) {
-      console.warn("[VirtualScroll] Invalid metadata or fixed columns value");
+    )
       return false;
-    }
 
     this.headerRow = this.headerTarget.querySelector("tr");
-    if (!this.headerRow) {
-      console.warn("[VirtualScroll] No header row found");
-      return false;
-    }
+    if (!this.headerRow) return false;
     this.numBaseColumns = this.fixedColumnsValue.length;
     this.numMetadataColumns = this.metadataFieldsValue.length;
     this.metadataFieldIndex = new Map();
@@ -1009,15 +989,6 @@ export default class extends Controller {
   handleKeydown(event) {
     if (this.keyboardNavigator) {
       this.keyboardNavigator.handleKeydown(event);
-    } else {
-      console.warn(
-        "[VirtualScroll] handleKeydown called but GridKeyboardNavigator not initialized",
-        {
-          key: event.key,
-          target: event.target,
-          isInitialized: this.isInitialized,
-        },
-      );
     }
   }
 
