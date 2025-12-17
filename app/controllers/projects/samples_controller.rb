@@ -9,9 +9,9 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select]
+    before_action :query, only: %i[index search select deferred_templates]
     before_action :current_metadata_template, only: %i[index]
-    before_action :index_view_authorizations, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index deferred_templates]
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
@@ -32,6 +32,29 @@ module Projects
             render status: :unprocessable_content
           end
         end
+      end
+    end
+
+    def deferred_templates
+      # Re-use existing query to get same samples as index
+      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @samples = @samples.includes(project: { namespace: :parent })
+
+      # Get only deferred metadata fields (after initial batch)
+      @deferred_metadata_fields = @project.namespace.metadata_fields.drop(
+        ::Samples::TableComponent::INITIAL_TEMPLATE_BATCH_SIZE
+      )
+
+      # Set abilities for EditableCell conditional rendering
+      @abilities = {
+        edit_sample_metadata: @allowed_to[:update_sample_metadata]
+      }
+
+      # Set columns for aria-colindex calculation (needed in view)
+      @columns = %i[puid name created_at updated_at attachments_updated_at]
+
+      respond_to do |format|
+        format.turbo_stream
       end
     end
 
