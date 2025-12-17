@@ -17,14 +17,17 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
 
     this.boundOnMorph = this.onMorph.bind(this);
+    this.boundHandleKeydown = this.#handleKeydown.bind(this);
 
     this.update(this.getOrCreateStoredItems(), false);
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
+    this.element.addEventListener("keydown", this.boundHandleKeydown);
   }
 
   disconnect() {
     document.removeEventListener("turbo:morph", this.boundOnMorph);
+    this.element.removeEventListener("keydown", this.boundHandleKeydown);
   }
 
   onMorph() {
@@ -180,5 +183,69 @@ export default class extends Controller {
       this.storageKeyValue ||
       `${location.protocol}//${location.host}${location.pathname}`
     );
+  }
+
+  /**
+   * Handle keyboard events for selection
+   * @param {KeyboardEvent} event - The keydown event
+   * @private
+   */
+  #handleKeydown(event) {
+    // Ignore if actively editing a cell
+    const activeElement = document.activeElement;
+    if (activeElement?.dataset?.editing === "true") return;
+
+    // Shift+Space: Select/deselect focused row
+    if (event.key === " " && event.shiftKey && !event.ctrlKey) {
+      event.preventDefault();
+      this.#selectFocusedRow();
+      return;
+    }
+
+    // Ctrl+A: Select/deselect all visible
+    if (event.key === "a" && event.ctrlKey && !event.shiftKey) {
+      event.preventDefault();
+      this.#selectAllVisible();
+      return;
+    }
+  }
+
+  /**
+   * Select or deselect the focused row
+   * @private
+   */
+  #selectFocusedRow() {
+    const focusedCell = document.activeElement.closest("[aria-colindex]");
+    if (!focusedCell) return;
+
+    const row = focusedCell.closest('[role="row"]');
+    const checkbox = row?.querySelector(
+      'input[type="checkbox"][data-selection-target="rowSelection"]',
+    );
+
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
+      checkbox.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  }
+
+  /**
+   * Select or deselect all visible rows
+   * @private
+   */
+  #selectAllVisible() {
+    // Toggle all: if any unchecked, check all; if all checked, uncheck all
+    const allChecked = this.rowSelectionTargets.every((cb) => cb.checked);
+    const newCheckedState = !allChecked;
+
+    this.rowSelectionTargets.forEach((cb) => {
+      cb.checked = newCheckedState;
+    });
+
+    // Trigger update to sync with session storage
+    const ids = newCheckedState
+      ? this.rowSelectionTargets.map((cb) => cb.value)
+      : [];
+    this.update(ids);
   }
 }
