@@ -16,11 +16,11 @@ importers:
         specifier: ^4.11.0
         version: 4.11.0
       prettier:
-        specifier: ^3.3.3
-        version: 3.3.3
+        specifier: ^3.7.4
+        version: 3.7.4
       prettier-plugin-tailwindcss:
         specifier: ^0.7.2
-        version: 0.7.2(prettier@3.3.3)
+        version: 0.7.2(prettier@3.7.4)
 
 packages:
 
@@ -163,8 +163,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@3.3.3:
-    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
+  prettier@3.7.4:
+    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -260,11 +260,11 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prettier-plugin-tailwindcss@0.7.2(prettier@3.3.3):
+  prettier-plugin-tailwindcss@0.7.2(prettier@3.7.4):
     dependencies:
-      prettier: 3.3.3
+      prettier: 3.7.4
 
-  prettier@3.3.3: {}
+  prettier@3.7.4: {}
 
   resolve@1.22.8:
     dependencies:
