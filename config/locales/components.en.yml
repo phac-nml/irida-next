@@ -290,9 +290,6 @@ en:
           status:
             one: 1 sample selected
             other: "%{selected} of %{total} samples selected"
-        edit_mode:
-          activated: Edit mode activated
-          deactivated: Edit mode deactivated, navigating
     search:
       advanced:
         results_message:
