@@ -52,21 +52,43 @@ export default class extends Controller {
   pendingFocusCol = null;
 
   static constants = {
-    COLUMN_WIDTH: 300, // pixels - fallback for unmeasured columns
     BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
-    TAILWIND_2XL_BREAKPOINT: 1536, // pixels
     MAX_MEASURE_RETRIES: 5,
     PAGE_JUMP_SIZE: 5, // Rows to jump on PageUp/PageDown
     STICKY_HEADER_Z_INDEX: 20,
     STICKY_BODY_Z_INDEX: 10,
   };
 
+  /**
+   * Read configuration values from CSS custom properties
+   * @returns {{columnWidth: number, breakpoint2xl: number}}
+   * @private
+   */
+  static getCSSConfig() {
+    const style = getComputedStyle(document.documentElement);
+
+    return {
+      columnWidth: parseInt(
+        style.getPropertyValue("--metadata-column-width") || "300",
+        10,
+      ),
+      breakpoint2xl: parseInt(
+        style.getPropertyValue("--breakpoint-2xl") || "1536",
+        10,
+      ),
+    };
+  }
+
   measureRetryCount = 0;
+  isRetrying = false; // Guard for race condition in retry logic
 
   /**
    * Stimulus lifecycle: Connect controller and initialize
    */
   connect() {
+    // Get CSS configuration values
+    this.cssConfig = this.constructor.getCSSConfig();
+
     this.boundHandleSort = this.handleSort.bind(this);
     this.element.addEventListener("click", this.boundHandleSort);
 
@@ -248,8 +270,7 @@ export default class extends Controller {
     const metadataHeaders = headerCells.slice(this.numBaseColumns);
     this.metadataColumnWidths = metadataHeaders.map((th) => {
       const width =
-        th.getBoundingClientRect().width ||
-        this.constructor.constants.COLUMN_WIDTH;
+        th.getBoundingClientRect().width || this.cssConfig.columnWidth;
 
       // Explicitly set width for metadata headers to prevent them from resizing
       // and prevent text overflow
@@ -266,10 +287,10 @@ export default class extends Controller {
       return width;
     });
 
-    // If no metadata columns measured yet, use COLUMN_WIDTH as fallback
+    // If no metadata columns measured yet, use columnWidth from CSS as fallback
     if (this.metadataColumnWidths.length === 0) {
       this.metadataColumnWidths = Array(this.numMetadataColumns).fill(
-        this.constructor.constants.COLUMN_WIDTH,
+        this.cssConfig.columnWidth,
       );
     }
 
@@ -289,7 +310,7 @@ export default class extends Controller {
       metadataFields: this.metadataFieldsValue,
       numBaseColumns: this.numBaseColumns,
       metadataColumnWidths: this.metadataColumnWidths,
-      columnWidthFallback: this.constructor.constants.COLUMN_WIDTH,
+      columnWidthFallback: this.cssConfig.columnWidth,
     });
 
     // Keep all metadata headers in DOM (rendered server-side)
@@ -328,10 +349,15 @@ export default class extends Controller {
     // If measurements failed because the table is hidden, retry a few times
     if (
       this.baseColumnsWidth === 0 &&
-      this.measureRetryCount < this.constructor.constants.MAX_MEASURE_RETRIES
+      this.measureRetryCount < this.constructor.constants.MAX_MEASURE_RETRIES &&
+      !this.isRetrying
     ) {
+      this.isRetrying = true;
       this.measureRetryCount += 1;
       requestAnimationFrame(() => {
+        this.isRetrying = false;
+        // Ensure controller is still connected before retrying
+        if (!this.element.isConnected) return;
         this.initializeDimensions();
         this.render();
       });
@@ -377,33 +403,50 @@ export default class extends Controller {
   mergeDeferredTemplates() {
     if (!this.hasTemplateContainerTarget) return;
 
-    // Find all deferred template containers
-    const deferredContainers = this.templateContainerTarget.querySelectorAll(
-      '[data-deferred="true"]',
-    );
-
-    if (deferredContainers.length === 0) return;
-
-    // Merge deferred templates into existing sample containers
-    deferredContainers.forEach((deferredContainer) => {
-      const sampleId = deferredContainer.dataset.sampleId;
-      const mainContainer = this.templateContainerTarget.querySelector(
-        `[data-sample-id="${sampleId}"]:not([data-deferred])`,
+    try {
+      // Find all deferred template containers
+      const deferredContainers = this.templateContainerTarget.querySelectorAll(
+        '[data-deferred="true"]',
       );
 
-      if (mainContainer) {
-        // Move all template children from deferred to main container
-        Array.from(deferredContainer.children).forEach((template) => {
-          mainContainer.appendChild(template);
-        });
+      if (deferredContainers.length === 0) return;
 
-        // Remove deferred container
-        deferredContainer.remove();
+      // Merge deferred templates into existing sample containers
+      deferredContainers.forEach((deferredContainer) => {
+        const sampleId = deferredContainer.dataset.sampleId;
+        const mainContainer = this.templateContainerTarget.querySelector(
+          `[data-sample-id="${sampleId}"]:not([data-deferred])`,
+        );
+
+        if (mainContainer) {
+          // Move all template children from deferred to main container
+          Array.from(deferredContainer.children).forEach((template) => {
+            mainContainer.appendChild(template);
+          });
+
+          // Remove deferred container
+          deferredContainer.remove();
+        }
+      });
+
+      // Re-render visible range to replace placeholders with real cells
+      this.replaceVisiblePlaceholders();
+    } catch (error) {
+      // Log error in development, dispatch event for monitoring in production
+      if (process.env.NODE_ENV !== "production") {
+        console.error(
+          "[virtual-scroll] Failed to merge deferred templates:",
+          error,
+        );
       }
-    });
 
-    // Re-render visible range to replace placeholders with real cells
-    this.replaceVisiblePlaceholders();
+      // Dispatch error event for monitoring
+      this.element.dispatchEvent(
+        new CustomEvent("virtual-scroll:error", {
+          detail: { error, context: "mergeDeferredTemplates" },
+        }),
+      );
+    }
   }
 
   /**
@@ -597,9 +640,8 @@ export default class extends Controller {
   detectStickyColumnCount(maxStickyColumns = this.numBaseColumns) {
     const cappedMax = Math.min(maxStickyColumns, this.numBaseColumns);
 
-    if (
-      window.innerWidth >= this.constructor.constants.TAILWIND_2XL_BREAKPOINT
-    ) {
+    // Use breakpoint from CSS custom property
+    if (window.innerWidth >= this.cssConfig.breakpoint2xl) {
       return Math.min(2, cappedMax);
     }
 
@@ -754,8 +796,17 @@ export default class extends Controller {
     // --- Render Body Rows ---
     // Check if templateContainer is available for debugging
     if (!this.hasTemplateContainerTarget) {
-      console.error(
-        "[virtual-scroll] templateContainer target not found! Templates cannot be loaded.",
+      if (process.env.NODE_ENV !== "production") {
+        console.error(
+          "[virtual-scroll] templateContainer target not found! Templates cannot be loaded.",
+        );
+      }
+
+      // Dispatch error event for monitoring
+      this.element.dispatchEvent(
+        new CustomEvent("virtual-scroll:error", {
+          detail: { message: "Template container not found" },
+        }),
       );
     }
 

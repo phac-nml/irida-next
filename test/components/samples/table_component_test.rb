@@ -185,5 +185,93 @@ module Samples
       # Metadata templates should be present for virtualization
       assert_selector '#virtual-scroll-templates template[data-field="field_1"]', minimum: 1, visible: :all
     end
+
+    test 'deferred template loading with exactly INITIAL_TEMPLATE_BATCH_SIZE fields' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(5).to_a
+        pagy = Pagy.new(count: 5, page: 1, limit: 5)
+        # Exactly 20 fields (INITIAL_TEMPLATE_BATCH_SIZE)
+        metadata_fields = (1..20).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: { edit_sample_metadata: true },
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # All 20 templates should be in initial batch (no deferred loading)
+        assert_selector '#virtual-scroll-templates template', count: 20 * samples.count, visible: :all
+
+        # Should NOT have deferred frame
+        assert_no_selector 'turbo-frame#deferred-templates'
+      end
+    end
+
+    test 'deferred template loading with more than INITIAL_TEMPLATE_BATCH_SIZE fields' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(5).to_a
+        pagy = Pagy.new(count: 5, page: 1, limit: 5)
+        # 50 fields (30 deferred)
+        metadata_fields = (1..50).map { |i| "field_#{i}" }
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: { edit_sample_metadata: true },
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # First 20 templates should be in initial batch
+        assert_selector '#virtual-scroll-templates template[data-field="field_1"]', count: samples.count, visible: :all
+        assert_selector '#virtual-scroll-templates template[data-field="field_20"]', count: samples.count, visible: :all
+
+        # Should have deferred frame for remaining fields
+        assert_selector 'turbo-frame#deferred-templates[src]', visible: :all
+
+        # Verify deferred frame has correct data attributes
+        assert_selector 'turbo-frame#deferred-templates[data-virtual-scroll-target="deferredFrame"]', visible: :all
+      end
+    end
+
+    test 'deferred template loading with zero metadata fields' do
+      with_request_url '/namespaces/12/projects/1/samples' do
+        project = projects(:project1)
+        namespace = project.namespace
+        samples = Sample.limit(5).to_a
+        pagy = Pagy.new(count: 5, page: 1, limit: 5)
+        metadata_fields = []
+
+        render_inline Samples::TableComponent.new(
+          samples,
+          namespace,
+          pagy,
+          has_samples: true,
+          abilities: {},
+          metadata_fields: metadata_fields,
+          search_params: { sort: 'name asc' }.with_indifferent_access,
+          empty: {}
+        )
+
+        # Should have template container but no templates
+        assert_selector '#virtual-scroll-templates', visible: :all
+        assert_no_selector '#virtual-scroll-templates template', visible: :all
+
+        # Should NOT have deferred frame
+        assert_no_selector 'turbo-frame#deferred-templates'
+      end
+    end
   end
 end
