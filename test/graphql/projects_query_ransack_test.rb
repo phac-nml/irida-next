@@ -167,10 +167,10 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     end
   end
 
-  test 'projects query with metadata sumamry should work' do
+  test 'projects query with metadata summary should work' do
     result = IridaSchema.execute(PROJECTS_RANSACK_WITH_METADATA_SUMMARY_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { name_cont: 'Project 1' },
+                                 variables: { filter: { name_eq: 'Project 1' },
                                               orderBy: { field: 'created_at', direction: 'asc' },
                                               keys: ['metadatafield2'] })
 
