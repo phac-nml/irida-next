@@ -246,6 +246,19 @@ module Samples
       end
     end
 
+    test 'renders all metadata templates for groups without deferral' do
+      with_request_url '/-/groups/group-1/-/samples' do
+        groups(:group_one)
+        metadata_fields = (1..30).map { |i| "field_#{i}" }
+
+        render_table_component(metadata_fields: metadata_fields, abilities: default_abilities)
+
+        expected_templates = metadata_fields.length * @rendered_samples.count
+        assert_selector '#virtual-scroll-templates template', count: expected_templates, visible: :all
+        assert_no_selector 'turbo-frame#deferred-templates'
+      end
+    end
+
     test 'deferred template loading with zero metadata fields' do
       with_request_url '/namespaces/12/projects/1/samples' do
         project = projects(:project1)
