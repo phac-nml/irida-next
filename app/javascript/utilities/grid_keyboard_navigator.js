@@ -59,6 +59,19 @@ export class GridKeyboardNavigator {
    * @param {KeyboardEvent} event - The keydown event
    */
   async handleKeydown(event) {
+    try {
+      await this.#handleKeydownInternal(event);
+    } catch {
+      // Silently handle navigation errors to prevent breaking user interaction
+    }
+  }
+
+  /**
+   * Internal keydown handler implementation
+   * @param {KeyboardEvent} event - The keydown event
+   * @private
+   */
+  async #handleKeydownInternal(event) {
     const cell = event.target.closest("[aria-colindex]");
     if (!cell || !this.bodyElement.contains(cell)) return;
 

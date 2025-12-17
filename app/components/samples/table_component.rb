@@ -69,7 +69,6 @@ module Samples
       args[:data][:controller] = 'virtual-scroll'
       args[:data][:'virtual-scroll-target'] = 'container'
       args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
-      args[:data][:'virtual-scroll-deferred-fields-value'] = @deferred_metadata_fields.to_json
       args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
       args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
       args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''

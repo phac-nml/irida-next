@@ -34,7 +34,6 @@ export default class extends Controller {
     fixedColumns: Array,
     stickyColumnCount: Number,
     sortKey: String,
-    deferredFields: Array,
   };
 
   static targets = [
@@ -51,13 +50,13 @@ export default class extends Controller {
   pendingFocusRow = null;
   pendingFocusCol = null;
 
-  static constants = {
+  static constants = Object.freeze({
     BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
     MAX_MEASURE_RETRIES: 5,
     PAGE_JUMP_SIZE: 5, // Rows to jump on PageUp/PageDown
     STICKY_HEADER_Z_INDEX: 20,
     STICKY_BODY_Z_INDEX: 10,
-  };
+  });
 
   /**
    * Read configuration values from CSS custom properties
@@ -66,16 +65,14 @@ export default class extends Controller {
    */
   static getCSSConfig() {
     const style = getComputedStyle(document.documentElement);
+    const columnWidthRaw = style
+      .getPropertyValue("--metadata-column-width")
+      .trim();
+    const breakpoint2xlRaw = style.getPropertyValue("--breakpoint-2xl").trim();
 
     return {
-      columnWidth: parseInt(
-        style.getPropertyValue("--metadata-column-width") || "300",
-        10,
-      ),
-      breakpoint2xl: parseInt(
-        style.getPropertyValue("--breakpoint-2xl") || "1536",
-        10,
-      ),
+      columnWidth: parseInt(columnWidthRaw || "300", 10),
+      breakpoint2xl: parseInt(breakpoint2xlRaw || "1536", 10),
     };
   }
 
@@ -194,6 +191,17 @@ export default class extends Controller {
       this.initializeDimensions();
       this.render();
     });
+  }
+
+  /**
+   * Value change callback - re-render when metadata fields change dynamically
+   */
+  metadataFieldsValueChanged() {
+    if (this.isInitialized) {
+      this.rowVisibleRanges?.clear();
+      this.initializeDimensions();
+      this.render();
+    }
   }
 
   /**
@@ -385,6 +393,8 @@ export default class extends Controller {
       if (hasDeferredContent) {
         // Use setTimeout to ensure all mutations are processed
         setTimeout(() => {
+          // Guard against execution after controller disconnect
+          if (!this.element?.isConnected) return;
           this.mergeDeferredTemplates();
         }, 0);
       }
@@ -432,14 +442,6 @@ export default class extends Controller {
       // Re-render visible range to replace placeholders with real cells
       this.replaceVisiblePlaceholders();
     } catch (error) {
-      // Log error in development, dispatch event for monitoring in production
-      if (process.env.NODE_ENV !== "production") {
-        console.error(
-          "[virtual-scroll] Failed to merge deferred templates:",
-          error,
-        );
-      }
-
       // Dispatch error event for monitoring
       this.element.dispatchEvent(
         new CustomEvent("virtual-scroll:error", {
@@ -795,14 +797,8 @@ export default class extends Controller {
     });
 
     // --- Render Body Rows ---
-    // Check if templateContainer is available for debugging
+    // Check if templateContainer is available
     if (!this.hasTemplateContainerTarget) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error(
-          "[virtual-scroll] templateContainer target not found! Templates cannot be loaded.",
-        );
-      }
-
       // Dispatch error event for monitoring
       this.element.dispatchEvent(
         new CustomEvent("virtual-scroll:error", {
@@ -1005,6 +1001,7 @@ export default class extends Controller {
       }
 
       // Give the DOM a frame to materialize
+      // Intentional sequential await - we need to wait for each frame before retrying
       // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
