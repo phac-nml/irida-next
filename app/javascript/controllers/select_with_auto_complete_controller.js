@@ -107,6 +107,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.#filter.length,
       this.#filter.length,
     );
+    this.#filterOptions();
   }
 
   #renderNoResults() {
@@ -221,6 +222,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
         option.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        this.#onOptionFocus();
       } else {
         opt.removeAttribute("aria-selected");
       }
@@ -431,6 +433,17 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.#setOption(option);
       this.#close();
       this.comboboxTarget.focus();
+    }
+  }
+
+  #onOptionFocus() {
+    const dialog = this.#option.closest("dialog");
+    if (dialog) {
+      const rect = this.#option.getBoundingClientRect();
+      if (rect.top < 0 || rect.top + rect.height > dialog.offsetHeight) {
+        const dialogContents = dialog.querySelector(".dialog--section");
+        dialogContents.scrollBy(0, rect.top);
+      }
     }
   }
 
