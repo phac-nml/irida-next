@@ -4,11 +4,10 @@
 module QueryConcern # rubocop:disable GraphQL/ObjectDescription
   include ActiveSupport::Concern
 
-  def params(context, project_id, group_id, filter, order_by)
+  def params(context, project_id, group_id, filter)
     filter = filter&.to_h
     params = {}
     params.merge!(filter_params(filter)) if filter
-    params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
 
     if project_id
       params.merge!({ project_ids: [project_id] })

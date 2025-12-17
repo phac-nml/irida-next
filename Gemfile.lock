@@ -92,6 +92,8 @@ GEM
       cgi (>= 0.3.6)
       rack (>= 2.0.8, < 4)
       railties (>= 7.0)
+    activerecord_cursor_paginate (0.4.1)
+      activerecord (>= 7.0)
     activerecord_json_validator (3.1.0)
       activerecord (>= 4.2.0, < 9)
       json_schemer (~> 2.2)
@@ -727,6 +729,7 @@ DEPENDENCIES
   actioncable
   active_storage_validations
   activerecord-session_store (~> 2.1)
+  activerecord_cursor_paginate (~> 0.4.1)
   activerecord_json_validator (~> 3.1.0)
   aws-sdk-s3
   azure-blob!

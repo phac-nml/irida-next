@@ -6,7 +6,7 @@ module Validators
     include QueryConcern
 
     def validate(_object, context, value)
-      query = Sample::Query.new(params(context, value[:project_id], value[:group_id], value[:filter], value[:order_by]))
+      query = Sample::Query.new(params(context, value[:project_id], value[:group_id], value[:filter]))
 
       return if query.valid?
 

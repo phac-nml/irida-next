@@ -13,6 +13,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   default_page_size 25
   default_max_page_size 100
 
+  connections.add(ActiveRecord::Relation, Connections::ActiveRecordCursorPaginateConnection)
+
   # GraphQL-Ruby calls this when something goes wrong while running a query:
   def self.type_error(err, context) # rubocop:disable Lint/UselessMethodDefinition
     # if err.is_a?(GraphQL::InvalidNullError)
