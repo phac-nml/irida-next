@@ -90,7 +90,10 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        pagy = Pagy::Offset.new(count: 20, page: 1, limit: 20,
+                                request: Pagy::Request.new(
+                                  request: { base_url: 'localhost:3000', path: '/', params: {} }
+                                ))
         metadata_fields = (1..150).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
@@ -119,7 +122,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        pagy = Pagy::Offset.new(count: 20, page: 1, limit: 20)
         metadata_fields = (1..150).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
@@ -144,7 +147,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        pagy = Pagy::Offset.new(count: 20, page: 1, limit: 20)
         metadata_fields = (1..150).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
@@ -169,7 +172,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(50).to_a
-        pagy = Pagy.new(count: 50, page: 1, limit: 50)
+        pagy = Pagy::Offset.new(count: 50, page: 1, limit: 50)
         metadata_fields = (1..100).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
@@ -198,7 +201,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(5).to_a
-        pagy = Pagy.new(count: 5, page: 1, limit: 5)
+        pagy = Pagy::Offset.new(count: 5, page: 1, limit: 5)
         metadata_fields = (1..250).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
@@ -227,7 +230,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
+        pagy = Pagy::Offset.new(count: 20, page: 1, limit: 20)
         metadata_fields = (1..50).map { |i| "field_#{i}" } # Well under the 100 limit for 20 samples
 
         render_inline Samples::TableComponent.new(
@@ -255,7 +258,7 @@ module Samples
         project = projects(:project1)
         namespace = project.namespace
         samples = Sample.limit(1).to_a
-        pagy = Pagy.new(count: 1, page: 1, limit: 1)
+        pagy = Pagy::Offset.new(count: 1, page: 1, limit: 1)
         metadata_fields = (1..250).map { |i| "field_#{i}" }
 
         render_inline Samples::TableComponent.new(
