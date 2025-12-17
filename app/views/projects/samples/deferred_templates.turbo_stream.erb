@@ -1,0 +1,35 @@
+<%# Turbo Stream view for deferred metadata field templates %>
+<%# Appends remaining metadata field templates after initial batch %>
+
+<%= turbo_stream.append "virtual-scroll-templates" do %>
+  <% @samples.each do |sample| %>
+    <div data-sample-id="<%= sample.id %>" data-deferred="true">
+      <% @deferred_metadata_fields.each do |field| %>
+        <template data-field="<%= field %>">
+          <% field_colindex =
+            @columns.length + @project.namespace.metadata_fields.index(field) + 1 %>
+          <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
+            <%= render Samples::EditableCell.new(
+              field: field,
+              sample: sample,
+              aria: {
+                colindex: field_colindex,
+              },
+            ) %>
+          <% else %>
+            <td
+              role="gridcell"
+              aria-colindex="<%= field_colindex %>"
+              class="px-3 py-3"
+              data-field-id="<%= field %>"
+            >
+              <%= sample.metadata[field] %>
+            </td>
+          <% end %>
+        </template>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.remove "deferred-templates" %>
