@@ -76,11 +76,24 @@ export class GridKeyboardNavigator {
     // Check for edit activation keys on editable cells
     if (cell.dataset.editable === "true") {
       if (this.#isEditActivationKey(event)) {
+        console.log("[GridKeyboardNavigator] Activating edit mode", {
+          cell,
+          key: event.key,
+        });
         event.preventDefault();
         event.stopPropagation();
         this.#activateEditMode(cell, event);
         return;
       }
+    } else {
+      console.log(
+        "[GridKeyboardNavigator] Cell not editable, skipping edit activation",
+        {
+          cell,
+          editable: cell.dataset.editable,
+          key: event.key,
+        },
+      );
     }
 
     // Handle navigation keys
@@ -404,10 +417,32 @@ export class GridKeyboardNavigator {
    * @private
    */
   #activateEditMode(cell, event) {
+    console.log("[GridKeyboardNavigator] #activateEditMode called", {
+      cell,
+      previousEditing: cell.dataset.editing,
+      previousContentEditable: cell.getAttribute("contenteditable"),
+    });
+
     cell.dataset.editing = "true";
     cell.setAttribute("contenteditable", "true");
 
+    // Focus the cell
     cell.focus();
+
+    // Select all text in the cell to provide visual feedback
+    // This ensures the cursor is visible and the user can start typing immediately
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(cell);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    console.log("[GridKeyboardNavigator] Edit mode activated", {
+      cell,
+      editing: cell.dataset.editing,
+      contentEditable: cell.getAttribute("contenteditable"),
+      hasSelection: selection.rangeCount > 0,
+    });
 
     // Dispatch custom event for screen reader announcement
     cell.dispatchEvent(
