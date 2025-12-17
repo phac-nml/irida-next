@@ -70,6 +70,7 @@ jobs:
         run: bin/rubocop -f github
 
   test:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     services:
@@ -124,6 +125,7 @@ jobs:
         run: bin/rails db:test:prepare test
 
   system-test:
+    timeout-minutes: 25
     runs-on: ubuntu-latest
 
     services:
