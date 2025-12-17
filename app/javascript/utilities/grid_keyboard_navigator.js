@@ -40,7 +40,7 @@ export class GridKeyboardNavigator {
    * @param {number} options.numBaseColumns - Number of non-virtualized columns
    * @param {number} options.totalColumns - Total number of columns (including metadata)
    * @param {number} [options.pageJumpSize=5] - Number of rows to jump on PageUp/PageDown
-   * @param {Function} [options.onNavigate] - Callback when navigating to column (for virtualization)
+   * @param {Function} [options.onNavigate] - Async callback when navigating to row/column (for virtualization). Signature: (rowIndex, colIndex, attempt) => Promise<void>
    */
   constructor(options) {
     this.grid = options.gridElement;
@@ -58,7 +58,32 @@ export class GridKeyboardNavigator {
    * Handle keydown events for grid navigation
    * @param {KeyboardEvent} event - The keydown event
    */
-  handleKeydown(event) {
+  async handleKeydown(event) {
+    const cell = event.target.closest("[aria-colindex]");
+    if (!cell || !this.bodyElement.contains(cell)) return;
+
+    const isEditing = cell.dataset.editing === "true";
+
+    // If actively editing, ignore all navigation keys (let browser handle them)
+    if (isEditing) {
+      return;
+    }
+
+    // If the currently focused cell (or any ancestor) is marked editing, block navigation
+    const editingAncestor = cell.closest('[data-editing="true"]');
+    if (editingAncestor) return;
+
+    // Check for edit activation keys on editable cells
+    if (cell.dataset.editable === "true") {
+      if (this.#isEditActivationKey(event)) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.#activateEditMode(cell, event);
+        return;
+      }
+    }
+
+    // Handle navigation keys
     const relevantKeys = [
       "ArrowRight",
       "ArrowLeft",
@@ -68,21 +93,10 @@ export class GridKeyboardNavigator {
       "End",
       "PageUp",
       "PageDown",
+      "Tab",
     ];
 
     if (!relevantKeys.includes(event.key)) return;
-
-    // Ignore if inside editable element
-    if (
-      event.target.closest(
-        "input, textarea, select, button, [contenteditable='true']",
-      )
-    ) {
-      return;
-    }
-
-    const cell = event.target.closest("[aria-colindex]");
-    if (!cell || !this.bodyElement.contains(cell)) return;
 
     const currentRow = this.getRowIndex(cell);
     const currentCol = this.getColIndex(cell);
@@ -93,7 +107,31 @@ export class GridKeyboardNavigator {
     if (target.row === currentRow && target.col === currentCol) return;
 
     event.preventDefault();
-    this.navigateToCell(target.row, target.col);
+    const success = await this.navigateToCell(target.row, target.col, event);
+
+    // If forward Tab still has no cell after retry, fall back to next row start
+    if (!success && event.key === "Tab" && !event.shiftKey) {
+      const lastRow = this.getLastRowIndex();
+      if (target.row < lastRow) {
+        await this.navigateToCell(target.row + 1, 1, event);
+      }
+    }
+  }
+
+  /**
+   * Handle double click events for grid interaction
+   * @param {MouseEvent} event - The double click event
+   */
+  handleDblClick(event) {
+    const cell = event.target.closest("[aria-colindex]");
+    if (!cell || !this.bodyElement.contains(cell)) return;
+
+    // Check if cell is editable
+    if (cell.dataset.editable === "true") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.#activateEditMode(cell, event);
+    }
   }
 
   /**
@@ -138,6 +176,25 @@ export class GridKeyboardNavigator {
       case "PageDown":
         targetRow = Math.min(lastRow, currentRow + this.pageJumpSize);
         break;
+      case "Tab":
+        if (event.shiftKey) {
+          // Shift+Tab: move left, or up and to last column
+          if (currentCol > 1) {
+            targetCol = currentCol - 1;
+          } else if (currentRow > firstRow) {
+            targetRow = currentRow - 1;
+            targetCol = this.totalColumns;
+          }
+        } else {
+          // Tab: move right, or down and to first column
+          if (currentCol < this.totalColumns) {
+            targetCol = currentCol + 1;
+          } else if (currentRow < lastRow) {
+            targetRow = currentRow + 1;
+            targetCol = 1;
+          }
+        }
+        break;
     }
 
     return { row: targetRow, col: targetCol };
@@ -148,21 +205,38 @@ export class GridKeyboardNavigator {
    * @param {number} rowIndex - Target row index (1-based)
    * @param {number} colIndex - Target column index (1-based)
    */
-  navigateToCell(rowIndex, colIndex) {
+  async navigateToCell(rowIndex, colIndex) {
     this.focusedRowIndex = rowIndex;
     this.focusedColIndex = colIndex;
 
-    // Callback to ensure column is visible (for virtualization)
-    if (colIndex > this.numBaseColumns && this.onNavigate) {
-      this.onNavigate(colIndex);
-    }
+    return this.#attemptFocus(rowIndex, colIndex, 0);
+  }
 
-    const cell = this.findCell(rowIndex, colIndex);
+  async #attemptFocus(rowIndex, colIndex, attempt) {
+    let cell = this.findCell(rowIndex, colIndex);
     if (cell) {
       this.resetTabStops();
       cell.tabIndex = 0;
       cell.focus();
+      return true;
     }
+
+    if (this.onNavigate) {
+      const ready = await this.onNavigate(rowIndex, colIndex, attempt);
+      cell = this.findCell(rowIndex, colIndex);
+      if (cell) {
+        this.resetTabStops();
+        cell.tabIndex = 0;
+        cell.focus();
+        return true;
+      }
+
+      if (attempt === 0 && ready !== false) {
+        return this.#attemptFocus(rowIndex, colIndex, attempt + 1);
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -172,11 +246,19 @@ export class GridKeyboardNavigator {
    * @param {number} [fallbackColIndex] - Column to focus if no active cell
    */
   applyRovingTabindex(fallbackRowIndex, fallbackColIndex) {
-    // Determine current active cell within the grid if any
-    const activeCell = this.getActiveGridCell();
-    if (activeCell) {
-      this.focusedRowIndex = this.getRowIndex(activeCell);
-      this.focusedColIndex = this.getColIndex(activeCell);
+    // If explicit fallback provided, prefer it; otherwise derive from active cell
+    if (
+      Number.isInteger(fallbackRowIndex) &&
+      Number.isInteger(fallbackColIndex)
+    ) {
+      this.focusedRowIndex = fallbackRowIndex;
+      this.focusedColIndex = fallbackColIndex;
+    } else {
+      const activeCell = this.getActiveGridCell();
+      if (activeCell) {
+        this.focusedRowIndex = this.getRowIndex(activeCell);
+        this.focusedColIndex = this.getColIndex(activeCell);
+      }
     }
 
     const firstRowIndex = this.getFirstRowIndex();
@@ -256,17 +338,8 @@ export class GridKeyboardNavigator {
     const row = this.bodyElement.querySelector(`[aria-rowindex="${rowIndex}"]`);
     if (!row) return null;
 
-    let cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
-
-    // If cell not found and it's a metadata column, trigger onNavigate callback
-    // (might be virtualized and needs to be rendered)
-    if (!cell && colIndex > this.numBaseColumns && this.onNavigate) {
-      this.onNavigate(colIndex);
-      // Try again after callback
-      cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
-    }
-
-    return cell;
+    const cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+    return cell || null;
   }
 
   /**
@@ -311,5 +384,34 @@ export class GridKeyboardNavigator {
    */
   updateTotalColumns(newTotal) {
     this.totalColumns = newTotal;
+  }
+
+  /**
+   * Check if key is an edit activation key (Enter)
+   * @param {KeyboardEvent} event - The keydown event
+   * @returns {boolean} True if key should activate edit mode
+   * @private
+   */
+  #isEditActivationKey(event) {
+    // Only Enter activates edit mode
+    return event.key === "Enter";
+  }
+
+  /**
+   * Activate edit mode on a cell
+   * @param {HTMLElement} cell - The cell to activate edit mode on
+   * @param {Event} event - The triggering event
+   * @private
+   */
+  #activateEditMode(cell, event) {
+    cell.dataset.editing = "true";
+    cell.setAttribute("contenteditable", "true");
+
+    cell.focus();
+
+    // Dispatch custom event for screen reader announcement
+    cell.dispatchEvent(
+      new CustomEvent("edit-mode-activated", { bubbles: true }),
+    );
   }
 }

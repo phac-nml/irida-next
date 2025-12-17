@@ -19,7 +19,32 @@ export default class extends Controller {
     this.boundBlur = this.blur.bind(this);
     this.boundKeydown = this.keydown.bind(this);
     this.boundFocus = this.focus.bind(this);
+    this.boundHandleEditActivated = this.#handleEditActivated.bind(this);
+    this.boundHandleEditDeactivated = this.#handleEditDeactivated.bind(this);
     this.#originalCellContent = {};
+  }
+
+  connect() {
+    // Listen for edit mode events
+    this.element.addEventListener(
+      "edit-mode-activated",
+      this.boundHandleEditActivated,
+    );
+    this.element.addEventListener(
+      "edit-mode-deactivated",
+      this.boundHandleEditDeactivated,
+    );
+  }
+
+  disconnect() {
+    this.element.removeEventListener(
+      "edit-mode-activated",
+      this.boundHandleEditActivated,
+    );
+    this.element.removeEventListener(
+      "edit-mode-deactivated",
+      this.boundHandleEditDeactivated,
+    );
   }
 
   editableCellTargetConnected(element) {
@@ -40,7 +65,8 @@ export default class extends Controller {
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
     element.addEventListener("focus", this.boundFocus);
-    element.setAttribute("contenteditable", true);
+    element.setAttribute("data-editable", "true");
+    element.setAttribute("contenteditable", "false");
 
     if (element.hasAttribute("data-refocus")) {
       element.focus();
@@ -60,7 +86,7 @@ export default class extends Controller {
       // Remove event listeners on submission, they will be re-added on succesfull update
       element.removeEventListener("blur", this.boundBlur);
       element.removeEventListener("keydown", this.boundKeydown);
-      element.removeAttribute("contenteditable");
+      element.setAttribute("contenteditable", "false");
       const field = element
         .closest("table")
         .querySelector(`th:nth-child(${element.cellIndex + 1})`)
@@ -112,12 +138,37 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    const isEditing = event.target.dataset.editing === "true";
+
+    // Tab: submit if changed, then clear editing state and navigate
+    if (event.key === "Tab" && isEditing) {
+      if (!this.#unchanged(event.target)) {
+        // Submit changes (this will clear editing state)
+        this.submit(event.target);
+      } else {
+        // No changes, just clear editing state
+        this.#clearEditingState(event.target);
+      }
+      // Let Tab navigate (don't prevent default)
+      return;
+    }
+
+    // Escape: exit edit mode and restore original content
+    if (event.key === "Escape" && isEditing) {
+      event.preventDefault();
+      this.#exitEditMode(event.target);
+      return;
+    }
+
+    // Enter: prevent default always
     if (event.key === "Enter") {
       event.preventDefault();
     }
 
+    // Enter: submit if editing and content changed
     if (event.key !== "Enter" || this.#unchanged(event.target)) return;
 
+    event.stopPropagation();
     this.submit(event.target);
   }
 
@@ -205,12 +256,47 @@ export default class extends Controller {
   }
 
   focus(event) {
-    event.target.dataset.editing = "true";
+    // Don't automatically set editing mode on focus
+    // Edit mode is only activated by Enter, F2, or alphanumeric keys
   }
 
   #clearEditingState(element) {
     if (!element) return;
     delete element.dataset.editing;
+  }
+
+  #exitEditMode(element) {
+    this.reset(element); // Restore original content
+    this.#clearEditingState(element);
+    element.setAttribute("contenteditable", "false");
+    element.blur(); // Return to navigation mode
+
+    // Dispatch custom event for screen reader announcement
+    element.dispatchEvent(
+      new CustomEvent("edit-mode-deactivated", { bubbles: true }),
+    );
+  }
+
+  #handleEditActivated() {
+    this.#announce("Edit mode activated");
+  }
+
+  #handleEditDeactivated() {
+    this.#announce("Edit mode deactivated, navigating");
+  }
+
+  #announce(message) {
+    // Find the live region via controller
+    const liveRegion = this.element.querySelector(
+      '[data-controller="announcement"]',
+    );
+    if (liveRegion) {
+      const controller = this.application.getControllerForElementAndIdentifier(
+        liveRegion,
+        "announcement",
+      );
+      controller?.announce(message);
+    }
   }
 
   #elementId(element) {

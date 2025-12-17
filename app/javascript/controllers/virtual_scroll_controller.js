@@ -47,6 +47,10 @@ export default class extends Controller {
     "deferredFrame",
   ];
 
+  // Track a pending focus target for post-render reapplication
+  pendingFocusRow = null;
+  pendingFocusCol = null;
+
   static constants = {
     COLUMN_WIDTH: 300, // pixels - fallback for unmeasured columns
     BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
@@ -68,6 +72,9 @@ export default class extends Controller {
 
     this.boundHandleKeydown = this.handleKeydown.bind(this);
     this.element.addEventListener("keydown", this.boundHandleKeydown);
+
+    this.boundHandleDblClick = this.handleDblClick.bind(this);
+    this.element.addEventListener("dblclick", this.boundHandleDblClick);
 
     this.boundHideLoading = this.hideLoading.bind(this);
     document.addEventListener("turbo:before-cache", this.boundHideLoading);
@@ -131,7 +138,8 @@ export default class extends Controller {
           numBaseColumns: this.numBaseColumns,
           totalColumns: this.totalColumnCount(),
           pageJumpSize: this.constructor.constants.PAGE_JUMP_SIZE,
-          onNavigate: (colIndex) => this.ensureMetadataColumnVisible(colIndex),
+          onNavigate: (rowIndex, colIndex) =>
+            this.ensureCellReady(rowIndex, colIndex),
         });
 
         // Render once to clone templates into visible cells
@@ -663,6 +671,19 @@ export default class extends Controller {
     }
     if (this.baseColumnsWidth === 0) return;
 
+    // Capture current focus if it's in the grid and we don't have a pending focus
+    if (this.pendingFocusRow === null || this.pendingFocusCol === null) {
+      const activeElement = document.activeElement;
+      if (activeElement && this.bodyTarget.contains(activeElement)) {
+        const row = activeElement.closest("[aria-rowindex]");
+        const cell = activeElement.closest("[aria-colindex]");
+        if (row && cell) {
+          this.pendingFocusRow = parseInt(row.getAttribute("aria-rowindex"));
+          this.pendingFocusCol = parseInt(cell.getAttribute("aria-colindex"));
+        }
+      }
+    }
+
     const stickyColumnsWidth = this.baseColumnWidths
       .slice(0, this.numStickyColumns)
       .reduce((a, b) => a + b, 0);
@@ -771,7 +792,31 @@ export default class extends Controller {
     });
 
     // Ensure a single focus target is available after render
-    this.applyRovingTabindex();
+    this.applyRovingTabindex(this.pendingFocusRow, this.pendingFocusCol);
+
+    // If a pending focus target exists, set focus explicitly after tabindex reset
+    if (
+      Number.isInteger(this.pendingFocusRow) &&
+      Number.isInteger(this.pendingFocusCol)
+    ) {
+      const row = this.bodyTarget?.querySelector?.(
+        `[aria-rowindex="${this.pendingFocusRow}"]`,
+      );
+      const cell = row?.querySelector?.(
+        `[aria-colindex="${this.pendingFocusCol}"]`,
+      );
+      if (cell) {
+        cell.tabIndex = 0;
+        cell.focus();
+        if (this.keyboardNavigator) {
+          this.keyboardNavigator.focusedRowIndex = this.pendingFocusRow;
+          this.keyboardNavigator.focusedColIndex = this.pendingFocusCol;
+        }
+      }
+    }
+
+    this.pendingFocusRow = null;
+    this.pendingFocusCol = null;
   }
 
   getActiveEditingColumnIndex() {
@@ -827,31 +872,113 @@ export default class extends Controller {
     if (metadataIndex < 0 || metadataIndex >= this.numMetadataColumns) return;
 
     const stickyWidth = this.stickyColumnsWidth();
-    const targetScrollLeft =
-      this.baseColumnsWidth -
-      stickyWidth +
-      this.geometry.cumulativeWidthTo(metadataIndex);
+    const colLeft = this.geometry.cumulativeWidthTo(metadataIndex);
+    const colWidth = this.metadataColumnWidths[metadataIndex];
+
+    const containerWidth = this.containerTarget.clientWidth;
+    const currentScrollLeft = this.containerTarget.scrollLeft;
+
+    // Calculate absolute positions in the scrollable container
+    const absoluteColLeft = this.baseColumnsWidth + colLeft;
+    const absoluteColRight = absoluteColLeft + colWidth;
+
+    // Calculate currently visible area (accounting for sticky columns)
+    const visibleStart = currentScrollLeft + stickyWidth;
+    const visibleEnd = currentScrollLeft + containerWidth;
+
+    // Check if already fully visible
+    if (absoluteColLeft >= visibleStart && absoluteColRight <= visibleEnd) {
+      return;
+    }
+
+    // Calculate target scroll to make it visible
+    let targetScrollLeft = currentScrollLeft;
+
+    if (absoluteColLeft < visibleStart) {
+      // Scroll left to show left edge
+      targetScrollLeft = absoluteColLeft - stickyWidth;
+    } else if (absoluteColRight > visibleEnd) {
+      // Scroll right to show right edge
+      targetScrollLeft = absoluteColRight - containerWidth;
+    }
 
     const maxScroll = Math.max(
       0,
       this.containerTarget.scrollWidth - this.containerTarget.clientWidth,
     );
     const clamped = Math.max(0, Math.min(maxScroll, targetScrollLeft));
-    this.containerTarget.scrollLeft = clamped;
 
-    // Force re-render so the column is materialized
-    this.lastFirstVisible = undefined;
-    this.lastLastVisible = undefined;
-    this.render();
+    if (Math.abs(clamped - currentScrollLeft) > 1) {
+      this.containerTarget.scrollLeft = clamped;
+
+      // Force re-render so the column is materialized
+      this.lastFirstVisible = undefined;
+      this.lastLastVisible = undefined;
+      this.render();
+      return true;
+    }
+    return false;
+  }
+
+  async ensureCellReady(rowIndex, colIndex) {
+    // Try a few frames to allow rendering/placeholders to appear
+    const maxTries = 5;
+
+    for (let i = 0; i < maxTries; i += 1) {
+      // Remember intended focus so post-render roving tabindex can honor it
+      // Reset on each iteration because render() clears it
+      this.pendingFocusRow = rowIndex;
+      this.pendingFocusCol = colIndex;
+
+      if (colIndex > this.numBaseColumns) {
+        const rendered = this.ensureMetadataColumnVisible(colIndex);
+        if (!rendered) {
+          this.render();
+        }
+      } else {
+        this.render();
+      }
+
+      // Check immediately if the cell exists after render
+      // This avoids an unnecessary frame delay which can cause focus loss
+      let row = this.bodyTarget?.querySelector?.(
+        `[aria-rowindex="${rowIndex}"]`,
+      );
+      let cell = row?.querySelector?.(`[aria-colindex="${colIndex}"]`);
+
+      if (cell) {
+        // Ensure it's focused (render might have done it, but to be safe)
+        cell.focus();
+        return true;
+      }
+
+      // Give the DOM a frame to materialize
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      row = this.bodyTarget?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
+      if (!row) continue;
+      cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+      if (cell) {
+        cell.focus();
+        return true;
+      }
+    }
+
+    // If we exhausted retries, keep pending focus so fallback logic can still try
+    return false;
   }
 
   /**
    * Reset all visible gridcells to tabindex=-1 and set a single active cell to tabindex=0
    * Delegates to GridKeyboardNavigator utility
    */
-  applyRovingTabindex() {
+  applyRovingTabindex(fallbackRowIndex, fallbackColIndex) {
     if (this.keyboardNavigator) {
-      this.keyboardNavigator.applyRovingTabindex();
+      this.keyboardNavigator.applyRovingTabindex(
+        fallbackRowIndex,
+        fallbackColIndex,
+      );
     }
   }
 
@@ -862,6 +989,12 @@ export default class extends Controller {
   handleKeydown(event) {
     if (this.keyboardNavigator) {
       this.keyboardNavigator.handleKeydown(event);
+    }
+  }
+
+  handleDblClick(event) {
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.handleDblClick(event);
     }
   }
 
