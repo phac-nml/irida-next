@@ -103,10 +103,12 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.samplesheetParamsFormTarget.removeEventListener(
-      "turbo:before-fetch-request",
-      this.boundAmendForm,
-    );
+    if (this.hasSamplesheetParamsFormTarget && this.boundAmendForm) {
+      this.samplesheetParamsFormTarget.removeEventListener(
+        "turbo:before-fetch-request",
+        this.boundAmendForm,
+      );
+    }
   }
 
   sampleAttributesTargetConnected() {
