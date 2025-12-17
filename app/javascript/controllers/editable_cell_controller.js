@@ -54,10 +54,6 @@ export default class extends Controller {
 
     // Skip initialization if we can't determine element ID
     if (!elementId) {
-      console.warn(
-        "Skipping editable cell initialization - no field ID found",
-        element,
-      );
       return;
     }
 
@@ -98,7 +94,6 @@ export default class extends Controller {
     const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
 
     if (!item_id) {
-      console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
       return;
     }
 
@@ -288,7 +283,6 @@ export default class extends Controller {
 
     // Handle undefined field gracefully
     if (!field) {
-      console.warn("Could not determine field ID for cell", element);
       return null;
     }
 
