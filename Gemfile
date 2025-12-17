@@ -184,7 +184,7 @@ group :development do
   gem 'lookbook', '~> 2.1', '>= 2.1.1'
 
   # i18n-tasks
-  gem 'i18n-tasks', '~> 1.0.15', require: false
+  gem 'i18n-tasks', '~> 1.1.2', require: false
 end
 
 group :test do
