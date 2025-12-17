@@ -31,7 +31,7 @@ export default class extends Controller {
 
     document.addEventListener("turbo:submit-end", preventEscapeListener);
 
-    this.#sampleCount = this.selectionOutlet.getOrCreateStoredItems().length;
+    this.#sampleCount = this.selectionOutlet.getStoredItemsCount();
   }
 
   disconnect() {
