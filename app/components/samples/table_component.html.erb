@@ -223,9 +223,9 @@
       >
         <% @samples.each do |sample| %>
           <div data-sample-id="<%= sample.id %>">
-            <% @metadata_fields.each do |field| %>
+            <% @metadata_fields.each_with_index do |field, field_index| %>
               <template data-field="<%= field %>">
-                <% field_colindex = @columns.length + @metadata_fields.index(field) + 1 %>
+                <% field_colindex = @columns.length + field_index + 1 %>
                 <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(
                     field: field,
