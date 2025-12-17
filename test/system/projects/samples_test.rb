@@ -3527,16 +3527,19 @@ module Projects
       end
       ## SETUP END ###
 
-      ### ACTIONS START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      find('table tbody tr:first-child td:nth-child(7)').click
+      within('table tbody tr:first-child') do
+        ### ACTIONS START ###
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('value2')
-      find('table tbody tr:first-child td:nth-child(7)').send_keys(:return)
-      ### ACTIONS END ###
+        find('td:nth-child(7)').send_keys('value2')
+        find('td:nth-child(7)').native.send_keys(:return)
+        ### ACTIONS END ###
 
-      ### VERIFY START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        ### VERIFY START ###
+        assert_selector 'td:nth-child(7)', text: 'value2'
+      end
       assert_text I18n.t('samples.editable_cell.update_success')
 
       assert_no_selector 'dialog[open]'
@@ -3627,11 +3630,14 @@ module Projects
       end
       ### SETUP END ###
 
-      ### ACTIONS START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      find('table tbody tr:first-child td:nth-child(7)').click
+      within('table tbody tr:first-child') do
+        ### ACTIONS START ###
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+        find('td:nth-child(7)').send_keys('New Value')
+      end
       find('body').click
 
       assert_selector 'dialog[open]'
@@ -3643,7 +3649,9 @@ module Projects
 
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
-      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)', text: 'New Value'
+      end
       ### VERIFY END ###
     end
 
@@ -3672,11 +3680,14 @@ module Projects
       end
       ### SETUP END ###
 
-      ### ACTIONS START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      find('table tbody tr:first-child td:nth-child(7)').click
+      within('table tbody tr:first-child') do
+        ### ACTIONS START ###
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+        find('td:nth-child(7)').send_keys('New Value')
+      end
       find('body').click
 
       assert_selector 'dialog[open]'
@@ -3688,7 +3699,9 @@ module Projects
 
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
-      assert_no_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+      within('table tbody tr:first-child') do
+        assert_no_selector 'td:nth-child(7)', text: 'New Value'
+      end
       ### VERIFY END ###
     end
 
