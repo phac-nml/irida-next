@@ -55,10 +55,6 @@ export default class extends Controller {
 
     // Skip initialization if we can't determine element ID
     if (!elementId) {
-      console.warn(
-        "Skipping editable cell initialization - no field ID found",
-        element,
-      );
       return;
     }
 
@@ -316,7 +312,6 @@ export default class extends Controller {
 
     // Handle undefined field gracefully
     if (!field) {
-      console.warn("Could not determine field ID for cell", element);
       return null;
     }
 
