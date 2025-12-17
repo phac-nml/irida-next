@@ -73,7 +73,7 @@ gem 'view_component', ['>= 4.0', '< 5.0']
 gem 'pagy', '~> 9.4.0'
 
 # Ransack
-gem 'ransack', '~> 4.2.1'
+gem 'ransack', '~> 4.4.1'
 
 # Search Syntax
 gem 'search_syntax'
