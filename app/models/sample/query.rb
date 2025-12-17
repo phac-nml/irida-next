@@ -4,7 +4,7 @@
 class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
   include ActiveModel::Model
   include ActiveModel::Attributes
-  include Pagy::Backend
+  include Pagy::Method
 
   ResultTypeError = Class.new(StandardError)
 
@@ -18,6 +18,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   }
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
+  attribute :request, default: -> { {} }
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
@@ -25,6 +26,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   def initialize(...)
     super
+    self.request = request
     self.sort = sort
     self.advanced_query = advanced_query?
     self.groups = groups

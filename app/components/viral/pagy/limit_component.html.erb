@@ -42,7 +42,7 @@
           "
           onchange="this.form.requestSubmit()"
         >
-          <% Pagy::DEFAULT[:limits].each do |limit| %>
+          <% LIMITS.each do |limit| %>
             <option
               value="<%= limit %>"
               <%= 'selected' if limit == @pagy.limit %>

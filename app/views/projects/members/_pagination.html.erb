@@ -1,12 +1,12 @@
 <% if @has_members %>
   <% if @pagy.count.positive? %>
     <%= render PaginationComponent.new(
-      info: pagy_info(@pagy),
+      info: @pagy.info_tag,
       prev_url:
         (
-          if @pagy.prev
+          if @pagy.previous
             namespace_project_members_url(
-              page: @pagy.prev,
+              page: @pagy.previous,
               q: params[:q]&.to_unsafe_h,
             )
           else

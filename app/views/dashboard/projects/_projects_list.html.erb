@@ -45,7 +45,7 @@
       <% end %>
     <% end %>
 
-    <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
+    <% if @pagy.count.positive? %>
       <%= render Viral::Pagy::FullComponent.new(
         @pagy,
         item: t("dashboard.projects.index.pagy_item"),
