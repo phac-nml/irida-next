@@ -181,10 +181,11 @@ export default class extends Controller {
     this.metadataFieldsValue.forEach((field, index) => {
       this.metadataFieldIndex.set(field, index);
     });
-    this.numStickyColumns = Math.min(
+    const maxStickyColumns = Math.min(
       this.stickyColumnCountValue ?? this.numBaseColumns,
       this.numBaseColumns,
     );
+    this.numStickyColumns = this.detectStickyColumnCount(maxStickyColumns);
 
     const table = this.element.querySelector("table");
     if (!table) return false;
@@ -404,7 +405,11 @@ export default class extends Controller {
       return;
 
     // Detect if sticky column count should change based on breakpoint
-    const newStickyColumnCount = this.detectStickyColumnCount();
+    const maxStickyColumns = Math.min(
+      this.stickyColumnCountValue ?? this.numBaseColumns,
+      this.numBaseColumns,
+    );
+    const newStickyColumnCount = this.detectStickyColumnCount(maxStickyColumns);
     if (newStickyColumnCount !== this.numStickyColumns) {
       this.numStickyColumns = newStickyColumnCount;
     }
@@ -448,13 +453,16 @@ export default class extends Controller {
    * Detect sticky column count based on window width
    * @returns {number} Number of sticky columns (2 at @2xl+, 1 below)
    */
-  detectStickyColumnCount() {
+  detectStickyColumnCount(maxStickyColumns = this.numBaseColumns) {
+    const cappedMax = Math.min(maxStickyColumns, this.numBaseColumns);
+
     if (
       window.innerWidth >= this.constructor.constants.TAILWIND_2XL_BREAKPOINT
     ) {
-      return Math.min(2, this.numBaseColumns);
+      return Math.min(2, cappedMax);
     }
-    return Math.min(1, this.numBaseColumns);
+
+    return Math.min(1, cappedMax);
   }
 
   /**
