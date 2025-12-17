@@ -542,11 +542,11 @@ module Groups
 
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
+        assert_no_selector 'td:nth-child(8)[data-editable="true"]'
         assert_selector 'td:nth-child(8)', text: 'value1'
-        assert_no_selector 'td:nth-child(9)[contenteditable="true"]'
+        assert_no_selector 'td:nth-child(9)[data-editable="true"]'
         assert_selector 'td:nth-child(9)', text: 'value2'
-        assert_selector 'td:nth-child(10)[contenteditable="true"]', text: ''
+        assert_selector 'td:nth-child(10)[data-editable="true"]', text: ''
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
@@ -1344,15 +1344,16 @@ module Groups
 
       ### ACTIONS START ###
       within('table tbody tr:first-child') do
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('value2')
         find('td:nth-child(7)').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        assert_selector 'td:nth-child(7)', text: 'value2'
       end
 
       assert_text I18n.t('samples.editable_cell.update_success')

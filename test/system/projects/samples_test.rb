@@ -3715,15 +3715,16 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('value2')
         find('td:nth-child(7)').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        assert_selector 'td:nth-child(7)', text: 'value2'
       end
       assert_text I18n.t('samples.editable_cell.update_success')
 
@@ -3827,8 +3828,9 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('New Value')
       end
@@ -3884,8 +3886,9 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('New Value')
       end
