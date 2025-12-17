@@ -22,7 +22,9 @@
       <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
     <% end %>
   <% end %>
-  <!-- Dropdown menu -->
+  <!-- Dropdown menu Note: z-30 ensures dropdown appears above virtual scroll
+  header (z-20) to prevent stacking context issues with sticky positioned table
+  headers -->
   <ul
     id="<%= @dd_id %>"
     data-viral--dropdown-target="menu"
