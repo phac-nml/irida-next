@@ -403,8 +403,7 @@ module W3cValidationHelpers
       # Example of Errors:
       #   ERROR; line 1318: Attribute "aria-colindex" not allowed on element "th" at this point.
       #   ERROR; line 1450: Attribute "aria-colindex" not allowed on element "td" at this point.
-      pattern = /\AERROR\b.+\baria-colindex\b.*\battribute\b.*\bnot\b\s\ballowed\b\s\bon\b\s\belement\b.*
-                 \b(th|td)\b.*\bat\b\s\bthis\b\s\bpoint\b/ix
+      pattern = /\AERROR\b.*\battribute\b.*\baria-colindex\b.*not\s+allowed.*element.*\b(th|td)\b/i
       if pattern =~ es.to_s
         removeds << es
         nil
