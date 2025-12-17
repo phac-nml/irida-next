@@ -19,6 +19,10 @@
   --color-primary: #16a34a;
   --layout-body-columns: 280px 1fr;
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
+
+  /* Virtual scroll configuration */
+  --breakpoint-2xl: 1536; /* Tailwind 2xl breakpoint in pixels (used by virtual_scroll_controller.js) */
+  --metadata-column-width: 300; /* Default metadata column width in pixels */
 }
 
 /* Hide search clear button across all browsers */

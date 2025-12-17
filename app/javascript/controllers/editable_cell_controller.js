@@ -37,6 +37,9 @@ export default class extends Controller {
   }
 
   disconnect() {
+    // Clean up controller-level event listeners
+    // Note: Target-level listeners (blur, keydown, focus) are automatically
+    // cleaned up in editableCellTargetDisconnected() when targets are removed
     this.element.removeEventListener(
       "edit-mode-activated",
       this.boundHandleEditActivated,
