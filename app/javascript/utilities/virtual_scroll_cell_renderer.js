@@ -177,27 +177,37 @@ export class VirtualScrollCellRenderer {
       return existingCell;
     }
 
-    // Clone from template
-    return this.cloneCellFromTemplate(field, templates);
+    // Clone from template (or return placeholder if template missing)
+    return this.cloneCellFromTemplate(field, templates, columnIndex);
   }
 
   /**
-   * Clone a cell from template
+   * Clone a cell from template, or return placeholder if template not available
    * @param {string} field - Field name
    * @param {HTMLElement} templates - Templates container
-   * @returns {HTMLElement|null} Cloned cell element
+   * @param {number} columnIndex - Column index in metadata fields
+   * @returns {HTMLElement|null} Cloned cell element or placeholder
    * @private
    */
-  cloneCellFromTemplate(field, templates) {
-    if (!templates) return null;
+  cloneCellFromTemplate(field, templates, columnIndex) {
+    // Return placeholder if no templates container
+    if (!templates) return this.createPlaceholderCell(field, columnIndex);
 
     const selector = `template[data-field="${CSS.escape(field)}"]`;
     const template = templates.querySelector(selector);
-    if (!template) return null;
+
+    // Return placeholder if template not found (deferred loading)
+    if (!template) {
+      return this.createPlaceholderCell(field, columnIndex);
+    }
 
     const clonedContent = template.content.cloneNode(true);
     const cellElement = clonedContent.firstElementChild;
-    if (!cellElement) return null;
+
+    // Return placeholder if template content is empty
+    if (!cellElement) {
+      return this.createPlaceholderCell(field, columnIndex);
+    }
 
     cellElement.dataset.virtualizedCell = "true";
     cellElement.dataset.fieldId = field;
@@ -306,6 +316,40 @@ export class VirtualScrollCellRenderer {
     });
 
     return spacer;
+  }
+
+  /**
+   * Create a placeholder cell for templates not yet loaded
+   * @param {string} field - Field name
+   * @param {number} columnIndex - Column index in metadata fields
+   * @returns {HTMLElement} Placeholder cell element
+   */
+  createPlaceholderCell(field, columnIndex) {
+    const cell = document.createElement("td");
+    cell.dataset.virtualizedCell = "true";
+    cell.dataset.fieldId = field;
+    cell.dataset.placeholder = "true";
+    cell.setAttribute("role", "gridcell");
+    cell.setAttribute("aria-colindex", this.numBaseColumns + columnIndex + 1);
+    cell.setAttribute("aria-busy", "true");
+    cell.tabIndex = -1;
+
+    const width =
+      this.metadataColumnWidths[columnIndex] ?? this.columnWidthFallback;
+    Object.assign(cell.style, {
+      display: "table-cell",
+      boxSizing: "border-box",
+      width: `${width}px`,
+      minWidth: `${width}px`,
+      maxWidth: `${width}px`,
+      overflow: "hidden",
+    });
+
+    // Add loading indicator with proper styling
+    cell.classList.add("px-3", "py-3", "text-slate-400", "dark:text-slate-600");
+    cell.textContent = "…";
+
+    return cell;
   }
 
   /**

@@ -11,6 +11,9 @@ module Samples
     # Number of sticky columns at @2xl breakpoint and above (2), 1 column below @2xl
     STICKY_COLUMN_COUNT = 2
 
+    # Initial batch size for metadata field templates (deferred loading optimization)
+    INITIAL_TEMPLATE_BATCH_SIZE = 20
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       samples,
@@ -30,6 +33,8 @@ module Samples
       @abilities = abilities
 
       @metadata_fields = metadata_fields
+      @initial_metadata_fields = metadata_fields.take(INITIAL_TEMPLATE_BATCH_SIZE)
+      @deferred_metadata_fields = metadata_fields.drop(INITIAL_TEMPLATE_BATCH_SIZE)
 
       @search_params = search_params
       @empty = empty
@@ -65,6 +70,7 @@ module Samples
       args[:data][:controller] = 'virtual-scroll'
       args[:data][:'virtual-scroll-target'] = 'container'
       args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
+      args[:data][:'virtual-scroll-deferred-fields-value'] = @deferred_metadata_fields.to_json
       args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
       args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
       args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
