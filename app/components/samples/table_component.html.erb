@@ -2,6 +2,7 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
+      <%= render LiveRegionComponent.new(controller: "announcement") %>
 
       <table
         class="
