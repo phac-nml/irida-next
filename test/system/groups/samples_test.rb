@@ -505,14 +505,16 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_selector 'table thead tr th', count: 10
+assert_selector 'table thead tr th', count: 10
 
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_no_selector 'table tbody tr:first-child td:nth-child(8)[contenteditable="true"]'
-      assert_selector 'table tbody tr:first-child td:nth-child(8)', text: 'value1'
-      assert_no_selector 'table tbody tr:first-child td:nth-child(9)[contenteditable="true"]'
-      assert_selector 'table tbody tr:first-child td:nth-child(9)', text: 'value2'
-      assert_selector 'table tbody tr:first-child td:nth-child(10)[contenteditable="true"]', text: ''
+      within('table tbody tr:first-child') do
+        assert_text @sample30.name
+        assert_no_selector 'td:nth-child(8)[data-editable="true"]'
+        assert_selector 'td:nth-child(8)', text: 'value1'
+        assert_no_selector 'td:nth-child(9)[data-editable="true"]'
+        assert_selector 'td:nth-child(9)', text: 'value2'
+        assert_selector 'td:nth-child(10)[data-editable="true"]', text: ''
+      end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
@@ -1247,14 +1249,18 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      find('table tbody tr:first-child td:nth-child(7)').click
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('value2')
-      find('table tbody tr:first-child td:nth-child(7)').send_keys(:return)
-      ### ACTIONS END ###
+within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
-      ### VERIFY START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        find('td:nth-child(7)').send_keys('value2')
+        find('td:nth-child(7)').send_keys(:return)
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_selector 'td:nth-child(7)', text: 'value2'
+      end
 
       assert_text I18n.t('samples.editable_cell.update_success')
 
