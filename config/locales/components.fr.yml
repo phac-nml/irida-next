@@ -302,9 +302,6 @@ fr:
           status:
             one: 1 échantillon sélectionné
             other: "%{selected} sur %{total} échantillons sélectionnés"
-        edit_mode:
-          activated: Activer le mode d’édition
-          deactivated: Désactiver le mode d’édition
     search:
       advanced:
         results_message:
