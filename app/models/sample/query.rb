@@ -13,14 +13,11 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
     [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
   }
 
+  query_for Sample
   filter_by :project_id, ids: :project_ids
   validates_with AdvancedSearchGroupValidator
 
   private
-
-  def model_class
-    Sample
-  end
 
   def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
     return super unless field_name == 'puid' && !metadata_field
