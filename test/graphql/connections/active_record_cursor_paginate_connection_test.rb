@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class ActiveRecordCursorPaginateConnectionTest < ActiveSupport::TestCase
+  OrderByArgument = Struct.new(:field, :direction)
+
   test 'raises error when first is not provided but last and after are' do
     assert_raises GraphQL::ExecutionError do
       Connections::ActiveRecordCursorPaginateConnection.new([], field: 'items', first: nil, after: 'cursor',
@@ -15,5 +17,87 @@ class ActiveRecordCursorPaginateConnectionTest < ActiveSupport::TestCase
       Connections::ActiveRecordCursorPaginateConnection.new([], field: 'items', first: 5, before: 'cursor',
                                                                 max_page_size: 25, default_page_size: 10, last: nil)
     end
+  end
+
+  test 'cursor_for returns correct cursor' do
+    items = Sample.all
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    cursor = connection.cursor_for(items.first)
+    assert_equal Sample.all.cursor_paginate(limit: 1, order: { created_at: :asc }).fetch.cursor_for(items.first),
+                 cursor
+  end
+
+  test 'has_previous_page returns false when there is no previous page' do
+    items = Sample.none
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    assert_not connection.has_previous_page
+  end
+
+  test 'has_next_page returns false when there is no next page' do
+    items = Sample.none
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', last: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    assert_not connection.has_next_page
+  end
+
+  test 'has_previous_page returns true when there is a previous page' do
+    items = Sample.all
+    cursor = items.cursor_paginate(limit: 5, order: { created_at: :asc }).fetch.cursors.last
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5, after: cursor,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    assert connection.has_previous_page
+  end
+
+  test 'has_next_page returns true when there is a next page' do
+    items = Sample.all
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    assert connection.has_next_page
+  end
+
+  test 'nodes returns correct records when passing first without a cursor' do
+    items = Sample.all
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    expected_records = Sample.order(created_at: :asc).limit(5).to_a
+    assert_equal expected_records, connection.nodes
+  end
+
+  test 'nodes returns correct records when passing last without a cursor' do
+    items = Sample.all
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: nil, last: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    expected_records = Sample.order(created_at: :desc, id: :asc).first(5).to_a.reverse
+    assert_equal expected_records, connection.nodes
   end
 end
