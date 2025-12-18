@@ -10,7 +10,10 @@
       ) %>
 
       <table
-        class="samples-table"
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
@@ -22,10 +25,17 @@
         <%# Target for virtual scroll header manipulation %>
         <thead
           role="rowgroup"
-          class="samples-table__header"
+          class="@2xl:sticky @2xl:top-0 z-20 uppercase"
           data-virtual-scroll-target="header"
         >
-          <tr role="row" aria-rowindex="1" class="samples-table__header-row">
+          <tr
+            role="row"
+            aria-rowindex="1"
+            class="
+              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
+              text-slate-900 bg-slate-100 dark:bg-slate-900
+            "
+          >
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',
@@ -33,9 +43,11 @@
               scope: 'col',
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               aria: { colindex: index + 1 },
-              classes: class_names('samples-table__header-cell', 'samples-table__header-cell--sticky-puid': index.zero?, 'samples-table__header-cell--sticky-name': index == 1)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
-                <div class="samples-table__header-cell-content">
+                <div
+                  class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>"
+                >
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
@@ -79,7 +91,7 @@
               },
               aria: { colindex: @columns.length + field_index + 1 },
               scope: 'col',
-              classes: class_names('samples-table__header-cell samples-table__header-cell--metadata')
+              classes: class_names('px-3 pl-3 pr-20 text-xs')
             ) do %>
                 <%= render SortComponent.new(
                   sort: @search_params["sort"],
@@ -100,7 +112,9 @@
         <tbody
           role="rowgroup"
           id="samples-table-body"
-          class="samples-table__body"
+          class="
+            bg-white border-slate-200 dark:bg-slate-800 dark:border-slate-700
+          "
           data-virtual-scroll-target="body"
         >
           <% @samples.each_with_index do |sample, row_index| %>
@@ -111,9 +125,9 @@
                 role: index.zero? ? 'rowheader' : 'gridcell',
                 scope: index.zero? ? 'row' : nil,
                 aria: { colindex: index + 1 },
-                classes: class_names('samples-table__cell', 'samples-table__cell--sticky-puid': index.zero?, 'samples-table__cell--sticky-name': index == 1)
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
               ) do %>
-                  <div class="samples-table__cell-content">
+                  <div class="flex items-center gap-3">
                     <% if index.zero? && @abilities[:select_samples] %>
                       <%= check_box_tag "sample_ids[]",
                       sample.id,
@@ -133,12 +147,12 @@
                     <% end %>
 
                     <% if column == :puid %>
-                      <span class="samples-table__cell--puid-content">
+                      <span class="font-mono font-semibold">
                         <%= highlight(
                           sample[column],
                           defined?(@search_params[:name_or_puid_cont]) &&
                             @search_params[:name_or_puid_cont],
-                          highlighter: '<mark class="samples-table__highlight">\1</mark>',
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                         ) %>
                       </span>
                     <% elsif column == :name %>
@@ -146,13 +160,14 @@
                     sample_path(sample),
                     data: { turbo: false },
                     tabindex: "-1",
-                    class: "samples-table__cell-link"
+                    class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
                   ) do %>
                         <%= highlight(
                           sample[column],
                           defined?(@search_params[:name_or_puid_cont]) &&
                             @search_params[:name_or_puid_cont],
-                          highlighter: '<mark class="samples-table__highlight">\1</mark>',
+                          highlighter:
+                            '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\1</mark>',
                         ) %>
                       <% end %>
                     <% elsif column == "namespaces.puid" %>
@@ -162,7 +177,7 @@
                         turbo: false,
                       },
                       tabindex: "-1",
-                      class: "samples-table__cell-link" %>
+                      class: "font-semibold underline hover:decoration-2" %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(sample[column], :long) %>
                     <% elsif column == :updated_at || column == :attachments_updated_at %>
@@ -181,20 +196,23 @@
         </tbody>
 
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot role="rowgroup" class="samples-table__footer">
+          <tfoot
+            role="rowgroup"
+            class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900"
+          >
             <tr role="row">
               <td
                 class="
-                  samples-table__footer-cell samples-table__footer-cell--sticky
+                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
                 "
                 colspan="2"
               >
-                <span class="samples-table__footer-stats">
+                <span>
                   <%= t(".counts.samples") %>:
                   <strong><%= @pagy.count %></strong>
                 </span>
 
-                <span class="samples-table__footer-stats">
+                <span>
                   <%= t(".counts.selected") %>:
                   <strong data-selection-target="selected">0</strong>
                 </span>
@@ -202,7 +220,7 @@
 
               <td
                 colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
-                class="samples-table__footer-cell"
+                class="p-3 bg-slate-100 dark:bg-slate-900"
               ></td>
             </tr>
           </tfoot>
@@ -212,7 +230,7 @@
       <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
       <div
         id="virtual-scroll-templates"
-        class="samples-table__hidden"
+        class="hidden"
         aria-hidden="true"
         data-virtual-scroll-target="templateContainer"
       >
@@ -230,7 +248,7 @@
                     },
                   ) %>
                 <% else %>
-                  <%= render_cell(tag: 'td', role: 'gridcell', aria: { colindex: field_colindex }, classes: 'samples-table__cell', data: { "field-id": field }) do %>
+                  <%= render_cell(tag: 'td', role: 'gridcell', aria: { colindex: field_colindex }, classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
                     <%= sample.metadata[field] %>
                   <% end %>
                 <% end %>
@@ -265,11 +283,17 @@
       <% end %>
 
       <%# Loading overlay %>
-      <div class="samples-table__loading" data-virtual-scroll-target="loading">
-        <div class="samples-table__loading-content">
-          <div class="samples-table__loading-inner">
+      <div
+        class="
+          hidden absolute inset-0 bg-white/50 dark:bg-slate-900/50 z-50
+          backdrop-blur-[1px]
+        "
+        data-virtual-scroll-target="loading"
+      >
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="flex flex-col items-center justify-center">
             <%= pathogen_icon :faded_spinner, library: "animated", color: :primary, size: :xl %>
-            <span class="samples-table__sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
+            <span class="sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
           </div>
         </div>
       </div>
@@ -301,19 +325,19 @@
           ) %>
 
           <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
-            <span data-message-type="wov" class="samples-table__hidden">
+            <span data-message-type="wov" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
               ) %>
             </span>
 
-            <span data-message-type="woov" class="samples-table__hidden">
+            <span data-message-type="woov" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
               ) %>
             </span>
 
-            <span data-message-type="wonv" class="samples-table__hidden">
+            <span data-message-type="wonv" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
               ) %>
