@@ -115,7 +115,6 @@
             dark:bg-slate-700
           "
           tabindex="-1"
-          hidden="hidden"
           role="menu"
         >
           <li role="none">
@@ -164,9 +163,7 @@
       </turbo-frame>
 
       <%# Main navigation area %>
-      <div
-        class="pt-1 space-y-1 sm:overflow-y-auto flex-1"
-      >
+      <div class="pt-1 space-y-1 sm:overflow-y-auto flex-1">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>

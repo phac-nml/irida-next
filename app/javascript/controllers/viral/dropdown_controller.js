@@ -21,6 +21,9 @@ export default class extends Controller {
   }
 
   menuTargetConnected(element) {
+    element.style.position = "fixed";
+    element.style.positionAnchor = `--anchor-${this.menuTarget.id}`;
+    element.classList.add("anchor");
     element.setAttribute("aria-hidden", "true");
     element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
     element.addEventListener("focusout", this.boundFocusOut);
@@ -35,33 +38,16 @@ export default class extends Controller {
   }
 
   triggerTargetConnected(element) {
+    element.style.anchorName = `--anchor-${this.menuTarget.id}`;
     element.addEventListener("keydown", this.boundOnButtonKeyDown);
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
-    });
-    this.dropdown = new Dropdown(this.menuTarget, element, {
-      triggerType: "none",
-      offsetSkidding: this.skiddingValue,
-      offsetDistance: this.distanceValue,
-      onShow: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "true");
-        this.menuTarget.setAttribute("aria-hidden", "false");
-        this.menuTarget.removeAttribute("hidden");
-      },
-      onHide: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "false");
-        this.menuTarget.setAttribute("aria-hidden", "true");
-        this.menuTarget.setAttribute("hidden", "hidden");
-        this.#menuItems(element).forEach((menuitem) => {
-          menuitem.setAttribute("tabindex", "-1");
-        });
-      },
     });
   }
 
   focusOut(event) {
     if (!this.element.contains(event.relatedTarget)) {
-      this.dropdown.hide();
+      this.hide();
     }
   }
 
@@ -69,11 +55,30 @@ export default class extends Controller {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.dropdown.isVisible()) {
-      this.dropdown.hide();
+    if (this.isVisible()) {
+      this.hide();
     } else {
       this.#openMenuAndFocusMenuItem(0);
     }
+  }
+
+  isVisible() {
+    return !this.menuTarget.classList.contains("hidden");
+  }
+
+  show() {
+    this.triggerTarget.setAttribute("aria-expanded", "true");
+    this.menuTarget.removeAttribute("aria-hidden");
+    this.menuTarget.classList.remove("hidden");
+  }
+
+  hide() {
+    this.triggerTarget.setAttribute("aria-expanded", "false");
+    this.menuTarget.setAttribute("aria-hidden", "true");
+    this.menuTarget.classList.add("hidden");
+    this.#menuItems(this.menuTarget).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
+    });
   }
 
   onButtonKeyDown(event) {
@@ -108,9 +113,9 @@ export default class extends Controller {
         },
         { once: true },
       );
-      this.dropdown.show();
+      this.show();
     } else {
-      this.dropdown.show();
+      this.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
@@ -135,7 +140,7 @@ export default class extends Controller {
           if (clickableTarget) {
             clickableTarget.click();
           } else {
-            this.dropdown.hide();
+            this.hide();
           }
         } else {
           menuItems[currentIndex].click();
@@ -183,7 +188,7 @@ export default class extends Controller {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          this.dropdown.hide();
+          this.hide();
         }
         break;
     }
