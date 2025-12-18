@@ -1,46 +1,20 @@
 # frozen_string_literal: true
 
 # model to represent sample search form
-class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
-  include ActiveModel::Model
-  include ActiveModel::Attributes
-  include Pagy::Backend
-  include AdvancedSearchable
-  include AdvancedSearchConditions
-  include AdvancedSearchConditionDispatcher
-  prepend SortableQuery
-  include AdvancedSearchQuery
-
+class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndModuleChildren
   ResultTypeError = Class.new(StandardError)
 
   ALLOWED_SORT_COLUMNS = %w[name puid created_at updated_at attachments_updated_at].freeze
 
-  attribute :column, :string
-  attribute :direction, :string
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
   attribute :groups, default: lambda {
     [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
   }
-  attribute :sort, :string, default: 'updated_at desc'
-  attribute :advanced_query, :boolean, default: false
 
-  validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
-  validates :column, inclusion: {
-    in: lambda { |record|
-      ALLOWED_SORT_COLUMNS + [record.column].select { |c| c&.start_with?('metadata.') }
-    }
-  }
   validates_with AdvancedSearchGroupValidator
-
-  def initialize(...)
-    super
-    self.sort = sort
-    self.advanced_query = advanced_query?
-    self.groups = groups
-  end
 
   private
 
