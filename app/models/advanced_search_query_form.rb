@@ -7,7 +7,6 @@
 # - optional pagination
 #
 # Subclasses are expected to define:
-# - `ALLOWED_SORT_COLUMNS`
 # - `filter_column` and `filter_ids`
 # - `model_class`
 # - `ransack_params`
@@ -32,9 +31,14 @@ class AdvancedSearchQueryForm
   class_attribute :filter_column_attribute, instance_accessor: false, default: nil
   class_attribute :filter_ids_attribute, instance_accessor: false, default: nil
   class_attribute :model_class_attribute, instance_accessor: false, default: nil
+  class_attribute :allowed_sort_columns_attribute, instance_accessor: false, default: [].freeze
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :column, inclusion: { in: ->(record) { record.send(:allowed_sort_columns) } }
+
+  def self.allowed_sort_columns(*columns)
+    self.allowed_sort_columns_attribute = columns.flatten.map(&:to_s).freeze
+  end
 
   def self.validates_filter_ids(attribute)
     self.filter_ids_attribute = attribute
@@ -66,7 +70,7 @@ class AdvancedSearchQueryForm
   private
 
   def allowed_sort_columns
-    self.class::ALLOWED_SORT_COLUMNS + [column].select { |c| c&.start_with?('metadata.') }
+    self.class.allowed_sort_columns_attribute + [column].select { |c| c&.start_with?('metadata.') }
   end
 
   def filter_column

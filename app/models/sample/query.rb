@@ -4,7 +4,7 @@
 class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndModuleChildren
   ResultTypeError = Class.new(StandardError)
 
-  ALLOWED_SORT_COLUMNS = %w[name puid created_at updated_at attachments_updated_at].freeze
+  allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at
 
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }

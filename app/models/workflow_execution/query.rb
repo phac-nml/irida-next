@@ -6,7 +6,7 @@
 class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndModuleChildren
   ResultTypeError = Class.new(StandardError)
 
-  ALLOWED_SORT_COLUMNS = %w[id name run_id state created_at updated_at].freeze
+  allowed_sort_columns :id, :name, :run_id, :state, :created_at, :updated_at
 
   attribute :name_or_id_cont, :string
   attribute :name_or_id_in, default: -> { [] }
