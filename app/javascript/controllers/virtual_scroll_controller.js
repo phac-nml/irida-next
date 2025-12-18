@@ -719,7 +719,7 @@ export default class extends Controller {
    */
   showLoading() {
     if (this.hasLoadingTarget) {
-      this.loadingTarget.classList.add("samples-table__loading--visible");
+      this.loadingTarget.classList.remove("hidden");
     }
   }
 
@@ -728,7 +728,7 @@ export default class extends Controller {
    */
   hideLoading() {
     if (this.hasLoadingTarget) {
-      this.loadingTarget.classList.remove("samples-table__loading--visible");
+      this.loadingTarget.classList.add("hidden");
     }
   }
 
