@@ -346,7 +346,7 @@ export class VirtualScrollCellRenderer {
     });
 
     // Add loading indicator with proper styling
-    cell.classList.add("px-3", "py-3", "text-slate-400", "dark:text-slate-600");
+    cell.classList.add("samples-table__cell");
     cell.textContent = "…";
 
     return cell;
