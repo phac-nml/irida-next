@@ -29,6 +29,7 @@ class AdvancedSearchQueryForm
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
 
+  class_attribute :filter_column_attribute, instance_accessor: false, default: nil
   class_attribute :filter_ids_attribute, instance_accessor: false, default: nil
 
   validates :direction, inclusion: { in: %w[asc desc] }
@@ -37,6 +38,11 @@ class AdvancedSearchQueryForm
   def self.validates_filter_ids(attribute)
     self.filter_ids_attribute = attribute
     validates attribute, length: { minimum: 1 }
+  end
+
+  def self.filter_by(column, ids:)
+    self.filter_column_attribute = column
+    validates_filter_ids(ids)
   end
 
   def initialize(attributes = nil, scope: nil, **kwargs)
@@ -58,11 +64,18 @@ class AdvancedSearchQueryForm
     self.class::ALLOWED_SORT_COLUMNS + [column].select { |c| c&.start_with?('metadata.') }
   end
 
+  def filter_column
+    column_name = self.class.filter_column_attribute
+    return column_name if column_name
+
+    raise NotImplementedError, "Define filter_column or call filter_by in #{self.class.name}"
+  end
+
   def filter_ids
     attribute_name = self.class.filter_ids_attribute
     return public_send(attribute_name) if attribute_name
 
-    raise NotImplementedError, "Define filter_ids or call validates_filter_ids in #{self.class.name}"
+    raise NotImplementedError, "Define filter_ids or call validates_filter_ids/filter_by in #{self.class.name}"
   end
 
   def search_scope
