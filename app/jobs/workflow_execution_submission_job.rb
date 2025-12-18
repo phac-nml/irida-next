@@ -42,6 +42,6 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
   def queue_job(workflow_execution)
     WorkflowExecutionStatusJob.set(
       wait_until: workflow_execution.workflow.status_check_interval.seconds.from_now
-    ).perform_later(workflow_execution)
+    ).perform_later(workflow_execution.reload)
   end
 end
