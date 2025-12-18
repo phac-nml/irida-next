@@ -58,6 +58,7 @@ export default class extends Controller {
   static constants = Object.freeze({
     BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
     MAX_MEASURE_RETRIES: 5,
+    MAX_CELL_READY_RETRIES: 5,
     PAGE_JUMP_SIZE: 5, // Rows to jump on PageUp/PageDown
     STICKY_HEADER_Z_INDEX: 20,
     STICKY_BODY_Z_INDEX: 10,
@@ -1126,7 +1127,7 @@ export default class extends Controller {
 
   async ensureCellReady(rowIndex, colIndex) {
     // Try a few frames to allow rendering/placeholders to appear
-    const maxTries = 5;
+    const maxTries = this.constructor.constants.MAX_CELL_READY_RETRIES;
 
     for (let i = 0; i < maxTries; i += 1) {
       // Remember intended focus so post-render roving tabindex can honor it
