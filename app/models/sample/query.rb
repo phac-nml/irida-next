@@ -19,28 +19,18 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   private
 
-  def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
-    return super unless field_name == 'puid' && !metadata_field
+  def normalize_condition_value(condition)
+    return condition.value unless condition.field == 'puid'
+    return condition.value if condition.field.starts_with?('metadata.')
 
-    scope.where(node.eq(value.upcase))
-  end
-
-  def apply_in_operator(scope, node, value, metadata_field:, field_name:)
-    return super unless field_name == 'puid' && !metadata_field
-
-    scope.where(node.in(value.map(&:upcase)))
-  end
-
-  def apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-    return super unless field_name == 'puid' && !metadata_field
-
-    scope.where(node.not_eq(value.upcase))
-  end
-
-  def apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
-    return super unless field_name == 'puid' && !metadata_field
-
-    scope.where(node.not_in(value.map(&:upcase)))
+    case condition.operator
+    when 'in', 'not_in'
+      Array(condition.value).map { |v| v.to_s.upcase }
+    when '=', '!='
+      condition.value.to_s.upcase
+    else
+      condition.value
+    end
   end
 
   def ransack_params

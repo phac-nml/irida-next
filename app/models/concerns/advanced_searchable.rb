@@ -9,22 +9,20 @@ module AdvancedSearchable
   # Determines if advanced query is active based on non-empty groups
   # @return [Boolean] true if groups contain non-empty conditions
   def advanced_query?
-    return !groups.all?(&:empty?) if groups
-
-    false
+    groups.present? && groups.any? { |group| !group.empty? }
   end
 
   # Parses nested form attributes into SearchGroup and SearchCondition objects
   # Handles the complex nested structure from Rails form submissions
   # @param attributes [Hash] nested hash of group and condition attributes
   def groups_attributes=(attributes)
-    groups = attributes.each_value.map do |group_attributes|
+    new_groups = attributes.each_value.map do |group_attributes|
       group_class = search_group_class
       conditions = build_group_conditions(group_class, group_attributes)
       group_class.new(conditions:)
     end
 
-    assign_attributes(groups:)
+    assign_attributes(groups: new_groups)
   end
 
   private
