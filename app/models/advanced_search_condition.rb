@@ -12,6 +12,6 @@ class AdvancedSearchCondition
   attribute :value
 
   def empty?
-    field.empty? && operator.empty? && ((value.is_a?(Array) && value.compact!.nil?) || value.empty?)
+    field.blank? && operator.blank? && Array(value).compact_blank.blank?
   end
 end

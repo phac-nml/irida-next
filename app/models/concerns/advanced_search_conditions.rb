@@ -7,12 +7,11 @@ module AdvancedSearchConditions
   private
 
   def build_arel_node(condition, model_class)
-    metadata_field = condition.field.starts_with? 'metadata.'
-    metadata_key = (condition.field.gsub(/^metadata./, '') if metadata_field)
+    metadata_field = condition.field.starts_with?('metadata.')
 
     if metadata_field
-      Arel::Nodes::InfixOperation.new('->>', model_class.arel_table[:metadata],
-                                      Arel::Nodes::Quoted.new(metadata_key))
+      metadata_key = condition.field.delete_prefix('metadata.')
+      Arel::Nodes::InfixOperation.new('->>', model_class.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key))
     else
       model_class.arel_table[condition.field]
     end
