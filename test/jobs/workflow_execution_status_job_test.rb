@@ -216,12 +216,17 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
-    end
+      assert_enqueued_with(job: WorkflowExecutionStatusJob,
+                           at: Time.current + @workflow_execution.workflow.minimum_run_time) do
+        WorkflowExecutionStatusJob.set(
+          wait_until: @workflow_execution.workflow.minimum_run_time.seconds.from_now
+        ).perform_later(@workflow_execution)
+      end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+      assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    end
   end
 
   test 'min_run_time with non-running state should proceed normally' do
@@ -239,6 +244,14 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         ]
       end
 
+      assert_enqueued_with(job: WorkflowExecutionStatusJob,
+                           at: Time.current + @workflow_execution.workflow.status_check_interval) do
+        WorkflowExecutionStatusJob.set(
+          wait_until: @workflow_execution.workflow.status_check_interval.seconds.from_now
+        ).perform_later(@workflow_execution)
+      end
+
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
       perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
         WorkflowExecutionStatusJob.perform_later(@workflow_execution)
       end
@@ -281,5 +294,36 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
     assert workflow_execution.reload.canceling?
     assert_enqueued_jobs(1, only: WorkflowExecutionCancelationJob)
+  end
+
+  test 'workflow execution which hasn\'t exceeded maximum runtime should proceed normally' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+    # Set up pipeline schema to get max_runtime
+    @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
+    Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
+                         pipeline_schema_file_dir: @pipeline_schema_file_dir)
+
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    workflow_execution.create_logidze_snapshot!
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(workflow_execution)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+    end
+
+    assert workflow_execution.reload.running?
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
   end
 end
