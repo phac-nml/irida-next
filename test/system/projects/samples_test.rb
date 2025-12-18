@@ -1809,7 +1809,7 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'imported metadata with whitespaces can still be interacted with within import dialog' do
+    test 'imported metadata with whitespaces can still be interacted with within import dialog and imported' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
