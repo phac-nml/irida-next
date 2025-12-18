@@ -67,6 +67,26 @@ export default class extends Controller {
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
 
+    // Make sure the cell remains focusable after Turbo Stream replacement.
+    // Virtual scroll/grid navigation expects cells to participate in roving tabindex.
+    if (!element.hasAttribute("tabindex")) {
+      element.setAttribute("tabindex", "-1");
+    }
+
+    // Turbo Stream `replace` swaps the entire <td>, which can drop ARIA attributes
+    // required by grid navigation/edit activation logic (it relies on `[aria-colindex]`).
+    // Restore a reasonable default when missing.
+    if (
+      !element.hasAttribute("aria-colindex") &&
+      Number.isInteger(element.cellIndex)
+    ) {
+      element.setAttribute("aria-colindex", String(element.cellIndex + 1));
+    }
+
+    if (!element.hasAttribute("role")) {
+      element.setAttribute("role", "gridcell");
+    }
+
     if (element.hasAttribute("data-refocus")) {
       element.focus();
     }
@@ -112,6 +132,12 @@ export default class extends Controller {
 
       notifyRefreshControllers(this);
 
+      const ariaColindex =
+        element.getAttribute("aria-colindex") ??
+        (Number.isInteger(element.cellIndex)
+          ? String(element.cellIndex + 1)
+          : "");
+
       const form = this.formTemplateTarget.innerHTML
         .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
         .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
@@ -119,7 +145,8 @@ export default class extends Controller {
           /FIELD_VALUE_PLACEHOLDER/g,
           this.#trimWhitespaces(element.innerText),
         )
-        .replace(/CELL_ID_PLACEHOLDER/g, element.id);
+        .replace(/CELL_ID_PLACEHOLDER/g, element.id)
+        .replace(/ARIA_COLINDEX_PLACEHOLDER/g, ariaColindex);
       this.formContainerTarget.innerHTML = form;
       this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
     }

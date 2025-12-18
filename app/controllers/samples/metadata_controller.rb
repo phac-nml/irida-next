@@ -14,6 +14,7 @@ module Samples
 
       value = params[:value]
       cell_id = params[:cell_id]
+      @aria_colindex = params[:aria_colindex]
 
       if @sample.field?(@field)
         update_field_value(@sample.metadata[@field], value, cell_id)
@@ -185,22 +186,45 @@ module Samples
     end
 
     def render_update_success(cell_id)
-      # When the timestamp is rendered to the form, it only renders down to the second, this was causing timing
-      # issues for selecting current samples.  To fix this, we are adding a second to the timestamp so that the
-      # timestamp is always greater than the current time.
-      @timestamp = @sample.updated_at + 1.second
       render turbo_stream: [
-        turbo_stream.replace(
-          cell_id, Samples::EditableCell.new(field: @field, sample: @sample, data: { refocus: 'true' })
-        ),
-        turbo_stream.append(
-          'flashes',
-          partial: 'shared/flash',
-          locals: { type: 'success',
-                    message: t('samples.editable_cell.update_success') }
-        ),
-        turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')
+        editable_cell_replace_stream(cell_id),
+        success_flash_append_stream,
+        timestamp_replace_stream
       ]
+    end
+
+    def editable_cell_replace_stream(cell_id)
+      turbo_stream.replace(cell_id, editable_cell_component(cell_id))
+    end
+
+    def editable_cell_component(cell_id)
+      Samples::EditableCell.new(
+        id: cell_id,
+        aria: (@aria_colindex.present? ? { colindex: @aria_colindex } : {}),
+        field: @field,
+        sample: @sample,
+        data: { refocus: 'true' }
+      )
+    end
+
+    def success_flash_append_stream
+      turbo_stream.append(
+        'flashes',
+        partial: 'shared/flash',
+        locals: { type: 'success', message: t('samples.editable_cell.update_success') }
+      )
+    end
+
+    def timestamp_replace_stream
+      set_timestamp_for_form
+      turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')
+    end
+
+    def set_timestamp_for_form
+      # When the timestamp is rendered to the form, it only renders down to the second.
+      # This was causing timing issues for selecting current samples.
+      # Adding one second ensures the timestamp is always greater than the current time.
+      @timestamp = @sample.updated_at + 1.second
     end
   end
 end
