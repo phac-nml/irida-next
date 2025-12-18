@@ -17,7 +17,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
     )]
   }
 
-  validates :namespace_ids, length: { minimum: 1 }
+  validates_filter_ids :namespace_ids
   validates_with WorkflowExecutionAdvancedSearchGroupValidator
 
   private
@@ -28,10 +28,6 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   def filter_column
     :namespace_id
-  end
-
-  def filter_ids
-    namespace_ids
   end
 
   def normalize_condition_value(condition)

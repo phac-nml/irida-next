@@ -13,7 +13,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
     [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
   }
 
-  validates :project_ids, length: { minimum: 1 }
+  validates_filter_ids :project_ids
   validates_with AdvancedSearchGroupValidator
 
   private
@@ -24,10 +24,6 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   def filter_column
     :project_id
-  end
-
-  def filter_ids
-    project_ids
   end
 
   def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
