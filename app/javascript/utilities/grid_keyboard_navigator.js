@@ -37,6 +37,7 @@ export class GridKeyboardNavigator {
    * @param {Object} options - Configuration options
    * @param {HTMLElement} options.gridElement - The grid container element
    * @param {HTMLElement} options.bodyElement - The grid body element (tbody)
+   * @param {HTMLElement} [options.rootElement] - Root element containing all grid rows/cells (e.g., table). Defaults to bodyElement.
    * @param {number} options.numBaseColumns - Number of non-virtualized columns
    * @param {number} options.totalColumns - Total number of columns (including metadata)
    * @param {number} [options.pageJumpSize=5] - Number of rows to jump on PageUp/PageDown
@@ -45,6 +46,7 @@ export class GridKeyboardNavigator {
   constructor(options) {
     this.grid = options.gridElement;
     this.bodyElement = options.bodyElement;
+    this.rootElement = options.rootElement || options.bodyElement;
     this.numBaseColumns = options.numBaseColumns || 0;
     this.totalColumns = options.totalColumns || 0;
     this.pageJumpSize = options.pageJumpSize || 5;
@@ -73,7 +75,7 @@ export class GridKeyboardNavigator {
    */
   async #handleKeydownInternal(event) {
     const cell = event.target.closest("[aria-colindex]");
-    if (!cell || !this.bodyElement.contains(cell)) return;
+    if (!cell || !this.rootElement?.contains?.(cell)) return;
 
     const isEditing = cell.dataset.editing === "true";
 
@@ -96,6 +98,23 @@ export class GridKeyboardNavigator {
       }
     }
 
+    // Cell activation (Enter/Space) for non-editable interactions (sort, open link, toggle checkbox)
+    if (
+      (event.key === "Enter" || event.key === " ") &&
+      !event.altKey &&
+      !event.metaKey
+    ) {
+      // Let selection controller handle Shift+Space (row selection)
+      if (event.key === " " && (event.shiftKey || event.ctrlKey)) return;
+
+      const activated = this.#activateCell(cell, event);
+      if (activated) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      return;
+    }
+
     // Handle navigation keys
     const relevantKeys = [
       "ArrowRight",
@@ -106,7 +125,6 @@ export class GridKeyboardNavigator {
       "End",
       "PageUp",
       "PageDown",
-      "Tab",
     ];
 
     if (!relevantKeys.includes(event.key)) return;
@@ -120,15 +138,7 @@ export class GridKeyboardNavigator {
     if (target.row === currentRow && target.col === currentCol) return;
 
     event.preventDefault();
-    const success = await this.navigateToCell(target.row, target.col, event);
-
-    // If forward Tab still has no cell after retry, fall back to next row start
-    if (!success && event.key === "Tab" && !event.shiftKey) {
-      const lastRow = this.getLastRowIndex();
-      if (target.row < lastRow) {
-        await this.navigateToCell(target.row + 1, 1, event);
-      }
-    }
+    await this.navigateToCell(target.row, target.col, event);
   }
 
   /**
@@ -188,25 +198,6 @@ export class GridKeyboardNavigator {
         break;
       case "PageDown":
         targetRow = Math.min(lastRow, currentRow + this.pageJumpSize);
-        break;
-      case "Tab":
-        if (event.shiftKey) {
-          // Shift+Tab: move left, or up and to last column
-          if (currentCol > 1) {
-            targetCol = currentCol - 1;
-          } else if (currentRow > firstRow) {
-            targetRow = currentRow - 1;
-            targetCol = this.totalColumns;
-          }
-        } else {
-          // Tab: move right, or down and to first column
-          if (currentCol < this.totalColumns) {
-            targetCol = currentCol + 1;
-          } else if (currentRow < lastRow) {
-            targetRow = currentRow + 1;
-            targetCol = 1;
-          }
-        }
         break;
     }
 
@@ -300,7 +291,7 @@ export class GridKeyboardNavigator {
    * @private
    */
   resetTabStops() {
-    this.bodyElement?.querySelectorAll("[aria-colindex]").forEach((node) => {
+    this.rootElement?.querySelectorAll("[aria-colindex]").forEach((node) => {
       node.tabIndex = -1;
     });
   }
@@ -348,7 +339,7 @@ export class GridKeyboardNavigator {
    * @private
    */
   findCell(rowIndex, colIndex) {
-    const row = this.bodyElement.querySelector(`[aria-rowindex="${rowIndex}"]`);
+    const row = this.rootElement.querySelector(`[aria-rowindex="${rowIndex}"]`);
     if (!row) return null;
 
     const cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
@@ -361,7 +352,7 @@ export class GridKeyboardNavigator {
    * @private
    */
   getFirstRowIndex() {
-    const rows = this.bodyElement.querySelectorAll("[aria-rowindex]");
+    const rows = this.rootElement.querySelectorAll("[aria-rowindex]");
     if (rows.length === 0) return 1;
     const firstRow = rows[0];
     const idx = firstRow?.getAttribute("aria-rowindex");
@@ -375,7 +366,7 @@ export class GridKeyboardNavigator {
    * @private
    */
   getLastRowIndex() {
-    const rows = this.bodyElement.querySelectorAll("[aria-rowindex]");
+    const rows = this.rootElement.querySelectorAll("[aria-rowindex]");
     if (rows.length === 0) return 1;
     const lastRow = rows[rows.length - 1];
     const idx = lastRow?.getAttribute("aria-rowindex");
@@ -408,6 +399,61 @@ export class GridKeyboardNavigator {
   #isEditActivationKey(event) {
     // Only Enter activates edit mode
     return event.key === "Enter";
+  }
+
+  /**
+   * Activate the focused cell's primary interaction.
+   * - Column headers: activate sort link (Enter/Space)
+   * - Cells with checkboxes: toggle checkbox (Space; also Enter if no better action)
+   * - Cells with links/buttons: click (Enter)
+   * @param {HTMLElement} cell
+   * @param {KeyboardEvent} event
+   * @returns {boolean}
+   */
+  #activateCell(cell, event) {
+    if (!cell) return false;
+
+    const isHeader = cell.getAttribute("role") === "columnheader";
+    const checkbox = cell.querySelector('input[type="checkbox"]');
+    const link = cell.querySelector("a[href]");
+    const button = cell.querySelector("button:not([disabled])");
+
+    if (event.key === " ") {
+      // Prefer toggling checkbox on Space
+      if (checkbox && !checkbox.disabled) {
+        checkbox.click();
+        return true;
+      }
+      // Allow Space to activate sort headers as button-like controls
+      if (isHeader && link) {
+        link.click();
+        return true;
+      }
+      return false;
+    }
+
+    // Enter
+    if (isHeader && link) {
+      link.click();
+      return true;
+    }
+
+    if (button) {
+      button.click();
+      return true;
+    }
+
+    if (link) {
+      link.click();
+      return true;
+    }
+
+    if (checkbox && !checkbox.disabled) {
+      checkbox.click();
+      return true;
+    }
+
+    return false;
   }
 
   /**

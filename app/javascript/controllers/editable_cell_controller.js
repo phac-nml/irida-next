@@ -86,10 +86,19 @@ export default class extends Controller {
       element.removeEventListener("blur", this.boundBlur);
       element.removeEventListener("keydown", this.boundKeydown);
       element.setAttribute("contenteditable", "false");
-      const field = element
-        .closest("table")
-        .querySelector(`th:nth-child(${element.cellIndex + 1})`)
-        .dataset.fieldId;
+
+      // Prefer explicit field-id (works with virtualization/spacers)
+      let field = element.dataset.fieldId;
+
+      // Fall back to header lookup by cellIndex (non-virtualized / legacy)
+      if (!field) {
+        const header = element
+          .closest("table")
+          .querySelector(`th:nth-child(${element.cellIndex + 1})`);
+        field = header?.dataset?.fieldId;
+      }
+
+      if (!field) return;
 
       // Get the parent DOM ID to extract the item ID
       // Use a regular expression to match the part after the last underscore
