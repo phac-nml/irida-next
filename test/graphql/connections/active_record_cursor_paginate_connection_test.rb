@@ -100,4 +100,49 @@ class ActiveRecordCursorPaginateConnectionTest < ActiveSupport::TestCase
     expected_records = Sample.order(created_at: :desc, id: :asc).first(5).to_a.reverse
     assert_equal expected_records, connection.nodes
   end
+
+  test 'nodes returns correct records when passing first with after cursor' do
+    items = Sample.all
+    paginator = items.cursor_paginate(limit: 5, order: { created_at: :asc })
+    first_page = paginator.fetch
+    after_cursor = first_page.cursors.last
+
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5, after: after_cursor,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    expected_records = Sample.order(created_at: :asc).offset(5).limit(5).to_a
+    assert_equal expected_records, connection.nodes
+  end
+
+  test 'nodes returns correct records when passing last with before cursor' do
+    items = Sample.all
+    paginator = items.cursor_paginate(limit: 5, order: { created_at: :asc })
+    paginator.fetch # skip first page
+    second_page = paginator.fetch
+    before_cursor = second_page.cursors.first
+
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: nil, last: 5, before: before_cursor,
+             max_page_size: 25, default_page_size: 10,
+             arguments: { order_by: OrderByArgument.new('created_at', :asc) }
+    )
+
+    expected_records = Sample.order(created_at: :asc, id: :asc).first(5).to_a
+    assert_equal expected_records, connection.nodes
+  end
+
+  test 'sets default order when no order_by argument is provided' do
+    items = Sample.all
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5,
+             max_page_size: 25, default_page_size: 10,
+             arguments: {}
+    )
+
+    expected_records = Sample.order(created_at: :asc).limit(5).to_a
+    assert_equal expected_records, connection.nodes
+  end
 end
