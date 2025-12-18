@@ -84,7 +84,7 @@ module Connections
     # @param paginator [ActiveRecordCursorPaginate::Paginator] The paginator to set the order for.
     # @return [void]
     def set_order(paginator) # rubocop:disable Metrics/AbcSize,Naming/AccessorMethodName
-      order_arguments = if arguments.key?(:order_by) && arguments[:order_by].present?
+      paginator.order = if arguments.key?(:order_by) && arguments[:order_by].present?
                           if arguments[:order_by].direction.present?
                             { arguments[:order_by].field => resolve_direction(arguments[:order_by].direction.to_sym) }
                           else
@@ -93,8 +93,6 @@ module Connections
                         else
                           { created_at: resolve_direction(:asc) }
                         end
-
-      paginator.order = order_arguments
     end
 
     # Determine the direction of sorting based on pagination arguments
