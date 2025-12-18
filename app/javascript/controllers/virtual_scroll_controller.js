@@ -5,8 +5,9 @@ import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
 import { StickyColumnManager } from "utilities/sticky_column_manager";
 import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
 
-const SORT_FOCUS_STORAGE_KEY = "irida:virtual-scroll:pending-focus";
-const SORT_FOCUS_TTL_MS = 5000;
+import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
+import { focusMixin } from "controllers/virtual_scroll/focus";
+import { deferredTemplatesMixin } from "controllers/virtual_scroll/deferred_templates";
 
 /**
  * VirtualScrollController
@@ -31,7 +32,7 @@ const SORT_FOCUS_TTL_MS = 5000;
  *        data-virtual-scroll-sticky-column-count-value="2"
  *        data-virtual-scroll-sort-key-value="metadata_field1">
  */
-export default class extends Controller {
+class VirtualScrollController extends Controller {
   static values = {
     metadataFields: Array,
     fixedColumns: Array,
@@ -89,61 +90,36 @@ export default class extends Controller {
    * Stimulus lifecycle: Connect controller and initialize
    */
   connect() {
+    this.lifecycle = createVirtualScrollLifecycle();
+
     this.restorePendingFocusFromSessionStorage();
 
-    if (this.sortFocusToRestore) {
-      this.boundRestoreSortFocusAfterLoad = () => {
-        const target = this.sortFocusToRestore;
-        if (!target) return;
-
-        // Turbo may restore focus after our initial render; re-assert focus on load.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            this.focusCellIfNeeded(target.row, target.col);
-          });
-        });
-
-        this.sortFocusToRestore = null;
-      };
-
-      document.addEventListener(
-        "turbo:load",
-        this.boundRestoreSortFocusAfterLoad,
-        { once: true },
-      );
-
-      document.addEventListener(
-        "turbo:render",
-        this.boundRestoreSortFocusAfterLoad,
-        { once: true },
-      );
-
-      // Fallback for cases where turbo:load doesn't fire (or fires before connect)
-      setTimeout(() => {
-        if (this.sortFocusToRestore) {
-          this.focusCellIfNeeded(
-            this.sortFocusToRestore.row,
-            this.sortFocusToRestore.col,
-          );
-          this.sortFocusToRestore = null;
-        }
-      }, 0);
-    }
+    this.setupSortFocusRestoration();
 
     // Get CSS configuration values
     this.cssConfig = this.constructor.getCSSConfig();
 
     this.boundHandleSort = this.handleSort.bind(this);
-    this.element.addEventListener("click", this.boundHandleSort, true);
+    this.lifecycle.listen(this.element, "click", this.boundHandleSort, {
+      capture: true,
+    });
 
     this.boundHandleKeydown = this.handleKeydown.bind(this);
-    this.element.addEventListener("keydown", this.boundHandleKeydown, true);
+    this.lifecycle.listen(this.element, "keydown", this.boundHandleKeydown, {
+      capture: true,
+    });
 
     this.boundHandleDblClick = this.handleDblClick.bind(this);
-    this.element.addEventListener("dblclick", this.boundHandleDblClick, true);
+    this.lifecycle.listen(this.element, "dblclick", this.boundHandleDblClick, {
+      capture: true,
+    });
 
     this.boundHideLoading = this.hideLoading.bind(this);
-    document.addEventListener("turbo:before-cache", this.boundHideLoading);
+    this.lifecycle.listen(
+      document,
+      "turbo:before-cache",
+      this.boundHideLoading,
+    );
 
     // Listen for deferred template arrival - use MutationObserver for reliable detection
     this.setupDeferredTemplateObserver();
@@ -180,17 +156,24 @@ export default class extends Controller {
     // Keep debounce for resize (less critical)
     this.debouncedResizeHandler = _.debounce(this.boundHandleResize, 100);
 
-    this.containerTarget.addEventListener("scroll", this.handleScroll, {
+    this.lifecycle.trackDebounce(this.debouncedResizeHandler);
+
+    this.lifecycle.listen(this.containerTarget, "scroll", this.handleScroll, {
       passive: true,
     });
 
     // Initialize ResizeObserver for responsive behavior
     this.resizeObserver = new ResizeObserver(this.debouncedResizeHandler);
     this.resizeObserver.observe(this.containerTarget);
+    this.lifecycle.trackObserver(this.resizeObserver);
 
     // Handle Turbo cache restoration - need to re-render when page is restored from cache
     this.boundHandleTurboRender = this.handleTurboRender.bind(this);
-    document.addEventListener("turbo:render", this.boundHandleTurboRender);
+    this.lifecycle.listen(
+      document,
+      "turbo:render",
+      this.boundHandleTurboRender,
+    );
 
     requestAnimationFrame(() => {
       const initialized = this.initializeDimensions();
@@ -437,186 +420,18 @@ export default class extends Controller {
   }
 
   /**
-   * Set up MutationObserver to detect when deferred templates are added to the DOM
-   */
-  setupDeferredTemplateObserver() {
-    if (!this.hasTemplateContainerTarget) return;
-
-    this.deferredObserver = new MutationObserver((mutations) => {
-      // Check if any added nodes have data-deferred attribute
-      const hasDeferredContent = mutations.some((mutation) =>
-        Array.from(mutation.addedNodes).some(
-          (node) =>
-            node.nodeType === Node.ELEMENT_NODE &&
-            node.dataset?.deferred === "true",
-        ),
-      );
-
-      if (hasDeferredContent) {
-        // Use setTimeout to ensure all mutations are processed
-        setTimeout(() => {
-          // Guard against execution after controller disconnect
-          if (!this.element?.isConnected) return;
-          this.mergeDeferredTemplates();
-        }, 0);
-      }
-    });
-
-    // Observe the template container for child additions
-    this.deferredObserver.observe(this.templateContainerTarget, {
-      childList: true,
-      subtree: false,
-    });
-  }
-
-  /**
-   * Merge deferred templates into main container and re-render visible cells
-   */
-  mergeDeferredTemplates() {
-    if (!this.hasTemplateContainerTarget) return;
-
-    try {
-      // Find all deferred template containers
-      const deferredContainers = this.templateContainerTarget.querySelectorAll(
-        '[data-deferred="true"]',
-      );
-
-      if (deferredContainers.length === 0) return;
-
-      // Merge deferred templates into existing sample containers
-      deferredContainers.forEach((deferredContainer) => {
-        const sampleId = deferredContainer.dataset.sampleId;
-        const mainContainer = this.templateContainerTarget.querySelector(
-          `[data-sample-id="${sampleId}"]:not([data-deferred])`,
-        );
-
-        if (mainContainer) {
-          // Move all template children from deferred to main container
-          Array.from(deferredContainer.children).forEach((template) => {
-            mainContainer.appendChild(template);
-          });
-
-          // Remove deferred container
-          deferredContainer.remove();
-        }
-      });
-
-      // Re-render visible range to replace placeholders with real cells
-      this.replaceVisiblePlaceholders();
-    } catch (error) {
-      // Dispatch error event for monitoring
-      this.element.dispatchEvent(
-        new CustomEvent("virtual-scroll:error", {
-          detail: { error, context: "mergeDeferredTemplates" },
-        }),
-      );
-    }
-  }
-
-  /**
-   * Replace placeholder cells in visible range with real cells from templates
-   */
-  replaceVisiblePlaceholders() {
-    if (!this.hasBodyTarget) return;
-
-    const rows = this.bodyTarget.querySelectorAll(
-      '[data-virtual-scroll-target="row"]',
-    );
-
-    rows.forEach((row) => {
-      const placeholders = row.querySelectorAll('[data-placeholder="true"]');
-
-      if (placeholders.length === 0) return;
-
-      const sampleId = row.dataset.sampleId;
-      const templates = this.templateContainerTarget?.querySelector(
-        `[data-sample-id="${sampleId}"]`,
-      );
-
-      placeholders.forEach((placeholder) => {
-        const field = placeholder.dataset.fieldId;
-        if (!field) return;
-
-        const selector = `template[data-field="${CSS.escape(field)}"]`;
-        const template = templates?.querySelector(selector);
-
-        if (!template) return; // Still not available
-
-        // Clone real cell from template
-        const clonedContent = template.content.cloneNode(true);
-        const realCell = clonedContent.firstElementChild;
-
-        if (!realCell) return;
-
-        // Copy attributes from placeholder
-        realCell.dataset.virtualizedCell = "true";
-        realCell.dataset.fieldId = field;
-
-        // Apply styles from placeholder
-        realCell.style.cssText = placeholder.style.cssText;
-
-        // Copy ARIA attributes
-        if (placeholder.hasAttribute("aria-colindex")) {
-          realCell.setAttribute(
-            "aria-colindex",
-            placeholder.getAttribute("aria-colindex"),
-          );
-        }
-
-        // Replace placeholder with real cell
-        placeholder.replaceWith(realCell);
-      });
-    });
-  }
-
-  /**
    * Stimulus lifecycle: Disconnect and cleanup
    */
   disconnect() {
-    this.element.removeEventListener("click", this.boundHandleSort, true);
-    this.element.removeEventListener("keydown", this.boundHandleKeydown, true);
-    this.element.removeEventListener(
-      "dblclick",
-      this.boundHandleDblClick,
-      true,
-    );
-    document.removeEventListener("turbo:before-cache", this.boundHideLoading);
-
-    // Cleanup MutationObserver for deferred templates
-    if (this.deferredObserver) {
-      this.deferredObserver.disconnect();
-      this.deferredObserver = null;
-    }
-
-    this.containerTarget.removeEventListener("scroll", this.handleScroll);
+    this.lifecycle?.stop?.();
+    this.lifecycle = null;
 
     // Cancel RAF if pending
     this.rafPending = false;
 
-    this.debouncedResizeHandler?.cancel?.();
-
-    // Cleanup Turbo event listener
-    if (this.boundHandleTurboRender) {
-      document.removeEventListener("turbo:render", this.boundHandleTurboRender);
-    }
-
-    if (this.boundRestoreSortFocusAfterLoad) {
-      document.removeEventListener(
-        "turbo:load",
-        this.boundRestoreSortFocusAfterLoad,
-      );
-
-      document.removeEventListener(
-        "turbo:render",
-        this.boundRestoreSortFocusAfterLoad,
-      );
-    }
-
-    // Cleanup ResizeObserver to prevent memory leaks
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-      this.resizeObserver = null;
-    }
+    // Clear observer references (disconnected via lifecycle)
+    this.deferredObserver = null;
+    this.resizeObserver = null;
 
     // Clear caches and utilities
     this.rowVisibleRanges = null;
@@ -637,81 +452,6 @@ export default class extends Controller {
         this.rememberPendingFocusFromSortLink(link);
         this.showLoading();
       }
-    }
-  }
-
-  restorePendingFocusFromSessionStorage() {
-    try {
-      const raw = sessionStorage.getItem(SORT_FOCUS_STORAGE_KEY);
-      if (!raw) return;
-
-      const data = JSON.parse(raw);
-      sessionStorage.removeItem(SORT_FOCUS_STORAGE_KEY);
-
-      if (!data || typeof data !== "object") return;
-      if (data.path && data.path !== window.location.pathname) return;
-      if (
-        !Number.isInteger(data.ts) ||
-        Date.now() - data.ts > SORT_FOCUS_TTL_MS
-      )
-        return;
-
-      if (Number.isInteger(data.row) && Number.isInteger(data.col)) {
-        this.pendingFocusRow = data.row;
-        this.pendingFocusCol = data.col;
-        this.sortFocusToRestore = { row: data.row, col: data.col };
-      }
-    } catch {
-      // Ignore storage errors
-    }
-  }
-
-  focusCellIfNeeded(rowIndex, colIndex) {
-    const tableElement = this.element.querySelector("table");
-    const focusRoot = tableElement || this.bodyTarget;
-    if (!focusRoot) return false;
-
-    const row = focusRoot.querySelector(`[aria-rowindex="${rowIndex}"]`);
-    const cell = row?.querySelector?.(`[aria-colindex="${colIndex}"]`);
-    if (!cell) return false;
-
-    const activeCell = document.activeElement?.closest?.("[aria-colindex]");
-    if (activeCell === cell) return true;
-
-    // Ensure roving tabindex points at the cell
-    focusRoot.querySelectorAll("[aria-colindex]").forEach((node) => {
-      node.tabIndex = -1;
-    });
-    cell.tabIndex = 0;
-    cell.focus();
-
-    if (this.keyboardNavigator) {
-      this.keyboardNavigator.focusedRowIndex = rowIndex;
-      this.keyboardNavigator.focusedColIndex = colIndex;
-    }
-
-    return true;
-  }
-
-  rememberPendingFocusFromSortLink(link) {
-    try {
-      const headerCell = link.closest('[role="columnheader"][aria-colindex]');
-      if (!headerCell) return;
-
-      const col = parseInt(headerCell.getAttribute("aria-colindex"), 10);
-      if (!Number.isInteger(col)) return;
-
-      sessionStorage.setItem(
-        SORT_FOCUS_STORAGE_KEY,
-        JSON.stringify({
-          path: window.location.pathname,
-          ts: Date.now(),
-          row: 1,
-          col,
-        }),
-      );
-    } catch {
-      // Ignore storage errors
     }
   }
 
@@ -1200,24 +940,7 @@ export default class extends Controller {
     }
   }
 
-  rememberPendingFocusFromSortKeydown(event) {
-    // When keyboard-navigation activates sorting, focus can be lost on Turbo refresh.
-    // Store the currently focused column header so we can re-focus after render.
-    if (!event || (event.key !== "Enter" && event.key !== " ")) return;
-
-    const cell = event.target?.closest?.(
-      '[role="columnheader"][aria-colindex]',
-    );
-    if (!cell || !this.element.contains(cell)) return;
-
-    const link = cell.querySelector("a[href]");
-    if (!link) return;
-
-    // Only persist focus for Turbo replace navigations (sorting links)
-    if (link.dataset?.turboAction !== "replace") return;
-
-    this.rememberPendingFocusFromSortLink(link);
-  }
+  // rememberPendingFocusFromSortKeydown moved to focusMixin
 
   handleDblClick(event) {
     if (this.keyboardNavigator) {
@@ -1229,3 +952,11 @@ export default class extends Controller {
     return (this.numBaseColumns || 0) + (this.numMetadataColumns || 0);
   }
 }
+
+Object.assign(
+  VirtualScrollController.prototype,
+  focusMixin,
+  deferredTemplatesMixin,
+);
+
+export default VirtualScrollController;
