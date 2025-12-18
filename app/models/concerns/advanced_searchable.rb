@@ -34,17 +34,4 @@ module AdvancedSearchable
     end
     assign_attributes(groups:)
   end
-
-  # Parses sort parameter and extracts column and direction
-  # Converts metadata_ prefix to metadata. dot notation for JSONB field access
-  # Uses rpartition to handle field names containing spaces
-  # @param value [String] sort string in format "column direction" (e.g., "name asc", "metadata_custom_field desc")
-  def sort=(value)
-    super
-    # use rpartition to split on the first space encountered from the right side
-    # this allows us to sort by metadata fields which contain spaces
-    column, _space, direction = sort.rpartition(' ')
-    column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
-    assign_attributes(column:, direction:)
-  end
 end
