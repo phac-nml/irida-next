@@ -17,14 +17,11 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
     )]
   }
 
+  query_for WorkflowExecution
   filter_by :namespace_id, ids: :namespace_ids
   validates_with WorkflowExecutionAdvancedSearchGroupValidator
 
   private
-
-  def model_class
-    WorkflowExecution
-  end
 
   def normalize_condition_value(condition)
     return condition.value unless condition.field == 'state'

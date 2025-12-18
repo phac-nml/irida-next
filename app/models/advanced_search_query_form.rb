@@ -31,6 +31,7 @@ class AdvancedSearchQueryForm
 
   class_attribute :filter_column_attribute, instance_accessor: false, default: nil
   class_attribute :filter_ids_attribute, instance_accessor: false, default: nil
+  class_attribute :model_class_attribute, instance_accessor: false, default: nil
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :column, inclusion: { in: ->(record) { record.send(:allowed_sort_columns) } }
@@ -43,6 +44,10 @@ class AdvancedSearchQueryForm
   def self.filter_by(column, ids:)
     self.filter_column_attribute = column
     validates_filter_ids(ids)
+  end
+
+  def self.query_for(model_class)
+    self.model_class_attribute = model_class
   end
 
   def initialize(attributes = nil, scope: nil, **kwargs)
@@ -76,6 +81,13 @@ class AdvancedSearchQueryForm
     return public_send(attribute_name) if attribute_name
 
     raise NotImplementedError, "Define filter_ids or call validates_filter_ids/filter_by in #{self.class.name}"
+  end
+
+  def model_class
+    klass = self.class.model_class_attribute
+    return klass if klass
+
+    raise NotImplementedError, "Define model_class or call query_for in #{self.class.name}"
   end
 
   def search_scope
