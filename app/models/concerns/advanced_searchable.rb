@@ -18,20 +18,32 @@ module AdvancedSearchable
   # Handles the complex nested structure from Rails form submissions
   # @param attributes [Hash] nested hash of group and condition attributes
   def groups_attributes=(attributes)
-    groups = []
-    attributes.each_value do |group_attributes|
-      conditions = []
-      group_attributes.each_value do |conditions_attributes|
-        conditions_attributes.each_value do |condition_params|
-          # Use the appropriate SearchCondition class based on the including model
-          condition_class = self.class.name.deconstantize.constantize::SearchCondition
-          conditions.push(condition_class.new(condition_params))
-        end
-      end
-      # Use the appropriate SearchGroup class based on the including model
-      group_class = self.class.name.deconstantize.constantize::SearchGroup
-      groups.push(group_class.new(conditions:))
+    groups = attributes.each_value.map do |group_attributes|
+      group_class = search_group_class
+      conditions = build_group_conditions(group_class, group_attributes)
+      group_class.new(conditions:)
     end
+
     assign_attributes(groups:)
+  end
+
+  private
+
+  def search_group_class
+    self.class.name.deconstantize.constantize::SearchGroup
+  end
+
+  def search_condition_class(group_class)
+    return group_class.condition_class if group_class.respond_to?(:condition_class)
+
+    self.class.name.deconstantize.constantize::SearchCondition
+  end
+
+  def build_group_conditions(group_class, group_attributes)
+    condition_class = search_condition_class(group_class)
+
+    group_attributes.values.flat_map do |conditions_attributes|
+      conditions_attributes.values.map { |condition_params| condition_class.new(condition_params) }
+    end
   end
 end
