@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 # model to represent sample search form
-class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
+class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
   include AdvancedSearchable
   include AdvancedSearchConditions
-  include SortableQuery
+  include AdvancedSearchConditionDispatcher
+  prepend SortableQuery
+  include AdvancedSearchQuery
 
   ResultTypeError = Class.new(StandardError)
 
@@ -40,135 +42,42 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     self.groups = groups
   end
 
-  def results(**results_arguments)
-    if results_arguments[:limit] || results_arguments[:page]
-      pagy_results(results_arguments[:limit], results_arguments[:page])
-    else
-      non_pagy_results
-    end
-  end
-
   private
 
-  def pagy_results(limit, page)
-    pagy(ransack_results, limit:, page:)
+  def model_class
+    Sample
   end
 
-  def non_pagy_results
-    ransack_results
+  def filter_column
+    :project_id
   end
 
-  def ransack_results
-    return Sample.none unless valid?
-
-    scope = if advanced_query
-              sort_samples(advanced_query_scope)
-            else
-              sort_samples
-            end
-
-    scope.ransack(ransack_params).result
+  def filter_ids
+    project_ids
   end
 
-  def advanced_query_scope
-    Sample.where(project_id: project_ids).and(advanced_query_groups)
+  def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
+    return super unless field_name == 'puid' && !metadata_field
+
+    scope.where(node.eq(value.upcase))
   end
 
-  def advanced_query_groups
-    adv_query_scope = nil
-    groups.each do |group|
-      group_scope = Sample
-      group.conditions.map do |condition|
-        group_scope = add_condition(group_scope, condition)
-      end
-      adv_query_scope = if adv_query_scope.nil?
-                          group_scope
-                        else
-                          adv_query_scope.or(group_scope)
-                        end
-    end
-    adv_query_scope
+  def apply_in_operator(scope, node, value, metadata_field:, field_name:)
+    return super unless field_name == 'puid' && !metadata_field
+
+    scope.where(node.in(value.map(&:upcase)))
   end
 
-  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
-    node = build_arel_node(condition, Sample)
-    value = condition.value
-    metadata_field = condition.field.starts_with? 'metadata.'
+  def apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
+    return super unless field_name == 'puid' && !metadata_field
 
-    case condition.operator
-    when '='
-      handle_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
-    when 'in'
-      handle_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
-    when '!='
-      handle_not_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
-    when 'not_in'
-      handle_not_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
-    when '<='
-      handle_less_than_or_equal(scope, node, value, condition.field, metadata_field)
-    when '>='
-      handle_greater_than_or_equal(scope, node, value, condition.field, metadata_field)
-    when 'contains'
-      condition_contains(scope, node, value)
-    when 'not_contains'
-      condition_not_contains(scope, node, value)
-    when 'exists'
-      condition_exists(scope, node)
-    when 'not_exists'
-      condition_not_exists(scope, node)
-    else
-      scope
-    end
+    scope.where(node.not_eq(value.upcase))
   end
 
-  def handle_less_than_or_equal(scope, node, value, field, metadata_field)
-    metadata_key = field.gsub(/^metadata./, '')
-    condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-  end
+  def apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
+    return super unless field_name == 'puid' && !metadata_field
 
-  def handle_greater_than_or_equal(scope, node, value, field, metadata_field)
-    metadata_key = field.gsub(/^metadata./, '')
-    condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-  end
-
-  def handle_equals_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_equals(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.eq(value.upcase))
-    else
-      scope.where(node.eq(value))
-    end
-  end
-
-  def handle_in_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_in(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.in(value.map(&:upcase)))
-    else
-      scope.where(node.in(value))
-    end
-  end
-
-  def handle_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_not_equals(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.not_eq(value.upcase))
-    else
-      scope.where(node.not_eq(value))
-    end
-  end
-
-  def handle_not_in_operator(scope, node, value, metadata_field:, field_name:)
-    if metadata_field || field_name == 'name'
-      condition_not_in(scope, node, value, metadata_field:, field_name:)
-    elsif field_name == 'puid'
-      scope.where(node.not_in(value.map(&:upcase)))
-    else
-      scope.where(node.not_in(value))
-    end
+    scope.where(node.not_in(value.map(&:upcase)))
   end
 
   def ransack_params
@@ -176,19 +85,5 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       name_or_puid_cont: name_or_puid_cont,
       name_or_puid_in: name_or_puid_in
     }.compact
-  end
-
-  def sort_samples(scope = Sample.where(project_id: project_ids))
-    ordered_scope = if column.starts_with? 'metadata.'
-                      field = column.gsub('metadata.', '')
-                      scope.order(Sample.metadata_sort(field, direction))
-                    else
-                      scope.order(Arel.sql(column) => direction.to_sym)
-                    end
-
-    # add in tie breaker sort
-    return ordered_scope if column == 'id'
-
-    ordered_scope.order(id: direction.to_sym)
   end
 end
