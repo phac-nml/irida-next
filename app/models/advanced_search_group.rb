@@ -24,9 +24,14 @@ class AdvancedSearchGroup
   # Converts hash of condition parameters into SearchCondition objects.
   # @param attributes [Hash] nested hash of condition attributes
   def conditions_attributes=(attributes)
-    self.conditions = attributes.to_h.each_value.map do |condition_params|
-      self.class.condition_class.new(condition_params)
+    new_conditions = Array(conditions).dup
+
+    attributes.each_value do |condition_params|
+      new_conditions << self.class.condition_class.new(condition_params)
     end
+
+    @conditions = new_conditions
+    self.conditions = new_conditions
   end
 
   # Checks if all conditions in the group are empty.
