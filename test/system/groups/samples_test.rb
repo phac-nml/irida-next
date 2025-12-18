@@ -1269,6 +1269,19 @@ within('table tbody tr:first-child') do
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
       assert_no_selector 'dialog button',
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+
+      # Regression: ensure the same cell remains editable after the Turbo Stream update
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[aria-colindex="7"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]', text: 'value2'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        find('td:nth-child(7)').send_keys('value3')
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        assert_selector 'td:nth-child(7)', text: 'value3'
+      end
       ### VERIFY END ###
     end
 
