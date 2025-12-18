@@ -167,15 +167,12 @@ module Irida
       # Join (lateral join requires Arel.sql)
       join_sql = Arel.sql(", lateral jsonb_array_elements(workflow_executions.log_data->'h') as log_entry")
 
-      # Order: ts_bigint asc
-      order_node = ts_big_int.asc
-
       # Construct the query
       query = workflow_executions_table.where(id_condition).project(timestamp_ms).join(join_sql)
                                        .where(state_log_entry(
                                                 log_entry, state
                                               ))
-                                       .order(order_node)&.take(1)
+                                       .order(ts_big_int.asc)&.take(1)
 
       # Execute the raw sql to get the timestamp on when workflow execution entered state
       # and then flatten the rows array which is an array of arrays to get the first timestamp
