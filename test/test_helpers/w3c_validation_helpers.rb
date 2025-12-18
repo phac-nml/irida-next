@@ -88,6 +88,7 @@ module W3cValidationHelpers
     arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_label_on_div_without_role(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+     arerr = _ignore_anchor_positioning_errors(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -251,6 +252,28 @@ module W3cValidationHelpers
       # Example of an Error:
       #   ERROR; line 194: A "script" element with a "type" attribute whose value is "importmap" must contain a JSON object with no properties other than "imports" and "scopes".
       if /\AERROR\b.+\bscript\b.*\belement.+\btype\b.*\bimportmap\b.+\bJSON\b\s\bobject\b.+\bimports\b.*\bscopes\b/i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  def _ignore_anchor_positioning_errors(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 286: CSS: “position-anchor”: Parse Error.
+      #   ERROR; line 285: CSS: “anchor-name”: Parse Error.
+      if /\AERROR\b.+\bposition-anchor\b.*\bParse\b\s\bError\b\./i =~ es.to_s ||
+        /\AERROR\b.+\banchor-name\b.*\bParse\b\s\bError\b\./i =~ es.to_s
         removeds << es
         nil
       else

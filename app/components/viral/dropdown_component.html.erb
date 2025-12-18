@@ -28,14 +28,13 @@
     data-viral--dropdown-target="menu"
     role="menu"
     class="
-      z-20 py-2 text-sm text-slate-700 dark:text-slate-200 hidden mx-3 bg-white
-      rounded-lg shadow dark:bg-slate-700 border border-slate-200
-      dark:border-slate-800 <%= styles[:dropdown] %>
+      z-20 py-2 text-sm text-slate-700 dark:text-slate-200 hidden bg-white rounded-lg
+      shadow dark:bg-slate-700 border border-slate-200 dark:border-slate-800
+      <%= styles[:dropdown] %>
     "
     aria-labelledby="<%= system_arguments[:id] %>"
     aria-hidden="true"
     tabindex="-1"
-    hidden="hidden"
   >
     <% items.each do |item| %>
       <%= item %>
