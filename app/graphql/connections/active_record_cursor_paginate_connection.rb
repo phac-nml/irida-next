@@ -13,7 +13,7 @@ module Connections
 
       if after.present? && first.nil? && last.present?
         raise GraphQL::ExecutionError, 'When using `after` you must also provide `first` if also providing `last`.'
-      elsif before.present? && first.nil? && last.present?
+      elsif before.present? && last.nil? && first.present?
         raise GraphQL::ExecutionError, 'When using `before` you must also provide `last` if also providing `first`.'
       end
     end
