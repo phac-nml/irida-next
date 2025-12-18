@@ -258,6 +258,7 @@ fr:
           optional: Nom (facultatif)
           required: Nom
       processing_request: Le traitement de votre soumission peut prendre un certain temps.
+      processing_samplesheet: Feuille d'échantillons de traitement
     project_dashboard:
       activity_title: Dernière activité
       info_title: Renseignements sur le projet
