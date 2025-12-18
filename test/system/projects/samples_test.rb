@@ -1837,13 +1837,15 @@ module Projects
           assert_no_text 'metadata field 1'
           assert_no_text 'metadata field 2'
           assert_no_text 'metadata field 3'
+          assert_no_text 'metadata field 4'
           assert_no_selector 'li'
         end
         within 'ul#selected-list' do
           assert_text 'metadata field 1'
           assert_text 'metadata field 2'
           assert_text 'metadata field 3'
-          assert_selector 'li', count: 3
+          assert_text 'metadata field 4'
+          assert_selector 'li', count: 4
         end
 
         # click on "metadata field 1" and then remove it
@@ -1856,6 +1858,7 @@ module Projects
           assert_text 'metadata field 1'
           assert_no_text 'metadata field 2'
           assert_no_text 'metadata field 3'
+          assert_no_text 'metadata field 4'
           assert_selector 'li', count: 1
         end
 
@@ -1863,7 +1866,8 @@ module Projects
           assert_no_text 'metadata field 1'
           assert_text 'metadata field 2'
           assert_text 'metadata field 3'
-          assert_selector 'li', count: 2
+          assert_text 'metadata field 4'
+          assert_selector 'li', count: 3
         end
 
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1880,12 +1884,13 @@ module Projects
 
       assert_no_selector 'dialog[open]'
 
-      # verify after import only metadata fields "metadata field 2" and "metadata field 3" were imported
-      assert_selector '#samples-table table thead tr th', count: 9
+      # verify after import only metadata fields "metadata field 2/3/4" were imported
+      assert_selector '#samples-table table thead tr th', count: 10
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATA FIELD 2'
           assert_text 'METADATA FIELD 3'
+          assert_text 'METADATA FIELD 4'
           assert_no_text 'METADATA FIELD 1'
         end
       end

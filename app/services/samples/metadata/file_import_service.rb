@@ -28,13 +28,15 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         response = {}
         headers = if Flipper.enabled?(:metadata_import_field_selection)
                     @selected_headers << @sample_id_column
                   else
                     @headers
                   end
+        # strip before and after whitespaces
+        headers.map!(&:strip)
         parse_settings = headers.zip(headers).to_h
         # minus 1 to exclude header
         total_sample_count = @spreadsheet.count - 1
