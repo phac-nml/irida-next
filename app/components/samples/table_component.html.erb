@@ -20,7 +20,7 @@
         role="grid"
         aria-label="<%= t('.table_label') %>"
         aria-colcount="<%= @columns.length + @metadata_fields.length %>"
-        aria-rowcount="<%= @pagy.count + 1 %>"
+        aria-rowcount="<%= @pagy.count + (@abilities[:select_samples] && @has_samples ? 2 : 1) %>"
       >
         <%# Target for virtual scroll header manipulation %>
         <thead
@@ -200,12 +200,15 @@
             role="rowgroup"
             class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900"
           >
-            <tr role="row">
+            <tr role="row" aria-rowindex="<%= @pagy.count + 2 %>">
               <td
                 class="
                   sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
                 "
                 colspan="2"
+                role="gridcell"
+                aria-colindex="1"
+                aria-colspan="2"
               >
                 <span>
                   <%= t(".counts.samples") %>:
@@ -221,6 +224,9 @@
               <td
                 colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
                 class="p-3 bg-slate-100 dark:bg-slate-900"
+                role="gridcell"
+                aria-colindex="3"
+                aria-colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
               ></td>
             </tr>
           </tfoot>
