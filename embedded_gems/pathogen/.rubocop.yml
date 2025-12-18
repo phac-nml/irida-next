@@ -5,6 +5,10 @@ Rails:
   Enabled: true
 
 AllCops:
+  TargetRubyVersion: "3.3"
+  Exclude:
+    - "vendor/**/*"
+    - "**/bin/**/**"
   NewCops: enable
 
 Lint/MissingSuper:
@@ -15,3 +19,7 @@ Lint/MissingSuper:
 Metrics/MethodLength:
   CountComments: false
   Max: 15
+
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsabcsize
+Metrics/AbcSize:
+  Max: 20
