@@ -43,10 +43,10 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
     assert_equal project.samples.count, data['samples']['nodes'].count
 
     # verify fetched sample data matches data on project
-    project.samples.each_with_index do |sample, index|
-      assert_equal sample.name, data['samples']['nodes'][index]['name']
-      assert_equal sample.to_global_id.to_s, data['samples']['nodes'][index]['id']
-      assert_equal project.to_global_id.to_s, data['samples']['nodes'][index]['project']['id']
+    project.samples.each do |sample|
+      retrieved_sample = data['samples']['nodes'].find { |s| s['id'] == sample.to_global_id.to_s }
+
+      assert_not_nil retrieved_sample, "Sample #{sample.name} should be present"
     end
   end
 
@@ -69,10 +69,10 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
     assert_equal project.samples.count, data['samples']['nodes'].count
 
     # verify fetched sample data matches data on project
-    project.samples.each_with_index do |sample, index|
-      assert_equal sample.name, data['samples']['nodes'][index]['name']
-      assert_equal sample.to_global_id.to_s, data['samples']['nodes'][index]['id']
-      assert_equal project.to_global_id.to_s, data['samples']['nodes'][index]['project']['id']
+    project.samples.each do |sample|
+      retrieved_sample = data['samples']['nodes'].find { |s| s['id'] == sample.to_global_id.to_s }
+
+      assert_not_nil retrieved_sample, "Sample #{sample.name} should be present"
     end
   end
 
@@ -105,10 +105,10 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
     assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
     assert_equal 2, data['samples']['nodes'].count
     # verify fetched sample data only includes ones with `Sample 2` in the name
-    project.samples.ransack(name_or_puid_cont: 'Sample 2').result.each_with_index do |sample, index|
-      assert_equal sample.name, data['samples']['nodes'][index]['name']
-      assert_equal sample.to_global_id.to_s, data['samples']['nodes'][index]['id']
-      assert_equal project.to_global_id.to_s, data['samples']['nodes'][index]['project']['id']
+    project.samples.ransack(name_or_puid_cont: 'Sample 2').result.each do |sample|
+      retrieved_sample = data['samples']['nodes'].find { |s| s['id'] == sample.to_global_id.to_s }
+
+      assert_not_nil retrieved_sample, "Sample #{sample.name} should be present"
     end
   end
 

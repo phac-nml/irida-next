@@ -17,11 +17,11 @@ module Resolvers
              description: 'Order by',
              default_value: nil
 
-    def resolve(filter:, order_by:)
+    def resolve(filter:, order_by:) # rubocop:disable Lint/UnusedMethodArgument
       context.scoped_set!(:project, project)
       context.scoped_set!(:samples_preauthorized, true)
 
-      query = Sample::Query.new(params(context, project.id, nil, filter, order_by))
+      query = Sample::Query.new(params(context, project.id, nil, filter))
       query.results
     end
 

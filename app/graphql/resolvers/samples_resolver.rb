@@ -22,10 +22,10 @@ module Resolvers
              description: 'Order by',
              default_value: nil
 
-    def resolve(group_id:, filter:, order_by:)
+    def resolve(group_id:, filter:, order_by:) # rubocop:disable Lint/UnusedMethodArgument
       context.scoped_set!(:samples_preauthorized, true)
-      query = Sample::Query.new(params(context, nil, group_id, filter, order_by))
-      query.results
+      query = Sample::Query.new(params(context, nil, group_id, filter))
+      query.results.unscope(:order)
     end
 
     def ready?(**_args)

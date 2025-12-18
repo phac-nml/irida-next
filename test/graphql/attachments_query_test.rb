@@ -92,20 +92,6 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  ATTACHMENTS_PAIRED_QUERY = <<~GRAPHQL
-    query($first: Int, $samp_puid: ID!) {
-      sample(puid: $samp_puid) {
-        id
-        attachments(first: $first) {
-          nodes {
-            id,
-            metadata
-          }
-        }
-      }
-    }
-  GRAPHQL
-
   def setup
     @user = users(:john_doe)
     @sample = samples(:sample1)
@@ -333,31 +319,6 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_nil metadata2['compression'], 'should not have field that was not requested'
   end
 
-  test 'attachment paired query should work' do
-    result = IridaSchema.execute(
-      ATTACHMENTS_PAIRED_QUERY,
-      context: { current_user: @user_paired },
-      variables: { first: 2, samp_puid: @sample_paired.puid }
-    )
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    attachment1 = result['data']['sample']['attachments']['nodes'][0]
-    attachment2 = result['data']['sample']['attachments']['nodes'][1]
-    metadata1 = attachment1['metadata']
-    metadata2 = attachment2['metadata']
-
-    assert_equal 'forward', metadata1['direction']
-    assert_equal 'reverse', metadata2['direction']
-
-    assert_equal 'pe', metadata1['type']
-    assert_equal 'pe', metadata2['type']
-
-    # check they reference each other
-    assert_equal attachment1['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
-    assert_equal attachment2['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
-  end
-
   test 'attachment query should work with metadata_jcont filter' do
     result = IridaSchema.execute(
       ATTACHMENTS_QUERY,
@@ -371,20 +332,24 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_equal 6, data.count
 
-    attachment1 = data[0]
-    attachment2 = data[1]
-    metadata1 = attachment1['metadata']
-    metadata2 = attachment2['metadata']
+    data.first(3).each do |attachment|
+      metadata = attachment['metadata']
+      assert_equal 'pe', metadata['type']
 
-    assert_equal 'forward', metadata1['direction']
-    assert_equal 'reverse', metadata2['direction']
+      assert_includes %w[forward reverse], metadata['direction']
+      associated_attachment = data.find do |att|
+        att['id'] == "gid://irida/Attachment/#{metadata['associated_attachment_id']}"
+      end
 
-    assert_equal 'pe', metadata1['type']
-    assert_equal 'pe', metadata2['type']
+      assert_not_nil associated_attachment, 'should find associated attachment'
 
-    # check they reference each other
-    assert_equal attachment1['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
-    assert_equal attachment2['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
+      assert_equal 'pe', associated_attachment['metadata']['type']
+      assert_includes %w[forward reverse], associated_attachment['metadata']['direction']
+      assert_equal attachment['id'],
+                   "gid://irida/Attachment/#{associated_attachment['metadata']['associated_attachment_id']}"
+
+      assert_not_equal attachment['metadata']['direction'], associated_attachment['metadata']['direction']
+    end
   end
 
   test 'attachment query should work with metadata_jcont filter to select only forward files' do

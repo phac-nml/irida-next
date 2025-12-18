@@ -69,6 +69,9 @@ gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'tailwindcss-rails', '~> 4.4'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
+# ActiveRecord Cursor Paginate
+gem 'activerecord_cursor_paginate', '~> 0.4.1'
+
 # Pagy
 gem 'pagy', '~> 9.4.0'
 
