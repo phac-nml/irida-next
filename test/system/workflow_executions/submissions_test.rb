@@ -1533,6 +1533,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+        assert find('#workflow_execution_update_samples').disabled?
       end
     end
 
@@ -1568,6 +1569,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+        assert find('#workflow_execution_update_samples').disabled?
       end
     end
   end
