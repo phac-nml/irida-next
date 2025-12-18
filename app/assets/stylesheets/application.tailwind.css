@@ -2,6 +2,9 @@
 @plugin "flowbite/plugin";
 @source "../../../node_modules/flowbite/**/*.js";
 
+/* Component-specific stylesheets */
+@import "../../components/samples/table_component.css";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -68,12 +71,6 @@ input[type="search"] {
   ::file-selector-button {
     border-color: var(--color-slate-200, currentColor);
   }
-  /* Navigation mode - all table cells when focused but not editing */
-  table[role="grid"] td:focus-visible:not([data-editing="true"]),
-  table[role="grid"] th:focus-visible:not([data-editing="true"]) {
-    @apply outline-2 outline-offset-[-3px] outline-slate-900 dark:outline-white;
-  }
-
   /* Edit mode - actively editing cell */
   table[role="grid"] td[data-editing="true"] {
     @apply bg-yellow-50 outline-2 outline-offset-[-2px] outline-green-600 dark:bg-yellow-900/20 dark:outline-green-500;

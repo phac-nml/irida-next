@@ -1,0 +1,491 @@
+/**
+ * Samples Table Component - BEM CSS
+ * Block: samples-table
+ */
+
+/* ==========================================================================
+   Block: samples-table
+   ========================================================================== */
+
+.samples-table {
+  width: 100%;
+  font-size: 0.875rem; /* 14px */
+  text-align: left;
+  color: #64748b; /* slate-500 */
+  white-space: nowrap;
+  table-layout: fixed;
+}
+
+.dark .samples-table {
+  color: #94a3b8; /* slate-400 */
+}
+
+/* Wrapper - outer container */
+.samples-table__wrapper {
+  position: relative;
+  overflow: auto;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+}
+
+.dark .samples-table__wrapper {
+  background-color: #1e293b; /* slate-800 */
+}
+
+/* Container - with border */
+.samples-table__container {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  border-radius: 0.5rem;
+}
+
+.dark .samples-table__container {
+  border-color: #334155; /* slate-700 */
+}
+
+/* ==========================================================================
+   Element: Header (thead)
+   ========================================================================== */
+
+.samples-table__header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  text-transform: uppercase;
+}
+
+@media (min-width: 1536px) {
+  /* @2xl */
+  .samples-table__header {
+    position: sticky;
+    top: 0;
+  }
+}
+
+.samples-table__header-row {
+  border-bottom: 1px solid #e2e8f0; /* slate-200 */
+  color: #0f172a; /* slate-900 */
+  background-color: #f1f5f9; /* slate-100 */
+}
+
+.dark .samples-table__header-row {
+  border-color: #0f172a; /* slate-900 */
+  color: #94a3b8; /* slate-400 */
+  background-color: #0f172a; /* slate-900 */
+}
+
+/* Header Cell (th) */
+.samples-table__header-cell {
+  padding: 0.75rem; /* 12px */
+  background-color: #f1f5f9; /* slate-100 */
+  box-sizing: border-box;
+  position: relative;
+}
+
+.dark .samples-table__header-cell {
+  background-color: #0f172a; /* slate-900 */
+}
+
+/* Header cell content wrapper */
+.samples-table__header-cell-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem; /* 12px */
+}
+
+/* Sticky header cells (first two columns) */
+.samples-table__header-cell--sticky-puid {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  width: var(--puid-width);
+}
+
+@media (min-width: 1536px) {
+  /* @2xl */
+  .samples-table__header-cell--sticky-puid {
+    position: sticky;
+  }
+}
+
+.samples-table__header-cell--sticky-name {
+  position: sticky;
+  left: var(--puid-width);
+  z-index: 10;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@media (min-width: 1280px) {
+  /* @4xl - adjusted to xl for more conservative approach */
+  .samples-table__header-cell--sticky-name {
+    position: sticky;
+  }
+}
+
+/* Make header cell content font sans when it's the first/second column */
+.samples-table__header-cell--sticky-puid .samples-table__header-cell-content,
+.samples-table__header-cell--sticky-name .samples-table__header-cell-content {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Metadata header cells */
+.samples-table__header-cell--metadata {
+  padding-left: 0.75rem;
+  padding-right: 5rem; /* pr-20 = 80px */
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Element: Body (tbody)
+   ========================================================================== */
+
+.samples-table__body {
+  background-color: #ffffff;
+  border-color: #e2e8f0; /* slate-200 */
+}
+
+.dark .samples-table__body {
+  background-color: #1e293b; /* slate-800 */
+  border-color: #334155; /* slate-700 */
+}
+
+/* Body Row (tr) */
+.samples-table__row {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .samples-table__row {
+  border-color: #334155;
+}
+
+.samples-table__row:hover {
+  background-color: #f8fafc; /* slate-50 */
+}
+
+.dark .samples-table__row:hover {
+  background-color: #334155; /* slate-700 */
+}
+
+/* Body Cell (td/th) */
+.samples-table__cell {
+  padding: 0.75rem; /* 12px */
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Cell content wrapper */
+.samples-table__cell-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Sticky body cells (first two columns) */
+.samples-table__cell--sticky-puid {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  width: var(--puid-width);
+  background-color: #f8fafc; /* slate-50 */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.dark .samples-table__cell--sticky-puid {
+  background-color: #0f172a; /* slate-900 */
+}
+
+@media (min-width: 1536px) {
+  /* @2xl */
+  .samples-table__cell--sticky-puid {
+    position: sticky;
+  }
+}
+
+.samples-table__cell--sticky-name {
+  position: sticky;
+  z-index: 5;
+  left: var(--puid-width);
+  background-color: #f8fafc; /* slate-50 */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.dark .samples-table__cell--sticky-name {
+  background-color: #0f172a; /* slate-900 */
+}
+
+@media (min-width: 1280px) {
+  /* @4xl - adjusted */
+  .samples-table__cell--sticky-name {
+    position: sticky;
+  }
+}
+
+/* Cell content - PUID specific */
+.samples-table__cell--puid-content {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+}
+
+/* Cell content - Name link */
+.samples-table__cell-link {
+  color: #334155; /* slate-700 */
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.dark .samples-table__cell-link {
+  color: #cbd5e1; /* slate-300 */
+}
+
+.samples-table__cell-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Highlight mark styling */
+.samples-table__highlight {
+  background-color: #86efac; /* primary-300 */
+}
+
+.dark .samples-table__highlight {
+  background-color: #15803d; /* primary-700 */
+}
+
+/* ==========================================================================
+   Element: Footer (tfoot)
+   ========================================================================== */
+
+.samples-table__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background-color: #f1f5f9; /* slate-100 */
+}
+
+.dark .samples-table__footer {
+  background-color: #0f172a; /* slate-900 */
+}
+
+@media (min-width: 1536px) {
+  /* @2xl */
+  .samples-table__footer {
+    position: sticky;
+  }
+}
+
+.samples-table__footer-cell {
+  padding: 0.75rem 1.5rem;
+  color: #334155; /* slate-700 */
+}
+
+.dark .samples-table__footer-cell {
+  color: #cbd5e1; /* slate-300 */
+}
+
+.samples-table__footer-cell--sticky {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+.samples-table__footer-stats {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+/* ==========================================================================
+   Element: Loading Overlay
+   ========================================================================== */
+
+.samples-table__loading {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(1px);
+  z-index: 50;
+}
+
+.dark .samples-table__loading {
+  background-color: rgba(15, 23, 42, 0.5); /* slate-900/50 */
+}
+
+.samples-table__loading--visible {
+  display: block;
+}
+
+.samples-table__loading-content {
+  display: flex;
+  align-items: center;
+  justify-center: center;
+  width: 100%;
+  height: 100%;
+}
+
+.samples-table__loading-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   Focus States - Keyboard Navigation
+   ========================================================================== */
+
+/* Sticky cells - use pseudo-element for focus indicator to avoid clipping */
+/* These rules MUST come first to establish specificity */
+.samples-table__cell--sticky-puid:focus-visible:not([data-editing="true"]),
+.samples-table__cell--sticky-name:focus-visible:not([data-editing="true"]),
+.samples-table__header-cell--sticky-puid:focus-visible:not(
+    [data-editing="true"]
+  ),
+.samples-table__header-cell--sticky-name:focus-visible:not(
+    [data-editing="true"]
+  ) {
+  /* Keep position: sticky - don't change to relative as it breaks sticky positioning */
+  z-index: 25 !important; /* Higher than all sticky z-indexes */
+  outline: none !important; /* Remove default outline */
+}
+
+/* Use ::before pseudo-element to create visible focus indicator */
+.samples-table__cell--sticky-puid:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.samples-table__cell--sticky-name:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.samples-table__header-cell--sticky-puid:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.samples-table__header-cell--sticky-name:focus-visible:not(
+    [data-editing="true"]
+  )::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 2px solid #0f172a; /* slate-900 */
+  pointer-events: none; /* Don't interfere with cell interactions */
+  z-index: 1; /* Above cell content */
+}
+
+.dark
+  .samples-table__cell--sticky-puid:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.dark
+  .samples-table__cell--sticky-name:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.dark
+  .samples-table__header-cell--sticky-puid:focus-visible:not(
+    [data-editing="true"]
+  )::before,
+.dark
+  .samples-table__header-cell--sticky-name:focus-visible:not(
+    [data-editing="true"]
+  )::before {
+  border-color: white;
+}
+
+/* Regular cells (non-sticky) - focus within cell boundary */
+/* Exclude sticky cells using :not() to prevent conflicts */
+.samples-table__cell:focus-visible:not([data-editing="true"]):not(
+    .samples-table__cell--sticky-puid
+  ):not(.samples-table__cell--sticky-name),
+.samples-table__header-cell:focus-visible:not([data-editing="true"]):not(
+    .samples-table__header-cell--sticky-puid
+  ):not(.samples-table__header-cell--sticky-name) {
+  outline: 2px solid #0f172a; /* slate-900 */
+  outline-offset: -3px;
+  position: relative;
+  z-index: 15;
+}
+
+.dark
+  .samples-table__cell:focus-visible:not([data-editing="true"]):not(
+    .samples-table__cell--sticky-puid
+  ):not(.samples-table__cell--sticky-name),
+.dark
+  .samples-table__header-cell:focus-visible:not([data-editing="true"]):not(
+    .samples-table__header-cell--sticky-puid
+  ):not(.samples-table__header-cell--sticky-name) {
+  outline-color: white;
+}
+
+/* Editing state */
+.samples-table__cell[data-editing="true"] {
+  background-color: #fefce8; /* yellow-50 */
+  outline: 2px solid #16a34a; /* green-600 */
+  outline-offset: -2px;
+  caret-color: #0f172a;
+}
+
+.dark .samples-table__cell[data-editing="true"] {
+  background-color: rgba(133, 77, 14, 0.2); /* yellow-900/20 */
+  outline-color: #22c55e; /* green-500 */
+  caret-color: white;
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+/* Screen reader only */
+.samples-table__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Hidden */
+.samples-table__hidden {
+  display: none;
+}
+
+/* Checkbox styling within table */
+.samples-table input[type="checkbox"] {
+  color: #16a34a; /* primary-600 */
+  margin-right: 0.5rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  border-radius: 0.125rem;
+  border-color: #e2e8f0; /* slate-200 */
+}
+
+.samples-table input[type="checkbox"]:checked {
+  border-color: #16a34a; /* primary-500 */
+}
+
+.dark .samples-table input[type="checkbox"] {
+  border-color: #334155; /* slate-700 */
+  background-color: #1e293b; /* slate-800 */
+}
+
+.dark .samples-table input[type="checkbox"]:checked {
+  border-color: #16a34a;
+  background-color: #16a34a;
+}
+
+.samples-table input[type="checkbox"]:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
