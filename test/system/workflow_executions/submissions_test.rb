@@ -1395,5 +1395,76 @@ module WorkflowExecutions
       end
       ### VERIFY END ###
     end
+
+    test 'analyst cannot update samples with analysis result' do
+      user = users(:michelle_doe)
+      login_as user
+
+      project = projects(:project1)
+      sample = samples(:sample1)
+      Project.reset_counters(project.id, :samples_count)
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      end
+    end
+
+    test 'cannot update shared samples with analysis results when shared role is analyst' do
+      group = groups(:subgroup_sample_actions)
+      user = users(:subgroup_sample_actions_doe)
+      sample = samples(:sample71)
+
+      login_as user
+
+      visit group_samples_url(group)
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 5, count: 5,
+                                                                                      locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      end
+    end
   end
 end
