@@ -5,6 +5,9 @@ import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
 import { StickyColumnManager } from "utilities/sticky_column_manager";
 import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
 
+const SORT_FOCUS_STORAGE_KEY = "irida:virtual-scroll:pending-focus";
+const SORT_FOCUS_TTL_MS = 5000;
+
 /**
  * VirtualScrollController
  *
@@ -50,6 +53,8 @@ export default class extends Controller {
   pendingFocusRow = null;
   pendingFocusCol = null;
 
+  sortFocusToRestore = null;
+
   static constants = Object.freeze({
     BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
     MAX_MEASURE_RETRIES: 5,
@@ -83,17 +88,58 @@ export default class extends Controller {
    * Stimulus lifecycle: Connect controller and initialize
    */
   connect() {
+    this.restorePendingFocusFromSessionStorage();
+
+    if (this.sortFocusToRestore) {
+      this.boundRestoreSortFocusAfterLoad = () => {
+        const target = this.sortFocusToRestore;
+        if (!target) return;
+
+        // Turbo may restore focus after our initial render; re-assert focus on load.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.focusCellIfNeeded(target.row, target.col);
+          });
+        });
+
+        this.sortFocusToRestore = null;
+      };
+
+      document.addEventListener(
+        "turbo:load",
+        this.boundRestoreSortFocusAfterLoad,
+        { once: true },
+      );
+
+      document.addEventListener(
+        "turbo:render",
+        this.boundRestoreSortFocusAfterLoad,
+        { once: true },
+      );
+
+      // Fallback for cases where turbo:load doesn't fire (or fires before connect)
+      setTimeout(() => {
+        if (this.sortFocusToRestore) {
+          this.focusCellIfNeeded(
+            this.sortFocusToRestore.row,
+            this.sortFocusToRestore.col,
+          );
+          this.sortFocusToRestore = null;
+        }
+      }, 0);
+    }
+
     // Get CSS configuration values
     this.cssConfig = this.constructor.getCSSConfig();
 
     this.boundHandleSort = this.handleSort.bind(this);
-    this.element.addEventListener("click", this.boundHandleSort);
+    this.element.addEventListener("click", this.boundHandleSort, true);
 
     this.boundHandleKeydown = this.handleKeydown.bind(this);
-    this.element.addEventListener("keydown", this.boundHandleKeydown);
+    this.element.addEventListener("keydown", this.boundHandleKeydown, true);
 
     this.boundHandleDblClick = this.handleDblClick.bind(this);
-    this.element.addEventListener("dblclick", this.boundHandleDblClick);
+    this.element.addEventListener("dblclick", this.boundHandleDblClick, true);
 
     this.boundHideLoading = this.hideLoading.bind(this);
     document.addEventListener("turbo:before-cache", this.boundHideLoading);
@@ -150,10 +196,13 @@ export default class extends Controller {
       this.isInitialized = initialized;
 
       if (initialized) {
+        const tableElement = this.element.querySelector("table");
+
         // Initialize keyboard navigator after dimensions are set
         this.keyboardNavigator = new GridKeyboardNavigator({
           gridElement: this.element,
           bodyElement: this.bodyTarget,
+          rootElement: tableElement || this.bodyTarget,
           numBaseColumns: this.numBaseColumns,
           totalColumns: this.totalColumnCount(),
           pageJumpSize: this.constructor.constants.PAGE_JUMP_SIZE,
@@ -182,6 +231,10 @@ export default class extends Controller {
     // Only handle if we're initialized and the controller element is still in the DOM
     if (!this.isInitialized || !this.element.isConnected) return;
 
+    // If a sort was triggered and the response renders in-place (e.g., within a Turbo Frame),
+    // the controller may stay connected. Re-check sessionStorage so we can restore focus.
+    this.restorePendingFocusFromSessionStorage();
+
     // Reset state and re-render
     this.lastFirstVisible = undefined;
     this.lastLastVisible = undefined;
@@ -190,6 +243,14 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       this.initializeDimensions();
       this.render();
+
+      if (this.sortFocusToRestore) {
+        this.focusCellIfNeeded(
+          this.sortFocusToRestore.row,
+          this.sortFocusToRestore.col,
+        );
+        this.sortFocusToRestore = null;
+      }
     });
   }
 
@@ -511,9 +572,13 @@ export default class extends Controller {
    * Stimulus lifecycle: Disconnect and cleanup
    */
   disconnect() {
-    this.element.removeEventListener("click", this.boundHandleSort);
-    this.element.removeEventListener("keydown", this.boundHandleKeydown);
-    this.element.removeEventListener("dblclick", this.boundHandleDblClick);
+    this.element.removeEventListener("click", this.boundHandleSort, true);
+    this.element.removeEventListener("keydown", this.boundHandleKeydown, true);
+    this.element.removeEventListener(
+      "dblclick",
+      this.boundHandleDblClick,
+      true,
+    );
     document.removeEventListener("turbo:before-cache", this.boundHideLoading);
 
     // Cleanup MutationObserver for deferred templates
@@ -532,6 +597,18 @@ export default class extends Controller {
     // Cleanup Turbo event listener
     if (this.boundHandleTurboRender) {
       document.removeEventListener("turbo:render", this.boundHandleTurboRender);
+    }
+
+    if (this.boundRestoreSortFocusAfterLoad) {
+      document.removeEventListener(
+        "turbo:load",
+        this.boundRestoreSortFocusAfterLoad,
+      );
+
+      document.removeEventListener(
+        "turbo:render",
+        this.boundRestoreSortFocusAfterLoad,
+      );
     }
 
     // Cleanup ResizeObserver to prevent memory leaks
@@ -556,8 +633,84 @@ export default class extends Controller {
     const link = event.target.closest("a[href]");
     if (link && this.headerTarget.contains(link)) {
       if (link.dataset.turboAction === "replace") {
+        this.rememberPendingFocusFromSortLink(link);
         this.showLoading();
       }
+    }
+  }
+
+  restorePendingFocusFromSessionStorage() {
+    try {
+      const raw = sessionStorage.getItem(SORT_FOCUS_STORAGE_KEY);
+      if (!raw) return;
+
+      const data = JSON.parse(raw);
+      sessionStorage.removeItem(SORT_FOCUS_STORAGE_KEY);
+
+      if (!data || typeof data !== "object") return;
+      if (data.path && data.path !== window.location.pathname) return;
+      if (
+        !Number.isInteger(data.ts) ||
+        Date.now() - data.ts > SORT_FOCUS_TTL_MS
+      )
+        return;
+
+      if (Number.isInteger(data.row) && Number.isInteger(data.col)) {
+        this.pendingFocusRow = data.row;
+        this.pendingFocusCol = data.col;
+        this.sortFocusToRestore = { row: data.row, col: data.col };
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }
+
+  focusCellIfNeeded(rowIndex, colIndex) {
+    const tableElement = this.element.querySelector("table");
+    const focusRoot = tableElement || this.bodyTarget;
+    if (!focusRoot) return false;
+
+    const row = focusRoot.querySelector(`[aria-rowindex="${rowIndex}"]`);
+    const cell = row?.querySelector?.(`[aria-colindex="${colIndex}"]`);
+    if (!cell) return false;
+
+    const activeCell = document.activeElement?.closest?.("[aria-colindex]");
+    if (activeCell === cell) return true;
+
+    // Ensure roving tabindex points at the cell
+    focusRoot.querySelectorAll("[aria-colindex]").forEach((node) => {
+      node.tabIndex = -1;
+    });
+    cell.tabIndex = 0;
+    cell.focus();
+
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.focusedRowIndex = rowIndex;
+      this.keyboardNavigator.focusedColIndex = colIndex;
+    }
+
+    return true;
+  }
+
+  rememberPendingFocusFromSortLink(link) {
+    try {
+      const headerCell = link.closest('[role="columnheader"][aria-colindex]');
+      if (!headerCell) return;
+
+      const col = parseInt(headerCell.getAttribute("aria-colindex"), 10);
+      if (!Number.isInteger(col)) return;
+
+      sessionStorage.setItem(
+        SORT_FOCUS_STORAGE_KEY,
+        JSON.stringify({
+          path: window.location.pathname,
+          ts: Date.now(),
+          row: 1,
+          col,
+        }),
+      );
+    } catch {
+      // Ignore storage errors
     }
   }
 
@@ -719,7 +872,8 @@ export default class extends Controller {
     // Capture current focus if it's in the grid and we don't have a pending focus
     if (this.pendingFocusRow === null || this.pendingFocusCol === null) {
       const activeElement = document.activeElement;
-      if (activeElement && this.bodyTarget.contains(activeElement)) {
+      const tableElement = this.element.querySelector("table");
+      if (activeElement && tableElement?.contains?.(activeElement)) {
         const row = activeElement.closest("[aria-rowindex]");
         const cell = activeElement.closest("[aria-colindex]");
         if (row && cell) {
@@ -847,7 +1001,9 @@ export default class extends Controller {
       Number.isInteger(this.pendingFocusRow) &&
       Number.isInteger(this.pendingFocusCol)
     ) {
-      const row = this.bodyTarget?.querySelector?.(
+      const tableElement = this.element.querySelector("table");
+      const focusRoot = tableElement || this.bodyTarget;
+      const row = focusRoot?.querySelector?.(
         `[aria-rowindex="${this.pendingFocusRow}"]`,
       );
       const cell = row?.querySelector?.(
@@ -1036,9 +1192,30 @@ export default class extends Controller {
    * Delegates to GridKeyboardNavigator utility
    */
   handleKeydown(event) {
+    this.rememberPendingFocusFromSortKeydown(event);
+
     if (this.keyboardNavigator) {
       this.keyboardNavigator.handleKeydown(event);
     }
+  }
+
+  rememberPendingFocusFromSortKeydown(event) {
+    // When keyboard-navigation activates sorting, focus can be lost on Turbo refresh.
+    // Store the currently focused column header so we can re-focus after render.
+    if (!event || (event.key !== "Enter" && event.key !== " ")) return;
+
+    const cell = event.target?.closest?.(
+      '[role="columnheader"][aria-colindex]',
+    );
+    if (!cell || !this.element.contains(cell)) return;
+
+    const link = cell.querySelector("a[href]");
+    if (!link) return;
+
+    // Only persist focus for Turbo replace navigations (sorting links)
+    if (link.dataset?.turboAction !== "replace") return;
+
+    this.rememberPendingFocusFromSortLink(link);
   }
 
   handleDblClick(event) {
