@@ -36,7 +36,7 @@ export default class extends Controller {
 
   togglePage(event) {
     const newStorageValue = this.getOrCreateStoredItems();
-    this.rowSelectionTargets.map((row) => {
+    this.rowSelectionTargets.forEach((row) => {
       if (row.checked !== event.target.checked) {
         row.checked = event.target.checked;
         if (row.checked) {
@@ -110,7 +110,7 @@ export default class extends Controller {
 
   #updateUI(ids, announce) {
     try {
-      this.rowSelectionTargets.map((row) => {
+      this.rowSelectionTargets.forEach((row) => {
         row.checked = ids.indexOf(row.value) > -1;
       });
       this.#updateActionButtons(ids.length);
@@ -142,7 +142,7 @@ export default class extends Controller {
 
   #updateCounts(selected, announce) {
     if (this.hasSelectedTarget) {
-      this.selectedTarget.innerText = selected;
+      this.selectedTarget.textContent = String(selected);
     }
     if (announce) {
       this.#announceSelectionStatus(selected);

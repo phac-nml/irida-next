@@ -188,7 +188,9 @@ export default class extends Controller {
 
     const validEntry = this.#validateEntry(editableCell);
     if (validEntry) {
-      const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
+      let didConfirm = false;
+
+      let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
         .replace(/ORIGINAL_VALUE/g, originalValue)
         .replace(/NEW_VALUE/g, this.#trimWhitespaces(editableCell.innerText));
       this.confirmDialogContainerTarget.innerHTML = confirmDialog;
@@ -220,9 +222,13 @@ export default class extends Controller {
         (e) => {
           if (e.target.tagName !== "BUTTON") return;
 
-          e.target.value === "confirm"
-            ? this.submit(editableCell)
-            : this.reset(editableCell);
+          didConfirm = e.target.value === "confirm";
+
+          if (didConfirm) {
+            this.submit(editableCell);
+          } else {
+            this.reset(editableCell);
+          }
           dialog.close();
         },
         { once: true },
@@ -232,6 +238,7 @@ export default class extends Controller {
       dialog.addEventListener(
         "close",
         () => {
+          if (didConfirm) return;
           this.reset(editableCell);
         },
         { once: true },
