@@ -204,7 +204,7 @@ export default class extends Controller {
       }
       dialog
         .querySelector(`[data-message-type="${messageType}"]`)
-        .classList.remove("hidden");
+        .classList.remove("samples-table__hidden");
 
       dialog.showModal();
 
