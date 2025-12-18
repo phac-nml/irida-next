@@ -40,6 +40,7 @@ module WorkflowExecutions
 
     private
 
+    # Delay checking the status of a running pipeline for X amount of seconds, if set
     def delay_status_check?(run_status)
       return false if @workflow_execution.reload.state.to_sym == :running
 
@@ -57,14 +58,16 @@ module WorkflowExecutions
       end
     end
 
+    # Send cancellation request to WES if pipeline has exceeded maximum runtime, if set
     def max_run_time_exceeded_cancel?
       run_time = @workflow_execution.workflow.state_time_calculation(@workflow_execution, :running)
       maximum_run_time = @workflow_execution.workflow.maximum_run_time(@workflow_execution.samples.count)
 
-      # Max runtime for pipeline (in running state) has exceeded so a cancellation request to WES is made
       unless @workflow_execution.cancellable? && maximum_run_time && run_time && (run_time > maximum_run_time)
         return false
       end
+
+      # Max runtime for pipeline (in running state) has exceeded so a cancellation request to WES is made
 
       @workflow_execution.state = :canceling
       @workflow_execution.save
