@@ -126,8 +126,9 @@ export default class extends Controller {
     this.#setSamplesheetParametersAndData();
     this.#disableProcessingState();
     this.#samplesheetReady = true;
-    if (Object.keys(this.#queuedMetadataChanges).length > 0) {
-      this.#submitMetadataChange(this.#queuedMetadataChanges);
+    const metadataChanges = { ...this.#queuedMetadataChanges };
+    if (Object.keys(metadataChanges).length > 0) {
+      this.#submitMetadataChange(metadataChanges);
       this.#queuedMetadataChanges = {};
     }
     this.updateMessageTarget.classList.remove("hidden");
@@ -274,17 +275,18 @@ export default class extends Controller {
   #disableProcessingState() {
     this.submitTarget.disabled = false;
     this.samplesheetSpinnerTarget.remove();
-
-    this.updateSamplesLabelTarget.innerHTML = "";
-    if (this.#allowedToUpdateSamples) {
-      this.updateSamplesLabelTarget.innerText =
-        this.allowedToUpdateSamplesStringValue;
-      this.updateSamplesCheckboxTarget.disabled = false;
-      this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
-    } else {
-      this.updateSamplesLabelTarget.innerText =
-        this.notAllowedToUpdateSamplesStringValue;
-      this.updateSamplesCheckboxTarget.checked = false;
+    if (this.hasUpdateSamplesLabelTarget) {
+      this.updateSamplesLabelTarget.innerHTML = "";
+      if (this.#allowedToUpdateSamples) {
+        this.updateSamplesLabelTarget.innerText =
+          this.allowedToUpdateSamplesStringValue;
+        this.updateSamplesCheckboxTarget.disabled = false;
+        this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
+      } else {
+        this.updateSamplesLabelTarget.innerText =
+          this.notAllowedToUpdateSamplesStringValue;
+        this.updateSamplesCheckboxTarget.checked = false;
+      }
     }
   }
 

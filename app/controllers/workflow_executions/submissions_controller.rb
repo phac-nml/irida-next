@@ -58,7 +58,6 @@ module WorkflowExecutions
     end
 
     def allowed_to_update_samples
-      @allowed_to_update_samples = true
       projects = Project.where(id: @samples.select(:project_id))
 
       projects.each do |project|
