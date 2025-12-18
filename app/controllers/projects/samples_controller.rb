@@ -40,8 +40,11 @@ module Projects
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @samples = @samples.includes(project: { namespace: :parent })
 
+      # Use the same field list/order as the main index (respects selected template)
+      @metadata_fields = @fields || []
+
       # Get only deferred metadata fields (after initial batch)
-      @deferred_metadata_fields = @project.namespace.metadata_fields.drop(
+      @deferred_metadata_fields = @metadata_fields.drop(
         ::Samples::TableComponent::INITIAL_TEMPLATE_BATCH_SIZE
       )
 
