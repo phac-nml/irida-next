@@ -11,18 +11,18 @@
 # GitHub Repo: https://github.com/marcoroth/herb
 #
 
-version: 0.8.2
+version: 0.8.4
 
 files:
-#   # Additional patterns beyond the defaults (**.html, **.rhtml, **.html.erb, etc.)
-#   include:
-#     - '**/*.xml.erb'
-#     - 'custom/**/*.html'
-#
-#   # Patterns to exclude (can exclude defaults too)
+  #   # Additional patterns beyond the defaults (**.html, **.rhtml, **.html.erb, etc.)
+  #   include:
+  #     - '**/*.xml.erb'
+  #     - 'custom/**/*.html'
+  #
+  #   # Patterns to exclude (can exclude defaults too)
   exclude:
-    - '.devenv/**/*'
-    - 'docs-site/**/*'
+    - ".devenv/**/*"
+    - "docs-site/**/*"
 
 linter:
   enabled: true
@@ -65,7 +65,7 @@ formatter:
   #
   # Patterns to exclude from formatting
   exclude:
-    - 'docs-site/**/*'
+    - "docs-site/**/*"
 
   # Rewriters modify templates during formatting
   rewriter:
