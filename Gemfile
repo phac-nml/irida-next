@@ -179,9 +179,6 @@ group :development do
 
   gem 'faker'
 
-  # erb-formatter
-  gem 'erb-formatter', '~> 0.7.2', require: false
-
   # LookBook
   gem 'actioncable'
   gem 'listen'
