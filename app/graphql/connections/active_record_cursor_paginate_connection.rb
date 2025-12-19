@@ -53,6 +53,8 @@ module Connections
       else
         records
       end
+    rescue ActiveRecordCursorPaginate::InvalidCursorError => e
+      raise GraphQL::ExecutionError, e.message
     end
 
     # Check if there is a previous page of results.

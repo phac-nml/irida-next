@@ -19,6 +19,18 @@ class ActiveRecordCursorPaginateConnectionTest < ActiveSupport::TestCase
     end
   end
 
+  test 'raises error when cursor is invalid' do
+    items = Sample.order(created_at: :asc)
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5, after: 'invalid_cursor',
+             max_page_size: 25, default_page_size: 10,
+             arguments: {}
+    )
+    assert_raises GraphQL::ExecutionError do
+      connection.nodes
+    end
+  end
+
   test 'cursor_for returns correct cursor' do
     items = Sample.order(created_at: :asc)
     connection = Connections::ActiveRecordCursorPaginateConnection.new(
