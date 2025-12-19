@@ -198,6 +198,13 @@ export default class extends Controller {
   #focusMenuItem(menuItem) {
     menuItem.tabIndex = "0";
     menuItem.focus();
+    this.#scrollToMenuItem(menuItem);
+  }
+
+  #scrollToMenuItem(menuItem) {
+    const parentContainer = document.getElementsByClassName("content")[0];
+    const scrollToPosition = menuItem.offsetTop - parentContainer.offsetTop;
+    parentContainer.scrollTop = scrollToPosition;
   }
 
   #menuItems(menu) {
