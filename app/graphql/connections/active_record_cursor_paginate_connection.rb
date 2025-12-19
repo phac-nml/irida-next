@@ -84,9 +84,15 @@ module Connections
     # Set the order for the paginator based on the order_values present in the ActiveRecord query.
     # @param paginator [ActiveRecordCursorPaginate::Paginator] The paginator to set the order for.
     # @return [void]
-    def set_order(paginator) # rubocop:disable Naming/AccessorMethodName
+    def set_order(paginator) # rubocop:disable Naming/AccessorMethodName,Metrics/AbcSize
       paginator.order = items.order_values.to_h do |order|
-        [order.expr, order.direction]
+        if order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation == items.table
+          [order.expr.name, resolve_direction(order.direction)]
+        elsif order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation != items.table
+          [Arel.sql("#{order.expr.relation.name}.#{order.expr.name}"), resolve_direction(order.direction)]
+        else
+          [order.expr, resolve_direction(order.direction)]
+        end
       end
     end
 

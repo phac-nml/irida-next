@@ -11,13 +11,14 @@ module Resolvers
     argument :order_by, Types::AttachmentOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
     alias sample object
 
-    def resolve(filter:, order_by:) # rubocop:disable Lint/UnusedMethodArgument
+    def resolve(filter:, order_by:)
       context.scoped_set!(:attachments_preauthorized, true)
       ransack_obj = sample.attachments.joins(:file_blob).ransack(filter&.to_h)
+      ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
       ransack_obj.result
     end

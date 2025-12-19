@@ -8,7 +8,7 @@ module Resolvers
              description: 'Full path of the group. For example, `pathogen/surveillance`.'
     argument :puid, GraphQL::Types::ID,
              required: false,
-             description: 'Persistent Unique Identifer of the group. For example, `INXT_GRP_GGGGGGGGGG.`'
+             description: 'Persistent Unique Identifier of the group. For example, `INXT_GRP_GGGGGGGGGG.`'
     validates required: { one_of: %i[full_path puid] }
 
     type Types::GroupType, null: true
