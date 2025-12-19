@@ -66,9 +66,9 @@ gem 'openssl', '~> 3.3', '>= 3.3.1'
 # Tailwind CSS [https://tailwindcss.com]
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
+gem 'reactionview', '~> 0.2.0'
 gem 'tailwindcss-rails', '~> 4.4'
 gem 'view_component', ['>= 4.0', '< 5.0']
-gem 'reactionview', '~> 0.2.0'
 
 # ActiveRecord Cursor Paginate
 gem 'activerecord_cursor_paginate', '~> 0.4.1'
