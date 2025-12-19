@@ -108,5 +108,9 @@ Rails.application.configure do
 
   # Use EventedFileUpdateChecker to watch files for changes
   # fixes performance issues with propshaft in development
-  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.file_watcher = if ENV['RAILS_DISABLE_EVENTED_FILE_WATCHER'].present?
+                          ActiveSupport::FileUpdateChecker
+                        else
+                          ActiveSupport::EventedFileUpdateChecker
+                        end
 end
