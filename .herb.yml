@@ -1,0 +1,38 @@
+# This file configures Herb for your project and team.
+# Settings here take precedence over individual editor preferences.
+#
+# Herb is a suite of tools for HTML+ERB templates including:
+# - Linter: Validates templates and enforces best practices
+# - Formatter: Auto-formats templates with intelligent indentation
+# - Language Server: Provides IDE support (VS Code, Zed, Neovim, etc.)
+#
+# Website: https://herb-tools.dev
+# Configuration: https://herb-tools.dev/configuration
+
+version: 0.8.4
+
+files:
+  exclude:
+    - ".devenv/**/*"
+    - ".git/**/*"
+    - "coverage/**/*"
+    - "docs-site/**/*"
+    - "log/**/*"
+    - "node_modules/**/*"
+    - "public/**/*"
+    - "storage/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+
+linter:
+  enabled: true
+
+formatter:
+  enabled: true
+  indentWidth: 2
+  maxLineLength: 120
+
+  rewriter:
+    pre:
+      - tailwind-class-sorter
+    post: []
