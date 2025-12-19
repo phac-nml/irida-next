@@ -101,6 +101,6 @@ class BaseSpreadsheetImportService < BaseService
   end
 
   def strip_headers(headers)
-    headers.map!(&:strip)
+    headers.map(&:strip)
   end
 end
