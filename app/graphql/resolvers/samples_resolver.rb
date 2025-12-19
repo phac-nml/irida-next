@@ -20,12 +20,12 @@ module Resolvers
     argument :order_by, Types::SampleOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
-    def resolve(group_id:, filter:, order_by:) # rubocop:disable Lint/UnusedMethodArgument
+    def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:samples_preauthorized, true)
-      query = Sample::Query.new(params(context, nil, group_id, filter))
-      query.results.unscope(:order)
+      query = Sample::Query.new(params(context, nil, group_id, filter, order_by))
+      query.results
     end
 
     def ready?(**_args)
