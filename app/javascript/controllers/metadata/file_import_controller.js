@@ -117,12 +117,13 @@ export default class extends Controller {
         this.sortableListsTemplateTarget.innerHTML;
 
       columns.forEach((column) => {
+        const formattedColumn = column.replace(/\s+/g, "-");
         const template =
           this.sortableListsItemTemplateTarget.content.cloneNode(true);
         template.querySelector("li").firstElementChild.id =
-          `${column}_unselected`;
+          `${formattedColumn}_unselected`;
         template.querySelector("li").lastElementChild.innerText = column;
-        template.querySelector("li").id = column.replace(/\s+/g, "-");
+        template.querySelector("li").id = formattedColumn;
         this.metadataColumnsTarget
           .querySelector("#selected-list")
           .append(template);

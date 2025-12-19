@@ -1809,6 +1809,94 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'imported metadata with whitespaces can still be interacted with within import dialog and imported' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 7
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
+      within('#dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_whitespaces.csv')
+        within 'ul#available-list' do
+          assert_no_text 'metadata field 1'
+          assert_no_text 'metadata field 2'
+          assert_no_text 'metadata field 3'
+          assert_no_text 'metadata field 4'
+          assert_no_selector 'li'
+        end
+        within 'ul#selected-list' do
+          assert_text 'metadata field 1'
+          assert_text 'metadata field 2'
+          assert_text 'metadata field 3'
+          assert_text 'metadata field 4'
+          assert_selector 'li', count: 4
+        end
+
+        # click on "metadata field 1" and then remove it
+        find('#metadata-field-1').click
+
+        click_button I18n.t('common.actions.remove')
+
+        # verify only "metadata field 1" was removed
+        within('#available-list') do
+          assert_text 'metadata field 1'
+          assert_no_text 'metadata field 2'
+          assert_no_text 'metadata field 3'
+          assert_no_text 'metadata field 4'
+          assert_selector 'li', count: 1
+        end
+
+        within 'ul#selected-list' do
+          assert_no_text 'metadata field 1'
+          assert_text 'metadata field 2'
+          assert_text 'metadata field 3'
+          assert_text 'metadata field 4'
+          assert_selector 'li', count: 3
+        end
+
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_no_text I18n.t('shared.progress_bar.in_progress')
+
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
+      # verify after import only metadata fields "metadata field 2/3/4" were imported
+      assert_selector '#samples-table table thead tr th', count: 10
+      within('#samples-table table') do
+        within('thead') do
+          assert_text 'METADATA FIELD 2'
+          assert_text 'METADATA FIELD 3'
+          assert_text 'METADATA FIELD 4'
+          assert_no_text 'METADATA FIELD 1'
+        end
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
     test 'should not import metadata with duplicate header errors' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -2228,6 +2316,110 @@ module Projects
         # added 1 new sample
         assert_selector 'tr', count: 4
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should import samples with metadata that have whitespaces' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(
+        I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3, locale: @user.locale)
+      )
+      within('table tbody') do
+        assert_selector 'tr', count: 3
+        assert_no_text 'my new sample 1'
+        assert_no_text 'my new sample 2'
+      end
+
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 7
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/valid_with_whitespaces.csv'))
+
+        within 'ul#available-list' do
+          assert_no_text 'metadata field 1'
+          assert_no_text 'metadata field 2'
+          assert_no_text 'metadata field 3'
+          assert_no_selector 'li'
+        end
+        within 'ul#selected-list' do
+          assert_text 'metadata field 1'
+          assert_text 'metadata field 2'
+          assert_text 'metadata field 3'
+          assert_selector 'li', count: 3
+        end
+
+        # click on "metadata field 1" and then remove it
+        find('#metadata-field-1').click
+
+        click_button I18n.t('common.actions.remove')
+
+        # verify only "metadata field 1" was removed
+        within('#available-list') do
+          assert_text 'metadata field 1'
+          assert_no_text 'metadata field 2'
+          assert_no_text 'metadata field 3'
+          assert_selector 'li', count: 1
+        end
+
+        within 'ul#selected-list' do
+          assert_no_text 'metadata field 1'
+          assert_text 'metadata field 2'
+          assert_text 'metadata field 3'
+          assert_selector 'li', count: 2
+        end
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+        # success msg
+        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+      end
+
+      assert_no_selector 'dialog[open]'
+
+      # refresh to see new samples
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(
+        I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 5, count: 5, locale: @user.locale)
+      )
+      assert_selector '#samples-table table thead tr th',
+                      count: 9
+      within('#samples-table table') do
+        within('tbody') do
+          # added 2 new samples
+          assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+          assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+        end
+        within('thead') do
+          assert_text 'METADATA FIELD 2'
+          assert_text 'METADATA FIELD 3'
+          assert_no_text 'METADATA FIELD 1'
+        end
       end
       ### VERIFY END ###
     end
