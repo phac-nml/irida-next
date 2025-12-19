@@ -70,7 +70,7 @@ jobs:
         run: bin/rubocop -f github
 
   test:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
 
     services:

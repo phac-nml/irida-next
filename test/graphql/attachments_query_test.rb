@@ -156,6 +156,49 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal 'none', attachments[1]['metadata']['compression']
   end
 
+  test 'project attachments query applies a default order of created_at asc' do
+    project = projects(:project1)
+    result = IridaSchema.execute(ATTACHMENTS_PROJECT_QUERY, context: { current_user: @user },
+                                                            variables: { puid: project.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['project']
+
+    assert_not_empty data, 'project type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['nodes']
+
+    attachments = data['attachments']['nodes']
+    assert_equal 2, attachments.count
+
+    created_at_values = attachments.map { |node| node['created_at'] } # rubocop:disable Rails/Pluck
+    assert_equal created_at_values.sort, created_at_values
+  end
+
+  test 'project attachments query applies a default direction of ascending' do
+    project = projects(:project1)
+    result = IridaSchema.execute(ATTACHMENTS_PROJECT_QUERY, context: { current_user: @user },
+                                                            variables: { puid: project.puid,
+                                                                         attachmentOrderBy: { field: 'updated_at' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['project']
+
+    assert_not_empty data, 'project type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['nodes']
+
+    attachments = data['attachments']['nodes']
+    assert_equal 2, attachments.count
+
+    updated_at_values = attachments.map { |node| node['updated_at'] } # rubocop:disable Rails/Pluck
+    assert_equal updated_at_values.sort, updated_at_values
+  end
+
   test 'attachment query on group should work' do
     group = groups(:group_one)
     result = IridaSchema.execute(ATTACHMENTS_GROUP_QUERY, context: { current_user: @user },
@@ -183,6 +226,49 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal 'none', attachments[0]['node']['metadata']['compression']
     assert_equal 'csv', attachments[1]['node']['metadata']['format']
     assert_equal 'none', attachments[1]['node']['metadata']['compression']
+  end
+
+  test 'group attachments query applies a default order of created_at asc' do
+    group = groups(:group_one)
+    result = IridaSchema.execute(ATTACHMENTS_GROUP_QUERY, context: { current_user: @user },
+                                                          variables: { puid: group.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['group']
+
+    assert_not_empty data, 'group type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['edges']
+
+    attachments = data['attachments']['edges']
+    assert_equal 2, attachments.count
+
+    created_at_values = attachments.map { |edge| edge['node']['created_at'] }
+    assert_equal created_at_values.sort, created_at_values
+  end
+
+  test 'group attachments query applies a default direction of ascending' do
+    group = groups(:group_one)
+    result = IridaSchema.execute(ATTACHMENTS_GROUP_QUERY, context: { current_user: @user },
+                                                          variables: { puid: group.puid,
+                                                                       attachmentOrderBy: { field: 'updated_at' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['group']
+
+    assert_not_empty data, 'group type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['edges']
+
+    attachments = data['attachments']['edges']
+    assert_equal 2, attachments.count
+
+    created_at_values = attachments.map { |edge| edge['node']['created_at'] }
+    assert_equal created_at_values.sort, created_at_values
   end
 
   test 'attachment query should work for uploader access level' do
@@ -240,6 +326,26 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal 'none', attachments[0]['metadata']['compression']
   end
 
+  test 'attachment query applies a default order of created_at asc' do
+    result = IridaSchema.execute(ATTACHMENTS_QUERY, context: { current_user: @user },
+                                                    variables: { puid: @sample.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['sample']
+
+    assert_not_empty data, 'sample type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['nodes']
+
+    attachments = data['attachments']['nodes']
+    assert_equal 2, attachments.count
+
+    created_at_values = attachments.map { |node| node['created_at'] } # rubocop:disable Rails/Pluck
+    assert_equal created_at_values.sort, created_at_values
+  end
+
   test 'attachment query should work with order by' do
     result = IridaSchema.execute(ATTACHMENTS_QUERY, context: { current_user: @user },
                                                     variables: { puid: @sample.puid,
@@ -268,6 +374,27 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal 'none', attachments[0]['metadata']['compression']
     assert_equal 'fastq', attachments[1]['metadata']['format']
     assert_equal 'none', attachments[1]['metadata']['compression']
+  end
+
+  test 'attachment query applies a default direction of ascending' do
+    result = IridaSchema.execute(ATTACHMENTS_QUERY, context: { current_user: @user },
+                                                    variables: { puid: @sample.puid,
+                                                                 attachmentOrderBy: { field: 'filename' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['sample']
+
+    assert_not_empty data, 'sample type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['nodes']
+
+    attachments = data['attachments']['nodes']
+    assert_equal 2, attachments.count
+
+    name_values = attachments.map { |node| node['name'] } # rubocop:disable Rails/Pluck
+    assert_equal name_values.sort, name_values
   end
 
   test 'attachment url query should work' do

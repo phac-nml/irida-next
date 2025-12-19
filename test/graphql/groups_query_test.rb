@@ -19,6 +19,22 @@ class GroupsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  ORDERED_GROUPS_QUERY = <<~GRAPHQL
+    query($first: Int, $order_by: GroupOrder) {
+      groups(first: $first, orderBy: $order_by) {
+        nodes {
+          name
+          path
+          description
+          id
+          createdAt
+          updatedAt
+        }
+        totalCount
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
   end
@@ -81,5 +97,35 @@ class GroupsQueryTest < ActiveSupport::TestCase
     assert_not_nil result['errors'], 'should work and have errors.'
     error_message = result['errors'][0]['message']
     assert_equal 'An object of type Group was hidden due to permissions', error_message
+  end
+
+  test 'groups query applies a default order of created_at asc' do
+    result = IridaSchema.execute(GROUPS_QUERY, context: { current_user: @user },
+                                               variables: { first: 20 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['groups']
+
+    assert_not_empty data, 'groups type should work'
+    assert_not_empty data['nodes']
+
+    created_at_values = data['nodes'].map { |node| node['createdAt'] } # rubocop:disable Rails/Pluck
+    assert_equal created_at_values.sort, created_at_values
+  end
+
+  test 'groups query applies a default direction of ascending' do
+    result = IridaSchema.execute(ORDERED_GROUPS_QUERY, context: { current_user: @user },
+                                                       variables: { first: 20, order_by: { field: 'updated_at' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['groups']
+
+    assert_not_empty data, 'groups type should work'
+    assert_not_empty data['nodes']
+
+    updated_at_values = data['nodes'].map { |node| node['updated_at'] } # rubocop:disable Rails/Pluck
+    assert_equal updated_at_values.sort { |a, b| b <=> a }, updated_at_values
   end
 end

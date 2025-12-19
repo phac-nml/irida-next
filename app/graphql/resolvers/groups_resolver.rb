@@ -13,7 +13,7 @@ module Resolvers
     argument :order_by, Types::GroupOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
     def resolve(filter:, order_by:)
       groups = authorized_scope Group, type: :relation

@@ -7,7 +7,25 @@ module Connections
   # It extends the GraphQL::Pagination::Connection class to provide custom pagination logic.
   # It supports both forward and backward pagination using `first`, `last`, `after`, and `before` arguments.
   # It also allows sorting based on specified fields and directions.
-  class ActiveRecordCursorPaginateConnection < GraphQL::Pagination::Connection # rubocop:disable GraphQL/ObjectDescription
+  class ActiveRecordCursorPaginateConnection < GraphQL::Pagination::Connection # rubocop:disable GraphQL/ObjectDescription,Metrics/ClassLength
+    # @return [String, nil] the client-provided cursor. `""` and `"null"` is treated as `nil`.
+    def before
+      if defined?(@before)
+        @before
+      else
+        @before = ['', 'null'].include?(@before_value) ? nil : @before_value
+      end
+    end
+
+    # @return [String, nil] the client-provided cursor. `""` and `"null"` is treated as `nil`.
+    def after
+      if defined?(@after)
+        @after
+      else
+        @after = ['', 'null'].include?(@after_value) ? nil : @after_value
+      end
+    end
+
     def initialize(items, **args)
       super
 
@@ -35,6 +53,8 @@ module Connections
       else
         records
       end
+    rescue ActiveRecordCursorPaginate::InvalidCursorError => e
+      raise GraphQL::ExecutionError, e.message
     end
 
     # Check if there is a previous page of results.
@@ -68,6 +88,7 @@ module Connections
         paginator = items.cursor_paginate
 
         set_order(paginator)
+        set_nullable_columns(paginator)
         set_limit(paginator)
 
         if after.present?
@@ -80,19 +101,28 @@ module Connections
       end
     end
 
-    # Set the order for the paginator based on the provided order arguments.
+    # Set the order for the paginator based on the order_values present in the ActiveRecord query.
     # @param paginator [ActiveRecordCursorPaginate::Paginator] The paginator to set the order for.
     # @return [void]
-    def set_order(paginator) # rubocop:disable Metrics/AbcSize,Naming/AccessorMethodName
-      paginator.order = if arguments.key?(:order_by) && arguments[:order_by].present?
-                          if arguments[:order_by].direction.present?
-                            { arguments[:order_by].field => resolve_direction(arguments[:order_by].direction.to_sym) }
-                          else
-                            { arguments[:order_by].field => resolve_direction(:asc) }
-                          end
-                        else
-                          { created_at: resolve_direction(:asc) }
-                        end
+    def set_order(paginator) # rubocop:disable Naming/AccessorMethodName,Metrics/AbcSize
+      paginator.order = items.order_values.to_h do |order|
+        if order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation == items.table
+          [order.expr.name, resolve_direction(order.direction)]
+        elsif order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation != items.table
+          [Arel.sql("#{order.expr.relation.name}.#{order.expr.name}"), resolve_direction(order.direction)]
+        else
+          [order.expr, resolve_direction(order.direction)]
+        end
+      end
+    end
+
+    # Set the nullable columns for the paginator based on the order_values present in the ActiveRecord query.
+    # @param paginator [ActiveRecordCursorPaginate::Paginator] The paginator to set the nullable columns for.
+    # @return [void]
+    def set_nullable_columns(paginator) # rubocop:disable Naming/AccessorMethodName
+      paginator.nullable_columns = items.order_values.map do |order|
+        order.expr if order.expr.is_a?(Arel::Nodes::InfixOperation)
+      end.compact
     end
 
     # Determine the direction of sorting based on pagination arguments
