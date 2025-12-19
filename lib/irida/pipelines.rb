@@ -144,8 +144,20 @@ module Irida
       data = {}
       data[etag_type] = current_file_etag
 
-      File.open(status_file_location, 'w') { |output_file| output_file << data.to_json }
+      update_status_file(status_file_location, data)
       false
+    end
+
+    def update_status_file(status_file_location, new_data)
+      if File.exist?(status_file_location)
+        status_file = File.read(status_file_location)
+        data = JSON.parse(status_file)
+        data_to_write = data.merge(new_data).to_json
+      else
+        data_to_write = new_data.to_json
+      end
+
+      File.open(status_file_location, 'w') { |output_file| output_file << data_to_write }
     end
 
     # File etag if it currently exists, false otherwise
