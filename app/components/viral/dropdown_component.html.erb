@@ -1,9 +1,4 @@
-<div
-  class="flex max-sm:grow"
-  data-controller="viral--dropdown"
-  data-viral--dropdown-skidding-value="<%= skidding %>"
-  data-viral--dropdown-distance-value="<%= distance %>"
->
+<div class="flex max-sm:grow" data-controller="viral--dropdown">
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
       <%= pathogen_icon(

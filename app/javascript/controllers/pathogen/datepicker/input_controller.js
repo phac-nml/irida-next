@@ -91,8 +91,6 @@ export default class extends Controller {
         {
           placement: "top",
           triggerType: "none", // handle via handleDatepickerInputFocus instead
-          offsetSkidding: 0,
-          offsetDistance: 10,
           delay: 300,
           onShow: () => {
             this.datepickerInputTarget.setAttribute("aria-expanded", "true");
