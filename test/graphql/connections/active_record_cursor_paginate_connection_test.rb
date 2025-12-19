@@ -145,4 +145,26 @@ class ActiveRecordCursorPaginateConnectionTest < ActiveSupport::TestCase
     expected_records = Sample.order(created_at: :asc).limit(5).to_a
     assert_equal expected_records, connection.nodes
   end
+
+  test 'after returns nil when after is "null"' do
+    items = Sample.order(created_at: :asc)
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5, after: 'null',
+             max_page_size: 25, default_page_size: 10,
+             arguments: {}
+    )
+
+    assert_nil connection.after
+  end
+
+  test 'before returns nil when before is "null"' do
+    items = Sample.order(created_at: :asc)
+    connection = Connections::ActiveRecordCursorPaginateConnection.new(
+      items, field: 'items', first: 5, before: 'null',
+             max_page_size: 25, default_page_size: 10,
+             arguments: {}
+    )
+
+    assert_nil connection.before
+  end
 end
