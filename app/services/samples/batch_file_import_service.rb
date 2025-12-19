@@ -151,10 +151,10 @@ module Samples
 
       metadata = {}
       @metadata_fields.each do |metadata_field|
-        metadata[metadata_field] = data[metadata_field]
+        formatted_metadata_field = metadata_field.strip
+        metadata[formatted_metadata_field] = data[formatted_metadata_field]
       end
       metadata.compact!
-
       metadata
     end
 
