@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Validator for advanced search group validator
-class AdvancedSearchGroupValidator < AdvancedSearchGroupValidatorBase
+# Validator for advanced search groups in Sample queries.
+class Sample::AdvancedSearchGroupValidator < AdvancedSearch::GroupValidator # rubocop:disable Style/ClassAndModuleChildren
   private
 
   def allowed_fields

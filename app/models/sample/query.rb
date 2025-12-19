@@ -15,7 +15,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   query_for Sample
   filter_by :project_id, ids: :project_ids
-  validates_with AdvancedSearchGroupValidator
+  validates_with Sample::AdvancedSearchGroupValidator
 
   private
 

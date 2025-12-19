@@ -19,7 +19,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   query_for WorkflowExecution
   filter_by :namespace_id, ids: :namespace_ids
-  validates_with WorkflowExecutionAdvancedSearchGroupValidator
+  validates_with WorkflowExecution::AdvancedSearchGroupValidator
 
   private
 

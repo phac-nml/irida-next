@@ -24,7 +24,7 @@ class WorkflowExecution::SearchGroupTest < ActiveSupport::TestCase # rubocop:dis
   end
 
   test 'conditions_attributes= parses nested attributes when creating group' do
-    # NOTE: conditions_attributes= is typically called from the AdvancedSearchable concern
+    # NOTE: conditions_attributes= is typically called from the AdvancedSearch::Form concern
     # when creating groups. Direct usage works differently due to ActiveModel::Attributes
     group = WorkflowExecution::SearchGroup.new
     attributes = {
