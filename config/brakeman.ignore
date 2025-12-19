@@ -22,6 +22,29 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "a6bbb50d60fb000bc3b906f3c66bb03ea40b1f944604862963d528e6f15a9df8",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/graphql/connections/active_record_cursor_paginate_connection.rb",
+      "line": 110,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{order.expr.relation.name}.#{order.expr.name}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Connections::ActiveRecordCursorPaginateConnection",
+        "method": "set_order"
+      },
+      "user_input": "order.expr.relation.name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
     }
   ],
   "brakeman_version": "7.1.1"
