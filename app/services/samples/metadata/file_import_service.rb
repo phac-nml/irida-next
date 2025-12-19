@@ -70,8 +70,7 @@ module Samples
                   else
                     @headers
                   end
-        headers.map!(&:strip)
-        headers
+        strip_headers(headers)
       end
 
       def process_sample_metadata_row(sample_id, metadata)
