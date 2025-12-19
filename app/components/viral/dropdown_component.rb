@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles, :prefix
+    attr_reader :label, :icon_name, :caret, :trigger, :tooltip, :styles, :prefix
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -36,8 +36,6 @@ module Viral
     # @param icon [String] Optional icon name
     # @param caret [Boolean] Show dropdown caret icon
     # @param trigger [Symbol] :click or :hover (default :click)
-    # @param skidding [Integer] Popper.js skidding offset
-    # @param distance [Integer] Popper.js distance offset
     # @param styles [Hash] Custom styles for dropdown/button
     # @param action_link [Boolean] Use as action button
     # @param action_link_value [Object] Value for action button
@@ -52,12 +50,10 @@ module Viral
 
     # 🏷️ Set basic attributes from params
     def set_basic_attributes
-      @distance = @params[:distance] || 10
       @styles = (@params[:styles] || {}).with_indifferent_access
       @label = @params[:label]
       @icon_name = @params[:icon]
       @caret = @params[:caret]
-      @skidding = @params[:skidding] || 0
       @action_link = @params[:action_link]
       @action_link_value = @params[:action_link_value]
       @trigger = TRIGGER_MAPPINGS.fetch(

@@ -365,8 +365,6 @@ export default class Select2Controller extends Controller {
       this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
         placement: "bottom",
         triggerType: "click",
-        offsetSkidding: 0,
-        offsetDistance: 10,
         delay: 300,
         onShow: () => {
           this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
