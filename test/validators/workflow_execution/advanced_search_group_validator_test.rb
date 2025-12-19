@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class WorkflowExecutionAdvancedSearchGroupValidatorTest < ActiveSupport::TestCase
+class WorkflowExecution::AdvancedSearchGroupValidatorTest < ActiveSupport::TestCase # rubocop:disable Style/ClassAndModuleChildren
   setup do
     @namespace = groups(:group_one)
   end

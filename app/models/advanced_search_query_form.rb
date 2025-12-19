@@ -16,10 +16,10 @@ class AdvancedSearchQueryForm
   include ActiveModel::Attributes
   include Pagy::Backend
 
-  include AdvancedSearchable
-  include AdvancedSearchConditions
-  include AdvancedSearchConditionDispatcher
-  include AdvancedSearchQuery
+  include AdvancedSearch::Form
+  include AdvancedSearch::Operators
+  include AdvancedSearch::Filtering
+  include AdvancedSearch::Querying
 
   prepend SortableQuery
 
