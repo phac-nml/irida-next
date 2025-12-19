@@ -114,6 +114,7 @@ export default class extends Controller {
         { once: true },
       );
       this.show();
+      this.#focusMenuItem(this.menuTarget);
     } else {
       this.show();
       this.#focusMenuItem(menuItems.at(index));

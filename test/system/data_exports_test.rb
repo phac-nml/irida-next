@@ -1664,8 +1664,8 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
-    assert_selector 'button[disabled]',
-                    text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.workflow_executions.actions_dropdown.create_export')
     click_button I18n.t('shared.workflow_executions.actions_dropdown.create_export')
 
     within 'dialog[open].dialog--size-lg' do
