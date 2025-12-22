@@ -69,7 +69,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     respond_to do |format|
       @updated = Groups::UpdateService.new(@group, current_user, group_params).execute
       if @updated
@@ -108,7 +108,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     Groups::DestroyService.new(@group, current_user).execute
     if @group.deleted?
       flash[:success] = t('.success', group_name: @group.name)
-      redirect_to dashboard_groups_path(format: :html)
+      redirect_to dashboard_groups_path
     else
       flash[:error] = error_message(@group)
       redirect_to group_path(@group)
@@ -163,7 +163,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def authorized_namespaces
     @authorized_namespaces = authorized_scope(Namespace,
-                                              type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
+                                              type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name)
   end
 
   def tab
