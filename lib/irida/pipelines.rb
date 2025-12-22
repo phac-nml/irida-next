@@ -38,6 +38,32 @@ module Irida
       register_pipelines
     end
 
+    def pipelines(type = 'available')
+      case type
+      when 'executable'
+        @pipelines.select { |_key, pipeline| pipeline.executable? }
+      when 'automatable'
+        @pipelines.select { |_key, pipeline| pipeline.automatable? && pipeline.executable? }
+      else
+        @pipelines
+      end
+    end
+
+    def find_pipeline_by(pipeline_id, version)
+      pipeline = @pipelines["#{pipeline_id}_#{version}"]
+
+      return pipeline unless pipeline.nil?
+
+      Pipeline.new(pipeline_id,
+                   UNKNOWN_PIPELINE_ENTRY,
+                   { 'name' => version }.merge(UNKNOWN_PIPELINE_VERSION),
+                   nil,
+                   nil,
+                   unknown: true)
+    end
+
+    private
+
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
     def register_pipelines
@@ -47,28 +73,29 @@ module Irida
         entry['versions'].each do |version|
           next if @pipelines.key?("#{pipeline_id}_#{version['name']}")
 
-          uri = get_uri_from_entry(entry, pipeline_id)
-          could_not_update = false
-          begin
-            nextflow_schema_location = prepare_schema_download(uri, version, 'nextflow_schema')
-            schema_input_location = prepare_schema_download(uri, version, 'schema_input')
-          rescue PipelinesInvalidUrlException => e
-            raise e if e.code == '503' # re-raise error to force crash
+          pipeline = create_pipeline(pipeline_id, entry, version)
+          @pipelines["#{pipeline_id}_#{version['name']}"] = pipeline unless pipeline.nil?
+        end
+      end
+    end
 
-            if e.previous_etag_exists # create error and mark pipeline as non executable
-              Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
-              nextflow_schema_location = nil
-              schema_input_location = nil
-              could_not_update = true
-            else # create error and skip this pipeline
-              Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
-              next
-            end
-          end
+    def create_pipeline(pipeline_id, entry, version) # rubocop:disable Metrics/MethodLength
+      uri = get_uri_from_entry(entry, pipeline_id)
+      begin
+        nextflow_schema_location = prepare_schema_download(uri, version, 'nextflow_schema')
+        schema_input_location = prepare_schema_download(uri, version, 'schema_input')
 
-          pipeline = Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
-          pipeline.executable = false if could_not_update
-          @pipelines["#{pipeline_id}_#{version['name']}"] = pipeline
+        Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+      rescue PipelinesInvalidUrlException => e
+        raise e if e.code == '503' # re-raise error to force crash
+
+        if e.previous_etag_exists # log error and mark pipeline as non executable
+          Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
+          version['executable'] = false
+          Pipeline.new(pipeline_id, entry, version, nil, nil)
+        else # log error and skip this pipeline
+          Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
+          nil
         end
       end
     end
@@ -83,6 +110,16 @@ module Irida
       raise PipelinesJsonFormatException, "Exception parsing #{path}: #{errors}" unless errors.empty?
 
       data
+    end
+
+    def get_uri_from_entry(entry, pipeline_id)
+      uri = URI.parse(entry['url'])
+
+      unless uri.scheme == 'https' && uri.host == 'github.com'
+        Rails.logger.warn("Pipeline with id '#{pipeline_id}' specifies a url not hosted on 'https://github.com'")
+      end
+
+      uri
     end
 
     # Sets up the file names, paths, and urls to be used
@@ -101,25 +138,15 @@ module Irida
       schema_location =
         Rails.root.join(pipeline_schema_files_path, filename)
 
-      write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
+      write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, type)
 
       schema_location
     end
 
-    def get_uri_from_entry(entry, pipeline_id)
-      uri = URI.parse(entry['url'])
-
-      unless uri.scheme == 'https' && uri.host == 'github.com'
-        Rails.logger.warn("Pipeline with id '#{pipeline_id}' specifies a url not hosted on 'https://github.com'")
-      end
-
-      uri
-    end
-
     # Create directory if it doesn't exist and write the schema file unless the resource etag matches
     # the currently stored resource etag
-    def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
-      dir = Rails.root.join(pipeline_schema_files_path, filename).dirname
+    def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, type)
+      dir = Rails.root.join(pipeline_schema_files_path)
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       return if resource_etag_exists(schema_file_url, pipeline_schema_files_path, type)
@@ -134,17 +161,14 @@ module Irida
     def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Naming/PredicateMethod
       status_file_location = Rails.root.join(status_file_location, @pipeline_schema_status_file)
 
-      # File etag if it currently exists, false otherwise
+      # File etag if it currently exists, nil otherwise
       existing_etag = get_existing_etag(status_file_location, etag_type)
       # File currently at pipeline url
-      current_file_etag = fetch_resource_etag(resource_url, existing_etag != false)
+      current_file_etag = fetch_resource_etag(resource_url, !existing_etag.nil?)
 
       return true if current_file_etag == existing_etag
 
-      data = {}
-      data[etag_type] = current_file_etag
-
-      update_status_file(status_file_location, data)
+      update_status_file(status_file_location, { etag_type.to_s => current_file_etag })
       false
     end
 
@@ -167,7 +191,7 @@ module Irida
         data = JSON.parse(status_file)
         return data[etag_type] if data.key?(etag_type) && data[etag_type].present?
       end
-      false
+      nil
     end
 
     # Get the etag from headers which will be used to check if newer
@@ -201,30 +225,6 @@ module Irida
 
         resp.to_hash
       end
-    end
-
-    def pipelines(type = 'available')
-      case type
-      when 'executable'
-        @pipelines.select { |_key, pipeline| pipeline.executable? }
-      when 'automatable'
-        @pipelines.select { |_key, pipeline| pipeline.automatable? && pipeline.executable? }
-      else
-        @pipelines
-      end
-    end
-
-    def find_pipeline_by(pipeline_id, version)
-      pipeline = @pipelines["#{pipeline_id}_#{version}"]
-
-      return pipeline unless pipeline.nil?
-
-      Pipeline.new(pipeline_id,
-                   UNKNOWN_PIPELINE_ENTRY,
-                   { 'name' => version }.merge(UNKNOWN_PIPELINE_VERSION),
-                   nil,
-                   nil,
-                   unknown: true)
     end
   end
 end
