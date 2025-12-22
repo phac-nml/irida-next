@@ -26,7 +26,6 @@ export default class Select2Controller extends Controller {
   #itemSelected = false;
   #cachedInputValue = "";
   #currentItemIndex = -1;
-  #dropdown = null;
   #boundHandlers = {};
 
   static #KEY_CODES = {
@@ -38,20 +37,31 @@ export default class Select2Controller extends Controller {
     END: "End",
   };
 
+  initialize() {
+    this.#boundHandlers.dropdownFocusOut =
+      this.#handleDropdownFocusOut.bind(this);
+    this.#boundHandlers.inputClick = this.#handleInputClick.bind(this);
+  }
+
   connect() {
     try {
       this.#validateTargets();
-      this.#initializeDropdown();
       this.#setDefaultSelection();
 
-      this.#boundHandlers.dropdownFocusOut =
-        this.#handleDropdownFocusOut.bind(this);
       this.dropdownTarget.addEventListener(
         "focusout",
         this.#boundHandlers.dropdownFocusOut,
       );
+      this.dropdownTarget.style.position = "fixed";
+      this.dropdownTarget.style.positionAnchor = `--anchor-${this.inputTarget.id}`;
+      this.dropdownTarget.classList.add("anchor");
 
       // Accessibility: set ARIA attributes
+      this.inputTarget.addEventListener(
+        "click",
+        this.#boundHandlers.inputClick,
+      );
+      this.inputTarget.style.anchorName = `--anchor-${this.inputTarget.id}`;
       this.inputTarget.setAttribute("role", "combobox");
       this.inputTarget.setAttribute("aria-autocomplete", "list");
       this.inputTarget.setAttribute("aria-expanded", "false");
@@ -59,6 +69,7 @@ export default class Select2Controller extends Controller {
         "aria-controls",
         this.scrollerTarget.id || "select2-listbox",
       );
+
       this.scrollerTarget.setAttribute("role", "listbox");
       this.scrollerTarget.id = this.scrollerTarget.id || "select2-listbox";
       this.itemTargets.forEach((item, idx) => {
@@ -81,10 +92,13 @@ export default class Select2Controller extends Controller {
           this.#boundHandlers.dropdownFocusOut,
         );
       }
-      if (this.#dropdown) {
-        this.#dropdown.hide();
-        this.#dropdown = null;
+      if (this.#boundHandlers.inputClick) {
+        this.inputTarget.removeEventListener(
+          "click",
+          this.#boundHandlers.inputClick,
+        );
       }
+      this.#hide();
     } catch (error) {
       this.#handleError(error, "disconnect");
     }
@@ -119,7 +133,7 @@ export default class Select2Controller extends Controller {
       if (selectedItemData) {
         const { value, label } = selectedItemData;
         this.#updateSelection(value, label);
-        if (this.#dropdown) this.#dropdown.hide();
+        this.#hide();
         this.inputTarget.focus();
       } else {
         // If no valid item was determined (edge case or unexpected state),
@@ -162,7 +176,7 @@ export default class Select2Controller extends Controller {
           break;
         case Select2Controller.#KEY_CODES.ENTER:
           if (this.#currentItemIndex < 0) {
-            if (this.#dropdown) this.#dropdown.show();
+            this.#show();
           } else {
             this.select(event);
           }
@@ -175,8 +189,7 @@ export default class Select2Controller extends Controller {
 
   showDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.show();
-      this.inputTarget.setAttribute("aria-expanded", "true");
+      this.#show();
     } catch (error) {
       this.#handleError(error, "showDropdown");
     }
@@ -184,8 +197,7 @@ export default class Select2Controller extends Controller {
 
   hideDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
-      this.inputTarget.setAttribute("aria-expanded", "false");
+      this.#hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -215,9 +227,7 @@ export default class Select2Controller extends Controller {
       this.#updateAriaActiveDescendant();
 
       if (visibleItemCount > 0) {
-        if (this.#dropdown && !this.#dropdown.isVisible()) {
-          this.#dropdown.show();
-        }
+        this.#show();
         this.emptyTarget.classList.add("hidden");
         this.scrollerTarget.scrollTop = 0;
       } else {
@@ -265,7 +275,7 @@ export default class Select2Controller extends Controller {
 
   #resetInput() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      this.#hide();
       if (this.#cachedInputValue) {
         this.hiddenTarget.value = this.#cachedInputValue;
         this.#setInputTargetValueFromCache();
@@ -355,29 +365,22 @@ export default class Select2Controller extends Controller {
     }
   }
 
-  #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
-        placement: "bottom",
-        triggerType: "click",
-        delay: 300,
-        onShow: () => {
-          this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
-          this.inputTarget.setAttribute("aria-expanded", "true");
-        },
-        onHide: () => {
-          this.inputTarget.setAttribute("aria-expanded", "false");
-          if (!this.#itemSelected) this.#setInputTargetValueFromCache();
-        },
-      });
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+  #isVisible() {
+    return !this.dropdownTarget.classList.contains("hidden");
+  }
+
+  #show() {
+    this.dropdownTarget.removeAttribute("aria-hidden");
+    this.dropdownTarget.classList.remove("hidden");
+    this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
+    this.inputTarget.setAttribute("aria-expanded", "true");
+  }
+
+  #hide() {
+    this.dropdownTarget.setAttribute("aria-hidden", "true");
+    this.dropdownTarget.classList.add("hidden");
+    this.inputTarget.setAttribute("aria-expanded", "false");
+    if (!this.#itemSelected) this.#setInputTargetValueFromCache();
   }
 
   #setDefaultSelection() {
@@ -407,10 +410,18 @@ export default class Select2Controller extends Controller {
   #handleDropdownFocusOut(event) {
     try {
       if (!this.dropdownTarget.contains(event.relatedTarget)) {
-        if (this.#dropdown) this.#dropdown.hide();
+        this.#hide();
       }
     } catch (error) {
       this.#handleError(error, "handleDropdownFocusOut");
+    }
+  }
+
+  #handleInputClick() {
+    if (this.#isVisible()) {
+      this.#hide();
+    } else {
+      this.#show();
     }
   }
 
