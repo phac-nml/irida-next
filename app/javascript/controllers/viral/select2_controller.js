@@ -358,6 +358,16 @@ export default class Select2Controller extends Controller {
     const container = this.scrollerTarget;
     const containerRect = container.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
+    const dialog = item.closest("dialog");
+    if (dialog) {
+      if (
+        itemRect.top < 0 ||
+        itemRect.top + itemRect.height > dialog.offsetHeight
+      ) {
+        const dialogContents = dialog.querySelector(".dialog--section");
+        dialogContents.scrollBy(0, itemRect.top);
+      }
+    }
     if (itemRect.bottom > containerRect.bottom) {
       container.scrollTop += itemRect.bottom - containerRect.bottom;
     } else if (itemRect.top < containerRect.top) {
@@ -374,6 +384,7 @@ export default class Select2Controller extends Controller {
     this.dropdownTarget.classList.remove("hidden");
     this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
     this.inputTarget.setAttribute("aria-expanded", "true");
+    this.scrollerTarget.focus();
   }
 
   #hide() {
