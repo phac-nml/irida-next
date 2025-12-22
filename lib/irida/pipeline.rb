@@ -5,7 +5,7 @@ module Irida
   class Pipeline # rubocop:disable Metrics/ClassLength
     attr_accessor :pipeline_id, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
-                  :default_params, :default_workflow_params
+                  :default_params, :default_workflow_params, :settings
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
@@ -25,6 +25,7 @@ module Irida
       @executable = version['executable'].nil? || version['executable']
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
+      @settings = settings_for_entry(entry, version)
       @default_params = default_params_for_entry
       @default_workflow_params = default_workflow_params_for_entry
       @unknown = unknown
@@ -88,7 +89,117 @@ module Irida
       sample_sheet['items']['properties'][property_name]['pattern']
     end
 
+    def estimated_cost_formula(sample_count)
+      cost = @settings.fetch('estimated_cost_formula', nil)
+
+      return nil if cost.nil?
+      return cost if cost.is_a?(Integer) || cost.is_a?(Float)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(cost, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.round(2)
+    end
+
+    def status_check_interval
+      @settings.fetch('status_check_interval', 30).to_i
+    end
+
+    def minimum_samples
+      @settings.fetch('min_samples', 0).to_i
+    end
+
+    def maximum_samples
+      @settings.fetch('max_samples', 0).to_i
+    end
+
+    def maximum_run_time(sample_count = 0)
+      max_run_time = @settings.fetch('max_runtime', nil)
+
+      return nil if max_run_time.nil?
+      return max_run_time.to_i if max_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(max_run_time, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    def minimum_run_time(samples_count = 0)
+      min_run_time = @settings.fetch('min_runtime', nil)
+
+      return nil if min_run_time.nil?
+      return min_run_time.to_i if min_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(min_run_time, SAMPLE_COUNT: samples_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    # Calculate time spent in state till now in seconds
+    def state_time_calculation(workflow_execution, state)
+      state_time = state_timestamp(workflow_execution, state)
+
+      # log change version timestamps are in milliseconds
+      return Time.zone.now.to_i - state_time.to_i if state_time
+
+      nil
+    end
+
     private
+
+    def state_timestamp(workflow_execution, state) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      return nil if WorkflowExecution.states[state].nil?
+
+      workflow_executions_table = Arel::Table.new('workflow_executions')
+      id_condition = workflow_executions_table[:id].eq(workflow_execution.id)
+      log_entry = Arel::Table.new('log_entry')
+
+      ts_big_int = timestamp_as_bigint(log_entry)
+      # Timestamp in milliseconds since epoch
+      timestamp_ms = Arel::Nodes::NamedFunction.new(
+        'trunc', [
+          Arel::Nodes::Division.new(ts_big_int, Arel::Nodes::SqlLiteral.new('1000'))
+        ]
+      )
+
+      # Join (lateral join requires Arel.sql)
+      join_sql = Arel.sql(", lateral jsonb_array_elements(workflow_executions.log_data->'h') as log_entry")
+
+      # Construct the query
+      query = workflow_executions_table.where(id_condition).project(timestamp_ms).join(join_sql)
+                                       .where(state_log_entry(
+                                                log_entry, state
+                                              ))
+                                       .order(ts_big_int.asc)&.take(1)
+
+      # Execute the raw sql to get the timestamp on when workflow execution entered state
+      # and then flatten the rows array which is an array of arrays to get the first timestamp
+      ActiveRecord::Base.connection.exec_query(query.to_sql).rows.flatten.first
+    end
+
+    def timestamp_as_bigint(log_entry)
+      Arel::Nodes::InfixOperation.new(
+        '::',
+        Arel::Nodes::Grouping.new(Arel::Nodes::InfixOperation.new('->>', log_entry, Arel::Nodes::Quoted.new('ts'))),
+        Arel::Nodes::SqlLiteral.new('bigint')
+      )
+    end
+
+    def state_log_entry(log_entry, state)
+      # Where condition: (log_entry->'c'->'state')::int = STATE
+      Arel::Nodes::InfixOperation.new(
+        '::',
+        Arel::Nodes::Grouping.new(Arel::Nodes::InfixOperation.new('->',
+                                                                  Arel::Nodes::InfixOperation.new(
+                                                                    '->',
+                                                                    log_entry, Arel::Nodes::Quoted.new('c')
+                                                                  ),
+                                                                  Arel::Nodes::Quoted.new('state'))),
+        Arel::Nodes::SqlLiteral.new('int')
+      ).eq(Arel::Nodes::SqlLiteral.new(WorkflowExecution.states[state].to_s))
+    end
 
     def text_for(value)
       return '' if value.nil?
@@ -144,6 +255,17 @@ module Irida
         )
 
       overrides
+    end
+
+    def settings_for_entry(entry, version)
+      settings = entry['settings'].deep_dup || {}
+
+      settings
+        .deep_merge!(
+          version.key?('settings') ? version['settings'] : {}
+        )
+
+      settings
     end
 
     def samplesheet_schema_overrides_for_entry(entry, version)

@@ -185,6 +185,9 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     declarative (0.0.20)
+    dentaku (3.5.6)
+      bigdecimal
+      concurrent-ruby
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -742,6 +745,7 @@ DEPENDENCIES
   csv
   cuprite
   debug
+  dentaku
   devise (~> 4.9.4)
   erb-formatter (~> 0.7.2)
   faker

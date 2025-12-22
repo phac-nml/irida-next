@@ -3,9 +3,19 @@
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
+    "settings": {
+      "min_runtime": 30,
+      "max_runtime": 150
+    },
     "versions": [
       {
-        "name": "1.0.3"
+        "name": "1.0.3",
+        "settings": {
+          "min_samples": 2,
+          "max_samples": 2,
+          "max_runtime": "(30 * SAMPLE_COUNT) + 5",
+          "status_check_interval": 45
+        }
       },
       {
         "name": "1.0.2",
