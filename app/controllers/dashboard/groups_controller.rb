@@ -13,24 +13,20 @@ module Dashboard
       @q = all_groups.ransack(params[:q])
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)
-      respond_to_format
+
+      respond_to do |format|
+        if expanding_group?
+          format.turbo_stream { expand_group }
+        else
+          format.html
+        end
+      end
     end
 
     private
 
     def render_flat_list
       @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
-    end
-
-    def respond_to_format
-      respond_to do |format|
-        format.html
-        format.turbo_stream { handle_turbo_stream }
-      end
-    end
-
-    def handle_turbo_stream
-      expand_group if expanding_group?
     end
 
     def set_default_sort
