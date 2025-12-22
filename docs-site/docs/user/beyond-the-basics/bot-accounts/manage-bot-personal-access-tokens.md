@@ -48,3 +48,4 @@ To revoke a bot account personal access token within a group:
 3. Click on the **Active Tokens** total link within the row of the bot account personal access token you want to revoke. A list of the active personal access tokens will be displayed.
 4. On the right hand side of the row for the bot account personal access token, click the **Revoke** button.
 5. Confirm that you would like to revoke the bot account personal access token by clicking the **Confirm** button.
+
