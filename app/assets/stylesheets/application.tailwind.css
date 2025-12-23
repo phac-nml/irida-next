@@ -740,3 +740,9 @@ a.pill-focus-reset:focus-visible {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
 }
+
+.anchor {
+  top: anchor(bottom);
+  left: anchor(left);
+  width: anchor-size(width);
+}
