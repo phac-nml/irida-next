@@ -100,11 +100,20 @@ export default class extends Controller {
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
   #samplesheetAttributes;
 
+  // sample data is contained within a nested object, so we'll extract the sample_ids from the object and utilize
+  // allSampleIds array for indexes on the samplesheet table
   #allSampleIds;
+
+  // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames,
+  // which will be contained in fileAttributes
   #fileAttributes;
 
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
+
+  // current sample 'indexes' present on table, mainly required for updating metadata upon header selection
+  #startingIndex;
+  #lastIndex;
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
@@ -351,12 +360,14 @@ export default class extends Controller {
 
   // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
   updateMetadata({ detail: { content } }) {
-    for (const index in content["metadata"]) {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
-        content["metadata"][index],
+    _.merge(this.#samplesheetAttributes, content["metadata"]);
+    for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
+      this.#updateCell(
+        content["property"],
+        this.#allSampleIds[i],
+        "metadata_cell",
+        false,
       );
-      this.#updateCell(content["property"], index, "metadata_cell", false);
     }
     this.#clearPayload();
   }
@@ -364,15 +375,16 @@ export default class extends Controller {
   #loadTableData() {
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
-      const startingIndex = (this.#currentPage - 1) * 5;
-      let lastIndex = startingIndex + 5;
+      this.#startingIndex = (this.#currentPage - 1) * 5;
+      this.#lastIndex = this.#startingIndex + 5;
       if (
         this.#currentPage == this.#lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
       ) {
-        lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
+        this.#lastIndex =
+          (this.#currentSampleIndexes.length % 5) + this.#startingIndex;
       }
-      for (let i = startingIndex; i < lastIndex; i++) {
+      for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
         const sampleId = this.#allSampleIds[this.#currentSampleIndexes[i]];
         const tableRow = this.#generateTableRow();
 
