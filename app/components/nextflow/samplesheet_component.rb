@@ -2,7 +2,7 @@
 
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
-  class SamplesheetComponent < Component
+  class SamplesheetComponent < Component # rubocop:disable Metrics/ClassLength
     attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
@@ -13,12 +13,13 @@ module Nextflow
       @metadata_fields = fields
       @required_properties = schema['items']['required'] || []
       @workflow_params = workflow_params
+      @file_attributes = {}
       extract_properties(schema)
     end
 
     def samples_workflow_executions_attributes
-      samples.each_with_index.to_h do |sample, index|
-        [index, samples_workflow_execution_attributes(sample)]
+      samples.each_with_index.to_h do |sample|
+        [sample.id, samples_workflow_execution_attributes(sample)]
       end
     end
 
@@ -35,20 +36,24 @@ module Nextflow
       @properties.to_h do |name, property|
         case property['cell_type']
         when 'sample_cell'
-          [name, { form_value: sample.puid }]
+          [name, sample.puid]
         when 'sample_name_cell'
-          [name, { form_value: sample.name }]
+          [name, sample.name]
         when 'fastq_cell'
           [name,
-           file_samplesheet_values(sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                                                  property['pattern']))]
+           file_samplesheet_values(
+             sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
+                                                                            property['pattern']), sample.id, name
+           )]
         when 'file_cell'
           [name,
-           file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
+           file_samplesheet_values(
+             sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
+           )]
         when 'metadata_cell'
           [name, metadata_samplesheet_values(sample, name, property)]
         when 'dropdown_cell' || 'input_cell'
-          [name, { form_value: '' }]
+          [name, '']
         end
       end
     end
@@ -63,19 +68,22 @@ module Nextflow
       end
     end
 
-    def file_samplesheet_values(file)
-      { form_value: file.empty? ? '' : file[:global_id],
+    def file_samplesheet_values(file, sample_id, column_name)
+      @file_attributes[sample_id] = {} unless @file_attributes.key?(sample_id)
+      @file_attributes[sample_id][column_name] = {
         filename: if file.empty?
                     I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
                   else
                     file[:filename]
                   end,
-        attachment_id: file.empty? ? '' : file[:id] }
+        attachment_id: file.empty? ? '' : file[:id]
+      }
+      file.empty? ? '' : file[:global_id]
     end
 
     def metadata_samplesheet_values(sample, name, property)
       metadata = sample.metadata.fetch(property.fetch('x-irida-next-selected', name), '')
-      { form_value: metadata.empty? ? '' : metadata }
+      metadata.empty? ? '' : metadata
     end
 
     def extract_properties(schema) # rubocop:disable Metrics/AbcSize
