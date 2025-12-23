@@ -57,9 +57,6 @@ export default class extends Controller {
 
     this.#addCalendarTemplate();
 
-    // Position the calendar
-    this.#initializeDropdown();
-
     this.datepickerInputTarget.addEventListener(
       "focus",
       this.boundHandleDatepickerInputFocus,
@@ -78,44 +75,31 @@ export default class extends Controller {
     this.#calendar = null;
   }
 
-  #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(
-        this.#calendar,
-        this.datepickerInputTarget,
-        {
-          placement: "top",
-          triggerType: "none", // handle via handleDatepickerInputFocus instead
-          delay: 300,
-          onShow: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-            this.#calendar.addEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-          onHide: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-            document.removeEventListener(
-              "keydown",
-              this.boundHandleGlobalKeydown,
-            );
-            this.#calendar.removeEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-        },
-      );
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+  datepickerInputTargetConnected(element) {
+    element.style.anchorName = `--anchor-${this.calendarIdValue}`;
+  }
+
+  #isVisible() {
+    return !this.#calendar.classList.contains("hidden");
+  }
+
+  #show() {
+    this.#calendar.removeAttribute("aria-hidden");
+    this.#calendar.classList.remove("hidden");
+    this.datepickerInputTarget.setAttribute("aria-expanded", "true");
+    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+    this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
+  }
+
+  #hide() {
+    this.#calendar.setAttribute("aria-hidden", "true");
+    this.#calendar.classList.add("hidden");
+    this.datepickerInputTarget.setAttribute("aria-expanded", "false");
+    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+    this.#calendar.removeEventListener(
+      "focusin",
+      this.boundHandleCalendarFocus,
+    );
   }
 
   #setMinDate() {
@@ -140,6 +124,10 @@ export default class extends Controller {
 
       if (!this.#calendar) {
         console.error("Failed to find calendar after appending to DOM");
+      } else {
+        this.#calendar.style.position = "fixed";
+        this.#calendar.style.positionAnchor = `--anchor-${this.calendarIdValue}`;
+        this.#calendar.classList.add("anchor");
       }
     } catch (error) {
       console.error("Error adding calendar template:", error);
@@ -192,8 +180,8 @@ export default class extends Controller {
   }
 
   handleDatepickerInputFocus() {
-    if (!this.#dropdown.isVisible()) {
-      this.#dropdown.show();
+    if (!this.#isVisible()) {
+      this.#show();
     }
   }
 
@@ -212,7 +200,7 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      this.#hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
