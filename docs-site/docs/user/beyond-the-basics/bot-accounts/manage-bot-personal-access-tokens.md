@@ -10,11 +10,11 @@ Personal Access Tokens (PAT) are needed to use the IRIDA Next GraphQL API. See [
 
 Prerequisite:
 
-- You must have at least a **Maintainer** role.
+-  **Maintainer** role (at minimum).
 
-To view bot account personal access tokens within a group:
+To view bot account personal access tokens within a group or project:
 
-1. From the left sidebar, select **Groups** and find your group.
+1. From the left sidebar, select **Groups** and find your group, or **Projects** and find your project.
 2. From the left sidebar, select **Settings > Bot Accounts**.
 3. Click on the **Active Tokens** total link within the row of the bot account personal access token you want to view. A list of the active personal access tokens will be displayed.
 
@@ -22,11 +22,11 @@ To view bot account personal access tokens within a group:
 
 Prerequisite:
 
-- You must have at least a **Maintainer** role.
+- **Maintainer** role (at minimum).
 
-To generate a bot account personal access token within a group:
+To generate a bot account personal access token within a group or project:
 
-1. From the left sidebar, select **Groups** and find your group.
+1. From the left sidebar, select **Groups** and find your group, or **Projects** and find your project.
 2. From the left sidebar, select **Settings > Bot Accounts**.
 3. On the right hand side of the row for the bot account, click the **Generate new token** link.
 4. Enter the token name in the **Name** field.
@@ -39,11 +39,11 @@ To generate a bot account personal access token within a group:
 
 Prerequisite:
 
-- You must have at least a **Maintainer** role.
+- **Maintainer** role (at minimum).
 
-To revoke a bot account personal access token within a group:
+To revoke a bot account personal access token within a group or project:
 
-1. From the left sidebar, select **Groups** and find your group.
+1. From the left sidebar, select **Groups** and find your group, or **Projects** and find your project.
 2. From the left sidebar, select **Settings > Bot Accounts**.
 3. Click on the **Active Tokens** total link within the row of the bot account personal access token you want to revoke. A list of the active personal access tokens will be displayed.
 4. On the right hand side of the row for the bot account personal access token, click the **Revoke** button.
