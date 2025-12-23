@@ -17,8 +17,13 @@ module WorkflowExecutions
 
     def generate_metadata_for_samplesheet
       metadata = {}
-      @samples.each_with_index do |sample, index|
-        metadata[index] = sample.metadata.fetch(@field, '')
+      @samples.each do |sample|
+        metadata[sample.id] = {
+          sample_id: sample.id,
+          samplesheet_params: {
+            "#{@header}": sample.metadata.fetch(@field, '')
+          }
+        }
       end
       metadata
     end
