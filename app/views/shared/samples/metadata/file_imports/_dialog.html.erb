@@ -102,7 +102,11 @@
                         } %>
           </div>
           <% if Flipper.enabled?(:metadata_import_field_selection) %>
-            <div data-metadata--file-import-target="metadataColumns"></div>
+            <div
+              data-metadata--file-import-target="metadataColumns"
+              aria-hidden="true"
+              class="hidden"
+            ></div>
             <template data-metadata--file-import-target="sortableListsTemplate">
               <div class="grid gap-4">
                 <div
