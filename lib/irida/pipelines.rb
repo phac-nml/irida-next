@@ -11,11 +11,11 @@ module Irida
   class Pipelines # rubocop:disable Metrics/ClassLength
     PipelinesJsonFormatException = Class.new StandardError
     class PipelinesInvalidUrlException < StandardError # rubocop:disable Style/Documentation
-      attr_reader :code, :previous_etag_exists
+      attr_reader :code, :previously_fetched
 
-      def initialize(code, previous_etag_exists) # rubocop:disable Lint/MissingSuper
+      def initialize(code, previously_fetched) # rubocop:disable Lint/MissingSuper
         @code = code
-        @previous_etag_exists = previous_etag_exists
+        @previously_fetched = previously_fetched
       end
     end
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
@@ -79,24 +79,22 @@ module Irida
       end
     end
 
-    def create_pipeline(pipeline_id, entry, version) # rubocop:disable Metrics/MethodLength
+    def create_pipeline(pipeline_id, entry, version)
       uri = get_uri_from_entry(entry, pipeline_id)
-      begin
-        nextflow_schema_location = prepare_schema_download(uri, version, 'nextflow_schema')
-        schema_input_location = prepare_schema_download(uri, version, 'schema_input')
+      nextflow_schema_location = prepare_schema_download(uri, version, 'nextflow_schema')
+      schema_input_location = prepare_schema_download(uri, version, 'schema_input')
 
-        Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
-      rescue PipelinesInvalidUrlException => e
-        raise e if e.code == '503' # re-raise error to force crash
+      Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+    rescue PipelinesInvalidUrlException => e
+      raise e if e.code == '503' # re-raise error to force crash
 
-        if e.previous_etag_exists # log error and mark pipeline as non executable
-          Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
-          version['executable'] = false
-          Pipeline.new(pipeline_id, entry, version, nil, nil)
-        else # log error and skip this pipeline
-          Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
-          nil
-        end
+      if e.previously_fetched # log error and mark pipeline as non executable
+        Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
+        version['executable'] = false
+        Pipeline.new(pipeline_id, entry, version, nil, nil)
+      else # log error and skip this pipeline
+        Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
+        nil
       end
     end
 
@@ -196,31 +194,31 @@ module Irida
 
     # Get the etag from headers which will be used to check if newer
     # schema files are required to be downloaded for a pipeline
-    def fetch_resource_etag(resource_url, previous_etag_exists)
+    def fetch_resource_etag(resource_url, previously_fetched)
       url = URI(resource_url)
-      headers = retrieve_headers(url, previous_etag_exists)
+      headers = retrieve_headers(url, previously_fetched)
 
       # Handle Redirects
       if headers['location']
         response_location = headers['location'].join
         url = URI("#{url.scheme}://#{url.host}#{response_location}")
 
-        headers = retrieve_headers(url, previous_etag_exists)
+        headers = retrieve_headers(url, previously_fetched)
       end
 
       headers['etag'].join.scan(/"([^"]*)"/).join
     end
 
     # Get the headers for the resource
-    def retrieve_headers(url, previous_etag_exists)
+    def retrieve_headers(url, previously_fetched)
       request_options = { use_ssl: url.scheme == 'https' }
       Net::HTTP.start(url.host, url.port, request_options) do |http|
         resp = http.head(url.path)
 
         unless resp.code == '200'
-          message = "Url `#{url.path}` returned http `#{resp.code}`"
+          message = "Schema url `#{url.path}` returned http `#{resp.code}`. Previously fetched successfully: #{previously_fetched}" # rubocop:disable Layout/LineLength
           Rails.logger.error(message)
-          raise PipelinesInvalidUrlException.new(resp.code, previous_etag_exists), message
+          raise PipelinesInvalidUrlException.new(resp.code, previously_fetched), message
         end
 
         resp.to_hash
