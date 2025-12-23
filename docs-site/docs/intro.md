@@ -5,8 +5,7 @@ title: Intro
 hide_table_of_contents: true
 ---
 
-IRIDA Next Docs
-===============
+# IRIDA Next Docs
 
 Welcome to the IRIDA Next documentation.
 
