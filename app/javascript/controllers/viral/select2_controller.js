@@ -384,7 +384,6 @@ export default class Select2Controller extends Controller {
     this.dropdownTarget.classList.remove("hidden");
     this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
     this.inputTarget.setAttribute("aria-expanded", "true");
-    this.scrollerTarget.focus();
   }
 
   #hide() {
