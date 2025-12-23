@@ -38,6 +38,8 @@ export default class Select2Controller extends Controller {
   };
 
   initialize() {
+    this.#boundHandlers.boundOnBackgroundMouseDown =
+      this.#onBackgroundMouseDown.bind(this);
     this.#boundHandlers.dropdownFocusOut =
       this.#handleDropdownFocusOut.bind(this);
     this.#boundHandlers.inputClick = this.#handleInputClick.bind(this);
@@ -78,6 +80,12 @@ export default class Select2Controller extends Controller {
         item.setAttribute("aria-selected", "false");
       });
 
+      document.body.addEventListener(
+        "mousedown",
+        this.#boundHandlers.boundOnBackgroundMouseDown,
+        true,
+      );
+
       this.element.setAttribute("data-controller-connected", "true");
     } catch (error) {
       this.#handleError(error, "connect");
@@ -86,6 +94,13 @@ export default class Select2Controller extends Controller {
 
   disconnect() {
     try {
+      if (this.#boundHandlers.boundOnBackgroundMouseDown) {
+        document.body.removeEventListener(
+          "mousedown",
+          this.#boundHandlers.boundOnBackgroundMouseDown,
+          true,
+        );
+      }
       if (this.#boundHandlers.dropdownFocusOut) {
         this.dropdownTarget.removeEventListener(
           "focusout",
@@ -414,6 +429,15 @@ export default class Select2Controller extends Controller {
       }
     } catch (error) {
       this.#handleError(error, "setDefaultSelection");
+    }
+  }
+
+  #onBackgroundMouseDown(event) {
+    if (
+      !this.dropdownTarget.contains(event.target) &&
+      !this.inputTarget.contains(event.target)
+    ) {
+      this.#hide();
     }
   }
 

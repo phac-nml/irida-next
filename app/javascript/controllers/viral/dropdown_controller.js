@@ -2,9 +2,6 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
-  static values = {
-    position: String, //TODO
-  };
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);

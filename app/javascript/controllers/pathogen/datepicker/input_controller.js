@@ -34,19 +34,20 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
-  #dropdown;
-
   #minDate;
+
+  initialize() {
+    this.boundOnBackgroundMouseDown = this.onBackgroundMouseDown.bind(this);
+    this.boundHandleDatepickerInputFocus =
+      this.handleDatepickerInputFocus.bind(this);
+    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
+    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+  }
 
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
-
-    this.boundHandleDatepickerInputFocus =
-      this.handleDatepickerInputFocus.bind(this);
-    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
-    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
   }
@@ -57,6 +58,11 @@ export default class extends Controller {
 
     this.#addCalendarTemplate();
 
+    document.body.addEventListener(
+      "mousedown",
+      this.boundOnBackgroundMouseDown,
+      true,
+    );
     this.datepickerInputTarget.addEventListener(
       "focus",
       this.boundHandleDatepickerInputFocus,
@@ -66,6 +72,11 @@ export default class extends Controller {
   }
 
   disconnect() {
+    document.body.removeEventListener(
+      "mousedown",
+      this.boundOnBackgroundMouseDown,
+      true,
+    );
     this.datepickerInputTarget.removeEventListener(
       "focus",
       this.boundHandleDatepickerInputFocus,
@@ -177,6 +188,15 @@ export default class extends Controller {
   // once the calendar controller connects, share values used by both controllers
   pathogenDatepickerCalendarOutletConnected() {
     this.#shareParamsWithCalendar();
+  }
+
+  onBackgroundMouseDown(event) {
+    if (
+      !this.#calendar.contains(event.target) &&
+      !this.datepickerInputTarget.contains(event.target)
+    ) {
+      this.#hide();
+    }
   }
 
   handleDatepickerInputFocus() {
