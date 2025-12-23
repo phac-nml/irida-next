@@ -4,120 +4,128 @@ id: manage-samples
 title: Manage Samples
 ---
 
-In IRIDA Next samples are stored inside of a project
+In IRIDA Next, samples are stored exclusively within projects. Each sample can have multiple files attached, including sequence data or assembly files. There are no limitations to the file types that can be added to samples. Detailed metadata can also be added to each sample.
 
 ## View Samples
 
 Prerequisite:
 
-- You must have access to the project either through membership, or through a namespace share
+- **Guest** role in the project (at minimum).
 
-To view samples that the project contains:
+**Note:** A user or bot account with the **Uploader** role can only view samples via the API.
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
+To view samples:
 
-## Create Sample
+1. From the left sidebar, select **Projects** or **Groups**.
+2. Select the project containing the samples that you would like to view.
+3. From the left sidebar, select **Samples**.
+4. The **Samples** page will open. If you are within a project, the page shows a list of all samples contained within the project. If you are within a group, the page shows a list of all samples contained within <u>all projects</u> within that group and its subgroups.
+
+Refer to the following sections for information on viewing:
+1. Sample data files
+2. Sample metadata
+
+## Create a Sample
 
 Prerequisites:
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least a **Maintainer** role
+- **Maintainer** role in the project (at minimum).
+
+**Note:** A user or bot account with the **Uploader** role <u>can</u> create samples through the API.
 
 To create a new sample in a project:
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select **New Sample**
-5. Enter the name of the sample in the **Name** field
-6. Enter an optional description for the sample in the **Description** field
-7. Select **Create sample**
+1. From the left sidebar, select **Projects**. You <u>cannot</u> create samples from the group level view.
+2. Select the project that you would like to create a sample in.
+3. From the left sidebar, select **Samples**.
+4. Click **Sample Actions** and select **New Sample** from the drop-down menu.
+5. Enter the name of the sample in the **Name** field.
+6. Enter an optional description for the sample in the **Description** field.
+7. Select **Create sample**.
 
-## Update Sample
+## Edit a Sample Name
 
 Prerequisites:
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least a **Maintainer** role
+- **Maintainer** role in the project (at minimum).
 
-To update sample details:
+**Note:** A user or bot account with the **Uploader** role <u>can</u> create samples through the API.
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select **Edit this sample**
-6. Enter the name of the sample in the **Name** field
-7. Enter an optional description for the sample in the **Description** field
-8. Select **Update sample**
+To edit a sample name or description:
+
+1. From the left sidebar, select **Projects**. You <u>cannot</u> edit samples from the group level view.
+2. Select the project with the sample that you would like to edit.
+3. From the left sidebar, select **Samples**.
+4.	Click on the **SAMPLE PUID** to select the sample.
+5.	Click the **Edit this sample** button.
+6. Enter the name of the sample in the **Name** field.
+7. Enter an optional description for the sample in the **Description** field.
+8. Select **Update sample**.
+
+## Delete a Sample
+Deleting a sample will permanently remove that sample from the project. This action cannot be undone. It is strongly recommended that rather than routinely deleting samples, you create a "Recycling Bin Project" to temporarily store samples destined for deletion. It is recommended that the Recycling Bin Project be reviewed and emptied by a designated individual at regular intervals.
+
+Prerequisites:
+- You must have an **Owner** role in the project.
+
+To delete samples:
+1.	From the left sidebar, select **Projects**. You <u>cannot</u> delete samples when viewing at the group level.
+2.	Select the project with the sample that you would like to delete.
+3.	From the left sidebar, select **Samples**.
+
+To delete a single sample:
+
+4.	Click on the **SAMPLE PUID** to select the sample.
+5.	Select **Remove**.
+6.	In the pop-up window, click the **Remove** button to confirm sample deletion.
+
+To delete multiple samples:
+
+4.	Select the checkboxes beside the samples that you would like to transfer.
+5.	Click **Sample Actions** and select **Delete Samples** from the drop-down menu.
+6.	In the pop-up window, review your samples selected for deletion and click **Confirm**.
+
+
 
 ## Transfer Samples
 
+Transferring a sample will move that sample from its current location to a destination project of your choice. This sample will no longer exist in the original location. All files and metadata associated with the sample at the time of transfer will be conserved in the new location.
+
 Prerequisites:
 
-- If you have a **Maintainer** role, you can only transfer samples to other projects which share a common ancestor to the project from which you are transferring from.
+- **Owner** role in the project you are transferring from.
+- **Maintainer** role (at minimum) in the project you are transferring to.
 
-Otherwise:
-
-- You must have access to the project from which you are transferring samples, and the project into which you are transferring either through membership, or through a namespace share
-- You must have at least an **Owner** role in the project you are transferring from
-- You must have at least a **Maintainer** role in the project you are transferring into
+**Note:** If you have a **Maintainer** role in the project you are transferring from, you <u>can</u> transfer samples to other projects with a shared common ancestor.
 
 To transfer samples into another project:
 
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the checkboxes for the samples that you would like to transfer
-5. Select **Transfer samples**
-6. From the transfer samples pop-up, select the project to which you would like to transfer the samples to, and select **Submit**
+1. From the left sidebar, select **Projects**. You <u>cannot</u> transfer samples when viewing at the group level.
+2. Select the project with the sample that you would like to transfer.
+3. From the left sidebar, select **Samples**.
+4. Select the checkboxes beside the samples that you would like to transfer.
+5. Click **Sample Actions** and select **Transfer Samples** from the drop-down menu.
+6.	In the pop-up window, select the **Project** to transfer samples to and click **Submit**.
+7.	A pop-up window with a progress bar will appear, followed by message indicating the success of the transfer. Click **OK**.
 
-## Clone Samples
+**TIP:** Check out the **Activity** tab on the left sidebar to view a history of transfers and other activities within a group or project.
 
-Prerequisites:
 
-- You must have access to the project from which you are cloning samples, and the project into which you are cloning either through membership, or through a namespace share
-- You must have at least a **Maintainer** role in the project you are cloning from
-- You must have at least a **Maintainer** role in the project you are cloning into
+## Copy Samples
+Copying samples will create a duplicate sample in the destination project of your choice. This duplicate sample will contain all files and metadata associated with the sample at the time of copying.
 
-To clone samples into another project:
-
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the checkboxes for the samples that you would like to clone
-5. Select **Clone samples**
-6. From the clone samples pop-up, select the project to which you would like to clone the samples to, and select **Submit**
-
-## Delete Sample
+**Note:** Any changes made to either the copy or the original sample are unique to that specific sample.
 
 Prerequisites:
+- **Maintainer** role (at minimum) in the project you are copying from.
+- **Maintainer** role (at minimum) in the project you are copying to.
 
-- You must have access to the project either through membership, or through a namespace share
-- You must have at least an **Owner** role
+To copy samples into another project:
 
-To remove a sample:
-
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Select **Remove**
-
-## View Sample History
-
-Prerequisite:
-- You must have at least the Maintainer role for the sample's project.
-- You must be a direct or inherited member of the project's ancestry. Shared groups and their members cannot see the history.
-
-To view a sample's history:
-
-1. From the left sidebar, select **Projects**
-2. Select the project
-3. From the left sidebar, select **Samples**
-4. Select the sample
-5. Click the **History** tab
-
-A new sample version is created each time the sample's information is changed. Clicking a version within the sample's history will display what changes were made to the sample.
+1.	From the left sidebar, select **Projects**. You <u>cannot</u> copy samples when viewing at the group level.
+2.	Select the project with the sample that you would like to copy.
+3.	From the left sidebar, select **Samples**.
+4.	Select the checkboxes beside the sample(s) that you would like to copy.
+5.	Click **Sample Actions** and select **Copy samples** from the drop-down menu.
+6.	In the pop-up window, select the **Project to copy samples to** and click **Submit**.
+7.	A pop-up window with a progress bar will appear, followed by message indicating that the sample(s) copied successfully. Click **OK**.
