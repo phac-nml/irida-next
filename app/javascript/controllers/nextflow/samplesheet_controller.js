@@ -329,33 +329,22 @@ export default class extends Controller {
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
   updateFileData({ detail: { content } }) {
-    content["files"].forEach((file, index) => {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${file["property"]}]`,
-        file["global_id"],
-      );
-
-      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
-      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
-      // via formData (files are stored by globalID in formData)
-      const filename = file["filename"]
+    const sample_id = content["attachable_id"];
+    content["files"].forEach((file) => {
+      this.#fileAttributes[sample_id][file["property"]].attachment_id = file.id;
+      this.#fileAttributes[sample_id][file["property"]].filename = file[
+        "filename"
+      ]
         ? file["filename"]
         : this.noSelectedFileValue;
 
-      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
+      this.#samplesheetAttributes[sample_id]["samplesheet_params"][
         file["property"]
-      ]["filename"] = filename;
-
-      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
-        file["property"]
-      ]["attachment_id"] = file["id"];
-
-      this.#updateCell(
-        file["property"],
-        content["index"],
-        "file_cell",
-        index === 0,
-      );
+      ] = file.global_id;
+      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
+      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
+      // via formData (files are stored by globalID in formData)
+      this.#updateCell(file["property"], sample_id, "file_cell", true);
     });
     this.#clearPayload();
   }
@@ -384,10 +373,7 @@ export default class extends Controller {
         lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
       for (let i = startingIndex; i < lastIndex; i++) {
-        console.log(i);
-        console.log(this.#currentSampleIndexes[i]);
         const sampleId = this.#allSampleIds[this.#currentSampleIndexes[i]];
-        console.log(sampleId);
         const tableRow = this.#generateTableRow();
 
         this.#columnNames.forEach((columnName) => {
@@ -496,8 +482,7 @@ export default class extends Controller {
       "file_selector[pattern]": this.#samplesheetProperties[columnName].pattern,
       "file_selector[property]": columnName,
       "file_selector[selected_id]":
-        this.#samplesheetAttributes[sampleId].samplesheet_params[columnName]
-          .attachment_id,
+        this.#fileAttributes[sampleId][columnName].attachment_id,
     });
 
     // Add required properties
@@ -638,14 +623,14 @@ export default class extends Controller {
   }
 
   // TODO update this from index to sampleId
-  #updateCell(columnName, index, cellType, focusCell) {
-    const cell = document.getElementById(`${index}_${columnName}`);
+  #updateCell(columnName, sampleId, cellType, focusCell) {
+    const cell = document.getElementById(`${sampleId}_${columnName}`);
     if (cell) {
       cell.innerHTML = "";
       if (cellType == "file_cell") {
-        this.#insertFileContent(cell, columnName, index);
+        this.#insertFileContent(cell, columnName, sampleId);
       } else {
-        this.#insertMetadataContent(cell, columnName, index);
+        this.#insertMetadataContent(cell, columnName, sampleId);
       }
       if (focusCell) {
         cell.firstElementChild.focus();
