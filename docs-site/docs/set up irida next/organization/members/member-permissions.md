@@ -25,79 +25,84 @@ A comprehensive list of all permissions and roles is provided below based on **G
 ## Group Level Permissions
 | Action                       | Guest | Uploader | Analyst | Maintainer | Owner |
 | :--------------------------- | :---- | :------- | :------ | :--------- | :---- |
-| Create Group and Subgroups   |       |          |         | ✓          | ✓     |
-| Edit Group and Subgroups     |       |          |         | ✓          | ✓     |
-| Delete Group and Subgroups   |       |          |         |            | ✓     |
-| View Group and Subgroups     | ✓     | ✓ (2)    | ✓       | ✓          | ✓     |
-| Transfer Group and Subgroups |       |          |         |            | ✓     |
-| Add Group Member             |       |          |         | ✓(1)       | ✓     |
-| Edit Group Member            |       |          |         | ✓(1)       | ✓     |
-| Remove Group Member          |       |          |         | ✓(1)       | ✓     |
+| Create Subgroups   |       |          |         | ✓          | ✓     |
+| Edit Group      |       |          |         | ✓          | ✓     |
+| Delete Group    |       |          |         |            | ✓     |
+| View Group      | ✓     | ✓ (1)    | ✓       | ✓          | ✓     |
+| Transfer Group  |       |          |         |            | ✓     |
+| Add Group Member             |       |          |         | ✓(2)       | ✓     |
+| Edit Group Member            |       |          |         | ✓(2)       | ✓     |
+| Remove Group Member          |       |          |         | ✓(2)       | ✓     |
+| Add Bot Account             |       |          |         | ✓          | ✓     |
+| Remove Bot Account         |       |          |         | ✓          | ✓     |
 | View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
 | View Group Files             |       |          | ✓       | ✓          | ✓     |
+| Download Group Files             |       |          | ✓       | ✓          | ✓     |
 | Upload Group Files           |       |          |         | ✓          | ✓     |
-| Remove Group Files           |       |          |         | ✓          | ✓     |
+| Delete Group Files           |       |          |         | ✓          | ✓     |
+| Create Project   |       |          |         | ✓          | ✓     |
 
-1. A user with the **Maintainer** role can only modify members upto and including their role
-2. A user or bot account with the **Uploader** role can only perform these actions via the api
+(1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+(2) A user with the **Maintainer** role can only modify members up to and including their role.
+
 
 
 ## Project Level Permissions
 
-  | Action                              | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :---------------------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
-    | Create Project                      |       |          |         | ✓          | ✓     |
-    | Edit Project                        |       |          |         | ✓          | ✓     |
-    | Delete Project                      |       |          |         |            | ✓     |
-    | Transfer Project                    |       |          |         |            | ✓     |
-    | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
-    | Add Project Member                  |       |          |         | ✓(2)       | ✓     |
-    | Edit Project Member                 |       |          |         | ✓(2)       | ✓     |
-    | Remove Project Member               |       |          |         | ✓(2)       | ✓     |
-    | Add Bot Account                     |       |          |         | ✓          | ✓     |
-    | Remove Bot Account                  |       |          |         | ✓          | ✓     |
-    | Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
-    | View Project History                |       |          |         | ✓          | ✓     |
-    | View Project Files                  |       |          | ✓       | ✓          | ✓     |
-    | Upload Project Files                |       |          |         | ✓          | ✓     |
-    | Remove Project Files                |       |          |         | ✓          | ✓     |
+| Action                               | Guest | Uploader | Analyst | Maintainer | Owner |
+| :---------------------------------- | :---- | -------- | ------- | ---------- | ----- |
+| View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
+| Edit Project                        |       |          |         | ✓          | ✓     |
+| Delete Project                      |       |          |         |            | ✓     |
+| Transfer Project                    |       |          |         |            | ✓     |
+| View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
+| Add Project Member                  |       |          |         | ✓(2)       | ✓     |
+| Edit Project Member                 |       |          |         | ✓(2)       | ✓     |
+| Remove Project Member               |       |          |         | ✓(2)       | ✓     |
+| Add Bot Account                     |       |          |         | ✓          | ✓     |
+| Remove Bot Account                  |       |          |         | ✓          | ✓     |
+| Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
+| View Automated Workflow Executions |       |          | ✓       | ✓          | ✓     |
+| Launch User-launched Workflow Execution |       |          | ✓       | ✓          | ✓     |
+| View User-launched Workflow Executions |       |          | ✓       | ✓          | ✓     |
+| Add Metadata Template                |       |          |         | ✓          | ✓     |
+| Update Metadata Template               |       |          |         | ✓          | ✓     |
+| Delete Metadata Template                |       |          |         | ✓          | ✓     |
+| Use Metadata Template               |       |          |         | ✓          | ✓     |
+| View Project History                |       |          |         | ✓          | ✓     |
+| View Project Files                  |       |          | ✓       | ✓          | ✓     |
+| Download Project Files                  |       |          | ✓       | ✓          | ✓     |
+| Upload Project Files                |       |          |         | ✓          | ✓     |
+| Delete Project Files                |       |          |         | ✓          | ✓     |
 
 
 
-  1. A user or bot account with the **Uploader** role can only perform these actions via the api
-  2. A user with the **Maintainer** role can only modify members upto and including their role
+(1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+(2) A user with the **Maintainer** role can only modify members up to and including their role.
 
-  - Sample Management:
+## Sample Level Permissions
 
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | View Samples          | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
-    | Create Samples        |       | ✓(1)     |         | ✓          | ✓     |
-    | Edit Samples          |       | ✓(1)     |         | ✓          | ✓     |
-    | Delete Samples        |       |          |         |            | ✓     |
-    | Transfer Samples      |       |          |         | ✓(2)       | ✓     |
-    | Clone Samples         |       |          |         | ✓          | ✓     |
-    | Export Samples        |       |          | ✓       | ✓          | ✓     |
-    | View Sample History   |       |          |         | ✓          | ✓     |
+| Action                      | Guest | Uploader | Analyst | Maintainer | Owner |
+| :--------------------------- | :---- | -------- | ------- | ---------- | ----- |
+| View Samples          | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
+| Create Samples        |       | ✓(1)     |         | ✓          | ✓     |
+| Edit Samples          |       | ✓(1)     |         | ✓          | ✓     |
+| Delete Samples        |       |          |         |            | ✓     |
+| Transfer Samples      |       |          |         | ✓(3)       | ✓     |
+| Copy Samples         |       |          |         | ✓          | ✓     |
+| Export Samples        |       |          | ✓       | ✓          | ✓     |
+| View Sample History   |       |          |         | ✓          | ✓     |
+| Upload Sample Files          |       |          |         | ✓          | ✓     |
+| Concatenate Sample Files     |       |          |         | ✓          | ✓     |
+| Download Sample Files        | ✓     |          | ✓       | ✓          | ✓     |
+| Delete Sample Files          |       |          |         | ✓ (4)        | ✓     |
+| View Metadata         | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
+| Add Metadata          |       |          |         | ✓          | ✓     |
+| Update Metadata       |       |          |         | ✓          | ✓     |
+| Import Metadata       |       |          |         | ✓          | ✓     |
+| Delete Metadata       |       |          |         | ✓          | ✓     |
 
-  1. A user or bot account with the **Uploader** role can only perform these actions via the api
-  2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
-
-  - Sample File Management:
-
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | Upload Files          |       |          |         | ✓          | ✓     |
-    | Concatenate Files     |       |          |         | ✓          | ✓     |
-    | Download Files        | ✓     |          | ✓       | ✓          | ✓     |
-    | Delete Files          |       |          |         |            | ✓     |
-
-  - Sample Metadata Mangement:
-
-    | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
-    | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | Add Metadata          |       |          |         | ✓          | ✓     |
-    | Update Metadata       |       |          |         | ✓          | ✓     |
-    | Import Metadata       |       |          |         | ✓          | ✓     |
-    | Delete Metadata       |       |          |         | ✓          | ✓     |
+(1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+(2) A user with the **Maintainer** role can only modify members up to and including their role.
+(3) A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project.
+(4) A user with the **Maintainer** role can only delete files by selecting the “Delete Originals” checkbox when concatenating files.
