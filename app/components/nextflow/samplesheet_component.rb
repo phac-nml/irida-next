@@ -32,6 +32,7 @@ module Nextflow
       }
     end
 
+    # TODO: check most recent file selection
     def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
       @properties.to_h do |name, property|
         case property['cell_type']

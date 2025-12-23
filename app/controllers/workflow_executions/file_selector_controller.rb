@@ -28,7 +28,6 @@ module WorkflowExecutions
         file_selector: [
           :attachable_id,
           :attachable_type,
-          :index,
           :property,
           :selected_id,
           :pattern,
@@ -67,7 +66,7 @@ module WorkflowExecutions
 
     def attachments
       @attachments_params = {
-        index: file_selector_params[:index],
+        attachable_id: file_selector_params[:attachable_id],
         files: []
       }
       property = file_selector_params['property']
