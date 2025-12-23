@@ -3,12 +3,10 @@ sidebar_position: 2
 id: member-permissions
 title: Permissions and Roles
 ---
+##
+When you add a user to a project or group, you assign each member a role. This role determines the actions that members are permitted to perform within IRIDA Next.
 
-When you add a user to a project or group, you assign them a role. The role determines which actions they can take in IRIDA Next.
-
-If you add a user to both a project’s group and the project itself, the higher role is used.
-
-## Roles
+# Roles
 
 The available roles are:
 
@@ -18,18 +16,13 @@ The available roles are:
 - Maintainer
 - Owner
 
-A user assigned the Guest role has the least permissions, and the Owner has the most.
+A user assigned the **Guest** role has the least permissions, and the **Owner** has the most.
 
-The **Uploader** is to be used for api access for the uploader
+# Permissions
 
-All users can create top-level groups and projects.
+A comprehensive list of all permissions and roles is provided below based on **Group**, **Project**, and **Sample** Level.
 
-## Group Members Permissions
-
-Any user can remove themselves from a group, unless they are the last Owner of the group.
-
-The following table lists group permissions available for each role:
-
+## Group Level Permissions
 | Action                       | Guest | Uploader | Analyst | Maintainer | Owner |
 | :--------------------------- | :---- | :------- | :------ | :--------- | :---- |
 | Create Group and Subgroups   |       |          |         | ✓          | ✓     |
@@ -48,15 +41,10 @@ The following table lists group permissions available for each role:
 1. A user with the **Maintainer** role can only modify members upto and including their role
 2. A user or bot account with the **Uploader** role can only perform these actions via the api
 
-## Subgroup permissions
 
-When you add a member to a subgroup where they are also a member of one of the parent groups, they inherit the member role from the parent groups.
+## Project Level Permissions
 
-## Project Members Permissions
-
-  - Project Management:
-
-    | Action                              | Guest | Uploader | Analyst | Maintainer | Owner |
+  | Action                              | Guest | Uploader | Analyst | Maintainer | Owner |
     | :---------------------------------- | :---- | -------- | ------- | ---------- | ----- |
     | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
     | Create Project                      |       |          |         | ✓          | ✓     |
@@ -74,6 +62,7 @@ When you add a member to a subgroup where they are also a member of one of the p
     | View Project Files                  |       |          | ✓       | ✓          | ✓     |
     | Upload Project Files                |       |          |         | ✓          | ✓     |
     | Remove Project Files                |       |          |         | ✓          | ✓     |
+
 
 
   1. A user or bot account with the **Uploader** role can only perform these actions via the api
