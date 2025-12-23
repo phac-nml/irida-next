@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import Dropdown from "utilities/dropdown";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
@@ -39,24 +40,33 @@ export default class extends Controller {
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
+
     this.dropdown = new Dropdown(this.menuTarget, element, {
-      triggerType: "none",
-      offsetSkidding: this.skiddingValue,
-      offsetDistance: this.distanceValue,
-      onShow: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "true");
-        this.menuTarget.setAttribute("aria-hidden", "false");
-        this.menuTarget.removeAttribute("hidden");
-      },
       onHide: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "false");
-        this.menuTarget.setAttribute("aria-hidden", "true");
-        this.menuTarget.setAttribute("hidden", "hidden");
         this.#menuItems(element).forEach((menuitem) => {
           menuitem.setAttribute("tabindex", "-1");
         });
       },
     });
+
+    // this.dropdown = new Dropdown(this.menuTarget, element, {
+    //   triggerType: "none",
+    //   offsetSkidding: this.skiddingValue,
+    //   offsetDistance: this.distanceValue,
+    //   onShow: () => {
+    //     this.triggerTarget.setAttribute("aria-expanded", "true");
+    //     this.menuTarget.setAttribute("aria-hidden", "false");
+    //     this.menuTarget.removeAttribute("hidden");
+    //   },
+    //   onHide: () => {
+    //     this.triggerTarget.setAttribute("aria-expanded", "false");
+    //     this.menuTarget.setAttribute("aria-hidden", "true");
+    //     this.menuTarget.setAttribute("hidden", "hidden");
+    //     this.#menuItems(element).forEach((menuitem) => {
+    //       menuitem.setAttribute("tabindex", "-1");
+    //     });
+    //   },
+    // });
   }
 
   focusOut(event) {
