@@ -46,6 +46,7 @@ A comprehensive list of all permissions and roles is provided below based on **G
 | Create Project       |       |          |         | ✓          | ✓     |
 
 (1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+
 (2) A user with the **Maintainer** role can only modify members up to and including their role.
 
 ## Project Level Permissions
@@ -82,6 +83,7 @@ A comprehensive list of all permissions and roles is provided below based on **G
 - Sample Management:
 
 (1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+
 (2) A user with the **Maintainer** role can only modify members up to and including their role.
 
 ## Sample Level Permissions
@@ -107,6 +109,9 @@ A comprehensive list of all permissions and roles is provided below based on **G
 | Delete Metadata          |       |          |         | ✓          | ✓     |
 
 (1) A user or bot account with the **Uploader** role can only perform these actions via the API.
+
 (2) A user with the **Maintainer** role can only modify members up to and including their role.
+
 (3) A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project.
+
 (4) A user with the **Maintainer** role can only delete files by selecting the “Delete Originals” checkbox when concatenating files.
