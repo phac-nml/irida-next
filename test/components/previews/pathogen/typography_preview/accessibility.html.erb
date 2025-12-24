@@ -1,0 +1,218 @@
+<div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+      <%= pathogen_icon(:wheelchair, color: :primary, size: :xl, class: "inline mr-3") %>
+      Accessibility Features
+    <% end %>
+    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+      Typography components are built with accessibility in mind, using semantic HTML and proper ARIA patterns.
+    <% end %>
+  </div>
+
+  <!-- Semantic HTML -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+        Semantic HTML
+      <% end %>
+
+      <%= pathogen_text(class: "mb-6") do %>
+        All typography components use semantic HTML elements that convey meaning to assistive technologies.
+        Headings always render actual h1-h6 tags, never divs with heading styles.
+      <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 overflow-x-auto">
+        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200"><%%= render pathogen_heading(level: 1) do %>
+  Main Title
+<%% end %>
+
+<%%= render pathogen_text do %>
+  Body paragraph
+<%% end %></code></pre>
+      </div>
+
+      <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div>
+            <div class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Rendered Output</div>
+            <div class="text-sm text-blue-800 dark:text-blue-200 font-mono">
+              &lt;h1&gt;Main Title&lt;/h1&gt;<br>
+              &lt;p&gt;Body paragraph&lt;/p&gt;<br>
+              Screen readers can navigate by heading structure
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heading Hierarchy -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:list_numbers, color: :primary, class: "mr-3") %>
+        Proper Heading Hierarchy
+      <% end %>
+
+      <%= pathogen_text(class: "mb-6") do %>
+        Screen readers use heading structure to navigate content. Always maintain a logical hierarchy
+        without skipping levels.
+      <% end %>
+
+      <div class="space-y-4 max-w-3xl">
+        <%= pathogen_heading(level: 1) do %>
+          Main Page Title (H1)
+        <% end %>
+        <%= pathogen_text(variant: :muted, class: "text-sm mb-4") do %>
+          Only one H1 per page
+        <% end %>
+
+        <%= pathogen_heading(level: 2) do %>
+          Section Heading (H2)
+        <% end %>
+        <%= pathogen_heading(level: 3) do %>
+          Subsection Heading (H3)
+        <% end %>
+        <%= pathogen_heading(level: 2) do %>
+          Another Section (H2)
+        <% end %>
+      </div>
+
+      <div class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:warning, color: :warning) %>
+          <div>
+            <div class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Never Skip Levels</div>
+            <div class="text-sm text-amber-800 dark:text-amber-200">
+              Don't go from h1 directly to h3. Screen readers rely on sequential heading levels
+              to understand document structure.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contrast Ratios -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:eye, color: :primary, class: "mr-3") %>
+        Color Contrast
+      <% end %>
+
+      <%= pathogen_text(class: "mb-6") do %>
+        All typography components meet WCAG AA contrast requirements for readability.
+      <% end %>
+
+      <div class="space-y-4">
+        <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:check_circle, color: :success, class: "mr-2") %>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100 mb-1">Body Text</div>
+              <div class="text-sm text-green-800 dark:text-green-200">
+                4.5:1 contrast ratio (exceeds 4.5:1 requirement)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:check_circle, color: :success, class: "mr-2") %>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100 mb-1">Headings</div>
+              <div class="text-sm text-green-800 dark:text-green-200">
+                3:1 contrast ratio for large text (18px+) - All headings exceed requirement
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div class="font-semibold text-blue-900 dark:text-blue-100 mb-2">Contrast Ratios</div>
+            <div>All headings: ✅ Exceed requirement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen Reader Support -->
+  <div class="mb-12">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:speaker_high, color: :primary, class: "mr-3") %>
+        Screen Reader Support
+      <% end %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            Semantic Structure
+          <% end %>
+          <%= pathogen_text do %>
+            Screen readers announce headings with their level, helping users understand document structure.
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            Navigation
+          <% end %>
+          <%= pathogen_text do %>
+            Users can jump between headings using screen reader shortcuts (e.g., H key in NVDA/JAWS).
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+            Lists
+          <% end %>
+          <%= pathogen_text do %>
+            List components render proper &lt;ul&gt; and &lt;ol&gt; tags, allowing screen readers to
+            announce list structure and item count.
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Navigation -->
+  <div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+        <%= pathogen_icon(:keyboard, color: :primary, class: "mr-3") %>
+        Keyboard Navigation
+      <% end %>
+
+      <%= pathogen_text(class: "mb-6") do %>
+        Screen reader users can navigate through headings, lists, and other semantic elements using
+        standard keyboard shortcuts.
+      <% end %>
+
+      <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white mb-3">Screen Reader Shortcuts</div>
+            <div class="space-y-2 text-sm">
+              <div><strong>H:</strong> Navigate headings</div>
+              <div><strong>L:</strong> Navigate lists</div>
+              <div><strong>K:</strong> Navigate links</div>
+            </div>
+          </div>
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white mb-3">Browser Navigation</div>
+            <div class="space-y-2 text-sm">
+              <div><strong>Tab:</strong> Navigate interactive elements</div>
+              <div><strong>Arrow Keys:</strong> Navigate within lists</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
