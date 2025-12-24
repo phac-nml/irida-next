@@ -742,6 +742,7 @@ a.pill-focus-reset:focus-visible {
 }
 
 .anchor {
+  position: fixed;
   top: anchor(bottom);
   left: anchor(left);
   width: anchor-size(width);
