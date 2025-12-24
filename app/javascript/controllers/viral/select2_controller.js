@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import Dropdown from "utilities/dropdown";
 
 /**
  * Select2Controller
@@ -356,30 +357,14 @@ export default class Select2Controller extends Controller {
   }
 
   #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
-        placement: "bottom",
-        triggerType: "click",
-        offsetSkidding: 0,
-        offsetDistance: 10,
-        delay: 300,
-        onShow: () => {
-          this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
-          this.inputTarget.setAttribute("aria-expanded", "true");
-        },
-        onHide: () => {
-          this.inputTarget.setAttribute("aria-expanded", "false");
-          if (!this.#itemSelected) this.#setInputTargetValueFromCache();
-        },
-      });
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+    this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
+      onShow: () => {
+        this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
+      },
+      onHide: () => {
+        if (!this.#itemSelected) this.#setInputTargetValueFromCache();
+      },
+    });
   }
 
   #setDefaultSelection() {

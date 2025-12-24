@@ -6,23 +6,66 @@
 
 export default class Dropdown {
   constructor(target, trigger, options = {}) {
-    this.target = target;
-    this.trigger = trigger;
-    this.options = options;
-    this.visible = false;
-    this.initialize();
+    this._target = target;
+    this._trigger = trigger;
+    this._options = options;
+    this._visible = false;
+    this._initialize();
   }
 
-  initialize() {
-    console.log("Initializing...");
-    this.target.style.position = "fixed";
-    this.target.style.positionAnchor = `--anchor-${this.target.id}`;
-    this.target.classList.add("anchor");
-    this.trigger.style.anchorName = `--anchor-${this.target.id}`;
+  _initialize() {
+    if (this._target && this._trigger) {
+      this._addStyling();
+      this._setupEventListeners();
+    }
+  }
+
+  _addStyling() {
+    this._target.classList.add("anchor");
+    this._target.style.positionAnchor = `--anchor-${this._target.id}`;
+    this._trigger.style.anchorName = `--anchor-${this._target.id}`;
+  }
+
+  _setupEventListeners() {
+    this._trigger.addEventListener("click", () => {
+      this.toggle();
+    });
+  }
+
+  _setupClickOutsideListener() {
+    document.body.addEventListener(
+      "click",
+      (event) => {
+        this._handleClickOutside(event);
+      },
+      true,
+    );
+  }
+
+  _removeClickOutsideListener() {
+    document.body.removeEventListener(
+      "click",
+      (event) => {
+        this._handleClickOutside(event);
+      },
+      true,
+    );
+  }
+
+  _handleClickOutside(event) {
+    const clickedElement = event.target;
+    if (
+      clickedElement !== this._target &&
+      !this._target.contains(clickedElement) &&
+      !this._trigger.contains(clickedElement) &&
+      this.isVisible()
+    ) {
+      this.hide();
+    }
   }
 
   isVisible() {
-    return this.visible;
+    return this._visible;
   }
 
   toggle() {
@@ -34,24 +77,24 @@ export default class Dropdown {
   }
 
   show() {
-    this.trigger.setAttribute("aria-expanded", "true");
-    this.target.removeAttribute("aria-hidden");
-    this.target.classList.remove("hidden");
-    this.visible = true;
-
-    if (this.options.onShow) {
-      this.options.onShow();
+    this._trigger.setAttribute("aria-expanded", "true");
+    this._target.removeAttribute("aria-hidden");
+    this._target.classList.remove("hidden");
+    this._visible = true;
+    this._setupClickOutsideListener();
+    if (this._options.onShow) {
+      this._options.onShow();
     }
   }
 
   hide() {
-    this.trigger.setAttribute("aria-expanded", "false");
-    this.target.setAttribute("aria-hidden", "true");
-    this.target.classList.add("hidden");
-    this.visible = false;
-
-    if (this.options.onHide) {
-      this.options.onHide();
+    this._trigger.setAttribute("aria-expanded", "false");
+    this._target.setAttribute("aria-hidden", "true");
+    this._target.classList.add("hidden");
+    this._visible = false;
+    this._removeClickOutsideListener();
+    if (this._options.onHide) {
+      this._options.onHide();
     }
   }
 }
