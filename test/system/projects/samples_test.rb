@@ -1401,6 +1401,7 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+
         within 'ul#available-list' do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -1642,6 +1643,36 @@ module Projects
         end
       end
       ### VERIFY END ###
+    end
+
+    test 'verify metadata columns are hidden and unhidden during file selection' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
+      within('#dialog') do
+        # find metadataColumns div container
+        metadata_columns_element = find('div[data-metadata--file-import-target="metadataColumns"]', visible: :all)
+        # verify by default it's hidden and has aria-hidden="true"
+        assert_equal 'true', metadata_columns_element['aria-hidden']
+        assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
+
+        # verify after uploading file, metadata columns are shown and aria-hidden is removed
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
+        assert_not metadata_columns_element['aria-hidden']
+        assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
+
+        # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
+        attach_file 'file_import[file]', nil
+        assert_equal 'true', metadata_columns_element['aria-hidden']
+        assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
+      end
     end
 
     test 'dialog close button is hidden during metadata import' do

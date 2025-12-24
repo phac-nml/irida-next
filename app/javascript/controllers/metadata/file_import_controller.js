@@ -177,7 +177,7 @@ export default class extends Controller {
 
   #hideElement(element) {
     element.classList.add("hidden");
-    element.setAttribute("aria-disabled", "true");
+    element.setAttribute("aria-hidden", "true");
   }
 
   #unhideElement(element) {
