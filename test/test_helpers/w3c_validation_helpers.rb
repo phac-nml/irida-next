@@ -307,6 +307,20 @@ module W3cValidationHelpers
     end
   end
 
+  # Botch fix of W3C validation errors for CSS properties used for anchoring
+  #
+  # The Nu HTML Checker (vnu) may report parse errors for non-standard or
+  # experimental CSS properties such as "position-anchor" and "anchor-name".
+  # These properties are used by our frontend utilities to position dropdowns
+  # and anchors. This routine filters out those specific parse errors so that
+  # the remaining W3C validation errors can still be asserted in tests.
+  #
+  # It behaves like the other "_ignore_*" helpers: removed messages are logged
+  # via Rails.logger.warn when a prefix is provided.
+  #
+  # @param errs [Array<W3CValidators::Message>] errors from @validator.validate_text(...)
+  # @param prefix [String] optional log prefix
+  # @return [Array<W3CValidators::Message>] filtered error array
   def _ignore_anchor_positioning_errors(errs, prefix="")
     removeds = []
     errs.map{ |es|
