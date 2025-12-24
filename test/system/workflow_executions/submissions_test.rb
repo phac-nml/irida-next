@@ -394,7 +394,7 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'div#samplesheet'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
@@ -1110,8 +1110,6 @@ module WorkflowExecutions
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'div#nextflow-spinner'
-        assert_no_selector 'div#nextflow-spinner'
         assert_selector %(input#samplesheet-filter) do |input|
           assert_equal 'inxt_sam_', input['value']
         end
@@ -1329,6 +1327,9 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+        assert_text I18n.t('components.nextflow_component.loading_complete')
+        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 4)
+
         # assert indexes of samples
         within('th[id="0_sample"]') do
           assert_text sample32.puid
@@ -1438,6 +1439,8 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+        assert_text I18n.t('components.nextflow_component.loading_complete')
+        assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
 
         find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
 
@@ -1495,6 +1498,77 @@ module WorkflowExecutions
         assert_no_selector 'input[disabled][value="metadata_8"]'
       end
       ### VERIFY END ###
+    end
+
+    test 'analyst cannot update samples with analysis result' do
+      user = users(:michelle_doe)
+      login_as user
+
+      project = projects(:project1)
+      sample = samples(:sample1)
+      Project.reset_counters(project.id, :samples_count)
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      end
+    end
+
+    test 'cannot update shared samples with analysis results when shared role is analyst' do
+      group = groups(:subgroup_sample_actions)
+      user = users(:subgroup_sample_actions_doe)
+      sample = samples(:sample71)
+
+      login_as user
+
+      visit group_samples_url(group)
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 5, count: 5,
+                                                                                      locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      end
     end
   end
 end

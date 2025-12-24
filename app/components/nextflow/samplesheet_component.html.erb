@@ -1,9 +1,12 @@
-<div class="sample-sheet">
-  <div class="hidden" data-nextflow--samplesheet-target="workflowAttributes">
-    <%= samples_workflow_executions_attributes.to_json %>
-  </div>
-  <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
-    <%= @properties.to_json %>
+<div id="samplesheet">
+  <%= helpers.turbo_frame_tag "sample_attributes" %>
+
+  <div
+    class="hidden"
+    data-nextflow--samplesheet-target="samplesheetProperties"
+    data-properties="<%= @properties.to_json %>"
+  >
+
   </div>
   <div class="flex justify-between mb-2 @max-2xl:flex-col">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t("components.nextflow.samplesheet_component.label") %></label>
@@ -80,11 +83,7 @@
     </div>
   </div>
 
-  <div
-    class="
-      @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
-    "
-  >
+  <div class=" @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink mb-2 ">
     <div class="overflow-x-auto relative">
       <table
         class="
@@ -123,7 +122,7 @@
     class="flex items-center justify-end"
   >
   </div>
-  <div class="hidden" id="samplesheet-payload-container"></div>
+  <%= helpers.turbo_frame_tag "samplesheet-payload-container" %>
 </div>
 
 <template data-nextflow--samplesheet-target="trTemplate">
@@ -197,10 +196,13 @@
       <li><button
           type="button"
           class="
-            flex items-center justify-center h-10 px-4 leading-tight border cursor-default
-            ms-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-700
-            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-e-0 rounded-s-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
@@ -213,7 +215,7 @@
           style="width: 80px;"
           class="
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-900
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
             dark:hover:bg-slate-700 dark:hover:text-white focus-visible:relative
           "
@@ -224,11 +226,13 @@
       </li>
       <li><button
           class="
-            flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
-            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-l-0 rounded-e-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
           type="button"
           data-nextflow--samplesheet-target="nextBtn"
@@ -240,7 +244,7 @@
 </template>
 
 <template data-nextflow--samplesheet-target="metadataHeaderForm">
-  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+  <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
     <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>
