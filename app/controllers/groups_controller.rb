@@ -36,7 +36,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q = all_namespaces.ransack(params[search_key], search_key:)
 
     set_default_sort
-    @pagy, @namespaces = pagy(@q.result.include_route)
+    @pagy, @namespaces = pagy(@q.result.include_route, raise_range_error: true)
   end
 
   def new
@@ -94,7 +94,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
     group_activities = @group.retrieve_group_activity.order(created_at: :desc)
 
-    @pagy, raw_activities = pagy(group_activities, limit: 10)
+    @pagy, raw_activities = pagy(group_activities, limit: 10, raise_range_error: true)
 
     @activities = @group.human_readable_activity(raw_activities)
 

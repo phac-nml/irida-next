@@ -192,7 +192,7 @@ module Projects
     end
 
     test 'accessing samples index on invalid page causes pagy overflow redirect at project level' do
-      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
       get namespace_project_samples_path(@namespace, @project, page: 50)
 
