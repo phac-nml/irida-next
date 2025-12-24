@@ -207,7 +207,12 @@ export default class extends Controller {
     if (cellIndex < 0) {
       elem.focus();
     } else {
-      tabbable(elem)[cellIndex].focus();
+      const focusableRowTargets = tabbable(elem);
+      if (cellIndex < focusableRowTargets.length) {
+        focusableRowTargets[cellIndex].focus();
+      } else {
+        focusableRowTargets[focusableRowTargets.length - 1].focus();
+      }
     }
   }
 
