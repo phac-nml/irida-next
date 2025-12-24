@@ -10,13 +10,18 @@ export default class extends Controller {
 
   initialize() {
     this.boundKeydown = this.keydown.bind(this);
-    this.boundFocusin = this.focusin.bind(this);
   }
 
   connect() {
     this.element.addEventListener("keydown", this.boundKeydown);
-    this.element.addEventListener("focusin", this.boundFocusin);
     this.element.setAttribute("data-controller-connected", "true");
+
+    // Make sure focusable elements are not in the tab order
+    // They will be added back in for the active row
+    this.#setTabIndexOfFocusableElements(this.element, -1);
+
+    this.rowTargets[0].tabIndex = 0;
+    this.#setTabIndexForElementsInRow(this.rowTargets[0], 0);
   }
 
   keydown(event) {
@@ -56,10 +61,14 @@ export default class extends Controller {
     } else if (event.key === "Home") {
       if (this.rowTargets.includes(event.target) || event.ctrlKey) {
         this.#moveToExtremeRow(-1);
+      } else {
+        this.#navigateToExtremeCell(-1);
       }
     } else if (event.key === "End") {
       if (this.rowTargets.includes(event.target) || event.ctrlKey) {
         this.#moveToExtremeRow(+1);
+      } else {
+        this.#navigateToExtremeCell(+1);
       }
     } else if (event.key === "PageUp") {
       this.#moveToExtremeRow(-1);
@@ -100,18 +109,6 @@ export default class extends Controller {
     event.preventDefault();
   }
 
-  focusin(event) {
-    // if focusing freshly into the treegrid via keyboard then focus the focusable row
-    if (
-      event.relatedTarget &&
-      !this.rowTargets.includes(event.target) &&
-      !this.element.contains(event.relatedTarget)
-    ) {
-      this.rowTargets.filter((row) => parseInt(row.tabIndex) === 0)[0].focus();
-      event.preventDefault();
-    }
-  }
-
   toggleRow(event) {
     const row = this.#getContainingRow(event.target);
 
@@ -133,6 +130,19 @@ export default class extends Controller {
     }
   }
 
+  #navigateToExtremeCell(direction) {
+    const currentRow = this.#getRowWithFocus();
+
+    const rowFocusableTargets = tabbable(currentRow);
+
+    const newIndex = direction > 0 ? rowFocusableTargets.length - 1 : 0;
+    const newCell = rowFocusableTargets[newIndex];
+
+    if (document.activeElement != newCell) {
+      newCell.focus();
+    }
+  }
+
   #moveByRow(direction) {
     const currentRow = this.#getRowWithFocus();
     const rows = this.#getAllNavigableRows();
@@ -141,8 +151,10 @@ export default class extends Controller {
     let newRowIndex = this.#restrictIndex(rowIndex + direction, numRows);
 
     if (newRowIndex != rowIndex) {
+      const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
       currentRow.tabIndex = -1;
-      this.#focus(rows[newRowIndex]);
+      this.#setTabIndexForElementsInRow(currentRow, -1);
+      this.#focus(rows[newRowIndex], cellIndex);
     }
   }
 
@@ -160,7 +172,7 @@ export default class extends Controller {
 
     if (currentRow !== newRow) {
       currentRow.tabIndex = -1;
-      this.#focus(newRow);
+      this.#focus(newRow, -1);
     }
   }
 
@@ -180,9 +192,14 @@ export default class extends Controller {
     return this.rowTargets.filter((row) => !row.classList.contains("hidden"));
   }
 
-  #focus(elem) {
+  #focus(elem, cellIndex) {
     elem.tabIndex = 0;
-    elem.focus();
+    this.#setTabIndexForElementsInRow(elem, 0);
+    if (cellIndex < 0) {
+      elem.focus();
+    } else {
+      tabbable(elem)[cellIndex].focus();
+    }
   }
 
   #getLevel(row) {
@@ -256,5 +273,17 @@ export default class extends Controller {
     } else {
       toggleButton.setAttribute("aria-label", this.expandTextValue);
     }
+  }
+
+  #setTabIndexOfFocusableElements(element, tabIndex) {
+    tabbable(element).forEach((el) => {
+      el.tabIndex = tabIndex;
+    });
+  }
+
+  #setTabIndexForElementsInRow(row, tabIndex) {
+    row.querySelectorAll("[tabindex]").forEach((el) => {
+      el.tabIndex = tabIndex;
+    });
   }
 }
