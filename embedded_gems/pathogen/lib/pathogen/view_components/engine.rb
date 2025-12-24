@@ -35,6 +35,30 @@ module Pathogen
           include Pathogen::FormTagHelper
         end
       end
+
+      initializer 'pathogen.assets', before: 'importmap.assets' do |app|
+        # Add engine's JavaScript paths to asset pipeline
+        app.config.assets.paths << root.join('app/javascript/controllers')
+
+        # Precompile pathogen controller files for production
+        app.config.assets.precompile += %w[
+          pathogen/tabs_controller.js
+          pathogen/tooltip_controller.js
+          pathogen/datepicker/input_controller.js
+          pathogen/datepicker/calendar_controller.js
+          pathogen/datepicker/utils.js
+          pathogen/datepicker/constants.js
+        ]
+      end
+
+      initializer 'pathogen.importmap', before: 'importmap' do |app|
+        # Register this engine's importmap configuration
+        app.config.importmap.paths << root.join('config/importmap.rb')
+
+        # Register cache sweepers for development mode
+        app.config.importmap.cache_sweepers << root.join('app/assets/javascripts')
+        app.config.importmap.cache_sweepers << root.join('app/javascript/controllers')
+      end
     end
   end
 end
