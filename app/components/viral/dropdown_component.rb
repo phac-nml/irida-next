@@ -36,8 +36,6 @@ module Viral
     # @param icon [String] Optional icon name
     # @param caret [Boolean] Show dropdown caret icon
     # @param trigger [Symbol] :click or :hover (default :click)
-    # @param skidding [Integer] Popper.js skidding offset
-    # @param distance [Integer] Popper.js distance offset
     # @param styles [Hash] Custom styles for dropdown/button
     # @param action_link [Boolean] Use as action button
     # @param action_link_value [Object] Value for action button
