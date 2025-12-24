@@ -24,6 +24,15 @@ export default class extends Controller {
     this.#setTabIndexForElementsInRow(this.rowTargets[0], 0);
   }
 
+  rowTargetConnected(row) {
+    if (
+      row !== document.activeElement &&
+      !row.contains(document.activeElement)
+    ) {
+      this.#setTabIndexForElementsInRow(row, -1);
+    }
+  }
+
   keydown(event) {
     if (event.key === "ArrowDown" && !event.ctrlKey && !event.shiftKey) {
       this.#moveByRow(+1);
@@ -249,6 +258,14 @@ export default class extends Controller {
         if (willHideRow !== isRowHidden) {
           if (willHideRow) {
             nextRow.classList.add("hidden");
+            // if row was currently tabbable then move tabindex to first row
+            if (nextRow.tabIndex === 0) {
+              nextRow.tabIndex = -1;
+              this.#setTabIndexForElementsInRow(nextRow, -1);
+              // set first row as tabbable
+              this.rowTargets[0].tabIndex = 0;
+              this.#setTabIndexForElementsInRow(this.rowTargets[0], 0);
+            }
           } else {
             nextRow.classList.remove("hidden");
           }
@@ -258,6 +275,7 @@ export default class extends Controller {
       if (didChange) {
         this.#setAriaExpanded(row, doExpand);
         this.#setToggleButtonText(toggleButton, doExpand);
+
         return true;
       }
     }
@@ -282,8 +300,20 @@ export default class extends Controller {
   }
 
   #setTabIndexForElementsInRow(row, tabIndex) {
-    row.querySelectorAll("[tabindex]").forEach((el) => {
-      el.tabIndex = tabIndex;
-    });
+    if (tabIndex !== -1) {
+      row.querySelectorAll("[tabindex]").forEach((el) => {
+        // ignore toggle buttons
+        if (el.getAttribute("data-action") !== "click->treegrid#toggleRow") {
+          el.tabIndex = tabIndex;
+        }
+      });
+    } else {
+      tabbable(row).forEach((el) => {
+        // ignore toggle buttons
+        if (el.getAttribute("data-action") !== "click->treegrid#toggleRow") {
+          el.tabIndex = tabIndex;
+        }
+      });
+    }
   }
 }
