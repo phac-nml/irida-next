@@ -3,12 +3,6 @@ import Dropdown from "utilities/dropdown";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
-  static values = {
-    position: String,
-    trigger: String,
-    skidding: Number,
-    distance: Number,
-  };
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
