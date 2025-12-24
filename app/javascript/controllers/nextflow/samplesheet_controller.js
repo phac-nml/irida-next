@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
+import _ from "lodash";
 
 export default class extends Controller {
   static targets = [
@@ -14,6 +15,7 @@ export default class extends Controller {
     "spinner",
     "workflowAttributes",
     "samplesheetProperties",
+    "fileAttributes",
     "trTemplate",
     "thTemplate",
     "tdTemplate",
@@ -98,8 +100,20 @@ export default class extends Controller {
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
   #samplesheetAttributes;
 
+  // sample data is contained within a nested object, so we'll extract the sample_ids from the object and utilize
+  // allSampleIds array for indexes on the samplesheet table
+  #allSampleIds;
+
+  // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames,
+  // which will be contained in fileAttributes
+  #fileAttributes;
+
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
+
+  // current sample 'indexes' present on table, mainly required for updating metadata upon header selection
+  #startingIndex;
+  #lastIndex;
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
@@ -120,8 +134,16 @@ export default class extends Controller {
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
+
+    this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
+    console.log(this.#allSampleIds);
+    console.log(this.#samplesheetAttributes);
     // clear the now unnecessary DOM element
     this.workflowAttributesTarget.remove();
+
+    this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
+    console.log(this.#fileAttributes);
+    this.fileAttributesTarget.remove();
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
@@ -137,7 +159,7 @@ export default class extends Controller {
       }
     }
     // enter all initial/autoloaded sample data into FormData
-    this.#setInitialSamplesheetData();
+    // this.#setInitialSamplesheetData();
 
     // set initial sample indexes to include all samples
     this.#setCurrentSampleIndexesToAll();
@@ -239,8 +261,8 @@ export default class extends Controller {
         i < Object.keys(this.#samplesheetAttributes).length;
         i++
       ) {
-        if (!this.#retrieveFormData(i, requiredColumn)) {
-          let sample = this.#retrieveFormData(i, "sample");
+        if (!this.#retrieveSampleData(i, requiredColumn)) {
+          let sample = this.#retrieveSampleData(i, "sample");
           if (sample in missingData) {
             missingData[sample].push(requiredColumn);
           } else {
@@ -303,10 +325,10 @@ export default class extends Controller {
     this.#formData.set(inputName, inputValue);
   }
 
-  #retrieveFormData(index, columnName) {
-    return this.#formData.get(
-      `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
-    );
+  #retrieveSampleData(sampleId, columnName) {
+    return this.#samplesheetAttributes[sampleId]["samplesheet_params"][
+      columnName
+    ];
   }
 
   // handles changes to text and dropdown cells
@@ -316,45 +338,36 @@ export default class extends Controller {
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
   updateFileData({ detail: { content } }) {
-    content["files"].forEach((file, index) => {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${file["property"]}]`,
-        file["global_id"],
-      );
-
-      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
-      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
-      // via formData (files are stored by globalID in formData)
-      let filename = file["filename"]
+    const sample_id = content["attachable_id"];
+    content["files"].forEach((file) => {
+      this.#fileAttributes[sample_id][file["property"]].attachment_id = file.id;
+      this.#fileAttributes[sample_id][file["property"]].filename = file[
+        "filename"
+      ]
         ? file["filename"]
         : this.noSelectedFileValue;
 
-      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
+      this.#samplesheetAttributes[sample_id]["samplesheet_params"][
         file["property"]
-      ]["filename"] = filename;
-
-      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
-        file["property"]
-      ]["attachment_id"] = file["id"];
-
-      this.#updateCell(
-        file["property"],
-        content["index"],
-        "file_cell",
-        index === 0,
-      );
+      ] = file.global_id;
+      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
+      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
+      // via formData (files are stored by globalID in formData)
+      this.#updateCell(file["property"], sample_id, "file_cell", true);
     });
     this.#clearPayload();
   }
 
   // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
   updateMetadata({ detail: { content } }) {
-    for (const index in content["metadata"]) {
-      this.#setFormData(
-        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
-        content["metadata"][index],
+    _.merge(this.#samplesheetAttributes, content["metadata"]);
+    for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
+      this.#updateCell(
+        content["property"],
+        this.#allSampleIds[i],
+        "metadata_cell",
+        false,
       );
-      this.#updateCell(content["property"], index, "metadata_cell", false);
     }
     this.#clearPayload();
   }
@@ -362,46 +375,47 @@ export default class extends Controller {
   #loadTableData() {
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
-      const startingIndex = (this.#currentPage - 1) * 5;
-      let lastIndex = startingIndex + 5;
+      this.#startingIndex = (this.#currentPage - 1) * 5;
+      this.#lastIndex = this.#startingIndex + 5;
       if (
         this.#currentPage == this.#lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
       ) {
-        lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
+        this.#lastIndex =
+          (this.#currentSampleIndexes.length % 5) + this.#startingIndex;
       }
-      for (let i = startingIndex; i < lastIndex; i++) {
-        const sampleIndex = this.#currentSampleIndexes[i];
+      for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
+        const sampleId = this.#allSampleIds[this.#currentSampleIndexes[i]];
         const tableRow = this.#generateTableRow();
 
         this.#columnNames.forEach((columnName) => {
           const cell = this.#generateTableCell(
             columnName,
-            sampleIndex,
+            sampleId,
             this.#columnNames.indexOf(columnName) == 0,
           );
           switch (this.#samplesheetProperties[columnName]["cell_type"]) {
             case "sample_cell":
             case "sample_name_cell":
-              this.#insertSampleContent(cell, columnName, sampleIndex);
+              this.#insertSampleContent(cell, columnName, sampleId);
               break;
             case "dropdown_cell":
               this.#insertDropdownContent(
                 cell,
                 columnName,
-                sampleIndex,
+                sampleId,
                 this.#samplesheetProperties[columnName]["enum"],
               );
               break;
             case "fastq_cell":
             case "file_cell":
-              this.#insertFileContent(cell, columnName, sampleIndex);
+              this.#insertFileContent(cell, columnName, sampleId);
               break;
             case "metadata_cell":
-              this.#insertMetadataContent(cell, columnName, sampleIndex);
+              this.#insertMetadataContent(cell, columnName, sampleId);
               break;
             case "input_cell":
-              this.#insertTextInputContent(cell, columnName, sampleIndex);
+              this.#insertTextInputContent(cell, columnName, sampleId);
               break;
           }
           // add cell content to the row
@@ -421,30 +435,31 @@ export default class extends Controller {
     return tableRow;
   }
 
-  #generateTableCell(columnName, index, headerCell) {
+  #generateTableCell(columnName, sampleId, headerCell) {
     const template = headerCell
       ? this.thTemplateTarget.content.cloneNode(true)
       : this.tdTemplateTarget.content.cloneNode(true);
     const cell = template.firstElementChild;
-    cell.id = `${index}_${columnName}`;
+    cell.id = `${sampleId}_${columnName}`;
     return cell;
   }
 
-  #insertSampleContent(cell, columnName, index) {
+  #insertSampleContent(cell, columnName, sampleId) {
     const sampleContent =
       this.sampleIdentifierTemplateTarget.content.cloneNode(true);
 
-    sampleContent.querySelector("div").textContent = this.#retrieveFormData(
-      index,
+    sampleContent.querySelector("div").textContent = this.#retrieveSampleData(
+      sampleId,
       columnName,
     );
 
     cell.appendChild(sampleContent);
   }
 
-  #insertDropdownContent(cell, columnName, index, options) {
-    const name = `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`;
-    const id = `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`;
+  // TODO chec same name and id this is okay
+  #insertDropdownContent(cell, columnName, sampleId, options) {
+    const name = `${sampleId}_${columnName}`;
+    const id = `${sampleId}_${columnName}`;
 
     const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
     dropdownContent
@@ -460,29 +475,26 @@ export default class extends Controller {
       dropdownContent.querySelector("select").appendChild(option);
     }
 
-    dropdownContent.querySelector("select").value = this.#retrieveFormData(
-      index,
+    dropdownContent.querySelector("select").value = this.#retrieveSampleData(
+      sampleId,
       columnName,
     );
 
     cell.appendChild(dropdownContent);
   }
 
-  #insertFileContent(cell, columnName, index) {
+  #insertFileContent(cell, columnName, sampleId) {
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
 
     // Build URL parameters
     const params = new URLSearchParams({
-      "file_selector[attachable_id]":
-        this.#samplesheetAttributes[index].sample_id,
+      "file_selector[attachable_id]": sampleId,
       "file_selector[attachable_type]": "Sample",
-      "file_selector[index]": index,
       "file_selector[pattern]": this.#samplesheetProperties[columnName].pattern,
       "file_selector[property]": columnName,
       "file_selector[selected_id]":
-        this.#samplesheetAttributes[index].samplesheet_params[columnName]
-          .attachment_id,
+        this.#fileAttributes[sampleId][columnName].attachment_id,
     });
 
     // Add required properties
@@ -500,10 +512,8 @@ export default class extends Controller {
 
     // Set link attributes
     const href = `/-/workflow_executions/file_selector/new?${params.toString()}`;
-    const linkId = `${this.#samplesheetAttributes[index].sample_id}_${columnName}`;
-    const filename =
-      this.#samplesheetAttributes[index].samplesheet_params[columnName]
-        .filename;
+    const linkId = `${sampleId}_${columnName}`;
+    const filename = this.#fileAttributes[sampleId][columnName].filename;
 
     fileLink.setAttribute("href", href);
     fileLink.id = linkId;
@@ -513,23 +523,24 @@ export default class extends Controller {
     cell.appendChild(fileContent);
   }
 
-  #insertMetadataContent(cell, columnName, index) {
-    const metadataValue = this.#retrieveFormData(index, columnName);
+  #insertMetadataContent(cell, columnName, sampleId) {
+    const metadataValue = this.#retrieveSampleData(sampleId, columnName);
     if (metadataValue) {
       const metadataContent =
         this.metadataTemplateTarget.content.cloneNode(true);
       metadataContent.querySelector("span").textContent = metadataValue;
       cell.appendChild(metadataContent);
     } else {
-      this.#insertTextInputContent(cell, columnName, index);
+      this.#insertTextInputContent(cell, columnName, sampleId);
     }
   }
 
-  #insertTextInputContent(cell, columnName, index) {
+  // TODO cehck name and id again
+  #insertTextInputContent(cell, columnName, sampleId) {
     const textInputContent =
       this.textInputTemplateTarget.content.cloneNode(true);
-    const name = `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`;
-    const id = `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`;
+    const name = `${sampleId}_${columnName}`;
+    const id = `${sampleId}_${columnName}`;
     const input = textInputContent.querySelector("input");
     const label = textInputContent.querySelector("label");
 
@@ -539,7 +550,7 @@ export default class extends Controller {
     label.setAttribute("for", id);
     label.textContent = name;
 
-    const formValue = this.#retrieveFormData(index, columnName);
+    const formValue = this.#retrieveSampleData(sampleId, columnName);
     if (formValue) {
       input.value = formValue;
     }
@@ -623,14 +634,15 @@ export default class extends Controller {
     }
   }
 
-  #updateCell(columnName, index, cellType, focusCell) {
-    const cell = document.getElementById(`${index}_${columnName}`);
+  // TODO update this from index to sampleId
+  #updateCell(columnName, sampleId, cellType, focusCell) {
+    const cell = document.getElementById(`${sampleId}_${columnName}`);
     if (cell) {
       cell.innerHTML = "";
       if (cellType == "file_cell") {
-        this.#insertFileContent(cell, columnName, index);
+        this.#insertFileContent(cell, columnName, sampleId);
       } else {
-        this.#insertMetadataContent(cell, columnName, index);
+        this.#insertMetadataContent(cell, columnName, sampleId);
       }
       if (focusCell) {
         cell.firstElementChild.focus();
@@ -646,7 +658,7 @@ export default class extends Controller {
 
   #setCurrentSampleIndexesToAll() {
     this.#currentSampleIndexes = [
-      ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+      ...Array(Object.keys(this.#allSampleIds).length).keys(),
     ];
   }
 
