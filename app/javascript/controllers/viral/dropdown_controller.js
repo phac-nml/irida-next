@@ -48,25 +48,6 @@ export default class extends Controller {
         });
       },
     });
-
-    // this.dropdown = new Dropdown(this.menuTarget, element, {
-    //   triggerType: "none",
-    //   offsetSkidding: this.skiddingValue,
-    //   offsetDistance: this.distanceValue,
-    //   onShow: () => {
-    //     this.triggerTarget.setAttribute("aria-expanded", "true");
-    //     this.menuTarget.setAttribute("aria-hidden", "false");
-    //     this.menuTarget.removeAttribute("hidden");
-    //   },
-    //   onHide: () => {
-    //     this.triggerTarget.setAttribute("aria-expanded", "false");
-    //     this.menuTarget.setAttribute("aria-hidden", "true");
-    //     this.menuTarget.setAttribute("hidden", "hidden");
-    //     this.#menuItems(element).forEach((menuitem) => {
-    //       menuitem.setAttribute("tabindex", "-1");
-    //     });
-    //   },
-    // });
   }
 
   focusOut(event) {
@@ -119,6 +100,7 @@ export default class extends Controller {
         { once: true },
       );
       this.dropdown.show();
+      this.#focusMenuItem(this.menuTarget);
     } else {
       this.dropdown.show();
       this.#focusMenuItem(menuItems.at(index));

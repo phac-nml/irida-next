@@ -79,45 +79,22 @@ export default class extends Controller {
   }
 
   #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
+    this.#dropdown = new Dropdown(this.#calendar, this.datepickerInputTarget, {
+      onShow: () => {
+        document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+        this.#calendar.addEventListener(
+          "focusin",
+          this.boundHandleCalendarFocus,
         );
-      }
-      this.#dropdown = new Dropdown(
-        this.#calendar,
-        this.datepickerInputTarget,
-        {
-          placement: "top",
-          triggerType: "none", // handle via handleDatepickerInputFocus instead
-          offsetSkidding: 0,
-          offsetDistance: 10,
-          delay: 300,
-          onShow: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-            this.#calendar.addEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-          onHide: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-            document.removeEventListener(
-              "keydown",
-              this.boundHandleGlobalKeydown,
-            );
-            this.#calendar.removeEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-        },
-      );
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+      },
+      onHide: () => {
+        document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+        this.#calendar.removeEventListener(
+          "focusin",
+          this.boundHandleCalendarFocus,
+        );
+      },
+    });
   }
 
   #setMinDate() {
