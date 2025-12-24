@@ -382,7 +382,8 @@ GEM
     marcel (1.1.0)
     matrix (0.4.3)
     mini_mime (1.1.5)
-    minitest (5.26.1)
+    minitest (6.0.0)
+      prism (~> 1.5)
     minitest-retry (0.2.5)
       minitest (>= 5.0)
     msgpack (1.8.0)
@@ -765,7 +766,7 @@ DEPENDENCIES
   local_time (~> 3.0, >= 3.0.2)
   logidze
   lookbook (~> 2.1, >= 2.1.1)
-  minitest (~> 5.25, >= 5.25.5)
+  minitest (~> 6.0)
   minitest-retry
   omniauth
   omniauth-entra-id
