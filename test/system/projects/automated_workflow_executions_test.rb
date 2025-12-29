@@ -62,7 +62,7 @@ module Projects
         assert_selector '.dialog--header',
                         text: I18n.t(:'projects.automated_workflow_executions.pipeline_selection_modal.title')
         assert_link text: 'phac-nml/iridanextexample', count: 1
-        click 'phac-nml/iridanextexample'
+        click_link 'phac-nml/iridanextexample'
       end
 
       within('dialog[open].dialog--size-xl') do

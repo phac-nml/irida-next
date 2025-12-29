@@ -342,7 +342,7 @@ module Projects
     test 'can view a workflow execution' do
       workflow_execution = workflow_executions(:automated_workflow_execution_existing)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -383,7 +383,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
       end
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1, anchor: 'summary-tab')
+      visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
 
       click_button I18n.t('common.actions.remove')
 
@@ -418,7 +418,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution1.id
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -432,14 +432,14 @@ module Projects
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -457,7 +457,7 @@ module Projects
       user = users(:james_doe)
       login_as user
       workflow_execution = workflow_executions(:automated_workflow_execution)
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
       dt_value = I18n.t('common.labels.name', locale: user.locale)
       new_we_name = 'New Name'
       ### SETUP END ###
@@ -495,7 +495,7 @@ module Projects
     test 'can view a shared workflow execution that was shared by a different user' do
       workflow_execution = workflow_executions(:workflow_execution_shared2)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -523,7 +523,7 @@ module Projects
       Flipper.enable(:workflow_execution_attachments_searching)
       workflow_execution = workflow_executions(:workflow_execution_shared2)
 
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, anchor: 'summary-tab')
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -542,7 +542,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       within 'tbody' do
         assert_text attachment.puid
@@ -551,7 +551,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       within 'tbody' do
         assert_text attachment.puid
