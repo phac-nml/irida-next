@@ -136,8 +136,7 @@ export default class extends Controller {
     );
 
     this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
-    console.log(this.#allSampleIds);
-    console.log(this.#samplesheetAttributes);
+
     // clear the now unnecessary DOM element
     this.workflowAttributesTarget.remove();
 
@@ -173,32 +172,6 @@ export default class extends Controller {
     this.#loadTableData();
   }
 
-  #setInitialSamplesheetData() {
-    for (const index in this.#samplesheetAttributes) {
-      for (const sample_attrs in this.#samplesheetAttributes[index]) {
-        if (sample_attrs == "sample_id") {
-          // specifically adds sample to form
-          this.#setFormData(
-            `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}]`,
-            this.#samplesheetAttributes[index][sample_attrs],
-          );
-          continue;
-        }
-        for (const property in this.#samplesheetAttributes[index][
-          sample_attrs
-        ]) {
-          // adds all remaining sample data to form (files, metadata, etc.)
-          this.#setFormData(
-            `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}][${property}]`,
-            this.#samplesheetAttributes[index][sample_attrs][property][
-              "form_value"
-            ],
-          );
-        }
-      }
-    }
-  }
-
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState(this.processingRequestValue);
@@ -227,13 +200,12 @@ export default class extends Controller {
           this.#enableErrorState(errorMsg);
         } else {
           this.#disableErrorState();
-          this.#combineFormData();
 
           this.formTarget.addEventListener(
             "turbo:before-fetch-request",
             (event) => {
               event.detail.fetchOptions.body = JSON.stringify(
-                formDataToJsonParams(this.#compactFormData()),
+                this.#compactFormData(),
               );
               event.detail.fetchOptions.headers["Content-Type"] =
                 "application/json";
@@ -261,8 +233,9 @@ export default class extends Controller {
         i < Object.keys(this.#samplesheetAttributes).length;
         i++
       ) {
-        if (!this.#retrieveSampleData(i, requiredColumn)) {
-          let sample = this.#retrieveSampleData(i, "sample");
+        const sampleId = this.#allSampleIds[i];
+        if (!this.#retrieveSampleData(sampleId, requiredColumn)) {
+          let sample = this.#retrieveSampleData(sampleId, "sample");
           if (sample in missingData) {
             missingData[sample].push(requiredColumn);
           } else {
@@ -841,14 +814,14 @@ export default class extends Controller {
   }
 
   #compactFormData() {
-    const compactFormData = new FormData();
-    for (const [key, value] of this.#formData.entries()) {
-      // exclude empty values from form data for samplesheet_params
-      if (!(/[samplesheet_params]/.test(key) && value === "")) {
-        compactFormData.append(key, value);
-      }
-    }
-    return compactFormData;
+    console.log("in compact");
+    const compactFormData = new FormData(this.formTarget);
+
+    let params = formDataToJsonParams(compactFormData);
+    params["workflow_execution"]["samples_workflow_executions_attributes"] =
+      Object.values(this.#samplesheetAttributes);
+    console.log("compact done");
+    return params;
   }
 
   #validateWorkflowExecutionName() {
