@@ -79,7 +79,11 @@ module AxeHelpers
       raise AccessibilityError, 'Not accessible' unless violations.empty?
     rescue AccessibilityError
       retry_attempts += 1
-      page.driver.wait_for_network_idle
+      # With Playwright-native Page
+      Capybara.current_session.driver.with_playwright_page do |page|
+        # `page` is an instance of Playwright::Page.
+        page.wait_for_load_state(state: 'networkidle')
+      end
       retry if retry_attempts < max_retry_attempts
     end
 
@@ -93,13 +97,13 @@ module AxeHelpers
     super
 
     assert_accessible
-    w3c_validate content: "<!DOCTYPE html>#{html}"
+    w3c_validate content: html
   end
 
   def visit(path, **attributes)
     super
 
     assert_accessible
-    w3c_validate content: "<!DOCTYPE html>#{html}"
+    w3c_validate content: html
   end
 end
