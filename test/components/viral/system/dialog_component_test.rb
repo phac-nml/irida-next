@@ -73,7 +73,7 @@ module System
       within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'input[type="text"]', count: 1
-        find('input[type="text"]').send_keys :escape
+        find('input[type="text"]').native.press 'Escape'
       end
       assert_selector 'div[data-controller-connected="true"] dialog'
     end
