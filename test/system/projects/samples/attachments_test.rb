@@ -409,6 +409,7 @@ module Projects
           fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated file'
           check I18n.t('helpers.label.concatenation.delete_originals')
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+          assert_text I18n.t('general.form.error_notification')
           fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
