@@ -32,6 +32,9 @@ require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'test_helpers/array_helpers'
 require 'test_helpers/w3c_validation_helpers'
+require 'minitest/retry'
+
+Minitest::Retry.use!
 
 module ActiveSupport
   class TestCase
