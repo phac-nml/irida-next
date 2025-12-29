@@ -8,10 +8,21 @@ export default class extends Controller {
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
+    this.boundOnMorph = this.onMorph.bind(this);
   }
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  onMorph() {
+    this.menuTargetConnected(this.menuTarget);
+    this.triggerTargetConnected(this.triggerTarget);
   }
 
   menuTargetConnected(element) {
