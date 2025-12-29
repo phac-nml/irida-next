@@ -883,6 +883,7 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
       # fill destination input
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
@@ -1481,7 +1482,9 @@ module Projects
       assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
 
       # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
-      attach_file 'file_import[file]', nil
+      page.driver.with_playwright_page do |playwright_page|
+        playwright_page.locator('input[type="file"][name="file_import[file]"]').set_input_files([])
+      end
       assert_equal 'true', metadata_columns_element['aria-hidden']
       assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
     end
@@ -2255,7 +2258,9 @@ module Projects
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
 
-      attach_file('spreadsheet_import[file]', Rails.root.join)
+      page.driver.with_playwright_page do |playwright_page|
+        playwright_page.locator('input[type="file"][name="spreadsheet_import[file]"]').set_input_files([])
+      end
       # verify select inputs are re-disabled after file is unselected
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
@@ -2778,6 +2783,7 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector 'dialog h1', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
@@ -3662,7 +3668,7 @@ module Projects
       assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       find('table tbody tr:first-child td:nth-child(7)').click
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+      find('table tbody tr:first-child td:nth-child(7)').set('New Value')
       find('body').click
 
       assert_selector 'dialog[open]'
@@ -3707,7 +3713,7 @@ module Projects
       assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       find('table tbody tr:first-child td:nth-child(7)').click
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+      find('table tbody tr:first-child td:nth-child(7)').set('New Value')
       find('body').click
 
       assert_selector 'dialog[open]'

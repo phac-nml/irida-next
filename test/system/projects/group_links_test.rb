@@ -19,7 +19,8 @@ module Projects
     end
 
     test 'can create a project to group link' do
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       assert_selector 'button', text: I18n.t(:'projects.members.index.invite_group'), count: 1
@@ -44,7 +45,8 @@ module Projects
 
     test 'cannot add a project to group link' do
       login_as users(:ryan_doe)
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 0
     end
@@ -52,7 +54,8 @@ module Projects
     test 'can remove a project to group link' do
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -72,14 +75,17 @@ module Projects
     test 'cannot remove a project to group link that may have been unlinked in another tab' do
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
-
-      namespace_group_link.destroy
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       assert_selector 'table', wait: 10
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
+        assert_button I18n.t(:'projects.group_links.index.unlink')
+
+        namespace_group_link.destroy
+
         click_button I18n.t(:'projects.group_links.index.unlink')
       end
 
@@ -92,7 +98,9 @@ module Projects
 
     test 'cannot remove a project to group link' do
       login_as users(:ryan_doe)
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
+
       within('table') do
         assert_selector 'button.viral-dropdown--icon', count: 0
       end
@@ -101,7 +109,8 @@ module Projects
     test 'cannot remove a project to group link if logged in user has role changed to a level which can\'t modify' do
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -128,7 +137,9 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       Timecop.travel(Time.zone.now + 5) do
-        visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+        visit namespace_project_members_path(@namespace.parent, @namespace.project)
+        click_button I18n.t(:'projects.members.index.tabs.groups')
+
         assert_selector 'table', wait: 10
         assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
@@ -145,7 +156,8 @@ module Projects
     test 'cannot update namespace group links group access level' do
       login_as users(:ryan_doe)
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       within('table') do
         assert_selector 'select', count: 0
@@ -157,10 +169,11 @@ module Projects
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
       Timecop.travel(Time.zone.now + 5) do
-        visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+        visit namespace_project_members_path(@namespace.parent, @namespace.project)
+        click_button I18n.t(:'projects.members.index.tabs.groups')
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                                .send_keys(:return)
+                                                                                .native.press('Enter')
 
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -172,7 +185,8 @@ module Projects
     test 'cannot update namespace group links expiration' do
       login_as users(:ryan_doe)
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       assert_selector 'table', wait: 10
       within('table') do
@@ -184,12 +198,15 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
-      visit namespace_project_members_path(@namespace.parent, @namespace.project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
+
+      assert_selector "#invited-group-#{namespace_group_link.group.id}-expiration-input"
 
       namespace_group_link.destroy
 
       find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                              .send_keys(:return)
+                                                                              .native.press('Enter')
 
       assert_text 'Resource not found'
     end
@@ -263,7 +280,8 @@ module Projects
     test 'can search group links by group name' do
       group_name_col = 1
 
-      visit namespace_project_members_path(@namespace.parent, @project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       assert_text 'Displaying 4 items'
       assert_selector 'table tbody tr', count: 4
@@ -278,7 +296,8 @@ module Projects
     end
 
     test 'can sort by column' do
-      visit namespace_project_members_path(@namespace.parent, @project, anchor: 'groups-tab')
+      visit namespace_project_members_path(@namespace.parent, @project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
 
       assert_text 'Displaying 4 items', wait: 10
       assert_selector 'table tbody tr', count: 4
@@ -301,7 +320,7 @@ module Projects
       within('thead') do
         click_on 'Group'
       end
-      wait_for_network_idle
+      # wait_for_network_idle
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -320,7 +339,7 @@ module Projects
       within('thead') do
         click_on 'Access Level'
       end
-      wait_for_network_idle
+      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -340,7 +359,7 @@ module Projects
       within('thead') do
         click_on 'Expiration'
       end
-      wait_for_network_idle
+      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name

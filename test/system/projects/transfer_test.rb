@@ -31,6 +31,7 @@ module Projects
 
     test 'empty state of transfer group' do
       visit namespace_project_edit_path(@project.namespace.parent, @project)
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       assert_text I18n.t(:'projects.edit.advanced.transfer.empty_state')
     end
