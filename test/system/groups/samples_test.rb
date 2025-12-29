@@ -213,7 +213,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -294,7 +294,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -332,7 +332,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -371,7 +371,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -454,7 +454,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -677,13 +677,20 @@ module Groups
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='puid']").select_option
             find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+            find("input[name$='[value][]']").fill_in with: @sample1.puid
+            find("input[name$='[value][]']").native.press('Comma')
+            find("input[name$='[value][]']").fill_in with: @sample2.puid
+            find("input[name$='[value][]']").native.press('Comma')
           end
         end
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      page.driver.with_playwright_page do |playwright_page|
+        playwright_page.wait_for_load_state(state: 'networkidle')
+      end
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
@@ -900,7 +907,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -924,7 +931,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1002,7 +1009,7 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         assert_no_selector '#available-list'
         assert_no_selector '#selected-list'
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
+        assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
       end
     end
 
@@ -1180,7 +1187,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
+        assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
       end
     end
 
@@ -1280,7 +1287,7 @@ module Groups
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv')
 
         assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
+        assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
       end
     end
 
@@ -1372,7 +1379,11 @@ module Groups
         assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
 
         # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
-        attach_file 'file_import[file]', nil
+        # With Playwright-native Page
+        page.driver.with_playwright_page do |playwright_page|
+          # `playwright_page` is an instance of Playwright::Page.
+          playwright_page.locator('input[type="file"][name="file_import[file]"]').set_input_files([])
+        end
         assert_equal 'true', metadata_columns_element['aria-hidden']
         assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
       end
@@ -1411,7 +1422,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1436,8 +1447,8 @@ module Groups
         assert_selector 'td:nth-child(7)[contenteditable="true"]'
         find('td:nth-child(7)').click
 
-        find('td:nth-child(7)').send_keys('value2')
-        find('td:nth-child(7)').native.send_keys(:return)
+        find('td:nth-child(7)').set('value2')
+        find('td:nth-child(7)').native.press('Enter')
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1471,7 +1482,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1778,7 +1789,10 @@ module Groups
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
 
-        attach_file('spreadsheet_import[file]', Rails.root.join)
+        # clear file input
+        page.driver.with_playwright_page do |playwright_page|
+          playwright_page.locator('input[type="file"][name="spreadsheet_import[file]"]').set_input_files([])
+        end
         # verify select inputs are re-disabled after file is unselected
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
@@ -1800,7 +1814,7 @@ module Groups
       within('#samples-table table') do
         within('tbody') do
           # rows
-          assert_selector '#samples-table table tbody tr', count: 20
+          assert_selector 'tr', count: 20
           # row contents
         end
       end
@@ -1819,13 +1833,13 @@ module Groups
       within('#samples-table table') do
         within('tbody') do
           # rows
-          assert_selector '#samples-table table tbody tr', count: 20
+          assert_selector 'tr', count: 20
           # row contents
         end
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: sample.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').native.press('Enter')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -2504,6 +2518,7 @@ module Groups
       assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
+        find('input.select2-input').click
         find('input.select2-input').fill_in with: 'invalid project name or puid'
         ### ACTIONS END ###
 
@@ -2839,6 +2854,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector '#dialog'
       within('#dialog') do
+        find('input.select2-input').click
         find('input.select2-input').fill_in with: 'invalid project name or puid'
         ### ACTIONS END ###
 

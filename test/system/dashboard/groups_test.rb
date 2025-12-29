@@ -195,20 +195,20 @@ module Dashboard
       visit dashboard_groups_url
 
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group a'
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text groups(:group_a).name
       assert_no_text groups(:group_b).name
 
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: groups(:group_b).puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_no_text groups(:group_a).name
       assert_text groups(:group_b).name
 
       #   Test empty state
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
       assert_text I18n.t(:'components.viral.pagy.empty_state.title')
       assert_text I18n.t(:'components.viral.pagy.empty_state.description')
     end
@@ -232,7 +232,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group'
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       within('#groups_tree') do
         assert_text group1.name
@@ -259,7 +259,7 @@ module Dashboard
       visit dashboard_groups_url
 
       assert_css '#main-content-link', visible: false
-      find('body').send_keys(:tab)
+      find('body').native.press('Tab')
       assert_css '#main-content-link', visible: true
       find('#main-content-link').trigger('click')
       assert_css '#main-content', focused: true
