@@ -55,7 +55,6 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def samples_workflow_execution_params_attributes
     [
-      :id, # index, increment for each one, not necessary for functionality
       :sample_id,
       { samplesheet_params: {} }
     ]
