@@ -8,7 +8,8 @@ Capybara.register_driver(:irida_next_playwright) do |app|
     browser_type: ENV['PLAYWRIGHT_BROWSER']&.to_sym || :chromium,
     headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
     viewport: { width: 1280, height: 1024 },
-    playwright_cli_executable_path: 'pnpm exec playwright'
+    playwright_cli_executable_path: 'pnpm exec playwright',
+    timeout: 45
   )
 end
 
