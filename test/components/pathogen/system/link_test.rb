@@ -19,7 +19,7 @@ module Pathogen
           assert_text @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on escape
-          find('a', text: @link_text).native.send_keys(:escape)
+          find('a', text: @link_text).native.press('Escape')
           assert_no_text  @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
@@ -34,7 +34,7 @@ module Pathogen
           assert_text @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on blur
-          find('a', text: @link_text).native.send_keys(:tab)
+          find('a', text: @link_text).native.press('Tab')
           assert_no_text  @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
