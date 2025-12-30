@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin 'flowbite/plugin';
+@plugin "flowbite/plugin";
 @source "../../../node_modules/flowbite/**/*.js";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -72,13 +72,13 @@ input[type="search"] {
   }
   ul[role="menu"] {
     & [role="menuitem"]:focus-visible {
-      @apply -outline-offset-2! rounded-lg;
+      @apply rounded-lg -outline-offset-2!;
     }
     & [role="menuitemcheckbox"]:focus-visible {
-      @apply -outline-offset-2! rounded-lg;
+      @apply rounded-lg -outline-offset-2!;
     }
     & [role="menuitemradio"]:focus-visible {
-      @apply -outline-offset-2! rounded-lg;
+      @apply rounded-lg -outline-offset-2!;
     }
   }
 }
@@ -122,7 +122,7 @@ input[type="search"] {
 }
 
 @utility card {
-  @apply shadow-xs rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+  @apply rounded-lg border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
 @utility form-field {
@@ -537,7 +537,7 @@ input[type="search"] {
 
   /* VIRAL DIALOG */
   dialog {
-    @apply max-w-screen backdrop-blur-xs left-1/2 top-1/2 max-h-screen w-full -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white shadow-sm backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
+    @apply top-1/2 left-1/2 max-h-screen w-full max-w-screen -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white shadow-sm backdrop-blur-xs backdrop:bg-slate-200/40 dark:bg-slate-800 dark:backdrop:bg-slate-600/40;
   }
 
   dialog div.dialog--contents {
@@ -571,7 +571,7 @@ input[type="search"] {
   }
 
   .dialog--section {
-    @apply break-words p-5 sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
+    @apply p-5 break-words sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
   }
 
   strong {
@@ -587,12 +587,12 @@ input[type="search"] {
     + [data-breadcrumb-target="crumb"]
     > *::before {
     content: "›";
-    @apply mx-2 select-none text-slate-400;
+    @apply mx-2 text-slate-400 select-none;
   }
 }
 
 .pagy-nav.pagination {
-  @apply shadow-xs isolate inline-flex -space-x-px rounded-lg;
+  @apply isolate inline-flex -space-x-px rounded-lg shadow-xs;
 }
 
 .page.next a {
@@ -646,7 +646,7 @@ div.field_with_errors :is(input, select, textarea):focus-visible {
 }
 
 input[type="checkbox"] {
-  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mr-2 mt-0.5 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
+  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
 }
 
 input[type="radio"] {
@@ -706,12 +706,12 @@ a.pill-focus-reset:focus-visible {
   }
 
   input:focus-visible {
-    @apply outline-solid outline-3 outline-offset-2 outline-black dark:outline-white;
+    @apply outline-3 outline-offset-2 outline-black outline-solid dark:outline-white;
     box-shadow: none !important;
   }
 
   input[aria-invalid="true"]:focus-visible {
-    @apply outline-solid outline-3 outline-offset-2 outline-red-700 dark:outline-red-400;
+    @apply outline-3 outline-offset-2 outline-red-700 outline-solid dark:outline-red-400;
     box-shadow: none !important;
   }
 
@@ -719,7 +719,8 @@ a.pill-focus-reset:focus-visible {
     top: anchor(bottom);
     left: anchor(left);
     width: anchor-size(width);
-    @apply fixed z-10 m-0 box-border hidden max-h-[250px] overflow-y-auto overflow-x-hidden border border-slate-500 bg-white p-0 dark:border-slate-600 dark:bg-slate-800;
+    position-try-fallbacks: flip-block;
+    @apply fixed z-10 m-0 box-border hidden max-h-[250px] overflow-x-hidden overflow-y-auto border border-slate-500 bg-white p-0 dark:border-slate-600 dark:bg-slate-800;
   }
 
   [role="listbox"] > [role="group"] {
