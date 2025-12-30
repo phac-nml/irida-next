@@ -142,7 +142,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
                          exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
@@ -180,7 +180,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_selector '.treegrid-row', count: 12
       assert_no_selector 'a',
@@ -214,9 +214,9 @@ module Dashboard
         click_on I18n.t(:'projects.new.submit')
       end
 
+      assert_selector 'h1', text: project_name
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_path(new_project.parent, new_project))
-      assert_selector 'h1', text: new_project.name
     end
 
     test 'should have Project URL filled with user namespace, when creating a new project from the dashboard' do
@@ -303,7 +303,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text @project.namespace.name
       assert_equal 4, @project.reload.samples.size
@@ -349,7 +349,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text @project.namespace.name
       assert_no_text @project2.namespace.name
@@ -361,7 +361,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text @project2.namespace.name
       assert_no_text @project.namespace.name
@@ -410,7 +410,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text @project.namespace.name
       assert_no_text @project2.namespace.name
@@ -422,7 +422,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').native.press('Enter')
 
       assert_text @project2.namespace.name
       assert_no_text @project.namespace.name
@@ -438,7 +438,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_css '#main-content-link', visible: false
-      find('body').send_keys(:tab)
+      find('body').native.press('Tab')
       assert_css '#main-content-link', visible: true
       find('#main-content-link').trigger('click')
       assert_css '#main-content', focused: true

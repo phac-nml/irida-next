@@ -354,7 +354,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can view a workflow execution' do
     workflow_execution = workflow_executions(:workflow_execution_existing)
 
-    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
+    visit workflow_execution_path(workflow_execution)
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -380,7 +380,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'can search workflow execution files by puid & filename' do
     Flipper.enable(:workflow_execution_attachments_searching)
-    visit workflow_execution_path(@workflow_execution3, anchor: 'summary-tab')
+    visit workflow_execution_path(@workflow_execution3)
 
     assert_text @workflow_execution3.id
     assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution3.state}")
@@ -396,7 +396,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
             with: attachments(:samples_workflow_execution_completed_output_attachment).puid
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     within 'tbody' do
       assert_text attachments(:samples_workflow_execution_completed_output_attachment).puid
@@ -405,7 +405,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
             with: attachments(:workflow_execution_completed_output_attachment).file.filename.to_s
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     within 'tbody' do
       assert_no_text attachments(:samples_workflow_execution_completed_output_attachment).puid
@@ -414,7 +414,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet' do
-    visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
+    visit workflow_execution_path(@workflow_execution1)
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -425,7 +425,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet with multiple files' do
-    visit workflow_execution_path(@workflow_execution2, anchor: 'summary-tab')
+    visit workflow_execution_path(@workflow_execution2)
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -451,7 +451,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
     end
 
-    visit workflow_execution_path(@workflow_execution1, anchor: 'summary-tab')
+    visit workflow_execution_path(@workflow_execution1)
 
     click_button I18n.t('common.actions.remove')
 
@@ -486,7 +486,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: @workflow_execution2.id
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     assert_text 'Displaying 1 item'
     assert_selector 'table tbody tr', count: 1
@@ -500,14 +500,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: ''
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: @workflow_execution3.name
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     assert_text 'Displaying 1 item'
     assert_selector 'table tbody tr', count: 1
@@ -524,7 +524,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     ### SETUP START ###
     Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
-    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
+    visit workflow_execution_path(workflow_execution)
     dt_value = I18n.t('common.labels.name', locale: @user.locale)
     new_we_name = 'New Name'
     ### SETUP END ###
@@ -572,7 +572,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can view a shared workflow execution that the current user submitted' do
     workflow_execution = workflow_executions(:workflow_execution_shared1)
 
-    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
+    visit workflow_execution_path(workflow_execution)
 
     assert_text workflow_execution.id
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
@@ -706,7 +706,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.enable(:attachments_preview)
     Flipper.enable(:workflow_execution_attachments_searching)
 
-    visit workflow_execution_path(@workflow_execution3, anchor: 'summary-tab')
+    visit workflow_execution_path(@workflow_execution3)
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 

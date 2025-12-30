@@ -24,3 +24,6 @@ config/credentials/*
 
 # Locales
 config/locales/*
+
+# PNPM
+pnpm-lock.yaml

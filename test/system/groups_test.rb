@@ -376,7 +376,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
-      find('input.select2-input').click
+      find_field(I18n.t('groups.edit.advanced.transfer.new_namespace_id')).click
       find("li[data-label='#{group3.name}']").click
       assert_selector 'input[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
@@ -400,7 +400,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
-      find('input.select2-input').fill_in with: 'invalid project name or puid'
+      find_field(I18n.t('groups.edit.advanced.transfer.new_namespace_id')).click
+      fill_in I18n.t('groups.edit.advanced.transfer.new_namespace_id'), with: 'invalid project name or puid'
       assert_text I18n.t(:'groups.edit.advanced.transfer.empty_state')
     end
   end
@@ -507,7 +508,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     assert_text I18n.t(:'components.viral.pagy.pagination_component.next')
     fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     assert_selector 'div.treegrid-row', count: 5
   end
@@ -536,7 +537,7 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').native.press('Enter')
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 3
@@ -565,7 +566,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: subgroup3.puid
-    input_field.native.send_keys(:return)
+    input_field.native.press('Enter')
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 1
@@ -595,7 +596,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'subgroup'
-    input_field.native.send_keys(:return)
+    input_field.native.press('Enter')
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 8
@@ -619,7 +620,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
-    input_field.native.send_keys(:return)
+    input_field.native.press('Enter')
 
     assert_selector 'div.treegrid-row', count: 0
 
@@ -640,7 +641,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'input.t-search-component'
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
-    input_field.native.send_keys(:return)
+    input_field.native.press('Enter')
 
     assert_selector 'div.treegrid-row', count: 0
     assert_text I18n.t('components.viral.pagy.empty_state.title')

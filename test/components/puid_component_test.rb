@@ -6,7 +6,8 @@ class PuidComponentTest < ApplicationSystemTestCase
   def test_default
     visit('/rails/view_components/puid_component/default')
     assert_text '1234567890'
-    find('button[data-clipboard-target="button"]').click
+    assert_button I18n.t('components.puid.title', puid: '1234567890')
+    click_button I18n.t('components.puid.title', puid: '1234567890')
     assert_text I18n.t('components.clipboard.copied')
   end
 
