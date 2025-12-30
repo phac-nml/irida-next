@@ -744,8 +744,8 @@ a.pill-focus-reset:focus-visible {
 .anchor {
   position: fixed;
   top: anchor(bottom);
-  left: anchor(left);
   width: fit-content;
   justify-self: anchor-center;
   white-space: nowrap;
+  position-try-fallbacks: flip-block;
 }
