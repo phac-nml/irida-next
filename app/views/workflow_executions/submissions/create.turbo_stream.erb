@@ -4,8 +4,7 @@
     <%= render NextflowComponent.new(
       workflow: @workflow,
       url: workflow_executions_path,
-      samples: @samples,
-      allowed_to_update_samples: @allowed_to_update_samples,
+      sample_count: @sample_count,
       namespace_id: @namespace_id,
       fields: @fields,
     ) %>

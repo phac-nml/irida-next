@@ -1,15 +1,18 @@
 <div
+  id="nextflow-container"
   data-controller="nextflow--samplesheet"
   data-nextflow--samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
-  data-nextflow--samplesheet-submission-error-value="<%= t("components.nextflow_component.submission_error") %>"
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
   data-nextflow--samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
-  data-nextflow--samplesheet-processing-request-value="<%= t("components.nextflow_component.processing_request")%>"
-  data-nextflow--samplesheet-filtering-samples-value="<%= t("components.nextflow_component.filtering_samples")%>"
   data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
-  data-nextflow--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
+  data-nextflow--samplesheet-automated-workflow-value="<%= @automated_workflow %>"
   data-nextflow--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  data-nextflow--samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
+  data-nextflow--samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
+  <% unless @automated_workflow %>
+  data-nextflow--samplesheet-selection-outlet="#samples-table"
+  <% end %>
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -54,14 +57,13 @@
     </div>
   </div>
 
-  <%= form_with url: url, method: (instance.nil? ? :post : :patch),
-                data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
-    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
+  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
+    <%= hidden_field_tag :format, :turbo_stream, id: "submission_turbo" %>
 
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <div id="workflow_execution_name_field" class="form-field">
-          <% label = label_attributes(!@samples.empty?) %>
+          <% label = label_attributes(!@automated_workflow) %>
 
           <%= workflow.label :name,
                          label[:name],
@@ -71,7 +73,7 @@
           <%= workflow.text_field :name,
                               value: instance.present? ? instance.name : nil,
                               aria: {
-                                required: !@samples.empty?,
+                                required: (!@automated_workflow).to_s,
                               },
                               class:
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
@@ -82,7 +84,7 @@
             id="<%= form.field_id("workflow_execution_name", "hint") %>"
             class="field-hint"
           >
-            <%== t("components.nextflow_component.name.helper") %>
+            <%= t("components.nextflow_component.name.helper") %>
           </p>
         </div>
       </section>
@@ -105,10 +107,25 @@
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
-                <% unless @samples.empty? %>
+                <% unless @automated_workflow %>
+                  <turbo-frame
+                    id="samplesheet_message"
+                    data-nextflow--samplesheet-target="samplesheetMessagesContainer"
+                  >
+                    <%= viral_alert(
+                      message:
+                        t(
+                          "components.nextflow_component.loading_samplesheet",
+                          count: @sample_count,
+                        ),
+                      dismissible: true,
+                      auto_dismiss: true,
+                      classes: "mb-2",
+                    ) %>
+                  </turbo-frame>
+
                   <%= render Nextflow::SamplesheetComponent.new(
                     schema: property[:schema],
-                    samples:,
                     namespace_id:,
                     fields: metadata_fields,
                     workflow_params: {
@@ -116,6 +133,23 @@
                       version: @workflow.version,
                     },
                   ) %>
+                  <div
+                    class="flex justify-center"
+                    id="samplesheet-spinner"
+                    data-nextflow--samplesheet-target="samplesheetSpinner"
+                  >
+                    <div
+                      class="
+                        flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
+                        rounded-lg rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
+                        dark:divide-gray-700 dark:bg-gray-800
+                      "
+                      role="alert"
+                    >
+                      <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+                      <span class="text-sm font-normal"><%= t("components.nextflow_component.processing_samplesheet") %></span>
+                    </div>
+                  </div>
                 <% end %>
               <% else %>
                 <div>
@@ -160,15 +194,49 @@
         <% end %>
       <% end %>
 
-      <% if @allowed_to_update_samples %>
-        <div class="flex items-center h-5 mb-4">
-          <%= workflow.check_box :update_samples,
-                             { checked: instance.present? && instance["update_samples"] } %>
+      <div class="flex items-center h-5 mb-4">
+        <%= workflow.check_box :update_samples,
+                           {
+                             checked: instance.present? && instance["update_samples"],
+                             disabled: !@automated_workflow,
+                             aria: {
+                               disabled: (!@automated_workflow).to_s,
+                             },
+                             data: {
+                               "nextflow--samplesheet-target": "updateSamplesCheckbox",
+                             },
+                           } %>
+        <% if @automated_workflow %>
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
-        </div>
-      <% end %>
+        <% else %>
+          <label
+            class="
+              block mb-2 text-sm font-medium text-slate-900 dark:text-white mr-2 text-sm
+              font-medium text-slate-900 dark:text-white
+            "
+            for="workflow_execution_update_samples"
+            data-nextflow--samplesheet-target="updateSamplesLabel"
+          >
+            <div class="flex" id="update-samples-spinner">
+              <div
+                class="
+                  flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
+                  rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
+                  dark:bg-gray-800
+                "
+                role="alert"
+              >
+                <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+                <span class="text-sm font-medium text-slate-900 dark:text-white">
+                  <%= t("components.nextflow.verifying_update_samples") %>
+                </span>
+              </div>
+            </div>
+          </label>
+        <% end %>
+      </div>
       <div class="flex items-center h-5 mb-4">
         <%= workflow.check_box :email_notification,
                            {
@@ -180,7 +248,7 @@
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <%# do not render checkbox for an automated workflow execution %>
-      <% if Flipper.enabled?(:workflow_execution_sharing) && @namespace_type && !@samples.empty? %>
+      <% if Flipper.enabled?(:workflow_execution_sharing) && @namespace_type && !@automated_workflow %>
         <div class="flex items-center h-5 mb-4">
           <%= workflow.check_box :shared_with_namespace,
                              {
@@ -199,7 +267,7 @@
     <button
       class="button button-primary"
       data-nextflow--samplesheet-target="submit"
-      <% if @samples.empty? %>
+      <% if @automated_workflow %>
       type="submit"
       <% else %>
       type="button"
@@ -214,15 +282,25 @@
       <% end %>
     </button>
   <% end %>
-  <% unless @samples.empty? %>
-    <div
-      class="flex items-center p-4 space-x-4"
-      data-nextflow--samplesheet-target="spinner"
-    >
-      <%= render SpinnerComponent.new(
-        message: t("components.nextflow_component.processing_samplesheet"),
-        id: "nextflow-spinner",
-      ) %>
-    </div>
+
+  <div
+    class="flex items-center p-4 space-x-4 hidden"
+    data-nextflow--samplesheet-target="submissionSpinner"
+  >
+    <%= render SpinnerComponent.new(
+      message: t("components.nextflow_component.processing_request"),
+      id: "nextflow-processing-request-spinner",
+    ) %>
+  </div>
+
+  <% unless @automated_workflow %>
+    <%= form_with(
+      url: samplesheet_workflow_executions_submissions_path,
+      method: :post,
+      data: {
+        "nextflow--samplesheet-target": "samplesheetParamsForm",
+      },
+    ) do |f| %>
+    <% end %>
   <% end %>
 </div>
