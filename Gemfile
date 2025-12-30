@@ -184,7 +184,7 @@ group :development do
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '~> 2.1', '>= 2.1.1'
+  gem 'lookbook', '~> 2.3'
 
   # i18n-tasks
   gem 'i18n-tasks', '~> 1.1.2', require: false
