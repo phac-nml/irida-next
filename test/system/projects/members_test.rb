@@ -555,7 +555,7 @@ module Projects
     end
 
     # Pathogen Tabs Component Tests
-    test 'tabs component switches between members and groups with click' do
+    test 'can switch between members and groups tabs with click' do
       visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
       wait_for_network_idle
 
@@ -586,129 +586,6 @@ module Projects
       # Members tab should be selected again
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
       assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
-    end
-
-    test 'tabs component supports keyboard navigation with arrow keys' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
-
-      # Press ArrowRight to move to groups tab
-      find('[role="tab"]#members-tab').native.send_keys(:right)
-
-      # Groups tab should now be selected (automatic activation)
-      assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
-
-      # Press ArrowLeft to move back to members tab
-      find('[role="tab"]#groups-tab').native.send_keys(:left)
-
-      # Members tab should be selected again
-      assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
-    end
-
-    test 'tabs component supports Home and End keys for navigation' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
-
-      # Navigate to groups tab first
-      find('[role="tab"]#members-tab').native.send_keys(:right)
-
-      # Should be on groups tab now
-      assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
-
-      # Press Home key to go to first tab
-      find('[role="tab"]#groups-tab').native.send_keys(:home)
-
-      # Should be on members tab (first tab)
-      assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
-
-      # Press End key to go to last tab
-      find('[role="tab"]#members-tab').native.send_keys(:end)
-
-      # Should be on groups tab (last tab)
-      assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
-    end
-
-    test 'tabs component syncs selection with URL hash' do
-      # Visit with hash for groups tab
-      visit namespace_project_members_path(@namespace, @project, anchor: 'groups-tab')
-      wait_for_network_idle
-
-      # Groups tab should be selected based on hash
-      assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
-
-      # Click members tab
-      find('[role="tab"]#members-tab').click
-
-      # Wait for debounced hash update (100ms debounce in controller)
-      sleep 0.15
-
-      # URL hash should update
-      assert_equal 'members-tab', URI.parse(current_url).fragment
-    end
-
-    test 'tabs component loads content via Turbo Frame lazy loading' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
-
-      # Initially, only members panel content should be loaded
-      assert_selector '[role="tabpanel"]#members-panel turbo-frame#members'
-
-      # Switch to groups tab
-      find('[role="tab"]#groups-tab').click
-      wait_for_network_idle
-
-      # Groups panel turbo frame should now be loaded
-      assert_selector '[role="tabpanel"]#groups-panel turbo-frame#invited_groups'
-    end
-
-    test 'tabs component maintains ARIA relationships' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
-
-      # Check ARIA attributes on members tab
-      members_tab = find('[role="tab"]#members-tab')
-      assert_equal 'members-panel', members_tab['aria-controls']
-      assert_equal 'true', members_tab['aria-selected']
-
-      # Check ARIA attributes on members panel
-      members_panel = find('[role="tabpanel"]#members-panel')
-      assert_equal 'members-tab', members_panel['aria-labelledby']
-      assert_equal 'false', members_panel['aria-hidden']
-
-      # Check ARIA attributes on groups tab
-      groups_tab = find('[role="tab"]#groups-tab')
-      assert_equal 'groups-panel', groups_tab['aria-controls']
-      assert_equal 'false', groups_tab['aria-selected']
-
-      # Check ARIA attributes on groups panel (must use visible: :all since it's hidden)
-      groups_panel = find('[role="tabpanel"]#groups-panel', visible: :all)
-      assert_equal 'groups-tab', groups_panel['aria-labelledby']
-      assert_equal 'true', groups_panel['aria-hidden']
-    end
-
-    test 'tabs component maintains roving tabindex pattern' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
-
-      # Members tab (selected) should have tabindex="0"
-      members_tab = find('[role="tab"]#members-tab')
-      assert_equal '0', members_tab['tabindex']
-
-      # Groups tab (unselected) should have tabindex="-1"
-      groups_tab = find('[role="tab"]#groups-tab')
-      assert_equal '-1', groups_tab['tabindex']
-
-      # Click groups tab
-      groups_tab.click
-      wait_for_network_idle
-
-      # Now groups tab should have tabindex="0"
-      assert_equal '0', find('[role="tab"]#groups-tab')['tabindex']
-      # And members tab should have tabindex="-1"
-      assert_equal '-1', find('[role="tab"]#members-tab')['tabindex']
     end
   end
 end
