@@ -1,12 +1,13 @@
 <%= turbo_stream.append "samplesheet-payload-container" do %>
   <div
     hidden
-    data-controller="nextflow--metadata"
-    data-nextflow--metadata-metadata-value="<%= @metadata %>"
+    <%# data-controller="nextflow--metadata" %>
+    data-metadata="<%= @metadata %>"
     <% unless Flipper.enabled?(:deferred_samplesheet) %>
-    data-nextflow--metadata-property-value="<%= @header %>"
+    data-header="<%= @header %>"
     <% end %>
     data-nextflow--samplesheet-target="dataPayload"
+    data-payload-type="metadata"
   />
 
 <% end %>

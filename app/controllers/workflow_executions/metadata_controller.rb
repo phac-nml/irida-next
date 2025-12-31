@@ -47,8 +47,9 @@ module WorkflowExecutions
     end
 
     def fetch_metadata
+      # sample_ids = params[:sample_ids].split(',') TODO: Check how this works now
       node = Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(@field))
-      query = Sample.where(id: params[:sample_ids]).pluck(:id, node).map do |results|
+      query = Sample.where(id: sample_ids).pluck(:id, node).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
       end
 
