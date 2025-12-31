@@ -206,6 +206,6 @@ end
 
 gem 'activerecord-session_store', '~> 2.1'
 
-gem 'minitest', '~> 5.25', '>= 5.25.5'
+gem 'minitest', '~> 5.27'
 
 gem 'rails_icons', '~> 1.3'
