@@ -35,8 +35,8 @@ class AttachmentsController < ApplicationController
 
   # 🎬 Renders the appropriate preview template based on file format
   def handle_preview
-    format = @attachment.metadata['format']
-    if lookup_context.template_exists?("attachments/#{format}_preview")
+    format = Attachment::PREVIEWABLE_TYPES[@attachment.metadata['format']]
+    if format.present? && lookup_context.template_exists?("attachments/#{format}_preview")
       render "#{format}_preview", locals: { contents: attachment_contents }
     else
       handle_not_found

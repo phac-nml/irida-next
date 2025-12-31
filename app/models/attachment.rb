@@ -27,7 +27,7 @@ class Attachment < ApplicationRecord
     'json' => :json,
     'csv' => :csv,
     'tsv' => :tsv,
-    'spreadsheet' => :excel
+    'spreadsheet' => :spreadsheet
   }.freeze
 
   COPYABLE_TYPES = %w[text json csv tsv fasta fastq genbank].freeze
