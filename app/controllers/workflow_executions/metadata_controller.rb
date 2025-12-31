@@ -6,7 +6,6 @@ module WorkflowExecutions
     respond_to :turbo_stream
 
     def fields
-      @samples = Sample.where(id: params[:sample_ids])
       @header = params[:header]
       @field = params[:field]
       @metadata = generate_metadata_for_samplesheet.to_json
@@ -16,8 +15,9 @@ module WorkflowExecutions
     private
 
     def generate_metadata_for_samplesheet
+      sample_ids = params[:sample_ids].split(',')
       node = Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(@field))
-      query = Sample.where(id: params[:sample_ids]).pluck(:id, node).map do |results|
+      query = Sample.where(id: sample_ids).pluck(:id, node).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
       end
 

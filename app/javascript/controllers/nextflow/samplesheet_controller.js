@@ -331,18 +331,11 @@ export default class extends Controller {
     this.#clearPayload();
   }
 
-  // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
-  updateMetadata({ detail: { content } }) {
-    _.merge(this.#samplesheetAttributes, content["metadata"]);
+  #updateMetadata(metadata, header) {
+    _.merge(this.#samplesheetAttributes, metadata);
     for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
-      this.#updateCell(
-        content["property"],
-        this.#allSampleIds[i],
-        "metadata_cell",
-        false,
-      );
+      this.#updateCell(header, this.#allSampleIds[i], "metadata_cell", false);
     }
-    this.#clearPayload();
   }
 
   #loadTableData() {
@@ -787,15 +780,11 @@ export default class extends Controller {
         name: "field",
         value: metadataField,
       },
+      {
+        name: "sample_ids",
+        value: this.#allSampleIds,
+      },
     ];
-
-    // add sample ids
-    Object.values(this.#samplesheetAttributes).forEach((sample) => {
-      formInputValues.push({
-        name: "sample_ids[]",
-        value: sample.sample_id,
-      });
-    });
 
     const form = metadataFormContent.querySelector("form");
     formInputValues.forEach((inputValue) => {
@@ -814,13 +803,11 @@ export default class extends Controller {
   }
 
   #compactFormData() {
-    console.log("in compact");
     const compactFormData = new FormData(this.formTarget);
 
     let params = formDataToJsonParams(compactFormData);
     params["workflow_execution"]["samples_workflow_executions_attributes"] =
       Object.values(this.#samplesheetAttributes);
-    console.log("compact done");
     return params;
   }
 
@@ -882,5 +869,19 @@ export default class extends Controller {
     nameErrorSpan.classList.remove(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.remove("hidden");
     nameField.classList.remove("invalid");
+  }
+
+  dataPayloadTargetConnected() {
+    const payloadType =
+      this.dataPayloadTarget.getAttribute("data-payload-type");
+    if (payloadType === "metadata") {
+      const metadata = JSON.parse(
+        this.dataPayloadTarget.getAttribute("data-metadata"),
+      );
+      const header = this.dataPayloadTarget.getAttribute("data-header");
+      this.#updateMetadata(metadata, header);
+    }
+
+    this.dataPayloadTarget.remove();
   }
 }
