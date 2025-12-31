@@ -3,7 +3,7 @@
 valid_metadata_template:
   name: "Valid Template"
   description: "This is a valid template."
-  fields: ["field_v1", "field_v2", "field_v3"]
+  fields: ["metadatafield2", "metadatafield1"]
   created_at: <%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -11,26 +11,26 @@ valid_metadata_template:
 valid_group_metadata_template:
   name: "Valid Group Template"
   description: "This is a valid group template."
-  fields: ["field_1", "field_2"]
+  fields: ["metadatafield1", "metadatafield2"]
   created_at: <%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
-<% 21.times do |n| %>
+<% 2.times do |n| %>
 project1_metadata_template<%= (n) %>:
   name: <%= "Project Template#{n}" %>
   description: <%= "This is template #{n} for the project" %>
-  fields: <%= ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"] %>
+  fields: <%= ["metadatafield#{n+1}"] %>
   created_at: <%= (n+3).hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
 <% end %>
 
-<% 21.times do |n| %>
+<% 2.times do |n| %>
 group_one_metadata_template<%= (n) %>:
   name: <%= "Group Template#{n}" %>
   description: <%= "This is template #{n} for the group" %>
-  fields: <%= ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"] %>
+  fields: <%= ["metadatafield#{n+1}"] %>
   created_at: <%= (n+3).hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
@@ -66,12 +66,4 @@ group_two_metadata_template2:
   fields: ["field_d1", "field_d2", "field_d3"]
   created_at: (<%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-
-project1_metadata_template_with_existing_fields:
-  name: Project Template with existing fields
-  description: This is a template with existing fields
-  fields: ["metadatafield1"]
-  created_at: <%= 3.hours.ago %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

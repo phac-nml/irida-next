@@ -4259,7 +4259,7 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
       assert_selector "div[data-controller='infinite-scroll viral--sortable-lists--two-lists-selection']"
       assert_no_selector 'ul#selected-list li', text: 'metadatafield1'
-      select 'Project Template with existing fields', from: I18n.t('data_exports.new.template_select_label')
+      select 'Project Template0', from: I18n.t('data_exports.new.template_select_label')
       ### ACTIONS END ###
 
       ### VERIFY START ###
