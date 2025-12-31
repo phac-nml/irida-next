@@ -1,7 +1,6 @@
 <%= turbo_stream.append "samplesheet-payload-container" do %>
   <div
     hidden
-    <%# data-controller="nextflow--metadata" %>
     data-metadata="<%= @metadata %>"
     data-header="<%= @header %>"
     data-nextflow--samplesheet-target="dataPayload"
