@@ -949,6 +949,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -983,6 +984,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -1035,6 +1037,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -1089,6 +1092,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1131,6 +1135,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
       end
@@ -1214,6 +1219,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
@@ -1254,6 +1260,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
@@ -1322,6 +1329,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
 
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -1389,6 +1397,7 @@ module Groups
         # dialog button hidden while importing
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        assert_performed_jobs 1
       end
       ### VERIFY END ###
     end
@@ -1504,6 +1513,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+        assert_performed_jobs 1
 
         # success msg
         assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
@@ -1559,6 +1569,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+        assert_performed_jobs 1
 
         # success msg
         assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
@@ -1612,6 +1623,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+        assert_performed_jobs 1
 
         # success msg
         assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
@@ -1709,6 +1721,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+        assert_performed_jobs 1
 
         # success msg
         assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
@@ -2000,6 +2013,7 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+        assert_performed_jobs 1
 
         # success msg
         assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
@@ -2199,6 +2213,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
+        assert_performed_jobs 1
 
         # flash msg
         assert_text I18n.t('samples.transfers.create.success')
@@ -2269,6 +2284,7 @@ module Groups
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::TransferJob]
+        assert_performed_jobs 1
       end
       ### VERIFY END ###
     end
@@ -2310,6 +2326,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
+        assert_performed_jobs 1
 
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
@@ -2380,6 +2397,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
+        assert_performed_jobs 1
 
         # error messages in dialog
         assert_text I18n.t('samples.transfers.create.error')
@@ -2618,6 +2636,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
 
         # flash msg
         assert_text I18n.t('samples.clones.create.success')
@@ -2689,6 +2708,7 @@ module Groups
         # close button hidden during cloning
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
       end
       ### VERIFY END ###
     end
@@ -2729,6 +2749,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
 
         # sample listing should not be in error dialog
         assert_no_selector '#list_selections'
@@ -2774,6 +2795,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
 
         # errors that a sample with the same name as sample30 already exists in project25
         assert_text I18n.t('samples.clones.create.error')
@@ -2868,6 +2890,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
 
         # flash msg
         assert_text I18n.t('samples.clones.create.success')
