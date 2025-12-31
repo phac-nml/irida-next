@@ -26,14 +26,16 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         # verify the field list & option group elements are localized
-        first("input[role='combobox']").fill_in with: ''
-        first("input[role='combobox']").click
-        within first("div[role='listbox']") do
+        within first("div[data-controller='select-with-auto-complete']") do
+          combobox = find("input[role='combobox']")
+          combobox.send_keys(:escape, :escape)
+          combobox.click
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.name'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.puid'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.created_at'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.updated_at'), count: 2
-          assert_selector "div[role='option']", text: I18n.t('samples.table_component.attachments_updated_at'), count: 1
+          assert_selector "div[role='option']", text: I18n.t('samples.table_component.attachments_updated_at'),
+                                                count: 1
           assert_selector "div[role='presentation']",
                           text: I18n.t('components.advanced_search_component.operation.metadata_fields'),
                           count: 1

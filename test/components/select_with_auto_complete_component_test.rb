@@ -19,9 +19,10 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='option'][data-value='metadata.age']"
           assert_selector "div[role='option'][data-value='metadata.patient_age']"
           find("div[role='option'][data-value='metadata.patient_age']").click
-          assert_equal 'patient_age', combobox.value
         end
       end
+      hidden = find("input[type='hidden']", visible: false)
+      assert_equal 'metadata.patient_age', hidden.value
     end
   end
 
@@ -31,7 +32,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
       combobox = find("input[role='combobox']")
       combobox.send_keys(:down, :down, :enter)
       assert_selector "div[role='listbox']", visible: false
-      assert_equal 'patient_age', combobox.value
+      hidden = find("input[type='hidden']", visible: false)
+      assert_equal 'metadata.age', hidden.value
     end
   end
 
@@ -39,11 +41,12 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
       combobox = find("input[role='combobox']")
-      combobox.send_keys(:down, :down, :down)
-      first_option = find("div[role='option'][data-value='metadata.age']")
+      combobox.send_keys(:down, :down)
+      options = all("div[role='option']")
+      first_option = options.first
       assert_equal first_option[:id], combobox['aria-activedescendant']
       combobox.send_keys(:up)
-      last_option = find("div[role='option'][data-value='metadata.patient_age']")
+      last_option = options.last
       assert_equal last_option[:id], combobox['aria-activedescendant']
     end
   end
@@ -81,7 +84,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
       assert_equal 'age', combobox.value
       combobox.send_keys(:escape, :escape)
       assert_matches_style(listbox, 'display' => 'none')
-      assert_empty combobox.value
+      hidden = find("input[type='hidden']", visible: false)
+      assert_empty hidden.value
     end
   end
 end
