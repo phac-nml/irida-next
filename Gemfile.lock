@@ -715,7 +715,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.38)
     zeitwerk (2.7.4)
-    zip_kit (6.3.3)
+    zip_kit (6.3.4)
 
 PLATFORMS
   arm64-darwin-24
