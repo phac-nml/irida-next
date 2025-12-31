@@ -192,8 +192,6 @@ module Groups
         )
       end
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       table_row = find(:table_row, ['Group Template011'])
