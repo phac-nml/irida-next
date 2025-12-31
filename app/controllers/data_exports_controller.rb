@@ -20,7 +20,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     @has_data_exports = all_data_exports.any?
     @q = all_data_exports.ransack(params[:q])
     set_default_sort
-    @pagy, @data_exports = pagy(@q.result)
+    @pagy, @data_exports = pagy(@q.result, raise_range_error: true)
   end
 
   def show

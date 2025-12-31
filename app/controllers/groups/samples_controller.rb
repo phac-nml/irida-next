@@ -106,7 +106,8 @@ module Groups
       @group_project_ids = authorized_scope(Project, type: :relation, as: :group_projects,
                                                      scope_options: { group: @group }).pluck(:id)
 
-      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: @group_project_ids }))
+      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: @group_project_ids,
+                                                                                    request: }))
     end
 
     def results_message

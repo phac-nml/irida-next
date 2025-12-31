@@ -16,7 +16,7 @@ module BotActions
   def index
     authorize! @namespace, to: :view_bot_accounts?
 
-    @pagy, @bot_accounts = pagy(@bot_accounts)
+    @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true)
   end
 
   def new

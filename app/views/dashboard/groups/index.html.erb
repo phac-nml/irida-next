@@ -17,7 +17,7 @@
           query: @q,
           url: dashboard_groups_url,
           search_attribute: :name_or_puid_cont,
-        label: t('common.controls.search'),
+          label: t("common.controls.search"),
           placeholder: t(:".search.placeholder"),
           total_count: @pagy.count,
           class: "max-sm:grow",
@@ -52,7 +52,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
+      <% if @pagy.count.positive? %>
         <div class="flex flex-row-reverse">
           <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
         </div>
