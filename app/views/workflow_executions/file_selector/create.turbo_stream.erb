@@ -7,9 +7,9 @@
 <%= turbo_stream.append "samplesheet-payload-container" do %>
   <div
     hidden
-    data-controller="nextflow--file"
-    data-nextflow--file-files-value="<%= @attachments_params.to_json %>"
+    data-files="<%= @attachments_params.to_json %>"
     data-nextflow--samplesheet-target="dataPayload"
+    data-payload-type="files"
   />
 
 <% end %>

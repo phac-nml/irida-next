@@ -157,8 +157,6 @@ export default class extends Controller {
         this.#requiredColumns.push(column);
       }
     }
-    // enter all initial/autoloaded sample data into FormData
-    // this.#setInitialSamplesheetData();
 
     // set initial sample indexes to include all samples
     this.#setCurrentSampleIndexesToAll();
@@ -310,9 +308,10 @@ export default class extends Controller {
   }
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
-  updateFileData({ detail: { content } }) {
-    const sample_id = content["attachable_id"];
-    content["files"].forEach((file) => {
+  #updateFileData(files) {
+    console.log(files);
+    const sample_id = files["attachable_id"];
+    files["files"].forEach((file) => {
       this.#fileAttributes[sample_id][file["property"]].attachment_id = file.id;
       this.#fileAttributes[sample_id][file["property"]].filename = file[
         "filename"
@@ -328,7 +327,7 @@ export default class extends Controller {
       // via formData (files are stored by globalID in formData)
       this.#updateCell(file["property"], sample_id, "file_cell", true);
     });
-    this.#clearPayload();
+    // this.#clearPayload();
   }
 
   #updateMetadata(metadata, header) {
@@ -600,7 +599,6 @@ export default class extends Controller {
     }
   }
 
-  // TODO update this from index to sampleId
   #updateCell(columnName, sampleId, cellType, focusCell) {
     const cell = document.getElementById(`${sampleId}_${columnName}`);
     if (cell) {
@@ -880,6 +878,11 @@ export default class extends Controller {
       );
       const header = this.dataPayloadTarget.getAttribute("data-header");
       this.#updateMetadata(metadata, header);
+    } else if (payloadType === "files") {
+      const files = JSON.parse(
+        this.dataPayloadTarget.getAttribute("data-files"),
+      );
+      this.#updateFileData(files);
     }
 
     this.dataPayloadTarget.remove();
