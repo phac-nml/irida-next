@@ -782,18 +782,22 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.enable(:attachments_preview)
     Flipper.enable(:workflow_execution_attachments_searching)
 
+    previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)
+
     visit workflow_execution_path(@workflow_execution3, anchor: 'summary-tab')
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 
     within 'tbody' do
-      assert_link I18n.t('components.attachments.table_component.preview')
-      click_link I18n.t('components.attachments.table_component.preview'), match: :first
+      assert_link I18n.t('components.attachments.table_component.preview_aria_label',
+                         name: previewable_attachment.file.filename.to_s)
+      click_link I18n.t('components.attachments.table_component.preview_aria_label',
+                        name: previewable_attachment.file.filename.to_s)
     end
 
     # Should navigate to attachment preview page
+    assert_selector 'h1', text: previewable_attachment.file.filename.to_s
     assert_current_path(%r{/attachments/\d+})
-    assert_selector 'h1'
   end
 
   test 'can successfully cancel multiple workflows at once' do

@@ -24,3 +24,6 @@ config/credentials/*
 
 # Locales
 config/locales/*
+
+# Fixture files
+test/fixtures/*
