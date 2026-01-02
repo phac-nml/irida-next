@@ -1,0 +1,147 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-6xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_heading_group(level: 1) do |group| %>
+        <%= group.with_eyebrow { "Typography Components" } %>
+        <%= group.with_heading { "Special Components" } %>
+        <%= group.with_metadata { "Code, lists, heading groups, and sections" } %>
+      <% end %>
+    </div>
+
+    <!-- HeadingGroup Component -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "HeadingGroup Component" } %>
+      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Compound component coordinating eyebrow, heading, and metadata" } %>
+
+      <div class="space-y-8">
+        <%= pathogen_heading_group(level: 2) do |group| %>
+          <%= group.with_eyebrow { "Tutorial" } %>
+          <%= group.with_heading { "Getting Started" } %>
+          <%= group.with_metadata { "Last updated January 15, 2024" } %>
+        <% end %>
+
+        <%= pathogen_heading_group(level: 3, spacing: :compact) do |group| %>
+          <%= group.with_heading { "Compact Spacing" } %>
+          <%= group.with_metadata(variant: :muted) { "3 samples processed" } %>
+        <% end %>
+
+        <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_heading_group(level: 2) do |group| %>
+  <%%= group.with_eyebrow { "Category" } %>
+  <%%= group.with_heading { "Title" } %>
+  <%%= group.with_metadata { "Metadata" } %>
+<%% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Section Component -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Section Component" } %>
+      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Semantic wrapper with heading hierarchy validation" } %>
+
+      <%= pathogen_section(level: 3) do |section| %>
+        <% section.with_heading { "Section with Heading" } %>
+        <%= pathogen_text { "Section content goes here. The Section component validates heading hierarchy in development mode." } %>
+      <% end %>
+
+      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_section(level: 2, spacing: :spacious) do |section| %>
+  <%%= section.with_heading { "Features" } %>
+  <p>Section content...</p>
+<%% end %>
+      <% end %>
+    </div>
+
+    <!-- Code Components -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Code Components" } %>
+
+      <div class="space-y-6">
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Inline Code" } %>
+          <%= pathogen_text { "Use " } %>
+          <%= pathogen_code { "pathogen_text" } %>
+          <%= pathogen_text { " for paragraphs and " } %>
+          <%= pathogen_code { "pathogen_heading" } %>
+          <%= pathogen_text { " for headings." } %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Code Block" } %>
+          <%= pathogen_code_block(language: "ruby") do %>
+def example
+  puts "Hello, World!"
+end
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- List Components -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "List Components" } %>
+
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Unordered List" } %>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { "Sample management" } %>
+            <%= list.with_item { "Workflow execution" } %>
+            <%= list.with_item { "Data visualization" } %>
+            <%= list.with_item { "Quality control" } %>
+          <% end %>
+        </div>
+
+        <div>
+          <%= pathogen_heading(level: 4, class: "mb-3") { "Ordered List" } %>
+          <%= pathogen_list(ordered: true) do |list| %>
+            <%= list.with_item { "Upload samples" } %>
+            <%= list.with_item { "Select workflow" } %>
+            <%= list.with_item { "Configure parameters" } %>
+            <%= list.with_item { "Run analysis" } %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_list do |list| %>
+  <%%= list.with_item { "Item 1" } %>
+  <%%= list.with_item { "Item 2" } %>
+  <%%= list.with_item { "Item 3" } %>
+<%% end %>
+
+<%%= pathogen_list(ordered: true) do |list| %>
+  <%%= list.with_item { "Step 1" } %>
+  <%%= list.with_item { "Step 2" } %>
+<%% end %>
+      <% end %>
+    </div>
+
+    <!-- Combined Example -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Combined Example" } %>
+
+      <%= pathogen_section(level: 3, spacing: :default) do |section| %>
+        <% section.with_heading { "Installation Guide" } %>
+
+        <%= pathogen_lead(class: "mb-6") { "Follow these steps to set up IRIDA Next in your environment." } %>
+
+        <%= pathogen_heading(level: 4, class: "mb-3") { "Prerequisites" } %>
+        <%= pathogen_list do |list| %>
+          <%= list.with_item { "Ruby 3.4.4 or higher" } %>
+          <%= list.with_item { "PostgreSQL 14 or higher" } %>
+          <%= list.with_item { "Node.js 20 LTS or higher" } %>
+        <% end %>
+
+        <%= pathogen_heading(level: 4, class: "mb-3 mt-6") { "Installation Steps" } %>
+        <%= pathogen_list(ordered: true) do |list| %>
+          <%= list.with_item { "Clone the repository" } %>
+          <%= list.with_item { "Install dependencies with bundle install" } %>
+          <%= list.with_item { "Set up the database with bin/setup" } %>
+          <%= list.with_item { "Start the server with bin/dev" } %>
+        <% end %>
+
+        <%= pathogen_callout(class: "mt-6") { "Note: Make sure all prerequisites are installed before proceeding with the installation." } %>
+      <% end %>
+    </div>
+  </div>
+</div>

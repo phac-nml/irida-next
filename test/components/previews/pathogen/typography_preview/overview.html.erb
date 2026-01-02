@@ -1,0 +1,179 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <div class="mx-auto max-w-7xl space-y-12">
+    <!-- Header -->
+    <div class="text-center">
+      <%= pathogen_typography_preset(:article) do |group| %>
+        <%= group.with_eyebrow { "Pathogen Design System" } %>
+        <%= group.with_heading { "Typography System" } %>
+        <%= group.with_metadata { "A comprehensive, accessible typography system built on Tailwind CSS 4.0" } %>
+      <% end %>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+      <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400">11</div>
+        <%= pathogen_supporting(variant: :muted) { "Components" } %>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400">6</div>
+        <%= pathogen_supporting(variant: :muted) { "Heading Levels" } %>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400">5</div>
+        <%= pathogen_supporting(variant: :muted) { "Presets" } %>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400">4</div>
+        <%= pathogen_supporting(variant: :muted) { "Color Variants" } %>
+      </div>
+    </div>
+
+    <!-- Typography Scale -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-2") { "Typography Scale" } %>
+      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Modular scale with ~1.25 ratio, optimized for readability" } %>
+
+      <div class="space-y-6">
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_heading(level: 1, responsive: false) { "Heading 1" } %>
+          <%= pathogen_supporting(variant: :muted) { "31px mobile, 49px desktop" } %>
+        </div>
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_heading(level: 2, responsive: false) { "Heading 2" } %>
+          <%= pathogen_supporting(variant: :muted) { "25px mobile, 39px desktop" } %>
+        </div>
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_heading(level: 3, responsive: false) { "Heading 3" } %>
+          <%= pathogen_supporting(variant: :muted) { "20px mobile, 31px desktop" } %>
+        </div>
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_lead { "Lead Paragraph" } %>
+          <%= pathogen_supporting(variant: :muted) { "20px (18px responsive)" } %>
+        </div>
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_callout { "Callout Text" } %>
+          <%= pathogen_supporting(variant: :muted) { "18px (16px responsive)" } %>
+        </div>
+        <div class="flex items-baseline gap-6 border-b border-slate-200 pb-4 dark:border-slate-700">
+          <%= pathogen_text { "Body Text" } %>
+          <%= pathogen_supporting(variant: :muted) { "16px (14px responsive)" } %>
+        </div>
+        <div class="flex items-baseline gap-6">
+          <%= pathogen_supporting { "Supporting Text" } %>
+          <%= pathogen_supporting(variant: :muted) { "14px (12px responsive)" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Color Variants" } %>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="space-y-3">
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+            <%= pathogen_text(variant: :default) { "Default variant" } %>
+            <%= pathogen_code(class: "mt-2") { "variant: :default" } %>
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+            <%= pathogen_text(variant: :muted) { "Muted variant" } %>
+            <%= pathogen_code(class: "mt-2") { "variant: :muted" } %>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+            <%= pathogen_text(variant: :subdued) { "Subdued variant" } %>
+            <%= pathogen_code(class: "mt-2") { "variant: :subdued" } %>
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-slate-900 p-4 dark:border-white dark:bg-slate-50">
+            <%= pathogen_text(variant: :inverse) { "Inverse variant" } %>
+            <%= pathogen_code(class: "mt-2") { "variant: :inverse" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Components -->
+    <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+      <%= pathogen_heading(level: 2, class: "mb-6") { "Core Components" } %>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Heading</div>
+          <%= pathogen_heading(level: 3) { "Sample Heading" } %>
+          <%= pathogen_supporting(variant: :muted, class: "mt-2") { "6 levels, responsive sizing" } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">HeadingGroup</div>
+          <%= pathogen_heading_group(level: 3, spacing: :compact) do |group| %>
+            <%= group.with_eyebrow { "Component" } %>
+            <%= group.with_heading { "Compound Component" } %>
+          <% end %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Section</div>
+          <%= pathogen_section(level: 3, spacing: :compact) do |section| %>
+            <% section.with_heading { "Section Wrapper" } %>
+            <%= pathogen_supporting(variant: :muted) { "With hierarchy validation" } %>
+          <% end %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Text</div>
+          <%= pathogen_text { "Standard body text for paragraphs and main content." } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Lead</div>
+          <%= pathogen_lead { "Introductory paragraph that draws attention." } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Callout</div>
+          <%= pathogen_callout { "Emphasized text between body and lead." } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Supporting</div>
+          <%= pathogen_supporting { "Captions, labels, and secondary information." } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">Eyebrow</div>
+          <%= pathogen_eyebrow { "Category Label" } %>
+          <%= pathogen_supporting(variant: :muted, class: "mt-2") { "Uppercase, wide tracking" } %>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          <div class="mb-2 font-mono text-sm text-primary-600 dark:text-primary-400">List</div>
+          <%= pathogen_list do |list| %>
+            <%= list.with_item { "Feature one" } %>
+            <%= list.with_item { "Feature two" } %>
+            <%= list.with_item { "Feature three" } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Features -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
+        <%= pathogen_heading(level: 3, class: "mb-3") { "Responsive Sizing" } %>
+        <%= pathogen_text { "All components support optional responsive sizing with mobile-first approach." } %>
+      </div>
+
+      <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-8 dark:from-blue-900/20 dark:to-blue-800/20">
+        <%= pathogen_heading(level: 3, class: "mb-3") { "Accessibility First" } %>
+        <%= pathogen_text { "Semantic HTML, WCAG AA compliance, and hierarchy validation built-in." } %>
+      </div>
+
+      <div class="rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-8 dark:from-purple-900/20 dark:to-purple-800/20">
+        <%= pathogen_heading(level: 3, class: "mb-3") { "Preset Patterns" } %>
+        <%= pathogen_text { "5 pre-configured presets for common UI patterns: article, card, section, dialog, form." } %>
+      </div>
+    </div>
+  </div>
+</div>
