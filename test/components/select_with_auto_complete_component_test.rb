@@ -27,6 +27,15 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
     end
   end
 
+  def test_no_results_found
+    visit('/rails/view_components/select_with_auto_complete_component/default')
+    within "div[data-controller='select-with-auto-complete']" do
+      combobox = find("input[role='combobox']")
+      combobox.send_keys('this does not exist')
+      assert_selector "div[role='option']", text: I18n.t('select_with_auto_complete_component.no_results_text')
+    end
+  end
+
   def test_enter_key
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
