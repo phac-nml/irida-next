@@ -20,8 +20,8 @@ class MetadataTemplateTest < ActiveSupport::TestCase
   end
 
   test 'invalid with duplicate fields with same ordering as another template' do
-    metadata_template = metadata_templates(:project1_metadata_template0)
-    metadata_template.fields = %w[field_4 field_5 field_6]
+    metadata_template = MetadataTemplate.new(name: 'duplicate test', fields: @valid_metadata_template.fields,
+                                             namespace: @valid_metadata_template.namespace)
     assert_not metadata_template.valid?
     assert_not_nil metadata_template.errors[:fields]
   end
