@@ -54,17 +54,51 @@ module FileSelector
 
   # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
   # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
-  def most_recent_fastq_file(property, pattern)
+  def most_recent_fastq_file(property, _pattern) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    most_recent_file = nil
     direction = fastq_direction(property)
+    if %i[pe_forward pe_reverse].include?(direction)
+      node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                             Arel::Nodes::Quoted.new('direction'))
+      most_recent_file = attachments.where(node.eq(direction == :pe_forward ? 'forward' : 'reverse'),
+                                           "metadata -> 'associated_attachment_id' IS NOT NULL").last
+      unless most_recent_file
+        return {} unless direction == :pe_forward
 
-    if sorted_files[direction].present?
-      sorted_files[direction].last
-    elsif %i[pe_forward none].include?(direction)
-      last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/).last
-      last_single.nil? ? {} : last_single
+        node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                               Arel::Nodes::Quoted.new('format'))
+        most_recent_file = attachments.where(node.eq('fastq')).last
+
+      end
+    else
+      # NO METADATA[:DIRECTION]
+      node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                             Arel::Nodes::Quoted.new('format'))
+      most_recent_file = attachments.where(node.eq('fastq')).last
+    end
+
+    if most_recent_file
+      file_attributes(most_recent_file)
     else
       {}
     end
+
+    # if most_recent_file
+    #   paired_most_recent_file = most_recent_file.associated_attachment
+
+    # else
+
+    # end
+
+    # non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse')))
+    # if sorted_files[direction].present?
+    #   sorted_files[direction].last
+    # elsif %i[pe_forward none].include?(direction)
+    #   last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/).last
+    #   last_single.nil? ? {} : last_single
+    # else
+    #   {}
+    # end
   end
 
   def most_recent_other_file(autopopulate, pattern)
@@ -93,5 +127,13 @@ module FileSelector
     else
       :single
     end
+  end
+
+  def file_attributes(file)
+    {
+      filename: file.file.filename.to_s,
+      global_id: file.to_global_id,
+      id: file.id
+    }
   end
 end
