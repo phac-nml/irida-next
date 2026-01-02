@@ -149,6 +149,9 @@ gem 'opentelemetry-metrics-api'
 gem 'opentelemetry-metrics-sdk'
 gem 'opentelemetry-sdk'
 
+# progress bar for rake tasks
+gem 'ruby-progressbar'
+
 # feature flags
 flipper_version = '~> 1.3.2'
 gem 'flipper-active_record', flipper_version
