@@ -216,11 +216,16 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def sort_samples(scope = Sample.where(project_id: project_ids))
-    if column.starts_with? 'metadata.'
-      field = column.gsub('metadata.', '')
-      scope.order(Sample.metadata_sort(field, direction))
-    else
-      scope.order(Arel.sql(column) => direction.to_sym)
-    end
+    ordered_scope = if column.starts_with? 'metadata.'
+                      field = column.gsub('metadata.', '')
+                      scope.order(Sample.metadata_sort(field, direction))
+                    else
+                      scope.order(Arel.sql(column) => direction.to_sym)
+                    end
+
+    # add in tie breaker sort
+    return ordered_scope if column == 'id'
+
+    ordered_scope.order(id: direction.to_sym)
   end
 end

@@ -204,4 +204,28 @@ class QueryTest < ActiveSupport::TestCase
     assert_not_includes results, sample1
     assert_includes results, sample2
   end
+
+  test 'applies a default sort of updated_at desc' do
+    search_params = { sort: 'updated_at desc',
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    assert_equal 'updated_at desc', query.sort
+  end
+
+  test 'applies a tie breaker sort on id by same direction of provided sort if not sorting on id column' do
+    search_params = { sort: 'updated_at desc',
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.valid?
+    assert_equal 'updated_at desc', query.sort
+
+    order_values = query.results.order_values
+
+    assert_equal 2, order_values.length
+
+    tie_breaker_sort = order_values.last
+    assert_equal 'id', tie_breaker_sort.expr.name
+    assert_equal :desc, tie_breaker_sort.direction
+  end
 end
