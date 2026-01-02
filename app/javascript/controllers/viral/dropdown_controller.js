@@ -1,23 +1,29 @@
 import { Controller } from "@hotwired/stimulus";
+import Dropdown from "utilities/dropdown";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
-  static values = {
-    position: String,
-    trigger: String,
-    skidding: Number,
-    distance: Number,
-  };
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
+    this.boundOnMorph = this.onMorph.bind(this);
   }
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  onMorph() {
+    this.menuTargetConnected(this.menuTarget);
+    this.triggerTargetConnected(this.triggerTarget);
   }
 
   menuTargetConnected(element) {
@@ -39,19 +45,9 @@ export default class extends Controller {
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
+
     this.dropdown = new Dropdown(this.menuTarget, element, {
-      triggerType: "none",
-      offsetSkidding: this.skiddingValue,
-      offsetDistance: this.distanceValue,
-      onShow: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "true");
-        this.menuTarget.setAttribute("aria-hidden", "false");
-        this.menuTarget.removeAttribute("hidden");
-      },
       onHide: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "false");
-        this.menuTarget.setAttribute("aria-hidden", "true");
-        this.menuTarget.setAttribute("hidden", "hidden");
         this.#menuItems(element).forEach((menuitem) => {
           menuitem.setAttribute("tabindex", "-1");
         });
@@ -109,6 +105,7 @@ export default class extends Controller {
         { once: true },
       );
       this.dropdown.show();
+      this.#focusMenuItem(this.menuTarget);
     } else {
       this.dropdown.show();
       this.#focusMenuItem(menuItems.at(index));
