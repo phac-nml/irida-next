@@ -37,6 +37,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
     this.boundOnComboboxClick = this.#onComboboxClick.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
+    this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
 
     this.#filter = "";
     this.#filteredOptions = [];
@@ -292,18 +293,17 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Down":
       case "ArrowDown":
         if (this.#filteredOptions.length > 0) {
-          if (altKey && this.#isClosed()) {
+          if (altKey) {
             this.#setOption(null);
-            this.#open();
           } else {
-            if (this.#isClosed()) {
-              this.#open();
-            }
             if (this.#filteredOptions.length > 1) {
               this.#setOption(this.#getNextOption(this.#option));
             } else {
               this.#setOption(this.#firstOption);
             }
+          }
+          if (this.#isClosed()) {
+            this.#open();
           }
         }
         flag = true;
@@ -413,6 +413,10 @@ export default class SelectWithAutoCompleteController extends Controller {
     }
   }
 
+  #onComboboxFocus() {
+    this.#filterOptions();
+  }
+
   #onBackgroundMouseDown(event) {
     if (
       !this.comboboxTarget.contains(event.target) &&
@@ -453,12 +457,14 @@ export default class SelectWithAutoCompleteController extends Controller {
     combobox.addEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.addEventListener("click", this.boundOnComboboxClick);
+    combobox.addEventListener("focus", this.boundOnComboboxFocus);
   }
 
   #removeComboboxEventListeners(combobox) {
     combobox.removeEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
     combobox.removeEventListener("click", this.boundOnComboboxClick);
+    combobox.removeEventListener("focus", this.boundOnComboboxFocus);
   }
 
   #addListboxOptionEventListeners(option) {

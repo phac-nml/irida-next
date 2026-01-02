@@ -19,6 +19,7 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='option'][data-value='metadata.age']"
           assert_selector "div[role='option'][data-value='metadata.patient_age']"
           find("div[role='option'][data-value='metadata.patient_age']").click
+          assert_equal 'patient_age', combobox.value
         end
       end
       hidden = find("input[type='hidden']", visible: false)
@@ -32,8 +33,20 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
       combobox = find("input[role='combobox']")
       combobox.send_keys(:down, :down, :enter)
       assert_selector "div[role='listbox']", visible: false
+      assert_equal 'patient_age', combobox.value
       hidden = find("input[type='hidden']", visible: false)
-      assert_equal 'metadata.age', hidden.value
+      assert_equal 'metadata.patient_age', hidden.value
+    end
+  end
+
+  def test_alt_and_down_combination_keys
+    visit('/rails/view_components/select_with_auto_complete_component/default')
+    within "div[data-controller='select-with-auto-complete']" do
+      combobox = find("input[role='combobox']")
+      combobox.send_keys(%i[alt down])
+      assert_selector "div[role='listbox']", visible: true
+      first_option = all("div[role='option']")[0]
+      assert_nil first_option['aria-selected']
     end
   end
 
@@ -41,7 +54,7 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
       combobox = find("input[role='combobox']")
-      combobox.send_keys(:down, :down)
+      combobox.send_keys(:down, :down, :down)
       options = all("div[role='option']")
       first_option = options.first
       assert_equal first_option[:id], combobox['aria-activedescendant']
@@ -84,6 +97,7 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
       assert_equal 'age', combobox.value
       combobox.send_keys(:escape, :escape)
       assert_matches_style(listbox, 'display' => 'none')
+      assert_empty combobox.value
       hidden = find("input[type='hidden']", visible: false)
       assert_empty hidden.value
     end
