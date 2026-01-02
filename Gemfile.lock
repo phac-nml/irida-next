@@ -403,7 +403,7 @@ GEM
       timeout
     net-smtp (0.5.1)
       net-protocol
-    nio4r (2.7.4)
+    nio4r (2.7.5)
     nokogiri (1.19.0-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.0-x86_64-linux-gnu)
@@ -504,7 +504,7 @@ GEM
       i18n (>= 0.5.0)
       railties (>= 6.1.0)
     public_suffix (7.0.0)
-    puma (6.6.1)
+    puma (7.1.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -786,7 +786,7 @@ DEPENDENCIES
   pg
   propshaft
   public_activity
-  puma (~> 6.6)
+  puma (~> 7.1)
   rack-cors
   rails (~> 8.1.1)
   rails_icons (~> 1.3)
