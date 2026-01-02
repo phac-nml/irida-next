@@ -101,7 +101,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     Projects::DestroyService.new(@project, current_user).execute
     if @project.namespace.deleted?
       flash[:success] = t('.success', project_name: @project.name)
-      redirect_to dashboard_projects_path(format: :html)
+      redirect_to dashboard_projects_path
     else
       flash[:error] = error_message(@project)
       redirect_to namespace_project_path(@project.namespace.parent, @project)
