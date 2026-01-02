@@ -2067,6 +2067,7 @@ fr:
         title: Sélection du flux de travail
     summary:
       created_at: Créé
+      deleted: Supprimé
       run_from_namespace:
         group: Faire l’exécution à partir du groupe
         project: Faire l’exécution à partir du projet

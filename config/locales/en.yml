@@ -2063,6 +2063,7 @@ en:
         title: Workflow Selection
     summary:
       created_at: Created
+      deleted: Deleted
       run_from_namespace:
         group: Run from Group
         project: Run from Project

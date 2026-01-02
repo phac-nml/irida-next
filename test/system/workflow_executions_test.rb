@@ -360,6 +360,79 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
+    assert_link workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_no_text I18n.t('workflow_executions.summary.deleted')
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    assert_text I18n.t('workflow_executions.files.empty.title')
+    assert_text I18n.t('workflow_executions.files.empty.description')
+
+    click_on I18n.t('workflow_executions.show.tabs.params')
+
+    assert_selector 'div.project_name-param > span', text: '--project_name'
+    assert_selector 'div.project_name-param > input[value="assembly"]'
+
+    assert_selector 'div.assembler-param > span', text: '--assembler'
+    assert_selector 'div.assembler-param > input[value="stub"]'
+
+    assert_selector 'div.random_seed-param > span', text: '--random_seed'
+    assert_selector 'div.random_seed-param > input[value="1"]'
+  end
+
+  test 'can view a workflow execution of a deleted project' do
+    workflow_execution = workflow_executions(:workflow_execution_existing)
+    project = workflow_execution.namespace.project
+
+    Projects::DestroyService.new(project, @user).execute
+    assert project.deleted?
+
+    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
+
+    assert_text workflow_execution.id
+    assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+    assert_text workflow_execution.workflow.name
+    assert_text workflow_execution.metadata['workflow_version']
+    assert_no_link workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_text I18n.t('workflow_executions.summary.deleted')
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    assert_text I18n.t('workflow_executions.files.empty.title')
+    assert_text I18n.t('workflow_executions.files.empty.description')
+
+    click_on I18n.t('workflow_executions.show.tabs.params')
+
+    assert_selector 'div.project_name-param > span', text: '--project_name'
+    assert_selector 'div.project_name-param > input[value="assembly"]'
+
+    assert_selector 'div.assembler-param > span', text: '--assembler'
+    assert_selector 'div.assembler-param > input[value="stub"]'
+
+    assert_selector 'div.random_seed-param > span', text: '--random_seed'
+    assert_selector 'div.random_seed-param > input[value="1"]'
+  end
+
+  test 'can view a workflow execution of a deleted group' do
+    workflow_execution = workflow_executions(:workflow_execution_existing)
+    group = workflow_execution.namespace.parent
+
+    Groups::DestroyService.new(group, @user).execute
+    assert group.deleted?
+
+    visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
+
+    assert_text workflow_execution.id
+    assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+    assert_text workflow_execution.workflow.name
+    assert_text workflow_execution.metadata['workflow_version']
+    assert_no_link workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_text I18n.t('workflow_executions.summary.deleted')
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 
@@ -578,6 +651,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
+    assert_link workflow_execution.namespace_with_deleted.name
+    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_no_text I18n.t('workflow_executions.summary.deleted')
 
     assert_selector 'button[disabled]', text: I18n.t(:'workflow_executions.show.create_export_button')
     assert_button I18n.t('common.actions.cancel')
