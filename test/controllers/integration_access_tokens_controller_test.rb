@@ -42,6 +42,6 @@ class IntegrationAccessTokensControllerTest < ActionDispatch::IntegrationTest
       post integration_access_token_index_path(format: :turbo_stream), headers: { 'HTTP_REFERER' => 'http://localhost:3000/integration_access_token?caller=not_a_valid_identifier' }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

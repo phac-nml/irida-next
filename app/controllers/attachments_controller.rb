@@ -65,8 +65,7 @@ class AttachmentsController < ApplicationController
 
   # 🚫 Redirects when attachment can't be found or displayed
   def handle_not_found
-    redirect_back fallback_location: request.referer || root_path,
-                  alert: I18n.t('attachment.show.file_not_found')
+    redirect_back_or_to(request.referer || root_path, alert: I18n.t('attachment.show.file_not_found'))
     nil
   end
 
@@ -136,6 +135,6 @@ class AttachmentsController < ApplicationController
   # 🚦 Feature flag check for attachment previews
   # Redirects if the preview feature is disabled
   def check_attachments_preview_enabled
-    redirect_back(fallback_location: root_path) unless Flipper.enabled?(:attachments_preview)
+    redirect_back_or_to(root_path) unless Flipper.enabled?(:attachments_preview)
   end
 end

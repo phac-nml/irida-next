@@ -73,7 +73,7 @@ module Projects
           assert_response :multi_status
         end
 
-        test 'should get unprocessable_entity when no attachments are deleted' do
+        test 'should get unprocessable_content when no attachments are deleted' do
           delete namespace_project_sample_attachments_deletion_path(@namespace, @project1, @sample2,
                                                                     format: :turbo_stream),
                  params: {

@@ -23,8 +23,8 @@ class IntegrationAccessTokenController < ApplicationController
         handle_token_creation(format)
       else # caller identifier not in allow list
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { new_personal_access_token: nil,
-                                                          message: I18n.t('integration_access_tokens.create.denied') }
+          render status: :unprocessable_content, locals: { new_personal_access_token: nil,
+                                                           message: I18n.t('integration_access_tokens.create.denied') }
         end
       end
     end
@@ -43,7 +43,7 @@ class IntegrationAccessTokenController < ApplicationController
     else
       format.turbo_stream do
         error = I18n.t('integration_access_tokens.create.error', error: error_message(@personal_access_token))
-        render status: :unprocessable_entity, locals: {
+        render status: :unprocessable_content, locals: {
           new_personal_access_token: nil, message: error
         }
       end
