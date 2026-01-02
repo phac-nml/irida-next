@@ -32,7 +32,9 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     result = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
-    if result
+    if result.nil?
+      nil
+    elsif result
       queue_next_job(workflow_execution.reload)
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
@@ -46,8 +48,9 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     when :completing
       WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     else
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now)
-                                .perform_later(workflow_execution)
+      WorkflowExecutionStatusJob.set(
+        wait_until: workflow_execution.workflow.status_check_interval.seconds.from_now
+      ).perform_later(workflow_execution)
     end
   end
 end
