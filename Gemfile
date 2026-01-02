@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.7'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 8.0.1'
+gem 'rails', '~> 8.1.1'
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft'
@@ -66,14 +66,17 @@ gem 'openssl', '~> 3.3', '>= 3.3.1'
 # Tailwind CSS [https://tailwindcss.com]
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
-gem 'tailwindcss-rails', '~> 4.0'
+gem 'tailwindcss-rails', '~> 4.4'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
+# ActiveRecord Cursor Paginate
+gem 'activerecord_cursor_paginate', '~> 0.4.1'
+
 # Pagy
-gem 'pagy', '~> 9.3.3'
+gem 'pagy', '~> 9.4.0'
 
 # Ransack
-gem 'ransack', '~> 4.2.1'
+gem 'ransack', '~> 4.4.1'
 
 # Search Syntax
 gem 'search_syntax'
@@ -107,7 +110,7 @@ gem 'activerecord_json_validator', '~> 3.1.0'
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
 gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'copy-blob', require: false
-gem 'google-cloud-storage', '~> 1.11', require: false
+gem 'google-cloud-storage', '~> 1.57', require: false
 
 # job queueing
 gem 'good_job', '~> 4.9.0'
@@ -162,6 +165,9 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
 
+  # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
+  gem 'bundler-audit', require: false
+
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem 'brakeman', require: false
 end
@@ -178,10 +184,10 @@ group :development do
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '~> 2.1', '>= 2.1.1'
+  gem 'lookbook', '~> 2.3'
 
   # i18n-tasks
-  gem 'i18n-tasks', '~> 1.0.15', require: false
+  gem 'i18n-tasks', '~> 1.1.2', require: false
 end
 
 group :test do
@@ -200,6 +206,6 @@ end
 
 gem 'activerecord-session_store', '~> 2.1'
 
-gem 'minitest', '~> 5.25', '>= 5.25.5'
+gem 'minitest', '~> 5.27'
 
 gem 'rails_icons', '~> 1.3'

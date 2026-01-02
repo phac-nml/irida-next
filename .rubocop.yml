@@ -1,7 +1,5 @@
-require:
-  - rubocop-graphql
-
 plugins:
+  - rubocop-graphql
   - rubocop-rails
 
 Rails:

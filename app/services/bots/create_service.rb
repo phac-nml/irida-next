@@ -13,7 +13,7 @@ module Bots
 
       is_automation_bot = HasUserType::AUTOMATION_BOT_USER_TYPES.include?(bot_type)
 
-      bot_text = is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
+      bot_text = is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', current_count + 1)}"
 
       set_default_params(bot_text, bot_type, current_count)
     end
@@ -33,7 +33,7 @@ module Bots
                                          email: "#{namespace.puid}_#{bot_text}@iridanext.com",
                                          user_type: bot_type,
                                          first_name: namespace.puid,
-                                         last_name: "Bot #{format('%03d', (current_count + 1))}"
+                                         last_name: "Bot #{format('%03d', current_count + 1)}"
                                        })
       @params[:user_attributes][:members_attributes] ||= {}
       @params[:user_attributes][:members_attributes][:'0'] ||= {}

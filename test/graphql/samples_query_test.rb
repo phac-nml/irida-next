@@ -10,6 +10,25 @@ class SamplesQueryTest < ActiveSupport::TestCase
           name
           description
           id
+          createdAt
+          project {
+            id
+          }
+        }
+        totalCount
+      }
+    }
+  GRAPHQL
+
+  ORDERED_SAMPLES_QUERY = <<~GRAPHQL
+    query($first: Int, $order_by: SampleOrder) {
+      samples(first: $first, orderBy: $order_by) {
+        nodes {
+          name
+          description
+          id
+          createdAt
+          updatedAt
           project {
             id
           }
@@ -233,5 +252,32 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_not data['metadata'].key?('metadatafield1')
     assert_not data['metadata'].key?('metadatafield2')
     assert_empty data['metadata']
+  end
+
+  test 'samples query applies a default order of created_at asc' do
+    result = IridaSchema.execute(SAMPLES_QUERY, context: { current_user: @user },
+                                                variables: { first: 3 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']
+
+    assert_not_nil data
+    assert_not_empty data
+
+    created_at_values = data['nodes'].map { |node| node['created_at'] } # rubocop:disable Rails/Pluck
+    assert_equal created_at_values.sort, created_at_values, 'samples should be ordered by created_at ascending'
+  end
+
+  test 'samples query applies a default direction of ascending' do
+    result = IridaSchema.execute(ORDERED_SAMPLES_QUERY, context: { current_user: @user },
+                                                        variables: { first: 3, order_by: { field: 'name' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']
+
+    name_values = data['nodes'].map { |node| node['name'] } # rubocop:disable Rails/Pluck
+    assert_equal name_values.sort, name_values, 'samples should be ordered by name ascending'
   end
 end

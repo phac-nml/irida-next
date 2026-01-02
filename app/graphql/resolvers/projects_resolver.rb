@@ -18,12 +18,12 @@ module Resolvers
     argument :order_by, Types::ProjectOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
     def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:projects_preauthorized, true)
       projects = group_id ? projects_by_group_scope(group_id:) : projects_by_scope
-      ransack_obj = projects.ransack(filter&.to_h)
+      ransack_obj = projects.joins(:namespace).ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
       ransack_obj.result

@@ -905,7 +905,7 @@ type Group implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = null
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """
@@ -1653,7 +1653,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = null
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """
@@ -1743,7 +1743,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: SampleOrder = null
+    orderBy: SampleOrder = {field: created_at, direction: asc}
   ): SampleConnection
 
   """
@@ -2079,7 +2079,7 @@ type Query {
     fullPath: ID
 
     """
-    Persistent Unique Identifer of the group. For example, `INXT_GRP_GGGGGGGGGG.`
+    Persistent Unique Identifier of the group. For example, `INXT_GRP_GGGGGGGGGG.`
     """
     puid: ID
   ): Group
@@ -2116,7 +2116,7 @@ type Query {
     """
     Order by
     """
-    orderBy: GroupOrder = null
+    orderBy: GroupOrder = {field: created_at, direction: asc}
   ): GroupConnection!
 
   """
@@ -2269,7 +2269,7 @@ type Query {
     """
     Order by
     """
-    orderBy: ProjectOrder = null
+    orderBy: ProjectOrder = {field: created_at, direction: asc}
   ): ProjectConnection
 
   """
@@ -2319,7 +2319,7 @@ type Query {
     """
     Order by
     """
-    orderBy: SampleOrder = null
+    orderBy: SampleOrder = {field: created_at, direction: asc}
   ): SampleConnection
 
   """
@@ -2384,7 +2384,7 @@ type Sample implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = null
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """

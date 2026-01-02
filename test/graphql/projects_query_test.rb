@@ -17,6 +17,20 @@ class ProjectsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  ORDERED_PROJECTS_QUERY = <<~GRAPHQL
+    query($first: Int, $order_by: ProjectOrder) {
+      projects(first: $first, orderBy: $order_by) {
+        nodes {
+          name
+          path
+          description
+          id
+        }
+        totalCount
+      }
+    }
+  GRAPHQL
+
   GROUP_PROJECTS_QUERY = <<~GRAPHQL
     query($group_id: ID!) {
       projects(groupId: $group_id) {
@@ -117,5 +131,35 @@ class ProjectsQueryTest < ActiveSupport::TestCase
     data = result['data']['projects']
 
     assert_nil data
+  end
+
+  test 'projects query applies a default order of created_at asc' do
+    result = IridaSchema.execute(PROJECTS_QUERY, context: { current_user: @user },
+                                                 variables: { first: 20 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['projects']
+
+    assert_not_empty data, 'projects type should work'
+    assert_not_empty data['nodes']
+
+    created_at_values = data['nodes'].map { |node| node['createdAt'] } # rubocop:disable Rails/Pluck
+    assert_equal created_at_values.sort, created_at_values
+  end
+
+  test 'projects query applies a default direction of ascending' do
+    result = IridaSchema.execute(ORDERED_PROJECTS_QUERY, context: { current_user: @user },
+                                                         variables: { first: 20, order_by: { field: 'updated_at' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['projects']
+
+    assert_not_empty data, 'projects type should work'
+    assert_not_empty data['nodes']
+
+    updated_at_values = data['nodes'].map { |node| node['updated_at'] } # rubocop:disable Rails/Pluck
+    assert_equal updated_at_values.sort { |a, b| b <=> a }, updated_at_values
   end
 end

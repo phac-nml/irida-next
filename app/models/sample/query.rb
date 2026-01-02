@@ -220,7 +220,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       field = column.gsub('metadata.', '')
       scope.order(Sample.metadata_sort(field, direction))
     else
-      scope.order("#{column} #{direction}")
+      scope.order(Arel.sql(column) => direction.to_sym)
     end
   end
 end

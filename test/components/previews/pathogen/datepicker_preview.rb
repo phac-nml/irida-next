@@ -3,6 +3,7 @@
 module Pathogen
   class DatepickerPreview < ViewComponent::Preview
     include Pathogen::ViewHelper
+
     def default
       pathogen_datepicker(id: 'test_id', input_name: 'test_input_name')
     end

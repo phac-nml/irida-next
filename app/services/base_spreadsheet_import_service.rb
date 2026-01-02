@@ -99,4 +99,8 @@ class BaseSpreadsheetImportService < BaseService
     @temp_import_file.close
     File.unlink(@temp_import_file.path)
   end
+
+  def strip_headers(headers)
+    headers.map(&:strip)
+  end
 end

@@ -1283,7 +1283,6 @@ fr:
         empty:
           description: Aucun pipeline automatisé n’a été configuré pour ce projet
           title: Pas de pipeline automatisé
-        enabled: ACTIVÉ
         headers:
           actions: Mesures
           created_at: Créé

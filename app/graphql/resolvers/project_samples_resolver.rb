@@ -15,7 +15,7 @@ module Resolvers
     argument :order_by, Types::SampleOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
     def resolve(filter:, order_by:)
       context.scoped_set!(:project, project)

@@ -11,7 +11,7 @@ module Resolvers
     argument :order_by, Types::AttachmentOrderInputType,
              required: false,
              description: 'Order by',
-             default_value: nil
+             default_value: { field: 'created_at', direction: 'asc' }
 
     alias project object
 
