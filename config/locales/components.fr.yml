@@ -118,6 +118,7 @@ fr:
       group: Groupe %{index}
       operation:
         contains: contient
+        does_not_contain: ne contient pas
         equals: "="
         exists: existe
         greater_than: ">="

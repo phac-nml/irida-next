@@ -19,6 +19,7 @@ module Types
     value 'LESS_THAN_EQUALS', value: '<='
     value 'GREATER_THAN_EQUALS', value: '>='
     value 'CONTAINS', value: 'contains'
+    value 'NOT_CONTAINS', value: 'not_contains'
     value 'EXISTS', value: 'exists'
     value 'NOT_EXISTS', value: 'not_exists'
     value 'IN', value: 'in'
