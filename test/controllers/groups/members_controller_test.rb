@@ -53,6 +53,20 @@ module Groups
       assert_response :ok
     end
 
+    test 'should redirect user to groups dashboard when they leave the group' do
+      sign_in users(:james_doe)
+
+      group = groups(:group_one)
+      get group_members_path(group)
+      group_member = members(:group_one_member_james_doe)
+
+      assert_difference('Member.count', -1) do
+        delete group_member_path(group, group_member, format: :turbo_stream)
+      end
+
+      assert_redirected_to dashboard_groups_url
+    end
+
     test 'shouldn\'t delete a member from the group' do
       sign_in users(:joan_doe)
 

@@ -65,9 +65,9 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       if current_user == @member.user
         flash[:success] = t('concerns.membership_actions.destroy.leave_success', name: @namespace.name)
         if @namespace.group_namespace?
-          redirect_to dashboard_groups_path(format: :html)
+          redirect_to dashboard_groups_path
         else
-          redirect_to dashboard_projects_path(format: :html)
+          redirect_to dashboard_projects_path
         end
       else
         respond_to do |format|
