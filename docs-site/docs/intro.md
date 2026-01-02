@@ -9,7 +9,7 @@ hide_table_of_contents: true
 
 Welcome to the IRIDA Next documentation.
 
-IRIDA Next is a cloud-based data management system designed to securely store data, enhance data sharing, and facilitate bioinformatic workflows. For more information see About IRIDA Next
+IRIDA Next is a cloud-based data management system designed to securely store data, enhance data sharing, and facilitate bioinformatic workflows. For more information see [About IRIDA Next](About-IRIDA-Next)
 
 |                                                                                         |                                                                               |
 | :-------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------- |
