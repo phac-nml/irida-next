@@ -11,7 +11,7 @@ export default class Dropdown {
   /**
    * @param {Element} target  The panel element to show/hide.
    * @param {Element} trigger The element that toggles the panel.
-   * @param {Object} options  Optional callbacks: { onShow, onHide }.
+   * @param {Object} options  Optional trigger type and callbacks: { triggerType, onShow, onHide }.
    */
   constructor(target, trigger, options = {}) {
     this._target = target;
@@ -42,9 +42,11 @@ export default class Dropdown {
 
   // Attach primary toggle handler to trigger
   _setupEventListeners() {
-    this._trigger.addEventListener("click", () => {
-      this.toggle();
-    });
+    if (this._options.triggerType === "click" || !this._options.triggerType) {
+      this._trigger.addEventListener("click", () => {
+        this.toggle();
+      });
+    }
   }
 
   // Install a capturing click listener on body to detect outside clicks
