@@ -21,7 +21,7 @@ class ActivitiesController < ApplicationController
   protected
 
   def handle_not_found
-    redirect_back_or_to(request.referer || root_path, alert: I18n.t('activities.show.error'))
+    redirect_back_or_to(root_path, alert: I18n.t('activities.show.error'))
   end
 
   def activity

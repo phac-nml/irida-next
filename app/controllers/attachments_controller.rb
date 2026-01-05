@@ -65,7 +65,7 @@ class AttachmentsController < ApplicationController
 
   # 🚫 Redirects when attachment can't be found or displayed
   def handle_not_found
-    redirect_back_or_to(request.referer || root_path, alert: I18n.t('attachment.show.file_not_found'))
+    redirect_back_or_to(root_path, alert: I18n.t('attachment.show.file_not_found'))
     nil
   end
 
