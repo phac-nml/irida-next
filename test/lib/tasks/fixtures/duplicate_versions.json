@@ -1,0 +1,17 @@
+{
+  "test/duplicate-versions": {
+    "url": "https://github.com/test/duplicate-versions",
+    "name": "Test Duplicate Versions",
+    "description": "A pipeline with duplicate versions",
+    "versions": [
+      {
+        "name": "1.0.0",
+        "executable": true
+      },
+      {
+        "name": "1.0.0",
+        "executable": false
+      }
+    ]
+  }
+}

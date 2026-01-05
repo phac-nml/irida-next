@@ -1,0 +1,13 @@
+{
+  "test/unreachable-url": {
+    "url": "https://github.com/nonexistent/repo",
+    "name": "Test Unreachable URL",
+    "description": "A pipeline with unreachable URL",
+    "versions": [
+      {
+        "name": "nonexistent-branch",
+        "executable": true
+      }
+    ]
+  }
+}

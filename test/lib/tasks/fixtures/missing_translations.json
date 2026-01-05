@@ -1,0 +1,47 @@
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "overrides": {
+      "definitions": {
+        "input_output_options": {
+          "description": {
+            "fr": "Définir où le pipeline doit trouver les données d’entrée et sauvegarder les données de sortie."
+          }
+        }
+      }
+    },
+    "versions": [
+      {
+        "name": "1.0.0",
+        "executable": false
+      },
+      {
+        "name": "1.0.1",
+        "executable": false
+      },
+      {
+        "name": "1.0.2",
+        "executable": false
+      },
+      {
+        "name": "1.0.3",
+        "automatable": true,
+        "executable": true
+      },
+      {
+        "name": "1.0.4",
+        "automatable": true
+      },
+      {
+        "name": "test-env-variables",
+        "executable": true
+      },
+      {
+        "name": "test-json",
+        "executable": true
+      }
+    ]
+  }
+}

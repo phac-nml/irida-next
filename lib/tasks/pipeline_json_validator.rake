@@ -8,6 +8,7 @@
 #  Exits with status code 0 if valid, 1 if invalid.
 namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   @errors = []
+  @invalid_json = false
   @required_translation_keys = %w[en fr]
 
   desc 'Validate JSON files against a JSON schema'
@@ -19,10 +20,17 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
       json_file_path_input = ARGV[1]
     end
     json_file_path = Rails.root.join(json_file_path_input)
-    json_data = JSON.parse(File.read(json_file_path))
+
+    json_data = validate_json(json_file_path)
+
+    # Exit early if JSON is malformed
+    early_exit if @invalid_json
 
     puts "Validating JSON file at: #{json_file_path_input} against the schema..."
     validate_schema(json_data)
+
+    # Exit early if schema validation failed
+    early_exit if @errors.any?
 
     puts 'Verifying singular version entries for pipelines...'
     verify_singular_version_entry(json_data)
@@ -40,6 +48,21 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   end
 
   private
+
+  def early_exit
+    puts 'Validation results:'
+    output_validation_results
+    exit(1)
+  end
+
+  # Validate that the JSON file is well-formed
+  def validate_json(json_file_path)
+    JSON.parse(File.read(json_file_path))
+  rescue JSON::ParserError => e
+    @errors << "Invalid JSON format: #{e.message}"
+    @invalid_json = true
+    nil
+  end
 
   # Validate pipeline json config against the IRIDA Next pipelines schema
   def validate_schema(json_data)
@@ -62,6 +85,8 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   # Verify that each pipeline has singular version entries
   def verify_singular_version_entry(json_data)
     json_data.each do |pipeline_key, pipeline_hash|
+      next unless pipeline_hash.key?('versions') && pipeline_hash['versions'].is_a?(Array)
+
       duplicate_pipeline_versions = pipeline_hash['versions'].map { |v| v['name'] }
       counts = duplicate_pipeline_versions.tally
       duplicates_with_counts = counts.select { |_version, count| count > 1 }
