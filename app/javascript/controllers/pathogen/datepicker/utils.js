@@ -15,12 +15,10 @@ export function getFirstOfMonthNode(calendar) {
   return calendar.querySelector('[data-date-within-month-position="inMonth"]');
 }
 
-export function focusDate(calendar, dateNode) {
-  // find current tabbable node, and remove tabIndex
-  const currentTabbableDate = calendar.querySelectorAll('[tabindex="0"]')[0];
-  currentTabbableDate.tabIndex = -1;
-
-  // assign tabindex and focus to the current target date
-  dateNode.tabIndex = 0;
-  dateNode.focus();
+// parses a date from 2025-01-01 to year=2025, month=0 (index), day=1
+export function parseDate(date) {
+  let year, month, day;
+  [year, month, day] = date.split("-").map(Number);
+  month--;
+  return [year, month, day];
 }
