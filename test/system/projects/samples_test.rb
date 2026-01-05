@@ -9,6 +9,7 @@ module Projects
     setup do
       Flipper.enable(:metadata_import_field_selection)
       Flipper.enable(:batch_sample_spreadsheet_import)
+      Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)
       login_as @user
@@ -3522,6 +3523,62 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+        # sample30 found
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      end
+
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search and autocomplete disabled' do
+      Flipper.disable(:advanced_search_with_auto_complete)
+
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
@@ -3583,7 +3640,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.example_date']").select_option
+            find("input[role='combobox']").send_keys('example_date', :enter)
             find("select[name$='[operator]']").find("option[value='>=']").select_option
             find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
                                                                             '%Y-%m-%d') - 1.day).strftime('%Y-%m-%d')
@@ -3591,7 +3648,7 @@ module Projects
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-            find("select[name$='[field]']").find("option[value='metadata.example_date']").select_option
+            find("input[role='combobox']").send_keys('example_date', :enter)
             find("select[name$='[operator]']").find("option[value='<=']").select_option
             find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
                                                                             '%Y-%m-%d') + 1.day).strftime('%Y-%m-%d')
@@ -3649,14 +3706,14 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.example_float']").select_option
+            find("input[role='combobox']").send_keys('example_float', :enter)
             find("select[name$='[operator]']").find("option[value='>=']").select_option
             find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f - 0.1
           end
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-            find("select[name$='[field]']").find("option[value='metadata.example_float']").select_option
+            find("input[role='combobox']").send_keys('example_float', :enter)
             find("select[name$='[operator]']").find("option[value='<=']").select_option
             find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f + 0.1
           end
@@ -3713,14 +3770,14 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.example_integer']").select_option
+            find("input[role='combobox']").send_keys('example_integer', :enter)
             find("select[name$='[operator]']").find("option[value='>=']").select_option
             find("input[name$='[value]']").fill_in with: sample62.metadata['example_integer'].to_i - 1
           end
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-            find("select[name$='[field]']").find("option[value='metadata.example_integer']").select_option
+            find("input[role='combobox']").send_keys('example_integer', :enter)
             find("select[name$='[operator]']").find("option[value='<=']").select_option
             find("input[name$='[value]']").fill_in with: sample62.metadata['example_integer'].to_i + 1
           end
@@ -3770,14 +3827,14 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
           end
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-            find("select[name$='[field]']").find("option[value='metadata.metadatafield2']").select_option
+            find("input[role='combobox']").send_keys('metadatafield2', :enter)
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield2']
           end
@@ -3827,14 +3884,14 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
             find("select[name$='[operator]']").find("option[value='contains']").select_option
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
           end
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[1] do
-            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
             find("select[name$='[operator]']").find("option[value='contains']").select_option
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
           end
@@ -3864,7 +3921,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='name']").select_option
+            find("input[role='combobox']").send_keys('Sample Name', :enter)
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample1.name
           end
@@ -3873,7 +3930,7 @@ module Projects
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search-target='groupsContainer']")[1] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='name']").select_option
+            find("input[role='combobox']").send_keys('Sample Name', :enter)
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample2.name
           end

@@ -1,0 +1,29 @@
+<div
+  data-controller="select-with-auto-complete"
+  data-select-with-auto-complete-no-results-text-value="<%= t(".no_results_text") %>"
+  data-select-with-auto-complete-single-result-text-value="<%= t(".single_result_text") %>"
+  data-select-with-auto-complete-multiple-results-text-value="<%= t(".multiple_results_text") %>"
+>
+  <%= @form.hidden_field @field,
+                     value: @selected_option[:value],
+                     id: "#{@combobox_id}_hidden",
+                     data: {
+                       "select-with-auto-complete-target": "hidden",
+                     } %>
+  <%= render Viral::BaseComponent.new(**combobox_arguments) %>
+  <div
+    id="<%= @listbox_id %>"
+    role="listbox"
+    aria-label="<%= combobox_arguments[:aria][:label] %>"
+    data-select-with-auto-complete-target="listbox"
+    style="position-anchor: --anchor-<%= @listbox_id %>;"
+  >
+    <%= @listbox_options %>
+  </div>
+  <div
+    class="sr-only"
+    aria-live="polite"
+    data-select-with-auto-complete-target="ariaLiveUpdate"
+  >
+  </div>
+</div>
