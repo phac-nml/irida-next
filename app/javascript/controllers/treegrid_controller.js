@@ -147,7 +147,7 @@ export default class extends Controller {
     const newIndex = direction > 0 ? rowFocusableTargets.length - 1 : 0;
     const newCell = rowFocusableTargets[newIndex];
 
-    if (document.activeElement != newCell) {
+    if (document.activeElement !== newCell) {
       newCell.focus();
     }
   }
@@ -159,7 +159,7 @@ export default class extends Controller {
     let rowIndex = rows.indexOf(currentRow);
     let newRowIndex = this.#restrictIndex(rowIndex + direction, numRows);
 
-    if (newRowIndex != rowIndex) {
+    if (newRowIndex !== rowIndex) {
       const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
       currentRow.tabIndex = -1;
       this.#setTabIndexForElementsInRow(currentRow, -1);
