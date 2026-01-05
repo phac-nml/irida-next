@@ -3938,15 +3938,16 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('value2')
         find('td:nth-child(7)').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        assert_selector 'td:nth-child(7)', text: 'value2'
       end
       assert_text I18n.t('samples.editable_cell.update_success')
 
@@ -3955,6 +3956,19 @@ module Projects
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
       assert_no_selector 'dialog button',
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+
+      # Regression: ensure the same cell remains editable after the Turbo Stream update
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[aria-colindex="7"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]', text: 'value2'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        find('td:nth-child(7)').send_keys('value3')
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        assert_selector 'td:nth-child(7)', text: 'value3'
+      end
       ### VERIFY END ###
     end
 
@@ -4050,8 +4064,9 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('New Value')
       end
@@ -4107,8 +4122,9 @@ module Projects
 
       within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
         find('td:nth-child(7)').send_keys('New Value')
       end
