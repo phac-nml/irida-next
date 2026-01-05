@@ -29,7 +29,7 @@ This `pipelines.json` file should be in the format below and can include the fol
 - **samplesheet_schema_overrides** _(Optional)_ for the pipeline
 - **settings**
   - `min_samples`: _(Optional)_ `number` to specify the minimum number of samples required for analysis by the pipeline
-  - `max_samples`: _(Optional)_ `number` to specify the maximum number of samples allowed to be analyzed by the pipeline
+  - `max_samples`: _(Optional)_ `number` to specify the maximum number of samples allowed to be analyzed by the pipeline. If a value of -1 is set, this indicates no maximum which effectively disables this setting
   - `min_runtime`: _(Optional)_ `number` or `string (formula)` to specify minimum allowed runtime in seconds for the pipeline
   - `max_runtime`: _(Optional)_ `number` or `string (formula)` to specify maximum allowed runtime in seconds for the pipeline
   - `status_check_interval`: _(Optional)_ `number` specifies the time in seconds between status checks sent to WES. Default is `30` seconds.

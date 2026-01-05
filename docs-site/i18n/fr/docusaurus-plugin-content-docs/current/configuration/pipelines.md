@@ -29,7 +29,7 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
 - **samplesheet_schema_overrides** _(Optional)_ pour le pipeline
 - **settings**
   - `min_samples` : _(Optionnel)_ `number` pour spécifier le nombre minimal d'échantillons requis pour l'analyse par le pipeline
-  - `max_samples` : _(Optionnel)_ `number` pour spécifier le nombre maximal d'échantillons pouvant être analysés par le pipeline
+  - `max_samples`: _(Optionnel)_ `nombre` pour spécifier le nombre maximum d'échantillons pouvant être analysés par le pipeline. Si une valeur de -1 est définie, cela indique l'absence de maximum, ce qui désactive efficacement ce paramètre
   - `min_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution minimal autorisé (en secondes) pour le pipeline
   - `max_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution maximal autorisé (en secondes) pour le pipeline
   - `status_check_interval` : _(Optionnel)_ `number` spécifiant l'intervalle (en secondes) entre les vérifications d'état envoyées au WES. Par défaut : `30` secondes.

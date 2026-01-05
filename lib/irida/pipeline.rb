@@ -110,6 +110,7 @@ module Irida
     end
 
     def maximum_samples
+      # A value of -1 indicates no maximum which effectively disables this setting
       @settings.fetch('max_samples', -1).to_i
     end
 
