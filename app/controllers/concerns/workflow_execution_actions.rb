@@ -128,7 +128,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     return if params[:select].blank?
 
     @query = workflow_execution_query
-    @workflow_executions = @query.send(:ransack_results).select(:id)
+    @workflow_executions = @query.results.select(:id)
   end
 
   def destroy_confirmation
