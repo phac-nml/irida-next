@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rails', '>= 8.1.1' # Required for security patches (nokogiri >= 1.18.9, rack >= 3.1.18, activerecord >= 8.0.2.1, uri >= 1.0.4)
+gem 'rails', '>= 8.1.1'
 
 # development dependencies
 group :development do
