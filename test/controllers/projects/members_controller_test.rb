@@ -61,6 +61,22 @@ module Projects
       assert_response :ok
     end
 
+    test 'should redirect user to projects dashboard when they leave the project' do
+      sign_in users(:james_doe)
+
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+
+      get new_namespace_project_member_path(namespace, project)
+      project_member = members(:project_two_member_james_doe)
+
+      assert_difference('Member.count', -1) do
+        delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
+      end
+
+      assert_redirected_to dashboard_projects_url
+    end
+
     test 'shouldn\'t delete a member from the project' do
       sign_in users(:joan_doe)
 
