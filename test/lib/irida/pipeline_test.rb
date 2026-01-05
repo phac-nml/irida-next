@@ -226,7 +226,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 150, pipeline.maximum_run_time(2)
+    assert_equal 150, pipeline.maximum_run_time
   end
 
   test 'minimum_run_time at entry level (Irida Next Example Pipeline)' do
@@ -244,7 +244,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 30, pipeline.minimum_run_time(2)
+    assert_equal 30, pipeline.minimum_run_time
   end
 
   test 'maximum_run_time at version level (1.0.3)' do
@@ -267,7 +267,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 65, pipeline.maximum_run_time(2)
+    assert_equal 65, pipeline.maximum_run_time
   end
 
   test 'minimum_run_time at version level (1.0.3)' do
@@ -287,7 +287,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 45, pipeline.minimum_run_time(2)
+    assert_equal 45, pipeline.minimum_run_time
   end
 
   test 'status_check_interval default' do
@@ -331,7 +331,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_nil pipeline.maximum_run_time(2)
+    assert_nil pipeline.maximum_run_time
   end
 
   test 'minimum_run_time not set' do
@@ -345,7 +345,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_nil pipeline.minimum_run_time(2)
+    assert_nil pipeline.minimum_run_time
   end
 
   test 'minimum_samples set' do
@@ -375,7 +375,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 0, pipeline.minimum_samples
+    assert_equal 1, pipeline.minimum_samples
   end
 
   test 'maximum_samples set' do
@@ -405,6 +405,6 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 0, pipeline.maximum_samples
+    assert_equal(-1, pipeline.maximum_samples)
   end
 end

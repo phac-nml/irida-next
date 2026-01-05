@@ -106,11 +106,11 @@ module Irida
     end
 
     def minimum_samples
-      @settings.fetch('min_samples', 0).to_i
+      @settings.fetch('min_samples', 1).to_i
     end
 
     def maximum_samples
-      @settings.fetch('max_samples', 0).to_i
+      @settings.fetch('max_samples', -1).to_i
     end
 
     def maximum_run_time(sample_count = 0)
