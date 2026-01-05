@@ -19,6 +19,7 @@ export default class extends Controller {
     "samplesheetMessagesContainer",
     "submissionSpinner",
     "samplesheetSpinner",
+    "updateSamplesSpinner",
     "samplesheetProperties",
     "trTemplate",
     "thTemplate",
@@ -276,7 +277,11 @@ export default class extends Controller {
   #disableProcessingState() {
     this.submitTarget.disabled = false;
     this.samplesheetSpinnerTarget.remove();
+    this.updateSamplesSpinnerTarget.remove();
     if (this.hasUpdateSamplesLabelTarget) {
+      const container = this.updateSamplesLabelTarget.parentNode;
+      container.classList.remove("hidden");
+      container.setAttribute("aria-hidden", false);
       this.updateSamplesLabelTarget.innerHTML = "";
       if (this.#allowedToUpdateSamples) {
         this.updateSamplesLabelTarget.innerText =
@@ -287,6 +292,8 @@ export default class extends Controller {
         this.updateSamplesLabelTarget.innerText =
           this.notAllowedToUpdateSamplesStringValue;
         this.updateSamplesCheckboxTarget.checked = false;
+        this.updateSamplesCheckboxTarget.disabled = true;
+        this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "true");
       }
     }
   }
