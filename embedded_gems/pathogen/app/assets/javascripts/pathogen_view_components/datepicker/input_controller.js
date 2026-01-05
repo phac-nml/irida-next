@@ -80,6 +80,7 @@ export default class extends Controller {
 
   #initializeDropdown() {
     this.#dropdown = new Dropdown(this.#calendar, this.datepickerInputTarget, {
+      triggerType: "none", // handle via handleDatepickerInputFocus instead
       onShow: () => {
         document.addEventListener("keydown", this.boundHandleGlobalKeydown);
         this.#calendar.addEventListener(
