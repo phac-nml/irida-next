@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Concern with for retrieving and organizing files within the nextflow samplesheet file selector
-module FileSelector
+module FileSelector # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   def sorted_files
@@ -104,12 +104,18 @@ module FileSelector
   def most_recent_other_file(autopopulate, pattern)
     return {} unless autopopulate
 
-    files = if pattern
-              filter_files_by_pattern(sorted_files[:singles] || [], pattern)
-            else
-              sorted_files[:singles] || []
-            end
-    files.present? ? files.last : {}
+    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                           Arel::Nodes::Quoted.new('direction'))
+    non_fastq_files = attachments.where(node.eq(nil))
+    files_with_samplesheet_attributes = non_fastq_files.map do |file|
+      file_attributes(file)
+    end
+    filtered_files = if pattern
+                       filter_files_by_pattern(files_with_samplesheet_attributes || [], pattern)
+                     else
+                       files_with_samplesheet_attributes || []
+                     end
+    filtered_files.present? ? filtered_files.last : {}
   end
 
   def filter_files_by_pattern(files, pattern)
