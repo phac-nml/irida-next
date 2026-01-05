@@ -83,6 +83,36 @@ class PipelinesTest < ActiveSupport::TestCase
     assert_not pl.executable
   end
 
+  test 'fail on trying to get etag for new pipeline' do
+    # ok pipeline, no cache
+    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.8/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.8/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+
+    # pipeline that should fail, no cache
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.9/nextflow_schema.json')
+      .to_return(status: 404)
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.9/assets/schema_input.json')
+      .to_return(status: 404)
+
+    pipeline_refresh = Irida::Pipelines.new(
+      pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_new_pipeline/pipelines.json',
+      pipeline_schema_file_dir: @pipeline_schema_file_dir
+    )
+
+    pl8 = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.8']
+    pl9 = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.9']
+
+    # ok pipeline
+    assert_not_nil pl8
+    assert pl8.executable
+    # failed pipeline
+    assert_nil pl9
+  end
+
   test 'fail on github not accessible' do
     # if github is inaccessible we want to hard crash with a custom exception
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
