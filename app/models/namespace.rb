@@ -263,13 +263,21 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         )
       ).where(Arel::Nodes::InfixOperation.new('::', entry_table[:value], Arel::Nodes::SqlLiteral.new('integer')).gt(0))
 
-      # Perform the update inside a transaction and with row-level locks to
-      # avoid race conditions when multiple processes update the same
+      root_namespace = if namespaces.one?
+                         namespaces.first
+                       else
+                         namespaces.where(parent_id: nil).first
+                       end
+
+      # Perform the update inside a transaction using a PostgreSQL advisory lock
+      # to avoid race conditions when multiple processes update the same
       # namespaces concurrently. Use update_all to run a single efficient SQL
       # UPDATE without instantiating ActiveRecord objects.
       Namespace.transaction do
-        locked_namespaces = namespaces.lock('FOR UPDATE')
-        locked_namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(updated_metadata_summary)) # rubocop:disable Rails/SkipsModelValidations
+        lock_id = Zlib.crc32("namespace_#{root_namespace.puid}_metadata_summary_lock").to_i
+        Namespace.connection.execute("SELECT pg_advisory_lock(#{lock_id})")
+
+        namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(updated_metadata_summary)) # rubocop:disable Rails/SkipsModelValidations
       end
     end
 
