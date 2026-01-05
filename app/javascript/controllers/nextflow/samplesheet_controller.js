@@ -56,6 +56,7 @@ export default class extends Controller {
     nameMissing: { type: String },
     allowedToUpdateSamplesString: { type: String },
     notAllowedToUpdateSamplesString: { type: String },
+    processingError: { type: String },
   };
 
   static outlets = ["selection"];
@@ -114,14 +115,22 @@ export default class extends Controller {
 
   sampleAttributesTargetConnected() {
     const dataAttributes = this.sampleAttributesTarget.dataset;
-    this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
-    // turns true/false string into bool
-    this.#allowedToUpdateSamples = JSON.parse(
-      dataAttributes.allowedToUpdateSamples,
-    );
-    // remove node after retrieving data
-    this.sampleAttributesTarget.remove();
-    this.#processSamplesheet();
+    if (
+      Object.keys(dataAttributes.sampleAttributes).length === 0 ||
+      dataAttributes.allowedToUpdateSamples === ""
+    ) {
+      this.samplesheetSpinnerTarget.remove();
+      this.#enableErrorState(this.processingErrorValue);
+    } else {
+      this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
+      // turns true/false string into bool
+      this.#allowedToUpdateSamples = JSON.parse(
+        dataAttributes.allowedToUpdateSamples,
+      );
+      // remove node after retrieving data
+      this.sampleAttributesTarget.remove();
+      this.#processSamplesheet();
+    }
   }
 
   #processSamplesheet() {

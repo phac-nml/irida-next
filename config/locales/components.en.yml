@@ -259,6 +259,7 @@ en:
           required: Name
       processing_request: Processing your submission, this may take some time.
       processing_samplesheet: Processing samplesheet
+      samplesheet_processing_error: An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information
