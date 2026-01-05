@@ -239,13 +239,31 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     [@namespace.id]
   end
 
+  # Sets up Ransack compatibility for UI components that expect a Ransack object.
+  #
+  # This creates a dual-object pattern:
+  # - @query (WorkflowExecution::Query) - Handles actual search logic and results
+  # - @q (Ransack::Search) - Used by Ransack-based UI components
+  #
+  # Why both objects are needed:
+  # - The custom Query object provides advanced search capabilities
+  # - Ransack::SortComponent (used in WorkflowExecutions::TableComponent) requires a Ransack object
+  # - SearchComponent expects @q for form binding and displaying current search values
+  #
+  # View usage:
+  # - SearchComponent: Uses @q.name_or_id_cont for displaying current search term
+  # - Table headers: Ransack::SortComponent uses @q for sort links and sort state
+  # - Results: @query.results provides the actual paginated workflow executions
+  #
+  # TODO: When updating the UI, the samples feature uses a custom SortComponent instead of Ransack::SortComponent,
+  # eliminating the need for this bridging pattern. Consider refactoring workflow executions
+  # to use the same approach in the future.
   def setup_ransack_for_form
-    # Set @q for view compatibility (used in search forms)
-    # Create a minimal ransack object for the form while using @query for actual searching
+    # Create Ransack object from request params for UI component compatibility
     @q = load_workflows.ransack(params[:q])
-    # Copy search values from query to ransack for form display
+    # Sync search values from custom Query to Ransack for accurate form display
     @q.name_or_id_cont = @query.name_or_id_cont
-    # Set default sort if none provided
+    # Set default sort order if none provided
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
