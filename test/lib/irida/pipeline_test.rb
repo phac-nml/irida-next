@@ -267,7 +267,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 65, pipeline.maximum_run_time
+    assert_equal 65, pipeline.maximum_run_time(2)
   end
 
   test 'minimum_run_time at version level (1.0.3)' do
@@ -287,7 +287,7 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    assert_equal 45, pipeline.minimum_run_time
+    assert_equal 45, pipeline.minimum_run_time(2)
   end
 
   test 'status_check_interval default' do
