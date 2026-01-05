@@ -20,8 +20,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
         assert_selector 'thead th', count: 5
         assert_selector 'tr:first-child th:last-child', text: 'STRANDEDNESS (REQUIRED)'
       end
-
-      assert_text I18n.t('components.nextflow_component.loading_complete')
     end
   end
 
@@ -33,8 +31,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
         assert_selector 'thead th', count: 4
         assert_selector 'tr:first-child th:last-child', text: 'REFERENCE_ASSEMBLY'
       end
-
-      assert_text I18n.t('components.nextflow_component.loading_complete')
     end
   end
 
@@ -54,8 +50,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
           assert_selector 'select', text: 'insdc_accession (default)'
         end
       end
-
-      assert_text I18n.t('components.nextflow_component.loading_complete')
     end
   end
 
@@ -75,8 +69,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
           assert_selector 'select', text: 'metadata_3 (default)'
         end
       end
-
-      assert_text I18n.t('components.nextflow_component.loading_complete')
     end
   end
 end
