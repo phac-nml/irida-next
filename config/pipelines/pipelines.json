@@ -34,7 +34,7 @@
             "x-irida-next-selected": "prediceted_primary_identification_name"
           }
         },
-        "required": ["sample"]
+        "required": ["sample", "mlst_alleles"]
       }
     },
     "versions": [
