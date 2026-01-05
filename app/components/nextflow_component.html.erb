@@ -194,23 +194,42 @@
         <% end %>
       <% end %>
 
-      <div class="flex items-center h-5 mb-4">
-        <%= workflow.check_box :update_samples,
-                           {
-                             checked: instance.present? && instance["update_samples"],
-                             disabled: !@automated_workflow,
-                             aria: {
-                               disabled: (!@automated_workflow).to_s,
-                             },
-                             data: {
-                               "nextflow--samplesheet-target": "updateSamplesCheckbox",
-                             },
-                           } %>
-        <% if @automated_workflow %>
+      <% if @automated_workflow %>
+        <div class="flex items-center h-5 mb-4">
+          <%= workflow.check_box :update_samples,
+                             { checked: instance.present? && instance["update_samples"] } %>
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
-        <% else %>
+        </div>
+      <% else %>
+        <div
+          class="flex mb-4"
+          id="update-samples-spinner"
+          data-nextflow--samplesheet-target="updateSamplesSpinner"
+        >
+          <div
+            class="
+              flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
+              rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
+              dark:bg-gray-800
+            "
+            role="alert"
+          >
+            <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+            <span class="text-sm font-medium text-slate-900 dark:text-white">
+              <%= t("components.nextflow.verifying_update_samples") %>
+            </span>
+          </div>
+        </div>
+        <div class="hidden flex items-center h-5 mb-4" aria-hidden="true">
+          <%= workflow.check_box :update_samples,
+                             {
+                               checked: instance.present? && instance["update_samples"],
+                               data: {
+                                 "nextflow--samplesheet-target": "updateSamplesCheckbox",
+                               },
+                             } %>
           <label
             class="
               block mb-2 text-sm font-medium text-slate-900 dark:text-white mr-2 text-sm
@@ -219,24 +238,9 @@
             for="workflow_execution_update_samples"
             data-nextflow--samplesheet-target="updateSamplesLabel"
           >
-            <div class="flex" id="update-samples-spinner">
-              <div
-                class="
-                  flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
-                  rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
-                  dark:bg-gray-800
-                "
-                role="alert"
-              >
-                <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
-                <span class="text-sm font-medium text-slate-900 dark:text-white">
-                  <%= t("components.nextflow.verifying_update_samples") %>
-                </span>
-              </div>
-            </div>
           </label>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
       <div class="flex items-center h-5 mb-4">
         <%= workflow.check_box :email_notification,
                            {
