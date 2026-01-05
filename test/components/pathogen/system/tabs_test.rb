@@ -68,6 +68,26 @@ module Pathogen
         end
       end
 
+      test 'home and end key navigation is supported' do
+        visit ORIENTATION_PREVIEW_PATH
+        wait_for_tabs('horizontal-tabs')
+
+        within_tabs('horizontal-tabs') do
+          overview = find('[role="tab"]', text: 'Overview')
+          overview.click
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          overview.native.send_keys(:right)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
+
+          find('[role="tab"]', text: 'Features').native.send_keys(:home)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
+
+          find('[role="tab"]', text: 'Features').native.send_keys(:end)
+          assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples'
+        end
+      end
+
       test 'vertical arrow keys navigate up and down without reacting to left/right' do
         visit ORIENTATION_PREVIEW_PATH
         wait_for_tabs('vertical-tabs')

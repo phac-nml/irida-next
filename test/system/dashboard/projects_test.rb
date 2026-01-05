@@ -342,6 +342,7 @@ module Dashboard
         click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
+        assert_performed_jobs 1
       end
 
       visit dashboard_projects_url
@@ -402,6 +403,7 @@ module Dashboard
         click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::CloneJob]
+        assert_performed_jobs 1
       end
       assert_text I18n.t('samples.clones.create.success')
 

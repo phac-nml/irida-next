@@ -224,8 +224,9 @@ module Groups
             assert_selector 'th[scope="row"]', text: 'Valid PAT0'
             assert_selector 'td:nth-child(2)', text: 'read_api, api'
 
-            assert_selector 'td:nth-child(3)', text: I18n.l(Time.zone.now.to_date, format: :long)
-            assert_selector 'td:nth-child(5)', text: I18n.l(10.days.from_now.to_date, format: :long)
+            assert_selector 'td:nth-child(3)', text: I18n.l(token.created_at.getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(5)',
+                            text: I18n.l(DateTime.parse(token.expires_at.to_s).getlocal.to_date, format: :long)
           end
         end
       end

@@ -345,7 +345,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group metadata templates list with pagination params' do
     get list_group_metadata_templates_path(@group,
                                            metadata_template: 'all',
-                                           limit: 10,
+                                           limit: 1,
                                            page: 2)
 
     assert_response :success
@@ -355,7 +355,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'group metadata templates index with pagination and sorting' do
-    get group_metadata_templates_path(@group, params: { q: { s: 'name desc' }, page: 2, limit: 10 })
+    get group_metadata_templates_path(@group, params: { q: { s: 'name desc' }, page: 2, limit: 1 })
 
     assert_response :success
     # Verify the response includes the sorted and paginated content
@@ -397,7 +397,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
 
   test 'project metadata templates index with pagination and sorting' do
     get namespace_project_metadata_templates_path(@project_namespace.parent, @project,
-                                                  params: { q: { s: 'name desc' }, page: 2, limit: 10 })
+                                                  params: { q: { s: 'name desc' }, page: 2, limit: 1 })
 
     assert_response :success
     # Verify the response includes the sorted and paginated content

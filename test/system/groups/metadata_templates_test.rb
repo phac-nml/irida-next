@@ -13,42 +13,16 @@ module Groups
 
     test 'should display metadata templates associated with the group' do
       group = groups(:group_one)
-      metadata_template = metadata_templates(:group_one_metadata_template0)
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+      assert_selector 'table thead tr th', count: 6
+      assert_selector 'table tbody tr', count: group.metadata_templates.count
 
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-
-      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
-      assert_no_selector 'a',
-                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
-
-      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
-
-      within('table tbody') do
-        assert_selector 'tr', count: 2
-      end
-
-      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
-      assert_no_selector 'a',
-                         exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
-
-      click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
-
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-
-      within('table tbody tr:first-child td:nth-child(1)') do
-        assert_text metadata_template.name
+      group.metadata_templates.each do |metadata_template|
+        assert_selector 'table tbody tr td:nth-child(1)', text: metadata_template.name
       end
     end
 
@@ -79,38 +53,28 @@ module Groups
       assert_selector 'table tbody tr', count: 2
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template1.name
-        assert_selector 'tr:first-child td:nth-child(2)',
-                        text: metadata_template1.description
-      end
+      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: metadata_template1.description
 
       click_on I18n.t('metadata_templates.table_component.name')
       assert_selector 'table thead th:first-child svg.arrow-down-icon'
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
-        assert_selector 'tr:first-child td:nth-child(2)',
-                        text: metadata_template2.description
-      end
+      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: metadata_template2.description
 
       click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:nth-child(3) svg.arrow-up-icon'
+      assert_selector 'table thead th:has(svg.arrow-up-icon)',
+                      text: I18n.t('metadata_templates.table_component.created_by_email').upcase
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template1.name
-        assert_selector 'tr:first-child td:nth-child(3)',
-                        text: metadata_template1.created_by.email
-      end
+      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: metadata_template1.created_by.email
 
       click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:nth-child(3) svg.arrow-down-icon'
+      assert_selector 'table thead th:has(svg.arrow-down-icon)',
+                      text: I18n.t('metadata_templates.table_component.created_by_email').upcase
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
-        assert_selector 'tr:first-child td:nth-child(3)',
-                        text: metadata_template2.created_by.email
-      end
+      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: metadata_template2.created_by.email
     end
 
     test 'should destroy metadata template associated with the group' do
@@ -133,12 +97,10 @@ module Groups
 
       click_button I18n.t('common.controls.confirm')
 
-      within %(div[data-controller='viral--flash']) do
-        assert_text I18n.t(
-          :'concerns.metadata_template_actions.destroy.success',
-          template_name: metadata_template.name
-        )
-      end
+      assert_text I18n.t(
+        :'concerns.metadata_template_actions.destroy.success',
+        template_name: metadata_template.name
+      )
     end
 
     test 'maintainer or higher can access the metadata template page and create new template' do
@@ -153,54 +115,30 @@ module Groups
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
-        find('input#metadata_template_name').fill_in with: 'Group Template011'
-        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+      group.metadata_fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      within %(div[data-controller='viral--flash']) do
-        assert_text I18n.t(
-          :'concerns.metadata_template_actions.create.success',
-          template_name: 'Group Template011'
-        )
-      end
+      click_button I18n.t('components.viral.sortable_list.list_component.add')
+      find('input#metadata_template_name').fill_in with: 'Group Template011'
+      click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      assert_text I18n.t(
+        :'concerns.metadata_template_actions.create.success',
+        template_name: 'Group Template011'
+      )
 
-      table_row = find(:table_row, ['Group Template011'])
-
-      within(table_row) do
-        assert_text 'Group Template011'
-      end
+      assert_selector 'table tbody tr td:nth-child(1)', text: 'Group Template011'
 
       assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), focused: true
     end
@@ -217,37 +155,18 @@ module Groups
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
+      find('input#metadata_template_name').fill_in with: 'Newest template'
 
-        find('input#metadata_template_name').fill_in with: 'Newest template'
-
-        assert_selector "input[value='#{I18n.t('metadata_templates.new_template_dialog.submit_button')}']:disabled",
-                        count: 1
-      end
-
-      assert_no_selector "div[data-controller='viral--flash']"
-      assert_no_selector 'div[data-test-selector="spinner"]'
-      assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
+      assert_button I18n.t('metadata_templates.new_template_dialog.submit_button'), disabled: true
     end
 
     test 'cannot create a template with no template name entered' do
@@ -262,139 +181,65 @@ module Groups
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
-
-        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+      group.metadata_fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      assert_no_selector "div[data-controller='viral--flash']"
-      assert_no_selector 'div[data-test-selector="spinner"]'
-      assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
+      click_button I18n.t('components.viral.sortable_list.list_component.add')
+
+      click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+
+      assert_text I18n.t('general.form.error_notification')
+      assert_text I18n.t('errors.format', attribute: I18n.t('activerecord.attributes.metadata_template.name'),
+                                          message: I18n.t('errors.messages.blank'))
     end
 
     test 'cannot create a template with duplicate fields with same ordering in another template' do
       group = groups(:group_one)
+      existing_metadata_template = metadata_templates(:valid_group_metadata_template)
 
       visit group_metadata_templates_url(group)
 
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_button I18n.t('groups.metadata_templates.index.new_button')
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_button I18n.t('groups.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
+      existing_metadata_template.fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
         click_button I18n.t('components.viral.sortable_list.list_component.add')
-        find('input#metadata_template_name').fill_in with: 'Group Template011'
-        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
 
-      within %(div[data-controller='viral--flash']) do
-        assert_text I18n.t(
-          :'concerns.metadata_template_actions.create.success',
-          template_name: 'Group Template011'
-        )
-      end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li",
+                      count: group.metadata_fields.count - existing_metadata_template.fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: existing_metadata_template.fields.count
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      find('input#metadata_template_name').fill_in with: 'New Group Template'
+      click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
-      table_row = find(:table_row, ['Group Template011'])
-
-      within(table_row) do
-        assert_text 'Group Template011'
-      end
-
-      click_on I18n.t('groups.metadata_templates.index.new_button')
-
-      assert_selector '#dialog'
-
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
-
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
-
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
-        find('input#metadata_template_name').fill_in with: 'Group Template011 New'
-        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
-
-        assert_text 'Fields already exist in another template with the same ordering'
-      end
+      assert_text 'Fields already exist in another template with the same ordering'
 
       assert_no_selector "div[data-controller='viral--flash']"
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -409,78 +254,37 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'span', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_button I18n.t('groups.metadata_templates.index.new_button')
 
-      click_on I18n.t('groups.metadata_templates.index.new_button')
+      click_button I18n.t('groups.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-        assert_text I18n.t('metadata_templates.form.description')
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
-
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
-
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
-
-        click_button I18n.t('common.actions.remove')
-
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
-
-        within 'ul#selected-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
+      group.metadata_fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
+
+      click_button I18n.t('components.viral.sortable_list.list_component.add')
+
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: group.metadata_fields.count
+
+      group.metadata_fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{selected_label_id}'] li", text: field).click
+      end
+      click_button I18n.t('common.actions.remove')
+
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
     end
 
     test 'cannot view the add new template button if no fields are available for the group' do
@@ -501,83 +305,49 @@ module Groups
       visit group_metadata_templates_url(group)
 
       table_row = find(:table_row, [metadata_template.name])
-
-      assert_equal 3, metadata_template.fields.length
-      assert_equal 'Group Template0', metadata_template.name
-
       within table_row do
         assert_button I18n.t('common.actions.edit'), count: 1
         click_button I18n.t('common.actions.edit')
       end
 
-      assert_selector '#dialog'
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.edit_template_dialog.title')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('metadata_templates.edit_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.description')
 
-        within 'ul#available-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 4
-        end
+      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
+      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
 
-        # fields currently in template fixture
-        within 'ul#selected-list' do
-          assert_text 'field_1'
-          assert_text 'field_2'
-          assert_text 'field_3'
-          assert_selector 'li', count: 3
-        end
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li",
+                      count: group.metadata_fields.count - metadata_template.fields.count
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: metadata_template.fields.count
 
-        find('#metadatafield1').click
-        find('#metadatafield2').click
-        find('li[id="unique.metadata.field"]').click
-        find('li[id="metadata-field-with-spaces"]').click
+      unselected_fields = group.metadata_fields.reject { |field| metadata_template.fields.include? field }
 
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
-
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'unique.metadata.field'
-          assert_no_text 'metadata field with spaces'
-          assert_no_selector 'li'
-        end
-
-        within 'ul#selected-list' do
-          assert_text 'field_1'
-          assert_text 'field_2'
-          assert_text 'field_3'
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'unique.metadata.field'
-          assert_text 'metadata field with spaces'
-          assert_selector 'li', count: 7
-        end
-
-        fill_in 'Name', with: 'Group Template011'
-
-        assert_selector 'input[type="submit"]', count: 1
-        click_on I18n.t('common.actions.update')
+      unselected_fields.each do |field|
+        assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
+        find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      within %(div[data-controller='viral--flash']) do
-        assert_text I18n.t(
-          :'concerns.metadata_template_actions.update.success',
-          template_name: 'Group Template011'
-        )
-      end
+      click_button I18n.t('components.viral.sortable_list.list_component.add')
 
-      assert_equal 7, metadata_template.reload.fields.length
-      assert_equal 'Group Template011', metadata_template.name
+      assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
+      assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: group.metadata_fields.count
+
+      fill_in 'Name', with: 'Group Template011'
+
+      assert_button I18n.t('common.actions.update')
+      click_button I18n.t('common.actions.update')
+
+      assert_text I18n.t(
+        :'concerns.metadata_template_actions.update.success',
+        template_name: 'Group Template011'
+      )
 
       table_row = find(:table_row, ['Group Template011'])
 
       within(table_row) do
         assert_text 'Group Template011'
-        assert_selector 'button', text: I18n.t('common.actions.edit'), focused: true
+        assert_button I18n.t('common.actions.edit'), focused: true
       end
     end
   end

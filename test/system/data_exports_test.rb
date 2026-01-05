@@ -798,11 +798,9 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_current_path(namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2))
     assert_text @shared_workflow_execution2.id
 
-    within first('dl') do
-      assert_text @shared_workflow_execution2.run_id
-      assert_text @shared_workflow_execution2.workflow.name
-      assert_text @shared_workflow_execution2.metadata['workflow_version']
-    end
+    assert_text @shared_workflow_execution2.run_id
+    assert_text @shared_workflow_execution2.workflow.name
+    assert_text @shared_workflow_execution2.metadata['workflow_version']
 
     visit data_export_path(data_export12, anchor: 'preview-tab')
 
