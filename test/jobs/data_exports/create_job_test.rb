@@ -244,15 +244,6 @@ module DataExports
                    'type' => 'pe'
                  } }]
              },
-             { 'name' => attachment_d.puid,
-               'type' => 'folder',
-               'irida-next-type' => 'attachment',
-               'children' =>
-              [{
-                'name' => 'test_file_D.fastq',
-                'type' => 'file',
-                'metadata' => { 'format' => 'fastq' }
-              }] },
              {
                'name' => attachment_e.puid,
                'type' => 'folder',
@@ -274,7 +265,16 @@ module DataExports
                  'type' => 'file',
                  'metadata' => { 'format' => 'fastq' }
                }]
-             }]
+             },
+             { 'name' => attachment_d.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+              [{
+                'name' => 'test_file_D.fastq',
+                'type' => 'file',
+                'metadata' => { 'format' => 'fastq' }
+              }] }]
           }]
         }]
       }
