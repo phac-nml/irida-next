@@ -57,65 +57,50 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
   def most_recent_fastq_file(property, _pattern) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     most_recent_file = nil
     direction = fastq_direction(property)
+
+    # first check if paired-end fastq files exist
     if %i[pe_forward pe_reverse].include?(direction)
-      node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                             Arel::Nodes::Quoted.new('direction'))
-      most_recent_file = attachments.where(node.eq(direction == :pe_forward ? 'forward' : 'reverse'),
-                                           "metadata -> 'associated_attachment_id' IS NOT NULL").last
-      unless most_recent_file
-        return {} unless direction == :pe_forward
-
-        node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                               Arel::Nodes::Quoted.new('format'))
-        most_recent_file = attachments.where(node.eq('fastq')).last
-
-      end
-    else
-      # NO METADATA[:DIRECTION]
-      node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                             Arel::Nodes::Quoted.new('format'))
-      most_recent_file = attachments.where(node.eq('fastq')).last
+      metadata_node = create_query_node('direction')
+      associated_attachment_node = create_query_node('associated_attachment_id')
+      most_recent_file = attachments.where(
+        metadata_node.eq(direction == :pe_forward ? 'forward' : 'reverse'),
+        associated_attachment_node.not_eq(nil)
+      ).order(created_at: :desc, id: :desc).first
+      # if paired-end files don't exist, return empty if reverse direction
+      return {} if !most_recent_file && direction == :pe_reverse
     end
 
-    if most_recent_file
-      file_attributes(most_recent_file)
-    else
-      {}
+    # find single, non-paired fastq file to fill forward fastq file
+    unless most_recent_file
+      node = create_query_node('format')
+      most_recent_file = attachments.where(node.eq('fastq')).order(created_at: :desc, id: :desc).first
     end
 
-    # if most_recent_file
-    #   paired_most_recent_file = most_recent_file.associated_attachment
+    return {} unless most_recent_file
 
-    # else
-
-    # end
-
-    # non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse')))
-    # if sorted_files[direction].present?
-    #   sorted_files[direction].last
-    # elsif %i[pe_forward none].include?(direction)
-    #   last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/).last
-    #   last_single.nil? ? {} : last_single
-    # else
-    #   {}
-    # end
+    file_attributes(most_recent_file)
   end
 
   def most_recent_other_file(autopopulate, pattern)
     return {} unless autopopulate
 
-    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                           Arel::Nodes::Quoted.new('direction'))
-    non_fastq_files = attachments.where(node.eq(nil))
-    files_with_samplesheet_attributes = non_fastq_files.map do |file|
-      file_attributes(file)
+    most_recent_file = nil
+    # find file that fits regex
+    if pattern
+      most_recent_file = attachments
+                         .joins(:file_blob)
+                         .where(ActiveStorage::Blob.arel_table[:filename].matches_regexp(pattern))
+                         .order(created_at: :desc, id: :desc)
+                         .first
+    # find file that is not fastq
+    else
+      node = create_query_node('format')
+      most_recent_file = attachments.where(node.not_eq('fastq')).order(created_at: :desc, id: :desc).first
     end
-    filtered_files = if pattern
-                       filter_files_by_pattern(files_with_samplesheet_attributes || [], pattern)
-                     else
-                       files_with_samplesheet_attributes || []
-                     end
-    filtered_files.present? ? filtered_files.last : {}
+
+    return {} unless most_recent_file
+
+    file_attributes(most_recent_file)
   end
 
   def filter_files_by_pattern(files, pattern)
@@ -141,5 +126,10 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
       global_id: file.to_global_id,
       id: file.id
     }
+  end
+
+  def create_query_node(key)
+    Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                    Arel::Nodes::Quoted.new(key))
   end
 end
