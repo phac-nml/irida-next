@@ -22,16 +22,19 @@ attachmentA:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAC
+  created_at: <%= 3.hours.ago %>
 
 attachmentB:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAD
+  created_at: <%= 2.hours.ago %>
 
 attachmentC:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAE
+  created_at: <%= 1.hour.ago %>
 
 attachmentPEFWD1:
   metadata:
@@ -45,6 +48,7 @@ attachmentPEFWD1:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
+  created_at: <%= 4.hour.ago %>
 
 attachmentPEREV1:
   metadata:
@@ -58,6 +62,7 @@ attachmentPEREV1:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
+  created_at: <%= 4.hour.ago %>
 
 attachmentPEFWD2:
   metadata:
@@ -71,6 +76,7 @@ attachmentPEFWD2:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
+  created_at: <%= 3.hour.ago %>
 
 attachmentPEREV2:
   metadata:
@@ -84,6 +90,7 @@ attachmentPEREV2:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
+  created_at: <%= 3.hour.ago %>
 
 attachmentPEFWD3:
   metadata:
@@ -97,6 +104,7 @@ attachmentPEFWD3:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
+  created_at: <%= 2.hour.ago %>
 
 attachmentPEREV3:
   metadata:
@@ -110,6 +118,7 @@ attachmentPEREV3:
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
+  created_at: <%= 2.hour.ago %>
 
 attachmentPEFWD4:
   metadata:
@@ -155,20 +164,23 @@ attachmentPEREV5:
   attachable: sampleC (Sample)
   puid: INXT_ATT_AAAAAAAAAJ
 
-attachmentD:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAK
-
 attachmentE:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAL
+  created_at: <%= 2.hour.ago %>
 
 attachmentF:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAM
+  created_at: <%= 1.hour.ago %>
+
+attachmentD:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleB (Sample)
+  puid: INXT_ATT_AAAAAAAAAK
+  created_at: <%= 3.hour.ago %>
 
 attachmentG:
   metadata: { "compression": "none", "format": "fastq" }

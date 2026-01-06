@@ -2,11 +2,8 @@
 
 require 'test_helper'
 
-class HistoryConcernTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
-
+class HistoryConcernTest < ActiveSupport::TestCase
   test 'get project logidze log data without changes' do
-    sign_in users(:john_doe)
     project = projects(:project1)
 
     freeze_time
@@ -28,7 +25,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get project logidze log data with changes' do
-    sign_in users(:john_doe)
     project = projects(:project1)
     project.namespace.create_logidze_snapshot!
 
@@ -50,7 +46,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get project logidze log data with delete and restore actions' do
-    sign_in users(:john_doe)
     project = projects(:project1)
     project.namespace.create_logidze_snapshot!
 
@@ -83,8 +78,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get sample logidze log data without changes' do
-    sign_in users(:john_doe)
-
     sample = samples(:sample1)
 
     freeze_time
@@ -106,7 +99,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get group logidze log data without changes' do
-    sign_in users(:john_doe)
     group = groups(:group_one)
 
     freeze_time
@@ -128,7 +120,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get sample logidze log data with changes' do
-    sign_in users(:john_doe)
     sample = samples(:sample1)
 
     sample.create_logidze_snapshot!
@@ -151,7 +142,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get group logidze log data with changes' do
-    sign_in users(:john_doe)
     group = groups(:group_one)
 
     group.create_logidze_snapshot!
@@ -174,7 +164,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get sample logidze log data with delete and restore actions' do
-    sign_in users(:john_doe)
     sample = samples(:sample1)
 
     sample.create_logidze_snapshot!
@@ -208,7 +197,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'get group logidze log data with delete and restore actions' do
-    sign_in users(:john_doe)
     group = groups(:group_one)
 
     group.create_logidze_snapshot!

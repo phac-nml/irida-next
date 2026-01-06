@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class HasPuidTest < ActionDispatch::IntegrationTest
+class HasPuidTest < ActiveSupport::TestCase
   def setup
     @project = projects(:project1)
     @sample = samples(:sample1)
