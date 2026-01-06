@@ -66,6 +66,7 @@ gem 'openssl', '~> 3.3', '>= 3.3.1'
 # Tailwind CSS [https://tailwindcss.com]
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
+gem 'reactionview', '~> 0.2.0'
 gem 'tailwindcss-rails', '~> 4.4'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
@@ -180,9 +181,6 @@ group :development do
   gem 'web-console'
 
   gem 'faker'
-
-  # erb-formatter
-  gem 'erb-formatter', '~> 0.7.2', require: false
 
   # LookBook
   gem 'actioncable'
