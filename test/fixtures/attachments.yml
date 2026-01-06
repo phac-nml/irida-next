@@ -155,20 +155,23 @@ attachmentPEREV5:
   attachable: sampleC (Sample)
   puid: INXT_ATT_AAAAAAAAAJ
 
-attachmentD:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAK
-
 attachmentE:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAL
+  created_at: <%= 2.hour.ago %>
 
 attachmentF:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAM
+  created_at: <%= 1.hour.ago %>
+
+attachmentD:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleB (Sample)
+  puid: INXT_ATT_AAAAAAAAAK
+  created_at: <%= 3.hour.ago %>
 
 attachmentG:
   metadata: { "compression": "none", "format": "fastq" }
