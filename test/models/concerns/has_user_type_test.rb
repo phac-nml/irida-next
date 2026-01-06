@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class HasUserTypeTest < ActionDispatch::IntegrationTest
+class HasUserTypeTest < ActiveSupport::TestCase
   def setup
     @project1_automation_bot = users(:project1_automation_bot)
     @user_group_bot_account = users(:user_group_bot_account0)
