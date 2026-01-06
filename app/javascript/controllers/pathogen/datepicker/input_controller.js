@@ -172,7 +172,7 @@ export default class extends Controller {
     const focusable = Array.from(
       document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
     );
-    let index = focusable.indexOf(this.datepickerInputTarget);
+    const index = focusable.indexOf(this.datepickerInputTarget);
     this.#nextFocusableElementAfterInput = focusable[index + 1];
   }
 

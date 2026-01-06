@@ -130,7 +130,7 @@ export default class extends Controller {
     const rowFocusableTargets = tabbable(currentRow);
 
     const currentIndex = rowFocusableTargets.indexOf(document.activeElement);
-    let newIndex = currentIndex + direction;
+    const newIndex = currentIndex + direction;
 
     if (newIndex < 0) {
       currentRow.focus();
@@ -156,8 +156,8 @@ export default class extends Controller {
     const currentRow = this.#getRowWithFocus();
     const rows = this.#getAllNavigableRows();
     const numRows = rows.length;
-    let rowIndex = rows.indexOf(currentRow);
-    let newRowIndex = this.#restrictIndex(rowIndex + direction, numRows);
+    const rowIndex = rows.indexOf(currentRow);
+    const newRowIndex = this.#restrictIndex(rowIndex + direction, numRows);
 
     if (newRowIndex !== rowIndex) {
       const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
@@ -231,7 +231,7 @@ export default class extends Controller {
   #changeExpanded(doExpand, row) {
     const toggleButton = row.querySelector(".treegrid-row-toggle");
     if (toggleButton.hasAttribute("data-toggle-url")) {
-      let toggleUrl = new URL(toggleButton.getAttribute("data-toggle-url"));
+      const toggleUrl = new URL(toggleButton.getAttribute("data-toggle-url"));
       toggleUrl.searchParams.append("tabindex", row.tabIndex);
       fetch(toggleUrl.href, {
         credentials: "same-origin",
@@ -243,12 +243,12 @@ export default class extends Controller {
       let currentRowIndex = this.rowTargets.indexOf(row);
       const currentLevel = this.#getLevel(row);
       let didChange;
-      let doExpandLevel = [];
+      const doExpandLevel = [];
       doExpandLevel[currentLevel + 1] = doExpand;
 
       while (++currentRowIndex < this.rowTargets.length) {
-        let nextRow = this.rowTargets[currentRowIndex];
-        let rowLevel = this.#getLevel(nextRow);
+        const nextRow = this.rowTargets[currentRowIndex];
+        const rowLevel = this.#getLevel(nextRow);
         if (rowLevel <= currentLevel) {
           break; // Next row is not a level down from current row
         }
@@ -257,8 +257,8 @@ export default class extends Controller {
         // and previous level is expanded
         doExpandLevel[rowLevel + 1] =
           doExpandLevel[rowLevel] && this.#isExpanded(nextRow);
-        var willHideRow = !doExpandLevel[rowLevel];
-        var isRowHidden = nextRow.classList.contains("hidden");
+        const willHideRow = !doExpandLevel[rowLevel];
+        const isRowHidden = nextRow.classList.contains("hidden");
 
         if (willHideRow !== isRowHidden) {
           if (willHideRow) {

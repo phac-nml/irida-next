@@ -82,7 +82,7 @@ export default class extends Controller {
   }
 
   #addSampleIDInputOptions() {
-    for (let header of this.#headers) {
+    for (const header of this.#headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
@@ -105,7 +105,7 @@ export default class extends Controller {
   }
 
   #addMetadataColumns() {
-    let columns = this.#headers.filter(
+    const columns = this.#headers.filter(
       (header) =>
         !this.#ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),

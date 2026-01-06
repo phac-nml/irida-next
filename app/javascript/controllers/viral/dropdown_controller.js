@@ -92,14 +92,14 @@ export default class extends Controller {
   }
 
   #openMenuAndFocusMenuItem(index) {
-    var menuItems = this.#menuItems(this.menuTarget);
+    const menuItems = this.#menuItems(this.menuTarget);
 
     if (menuItems.length === 0) {
       // lazy loaded menu
       document.addEventListener(
         "turbo:frame-load",
         () => {
-          var menuItems = this.#menuItems(this.menuTarget);
+          const menuItems = this.#menuItems(this.menuTarget);
           // initialize tab index to -1 on lazy load
           menuItems.forEach((menuItem) => {
             menuItem.setAttribute("tabindex", "-1");
@@ -116,8 +116,8 @@ export default class extends Controller {
   }
 
   onMenuItemKeyDown(event) {
-    var menuItems = this.#menuItems(this.menuTarget);
-    var currentIndex = menuItems.indexOf(document.activeElement);
+    const menuItems = this.#menuItems(this.menuTarget);
+    const currentIndex = menuItems.indexOf(document.activeElement);
     this.#focusByKey(event, menuItems, currentIndex);
   }
 

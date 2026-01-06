@@ -50,7 +50,7 @@ export default class extends Controller {
   }
 
   #toJson(formData) {
-    let params = formDataToJsonParams(formData);
+    const params = formDataToJsonParams(formData);
 
     if (this.hasFieldNameValue && this.hasSelectionOutlet) {
       normalizeParams(

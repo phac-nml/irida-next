@@ -62,7 +62,7 @@ export default class extends Controller {
     // Improve accessible label with file name
     const progressEl = document.getElementById(`direct-upload-progress-${id}`);
     if (progressEl) {
-      let ariaLabel = this.uploadingTextValue + " " + file.name;
+      const ariaLabel = this.uploadingTextValue + " " + file.name;
       progressEl.setAttribute("aria-label", ariaLabel);
       progressEl.setAttribute(
         "aria-describedby",

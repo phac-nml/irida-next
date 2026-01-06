@@ -14,11 +14,11 @@ export default class extends Controller {
 
   connect() {
     const storageValues = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
+      sessionStorage.getItem(this.storageKeyValue),
     );
 
     if (storageValues) {
-      for (let [storageValueIndex, storageValue] of storageValues.entries()) {
+      for (const [storageValueIndex, storageValue] of storageValues.entries()) {
         let value = "";
         try {
           // Parse required for array ie: paired attachments
@@ -28,20 +28,20 @@ export default class extends Controller {
         }
 
         if (value instanceof Array) {
-          for (let arrayValue of value) {
+          for (const arrayValue of value) {
             this.fieldTarget.appendChild(
               createHiddenInput(
                 `${this.fieldNameValue}[${storageValueIndex}][]`,
-                arrayValue
-              )
+                arrayValue,
+              ),
             );
           }
         } else {
           this.fieldTarget.appendChild(
             createHiddenInput(
               `${this.fieldNameValue}[${storageValueIndex}]`,
-              value
-            )
+              value,
+            ),
           );
         }
       }

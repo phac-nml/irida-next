@@ -194,7 +194,7 @@ export default class extends Controller {
       if (nameValid) {
         this.#disableFormFieldErrorState();
 
-        let missingData = this.#validateData();
+        const missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {
           this.#disableProcessingState();
           let errorMsg = this.dataMissingErrorValue;
@@ -232,7 +232,7 @@ export default class extends Controller {
   }
 
   #validateData() {
-    let missingData = {};
+    const missingData = {};
     this.#requiredColumns.forEach((requiredColumn) => {
       for (
         let i = 0;
@@ -240,7 +240,7 @@ export default class extends Controller {
         i++
       ) {
         if (!this.#retrieveFormData(i, requiredColumn)) {
-          let sample = this.#retrieveFormData(i, "sample");
+          const sample = this.#retrieveFormData(i, "sample");
           if (sample in missingData) {
             missingData[sample].push(requiredColumn);
           } else {
@@ -325,7 +325,7 @@ export default class extends Controller {
       // update samplesheetParams filename with the new filename to be displayed in samplesheet table
       // as this is the only place to retrieve filename unlike all other fields that can be retrieved
       // via formData (files are stored by globalID in formData)
-      let filename = file["filename"]
+      const filename = file["filename"]
         ? file["filename"]
         : this.noSelectedFileValue;
 
@@ -454,7 +454,7 @@ export default class extends Controller {
     dropdownContent.querySelector("select").setAttribute("id", id);
 
     for (let j = 0; j < options.length; j++) {
-      let option = document.createElement("option");
+      const option = document.createElement("option");
       option.value = options[j];
       option.innerHTML = options[j];
       dropdownContent.querySelector("select").appendChild(option);
@@ -616,7 +616,7 @@ export default class extends Controller {
   #generatePageNumberDropdown() {
     // page 1 is already added by default
     for (let i = 2; i < this.#lastPage + 1; i++) {
-      let option = document.createElement("option");
+      const option = document.createElement("option");
       option.value = i;
       option.innerHTML = i;
       this.pageNumTarget.appendChild(option);
@@ -717,7 +717,7 @@ export default class extends Controller {
       "data-metadata-header",
     );
     const metadataField = event.target.value;
-    let metadataParameter = document.querySelector(
+    const metadataParameter = document.querySelector(
       `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
     );
 
@@ -767,7 +767,7 @@ export default class extends Controller {
   #updateMetadataColumnHeaderNames() {
     // Update the values for the fields under 'The column header names of the metadata columns'
 
-    let metadataSamplesheetColumns = this.element.querySelectorAll(
+    const metadataSamplesheetColumns = this.element.querySelectorAll(
       ".metadata_field-header",
     );
 
@@ -777,7 +777,7 @@ export default class extends Controller {
       );
       const metadataField = metadataSamplesheetColumn.value;
 
-      let metadataParameter = this.element.querySelector(
+      const metadataParameter = this.element.querySelector(
         `input[data-metadata-header-name="${columnName}"]`,
       );
 
@@ -840,7 +840,7 @@ export default class extends Controller {
   }
 
   #validateWorkflowExecutionName() {
-    let name = document.getElementById("workflow_execution_name");
+    const name = document.getElementById("workflow_execution_name");
     let hasErrors = false;
 
     if (name.value === "") {
@@ -858,13 +858,13 @@ export default class extends Controller {
   }
 
   #addNameFieldErrorState() {
-    let nameError = document.getElementById(
+    const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
-    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
-    let name = document.getElementById("workflow_execution_name");
-    let nameHint = document.getElementById("workflow_execution_name_hint");
-    let nameField = document.getElementById("workflow_execution_name_field");
+    const nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    const name = document.getElementById("workflow_execution_name");
+    const nameHint = document.getElementById("workflow_execution_name_hint");
+    const nameField = document.getElementById("workflow_execution_name_field");
 
     name.setAttribute("autofocus", true);
     name.setAttribute("aria-invalid", true);
@@ -879,13 +879,13 @@ export default class extends Controller {
   }
 
   #removeNameFieldErrorState() {
-    let nameError = document.getElementById(
+    const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
-    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
-    let name = document.getElementById("workflow_execution_name");
-    let nameHint = document.getElementById("workflow_execution_name_hint");
-    let nameField = document.getElementById("workflow_execution_name_field");
+    const nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    const name = document.getElementById("workflow_execution_name");
+    const nameHint = document.getElementById("workflow_execution_name_hint");
+    const nameField = document.getElementById("workflow_execution_name_field");
 
     name.removeAttribute("autofocus", false);
     name.removeAttribute("aria-invalid");

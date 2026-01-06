@@ -44,7 +44,7 @@ export default class extends Controller {
     element.removeEventListener("keydown", this.boundKeydown);
     element.removeAttribute("contenteditable");
 
-    let field = element
+    const field = element
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
 
@@ -60,7 +60,7 @@ export default class extends Controller {
 
     notifyRefreshControllers(this);
 
-    let form = this.formTemplateTarget.innerHTML
+    const form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
       .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
       .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
@@ -92,7 +92,7 @@ export default class extends Controller {
   }
 
   async showConfirmDialog(editableCell) {
-    let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
+    const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
       .replace(
         /ORIGINAL_VALUE/g,
         this.#originalCellContent[this.#elementId(editableCell)],
@@ -100,7 +100,7 @@ export default class extends Controller {
       .replace(/NEW_VALUE/g, editableCell.innerText);
     this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
-    let dialog =
+    const dialog =
       this.confirmDialogContainerTarget.getElementsByTagName("dialog")[0];
 
     let messageType = "wov";

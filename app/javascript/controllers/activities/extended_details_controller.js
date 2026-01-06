@@ -52,7 +52,7 @@ export default class extends Controller {
 
   #loadData() {
     if (this.#currentDataIndexes.length > 0) {
-      let startingIndex = (this.#currentPage - 1) * 5;
+      const startingIndex = (this.#currentPage - 1) * 5;
       let lastIndex = startingIndex + 5;
 
       if (
@@ -61,7 +61,7 @@ export default class extends Controller {
       ) {
         lastIndex = (this.#currentDataIndexes.length % 5) + startingIndex;
       }
-      let indexRangeData = this.#data.slice(startingIndex, lastIndex);
+      const indexRangeData = this.#data.slice(startingIndex, lastIndex);
 
       // If activityType value is set, this else statement
       // can be updated to call the relevant method required

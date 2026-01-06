@@ -12,7 +12,7 @@ export function createHiddenInput(name, value) {
  * @returns {Object} The normalized JSON parameters
  */
 export function formDataToJsonParams(formData) {
-  let jsonParams = new Object();
+  const jsonParams = new Object();
 
   formData.forEach((value, key) => {
     normalizeParams(jsonParams, key, value, 0);
