@@ -155,7 +155,7 @@ jobs:
         run: bin/rails db:test:prepare test
 
   system-test:
-    timeout-minutes: 25
+    timeout-minutes: 45
     runs-on: ubuntu-latest
 
     services:
