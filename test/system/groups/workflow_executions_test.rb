@@ -110,7 +110,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution_group_shared1.id
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -126,14 +126,14 @@ module Groups
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 11 items'
       assert_selector 'table tbody tr', count: 11
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution_group_shared2.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -235,7 +235,7 @@ module Groups
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
               with: attachments(:workflow_execution_group_shared_output_attachment).puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       within 'tbody' do
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
@@ -243,7 +243,7 @@ module Groups
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
               with: attachments(:workflow_execution_group_shared_output_attachment).file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       within 'tbody' do
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid

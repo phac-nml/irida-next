@@ -459,7 +459,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
             with: attachments(:samples_workflow_execution_completed_output_attachment).puid
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     within 'tbody' do
       assert_text attachments(:samples_workflow_execution_completed_output_attachment).puid
@@ -468,7 +468,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
             with: attachments(:workflow_execution_completed_output_attachment).file.filename.to_s
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     within 'tbody' do
       assert_no_text attachments(:samples_workflow_execution_completed_output_attachment).puid
@@ -549,7 +549,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: @workflow_execution2.id
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     assert_text 'Displaying 1 item'
     assert_selector 'table tbody tr', count: 1
@@ -563,14 +563,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: ''
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
     assert_selector 'table tbody tr', count: PAGE_SIZE
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: @workflow_execution3.name
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     assert_text 'Displaying 1 item'
     assert_selector 'table tbody tr', count: 1

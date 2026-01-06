@@ -418,7 +418,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution1.id
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -432,14 +432,14 @@ module Projects
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: ''
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -542,7 +542,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.puid
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       within 'tbody' do
         assert_text attachment.puid
@@ -551,7 +551,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.file.filename.to_s
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       within 'tbody' do
         assert_text attachment.puid
