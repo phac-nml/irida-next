@@ -76,12 +76,17 @@ module AdvancedSearch
     def apply_sort(scope)
       return scope unless column.present? && direction.present?
 
-      if column.starts_with?('metadata.')
-        field = column.delete_prefix('metadata.')
-        scope.order(model_class.metadata_sort(field, direction))
-      else
-        scope.order(column => direction)
-      end
+      ordered_scope = if column.starts_with?('metadata.')
+                        field = column.delete_prefix('metadata.')
+                        scope.order(model_class.metadata_sort(field, direction))
+                      else
+                        scope.order(column => direction)
+                      end
+
+      # Add tie-breaker sort on id (unless already sorting by id)
+      return ordered_scope if column == 'id'
+
+      ordered_scope.order(id: direction)
     end
 
     def search_scope
