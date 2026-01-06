@@ -117,6 +117,16 @@ lib.mkMerge [
         pass_filenames = true;
       };
 
+      # ESLint for JavaScript files
+      eslint = {
+        enable = true;
+        name = "ESLint";
+        description = "Lint and auto-fix JavaScript files";
+        entry = "pnpm exec eslint --fix";
+        files = "\\.js$";
+        pass_filenames = true;
+      };
+
       # erb-formatter for ERB templates
       erb_formatter = {
         enable = true;
