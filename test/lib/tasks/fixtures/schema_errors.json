@@ -1,0 +1,6 @@
+{
+  "test/schema-errors": {
+    "invalid_field": "should not be here",
+    "versions": "should be an array, not a string"
+  }
+}
