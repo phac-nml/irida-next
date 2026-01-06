@@ -63,11 +63,17 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
       metadata_node = create_query_node('direction')
       associated_attachment_node = create_query_node('associated_attachment_id')
       most_recent_file = attachments.where(
-        metadata_node.eq(direction == :pe_forward ? 'forward' : 'reverse'),
+        metadata_node.eq('forward'),
         associated_attachment_node.not_eq(nil)
       ).order(created_at: :desc, id: :desc).first
-      # if paired-end files don't exist, return empty if reverse direction
-      return {} if !most_recent_file && direction == :pe_reverse
+
+      # because multiple paired-end files uploaded at once can be out of order, we can't simply look for the most recent
+      # reverse file, so we base the reverse file on the most recent forward file's associated attachment
+      if direction == :pe_reverse
+        return {} if most_recent_file.nil?
+
+        most_recent_file = most_recent_file.associated_attachment
+      end
     end
 
     # find single, non-paired fastq file to fill forward fastq file
