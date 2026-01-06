@@ -72,7 +72,7 @@ export default class extends Controller {
     this.pipelineIdTarget.value = params.pipelineid;
     this.workflowVersionTarget.value = params.workflowversion;
 
-    let spinner = document.getElementById("pipeline-spinner");
+    const spinner = document.getElementById("pipeline-spinner");
 
     spinner.classList.remove("hidden");
     // Update the text inside spinner dialog
@@ -111,7 +111,7 @@ export default class extends Controller {
   }
 
   #toJson(formData) {
-    let params = formDataToJsonParams(formData);
+    const params = formDataToJsonParams(formData);
 
     // add sample_ids under the fieldNameValue key to the params
     normalizeParams(

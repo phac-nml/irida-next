@@ -10,7 +10,7 @@ ActiveStorage.start();
 
 // Configure LocalTime from meta tag data
 let LocalTime;
-let localTimePromise = import("local-time").then((module) => {
+const localTimePromise = import("local-time").then((module) => {
   LocalTime = module.default;
   return LocalTime;
 });
@@ -46,7 +46,7 @@ async function configureLocalTime() {
 configureLocalTime();
 
 function isElementInViewport(el) {
-  var rect = el.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
 
   return (
     rect.top >= 0 &&
@@ -107,7 +107,7 @@ Turbo.config.forms.confirm = (message, element) => {
   const contentIdElement = element.querySelector("[data-turbo-content]");
 
   if (contentIdElement) {
-    let contentId = contentIdElement.getAttribute("data-turbo-content");
+    const contentId = contentIdElement.getAttribute("data-turbo-content");
     dialog.querySelector(".dialog--content").innerHTML =
       document.querySelector(contentId).innerHTML;
   }
@@ -115,7 +115,7 @@ Turbo.config.forms.confirm = (message, element) => {
   // See if there is a custom form to display
   const confirmValueElement = element.querySelector("[data-confirm-value]");
   if (confirmValueElement) {
-    let value = confirmValueElement.getAttribute("data-confirm-value");
+    const value = confirmValueElement.getAttribute("data-confirm-value");
     const confirmForm = dialog.querySelector(".dialog--form--validate");
     confirmForm.setAttribute("data-confirmation-input-value", value);
 

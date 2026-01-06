@@ -204,8 +204,8 @@ export default class extends Controller {
     if (columnTarget === this.sampleNameColumnTarget) {
       // copy unselected headers as we'll be removing array values
       // also create a copy that lower cases all values to test for case insensitivity
-      let copyUnselectedHeaders = unselectedHeaders.slice();
-      let lowerCasedUnselectedHeaders = copyUnselectedHeaders.map((header) =>
+      const copyUnselectedHeaders = unselectedHeaders.slice();
+      const lowerCasedUnselectedHeaders = copyUnselectedHeaders.map((header) =>
         header.toLowerCase(),
       );
       for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
@@ -258,13 +258,13 @@ export default class extends Controller {
   }
 
   #createInputOptions(column, values) {
-    for (let value of values) {
+    for (const value of values) {
       column.append(this.#createInputOption(value, value));
     }
   }
 
   #createInputOption(value, text) {
-    let option = document.createElement("option");
+    const option = document.createElement("option");
     option.value = value;
     option.text = text;
     return option;

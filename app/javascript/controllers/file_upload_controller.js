@@ -14,7 +14,7 @@ export default class extends Controller {
   }
 
   handleFileChange(event) {
-    let submitButton = document.querySelectorAll(
+    const submitButton = document.querySelectorAll(
       "input[type='submit'][data-attachment-upload-target]",
     )[0];
     const files = Array.from(event.target.files);

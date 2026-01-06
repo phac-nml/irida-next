@@ -347,7 +347,7 @@ export default class extends Controller {
     const value = valueInput.value.trim();
     const inputName = `sample[create_fields][${key}]`;
 
-    let existingHiddenInput = document.querySelector(
+    const existingHiddenInput = document.querySelector(
       `input[name="${inputName}"]`,
     );
 

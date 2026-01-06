@@ -499,7 +499,7 @@ export default class extends Controller {
     }
     const selectedOptions = this.#getSelectedOptions(sourceList);
 
-    let selectedOptionsText = [];
+    const selectedOptionsText = [];
     if (selectedOptions.length > 0) {
       for (let i = 0; i < selectedOptions.length; i++) {
         selectedOptionsText.push(
@@ -521,7 +521,7 @@ export default class extends Controller {
       this.#updateListAttributes(selectedOptions[0]);
     }
 
-    let ariaLiveUpdateString =
+    const ariaLiveUpdateString =
       sourceList === this.selectedList
         ? this.#ariaLiveTranslations["removed"]
         : this.#ariaLiveTranslations["added"];
@@ -849,8 +849,8 @@ export default class extends Controller {
 
   // used for dynamic/changing listing values
   updateMetadataListing({ detail: { content } }) {
-    let newMetadata = content["metadata"];
-    let existingMetadata = { available: [], selected: [] };
+    const newMetadata = content["metadata"];
+    const existingMetadata = { available: [], selected: [] };
 
     // check which values already exist in lists; prevents moving metadata between lists that have already been moved
     // by user
@@ -875,7 +875,7 @@ export default class extends Controller {
     this.selectedList.innerHTML = "";
 
     // add new metadata to the selected list
-    let selectedMetadata = existingMetadata["selected"].concat(newMetadata);
+    const selectedMetadata = existingMetadata["selected"].concat(newMetadata);
 
     // repopulate lists with existing and new metadata
     existingMetadata["available"].forEach((metadata) => {
@@ -890,7 +890,7 @@ export default class extends Controller {
   }
 
   #createListItem(element, list) {
-    let template = this.itemTemplateTarget.content.cloneNode(true);
+    const template = this.itemTemplateTarget.content.cloneNode(true);
     template.querySelector("li").firstElementChild.id =
       `${this.#validateId(element)}_unselected`;
     template.querySelector("li").lastElementChild.textContent = element;

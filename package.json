@@ -1,15 +1,22 @@
 {
   "name": "irida-next",
   "private": true,
+  "type": "module",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "axe-core": "^4.11.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.0.0",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2"
   },
   "scripts": {
     "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
     "format:check": "prettier --check '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
-    "format:changed": "prettier --write"
+    "format:changed": "prettier --write",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "flowbite": "^3.1.2"

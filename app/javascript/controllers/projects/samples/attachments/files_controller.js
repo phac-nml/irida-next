@@ -10,17 +10,17 @@ export default class extends Controller {
     const newTable = document.createElement("table");
     newTable.classList = table.classList;
 
-    for (let row of body.rows) {
+    for (const row of body.rows) {
       const isChecked = row.querySelector("input[type='checkbox']").checked;
 
       if (isChecked) {
         const newRow = newTable.insertRow(-1);
         newRow.classList = row.classList;
 
-        for (let cell of row.cells) {
+        for (const cell of row.cells) {
           // copy file name, type, size, and uploaded time
           if ([1, 2, 4, 5].includes(cell.cellIndex)) {
-            let cloneNode = cell.cloneNode(true);
+            const cloneNode = cell.cloneNode(true);
             cloneNode.classList = "px-3 py-3";
             newRow.append(cloneNode);
           }

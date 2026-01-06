@@ -100,7 +100,7 @@ export default class extends Controller {
     this.calendarTarget.innerHTML = "";
     // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
     // first and last week of dates
-    let fullCalendar = [];
+    const fullCalendar = [];
 
     // add last month's dates to fill first week (eg: if the 1st lands on a Tuesday, we'll add Sunday 30th, Monday 31st)
     fullCalendar.push(...this.#getPreviousMonthsDates());
@@ -121,7 +121,7 @@ export default class extends Controller {
   }
 
   #getPreviousMonthsDates() {
-    let firstDayOfMonthIndex = getDayOfWeek(
+    const firstDayOfMonthIndex = getDayOfWeek(
       this.#selectedYear,
       this.#selectedMonthIndex,
       1,
@@ -161,7 +161,7 @@ export default class extends Controller {
   }
 
   #getNextMonthsDates(thisMonthsLastDate) {
-    let lastDayOfMonthDay = getDayOfWeek(
+    const lastDayOfMonthDay = getDayOfWeek(
       this.#selectedYear,
       this.#selectedMonthIndex,
       thisMonthsLastDate,
@@ -562,7 +562,7 @@ export default class extends Controller {
   // handles ArrowLeft/Right keyboard navigation
   #handleHorizontalNavigation(event, direction) {
     let targetDate;
-    let currentDate = parseInt(event.target.innerText);
+    const currentDate = parseInt(event.target.innerText);
 
     if (direction === "left") {
       targetDate = currentDate - 1;
@@ -600,7 +600,7 @@ export default class extends Controller {
     let targetWeek;
     let targetDate;
     const currentWeek = event.target.parentNode;
-    let currentDate = parseInt(event.target.innerText);
+    const currentDate = parseInt(event.target.innerText);
 
     // find previous/next week and deduct/add 7 days since we're navigating by week with vertical navigation
     if (direction === "up") {

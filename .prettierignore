@@ -15,6 +15,12 @@ db/schema.rb
 db/jobs_schema.rb
 db/structure.sql
 
+# Lock files (auto-generated, should not be formatted)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+Gemfile.lock
+
 # Credentials
 config/credentials.yml.enc
 config/credentials/*
