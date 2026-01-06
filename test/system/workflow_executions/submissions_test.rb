@@ -392,7 +392,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### VERIFY START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
@@ -427,7 +427,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -482,7 +482,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -538,7 +538,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -595,7 +595,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -644,7 +644,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -698,7 +698,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
@@ -753,7 +753,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         find('input#workflow_execution_name').fill_in with: 'TestExecution'
         # verify samples samplesheet loaded
         assert_selector 'table'
@@ -817,10 +817,9 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify pagination buttons as well as disabled previous state
-        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
-                        text: I18n.t('components.nextflow.samplesheet_component.previous')
+        assert_button I18n.t('components.nextflow.samplesheet_component.previous'), disabled: true
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
         within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
           # verify only 4 pages exist
@@ -830,17 +829,13 @@ module WorkflowExecutions
           assert_selector 'option[value="4"]'
           assert_no_selector 'option[value="5"]'
         end
-        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
-                        text: I18n.t('components.nextflow.samplesheet_component.next')
+        assert_button I18n.t('components.nextflow.samplesheet_component.next')
 
         # navigate to page 2 of 4
         click_button I18n.t('components.nextflow.samplesheet_component.next')
 
         # verify previous button no longer disabled
-        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"]',
-                        text: I18n.t('components.nextflow.samplesheet_component.previous')
-        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
-                           text: I18n.t('components.nextflow.samplesheet_component.previous')
+        assert_button I18n.t('components.nextflow.samplesheet_component.previous')
         # page dropdown selection updated
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '2'
         # navigate to page 3 of 4
@@ -853,8 +848,7 @@ module WorkflowExecutions
 
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
         # verify next button is disabled on last page
-        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"][disabled]',
-                        text: I18n.t('components.nextflow.samplesheet_component.next')
+        assert_button text: I18n.t('components.nextflow.samplesheet_component.next'), disabled: true
       end
       ### ACTIONS AND VERIFY END ###
     end
@@ -891,7 +885,7 @@ module WorkflowExecutions
         first('button', text: 'phac-nml/iridanextexample').click
       end
 
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
         # navigate to page 4
         select '4', from: I18n.t('components.nextflow.samplesheet_component.page_selection.aria_label')
@@ -969,7 +963,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify samples samplesheet loaded
         assert_selector 'table'
         within('table tbody') do
@@ -1018,7 +1012,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify pagination buttons
         assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                         text: I18n.t('components.nextflow.samplesheet_component.previous')
@@ -1041,7 +1035,7 @@ module WorkflowExecutions
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: @sample22.puid
-        find('input#samplesheet-filter').send_keys :enter
+        find('input#samplesheet-filter').native.press 'Enter'
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1087,7 +1081,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify pagination buttons
         assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                         text: I18n.t('components.nextflow.samplesheet_component.previous')
@@ -1106,7 +1100,7 @@ module WorkflowExecutions
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: 'inxt_sam_'
-        find('input#samplesheet-filter').native.send_keys(:return)
+        find('input#samplesheet-filter').native.press('Enter')
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1153,7 +1147,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify pagination buttons
         assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                         text: I18n.t('components.nextflow.samplesheet_component.previous')
@@ -1172,7 +1166,7 @@ module WorkflowExecutions
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: 'not a valid filter'
-        find('input#samplesheet-filter').send_keys :enter
+        find('input#samplesheet-filter').native.press 'Enter'
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1220,7 +1214,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         # verify pagination buttons
         assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                         text: I18n.t('components.nextflow.samplesheet_component.previous')
@@ -1327,7 +1321,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
         # assert indexes of samples
         within('th[id="0_sample"]') do
@@ -1436,7 +1430,7 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
+      within 'dialog[open].dialog--size-xl' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
 
         find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
