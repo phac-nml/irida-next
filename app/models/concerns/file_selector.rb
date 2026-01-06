@@ -16,7 +16,7 @@ module FileSelector
     pe_reverse = []
     node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
                                            Arel::Nodes::Quoted.new('direction'))
-    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse')))
+    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse'))).order(:created_at, :id)
 
     non_reverse_attachments.each do |attachment|
       case attachment.metadata['direction']
