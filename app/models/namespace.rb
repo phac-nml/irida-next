@@ -275,7 +275,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       # UPDATE without instantiating ActiveRecord objects.
       Namespace.transaction do
         lock_id = Zlib.crc32("namespace_#{root_namespace.puid}_metadata_summary_lock").to_i
-        Namespace.connection.execute("SELECT pg_advisory_lock(#{lock_id})")
+        Namespace.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
 
         namespaces.update_all(metadata_summary: Arel::Nodes::Grouping.new(updated_metadata_summary)) # rubocop:disable Rails/SkipsModelValidations
       end
