@@ -30,17 +30,17 @@ module Nextflow
         'sample_id' => sample.id,
         'samplesheet_params' => sample_samplesheet_params(sample)
       }
-
-      return unless @properties.key?('fastq_1') && @properties.key?('fastq_2') && !sample.attachments.empty?
+      unless @properties.key?('fastq_1') && @properties.key?('fastq_2') && !sample.attachments.empty?
+        return sample_attributes
+      end
 
       fastq_file_attributes = sample.most_recent_fastq_files
       sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,
                                                                                   sample.id))
-
       sample_attributes
     end
 
-    def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+    def sample_samplesheet_params(sample) # rubocop:disable Metrics/MethodLength
       @properties.to_h do |name, property|
         case property['cell_type']
         when 'sample_cell'
@@ -48,16 +48,14 @@ module Nextflow
         when 'sample_name_cell'
           [name, sample.name]
         when 'file_cell'
-          [name, if sample.attachments.empty?
-                   {}
-                 else
-                   file_samplesheet_values(
-                     sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
-                   )
-                 end]
+          [name,
+           file_samplesheet_values(
+             sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
+           )]
         when 'metadata_cell'
           [name, metadata_samplesheet_values(sample, name, property)]
-        when 'dropdown_cell' || 'input_cell'
+        when 'dropdown_cell', 'input_cell', 'fastq_cell'
+          # fastq is queried above in samples_workflow_execution_attributes and values are merged over this empty value
           [name, '']
         end
       end
@@ -110,7 +108,6 @@ module Nextflow
       if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
         @properties['fastq_1']['pe_only'] = true
       end
-
       identify_autopopulated_file_properties
     end
 
