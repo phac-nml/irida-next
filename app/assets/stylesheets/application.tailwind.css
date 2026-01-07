@@ -740,12 +740,3 @@ a.pill-focus-reset:focus-visible {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
 }
-
-.anchor {
-  position: fixed;
-  top: anchor(bottom);
-  width: fit-content;
-  justify-self: anchor-center;
-  white-space: nowrap;
-  position-try-fallbacks: flip-block;
-}
