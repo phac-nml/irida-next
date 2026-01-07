@@ -16,10 +16,9 @@ export default class extends Controller {
   static outlets = ["pathogen--datepicker--input"];
   static targets = [
     "backButton",
-    "monthsArray",
-    "monthSelect",
-    "monthSelectContainer",
-    "monthSelectTemplate",
+    "monthTrigger",
+    "monthLabel",
+    "monthItem",
     "year",
     "calendar",
     "inMonthDateTemplate",
@@ -52,7 +51,8 @@ export default class extends Controller {
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
     // set the month and year inputs
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
+    this.monthLabelTarget.innerText =
+      this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
     if (this.hasMinDateMessageTarget) {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
@@ -61,23 +61,35 @@ export default class extends Controller {
   }
 
   setMonths() {
-    this.monthSelectContainerTarget.innerHTML = "";
-    const monthSelectTemplate =
-      this.monthSelectTemplateTarget.content.cloneNode(true);
-    const monthSelect = monthSelectTemplate.querySelector("select");
-    // if 2025 is #selectedYear and minDate = 2025-06-01, we remove Jan -> May from select template and append
-    if (this.#minDate && this.#minDate.includes(this.#selectedYear)) {
-      const minDateMonthIndex = new Date(this.#minDate).getUTCMonth();
-      for (let i = 0; i < minDateMonthIndex; i++) {
-        monthSelect.firstElementChild.remove();
-      }
-      // if current calendar is Feb 2026 and our minDate is July 2025, if the user clicks 'down' on year input to go to
-      // Feb 2025, we need to check that Feb index is less than July index, and if true, set index to July
-      if (this.#selectedMonthIndex < minDateMonthIndex) {
-        this.#selectedMonthIndex = minDateMonthIndex;
-      }
+    let minDateMonthIndex;
+    let minDateYear;
+
+    if (this.#minDate) {
+      const minDate = new Date(this.#minDate);
+      minDateYear = minDate.getUTCFullYear();
+      minDateMonthIndex = minDate.getUTCMonth();
     }
-    this.monthSelectContainerTarget.appendChild(monthSelect);
+
+    const selectedYear = parseInt(this.#selectedYear, 10);
+    const shouldRestrictMonths =
+      this.#minDate &&
+      Number.isFinite(selectedYear) &&
+      selectedYear === minDateYear;
+
+    if (shouldRestrictMonths && this.#selectedMonthIndex < minDateMonthIndex) {
+      this.#selectedMonthIndex = minDateMonthIndex;
+    }
+
+    this.monthItemTargets.forEach((item) => {
+      const itemMonthIndex = parseInt(item.dataset.monthIndex, 10);
+      const shouldDisable =
+        shouldRestrictMonths &&
+        Number.isFinite(itemMonthIndex) &&
+        itemMonthIndex < minDateMonthIndex;
+
+      item.disabled = shouldDisable;
+      item.setAttribute("aria-disabled", shouldDisable ? "true" : "false");
+    });
   }
 
   // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
@@ -427,7 +439,6 @@ export default class extends Controller {
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -439,7 +450,6 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
@@ -447,13 +457,11 @@ export default class extends Controller {
     this.idempotentConnect();
   }
 
-  // change calendar via month select dropdown
-  changeMonth() {
-    this.#selectedMonthIndex = this.monthsValue.indexOf(
-      this.monthSelectTarget.value,
-    );
+  // change calendar via dropdown menu month selection
+  selectMonth(event) {
+    this.#selectedMonthIndex = parseInt(event.params.monthIndex, 10);
     this.idempotentConnect();
-    this.monthSelectTarget.focus();
+    this.monthTriggerTarget.focus();
   }
 
   // change year via year input
@@ -494,7 +502,7 @@ export default class extends Controller {
     // if we're on the back button, or on the month select when back button is disabled, tab to the datepicker input
     if (
       event.target === this.backButtonTarget ||
-      (event.target === this.monthSelectTarget &&
+      (event.target === this.monthTriggerTarget &&
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
@@ -703,7 +711,7 @@ export default class extends Controller {
   // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
   getFirstFocusableElement() {
     return this.backButtonTarget.disabled
-      ? this.monthSelectTarget
+      ? this.monthTriggerTarget
       : this.backButtonTarget;
   }
 

@@ -24,10 +24,38 @@
     >
       <%= pathogen_icon(:arrow_left, size: :sm) %>
     </button>
-    <div
-      data-pathogen--datepicker--calendar-target="monthSelectContainer"
-      data-action="keydown->pathogen--datepicker--calendar#tabBackToInput"
-    >
+    <div>
+      <%= render(Pathogen::DropdownMenu.new(placement: :bottom_start, offset: 4)) do |menu| %>
+        <% menu.with_trigger(
+          aria_label: t('pathogen.datepicker.aria_label.select_month'),
+          class: 'rounded-lg border border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white px-3 py-2',
+          data: {
+            action: 'keydown->pathogen--datepicker--calendar#tabBackToInput',
+            'pathogen--datepicker--calendar-target' => 'monthTrigger'
+          }
+        ) do %>
+          <span class="inline-flex items-center gap-2">
+            <span data-pathogen--datepicker--calendar-target="monthLabel"></span>
+            <%= pathogen_icon(
+              :caret_down,
+              size: :sm,
+              class: "text-slate-500 dark:text-slate-300",
+            ) %>
+          </span>
+        <% end %>
+
+        <% months.each_with_index do |month, month_index| %>
+          <% menu.with_item(
+            label: month,
+            data: {
+              :action => "click->pathogen--datepicker--calendar#selectMonth",
+              :month_index => month_index,
+              "pathogen--datepicker--calendar-target" => "monthItem",
+              "pathogen--datepicker--calendar-month-index-param" => month_index,
+            },
+          ) %>
+        <% end %>
+      <% end %>
     </div>
     <div>
       <input
@@ -57,19 +85,3 @@
     </button>
   </div>
 </div>
-
-<template data-pathogen--datepicker--calendar-target="monthSelectTemplate">
-  <select
-    data-pathogen--datepicker--calendar-target="monthSelect"
-    data-action="change->pathogen--datepicker--calendar#changeMonth"
-    class="
-      rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
-      dark:bg-slate-800 dark:text-white
-    "
-    aria-label="<%= t('pathogen.datepicker.aria_label.select_month') %>"
-  >
-    <% months.each do |month| %>
-      <option value="<%= month %>"><%= month %></option>
-    <% end %>
-  </select>
-</template>
