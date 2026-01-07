@@ -12,7 +12,7 @@ gem 'rails', '~> 8.1.1'
 gem 'propshaft'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.6'
+gem 'puma', '~> 7.1'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
