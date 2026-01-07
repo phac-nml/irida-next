@@ -1,3 +1,5 @@
+import { computePosition, flip, shift, autoUpdate } from "@floating-ui/dom";
+
 /**
  * Dropdown - small utility to manage show/hide of a dropdown panel.
  *
@@ -5,7 +7,6 @@
  * - Toggle visibility and ARIA attributes
  * - Provide onShow/onHide lifecycle hooks
  * - Close when clicking outside the dropdown/trigger
- * - Add minimal "anchor" styling hooks for positioning
  */
 export default class Dropdown {
   /**
@@ -18,6 +19,7 @@ export default class Dropdown {
     this._trigger = trigger;
     this._options = options;
     this._visible = false;
+    this._cleanup = null;
 
     // Prepare element styling and event wiring
     this._initialize();
@@ -26,18 +28,8 @@ export default class Dropdown {
   // Initialize styling and event listeners
   _initialize() {
     if (this._target && this._trigger) {
-      this._addStyling();
       this._setupEventListeners();
     }
-  }
-
-  // Add minimal CSS hooks so application styles can position the panel
-  _addStyling() {
-    // 'anchor' is used in app CSS to position dropdowns relative to their trigger
-    this._target.classList.add("anchor");
-    // store an anchor name so styles/scripts can locate relation between trigger and panel
-    this._target.style.positionAnchor = `--anchor-${this._target.id}`;
-    this._trigger.style.anchorName = `--anchor-${this._target.id}`;
   }
 
   // Attach primary toggle handler to trigger
@@ -111,6 +103,12 @@ export default class Dropdown {
     if (this._options.onShow) {
       this._options.onShow();
     }
+
+    this._cleanup = autoUpdate(
+      this._trigger,
+      this._target,
+      this.update.bind(this),
+    );
   }
 
   // Hide the panel and run onHide hook
@@ -126,5 +124,20 @@ export default class Dropdown {
     if (this._options.onHide) {
       this._options.onHide();
     }
+
+    this._cleanup();
+  }
+
+  update() {
+    computePosition(this._trigger, this._target, {
+      placement: "bottom-start",
+      middleware: [flip(), shift({ padding: 8 })],
+    }).then(({ x, y }) => {
+      Object.assign(this._target.style, {
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+    });
   }
 }
