@@ -1,38 +1,73 @@
 # frozen_string_literal: true
 
 # Concern with for retrieving and organizing files within the nextflow samplesheet file selector
-module FileSelector # rubocop:disable Metrics/ModuleLength
+module FileSelector
   extend ActiveSupport::Concern
 
-  def sorted_files
-    return {} if attachments.empty?
+  def file_selector_fastq_files(property)
+    fastq_files = query_fastq_files(property == 'fastq_1' ? 'forward' : 'reverse', property == 'fastq_1')
+    return unless fastq_files
 
-    @sorted_files || sort_files
+    fastq_files.map do |file|
+      file_selector_attributes(file)
+    end
   end
 
-  def sort_files # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    singles = []
-    pe_forward = []
-    pe_reverse = []
-    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                           Arel::Nodes::Quoted.new('direction'))
-    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse'))).order(:created_at, :id)
+  def file_selector_other_files(pattern)
+    other_files = if pattern
+                    query_files_by_pattern(pattern)
+                  else
+                    query_non_fastq_files
+                  end
+    other_files.map do |file|
+      file_selector_attributes(file)
+    end
+  end
 
-    non_reverse_attachments.each do |attachment|
-      case attachment.metadata['direction']
-      when nil
-        singles << retrieve_attachment_attributes(attachment)
-      when 'forward'
-        pe_forward << retrieve_attachment_attributes(attachment)
-        pe_reverse << retrieve_attachment_attributes(attachment.associated_attachment)
+  def most_recent_fastq_files
+    # prioritize paired attachment before returning single attachment
+    forward_file = query_fastq_files('forward', false).first
+
+    if forward_file
+      { 'fastq_1' => samplesheet_file_attributes(forward_file),
+        'fastq_2' => samplesheet_file_attributes(forward_file.associated_attachment) }
+    else
+      single_file = query_single_fastq_files.first
+      if single_file
+        { 'fastq_1' => samplesheet_file_attributes(single_file), 'fastq_2' => {} }
+      else
+        { 'fastq_1' => {}, 'fastq_2' => {} }
       end
     end
-
-    @sorted_files = { singles:, pe_forward:, pe_reverse: }
-    @sorted_files
   end
 
-  def retrieve_attachment_attributes(attachment)
+  def most_recent_other_file(autopopulate, pattern)
+    return {} unless autopopulate
+
+    most_recent_file = if pattern
+                         # find file that fits regex
+                         query_files_by_pattern(pattern).first
+                       else
+                         # find file that is not fastq
+                         query_non_fastq_files.first
+                       end
+
+    return {} unless most_recent_file
+
+    samplesheet_file_attributes(most_recent_file)
+  end
+
+  private
+
+  def samplesheet_file_attributes(file)
+    {
+      filename: file.file.filename.to_s,
+      global_id: file.to_global_id,
+      id: file.id
+    }
+  end
+
+  def file_selector_attributes(attachment)
     {
       filename: attachment.file.filename.to_s,
       global_id: attachment.to_global_id,
@@ -43,88 +78,46 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
     }
   end
 
-  def samplesheet_fastq_files(property, pattern)
-    direction = fastq_direction(property)
-    singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/)
-    files = sorted_files.fetch(direction, [])
-
-    files.concat(singles) if (direction == :pe_forward && property['pe_only'].blank?) || direction == :none
-    files.sort_by! { |file| file[:created_at] }.reverse
-  end
-
-  def most_recent_fastq_files # rubocop:disable Metrics/MethodLength
-    metadata_node = create_query_node('direction')
-    associated_attachment_node = create_query_node('associated_attachment_id')
-
-    # prioritize paired attachment before returning single attachment
-    forward_file = attachments.where(
-      metadata_node.eq('forward'),
-      associated_attachment_node.not_eq(nil)
-    ).order(created_at: :desc, id: :desc).first
-
-    if forward_file
-      { 'fastq_1' => file_attributes(forward_file),
-        'fastq_2' => file_attributes(forward_file.associated_attachment) }
-    else
-      node = create_query_node('format')
-      single_file = attachments.where(node.eq('fastq')).order(created_at: :desc, id: :desc).first
-      if single_file
-        { 'fastq_1' => file_attributes(single_file), 'fastq_2' => {} }
-      else
-        { 'fastq_1' => {}, 'fastq_2' => {} }
-      end
-    end
-  end
-
-  def most_recent_other_file(autopopulate, pattern)
-    return {} unless autopopulate
-
-    most_recent_file = nil
-    # find file that fits regex
-    if pattern
-      most_recent_file = attachments
-                         .joins(:file_blob)
-                         .where(ActiveStorage::Blob.arel_table[:filename].matches_regexp(pattern))
-                         .order(created_at: :desc, id: :desc)
-                         .first
-    # find file that is not fastq
-    else
-      node = create_query_node('format')
-      most_recent_file = attachments.where(node.not_eq('fastq')).order(created_at: :desc, id: :desc).first
-    end
-
-    return {} unless most_recent_file
-
-    file_attributes(most_recent_file)
-  end
-
-  def filter_files_by_pattern(files, pattern)
-    files.select { |file| file[:filename] =~ Regexp.new(pattern) }
-  end
-
-  private
-
-  def fastq_direction(property)
-    case property.match(/^fastq_(\d+)$/).to_a[1]
-    when '1'
-      :pe_forward
-    when '2'
-      :pe_reverse
-    else
-      :single
-    end
-  end
-
-  def file_attributes(file)
-    {
-      filename: file.file.filename.to_s,
-      global_id: file.to_global_id,
-      id: file.id
-    }
-  end
-
   def create_query_node(key)
     Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
                                     Arel::Nodes::Quoted.new(key))
+  end
+
+  # paired fastq files of single direction
+  def query_fastq_files(direction, include_singles)
+    direction_node = create_query_node('direction')
+    associated_attachment_node = create_query_node('associated_attachment_id')
+
+    paired_files = attachments.where(
+      direction_node.eq(direction),
+      associated_attachment_node.not_eq(nil)
+    )
+
+    return paired_files.order(created_at: :desc, id: :desc) unless include_singles
+
+    single_files = query_single_fastq_files
+
+    paired_files.or(single_files).order(created_at: :desc, id: :desc)
+  end
+
+  # single non-paired fastq files
+  def query_single_fastq_files
+    format_node = create_query_node('format')
+    associated_attachment_node = create_query_node('associated_attachment_id')
+    attachments.where(format_node.eq('fastq')).where(
+      associated_attachment_node.eq(nil)
+    )
+  end
+
+  def query_files_by_pattern(pattern)
+    attachments
+      .joins(:file_blob)
+      .where(ActiveStorage::Blob.arel_table[:filename].matches_regexp(pattern))
+      .order(created_at: :desc, id: :desc)
+  end
+
+  def query_non_fastq_files
+    node = create_query_node('format')
+    attachments.where(node.not_eq('fastq')).order(created_at: :desc, id: :desc)
   end
 end
