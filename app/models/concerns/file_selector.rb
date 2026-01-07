@@ -13,6 +13,7 @@ module FileSelector
     end
   end
 
+  # TODO: verify how pattern comes in if no pattern
   def file_selector_other_files(pattern)
     other_files = if pattern
                     query_files_by_pattern(pattern)
