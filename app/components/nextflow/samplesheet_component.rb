@@ -26,13 +26,20 @@ module Nextflow
     private
 
     def samples_workflow_execution_attributes(sample)
-      {
+      sample_attributes = {
         'sample_id' => sample.id,
         'samplesheet_params' => sample_samplesheet_params(sample)
       }
+
+      return unless @properties.key?('fastq_1') && @properties.key?('fastq_2') && !sample.attachments.empty?
+
+      fastq_file_attributes = sample.most_recent_fastq_files
+      sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,
+                                                                                  sample.id))
+
+      sample_attributes
     end
 
-    # TODO: check most recent file selection
     def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
       @properties.to_h do |name, property|
         case property['cell_type']
@@ -40,17 +47,14 @@ module Nextflow
           [name, sample.puid]
         when 'sample_name_cell'
           [name, sample.name]
-        when 'fastq_cell'
-          [name,
-           file_samplesheet_values(
-             sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                            property['pattern']), sample.id, name
-           )]
         when 'file_cell'
-          [name,
-           file_samplesheet_values(
-             sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
-           )]
+          [name, if sample.attachments.empty?
+                   {}
+                 else
+                   file_samplesheet_values(
+                     sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
+                   )
+                 end]
         when 'metadata_cell'
           [name, metadata_samplesheet_values(sample, name, property)]
         when 'dropdown_cell' || 'input_cell'
@@ -80,6 +84,14 @@ module Nextflow
         attachment_id: file.empty? ? '' : file[:id]
       }
       file.empty? ? '' : file[:global_id]
+    end
+
+    def fastq_file_samplesheet_values(files, sample_id)
+      fastq_samplesheet_params = {}
+      files.each do |name, file|
+        fastq_samplesheet_params[name] = file_samplesheet_values(file, sample_id, name)
+      end
+      fastq_samplesheet_params
     end
 
     def metadata_samplesheet_values(sample, name, property)

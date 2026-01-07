@@ -52,39 +52,28 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
     files.sort_by! { |file| file[:created_at] }.reverse
   end
 
-  # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
-  # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
-  def most_recent_fastq_file(property, _pattern) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    most_recent_file = nil
-    direction = fastq_direction(property)
+  def most_recent_fastq_files # rubocop:disable Metrics/MethodLength
+    metadata_node = create_query_node('direction')
+    associated_attachment_node = create_query_node('associated_attachment_id')
 
-    # first check if paired-end fastq files exist
-    if %i[pe_forward pe_reverse].include?(direction)
-      metadata_node = create_query_node('direction')
-      associated_attachment_node = create_query_node('associated_attachment_id')
-      most_recent_file = attachments.where(
-        metadata_node.eq('forward'),
-        associated_attachment_node.not_eq(nil)
-      ).order(created_at: :desc, id: :desc).first
+    # prioritize paired attachment before returning single attachment
+    forward_file = attachments.where(
+      metadata_node.eq('forward'),
+      associated_attachment_node.not_eq(nil)
+    ).order(created_at: :desc, id: :desc).first
 
-      # because multiple paired-end files uploaded at once can be out of order, we can't simply look for the most recent
-      # reverse file, so we base the reverse file on the most recent forward file's associated attachment
-      if direction == :pe_reverse
-        return {} if most_recent_file.nil?
-
-        most_recent_file = most_recent_file.associated_attachment
+    if forward_file
+      { 'fastq_1' => file_attributes(forward_file),
+        'fastq_2' => file_attributes(forward_file.associated_attachment) }
+    else
+      node = create_query_node('format')
+      single_file = attachments.where(node.eq('fastq')).order(created_at: :desc, id: :desc).first
+      if single_file
+        { 'fastq_1' => file_attributes(single_file), 'fastq_2' => {} }
+      else
+        { 'fastq_1' => {}, 'fastq_2' => {} }
       end
     end
-
-    # find single, non-paired fastq file to fill forward fastq file
-    unless most_recent_file
-      node = create_query_node('format')
-      most_recent_file = attachments.where(node.eq('fastq')).order(created_at: :desc, id: :desc).first
-    end
-
-    return {} unless most_recent_file
-
-    file_attributes(most_recent_file)
   end
 
   def most_recent_other_file(autopopulate, pattern)
