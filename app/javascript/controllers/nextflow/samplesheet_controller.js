@@ -115,18 +115,16 @@ export default class extends Controller {
 
   sampleAttributesTargetConnected() {
     const dataAttributes = this.sampleAttributesTarget.dataset;
-    if (
-      Object.keys(dataAttributes.sampleAttributes).length === 0 ||
-      dataAttributes.allowedToUpdateSamples === ""
-    ) {
+    this.#samplesheetAttributes = JSON.parse(
+      dataAttributes.sampleAttributes || "{}",
+    );
+    this.#allowedToUpdateSamples = JSON.parse(
+      dataAttributes.allowedToUpdateSamples || "false",
+    );
+    if (Object.keys(this.#samplesheetAttributes).length === 0) {
       this.samplesheetSpinnerTarget.remove();
       this.#enableErrorState(this.processingErrorValue);
     } else {
-      this.#samplesheetAttributes = JSON.parse(dataAttributes.sampleAttributes);
-      // turns true/false string into bool
-      this.#allowedToUpdateSamples = JSON.parse(
-        dataAttributes.allowedToUpdateSamples,
-      );
       // remove node after retrieving data
       this.sampleAttributesTarget.remove();
       this.#processSamplesheet();
@@ -608,6 +606,7 @@ export default class extends Controller {
         this.paginationTemplateTarget.innerHTML,
       );
       this.#generatePageNumberDropdown();
+      this.#verifyPaginationButtonStates();
     }
   }
 
@@ -963,7 +962,7 @@ export default class extends Controller {
   }
 
   #toJson(formData) {
-    let params = formDataToJsonParams(formData);
+    const params = formDataToJsonParams(formData);
     if (this.hasSelectionOutlet) {
       normalizeParams(
         params,
