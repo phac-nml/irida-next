@@ -2,6 +2,7 @@
 en:
   common:
     actions:
+      apply: Apply
       cancel: Cancel
       delete: Delete
       download: Download

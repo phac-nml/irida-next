@@ -1,0 +1,58 @@
+<div
+  class="
+    p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900
+    dark:to-slate-800 min-h-screen
+  "
+>
+  <div class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %>
+      Pathogen Dropdown Menu - Basic Usage
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Trigger slot only. Click or press Enter/Space to open. Arrow keys
+      navigate. Escape closes.
+    </p>
+  </div>
+
+  <div
+    class="
+      bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+      dark:border-slate-700 p-8
+    "
+  >
+    <div class="flex items-center justify-between">
+      <div class="space-y-2">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Example</h2>
+        <p class="text-slate-600 dark:text-slate-400">
+          Standard menu items support links or button-style actions.
+        </p>
+      </div>
+
+      <%= render(Pathogen::DropdownMenu.new) do |menu| %>
+        <% menu.with_trigger(aria_label: "Open actions menu", class: "button button-default") do %>
+          <span class="inline-flex items-center gap-2">
+            <%= pathogen_icon(:squares_four, size: :sm) %>
+            <span>Actions</span>
+          </span>
+        <% end %>
+
+        <% menu.with_item(label: "Edit", href: "#") %>
+        <% menu.with_item(label: "Duplicate", href: "#") %>
+        <% menu.with_separator %>
+        <% menu.with_item(label: "Delete", href: "#", destructive: true) %>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Recommended Usage</h3>
+      <p class="text-slate-600 dark:text-slate-400">
+        Use
+        <span class="font-mono text-slate-800 dark:text-slate-200">with_trigger</span>
+        to render your button UI, then add items and separators. For icon-only
+        triggers, pass an
+        <span class="font-mono text-slate-800 dark:text-slate-200">aria_label</span>.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div
+  <%= tag.attributes(@system_arguments.except(:class)) %>
+  class="<%= @system_arguments[:class] %>"
+>
+  <%= trigger %>
+
+  <div
+    id="<%= @menu_id %>"
+    role="menu"
+    tabindex="-1"
+    hidden
+    aria-labelledby="<%= @trigger_id %>"
+    data-pathogen--dropdown-menu-target="menu"
+    data-menu-root="true"
+    data-state="closed"
+    class="
+      min-w-[12rem] z-50 rounded-lg border border-slate-200 bg-white shadow-lg
+      dark:bg-slate-900 dark:border-slate-700 outline-none
+    "
+  >
+    <div class="py-1" role="presentation">
+      <% entries.each do |entry| %>
+        <%= render entry %>
+      <% end %>
+    </div>
+
+    <% if footer? %>
+      <div
+        class="
+          border-t border-slate-200 dark:border-slate-700 px-2 py-2 flex items-center
+          justify-end gap-2
+        "
+        role="presentation"
+      >
+        <% if cancel_action.present? %>
+          <%= render cancel_action %>
+        <% end %>
+        <% if apply_action.present? %>
+          <%= render apply_action %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

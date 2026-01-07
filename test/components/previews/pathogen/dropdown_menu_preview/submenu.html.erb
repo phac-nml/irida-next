@@ -1,0 +1,59 @@
+<div
+  class="
+    p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900
+    dark:to-slate-800 min-h-screen
+  "
+>
+  <div class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:link, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dropdown Menu - Submenu (One Level)
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      One-level submenus support keyboard ArrowRight/ArrowLeft and hover open.
+      Escape/outside click cancels and reverts.
+    </p>
+  </div>
+
+  <div
+    class="
+      bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+      dark:border-slate-700 p-8
+    "
+  >
+    <div class="flex items-center justify-between">
+      <div class="space-y-2">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Example</h2>
+        <p class="text-slate-600 dark:text-slate-400">Submenu items are rendered as their own
+          <span class="font-mono">role="menu"</span>
+          region.</p>
+      </div>
+
+      <%= render(Pathogen::DropdownMenu.new) do |menu| %>
+        <% menu.with_trigger(aria_label: "Open project actions menu", class: "button button-default") do %>
+          <span class="inline-flex items-center gap-2">
+            <%= pathogen_icon(:link, size: :sm) %>
+            <span>Project</span>
+          </span>
+        <% end %>
+
+        <% menu.with_item(label: "Overview", href: "#") %>
+        <% menu.with_submenu(label: "More actions") do |submenu| %>
+          <% submenu.with_item(label: "Rename", href: "#") %>
+          <% submenu.with_item(label: "Move", href: "#") %>
+          <% submenu.with_separator %>
+          <% submenu.with_item(label: "Delete", href: "#", destructive: true) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Keyboard</h3>
+      <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-1">
+        <li>Use ArrowDown/ArrowUp to move through items.</li>
+        <li>On a submenu trigger, press ArrowRight to open the submenu.</li>
+        <li>In a submenu, press ArrowLeft to return to the parent menu.</li>
+      </ul>
+    </div>
+  </div>
+</div>

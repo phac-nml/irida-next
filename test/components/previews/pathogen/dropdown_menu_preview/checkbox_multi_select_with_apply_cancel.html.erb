@@ -1,0 +1,76 @@
+<div
+  class="
+    p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900
+    dark:to-slate-800 min-h-screen
+  "
+>
+  <div class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:sliders, color: :primary, size: :xl, class: "inline mr-3") %>
+      Dropdown Menu - Multi-select + Apply/Cancel
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Checkbox items include hidden form inputs for easy integration. Apply
+      emits a single change event with the full values array. Cancel / Escape /
+      outside click reverts and emits a cancel event.
+    </p>
+  </div>
+
+  <div
+    class="
+      bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+      dark:border-slate-700 p-8
+    "
+  >
+    <%= form_with url: "#", method: :get, class: "flex items-center justify-between gap-8" do %>
+      <div class="space-y-2">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Example</h2>
+        <p class="text-slate-600 dark:text-slate-400">
+          In an app page, you can listen for
+          <span class="font-mono text-slate-800 dark:text-slate-200">pathogen:dropdown-menu:change</span>
+          and persist via Turbo/fetch.
+        </p>
+      </div>
+
+      <%= render(Pathogen::DropdownMenu.new(submit_on_apply: true)) do |menu| %>
+        <% menu.with_trigger(aria_label: "Open filters menu", class: "button button-default") do %>
+          <span class="inline-flex items-center gap-2">
+            <%= pathogen_icon(:sliders, size: :sm) %>
+            <span>Filters</span>
+          </span>
+        <% end %>
+
+        <% menu.with_label(text: "Status") %>
+        <% menu.with_checkbox_item(
+          label: "Archived",
+          name: "filters[]",
+          value: "archived",
+          checked: false,
+        ) %>
+        <% menu.with_checkbox_item(
+          label: "Owned by me",
+          name: "filters[]",
+          value: "mine",
+          checked: true,
+        ) %>
+
+        <% menu.with_apply_action %>
+        <% menu.with_cancel_action %>
+      <% end %>
+    <% end %>
+
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Notes</h3>
+      <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-1">
+        <li>Toggle emits change events with
+          <span class="font-mono">source: "toggle"</span>.</li>
+        <li>Apply emits one change event with
+          <span class="font-mono">source: "apply"</span>
+          and full
+          <span class="font-mono">values</span>.</li>
+        <li>Cancel/Escape/outside click reverts UI and emits a cancel event with
+          the snapshot.</li>
+      </ul>
+    </div>
+  </div>
+</div>

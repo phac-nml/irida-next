@@ -2,6 +2,7 @@
 fr:
   common:
     actions:
+      apply: Appliquer
       cancel: Annuler
       delete: Supprimer
       download: Télécharger
