@@ -42,9 +42,10 @@ export default class extends Controller {
     "filterSearchButton",
     "updateSamplesCheckbox",
     "updateSamplesLabel",
-    "updateMessage",
     "sampleAttributes",
     "samplesheetParamsForm",
+    "samplesheetReadyTemplate",
+    "ariaLive",
   ];
 
   static values = {
@@ -57,6 +58,7 @@ export default class extends Controller {
     allowedToUpdateSamplesString: { type: String },
     notAllowedToUpdateSamplesString: { type: String },
     processingError: { type: String },
+    loadingCompleteAnnouncement: { type: String },
   };
 
   static outlets = ["selection"];
@@ -134,13 +136,28 @@ export default class extends Controller {
   #processSamplesheet() {
     this.#setSamplesheetParametersAndData();
     this.#disableProcessingState();
+    this.#changeSamplesheetToReadyState();
+  }
+
+  #changeSamplesheetToReadyState() {
     this.#samplesheetReady = true;
     const metadataChanges = { ...this.#queuedMetadataChanges };
     if (Object.keys(metadataChanges).length > 0) {
       this.#submitMetadataChange(metadataChanges);
       this.#queuedMetadataChanges = {};
     }
-    this.updateMessageTarget.classList.remove("hidden");
+    this.#addLoadingCompleteMessage();
+  }
+
+  #addLoadingCompleteMessage() {
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
+
+    const samplesheetReadyMessage =
+      this.samplesheetReadyTemplateTarget.content.cloneNode(true);
+    this.samplesheetMessagesContainerTarget.appendChild(
+      samplesheetReadyMessage,
+    );
+    this.ariaLiveTarget.innerHTML = this.loadingCompleteAnnouncementValue;
   }
 
   #setSamplesheetParametersAndData() {
