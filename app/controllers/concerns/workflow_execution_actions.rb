@@ -23,12 +23,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    @q = load_workflows.ransack(params[:q])
+    @query = workflow_execution_query
     @has_workflow_executions = load_workflows.any?
     @search_params = search_params
 
-    set_default_sort
-    @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
+    @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+
+    setup_ransack_for_form
   end
 
   def edit
@@ -126,8 +127,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     return if params[:select].blank?
 
-    @q = load_workflows.ransack(params[:q])
-    @workflow_executions = @q.result.select(:id)
+    @query = workflow_execution_query
+    @workflow_executions = @query.results.select(:id)
   end
 
   def destroy_confirmation
@@ -228,6 +229,44 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   private
 
+  def workflow_execution_query
+    WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }), scope: load_workflows)
+  end
+
+  def namespace_ids
+    return load_workflows.distinct.pluck(:namespace_id) if @namespace.nil?
+
+    [@namespace.id]
+  end
+
+  # Sets up Ransack compatibility for UI components that expect a Ransack object.
+  #
+  # This creates a dual-object pattern:
+  # - @query (WorkflowExecution::Query) - Handles actual search logic and results
+  # - @q (Ransack::Search) - Used by Ransack-based UI components
+  #
+  # Why both objects are needed:
+  # - The custom Query object provides advanced search capabilities
+  # - Ransack::SortComponent (used in WorkflowExecutions::TableComponent) requires a Ransack object
+  # - SearchComponent expects @q for form binding and displaying current search values
+  #
+  # View usage:
+  # - SearchComponent: Uses @q.name_or_id_cont for displaying current search term
+  # - Table headers: Ransack::SortComponent uses @q for sort links and sort state
+  # - Results: @query.results provides the actual paginated workflow executions
+  #
+  # TODO: When updating the UI, the samples feature uses a custom SortComponent instead of Ransack::SortComponent,
+  # eliminating the need for this bridging pattern. Consider refactoring workflow executions
+  # to use the same approach in the future.
+  def setup_ransack_for_form
+    # Create Ransack object from request params for UI component compatibility
+    @q = load_workflows.ransack(params[:q])
+    # Sync search values from custom Query to Ransack for accurate form display
+    @q.name_or_id_cont = @query.name_or_id_cont
+    # Set default sort order if none provided
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
+
   def workflow_properties
     workflow = @workflow_execution.workflow
     return {} if workflow.workflow_params.empty?
@@ -249,10 +288,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                    @tab = 'summary'
                    0
                  end
-  end
-
-  def set_default_sort
-    @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
   def destroy_multiple_params
@@ -332,6 +367,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def search_params
     search_params = {}
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params
+    search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
+    search_params[:sort] = params.dig(:q, :s)
+    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
+    search_params.compact
   end
 end

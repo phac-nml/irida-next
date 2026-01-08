@@ -48,6 +48,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.operation.less_than')
           assert_text I18n.t('components.advanced_search_component.operation.greater_than')
           assert_text I18n.t('components.advanced_search_component.operation.contains')
+          assert_text I18n.t('components.advanced_search_component.operation.does_not_contain')
           assert_text I18n.t('components.advanced_search_component.operation.exists')
           assert_text I18n.t('components.advanced_search_component.operation.not_exists')
           assert_text I18n.t('components.advanced_search_component.operation.in')

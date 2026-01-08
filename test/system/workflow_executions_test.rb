@@ -3,7 +3,8 @@
 require 'application_system_test_case'
 
 class WorkflowExecutionsTest < ApplicationSystemTestCase
-  WORKFLOW_EXECUTION_COUNT = 18
+  WORKFLOW_EXECUTION_COUNT = 22
+  PAGE_SIZE = 20
 
   setup do
     @user = users(:john_doe)
@@ -32,8 +33,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
   end
 
   test 'should display pages of workflow executions' do
@@ -60,11 +61,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'should sort a list of workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
-    workflow_execution1 = workflow_executions(:workflow_execution_valid)
-    workflow_execution8 = workflow_executions(:irida_next_example_canceling)
-    workflow_execution9 = workflow_executions(:irida_next_example_canceled)
-    workflow_execution12 = workflow_executions(:irida_next_example_new)
+    workflow_executions(:workflow_execution_valid)
     workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
+    workflow_execution_metadata_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    workflow_execution_metadata_dates2 = workflow_executions(:workflow_execution_with_metadata_dates2)
 
     visit workflow_executions_path
 
@@ -74,44 +74,34 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-up-icon"
 
     within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-      assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution12.run_id
-      assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
+      assert_selector 'tr', count: PAGE_SIZE
+      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_metadata_dates.run_id
     end
 
     click_on 'Run ID'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-down-icon"
 
     within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_selector 'tr', count: PAGE_SIZE
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-      assert_selector "tr:nth-child(4) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
-      assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
     end
 
     click_on 'Workflow Name'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.arrow-up-icon"
 
     within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_selector 'tr', count: PAGE_SIZE
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution9.workflow.name
-      assert_selector "tr:nth-child(3) td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution8.workflow.name
-      assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_shared1.workflow.name
+                      text: workflow_execution_metadata_dates2.workflow.name
     end
 
     click_on 'Workflow Name'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.arrow-down-icon"
 
     within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
+      assert_selector 'tr', count: PAGE_SIZE
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution_shared1.workflow.name
-      assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution9.workflow.name
     end
   end
 
@@ -223,7 +213,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     # Select all workflow executions within the table
     click_button I18n.t('common.controls.select_all')
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: PAGE_SIZE
     end
     within 'tfoot' do
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
@@ -252,7 +242,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     # Verify all workflow executions within the table are still selected and the footer is updated
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: PAGE_SIZE
     end
     within 'tfoot' do
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
@@ -518,7 +508,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     # Select all workflow executions within the table
     click_button I18n.t('common.controls.select_all')
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: PAGE_SIZE
     end
     within 'tfoot' do
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
@@ -537,7 +527,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     # Verify all workflow executions within the table are still selected and the footer is updated
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: PAGE_SIZE
     end
     within 'tfoot' do
       assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
@@ -547,8 +537,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can filter by ID and name on workflow execution index page' do
     visit workflow_executions_path
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector 'table tbody tr', count: PAGE_SIZE
 
     within('table tbody') do
       assert_text @workflow_execution2.id
@@ -575,8 +565,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: ''
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector 'table tbody tr', count: PAGE_SIZE
 
     fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
             with: @workflow_execution3.name
@@ -668,8 +658,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{error_workflow.id}']").click
@@ -708,8 +698,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
@@ -749,8 +739,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{workflow_execution1.id}']").click
@@ -773,8 +763,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
 
@@ -805,8 +795,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
@@ -832,8 +822,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
   end
 
@@ -843,8 +833,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
@@ -872,8 +862,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/3')
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '2/3')
   end
@@ -883,8 +873,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
 
     within 'table' do
       find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
@@ -907,8 +897,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+    assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
   end
 end

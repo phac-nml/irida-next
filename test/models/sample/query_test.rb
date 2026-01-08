@@ -228,4 +228,100 @@ class QueryTest < ActiveSupport::TestCase
     assert_equal 'id', tie_breaker_sort.expr.name
     assert_equal :desc, tie_breaker_sort.direction
   end
+
+  test 'not_contains operator with name field' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: 'not_contains', value: 'Sample 1' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    assert_not_includes results, sample1
+    assert_includes results, sample2
+  end
+
+  test 'not_contains operator with puid field' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    samples(:sample2)
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'puid', operator: 'not_contains', value: sample1.puid[0..5] } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    assert_not_includes results, sample1
+  end
+
+  test 'not_contains operator with metadata field' do
+    project = projects(:project1)
+    sample = samples(:sample1)
+    sample.update(metadata: { 'custom_field' => 'test_value' })
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'not_contains', value: 'test' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    assert_not_includes results, sample
+  end
+
+  test 'not_contains operator with nil metadata field should include record' do
+    project = projects(:project1)
+    sample_with_field = samples(:sample1)
+    sample_without_field = samples(:sample2)
+
+    sample_with_field.update(metadata: { 'custom_field' => 'contains_value' })
+    sample_without_field.update(metadata: {})
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'not_contains', value: 'value' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    # Should exclude record with the value
+    assert_not_includes results, sample_with_field
+    # Should include record without the field (nil metadata field)
+    assert_includes results, sample_without_field
+  end
+
+  test 'not_contains operator with SQL wildcard characters should be escaped' do
+    project = projects(:project1)
+    sample = samples(:sample1)
+    sample.update(name: 'Test%Sample')
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'name', operator: 'not_contains', value: '%' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+    # Should exclude sample with % in name
+    assert_not_includes results, sample
+  end
 end
