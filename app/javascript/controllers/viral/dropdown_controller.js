@@ -1,7 +1,6 @@
-import { Controller } from "@hotwired/stimulus";
-import Dropdown from "utilities/dropdown";
+import MenuController from "controllers/menu_controller";
 
-export default class extends Controller {
+export default class extends MenuController {
   static targets = ["trigger", "menu"];
 
   initialize() {
@@ -15,6 +14,7 @@ export default class extends Controller {
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
     document.addEventListener("turbo:morph", this.boundOnMorph);
+    this.#initializeDropdown();
   }
 
   disconnect() {
@@ -45,19 +45,24 @@ export default class extends Controller {
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
+    super.triggerTargetConnected();
+  }
 
-    this.dropdown = new Dropdown(this.menuTarget, element, {
-      onHide: () => {
-        this.#menuItems(element).forEach((menuitem) => {
-          menuitem.setAttribute("tabindex", "-1");
-        });
-      },
+  #initializeDropdown() {
+    super.connect({
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onHide() {
+    this.#menuItems(this.triggerTarget).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
     });
   }
 
   focusOut(event) {
     if (!this.element.contains(event.relatedTarget)) {
-      this.dropdown.hide();
+      super.hide();
     }
   }
 
@@ -65,8 +70,8 @@ export default class extends Controller {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.dropdown.isVisible()) {
-      this.dropdown.hide();
+    if (super.isVisible()) {
+      super.hide();
     } else {
       this.#openMenuAndFocusMenuItem(0);
     }
@@ -104,10 +109,10 @@ export default class extends Controller {
         },
         { once: true },
       );
-      this.dropdown.show();
+      super.show();
       this.#focusMenuItem(this.menuTarget);
     } else {
-      this.dropdown.show();
+      super.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
@@ -132,7 +137,7 @@ export default class extends Controller {
           if (clickableTarget) {
             clickableTarget.click();
           } else {
-            this.dropdown.hide();
+            super.hide();
           }
         } else {
           menuItems[currentIndex].click();
@@ -182,7 +187,7 @@ export default class extends Controller {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          this.dropdown.hide();
+          super.hide();
         }
         break;
     }
