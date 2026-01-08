@@ -43,31 +43,28 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
-      end
+      assert_text I18n.t(:'components.nextflow.update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
     end
 
     test 'should display a pipeline selection modal for project samples as maintainer' do
@@ -79,32 +76,29 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr', locale: user.locale)
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header',
-                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title',
+                                                       locale: user.locale)
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample', locale: user.locale)
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
-        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
-      end
+      assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
     end
 
     test 'should display a pipeline selection modal for project samples as analyst' do
@@ -116,32 +110,29 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr', locale: user.locale)
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header',
-                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title',
+                                                       locale: user.locale)
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample', locale: user.locale)
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
-        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
-      end
+      assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
     end
 
     test 'should display a pipeline selection modal for project samples as analyst through namespace group link' do
@@ -158,29 +149,26 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{sample.id}']").click
-      end
+      find("input[type='checkbox'][value='#{sample.id}']").click
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 1
+        assert_selector 'tr:first-child th:first-child', text: sample.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 1
-          assert_selector 'tr:first-child th:first-child', text: sample.puid
-        end
-
-        assert_no_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
-      end
+      assert_no_text I18n.t(:'components.nextflow.update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
     end
 
     test 'cannot launch workflow execution (user launched) without a name' do
@@ -196,33 +184,30 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{sample.id}']").click
-      end
+      find("input[type='checkbox'][value='#{sample.id}']").click
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 1
+        assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 1
-          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
-        end
+      assert_text I18n.t(:'components.nextflow.update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
 
-        assert_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+      click_button I18n.t('workflow_executions.submissions.create.submit')
 
-        click_button I18n.t('workflow_executions.submissions.create.submit')
-
-        assert_text I18n.t('components.nextflow_component.name.error')
-      end
+      assert_text I18n.t('components.nextflow_component.name.error')
     end
 
     test 'should not display a launch pipeline button for project samples as guest' do
@@ -242,31 +227,28 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr')
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
-      end
+      assert_text I18n.t(:'components.nextflow.update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
     end
 
     test 'should display a pipeline selection modal for group samples as maintainer' do
@@ -278,32 +260,29 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr', locale: user.locale)
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header',
-                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample', locale: user.locale)
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
-        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
-      end
+      assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
     end
 
     test 'should display a pipeline selection modal for group samples as analyst' do
@@ -315,32 +294,29 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample43.id}']").click
+      find("input[type='checkbox'][value='#{@sample44.id}']").click
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr', locale: user.locale)
 
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header',
-                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
-        assert_button text: 'phac-nml/iridanextexample', count: 3
-        first('button', text: 'phac-nml/iridanextexample').click
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      first('button', text: 'phac-nml/iridanextexample').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample', locale: user.locale)
+      assert_selector 'table[data-test-selector="samplesheet-table"]'
+      within 'table[data-test-selector="samplesheet-table"] tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
       end
 
-      within 'dialog[open].dialog--size-xl' do
-        assert_selector 'table'
-        within 'table tbody' do
-          assert_selector 'tr', count: 2
-          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-        end
-
-        assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
-        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
-      end
+      assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
     end
 
     test 'should not display a launch pipeline button for group samples as guest' do
@@ -377,31 +353,29 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
       # select samples
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample_a.id}']").click
-        find("input[type='checkbox'][value='#{@sample_b.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample_a.id}']").click
+      find("input[type='checkbox'][value='#{@sample_b.id}']").click
+
       # click workflow exectuions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        first('button', text: 'phac-nml/iridanextexample').click
-      end
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      first('button', text: 'phac-nml/iridanextexample').click
       ### SETUP END ###
 
       ### VERIFY START ###
-      within '#dialog' do
-        # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
-        # verify auto selected attachments
-        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
-        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
-                        text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
-      end
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      # verify auto selected attachments
+      assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+      assert_selector "a[id='#{@sample_a.id}_fastq_2']",
+                      text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+      assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
       ### VERIFY END ###
     end
 
@@ -412,50 +386,45 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
       # select samples
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample_a.id}']").click
-        find("input[type='checkbox'][value='#{@sample_b.id}']").click
-      end
+      find("input[type='checkbox'][value='#{@sample_a.id}']").click
+      find("input[type='checkbox'][value='#{@sample_b.id}']").click
+
       # click workflow exectuions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        first('button', text: 'phac-nml/iridanextexample').click
-      end
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      first('button', text: 'phac-nml/iridanextexample').click
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#dialog' do
-        # verify samples samplesheet loaded
-        assert_selector 'table'
-        # verify auto selected attachments
-        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
-        find("a[id='#{@sample_b.id}_fastq_1']").click
-      end
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+      # verify auto selected attachments
+      assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+      assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+      find("a[id='#{@sample_b.id}_fastq_1']").click
 
       # verify file selector rendered
-      assert_selector '#file_selector_form_dialog'
       within('#file_selector_form_dialog') do
         assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-        within('#file_selector_form') do
-          # select new attachment
-          find("#attachment_id_#{@attachment_fwd2.id}").click
-        end
+        # select new attachment
+        find("#attachment_id_#{@attachment_fwd2.id}").click
         click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within '#dialog' do
-        # both attachment fwd and rev3 were replaced with fwd and rev2
-        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd2.file.filename.to_s
-        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev2.file.filename.to_s
-        assert_no_text @attachment_fwd3.file.filename.to_s
-        assert_no_text @attachment_rev3.file.filename.to_s
-      end
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+      # both attachment fwd and rev3 were replaced with fwd and rev2
+      assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd2.file.filename.to_s
+      assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev2.file.filename.to_s
+      assert_no_text @attachment_fwd3.file.filename.to_s
+      assert_no_text @attachment_rev3.file.filename.to_s
       ### VERIFY END ###
     end
 
