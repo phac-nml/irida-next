@@ -110,6 +110,10 @@ module Pathogen
   class Tooltip < Pathogen::Component
     VALID_PLACEMENTS = %i[top bottom left right].freeze
 
+    TOOLTIP_BASE_CLASSES = 'fixed z-50 bg-slate-900 dark:bg-slate-700 text-white px-3 py-2 text-sm ' \
+                           'font-medium rounded-lg shadow-sm max-w-xs inline-block opacity-0 scale-90 ' \
+                           'invisible transition-all duration-200 ease-out'
+
     attr_reader :text
 
     def initialize(text:, id:, placement: :top, **system_arguments)
@@ -147,21 +151,22 @@ module Pathogen
       @system_arguments[:tag] = :div
       @system_arguments[:id] = @id
       @system_arguments[:role] ||= 'tooltip'
+      @system_arguments[:data] = merge_data_attributes
+      @system_arguments[:class] = merge_class_names
+    end
 
-      # Merge data attributes with defaults
-      @system_arguments[:data] = (@system_arguments[:data] || {}).reverse_merge(
+    # Merges data attributes with required defaults
+    def merge_data_attributes
+      (@system_arguments[:data] || {}).reverse_merge(
         'pathogen--tooltip-target': 'target',
         placement: @placement.to_s
       )
+    end
 
-      # Build base classes and merge with any custom classes
-      base_classes =
-        'fixed z-50 bg-slate-900 dark:bg-slate-700 text-white px-3 py-2 text-sm ' \
-        'font-medium rounded-lg shadow-sm max-w-xs inline-block opacity-0 scale-90 ' \
-        'invisible transition-all duration-200 ease-out'
-
-      @system_arguments[:class] = class_names(
-        base_classes,
+    # Builds and merges CSS classes with custom classes
+    def merge_class_names
+      class_names(
+        TOOLTIP_BASE_CLASSES,
         origin_class,
         @system_arguments[:class]
       )

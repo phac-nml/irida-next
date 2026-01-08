@@ -26,34 +26,16 @@ module Pathogen
       assert_selector 'div[data-placement="top"]'
     end
 
-    test 'renders with custom placement bottom' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :bottom
-                    ))
+    %i[bottom left right].each do |placement|
+      test "renders with custom placement #{placement}" do
+        render_inline(Pathogen::Tooltip.new(
+                        text: 'Sample tooltip',
+                        id: 'tooltip-123',
+                        placement: placement
+                      ))
 
-      assert_selector 'div[data-placement="bottom"]'
-    end
-
-    test 'renders with custom placement left' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :left
-                    ))
-
-      assert_selector 'div[data-placement="left"]'
-    end
-
-    test 'renders with custom placement right' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :right
-                    ))
-
-      assert_selector 'div[data-placement="right"]'
+        assert_selector "div[data-placement=\"#{placement}\"]"
+      end
     end
 
     test 'raises error for invalid placement value' do
@@ -67,7 +49,7 @@ module Pathogen
       assert_equal 'placement must be one of: :top, :bottom, :left, :right', error.message
     end
 
-    test 'renders with Primer-inspired styling' do
+    test 'renders with Primer-inspired styling and animations' do
       render_inline(Pathogen::Tooltip.new(
                       text: 'Sample tooltip',
                       id: 'tooltip-123'
@@ -76,119 +58,49 @@ module Pathogen
       assert_selector 'div.bg-slate-900.dark\:bg-slate-700.text-white'
       assert_selector 'div.px-3.py-2.text-sm.font-medium.rounded-lg.shadow-sm'
       assert_selector 'div.max-w-xs.inline-block'
-    end
-
-    test 'renders with animation classes' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123'
-                    ))
-
       assert_selector 'div.opacity-0.scale-90.invisible'
       assert_selector 'div.transition-all.duration-200.ease-out'
     end
 
-    test 'renders with correct origin class for top placement' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :top
-                    ))
+    {
+      top: 'origin-bottom', bottom: 'origin-top',
+      left: 'origin-right', right: 'origin-left'
+    }.each do |placement, origin|
+      test "renders with correct origin class for #{placement} placement" do
+        render_inline(Pathogen::Tooltip.new(
+                        text: 'Sample tooltip',
+                        id: 'tooltip-123',
+                        placement: placement
+                      ))
 
-      assert_selector 'div.origin-bottom'
+        assert_selector "div.#{origin}"
+      end
     end
 
-    test 'renders with correct origin class for bottom placement' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :bottom
-                    ))
-
-      assert_selector 'div.origin-top'
-    end
-
-    test 'renders with correct origin class for left placement' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :left
-                    ))
-
-      assert_selector 'div.origin-right'
-    end
-
-    test 'renders with correct origin class for right placement' do
-      render_inline(Pathogen::Tooltip.new(
-                      text: 'Sample tooltip',
-                      id: 'tooltip-123',
-                      placement: :right
-                    ))
-
-      assert_selector 'div.origin-left'
-    end
-
-    test 'forwards custom classes via system_arguments' do
+    test 'forwards custom attributes via system_arguments' do
       render_inline(
         Pathogen::Tooltip.new(
           text: 'Sample tooltip',
           id: 'tooltip-123',
-          class: 'custom-tooltip-class'
+          class: 'custom-tooltip-class',
+          role: 'status',
+          data: { controller: 'custom-controller', action: 'click->custom#action' },
+          aria: { label: 'Additional info', live: 'polite' }
         )
       )
 
+      # Custom attributes are applied
       assert_selector 'div#tooltip-123.custom-tooltip-class'
-      # Should still have base classes
-      assert_selector 'div.bg-slate-900'
-    end
-
-    test 'forwards custom data attributes via system_arguments' do
-      render_inline(
-        Pathogen::Tooltip.new(
-          text: 'Sample tooltip',
-          id: 'tooltip-123',
-          data: {
-            controller: 'custom-controller',
-            action: 'click->custom#action'
-          }
-        )
-      )
-
+      assert_selector 'div[role="status"]'
       assert_selector 'div[data-controller="custom-controller"]'
       assert_selector 'div[data-action="click->custom#action"]'
-      # Should still have required data attributes
-      assert_selector 'div[data-pathogen--tooltip-target="target"]'
-      assert_selector 'div[data-placement="top"]'
-    end
-
-    test 'forwards custom ARIA attributes via system_arguments' do
-      render_inline(
-        Pathogen::Tooltip.new(
-          text: 'Sample tooltip',
-          id: 'tooltip-123',
-          aria: {
-            label: 'Additional info',
-            live: 'polite'
-          }
-        )
-      )
-
       assert_selector 'div[aria-label="Additional info"]'
       assert_selector 'div[aria-live="polite"]'
-      # Should still have role attribute
-      assert_selector 'div[role="tooltip"]'
-    end
 
-    test 'allows overriding role via system_arguments' do
-      render_inline(
-        Pathogen::Tooltip.new(
-          text: 'Sample tooltip',
-          id: 'tooltip-123',
-          role: 'status'
-        )
-      )
-
-      assert_selector 'div[role="status"]'
+      # Required defaults are preserved
+      assert_selector 'div.bg-slate-900'
+      assert_selector 'div[data-pathogen--tooltip-target="target"]'
+      assert_selector 'div[data-placement="top"]'
     end
   end
 end
