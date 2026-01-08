@@ -242,8 +242,9 @@ module Groups
       within 'div.overflow-x-auto' do |div|
         # scroll to the end of the div
         div.execute_script('this.scrollLeft = this.scrollWidth')
-        find("#member-#{group_member.id}-expiration-input").click.set(expiry_date)
-                                                           .native.send_keys(:return)
+        find("#member-#{group_member.id}-expiration-input").click
+        find("#member-#{group_member.id}-expiration-input").set(expiry_date)
+        find("#member-#{group_member.id}-expiration-input").send_keys(:return)
       end
 
       within %(turbo-frame[id="member-update-alert"]) do
@@ -334,7 +335,7 @@ module Groups
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_bot.user.email
 
       fill_in placeholder: I18n.t(:'groups.members.member_listing.search.placeholder'), with: @member_james.user.email
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1

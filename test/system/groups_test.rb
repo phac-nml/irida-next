@@ -507,7 +507,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     assert_text I18n.t(:'components.viral.pagy.pagination_component.next')
     fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     assert_selector 'div.treegrid-row', count: 5
   end
@@ -536,7 +536,7 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
-    find('input.t-search-component').native.send_keys(:return)
+    find('input.t-search-component').send_keys(:return)
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 3
@@ -565,7 +565,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: subgroup3.puid
-    input_field.native.send_keys(:return)
+    input_field.send_keys(:return)
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 1
@@ -595,7 +595,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'subgroup'
-    input_field.native.send_keys(:return)
+    input_field.send_keys(:return)
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 8
@@ -619,7 +619,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
-    input_field.native.send_keys(:return)
+    input_field.send_keys(:return)
 
     assert_selector 'div.treegrid-row', count: 0
 
@@ -640,7 +640,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'input.t-search-component'
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
-    input_field.native.send_keys(:return)
+    input_field.send_keys(:return)
 
     assert_selector 'div.treegrid-row', count: 0
     assert_text I18n.t('components.viral.pagy.empty_state.title')

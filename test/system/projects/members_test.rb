@@ -362,8 +362,9 @@ module Projects
       wait_for_network_idle
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      find("#member-#{project_member.id}-expiration-input").click.set(expiry_date)
-                                                           .native.send_keys(:return)
+      find("#member-#{project_member.id}-expiration-input").click
+      find("#member-#{project_member.id}-expiration-input").set(expiry_date)
+      find("#member-#{project_member.id}-expiration-input").send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
@@ -461,7 +462,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.members.member_listing.search.placeholder'),
               with: @member_james.user.email
-      find('input.t-search-component').native.send_keys(:return)
+      find('input.t-search-component').send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1

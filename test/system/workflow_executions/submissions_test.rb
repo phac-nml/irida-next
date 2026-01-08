@@ -1106,7 +1106,7 @@ module WorkflowExecutions
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: 'inxt_sam_'
-        find('input#samplesheet-filter').native.send_keys(:return)
+        find('input#samplesheet-filter').send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###

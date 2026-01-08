@@ -896,7 +896,7 @@ module Projects
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -970,7 +970,7 @@ module Projects
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -994,7 +994,7 @@ module Projects
       ### ACTIONS START ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1022,7 +1022,7 @@ module Projects
       ### ACTIONS START ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1045,7 +1045,7 @@ module Projects
 
       ### ACTIONS START ###
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: 'sample'
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1069,7 +1069,7 @@ module Projects
 
       ### ACTIONS START ###
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1099,7 +1099,7 @@ module Projects
       ### ACTIONS and VERIFY START ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1151,7 +1151,7 @@ module Projects
       ### ACTIONS START ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3003,7 +3003,7 @@ module Projects
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: samples(:sample1).name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3019,7 +3019,7 @@ module Projects
 
       # remove filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: ' '
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3555,7 +3555,7 @@ module Projects
       assert_selector 'table thead tr th', count: 5
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3578,7 +3578,7 @@ module Projects
       find('table tbody tr:first-child td:nth-child(7)').click
 
       find('table tbody tr:first-child td:nth-child(7)').send_keys('value2')
-      find('table tbody tr:first-child td:nth-child(7)').native.send_keys(:return)
+      find('table tbody tr:first-child td:nth-child(7)').send_keys(:return)
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -3637,7 +3637,7 @@ module Projects
       assert_selector 'table thead tr th', count: 7
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3655,7 +3655,7 @@ module Projects
       assert_selector 'table thead tr th', count: 5
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3699,7 +3699,7 @@ module Projects
       assert_selector 'table thead tr th', count: 5
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3803,7 +3803,7 @@ module Projects
       assert_selector 'table tbody tr', count: 20
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample.puid
-      find('input[data-test-selector="search-field-input"]').native.send_keys(:return)
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'

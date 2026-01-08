@@ -56,14 +56,14 @@ module Pathogen
           overview = find('[role="tab"]', text: 'Overview')
           overview.click
 
-          overview.native.send_keys(:right)
+          overview.send_keys(:right)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
 
           find('[role="tab"]', text: 'Documentation').click
-          find('[role="tab"]', text: 'Documentation').native.send_keys(:right)
+          find('[role="tab"]', text: 'Documentation').send_keys(:right)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples'
 
-          find('[role="tab"]', text: 'Examples').native.send_keys(:right)
+          find('[role="tab"]', text: 'Examples').send_keys(:right)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
         end
       end
@@ -77,13 +77,13 @@ module Pathogen
           overview.click
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
-          overview.native.send_keys(:right)
+          overview.send_keys(:right)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Features'
 
-          find('[role="tab"]', text: 'Features').native.send_keys(:home)
+          find('[role="tab"]', text: 'Features').send_keys(:home)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Overview'
 
-          find('[role="tab"]', text: 'Features').native.send_keys(:end)
+          find('[role="tab"]', text: 'Features').send_keys(:end)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Examples'
         end
       end
@@ -99,30 +99,30 @@ module Pathogen
           dashboard.click
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Dashboard'
 
-          dashboard.native.send_keys(:down)
+          dashboard.send_keys(:down)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Settings'
 
           settings = find('[role="tab"]', text: 'Settings')
-          settings.native.send_keys(:down)
+          settings.send_keys(:down)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Profile'
 
           profile = find('[role="tab"]', text: 'Profile')
-          profile.native.send_keys(:down)
+          profile.send_keys(:down)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Notifications'
 
           notifications = find('[role="tab"]', text: 'Notifications')
-          notifications.native.send_keys(:down)
+          notifications.send_keys(:down)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Dashboard'
 
           dashboard = find('[role="tab"]', text: 'Dashboard')
-          dashboard.native.send_keys(:up)
+          dashboard.send_keys(:up)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Notifications'
 
           notifications = find('[role="tab"]', text: 'Notifications')
-          notifications.native.send_keys(:left)
+          notifications.send_keys(:left)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Notifications'
 
-          notifications.native.send_keys(:right)
+          notifications.send_keys(:right)
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Notifications'
         end
       end
@@ -171,7 +171,7 @@ module Pathogen
           assert_selector '[role="tab"][aria-selected="true"]', text: 'Getting Started'
 
           # Send right arrow key to navigate to next tab
-          find('[role="tab"][aria-selected="true"]').native.send_keys(:right)
+          find('[role="tab"][aria-selected="true"]').send_keys(:right)
         end
 
         # Wait for tab selection and debounced hash update
