@@ -1,14 +1,3 @@
-<%= turbo_stream.prepend "samplesheet_message" do
-  viral_alert(
-    type: "success",
-    message: t("components.nextflow_component.loading_complete"),
-    classes: "mb-2 hidden",
-    data: {
-      "nextflow--samplesheet-target": "updateMessage",
-    },
-  )
-end %>
-
 <%= turbo_stream.append "sample_attributes" do %>
   <%= render Nextflow::Samplesheet::SampleAttributesComponent.new(
     properties: @properties,

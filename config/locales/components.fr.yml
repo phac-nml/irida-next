@@ -247,7 +247,11 @@ fr:
       verifying_update_samples: Vérification de votre autorisation à mettre à jour les échantillons avec les résultats d’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
-      loading_complete: La feuille d’échantillons est prête.
+      loading_complete:
+        alert_message_html:
+          one: <div>Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>
+          other: <div>La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>
+        announcement: La feuille d’échantillons est prête.
       loading_samplesheet:
         one: Préparation des arguments d’exécution du flux de travail pour 1 échantillon.
         other: La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."

@@ -11,6 +11,7 @@
   data-nextflow--samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
   data-nextflow--samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
   data-nextflow--samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error")%>"
+  data-nextflow--samplesheet-loading-complete-announcement-value="<%= t("components.nextflow_component.loading_complete.announcement")%>"
   <% unless @automated_workflow %>
   data-nextflow--samplesheet-selection-outlet="#samples-table"
   <% end %>
@@ -119,9 +120,11 @@
                           "components.nextflow_component.loading_samplesheet",
                           count: @sample_count,
                         ),
-                      dismissible: true,
-                      auto_dismiss: true,
+                      data: {
+                        "nextflow--samplesheet-target": "loadingSamplesheetMessage",
+                      },
                       classes: "mb-2",
+                      dismissible: true,
                     ) %>
                   </turbo-frame>
 
@@ -308,4 +311,26 @@
     ) do |f| %>
     <% end %>
   <% end %>
+
+  <div
+    class="sr-only"
+    aria-live="polite"
+    data-nextflow--samplesheet-target="ariaLive"
+  ></div>
+
+  <template data-nextflow--samplesheet-target="samplesheetReadyTemplate">
+    <%= viral_alert(
+      type: "success",
+      message:
+        t(
+          "components.nextflow_component.loading_complete.alert_message_html",
+          count: @sample_count,
+        ),
+      classes: "mb-2",
+      dismissible: true,
+      # auto_dismiss: true,
+      auto_dismiss_duration: 10_000,
+      announce_alert: false,
+    ) %>
+  </template>
 </div>
