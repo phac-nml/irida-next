@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { notifyRefreshControllers } from "utilities/refresh";
+import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
   static targets = [
@@ -120,7 +121,7 @@ export default class extends Controller {
     // Focus the cancel button for accessibility
     const cancelButton = dialog.querySelector('button[value="cancel"]');
     if (cancelButton) {
-      requestAnimationFrame(() => cancelButton.focus());
+      focusWhenVisible(cancelButton);
     }
 
     // Handle dialog actions

@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
+import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
   static targets = [
@@ -683,7 +684,7 @@ export default class extends Controller {
       this.#setPagination();
       this.#updatePageData();
       this.#updateFilterButtons();
-      this.filterTarget.focus();
+      focusWhenVisible(this.filterTarget);
     }, 50);
   }
 
@@ -703,11 +704,11 @@ export default class extends Controller {
   }
   // check samplesheet properties for sample and sample_name and add them as filterable if present
   #setFilterableColumns() {
-    if (this.#samplesheetProperties.hasOwnProperty("sample")) {
+    if (Object.hasOwn(this.#samplesheetProperties, "sample")) {
       this.#filterableColumns.push("sample");
     }
 
-    if (this.#samplesheetProperties.hasOwnProperty("sample_name")) {
+    if (Object.hasOwn(this.#samplesheetProperties, "sample_name")) {
       this.#filterableColumns.push("sample_name");
     }
   }
