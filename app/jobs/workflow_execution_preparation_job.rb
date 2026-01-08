@@ -5,6 +5,13 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
   queue_as :default
   queue_with_priority 20
 
+  after_perform do |job|
+    workflow_execution = job.arguments[0]
+    if workflow_execution.present? && workflow_execution.prepared?
+      WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
+    end
+  end
+
   def perform(workflow_execution)
     # User signaled to cancel
     return if workflow_execution.canceling? || workflow_execution.canceled?
@@ -16,10 +23,8 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
 
     result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
 
-    if result
-      WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
-    else
-      handle_unable_to_process_job(workflow_execution, self.class.name)
-    end
+    return if result
+
+    handle_unable_to_process_job(workflow_execution, self.class.name)
   end
 end
