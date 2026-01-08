@@ -31,7 +31,7 @@ module Groups
           :'groups.group_links.new.sharing_namespace_with_group',
           name: @namespace.human_name
         )
-        find('input[data-viral--select2-target="input"]').click
+        find('input[data-viral--select2-target="trigger"]').click
         find("li[data-label='Subgroup 3']").click
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 

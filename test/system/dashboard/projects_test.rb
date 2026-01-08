@@ -137,7 +137,7 @@ module Dashboard
       click_on I18n.t(:'dashboard.projects.index.create_project_button')
 
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-        assert_selector %(input[data-viral--select2-target="input"]) do |input|
+        assert_selector %(input[data-viral--select2-target="trigger"]) do |input|
           assert_equal @user.namespace.full_path, input['value']
         end
       end

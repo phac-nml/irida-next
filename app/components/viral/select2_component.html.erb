@@ -4,7 +4,7 @@
     id: id,
     name: id,
     data: {
-      "viral--select2-target" => "input",
+      "viral--select2-target" => "trigger",
       action: "input->viral--select2#input",
     },
     placeholder: placeholder,
@@ -23,7 +23,7 @@
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
   <%= tag.div(
-    data: { "viral--select2-target": "dropdown" },
+    data: { "viral--select2-target": "menu" },
     class: "z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
   ) do %>
     <%= tag.ul(

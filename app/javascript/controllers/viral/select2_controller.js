@@ -1,5 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
-import Dropdown from "utilities/dropdown";
+import MenuController from "controllers/menu_controller";
 
 /**
  * Select2Controller
@@ -11,11 +10,11 @@ import Dropdown from "utilities/dropdown";
  * - Dropdown positioning and focus management
  * - Submit button enable/disable logic
  */
-export default class Select2Controller extends Controller {
+export default class Select2Controller extends MenuController {
   static targets = [
-    "input",
+    "trigger",
     "hidden",
-    "dropdown",
+    "menu",
     "scroller",
     "item",
     "empty",
@@ -27,7 +26,6 @@ export default class Select2Controller extends Controller {
   #itemSelected = false;
   #cachedInputValue = "";
   #currentItemIndex = -1;
-  #dropdown = null;
   #boundHandlers = {};
 
   static #KEY_CODES = {
@@ -47,16 +45,16 @@ export default class Select2Controller extends Controller {
 
       this.#boundHandlers.dropdownFocusOut =
         this.#handleDropdownFocusOut.bind(this);
-      this.dropdownTarget.addEventListener(
+      this.menuTarget.addEventListener(
         "focusout",
         this.#boundHandlers.dropdownFocusOut,
       );
 
       // Accessibility: set ARIA attributes
-      this.inputTarget.setAttribute("role", "combobox");
-      this.inputTarget.setAttribute("aria-autocomplete", "list");
-      this.inputTarget.setAttribute("aria-expanded", "false");
-      this.inputTarget.setAttribute(
+      this.triggerTarget.setAttribute("role", "combobox");
+      this.triggerTarget.setAttribute("aria-autocomplete", "list");
+      this.triggerTarget.setAttribute("aria-expanded", "false");
+      this.triggerTarget.setAttribute(
         "aria-controls",
         this.scrollerTarget.id || "select2-listbox",
       );
@@ -77,15 +75,12 @@ export default class Select2Controller extends Controller {
   disconnect() {
     try {
       if (this.#boundHandlers.dropdownFocusOut) {
-        this.dropdownTarget.removeEventListener(
+        this.menuTarget.removeEventListener(
           "focusout",
           this.#boundHandlers.dropdownFocusOut,
         );
       }
-      if (this.#dropdown) {
-        this.#dropdown.hide();
-        this.#dropdown = null;
-      }
+      super.hide();
     } catch (error) {
       this.#handleError(error, "disconnect");
     }
@@ -120,8 +115,8 @@ export default class Select2Controller extends Controller {
       if (selectedItemData) {
         const { value, label } = selectedItemData;
         this.#updateSelection(value, label);
-        if (this.#dropdown) this.#dropdown.hide();
-        this.inputTarget.focus();
+        super.hide();
+        this.triggerTarget.focus();
       } else {
         // If no valid item was determined (edge case or unexpected state),
         // potentially reset or log, but avoid throwing an error unless critical.
@@ -163,7 +158,7 @@ export default class Select2Controller extends Controller {
           break;
         case Select2Controller.#KEY_CODES.ENTER:
           if (this.#currentItemIndex < 0) {
-            if (this.#dropdown) this.#dropdown.show();
+            super.show();
           } else {
             this.select(event);
           }
@@ -176,8 +171,7 @@ export default class Select2Controller extends Controller {
 
   showDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.show();
-      this.inputTarget.setAttribute("aria-expanded", "true");
+      super.show();
     } catch (error) {
       this.#handleError(error, "showDropdown");
     }
@@ -185,8 +179,7 @@ export default class Select2Controller extends Controller {
 
   hideDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
-      this.inputTarget.setAttribute("aria-expanded", "false");
+      super.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -197,7 +190,7 @@ export default class Select2Controller extends Controller {
    */
   input() {
     try {
-      const query = this.inputTarget.value.toLowerCase().trim();
+      const query = this.triggerTarget.value.toLowerCase().trim();
       let visibleItemCount = 0;
 
       this.#setItemSelected(false);
@@ -216,8 +209,8 @@ export default class Select2Controller extends Controller {
       this.#updateAriaActiveDescendant();
 
       if (visibleItemCount > 0) {
-        if (this.#dropdown && !this.#dropdown.isVisible()) {
-          this.#dropdown.show();
+        if (!super.isVisible()) {
+          super.show();
         }
         this.emptyTarget.classList.add("hidden");
         this.scrollerTarget.scrollTop = 0;
@@ -248,8 +241,8 @@ export default class Select2Controller extends Controller {
       );
       return; // Prevent updating with invalid data
     }
-    this.inputTarget.value = label;
-    this.inputTarget.title = label;
+    this.triggerTarget.value = label;
+    this.triggerTarget.title = label;
     this.#cachedInputValue = value; // Cache the *value*, not the label
     this.hiddenTarget.value = value;
     this.#updateAriaSelected(label); // Update ARIA state based on the new selection
@@ -266,17 +259,17 @@ export default class Select2Controller extends Controller {
 
   #resetInput() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      super.hide();
       if (this.#cachedInputValue) {
         this.hiddenTarget.value = this.#cachedInputValue;
         this.#setInputTargetValueFromCache();
         this.#setItemSelected(true);
       } else {
-        this.inputTarget.value = "";
+        this.triggerTarget.value = "";
         this.hiddenTarget.value = "";
         this.#setItemSelected(false);
       }
-      this.inputTarget.focus();
+      this.triggerTarget.focus();
       this.#updateAriaActiveDescendant();
 
       if (this.hasSpreadsheetImportOutlet) {
@@ -357,20 +350,24 @@ export default class Select2Controller extends Controller {
   }
 
   #initializeDropdown() {
-    this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
-      onShow: () => {
-        this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
-      },
-      onHide: () => {
-        if (!this.#itemSelected) this.#setInputTargetValueFromCache();
-      },
+    super.connect({
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
     });
+  }
+
+  #onShow() {
+    this.menuTarget.style.minWidth = `${this.triggerTarget.offsetWidth}px`;
+  }
+
+  #onHide() {
+    if (!this.#itemSelected) this.#setInputTargetValueFromCache();
   }
 
   #setDefaultSelection() {
     try {
-      if (!this.inputTarget.value) return;
-      const query = this.inputTarget.value;
+      if (!this.triggerTarget.value) return;
+      const query = this.triggerTarget.value;
       let matched = false;
       for (const item of this.itemTargets) {
         const { value, label } = item.dataset;
@@ -381,9 +378,9 @@ export default class Select2Controller extends Controller {
           break;
         }
       }
-      if (!matched && this.inputTarget.value) {
+      if (!matched && this.triggerTarget.value) {
         throw new Error(
-          "No matching item found for the input value. Please check your data.",
+          "No matching item found for the trigger value. Please check your data.",
         );
       }
     } catch (error) {
@@ -393,8 +390,8 @@ export default class Select2Controller extends Controller {
 
   #handleDropdownFocusOut(event) {
     try {
-      if (!this.dropdownTarget.contains(event.relatedTarget)) {
-        if (this.#dropdown) this.#dropdown.hide();
+      if (!this.menuTarget.contains(event.relatedTarget)) {
+        super.hide();
       }
     } catch (error) {
       this.#handleError(error, "handleDropdownFocusOut");
@@ -403,9 +400,9 @@ export default class Select2Controller extends Controller {
 
   #validateTargets() {
     const missingTargets = [];
-    if (!this.hasInputTarget) missingTargets.push("input");
+    if (!this.hasTriggerTarget) missingTargets.push("trigger");
     if (!this.hasHiddenTarget) missingTargets.push("hidden");
-    if (!this.hasDropdownTarget) missingTargets.push("dropdown");
+    if (!this.hasMenuTarget) missingTargets.push("menu");
     if (!this.hasScrollerTarget) missingTargets.push("scroller");
     if (missingTargets.length > 0) {
       throw new Error(`Missing required targets: ${missingTargets.join(", ")}`);
@@ -418,7 +415,7 @@ export default class Select2Controller extends Controller {
   }
 
   #setInputTargetValueFromCache() {
-    const inputValue = this.inputTarget.value;
+    const inputValue = this.triggerTarget.value;
     if (inputValue === this.#cachedInputValue) return;
     const foundItem = this.itemTargets.find(
       (item) => item.dataset.value === this.#cachedInputValue,
@@ -432,8 +429,8 @@ export default class Select2Controller extends Controller {
       }
       return;
     }
-    this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
-    this.#updateAriaSelected(this.inputTarget.value);
+    this.triggerTarget.value = foundItem ? foundItem.dataset.label : "";
+    this.#updateAriaSelected(this.triggerTarget.value);
   }
 
   #updateAriaSelected(selectedLabel) {
@@ -449,9 +446,9 @@ export default class Select2Controller extends Controller {
     const visibleItems = this.#visibleItems();
     if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
       const activeId = visibleItems[this.#currentItemIndex].id;
-      this.inputTarget.setAttribute("aria-activedescendant", activeId);
+      this.triggerTarget.setAttribute("aria-activedescendant", activeId);
     } else {
-      this.inputTarget.removeAttribute("aria-activedescendant");
+      this.triggerTarget.removeAttribute("aria-activedescendant");
     }
   }
 }
