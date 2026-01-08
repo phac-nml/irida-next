@@ -19,8 +19,11 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
                else
                  @workflow_execution.errors.full_messages
                end
-      render locals: { message: t('.error_message'), errors: errors, type: :alert },
-             status: :unprocessable_content
+
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: 'error_dialog',
+                                               locals: { message: t('.error_message'), errors: errors, open: true,
+                                                         type: :alert }), status: :unprocessable_content
     end
   end
 

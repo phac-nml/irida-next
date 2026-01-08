@@ -1966,6 +1966,8 @@ fr:
         submit_button: Confirmer
         title: Supprimer les exécutions de flux de travail
         workflow_executions: Exécutions de flux de travail
+      error_dialog:
+        title: Échec de la création de l'exécution du flux de travail
       index:
         search:
           placeholder: Rechercher par ID ou nom

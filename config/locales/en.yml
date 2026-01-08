@@ -1962,6 +1962,8 @@ en:
         submit_button: Confirm
         title: Delete Workflow Executions
         workflow_executions: Workflow Executions
+      error_dialog:
+        title: Workflow Execution Create Failure
       index:
         search:
           placeholder: Search by ID or name
