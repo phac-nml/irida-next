@@ -221,10 +221,10 @@ CREATE UNIQUE INDEX index_good_job_settings_on_key ON public.good_job_settings U
 
 
 --
--- Name: index_good_jobs_jobs_on_finished_at; Type: INDEX; Schema: public; Owner: -
+-- Name: index_good_jobs_jobs_on_finished_at_only; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_good_jobs_jobs_on_finished_at ON public.good_jobs USING btree (finished_at) WHERE ((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL));
+CREATE INDEX index_good_jobs_jobs_on_finished_at_only ON public.good_jobs USING btree (finished_at) WHERE (finished_at IS NOT NULL);
 
 
 --
@@ -256,6 +256,13 @@ CREATE INDEX index_good_jobs_on_batch_id ON public.good_jobs USING btree (batch_
 
 
 --
+-- Name: index_good_jobs_on_concurrency_key_and_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_good_jobs_on_concurrency_key_and_created_at ON public.good_jobs USING btree (concurrency_key, created_at);
+
+
+--
 -- Name: index_good_jobs_on_concurrency_key_when_unfinished; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -274,6 +281,13 @@ CREATE INDEX index_good_jobs_on_cron_key_and_created_at_cond ON public.good_jobs
 --
 
 CREATE UNIQUE INDEX index_good_jobs_on_cron_key_and_cron_at_cond ON public.good_jobs USING btree (cron_key, cron_at) WHERE (cron_key IS NOT NULL);
+
+
+--
+-- Name: index_good_jobs_on_job_class; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_good_jobs_on_job_class ON public.good_jobs USING btree (job_class);
 
 
 --
@@ -318,6 +332,10 @@ CREATE INDEX index_good_jobs_on_scheduled_at ON public.good_jobs USING btree (sc
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260107195957'),
+('20260107195956'),
+('20260107195955'),
+('20260107195954'),
 ('20241217161002'),
 ('20240814150155'),
 ('20240814150154'),
