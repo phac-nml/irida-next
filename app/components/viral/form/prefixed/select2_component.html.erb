@@ -16,7 +16,7 @@
           type="text"
           id="<%= id %>"
           name="<%= id %>"
-          data-viral--select2-target="input"
+          data-viral--select2-target="trigger"
           placeholder="<%= placeholder %>"
           <%= "required" if required %>
           autocomplete="off"
@@ -37,7 +37,7 @@
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
         <div
-          data-viral--select2-target="dropdown"
+          data-viral--select2-target="menu"
           class="
             absolute z-10 hidden bg-white border border-slate-300 rounded-lg shadow-lg
             dark:bg-slate-800 dark:border-slate-700
