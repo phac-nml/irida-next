@@ -1,0 +1,8 @@
+{
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Toggle sidebar category '{label}'"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Toggle sidebar category '{label}'"
+  }
+}
