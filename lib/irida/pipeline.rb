@@ -153,11 +153,19 @@ module Irida
     def state_timestamp(workflow_execution, state) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       return nil if WorkflowExecution.states[state].nil?
 
-      workflow_executions_table = Arel::Table.new('workflow_executions')
+      workflow_executions_table = WorkflowExecution.arel_table
       id_condition = workflow_executions_table[:id].eq(workflow_execution.id)
-      log_entry = Arel::Table.new('log_entry')
 
-      ts_big_int = timestamp_as_bigint(log_entry)
+      log_entry_table = Arel::Table.new('log_entry')
+      log_entries = Arel::Nodes::Lateral.new(Arel::Nodes::NamedFunction.new(
+                                               'jsonb_array_elements',
+                                               [Arel::Nodes::InfixOperation.new(
+                                                 '->',
+                                                 WorkflowExecution.arel_table[:log_data], Arel::Nodes::Quoted.new('h')
+                                               )]
+                                             )).as(log_entry_table.name)
+
+      ts_big_int = timestamp_as_bigint(log_entry_table)
       # Timestamp in milliseconds since epoch
       timestamp_ms = Arel::Nodes::NamedFunction.new(
         'trunc', [
@@ -165,19 +173,13 @@ module Irida
         ]
       )
 
-      # Join (lateral join requires Arel.sql)
-      join_sql = Arel.sql(", lateral jsonb_array_elements(workflow_executions.log_data->'h') as log_entry")
+      workflow_execution_with_log_entries = WorkflowExecution.joins(workflow_executions_table.join(log_entries).on(
+        Arel::Nodes::SqlLiteral.new('TRUE')
+      ).join_sources)
 
-      # Construct the query
-      query = workflow_executions_table.where(id_condition).project(timestamp_ms).join(join_sql)
-                                       .where(state_log_entry(
-                                                log_entry, state
-                                              ))
-                                       .order(ts_big_int.asc)&.take(1)
-
-      # Execute the raw sql to get the timestamp on when workflow execution entered state
-      # and then flatten the rows array which is an array of arrays to get the first timestamp
-      ActiveRecord::Base.connection.exec_query(query.to_sql).rows.flatten.first
+      workflow_execution_with_log_entries.where(id_condition).where(state_log_entry(
+                                                                      log_entry_table, state
+                                                                    )).order(ts_big_int.asc).pick(timestamp_ms)
     end
 
     def timestamp_as_bigint(log_entry)
