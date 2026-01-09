@@ -350,10 +350,11 @@ export default class Select2Controller extends MenuController {
   }
 
   #initializeDropdown() {
-    super.connect({
+    super.share({
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
+    super.connect();
   }
 
   #onShow() {

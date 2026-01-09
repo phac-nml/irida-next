@@ -49,12 +49,23 @@ export default class extends MenuController {
   }
 
   #initializeDropdown() {
-    super.connect({
+    super.share({
+      onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
+    super.connect();
+  }
+
+  #onShow() {
+    this.triggerTarget.setAttribute("aria-expanded", "true");
+    this.menuTarget.removeAttribute("aria-hidden");
+    this.menuTarget.classList.remove("hidden");
   }
 
   #onHide() {
+    this.triggerTarget.setAttribute("aria-expanded", "false");
+    this.menuTarget.setAttribute("aria-hidden", "true");
+    this.menuTarget.classList.add("hidden");
     this.#menuItems(this.triggerTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });

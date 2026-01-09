@@ -1,5 +1,5 @@
 <%= form_with(url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
-data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
+data: { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
   <div class="form-field">
     <% form_id = "transfer_namespace_id_input" %>

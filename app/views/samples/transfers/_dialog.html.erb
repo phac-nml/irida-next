@@ -4,6 +4,7 @@
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
       data-controller="infinite-scroll viral--select2"
+      data-viral--select2-trigger-type-value="click"
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t("samples.transfers.dialog.description.singular") %>"
