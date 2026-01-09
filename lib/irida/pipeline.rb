@@ -140,7 +140,7 @@ module Irida
 
     # Calculate time spent in state till now in seconds
     def state_time_calculation(workflow_execution, state)
-      state_time = state_timestamp(workflow_execution, state)
+      state_time = workflow_execution.state_timestamp(state)
 
       # log change version timestamps are in milliseconds
       return Time.zone.now.to_i - state_time.to_i if state_time
@@ -149,60 +149,6 @@ module Irida
     end
 
     private
-
-    def state_timestamp(workflow_execution, state) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      return nil if WorkflowExecution.states[state].nil?
-
-      workflow_executions_table = WorkflowExecution.arel_table
-      id_condition = workflow_executions_table[:id].eq(workflow_execution.id)
-
-      log_entry_table = Arel::Table.new('log_entry')
-      log_entries = Arel::Nodes::Lateral.new(Arel::Nodes::NamedFunction.new(
-                                               'jsonb_array_elements',
-                                               [Arel::Nodes::InfixOperation.new(
-                                                 '->',
-                                                 WorkflowExecution.arel_table[:log_data], Arel::Nodes::Quoted.new('h')
-                                               )]
-                                             )).as(log_entry_table.name)
-
-      ts_big_int = timestamp_as_bigint(log_entry_table)
-      # Timestamp in milliseconds since epoch
-      timestamp_ms = Arel::Nodes::NamedFunction.new(
-        'trunc', [
-          Arel::Nodes::Division.new(ts_big_int, Arel::Nodes::SqlLiteral.new('1000'))
-        ]
-      )
-
-      workflow_execution_with_log_entries = WorkflowExecution.joins(workflow_executions_table.join(log_entries).on(
-        Arel::Nodes::SqlLiteral.new('TRUE')
-      ).join_sources)
-
-      workflow_execution_with_log_entries.where(id_condition).where(state_log_entry(
-                                                                      log_entry_table, state
-                                                                    )).order(ts_big_int.asc).pick(timestamp_ms)
-    end
-
-    def timestamp_as_bigint(log_entry)
-      Arel::Nodes::InfixOperation.new(
-        '::',
-        Arel::Nodes::Grouping.new(Arel::Nodes::InfixOperation.new('->>', log_entry, Arel::Nodes::Quoted.new('ts'))),
-        Arel::Nodes::SqlLiteral.new('bigint')
-      )
-    end
-
-    def state_log_entry(log_entry, state)
-      # Where condition: (log_entry->'c'->'state')::int = STATE
-      Arel::Nodes::InfixOperation.new(
-        '::',
-        Arel::Nodes::Grouping.new(Arel::Nodes::InfixOperation.new('->',
-                                                                  Arel::Nodes::InfixOperation.new(
-                                                                    '->',
-                                                                    log_entry, Arel::Nodes::Quoted.new('c')
-                                                                  ),
-                                                                  Arel::Nodes::Quoted.new('state'))),
-        Arel::Nodes::SqlLiteral.new('int')
-      ).eq(Arel::Nodes::SqlLiteral.new(WorkflowExecution.states[state].to_s))
-    end
 
     def text_for(value)
       return '' if value.nil?
