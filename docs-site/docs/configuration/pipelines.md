@@ -27,6 +27,13 @@ This `pipelines.json` file should be in the format below and can include the fol
   - `executable`: _(Optional)_ `true` or `false` to specify if the pipeline is able to be executed. When set to `false`, the pipeline will not be listed to the user.
 - **overrides** _(Optional)_ for the pipeline
 - **samplesheet_schema_overrides** _(Optional)_ for the pipeline
+- **settings**
+  - `min_samples`: _(Optional)_ `number` to specify the minimum number of samples required for analysis by the pipeline
+  - `max_samples`: _(Optional)_ `number` to specify the maximum number of samples allowed to be analyzed by the pipeline. If a value of -1 is set, this indicates no maximum which effectively disables this setting
+  - `min_runtime`: _(Optional)_ `number` or `string (formula)` to specify minimum allowed runtime in seconds for the pipeline
+  - `max_runtime`: _(Optional)_ `number` or `string (formula)` to specify maximum allowed runtime in seconds for the pipeline
+  - `status_check_interval`: _(Optional)_ `number` specifies the time in seconds between status checks sent to WES. Default is `30` seconds.
+  - `estimated_cost_formula`: _(Optional)_ `string (formula)` specifies the estimated cost in dollars for the analysis
 
 #### Example
 
@@ -453,5 +460,104 @@ In the below example, we will override the default selected metadata fields. Not
       ..........
     }
   ]
+}
+```
+
+### Pipeline settings
+
+The Settings section can be used to set pipeline specific settings at the entry and/or at the version level.
+
+In the below example, we will set the available pipeline specific settings at the entry level:
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "settings": {
+      "min_samples": 1,
+      "max_samples": 100,
+      "min_runtime": 60,
+      "max_runtime": 600,
+      "status_check_interval": 60,
+      "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+    },
+    "versions": [
+      {
+        "name": "1.0.3"
+      },
+      ......
+    ],
+    ........
+  },
+  "some other pipeline": {
+    .........
+  }
+}
+```
+
+In the below example, we will set the available pipeline specific settings at the version level:
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "versions": [
+      {
+        "name": "1.0.3",
+        "settings": {
+          "min_samples": 1,
+          "max_samples": 100,
+          "min_runtime": 60,
+          "max_runtime": 600,
+          "status_check_interval": 60,
+          "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+        }
+      },
+      ......
+    ],
+    ........
+  },
+  "some other pipeline": {
+    .........
+  }
+}
+```
+
+In the below example, we will set the available pipeline specific settings at the entry and version level. Version level settings only need to be set for settings which are different from the entry level settings
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "settings": {
+      "min_samples": 1,
+      "max_samples": 100,
+      "min_runtime": 60,
+      "max_runtime": 600,
+      "status_check_interval": 60,
+      "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+    },
+    "versions": [
+      {
+        "name": "1.0.3",
+        "settings": {
+          "max_samples": 500,
+          "status_check_interval": 45,
+          "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+        }
+      },
+      ......
+    ],
+    ........
+  },
+  "some other pipeline": {
+    .........
+  }
 }
 ```

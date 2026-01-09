@@ -83,6 +83,71 @@ module WorkflowExecutions
       assert_equal 'completing', @workflow_execution2.reload.state
     end
 
+    test 'test create workflow execution invalid min samples' do
+      workflow_params1 = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.3' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 2'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+
+      assert @workflow_execution.errors[:base].include?(
+        I18n.t('services.workflow_executions.create.min_samples_required',
+               min_samples: @workflow_execution.workflow.minimum_samples)
+      )
+    end
+
+    test 'test create workflow execution invalid max samples' do
+      sample2 = samples(:sample2)
+      sample3 = samples(:sample30)
+
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '1': {
+          sample_id: sample2.id,
+          samplesheet_params: {
+            sample: sample2.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '2': {
+          sample_id: sample3.id,
+          samplesheet_params: {
+            sample: sample3.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params1 = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.3' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 2'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+
+      assert @workflow_execution.errors[:base].include?(
+        I18n.t('services.workflow_executions.create.max_samples_exceeded',
+               max_samples: @workflow_execution.workflow.maximum_samples)
+      )
+    end
+
     test 'test create workflow execution completion step' do
       # prep test
       @workflow_execution_completing = workflow_executions(:irida_next_example_completing_a)
@@ -286,6 +351,8 @@ module WorkflowExecutions
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      puts @workflow_execution.errors.full_messages.to_sentence
 
       assert_not_nil @workflow_execution.workflow_type
       assert_not_nil @workflow_execution.workflow_type_version

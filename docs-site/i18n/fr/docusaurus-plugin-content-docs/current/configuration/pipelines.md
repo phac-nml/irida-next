@@ -27,6 +27,13 @@ Ce fichier `pipelines.json` devrait être au format ci-dessous et peut inclure l
   - `executable` : _(Optionnel)_ `true` ou `false` pour spécifier si le pipeline peut être exécuté. Lorsqu'il est défini sur `false`, le pipeline ne sera pas répertorié à l'utilisateur.
 - **overrides** _(Optionnel)_ pour le pipeline
 - **samplesheet_schema_overrides** _(Optional)_ pour le pipeline
+- **settings**
+  - `min_samples` : _(Optionnel)_ `number` pour spécifier le nombre minimal d'échantillons requis pour l'analyse par le pipeline
+  - `max_samples`: _(Optionnel)_ `nombre` pour spécifier le nombre maximum d'échantillons pouvant être analysés par le pipeline. Si une valeur de -1 est définie, cela indique l'absence de maximum, ce qui désactive efficacement ce paramètre
+  - `min_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution minimal autorisé (en secondes) pour le pipeline
+  - `max_runtime` : _(Optionnel)_ `number` ou `string (formula)` pour spécifier le temps d'exécution maximal autorisé (en secondes) pour le pipeline
+  - `status_check_interval` : _(Optionnel)_ `number` spécifiant l'intervalle (en secondes) entre les vérifications d'état envoyées au WES. Par défaut : `30` secondes.
+  - `estimated_cost_formula` : _(Optionnel)_ `string (formula)` spécifiant le coût estimé (en dollars) pour l'analyse
 
 #### Exemple
 
@@ -453,5 +460,104 @@ Dans l'exemple ci‑dessous, nous remplacerons les champs de métadonnées séle
       ..........
     }
   ]
+}
+```
+
+### Paramètres du pipeline
+
+La section Paramètres permet de définir des paramètres spécifiques au pipeline au niveau de l'entrée et/ou de la version.
+
+Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au pipeline au niveau de l'entrée :
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "Pipeline d'exemple IRIDA Next",
+    "settings": {
+      "min_samples": 1,
+      "max_samples": 100,
+      "min_runtime": 60,
+      "max_runtime": 600,
+      "status_check_interval": 60,
+      "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+    },
+    "versions": [
+      {
+        "name": "1.0.3"
+      },
+      ......
+    ],
+    ........
+  },
+  "some-other/pipeline": {
+    .........
+  }
+}
+```
+
+Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au pipeline au niveau de la version :
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "Pipeline d'exemple IRIDA Next",
+    "versions": [
+      {
+        "name": "1.0.3",
+        "settings": {
+          "min_samples": 1,
+          "max_samples": 100,
+          "min_runtime": 60,
+          "max_runtime": 600,
+          "status_check_interval": 60,
+          "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+        }
+      },
+      ......
+    ],
+    ........
+  },
+  "some-other/pipeline": {
+    .........
+  }
+}
+```
+
+Dans l'exemple ci‑dessous, nous définissons les paramètres spécifiques au pipeline au niveau de l'entrée et de la version. Les paramètres au niveau de la version n'ont à être définis que pour ceux qui diffèrent des paramètres de l'entrée.
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "Pipeline d'exemple IRIDA Next",
+    "settings": {
+      "min_samples": 1,
+      "max_samples": 100,
+      "min_runtime": 60,
+      "max_runtime": 600,
+      "status_check_interval": 60,
+      "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+    },
+    "versions": [
+      {
+        "name": "1.0.3",
+        "settings": {
+          "max_samples": 500,
+          "status_check_interval": 45,
+          "estimated_cost_formula": "5 + SAMPLE_COUNT * 1.35"
+        }
+      },
+      ......
+    ],
+    ........
+  },
+  "some-other/pipeline": {
+    .........
+  }
 }
 ```

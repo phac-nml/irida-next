@@ -44,6 +44,47 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
   end
 
   test 'submit workflow execution mutation should work' do
+    user = users(:jeff_doe)
+    project = projects(:projectA)
+    sample1 = samples(:sampleA)
+    sample2 = samples(:sampleB)
+    attachment1 = attachments(:attachmentA)
+    attachment2 = attachments(:attachmentPEFWD1)
+
+    samples_workflow_executions_attributes = [
+      {
+        sample_id: sample1.to_global_id.to_s,
+        samplesheet_params: {
+          sample: sample1.puid,
+          fastq_1: attachment1.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      },
+      {
+        sample_id: sample2.to_global_id.to_s,
+        samplesheet_params: {
+          sample: sample2.puid,
+          fastq_1: attachment2.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      }
+    ]
+
+    result = IridaSchema.execute(SUBMIT_WORKFLOW_EXECUTION_MUTATION,
+                                 context: { current_user: user },
+                                 variables: {
+                                   name: 'my_new_workflow_submission',
+                                   project_id: project.to_global_id.to_s,
+                                   samples_workflow_executions_attributes:
+                                 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['submitWorkflowExecution']
+    assert_not_empty data, 'submit workflow execution type should work'
+    workflow_execution = data['workflowExecution']
+    assert_equal 'my_new_workflow_submission', workflow_execution['name']
+  end
+
+  test 'submit workflow execution mutation should not work for minimum samples not provided' do
     samples_workflow_executions_attributes = [
       {
         sample_id: @sample.to_global_id.to_s,
@@ -68,7 +109,71 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
     data = result['data']['submitWorkflowExecution']
     assert_not_empty data, 'submit workflow execution type should work'
     workflow_execution = data['workflowExecution']
-    assert_equal 'my_new_workflow_submission', workflow_execution['name']
+    assert_nil workflow_execution, 'workflow execution should be nil due to error.'
+    errors = data['errors']
+
+    assert_not_empty errors, 'should have errors which prevented creation of workflow execution.'
+    assert(errors.any? do |e|
+      e['message'] == I18n.t('services.workflow_executions.create.min_samples_required',
+                             min_samples: 2)
+    end)
+  end
+
+  test 'submit workflow execution mutation should not work due to maximum samples exceeded' do
+    user = users(:jeff_doe)
+    project = projects(:projectA)
+    sample1 = samples(:sampleA)
+    sample2 = samples(:sampleB)
+    sample3 = samples(:sampleC)
+    attachment1 = attachments(:attachmentA)
+    attachment2 = attachments(:attachmentPEFWD1)
+    attachment3 = attachments(:attachmentPEFWD4)
+
+    samples_workflow_executions_attributes = [
+      {
+        sample_id: sample1.to_global_id.to_s,
+        samplesheet_params: {
+          sample: sample1.puid,
+          fastq_1: attachment1.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      },
+      {
+        sample_id: sample2.to_global_id.to_s,
+        samplesheet_params: {
+          sample: sample2.puid,
+          fastq_1: attachment2.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      },
+      {
+        sample_id: sample3.to_global_id.to_s,
+        samplesheet_params: {
+          sample: sample3.puid,
+          fastq_1: attachment3.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      }
+    ]
+
+    result = IridaSchema.execute(SUBMIT_WORKFLOW_EXECUTION_MUTATION,
+                                 context: { current_user: user },
+                                 variables: {
+                                   name: 'my_new_workflow_submission',
+                                   project_id: project.to_global_id.to_s,
+                                   samples_workflow_executions_attributes:
+                                 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['submitWorkflowExecution']
+    assert_not_empty data, 'submit workflow execution type should work'
+    workflow_execution = data['workflowExecution']
+    assert_nil workflow_execution, 'workflow execution should be nil due to error.'
+    errors = data['errors']
+
+    assert_not_empty errors, 'should have errors which prevented creation of workflow execution.'
+    assert(errors.any? do |e|
+      e['message'] == I18n.t('services.workflow_executions.create.max_samples_exceeded',
+                             max_samples: 2)
+    end)
   end
 
   test 'submit workflow execution mutation with non gid project' do

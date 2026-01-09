@@ -1,5 +1,7 @@
-<%= turbo_stream.update 'workflow_execution_errors' do %>
-  <%= viral_alert(message:, type: :alert, classes: "mb-4 h-30 overflow-y-auto") do %>
+<%= viral_dialog(open: open, id: 'workflow_execution_error_dialog', size: :large) do |dialog| %>
+  <% dialog.with_header(title: t("shared.workflow_executions.error_dialog.title")) %>
+
+  <%= viral_alert(message:, type: :alert, classes: "mb-4 h-30 overflow-y-auto", dismissible: false) do %>
     <ul class="mt-1.5 ml-4 list-disc list-inside">
       <% errors.each do |error| %>
         <%- error_parts = error.split(":") %>

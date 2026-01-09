@@ -5,7 +5,7 @@ module Irida
   class Pipeline # rubocop:disable Metrics/ClassLength
     attr_accessor :pipeline_id, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
-                  :default_params, :default_workflow_params
+                  :default_params, :default_workflow_params, :settings
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
@@ -25,6 +25,7 @@ module Irida
       @executable = version['executable'].nil? || version['executable']
       @overrides = overrides_for_entry(entry, version)
       @samplesheet_schema_overrides_for_entry = samplesheet_schema_overrides_for_entry(entry, version)
+      @settings = settings_for_entry(entry, version)
       @default_params = default_params_for_entry
       @default_workflow_params = default_workflow_params_for_entry
       @unknown = unknown
@@ -88,6 +89,65 @@ module Irida
       sample_sheet['items']['properties'][property_name]['pattern']
     end
 
+    def estimated_cost_formula(sample_count)
+      cost = @settings.fetch('estimated_cost_formula', nil)
+
+      return nil if cost.nil?
+      return cost if cost.is_a?(Integer) || cost.is_a?(Float)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(cost, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.round(2)
+    end
+
+    def status_check_interval
+      @settings.fetch('status_check_interval', 30).to_i
+    end
+
+    def minimum_samples
+      @settings.fetch('min_samples', 1).to_i
+    end
+
+    def maximum_samples
+      # A value of -1 indicates no maximum which effectively disables this setting
+      @settings.fetch('max_samples', -1).to_i
+    end
+
+    def maximum_run_time(sample_count = 0)
+      max_run_time = @settings.fetch('max_runtime', nil)
+
+      return nil if max_run_time.nil?
+      return max_run_time.to_i if max_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(max_run_time, SAMPLE_COUNT: sample_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    def minimum_run_time(samples_count = 0)
+      min_run_time = @settings.fetch('min_runtime', nil)
+
+      return nil if min_run_time.nil?
+      return min_run_time.to_i if min_run_time.is_a?(Integer)
+
+      calculator = Dentaku::Calculator.new
+      result = calculator.evaluate(min_run_time, SAMPLE_COUNT: samples_count)
+
+      result.nil? ? result : result.to_i
+    end
+
+    # Calculate time spent in state till now in seconds
+    def state_time_calculation(workflow_execution, state)
+      state_time = workflow_execution.state_timestamp(state)
+
+      # log change version timestamps are in milliseconds
+      return Time.zone.now.to_i - state_time.to_i if state_time
+
+      nil
+    end
+
     private
 
     def text_for(value)
@@ -144,6 +204,17 @@ module Irida
         )
 
       overrides
+    end
+
+    def settings_for_entry(entry, version)
+      settings = entry['settings'].deep_dup || {}
+
+      settings
+        .deep_merge!(
+          version.key?('settings') ? version['settings'] : {}
+        )
+
+      settings
     end
 
     def samplesheet_schema_overrides_for_entry(entry, version)

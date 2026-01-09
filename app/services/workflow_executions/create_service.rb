@@ -27,7 +27,11 @@ module WorkflowExecutions
         @workflow_execution.workflow_params = sanitized_workflow_params
       end
 
-      if @workflow_execution.save
+      # Check if required number of samples (min/max) is set for pipeline and set error to
+      # non persisted workflow execution object if selected samples exceeds/doesn't meet this requirement
+      validate_samples_requirement_for_pipeline(@workflow_execution)
+
+      if @workflow_execution.errors.empty? && @workflow_execution.save
         create_activities
         WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
       end
@@ -71,6 +75,26 @@ module WorkflowExecutions
       else
         value
       end
+    end
+
+    def validate_samples_requirement_for_pipeline(workflow_execution) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      min_samples = workflow_execution.workflow.minimum_samples
+      max_samples = workflow_execution.workflow.maximum_samples
+      selected_sample_length = if params[:samples_workflow_executions_attributes].is_a?(Array)
+                                 params[:samples_workflow_executions_attributes].length
+                               else
+                                 params[:samples_workflow_executions_attributes].keys.length
+                               end
+      if selected_sample_length < min_samples
+        workflow_execution.errors.add(:base,
+                                      I18n.t('services.workflow_executions.create.min_samples_required',
+                                             min_samples: min_samples))
+      end
+      return unless max_samples.positive? && (selected_sample_length > max_samples)
+
+      workflow_execution.errors.add(:base,
+                                    I18n.t('services.workflow_executions.create.max_samples_exceeded',
+                                           max_samples: max_samples))
     end
 
     def create_activities
