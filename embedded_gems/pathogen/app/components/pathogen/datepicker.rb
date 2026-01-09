@@ -105,6 +105,7 @@ module Pathogen
       @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
         I18n.t('pathogen.datepicker.errors.min_date_error')
       @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
+      @system_arguments[:data]['pathogen--datepicker--input-target'] = 'menu'
       @system_arguments[:data]['pathogen--datepicker--input-date-format-regex-value'] =
         I18n.t('pathogen.datepicker.date_format_regex')
     end
