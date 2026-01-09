@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
   static targets = [
@@ -53,9 +54,7 @@ export default class extends Controller {
     }
 
     if (initiatedByUser && this.hasExpandButtonTarget) {
-      window.requestAnimationFrame(() => {
-        this.expandButtonTarget.focus();
-      });
+      focusWhenVisible(this.expandButtonTarget);
     }
   }
 
@@ -69,9 +68,7 @@ export default class extends Controller {
 
     this.#setExpandedState(true);
 
-    setTimeout(() => {
-      this.logoTarget.focus();
-    }, 25);
+    focusWhenVisible(this.collapseButtonTarget);
 
     if (this.announcementsEnabled && this.hasAnnouncementTarget) {
       this.#announce(this.expandedAnnouncementValue);
