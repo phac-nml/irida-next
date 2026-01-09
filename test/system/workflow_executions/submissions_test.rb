@@ -56,11 +56,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_text I18n.t(:'components.nextflow.update_samples')
       assert_text I18n.t(:'components.nextflow.email_notification')
@@ -90,11 +90,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample', locale: user.locale)
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
@@ -124,11 +124,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample', locale: user.locale)
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
@@ -161,10 +161,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 1
-        assert_selector 'tr:first-child th:first-child', text: sample.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: sample.puid
 
       assert_no_text I18n.t(:'components.nextflow.update_samples')
       assert_text I18n.t(:'components.nextflow.email_notification')
@@ -196,10 +195,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 1
-        assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: sample.puid, count: 1
 
       assert_text I18n.t(:'components.nextflow.update_samples')
       assert_text I18n.t(:'components.nextflow.email_notification')
@@ -240,11 +238,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_text I18n.t(:'components.nextflow.update_samples')
       assert_text I18n.t(:'components.nextflow.email_notification')
@@ -274,11 +272,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample', locale: user.locale)
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
@@ -308,11 +306,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample', locale: user.locale)
       assert_selector 'table[data-test-selector="samplesheet-table"]'
-      within 'table[data-test-selector="samplesheet-table"] tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector 'tr:first-child th:first-child', text: @sample43.puid
-        assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
-      end
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 2
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
+                      text: @sample43.puid
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
+                      text: @sample44.puid
 
       assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
