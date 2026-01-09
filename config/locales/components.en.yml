@@ -249,12 +249,12 @@ en:
       data_missing_error: 'The following samples are missing required data: '
       loading_complete:
         alert_message_html:
-          one: "<div>Complete: Preparing workflow execution arguments for 1 sample, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
-          other: "<div>Complete: Preparing workflow execution arguments for %{count} samples, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
+          one: "<div>(Complete) Preparing workflow execution arguments for 1 sample, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
+          other: "<div>(Complete) Preparing workflow execution arguments for %{count} samples, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
         announcement: Samplesheet is ready.
       loading_samplesheet:
-        one: 'In progress: Preparing workflow execution arguments for 1 sample.'
-        other: 'In progress: Preparing workflow execution arguments for %{count} samples, this may take a bit of time.'
+        one: '(In progress) Preparing workflow execution arguments for 1 sample.'
+        other: '(In progress) Preparing workflow execution arguments for %{count} samples, this may take a bit of time.'
       name:
         error: Name is required. Please enter a name for the workflow execution.
         helper: A custom name will make it easier to search for this in the future.

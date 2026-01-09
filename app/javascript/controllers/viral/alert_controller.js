@@ -35,18 +35,20 @@ export default class extends Controller {
    * @type {Object}
    * @property {boolean} dismissible - Can the user close this alert? 🚪
    * @property {boolean} autoDismiss - Should it disappear automatically? ⏰
+   * @property {boolean} announceAlert - Should it alert be announced? ⏰
    * @property {string} type - What kind of alert? (danger, info, success, warning) 🏷️
    * @property {string} alertId - Unique identifier for this alert 🆔
    * @property {string} dismissButtonId - ID of the close button 🔘
+   *
    */
   static values = {
     dismissible: Boolean,
     autoDismiss: Boolean,
+    announceAlert: Boolean,
     type: String,
     alertId: String,
     dismissButtonId: String,
     autoDismissDuration: Number,
-    announceAlert: Boolean,
   };
 
   // 🔒 Private Properties - Internal state (only accessible within this class)

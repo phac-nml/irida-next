@@ -110,7 +110,7 @@
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @automated_workflow %>
-                  <turbo-frame
+                  <div
                     id="samplesheet_message"
                     data-nextflow--samplesheet-target="samplesheetMessagesContainer"
                   >
@@ -126,7 +126,7 @@
                       classes: "mb-2",
                       dismissible: true,
                     ) %>
-                  </turbo-frame>
+                  </div>
 
                   <%= render Nextflow::SamplesheetComponent.new(
                     schema: property[:schema],
@@ -148,7 +148,6 @@
                         rounded-lg rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
                         dark:divide-gray-700 dark:bg-gray-800
                       "
-                      role="alert"
                     >
                       <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
                       <span class="text-sm font-normal"><%= t("components.nextflow_component.processing_samplesheet") %></span>
@@ -314,7 +313,7 @@
 
   <div
     class="sr-only"
-    aria-live="polite"
+    aria-live="assertive"
     data-nextflow--samplesheet-target="ariaLive"
   ></div>
 
@@ -328,7 +327,7 @@
         ),
       classes: "mb-2",
       dismissible: true,
-      # auto_dismiss: true,
+      auto_dismiss: true,
       auto_dismiss_duration: 10_000,
       announce_alert: false,
     ) %>
