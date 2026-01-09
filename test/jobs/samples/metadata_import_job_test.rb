@@ -5,8 +5,6 @@ require 'test_helper'
 module Samples
   class MetadataImportJobTest < ActiveJob::TestCase
     def setup
-      Flipper.enable(:metadata_import_field_selection)
-
       @john_doe = users(:john_doe)
       @project = projects(:project1)
       @sample1 = samples(:sample1)
