@@ -242,8 +242,9 @@ module WorkflowExecutions
       assert_equal '', @workflow_execution.workflow_params['assembler']
       assert_equal 'assembly', @workflow_execution.workflow_params['project_name']
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
-      expected_tags = { 'createdBy' => @user.email }
-      assert_equal expected_tags, @workflow_execution.tags
+      expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
+                        samplesCount: @workflow_execution.samples_workflow_executions.size }
+      assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
@@ -268,8 +269,9 @@ module WorkflowExecutions
       assert_equal 1, @workflow_execution.log_data.size
 
       assert_equal test_name, @workflow_execution.name
-      expected_tags = { 'createdBy' => @user.email }
-      assert_equal expected_tags, @workflow_execution.tags
+      expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
+                        samplesCount: @workflow_execution.samples_workflow_executions.size }
+      assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
@@ -309,8 +311,9 @@ module WorkflowExecutions
       assert_equal 1, @workflow_execution.log_data.size
 
       assert_equal test_name, @workflow_execution.name
-      expected_tags = { 'createdBy' => @user.email }
-      assert_equal expected_tags, @workflow_execution.tags
+      expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
+                        samplesCount: @workflow_execution.samples_workflow_executions.size }
+      assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
