@@ -1,14 +1,18 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
-              data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
+              data: { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }) do |form| %>
   <div class="mb-2">
     <%= render partial: "shared/form/required_field_legend" %>
   </div>
   <div class="form-field">
     <% form_id = "transfer-form-select2" %>
-    <%= form.label :new_namespace_id, t(:"projects.edit.advanced.transfer.new_namespace_id"),
-                   for: form_id,
-                   class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                   data: { required: true } %>
+    <%= form.label :new_namespace_id,
+               t(:"projects.edit.advanced.transfer.new_namespace_id"),
+               for: form_id,
+               class:
+                 "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+               data: {
+                 required: true,
+               } %>
     <% if @authorized_namespaces.empty? %>
       <input
         disabled
