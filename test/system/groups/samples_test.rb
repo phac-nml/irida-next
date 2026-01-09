@@ -7,7 +7,6 @@ module Groups
     include ActionView::Helpers::SanitizeHelper
 
     def setup # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      Flipper.enable(:metadata_import_field_selection)
       Flipper.enable(:batch_sample_spreadsheet_import)
       Flipper.enable(:advanced_search_with_auto_complete)
 
@@ -932,31 +931,6 @@ module Groups
       assert_text 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
-    end
-
-    test 'should import metadata with disabled feature flag' do
-      Flipper.disable(:metadata_import_field_selection)
-      visit group_samples_url(@group)
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
-
-      ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
-
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
-
-      assert_no_selector 'dialog[open]'
-      ### VERIFY END ###
     end
 
     test 'should import metadata via csv' do
