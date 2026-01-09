@@ -88,6 +88,10 @@ export default class extends Controller {
     return [];
   }
 
+  getStoredItemsCount() {
+    return this.getOrCreateStoredItems().length;
+  }
+
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.getOrCreateStoredItems();
     if (add) {

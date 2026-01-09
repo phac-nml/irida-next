@@ -19,14 +19,16 @@ module Viral
   # Notes
   # - The `type` argument accepts Rails-style flash keys (:notice, :alert) as aliases.
   # - Helper methods used by the template are private to keep the public API small.
-  class AlertComponent < Viral::Component
+  class AlertComponent < Viral::Component # rubocop:disable Metrics/ClassLength
     # Public, read-only inputs surfaced to the template
     # @return [Symbol] one of :danger, :info, :success, :warning
     attr_reader :type
     # @return [String, nil]
     attr_reader :message
     # @return [Boolean]
-    attr_reader :dismissible, :auto_dismiss
+    attr_reader :dismissible, :auto_dismiss, :announce_alert
+    # @return [Integer]
+    attr_reader :auto_dismiss_duration
 
     # Default logical type
     TYPE_DEFAULT = :info
@@ -52,20 +54,28 @@ module Viral
     # @param message [String, nil] optional short message; block content renders as body
     # @param dismissible [Boolean] whether to render a close button
     # @param auto_dismiss [Boolean] whether to render a progress bar that a Stimulus controller can manage
+    # @param auto_dismiss_duration [Integer] Manually set how long the alert takes to dismiss itself (in milliseconds)
     # @param system_arguments [Hash] additional HTML attributes (classes are merged)
-    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false, **system_arguments)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false,
+                   auto_dismiss_duration: 5000, announce_alert: true, **system_arguments)
       # Normalize to canonical string type for styling and iconography
       @type = TYPE_MAPPINGS[type.to_sym] || TYPE_MAPPINGS[TYPE_DEFAULT]
       @message = message
       @dismissible = dismissible
       @auto_dismiss = auto_dismiss
+      @auto_dismiss_duration = auto_dismiss_duration
+      @announce_alert = announce_alert
       @system_arguments = system_arguments
       @system_arguments[:classes] =
         class_names('alert-component', classes_for_alert, @system_arguments[:classes])
+      return unless announce_alert
+
       @system_arguments[:role] = 'alert'
       @system_arguments[:'aria-live'] = 'assertive'
       @system_arguments[:'aria-atomic'] = 'true'
     end
+    # rubocop:enable Metrics/ParameterLists
 
     # Compose safe HTML attributes for the outer wrapper, including Stimulus data attributes.
     #
@@ -154,7 +164,9 @@ module Viral
         'data-viral--alert-auto-dismiss-value': auto_dismiss,
         'data-viral--alert-type-value': type,
         'data-viral--alert-alert-id-value': alert_id,
-        'data-viral--alert-dismiss-button-id-value': dismiss_button_id
+        'data-viral--alert-dismiss-button-id-value': dismiss_button_id,
+        'data-viral--alert-auto-dismiss-duration-value': auto_dismiss_duration,
+        'data-viral--alert-announce-alert-value': announce_alert
       }
     end
   end
