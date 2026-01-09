@@ -7,7 +7,7 @@
   </p>
 </div>
 
-<%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2"}, html: { novalidate: true }) do |form| %>
+<%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2", "viral--select2-trigger-type-value": "click"}, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if new_group_link.errors.any?
       viral_alert(
@@ -23,10 +23,14 @@
     <% invalid_group_id = new_group_link.errors.include?(:group_id) %>
     <div class="form-field <%= 'invalid' if invalid_group_id %>">
       <% form_id = "share_group_id_input" %>
-      <%= form.label :group_id, t("projects.group_links.new.label.shared_group"),
-                     for: form_id,
-                     class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                     data: { required: true } %>
+      <%= form.label :group_id,
+                 t("projects.group_links.new.label.shared_group"),
+                 for: form_id,
+                 class:
+                   "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                 data: {
+                   required: true,
+                 } %>
       <%= viral_select2(form:, name: :group_id, id: form_id, selected_value: new_group_link.group_id, aria_invalid: invalid_group_id, field_hint: true) do |select| %>
         <% @namespace_linkable_groups.each do |group| %>
           <% select.with_option(
@@ -62,7 +66,7 @@
     <% invalid_group_access_level = new_group_link.errors.include?(:group_access_level) %>
     <div class="form-field <%= 'invalid' if invalid_group_access_level %>">
       <%= form.label :group_access_level,
-                 I18n.t('common.labels.access_level'),
+                 I18n.t("common.labels.access_level"),
                  data: {
                    required: true,
                  } %>
@@ -89,7 +93,7 @@
                       required: true,
                     },
                     data: {
-                      placeholder: I18n.t('common.actions.select'),
+                      placeholder: I18n.t("common.actions.select"),
                     },
                     autofocus: invalid_group_access_level,
                     value: new_group_link.group_access_level,
@@ -111,7 +115,7 @@
       ) %>
     </div>
     <div class="my-4">
-      <%= form.submit I18n.t('common.actions.share'),
+      <%= form.submit I18n.t("common.actions.share"),
                   class: "button button-primary",
                   disabled: true,
                   data: {
@@ -122,7 +126,7 @@
         class="button button-default"
         data-action="click->viral--dialog#close"
       >
-        <%= t('common.actions.cancel') %>
+        <%= t("common.actions.cancel") %>
       </button>
     </div>
   </div>
