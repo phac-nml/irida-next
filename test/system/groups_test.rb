@@ -126,7 +126,7 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.show.create_subgroup_button')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      assert_selector %(input[data-viral--select2-target="input"]) do |input|
+      assert_selector %(input[data-viral--select2-target="trigger"]) do |input|
         assert_equal group1.path, input['value']
       end
     end
