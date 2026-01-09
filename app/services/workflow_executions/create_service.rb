@@ -86,13 +86,13 @@ module WorkflowExecutions
                                  params[:samples_workflow_executions_attributes].keys.length
                                end
       if selected_sample_length < min_samples
-        workflow_execution.errors.add(:samples,
+        workflow_execution.errors.add(:base,
                                       I18n.t('services.workflow_executions.create.min_samples_required',
                                              min_samples: min_samples))
       end
       return unless max_samples.positive? && (selected_sample_length > max_samples)
 
-      workflow_execution.errors.add(:samples,
+      workflow_execution.errors.add(:base,
                                     I18n.t('services.workflow_executions.create.max_samples_exceeded',
                                            max_samples: max_samples))
     end
