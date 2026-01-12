@@ -9,7 +9,6 @@ module WorkflowExecutions
       @user_destroyable = users(:janitor_doe)
 
       @namespace = projects(:project1).namespace
-      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should not destroy a workflow execution if the user is not the submitter' do

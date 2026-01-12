@@ -24,7 +24,6 @@ module Projects
       @workflow_version_col = '6'
       @created_at_col = '7'
 
-      Flipper.enable(:delete_multiple_workflows)
       Flipper.enable(:cancel_multiple_workflows)
     end
 

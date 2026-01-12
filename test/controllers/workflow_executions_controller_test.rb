@@ -12,7 +12,6 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     @workflow_execution_canceled = workflow_executions(:irida_next_example_canceled)
     @workflow_execution_running = workflow_executions(:irida_next_example_running)
     @workflow_execution_new = workflow_executions(:irida_next_example_new)
-    Flipper.enable(:delete_multiple_workflows)
   end
 
   test 'should create workflow execution with valid params' do

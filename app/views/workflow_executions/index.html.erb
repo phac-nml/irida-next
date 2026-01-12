@@ -26,21 +26,19 @@
           ) %>
         <% end %>
 
-        <% if Flipper.enabled?(:delete_multiple_workflows) %>
-          <% dropdown.with_item(
-            label:
-              t("shared.workflow_executions.actions_dropdown.delete_workflow_executions"),
-            url: destroy_multiple_confirmation_workflow_executions_path,
-            disableable: true,
-            data: {
-              turbo_stream: true,
-              controller: "action-button",
-              action_button_required_value: 1,
-            },
-            class:
-              "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
-          ) %>
-        <% end %>
+        <% dropdown.with_item(
+          label:
+            t("shared.workflow_executions.actions_dropdown.delete_workflow_executions"),
+          url: destroy_multiple_confirmation_workflow_executions_path,
+          disableable: true,
+          data: {
+            turbo_stream: true,
+            controller: "action-button",
+            action_button_required_value: 1,
+          },
+          class:
+            "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
+        ) %>
 
         <% dropdown.with_item(
           label: t("shared.workflow_executions.actions_dropdown.export"),
