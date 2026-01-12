@@ -4,7 +4,7 @@ module Samples
   # controller for sample cloning
   class ClonesController < ApplicationController
     respond_to :turbo_stream
-    before_action :namespace, :projects, :ensure_enabled
+    before_action :namespace, :projects
 
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :clone_sample?
@@ -39,10 +39,6 @@ module Samples
       return unless @namespace.project_namespace?
 
       @projects = @projects.where.not(namespace_id: @namespace.id)
-    end
-
-    def ensure_enabled
-      not_found unless Flipper.enabled?(:group_samples_clone)
     end
   end
 end

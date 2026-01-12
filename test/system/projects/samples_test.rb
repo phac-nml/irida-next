@@ -20,8 +20,6 @@ module Projects
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
-
-      Flipper.enable(:group_samples_clone)
     end
 
     test 'samples index table' do

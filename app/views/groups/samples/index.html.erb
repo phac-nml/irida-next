@@ -19,7 +19,7 @@
 
       <% if @group_project_ids.count.positive? && @render_sample_actions %>
         <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, styles: { button: "button button-default w-full" }) do |dropdown| %>
-          <% if @allowed_to[:clone_sample] && Flipper.enabled?(:group_samples_clone) %>
+          <% if @allowed_to[:clone_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.clone"),
               url: new_samples_clone_path,
