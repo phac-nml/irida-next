@@ -302,6 +302,26 @@ fr:
           status:
             one: 1 échantillon sélectionné
             other: "%{selected} sur %{total} échantillons sélectionnés"
+      virtualized_table_component:
+        table_label: "Tableau des échantillons (virtualisé)"
+        puid: "PUID"
+        name: "Nom"
+        "namespaces.puid": "Projet"
+        created_at: "Créé"
+        updated_at: "Mis à jour"
+        attachments_updated_at: "Fichiers mis à jour"
+        select_all:
+          aria_label: "Sélectionner tous les échantillons sur cette page"
+        row:
+          aria_label: "Sélectionner l'échantillon %{name}"
+        counts:
+          samples: "Échantillons"
+          selected: "Sélectionnés"
+          status:
+            one: "1 échantillon sélectionné"
+            other: "%{selected} sur %{total} échantillons sélectionnés"
+        limit:
+          item: "Échantillon"
     search:
       advanced:
         results_message:

@@ -4,6 +4,14 @@ require 'test_helper'
 
 module Samples
   class TableComponentTest < ViewComponent::TestCase
+    setup do
+      Flipper.disable(:virtualized_samples_table)
+    end
+
+    teardown do
+      Flipper.disable(:virtualized_samples_table)
+    end
+
     test 'Should render a table of samples for a group that are sorted by the project column' do
       render_table_component
 

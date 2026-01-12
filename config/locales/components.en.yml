@@ -302,6 +302,26 @@ en:
           status:
             one: 1 sample selected
             other: "%{selected} of %{total} samples selected"
+      virtualized_table_component:
+        table_label: "Samples table (virtualized)"
+        puid: "PUID"
+        name: "Name"
+        "namespaces.puid": "Project"
+        created_at: "Created"
+        updated_at: "Updated"
+        attachments_updated_at: "Files Updated"
+        select_all:
+          aria_label: "Select all samples on this page"
+        row:
+          aria_label: "Select sample %{name}"
+        counts:
+          samples: "Samples"
+          selected: "Selected"
+          status:
+            one: "1 sample selected"
+            other: "%{selected} of %{total} samples selected"
+        limit:
+          item: "Sample"
     search:
       advanced:
         results_message:

@@ -4,15 +4,14 @@ require 'ransack/helpers/form_helper'
 
 module Samples
   # Component for rendering a table of Samples
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
     include UrlHelpers
 
-    # Number of sticky columns at @2xl breakpoint and above (2), 1 column below @2xl
-    STICKY_COLUMN_COUNT = 2
-
-    # Initial batch size for metadata field templates (deferred loading optimization)
-    INITIAL_TEMPLATE_BATCH_SIZE = 20
+    # Maximum number of metadata fields to display regardless of sample count
+    MAX_METADATA_FIELDS_SIZE = 200
+    # Target maximum number of table cells (rows × columns) for optimal performance
+    TARGET_MAX_CELLS = 2000
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(
@@ -32,8 +31,8 @@ module Samples
       @has_samples = has_samples
       @abilities = abilities
 
-      @metadata_fields = metadata_fields
-      initialize_metadata_batches(metadata_fields)
+      @metadata_fields, @show_metadata_fields_size_warning =
+        apply_metadata_field_limit(metadata_fields)
 
       @search_params = search_params
       @empty = empty
@@ -50,28 +49,19 @@ module Samples
     # 📝 Returns the merged system arguments for the table wrapper.
     #
     # @return [Hash] system arguments for the table container
+    def before_render
+      return unless @show_metadata_fields_size_warning
+
+      can_edit = @abilities[:edit_sample_metadata]
+      @metadata_fields_size_warning_message = build_metadata_fields_size_warning_message(can_edit_metadata: can_edit)
+    end
+
     def system_arguments
       base_args = { tag: 'div' }.deep_merge(@system_arguments)
       base_args[:id] = 'samples-table'
       base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
-      base_args[:data] ||= {}
-
-      apply_virtual_scroll_data!(base_args)
       apply_selection_data!(base_args) if @abilities[:select_samples]
       base_args
-    end
-
-    # 🔄 Applies virtual-scroll controller and data attributes.
-    #
-    # @param args [Hash] arguments to mutate
-    # @return [void]
-    def apply_virtual_scroll_data!(args)
-      args[:data][:controller] = 'virtual-scroll'
-      args[:data][:'virtual-scroll-target'] = 'container'
-      args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
-      args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
-      args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
-      args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
     end
 
     # 🚀 Applies selection-related data attributes for interactive selection.
@@ -81,9 +71,7 @@ module Samples
     # @return [void]
     def apply_selection_data!(args)
       args[:data] ||= {}
-      # Append to existing controller value
-      existing_controller = args[:data][:controller] || ''
-      args[:data][:controller] = [existing_controller, 'selection'].join(' ').strip
+      args[:data][:controller] = 'selection'
       args[:data][:'selection-total-value'] = @pagy.count
       args[:data][:'selection-action-button-outlet'] = '.action-button'
       # i18n-driven live region messages
@@ -105,16 +93,11 @@ module Samples
       }
     end
 
-    def row_arguments(sample, row_index)
+    def row_arguments(sample)
       { tag: 'tr' }.tap do |args|
         args[:classes] =
           class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(sample)
-        args[:role] = 'row'
-        args[:aria] = { rowindex: @pagy.offset + row_index + 2 } # +2 for 1-based and header row
-        args[:data] ||= {}
-        args[:data][:sample_id] = sample.id
-        args[:data][:'virtual-scroll-target'] = 'row'
       end
     end
 
@@ -124,22 +107,63 @@ module Samples
 
     private
 
-    def initialize_metadata_batches(metadata_fields)
-      if @namespace.is_a?(Namespaces::ProjectNamespace)
-        @initial_metadata_fields = metadata_fields.take(INITIAL_TEMPLATE_BATCH_SIZE)
-        @deferred_metadata_fields = metadata_fields.drop(INITIAL_TEMPLATE_BATCH_SIZE)
-      else
-        # Groups do not have a deferred templates endpoint, so render all upfront
-        @initial_metadata_fields = metadata_fields
-        @deferred_metadata_fields = []
-      end
-    end
-
     def columns
       columns = %i[puid name]
       columns << 'namespaces.puid' if @namespace.type == 'Group'
       columns += %i[created_at updated_at attachments_updated_at]
       columns
+    end
+
+    def calculate_max_metadata_fields
+      return MAX_METADATA_FIELDS_SIZE if @samples.empty?
+
+      (TARGET_MAX_CELLS / @samples.size).floor.clamp(1, MAX_METADATA_FIELDS_SIZE)
+    end
+
+    def apply_metadata_field_limit(metadata_fields)
+      max_fields = calculate_max_metadata_fields
+      limited_fields = metadata_fields.take(max_fields)
+      show_warning = metadata_fields.count > max_fields
+      [limited_fields, show_warning]
+    end
+
+    def build_metadata_fields_size_warning_message(can_edit_metadata: false)
+      params = warning_interpolation_params
+
+      if can_edit_metadata
+        warning_message_with_link(params)
+      else
+        I18n.t('components.samples.table_component.metadata_fields_size_warning', **params)
+      end
+    end
+
+    def warning_interpolation_params
+      {
+        calculated_limit: calculate_max_metadata_fields,
+        sample_count: @samples.size,
+        target_max_cells: TARGET_MAX_CELLS
+      }
+    end
+
+    def warning_message_with_link(params)
+      link_markup = create_template_link
+
+      # Using html_safe because we're interpolating a link_to helper result
+      # which is already sanitized by Rails. This is safe as the link_markup
+      # contains no user-provided content - only the translated link text.
+      I18n.t(
+        'components.samples.table_component.metadata_fields_size_warning_with_link',
+        **params, create_template_link: link_markup
+      ).html_safe
+    end
+
+    def create_template_link
+      helpers.link_to(
+        I18n.t('components.samples.table_component.create_template_link'),
+        metadata_template_url,
+        class: 'font-semibold underline hover:no-underline',
+        data: { turbo_frame: 'top' }
+      )
     end
   end
 end
