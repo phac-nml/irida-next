@@ -32,7 +32,10 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch('RAILS_STORAGE_SERVICE', 'local').to_sym
-  config.active_storage.urls_expire_in = 15.minutes
+  # 30 minutes for redirect mode
+  config.active_storage.service_urls_expire_in = ENV.fetch('RAILS_STORAGE_URLS_EXPIRE_IN', 30).to_i.minutes
+  # 30 minutes for proxy mode (not used currently)
+  config.active_storage.urls_expire_in = ENV.fetch('RAILS_STORAGE_URLS_EXPIRE_IN', 30).to_i.minutes
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
