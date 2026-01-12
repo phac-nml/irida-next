@@ -7,7 +7,6 @@ module Groups
     include ActionView::Helpers::SanitizeHelper
 
     def setup # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      Flipper.enable(:batch_sample_spreadsheet_import)
       Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)

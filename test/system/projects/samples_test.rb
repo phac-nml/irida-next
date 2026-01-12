@@ -7,7 +7,6 @@ module Projects
     include ActionView::Helpers::SanitizeHelper
 
     setup do
-      Flipper.enable(:batch_sample_spreadsheet_import)
       Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)

@@ -9,7 +9,6 @@ module Groups
         sign_in users(:john_doe)
         @group = groups(:group_one)
         @blob_file = active_storage_blobs(:group_sample_import_valid_csv_blob)
-        Flipper.enable(:batch_sample_spreadsheet_import)
       end
 
       test 'should enqueue a Samples::BatchSampleImportJob' do
