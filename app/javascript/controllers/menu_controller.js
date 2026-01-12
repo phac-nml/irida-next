@@ -16,14 +16,6 @@ export default class MenuController extends Controller {
   #onShow = null;
   #onHide = null;
 
-  connect() {
-    console.debug("Menu controller connected");
-  }
-
-  disconnect() {
-    console.debug("Menu controller disconnected");
-  }
-
   triggerTargetConnected() {
     if (this.#triggerType === "click") {
       this.#trigger.addEventListener("click", () => {
