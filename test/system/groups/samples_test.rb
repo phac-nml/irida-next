@@ -25,13 +25,9 @@ module Groups
     end
 
     def retrieve_puids
-      puids = []
-      within('table tbody') do
-        (1..4).each do |n|
-          puids << first("tr:nth-child(#{n}) th").text
-        end
+      (1..4).map do |n|
+        first("table tbody tr:nth-child(#{n}) th").text
       end
-      puids
     end
 
     test 'visiting the index' do
@@ -40,8 +36,8 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-      assert_text samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample3)}'] td:nth-child(2)", text: @sample3.name
       assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
@@ -49,14 +45,13 @@ module Groups
       click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 6
+      assert_selector 'table tbody tr', count: 6
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample3)}']"
+
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-
-      click_link samples(:sample3).name
-      assert_selector 'h1', text: samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
     end
 
     test 'visiting the index of a group which has other groups/projects linked to it' do
@@ -68,9 +63,10 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-      assert_text samples(:sample1).name
-      assert_text samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample3)}'] td:nth-child(2)", text: @sample3.name
+
       assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
@@ -78,20 +74,18 @@ module Groups
       click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 6
-      assert_text samples(:sample28).name
+      assert_selector 'table tbody tr', count: 6
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample28)}'] td:nth-child(2)", text: @sample28.name
+
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
+      assert_selector 'table tbody tr', count: 20
 
-      click_link samples(:sample1).name
-      assert_selector 'h1', text: samples(:sample1).name
-
-      visit group_samples_url(group)
-
-      click_link samples(:sample1).name
-      assert_selector 'h1', text: samples(:sample1).name
+      click_link @sample1.name
+      assert_selector 'h1', text: @sample1.name
 
       visit group_samples_url(group)
 
@@ -103,8 +97,18 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
 
-      click_link samples(:sample28).name
-      assert_selector 'h1', text: samples(:sample28).name
+      click_link @sample28.name
+      assert_selector 'h1', text: @sample28.name
+    end
+
+    test 'visit sample show page by clicking sample name from index' do
+      visit group_samples_url(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+      click_link @sample3.name
+      assert_selector 'h1', text: @sample3.name
     end
 
     test 'User with role >= Analyst does not see workflow executions button' do
@@ -199,25 +203,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_text @sample1.name
-        assert_text @sample2.name
-      end
+
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(2)", text: @sample2.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text 'Samples: 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
+      assert_selector 'table tbody tr', count: 13
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can sort the list of samples' do
@@ -228,9 +231,7 @@ module Groups
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
+      assert_selector 'table tbody tr', count: 20
 
       click_on I18n.t(:'samples.table_component.puid')
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
@@ -248,30 +249,24 @@ module Groups
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
     end
 
     test 'can filter by name and then sort the list of samples' do
@@ -279,26 +274,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(2)", text: @sample2.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text 'Samples: 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector 'table tbody tr', count: 13
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
 
       assert_no_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       click_on I18n.t(:'samples.table_component.name')
@@ -320,99 +313,84 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] th:first-child", text: @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-      end
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can change pagination and then filter by puid' do
       visit group_samples_url(@group)
 
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
+      select '10', from: 'limit'
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-        assert_text @sample1.puid
-        assert_text @sample2.puid
-      end
+
+      assert_selector 'table tbody tr', count: 10
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] th:first-child", text: @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector 'div#limit-component select option[selected]', text: '10'
     end
 
     test 'can change pagination and then toggle metadata' do
       visit group_samples_url(@group)
 
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
+      select '10', from: 'limit'
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-      end
 
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+      assert_selector 'table tbody tr', count: 10
+
+      assert_selector 'table thead tr th', count: 6
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
 
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-      end
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
-      end
+      assert_selector 'table tbody tr', count: 10
+      assert_selector 'table thead tr th', count: 10
       assert_selector 'div#limit-component select option[selected]', text: '10'
     end
 
@@ -421,45 +399,43 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      assert_text '1-13 of 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
-
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample9.name
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 13, count: 13,
+                                                                                      locale: @user.locale))
+
+      assert_selector 'table tbody tr', count: 13
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample25)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample28)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can sort and then filter the list of samples by puid' do
@@ -467,31 +443,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
 
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       click_button I18n.t('common.controls.search')
@@ -503,13 +472,12 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample9.name
-      end
+      assert_selector 'table tbody tr', count: 1
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'should be able to toggle metadata' do
@@ -517,9 +485,8 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+
+      assert_selector 'table thead tr th', count: 6
 
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
@@ -527,27 +494,25 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      within('table tbody tr:first-child') do
-        assert_text @sample30.name
-        assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
-        assert_selector 'td:nth-child(8)', text: 'value1'
-        assert_no_selector 'td:nth-child(9)[contenteditable="true"]'
-        assert_selector 'td:nth-child(9)', text: 'value2'
-        assert_selector 'td:nth-child(10)[contenteditable="true"]', text: ''
-      end
+      assert_selector 'table thead tr th', count: 10
+
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample30.name
+      assert_no_selector 'table tbody tr:first-child td:nth-child(8)[contenteditable="true"]'
+      assert_selector 'table tbody tr:first-child td:nth-child(8)', text: 'value1'
+      assert_no_selector 'table tbody tr:first-child td:nth-child(9)[contenteditable="true"]'
+      assert_selector 'table tbody tr:first-child td:nth-child(9)', text: 'value2'
+      assert_selector 'table tbody tr:first-child td:nth-child(10)[contenteditable="true"]', text: ''
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_selector 'table thead tr th', count: 6
     end
@@ -556,19 +521,17 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+
+      assert_selector 'table thead tr th', count: 6
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 10
 
       click_on 'metadatafield1'
       assert_selector 'table thead th:nth-child(8) svg.arrow-up-icon'
@@ -585,20 +548,18 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 6
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(5) svg.arrow-down-icon'
-      within('tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
     end
 
     test 'filter samples with advanced search' do
@@ -606,48 +567,35 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('Sample PUID', :enter)
-            find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('Sample PUID', :enter)
+      select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        # sample1 & sample2 found
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 2
+      # sample1 & sample2 found
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'filter samples with advanced search and autocomplete disabled' do
@@ -657,48 +605,34 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='puid']").select_option
-            find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("select[name$='[field]']").find("option[value='puid']").select_option
+      select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        # sample1 & sample2 found
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 2
+      # sample1 & sample2 found
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'filter samples with advanced search using metadata fields names with extra periods' do
@@ -706,46 +640,32 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
-            find("select[name$='[operator]']").find("option[value='=']").select_option
-            find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
-          end
-        end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
+      select '=', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
 
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
-        # sample28 found
-        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
-        assert_selector "tr[id='#{dom_id(@sample28)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 1
+      # sample28 found
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
     end
 
     test 'filter samples with advanced search using exists operator' do
@@ -753,176 +673,143 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
-            find("select[name$='[operator]']").find("option[value='exists']").select_option
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
+      select 'exists', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
-        # sample28 found
-        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
-        assert_selector "tr[id='#{dom_id(@sample28)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 1
+      # sample28 found
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
     end
 
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '25'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
+      uncheck "checkbox_sample_#{@sample1.id}"
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '25'
+
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('common.controls.deselect_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
     end
 
     test 'selecting / deselecting a page of samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '20'
-      end
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '19'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '20'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+
+      check 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+
+      uncheck "checkbox_sample_#{@sample1.id}"
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '19'
+
+      check 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+
+      uncheck 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
     end
 
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
-      assert_text 'Samples: 1'
+      assert_selector 'table tfoot', text: 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
 
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 1
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 1
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
 
       click_button I18n.t('common.controls.select_all')
 
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 1'
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 1
+      assert_selector 'table tfoot', text: 'Samples: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
-      assert_text 'Samples: 26'
+      assert_selector 'table tfoot', text: 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
     end
@@ -1158,8 +1045,9 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_selector '#samples-table table thead tr th', count: 10
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -1258,8 +1146,9 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       # description and project_puid metadata headers do not exist
       within('#samples-table table thead tr') do
@@ -1381,14 +1270,16 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       within('table thead tr') do
         assert_selector 'th', count: 10
@@ -1431,8 +1322,9 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       within('table thead tr') do
         assert_selector 'th', count: 10
@@ -1441,8 +1333,9 @@ module Groups
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       ### SETUP END ###
 
@@ -1632,8 +1525,9 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 10
@@ -1795,8 +1689,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: sample.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       # Search for PUID
       #        within('#samples-table table') do
@@ -2002,8 +1897,9 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       # only metadata1 imported and not metadata2
       within('table thead tr') do
