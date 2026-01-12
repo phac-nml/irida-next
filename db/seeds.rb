@@ -5,7 +5,6 @@ require 'faker'
 Faker::Config.locale = 'en'
 
 Flipper.enable(:workflow_execution_sharing)
-Flipper.enable(:progress_bars)
 Flipper.enable(:update_nextflow_metadata_param)
 Flipper.enable(:attachments_preview)
 Flipper.enable(:delete_multiple_workflows)

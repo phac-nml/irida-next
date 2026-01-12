@@ -1,20 +1,15 @@
-<% if Flipper.enabled?(:progress_bars) %>
-  <%= turbo_stream.update "samples_dialog",
-                      partial: "samples/clones/dialog",
-                      locals: {
-                        open: true,
-                        closable: false,
-                        broadcast_target: @broadcast_target,
-                      } %>
+<%= turbo_stream.update "samples_dialog",
+                    partial: "samples/clones/dialog",
+                    locals: {
+                      open: true,
+                      closable: false,
+                      broadcast_target: @broadcast_target,
+                    } %>
 
-  <%= turbo_stream.update "clone_samples_dialog_content" do %>
-    <%= render partial: "shared/progress_bar",
-               locals: { percentage: 0, dom_id: ProgressBarStream.dom_id_for(@broadcast_target) } %>
-  <% end %>
-<% else %>
-  <%= turbo_stream.append "clone_samples_dialog_content" do %>
-    <%= render SpinnerComponent.new(
-      message: t("samples.clones.dialog.spinner_message"),
-    ) %>
-  <% end %>
+<%= turbo_stream.update "clone_samples_dialog_content" do %>
+  <%= render partial: "shared/progress_bar",
+  locals: {
+    percentage: 0,
+    dom_id: ProgressBarStream.dom_id_for(@broadcast_target),
+  } %>
 <% end %>

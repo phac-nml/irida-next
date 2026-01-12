@@ -1643,7 +1643,6 @@ en:
         no_available_projects: No available projects
         samples: Samples
         select_project: Select project
-        spinner_message: Copying samples, this might take a while...
         submit_button: Submit
         title: Copy Samples
     deletions:
@@ -1703,7 +1702,6 @@ en:
         no_available_projects: No available projects
         samples: Samples
         select_project: Select project
-        spinner_message: Transferring samples, this might take a while...
         submit_button: Submit
         title: Transfer Samples
   select_with_auto_complete_component:
@@ -1863,7 +1861,6 @@ en:
             sample_id_column: Sample Identifier Column
             select_sample_id_column: Select a Sample Identifier Column
             selected: Selected
-            spinner_message: Importing sample metadata, this might take a while...
             submit_button: Import Metadata
             title: Upload Sample Metadata
             uploading: Uploading
@@ -1908,7 +1905,6 @@ en:
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
           selected: Selected
-          spinner_message: Importing samples, this might take a while...
           static_project: Static Project
           static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid
           static_project_empty_state: No projects are associated with that name or ID

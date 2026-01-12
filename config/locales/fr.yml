@@ -1647,7 +1647,6 @@ fr:
         no_available_projects: Aucun projet disponible
         samples: Échantillons
         select_project: Sélectionner le projet
-        spinner_message: Copier des échantillons, cela peut prendre un certain temps...
         submit_button: Envoyer
         title: Copier des échantillons
     deletions:
@@ -1707,7 +1706,6 @@ fr:
         no_available_projects: Aucun projet disponible
         samples: Échantillons
         select_project: Sélectionner le projet
-        spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
         submit_button: Envoyer
         title: Transférer des échantillons
   select_with_auto_complete_component:
@@ -1867,7 +1865,6 @@ fr:
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
             selected: Sélectionné
-            spinner_message: L’importation d’échantillons de métadonnées, cela peut prendre un certain temps...
             submit_button: Importer des métadonnées
             title: Télécharger des échantillons de métadonnées
             uploading: Téléchargement
@@ -1912,7 +1909,6 @@ fr:
           select_sample_name_column: Sélectionner une colonne de nom d’échantillon
           select_static_project: Sélectionner un projet statique
           selected: Sélectionné
-          spinner_message: Importation d’échantillons, cela peut prendre un certain temps...
           static_project: Projet statique
           static_project_description: Attribue chaque échantillon au projet statique si la colonne d’identifiant du projet n’est pas attribuée, ou si la colonne d’identifiant du projet est attribuée mais que la valeur du projet dans le tableur est vide ou non valide.
           static_project_empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant

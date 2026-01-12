@@ -14,7 +14,6 @@ module Dashboard
       @group1 = groups(:group_one)
       @sample1 = samples(:sample1)
 
-      Flipper.enable(:progress_bars)
       Flipper.enable(:group_samples_clone)
     end
 

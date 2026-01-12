@@ -24,7 +24,6 @@ module Groups
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
 
-      Flipper.enable(:progress_bars)
       Flipper.enable(:group_samples_transfer)
       Flipper.enable(:group_samples_destroy)
       Flipper.enable(:group_samples_clone)

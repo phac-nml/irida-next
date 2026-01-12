@@ -22,7 +22,6 @@ module Projects
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
 
-      Flipper.enable(:progress_bars)
       Flipper.enable(:group_samples_clone)
     end
 

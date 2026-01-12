@@ -13,9 +13,7 @@ module Samples
                                                         .execute(
                                                           new_project_id,
                                                           sample_ids,
-                                                          Flipper.enabled?(
-                                                            :progress_bars
-                                                          ) ? broadcast_target : nil
+                                                          broadcast_target
                                                         )
 
       if namespace.errors.empty?

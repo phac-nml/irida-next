@@ -20,7 +20,8 @@ module Groups
                    file: @blob_file.signed_id,
                    sample_id_column: 'sample_name',
                    project_puid_column: 'project_puid'
-                 }
+                 },
+                 broadcast_target: 'a_broadcast_target'
                }
         end
       end

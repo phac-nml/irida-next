@@ -21,7 +21,8 @@ module Projects
                  spreadsheet_import: {
                    file: @blob_file.signed_id,
                    sample_id_column: 'sample_name'
-                 }
+                 },
+                 broadcast_target: 'a_broadcast_target'
                }
         end
       end
