@@ -183,11 +183,11 @@
     "description": "L'attribut titre pour le bouton de basculement du retour à la ligne des lignes de bloc de code"
   },
   "theme.DocSidebarItem.expandCategoryAriaLabel": {
-    "message": "Développer la catégorie '{label}' de la barre latérale",
+    "message": "Basculer la catégorie de la barre latérale '{label}'",
     "description": "L'étiquette ARIA pour développer la catégorie de la barre latérale"
   },
   "theme.DocSidebarItem.collapseCategoryAriaLabel": {
-    "message": "Réduire la catégorie '{label}' de la barre latérale",
+    "message": "Basculer la catégorie de la barre latérale '{label}'",
     "description": "L'étiquette ARIA pour réduire la catégorie de la barre latérale"
   },
   "theme.NavBar.navAriaLabel": {
