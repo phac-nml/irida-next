@@ -112,6 +112,31 @@ module WorkflowExecutions
       # after submission the execution should be completing
       assert_equal 'completing', @workflow_execution.reload.state
 
+      blob_run_directory = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution.blob_run_directory = blob_run_directory
+      @workflow_execution.save!
+
+      # create file blobs
+      make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal/iridanext.output.json',
+        blob_run_directory: blob_run_directory,
+        gzip: true
+      )
+      make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal/summary.txt',
+        blob_run_directory: blob_run_directory
+      )
+
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/my_run_id_a/status')
+        .to_return(body: '{ "run_id": "create_run_1", "state": "COMPLETE" }',
+                   headers: { content_type:
+                           'application/json' })
+
+      assert_performed_jobs 2, only: [WorkflowExecutionStatusJob, WorkflowExecutionCompletionJob] do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+
+      assert_equal 'completed', @workflow_execution.reload.state
       expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
                         samplesCount: @workflow_execution.samples_workflow_executions.size }
       assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
