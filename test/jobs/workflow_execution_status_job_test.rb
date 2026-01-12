@@ -2,11 +2,39 @@
 
 require 'test_helper'
 require 'active_job_test_case'
+require 'webmock/minitest'
 
 class WorkflowExecutionStatusJobTest < ActiveJobTestCase
-  def setup
+  def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
+    @workflow_execution.create_logidze_snapshot!
     @stubs = faraday_test_adapter_stubs
+
+    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"b1Bc"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"c1Cd"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"d1De"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/gasclustering/0.4.2/nextflow_schema.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"g1gh"]' })
+
+    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/gasclustering/0.4.2/assets/schema_input.json')
+      .to_return(status: 200, body:, headers: { etag: '[W/"h1hi"]' })
   end
 
   def teardown
@@ -129,6 +157,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'execution where namespace is removed before status is run' do
     workflow_execution = workflow_executions(:workflow_execution_missing_namespace)
+    workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
     perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
@@ -140,6 +169,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
 
   test 'execution where run_id is missing' do
     workflow_execution = workflow_executions(:workflow_execution_missing_run_id)
+    workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
     perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
@@ -147,5 +177,153 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
     assert workflow_execution.reload.error?
+  end
+
+  test 'canceling workflow should return early' do
+    workflow_execution = workflow_executions(:irida_next_example_canceling)
+
+    WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(0)
+  end
+
+  test 'canceled workflow should return early' do
+    workflow_execution = workflow_executions(:irida_next_example_canceled)
+    workflow_execution.create_logidze_snapshot!
+
+    WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(0)
+  end
+
+  test 'min_run_time with running state should delay status check' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+    @workflow_execution.create_logidze_snapshot!
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+
+      assert_enqueued_with(job: WorkflowExecutionStatusJob,
+                           at: Time.current + @workflow_execution.workflow.minimum_run_time) do
+        WorkflowExecutionStatusJob.set(
+          wait_until: @workflow_execution.workflow.minimum_run_time.seconds.from_now
+        ).perform_later(@workflow_execution)
+      end
+
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+      assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    end
+  end
+
+  test 'min_run_time with non-running state should proceed normally' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+
+      assert_enqueued_with(job: WorkflowExecutionStatusJob,
+                           at: Time.current + @workflow_execution.workflow.status_check_interval) do
+        WorkflowExecutionStatusJob.set(
+          wait_until: @workflow_execution.workflow.status_check_interval.seconds.from_now
+        ).perform_later(@workflow_execution)
+      end
+
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert @workflow_execution.reload.completing?
+  end
+
+  test 'workflow execution exceeds maximum runtime should queue cancellation job' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+    # Set up pipeline schema to get max_runtime
+    @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
+    Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
+                         pipeline_schema_file_dir: @pipeline_schema_file_dir)
+
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    workflow_execution.create_logidze_snapshot!
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+
+      # Mock state_time_calculation to return a large run time (400 seconds)
+      workflow_execution.workflow.stub :state_time_calculation, 400 do
+        perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+          WorkflowExecutionStatusJob.perform_later(workflow_execution)
+        end
+      end
+    end
+
+    assert workflow_execution.reload.canceling?
+    assert_enqueued_jobs(1, only: WorkflowExecutionCancelationJob)
+  end
+
+  test 'workflow execution which hasn\'t exceeded maximum runtime should proceed normally' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+    # Set up pipeline schema to get max_runtime
+    @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
+    Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
+                         pipeline_schema_file_dir: @pipeline_schema_file_dir)
+
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    workflow_execution.create_logidze_snapshot!
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(workflow_execution)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+    end
+
+    assert workflow_execution.reload.running?
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
   end
 end

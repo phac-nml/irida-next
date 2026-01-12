@@ -10,6 +10,8 @@ class WorkflowExecutionJobTest < ActiveJobTestCase
     @workflow_execution_new = workflow_executions(:irida_next_example_new)
     @workflow_execution_completed = workflow_executions(:irida_next_example_completed)
     @workflow_execution_missing_run_id = workflow_executions(:workflow_execution_missing_run_id)
+    @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
+    @workflow_execution_gas_clustering = workflow_executions(:workflow_execution_gasclustering)
   end
 
   def teardown

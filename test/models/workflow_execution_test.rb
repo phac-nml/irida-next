@@ -372,4 +372,56 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     assert_equal @workflow_execution_valid['workflow_engine_version'], as_wes_params[:workflow_engine_version]
     assert_equal @workflow_execution_valid['workflow_url'], as_wes_params[:workflow_url]
   end
+
+  test 'state_timestamp returns nil for invalid state' do
+    # Test with a state that doesn't exist in the states enum
+    result = @workflow_execution_valid.state_timestamp(:invalid_state)
+    assert_nil result
+  end
+
+  test 'state_timestamp returns timestamp for valid state' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    workflow_execution.create_logidze_snapshot!
+
+    running_state_timestamp = nil
+
+    freeze_time do
+      workflow_execution.state = :running
+      workflow_execution.save
+      workflow_execution.create_logidze_snapshot!
+      running_state_timestamp = Time.now.to_i
+    end
+
+    # When multiple log entries exist, should return the earliest timestamp for that state
+    timestamp = workflow_execution.state_timestamp(:running)
+
+    assert_equal timestamp.to_i, running_state_timestamp
+  end
+
+  test 'timestamp_as_bigint constructs proper AREL node' do
+    log_entry_table = Arel::Table.new('log_entry')
+    arel_node = @workflow_execution_valid.timestamp_as_bigint(log_entry_table)
+
+    # Should return an Arel::Nodes::InfixOperation for casting to bigint
+    assert_kind_of Arel::Nodes::InfixOperation, arel_node
+  end
+
+  test 'state_log_entry constructs proper WHERE condition' do
+    log_entry_table = Arel::Table.new('log_entry')
+    state = :prepared
+
+    arel_node = @workflow_execution_valid.state_log_entry(log_entry_table, state)
+
+    # Should return an equality condition
+    assert_kind_of Arel::Nodes::Equality, arel_node
+  end
+
+  test 'state_log_entry handles all valid states' do
+    log_entry_table = Arel::Table.new('log_entry')
+
+    WorkflowExecution.states.each_key do |state|
+      arel_node = @workflow_execution_valid.state_log_entry(log_entry_table, state.to_sym)
+      assert_kind_of Arel::Nodes::Equality, arel_node, "Failed for state: #{state}"
+    end
+  end
 end

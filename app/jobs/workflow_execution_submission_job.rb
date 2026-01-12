@@ -33,9 +33,15 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     result = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
 
     if result
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution.reload)
+      queue_job(workflow_execution)
     else
       handle_unable_to_process_job(workflow_execution, self.class.name)
     end
+  end
+
+  def queue_job(workflow_execution)
+    WorkflowExecutionStatusJob.set(
+      wait_until: workflow_execution.workflow.status_check_interval.seconds.from_now
+    ).perform_later(workflow_execution.reload)
   end
 end

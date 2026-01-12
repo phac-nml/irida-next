@@ -14,8 +14,11 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     if @workflow_execution.persisted?
       redirect_to workflow_executions_path
     else
-      render locals: { message: t('.error_message'), errors: @workflow_execution.errors.full_messages },
-             status: :unprocessable_content
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: 'error_dialog',
+                                               locals: { message: t('.error_message'),
+                                                         errors: @workflow_execution.errors.full_messages, open: true,
+                                                         type: :alert }), status: :unprocessable_content
     end
   end
 

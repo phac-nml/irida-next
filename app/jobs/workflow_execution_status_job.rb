@@ -45,9 +45,21 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     when :completing
       WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+    when :canceling # max run time exceeded
+      WorkflowExecutionCancelationJob.perform_later(workflow_execution, workflow_execution.submitter)
     else
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now)
-                                .perform_later(workflow_execution)
+      WorkflowExecutionStatusJob.set(
+        wait_until: status_check_delay_time(workflow_execution).seconds.from_now
+      ).perform_later(workflow_execution)
+    end
+  end
+
+  def status_check_delay_time(workflow_execution)
+    min_run_time = workflow_execution.workflow.minimum_run_time(workflow_execution.samples.count)
+    if min_run_time.nil?
+      workflow_execution.workflow.status_check_interval
+    else
+      min_run_time
     end
   end
 end
