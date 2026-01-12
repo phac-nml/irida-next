@@ -35,7 +35,9 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
     assert_equal 'submitted', @workflow_execution.reload.state
 
     # keep performing status jobs until we reach completing state
-    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) while @workflow_execution.reload.state != 'completing'
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) while enqueued_jobs.any? do |job|
+      job['job_class'] == WorkflowExecutionStatusJob.name
+    end
     assert_equal 'completing', @workflow_execution.reload.state
 
     perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
@@ -61,7 +63,12 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
     assert_not @workflow_execution.cleaned?
     WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
 
-    perform_enqueued_jobs(except: WorkflowExecutionCleanupJob) while @workflow_execution.reload.state != 'completed'
+    allowed_jobs = [WorkflowExecutionPreparationJob, WorkflowExecutionSubmissionJob,
+                    WorkflowExecutionStatusJob, WorkflowExecutionCompletionJob]
+    allowed_jobs_names = allowed_jobs.map(&:name)
+    perform_enqueued_jobs(only: allowed_jobs) while enqueued_jobs.any? do |job|
+      allowed_jobs_names.include?(job['job_class'])
+    end
 
     assert_equal 'completed', @workflow_execution.reload.state
 
