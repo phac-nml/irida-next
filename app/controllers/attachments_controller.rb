@@ -8,7 +8,6 @@ class AttachmentsController < ApplicationController
 
   layout 'attachment'
 
-  before_action :check_attachments_preview_enabled
   before_action :set_attachment
   before_action :set_context_crumbs
 
@@ -130,11 +129,5 @@ class AttachmentsController < ApplicationController
       name: @attachment.file.filename.to_s,
       path: attachment_path(attachment: @attachment.id)
     }
-  end
-
-  # 🚦 Feature flag check for attachment previews
-  # Redirects if the preview feature is disabled
-  def check_attachments_preview_enabled
-    redirect_back_or_to(root_path) unless Flipper.enabled?(:attachments_preview)
   end
 end

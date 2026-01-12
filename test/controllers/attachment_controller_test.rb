@@ -12,19 +12,11 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    # Enable the attachments_preview feature flag for testing
-    Flipper.enable(:attachments_preview)
-
     # Sign in as a user with access to attachments
     sign_in users(:john_doe)
 
     # Set up common test data
     @attachment = attachments(:attachment1) # fastq format
-  end
-
-  teardown do
-    # Disable the feature flag after tests
-    Flipper.disable(:attachments_preview)
   end
 
   test 'should redirect with alert when attachment not found' do
@@ -54,17 +46,6 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
     assert_equal I18n.t('attachment.show.file_not_found'), flash[:alert]
-  end
-
-  test 'should redirect when attachments_preview feature is disabled' do
-    # Disable the feature flag
-    Flipper.disable(:attachments_preview)
-
-    get attachment_path(@attachment)
-    assert_redirected_to root_path
-
-    # Re-enable for other tests
-    Flipper.enable(:attachments_preview)
   end
 
   test 'should handle unauthorized access' do

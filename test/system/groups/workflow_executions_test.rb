@@ -21,7 +21,6 @@ module Groups
       @created_at_col = '7'
 
       Flipper.enable(:workflow_execution_sharing)
-      Flipper.enable(:attachments_preview)
     end
 
     test 'should display a list of workflow executions' do

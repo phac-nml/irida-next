@@ -25,7 +25,6 @@ module Projects
       @created_at_col = '7'
 
       Flipper.enable(:delete_multiple_workflows)
-      Flipper.enable(:attachments_preview)
       Flipper.enable(:cancel_multiple_workflows)
     end
 

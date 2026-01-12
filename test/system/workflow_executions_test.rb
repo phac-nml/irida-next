@@ -769,7 +769,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can preview workflow execution files' do
-    Flipper.enable(:attachments_preview)
     Flipper.enable(:workflow_execution_attachments_searching)
 
     previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)

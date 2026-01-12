@@ -4,7 +4,6 @@ require 'application_system_test_case'
 
 class AttachmentsTest < ApplicationSystemTestCase
   def setup
-    Flipper.enable(:attachments_preview)
     @user = users(:john_doe)
     login_as @user
   end

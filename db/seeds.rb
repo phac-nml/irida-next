@@ -5,7 +5,6 @@ require 'faker'
 Faker::Config.locale = 'en'
 
 Flipper.enable(:workflow_execution_sharing)
-Flipper.enable(:attachments_preview)
 Flipper.enable(:delete_multiple_workflows)
 Flipper.enable(:batch_sample_spreadsheet_import)
 Flipper.enable(:compose_with_retry)
