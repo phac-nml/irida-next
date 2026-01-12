@@ -6,7 +6,7 @@ module Groups
   class SamplesTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
-    def setup # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def setup # rubocop:disable Metrics/MethodLength
       Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)
@@ -23,7 +23,6 @@ module Groups
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
 
-      Flipper.enable(:group_samples_transfer)
       Flipper.enable(:group_samples_destroy)
       Flipper.enable(:group_samples_clone)
     end

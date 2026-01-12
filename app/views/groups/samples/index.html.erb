@@ -37,7 +37,7 @@
             ) %>
           <% end %>
 
-          <% if Flipper.enabled?(:group_samples_transfer) && @allowed_to[:transfer_sample] %>
+          <% if @allowed_to[:transfer_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.transfer"),
               url: new_samples_transfer_path,
