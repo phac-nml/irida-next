@@ -27,4 +27,8 @@ class BaseService
                                                locals: { percentage:, dom_id: },
                                                target: dom_id
   end
+
+  def strip_string(string)
+    string.gsub(/ +/, ' ').strip
+  end
 end

@@ -40,34 +40,38 @@ export default class extends Controller {
   }
 
   submit(element) {
-    // Remove event listeners on submission, they will be re-added on succesfull update
-    element.removeEventListener("blur", this.boundBlur);
-    element.removeEventListener("keydown", this.boundKeydown);
-    element.removeAttribute("contenteditable");
+    const validEntry = this.#validateEntry(element);
+    if (validEntry) {
+      // Remove event listeners on submission, they will be re-added on succesfull update
+      element.removeEventListener("blur", this.boundBlur);
+      element.removeEventListener("keydown", this.boundKeydown);
+      element.removeAttribute("contenteditable");
 
-    const field = element
-      .closest("table")
-      .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
+      const field = element
+        .closest("table")
+        .querySelector(`th:nth-child(${element.cellIndex + 1})`)
+        .dataset.fieldId;
 
-    // Get the parent DOM ID to extract the item ID
-    // Use a regular expression to match the part after the last underscore
-    const parent_dom_id = element.parentNode.id;
-    const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
+      // Get the parent DOM ID to extract the item ID
+      // Use a regular expression to match the part after the last underscore
+      const parent_dom_id = element.parentNode.id;
+      const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
 
-    if (!item_id) {
-      console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
-      return;
+      if (!item_id) {
+        console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
+        return;
+      }
+
+      notifyRefreshControllers(this);
+
+      const form = this.formTemplateTarget.innerHTML
+        .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
+        .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
+        .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
+        .replace(/CELL_ID_PLACEHOLDER/g, element.id);
+      this.formContainerTarget.innerHTML = form;
+      this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
     }
-
-    notifyRefreshControllers(this);
-
-    const form = this.formTemplateTarget.innerHTML
-      .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
-      .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
-      .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
-      .replace(/CELL_ID_PLACEHOLDER/g, element.id);
-    this.formContainerTarget.innerHTML = form;
-    this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
   }
 
   reset(element) {
@@ -93,59 +97,62 @@ export default class extends Controller {
   }
 
   async showConfirmDialog(editableCell) {
-    const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-      .replace(
-        /ORIGINAL_VALUE/g,
-        this.#originalCellContent[this.#elementId(editableCell)],
-      )
-      .replace(/NEW_VALUE/g, editableCell.innerText);
-    this.confirmDialogContainerTarget.innerHTML = confirmDialog;
+    const validEntry = this.#validateEntry(editableCell);
+    if (validEntry) {
+      const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
+        .replace(
+          /ORIGINAL_VALUE/g,
+          this.#originalCellContent[this.#elementId(editableCell)],
+        )
+        .replace(/NEW_VALUE/g, editableCell.innerText);
+      this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
-    const dialog =
-      this.confirmDialogContainerTarget.getElementsByTagName("dialog")[0];
+      const dialog =
+        this.confirmDialogContainerTarget.getElementsByTagName("dialog")[0];
 
-    let messageType = "wov";
-    if (editableCell.innerText === "") {
-      messageType = "wonv";
-    } else if (
-      this.#originalCellContent[this.#elementId(editableCell)] === ""
-    ) {
-      messageType = "woov";
+      let messageType = "wov";
+      if (editableCell.innerText === "") {
+        messageType = "wonv";
+      } else if (
+        this.#originalCellContent[this.#elementId(editableCell)] === ""
+      ) {
+        messageType = "woov";
+      }
+      dialog
+        .querySelector(`[data-message-type="${messageType}"]`)
+        .classList.remove("hidden");
+
+      dialog.showModal();
+
+      // Focus the cancel button for accessibility
+      const cancelButton = dialog.querySelector('button[value="cancel"]');
+      if (cancelButton) {
+        focusWhenVisible(cancelButton);
+      }
+
+      // Handle dialog actions
+      dialog.addEventListener(
+        "click",
+        (e) => {
+          if (e.target.tagName !== "BUTTON") return;
+
+          e.target.value === "confirm"
+            ? this.submit(editableCell)
+            : this.reset(editableCell);
+          dialog.close();
+        },
+        { once: true },
+      );
+
+      // Handle dialog close
+      dialog.addEventListener(
+        "close",
+        () => {
+          this.reset(editableCell);
+        },
+        { once: true },
+      );
     }
-    dialog
-      .querySelector(`[data-message-type="${messageType}"]`)
-      .classList.remove("hidden");
-
-    dialog.showModal();
-
-    // Focus the cancel button for accessibility
-    const cancelButton = dialog.querySelector('button[value="cancel"]');
-    if (cancelButton) {
-      focusWhenVisible(cancelButton);
-    }
-
-    // Handle dialog actions
-    dialog.addEventListener(
-      "click",
-      (e) => {
-        if (e.target.tagName !== "BUTTON") return;
-
-        e.target.value === "confirm"
-          ? this.submit(editableCell)
-          : this.reset(editableCell);
-        dialog.close();
-      },
-      { once: true },
-    );
-
-    // Handle dialog close
-    dialog.addEventListener(
-      "close",
-      () => {
-        this.reset(editableCell);
-      },
-      { once: true },
-    );
   }
 
   #unchanged(element) {
@@ -160,5 +167,21 @@ export default class extends Controller {
       .querySelector(`th:nth-child(${element.cellIndex + 1})`)
       .dataset.fieldId.replaceAll(" ", "SPACE");
     return `${field}_${element.parentNode.rowIndex}`;
+  }
+
+  #validateEntry(metadataCell) {
+    const strippedMetadataValue = metadataCell.innerText
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const entryIsValid =
+      strippedMetadataValue !==
+      this.#originalCellContent[this.#elementId(metadataCell)];
+    if (!entryIsValid) {
+      metadataCell.innerText =
+        this.#originalCellContent[this.#elementId(metadataCell)];
+    }
+
+    return entryIsValid;
   }
 }

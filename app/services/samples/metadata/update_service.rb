@@ -85,7 +85,7 @@ module Samples
           validate_metadata_value(key, value)
 
           key = key.to_s.downcase.strip
-          value = value.to_s.strip # remove data types
+          value = strip_string(value.to_s) # remove data types
           status = get_metadata_change_status(key, value)
           next unless status
 

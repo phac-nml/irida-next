@@ -3738,6 +3738,129 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'editing metadata value with excess whitespaces should not update metadata' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 5
+
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      assert_selector 'table thead tr th', count: 7
+
+      within '.table-container' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+      ## SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
+      metadata_cell.click
+
+      metadata_cell.send_keys('value 2')
+      metadata_cell.send_keys(:return)
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_text I18n.t('samples.editable_cell.update_success')
+      ### ACTIONS AND VERIFY END ###
+
+      metadata_cell.send_keys('value2     ')
+      metadata_cell.send_keys(:return)
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_no_text I18n.t('samples.editable_cell.update_success')
+
+      metadata_cell.send_keys('     value2')
+      metadata_cell.send_keys(:return)
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_no_text I18n.t('samples.editable_cell.update_success')
+
+      metadata_cell.send_keys('     value2     ')
+      metadata_cell.send_keys(:return)
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_no_text I18n.t('samples.editable_cell.update_success')
+
+      metadata_cell.send_keys('val      ue2')
+      metadata_cell.send_keys(:return)
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_no_text I18n.t('samples.editable_cell.update_success')
+    end
+
+    test 'confirmation dialog does not prompt for edit metadata with excess whitespaces' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'table thead tr th', count: 5
+
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
+      find('input[data-test-selector="search-field-input"]').send_keys(:return)
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      assert_selector 'table thead tr th', count: 7
+
+      within '.table-container' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
+      metadata_cell.click
+      metadata_cell.send_keys('New Value')
+      find('body').click
+
+      assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+
+      click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
+
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+
+      metadata_cell.click
+      metadata_cell.send_keys([:control, 'a'], :backspace, 'New        Value')
+      find('body').click
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+
+      metadata_cell.click
+      metadata_cell.send_keys([:control, 'a'], :backspace, 'New Value         ')
+      find('body').click
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+
+      metadata_cell.click
+      metadata_cell.send_keys([:control, 'a'], :backspace, '            New Value')
+      find('body').click
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+
+      metadata_cell.click
+      metadata_cell.send_keys([:control, 'a'], :backspace, '     New        Value')
+      find('body').click
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+      ### ACTIONS AND VERIFY END ###
+    end
+
     test 'linelist export test' do
       metadata_template = metadata_templates(:project1_metadata_template0)
       ### SETUP START ###
