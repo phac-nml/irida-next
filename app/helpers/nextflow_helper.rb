@@ -39,6 +39,6 @@ module NextflowHelper
   end
 
   def metadata_header?(header_name)
-    /metadata_[0-9]+_header/.match?(header_name.to_s) && Flipper.enabled?(:update_nextflow_metadata_param)
+    /metadata_[0-9]+_header/.match?(header_name.to_s)
   end
 end
