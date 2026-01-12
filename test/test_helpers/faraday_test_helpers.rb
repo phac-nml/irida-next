@@ -2,23 +2,7 @@
 
 require 'minitest/mock'
 
-module ActiveJobTestHelpers
-  # Jobs that are retried must be run one at a time with a short delay to prevent stack errors
-  # Allows use of only/except to exit early like perform_enqueued_jobs does
-  def perform_enqueued_jobs_sequentially(delay_seconds: 1, only: nil, except: nil) # rubocop:disable Metrics/AbcSize
-    class_filter = lambda { |job_class|
-      (only.nil? || job_class == only.name) &&
-        (except.nil? || job_class != except.name)
-    }
-
-    while enqueued_jobs.count >= 1 && class_filter.call(enqueued_jobs.first['job_class'])
-      perform_enqueued_jobs(
-        only: ->(job) { job['job_id'] == enqueued_jobs.first['job_id'] }
-      )
-      sleep(delay_seconds)
-    end
-  end
-
+module FaradayTestHelpers
   # Mutable stubs, allowing adding/changing stubbed endpoints mid test
   def faraday_test_adapter_stubs
     Faraday::Adapter::Test::Stubs.new do |stub|

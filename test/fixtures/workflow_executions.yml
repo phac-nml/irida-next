@@ -197,7 +197,7 @@ irida_next_example_running:
 
 irida_next_example_new:
   <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
+  workflow_params: { }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: "my_run_id_12"
@@ -348,7 +348,7 @@ automated_workflow_execution:
 # <% (1..25).each do |n| %>
 workflow_execution<%= (n) %>:
   <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
+  workflow_params: { }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: <%= "my_run_id_#{n}" %>

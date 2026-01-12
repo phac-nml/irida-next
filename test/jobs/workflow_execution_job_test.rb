@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 
-class WorkflowExecutionJobTest < ActiveJobTestCase
+class WorkflowExecutionJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup
     @workflow_execution_submitted = workflow_executions(:irida_next_example_submitted)
     @workflow_execution_prepared = workflow_executions(:irida_next_example_prepared)

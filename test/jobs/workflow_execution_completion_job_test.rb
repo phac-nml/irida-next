@@ -2,10 +2,11 @@
 
 require 'test_helper'
 require 'test_helpers/blob_test_helpers'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 
-class WorkflowExecutionCompletionJobTest < ActiveJobTestCase
+class WorkflowExecutionCompletionJobTest < ActiveJob::TestCase
   include BlobTestHelpers
+  include FaradayTestHelpers
 
   def setup
     @workflow_execution_canceling = workflow_executions(:irida_next_example_canceling)

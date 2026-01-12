@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 require 'webmock/minitest'
 
-class WorkflowExecutionStatusJobTest < ActiveJobTestCase
+class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
     @workflow_execution.create_logidze_snapshot!

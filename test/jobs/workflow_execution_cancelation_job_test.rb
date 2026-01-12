@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 
-class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
+class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_canceling)
     @user = users(:john_doe)
