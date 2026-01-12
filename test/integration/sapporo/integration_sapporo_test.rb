@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
 
-class IntegrationSapporoTest < ActiveJobTestCase
+class IntegrationSapporoTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
     Rails.configuration.ga4gh_wes_server_endpoint = ENV.fetch('GA4GH_WES_URL', 'http://localhost:1122/')
@@ -27,19 +28,22 @@ class IntegrationSapporoTest < ActiveJobTestCase
 
     WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
 
-    perform_enqueued_jobs_sequentially(except: WorkflowExecutionSubmissionJob)
+    perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
     assert_equal 'prepared', @workflow_execution.reload.state
 
-    perform_enqueued_jobs_sequentially(except: WorkflowExecutionStatusJob)
+    perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob)
     assert_equal 'submitted', @workflow_execution.reload.state
 
-    perform_enqueued_jobs_sequentially(delay_seconds: 10, except: WorkflowExecutionCompletionJob)
+    # keep performing status jobs until we reach completing state
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) while enqueued_jobs.any? do |job|
+      job['job_class'] == WorkflowExecutionStatusJob.name
+    end
     assert_equal 'completing', @workflow_execution.reload.state
 
-    perform_enqueued_jobs_sequentially(except: WorkflowExecutionCleanupJob)
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
     assert_equal 'completed', @workflow_execution.reload.state
 
-    perform_enqueued_jobs_sequentially
+    perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
 
     assert_equal 'completed', @workflow_execution.reload.state
     assert @workflow_execution.cleaned?
@@ -58,7 +62,14 @@ class IntegrationSapporoTest < ActiveJobTestCase
     assert_equal 'initial', @workflow_execution.state
     assert_not @workflow_execution.cleaned?
     WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-    perform_enqueued_jobs_sequentially(delay_seconds: 10, except: WorkflowExecutionCleanupJob)
+
+    allowed_jobs = [WorkflowExecutionPreparationJob, WorkflowExecutionSubmissionJob,
+                    WorkflowExecutionStatusJob, WorkflowExecutionCompletionJob]
+    allowed_jobs_names = allowed_jobs.map(&:name)
+    perform_enqueued_jobs(only: allowed_jobs) while enqueued_jobs.any? do |job|
+      allowed_jobs_names.include?(job['job_class'])
+    end
+
     assert_equal 'completed', @workflow_execution.reload.state
 
     # check that inputs have been saved to appropriate blobs
@@ -80,7 +91,7 @@ class IntegrationSapporoTest < ActiveJobTestCase
     assert @workflow_execution.samples_workflow_executions[0].sample.attachments[1].file.blob.present?
 
     # Run cleanup step
-    perform_enqueued_jobs_sequentially
+    perform_enqueued_jobs
     assert_equal 'completed', @workflow_execution.reload.state
     assert @workflow_execution.cleaned?
 

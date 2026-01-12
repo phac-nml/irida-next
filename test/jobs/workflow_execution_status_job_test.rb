@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 require 'webmock/minitest'
 
-class WorkflowExecutionStatusJobTest < ActiveJobTestCase
+class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
     @workflow_execution.create_logidze_snapshot!
@@ -88,8 +90,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: [WorkflowExecutionStatusJob]) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
@@ -117,8 +120,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -146,8 +150,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: [WorkflowExecutionStatusJob]) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
@@ -159,8 +164,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     workflow_execution = workflow_executions(:workflow_execution_missing_namespace)
     workflow_execution.create_logidze_snapshot!
 
-    WorkflowExecutionStatusJob.perform_later(workflow_execution)
-    perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+      WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
@@ -171,8 +177,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     workflow_execution = workflow_executions(:workflow_execution_missing_run_id)
     workflow_execution.create_logidze_snapshot!
 
-    WorkflowExecutionStatusJob.perform_later(workflow_execution)
-    perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+      WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)

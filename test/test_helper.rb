@@ -32,6 +32,7 @@ require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'test_helpers/array_helpers'
 require 'test_helpers/w3c_validation_helpers'
+require 'turbo/broadcastable/test_helper'
 
 module ActiveSupport
   class TestCase
@@ -62,6 +63,7 @@ module ActiveSupport
     include ArrayHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
+    include Turbo::Broadcastable::TestHelper
     include W3cValidationHelpers
 
     PublicActivity.enabled = true

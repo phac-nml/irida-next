@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 
-class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
+class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_canceling)
     @user = users(:john_doe)
@@ -57,7 +59,9 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs(only: WorkflowExecutionCancelationJob) while enqueued_jobs.any? do |job|
+        job['job_class'] == WorkflowExecutionCancelationJob.name
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -83,7 +87,9 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs(only: WorkflowExecutionCancelationJob) while enqueued_jobs.any? do |job|
+        job['job_class'] == WorkflowExecutionCancelationJob.name
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -109,7 +115,9 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs(only: WorkflowExecutionCancelationJob) while enqueued_jobs.any? do |job|
+        job['job_class'] == WorkflowExecutionCancelationJob.name
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)

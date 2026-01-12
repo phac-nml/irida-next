@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_job_test_case'
+require 'test_helpers/faraday_test_helpers'
 
-class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
+class WorkflowExecutionSubmissionJobTest < ActiveJob::TestCase
+  include FaradayTestHelpers
+
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_prepared)
     @stubs = faraday_test_adapter_stubs
@@ -55,8 +57,9 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
@@ -73,8 +76,9 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
 
-      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -99,8 +103,9 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
         ]
       end
 
-      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob) do
+        WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+      end
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
