@@ -83,6 +83,40 @@ module WorkflowExecutions
       assert_equal 'completing', @workflow_execution2.reload.state
     end
 
+    test 'test workflow execution lifecycle retains tags on submit/run' do
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'Workflow With Tags'
+      }
+
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
+        .to_return(body: '{ "run_id": "run_with_tags" }',
+                   headers: { content_type:
+                            'application/json' })
+
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run_with_tags/status')
+        .to_return(body: '{ "run_id": "run_with_tags", "state": "COMPLETE" }',
+                   headers: { content_type:
+                            'application/json' })
+
+      # create and submit
+      assert_performed_jobs(3, except: [WorkflowExecutionCompletionJob, Turbo::Streams::BroadcastStreamJob]) do
+        @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+      end
+
+      # after submission the execution should be completing
+      assert_equal 'completing', @workflow_execution.reload.state
+
+      expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
+                        samplesCount: @workflow_execution.samples_workflow_executions.size }
+      assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
+    end
+
     test 'test create workflow execution invalid min samples' do
       workflow_params1 = {
         metadata:

@@ -11,7 +11,7 @@ module WorkflowExecutions
                                                              params[:metadata][:workflow_version])
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return false if params.empty?
 
       autoset_params if @workflow
