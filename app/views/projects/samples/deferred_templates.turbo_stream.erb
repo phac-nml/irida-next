@@ -8,7 +8,7 @@
         <template data-field="<%= field %>">
           <% field_colindex = @columns.length + @metadata_fields.index(field) + 1 %>
           <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
-            <%= render Samples::EditableCell.new(
+            <%= render Samples::VirtualizedEditableCell.new(
               field: field,
               sample: sample,
               aria: {
