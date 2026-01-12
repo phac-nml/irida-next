@@ -36,6 +36,9 @@ module Projects
     end
 
     def deferred_templates
+      # Only available when virtualized table is enabled
+      not_found unless Flipper.enabled?(:virtualized_samples_table)
+
       # Re-use existing query to get same samples as index
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @samples = @samples.includes(project: { namespace: :parent })
@@ -45,10 +48,10 @@ module Projects
 
       # Get only deferred metadata fields (after initial batch)
       @deferred_metadata_fields = @metadata_fields.drop(
-        ::Samples::TableComponent::INITIAL_TEMPLATE_BATCH_SIZE
+        ::Samples::VirtualizedTableComponent::INITIAL_TEMPLATE_BATCH_SIZE
       )
 
-      # Set abilities for EditableCell conditional rendering
+      # Set abilities for VirtualizedEditableCell conditional rendering
       @abilities = {
         edit_sample_metadata: @allowed_to[:update_sample_metadata]
       }

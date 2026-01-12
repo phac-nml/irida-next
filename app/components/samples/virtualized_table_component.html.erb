@@ -1,14 +1,13 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
-  <% if @show_metadata_fields_size_warning %>
-    <div class="mb-4" role="status" aria-live="polite">
-      <%= viral_alert do %>
-        <span class="inline"><%= @metadata_fields_size_warning_message %></span>
-      <% end %>
-    </div>
-  <% end %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
+      <%= render LiveRegionComponent.new(
+        controller: "announcement",
+        data: {
+          controller: "announcement",
+        },
+      ) %>
 
       <table
         class="
@@ -18,9 +17,20 @@
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
+        role="grid"
+        aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
+        aria-colcount="<%= @columns.length + @metadata_fields.length %>"
+        aria-rowcount="<%= @pagy.count + (@abilities[:select_samples] && @has_samples ? 2 : 1) %>"
       >
-        <thead class="@2xl:sticky @2xl:top-0 z-10 uppercase">
+        <%# Target for virtual scroll header manipulation %>
+        <thead
+          role="rowgroup"
+          class="@2xl:sticky @2xl:top-0 z-20 uppercase"
+          data-virtual-scroll-target="header"
+        >
           <tr
+            role="row"
+            aria-rowindex="1"
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
               text-slate-900 bg-slate-100 dark:bg-slate-900
@@ -29,8 +39,10 @@
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',
+              role: 'columnheader',
               scope: 'col',
               **helpers.aria_sort(column, @sort_key, @sort_direction),
+              aria: { colindex: index + 1 },
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
                 <div
@@ -42,8 +54,10 @@
                     false,
                     {
                       id: "select-page",
+                      tabindex: "-1",
                       aria: {
-                        label: t(".select_all.aria_label"),
+                        label:
+                          t("components.samples.virtualized_table_component.select_all.aria_label"),
                       },
                       data: {
                         table: true,
@@ -56,9 +70,10 @@
 
                   <%= render SortComponent.new(
                     sort: @search_params["sort"],
-                    label: t(".#{column}"),
+                    label: t("components.samples.virtualized_table_component.#{column}"),
                     url: sort_url(column),
                     field: column,
+                    tabindex: "-1",
                     data: {
                       turbo_action: "replace",
                     },
@@ -67,21 +82,24 @@
               <% end %>
             <% end %>
 
-            <% @metadata_fields.each do |field| %>
+            <% @metadata_fields.each_with_index do |field, field_index| %>
               <%= render_cell(
               tag: 'th',
+              role: 'columnheader',
               **helpers.aria_sort("metadata_#{field}", @sort_key, @sort_direction),
               data: {
                 "field-id": field
               },
+              aria: { colindex: @columns.length + field_index + 1 },
               scope: 'col',
-              classes: class_names('px-3 py-3 text-xs')
+              classes: class_names('px-3 pl-3 pr-20 text-xs')
             ) do %>
                 <%= render SortComponent.new(
                   sort: @search_params["sort"],
                   label: field,
                   url: sort_url("metadata_#{field}"),
                   field: "metadata_#{field}",
+                  tabindex: "-1",
                   data: {
                     turbo_action: "replace",
                   },
@@ -91,19 +109,23 @@
           </tr>
         </thead>
 
+        <%# Target for virtual scroll body manipulation %>
         <tbody
+          role="rowgroup"
           id="samples-table-body"
           class="
-            overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
-            dark:border-slate-700
+            bg-white border-slate-200 dark:bg-slate-800 dark:border-slate-700
           "
+          data-virtual-scroll-target="body"
         >
-          <% @samples.each do |sample| %>
-            <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
+          <% @samples.each_with_index do |sample, row_index| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(sample, row_index)) do %>
               <% @columns.each_with_index do |column, index| %>
                 <%= render_cell(
                 tag: index.zero? ? 'th' : 'td',
+                role: index.zero? ? 'rowheader' : 'gridcell',
                 scope: index.zero? ? 'row' : nil,
+                aria: { colindex: index + 1 },
                 classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
               ) do %>
                   <div class="flex items-center gap-3">
@@ -113,8 +135,13 @@
                       false,
                       {
                         id: dom_id(sample, :checkbox),
+                        tabindex: "-1",
                         aria: {
-                          label: t(".row.aria_label", name: sample.name),
+                          label:
+                            t(
+                              "components.samples.virtualized_table_component.row.aria_label",
+                              name: sample.name,
+                            ),
                         },
                         data: {
                           table: true,
@@ -137,6 +164,7 @@
                       <%= link_to(
                     sample_path(sample),
                     data: { turbo: false },
+                    tabindex: "-1",
                     class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
                   ) do %>
                         <%= highlight(
@@ -153,6 +181,7 @@
                       data: {
                         turbo: false,
                       },
+                      tabindex: "-1",
                       class: "font-semibold underline hover:decoration-2" %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(sample[column], :long) %>
@@ -167,35 +196,32 @@
                 <% end %>
               <% end %>
 
-              <% @metadata_fields.each do |field| %>
-                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
-                  <%= render Samples::EditableCell.new(field: field, sample: sample) %>
-                <% else %>
-                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3')) do %>
-                    <%= sample.metadata[field] %>
-                  <% end %>
-                <% end %>
-              <% end %>
             <% end %>
           <% end %>
         </tbody>
 
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
-            <tr>
+          <tfoot
+            role="rowgroup"
+            class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900"
+          >
+            <tr role="row" aria-rowindex="<%= @pagy.count + 2 %>">
               <td
                 class="
                   sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
                 "
                 colspan="2"
+                role="gridcell"
+                aria-colindex="1"
+                aria-colspan="2"
               >
                 <span>
-                  <%= t(".counts.samples") %>:
+                  <%= t("components.samples.virtualized_table_component.counts.samples") %>:
                   <strong><%= @pagy.count %></strong>
                 </span>
 
                 <span>
-                  <%= t(".counts.selected") %>:
+                  <%= t("components.samples.virtualized_table_component.counts.selected") %>:
                   <strong data-selection-target="selected">0</strong>
                 </span>
               </td>
@@ -203,14 +229,91 @@
               <td
                 colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
                 class="p-3 bg-slate-100 dark:bg-slate-900"
+                role="gridcell"
+                aria-colindex="3"
+                aria-colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
               ></td>
             </tr>
           </tfoot>
         <% end %>
       </table>
+
+      <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
+      <div
+        id="virtual-scroll-templates"
+        class="hidden"
+        aria-hidden="true"
+        data-virtual-scroll-target="templateContainer"
+      >
+        <% @samples.each do |sample| %>
+          <div data-sample-id="<%= sample.id %>">
+            <% @initial_metadata_fields.each_with_index do |field, field_index| %>
+              <template data-field="<%= field %>">
+                <% field_colindex = @columns.length + @metadata_fields.index(field) + 1 %>
+                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
+                  <%= render Samples::VirtualizedEditableCell.new(
+                    field: field,
+                    sample: sample,
+                    aria: {
+                      colindex: field_colindex,
+                    },
+                  ) %>
+                <% else %>
+                  <%= render_cell(tag: 'td', role: 'gridcell', aria: { colindex: field_colindex }, classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
+                    <%= sample.metadata[field] %>
+                  <% end %>
+                <% end %>
+              </template>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Turbo frame for deferred template loading (projects only) %>
+      <% if @namespace.is_a?(Namespaces::ProjectNamespace) && @deferred_metadata_fields.any? %>
+        <% deferred_params = {
+          q: @search_params,
+          limit: @pagy.vars[:limit],
+          page: @pagy.page,
+          format: :turbo_stream,
+        }.to_query %>
+        <% deferred_url =
+          deferred_templates_namespace_project_samples_path(
+            @namespace.parent,
+            @namespace.project,
+          ) + "?#{deferred_params}" %>
+        <%= helpers.turbo_frame_tag "deferred-templates",
+                                src: deferred_url,
+                                loading: "eager",
+                                class: "hidden",
+                                "aria-hidden": "true",
+                                data: {
+                                  "virtual-scroll-target": "deferredFrame",
+                                  turbo_action: "advance",
+                                } %>
+      <% end %>
+
+      <%# Loading overlay %>
+      <div
+        class="
+          hidden absolute inset-0 bg-white/50 dark:bg-slate-900/50 z-50
+          backdrop-blur-[1px]
+        "
+        data-virtual-scroll-target="loading"
+      >
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="flex flex-col items-center justify-center">
+            <%= pathogen_icon :faded_spinner, library: "animated", color: :primary, size: :xl %>
+            <span class="sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
+          </div>
+        </div>
+      </div>
     <% end %>
 
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+    <%= render Viral::Pagy::FullComponent.new(
+      @pagy,
+      item: t("components.samples.virtualized_table_component.limit.item"),
+    ) %>
 
     <% if @abilities[:edit_sample_metadata] %>
       <template data-editable-cell-target="formTemplate">
@@ -222,6 +325,7 @@
           <%= form.hidden_field :format, value: "turbo_stream" %>
           <%= form.hidden_field :value, value: "FIELD_VALUE_PLACEHOLDER" %>
           <%= form.hidden_field :cell_id, value: "CELL_ID_PLACEHOLDER" %>
+          <%= form.hidden_field :aria_colindex, value: "ARIA_COLINDEX_PLACEHOLDER" %>
         <% end %>
       </template>
       <div
