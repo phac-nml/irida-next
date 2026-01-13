@@ -34,6 +34,17 @@ module Samples
                                                                                limit: @pagy.limit)
         end
       end
+
+      # Generates the URL for creating a new metadata template based on namespace type.
+      #
+      # @return [String] the new metadata template URL
+      def metadata_template_url
+        if @namespace.type == 'Group'
+          new_group_metadata_template_url(@namespace)
+        else
+          new_namespace_project_metadata_template_url(@namespace.parent, @namespace.project)
+        end
+      end
     end
   end
 end
