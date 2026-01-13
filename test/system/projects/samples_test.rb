@@ -3790,7 +3790,8 @@ module Projects
 
       metadata_cell.send_keys('val      ue2')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'val      ue2',
+                                                                                            normalize_ws: false
       assert_no_text I18n.t('samples.editable_cell.update_success')
     end
 
@@ -3854,14 +3855,17 @@ module Projects
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
 
       metadata_cell.click
-      metadata_cell.send_keys([:control, 'a'], :backspace, 'New    Value')
+      metadata_cell.send_keys([:control, 'a'], :backspace, 'New     Value')
       find('body').click
       assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
       assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
 
       click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
-      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New    Value'
+      find('body').click
+
+      assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New     Value', normalize_ws: false
       ### ACTIONS AND VERIFY END ###
     end
 
