@@ -87,7 +87,7 @@ export default class MenuController extends Controller {
 
   update() {
     computePosition(this.#trigger, this.#menu, {
-      placement: "bottom-start",
+      placement: "bottom",
       middleware: [flip(), shift({ padding: 8 })],
     }).then(({ x, y }) => {
       Object.assign(this.#menu.style, {
