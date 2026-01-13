@@ -1682,17 +1682,40 @@ fr:
       created_at: Créé
       limit:
         item: Échantillons
-      name: Nom de l’échantillon
+      name: Nom de l'échantillon
       namespaces:
         puid: Projet
-      puid: PUID de l’échantillon
+      puid: PUID de l'échantillon
       row:
-        aria_label: Sélectionner l’échantillon %{name}
+        aria_label: Sélectionner l'échantillon %{name}
       select_all:
         aria_label: Sélectionner tous les échantillons sur cette page
       select_page: Sélectionner/Désélectionner les échantillons visibles
       table_label: Tableau des échantillons
       updated_at: Dernière mise à jour
+    virtualized_table_component:
+      action: Mesure
+      attachments_updated_at: Fichiers mis à jour
+      counts:
+        samples: Échantillons
+        selected: Sélectionné
+        status:
+          one: "%{count} échantillon sélectionné"
+          other: "%{count} échantillons sélectionnés"
+      created_at: Créé
+      limit:
+        item: Échantillons
+      name: Nom
+      namespaces:
+        puid: Projet
+      puid: PUID
+      row:
+        aria_label: Sélectionner l'échantillon %{name}
+      select_all:
+        aria_label: Sélectionner tous les échantillons sur cette page
+      select_page: Sélectionner/Désélectionner les échantillons visibles
+      table_label: Tableau des échantillons
+      updated_at: Mise à jour
     transfers:
       create:
         error: 'La liste suivante des échantillons n’a pas été transférée :'
