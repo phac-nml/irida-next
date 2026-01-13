@@ -426,9 +426,14 @@ export default class SelectWithAutoCompleteController extends MenuController {
     const dialog = this.#option.closest("dialog");
     if (dialog) {
       const rect = this.#option.getBoundingClientRect();
-      if (rect.top < 0 || rect.top + rect.height > dialog.offsetHeight) {
-        const dialogContents = dialog.querySelector(".dialog--section");
-        dialogContents.scrollBy(0, rect.top);
+      if (rect.top < 0 || rect.bottom > dialog.offsetHeight) {
+        if (window.matchMedia("(max-width: 640px)").matches) {
+          const dialogContents = dialog.querySelector(".dialog--contents");
+          dialogContents.scrollBy(0, rect.top);
+        } else {
+          const dialogSection = dialog.querySelector(".dialog--section");
+          dialogSection.scrollBy(0, rect.top);
+        }
       }
     }
   }

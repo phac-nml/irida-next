@@ -169,13 +169,17 @@ export default class extends MenuController {
   }
 
   handleCalendarFocus(event) {
-    const parentElement = this.#calendar.parentElement;
-    if (parentElement.tagName === "DIALOG") {
+    const dialog = this.#calendar.closest("dialog");
+    if (dialog) {
       const rect = event.target.getBoundingClientRect();
-
-      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
-        const dialogContents = parentElement.querySelector(".dialog--contents");
-        dialogContents.scrollBy(0, rect.top);
+      if (rect.top < 0 || rect.bottom > dialog.offsetHeight) {
+        if (window.matchMedia("(max-width: 640px)").matches) {
+          const dialogContents = dialog.querySelector(".dialog--contents");
+          dialogContents.scrollBy(0, rect.top);
+        } else {
+          const dialogSection = dialog.querySelector(".dialog--section");
+          dialogSection.scrollBy(0, rect.top);
+        }
       }
     }
   }
