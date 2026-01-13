@@ -1689,29 +1689,6 @@ en:
       select_page: Select / Deselect visible samples
       table_label: Samples table
       updated_at: Last Updated
-    virtualized_table_component:
-      action: Action
-      attachments_updated_at: Files Updated
-      counts:
-        samples: Samples
-        selected: Selected
-        status:
-          one: "%{count} sample selected"
-          other: "%{count} samples selected"
-      created_at: Created
-      limit:
-        item: Samples
-      name: Name
-      namespaces:
-        puid: Project
-      puid: PUID
-      row:
-        aria_label: Select sample %{name}
-      select_all:
-        aria_label: Select all samples on this page
-      select_page: Select / Deselect visible samples
-      table_label: Samples table
-      updated_at: Updated
     transfers:
       create:
         error: 'The following list of samples failed to transfer:'
