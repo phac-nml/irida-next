@@ -34,12 +34,16 @@ module Projects
 
       # samples table
       # headers
-      assert_selector 'table thead tr th:first-child', text: I18n.t('samples.table_component.puid').upcase
-      assert_selector 'table thead tr th:nth-child(2)', text: I18n.t('samples.table_component.name').upcase
-      assert_selector 'table thead tr th:nth-child(3)', text: I18n.t('samples.table_component.created_at').upcase
-      assert_selector 'table thead tr th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
+      assert_selector 'table thead tr th:first-child',
+                      text: I18n.t('components.samples.virtualized_table_component.puid').upcase
+      assert_selector 'table thead tr th:nth-child(2)',
+                      text: I18n.t('components.samples.virtualized_table_component.name').upcase
+      assert_selector 'table thead tr th:nth-child(3)',
+                      text: I18n.t('components.samples.virtualized_table_component.created_at').upcase
+      assert_selector 'table thead tr th:nth-child(4)',
+                      text: I18n.t('components.samples.virtualized_table_component.updated_at').upcase
       assert_selector 'table thead tr th:nth-child(5)',
-                      text: I18n.t('samples.table_component.attachments_updated_at').upcase
+                      text: I18n.t('components.samples.virtualized_table_component.attachments_updated_at').upcase
       # rows
       assert_selector 'table tbody tr', count: 3
       # row contents
@@ -805,7 +809,8 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project2)
 
       # verify no samples currently selected in destination project
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
 
       visit namespace_project_samples_url(@namespace, @project)
@@ -819,7 +824,8 @@ module Projects
       find('table tbody tr:first-child th input[type="checkbox"]').click
 
       # verify 1 sample selected in originating project
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
 
       # transfer sample
@@ -849,7 +855,8 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       # verify no samples selected anymore
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 2"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 2"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
 
       # verify destination project still has no selected samples and one additional sample
@@ -858,7 +865,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 21"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 21"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       ### VERIFY END ###
     end
@@ -925,7 +933,7 @@ module Projects
       assert_selector 'div#limit-component select option[selected]', text: '10'
 
       # apply sort
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # verify limit is still 10
@@ -944,7 +952,7 @@ module Projects
       ### ACTION and VERIFY START ###
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
       # sort by name
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
@@ -955,7 +963,7 @@ module Projects
       assert_selector 'table tbody tr:last-child td:nth-child(2)', text: @sample30.name
 
       # change name sort direction
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       assert_selector 'table tbody tr:first-child th', text: @sample30.puid
@@ -977,7 +985,7 @@ module Projects
 
       ### actions and VERIFY START ###
       # apply sort
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # set limit
@@ -1129,7 +1137,7 @@ module Projects
       assert_no_selector 'table tbody tr th', text: @sample30.puid
 
       # apply sort
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       # verify table still only contains sample1
@@ -1207,11 +1215,11 @@ module Projects
 
       ### ACTIONS START ###
       # apply sort
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       assert_selector '#samples-table table tbody th:first-child', text: @sample1.puid
       # change sort order from default sorting
-      click_on I18n.t('samples.table_component.name')
+      click_on I18n.t('components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
       ### ACTIONS END ###
@@ -2818,7 +2826,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: @user.locale))
       # verify no samples currently selected in destination project
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2831,7 +2840,8 @@ module Projects
       find('table tbody tr:first-child th input[type="checkbox"]').click
 
       # verify 1 sample selected in originating project
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
 
       # clone sample
@@ -2862,7 +2872,8 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       # verify no samples selected anymore
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
@@ -2870,7 +2881,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
 
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 21"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 21"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
 
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
@@ -2885,28 +2897,33 @@ module Projects
       # no samples selected/checked
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       # samples selected
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
       # unselect single sample
       find('table tbody tr:first-child th input[name="sample_ids[]"]').click
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
       # select all again
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
       # deselect all
       click_button I18n.t('common.controls.deselect_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
     end
 
@@ -2921,28 +2938,33 @@ module Projects
       end
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       # click select page
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 10
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '10'
       # unselect 1 sample
       find('table tbody tr:first-child th input[name="sample_ids[]"]').click
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '9'
       # select whole page again
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 10
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '10'
       # unselect whole page
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 20"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
     end
 
@@ -2953,7 +2975,8 @@ module Projects
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
 
       # apply filter
@@ -2979,7 +3002,8 @@ module Projects
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
+      assert_selector 'table tfoot tr',
+                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
     end
 
@@ -3937,9 +3961,9 @@ module Projects
       # samples table
       # headers
       assert_selector 'table thead tr:first-child th:nth-child(4)',
-                      text: I18n.t('samples.table_component.updated_at').upcase
+                      text: I18n.t('components.samples.virtualized_table_component.updated_at').upcase
       assert_selector 'table thead tr:first-child th:nth-child(5)',
-                      text: I18n.t('samples.table_component.attachments_updated_at').upcase
+                      text: I18n.t('components.samples.virtualized_table_component.attachments_updated_at').upcase
       # values with time_ago
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(4)", text: '3 hours ago'
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(5)", text: '2 hours ago'
