@@ -346,11 +346,11 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not data['sample']['metadata'].include?('nil')
   end
 
-  test 'updateSampleMetadata mutation should strip excess whitespaces from metadata value' do
+  test 'updateSampleMetadata mutation should strip leading/trailing whitespaces from metadata value' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
-                                              metadata: { key1: '    value     1     ' } })
+                                              metadata: { key1: '    value 1     ' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -365,5 +365,26 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data['sample']['metadata']
     assert_not_empty data['sample']['metadata']['key1']
     assert_equal 'value 1', data['sample']['metadata']['key1']
+  end
+
+  test 'updateSampleMetadata mutation does not strip multiple spaces between characters from metadata value' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: @sample.to_global_id.to_s,
+                                              metadata: { key1: '    value    1     ' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:added]
+    assert_equal 'key1', data['status'][:added].first
+    assert_not_empty data['sample']
+    assert_not_empty data['sample']['metadata']
+    assert_not_empty data['sample']['metadata']['key1']
+    assert_equal 'value    1', data['sample']['metadata']['key1']
   end
 end

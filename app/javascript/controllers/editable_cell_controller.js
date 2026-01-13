@@ -170,9 +170,7 @@ export default class extends Controller {
   }
 
   #validateEntry(metadataCell) {
-    const strippedMetadataValue = metadataCell.innerText
-      .replace(/\s+/g, " ")
-      .trim();
+    const strippedMetadataValue = metadataCell.innerText.trim();
 
     const entryIsValid =
       strippedMetadataValue !==

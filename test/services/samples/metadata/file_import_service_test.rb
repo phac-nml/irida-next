@@ -587,7 +587,7 @@ module Samples
                                                   'metadata field 4'],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
 
-        assert_equal({ 'metadata field 1' => '1 0', 'metadata field 2' => '20', 'metadata field 3' => '30',
+        assert_equal({ 'metadata field 1' => '1    0', 'metadata field 2' => '20', 'metadata field 3' => '30',
                        'metadata field 4' => '40' }, @sample1.reload.metadata)
         assert_equal(
           { 'metadata field 1' => '1 5', 'metadata field 2' => '25', 'metadata field 3' => '35',
