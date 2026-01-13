@@ -691,7 +691,7 @@ a.pill-focus-reset:focus-visible {
 /* SelectWithAutoCompleteComponent */
 
 [data-controller="select-with-auto-complete"] {
-  @apply relative text-slate-900 dark:text-white;
+  @apply text-slate-900 dark:text-white;
 
   input {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
