@@ -339,13 +339,20 @@ export default class Select2Controller extends MenuController {
 
   #ensureItemVisible(item) {
     if (!this.scrollerTarget || !item) return;
-    const container = this.scrollerTarget;
-    const containerRect = container.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
-    if (itemRect.bottom > containerRect.bottom) {
-      container.scrollTop += itemRect.bottom - containerRect.bottom;
-    } else if (itemRect.top < containerRect.top) {
-      container.scrollTop -= containerRect.top - itemRect.top;
+    item.scrollIntoView();
+
+    const dialog = item.closest("dialog");
+    if (dialog) {
+      const itemRect = item.getBoundingClientRect();
+      if (itemRect.top < 0 || itemRect.bottom > dialog.offsetHeight) {
+        if (window.matchMedia("(max-width: 640px)").matches) {
+          const dialogContents = dialog.querySelector(".dialog--contents");
+          dialogContents.scrollBy(0, itemRect.top);
+        } else {
+          const dialogSection = dialog.querySelector(".dialog--section");
+          dialogSection.scrollBy(0, itemRect.top);
+        }
+      }
     }
   }
 
@@ -440,8 +447,9 @@ export default class Select2Controller extends MenuController {
 
   #updateAriaActiveDescendant() {
     const visibleItems = this.#visibleItems();
-    if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
-      const activeId = visibleItems[this.#currentItemIndex].id;
+    const visibleItem = visibleItems[this.#currentItemIndex];
+    if (this.#currentItemIndex >= 0 && visibleItem) {
+      const activeId = visibleItem.id;
       this.triggerTarget.setAttribute("aria-activedescendant", activeId);
     } else {
       this.triggerTarget.removeAttribute("aria-activedescendant");
