@@ -149,6 +149,7 @@ module Samples
 
     def columns
       columns = %i[puid name]
+      # i18n-tasks-use t('components.samples.virtualized_table_component.namespaces.puid')
       columns << 'namespaces.puid' if @namespace.type == 'Group'
       columns += %i[created_at updated_at attachments_updated_at]
       columns
