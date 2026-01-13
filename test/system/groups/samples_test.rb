@@ -8,6 +8,7 @@ module Groups
 
     def setup
       Flipper.enable(:advanced_search_with_auto_complete)
+      Flipper.enable(:virtualized_samples_table)
 
       @user = users(:john_doe)
       login_as @user
