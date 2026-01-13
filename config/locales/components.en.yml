@@ -325,7 +325,7 @@ en:
         select_all:
           aria_label: Select all samples on this page
         table_label: Samples table (virtualized)
-        updated_at: Updated
+        updated_at: Last Updated
     search:
       advanced:
         results_message:

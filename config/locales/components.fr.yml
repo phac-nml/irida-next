@@ -325,7 +325,7 @@ fr:
         select_all:
           aria_label: Sélectionner tous les échantillons sur cette page
         table_label: Tableau des échantillons (virtualisé)
-        updated_at: Mis à jour
+        updated_at: Dernière mise à jour
     search:
       advanced:
         results_message:
