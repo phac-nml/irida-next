@@ -67,7 +67,7 @@
         <tbody id="metadata-table-body" class="bg-white dark:bg-slate-800">
           <% sample_metadata.each do |metadata| %>
             <tr
-              id="<%= metadata[:key] %>_field"
+              id="<%= metadata[:id] %>_field"
               class="
                 bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
               "
@@ -90,14 +90,14 @@
                   } %>
                 </td>
               <% end %>
-              <td class="px-6 py-4"><%= metadata[:key] %></td>
-              <td class="px-6 py-4"><%= metadata[:value] %></td>
+              <td class="px-6 py-4 whitespace-pre"><%= metadata[:key] %></td>
+              <td class="px-6 py-4 whitespace-pre"><%= metadata[:value] %></td>
               <td class="px-6 py-4"><%= metadata[:source] %></td>
               <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
               <% if @allowed_to[:update_sample] %>
                 <td class="flex justify-start px-6 py-4 space-x-2">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= button_to t('common.actions.update'),
+                    <%= button_to t("common.actions.update"),
                     edit_namespace_project_sample_metadata_path(
                       @project.namespace.parent,
                       @project,
@@ -111,7 +111,7 @@
                     class:
                       "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                   <% end %>
-                  <%= button_to t('common.actions.delete'),
+                  <%= button_to t("common.actions.delete"),
                   namespace_project_sample_metadata_path(
                     @project.namespace.parent,
                     @project,

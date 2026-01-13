@@ -19,13 +19,15 @@ end %>
       <%= field.fields_for :key do |metadata_key| %>
         <% invalid_key = @sample.errors.include?(:key) %>
         <div class="form-field <%= 'invalid' if invalid_key %>">
-          <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
+          <%= metadata_key.label "input",
+                             t("projects.samples.show.metadata.update.key"),
                              data: {
                                required: true,
                              },
                              class:
                                "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= metadata_key.text_field key,
+                                  id: "sample_update_field_key_input",
                                   value: key,
                                   required: true,
                                   aria: {
@@ -48,13 +50,15 @@ end %>
       <%= field.fields_for :value do |metadata_value| %>
         <% invalid_value = @sample.errors.include?(:value) %>
         <div class="form-field <%= 'invalid' if invalid_value %>">
-          <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
+          <%= metadata_value.label "input",
+                               t("projects.samples.show.metadata.update.value"),
                                data: {
                                  required: true,
                                },
                                class:
                                  "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= metadata_value.text_field value,
+                                    id: "sample_update_field_value_input",
                                     value: value,
                                     required: true,
                                     aria: {
@@ -82,8 +86,7 @@ end %>
       <% end %>
 
       <div>
-        <%= field.submit t('common.actions.update'),
-                     class: "button button-primary" %>
+        <%= field.submit t("common.actions.update"), class: "button button-primary" %>
       </div>
     <% end %>
   </div>

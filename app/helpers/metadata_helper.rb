@@ -25,4 +25,8 @@ module MetadataHelper
 
     result
   end
+
+  def replace_whitespace(string)
+    string.gsub(/\s/, '-')
+  end
 end

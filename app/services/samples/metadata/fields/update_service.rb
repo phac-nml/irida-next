@@ -51,8 +51,9 @@ module Samples
         end
 
         # Checks if neither key or value were changed
-        def validate_update_fields # rubocop:disable Metrics/AbcSize
-          if @key_update.keys[0] == @key_update.values[0] && @value_update.keys[0] == @value_update.values[0]
+        def validate_update_fields # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+          if @key_update.keys[0] == @key_update.values[0].strip &&
+             @value_update.keys[0] == @value_update.values[0].strip
 
             raise SampleMetadataFieldsUpdateError,
                   I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
@@ -62,7 +63,7 @@ module Samples
             raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
           end
 
-          if @value_update.values[0].nil?
+          if @value_update.values[0].blank?
             raise SampleMetadataValueValidationError,
                   I18n.t('services.samples.metadata.update_fields.value_required')
           end

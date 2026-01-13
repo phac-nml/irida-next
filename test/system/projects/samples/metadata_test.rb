@@ -685,6 +685,36 @@ module Projects
           assert_no_selector "input[value='testvalue2']"
         end
       end
+
+      test 'update metadata value with leading/trailing whitespaces' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody metadatafield1'
+
+        within '#sample-metadata' do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+          within('tbody tr:first-child td:last-child') do
+            click_on I18n.t('common.actions.update')
+          end
+        end
+
+        within %(turbo-frame[id="sample_modal"]) do
+          assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
+          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
+          assert_selector 'input#sample_update_field_value_value1', count: 1
+          find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+          click_on I18n.t('common.actions.update')
+        end
+
+        assert_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_no_text 'value1'
+        assert_text 'metadatafield1'
+        assert_text 'newMetadataValue'
+      end
     end
   end
 end
