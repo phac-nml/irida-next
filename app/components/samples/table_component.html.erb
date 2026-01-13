@@ -33,7 +33,9 @@
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
-                <div class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>">
+                <div
+                  class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>"
+                >
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
@@ -183,8 +185,7 @@
             <tr>
               <td
                 class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700
-                  dark:text-slate-300
+                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
                 "
                 colspan="2"
               >

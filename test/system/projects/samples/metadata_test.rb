@@ -52,9 +52,9 @@ module Projects
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
-          assert_selector 'input#sample_update_field_value_value1', count: 1
-          find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
+          assert_selector 'input#sample_update_field_key_input', count: 1
+          assert_selector 'input#sample_update_field_value_input', count: 1
+          find('input#sample_update_field_key_input').fill_in with: 'newMetadataKey'
           click_on I18n.t('common.actions.update')
         end
 
@@ -79,9 +79,9 @@ module Projects
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
-          assert_selector 'input#sample_update_field_value_value1', count: 1
-          find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+          assert_selector 'input#sample_update_field_key_input', count: 1
+          assert_selector 'input#sample_update_field_value_input', count: 1
+          find('input#sample_update_field_value_input').fill_in with: 'newMetadataValue'
           click_on I18n.t('common.actions.update')
         end
 
@@ -106,10 +106,10 @@ module Projects
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
-          assert_selector 'input#sample_update_field_value_value1', count: 1
-          find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
-          find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+          assert_selector 'input#sample_update_field_key_input', count: 1
+          assert_selector 'input#sample_update_field_value_input', count: 1
+          find('input#sample_update_field_key_input').fill_in with: 'newMetadataKey'
+          find('input#sample_update_field_value_input').fill_in with: 'newMetadataValue'
           click_on I18n.t('common.actions.update')
         end
 
@@ -135,9 +135,9 @@ module Projects
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
-          assert_selector 'input#sample_update_field_value_value1', count: 1
-          find('input#sample_update_field_key_metadatafield1').fill_in with: 'metadatafield2'
+          assert_selector 'input#sample_update_field_key_input', count: 1
+          assert_selector 'input#sample_update_field_value_input', count: 1
+          find('input#sample_update_field_key_input').fill_in with: 'metadatafield2'
           click_on I18n.t('common.actions.update')
         end
 
@@ -686,34 +686,32 @@ module Projects
         end
       end
 
-      test 'update metadata value with leading/trailing whitespaces' do
+      test 'update metadata key and value with leading/trailing whitespaces' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody metadatafield1'
+        assert_selector 'table tbody tr#metadatafield1_field'
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('common.actions.update')
-          end
-        end
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        click_button I18n.t('common.actions.update'), match: :first
 
         within %(turbo-frame[id="sample_modal"]) do
-          assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
-          assert_selector 'input#sample_update_field_value_value1', count: 1
-          find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+          assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+          fill_in 'sample_update_field_key_input', with: '          newMetadataKey              '
+          fill_in 'sample_update_field_value_input', with: '          newMetadataValue              '
           click_on I18n.t('common.actions.update')
         end
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_no_text 'metadatafield1'
         assert_no_text 'value1'
-        assert_text 'metadatafield1'
-        assert_text 'newMetadataValue'
+        assert_no_selector 'table tbody tr#metadatafield1_field'
+
+        assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(2)', text: 'newmetadatakey'
+        assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(3)', text: 'newMetadataValue'
       end
     end
   end

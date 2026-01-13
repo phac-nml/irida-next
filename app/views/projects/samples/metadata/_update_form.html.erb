@@ -26,20 +26,37 @@ end %>
                              },
                              class:
                                "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-          <%= metadata_key.text_field key,
-                                  id: "sample_update_field_key_input",
-                                  value: key,
-                                  required: true,
-                                  aria: {
-                                    describedby: [
-                                      invalid_key ? form.field_id(:key, "error") : nil,
-                                    ].join(" "),
-                                    invalid: invalid_key,
+          <% if invalid_key %>
+            <%= metadata_key.text_field key,
+                                    id: "sample_update_field_key_input",
+                                    value: key,
                                     required: true,
-                                  },
-                                  autofocus: invalid_key,
-                                  class:
-                                    "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                                    aria: {
+                                      describedby: [
+                                        invalid_key ? form.field_id(:key, "error") : nil,
+                                      ].join(" "),
+                                      invalid: invalid_key,
+                                      required: true,
+                                    },
+                                    autofocus: invalid_key,
+                                    class:
+                                      "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+          <% else %>
+
+            <%= metadata_key.text_field key,
+                                    id: "sample_update_field_key_input",
+                                    value: key,
+                                    required: true,
+                                    aria: {
+                                      invalid: invalid_key,
+                                      required: true,
+                                    },
+                                    autofocus: invalid_key,
+                                    class:
+                                      "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
+          <% end %>
+
           <%= if invalid_key
             render "shared/form/field_errors",
             id: form.field_id(:key, "error"),
@@ -57,26 +74,41 @@ end %>
                                },
                                class:
                                  "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-          <%= metadata_value.text_field value,
-                                    id: "sample_update_field_value_input",
-                                    value: value,
-                                    required: true,
-                                    aria: {
-                                      describedby: [
-                                        (
-                                          if invalid_value
-                                            form.field_id(:value, "error")
-                                          else
-                                            nil
-                                          end
-                                        ),
-                                      ].join(" "),
-                                      invalid: invalid_value,
+          <% if invalid_value %>
+            <%= metadata_value.text_field value,
+                                      id: "sample_update_field_value_input",
+                                      value: value,
                                       required: true,
-                                    },
-                                    autofocus: invalid_value,
-                                    class:
-                                      "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                                      aria: {
+                                        describedby: [
+                                          (
+                                            if invalid_value
+                                              form.field_id(:value, "error")
+                                            else
+                                              nil
+                                            end
+                                          ),
+                                        ].join(" "),
+                                        invalid: invalid_value,
+                                        required: true,
+                                      },
+                                      autofocus: invalid_value,
+                                      class:
+                                        "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+          <% else %>
+            <%= metadata_value.text_field value,
+                                      id: "sample_update_field_value_input",
+                                      value: value,
+                                      required: true,
+                                      aria: {
+                                        invalid: invalid_value,
+                                        required: true,
+                                      },
+                                      autofocus: invalid_value,
+                                      class:
+                                        "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
+          <% end %>
           <%= if invalid_value
             render "shared/form/field_errors",
             id: form.field_id(:value, "error"),
