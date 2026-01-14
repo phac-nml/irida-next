@@ -1,5 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
-import { computePosition, flip, shift, autoUpdate } from "@floating-ui/dom";
+import {
+  autoUpdate,
+  computePosition,
+  flip,
+  shift,
+  size,
+} from "@floating-ui/dom";
 
 export default class MenuController extends Controller {
   static targets = ["trigger", "menu"];
@@ -88,10 +94,21 @@ export default class MenuController extends Controller {
   update() {
     computePosition(this.#trigger, this.#menu, {
       placement: "bottom",
-      middleware: [flip(), shift({ padding: 8 })],
-    }).then(({ x, y }) => {
+      middleware: [
+        flip(),
+        shift({ padding: 8 }),
+        size({
+          apply({ availableWidth, availableHeight, elements }) {
+            Object.assign(elements.floating.style, {
+              maxWidth: `${Math.max(0, availableWidth)}px`,
+              maxHeight: `${Math.max(0, availableHeight)}px`,
+            });
+          },
+        }),
+      ],
+    }).then(({ x, y, strategy }) => {
       Object.assign(this.#menu.style, {
-        position: "absolute",
+        position: strategy,
         left: `${x}px`,
         top: `${y}px`,
       });
