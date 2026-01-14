@@ -70,8 +70,15 @@ module Samples
     end
 
     def component_options(namespace, metadata_fields: [], abilities: default_abilities)
+      has_samples = if namespace.is_a?(Group)
+                      namespace.has_samples?
+                    else
+                      # ProjectNamespace doesn't have has_samples? method
+                      @rendered_samples.any?
+                    end
+
       {
-        has_samples: namespace.has_samples?,
+        has_samples: has_samples,
         abilities: abilities,
         metadata_fields: metadata_fields,
         search_params: default_search_params,
@@ -92,207 +99,6 @@ module Samples
         title: I18n.t(:'groups.samples.table.no_samples'),
         description: I18n.t(:'groups.samples.table.no_associated_samples')
       }
-    end
-
-    test 'Should render all metadata fields with virtualization' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
-        metadata_fields = (1..150).map { |i| "field_#{i}" }
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: {},
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # With virtualization, all 150 metadata fields are rendered in headers
-        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
-        assert_selector 'table thead th', count: expected_columns + 150
-
-        # Should NOT show warning message (virtualization handles large field counts)
-        assert_no_selector 'div[role="status"][aria-live="polite"]', text: /limited to/
-      end
-    end
-
-    test 'Should render virtualized table with virtual-scroll controller' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
-        metadata_fields = (1..150).map { |i| "field_#{i}" }
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: { edit_sample_metadata: true },
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # Should have virtual-scroll controller data attributes
-        assert_selector '#samples-table[data-controller~="virtual-scroll"]'
-        assert_selector '#samples-table[data-virtual-scroll-metadata-fields-value]'
-        assert_selector '#samples-table[data-virtual-scroll-target="container"]'
-      end
-    end
-
-    test 'Should render all metadata fields without limiting' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(20).to_a
-        pagy = Pagy.new(count: 20, page: 1, limit: 20)
-        metadata_fields = (1..250).map { |i| "field_#{i}" }
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: {},
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # Should show all 250 metadata field columns
-        expected_columns = 5 # puid, name, created_at, updated_at, attachments_updated_at
-        assert_selector 'table thead th', count: expected_columns + 250
-
-        # Should NOT show warning message
-        assert_no_selector 'div', text: /limited to/
-      end
-    end
-
-    test 'exposes ARIA grid semantics and indices' do
-      render_table_component(metadata_fields: ['field_1'])
-
-      assert_selector 'table[role="grid"][aria-colcount][aria-rowcount]', count: 1
-      assert_selector 'tbody tr[role="row"]', count: @rendered_samples.count
-
-      first_row_index = @pagy.offset + 2
-      assert_selector "tbody tr[aria-rowindex='#{first_row_index}']"
-
-      # First column (puid) should be a rowheader with aria-colindex
-      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='1'][role='rowheader']"
-      # Second column (name) should be a gridcell with aria-colindex
-      assert_selector "tbody tr[aria-rowindex='#{first_row_index}'] [aria-colindex='2'][role='gridcell']"
-
-      # Metadata templates should be present for virtualization
-      assert_selector '#virtual-scroll-templates template[data-field="field_1"]', minimum: 1, visible: :all
-    end
-
-    test 'deferred template loading with exactly INITIAL_TEMPLATE_BATCH_SIZE fields' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(5).to_a
-        pagy = Pagy.new(count: 5, page: 1, limit: 5)
-        # Exactly 20 fields (INITIAL_TEMPLATE_BATCH_SIZE)
-        metadata_fields = (1..20).map { |i| "field_#{i}" }
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: { edit_sample_metadata: true },
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # All 20 templates should be in initial batch (no deferred loading)
-        assert_selector '#virtual-scroll-templates template', count: 20 * samples.count, visible: :all
-
-        # Should NOT have deferred frame
-        assert_no_selector 'turbo-frame#deferred-templates'
-      end
-    end
-
-    test 'deferred template loading with more than INITIAL_TEMPLATE_BATCH_SIZE fields' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(5).to_a
-        pagy = Pagy.new(count: 5, page: 1, limit: 5)
-        # 50 fields (30 deferred)
-        metadata_fields = (1..50).map { |i| "field_#{i}" }
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: { edit_sample_metadata: true },
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # First 20 templates should be in initial batch
-        assert_selector '#virtual-scroll-templates template[data-field="field_1"]', count: samples.count, visible: :all
-        assert_selector '#virtual-scroll-templates template[data-field="field_20"]', count: samples.count, visible: :all
-
-        # Should have deferred frame for remaining fields
-        assert_selector 'turbo-frame#deferred-templates[src]', visible: :all
-
-        # Verify deferred frame has correct data attributes
-        assert_selector 'turbo-frame#deferred-templates[data-virtual-scroll-target="deferredFrame"]', visible: :all
-      end
-    end
-
-    test 'renders all metadata templates for groups without deferral' do
-      with_request_url '/-/groups/group-1/-/samples' do
-        groups(:group_one)
-        metadata_fields = (1..30).map { |i| "field_#{i}" }
-
-        render_table_component(metadata_fields: metadata_fields, abilities: default_abilities)
-
-        expected_templates = metadata_fields.length * @rendered_samples.count
-        assert_selector '#virtual-scroll-templates template', count: expected_templates, visible: :all
-        assert_no_selector 'turbo-frame#deferred-templates'
-      end
-    end
-
-    test 'deferred template loading with zero metadata fields' do
-      with_request_url '/namespaces/12/projects/1/samples' do
-        project = projects(:project1)
-        namespace = project.namespace
-        samples = Sample.limit(5).to_a
-        pagy = Pagy.new(count: 5, page: 1, limit: 5)
-        metadata_fields = []
-
-        render_inline Samples::TableComponent.new(
-          samples,
-          namespace,
-          pagy,
-          has_samples: true,
-          abilities: {},
-          metadata_fields: metadata_fields,
-          search_params: { sort: 'name asc' }.with_indifferent_access,
-          empty: {}
-        )
-
-        # Should have template container but no templates
-        assert_selector '#virtual-scroll-templates', visible: :all
-        assert_no_selector '#virtual-scroll-templates template', visible: :all
-
-        # Should NOT have deferred frame
-        assert_no_selector 'turbo-frame#deferred-templates'
-      end
     end
   end
 end

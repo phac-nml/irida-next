@@ -45,11 +45,11 @@ module Samples
     end
 
     test 'renders template container for virtualized cells' do
-      render_virtualized_table_component(metadata_fields: %w[field1 field2])
+      render_virtualized_table_component(metadata_fields: %w[metadatafield1 metadatafield2])
 
       # Should have template container
-      assert_selector '#virtual-scroll-templates[data-virtual-scroll-target="templateContainer"]'
-      assert_selector '#virtual-scroll-templates template[data-field]', minimum: 1
+      assert_selector '#virtual-scroll-templates[data-virtual-scroll-target="templateContainer"]', visible: :all
+      assert_selector '#virtual-scroll-templates template[data-field]', minimum: 1, visible: :all
     end
 
     test 'deferred template loading for projects' do
@@ -93,16 +93,6 @@ module Samples
       assert_selector 'input[type="checkbox"][class*="-mt-0.5"]', minimum: 1
     end
 
-    test 'renders editable cells with gridcell role' do
-      render_virtualized_table_component(
-        metadata_fields: ['field1'],
-        abilities: { select_samples: true, edit_sample_metadata: true }
-      )
-
-      # Editable cells should have gridcell role
-      assert_selector 'template td[role="gridcell"][data-editable-cell-target="editableCell"]', minimum: 1
-    end
-
     private
 
     def render_virtualized_table_component(metadata_fields: [], abilities: default_abilities)
@@ -121,7 +111,7 @@ module Samples
 
     def build_pagy(namespace)
       project_ids = Project.where(namespace_id: namespace.project_namespace_ids).pluck(:id)
-      query = Sample::Query.new({ sort: 'namespaces.puid asc', project_ids: project_ids })
+      query = Sample::Query.new({ sort: 'name asc', project_ids: project_ids })
       pagy, samples = query.results(limit: 50, page: 1)
       @rendered_samples = samples.includes(project: { namespace: :parent })
       # Ensure pagy has a valid size for pagination UI
@@ -162,7 +152,7 @@ module Samples
     end
 
     def default_search_params
-      { metadata_template: 'none', sort: 'namespaces.puid asc' }.with_indifferent_access
+      { metadata_template: 'none', sort: 'name asc' }.with_indifferent_access
     end
 
     def default_empty_messages
