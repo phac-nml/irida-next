@@ -37,7 +37,6 @@ export default class extends MenuController {
     }
 
     this.boundHandleTriggerFocus = this.handleTriggerFocus.bind(this);
-    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
@@ -78,15 +77,10 @@ export default class extends MenuController {
 
   #onShow() {
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-    this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
   }
 
   #onHide() {
     document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
-    this.#calendar.removeEventListener(
-      "focusin",
-      this.boundHandleCalendarFocus,
-    );
   }
 
   #setMinDate() {
@@ -165,22 +159,6 @@ export default class extends MenuController {
   handleTriggerFocus() {
     if (!super.isVisible()) {
       super.show();
-    }
-  }
-
-  handleCalendarFocus(event) {
-    const dialog = this.#calendar.closest("dialog");
-    if (dialog) {
-      const rect = event.target.getBoundingClientRect();
-      if (rect.top < 0 || rect.bottom > dialog.offsetHeight) {
-        if (window.matchMedia("(max-width: 640px)").matches) {
-          const dialogContents = dialog.querySelector(".dialog--contents");
-          dialogContents.scrollBy(0, rect.top);
-        } else {
-          const dialogSection = dialog.querySelector(".dialog--section");
-          dialogSection.scrollBy(0, rect.top);
-        }
-      }
     }
   }
 
