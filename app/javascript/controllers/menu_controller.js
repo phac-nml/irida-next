@@ -96,19 +96,17 @@ export default class MenuController extends Controller {
       placement: "bottom",
       middleware: [
         flip(),
-        shift({ padding: 8 }),
         size({
-          apply({ availableWidth, availableHeight, elements }) {
+          apply({ availableHeight, elements }) {
             Object.assign(elements.floating.style, {
-              maxWidth: `${Math.max(0, availableWidth)}px`,
               maxHeight: `${Math.max(0, availableHeight)}px`,
             });
           },
         }),
       ],
-    }).then(({ x, y, strategy }) => {
+    }).then(({ x, y }) => {
       Object.assign(this.#menu.style, {
-        position: strategy,
+        position: "fixed",
         left: `${x}px`,
         top: `${y}px`,
       });
