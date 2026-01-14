@@ -67,7 +67,10 @@ export default class extends Controller {
       const form = this.formTemplateTarget.innerHTML
         .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
         .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
-        .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
+        .replace(
+          /FIELD_VALUE_PLACEHOLDER/g,
+          this.#trimWhitespaces(element.innerText),
+        )
         .replace(/CELL_ID_PLACEHOLDER/g, element.id);
       this.formContainerTarget.innerHTML = form;
       this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
@@ -104,7 +107,7 @@ export default class extends Controller {
           /ORIGINAL_VALUE/g,
           this.#originalCellContent[this.#elementId(editableCell)],
         )
-        .replace(/NEW_VALUE/g, editableCell.innerText);
+        .replace(/NEW_VALUE/g, this.#trimWhitespaces(editableCell.innerText));
       this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
       const dialog =
@@ -170,8 +173,7 @@ export default class extends Controller {
   }
 
   #validateEntry(metadataCell) {
-    const strippedMetadataValue = metadataCell.innerText.trim();
-
+    const strippedMetadataValue = this.#trimWhitespaces(metadataCell.innerText);
     const entryIsValid =
       strippedMetadataValue !==
       this.#originalCellContent[this.#elementId(metadataCell)];
@@ -181,5 +183,9 @@ export default class extends Controller {
     }
 
     return entryIsValid;
+  }
+
+  #trimWhitespaces(string) {
+    return string.replace(/\s+/g, " ").trim();
   }
 }

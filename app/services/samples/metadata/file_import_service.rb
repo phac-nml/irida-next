@@ -65,12 +65,11 @@ module Samples
       end
 
       def retrieve_headers
-        headers = if Flipper.enabled?(:metadata_import_field_selection)
-                    @selected_headers << @sample_id_column
-                  else
-                    @headers
-                  end
-        strip_headers(headers)
+        if Flipper.enabled?(:metadata_import_field_selection)
+          @selected_headers << @sample_id_column
+        else
+          @headers
+        end
       end
 
       def process_sample_metadata_row(sample_id, metadata)

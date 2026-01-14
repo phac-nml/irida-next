@@ -84,8 +84,8 @@ module Samples
         @metadata.each do |key, value|
           validate_metadata_value(key, value)
 
-          key = key.to_s.downcase.strip
-          value = value.to_s.strip # remove data types
+          key = strip_whitespaces(key.to_s.downcase)
+          value = strip_whitespaces(value.to_s) # remove data types
           status = get_metadata_change_status(key, value)
           next unless status
 

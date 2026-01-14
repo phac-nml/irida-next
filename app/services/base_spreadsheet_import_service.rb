@@ -101,6 +101,8 @@ class BaseSpreadsheetImportService < BaseService
   end
 
   def strip_headers(headers)
-    headers.map(&:strip)
+    headers.map do |header|
+      strip_whitespaces(header)
+    end
   end
 end
