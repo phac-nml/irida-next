@@ -14,13 +14,13 @@ module Groups
         filtered_samples = filter_sample_ids(sample_ids, 'clone')
         total_sample_count = filtered_samples.count
         filtered_samples.each.with_index(1) do |sample, index|
-          update_progress_bar(index, total_sample_count, broadcast_target)
           cloned_sample = clone_sample(sample)
           unless cloned_sample.nil?
             cloned_sample_ids[sample.id] = cloned_sample.id
             old_project_puid = sample.project.puid
             add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
+          update_progress_bar(index, total_sample_count, broadcast_target)
         end
 
         unless @cloned_samples_data[:project_data].empty?

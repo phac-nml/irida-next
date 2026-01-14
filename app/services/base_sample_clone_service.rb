@@ -12,7 +12,9 @@ class BaseSampleCloneService < BaseSampleService
     @new_project = Project.find_by(id: new_project_id)
 
     authorize_new_project(new_project_id, :clone_sample_into_project?)
-    clone_samples(sample_ids, broadcast_target)
+    ActiveRecord::Base.transaction do
+      clone_samples(sample_ids, broadcast_target)
+    end
   rescue BaseSampleService::BaseError, BaseSampleCloneService::CloneError => e
     @namespace.errors.add(:base, e.message)
     {}
