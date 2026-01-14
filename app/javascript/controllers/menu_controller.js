@@ -1,17 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
-import {
-  autoUpdate,
-  computePosition,
-  flip,
-  shift,
-  size,
-} from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, size } from "@floating-ui/dom";
 
 export default class MenuController extends Controller {
   static targets = ["trigger", "menu"];
 
   static values = {
     triggerType: { type: String, default: "none" },
+    strategy: { type: String, default: "absolute" },
   };
 
   #menu = this.menuTarget;
@@ -106,7 +101,7 @@ export default class MenuController extends Controller {
       ],
     }).then(({ x, y }) => {
       Object.assign(this.#menu.style, {
-        position: "absolute",
+        position: this.strategyValue,
         left: `${x}px`,
         top: `${y}px`,
       });
