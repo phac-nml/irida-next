@@ -113,13 +113,15 @@ class SampleTest < ActiveSupport::TestCase
       value: 'value1',
       source: user.email,
       source_type: 'user',
-      last_updated: DateTime.new(2000, 1, 1)
+      last_updated: DateTime.new(2000, 1, 1),
+      id: 'metadatafield1'
     }, {
       key: 'metadatafield2',
       value: 'value2',
       source: user.email,
       source_type: 'user',
-      last_updated: DateTime.new(2000, 1, 1)
+      last_updated: DateTime.new(2000, 1, 1),
+      id: 'metadatafield2'
     }]
     assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
   end
@@ -131,13 +133,15 @@ class SampleTest < ActiveSupport::TestCase
       value: 'value1',
       source: "#{I18n.t('models.sample.analysis')} 1",
       source_type: 'analysis',
-      last_updated: DateTime.new(2000, 1, 1)
+      last_updated: DateTime.new(2000, 1, 1),
+      id: 'metadatafield1'
     }, {
       key: 'metadatafield2',
       value: 'value2',
       source: "#{I18n.t('models.sample.analysis')} 1",
       source_type: 'analysis',
-      last_updated: DateTime.new(2000, 1, 1)
+      last_updated: DateTime.new(2000, 1, 1),
+      id: 'metadatafield2'
     }]
     assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
   end
