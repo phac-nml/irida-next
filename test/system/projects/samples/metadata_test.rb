@@ -120,28 +120,38 @@ module Projects
         assert_text 'newMetadataValue'
       end
 
-      test 'cannot update metadata key with key that already exists' do
+      test 'cannot update metadata with empty key' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('common.actions.update')
-          end
-        end
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody tr#metadatafield1_field'
+        click_button I18n.t('common.actions.update'), match: :first
 
-        within %(turbo-frame[id="sample_modal"]) do
-          assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
-          assert_selector 'input#sample_update_field_key_input', count: 1
-          assert_selector 'input#sample_update_field_value_input', count: 1
-          find('input#sample_update_field_key_input').fill_in with: 'metadatafield2'
-          click_on I18n.t('common.actions.update')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_no_text I18n.t('services.samples.metadata.update_fields.key_required')
+        fill_in 'sample_update_field_key_input', with: ''
+        fill_in 'sample_update_field_value_input', with: 'newValue'
+        click_on 'update-metadata-submit-btn'
+        assert_text I18n.t('services.samples.metadata.update_fields.key_required')
+      end
 
-        assert_text I18n.t('services.samples.metadata.update_fields.key_exists', key: 'metadatafield2')
+      test 'cannot update metadata with empty value' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody tr#metadatafield1_field'
+        click_button I18n.t('common.actions.update'), match: :first
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_no_text I18n.t('services.samples.metadata.update_fields.value_required')
+        fill_in 'sample_update_field_key_input', with: 'newKey'
+        fill_in 'sample_update_field_value_input', with: ''
+        click_on 'update-metadata-submit-btn'
+        assert_text I18n.t('services.samples.metadata.update_fields.value_required')
       end
 
       test 'user with access level < Maintainer cannot view update action' do
@@ -686,7 +696,7 @@ module Projects
         end
       end
 
-      test 'update metadata key and value with leading/trailing whitespaces' do
+      test 'update metadata key and value with stripping leading/trailing whitespaces' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -698,12 +708,10 @@ module Projects
         assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
-        within %(turbo-frame[id="sample_modal"]) do
-          assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
-          fill_in 'sample_update_field_key_input', with: '          newMetadataKey              '
-          fill_in 'sample_update_field_value_input', with: '          newMetadataValue              '
-          click_on I18n.t('common.actions.update')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        fill_in 'sample_update_field_key_input', with: '          newMetadataKey              '
+        fill_in 'sample_update_field_value_input', with: '          newMetadataValue              '
+        click_on 'update-metadata-submit-btn'
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
         assert_no_text 'metadatafield1'
@@ -712,6 +720,74 @@ module Projects
 
         assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(2)', text: 'newmetadatakey'
         assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(3)', text: 'newMetadataValue'
+      end
+
+      test 'update metadata key and value with multiple inner whitespaces' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody tr#metadatafield1_field'
+
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        click_button I18n.t('common.actions.update'), match: :first
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        fill_in 'sample_update_field_key_input', with: '   new Metadata  Key    '
+        fill_in 'sample_update_field_value_input', with: '  new  Metadata    Value  '
+        click_on 'update-metadata-submit-btn'
+
+        assert_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+        assert_no_selector 'table tbody tr#metadatafield1_field'
+
+        assert_selector 'table tbody tr#new-metadata--key_field td:nth-child(2)', text: 'new metadata  key',
+                                                                                  normalize_ws: false
+        assert_selector 'table tbody tr#new-metadata--key_field td:nth-child(3)', text: 'new  Metadata    Value',
+                                                                                  normalize_ws: false
+      end
+
+      test 'update metadata key with only leading/trailing whitespaces on old key will not update' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody tr#metadatafield1_field'
+
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        click_button I18n.t('common.actions.update'), match: :first
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        fill_in 'sample_update_field_key_input', with: '   metadatafield1    '
+        click_on 'update-metadata-submit-btn'
+
+        assert_no_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_text I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+      end
+
+      test 'update metadata value with only leading/trailing whitespaces on old value will not update' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+
+        assert_selector '#sample-metadata'
+        assert_selector 'table tbody tr#metadatafield1_field'
+
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        click_button I18n.t('common.actions.update'), match: :first
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        fill_in 'sample_update_field_value_input', with: '   value1    '
+        click_on 'update-metadata-submit-btn'
+
+        assert_no_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_text I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
       end
     end
   end

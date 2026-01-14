@@ -118,7 +118,9 @@ end %>
       <% end %>
 
       <div>
-        <%= field.submit t("common.actions.update"), class: "button button-primary" %>
+        <%= field.submit t("common.actions.update"),
+                     id: "update-metadata-submit-btn",
+                     class: "button button-primary" %>
       </div>
     <% end %>
   </div>
