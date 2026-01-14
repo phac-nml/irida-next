@@ -124,6 +124,8 @@ module Samples
       query = Sample::Query.new({ sort: 'namespaces.puid asc', project_ids: project_ids })
       pagy, samples = query.results(limit: 50, page: 1)
       @rendered_samples = samples.includes(project: { namespace: :parent })
+      # Ensure pagy has a valid size for pagination UI
+      pagy.vars[:size] ||= 7
       @pagy = pagy
       pagy
     end
@@ -132,13 +134,22 @@ module Samples
       query = Sample::Query.new({ sort: 'name asc', project_ids: [project.id] })
       pagy, samples = query.results(limit: 20, page: 1)
       @rendered_samples = samples.includes(project: { namespace: :parent })
+      # Ensure pagy has a valid size for pagination UI
+      pagy.vars[:size] ||= 7
       @pagy = pagy
       pagy
     end
 
     def component_options(namespace, metadata_fields: [], abilities: default_abilities)
+      has_samples = if namespace.is_a?(Group)
+                      namespace.has_samples?
+                    else
+                      # ProjectNamespace doesn't have has_samples? method
+                      @rendered_samples.any?
+                    end
+
       {
-        has_samples: namespace.has_samples?,
+        has_samples: has_samples,
         abilities: abilities,
         metadata_fields: metadata_fields,
         search_params: default_search_params,
