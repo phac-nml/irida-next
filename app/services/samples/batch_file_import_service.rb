@@ -33,8 +33,7 @@ module Samples
 
     def perform_file_import(broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       response = {}
-      stripped_headers = strip_headers(@headers)
-      parse_settings = stripped_headers.zip(stripped_headers).to_h
+      parse_settings = @headers.zip(@headers).to_h
 
       # minus 1 to exclude header
       total_sample_count = @spreadsheet.count - 1
@@ -151,8 +150,9 @@ module Samples
 
       metadata = {}
       @metadata_fields.each do |metadata_field|
-        formatted_metadata_field = metadata_field.strip
-        metadata[formatted_metadata_field] = data[formatted_metadata_field]
+        partially_cleaned_metadata_field = metadata_field.strip
+        metadata[strip_whitespaces(partially_cleaned_metadata_field)] =
+          strip_whitespaces(data[partially_cleaned_metadata_field])
       end
       metadata.compact!
       metadata

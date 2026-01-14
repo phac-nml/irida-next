@@ -419,15 +419,14 @@ module Samples
       default_params = {
         sample_name_column: 'sample_name',
         sample_description_column: 'description',
-        metadata_fields: ['metadata field 1', 'metadata field 2', 'metadata field 3']
+        metadata_fields: ['metadata     field 1', 'metadata field 2', 'metadata field 3']
       }
 
       response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, default_params).execute
 
       assert_equal 5, @project.samples.count
-
-      m1 = { 'metadata field 1' => 'a', 'metadata field 2' => 'b', 'metadata field 3' => 'c' }
-      m2 = { 'metadata field 1' => 'd', 'metadata field 2' => 'e', 'metadata field 3' => 'f' }
+      m1 = { 'metadata field 1' => 'value 1', 'metadata field 2' => 'value2', 'metadata field 3' => 'value3' }
+      m2 = { 'metadata field 1' => 'value 4', 'metadata field 2' => 'value 5', 'metadata field 3' => 'value6' }
 
       assert_equal m1, response['my new sample 1'].metadata
       assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
