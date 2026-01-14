@@ -22,7 +22,7 @@ module WorkflowExecutions
       @workflow_execution.submitter = current_user
 
       @workflow_execution.tags = { createdBy: current_user.email, namespaceId: @workflow_execution.namespace.puid,
-                                   samplesCount: @workflow_execution.samples_workflow_executions.size }
+                                   samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
 
       if @workflow_execution.valid? && params.key?(:workflow_params)
         @workflow_execution.workflow_params = sanitized_workflow_params
