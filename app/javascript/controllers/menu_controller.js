@@ -106,7 +106,7 @@ export default class MenuController extends Controller {
       ],
     }).then(({ x, y }) => {
       Object.assign(this.#menu.style, {
-        position: "fixed",
+        position: "absolute",
         left: `${x}px`,
         top: `${y}px`,
       });
