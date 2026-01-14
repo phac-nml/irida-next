@@ -231,7 +231,6 @@ export default class SelectWithAutoCompleteController extends MenuController {
       if (opt === option) {
         opt.setAttribute("aria-selected", "true");
         option.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        this.#onOptionFocus();
       } else {
         opt.removeAttribute("aria-selected");
       }
@@ -419,22 +418,6 @@ export default class SelectWithAutoCompleteController extends MenuController {
       this.#setOption(option);
       super.hide();
       this.triggerTarget.focus();
-    }
-  }
-
-  #onOptionFocus() {
-    const dialog = this.#option.closest("dialog");
-    if (dialog) {
-      const rect = this.#option.getBoundingClientRect();
-      if (rect.top < 0 || rect.bottom > dialog.offsetHeight) {
-        if (window.matchMedia("(max-width: 640px)").matches) {
-          const dialogContents = dialog.querySelector(".dialog--contents");
-          dialogContents.scrollBy(0, rect.top);
-        } else {
-          const dialogSection = dialog.querySelector(".dialog--section");
-          dialogSection.scrollBy(0, rect.top);
-        }
-      }
     }
   }
 

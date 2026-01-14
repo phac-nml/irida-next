@@ -340,20 +340,6 @@ export default class Select2Controller extends MenuController {
   #ensureItemVisible(item) {
     if (!this.scrollerTarget || !item) return;
     item.scrollIntoView();
-
-    const dialog = item.closest("dialog");
-    if (dialog) {
-      const itemRect = item.getBoundingClientRect();
-      if (itemRect.top < 0 || itemRect.bottom > dialog.offsetHeight) {
-        if (window.matchMedia("(max-width: 640px)").matches) {
-          const dialogContents = dialog.querySelector(".dialog--contents");
-          dialogContents.scrollBy(0, itemRect.top);
-        } else {
-          const dialogSection = dialog.querySelector(".dialog--section");
-          dialogSection.scrollBy(0, itemRect.top);
-        }
-      }
-    }
   }
 
   #initializeDropdown() {
