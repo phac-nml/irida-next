@@ -110,7 +110,7 @@ gem 'activerecord_json_validator', '~> 3.1.0'
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
 gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'copy-blob', require: false
-gem 'google-cloud-storage', '~> 1.57', require: false
+gem 'google-cloud-storage', '~> 1.58', require: false
 
 # job queueing
 gem 'good_job', '~> 4.13.1'
