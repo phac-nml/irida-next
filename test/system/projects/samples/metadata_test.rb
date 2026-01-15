@@ -820,7 +820,7 @@ module Projects
         fill_in 'sample_key_0', with: '    metadata       field   3   '
         fill_in 'sample_value_0', with: '    value      3   '
         fill_in 'sample_key_1', with: 'metadata   field   3'
-        fill_in 'sample_value_1', with: '    different value 3  '
+        fill_in 'sample_value_1', with: '    different value   '
         fill_in 'sample_key_2', with: 'metadata   field   4'
         fill_in 'sample_value_2', with: '     value 4 '
         click_on I18n.t('projects.samples.metadata.form.submit_button')
@@ -833,7 +833,7 @@ module Projects
         assert_selector 'tr#metadata-field-3_field'
         assert_selector 'tr#metadata-field-4_field'
         assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'different value'
         assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(2)', text: 'metadata field 4'
         assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(3)', text: 'value 4'
       end
