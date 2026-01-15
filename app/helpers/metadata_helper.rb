@@ -26,7 +26,7 @@ module MetadataHelper
     result
   end
 
-  def format_id(string)
-    string.gsub(/\s+/, '-')
+  def format_id(id)
+    id.gsub(/\s+/, '-')
   end
 end
