@@ -744,10 +744,8 @@ module Projects
         assert_no_text 'value1'
         assert_no_selector 'table tbody tr#metadatafield1_field'
 
-        assert_selector 'table tbody tr#new-metadata--key_field td:nth-child(2)', text: 'new metadata  key',
-                                                                                  normalize_ws: false
-        assert_selector 'table tbody tr#new-metadata--key_field td:nth-child(3)', text: 'new  Metadata    Value',
-                                                                                  normalize_ws: false
+        assert_selector 'table tbody tr#new-metadata-key_field td:nth-child(2)', text: 'new metadata key'
+        assert_selector 'table tbody tr#new-metadata-key_field td:nth-child(3)', text: 'new Metadata Value'
       end
 
       test 'update metadata key with only leading/trailing whitespaces on old key will not update' do
