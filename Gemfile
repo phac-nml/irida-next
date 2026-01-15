@@ -116,7 +116,7 @@ gem 'google-cloud-storage', '~> 1.58', require: false
 gem 'good_job', '~> 4.13.1'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
-gem 'roo', '~> 2.10.0'
+gem 'roo', '~> 3.0.0'
 gem 'roo-xls'
 gem 'spreadsheet', '1.3.4'
 
