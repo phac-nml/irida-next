@@ -577,7 +577,8 @@ module Samples
           content_type: file.content_type
         )
         params = { sample_id_column: 'sample_name',
-                   metadata_columns: ['metadata field 1', 'metadata field 2', 'metadata field 3', 'metadata field 4'] }
+                   metadata_columns: ['metadata field 1', 'metadata    field 2', 'metadata field 3',
+                                      'metadata field 4'] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
 
         assert_equal({ @sample1.name => { added: ['metadata field 1', 'metadata field 2', 'metadata field 3',
@@ -587,10 +588,10 @@ module Samples
                                                   'metadata field 4'],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
 
-        assert_equal({ 'metadata field 1' => '10', 'metadata field 2' => '20', 'metadata field 3' => '30',
+        assert_equal({ 'metadata field 1' => '1 0', 'metadata field 2' => '20', 'metadata field 3' => '30',
                        'metadata field 4' => '40' }, @sample1.reload.metadata)
         assert_equal(
-          { 'metadata field 1' => '15', 'metadata field 2' => '25', 'metadata field 3' => '35',
+          { 'metadata field 1' => '1 5', 'metadata field 2' => '25', 'metadata field 3' => '35',
             'metadata field 4' => '45' }, @sample2.reload.metadata
         )
       end

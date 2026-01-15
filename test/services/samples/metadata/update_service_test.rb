@@ -468,6 +468,41 @@ module Samples
                      sample.metadata_provenance)
         assert_equal({ 'metadatafield4' => 1 }, project.namespace.reload.metadata_summary)
       end
+
+      test 'metadata with whitespaces are sanitized' do
+        freeze_time
+        params = { 'metadata' => { ' metadata   field   1 ' => ' value 1 ', ' metadata field2 ' => ' value   2 ' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
+        assert_equal({ 'metadata field 1' => 'value 1', 'metadata field2' => 'value 2' }, @sample35.metadata)
+        assert_equal({ 'metadata field 1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+                       'metadata field2' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
+                     @sample35.metadata_provenance)
+        assert_equal({ added: ['metadata field 1', 'metadata field2'], updated: [], deleted: [],
+                       not_updated: [], unchanged: [] }, metadata_changes)
+
+        assert_equal(
+          { 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadata field 1' => 1,
+            'metadata field2' => 1 }, @project31.namespace.reload.metadata_summary
+        )
+        assert_equal(
+          { 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadata field 1' => 1,
+            'metadata field2' => 1 }, @subgroup12aa.reload.metadata_summary
+        )
+        assert_equal(
+          { 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadata field 1' => 1,
+            'metadata field2' => 1 }, @subgroup12a.reload.metadata_summary
+        )
+        assert_equal(
+          { 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadata field 1' => 1,
+            'metadata field2' => 1 }, @group12.reload.metadata_summary
+        )
+      end
     end
   end
 end
