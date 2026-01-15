@@ -7,6 +7,7 @@ require 'webmock/minitest'
 module WorkflowExecutions
   class CreateServiceTest < ActiveStorageTestCase
     def setup
+      Flipper.enable(:wes_extended_metadata)
       @user = users(:john_doe)
       @project = projects(:project1)
       @sample = samples(:sample1)

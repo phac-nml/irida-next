@@ -6,6 +6,7 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   def setup
+    Flipper.enable(:wes_extended_metadata)
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
     Rails.configuration.ga4gh_wes_server_endpoint = ENV.fetch('GA4GH_WES_URL', 'http://localhost:1122/')
   end

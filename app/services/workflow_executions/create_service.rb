@@ -11,7 +11,7 @@ module WorkflowExecutions
                                                              params[:metadata][:workflow_version])
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize
       return false if params.empty?
 
       autoset_params if @workflow
@@ -21,8 +21,7 @@ module WorkflowExecutions
 
       @workflow_execution.submitter = current_user
 
-      @workflow_execution.tags = { createdBy: current_user.email, namespaceId: @workflow_execution.namespace.puid,
-                                   samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
+      add_workflow_execution_tags
 
       if @workflow_execution.valid? && params.key?(:workflow_params)
         @workflow_execution.workflow_params = sanitized_workflow_params
@@ -38,6 +37,15 @@ module WorkflowExecutions
       end
 
       @workflow_execution
+    end
+
+    def add_workflow_execution_tags
+      if Flipper.enabled?(:wes_extended_metadata)
+        @workflow_execution.tags = { createdBy: current_user.email, namespaceId: @workflow_execution.namespace.puid,
+                                     samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
+      else
+        @workflow_execution.tags = { createdBy: current_user.email }
+      end
     end
 
     def sanitized_workflow_params
