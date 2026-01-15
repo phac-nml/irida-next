@@ -654,6 +654,9 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: group_three.name
 
+    assert_no_text "#{I18n.t(:'groups.show.information.number_of_samples')} #{group_three.samples_count}"
+    assert_text "#{I18n.t(:'groups.show.information.number_of_samples')} #{group_three.aggregated_samples_count}"
+
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
 
     assert_equal 3, subgroup1.aggregated_samples_count
