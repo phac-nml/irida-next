@@ -81,7 +81,7 @@ module GroupsDashboard
     private
 
     def stub_group_counts(group, samples:, members:, projects:, subgroups: 0)
-      group.define_singleton_method(:samples_count) { samples }
+      group.define_singleton_method(:aggregated_samples_count) { samples }
 
       group_members = []
       members.times { group_members << Object.new }
