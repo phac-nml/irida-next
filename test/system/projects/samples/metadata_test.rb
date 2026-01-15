@@ -808,6 +808,38 @@ module Projects
         assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
       end
 
+      test 'update metadata by adding extra spaces induces error' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
+
+        # create metadata field first
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        fill_in 'sample_key_0', with: '    metadata       field   3   '
+        fill_in 'sample_value_0', with: '    value      3   '
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+
+        assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadata field 3')
+
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+
+        assert_selector 'tr#metadata-field-3_field'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+
+        within('table tbody tr#metadata-field-3_field') do
+          click_button I18n.t('common.actions.update')
+        end
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
+        fill_in 'sample_update_field_key_input', with: '   metadata     field 3    '
+        click_on 'update-metadata-submit-btn'
+
+        assert_no_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_text I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+      end
+
       test 'add multiple new metadata with same key and different whitespaces' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
