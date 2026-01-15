@@ -39,7 +39,7 @@
         <%= render NamespaceStatisticComponent.new(
           id_prefix: "group-samples",
           label: t(:"groups.show.information.number_of_samples"),
-          value: @group.samples_count || 0,
+          value: @group.aggregated_samples_count,
           icon_name: Sample.icon,
           color_scheme: :blue,
         ) %>
