@@ -389,6 +389,8 @@ GEM
     minitest (5.27.0)
     minitest-retry (0.3.1)
       minitest (>= 5.0)
+    mocha (3.0.1)
+      ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
     multi_json (1.19.1)
     multi_xml (0.8.0)
@@ -628,6 +630,7 @@ GEM
     ruby-saml (1.18.1)
       nokogiri (>= 1.13.10)
       rexml
+    ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
     sanitize (7.0.0)
       crass (~> 1.0.2)
@@ -772,6 +775,7 @@ DEPENDENCIES
   lookbook (~> 2.3)
   minitest (~> 5.27)
   minitest-retry
+  mocha
   omniauth
   omniauth-entra-id
   omniauth-rails_csrf_protection

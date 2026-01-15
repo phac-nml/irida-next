@@ -202,6 +202,7 @@ group :test do
   gem 'cuprite'
 
   gem 'minitest-retry', require: false
+  gem 'mocha', require: false
 
   gem 'simplecov', require: false
   gem 'timecop'

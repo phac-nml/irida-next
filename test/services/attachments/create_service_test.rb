@@ -318,5 +318,52 @@ module Attachments
                    exception.result.message
       assert_equal original_updated_time, @group1.attachments_updated_at
     end
+
+    test 'create attachments does not commit transaction if ActiveRecord::Rollback is raised' do
+      valid_params = { files: [@fastq_se_blob], include_activity: true }
+
+      assert_nil @sample.attachments_updated_at
+
+      # raise exception after attachments are saved but before transaction is committed
+      Attachments::CreateService.any_instance.stubs(:create_activities).raises(ActiveRecord::Rollback)
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::CreateService.new(@user, @sample, valid_params).execute
+      end
+
+      assert_nil @sample.reload.attachments_updated_at
+    end
+
+    test 'create attachments queues AutomatedWorkflowExecutions::LaunchJob only once when uploading multiple paired-end files to a sample' do # rubocop:disable Layout/LineLength
+      sample = samples(:sampleA)
+      params = { files: [@testsample_illumina_pe_fwd_blob,
+                         @testsample_illumina_pe_rev_blob,
+                         @testsample_illumina_without_lane_pe_fwd_blob,
+                         @testsample_illumina_without_lane_pe_rev_blob] }
+
+      assert_difference -> { Attachment.count } => 4 do
+        Attachments::CreateService.new(users(:jeff_doe), sample, params).execute
+      end
+
+      assert_enqueued_jobs(1, only: AutomatedWorkflowExecutions::LaunchJob)
+    end
+
+    test 'create attachments does not queue AutomatedWorkflowExecutions::LaunchJob when uploading multiple paired-end files to a sample if transaction is rolled back' do # rubocop:disable Layout/LineLength
+      sample = samples(:sampleA)
+      params = { files: [@testsample_illumina_pe_fwd_blob,
+                         @testsample_illumina_pe_rev_blob,
+                         @testsample_illumina_without_lane_pe_fwd_blob,
+                         @testsample_illumina_without_lane_pe_rev_blob],
+                 include_activity: true }
+
+      # raise exception after attachments are saved but before transaction is committed
+      Attachments::CreateService.any_instance.stubs(:create_activities).raises(ActiveRecord::Rollback)
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::CreateService.new(users(:jeff_doe), sample, params).execute
+      end
+
+      assert_no_enqueued_jobs(only: AutomatedWorkflowExecutions::LaunchJob)
+    end
   end
 end

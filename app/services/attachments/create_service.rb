@@ -27,27 +27,29 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+    def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/MethodLength
       attachable_authorization
 
-      valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
+      ActiveRecord::Base.transaction do
+        valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
-      identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.many?
+        identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.many?
 
-      unidentified_fastq_attachments = valid_fastq_attachments.reject do |attachment|
-        attachment.metadata['type'] == 'illumina_pe'
-      end
+        unidentified_fastq_attachments = valid_fastq_attachments.reject do |attachment|
+          attachment.metadata['type'] == 'illumina_pe'
+        end
 
-      identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.many?
+        identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.many?
 
-      @attachments.each(&:save)
+        @attachments.each(&:save)
 
-      create_activities if @include_activity
+        create_activities if @include_activity
 
-      if Irida::Pipelines.instance.pipelines.any? &&
-         @attachable.instance_of?(Sample) &&
-         @attachable.project.namespace.automated_workflow_executions.present?
-        launch_automated_workflow_executions(@pe_attachments&.last)
+        if Irida::Pipelines.instance.pipelines.any? &&
+           @attachable.instance_of?(Sample) &&
+           @attachable.project.namespace.automated_workflow_executions.present?
+          launch_automated_workflow_executions(@pe_attachments&.last)
+        end
       end
 
       @attachments

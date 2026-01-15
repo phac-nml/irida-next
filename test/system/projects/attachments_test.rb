@@ -302,14 +302,12 @@ module Projects
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
-        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
-        within('tr:first-child') do
-          click_button I18n.t('common.actions.delete'), match: :first
-        end
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(3)', text: 'fastq'
+      assert_selector 'table tbody tr td:nth-child(4)', text: 'illumina_pe'
+      within('table tbody tr:first-child') do
+        click_button I18n.t('common.actions.delete'), match: :first
       end
 
       within('dialog') do
@@ -349,12 +347,10 @@ module Projects
       assert_text I18n.t('projects.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       assert_text I18n.t('projects.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
-        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
-      end
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(3)', text: 'fastq'
+      assert_selector 'table tbody tr td:nth-child(4)', text: 'illumina_pe'
 
       # Wait for the flash messages to disappear
       assert_no_text I18n.t('projects.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
@@ -367,14 +363,12 @@ module Projects
       assert_selector '#attachments-table table tbody tr', count: 2
       assert_text 'Displaying 1-2 of 2 items'
 
-      within('table tbody') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
-        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
-        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'fastq'
-        assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'illumina_pe'
-      end
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(3)', text: 'fastq'
+      assert_selector 'table tbody tr td:nth-child(4)', text: 'illumina_pe'
+      assert_selector 'table tbody tr td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+      assert_selector 'table tbody tr td:nth-child(3)', text: 'fastq'
+      assert_selector 'table tbody tr td:nth-child(4)', text: 'illumina_pe'
     end
 
     test 'empty search state' do

@@ -233,6 +233,22 @@ module Projects
           Projects::Samples::CloneService.new(project30.namespace, @john_doe).execute(project31.id, [sample33.id])
         end
       end
+
+      test 'samples are not cloned if any exception is encountered' do
+        clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
+
+        # raise a StandardError during the cloning process to trigger a rollback of all transactions
+        ::Attachments::CreateService.any_instance.stubs(:identify_illumina_paired_end_files).raises(StandardError)
+
+        assert_no_difference [-> { Attachment.count }, -> { Sample.count }] do
+          assert_raises(StandardError) do
+            Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
+              clone_samples_params[:new_project_id],
+              clone_samples_params[:sample_ids]
+            )
+          end
+        end
+      end
     end
   end
 end
