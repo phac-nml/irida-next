@@ -26,7 +26,7 @@ module MetadataHelper
     result
   end
 
-  def replace_whitespace(string)
-    string.gsub(/\s/, '-')
+  def format_id(string)
+    string.gsub(/\s+/, '-')
   end
 end

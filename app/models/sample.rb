@@ -45,7 +45,7 @@ class Sample < ApplicationRecord
     :test_tube
   end
 
-  def metadata_with_provenance # rubocop:disable Metrics/AbcSize
+  def metadata_with_provenance
     sample_metadata = []
     metadata.each do |key, value|
       source_type = metadata_provenance[key]['source']
@@ -55,7 +55,7 @@ class Sample < ApplicationRecord
                  "#{I18n.t('models.sample.analysis')} #{metadata_provenance[key]['id']}"
                end
       sample_metadata << { key:, value:, source:, source_type:,
-                           last_updated: metadata_provenance[key]['updated_at'], id: replace_whitespace(key) }
+                           last_updated: metadata_provenance[key]['updated_at'] }
     end
     sample_metadata
   end
