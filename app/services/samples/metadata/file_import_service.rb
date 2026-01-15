@@ -31,8 +31,6 @@ module Samples
       def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength
         response = {}
         headers = retrieve_headers
-
-        # strip before and after whitespaces
         parse_settings = headers.zip(headers).to_h
         # minus 1 to exclude header
         total_sample_count = @spreadsheet.count - 1
@@ -65,11 +63,12 @@ module Samples
       end
 
       def retrieve_headers
-        if Flipper.enabled?(:metadata_import_field_selection)
-          @selected_headers << @sample_id_column
-        else
-          @headers
-        end
+        headers = if Flipper.enabled?(:metadata_import_field_selection)
+                    @selected_headers << @sample_id_column
+                  else
+                    @headers
+                  end
+        strip_headers(headers)
       end
 
       def process_sample_metadata_row(sample_id, metadata)

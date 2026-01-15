@@ -150,9 +150,8 @@ module Samples
 
       metadata = {}
       @metadata_fields.each do |metadata_field|
-        partially_cleaned_metadata_field = metadata_field.strip
-        metadata[strip_whitespaces(partially_cleaned_metadata_field)] =
-          strip_whitespaces(data[partially_cleaned_metadata_field])
+        formatted_metadata_field = metadata_field.strip
+        metadata[formatted_metadata_field] = data[formatted_metadata_field]
       end
       metadata.compact!
       metadata
