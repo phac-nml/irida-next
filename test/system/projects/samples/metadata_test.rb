@@ -787,6 +787,56 @@ module Projects
         assert_no_text I18n.t('projects.samples.metadata.fields.update.success')
         assert_text I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
       end
+
+      test 'add new metadata with whitespaces' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        fill_in 'sample_key_0', with: '    metadata       field   3   '
+        fill_in 'sample_value_0', with: '    value      3   '
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+
+        assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadata field 3')
+
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+
+        assert_selector 'tr#metadata-field-3_field'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+      end
+
+      test 'add multiple new metadata with same key and different whitespaces' do
+        visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+        click_on I18n.t('projects.samples.show.tabs.metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
+
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        fill_in 'sample_key_0', with: '    metadata       field   3   '
+        fill_in 'sample_value_0', with: '    value      3   '
+        fill_in 'sample_key_1', with: 'metadata   field   3'
+        fill_in 'sample_value_1', with: '    different value 3  '
+        fill_in 'sample_key_2', with: 'metadata   field   4'
+        fill_in 'sample_value_2', with: '     value 4 '
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+
+        assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                           keys: ['metadata field 3', 'metadata field 4'].join(', '))
+
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+
+        assert_selector 'tr#metadata-field-3_field'
+        assert_selector 'tr#metadata-field-4_field'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+        assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(2)', text: 'metadata field 4'
+        assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(3)', text: 'value 4'
+      end
     end
   end
 end
