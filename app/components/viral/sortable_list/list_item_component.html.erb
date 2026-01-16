@@ -6,7 +6,7 @@
   role="option"
   tabindex="-1"
   aria-selected="false"
-  id="<%= formatted_list_item %>"
+  id="<%= @id %>"
   class="
     w-full px-4 py-2 border-b border-slate-200 dark:border-slate-600 flex
     focus:bg-primary-400 focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700
@@ -14,7 +14,7 @@
   "
 >
   <span
-    id="<%= formatted_list_item %>_unselected"
+    id="<%= @id %>_unselected"
     aria-hidden="true"
     class="mx-2 pointer-events-none"
   ></span>
