@@ -132,7 +132,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample?
-    return false if record.namespace.user_namespace? && @access_level != Member::AccessLevel::OWNER
+    return false if record.namespace.parent.user_namespace? && @access_level != Member::AccessLevel::OWNER
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name

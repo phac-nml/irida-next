@@ -753,7 +753,7 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'sample transfer destubatuib project listing should be blank for maintainer of a user namespace project' do
+    test 'sample transfer button should not be available for maintainer of a user namespace project' do
       ### SETUP START ###
       login_as users(:micha_doe)
 
@@ -770,12 +770,10 @@ module Projects
       assert_selector 'table tfoot tr', text: 'Samples: 1'
       assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ### ##
+
       ### VERIFY START ###
-      assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
-      # no available destination projects
-      assert_field placeholder: I18n.t('samples.transfers.dialog.no_available_projects'), disabled: true
+      assert_no_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### VERIFY END ###
     end
 
