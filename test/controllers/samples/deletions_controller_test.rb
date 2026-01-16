@@ -14,8 +14,6 @@ module Samples
       @group1 = groups(:group_one)
       @project1_namespace = namespaces_project_namespaces(:project1_namespace)
       @project2_namespace = namespaces_project_namespaces(:john_doe_project2_namespace)
-
-      Flipper.enable(:group_samples_destroy)
     end
 
     test 'should destroy single sample at group level' do

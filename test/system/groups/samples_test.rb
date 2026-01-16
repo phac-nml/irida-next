@@ -22,8 +22,6 @@ module Groups
       @sample28 = samples(:sample28)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
-
-      Flipper.enable(:group_samples_destroy)
     end
 
     def retrieve_puids
