@@ -1694,7 +1694,7 @@ module Groups
         end
 
         # click on "metadata field 1" and then remove it
-        find('#metadata-field-1').click
+        find('li', exact_text: 'metadata field 1').click
 
         click_button I18n.t('common.actions.remove')
 
@@ -1881,9 +1881,9 @@ module Groups
         end
 
         # move all metadata to available list
-        find('#metadata1').click
-        find('#metadata2').click
-        find('#description').click
+        find('li', exact_text: 'metadata1').click
+        find('li', exact_text: 'metadata2').click
+        find('li', exact_text: 'description').click
 
         click_button I18n.t('common.actions.remove')
 
@@ -1986,8 +1986,8 @@ module Groups
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
 
         # make metadata selections so one metadata field is in available and one is in selected
-        find('#metadata1').click
-        find('#metadata2').click
+        find('li', exact_text: 'metadata1').click
+        find('li', exact_text: 'metadata2').click
 
         click_button I18n.t('common.actions.remove')
 

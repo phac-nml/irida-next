@@ -29,7 +29,6 @@ export default class extends Controller {
   static ARIA_REQUIRED_TRUE = "true";
 
   #originalAvailableList;
-  #idCache = new Map();
 
   #lastClickedOption;
   #shiftSelectionOption;
@@ -430,11 +429,7 @@ export default class extends Controller {
   }
 
   #selectOrUnselectOption(option) {
-    if (
-      option.querySelector(
-        `span[id="${this.#validateId(option.lastElementChild.textContent)}_unselected"`,
-      )
-    ) {
+    if (option.querySelector(`span[id="${option.id}_unselected"`)) {
       this.#addSelectedAttributes(option);
     } else {
       this.#removeSelectedAttributes(option);
@@ -823,11 +818,9 @@ export default class extends Controller {
   // add checkmark to option
   #addSelectedAttributes(option) {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
-    const optionText = option.lastElementChild.textContent;
-    checkmark.querySelector("span").id =
-      `${this.#validateId(optionText)}_selected`;
+    checkmark.querySelector("span").id = `${option.id}_selected`;
     option
-      .querySelector(`span[id="${this.#validateId(optionText)}_unselected"`)
+      .querySelector(`span[id="${option.id}_unselected"`)
       .replaceWith(checkmark);
     option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_TRUE);
   }
@@ -836,12 +829,10 @@ export default class extends Controller {
   #removeSelectedAttributes(option) {
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
-    const optionText = option.lastElementChild.textContent;
-    hiddenCheckmark.querySelector("span").id =
-      `${this.#validateId(optionText)}_unselected`;
+    hiddenCheckmark.querySelector("span").id = `${option.id}_unselected`;
 
     option
-      .querySelector(`span[id="${this.#validateId(optionText)}_selected"`)
+      .querySelector(`span[id="${option.id}_selected"`)
       .replaceWith(hiddenCheckmark);
 
     option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_FALSE);
@@ -890,20 +881,12 @@ export default class extends Controller {
   }
 
   #createListItem(element, list) {
+    const id = `list_item_${crypto.randomUUID()}`;
     const template = this.itemTemplateTarget.content.cloneNode(true);
-    template.querySelector("li").firstElementChild.id =
-      `${this.#validateId(element)}_unselected`;
+    template.querySelector("li").firstElementChild.id = `${id}_unselected`;
     template.querySelector("li").lastElementChild.textContent = element;
-    template.querySelector("li").id = this.#validateId(element);
+    template.querySelector("li").id = id;
     list.append(template);
-  }
-
-  // replace whitespace with hyphen
-  #validateId(id) {
-    if (!this.#idCache.has(id)) {
-      this.#idCache.set(id, id.replace(/\s+/g, "-"));
-    }
-    return this.#idCache.get(id);
   }
 
   // updates and retains the options lists to compare for aria-live updating
