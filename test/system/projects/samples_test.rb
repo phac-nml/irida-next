@@ -753,6 +753,30 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'sample transfer button should not be available for maintainer of a user namespace project' do
+      ### SETUP START ###
+      login_as users(:micha_doe)
+
+      namespace = namespaces_user_namespaces(:user31_namespace)
+      project = projects(:projectUser31)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 1,
+                                                                                          locale: @user.locale))
+      ### SETUP END ### ##
+      ## ACTIONS START ###
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
+      assert_selector 'table tfoot tr', text: 'Samples: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      ### ACTIONS END ### ##
+
+      ### VERIFY START ###
+      assert_no_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### VERIFY END ###
+    end
+
     test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
       ### SETUP START ###
       login_as users(:user28)

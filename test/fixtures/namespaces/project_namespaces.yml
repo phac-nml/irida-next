@@ -663,3 +663,12 @@ project_shared_group_sample_actions_guest_namespace:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_PRJ_AAAAAAAACJ
+
+projectUser31_namespace:
+  <<: *DEFAULTS
+  name: Project 1
+  path: project-1
+  description: Project 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:user31_namespace, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAACK

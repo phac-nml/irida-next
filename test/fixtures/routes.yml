@@ -783,3 +783,13 @@ project_shared_group_sample_actions_guest_route:
   name: Shared Group Sample Actions Guest / Project Shared Group Sample Actions Guest
   path: shared-group-sample-actions-guest/project-shared-group-sample-actions-guest
   source: project_shared_group_sample_actions_guest_namespace (Namespace)
+
+user31_namespace_route:
+  name: user.31@localhost
+  path: user.31_at_localhost
+  source: user31_namespace (Namespace)
+
+user31_project1_namespace_route:
+  name: user.31@localhost / Project 1
+  path: user.31_at_localhost/project-1
+  source: projectUser31_namespace (Namespace)

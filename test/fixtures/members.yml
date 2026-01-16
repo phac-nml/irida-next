@@ -688,3 +688,9 @@ subgroup_sample_actions_group_member_subgroup_sample_actions_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+
+project_1_user_31_member_micha_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
