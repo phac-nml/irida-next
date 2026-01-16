@@ -6,6 +6,7 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   def setup
+    Flipper.enable(:wes_extended_metadata)
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
     Rails.configuration.ga4gh_wes_server_endpoint = ENV.fetch('GA4GH_WES_URL', 'http://localhost:1122/')
   end
@@ -47,6 +48,74 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
 
     assert_equal 'completed', @workflow_execution.reload.state
     assert @workflow_execution.cleaned?
+  end
+
+  test 'workflow execution metadata sends to WES' do
+    # Before starting test, check if Sapporo Integration is running.
+    begin
+      ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
+      ga4gh_client.service_info
+    rescue Integrations::ApiExceptions::ConnectionError
+      skip 'Sapporo server is not running'
+    end
+
+    @user = users(:john_doe)
+    @project = projects(:project1)
+    @sample = samples(:sample1)
+    @attachment = attachments(:attachment1)
+    @samples_workflow_executions_attributes = {
+      '0': {
+        sample_id: @sample.id,
+        samplesheet_params: {
+          sample: @sample.puid,
+          fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+        }
+      }
+    }
+
+    workflow_params = {
+      metadata:
+        { pipeline_id: 'phac-nml/iridanextexample',
+          workflow_version: '1.0.2' },
+      submitter_id: @user.id,
+      namespace_id: @project.namespace.id,
+      samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+      name: 'Workflow With Tags'
+    }
+
+    @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+    assert_equal 'initial', @workflow_execution.state
+    assert_not @workflow_execution.cleaned?
+
+    perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    assert_equal 'prepared', @workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob)
+    assert_equal 'submitted', @workflow_execution.reload.state
+
+    # keep performing status jobs until we reach completing state
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) while enqueued_jobs.any? do |job|
+      job['job_class'] == WorkflowExecutionStatusJob.name
+    end
+    assert_equal 'completing', @workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    assert_equal 'completed', @workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+
+    assert_equal 'completed', @workflow_execution.reload.state
+    assert @workflow_execution.cleaned?
+
+    run_id = @workflow_execution.run_id
+    response = ga4gh_client.get_run_log(run_id)
+    assert_equal run_id, response[:run_id]
+    assert_equal 'COMPLETE', response[:state]
+    # Verify the metadata was sent to WES
+    expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
+                      samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
+    assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
   end
 
   test 'integration sapporo cleaned files' do
