@@ -191,59 +191,49 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          find('input.keyInput').fill_in with: 'metadatafield3'
-          find('input.valueInput').fill_in with: 'value3'
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+
+        fill_in 'sample_key_0', with: 'metadatafield3'
+        fill_in 'sample_value_0', with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield3_field'
+        assert_selector 'table tbody tr', count: 3
 
-          within %(tr#metadatafield3_field) do
-            assert_text 'metadatafield3'
-            assert_text 'value3'
-          end
-        end
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafield3'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value3'
       end
 
       test 'add multiple new metadata' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          all('input.keyInput')[0].fill_in with: 'metadatafield3'
-          all('input.valueInput')[0].fill_in with: 'value3'
-
-          all('input.keyInput')[1].fill_in with: 'metadatafield4'
-          all('input.valueInput')[1].fill_in with: 'value4'
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        fill_in 'sample_key_0', with: 'metadatafield3'
+        fill_in 'sample_value_0', with: 'value3'
+        fill_in 'sample_key_1', with: 'metadatafield4'
+        fill_in 'sample_value_1', with: 'value4'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: %w[metadatafield3 metadatafield4].join(', '))
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield3_field'
-          assert_selector 'tr#metadatafield4_field'
+        assert_selector 'table tbody tr', count: 4
 
-          within %(tr#metadatafield3_field) do
-            assert_text 'metadatafield3'
-            assert_text 'value3'
-          end
-
-          within %(tr#metadatafield4_field) do
-            assert_text 'metadatafield4'
-            assert_text 'value4'
-          end
-        end
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: 'metadatafield3'
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(3)', text: 'value3'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafield4'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value4'
       end
 
       test 'Field required error messages are displayed when field left blank and successfully
@@ -251,8 +241,10 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
         within %(turbo-frame[id="sample_modal"]) do
           click_on I18n.t('projects.samples.metadata.form.create_field_button')
 
@@ -279,20 +271,11 @@ module Projects
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: %w[metadatafield4 metadatafieldnew].join(', '))
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafieldnew_field'
-          assert_selector 'tr#metadatafield4_field'
-
-          within %(tr#metadatafieldnew_field) do
-            assert_text 'metadatafieldnew'
-            assert_text 'valueNew'
-          end
-
-          within %(tr#metadatafield4_field) do
-            assert_text 'metadatafield4'
-            assert_text 'value4'
-          end
-        end
+        assert_selector 'table tbody tr', count: 4
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: 'metadatafield4'
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(3)', text: 'value4'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafieldnew'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'valueNew'
       end
 
       test 'add single existing metadata' do
@@ -300,24 +283,19 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield1_field'
-
-          within %(tr#metadatafield1_field) do
-            assert_text 'metadatafield1'
-            assert_text 'value1'
-          end
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
 
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          find('input.keyInput').fill_in with: 'metadatafield1'
-          find('input.valueInput').fill_in with: 'newValue1'
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        fill_in 'sample_key_0', with: 'metadatafield1'
+        fill_in 'sample_value_0', with: 'newValue1'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('services.samples.metadata.fields.single_all_keys_exist', key: 'metadatafield1')
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
       end
 
       test 'add multiple existing metadata' do
@@ -325,36 +303,25 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield1_field'
-
-          within %(tr#metadatafield1_field) do
-            assert_text 'metadatafield1'
-            assert_text 'value1'
-          end
-
-          assert_selector 'tr#metadatafield2_field'
-
-          within %(tr#metadatafield2_field) do
-            assert_text 'metadatafield2'
-            assert_text 'value2'
-          end
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'value2'
 
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          all('input.keyInput')[0].fill_in with: 'metadatafield1'
-          all('input.valueInput')[0].fill_in with: 'newValue1'
-
-          all('input.keyInput')[1].fill_in with: 'metadatafield2'
-          all('input.valueInput')[1].fill_in with: 'newValue2'
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        fill_in 'sample_key_0', with: 'metadatafield1'
+        fill_in 'sample_value_0', with: 'newValue1'
+        fill_in 'sample_key_1', with: 'metadatafield2'
+        fill_in 'sample_value_1', with: 'newValue2'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('services.samples.metadata.fields.multi_all_keys_exist',
                            keys: %w[metadatafield1 metadatafield2].join(', '))
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
       end
 
       test 'add both new and existing metadata' do
@@ -362,103 +329,90 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield1_field'
-          assert_no_selector 'tr#metadatafield3_field'
-          assert_no_text 'metadatafield3'
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'value2'
 
-          within %(tr#metadatafield1_field) do
-            assert_text 'metadatafield1'
-            assert_text 'value1'
-          end
-        end
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          all('input.keyInput')[0].fill_in with: 'metadatafield1'
-          all('input.valueInput')[0].fill_in with: 'newValue1'
-
-          all('input.keyInput')[1].fill_in with: 'metadatafield3'
-          all('input.valueInput')[1].fill_in with: 'value3'
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        fill_in 'sample_key_0', with: 'metadatafield1'
+        fill_in 'sample_value_0', with: 'newValue1'
+        fill_in 'sample_key_1', with: 'metadatafield3'
+        fill_in 'sample_value_1', with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
         assert_text I18n.t('projects.samples.metadata.fields.create.single_key_exists', key: 'metadatafield1')
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        within '#sample-metadata' do
-          assert_selector 'tr#metadatafield3_field'
-          within %(tr#metadatafield3_field) do
-            assert_text 'metadatafield3'
-            assert_text 'value3'
-          end
-        end
+        assert_selector 'table tbody tr', count: 3
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafield3'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value3'
       end
 
       test 'add new metadata after deleting fields' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          click_on I18n.t('projects.samples.metadata.form.create_field_button')
-          all('input.keyInput')[0].fill_in with: 'metadatafield3'
-          all('input.valueInput')[0].fill_in with: 'value3'
-          all('input.keyInput')[1].fill_in with: 'metadatafield4'
-          all('input.valueInput')[1].fill_in with: 'value4'
-          all('input.keyInput')[2].fill_in with: 'metadatafield5'
-          all('input.valueInput')[2].fill_in with: 'value5'
-          all('input.keyInput')[3].fill_in with: 'metadatafield6'
-          all('input.valueInput')[3].fill_in with: 'value6'
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
 
-          all('button[data-action="projects--samples--metadata--create#removeField"]')[2].click
-          all('button[data-action="projects--samples--metadata--create#removeField"]')[1].click
+        fill_in 'sample_key_0', with: 'metadatafield3'
+        fill_in 'sample_value_0', with: 'value3'
+        fill_in 'sample_key_1', with: 'metadatafield4'
+        fill_in 'sample_value_1', with: 'value4'
+        fill_in 'sample_key_2', with: 'metadatafield5'
+        fill_in 'sample_value_2', with: 'value5'
+        fill_in 'sample_key_3', with: 'metadatafield6'
+        fill_in 'sample_value_3', with: 'value6'
 
-          click_on I18n.t('projects.samples.metadata.form.submit_button')
-        end
+        click_button 'delete_1'
+        click_button 'delete_2'
+
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: %w[metadatafield3 metadatafield6].join(', '))
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        within '#sample-metadata' do
-          assert_no_text 'metadatafield4'
-          assert_no_text 'value4'
-          assert_no_text 'metadatafield5'
-          assert_no_text 'value5'
+        assert_no_text 'metadatafield4'
+        assert_no_text 'value4'
+        assert_no_text 'metadatafield5'
+        assert_no_text 'value5'
 
-          assert_selector 'tr#metadatafield3_field'
-          within %(tr#metadatafield3_field) do
-            assert_text 'metadatafield3'
-            assert_text 'value3'
-          end
-
-          assert_selector 'tr#metadatafield6_field'
-          within %(tr#metadatafield6_field) do
-            assert_text 'metadatafield6'
-            assert_text 'value6'
-          end
-        end
+        assert_selector 'table tbody tr', count: 4
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: 'metadatafield3'
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(3)', text: 'value3'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafield6'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value6'
       end
 
       test 'clicking remove button in add modal with one metadata field clears inputs but doesn\'t delete field' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
-        within %(turbo-frame[id="sample_modal"]) do
-          assert_selector 'input.keyInput', count: 1
-          assert_selector 'input.valueInput', count: 1
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
 
-          all('button[data-action="projects--samples--metadata--create#removeField"]')[0].click
+        click_button 'delete_0'
 
-          assert_selector 'input.keyInput', count: 1
-          assert_selector 'input.valueInput', count: 1
-        end
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
       end
 
       test 'user with access < Maintainer cannot see add metadata' do
@@ -474,24 +428,23 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('common.actions.delete')
-          end
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        click_on I18n.t('common.actions.delete'), match: :first
 
-        within('#turbo-confirm[open]') do
-          assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
-          click_button I18n.t('common.controls.confirm')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
+        click_button I18n.t('common.controls.confirm')
 
         assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
-        within '#sample-metadata' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'value1'
-        end
+        assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+
+        assert_selector 'table tbody tr', count: 1
+        assert_no_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_no_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value2'
       end
 
       test 'delete metadata key added by anaylsis' do
@@ -503,24 +456,23 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          within('tbody tr:first-child td:last-child') do
-            click_on I18n.t('common.actions.delete')
-          end
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        click_on I18n.t('common.actions.delete'), match: :first
 
-        within('#turbo-confirm[open]') do
-          assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
-          click_button I18n.t('common.controls.confirm')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
+        click_button I18n.t('common.controls.confirm')
 
         assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
-        within '#sample-metadata' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'value1'
-        end
+        assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
+
+        assert_selector 'table tbody tr', count: 1
+        assert_no_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_no_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value2'
       end
 
       test 'delete one metadata key by delete metadata modal' do
@@ -528,25 +480,25 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          find('input#metadatafield1').click
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        check 'metadata_0'
+        click_button I18n.t('projects.samples.metadata.table.delete_metadata_button')
 
-        click_on I18n.t('projects.samples.metadata.table.delete_metadata_button')
-
-        within %(turbo-frame[id="sample_modal"]) do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          click_on I18n.t('common.actions.delete')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.deletions.modal.title')
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        click_button 'destroy-metadata-button'
 
         assert_text I18n.t('projects.samples.metadata.deletions.destroy.single_success', deleted_key: 'metadatafield1')
-        within '#sample-metadata' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'value1'
-        end
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.deletions.modal.title')
+
+        assert_selector 'table tbody tr', count: 1
+        assert_no_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_no_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value2'
       end
 
       test 'delete multiple metadata keys by delete metadata modal' do
@@ -554,36 +506,34 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          assert_text 'metadatafield2'
-          assert_text 'value2'
-          find('input#metadatafield1').click
-          find('input#metadatafield2').click
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value2'
+        check 'metadata_0'
+        check 'metadata_1'
+        click_button I18n.t('projects.samples.metadata.table.delete_metadata_button')
 
-        click_on I18n.t('projects.samples.metadata.table.delete_metadata_button')
-
-        within %(turbo-frame[id="sample_modal"]) do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          assert_text 'metadatafield2'
-          assert_text 'value2'
-          click_on I18n.t('common.actions.delete')
-        end
+        assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.deletions.modal.title')
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        click_button 'destroy-metadata-button'
 
         assert_text I18n.t('projects.samples.metadata.deletions.destroy.multi_success',
                            deleted_keys: 'metadatafield1, metadatafield2')
-        within '#sample-metadata' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'value1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'value2'
-          assert_selector "[id^='empty-state-title-']", text: I18n.t('projects.samples.metadata.table.no_metadata')
-          assert_selector "[id^='empty-state-desc-'] span",
-                          text: I18n.t('projects.samples.metadata.table.no_associated_metadata')
-        end
+
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.deletions.modal.title')
+        assert_no_selector 'table'
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+        assert_no_text 'metadatafield2'
+        assert_no_text 'value2'
+        assert_selector "[id^='empty-state-title-']", text: I18n.t('projects.samples.metadata.table.no_metadata')
+        assert_selector "[id^='empty-state-desc-'] span",
+                        text: I18n.t('projects.samples.metadata.table.no_associated_metadata')
       end
 
       test 'user with access < Maintainer cannot view delete checkboxes, delete action or delete metadata button' do
@@ -592,14 +542,13 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within '#sample-metadata' do
-          assert_text 'metadatafield1'
-          assert_text 'value1'
-          assert_text 'metadatafield2'
-          assert_text 'value2'
-          assert_no_selector 'input[type="checkbox"]'
-          assert_no_text I18n.t('projects.samples.show.table_header.action').upcase
-        end
+        assert_selector 'table tbody tr', count: 2
+        assert_selector 'table tbody tr:first-child td:first-child', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'value1'
+        assert_selector 'table tbody tr:last-child td:first-child', text: 'metadatafield2'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'value2'
+        assert_no_selector 'input[type="checkbox"]'
+        assert_no_text I18n.t('projects.samples.show.table_header.action').upcase
 
         assert_no_selector 'button', text: I18n.t('projects.samples.metadata.table.add_metadata')
         assert_no_selector 'button', text: I18n.t('projects.samples.metadata.table.delete_metadata_button')
@@ -702,10 +651,10 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr', count: 2
 
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
@@ -714,12 +663,13 @@ module Projects
         click_on 'update-metadata-submit-btn'
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_selector 'table tbody tr', count: 2
         assert_no_text 'metadatafield1'
         assert_no_text 'value1'
-        assert_no_selector 'table tbody tr#metadatafield1_field'
-
-        assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(2)', text: 'newmetadatakey'
-        assert_selector 'table tbody tr#newmetadatakey_field td:nth-child(3)', text: 'newMetadataValue'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value2'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'newmetadatakey'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'newMetadataValue'
       end
 
       test 'update metadata key and value with multiple inner whitespaces' do
@@ -728,10 +678,10 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr', count: 2
 
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
@@ -740,12 +690,13 @@ module Projects
         click_on 'update-metadata-submit-btn'
 
         assert_text I18n.t('projects.samples.metadata.fields.update.success')
+        assert_selector 'table tbody tr', count: 2
         assert_no_text 'metadatafield1'
         assert_no_text 'value1'
-        assert_no_selector 'table tbody tr#metadatafield1_field'
-
-        assert_selector 'table tbody tr#new-metadata-key_field td:nth-child(2)', text: 'new metadata key'
-        assert_selector 'table tbody tr#new-metadata-key_field td:nth-child(3)', text: 'new Metadata Value'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield2'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value2'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'new metadata key'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'new Metadata Value'
       end
 
       test 'update metadata key with only leading/trailing whitespaces on old key will not update' do
@@ -754,10 +705,10 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr', count: 2
 
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
@@ -774,10 +725,10 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr', count: 2
 
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(2)', text: 'metadatafield1'
-        assert_selector 'table tbody tr#metadatafield1_field td:nth-child(3)', text: 'value1'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
@@ -792,6 +743,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
@@ -803,15 +755,16 @@ module Projects
 
         assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        assert_selector 'tr#metadata-field-3_field'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+        assert_selector 'table tbody tr', count: 3
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value 3'
       end
 
       test 'update metadata by adding extra spaces induces error' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         # create metadata field first
@@ -824,11 +777,11 @@ module Projects
 
         assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        assert_selector 'tr#metadata-field-3_field'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'value 3'
+        assert_selector 'table tbody tr', count: 3
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value 3'
 
-        within('table tbody tr#metadata-field-3_field') do
+        within('table tbody tr:last-child') do
           click_button I18n.t('common.actions.update')
         end
 
@@ -844,6 +797,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
+        assert_selector 'table tbody tr', count: 2
         click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
@@ -862,12 +816,11 @@ module Projects
 
         assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
-        assert_selector 'tr#metadata-field-3_field'
-        assert_selector 'tr#metadata-field-4_field'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(2)', text: 'metadata field 3'
-        assert_selector 'table tbody tr#metadata-field-3_field td:nth-child(3)', text: 'different value'
-        assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(2)', text: 'metadata field 4'
-        assert_selector 'table tbody tr#metadata-field-4_field td:nth-child(3)', text: 'value 4'
+        assert_selector 'table tbody tr', count: 4
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: 'metadata field 3'
+        assert_selector 'table tbody tr:nth-child(3) td:nth-child(3)', text: 'different value'
+        assert_selector 'table tbody tr:last-child td:nth-child(2)', text: 'metadata field 4'
+        assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value 4'
       end
     end
   end

@@ -429,7 +429,8 @@ export default class extends Controller {
   }
 
   #selectOrUnselectOption(option) {
-    if (option.querySelector(`span[id="${option.id}_unselected"`)) {
+    const selected = option.getAttribute("aria-selected");
+    if (selected === this.constructor.ARIA_SELECTED_FALSE) {
       this.#addSelectedAttributes(option);
     } else {
       this.#removeSelectedAttributes(option);
@@ -818,10 +819,7 @@ export default class extends Controller {
   // add checkmark to option
   #addSelectedAttributes(option) {
     const checkmark = this.checkmarkTemplateTarget.content.cloneNode(true);
-    checkmark.querySelector("span").id = `${option.id}_selected`;
-    option
-      .querySelector(`span[id="${option.id}_unselected"`)
-      .replaceWith(checkmark);
+    option.firstElementChild.replaceWith(checkmark);
     option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_TRUE);
   }
 
@@ -829,12 +827,7 @@ export default class extends Controller {
   #removeSelectedAttributes(option) {
     const hiddenCheckmark =
       this.hiddenCheckmarkTemplateTarget.content.cloneNode(true);
-    hiddenCheckmark.querySelector("span").id = `${option.id}_unselected`;
-
-    option
-      .querySelector(`span[id="${option.id}_selected"`)
-      .replaceWith(hiddenCheckmark);
-
+    option.firstElementChild.replaceWith(hiddenCheckmark);
     option.setAttribute("aria-selected", this.constructor.ARIA_SELECTED_FALSE);
   }
 
@@ -883,7 +876,6 @@ export default class extends Controller {
   #createListItem(element, list) {
     const id = `list_item_${crypto.randomUUID()}`;
     const template = this.itemTemplateTarget.content.cloneNode(true);
-    template.querySelector("li").firstElementChild.id = `${id}_unselected`;
     template.querySelector("li").lastElementChild.textContent = element;
     template.querySelector("li").id = id;
     list.append(template);
