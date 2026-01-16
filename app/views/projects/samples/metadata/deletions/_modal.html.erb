@@ -28,7 +28,9 @@
     }, method: :delete) do |form| %>
     <div data-projects--samples--metadata--destroy-target="field"></div>
     <div>
-      <%= form.submit t('common.actions.delete'), class: "button button-destructive" %>
+      <%= form.submit t("common.actions.delete"),
+                  id: "destroy-metadata-button",
+                  class: "button button-destructive" %>
     </div>
   <% end %>
 <% end %>

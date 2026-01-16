@@ -18,26 +18,29 @@ end %>
     <%= form.fields_for :update_field do |field| %>
       <%= field.fields_for :key do |metadata_key| %>
         <% invalid_key = @sample.errors.include?(:key) %>
+        <% key_aria_attributes = { invalid: invalid_key, required: true } %>
         <div class="form-field <%= 'invalid' if invalid_key %>">
-          <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
+          <%= metadata_key.label "input",
+                             t("projects.samples.show.metadata.update.key"),
                              data: {
                                required: true,
                              },
                              class:
                                "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+
+          <% if invalid_key %>
+            <% key_aria_attributes[:describedby] = form.field_id(:key, "error") %>
+          <% end %>
+
           <%= metadata_key.text_field key,
+                                  id: "sample_update_field_key_input",
                                   value: key,
                                   required: true,
-                                  aria: {
-                                    describedby: [
-                                      invalid_key ? form.field_id(:key, "error") : nil,
-                                    ].join(" "),
-                                    invalid: invalid_key,
-                                    required: true,
-                                  },
+                                  aria: key_aria_attributes,
                                   autofocus: invalid_key,
                                   class:
                                     "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
           <%= if invalid_key
             render "shared/form/field_errors",
             id: form.field_id(:key, "error"),
@@ -47,32 +50,28 @@ end %>
       <% end %>
       <%= field.fields_for :value do |metadata_value| %>
         <% invalid_value = @sample.errors.include?(:value) %>
+        <% value_aria_attributes = { invalid: invalid_value, required: true } %>
         <div class="form-field <%= 'invalid' if invalid_value %>">
-          <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
+          <%= metadata_value.label "input",
+                               t("projects.samples.show.metadata.update.value"),
                                data: {
                                  required: true,
                                },
                                class:
                                  "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+
+          <% if invalid_value %>
+            <% value_aria_attributes[:describedby] = form.field_id(:value, "error") %>
+          <% end %>
           <%= metadata_value.text_field value,
+                                    id: "sample_update_field_value_input",
                                     value: value,
                                     required: true,
-                                    aria: {
-                                      describedby: [
-                                        (
-                                          if invalid_value
-                                            form.field_id(:value, "error")
-                                          else
-                                            nil
-                                          end
-                                        ),
-                                      ].join(" "),
-                                      invalid: invalid_value,
-                                      required: true,
-                                    },
+                                    aria: value_aria_attributes,
                                     autofocus: invalid_value,
                                     class:
                                       "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
           <%= if invalid_value
             render "shared/form/field_errors",
             id: form.field_id(:value, "error"),
@@ -82,7 +81,8 @@ end %>
       <% end %>
 
       <div>
-        <%= field.submit t('common.actions.update'),
+        <%= field.submit t("common.actions.update"),
+                     id: "update-metadata-submit-btn",
                      class: "button button-primary" %>
       </div>
     <% end %>

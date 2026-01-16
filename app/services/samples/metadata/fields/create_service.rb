@@ -49,10 +49,11 @@ module Samples
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
           @create_fields.each do |k, v|
-            if @sample.metadata.transform_keys(&:downcase).key?(k.downcase)
-              @metadata_update_params['existing_keys'] << k
+            formatted_key = strip_whitespaces(k)
+            if @sample.metadata.transform_keys(&:downcase).key?(formatted_key.downcase)
+              @metadata_update_params['existing_keys'] << formatted_key
             else
-              @metadata_update_params['metadata'][k] = v
+              @metadata_update_params['metadata'][formatted_key] = strip_whitespaces(v)
             end
           end
         end

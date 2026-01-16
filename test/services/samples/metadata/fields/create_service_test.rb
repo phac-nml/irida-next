@@ -133,6 +133,44 @@ module Samples
                                                                                          project_name: @project30.name)
           )
         end
+
+        test 'add metadata with whitespaces' do
+          freeze_time
+          params = { 'metadatafield1    ' => 'newvalue1',
+                     '     metadatafield2' => 'newvalue2',
+                     '   metadata    field3   ' => 'value   3',
+                     ' metadata field 4 ' => '    value    4   ' }
+
+          assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
+          assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+          assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+          create_metadata_fields = Samples::Metadata::Fields::CreateService.new(@project29, @sample32, @user,
+                                                                                params).execute
+
+          assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadata field3' => 'value 3',
+                         'metadata field 4' => 'value 4' },
+                       @sample32.metadata)
+          assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
+                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                         'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
+                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                         'metadata field3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+                         'metadata field 4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
+                       @sample32.metadata_provenance)
+          assert_equal({ added_keys: ['metadata field3', 'metadata field 4'],
+                         existing_keys: %w[metadatafield1 metadatafield2] }, create_metadata_fields)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadata field3' => 1,
+                         'metadata field 4' => 1 },
+                       @project29.namespace.reload.metadata_summary)
+          assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadata field3' => 1,
+                         'metadata field 4' => 1 },
+                       @subgroup12a.reload.metadata_summary)
+          assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadata field3' => 1,
+                         'metadata field 4' => 1 },
+                       @group12.reload.metadata_summary)
+        end
       end
     end
   end
