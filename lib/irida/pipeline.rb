@@ -60,7 +60,7 @@ module Irida
     def <=>(other)
       comparison = name.downcase <=> other.name.downcase
       if comparison.zero?
-        Gem::Version.new(other.version) <=> Gem::Version.new(version)
+        other.version.downcase <=> version.downcase
       else
         comparison
       end
