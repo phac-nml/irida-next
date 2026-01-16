@@ -58,7 +58,7 @@ module Irida
     end
 
     def <=>(other)
-      comparison = description <=> other.description
+      comparison = name <=> other.name
       if comparison.zero?
         Gem::Version.new(other.version) <=> Gem::Version.new(version)
       else

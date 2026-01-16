@@ -28,13 +28,7 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = Irida::Pipelines.instance.pipelines('executable')
-      # @workflows = @workflows.sort_by do |_key, pipeline|
-      #   [pipeline.name, -Gem::Version.new(pipeline.version)]
-      # end.to_h
-      # @workflows = @workflows.sort_by { |pipeline| pipeline[1] }
-      @workflows = @workflows.sort_by { |_key, pipeline| pipeline }
-      # @workflows = @workflows.sort { |a, b| a[1] <=> b[1] }
+      @workflows = Irida::Pipelines.instance.pipelines('executable').sort_by { |_key, pipeline| pipeline }
     end
 
     def workflow
