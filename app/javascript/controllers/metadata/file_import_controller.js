@@ -10,8 +10,6 @@ export default class extends Controller {
     "metadataColumns",
     "submitButton",
     "error",
-    "sortableListsTemplate",
-    "sortableListsItemTemplate",
   ];
 
   #defaultSampleColumnHeaders = [
@@ -113,21 +111,11 @@ export default class extends Controller {
 
     if (columns.length > 0) {
       this.#unhideElement(this.metadataColumnsTarget);
-      this.metadataColumnsTarget.innerHTML =
-        this.sortableListsTemplateTarget.innerHTML;
 
-      columns.forEach((column) => {
-        const formattedColumn = column.replace(/\s+/g, "-");
-        const template =
-          this.sortableListsItemTemplateTarget.content.cloneNode(true);
-        template.querySelector("li").firstElementChild.id =
-          `${formattedColumn}_unselected`;
-        template.querySelector("li").lastElementChild.innerText = column;
-        template.querySelector("li").id = formattedColumn;
-        this.metadataColumnsTarget
-          .querySelector("#selected-list")
-          .append(template);
+      this.dispatch("sendMetadata", {
+        detail: { content: { metadata: columns } },
       });
+
       this.submitButtonTarget.disabled = !columns.length;
     } else {
       this.#hideElement(this.metadataColumnsTarget);

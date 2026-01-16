@@ -12,6 +12,9 @@
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       data-metadata--file-import-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
+      data-action="
+        metadata--file-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+      "
       <% else %>
       data-controller="attachment-upload metadata--file-import"
       <% end %>
@@ -102,37 +105,34 @@
                         } %>
           </div>
           <% if Flipper.enabled?(:metadata_import_field_selection) %>
+            <template data-viral--sortable-lists--two-lists-selection-target="itemTemplate">
+              <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+            </template>
             <div
               data-metadata--file-import-target="metadataColumns"
               aria-hidden="true"
-              class="hidden"
-            ></div>
-            <template data-metadata--file-import-target="sortableListsTemplate">
-              <div class="grid gap-4">
-                <div
-                  class="hidden"
-                  data-viral--sortable-lists--two-lists-selection-target="field"
-                ></div>
-                <%= viral_sortable_lists(
+              class="grid gap-4 hidden"
+            >
+              <%= viral_sortable_lists(
                 title: t(".metadata_columns"),
             ) do |sortable_lists| %>
-                  <%= sortable_lists.with_list(
-                    id: "available-list",
-                    title: t(".available"),
-                    group: "metadata_selection",
-                  ) %>
-                  <%= sortable_lists.with_list(
-                    id: "selected-list",
-                    title: t(".selected"),
-                    group: "metadata_selection",
-                    required: true,
-                  ) %>
-                <% end %>
-              </div>
-            </template>
-            <template data-metadata--file-import-target="sortableListsItemTemplate">
-              <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
-            </template>
+                <%= sortable_lists.with_list(
+                  id: "available-list",
+                  title: t(".available"),
+                  group: "metadata_selection",
+                ) %>
+                <%= sortable_lists.with_list(
+                  id: "selected-list",
+                  title: t(".selected"),
+                  group: "metadata_selection",
+                  required: true,
+                ) %>
+              <% end %>
+            </div>
+            <div
+              class="hidden"
+              data-viral--sortable-lists--two-lists-selection-target="field"
+            ></div>
           <% end %>
           <div class="flex items-center" data-controller="pathogen--tooltip">
             <%= form.check_box :ignore_empty_values,
