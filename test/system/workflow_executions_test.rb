@@ -584,7 +584,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
-    Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
     visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
     dt_value = I18n.t('common.labels.name', locale: @user.locale)

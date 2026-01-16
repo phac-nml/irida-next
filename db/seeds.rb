@@ -4,7 +4,6 @@ require 'faker'
 
 Faker::Config.locale = 'en'
 
-Flipper.enable(:workflow_execution_sharing)
 Flipper.enable(:compose_with_retry)
 Flipper.enable(:sample_attachments_searching)
 Flipper.enable(:workflow_execution_attachments_searching)
