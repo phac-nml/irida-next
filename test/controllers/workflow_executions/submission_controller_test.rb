@@ -35,5 +35,14 @@ module WorkflowExecutions
       assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
                    @controller.instance_eval('@fields', __FILE__, __LINE__)
     end
+
+    test '@workflows are sorted' do
+      get pipeline_selection_workflow_executions_submissions_path(format: :turbo_stream)
+      assert_response :ok
+
+      workflows = @controller.instance_variable_get('@workflows')
+      # workflows is an array of [key, pipeline] pairs, sorted by pipeline
+      assert(workflows.each_cons(2).all? { |(_, a), (_, b)| a <= b })
+    end
   end
 end

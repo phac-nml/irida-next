@@ -3,6 +3,8 @@
 module Irida
   # Class to store pipeline values
   class Pipeline # rubocop:disable Metrics/ClassLength
+    include Comparable
+
     attr_accessor :pipeline_id, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
                   :default_params, :default_workflow_params, :settings
@@ -53,6 +55,15 @@ module Irida
 
     def description
       text_for(@description)
+    end
+
+    def <=>(other)
+      comparison = name.downcase <=> other.name.downcase
+      if comparison.zero?
+        Gem::Version.new(other.version) <=> Gem::Version.new(version)
+      else
+        comparison
+      end
     end
 
     def workflow_params # rubocop:disable Metrics/AbcSize
@@ -168,7 +179,8 @@ module Irida
 
         name = name.to_sym
 
-        processed_section[name] = process_property(key, name, property, required.present? && required.include?(name))
+        processed_section[name] =
+          process_property(key, name, property, required.present? && required.include?(name))
       end
 
       processed_section

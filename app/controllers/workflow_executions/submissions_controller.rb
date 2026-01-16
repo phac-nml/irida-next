@@ -28,7 +28,7 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = Irida::Pipelines.instance.pipelines('executable')
+      @workflows = Irida::Pipelines.instance.pipelines('executable').sort_by { |_key, pipeline| pipeline }
     end
 
     def workflow
