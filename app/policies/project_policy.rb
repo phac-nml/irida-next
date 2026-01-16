@@ -132,6 +132,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample?
+    return false if record.namespace.user_namespace? && @access_level != Member::AccessLevel::OWNER
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
@@ -234,11 +235,14 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation, :project_samples_transferable do |relation, options|
     obj = options.key?(:group) ? options[:group] : options[:project]
     if Member.effective_access_level(obj, user) == Member::AccessLevel::MAINTAINER
+      return relation.none if obj.project_namespace? && obj.parent.user_namespace?
+
       top_level_ancestor = if obj.project_namespace?
                              obj.parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
                            else
                              obj.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
                            end
+
       group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
 
       authorized_scope(relation, type: :relation,

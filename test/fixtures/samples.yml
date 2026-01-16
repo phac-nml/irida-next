@@ -636,3 +636,11 @@ sample72:
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
                                              'updated_at': <%= DateTime.new(2000,1,1) %> },
                          'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample73:
+  name: Sample 1
+  description: Sample 1description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31, :uuid) %>
+  puid: INXT_SAM_AAAAAAAAGT
+  created_at: <%= 34.weeks.ago %>
+  updated_at: <%= 34.days.ago %>

@@ -753,6 +753,32 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'sample transfer destubatuib project listing should be blank for maintainer of a user namespace project' do
+      ### SETUP START ###
+      login_as users(:micha_doe)
+
+      namespace = namespaces_user_namespaces(:user31_namespace)
+      project = projects(:projectUser31)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 1,
+                                                                                          locale: @user.locale))
+      ### SETUP END ### ##
+      ## ACTIONS START ###
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
+      assert_selector 'table tfoot tr', text: 'Samples: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### ACTIONS END ### ##
+      ### VERIFY START ###
+      assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
+      # no available destination projects
+      assert_field placeholder: I18n.t('samples.transfers.dialog.no_available_projects'), disabled: true
+      ### VERIFY END ###
+    end
+
     test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
       ### SETUP START ###
       login_as users(:user28)
