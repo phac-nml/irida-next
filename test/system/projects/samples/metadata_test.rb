@@ -126,7 +126,8 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
@@ -143,7 +144,8 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         assert_selector '#sample-metadata'
-        assert_selector 'table tbody tr#metadatafield1_field'
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
         click_button I18n.t('common.actions.update'), match: :first
 
         assert_selector 'h1.dialog--title', text: I18n.t('projects.samples.show.metadata.update.update_metadata')
