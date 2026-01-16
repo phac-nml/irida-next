@@ -22,7 +22,7 @@ export default class extends Controller {
   }
 
   editableCellTargetConnected(element) {
-    element.id = this.#elementId(element);
+    element.id = crypto.randomUUID();
 
     this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
@@ -46,7 +46,6 @@ export default class extends Controller {
       element.removeEventListener("blur", this.boundBlur);
       element.removeEventListener("keydown", this.boundKeydown);
       element.removeAttribute("contenteditable");
-
       const field = element
         .closest("table")
         .querySelector(`th:nth-child(${element.cellIndex + 1})`)
@@ -78,7 +77,7 @@ export default class extends Controller {
   }
 
   reset(element) {
-    element.innerText = this.#originalCellContent[this.#elementId(element)];
+    element.innerText = this.#originalCellContent[element.id];
   }
 
   async blur(event) {
@@ -103,10 +102,7 @@ export default class extends Controller {
     const validEntry = this.#validateEntry(editableCell);
     if (validEntry) {
       const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-        .replace(
-          /ORIGINAL_VALUE/g,
-          this.#originalCellContent[this.#elementId(editableCell)],
-        )
+        .replace(/ORIGINAL_VALUE/g, this.#originalCellContent[editableCell.id])
         .replace(/NEW_VALUE/g, this.#trimWhitespaces(editableCell.innerText));
       this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
@@ -116,9 +112,7 @@ export default class extends Controller {
       let messageType = "wov";
       if (editableCell.innerText === "") {
         messageType = "wonv";
-      } else if (
-        this.#originalCellContent[this.#elementId(editableCell)] === ""
-      ) {
+      } else if (this.#originalCellContent[editableCell.id] === "") {
         messageType = "woov";
       }
       dialog
@@ -159,27 +153,15 @@ export default class extends Controller {
   }
 
   #unchanged(element) {
-    return (
-      element.innerText === this.#originalCellContent[this.#elementId(element)]
-    );
-  }
-
-  #elementId(element) {
-    const field = element
-      .closest("table")
-      .querySelector(`th:nth-child(${element.cellIndex + 1})`)
-      .dataset.fieldId.replaceAll(" ", "SPACE");
-    return `${crypto.randomUUID()}_${element.parentNode.rowIndex}`;
+    return element.innerText === this.#originalCellContent[element.id];
   }
 
   #validateEntry(metadataCell) {
     const strippedMetadataValue = this.#trimWhitespaces(metadataCell.innerText);
     const entryIsValid =
-      strippedMetadataValue !==
-      this.#originalCellContent[this.#elementId(metadataCell)];
+      strippedMetadataValue !== this.#originalCellContent[metadataCell.id];
     if (!entryIsValid) {
-      metadataCell.innerText =
-        this.#originalCellContent[this.#elementId(metadataCell)];
+      metadataCell.innerText = this.#originalCellContent[metadataCell.id];
     }
 
     return entryIsValid;
