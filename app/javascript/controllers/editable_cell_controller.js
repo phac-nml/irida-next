@@ -169,7 +169,7 @@ export default class extends Controller {
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`)
       .dataset.fieldId.replaceAll(" ", "SPACE");
-    return `${field}_${element.parentNode.rowIndex}`;
+    return `${crypto.randomUUID()}_${element.parentNode.rowIndex}`;
   }
 
   #validateEntry(metadataCell) {
