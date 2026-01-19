@@ -3769,33 +3769,48 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
 
       metadata_cell.send_keys('value 2')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'value 2'
       assert_text I18n.t('samples.editable_cell.update_success')
       ### ACTIONS AND VERIFY END ###
 
-      metadata_cell.send_keys('value2     ')
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      # When edit mode is activated, text is selected, so typing replaces it
+      # Type the same value with trailing whitespace - should not update after trim
+      metadata_cell.send_keys('value 2     ')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('     value2')
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      metadata_cell.send_keys('     value 2')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('     value2     ')
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      metadata_cell.send_keys('     value 2     ')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('val      ue2')
+      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
+      metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      metadata_cell.send_keys('value      2')
       metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'val ue2'
+      assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
     end
 
@@ -3826,8 +3841,9 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       metadata_cell.click
+      metadata_cell.send_keys(:return) # Activate edit mode
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       metadata_cell.send_keys('New Value')
       find('body').click
 
