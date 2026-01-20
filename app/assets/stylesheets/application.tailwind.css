@@ -688,9 +688,9 @@ a.pill-focus-reset:focus-visible {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
 
-/* SelectWithAutoCompleteComponent */
+/* ComboboxComponent */
 
-[data-controller="select-with-auto-complete"] {
+[data-controller="combobox"] {
   @apply text-slate-900 dark:text-white;
 
   input {
