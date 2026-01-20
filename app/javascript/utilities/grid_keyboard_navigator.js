@@ -32,6 +32,9 @@
  *   gridElement.addEventListener('keydown', (e) => navigator.handleKeydown(e));
  */
 export class GridKeyboardNavigator {
+  // Maximum number of focus attempts when navigating to virtualized cells
+  static MAX_FOCUS_ATTEMPTS = 3;
+
   /**
    * Create a grid keyboard navigator
    * @param {Object} options - Configuration options
@@ -235,7 +238,9 @@ export class GridKeyboardNavigator {
         return true;
       }
 
-      if (attempt === 0 && ready !== false) {
+      // Retry up to MAX_FOCUS_ATTEMPTS times to allow virtualized cells to render
+      const maxAttempts = this.constructor.MAX_FOCUS_ATTEMPTS;
+      if (attempt < maxAttempts && ready !== false) {
         return this.#attemptFocus(rowIndex, colIndex, attempt + 1);
       }
     }

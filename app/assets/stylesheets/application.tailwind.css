@@ -52,6 +52,23 @@ input[type="search"] {
   outline-style: solid; /* ensure we fully override outline:auto */
 }
 
+/* Navigation mode - table grid cells when focused but not editing
+   Must be outside @layer base to override the universal :focus-visible rule above */
+table[role="grid"] td:focus-visible:not([data-editing="true"]),
+table[role="grid"] th:focus-visible:not([data-editing="true"]) {
+  @apply outline-2 outline-offset-[-3px] outline-slate-900 dark:outline-white;
+}
+
+/* Edit mode - actively editing cell (outside @layer for proper cascade) */
+table[role="grid"] td[data-editing="true"] {
+  @apply bg-yellow-50 outline-2 outline-offset-[-2px] outline-green-600 dark:bg-yellow-900/20 dark:outline-green-500;
+  caret-color: theme(colors.slate.900);
+}
+
+.dark table[role="grid"] td[data-editing="true"] {
+  caret-color: theme(colors.white);
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -67,21 +84,6 @@ input[type="search"] {
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-slate-200, currentColor);
-  }
-  /* Navigation mode - all table cells when focused but not editing */
-  table[role="grid"] td:focus-visible:not([data-editing="true"]),
-  table[role="grid"] th:focus-visible:not([data-editing="true"]) {
-    @apply outline-2 outline-offset-[-3px] outline-slate-900 dark:outline-white;
-  }
-
-  /* Edit mode - actively editing cell */
-  table[role="grid"] td[data-editing="true"] {
-    @apply bg-yellow-50 outline-2 outline-offset-[-2px] outline-green-600 dark:bg-yellow-900/20 dark:outline-green-500;
-    caret-color: theme(colors.slate.900);
-  }
-
-  .dark table[role="grid"] td[data-editing="true"] {
-    caret-color: theme(colors.white);
   }
 
   td button.file-selector:focus-visible {
