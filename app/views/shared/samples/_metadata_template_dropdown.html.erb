@@ -16,9 +16,9 @@
   </button>
   <!-- Dropdown menu -->
   <%= turbo_frame_tag "metadata-template-dd-menu", class: "
-      hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
+       w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
-    ", "data-viral--dropdown-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
+    ", "hidden": "", "data-viral--dropdown-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
     <%= render SpinnerComponent.new(
       message: t("shared.samples.metadata_templates.loading"),
     ) %>

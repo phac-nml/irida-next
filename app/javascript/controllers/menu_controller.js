@@ -19,17 +19,13 @@ export default class MenuController extends Controller {
 
   triggerTargetConnected() {
     if (this.#triggerType === "click") {
-      this.#trigger.addEventListener("click", () => {
-        this.toggle();
-      });
+      this.#trigger.addEventListener("click", this.#onTriggerClick);
     }
   }
 
   triggerTargetDisconnected() {
     if (this.#triggerType === "click") {
-      this.#trigger.removeEventListener("click", () => {
-        this.toggle();
-      });
+      this.#trigger.removeEventListener("click", this.#onTriggerClick);
     }
   }
 
@@ -54,8 +50,8 @@ export default class MenuController extends Controller {
 
   show() {
     this.#trigger.setAttribute("aria-expanded", "true");
-    this.#menu.removeAttribute("aria-hidden");
-    this.#menu.classList.remove("hidden");
+    this.#menu.setAttribute("aria-hidden", "false");
+    this.#menu.removeAttribute("hidden");
     this.#visible = true;
 
     this.#setupClickOutsideListener();
@@ -74,7 +70,7 @@ export default class MenuController extends Controller {
   hide() {
     this.#trigger.setAttribute("aria-expanded", "false");
     this.#menu.setAttribute("aria-hidden", "true");
-    this.#menu.classList.add("hidden");
+    this.#menu.setAttribute("hidden", "");
     this.#visible = false;
 
     this.#removeClickOutsideListener();
@@ -83,7 +79,7 @@ export default class MenuController extends Controller {
       this.#onHide();
     }
 
-    this.#cleanup;
+    this.#cleanup();
   }
 
   update() {
@@ -139,4 +135,8 @@ export default class MenuController extends Controller {
       this.hide();
     }
   }
+
+  #onTriggerClick = () => {
+    this.toggle();
+  };
 }

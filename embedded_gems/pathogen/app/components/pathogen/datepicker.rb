@@ -11,7 +11,7 @@ module Pathogen
     SYSTEM_DEFAULT_CLASSES = 'relative'
 
     # Default CSS classes for the <div> element containing the datepicker.
-    CALENDAR_DEFAULT_CLASSES = 'hidden z-100 active select-none'
+    CALENDAR_DEFAULT_CLASSES = 'z-100 active select-none'
 
     # Initializes a new Datepicker component.
     # @param id [String] A unique identifier that is manipulated to use on multiple component items. This is required.
@@ -114,6 +114,7 @@ module Pathogen
     def setup_calendar_attributes
       @calendar_arguments[:id] = @calendar_id
       @calendar_arguments[:tag] = TAG_DEFAULT
+      @calendar_arguments[:hidden] = ''
       @calendar_arguments[:class] = class_names(
         CALENDAR_DEFAULT_CLASSES,
         @calendar_arguments[:class]
