@@ -58,17 +58,18 @@ export default class extends MenuController {
 
   #onShow() {
     this.triggerTarget.setAttribute("aria-expanded", "true");
-    this.menuTarget.removeAttribute("aria-hidden");
-    this.menuTarget.classList.remove("hidden");
+    this.menuTarget.setAttribute("aria-hidden", "false");
+    this.menuTarget.removeAttribute("hidden");
   }
 
   #onHide() {
     this.triggerTarget.setAttribute("aria-expanded", "false");
     this.menuTarget.setAttribute("aria-hidden", "true");
-    this.menuTarget.classList.add("hidden");
+    this.menuTarget.setAttribute("hidden", "");
     this.#menuItems(this.triggerTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
+    this.triggerTarget.focus();
   }
 
   focusOut(event) {
@@ -162,7 +163,7 @@ export default class extends MenuController {
         );
       case "Escape":
         event.preventDefault();
-        this.triggerTarget.focus();
+        super.hide();
         break;
       case "ArrowUp": {
         event.preventDefault();
