@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-class NextflowSamplesheetComponentPreview < ViewComponent::Preview
+class PrerenderedNextflowSamplesheetComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
-  def default(schema_file: 'nextflow_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
-    samples = Sample.where(id: sample_ids)
+  def default(schema_file: 'nextflow_schema.json')
     entry = {
       name: 'phac-nml/iridanextexample',
       description: 'IRIDA Next Example Pipeline',
@@ -15,13 +14,11 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
     render_with_template(locals: {
-                           samples:,
                            workflow:
                          })
   end
 
-  def with_reference_files(schema_file: 'nextflow_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
-    samples = Sample.where(id: sample_ids)
+  def with_reference_files(schema_file: 'nextflow_schema.json')
     entry = {
       name: 'phac-nml/iridanextexample',
       description: 'IRIDA Next Example Pipeline',
@@ -33,13 +30,11 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_snvphyl.json'))
 
     render_with_template(locals: {
-                           samples:,
                            workflow:
                          })
   end
 
-  def with_metadata(schema_file: 'nextflow_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
-    samples = Sample.where(id: sample_ids)
+  def with_metadata(schema_file: 'nextflow_schema.json')
     entry = {
       name: 'phac-nml/iridanextexample',
       description: 'IRIDA Next Example Pipeline',
@@ -51,13 +46,11 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
 
     render_with_template(locals: {
-                           samples:,
                            workflow:
                          })
   end
 
-  def with_samplesheet_overrides(sample_ids: [Sample.first.id, Sample.second.id]) # rubocop:disable Metrics/MethodLength
-    samples = Sample.where(id: sample_ids)
+  def with_samplesheet_overrides # rubocop:disable Metrics/MethodLength
     entry = {
       url: 'https://github.com/phac-nml/fastmatchirida',
       name: 'PNC Fast Match',
@@ -95,7 +88,6 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                                    ))
 
     render_with_template(locals: {
-                           samples:,
                            workflow:
                          })
   end

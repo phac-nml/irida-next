@@ -1397,6 +1397,7 @@ module WorkflowExecutions
     end
 
     test 'analyst cannot update samples with analysis result' do
+      Flipper.enable(:prerendered_samplesheet)
       user = users(:michelle_doe)
       login_as user
 
@@ -1427,6 +1428,7 @@ module WorkflowExecutions
     end
 
     test 'cannot update shared samples with analysis results when shared role is analyst' do
+      Flipper.enable(:prerendered_samplesheet)
       group = groups(:subgroup_sample_actions)
       user = users(:subgroup_sample_actions_doe)
       sample = samples(:sample71)

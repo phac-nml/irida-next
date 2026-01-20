@@ -35,7 +35,6 @@ export default class extends Controller {
     if (this.featureFlagValue) {
       this.#sampleCount = this.selectionOutlet.getStoredItemsCount();
     }
-    console.log(this.#sampleCount);
   }
 
   disconnect() {

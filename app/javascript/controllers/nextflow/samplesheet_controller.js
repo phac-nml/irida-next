@@ -103,7 +103,6 @@ export default class extends Controller {
   #filterEnabled = false;
 
   connect() {
-    console.log("old samplesheet onnected");
     if (this.hasWorkflowAttributesTarget) {
       this.#setSamplesheetParametersAndData();
       this.#updateMetadataColumnHeaderNames();
