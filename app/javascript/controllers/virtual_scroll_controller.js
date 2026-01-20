@@ -757,11 +757,12 @@ class VirtualScrollController extends Controller {
           this.keyboardNavigator.focusedRowIndex = this.pendingFocusRow;
           this.keyboardNavigator.focusedColIndex = this.pendingFocusCol;
         }
+        // Only clear pending focus when cell is successfully found and focused
+        this.pendingFocusRow = null;
+        this.pendingFocusCol = null;
       }
+      // If cell not found, keep pending focus for next render/retry
     }
-
-    this.pendingFocusRow = null;
-    this.pendingFocusCol = null;
   }
 
   getActiveEditingColumnIndex() {
@@ -808,13 +809,44 @@ class VirtualScrollController extends Controller {
   }
 
   /**
+   * Convert 1-based aria-colindex to 0-based metadata column index
+   * @param {number} colIndex - 1-based aria-colindex
+   * @returns {number} 0-based metadata column index
+   */
+  getMetadataIndexFromColIndex(colIndex) {
+    return colIndex - this.numBaseColumns - 1;
+  }
+
+  /**
+   * Check if an aria-colindex column is within the current render range
+   * @param {number} colIndex - 1-based aria-colindex
+   * @returns {boolean} True if column is rendered
+   */
+  isColumnInRenderRange(colIndex) {
+    if (colIndex <= this.numBaseColumns) {
+      return true; // Base columns are always rendered
+    }
+    const metadataIndex = this.getMetadataIndexFromColIndex(colIndex);
+    return (
+      this.lastFirstVisible !== undefined &&
+      this.lastLastVisible !== undefined &&
+      metadataIndex >= this.lastFirstVisible &&
+      metadataIndex < this.lastLastVisible
+    );
+  }
+
+  /**
    * Ensure a metadata column is rendered and scrolled into view for focus
    * @param {number} colIndex 1-based column index across all columns
+   * @returns {boolean|undefined} true if scroll/render was triggered, false if no scroll needed, undefined for early exits
    */
   ensureMetadataColumnVisible(colIndex) {
     if (colIndex <= this.numBaseColumns) return;
     const metadataIndex = colIndex - this.numBaseColumns - 1;
     if (metadataIndex < 0 || metadataIndex >= this.numMetadataColumns) return;
+
+    // Check if column is in current render range (not just scroll visible)
+    const isInRenderRange = this.isColumnInRenderRange(colIndex);
 
     const stickyWidth = this.stickyColumnsWidth();
     const colLeft = this.geometry.cumulativeWidthTo(metadataIndex);
@@ -831,10 +863,17 @@ class VirtualScrollController extends Controller {
     const visibleStart = currentScrollLeft + stickyWidth;
     const visibleEnd = currentScrollLeft + containerWidth;
 
-    // Check if already fully visible
-    if (absoluteColLeft >= visibleStart && absoluteColRight <= visibleEnd) {
-      return;
+    const isScrollVisible =
+      absoluteColLeft >= visibleStart && absoluteColRight <= visibleEnd;
+
+    // Only return early if BOTH in render range AND scroll visible
+    if (isInRenderRange && isScrollVisible) {
+      // Return false: column is already visible; no scroll or re-render is performed.
+      return false;
     }
+
+    // If in render range but not scroll visible, we still need to scroll
+    // If scroll visible but not in render range, we need to re-render
 
     // Calculate target scroll to make it visible
     let targetScrollLeft = currentScrollLeft;
@@ -899,7 +938,7 @@ class VirtualScrollController extends Controller {
 
       // Give the DOM a frame to materialize
       // Intentional sequential await - we need to wait for each frame before retrying
-      // eslint-disable-next-line no-await-in-loop
+
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
       row = this.bodyTarget?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
