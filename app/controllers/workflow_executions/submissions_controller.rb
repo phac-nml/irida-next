@@ -5,11 +5,16 @@ module WorkflowExecutions
   class SubmissionsController < ApplicationController
     include Metadata
 
+    # TODO: when feature flag :prerendered_samplesheet is retired
+    # - remove before action allowed_to_update_samples
+    # - rename before_action process_samples to samples_count and remove process_samples function and uncomment
+    # samples_count
     respond_to :turbo_stream
     before_action :workflows
-    before_action :sample_count, only: %i[create]
+    before_action :process_samples, only: %i[create]
     before_action :workflow, only: %i[create]
     before_action :namespace_id, only: %i[create pipeline_selection]
+    # before_action :allowed_to_update_samples, only: %i[create]
     before_action :samplesheet_params, only: %i[samplesheet]
 
     def pipeline_selection
@@ -42,9 +47,20 @@ module WorkflowExecutions
       @workflow = Irida::Pipelines.instance.find_pipeline_by(pipeline_id, workflow_version)
     end
 
-    def sample_count
-      @sample_count = params[:sample_count]
+    def process_samples
+      if Flipper.enabled?(:prerendered_samplesheet)
+        @sample_count = params[:sample_count]
+      else
+        sample_ids = params[:sample_ids]
+        @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: sample_ids)
+        allowed_to_update_samples
+      end
     end
+
+    # enable when feature flag :prerendered_samplesheet is retired
+    # def sample_count
+    #   @sample_count = params[:sample_count]
+    # end
 
     def namespace_id
       @namespace_id = params[:namespace_id]
@@ -58,7 +74,12 @@ module WorkflowExecutions
     end
 
     def allowed_to_update_samples
-      projects = Project.where(id: @samples.select(:project_id))
+      projects = if Flipper.enabled?(:prerendered_samplesheet)
+                   Project.where(id: @samples.select(:project_id))
+                 else
+                   @allowed_to_update_samples = true
+                   Project.where(id: Sample.where(id: params[:sample_ids]).select(:project_id))
+                 end
 
       projects.each do |project|
         @allowed_to_update_samples = allowed_to?(

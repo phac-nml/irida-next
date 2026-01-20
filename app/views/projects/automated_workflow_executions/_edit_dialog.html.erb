@@ -8,17 +8,34 @@
       end
     ) %>
   <% dialog.with_header(title: t(".title", workflow_name:)) %>
-  <%= render NextflowComponent.new(
-    workflow: @workflow,
-    url:
-      namespace_project_automated_workflow_execution_path(
-        @project.parent,
-        @project,
-        @automated_workflow_execution,
-      ),
-    sample_count: nil,
-    namespace_id: @project.namespace.id,
-    fields: nil,
-    instance: @automated_workflow_execution,
-  ) %>
+  <% if Flipper.enabled?(:prerendered_samplesheet) %>
+    <%= render PrerenderedNextflowComponent.new(
+      workflow: @workflow,
+      url:
+        namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          @automated_workflow_execution,
+        ),
+      sample_count: nil,
+      namespace_id: @project.namespace.id,
+      fields: nil,
+      instance: @automated_workflow_execution,
+    ) %>
+  <% else %>
+    <%= render NextflowComponent.new(
+      workflow: @workflow,
+      url:
+        namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          @automated_workflow_execution,
+        ),
+      samples: Sample.none,
+      allowed_to_update_samples: true,
+      namespace_id: @project.namespace.id,
+      fields: nil,
+      instance: @automated_workflow_execution,
+    ) %>
+  <% end %>
 <% end %>

@@ -7,13 +7,24 @@ module WorkflowExecutions
 
     def fields
       @samples = Sample.where(id: params[:sample_ids])
-      @metadata_fields = JSON.parse(params[:metadata_fields])
-      @metadata = generate_metadata_for_samplesheet.to_json
 
+      if Flipper.enabled?(:prerendered_samplesheet)
+        @metadata_fields = JSON.parse(params[:metadata_fields])
+      else
+        @header = params[:header]
+        @field = params[:field]
+      end
+      @metadata = generate_metadata_for_samplesheet.to_json
       render status: :ok
     end
 
     private
+
+    # TODO: when feature flag :prerendered_samplesheet is retired, move fetch_metadata_with_feature_flag logic
+    # into generate_metadata_for_samplesheet
+    def generate_metadata_for_samplesheet
+      Flipper.enabled?(:prerendered_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+    end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes
     # while samplesheet is undergoing initial processing
@@ -24,13 +35,21 @@ module WorkflowExecutions
     #   0: {metadata_header_4: "46", metadata_header_5: "canada"},
     #   1: {metadata_header_4: "10", metadata_header_5: "USA"}
     # }
-    def generate_metadata_for_samplesheet
+    def fetch_metadata_with_feature_flag
       metadata = {}
       @samples.each_with_index do |sample, index|
         metadata[index] = {}
         @metadata_fields.each do |key, value|
           metadata[index][key] = sample.metadata.fetch(value, '')
         end
+      end
+      metadata
+    end
+
+    def fetch_metadata
+      metadata = {}
+      @samples.each_with_index do |sample, index|
+        metadata[index] = sample.metadata.fetch(@field, '')
       end
       metadata
     end

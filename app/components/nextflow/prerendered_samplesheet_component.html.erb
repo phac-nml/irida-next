@@ -1,9 +1,12 @@
-<div class="sample-sheet">
-  <div class="hidden" data-nextflow--samplesheet-target="workflowAttributes">
-    <%= samples_workflow_executions_attributes.to_json %>
-  </div>
-  <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
-    <%= @properties.to_json %>
+<div id="samplesheet">
+  <%= helpers.turbo_frame_tag "sample_attributes" %>
+
+  <div
+    class="hidden"
+    data-nextflow--prerendered-samplesheet-target="samplesheetProperties"
+    data-properties="<%= @properties.to_json %>"
+  >
+
   </div>
   <div class="flex justify-between mb-2 @max-2xl:flex-col">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t("components.nextflow.samplesheet_component.label") %></label>
@@ -11,8 +14,8 @@
       <label class="sr-only" for="samplesheet-filter"><%= t("components.nextflow.samplesheet_component.filter.placeholder") %></label>
       <input
         id="samplesheet-filter"
-        data-nextflow--samplesheet-target="filter"
-        data-action="keydown.enter->nextflow--samplesheet#filter"
+        data-nextflow--prerendered-samplesheet-target="filter"
+        data-action="keydown.enter->nextflow--prerendered-samplesheet#filter"
         type="search"
         placeholder="<%= t('components.nextflow.samplesheet_component.filter.placeholder')%>"
         class="
@@ -25,8 +28,8 @@
       <!-- Clear button (shown only when there are existing search results)
       -->
       <button
-        data-nextflow--samplesheet-target="filterClearButton"
-        data-action="click->nextflow--samplesheet#clearFilter"
+        data-nextflow--prerendered-samplesheet-target="filterClearButton"
+        data-action="click->nextflow--prerendered-samplesheet#clearFilter"
         type="button"
         class="
           absolute inset-y-0 right-0 flex items-center justify-center w-12
@@ -40,8 +43,8 @@
       </button>
       <!-- Submit/search button (hidden while clear button is active) -->
       <button
-        data-nextflow--samplesheet-target="filterSearchButton"
-        data-action="click->nextflow--samplesheet#filter"
+        data-nextflow--prerendered-samplesheet-target="filterSearchButton"
+        data-action="click->nextflow--prerendered-samplesheet#filter"
         type="button"
         class="
           absolute inset-y-0 right-0 flex items-center justify-center w-12
@@ -60,7 +63,7 @@
     role="alert"
     aria-live="assertive"
     aria-atomic="true"
-    data-nextflow--samplesheet-target="error"
+    data-nextflow--prerendered-samplesheet-target="error"
     class="
       hidden alert-component bg-red-50 border-red-300 dark:bg-red-900/20
       dark:border-red-800/50 dark:text-red-400 text-red-800 mb-2
@@ -73,18 +76,14 @@
       <div class="flex-1 min-w-0 mt-0.5">
         <div
           class="text-sm font-medium leading-5"
-          data-nextflow--samplesheet-target="errorMessage"
+          data-nextflow--prerendered-samplesheet-target="errorMessage"
         >
         </div>
       </div>
     </div>
   </div>
 
-  <div
-    class="
-      @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
-    "
-  >
+  <div class=" @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink mb-2 ">
     <div class="overflow-x-auto relative">
       <table
         data-test-selector="samplesheet-table"
@@ -108,11 +107,11 @@
             ) %>
           <% end %>
         </thead>
-        <tbody data-nextflow--samplesheet-target="tableBody"></tbody>
+        <tbody data-nextflow--prerendered-samplesheet-target="tableBody"></tbody>
       </table>
     </div>
   </div>
-  <div data-nextflow--samplesheet-target="emptyState" class="hidden">
+  <div data-nextflow--prerendered-samplesheet-target="emptyState" class="hidden">
     <%= render Viral::EmptyStateComponent.new(
       icon_name: :magnifying_glass,
       title: t("components.viral.pagy.empty_state.title"),
@@ -120,14 +119,14 @@
     ) %>
   </div>
   <div
-    data-nextflow--samplesheet-target="paginationContainer"
+    data-nextflow--prerendered-samplesheet-target="paginationContainer"
     class="flex items-center justify-end"
   >
   </div>
-  <div class="hidden" id="samplesheet-payload-container"></div>
+  <%= helpers.turbo_frame_tag "samplesheet-payload-container" %>
 </div>
 
-<template data-nextflow--samplesheet-target="trTemplate">
+<template data-nextflow--prerendered-samplesheet-target="trTemplate">
   <tr
     class="
       bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
@@ -136,33 +135,37 @@
   ></tr>
 </template>
 
-<template data-nextflow--samplesheet-target="thTemplate">
+<template data-nextflow--prerendered-samplesheet-target="thTemplate">
   <th class="border table-td dark:border-slate-600 border-slate-100 font-medium">
   </th>
 </template>
 
-<template data-nextflow--samplesheet-target="tdTemplate">
+<template data-nextflow--prerendered-samplesheet-target="tdTemplate">
   <td class="border table-td dark:border-slate-600 border-slate-100">
   </td>
 </template>
 
-<template data-nextflow--samplesheet-target="sampleIdentifierTemplate">
+<template
+  data-nextflow--prerendered-samplesheet-target="sampleIdentifierTemplate"
+>
   <div class="p-2.5"></div>
 </template>
 
-<template data-nextflow--samplesheet-target="dropdownTemplate">
+<template data-nextflow--prerendered-samplesheet-target="dropdownTemplate">
   <select
     class="
       w-full p-2.5 dark:bg-slate-700 bg-slate-50 border-none dark:border-none
       dark:placeholder-slate-400 text-inherit text-sm cursor-pointer
     "
-    data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
+    data-action="
+      change->nextflow--prerendered-samplesheet#updateEditableSamplesheetData
+    "
   >
     <option value="" label=" "></option>
   </select>
 </template>
 
-<template data-nextflow--samplesheet-target="fileTemplate">
+<template data-nextflow--prerendered-samplesheet-target="fileTemplate">
   <a
     data-turbo-stream="true"
     class="
@@ -172,25 +175,27 @@
   ></a>
 </template>
 
-<template data-nextflow--samplesheet-target="metadataTemplate">
+<template data-nextflow--prerendered-samplesheet-target="metadataTemplate">
   <div class="p-2.5 text-nowrap">
     <span class="h-3.5 inline-block"></span>
   </div>
 </template>
 
-<template data-nextflow--samplesheet-target="textInputTemplate">
+<template data-nextflow--prerendered-samplesheet-target="textInputTemplate">
   <label class="sr-only"></label>
   <input
     class="
       block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
       focus-visible:relative focus-visible:z-15 focus-visible:-outline-offset-2!
     "
-    data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
+    data-action="
+      change->nextflow--prerendered-samplesheet#updateEditableSamplesheetData
+    "
     type="text"
   />
 </template>
 
-<template data-nextflow--samplesheet-target="paginationTemplate">
+<template data-nextflow--prerendered-samplesheet-target="paginationTemplate">
   <nav
     aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
   >
@@ -198,13 +203,16 @@
       <li><button
           type="button"
           class="
-            flex items-center justify-center h-10 px-4 leading-tight border cursor-default
-            ms-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-700
-            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-e-0 rounded-s-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
-          data-action="click->nextflow--samplesheet#previousPage"
-          data-nextflow--samplesheet-target="previousBtn"
+          data-action="click->nextflow--prerendered-samplesheet#previousPage"
+          data-nextflow--prerendered-samplesheet-target="previousBtn"
           disabled="disabled"
         ><%= t("components.nextflow.samplesheet_component.previous") %></button>
       </li>
@@ -214,34 +222,37 @@
           style="width: 80px;"
           class="
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-900
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
             dark:hover:bg-slate-700 dark:hover:text-white focus-visible:relative
           "
-          data-nextflow--samplesheet-target="pageNum"
-          data-action="change->nextflow--samplesheet#pageSelected"
+          data-nextflow--prerendered-samplesheet-target="pageNum"
+          data-action="change->nextflow--prerendered-samplesheet#pageSelected"
           id="pagination-page-selector"
         ><option value="1" selected="selected">1</option></select>
       </li>
       <li><button
           class="
-            flex items-center justify-center h-10 px-4 leading-tight bg-white border
-            border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
-            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
-            focus-visible:relative
+            flex items-center justify-center h-10 px-4 leading-tight border
+            disabled:cursor-default ms-0 border-slate-300 disabled:dark:border-slate-700
+            disabled:bg-slate-50 disabled:dark:bg-slate-700 border-l-0 rounded-e-lg
+            text-slate-900 disabled:dark:text-slate-300 focus-visible:relative
+            disabled:pointer-events-none bg-white hover:bg-slate-100 hover:text-slate-700
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white cursor cursor-pointer
           "
           type="button"
-          data-nextflow--samplesheet-target="nextBtn"
-          data-action="click->nextflow--samplesheet#nextPage"
+          data-nextflow--prerendered-samplesheet-target="nextBtn"
+          data-action="click->nextflow--prerendered-samplesheet#nextPage"
+          disabled="disabled"
         ><%= t("components.nextflow.samplesheet_component.next") %></button>
       </li>
     </ul>
   </nav>
 </template>
 
-<template data-nextflow--samplesheet-target="metadataHeaderForm">
-  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+<template data-nextflow--prerendered-samplesheet-target="metadataHeaderForm">
+  <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
     <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>

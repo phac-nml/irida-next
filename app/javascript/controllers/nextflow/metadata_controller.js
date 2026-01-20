@@ -4,6 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     metadata: { type: Object },
+    property: { type: String },
   };
 
   connect() {
@@ -13,7 +14,7 @@ export default class extends Controller {
   sendMetadata() {
     this.dispatch("sendMetadata", {
       detail: {
-        content: { metadata: this.metadataValue },
+        content: { metadata: this.metadataValue, property: this.propertyValue },
       },
     });
   }

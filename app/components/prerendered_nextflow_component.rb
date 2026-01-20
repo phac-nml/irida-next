@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 # Component to render Nextflow pipeline forms
-class NextflowComponent < Component
+class PrerenderedNextflowComponent < Component
   include NextflowHelper
 
-  attr_reader :schema, :url, :workflow, :metadata_fields, :samples, :namespace_id, :instance
+  attr_reader :url, :workflow, :metadata_fields, :sample_count, :namespace_id, :instance, :automated_workflow
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(url:, samples:, workflow:, fields:, namespace_id:, allowed_to_update_samples: true, instance: nil)
-    @samples = samples
+  def initialize(url:, sample_count:, workflow:, fields:, namespace_id:, instance: nil)
+    @sample_count = sample_count
+    @automated_workflow = @sample_count.nil? || @sample_count.zero?
     @namespace_id = namespace_id
     @url = url
     @workflow = workflow
     @metadata_fields = fields
-    @allowed_to_update_samples = allowed_to_update_samples
     @instance = instance
     @namespace_type = namespace_type(namespace_id)
   end
