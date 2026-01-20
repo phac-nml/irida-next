@@ -58,17 +58,18 @@ export default class extends MenuController {
 
   #onShow() {
     this.triggerTarget.setAttribute("aria-expanded", "true");
-    this.menuTarget.removeAttribute("aria-hidden");
-    this.menuTarget.classList.remove("hidden");
+    this.menuTarget.setAttribute("aria-hidden", "false");
+    this.menuTarget.removeAttribute("hidden");
   }
 
   #onHide() {
     this.triggerTarget.setAttribute("aria-expanded", "false");
     this.menuTarget.setAttribute("aria-hidden", "true");
-    this.menuTarget.classList.add("hidden");
+    this.menuTarget.setAttribute("hidden", "");
     this.#menuItems(this.triggerTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
+    this.triggerTarget.focus();
   }
 
   focusOut(event) {
@@ -162,26 +163,28 @@ export default class extends MenuController {
         );
       case "Escape":
         event.preventDefault();
-        this.triggerTarget.focus();
+        super.hide();
         break;
-      case "ArrowUp":
+      case "ArrowUp": {
         event.preventDefault();
-        var prevIndex = menuItems.length - 1;
+        let prevIndex = menuItems.length - 1;
         if (currentIndex > 0) {
-          var prevIndex = Math.max(0, currentIndex - 1);
+          prevIndex = Math.max(0, currentIndex - 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
         this.#focusMenuItem(menuItems.at(prevIndex));
         break;
-      case "ArrowDown":
+      }
+      case "ArrowDown": {
         event.preventDefault();
-        var nextIndex = 0;
+        let nextIndex = 0;
         if (currentIndex < menuItems.length - 1) {
-          var nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
+          nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
         this.#focusMenuItem(menuItems.at(nextIndex));
         break;
+      }
       case "Home":
         event.preventDefault();
         menuItems[currentIndex].tabIndex = "-1";
