@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Component for rendering a drop down that filters dynamically
-class SelectWithAutoCompleteComponent < Component
+class ComboboxComponent < Component
   def initialize(form:, field:, options:, **trigger_arguments)
     @trigger_id = form.field_id(field)
     @menu_id = "#{form.field_id(field)}_menu"
@@ -26,7 +26,7 @@ class SelectWithAutoCompleteComponent < Component
       args[:aria][:expanded] = 'false'
       args[:aria][:controls] = @menu_id
       args[:data] ||= {}
-      args[:data][:'select-with-auto-complete-target'] = 'trigger'
+      args[:data][:'combobox-target'] = 'trigger'
     end
   end
 
