@@ -118,6 +118,34 @@ export class GridKeyboardNavigator {
       return;
     }
 
+    // Handle tab navigation (row-by-row, column-by-column)
+    if (
+      event.key === "Tab" &&
+      !event.altKey &&
+      !event.metaKey &&
+      !event.ctrlKey
+    ) {
+      const currentRow = this.getRowIndex(cell);
+      const currentCol = this.getColIndex(cell);
+      const currentRowElement = this.getRowElement(cell);
+      if (!Number.isInteger(currentRow) || !Number.isInteger(currentCol))
+        return;
+
+      const target = this.calculateTabTarget(
+        event,
+        currentRow,
+        currentCol,
+        currentRowElement,
+      );
+
+      // Allow default tabbing out of the grid at boundaries
+      if (!target) return;
+
+      event.preventDefault();
+      await this.navigateToCell(target.row, target.col, event);
+      return;
+    }
+
     // Handle navigation keys
     const relevantKeys = [
       "ArrowRight",
@@ -136,9 +164,19 @@ export class GridKeyboardNavigator {
     const currentCol = this.getColIndex(cell);
     if (!Number.isInteger(currentRow) || !Number.isInteger(currentCol)) return;
 
-    const target = this.calculateTargetCell(event, currentRow, currentCol);
+    const currentRowElement = this.getRowElement(cell);
+    const target = this.calculateTargetCell(
+      event,
+      currentRow,
+      currentCol,
+      currentRowElement,
+    );
 
     if (target.row === currentRow && target.col === currentCol) return;
+
+    if (event.key === "Home" && target.col === 1 && this.grid) {
+      this.grid.scrollLeft = 0;
+    }
 
     event.preventDefault();
     await this.navigateToCell(target.row, target.col, event);
@@ -168,43 +206,118 @@ export class GridKeyboardNavigator {
    * @returns {{row: number, col: number}} Target cell coordinates
    * @private
    */
-  calculateTargetCell(event, currentRow, currentCol) {
+  calculateTargetCell(event, currentRow, currentCol, currentRowElement) {
     let targetRow = currentRow;
     let targetCol = currentCol;
 
-    const firstRow = this.getFirstRowIndex();
-    const lastRow = this.getLastRowIndex();
+    const rowElements = this.getRowElements();
+    const rowPosition = this.getRowPosition(rowElements, currentRowElement);
+    const firstRow = this.getFirstRowIndex(rowElements);
+    const lastRow = this.getLastRowIndex(rowElements);
+    const lastCol = this.getLastColIndex(currentCol);
+    const ctrlOrMeta = event.ctrlKey || event.metaKey;
 
     switch (event.key) {
       case "ArrowRight":
-        targetCol = Math.min(this.totalColumns, currentCol + 1);
+        targetCol = Math.min(lastCol, currentCol + 1);
         break;
       case "ArrowLeft":
         targetCol = Math.max(1, currentCol - 1);
         break;
       case "ArrowDown":
-        targetRow = Math.min(lastRow, currentRow + 1);
+        if (rowPosition !== null) {
+          const nextRow =
+            rowElements[Math.min(rowElements.length - 1, rowPosition + 1)];
+          targetRow = this.getRowIndexFromRow(nextRow) ?? currentRow;
+        } else {
+          targetRow = Math.min(lastRow, currentRow + 1);
+        }
         break;
       case "ArrowUp":
-        targetRow = Math.max(firstRow, currentRow - 1);
+        if (rowPosition !== null) {
+          const prevRow = rowElements[Math.max(0, rowPosition - 1)];
+          targetRow = this.getRowIndexFromRow(prevRow) ?? currentRow;
+        } else {
+          targetRow = Math.max(firstRow, currentRow - 1);
+        }
         break;
       case "Home":
         targetCol = 1;
-        if (event.ctrlKey) targetRow = firstRow;
+        if (ctrlOrMeta) targetRow = firstRow;
         break;
       case "End":
-        targetCol = this.totalColumns;
-        if (event.ctrlKey) targetRow = lastRow;
+        targetCol = lastCol;
+        if (ctrlOrMeta) targetRow = lastRow;
         break;
       case "PageUp":
-        targetRow = Math.max(firstRow, currentRow - this.pageJumpSize);
+        if (rowPosition !== null) {
+          const nextPosition = Math.max(0, rowPosition - this.pageJumpSize);
+          const nextRow = rowElements[nextPosition];
+          targetRow = this.getRowIndexFromRow(nextRow) ?? currentRow;
+        } else {
+          targetRow = Math.max(firstRow, currentRow - this.pageJumpSize);
+        }
         break;
       case "PageDown":
-        targetRow = Math.min(lastRow, currentRow + this.pageJumpSize);
+        if (rowPosition !== null) {
+          const nextPosition = Math.min(
+            rowElements.length - 1,
+            rowPosition + this.pageJumpSize,
+          );
+          const nextRow = rowElements[nextPosition];
+          targetRow = this.getRowIndexFromRow(nextRow) ?? currentRow;
+        } else {
+          targetRow = Math.min(lastRow, currentRow + this.pageJumpSize);
+        }
         break;
     }
 
     return { row: targetRow, col: targetCol };
+  }
+
+  /**
+   * Calculate target cell for Tab navigation.
+   * Returns null to allow default Tab behavior (leaving the grid).
+   * @param {KeyboardEvent} event
+   * @param {number} currentRow
+   * @param {number} currentCol
+   * @param {HTMLElement|null} currentRowElement
+   * @returns {{row: number, col: number}|null}
+   * @private
+   */
+  calculateTabTarget(event, currentRow, currentCol, currentRowElement) {
+    const rowElements = this.getRowElements();
+    const rowPosition = this.getRowPosition(rowElements, currentRowElement);
+    const lastCol = this.getLastColIndex(currentCol);
+
+    if (rowPosition === null || rowElements.length === 0) return null;
+
+    if (event.shiftKey) {
+      if (currentCol > 1) {
+        return { row: currentRow, col: currentCol - 1 };
+      }
+
+      if (rowPosition > 0) {
+        const prevRow = rowElements[rowPosition - 1];
+        return {
+          row: this.getRowIndexFromRow(prevRow) ?? currentRow,
+          col: lastCol,
+        };
+      }
+
+      return null;
+    }
+
+    if (currentCol < lastCol) {
+      return { row: currentRow, col: currentCol + 1 };
+    }
+
+    if (rowPosition < rowElements.length - 1) {
+      const nextRow = rowElements[rowPosition + 1];
+      return { row: this.getRowIndexFromRow(nextRow) ?? currentRow, col: 1 };
+    }
+
+    return null;
   }
 
   /**
@@ -347,8 +460,45 @@ export class GridKeyboardNavigator {
     const row = this.rootElement.querySelector(`[aria-rowindex="${rowIndex}"]`);
     if (!row) return null;
 
-    const cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
-    return cell || null;
+    const directCell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+    if (directCell) return directCell;
+
+    const isVirtualizedRow =
+      typeof this.onNavigate === "function" &&
+      row.dataset?.virtualScrollTarget === "row";
+
+    if (isVirtualizedRow) return null;
+
+    return this.findClosestCellInRow(row, colIndex);
+  }
+
+  /**
+   * Find the closest available cell within a row when exact colindex is missing
+   * (e.g., rows with colspans like footer rows).
+   * @param {HTMLElement} row
+   * @param {number} colIndex
+   * @returns {HTMLElement|null}
+   * @private
+   */
+  findClosestCellInRow(row, colIndex) {
+    const cells = Array.from(row.querySelectorAll("[aria-colindex]"));
+    if (cells.length === 0) return null;
+
+    let bestCell = null;
+    let bestDistance = Infinity;
+
+    cells.forEach((cell) => {
+      const idx = this.getColIndex(cell);
+      if (!Number.isInteger(idx)) return;
+
+      const distance = Math.abs(idx - colIndex);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestCell = cell;
+      }
+    });
+
+    return bestCell || null;
   }
 
   /**
@@ -356,12 +506,10 @@ export class GridKeyboardNavigator {
    * @returns {number} First row index (1-based)
    * @private
    */
-  getFirstRowIndex() {
-    const rows = this.rootElement.querySelectorAll("[aria-rowindex]");
-    if (rows.length === 0) return 1;
-    const firstRow = rows[0];
-    const idx = firstRow?.getAttribute("aria-rowindex");
-    const parsed = parseInt(idx, 10);
+  getFirstRowIndex(rowElements = this.getRowElements()) {
+    if (rowElements.length === 0) return 1;
+    const firstRow = rowElements[0];
+    const parsed = this.getRowIndexFromRow(firstRow);
     return Number.isInteger(parsed) ? parsed : 1;
   }
 
@@ -370,13 +518,82 @@ export class GridKeyboardNavigator {
    * @returns {number} Last row index (1-based)
    * @private
    */
-  getLastRowIndex() {
-    const rows = this.rootElement.querySelectorAll("[aria-rowindex]");
-    if (rows.length === 0) return 1;
-    const lastRow = rows[rows.length - 1];
-    const idx = lastRow?.getAttribute("aria-rowindex");
-    const parsed = parseInt(idx, 10);
-    return Number.isInteger(parsed) ? parsed : rows.length;
+  getLastRowIndex(rowElements = this.getRowElements()) {
+    if (rowElements.length === 0) return 1;
+    const lastRow = rowElements[rowElements.length - 1];
+    const parsed = this.getRowIndexFromRow(lastRow);
+    return Number.isInteger(parsed) ? parsed : rowElements.length;
+  }
+
+  /**
+   * Get all rows that participate in grid navigation.
+   * @returns {HTMLElement[]} row elements in DOM order
+   * @private
+   */
+  getRowElements() {
+    const allRows = Array.from(
+      this.rootElement?.querySelectorAll?.("[aria-rowindex]") || [],
+    );
+
+    return allRows.filter((row) => !row.closest("tfoot"));
+  }
+
+  /**
+   * Get row element for a cell.
+   * @param {HTMLElement} cell
+   * @returns {HTMLElement|null}
+   * @private
+   */
+  getRowElement(cell) {
+    return cell?.closest?.("[aria-rowindex]") || null;
+  }
+
+  /**
+   * Get 1-based row index from a row element.
+   * @param {HTMLElement|null} row
+   * @returns {number|null}
+   * @private
+   */
+  getRowIndexFromRow(row) {
+    if (!row) return null;
+    const idx = parseInt(row.getAttribute("aria-rowindex"), 10);
+    return Number.isInteger(idx) ? idx : null;
+  }
+
+  /**
+   * Get the row's position within the rowElements list.
+   * @param {HTMLElement[]} rowElements
+   * @param {HTMLElement|null} row
+   * @returns {number|null}
+   * @private
+   */
+  getRowPosition(rowElements, row) {
+    if (!row || rowElements.length === 0) return null;
+    const position = rowElements.indexOf(row);
+    return position >= 0 ? position : null;
+  }
+
+  /**
+   * Get the last column index in the grid
+   * @param {number} fallbackColIndex - Column to fall back to when counts unknown
+   * @returns {number} Last column index (1-based)
+   * @private
+   */
+  getLastColIndex(fallbackColIndex) {
+    if (Number.isInteger(this.totalColumns) && this.totalColumns > 0) {
+      return this.totalColumns;
+    }
+
+    const colCount = parseInt(this.grid?.getAttribute?.("aria-colcount"), 10);
+    if (Number.isInteger(colCount) && colCount > 0) return colCount;
+
+    const rootColCount = parseInt(
+      this.rootElement?.getAttribute?.("aria-colcount"),
+      10,
+    );
+    if (Number.isInteger(rootColCount) && rootColCount > 0) return rootColCount;
+
+    return fallbackColIndex || 1;
   }
 
   /**
