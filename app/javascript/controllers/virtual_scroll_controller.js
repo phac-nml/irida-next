@@ -366,6 +366,10 @@ class VirtualScrollController extends Controller {
       columnWidthFallback: this.cssConfig.columnWidth,
     });
 
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.updateTotalColumns(this.totalColumnCount());
+    }
+
     // Keep all metadata headers in DOM (rendered server-side)
     // No need to virtualize headers - performance impact is minimal for 1000 headers
     this.metadataHeaders = metadataHeaders;
@@ -913,6 +917,13 @@ class VirtualScrollController extends Controller {
       // Reset on each iteration because render() clears it
       this.pendingFocusRow = rowIndex;
       this.pendingFocusCol = colIndex;
+
+      // Force scroll to the far left when moving to the first column (Home/Ctrl+Home)
+      if (colIndex === 1 && this.containerTarget.scrollLeft !== 0) {
+        this.containerTarget.scrollLeft = 0;
+        this.lastFirstVisible = undefined;
+        this.lastLastVisible = undefined;
+      }
 
       if (colIndex > this.numBaseColumns) {
         const rendered = this.ensureMetadataColumnVisible(colIndex);
