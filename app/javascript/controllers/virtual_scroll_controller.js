@@ -7,7 +7,7 @@ import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_rendere
 
 import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
 import { focusMixin } from "controllers/virtual_scroll/focus";
-import { deferredTemplatesMixin } from "controllers/virtual_scroll/deferred_templates";
+import { deferredTemplateFieldsMixin } from "controllers/virtual_scroll/deferred_template_fields";
 
 /**
  * VirtualScrollController
@@ -1058,7 +1058,7 @@ class VirtualScrollController extends Controller {
 Object.assign(
   VirtualScrollController.prototype,
   focusMixin,
-  deferredTemplatesMixin,
+  deferredTemplateFieldsMixin,
 );
 
 export default VirtualScrollController;
