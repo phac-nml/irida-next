@@ -32,6 +32,8 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     step :queue_next_job
   end
 
+  private
+
   def verify_initial_state
     # User signaled to cancel
     @invalid_initial_state = @workflow_execution.canceling? || @workflow_execution.canceled?
@@ -73,20 +75,20 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     when :canceled, :error
       WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
     when :completing
-      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      WorkflowExecutionCompletionJob.perform_later(@workflow_execution)
     when :canceling # max run time exceeded
-      WorkflowExecutionCancelationJob.perform_later(workflow_execution, workflow_execution.submitter)
+      WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @workflow_execution.submitter)
     else
       WorkflowExecutionStatusJob.set(
-        wait_until: status_check_delay_time(workflow_execution).seconds.from_now
-      ).perform_later(workflow_execution)
+        wait_until: status_check_delay_time.seconds.from_now
+      ).perform_later(@workflow_execution)
     end
   end
 
-  def status_check_delay_time(workflow_execution)
-    min_run_time = workflow_execution.workflow.minimum_run_time(workflow_execution.samples.count)
+  def status_check_delay_time
+    min_run_time = @workflow_execution.workflow.minimum_run_time(@workflow_execution.samples.count)
     if min_run_time.nil?
-      workflow_execution.workflow.status_check_interval
+      @workflow_execution.workflow.status_check_interval
     else
       min_run_time
     end
