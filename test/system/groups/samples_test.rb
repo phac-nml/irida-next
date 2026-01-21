@@ -816,49 +816,44 @@ module Groups
 
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
-      ### VERIFY START ###
-
-      assert_no_selector 'dialog[open]'
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      ### VERIFY END ###
     end
 
     test 'should not import metadata via invalid file type' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
-        assert_no_selector '#available-list'
-        assert_no_selector '#selected-list'
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
+      assert_no_selector '#available-list'
+      assert_no_selector '#selected-list'
+      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
     end
 
     test 'should import metadata with ignore empty values' do
@@ -866,53 +861,44 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        assert find_field('Ignore empty values').checked?
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+
+      check 'file_import_ignore_empty_values'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
 
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within '#sample-metadata table' do
-        assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'tbody tr', count: 3
-        within('tbody tr:first-child td:nth-child(2)') do
-          assert_text 'metadatafield1'
-        end
-        within('tbody tr:first-child td:nth-child(3)') do
-          assert_text 'value1'
-        end
-      end
+      assert_selector 'div#sample-metadata'
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
       ### VERIFY END ###
     end
 
@@ -921,127 +907,122 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        uncheck 'Ignore empty values'
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      uncheck 'Ignore empty values'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within '#sample-metadata table' do
-        assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'tbody tr', count: 2
-        assert_no_text 'metadatafield1'
-      end
+
+      assert_selector 'div#sample-metadata'
+      assert_selector 'table tbody tr', count: 2
+      assert_no_text 'metadatafield1'
       ### VERIFY END ###
     end
 
     test 'should not import metadata with duplicate header errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 4
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 4
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
-      end
+      assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
       ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata row errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('services.spreadsheet_import.missing_data_row')
-      end
+      assert_text I18n.t('services.spreadsheet_import.missing_data_row')
       ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata column errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
+      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
     end
 
     test 'should partially import metadata with missing sample errors' do
       visit group_samples_url(@group)
-
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
@@ -1052,40 +1033,34 @@ module Groups
       assert_selector '#samples-table table thead tr th', count: 10
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
-
       assert_selector '#samples-table table thead tr th', count: 11
       ### VERIFY END ###
     end
@@ -1093,51 +1068,44 @@ module Groups
     test 'should not import metadata with analysis values' do
       group = groups(:group_twelve)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                                      locale: @user.locale))
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
+
+      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: 'value1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 2
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 2
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_no_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: '10'
+      assert_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: 'value1'
       ### VERIFY END ###
-    end
-
-    test 'uploading spreadsheet with no viable metadata should display error' do
-      group = groups(:group_twelve)
-      visit group_samples_url(group)
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv')
-
-        assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
     end
 
     test 'should not import metadata from ignored header values' do
