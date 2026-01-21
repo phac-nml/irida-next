@@ -175,6 +175,15 @@ class VirtualScrollController extends Controller {
       this.boundHandleTurboRender,
     );
 
+    // Sync template content when cells are replaced via Turbo Stream (e.g., after metadata edit)
+    this.boundSyncTemplateOnStreamReplace =
+      this.syncTemplateOnStreamReplace.bind(this);
+    this.lifecycle.listen(
+      document,
+      "turbo:before-stream-render",
+      this.boundSyncTemplateOnStreamReplace,
+    );
+
     requestAnimationFrame(() => {
       const initialized = this.initializeDimensions();
       this.isInitialized = initialized;
@@ -236,6 +245,49 @@ class VirtualScrollController extends Controller {
         this.sortFocusToRestore = null;
       }
     });
+  }
+
+  /**
+   * Sync template content when a cell is replaced via Turbo Stream.
+   * This ensures virtualized cells show updated values after edits when scrolling.
+   * @param {CustomEvent} event - Turbo before-stream-render event
+   */
+  syncTemplateOnStreamReplace(event) {
+    const streamElement = event.target;
+    if (streamElement.action !== "replace") return;
+
+    const targetId = streamElement.target;
+    if (!targetId) return;
+
+    // Check if this replacement is for a cell within our virtualized table
+    const existingCell = document.getElementById(targetId);
+    if (!existingCell) return;
+
+    // Verify the cell belongs to this controller's table
+    if (!this.element.contains(existingCell)) return;
+
+    const fieldId = existingCell.dataset.fieldId;
+    if (!fieldId) return;
+
+    // Find the sample ID from the row
+    const row = existingCell.closest("tr[data-sample-id]");
+    const sampleId = row?.dataset?.sampleId;
+    if (!sampleId) return;
+
+    // Get the new content from the stream's template
+    const newContent = streamElement.templateContent?.firstElementChild;
+    if (!newContent) return;
+
+    // Find and update the corresponding template in templateContainer
+    const templateSelector = `[data-sample-id="${sampleId}"] template[data-field="${CSS.escape(fieldId)}"]`;
+    const template =
+      this.templateContainerTarget?.querySelector(templateSelector);
+    if (!template) return;
+
+    // Clone the new content and update the template
+    const clonedContent = newContent.cloneNode(true);
+    template.innerHTML = "";
+    template.content.appendChild(clonedContent);
   }
 
   /**
