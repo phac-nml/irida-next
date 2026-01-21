@@ -360,14 +360,22 @@ export default class extends Controller {
 
     // Fall back to finding header by cellIndex (for non-virtualized cells)
     if (!field) {
-      const header = element
-        .closest("table")
-        .querySelector(`th:nth-child(${element.cellIndex + 1})`);
-      field = header?.dataset.fieldId;
+      const table = element.closest("table");
+      if (table) {
+        const header = table.querySelector(
+          `th:nth-child(${element.cellIndex + 1})`,
+        );
+        field = header?.dataset.fieldId;
+      }
     }
 
     // Handle undefined field gracefully
     if (!field) {
+      return null;
+    }
+
+    // Handle detached elements - parentNode may not exist
+    if (!element.parentNode || !Number.isInteger(element.parentNode.rowIndex)) {
       return null;
     }
 
