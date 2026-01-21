@@ -65,7 +65,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           end
         end
         collection do
-          get :deferred_templates
+          get :deferred_template_fields
           get :select
           post :search
           post :metadata_template
