@@ -46,7 +46,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       :namespace_id,
       :update_samples,
       :email_notification,
-      Flipper.enabled?(:workflow_execution_sharing) ? :shared_with_namespace : nil,
+      :shared_with_namespace,
       { metadata: {},
         workflow_params: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }

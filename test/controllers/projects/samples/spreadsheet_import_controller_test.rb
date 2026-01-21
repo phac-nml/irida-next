@@ -10,8 +10,6 @@ module Projects
         @namespace = groups(:group_one)
         @project = projects(:project1)
         @blob_file = active_storage_blobs(:project_sample_import_valid_csv_blob)
-
-        Flipper.enable(:batch_sample_spreadsheet_import)
       end
 
       test 'should enqueue a Samples::BatchSampleImportJob' do
@@ -21,7 +19,8 @@ module Projects
                  spreadsheet_import: {
                    file: @blob_file.signed_id,
                    sample_id_column: 'sample_name'
-                 }
+                 },
+                 broadcast_target: 'a_broadcast_target'
                }
         end
       end

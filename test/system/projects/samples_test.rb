@@ -7,8 +7,6 @@ module Projects
     include ActionView::Helpers::SanitizeHelper
 
     setup do
-      Flipper.enable(:metadata_import_field_selection)
-      Flipper.enable(:batch_sample_spreadsheet_import)
       Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)
@@ -22,9 +20,6 @@ module Projects
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
-
-      Flipper.enable(:progress_bars)
-      Flipper.enable(:group_samples_clone)
     end
 
     test 'samples index table' do
@@ -1230,71 +1225,6 @@ module Projects
       assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
       # verify table ordering is still in sorted state
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
-      ### VERIFY END ###
-    end
-
-    test 'should import metadata with disabled feature flag' do
-      ### SETUP START ###
-      Flipper.disable(:metadata_import_field_selection)
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      # toggle metadata on for samples table
-      click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t('shared.samples.metadata_templates.fields.all')
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      assert_selector 'table thead tr th', count: 7
-
-      # metadatafield1 and 2 already exist, 3 does not and will be added by the import
-      assert_selector 'table thead tr th', text: 'METADATAFIELD1'
-      assert_selector 'table thead tr th', text: 'METADATAFIELD2'
-      assert_no_selector 'table thead tr th', text: 'METADATAFIELD3'
-      # sample 1 and 2 have no current value for metadatafield 1 and 2
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(6)", text: ''
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(7)", text: ''
-      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(6)", text: ''
-      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(7)", text: ''
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # start import
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-
-      assert_selector 'dialog h1', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
-      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
-      # disable ignore empty values
-      find('input#file_import_ignore_empty_values').click
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-
-      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-      assert_performed_jobs 1
-      assert_no_text I18n.t('shared.progress_bar.in_progress')
-
-      # success msg
-      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-
-      assert_no_selector 'dialog[open]'
-
-      # metadatafield3 added to header
-      assert_selector 'table thead tr th', count: 8
-      assert_selector 'table thead tr th', text: 'METADATAFIELD3'
-      # sample 1 and 2 metadata is updated
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(6)", text: '10'
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(7)", text: '20'
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(8)", text: '30'
-      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(6)", text: '15'
-      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(7)", text: '25'
-      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(8)", text: '35'
       ### VERIFY END ###
     end
 

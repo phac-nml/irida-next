@@ -24,7 +24,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @workflow_version_col = '6'
     @created_at_col = '7'
 
-    Flipper.enable(:delete_multiple_workflows)
     Flipper.enable(:cancel_multiple_workflows)
   end
 
@@ -585,7 +584,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
-    Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
     visit workflow_execution_path(workflow_execution, anchor: 'summary-tab')
     dt_value = I18n.t('common.labels.name', locale: @user.locale)
@@ -769,7 +767,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can preview workflow execution files' do
-    Flipper.enable(:attachments_preview)
     Flipper.enable(:workflow_execution_attachments_searching)
 
     previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)

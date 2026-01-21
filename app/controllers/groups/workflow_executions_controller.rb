@@ -8,7 +8,6 @@ module Groups
     include WorkflowExecutionActions
 
     before_action :namespace
-    before_action :ensure_enabled
     before_action :page_title
 
     private
@@ -71,10 +70,6 @@ module Groups
           name: @workflow_execution.id,
           path: group_workflow_execution_path(@workflow_execution)
         }]
-    end
-
-    def ensure_enabled
-      render :not_found unless Flipper.enabled?(:workflow_execution_sharing, current_user)
     end
 
     protected

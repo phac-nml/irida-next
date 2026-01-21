@@ -4,19 +4,9 @@ require 'faker'
 
 Faker::Config.locale = 'en'
 
-Flipper.enable(:workflow_execution_sharing)
-Flipper.enable(:metadata_import_field_selection)
-Flipper.enable(:progress_bars)
-Flipper.enable(:update_nextflow_metadata_param)
-Flipper.enable(:attachments_preview)
-Flipper.enable(:delete_multiple_workflows)
-Flipper.enable(:batch_sample_spreadsheet_import)
 Flipper.enable(:compose_with_retry)
 Flipper.enable(:sample_attachments_searching)
-Flipper.enable(:group_samples_transfer)
-Flipper.enable(:group_samples_clone)
 Flipper.enable(:workflow_execution_attachments_searching)
-Flipper.enable(:group_samples_destroy)
 Flipper.enable(:samples_refresh_notice)
 Flipper.enable(:integration_access_token_generation)
 Flipper.enable(:cancel_multiple_workflows)

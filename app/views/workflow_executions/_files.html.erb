@@ -13,7 +13,7 @@
               data: {}
             ) do %>
       <%= hidden_field_tag :limit, pagy.limit %>
-      <%= hidden_field_tag :tab, 'files' %>
+      <%= hidden_field_tag :tab, "files" %>
     <% end %>
   <% end %>
 </div>
@@ -28,7 +28,7 @@
   abilities: {
   },
   row_actions: {
-    preview: Flipper.enabled?(:attachments_preview),
+    preview: true,
   },
   empty: {
     icon_name: Attachment.icon,

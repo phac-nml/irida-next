@@ -11,8 +11,6 @@ module Samples
       @namespace = groups(:group_one)
       @project1 = projects(:project1)
       @project2 = projects(:project2)
-
-      Flipper.enable(:group_samples_transfer)
     end
 
     test 'should get new for group if owner' do

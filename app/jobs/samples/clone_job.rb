@@ -8,7 +8,7 @@ module Samples
     queue_as :default
     queue_with_priority 15
 
-    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
       service = if namespace.group_namespace?
                   Groups::Samples::CloneService.new(namespace, current_user)
                 else
@@ -17,7 +17,7 @@ module Samples
       @cloned_sample_ids = service.execute(
         new_project_id,
         sample_ids,
-        Flipper.enabled?(:progress_bars) ? broadcast_target : nil
+        broadcast_target
       )
 
       if namespace.errors.empty?

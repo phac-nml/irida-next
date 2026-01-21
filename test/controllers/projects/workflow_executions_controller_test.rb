@@ -11,8 +11,6 @@ module Projects
       @workflow_execution = workflow_executions(:automated_example_completed)
       @namespace = groups(:group_one)
       @project = projects(:project1)
-
-      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should show a listing of workflow executions for the project' do

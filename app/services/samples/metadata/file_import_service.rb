@@ -63,11 +63,7 @@ module Samples
       end
 
       def retrieve_headers
-        headers = if Flipper.enabled?(:metadata_import_field_selection)
-                    @selected_headers << @sample_id_column
-                  else
-                    @headers
-                  end
+        headers = @selected_headers << @sample_id_column
         strip_headers(headers)
       end
 

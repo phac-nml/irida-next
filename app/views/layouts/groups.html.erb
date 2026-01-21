@@ -10,7 +10,7 @@
             url: group_path(@group),
             avatar: true,
             label: @group.name,
-            selected: @current_page == t('common.labels.details'),
+            selected: @current_page == t("common.labels.details"),
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
@@ -38,15 +38,13 @@
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
-          <% if Flipper.enabled?(:workflow_execution_sharing) %>
-            <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
-              <%= render section.with_item(
-                url: group_workflow_executions_path(@group),
-                icon: WorkflowExecution.icon,
-                label: t(:"groups.sidebar.workflow_executions"),
-                selected: @current_page == t(:"groups.sidebar.workflow_executions"),
-              ) %>
-            <% end %>
+          <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
+            <%= render section.with_item(
+              url: group_workflow_executions_path(@group),
+              icon: WorkflowExecution.icon,
+              label: t(:"groups.sidebar.workflow_executions"),
+              selected: @current_page == t(:"groups.sidebar.workflow_executions"),
+            ) %>
           <% end %>
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
@@ -62,8 +60,8 @@
               ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
                 url: edit_group_path(@group),
-                label: t('common.labels.general'),
-                selected: @current_page == t('common.labels.general'),
+                label: t("common.labels.general"),
+                selected: @current_page == t("common.labels.general"),
               ) %>
               <% multi_level_menu.with_menu_item(
                 url: group_bots_path(@group),

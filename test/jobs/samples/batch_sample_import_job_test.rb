@@ -30,10 +30,16 @@ module Samples
 
       assert_equal @john_doe.id, @project.samples.find_by(name: 'my new sample 1').reload_log_data.responsible_id
       assert_equal @john_doe.id, @project.samples.find_by(name: 'my new sample 2').reload_log_data.responsible_id
-      assert_equal 1, turbo_streams.size
-      assert_equal 'replace', turbo_streams.first['action']
-      assert_equal 'import_spreadsheet_dialog_content', turbo_streams.first['target']
-      assert_includes turbo_streams.first.to_html, I18n.t('shared.samples.spreadsheet_imports.success.description')
+      assert_equal 3, turbo_streams.size
+      # first 2 turbo streams are for progress bar updates
+      turbo_streams.take(2).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+      # last turbo stream is the success message
+      assert_equal 'replace', turbo_streams.last['action']
+      assert_equal 'import_spreadsheet_dialog_content', turbo_streams.last['target']
+      assert_includes turbo_streams.last.to_html, I18n.t('shared.samples.spreadsheet_imports.success.description')
     end
   end
 end

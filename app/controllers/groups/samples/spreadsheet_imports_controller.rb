@@ -6,7 +6,6 @@ module Groups
     class SpreadsheetImportsController < Groups::ApplicationController
       include SampleSpreadsheetImportActions
 
-      before_action :ensure_enabled
       before_action :group_projects
 
       respond_to :turbo_stream
@@ -19,10 +18,6 @@ module Groups
 
       def group
         @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      end
-
-      def ensure_enabled
-        not_found unless Flipper.enabled?(:batch_sample_spreadsheet_import)
       end
 
       def group_projects
