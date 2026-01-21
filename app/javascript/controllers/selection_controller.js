@@ -111,7 +111,9 @@ export default class extends Controller {
   #updateUI(ids, announce) {
     try {
       this.rowSelectionTargets.forEach((row) => {
-        row.checked = ids.indexOf(row.value) > -1;
+        const isSelected = ids.indexOf(row.value) > -1;
+        row.checked = isSelected;
+        this.#updateRowAriaSelected(row, isSelected);
       });
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
@@ -147,6 +149,12 @@ export default class extends Controller {
     if (announce) {
       this.#announceSelectionStatus(selected);
     }
+  }
+
+  #updateRowAriaSelected(rowCheckbox, isSelected) {
+    const row = rowCheckbox.closest('[role="row"]');
+    if (!row) return;
+    row.setAttribute("aria-selected", isSelected ? "true" : "false");
   }
 
   /**

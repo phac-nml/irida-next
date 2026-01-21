@@ -21,6 +21,9 @@
         aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
         aria-colcount="<%= @columns.length + @metadata_fields.length %>"
         aria-rowcount="<%= @pagy.count + (@abilities[:select_samples] && @has_samples ? 2 : 1) %>"
+        <% if @abilities[:select_samples] %>
+        aria-multiselectable="true"
+        <% end %>
       >
         <%# Target for virtual scroll header manipulation %>
         <thead
