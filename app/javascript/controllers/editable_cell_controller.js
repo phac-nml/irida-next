@@ -60,7 +60,12 @@ export default class extends Controller {
 
     element.id = elementId;
 
-    this.#originalCellContent[element.id] = element.innerText;
+    // Only initialize original content if not already tracked.
+    // This preserves the original value during reattach cycles (e.g., horizontal scroll
+    // in virtualized tables) so that in-progress edits are not lost.
+    if (!(elementId in this.#originalCellContent)) {
+      this.#originalCellContent[element.id] = element.innerText;
+    }
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
     element.addEventListener("focus", this.boundFocus);
@@ -102,6 +107,14 @@ export default class extends Controller {
     const validEntry = this.#validateEntry(element);
     if (validEntry) {
       this.#clearEditingState(element);
+
+      // Clear the stored original content for this cell. After Turbo Stream replaces
+      // the cell, the new cell should capture its updated content as the new original.
+      const elementId = this.#elementId(element);
+      if (elementId) {
+        delete this.#originalCellContent[elementId];
+      }
+
       // Remove event listeners on submission, they will be re-added on succesfull update
       element.removeEventListener("blur", this.boundBlur);
       element.removeEventListener("keydown", this.boundKeydown);
@@ -217,7 +230,7 @@ export default class extends Controller {
     if (validEntry) {
       let didConfirm = false;
 
-      let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
+      const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
         .replace(/ORIGINAL_VALUE/g, originalValue)
         .replace(/NEW_VALUE/g, this.#trimWhitespaces(editableCell.innerText));
       this.confirmDialogContainerTarget.innerHTML = confirmDialog;
