@@ -11,7 +11,7 @@ module WorkflowExecutions
       @wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
       return false if @workflow_execution.run_id.nil?
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
