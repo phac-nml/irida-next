@@ -79,7 +79,7 @@ export default class MenuController extends Controller {
       this.#onHide();
     }
 
-    this.#cleanup();
+    this.#cleanup?.();
   }
 
   update() {
