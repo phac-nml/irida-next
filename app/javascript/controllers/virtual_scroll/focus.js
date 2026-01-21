@@ -4,10 +4,10 @@ const SORT_FOCUS_TTL_MS = 5000;
 export const focusMixin = {
   restorePendingFocusFromSessionStorage() {
     try {
-      const raw = sessionStorage.getItem(SORT_FOCUS_STORAGE_KEY);
-      if (!raw) return;
+      const storedFocusData = sessionStorage.getItem(SORT_FOCUS_STORAGE_KEY);
+      if (!storedFocusData) return;
 
-      const data = JSON.parse(raw);
+      const data = JSON.parse(storedFocusData);
       sessionStorage.removeItem(SORT_FOCUS_STORAGE_KEY);
 
       if (!data || typeof data !== "object") return;
