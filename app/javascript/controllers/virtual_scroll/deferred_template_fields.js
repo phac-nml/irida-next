@@ -1,4 +1,4 @@
-export const deferredTemplatesMixin = {
+export const deferredTemplateFieldsMixin = {
   /**
    * Set up MutationObserver to detect when deferred templates are added to the DOM
    */
