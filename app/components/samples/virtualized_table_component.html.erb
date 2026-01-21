@@ -281,7 +281,7 @@
           format: :turbo_stream,
         }.to_query %>
         <% deferred_url =
-          deferred_templates_namespace_project_samples_path(
+          deferred_template_fields_namespace_project_samples_path(
             @namespace.parent,
             @namespace.project,
           ) + "?#{deferred_params}" %>

@@ -9,9 +9,9 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select deferred_templates]
+    before_action :query, only: %i[index search select deferred_template_fields]
     before_action :current_metadata_template, only: %i[index]
-    before_action :index_view_authorizations, only: %i[index deferred_templates]
+    before_action :index_view_authorizations, only: %i[index deferred_template_fields]
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
@@ -35,7 +35,7 @@ module Projects
       end
     end
 
-    def deferred_templates
+    def deferred_template_fields
       # Only available when virtualized table is enabled
       not_found unless Flipper.enabled?(:virtualized_samples_table)
 
