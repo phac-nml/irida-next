@@ -48,7 +48,7 @@ export default class TableController extends Controller {
         window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ??
         false;
 
-      // 🎯 Create debounced focus handler using lodash
+      // 🎯 Create debounced focus handler
       this.#debouncedHandleFocus = debounce(
         this.#handleCellFocusInternal.bind(this),
         TableController.#DEBOUNCE_DELAY,
