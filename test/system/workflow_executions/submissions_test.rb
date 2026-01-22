@@ -129,7 +129,7 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
                       text: @sample44.puid
 
-      assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.unauthorized_to_update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
       assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
     end
@@ -142,7 +142,6 @@ module WorkflowExecutions
       project = projects(:user29_project1)
       sample = samples(:sample45)
       Project.reset_counters(project.id, :samples_count)
-
       visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
@@ -307,7 +306,7 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
                       text: @sample44.puid
 
-      assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+      assert_text I18n.t(:'components.nextflow.unauthorized_to_update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
       assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
     end

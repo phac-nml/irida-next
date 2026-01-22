@@ -33,7 +33,6 @@ class NextflowComponentTest < ViewComponentTestCase
   end
 
   test 'default without feature flag' do
-    Flipper.enable(:workflow_execution_sharing)
     sample43 = samples(:sample43)
     sample44 = samples(:sample44)
     workflow = Irida::Pipeline.new(
