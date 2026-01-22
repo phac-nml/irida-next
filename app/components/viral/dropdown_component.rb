@@ -23,6 +23,8 @@ module Viral
     # Public: Expose key dropdown configuration
     attr_reader :label, :icon_name, :caret, :trigger, :tooltip, :styles, :prefix
 
+    attr_reader :distance, :skidding unless Flipper.enabled?(:flowbite_replacement)
+
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
       click: 'click',
@@ -36,6 +38,8 @@ module Viral
     # @param icon [String] Optional icon name
     # @param caret [Boolean] Show dropdown caret icon
     # @param trigger [Symbol] :click or :hover (default :click)
+    # @param skidding [Integer] Popper.js skidding offset
+    # @param distance [Integer] Popper.js distance offset
     # @param styles [Hash] Custom styles for dropdown/button
     # @param action_link [Boolean] Use as action button
     # @param action_link_value [Object] Value for action button
@@ -49,7 +53,11 @@ module Viral
     private
 
     # 🏷️ Set basic attributes from params
-    def set_basic_attributes
+    def set_basic_attributes # rubocop:disable Metrics/MethodLength
+      unless Flipper.enabled?(:flowbite_replacement)
+        @distance = @params[:distance] || 10
+        @skidding = @params[:skidding] || 0
+      end
       @styles = (@params[:styles] || {}).with_indifferent_access
       @label = @params[:label]
       @icon_name = @params[:icon]
@@ -171,7 +179,12 @@ module Viral
 
     # 🏗️ Build data attributes for the dropdown trigger
     def build_data_attributes
-      data = { 'viral--dropdown-target': 'trigger' }
+      data = if Flipper.enabled?(:flowbite_replacement)
+               { 'viral--dropdown-target': 'trigger' }
+
+             else
+               { 'viral--flowbite-dropdown-target': 'trigger' }
+             end
       return data unless @action_link
 
       data.merge(
