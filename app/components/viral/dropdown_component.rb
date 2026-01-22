@@ -36,6 +36,8 @@ module Viral
     # @param icon [String] Optional icon name
     # @param caret [Boolean] Show dropdown caret icon
     # @param trigger [Symbol] :click or :hover (default :click)
+    # @param skidding [Integer] Popper.js skidding offset
+    # @param distance [Integer] Popper.js distance offset
     # @param styles [Hash] Custom styles for dropdown/button
     # @param action_link [Boolean] Use as action button
     # @param action_link_value [Object] Value for action button
@@ -238,7 +240,12 @@ module Viral
 
     # 🏗️ Build data attributes for the dropdown trigger
     def build_data_attributes
-      data = { 'viral--dropdown-target': 'trigger' }
+      data = if Flipper.enabled?(:flowbite_replacement)
+               { 'viral--dropdown-target': 'trigger' }
+
+             else
+               { 'viral--flowbite-dropdown-target': 'trigger' }
+             end
       return data unless @action_link
 
       data.merge(
