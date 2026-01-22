@@ -18,7 +18,7 @@ class WorkflowExecutionCleanupJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.cleaned?
 
     assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
   end
 
   test 'successful job on canceled workflow execution' do
@@ -33,7 +33,8 @@ class WorkflowExecutionCleanupJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.cleaned?
 
     assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(2, only: Turbo::Streams::BroadcastStreamJob)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
   end
 
   test 'successful job on error workflow execution' do
@@ -48,7 +49,8 @@ class WorkflowExecutionCleanupJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.cleaned?
 
     assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(2, only: Turbo::Streams::BroadcastStreamJob)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
   end
 
   test 'failed job on running workflow execution' do

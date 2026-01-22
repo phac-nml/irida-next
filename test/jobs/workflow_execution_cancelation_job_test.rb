@@ -34,8 +34,8 @@ class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
       end
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert @workflow_execution.reload.canceled?
   end
 
@@ -64,8 +64,8 @@ class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
       end
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(6, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert @workflow_execution.reload.canceled?
   end
 
@@ -92,8 +92,8 @@ class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
       end
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(3, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     @workflow_execution.reload
     assert @workflow_execution.error?
     assert @workflow_execution.http_error_code == 400
