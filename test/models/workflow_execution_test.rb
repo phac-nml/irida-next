@@ -308,53 +308,53 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
 
     workflow_execution_example.state = :completed
     assert_enqueued_emails 1 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
       assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution_example]
     end
 
     workflow_execution_example.state = :error
     assert_enqueued_emails 1 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
       assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution_example]
     end
 
     workflow_execution_example.state = :submitted
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :running
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :completing
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :canceling
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :canceled
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :prepared
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     workflow_execution_example.state = :initial
     assert_enqueued_emails 0 do
-      workflow_execution_example.send_email
+      workflow_execution_example.save
     end
 
     assert_enqueued_emails 0 do
-      @workflow_execution_valid.send_email
+      workflow_execution_example.save
     end
   end
 

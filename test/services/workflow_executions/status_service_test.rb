@@ -43,11 +43,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      status = WorkflowExecutions::StatusService.new(@workflow_execution, @user, {}, conn).execute
 
-      assert_equal 'completing', @workflow_execution.reload.state
-
-      assert_no_enqueued_emails
+      assert_equal :completing, status
     end
 
     test 'get status of workflow execution which is running' do
@@ -84,11 +82,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      status = WorkflowExecutions::StatusService.new(@workflow_execution, @user, {}, conn).execute
 
-      assert_equal 'running', @workflow_execution.reload.state
-
-      assert_no_enqueued_emails
+      assert_equal :running, status
     end
 
     test 'get status of workflow execution which has been canceled' do
@@ -125,11 +121,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      status = WorkflowExecutions::StatusService.new(@workflow_execution, @user, {}, conn).execute
 
-      assert_equal 'canceled', @workflow_execution.reload.state
-
-      assert_no_enqueued_emails
+      assert_equal :canceled, status
     end
 
     test 'get status of workflow execution which has errored' do
@@ -166,13 +160,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      status = WorkflowExecutions::StatusService.new(@workflow_execution, @user, {}, conn).execute
 
-      assert_equal 'error', @workflow_execution.reload.state
-
-      assert @workflow_execution.email_notification
-      assert_enqueued_emails 1
-      assert_enqueued_email_with PipelineMailer, :error_user_email, args: [@workflow_execution]
+      assert_equal :error, status
     end
 
     test 'get status of automated workflow execution which has errored' do
@@ -211,19 +201,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
+      status = WorkflowExecutions::StatusService.new(@workflow_execution, @user, {}, conn).execute
 
-      assert_equal 'error', @workflow_execution.reload.state
-
-      assert @workflow_execution.email_notification
-      assert_enqueued_emails 2
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@workflow_execution.namespace, locale)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with PipelineMailer, :error_manager_email,
-                                   args: [@workflow_execution, manager_emails, locale]
-      end
+      assert_equal :error, status
     end
   end
 end
