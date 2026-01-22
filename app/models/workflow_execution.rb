@@ -13,7 +13,7 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
 
   after_save :send_email, if: :saved_change_to_state?
 
-  after_commit { broadcast_refresh_to [submitter, :workflow_executions] }
+  after_commit { broadcast_refresh_later_to [submitter, :workflow_executions] }
 
   belongs_to :submitter, class_name: 'User'
   belongs_to :namespace

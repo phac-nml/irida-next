@@ -22,8 +22,8 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
       WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionSubmissionJob)
     assert_performed_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionSubmissionJob)
     @workflow_execution.reload.state.to_sym == :prepared
   end
 
@@ -41,8 +41,9 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
       WorkflowExecutionPreparationJob.perform_later(@workflow_execution_completed)
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_enqueued_jobs(2, only: Turbo::Streams::BroadcastStreamJob)
     @workflow_execution_completed.reload.state.to_sym == :error
   end
 end
