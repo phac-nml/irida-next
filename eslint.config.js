@@ -20,6 +20,7 @@ export default defineConfig([
       "app/assets/builds/**",
       ".devenv/**",
       "docs-site/**", // Docusaurus has its own linting
+      "vendor/javascript/**",
     ],
   },
 
