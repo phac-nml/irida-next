@@ -102,7 +102,6 @@ export default class extends Controller {
   #allowedToUpdateSamples;
 
   connect() {
-    console.log("prerendered samplesheet connected");
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }

@@ -249,12 +249,12 @@ fr:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
       loading_complete:
         alert_message_html:
-          one: "<div>En cours: Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>"
-          other: "<div>En cours: La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>"
+          one: "<div>(Complète) Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>"
+          other: "<div>(Complète) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>"
         announcement: La feuille d’échantillons est prête.
       loading_samplesheet:
-        one: 'Complète: Préparation des arguments d’exécution du flux de travail pour 1 échantillon.'
-        other: 'Complète: La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.'
+        one: "(En cours) Préparation des arguments d’exécution du flux de travail pour 1 échantillon."
+        other: "(En cours) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
         helper: Un nom personnalisé facilitera la recherche à l’avenir.
