@@ -6,7 +6,6 @@ module WorkflowExecutions
     include Metadata
 
     # TODO: when feature flag :prerendered_samplesheet is retired
-    # - remove before action allowed_to_update_samples
     # - rename before_action process_samples to samples_count and remove process_samples function and uncomment
     # samples_count
     respond_to :turbo_stream
@@ -14,7 +13,6 @@ module WorkflowExecutions
     before_action :process_samples, only: %i[create]
     before_action :workflow, only: %i[create]
     before_action :namespace_id, only: %i[create pipeline_selection]
-    # before_action :allowed_to_update_samples, only: %i[create]
     before_action :samplesheet_params, only: %i[samplesheet]
 
     def pipeline_selection
