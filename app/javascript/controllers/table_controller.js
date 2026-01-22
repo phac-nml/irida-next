@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+import debounce from "debounce";
 
 /**
  * TableController
@@ -49,7 +49,7 @@ export default class TableController extends Controller {
         false;
 
       // 🎯 Create debounced focus handler using lodash
-      this.#debouncedHandleFocus = _.debounce(
+      this.#debouncedHandleFocus = debounce(
         this.#handleCellFocusInternal.bind(this),
         TableController.#DEBOUNCE_DELAY,
       );
@@ -65,7 +65,7 @@ export default class TableController extends Controller {
     try {
       this.#clearCaches();
       if (this.#debouncedHandleFocus) {
-        this.#debouncedHandleFocus.cancel();
+        this.#debouncedHandleFocus.clear();
       }
     } catch (error) {
       this.#handleError("Error during TableController disconnect", error);

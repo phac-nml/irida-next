@@ -5,14 +5,14 @@
  * Validates email format, displays appropriate error messages, and manages form submission.
  */
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+import debounce from "debounce";
 
 export default class extends Controller {
   static targets = ["form", "emailField", "errorContainer"];
 
   static values = {
     emailMissing: { type: String },
-    emailFormat: { type: String }
+    emailFormat: { type: String },
   };
 
   connect() {
@@ -23,7 +23,7 @@ export default class extends Controller {
     this.#validateRequiredValues();
 
     // Set up debounced validation for typing
-    this.debouncedValidate = _.debounce(
+    this.debouncedValidate = debounce(
       () => this.validateEmail(false, false),
       300,
     );
@@ -115,7 +115,10 @@ export default class extends Controller {
 
     // Update accessibility attributes
     this.emailFieldTarget.setAttribute("aria-invalid", "true");
-    this.emailFieldTarget.setAttribute("aria-describedby", this.errorContainerTarget.id);
+    this.emailFieldTarget.setAttribute(
+      "aria-describedby",
+      this.errorContainerTarget.id,
+    );
 
     if (shouldFocus) {
       this.emailFieldTarget.focus();
@@ -146,7 +149,7 @@ export default class extends Controller {
     // Comprehensive RFC 5322 compatible regex
     // Covers most valid email formats while rejecting obvious mistakes
     const emailRegex =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
 
     if (!emailRegex.test(email)) {
       return false;

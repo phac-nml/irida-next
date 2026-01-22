@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+import debounce from "debounce";
 import {
   isPrintableCharacter,
   getLowercaseContent,
@@ -47,7 +47,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#lastOption = null;
 
     // Add debounced filter for search input
-    this.debouncedFilterAndUpdate = _.debounce(() => {
+    this.debouncedFilterAndUpdate = debounce(() => {
       const option = this.#filterOptions();
       if (this.#isClosed() && this.comboboxTarget.value.length) {
         this.#open();
@@ -70,7 +70,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   disconnect() {
-    this.debouncedFilterAndUpdate.cancel();
+    this.debouncedFilterAndUpdate.clear();
 
     // Remove event handlers
     document.body.removeEventListener(
@@ -275,21 +275,21 @@ export default class SelectWithAutoCompleteController extends Controller {
   // Combobox events
 
   #onComboboxKeyDown(event) {
-    let flag = false,
-      altKey = event.altKey;
+    let flag = false;
+    const altKey = event.altKey;
 
     if (event.ctrlKey || event.shiftKey) {
       return;
     }
 
     switch (event.key) {
-      case "Enter":
+      case "Enter": {
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
         this.#close();
         flag = true;
         break;
-
+      }
       case "Down":
       case "ArrowDown":
         if (this.#filteredOptions.length > 0) {
@@ -335,25 +335,26 @@ export default class SelectWithAutoCompleteController extends Controller {
         flag = true;
         break;
 
-      case "Tab":
+      case "Tab": {
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
         this.#close();
         break;
-
-      case "Home":
+      }
+      case "Home": {
         this.comboboxTarget.setSelectionRange(0, 0);
         flag = true;
         break;
-
-      case "End":
+      }
+      case "End": {
         const length = this.comboboxTarget.value.length;
         this.comboboxTarget.setSelectionRange(length, length);
         flag = true;
         break;
-
-      default:
+      }
+      default: {
         break;
+      }
     }
 
     if (flag) {
