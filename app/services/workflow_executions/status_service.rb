@@ -3,11 +3,11 @@
 module WorkflowExecutions
   # Service used to update the status of a WorkflowExecution
   class StatusService < BaseService
-    def initialize(workflow_execution, user = nil, params = {})
+    def initialize(workflow_execution, user = nil, params = {}, conn_override = nil)
       super(user, params)
 
       @workflow_execution = workflow_execution
-      wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
+      wes_connection = conn_override || Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
       @wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
     end
 
