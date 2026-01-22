@@ -354,7 +354,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     end
 
     assert_enqueued_emails 0 do
-      workflow_execution_example.save
+      @workflow_execution_valid.save
     end
   end
 
