@@ -1119,60 +1119,42 @@ module Groups
       end
 
       # description and project_puid metadata headers do not exist
-      within('#samples-table table thead tr') do
-        assert_selector 'th', count: 10
-      end
-      within('#samples-table table thead') do
-        assert_text 'METADATAFIELD1'
-        assert_no_text 'DESCRIPTION'
-        assert_no_text 'PROJECT_PUID'
-      end
+      assert_selector '#samples-table table thead tr th', count: 10
+      assert_selector '#samples-table table thead th', exact_text: 'METADATAFIELD1'
+      assert_no_selector '#samples-table table thead th', exact_text: 'METADATAFIELD3'
+      assert_no_selector '#samples-table table thead th', exact_text: 'DESCRIPTION'
+      assert_no_selector '#samples-table table thead th', exact_text: 'PROJECT_PUID'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_text 'description'
-          assert_no_text 'project_puid'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_no_text 'description'
-          assert_no_text 'project_puid'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
 
+      assert_no_selector 'ul#available-list li'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      assert_no_selector 'li', exact_text: 'description'
+      assert_no_selector 'li', exact_text: 'project_puid'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
-
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
       assert_selector '#samples-table table thead tr th', count: 11
-      within('#samples-table table') do
-        within('thead') do
-          assert_text 'METADATAFIELD3'
-          assert_no_text 'DESCRIPTION'
-          assert_no_text 'PROJECT_PUID'
-        end
-      end
+      assert_selector '#samples-table table thead th', exact_text: 'METADATAFIELD3'
+      assert_no_selector '#samples-table table thead th', exact_text: 'DESCRIPTION'
+      assert_no_selector '#samples-table table thead th', exact_text: 'PROJECT_PUID'
       ### VERIFY END ###
     end
 
