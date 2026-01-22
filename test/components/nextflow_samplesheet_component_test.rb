@@ -121,7 +121,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with samplesheet overrides without feature flag' do
-    Flipper.enable(:update_nextflow_metadata_param)
     visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     within('div[data-controller-connected="true"]') do
