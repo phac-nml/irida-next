@@ -1604,8 +1604,8 @@ module Groups
       end
 
       assert_selector '#samples-table table tbody tr', count: 11
-      assert_selector 'samples-table table tbody tr:first-child th:first-child', text: sample.puid
-      assert_selector 'samples-table table tbody tr:first-child td:nth-child(2)', text: sample.name
+      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: sample.puid
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: sample.name
     end
 
     test 'batch sample import metadata fields listing' do
