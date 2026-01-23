@@ -5,7 +5,7 @@ module AdvancedSearch
   class Condition < Component
     # rubocop:disable Metrics/ParameterLists
     def initialize(groups_form:, group_index:, condition:, condition_index:, condition_number:, sample_fields: [],
-                   metadata_fields: [], operations: [])
+                   metadata_fields: [], operations: [], enum_fields: {})
       @groups_form = groups_form
       @group_index = group_index
       @condition = condition
@@ -14,6 +14,7 @@ module AdvancedSearch
       @sample_fields = sample_fields
       @metadata_fields = metadata_fields
       @operations = operations
+      @enum_fields = enum_fields
     end
     # rubocop:enable Metrics/ParameterLists
   end

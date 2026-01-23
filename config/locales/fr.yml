@@ -1966,6 +1966,7 @@ fr:
         title: Échec de la création de l'exécution du flux de travail
       index:
         search:
+          loading: Chargement des exécutions de flux de travail...
           placeholder: Rechercher par ID ou nom
         title: Exécutions de flux de travail
       list_workflow_execution:
@@ -2096,7 +2097,8 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
-      run_id: Exécuter l’identifiant
+      name: Nom
+      run_id: Exécuter l'identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles
       state: État
       updated_at: Dernière mise à jour

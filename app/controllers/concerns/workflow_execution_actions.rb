@@ -5,6 +5,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
   include NamespacePathHelper
+  include Storable
   include WorkflowExecutionAttachment
 
   included do
@@ -16,6 +17,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action proc { destroy_paths }, only: %i[destroy_confirmation]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
     before_action proc { cancel_multiple_paths }, only: %i[cancel_multiple_confirmation cancel_multiple]
+    before_action proc { workflow_execution_fields }, only: %i[index search]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -129,6 +131,23 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     @query = workflow_execution_query
     @workflow_executions = @query.results.select(:id)
+  end
+
+  def search
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+
+    @query = workflow_execution_query
+    @search_params = search_params
+
+    respond_to do |format|
+      format.turbo_stream do
+        if @query.valid?
+          render status: :ok
+        else
+          render status: :unprocessable_content
+        end
+      end
+    end
   end
 
   def destroy_confirmation
@@ -365,11 +384,24 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    search_params = {}
-    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
-    search_params[:sort] = params.dig(:q, :s)
-    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
-    search_params.compact
+    updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+    updated_params.slice!('name_or_id_cont', 'name_or_id_in', 'groups_attributes', 'sort')
+
+    updated_params['sort'] = 'updated_at desc' unless updated_params.key?('sort')
+    update_store(search_key, updated_params)
+
+    updated_params
+  end
+
+  def search_key
+    namespace_id = @namespace&.id || 'user'
+    :"#{controller_name}_#{namespace_id}_search_params"
+  end
+
+  def workflow_execution_fields
+    @workflow_execution_fields = %w[id name run_id state created_at updated_at]
+    @workflow_execution_enum_fields = {
+      'state' => WorkflowExecution.states.keys.map { |s| [s.humanize, s] }
+    }
   end
 end

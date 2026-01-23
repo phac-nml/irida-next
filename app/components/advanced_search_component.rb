@@ -2,21 +2,38 @@
 
 # View component for advanced search component
 class AdvancedSearchComponent < Component
-  def initialize(form:, search:, sample_fields: [], metadata_fields: [], open: false, status: true) # rubocop: disable Metrics/ParameterLists
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(
+    form:,
+    search:,
+    sample_fields: [],
+    metadata_fields: [],
+    open: false,
+    status: true,
+    i18n_prefix: 'samples.table_component',
+    search_group_class: Sample::SearchGroup,
+    search_condition_class: Sample::SearchCondition,
+    enum_fields: {}
+  )
     @form = form
     @search = search
-    @sample_fields = sample_field_options(sample_fields)
+    @sample_fields = sample_field_options(sample_fields, i18n_prefix)
     @metadata_fields = metadata_field_options(metadata_fields)
     @operations = operation_options
     @open = open
     @status = status
+    @i18n_prefix = i18n_prefix
+    @search_group_class = search_group_class
+    @search_condition_class = search_condition_class
+    @enum_fields = enum_fields
   end
+  # rubocop:enable Metrics/ParameterLists
 
   private
 
-  def sample_field_options(sample_fields)
+  def sample_field_options(sample_fields, i18n_prefix)
     sample_fields.map do |sample_field|
-      [I18n.t("samples.table_component.#{sample_field}"), sample_field]
+      [I18n.t("#{i18n_prefix}.#{sample_field}"), sample_field]
     end
   end
 

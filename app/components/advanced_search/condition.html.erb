@@ -1,5 +1,6 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
+  data-enum-fields="<%= @enum_fields.to_json %>"
   class="
     flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-end rounded-lg
     border border-slate-300 dark:border-slate-600 text-sm text-slate-500
@@ -28,6 +29,7 @@
                                options,
                                { include_blank: true },
                                {
+                                 "data-action": "advanced-search#handleFieldChange",
                                  "aria-label":
                                    t(
                                      "activemodel.attributes.sample/search_condition.field",
@@ -88,6 +90,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
+      enum_fields: @enum_fields,
     ) %>
   <% end %>
   <button

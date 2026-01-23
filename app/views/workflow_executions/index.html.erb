@@ -96,21 +96,9 @@
 
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
 
-    <%= render SearchComponent.new(
-      query: @q,
-      url: workflow_executions_path,
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: @q.name_or_id_cont,
-      total_count: @pagy.count,
-      class: "max-sm:grow",
-      search_field_arguments: {
-        data: {
-          "search-field-selection-outlet": "#workflow-executions-table",
-        },
-      },
-    ) %>
+    <div id="table-filter" class="contents">
+      <%= render partial: "table_filter" %>
+    </div>
   </div>
 <% end %>
 

@@ -1962,6 +1962,7 @@ en:
         title: Workflow Execution Create Failure
       index:
         search:
+          loading: Loading workflow executions...
           placeholder: Search by ID or name
         title: Workflow Executions
       list_workflow_execution:
@@ -2092,6 +2093,7 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
+      name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions
       state: State

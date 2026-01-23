@@ -5,7 +5,7 @@ module AdvancedSearch
   class Group < Component
     # rubocop:disable Metrics/ParameterLists
     def initialize(form:, group:, group_index:, group_number:, show_remove_group_button:, sample_fields: [],
-                   metadata_fields: [], operations: [])
+                   metadata_fields: [], operations: [], enum_fields: {})
       @form = form
       @group = group
       @group_index = group_index
@@ -14,6 +14,7 @@ module AdvancedSearch
       @sample_fields = sample_fields
       @metadata_fields = metadata_fields
       @operations = operations
+      @enum_fields = enum_fields
     end
     # rubocop:enable Metrics/ParameterLists
   end

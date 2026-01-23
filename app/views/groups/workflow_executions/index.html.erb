@@ -35,8 +35,8 @@
                   id: "select-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
-      <input type="hidden" name="select" value="on" />
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="select" value="on"/>
 
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
@@ -47,7 +47,7 @@
                   id: "deselect-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
+      <input type="hidden" name="format" value="turbo_stream"/>
 
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
@@ -55,19 +55,9 @@
 
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
 
-    <%= render SearchComponent.new(
-      query: @q,
-      url: group_workflow_executions_path(**request.query_parameters),
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      total_count: @pagy.count,
-      class: "max-sm:grow",
-      value: @q.name_or_id_cont,
-      data: {
-        "search-field-selection-outlet": "#workflow-executions-table",
-      },
-    ) %>
+    <div id="table-filter" class="contents">
+      <%= render partial: "table_filter" %>
+    </div>
   </div>
 <% end %>
 

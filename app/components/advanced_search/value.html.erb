@@ -8,21 +8,54 @@
     form-field w-5/12 @max-xl:w-full value <%= 'invalid' if invalid_value %>
     <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
+  data-enum-field="<%= enum_field? %>"
+  data-enum-options="<%= enum_options.to_json %>"
 >
   <%= @conditions_form.label :value, data: { required: true } %>
   <% if %w[in not_in].include?(@condition.operator) %>
-    <div
-      data-controller="list-filter"
-      data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
-      class="list-filter"
-    >
-      <%= render ListInputComponent.new(
-        list_input_form_name: @conditions_form.field_name(:value, multiple: true),
-        show_description: false,
-        "aria-invalid": invalid_value,
-        "aria-describedby": @conditions_form.field_id(:value, "error"),
-      ) %>
-    </div>
+    <% if enum_field? %>
+      <%= @conditions_form.select :value,
+                              options_for_select(enum_options, @condition.value),
+                              { include_blank: true },
+                              {
+                                multiple: true,
+                                "aria-label":
+                                  t(
+                                    "activemodel.attributes.sample/search_condition.value",
+                                  ),
+                                "aria-invalid": invalid_value,
+                                "aria-describedby":
+                                  @conditions_form.field_id(:value, "error"),
+                                autofocus: invalid_value,
+                              } %>
+    <% else %>
+      <div
+        data-controller="list-filter"
+        data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
+        class="list-filter"
+      >
+        <%= render ListInputComponent.new(
+          list_input_form_name: @conditions_form.field_name(:value, multiple: true),
+          show_description: false,
+          "aria-invalid": invalid_value,
+          "aria-describedby": @conditions_form.field_id(:value, "error"),
+        ) %>
+      </div>
+    <% end %>
+  <% elsif enum_field? %>
+    <%= @conditions_form.select :value,
+                            options_for_select(enum_options, @condition.value),
+                            { include_blank: true },
+                            {
+                              "aria-label":
+                                t(
+                                  "activemodel.attributes.sample/search_condition.value",
+                                ),
+                              "aria-invalid": invalid_value,
+                              "aria-describedby":
+                                @conditions_form.field_id(:value, "error"),
+                              autofocus: invalid_value,
+                            } %>
   <% else %>
     <%= @conditions_form.text_field :value,
                                 "aria-label":
