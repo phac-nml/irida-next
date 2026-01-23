@@ -11,6 +11,9 @@ module Irida
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
+    DEFS_KEY_FOR_SCHEMA_VERSION = { 'http://json-schema.org/draft-07/schema': 'definitions',
+                                    'https://json-schema.org/draft/2020-12/schema': '$defs' }.freeze
+
     def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc, unknown: false) # rubocop:disable Metrics/MethodLength,Metrics/ParameterLists,Metrics/AbcSize
       @pipeline_id = pipeline_id
       @name = entry['name']
@@ -72,7 +75,8 @@ module Irida
       nextflow_schema = JSON.parse(schema_loc.read)
       workflow_params = {}
 
-      definitions = nextflow_schema['definitions'].deep_merge(@overrides['definitions'] || {})
+      defs_key = DEFS_KEY_FOR_SCHEMA_VERSION[nextflow_schema['$schema'].to_sym]
+      definitions = nextflow_schema[defs_key].deep_merge(@overrides[defs_key] || {})
 
       definitions.each do |key, definition|
         next unless show_section?(definition['properties'])
@@ -239,7 +243,10 @@ module Irida
     def default_workflow_params_for_entry
       default_workflow_params = {}
 
-      @overrides['definitions']&.each_value do |definition|
+      nextflow_schema = JSON.parse(schema_loc.read)
+
+      defs_key = DEFS_KEY_FOR_SCHEMA_VERSION[nextflow_schema['$schema'].to_sym]
+      @overrides[defs_key]&.each_value do |definition|
         next unless definition.key?('properties')
 
         definition['properties'].each do |name, property|
