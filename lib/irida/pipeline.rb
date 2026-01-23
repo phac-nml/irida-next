@@ -23,7 +23,7 @@ module Irida
       @type = 'NFL'
       @type_version = 'DSL2'
       @engine = 'nextflow'
-      @engine_version = '23.10.0'
+      @engine_version = '24.10.3'
       @url = entry['url']
       @version = version['name']
       @schema_loc = schema_loc
