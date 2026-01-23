@@ -511,7 +511,7 @@ GEM
       i18n (>= 0.5.0)
       railties (>= 6.1)
     public_suffix (7.0.2)
-    puma (6.6.1)
+    puma (7.2.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -801,7 +801,7 @@ DEPENDENCIES
   pg
   propshaft
   public_activity
-  puma (~> 6.6)
+  puma (~> 7.2)
   rack-cors
   rails (~> 8.1.2)
   rails_icons (~> 1.5)
