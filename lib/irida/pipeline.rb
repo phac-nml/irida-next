@@ -12,6 +12,8 @@ module Irida
     IGNORED_PARAMS = %w[outdir email].freeze
 
     DEFS_KEY_FOR_SCHEMA_VERSION = { 'http://json-schema.org/draft-07/schema': 'definitions',
+                                    'https://json-schema.org/draft-07/schema': 'definitions',
+                                    'http://json-schema.org/draft/2020-12/schema': '$defs',
                                     'https://json-schema.org/draft/2020-12/schema': '$defs' }.freeze
 
     def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc, unknown: false) # rubocop:disable Metrics/MethodLength,Metrics/ParameterLists,Metrics/AbcSize
@@ -240,7 +242,9 @@ module Irida
       overrides
     end
 
-    def default_workflow_params_for_entry
+    def default_workflow_params_for_entry # rubocop:disable Metrics/CyclomaticComplexity
+      return {} if schema_loc.nil?
+
       default_workflow_params = {}
 
       nextflow_schema = JSON.parse(schema_loc.read)
