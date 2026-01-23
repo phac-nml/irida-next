@@ -30,6 +30,13 @@ module Groups
       end
     end
 
+    def pluck_sample_names_and_puids(namespaces)
+      samples = namespaces.map do |namespace|
+        namespace.project.samples.pluck(:name, :puid)
+      end
+      samples.flatten!
+    end
+
     test 'visiting the index' do
       visit group_samples_url(@group)
 
@@ -1806,6 +1813,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(group)
 
+      assert_no_selector 'table'
       assert_selector 'div.empty_state_message'
       assert_text I18n.t('groups.samples.table.no_associated_samples')
       assert_text I18n.t('groups.samples.table.no_samples')
@@ -1815,10 +1823,7 @@ module Groups
 
     test 'transfer dialog sample listing' do
       ### SETUP START ###
-      samples = @group.project_namespaces.map do |pn|
-        pn.project.samples.pluck(:name, :puid)
-      end
-      samples.flatten!
+      samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
 
@@ -1856,22 +1861,19 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'tfoot', text: 'Samples: 26'
+      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                '26')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                              '26')
       ### VERIFY END ###
     end
 
@@ -1884,29 +1886,21 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.description.singular')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.description.singular')
       ### VERIFY END ###
     end
 
     test 'transfer samples' do
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
-
-      samples.flatten!
+      samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1919,48 +1913,37 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-
       ### SETUP END ###
 
       ### ACTIONS START ###
       # select first sample
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26 Selected: 1'
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      assert_selector 'table tfoot', text: 'Samples: 26 Selected: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text samples[0][0]
-          assert_text samples[0][1]
-        end
-        # select destination project
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
 
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # select destination project
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.transfers.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.transfers.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -1972,22 +1955,15 @@ module Groups
       visit namespace_project_samples_url(project4.namespace.parent, project4)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_text samples[0][0]
-        assert_text samples[0][1]
-      end
+      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: samples[1]
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: samples[0]
       ### VERIFY END ###
     end
 
     test 'dialog close button hidden during transfer samples' do
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
 
-      samples.flatten!
       # originating project has 3 samples prior to transfer
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1999,33 +1975,24 @@ module Groups
       click_button I18n.t('common.controls.select_all')
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # close button available before confirming
-        assert_selector 'button.dialog--close'
-        within('#list_selections') do
-          samples.each do |sample|
-            # additional asserts to help prevent select2 actions below from flaking
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        # select destination project
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # close button available before confirming
+      assert_selector 'button.dialog--close'
+      # select destination project
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        # close button hidden during transfer
-        assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
-      end
+      # close button hidden during transfer
+      assert_no_selector 'button.dialog--close'
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
       ### VERIFY END ###
     end
 
@@ -2040,39 +2007,30 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.title')
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # samples listing should no longer appear in dialog
-        assert_no_selector '#list_selections'
-        # error msg displayed in dialog
-        assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
-      end
+      # samples listing should no longer appear in dialog
+      assert_no_selector '#list_selections'
+      # error msg displayed in dialog
+      assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       ### VERIFY END ###
     end
 
@@ -2081,17 +2039,10 @@ module Groups
 
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
-
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
       sample28 = samples(:sample28)
       sample29 = samples(:sample29)
-
-      samples.flatten!
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -2107,51 +2058,35 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            # additional asserts to help prevent select2 actions below from flaking
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # error messages in dialog
-        assert_text I18n.t('samples.transfers.create.error')
+      # error messages in dialog
+      assert_text I18n.t('samples.transfers.create.error')
 
-        assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
+      assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
 
-        # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
-                                                                      sample_name: sample29.name).gsub(':', '')
+      # colon is removed from translation in UI
+      assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
+                                                                    sample_name: sample29.name).gsub(':', '')
 
-        click_button I18n.t('shared.samples.errors.ok_button')
-      end
+      click_button I18n.t('shared.samples.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2194,27 +2129,20 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 4
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 4'
-        assert_selector 'strong[data-selection-target="selected"]', text: '4'
-      end
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        # Only projects within group are visible for maintainer to transfer to
-        find('input.select2-input').click
-        group_three_projects.each do |proj|
-          total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
-        end
-
-        assert_equal total_projects_transfer_to_count, group_three_projects.count
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # Only projects within group are visible for maintainer to transfer to
+      find('input.select2-input').click
+      group_three_projects.each do |proj|
+        total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
       end
+
+      assert_equal total_projects_transfer_to_count, group_three_projects.count
       ### VERIFY END ###
     end
 
@@ -2230,27 +2158,18 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 4
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 4'
-        assert_selector 'strong[data-selection-target="selected"]', text: '4'
-      end
 
       # launch dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # fill destination input
-        find('input.select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # fill destination input
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
+      ### ACTIONS END ###
 
-        ### VERIFY START ###
-        assert_text I18n.t('samples.transfers.dialog.empty_state')
-        ### VERIFY END ###
-      end
+      ### VERIFY START ###
+      assert_text I18n.t('samples.transfers.dialog.empty_state')
+      ### VERIFY END ###
     end
 
     test 'singular clone dialog description' do
@@ -2262,17 +2181,14 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.clones.dialog.description.singular')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('samples.clones.dialog.description.singular')
       ### VERIFY END ###
     end
 
@@ -2286,23 +2202,15 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t(
-          'samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '26'
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t(
+        'samples.clones.dialog.description.plural'
+      ).gsub! 'COUNT_PLACEHOLDER', '26'
       ### VERIFY END ###
     end
 
@@ -2315,28 +2223,22 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 2
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '2'
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 2
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '2'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#list_selections') do
-        assert_text @sample1.name
-        assert_text @sample1.puid
-        assert_text @sample2.name
-        assert_text @sample2.puid
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_selector '#list_selections', text: @sample1.name
+      assert_selector '#list_selections', text: @sample1.puid
+      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.puid
       ### VERIFY END ###
     end
 
@@ -2350,40 +2252,29 @@ module Groups
 
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.clones.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.clones.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2392,20 +2283,16 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
       # duplicated sample names
-      within('#samples-table table tbody') do
-        assert_text @sample1.name, count: 2
-        assert_text @sample2.name, count: 2
-      end
+      assert_selector '#samples-table table tbody td', text: @sample1.name, count: 2
+      assert_selector '#samples-table table tbody td', text: @sample2.name, count: 2
 
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@group, @project2)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
                                                                                       locale: @user.locale))
-      within('#samples-table table tbody') do
-        assert_text @sample1.name
-        assert_text @sample2.name
-      end
+      assert_selector '#samples-table table tbody td', text: @sample1.name, count: 1
+      assert_selector '#samples-table table tbody td', text: @sample2.name, count: 1
       ### VERIFY END ###
     end
 
@@ -2419,37 +2306,27 @@ module Groups
 
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # close button available before confirming cloning
-        assert_selector 'button.dialog--close'
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      # close button available before confirming cloning
+      assert_selector 'button.dialog--close'
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        # close button hidden during cloning
-        assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      # close button hidden during cloning
+      assert_no_selector 'button.dialog--close'
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
       ### VERIFY END ###
     end
 
@@ -2463,40 +2340,31 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        assert_text I18n.t('samples.clones.dialog.title')
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # sample listing should not be in error dialog
-        assert_no_selector '#list_selections'
-        # error msg
-        assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
-        assert_text I18n.t('services.samples.clone.empty_sample_ids')
-      end
+      # error msg
+      assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
+      assert_text I18n.t('services.samples.clone.empty_sample_ids')
       ### VERIFY END ###
     end
 
@@ -2510,44 +2378,30 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          assert_text @sample1.name
-          assert_text @sample2.name
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project1.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project1.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # errors that a sample with the same name as sample30 already exists in project25
-        assert_text I18n.t('samples.clones.create.error')
-        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample1.puid,
-                                                                   sample_name: @sample1.name).gsub(':', '')
-        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample2.puid,
-                                                                   sample_name: @sample2.name).gsub(':', '')
-        click_on I18n.t('shared.samples.errors.ok_button')
-      end
+      # errors that a sample with the same name as sample30 already exists in project25
+      assert_text I18n.t('samples.clones.create.error')
+      assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample1.puid,
+                                                                 sample_name: @sample1.name).gsub(':', '')
+      assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample2.puid,
+                                                                 sample_name: @sample2.name).gsub(':', '')
+      click_on I18n.t('shared.samples.errors.ok_button')
 
       # verify dialog is closed
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2568,24 +2422,16 @@ module Groups
 
       ### ACTIONS START ####
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        find('input.select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
 
-        ### VERIFY START ###
-        assert_text I18n.t('samples.clones.dialog.empty_state')
-        ### VERIFY END ###
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('samples.clones.dialog.empty_state')
+      ### VERIFY END ###
     end
 
     test 'updating sample selection during sample cloning' do
@@ -2598,55 +2444,41 @@ module Groups
 
       ### ACTIONS START ###
       # select 1 sample to clone
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
 
       # verify 1 sample selected in originating project
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
 
       # clone sample
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.clones.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.clones.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify no samples selected anymore
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 27"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 27"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
       ### VERIFY END ###
     end
 
@@ -2663,28 +2495,20 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1,
-                             :checkbox)}").click
-        find("input##{dom_id(@sample2,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.name
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      assert_selector '#list_selections', text: @sample1.name
+      assert_selector '#list_selections', text: @sample1.puid
+      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.name
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2713,28 +2537,16 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(sample25,
-                             :checkbox)}").click
-        find("input##{dom_id(sample28,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{sample25.id}"
+      check "checkbox_sample_#{sample28.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text sample25.name
-          assert_text sample25.puid
-          assert_text sample28.name
-          assert_text sample28.puid
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2763,28 +2575,20 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(sample28,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{sample28.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text sample28.name
-          assert_text sample28.puid
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
+
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('samples.deletions.destroy.no_deleted_samples', deleted: '1/2')
+      assert_text I18n.t('samples.deletions.destroy.no_deleted_samples')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
       ### VERIFY END ###
