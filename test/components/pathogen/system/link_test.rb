@@ -34,7 +34,7 @@ module Pathogen
           assert_text @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: true
           # Dismiss tooltip on blur
-          find('a', text: @link_text).send_keys(:tab)
+          find('a', text: @link_text).trigger('blur')
           assert_no_text  @tooltip_text
           assert_selector '[data-pathogen--tooltip-target="target"]', visible: false
         end
