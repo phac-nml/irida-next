@@ -15,8 +15,8 @@
     data: {
       action:
         (
-          if Flipper.enabled?(:prerendered_samplesheet)
-            "change->nextflow--prerendered-samplesheet#handleMetadataSelection"
+          if Flipper.enabled?(:deferred_samplesheet)
+            "change->nextflow--deferred-samplesheet#handleMetadataSelection"
           else
             "change->nextflow--samplesheet#handleMetadataSelection"
           end

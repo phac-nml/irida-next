@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Component to render Nextflow pipeline forms
-class PrerenderedNextflowComponent < Component
+class DeferredNextflowComponent < Component
   include NextflowHelper
 
   attr_reader :url, :workflow, :metadata_fields, :sample_count, :namespace_id, :instance, :automated_workflow

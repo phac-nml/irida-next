@@ -1,8 +1,8 @@
 <%= turbo_stream.update "samples_dialog" do %>
   <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
     <% dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
-    <% if Flipper.enabled?(:prerendered_samplesheet) %>
-      <%= render PrerenderedNextflowComponent.new(
+    <% if Flipper.enabled?(:deferred_samplesheet) %>
+      <%= render DeferredNextflowComponent.new(
         workflow: @workflow,
         url: workflow_executions_path,
         sample_count: @sample_count,

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nextflow
-  # Render the contents of a Nextflow samplesheet to a table
-  class PrerenderedSamplesheetComponent < Component
+  # Render the contents of a Nextflow samplesheet to a table for feature flag :deferred_samplesheet
+  class DeferredSamplesheetComponent < Component
     attr_reader :properties, :required_properties, :metadata_fields, :namespace_id, :workflow_params
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze

@@ -5,7 +5,7 @@ module WorkflowExecutions
   class SubmissionsController < ApplicationController
     include Metadata
 
-    # TODO: when feature flag :prerendered_samplesheet is retired
+    # TODO: when feature flag :deferred_samplesheet is retired
     # - rename before_action process_samples to samples_count and remove process_samples function and uncomment
     # samples_count
     respond_to :turbo_stream
@@ -46,7 +46,7 @@ module WorkflowExecutions
     end
 
     def process_samples
-      if Flipper.enabled?(:prerendered_samplesheet)
+      if Flipper.enabled?(:deferred_samplesheet)
         @sample_count = params[:sample_count]
       else
         sample_ids = params[:sample_ids]
@@ -55,7 +55,7 @@ module WorkflowExecutions
       end
     end
 
-    # enable when feature flag :prerendered_samplesheet is retired
+    # enable when feature flag :deferred_samplesheet is retired
     # def sample_count
     #   @sample_count = params[:sample_count]
     # end
@@ -72,7 +72,7 @@ module WorkflowExecutions
     end
 
     def allowed_to_update_samples
-      projects = if Flipper.enabled?(:prerendered_samplesheet)
+      projects = if Flipper.enabled?(:deferred_samplesheet)
                    Project.where(id: @samples.select(:project_id))
                  else
                    @allowed_to_update_samples = true

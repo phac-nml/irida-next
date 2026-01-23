@@ -16,7 +16,7 @@ class NextflowComponentTest < ViewComponentTestCase
       Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json')
     )
 
-    render_inline PrerenderedNextflowComponent.new(
+    render_inline DeferredNextflowComponent.new(
       workflow:,
       sample_count: 2,
       url: 'https://nf-co.re/testpipeline',
@@ -64,7 +64,7 @@ class NextflowComponentTest < ViewComponentTestCase
   end
 
   test 'with overrides with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
+    Flipper.enable(:deferred_samplesheet)
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: 'Mikrokondo pipeline',
@@ -105,7 +105,7 @@ class NextflowComponentTest < ViewComponentTestCase
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
     I18n.with_locale :en do
-      render_inline PrerenderedNextflowComponent.new(
+      render_inline DeferredNextflowComponent.new(
         workflow:,
         sample_count: nil,
         url: 'https://github.com/phac-nml/mikrokondo',
@@ -187,7 +187,7 @@ class NextflowComponentTest < ViewComponentTestCase
   end
 
   test 'with overrides in french with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
+    Flipper.enable(:deferred_samplesheet)
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: {
@@ -243,7 +243,7 @@ class NextflowComponentTest < ViewComponentTestCase
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
     I18n.with_locale :fr do
-      render_inline PrerenderedNextflowComponent.new(
+      render_inline DeferredNextflowComponent.new(
         workflow:,
         sample_count: nil,
         url: 'https://github.com/phac-nml/mikrokondo',
@@ -340,7 +340,7 @@ class NextflowComponentTest < ViewComponentTestCase
   end
 
   test 'with values with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
+    Flipper.enable(:deferred_samplesheet)
     instance = AutomatedWorkflowExecution.new(created_by: users(:john_doe),
                                               name: 'Test Instance',
                                               namespace: projects(:project1).namespace,
@@ -399,7 +399,7 @@ class NextflowComponentTest < ViewComponentTestCase
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
-    render_inline PrerenderedNextflowComponent.new(
+    render_inline DeferredNextflowComponent.new(
       workflow:,
       sample_count: nil,
       url: 'https://nf-co.re/testpipeline',

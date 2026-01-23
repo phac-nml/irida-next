@@ -8,8 +8,8 @@
       end
     ) %>
   <% dialog.with_header(title: t(".title", workflow_name:)) %>
-  <% if Flipper.enabled?(:prerendered_samplesheet) %>
-    <%= render PrerenderedNextflowComponent.new(
+  <% if Flipper.enabled?(:deferred_samplesheet) %>
+    <%= render DeferredNextflowComponent.new(
       workflow: @workflow,
       url:
         namespace_project_automated_workflow_execution_path(

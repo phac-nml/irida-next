@@ -15,8 +15,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'default with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
-    visit('rails/view_components/prerendered_nextflow_samplesheet_component/default')
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/default')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -42,8 +42,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with reference files with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
-    visit('rails/view_components/prerendered_nextflow_samplesheet_component/with_reference_files')
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_reference_files')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -67,8 +67,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with metadata with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
-    visit('rails/view_components/prerendered_nextflow_samplesheet_component/with_metadata')
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_metadata')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
       within('table') do
@@ -101,8 +101,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with samplesheet overrides with feature flag' do
-    Flipper.enable(:prerendered_samplesheet)
-    visit('rails/view_components/prerendered_nextflow_samplesheet_component/with_samplesheet_overrides')
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_samplesheet_overrides')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do

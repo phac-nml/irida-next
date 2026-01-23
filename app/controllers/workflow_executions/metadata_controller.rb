@@ -8,7 +8,7 @@ module WorkflowExecutions
     def fields
       @samples = Sample.where(id: params[:sample_ids])
 
-      if Flipper.enabled?(:prerendered_samplesheet)
+      if Flipper.enabled?(:deferred_samplesheet)
         @metadata_fields = JSON.parse(params[:metadata_fields])
       else
         @header = params[:header]
@@ -20,10 +20,10 @@ module WorkflowExecutions
 
     private
 
-    # TODO: when feature flag :prerendered_samplesheet is retired, move fetch_metadata_with_feature_flag logic
+    # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
     def generate_metadata_for_samplesheet
-      Flipper.enabled?(:prerendered_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+      Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes

@@ -1,23 +1,23 @@
 <div
   id="nextflow-container"
-  data-controller="nextflow--prerendered-samplesheet"
-  data-nextflow--prerendered-samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
-  data-nextflow--prerendered-samplesheet-url-value="<%= url %>"
-  data-nextflow--prerendered-samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
-  data-nextflow--prerendered-samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
-  data-nextflow--prerendered-samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
-  data-nextflow--prerendered-samplesheet-automated-workflow-value="<%= @automated_workflow %>"
-  data-nextflow--prerendered-samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
-  data-nextflow--prerendered-samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
-  data-nextflow--prerendered-samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
-  data-nextflow--prerendered-samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error")%>"
-  data-nextflow--prerendered-samplesheet-loading-complete-announcement-value="<%= t("components.nextflow_component.loading_complete.announcement")%>"
+  data-controller="nextflow--deferred-samplesheet"
+  data-nextflow--deferred-samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
+  data-nextflow--deferred-samplesheet-url-value="<%= url %>"
+  data-nextflow--deferred-samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
+  data-nextflow--deferred-samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
+  data-nextflow--deferred-samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
+  data-nextflow--deferred-samplesheet-automated-workflow-value="<%= @automated_workflow %>"
+  data-nextflow--deferred-samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  data-nextflow--deferred-samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
+  data-nextflow--deferred-samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
+  data-nextflow--deferred-samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error")%>"
+  data-nextflow--deferred-samplesheet-loading-complete-announcement-value="<%= t("components.nextflow_component.loading_complete.announcement")%>"
   <% unless @automated_workflow %>
-  data-nextflow--prerendered-samplesheet-selection-outlet="#samples-table"
+  data-nextflow--deferred-samplesheet-selection-outlet="#samples-table"
   <% end %>
   data-action="
-    nextflow--file:sendFileData->nextflow--prerendered-samplesheet#updateFileData
-    nextflow--metadata:sendMetadata->nextflow--prerendered-samplesheet#updateMetadata
+    nextflow--file:sendFileData->nextflow--deferred-samplesheet#updateFileData
+    nextflow--metadata:sendMetadata->nextflow--deferred-samplesheet#updateMetadata
   "
 >
   <h1
@@ -39,7 +39,7 @@
     role="alert"
     aria-live="assertive"
     aria-atomic="true"
-    data-nextflow--prerendered-samplesheet-target="formFieldError"
+    data-nextflow--deferred-samplesheet-target="formFieldError"
     class="
       hidden alert-component bg-red-50 border-red-300 dark:bg-red-900/20
       dark:border-red-800/50 dark:text-red-400 text-red-800 mb-2
@@ -52,14 +52,14 @@
       <div class="flex-1 min-w-0 mt-0.5">
         <div
           class="text-sm font-medium leading-5"
-          data-nextflow--prerendered-samplesheet-target="formFieldErrorMessage"
+          data-nextflow--deferred-samplesheet-target="formFieldErrorMessage"
         >
         </div>
       </div>
     </div>
   </div>
 
-  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--prerendered-samplesheet-target": "form" } do |form| %>
+  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--deferred-samplesheet-target": "form" } do |form| %>
     <%= hidden_field_tag :format, :turbo_stream, id: "submission_turbo" %>
 
     <%= fields_for :workflow_execution do |workflow| %>
@@ -112,7 +112,7 @@
                 <% unless @automated_workflow %>
                   <div
                     id="samplesheet_message"
-                    data-nextflow--prerendered-samplesheet-target="samplesheetMessagesContainer"
+                    data-nextflow--deferred-samplesheet-target="samplesheetMessagesContainer"
                   >
                     <%= viral_alert(
                       message:
@@ -121,14 +121,14 @@
                           count: @sample_count,
                         ),
                       data: {
-                        "nextflow--prerendered-samplesheet-target": "loadingSamplesheetMessage",
+                        "nextflow--deferred-samplesheet-target": "loadingSamplesheetMessage",
                       },
                       classes: "mb-2",
                       dismissible: true,
                     ) %>
                   </div>
 
-                  <%= render Nextflow::PrerenderedSamplesheetComponent.new(
+                  <%= render Nextflow::DeferredSamplesheetComponent.new(
                     schema: property[:schema],
                     namespace_id:,
                     fields: metadata_fields,
@@ -140,7 +140,7 @@
                   <div
                     class="flex justify-center"
                     id="samplesheet-spinner"
-                    data-nextflow--prerendered-samplesheet-target="samplesheetSpinner"
+                    data-nextflow--deferred-samplesheet-target="samplesheetSpinner"
                   >
                     <div
                       class="
@@ -209,7 +209,7 @@
         <div
           class="flex mb-4"
           id="update-samples-spinner"
-          data-nextflow--prerendered-samplesheet-target="updateSamplesSpinner"
+          data-nextflow--deferred-samplesheet-target="updateSamplesSpinner"
         >
           <div
             class="
@@ -230,7 +230,7 @@
                              {
                                checked: instance.present? && instance["update_samples"],
                                data: {
-                                 "nextflow--prerendered-samplesheet-target":
+                                 "nextflow--deferred-samplesheet-target":
                                    "updateSamplesCheckbox",
                                },
                              } %>
@@ -240,7 +240,7 @@
               font-medium text-slate-900 dark:text-white
             "
             for="workflow_execution_update_samples"
-            data-nextflow--prerendered-samplesheet-target="updateSamplesLabel"
+            data-nextflow--deferred-samplesheet-target="updateSamplesLabel"
           >
           </label>
         </div>
@@ -274,13 +274,13 @@
 
     <button
       class="button button-primary"
-      data-nextflow--prerendered-samplesheet-target="submit"
+      data-nextflow--deferred-samplesheet-target="submit"
       <% if @automated_workflow %>
       type="submit"
       <% else %>
       type="button"
       disabled="disabled"
-      data-action="click->nextflow--prerendered-samplesheet#submitSamplesheet"
+      data-action="click->nextflow--deferred-samplesheet#submitSamplesheet"
       <% end %>
     >
       <% if instance.nil? %>
@@ -293,7 +293,7 @@
 
   <div
     class="flex items-center p-4 space-x-4 hidden"
-    data-nextflow--prerendered-samplesheet-target="submissionSpinner"
+    data-nextflow--deferred-samplesheet-target="submissionSpinner"
   >
     <%= render SpinnerComponent.new(
       message: t("components.nextflow_component.processing_request"),
@@ -306,7 +306,7 @@
       url: samplesheet_workflow_executions_submissions_path,
       method: :post,
       data: {
-        "nextflow--prerendered-samplesheet-target": "samplesheetParamsForm",
+        "nextflow--deferred-samplesheet-target": "samplesheetParamsForm",
       },
     ) do |f| %>
     <% end %>
@@ -315,12 +315,10 @@
   <div
     class="sr-only"
     aria-live="assertive"
-    data-nextflow--prerendered-samplesheet-target="ariaLive"
+    data-nextflow--deferred-samplesheet-target="ariaLive"
   ></div>
 
-  <template
-    data-nextflow--prerendered-samplesheet-target="samplesheetReadyTemplate"
-  >
+  <template data-nextflow--deferred-samplesheet-target="samplesheetReadyTemplate">
     <%= viral_alert(
       type: "success",
       message:

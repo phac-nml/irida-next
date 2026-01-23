@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PrerenderedNextflowComponentPreview < ViewComponent::Preview
+class DeferredNextflowComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
   def default(schema_file: 'nextflow_schema.json')
     entry = {
