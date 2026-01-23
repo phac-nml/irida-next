@@ -1,0 +1,7 @@
+<%= turbo_stream.append "sample_attributes" do %>
+  <%= render Nextflow::Samplesheet::SampleAttributesComponent.new(
+    properties: @properties,
+    samples: @samples,
+    allowed_to_update_samples: @allowed_to_update_samples,
+  ) %>
+<% end %>

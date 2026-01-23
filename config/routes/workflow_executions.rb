@@ -11,6 +11,7 @@ resources :workflow_executions, only: %i[index create show destroy edit update] 
       resources :submissions, only: %i[create] do
         collection do
           get :pipeline_selection, as: :pipeline_selection
+          post :samplesheet
         end
       end
       resources :file_selector, only: %i[new create]

@@ -3,10 +3,38 @@
 require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
-  test 'default' do
+  test 'default with feature flag' do
+    workflow = Irida::Pipeline.new(
+      'phac-nml/iridanextexample',
+      {
+        'name' => 'phac-nml/iridanextexample',
+        'description' => 'This is a test workflow',
+        'url' => 'https://nf-co.re/testpipeline'
+      },
+      { 'name' => '2.0.0' },
+      Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+      Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json')
+    )
+
+    render_inline DeferredNextflowComponent.new(
+      workflow:,
+      sample_count: 2,
+      url: 'https://nf-co.re/testpipeline',
+      namespace_id: projects(:project1).namespace,
+      fields: %w[metadata_1 metadata_2 metadata_3]
+    )
+
+    assert_selector 'form' do
+      assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
+      assert_selector 'input[type=text][name="workflow_execution[name]"]'
+      assert_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
+      assert_text I18n.t(:'components.nextflow.shared_with.project')
+    end
+  end
+
+  test 'default without feature flag' do
     sample43 = samples(:sample43)
     sample44 = samples(:sample44)
-
     workflow = Irida::Pipeline.new(
       'phac-nml/iridanextexample',
       {
@@ -35,9 +63,71 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'with overrides' do
+  test 'with overrides with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'Mikrokondo pipeline',
+      description: 'Mikrokondo pipeline example',
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: 'Databases and Pre-Computed Files',
+            description: 'The location of databases used by mikrokondo',
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: 'Kraken2 database',
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.2.0' },
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    I18n.with_locale :en do
+      render_inline DeferredNextflowComponent.new(
+        workflow:,
+        sample_count: nil,
+        url: 'https://github.com/phac-nml/mikrokondo',
+        namespace_id: 'SDSDDFDSFDS',
+        fields: []
+      )
+
+      assert_selector 'form' do
+        assert_selector 'h1', text: 'Mikrokondo pipeline', count: 1
+        assert_text 'Mikrokondo pipeline example'
+        assert_text 'Databases and Pre-Computed Files'
+        assert_text 'The location of databases used by mikrokondo'
+        assert_text 'Kraken2 database'
+        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
+                        text: 'DBNAME'
+      end
+    end
+  end
+
+  test 'with overrides without feature flag' do
+    entry = {
+      url: 'https://github.com/phac-nml/mikr  okondo',
       name: 'Mikrokondo pipeline',
       description: 'Mikrokondo pipeline example',
       overrides: {
@@ -96,7 +186,84 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'with overrides in french' do
+  test 'with overrides in french with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
+      name: {
+        en: 'Mikrokondo pipeline',
+        fr: 'Pipeline Mikrokondo'
+      },
+      description: {
+        en: 'Mikrokondo pipeline example',
+        fr: 'Exemple Pipeline Mikrokondo'
+      },
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: {
+              en: 'Databases and Pre-Computed Files',
+              fr: 'Bases de données et fichiers pré-calculés'
+            },
+            description: {
+              en: 'The location of databases used by mikrokondo',
+              fr: "L'emplacement des bases de données utilisées par mikrokondo"
+            },
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: {
+                  en: 'Kraken2 database',
+                  fr: 'Base de données Kraken2'
+                },
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.2.0' },
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    I18n.with_locale :fr do
+      render_inline DeferredNextflowComponent.new(
+        workflow:,
+        sample_count: nil,
+        url: 'https://github.com/phac-nml/mikrokondo',
+        namespace_id: 'SDSDDFDSFDS',
+        fields: []
+      )
+
+      assert_selector 'form' do
+        assert_selector 'h1', text: 'Pipeline Mikrokondo', count: 1
+        assert_text 'Exemple Pipeline Mikrokondo'
+        assert_text 'Bases de données et fichiers pré-calculés'
+        assert_text "L'emplacement des bases de données utilisées par mikrokondo"
+        assert_text 'Base de données Kraken2'
+        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
+                        text: 'DBNAME'
+      end
+    end
+  end
+
+  test 'with overrides in french without feature flag' do
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: {
@@ -172,7 +339,92 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'with values' do
+  test 'with values with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    instance = AutomatedWorkflowExecution.new(created_by: users(:john_doe),
+                                              name: 'Test Instance',
+                                              namespace: projects(:project1).namespace,
+                                              workflow_params: {
+                                                platform: 'illumina',
+                                                min_reads: '1000',
+                                                skip_mlst: 'false',
+                                                kraken2_db: 'PATH_TO_DB',
+                                                run_kraken: 'true',
+                                                mash_sketch: '',
+                                                mh_min_kmer: '10',
+                                                skip_checkm: 'false',
+                                                skip_report: 'false',
+                                                skip_staramr: 'false',
+                                                target_depth: '100',
+                                                dehosting_idx: '',
+                                                long_read_opt: 'nanopore',
+                                                skip_abricate: 'false',
+                                                skip_mobrecon: 'false',
+                                                flye_read_type: 'hq',
+                                                fp_dedup_reads: 'false',
+                                                skip_polishing: 'false',
+                                                skip_subtyping: 'false',
+                                                metagenomic_run: 'false',
+                                                fp_polyg_min_len: '10',
+                                                fp_polyx_min_len: '10',
+                                                hybrid_unicycler: 'true',
+                                                fp_average_quality: '25',
+                                                fp_qualified_phred: '15',
+                                                nanopore_chemistry: '',
+                                                skip_depth_sampling: 'false',
+                                                qt_min_contig_length: '1000',
+                                                ba_min_conting_length: '200',
+                                                skip_raw_read_metrics: 'false',
+                                                fp_illumina_length_max: '400',
+                                                fp_illumina_length_min: '35',
+                                                skip_version_gathering: 'false',
+                                                fp_complexity_threshold: '20',
+                                                fp_cut_tail_window_size: '4',
+                                                fp_cut_tail_mean_quality: '15',
+                                                fp_single_end_length_min: '1000',
+                                                skip_ont_header_cleaning: 'true',
+                                                skip_metagenomic_detection: 'false',
+                                                skip_species_classification: 'false',
+                                                fp_unqualified_precent_limit: '40'
+                                              })
+
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo',
+                                   {
+                                     url: 'https://github.com/phac-nml/mikrokondo',
+                                     name: 'phac-nml/mikrokondo',
+                                     description: 'Mikrokondo pipeline'
+                                   },
+                                   { 'name' => '0.1.2',
+                                     'automatable' => true },
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_inline DeferredNextflowComponent.new(
+      workflow:,
+      sample_count: nil,
+      url: 'https://nf-co.re/testpipeline',
+      namespace_id: projects(:project1).namespace,
+      fields: %w[metadata_1 metadata_2 metadata_3],
+      instance:
+    )
+
+    # rubocop:disable Layout/LineLength
+    assert_selector 'form' do
+      assert_selector ' input[name="workflow_execution[name]"][value="Test Instance"]', count: 1
+      assert_selector 'input[name="workflow_execution[workflow_params][kraken2_db]"][value="PATH_TO_DB"]', count: 1
+      assert_selector 'input[type="radio"][name="workflow_execution[workflow_params][run_kraken]"][value="true"][checked="checked"]',
+                      count: 1
+      assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][run_kraken]"][value="false"][checked="checked"]'
+
+      assert_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="false"][checked="checked"]',
+                      count: 1
+      assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="true"][checked="checked"]'
+      assert_no_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
+    end
+    # rubocop:enable Layout/LineLength
+  end
+
+  test 'with values without feature flag' do
     instance = AutomatedWorkflowExecution.new(created_by: users(:john_doe),
                                               name: 'Test Instance',
                                               namespace: projects(:project1).namespace,

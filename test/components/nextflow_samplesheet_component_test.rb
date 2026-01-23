@@ -6,11 +6,27 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   # samplesheet component testing now has to use the nextflow_component
   # (not nextflow_samplesheet_component) as the samplesheet now requires the nextflow_component to be rendered
   # for stimulus connection.
+
   setup do
     @sample1 = samples(:sample43)
     @sample2 = samples(:sample44)
+    @user = users(:john_doe)
+    login_as @user
   end
-  test 'default' do
+
+  test 'default with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/default')
+    within('div[id="nextflow-container"][data-controller-connected="true"]') do
+      assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
+      within('table') do
+        assert_selector 'thead th', count: 5
+        assert_selector 'tr:first-child th:last-child', text: 'STRANDEDNESS (REQUIRED)'
+      end
+    end
+  end
+
+  test 'default without feature flag' do
     visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector 'table' do |table|
@@ -25,7 +41,19 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with reference files' do
+  test 'with reference files with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_reference_files')
+    within('div[id="nextflow-container"][data-controller-connected="true"]') do
+      assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
+      within('table') do
+        assert_selector 'thead th', count: 4
+        assert_selector 'tr:first-child th:last-child', text: 'REFERENCE_ASSEMBLY'
+      end
+    end
+  end
+
+  test 'with reference files without feature flag' do
     visit("/rails/view_components/nextflow_samplesheet_component/with_reference_files?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector 'table' do |table|
@@ -38,7 +66,27 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with metadata' do
+  test 'with metadata with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_metadata')
+    within('div[id="nextflow-container"][data-controller-connected="true"]') do
+      assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
+      within('table') do
+        assert_selector 'thead th', count: 4
+        within('tr:first-child th:nth-child(2)') do
+          assert_selector 'select', text: 'pfge_pattern (default)'
+        end
+        within('tr:first-child th:nth-child(3)') do
+          assert_selector 'select', text: 'country (default)'
+        end
+        within('tr:first-child th:last-child') do
+          assert_selector 'select', text: 'insdc_accession (default)'
+        end
+      end
+    end
+  end
+
+  test 'with metadata without feature flag' do
     visit("/rails/view_components/nextflow_samplesheet_component/with_metadata?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
@@ -52,7 +100,27 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with samplesheet overrides' do
+  test 'with samplesheet overrides with feature flag' do
+    Flipper.enable(:deferred_samplesheet)
+    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_samplesheet_overrides')
+    within('div[id="nextflow-container"][data-controller-connected="true"]') do
+      assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
+      within('table') do
+        assert_selector 'thead th', count: 20
+        within('tr:first-child th:nth-child(5)') do
+          assert_selector 'select', text: 'new_isolates_date (default)'
+        end
+        within('tr:first-child th:nth-child(6)') do
+          assert_selector 'select', text: 'predicted_primary_identification_name (default)'
+        end
+        within('tr:first-child th:nth-child(7)') do
+          assert_selector 'select', text: 'metadata_3 (default)'
+        end
+      end
+    end
+  end
+
+  test 'with samplesheet overrides without feature flag' do
     visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     within('div[data-controller-connected="true"]') do
@@ -71,15 +139,14 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
         table.assert_selector 'tbody tr:first-of-type td:nth-of-type(1)', text: @sample1.name
         table.assert_selector 'tbody tr:last-of-type th:first-of-type', text: @sample2.puid
         table.assert_selector 'tbody tr:last-of-type td:nth-of-type(1)', text: @sample2.name
+        assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
+        assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
+
+        assert_field 'The header name of metadata column 3.', with: 'metadata_3'
+
+        select('age', from: 'field-metadata_3')
+        assert_field 'The header name of metadata column 3.', with: 'age'
       end
-
-      assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
-      assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
-
-      assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-
-      select('age', from: 'field-metadata_3')
-      assert_field 'The header name of metadata column 3.', with: 'age'
     end
   end
 end

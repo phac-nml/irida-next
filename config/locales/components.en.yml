@@ -242,10 +242,19 @@ en:
       shared_with:
         group: Share results with group members?
         project: Share results with project members?
+      unauthorized_to_update_samples: You are not authorized to update samples with analysis results
       update_samples: Update samples with analysis results
+      verifying_update_samples: Verifying if you're authorized to update samples with analysis results
     nextflow_component:
       data_missing_error: 'The following samples are missing required data: '
-      filtering_samples: Filtering samples, this may take some time.
+      loading_complete:
+        alert_message_html:
+          one: "<div>(Complete) Preparing workflow execution arguments for 1 sample, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
+          other: "<div>(Complete) Preparing workflow execution arguments for %{count} samples, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
+        announcement: Samplesheet is ready.
+      loading_samplesheet:
+        one: "(In progress) Preparing workflow execution arguments for 1 sample."
+        other: "(In progress) Preparing workflow execution arguments for %{count} samples, this may take a bit of time."
       name:
         error: Name is required. Please enter a name for the workflow execution.
         helper: A custom name will make it easier to search for this in the future.
@@ -253,7 +262,8 @@ en:
           optional: Name (Optional)
           required: Name
       processing_request: Processing your submission, this may take some time.
-      processing_samplesheet: Processing samplesheet, this may take some time.
+      processing_samplesheet: Processing samplesheet
+      samplesheet_processing_error: An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.
       submission_error: Something went wrong with the submission request.
     project_dashboard:
       activity_title: Latest Activity

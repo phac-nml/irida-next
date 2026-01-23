@@ -242,10 +242,19 @@ fr:
       shared_with:
         group: Partager les résultats avec les membres du groupe?
         project: Partager les résultats avec les membres du projet?
+      unauthorized_to_update_samples: Vous n’êtes pas autorisé à mettre à jour les échantillons avec les résultats d’analyse.
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
+      verifying_update_samples: Vérification de votre autorisation à mettre à jour les échantillons avec les résultats d’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
-      filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
+      loading_complete:
+        alert_message_html:
+          one: "<div>(Complète) Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>"
+          other: "<div>(Complète) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>"
+        announcement: La feuille d’échantillons est prête.
+      loading_samplesheet:
+        one: "(En cours) Préparation des arguments d’exécution du flux de travail pour 1 échantillon."
+        other: "(En cours) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
         helper: Un nom personnalisé facilitera la recherche à l’avenir.
@@ -253,7 +262,8 @@ fr:
           optional: Nom (facultatif)
           required: Nom
       processing_request: Le traitement de votre soumission peut prendre un certain temps.
-      processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
+      processing_samplesheet: Feuille d'échantillons de traitement
+      samplesheet_processing_error: Une erreur s'est produite lors du traitement de votre demande. Veuillez relancer l’exécution du flux de travail. Si le problème persiste, désélectionnez puis resélectionnez les échantillons.
       submission_error: Quelque chose s’est mal passé avec la demande de soumission.
     project_dashboard:
       activity_title: Dernière activité

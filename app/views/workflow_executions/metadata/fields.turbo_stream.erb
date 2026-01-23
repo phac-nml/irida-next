@@ -3,7 +3,9 @@
     hidden
     data-controller="nextflow--metadata"
     data-nextflow--metadata-metadata-value="<%= @metadata %>"
+    <% unless Flipper.enabled?(:deferred_samplesheet) %>
     data-nextflow--metadata-property-value="<%= @header %>"
+    <% end %>
     data-nextflow--samplesheet-target="dataPayload"
   />
 

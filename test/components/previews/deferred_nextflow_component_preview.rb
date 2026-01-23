@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class NextflowComponentPreview < ViewComponent::Preview
+class DeferredNextflowComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
   def default(schema_file: 'nextflow_schema.json')
-    sample1 = Sample.first
-    sample2 = Sample.second
     entry = {
       name: 'phac-nml/iridanextexample',
       description: 'IRIDA Next Example Pipeline',
@@ -16,7 +14,7 @@ class NextflowComponentPreview < ViewComponent::Preview
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
     render_with_template(locals: {
-                           samples: [sample1, sample2],
+                           sample_count: 2,
                            workflow:
                          })
   end

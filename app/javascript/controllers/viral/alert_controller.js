@@ -35,16 +35,20 @@ export default class extends Controller {
    * @type {Object}
    * @property {boolean} dismissible - Can the user close this alert? 🚪
    * @property {boolean} autoDismiss - Should it disappear automatically? ⏰
+   * @property {boolean} announceAlert - Should it alert be announced? ⏰
    * @property {string} type - What kind of alert? (danger, info, success, warning) 🏷️
    * @property {string} alertId - Unique identifier for this alert 🆔
    * @property {string} dismissButtonId - ID of the close button 🔘
+   *
    */
   static values = {
     dismissible: Boolean,
     autoDismiss: Boolean,
+    announceAlert: Boolean,
     type: String,
     alertId: String,
     dismissButtonId: String,
+    autoDismissDuration: Number,
   };
 
   // 🔒 Private Properties - Internal state (only accessible within this class)
@@ -74,7 +78,9 @@ export default class extends Controller {
    */
   connect() {
     try {
-      this.#setupAccessibility(); // ♿ Make it screen reader friendly
+      if (this.announceAlertValue) {
+        this.#setupAccessibility(); // ♿ Make it screen reader friendly
+      }
       this.#setupKeyboardNavigation(); // ⌨️  Handle keyboard shortcuts
       this.#setupAutoDismiss(); // ⏰ Start countdown if needed
     } catch (error) {
@@ -231,7 +237,7 @@ export default class extends Controller {
    * @fires console.error - If countdown encounters an error
    */
   #startAutoDismiss() {
-    const duration = 5000; // ⏰ 5 seconds total
+    const duration = this.autoDismissDurationValue; // ⏰ 5 seconds total
     const interval = 50; // 🔄 Update every 50ms for smooth animation
     const steps = duration / interval;
     let currentStep = 0;
