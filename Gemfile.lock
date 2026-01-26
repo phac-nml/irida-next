@@ -14,7 +14,7 @@ PATH
       activesupport (>= 5.0.0)
       nokogiri
       rails_icons (>= 1.4.0)
-      view_component (>= 4.0, < 5.0)
+      view_component (>= 4.2.0, < 5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -700,9 +700,9 @@ GEM
     uri (1.1.1)
     useragent (0.16.11)
     version_gem (1.1.9)
-    view_component (4.1.1)
-      actionview (>= 7.1.0, < 8.2)
-      activesupport (>= 7.1.0, < 8.2)
+    view_component (4.2.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
       concurrent-ruby (~> 1)
     w3c_validators (1.3.7)
       json (>= 1.8)
@@ -823,14 +823,14 @@ DEPENDENCIES
   timecop
   turbo-rails
   tzinfo-data
-  view_component (>= 4.0, < 5.0)
+  view_component (>= 4.2.0, < 5.0)
   w3c_validators
   web-console
   webmock
   zip_kit
 
 RUBY VERSION
-   ruby 3.4.7p58
+   ruby 3.4.8
 
 BUNDLED WITH
    2.6.7

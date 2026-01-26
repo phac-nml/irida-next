@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.7'
+ruby '3.4.8'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.2'
@@ -67,7 +67,7 @@ gem 'openssl', '~> 4.0'
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'tailwindcss-rails', '~> 4.4'
-gem 'view_component', ['>= 4.0', '< 5.0']
+gem 'view_component', ['>= 4.2.0', '< 5.0']
 
 # ActiveRecord Cursor Paginate
 gem 'activerecord_cursor_paginate', '~> 0.4.1'
