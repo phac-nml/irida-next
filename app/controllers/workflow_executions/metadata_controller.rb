@@ -6,8 +6,7 @@ module WorkflowExecutions
     respond_to :turbo_stream
 
     def fields
-      @samples = Sample.where(id: params[:sample_ids])
-
+      @sample_ids = params[:sample_ids].split(',')
       if Flipper.enabled?(:deferred_samplesheet)
         @metadata_fields = JSON.parse(params[:metadata_fields])
       else
@@ -36,46 +35,33 @@ module WorkflowExecutions
     #   1: {metadata_header_4: "10", metadata_header_5: "USA"}
     # }
     def fetch_metadata_with_feature_flag
-      metadata = {}
-      @samples.each_with_index do |sample, index|
-        metadata[index] = {}
-        @metadata_fields.each do |key, value|
-          metadata[index][key] = sample.metadata.fetch(value, '')
-        end
+      fields_to_query = [:id]
+
+      @metadata_fields.each_value do |metadata_field|
+        fields_to_query.append(Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field)))
       end
-      metadata
+
+      Sample.where(id: @sample_ids).pluck(fields_to_query).map do |results|
+        { "#{results[0]}": { sample_id: results[0], samplesheet_params: retrieve_metadata(results) } }
+      end
     end
 
     def fetch_metadata
-      # sample_ids = params[:sample_ids].split(',') TODO: Check how this works now
       node = Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(@field))
-      query = Sample.where(id: sample_ids).pluck(:id, node).map do |results|
+      query = Sample.where(id: @sample_ids).pluck(:id, node).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
       end
-
       # query is an array of hashes, and we'll merge them into an empty has to create a nested hash that can be merged
       # in samplesheet_controller.js
       {}.merge(*query)
-
-      # TODO: potential logic for when this controller can receive multiple headers in PR1338
-      # fields_to_query = [:id]
-
-      # @metadata_fields.each_value do |metadata_field|
-      #   fields_to_query.append(Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field)))
-      # end
-
-      # Sample.where(id: params[:sample_ids]).pluck(fields_to_query).map do |results|
-      #   { "#{results[0]}": { sample_id: results[0], samplesheet_params: retrieve_metadata(results) } }
-      # end
-      #
     end
 
     # TODO: potential logic for when this controller can receive multiple headers in PR1338
-    # def retrieve_metadata(pluck_results)
-    #   metadata_values = {}
-    #   @metadata_fields.each.with_index(1) do |(header, _metadata_field), index|
-    #     metadata_values[header] = pluck_results[index]
-    #   end
-    # end
+    def retrieve_metadata(pluck_results)
+      metadata_values = {}
+      @metadata_fields.each.with_index(1) do |(header, _metadata_field), index|
+        metadata_values[header] = pluck_results[index]
+      end
+    end
   end
 end
