@@ -6,6 +6,9 @@ module Viral
   module Form
     module Prefixed
       class Select2ComponentTest < ApplicationSystemTestCase
+        def setup
+          Flipper.enable(:flowbite_replacement)
+        end
         test 'default' do
           visit '/rails/view_components/viral_form_prefixed_select2_component/default'
           assert_selector 'input[type="hidden"][name="user"]', visible: :hidden, count: 1

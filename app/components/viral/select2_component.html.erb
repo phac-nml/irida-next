@@ -1,11 +1,21 @@
-<%= tag.div(data: { action: "keydown->viral--select2#keydown" }, class: "select2") do %>
+<%= tag.div(
+  data: {
+    action: Flipper.enabled?(:flowbite_replacement) ? "keydown->viral--select2#keydown" : "keydown->viral--flowbite-select2#keydown",
+  },
+  class: "select2"
+  ) do %>
   <%= tag.input(
     type: "text",
     id: id,
     name: id,
     data: {
-      "viral--select2-target" => "trigger",
-      action: "input->viral--select2#input",
+      if Flipper.enabled?(:flowbite_replacement)
+        "viral--select2-target" => "trigger",
+        action: "input->viral--select2#input",
+      else
+        "viral--flowbite-select2-target" => "input",
+        action: "input->viral--flowbite-select2#input",
+      end
     },
     placeholder: placeholder,
     required: required,
@@ -20,17 +30,35 @@
     },
   ) %>
 
-  <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+  <%= form.hidden_field name, data: {
+    if Flipper.enabled?(:flowbite_replacement)
+      "viral--select2-target": "hidden",
+    else
+      "viral--flowbite-select2-target" => "hidden",
+    end
+  } %>
 
   <%= tag.div(
-    data: { "viral--select2-target": "menu" },
+    data: {
+      if Flipper.enabled?(:flowbite_replacement)
+        "viral--select2-target": "menu",
+      else
+        "viral--flowbite-select2-target" => "dropdown",
+      end
+      },
     class: "z-10 w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
     hidden:""
   ) do %>
     <%= tag.ul(
-      data: { "viral--select2-target": "scroller" },
+      if Flipper.enabled?(:flowbite_replacement)
+        data: { "viral--select2-target": "scroller" },
+        class: "w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
+        style:"max-height: inherit;"
+      else
+        data: { "viral--select2-target": "scroller" },
+        class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
+      end
       role: "listbox",
-      class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
     ) do %>
       <% options.each do |option| %>
         <%= option %>
@@ -45,8 +73,15 @@
             selected: "false",
           },
           class:
-            "hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
-          data: { "viral--select2-target": "empty" },
+            "p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
+          data: {
+            if Flipper.enabled?(:flowbite_replacement)
+              "viral--select2-target": "empty",
+            else
+            "viral--flowbite-select2-target": "empty",
+            end
+          },
+          hidden:""
         ) %>
       <% end %>
     <% end %>

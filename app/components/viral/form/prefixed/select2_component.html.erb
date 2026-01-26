@@ -11,12 +11,25 @@
       <%= root_url %>
     </div>
     <div class="grow">
-      <div data-action="keydown->viral--select2#keydown" class="select2">
+      <div
+        <% if Flipper.enabled?(:flowbite_replacement) %>
+        data-action="keydown->viral--select2#keydown"
+        <% else %>
+        data-action="keydown->viral--flowbite-select2#keydown"
+        <% end %>
+        class="select2"
+      >
         <input
           type="text"
           id="<%= id %>"
           name="<%= id %>"
+          <% if Flipper.enabled?(:flowbite_replacement) %>
           data-viral--select2-target="trigger"
+          data-action="input->viral--select2#input"
+          <% else %>
+          data-viral--flowbite-select2-target="input"
+          data-action="input->viral--flowbite-select2#input"
+          <% end%>
           placeholder="<%= placeholder %>"
           <%= "required" if required %>
           autocomplete="off"
@@ -27,17 +40,25 @@
             text-ellipsis overflow-hidden
           "
           value="<%= selected_value %>"
-          data-action="input->viral--select2#input"
           <% if aria.present? %>
           <% aria.each do |key, value| %>
           <%= "aria-#{key}=#{value}" %>
           <% end %>
           <% end %>
         >
-        <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
-
+        <%= form.hidden_field name,
+                          data:
+                            if Flipper.enabled?(:flowbite_replacement)
+                              { "viral--select2-target": "hidden" }
+                            else
+                              { "viral--flowbite-select2-target": "hidden" }
+                            end %>
         <div
+          <% if Flipper.enabled?(:flowbite_replacement) %>
           data-viral--select2-target="menu"
+          <% else %>
+          data-viral--flowbite-select2-target="dropdown"
+          <% end %>
           class="
             absolute z-10 bg-white border border-slate-300 rounded-lg shadow-lg
             dark:bg-slate-800 dark:border-slate-700
@@ -45,7 +66,11 @@
           hidden=""
         >
           <ul
+            <% if Flipper.enabled?(:flowbite_replacement) %>
             data-viral--select2-target="scroller"
+            <% else %>
+            data-viral--flowbite-select2-target="scroller"
+            <% end %>
             role="listbox"
             class="
               max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
@@ -61,10 +86,15 @@
                 aria-disabled="true"
                 aria-selected="false"
                 class="
-                  hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
+                  p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
                   dark:text-blue-400 dark:border-blue-800 pointer-events-none
                 "
+                hidden=""
+                <% if Flipper.enabled?(:flowbite_replacement) %>
                 data-viral--select2-target="empty"
+                <% else %>
+                data-viral--flowbite-select2-target="empty"
+                <% end %>
               >
                 <%= empty_state %>
               </li>

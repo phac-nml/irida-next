@@ -6,6 +6,7 @@ class ProjectsTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
     login_as @user
+    Flipper.enable(:flowbite_replacement)
   end
 
   test 'can create a project' do

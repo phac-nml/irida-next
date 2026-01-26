@@ -1,4 +1,10 @@
-<%= form_with(url: "#", data: {controller: "viral--select2", "viral--select2-trigger-type-value": "click"}) do |form| %>
+<%= form_with(url: "#", data:
+                      if Flipper.enabled?(:flowbite_replacement)
+                        { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+                      else
+                        { controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+                      end
+  ) do |form| %>
   <label for="unique_id">Select User</label>
   <%= viral_select2(form:, name: :user, id: "unique_id") do |select| %>
     <% (1..50).each do |num| %>
@@ -22,7 +28,10 @@
   <%= form.submit "Submit",
               class: "button button-primary",
               disabled: true,
-              data: {
-                "viral--select2-target": "submitButton",
-              } %>
+              data:
+                if Flipper.enabled?(:flowbite_replacement)
+                  { "viral--select2-target": "submitButton" }
+                else
+                  { "viral--flowbite-select2-target": "submitButton" }
+                end %>
 <% end %>
