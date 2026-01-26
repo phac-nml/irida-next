@@ -227,25 +227,52 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.error?
   end
 
-  test 'canceling workflow should return early' do
+  test 'already canceling workflow should return early' do
     workflow_execution = workflow_executions(:irida_next_example_canceling)
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
   end
 
-  test 'canceled workflow should return early' do
+  test 'already canceled workflow should return early' do
     workflow_execution = workflow_executions(:irida_next_example_canceled)
     workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+  end
+
+  test 'successful job execution service returned canceled' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'CANCELED'
+          }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert @workflow_execution.reload.canceled?
+
+    assert_no_enqueued_emails
   end
 
   test 'min_run_time with running state should delay status check' do
