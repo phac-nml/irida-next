@@ -411,7 +411,6 @@ export default class extends Controller {
     cell.appendChild(sampleContent);
   }
 
-  // TODO chec same name and id this is okay
   #insertDropdownContent(cell, columnName, sampleId, options) {
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}`;

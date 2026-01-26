@@ -2,11 +2,27 @@
   <div
     hidden
     data-metadata="<%= @metadata %>"
-    <% unless Flipper.enabled?(:deferred_samplesheet) %>
     data-header="<%= @header %>"
-    <% end %>
     data-nextflow--samplesheet-target="dataPayload"
     data-payload-type="metadata"
   />
+
+  <% if Flipper.enable(:deferred_samplesheet) %>
+    <div
+      hidden
+      data-metadata="<%= @metadata %>"
+      data-headers="<%= @headers %>"
+      data-nextflow--deferred-samplesheet-target="dataPayload"
+      data-payload-type="metadata"
+    />
+  <% else %>
+    <div
+      hidden
+      data-metadata="<%= @metadata %>"
+      data-header="<%= @header %>"
+      data-nextflow--samplesheet-target="dataPayload"
+      data-payload-type="metadata"
+    />
+  <% end %>
 
 <% end %>
