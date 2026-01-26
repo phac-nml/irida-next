@@ -247,7 +247,6 @@ en:
       verifying_update_samples: Verifying if you're authorized to update samples with analysis results
     nextflow_component:
       data_missing_error: 'The following samples are missing required data: '
-      filtering_samples: Filtering samples, this may take some time.
       loading_complete:
         alert_message_html:
           one: "<div>(Complete) Preparing workflow execution arguments for 1 sample, this may take a bit of time.</div><div>Samplesheet is ready.</div>"
