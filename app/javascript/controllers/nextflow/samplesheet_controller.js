@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
 import { focusWhenVisible } from "utilities/focus";
+import merge from "deepmerge";
 
 export default class extends Controller {
   static targets = [
@@ -141,7 +142,6 @@ export default class extends Controller {
     this.workflowAttributesTarget.remove();
 
     this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
-    console.log(this.#fileAttributes);
     this.fileAttributesTarget.remove();
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
@@ -233,7 +233,7 @@ export default class extends Controller {
       ) {
         const sampleId = this.#allSampleIds[i];
         if (!this.#retrieveSampleData(sampleId, requiredColumn)) {
-          let sample = this.#retrieveSampleData(sampleId, "sample");
+          const sample = this.#retrieveSampleData(sampleId, "sample");
           if (sample in missingData) {
             missingData[sample].push(requiredColumn);
           } else {
@@ -243,14 +243,6 @@ export default class extends Controller {
       }
     });
     return missingData;
-  }
-
-  // combines parameter form data with samplesheet form data
-  #combineFormData() {
-    const parameterData = new FormData(this.formTarget);
-    for (const parameter of parameterData.entries()) {
-      this.#setFormData(parameter[0], parameter[1]);
-    }
   }
 
   #enableProcessingState(message) {
@@ -309,7 +301,6 @@ export default class extends Controller {
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
   #updateFileData(files) {
-    console.log(files);
     const sample_id = files["attachable_id"];
     files["files"].forEach((file) => {
       this.#fileAttributes[sample_id][file["property"]].attachment_id = file.id;
@@ -327,11 +318,10 @@ export default class extends Controller {
       // via formData (files are stored by globalID in formData)
       this.#updateCell(file["property"], sample_id, "file_cell", true);
     });
-    // this.#clearPayload();
   }
 
   #updateMetadata(metadata, header) {
-    _.merge(this.#samplesheetAttributes, metadata);
+    this.#samplesheetAttributes = merge(this.#samplesheetAttributes, metadata);
     for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
       this.#updateCell(header, this.#allSampleIds[i], "metadata_cell", false);
     }
@@ -500,7 +490,6 @@ export default class extends Controller {
     }
   }
 
-  // TODO cehck name and id again
   #insertTextInputContent(cell, columnName, sampleId) {
     const textInputContent =
       this.textInputTemplateTarget.content.cloneNode(true);
@@ -611,12 +600,6 @@ export default class extends Controller {
       if (focusCell) {
         cell.firstElementChild.focus();
       }
-    }
-  }
-
-  #clearPayload() {
-    if (this.hasDataPayloadTarget) {
-      this.dataPayloadTarget.remove();
     }
   }
 
@@ -803,7 +786,7 @@ export default class extends Controller {
   #compactFormData() {
     const compactFormData = new FormData(this.formTarget);
 
-    let params = formDataToJsonParams(compactFormData);
+    const params = formDataToJsonParams(compactFormData);
     params["workflow_execution"]["samples_workflow_executions_attributes"] =
       Object.values(this.#samplesheetAttributes);
     return params;
