@@ -36,6 +36,7 @@ export default class extends Controller {
   // ====================================================================
   // Stimulus Configuration
   // ====================================================================
+
   static SELECTORS = {
     operatorSelect: "select[name$='[operator]']",
     fieldSelect: "select[name$='[field]'], input[name$='[field]']",
@@ -45,6 +46,8 @@ export default class extends Controller {
       "div > button[data-action='advanced-search#removeGroup']",
   };
 
+  static HIDDEN_CLASSES = ["invisible", "@max-xl:hidden"];
+
   static targets = [
     "conditionsContainer",
     "conditionTemplate",
@@ -53,6 +56,7 @@ export default class extends Controller {
     "listValueTemplate",
     "searchGroupsContainer",
     "searchGroupsTemplate",
+    "statusAnnouncement",
     "validationStatus",
     "valueTemplate",
   ];
@@ -60,9 +64,12 @@ export default class extends Controller {
   static values = {
     confirmCloseText: String,
     open: Boolean,
+    groupAddedMessage: { type: String, default: "Search group added" },
+    groupRemovedMessage: { type: String, default: "Search group removed" },
+    conditionAddedMessage: { type: String, default: "Condition added" },
+    conditionRemovedMessage: { type: String, default: "Condition removed" },
+    formClearedMessage: { type: String, default: "Search form cleared" },
   };
-
-  #hiddenClasses = ["invisible", "@max-xl:hidden"];
 
   // ====================================================================
   // Lifecycle
@@ -114,10 +121,12 @@ export default class extends Controller {
 
   /**
    * Clear the form and reset to a single empty group with one condition.
+   * Announces the action to screen readers.
    */
   clearForm() {
     this.clear();
     this.addGroup();
+    this.#announce(this.formClearedMessageValue);
   }
 
   /**
@@ -150,6 +159,7 @@ export default class extends Controller {
   /**
    * Add a new condition to the group containing the trigger element.
    * Focuses the newly added condition's field select.
+   * Announces the action to screen readers.
    *
    * @param {Event} event - Event triggered by the add condition button
    */
@@ -158,12 +168,14 @@ export default class extends Controller {
     if (!group) return;
 
     this.#addConditionToGroup(group);
+    this.#announce(this.conditionAddedMessageValue);
   }
 
   /**
    * Remove a condition from its group and reindex remaining conditions.
    * If the group becomes empty, adds a new condition to maintain at least one.
    * Focuses the last condition's select after removal.
+   * Announces the action to screen readers.
    *
    * @param {Event} event - Event triggered by the remove condition button
    */
@@ -182,12 +194,15 @@ export default class extends Controller {
     } else {
       conditions.at(-1)?.querySelector("select")?.focus();
     }
+
+    this.#announce(this.conditionRemovedMessageValue);
   }
 
   /**
    * Append a new search group to the dialog.
    * Each new group starts with one condition and focuses the field select.
    * Updates remove group button visibility after addition.
+   * Announces the action to screen readers.
    */
   addGroup() {
     const groupIndex = this.groupsContainerTargets.length;
@@ -214,12 +229,14 @@ export default class extends Controller {
     group.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
+    this.#announce(this.groupAddedMessageValue);
   }
 
   /**
    * Remove a search group if more than one group exists.
    * Prevents removal of the last group to maintain at least one group.
    * Reindexes remaining groups and focuses the last group's select.
+   * Announces the action to screen readers.
    *
    * @param {Event} event - Event triggered by the remove group button
    */
@@ -236,6 +253,7 @@ export default class extends Controller {
     groups.at(-1)?.querySelector("select")?.focus();
 
     this.#toggleRemoveGroupButtons();
+    this.#announce(this.groupRemovedMessageValue);
   }
 
   /**
@@ -286,7 +304,7 @@ export default class extends Controller {
     const valueContainer = condition.querySelector(".value");
     if (valueContainer && !isInitialCommit) {
       this.#clearValueInputs(valueContainer);
-      valueContainer.classList.add(...this.#hiddenClasses);
+      valueContainer.classList.add(...this.constructor.HIDDEN_CLASSES);
     }
   }
 
@@ -315,7 +333,7 @@ export default class extends Controller {
 
     if (["", "exists", "not_exists"].includes(operator)) {
       this.#clearValueInputs(valueContainer);
-      valueContainer.classList.add(...this.#hiddenClasses);
+      valueContainer.classList.add(...this.constructor.HIDDEN_CLASSES);
       return;
     }
 
@@ -412,7 +430,7 @@ export default class extends Controller {
     const updatedCondition = getConditions(group)[conditionIndex];
     const updatedValue = updatedCondition?.querySelector(".value") || null;
 
-    updatedValue?.classList.remove(...this.#hiddenClasses);
+    updatedValue?.classList.remove(...this.constructor.HIDDEN_CLASSES);
     return updatedValue;
   }
 
@@ -837,5 +855,40 @@ export default class extends Controller {
       (original, index) =>
         currentInputs[index] && original.value !== currentInputs[index].value,
     );
+  }
+
+  // ====================================================================
+  // Private: Accessibility
+  // ====================================================================
+
+  /**
+   * Announce a message to screen readers via an aria-live region.
+   * Uses the statusAnnouncement target if available, otherwise falls back
+   * to a global #sr-status element or creates one.
+   *
+   * @param {string} message - The message to announce
+   * @private
+   */
+  #announce(message) {
+    if (!message) return;
+
+    if (this.hasStatusAnnouncementTarget) {
+      this.statusAnnouncementTarget.textContent = message;
+      return;
+    }
+
+    const globalStatus = document.querySelector("#sr-status");
+    if (globalStatus) {
+      globalStatus.textContent = message;
+      return;
+    }
+
+    const region = document.createElement("div");
+    region.id = "sr-status";
+    region.setAttribute("aria-live", "polite");
+    region.setAttribute("aria-atomic", "true");
+    region.className = "sr-only";
+    region.textContent = message;
+    document.body.appendChild(region);
   }
 }

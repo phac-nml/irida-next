@@ -2078,7 +2078,7 @@ fr:
         submit: Envoyer
         title: Paramètres %{workflow}
       pipeline_selection:
-        loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>La préparation des arguments d’exécution du flux de travail pour les échantillons COUNT_PLACEHOLDER peut prendre un certain temps."
+        loading_message_html: "La préparation des arguments d'exécution du flux de travail pour %{count_placeholder} échantillons peut prendre un certain temps."
         title: Sélection du flux de travail
     summary:
       created_at: Créé

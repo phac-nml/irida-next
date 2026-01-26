@@ -55,13 +55,56 @@
           </li>
         <% end %>
       </ul>
-      <% unless Flipper.enabled?(:deferred_samplesheet) %>
-        <div id="pipeline-spinner" class="hidden flex items-center p-4 space-x-4">
-          <%= render SpinnerComponent.new(
-            message: t("workflow_executions.submissions.pipeline_selection.loading_html"),
-          ) %>
+      <div
+        data-workflow-selection-target="spinner"
+        class="hidden flex items-center p-4 space-x-4"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="grid place-items-start">
+          <div
+            class="
+              flex flex-col w-full max-w-md p-4 space-y-2 text-gray-500 bg-white rounded-lg
+              shadow-sm dark:text-gray-400 dark:bg-gray-800
+            "
+          >
+            <div class="flex items-center space-x-2">
+              <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+              <span class="flex items-center space-x-2">
+                <span
+                  data-workflow-selection-target="spinnerWorkflowName"
+                  class="font-medium truncate text-slate-900 dark:text-white"
+                ></span>
+                <span
+                  data-workflow-selection-target="spinnerWorkflowVersion"
+                  class="
+                    bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400
+                    text-xs font-medium px-2.5 py-0.5 rounded-full
+                  "
+                ></span>
+              </span>
+            </div>
+            <p class="text-sm font-normal">
+              <%= t(
+                "workflow_executions.submissions.pipeline_selection.loading_message_html",
+                count_placeholder:
+                  content_tag(
+                    :span,
+                    "",
+                    "data-workflow-selection-target": "spinnerCount",
+                    class: "font-semibold",
+                  ),
+              ) %>
+            </p>
+          </div>
         </div>
-      <% end %>
+      </div>
+      <div
+        data-workflow-selection-target="statusAnnouncement"
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+      ></div>
     <% end %>
   <% end %>
 <% end %>
