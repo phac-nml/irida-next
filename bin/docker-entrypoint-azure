@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+# Enable jemalloc for reduced memory usage and latency.
+if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
+  export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
+fi
+
+# If running the rails server then create or migrate existing database
+if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "$@"
+
+# Setup the ssh service entrypoint
+service ssh start
+exec gunicorn -w 4 -b 0.0.0.0:8000 app:app
