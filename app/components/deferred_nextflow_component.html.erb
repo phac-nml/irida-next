@@ -15,10 +15,6 @@
   <% unless @automated_workflow %>
   data-nextflow--deferred-samplesheet-selection-outlet="#samples-table"
   <% end %>
-  data-action="
-    nextflow--file:sendFileData->nextflow--deferred-samplesheet#updateFileData
-    nextflow--metadata:sendMetadata->nextflow--deferred-samplesheet#updateMetadata
-  "
 >
   <h1
     class="

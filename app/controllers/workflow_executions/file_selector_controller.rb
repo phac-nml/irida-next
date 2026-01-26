@@ -28,7 +28,6 @@ module WorkflowExecutions
         file_selector: [
           :attachable_id,
           :attachable_type,
-          :index,
           :property,
           :selected_id,
           :pattern,
@@ -40,18 +39,9 @@ module WorkflowExecutions
     def listing_attachments
       @listing_attachments = case file_selector_params['property']
                              when 'fastq_1', 'fastq_2'
-                               @attachable.samplesheet_fastq_files(
-                                 file_selector_params['property'], file_selector_params['pattern']
-                               )
+                               @attachable.file_selector_fastq_files(file_selector_params['property'])
                              else
-                               if file_selector_params['pattern']
-                                 @attachable.filter_files_by_pattern(
-                                   @attachable.sorted_files[:singles] || [],
-                                   file_selector_params['pattern']
-                                 )
-                               else
-                                 @attachable.sorted_files[:singles] || []
-                               end
+                               @attachable.file_selector_other_files(file_selector_params['pattern'])
                              end
     end
 
@@ -67,7 +57,7 @@ module WorkflowExecutions
 
     def attachments
       @attachments_params = {
-        index: file_selector_params[:index],
+        attachable_id: file_selector_params[:attachable_id],
         files: []
       }
       property = file_selector_params['property']
