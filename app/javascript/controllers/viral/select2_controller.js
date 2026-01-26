@@ -212,10 +212,10 @@ export default class Select2Controller extends MenuController {
         if (!super.isVisible()) {
           super.show();
         }
-        this.emptyTarget.classList.add("hidden");
+        this.emptyTarget.setAttribute("hidden", "");
         this.scrollerTarget.scrollTop = 0;
       } else {
-        this.emptyTarget.classList.remove("hidden");
+        this.emptyTarget.removeAttribute("hidden");
       }
     } catch (error) {
       this.#handleError(error, "input");

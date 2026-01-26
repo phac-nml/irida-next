@@ -270,13 +270,13 @@ export default class ComboboxController extends MenuController {
     }
 
     switch (event.key) {
-      case "Enter": {
+      case "Enter":
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
         super.hide();
         flag = true;
         break;
-      }
+
       case "Down":
       case "ArrowDown":
         if (this.#filteredOptions.length > 0) {
@@ -322,7 +322,7 @@ export default class ComboboxController extends MenuController {
         flag = true;
         break;
 
-      case "Tab": {
+      case "Tab":
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
         super.hide();
@@ -342,7 +342,6 @@ export default class ComboboxController extends MenuController {
 
       default:
         break;
-      }
     }
 
     if (flag) {
