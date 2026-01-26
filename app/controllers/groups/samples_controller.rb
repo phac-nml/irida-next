@@ -140,15 +140,31 @@ module Groups
     end
 
     def search_params
-      updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+      updated_params = retrieve_or_update_search_params
       updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes', 'metadata_template', 'sort')
-
-      if !updated_params.key?('sort') ||
-         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
-        updated_params['sort'] = 'updated_at desc'
-        update_store(search_key, updated_params)
-      end
+      ensure_valid_sort(updated_params)
       updated_params
+    end
+
+    def retrieve_or_update_search_params
+      if params[:q].blank?
+        stored = get_store(search_key) || {}
+        stored.with_indifferent_access
+      else
+        update_store(search_key, params[:q].to_unsafe_h)
+      end
+    end
+
+    def ensure_valid_sort(updated_params)
+      return if sort_valid?(updated_params)
+
+      updated_params['sort'] = 'updated_at desc'
+      update_store(search_key, updated_params)
+    end
+
+    def sort_valid?(updated_params)
+      updated_params.key?('sort') &&
+        !(updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
     end
 
     def search_key

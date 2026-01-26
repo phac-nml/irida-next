@@ -9,7 +9,14 @@ module AdvancedSearch
       private
 
       def condition_equals(scope, node, value, metadata_field:, field_name:)
-        if metadata_field || field_name == 'name'
+        # Enum metadata fields need exact matching, not pattern matching
+        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
+        is_enum_metadata = enum_metadata_fields.include?(field_name)
+
+        # Use pattern matching only for non-enum metadata fields and name field
+        use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata
+
+        if use_pattern_match
           scope.where(node.matches(value))
         else
           scope.where(node.eq(value))
@@ -17,7 +24,14 @@ module AdvancedSearch
       end
 
       def condition_not_equals(scope, node, value, metadata_field:, field_name:)
-        if metadata_field || field_name == 'name'
+        # Enum metadata fields need exact matching, not pattern matching
+        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
+        is_enum_metadata = enum_metadata_fields.include?(field_name)
+
+        # Use pattern matching only for non-enum metadata fields and name field
+        use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata
+
+        if use_pattern_match
           scope.where(node.eq(nil).or(node.does_not_match(value)))
         else
           scope.where(node.not_eq(value))

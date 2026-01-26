@@ -385,7 +385,16 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def search_params
     permitted = permit_search_params
-    updated_params = update_store(search_key, permitted)
+    # If no params provided in request, retrieve stored params from session
+    # Otherwise, use the submitted params (even if empty, to clear the search)
+    if params[:q].blank?
+      stored = get_store(search_key) || {}
+      updated_params = stored.with_indifferent_access
+    else
+      updated_params = update_store(search_key, permitted)
+    end
+    # Filter to only allow expected keys for security
+    updated_params.slice!('name_or_id_cont', 'name_or_id_in', 'groups_attributes', 'sort')
     updated_params['sort'] = 'updated_at desc' unless updated_params.key?('sort')
     update_store(search_key, updated_params)
 
@@ -395,12 +404,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def permit_search_params
     return {} if params[:q].blank?
 
-    params.expect(
-      q: [:name_or_id_cont,
-          :sort,
-          { name_or_id_in: [],
-            groups_attributes: [conditions_attributes: [:field, :operator, :value, { value: [] }]] }]
-    ).to_h.with_indifferent_access
+    # Use to_unsafe_h to handle form submissions more robustly
+    # This matches the pattern used in samples controllers
+    params[:q].to_unsafe_h.with_indifferent_access
   end
 
   def search_key
