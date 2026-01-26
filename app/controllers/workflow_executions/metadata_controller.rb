@@ -9,6 +9,7 @@ module WorkflowExecutions
       @sample_ids = params[:sample_ids].split(',')
       if Flipper.enabled?(:deferred_samplesheet)
         @metadata_fields = JSON.parse(params[:metadata_fields])
+        @headers = @metadata_fields.keys.to_json
       else
         @header = params[:header]
         @field = params[:field]
@@ -22,7 +23,10 @@ module WorkflowExecutions
     # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
     def generate_metadata_for_samplesheet
-      Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+      metadata = Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+      # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
+      # in samplesheet_controller.js
+      {}.merge(*metadata)
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes
@@ -48,20 +52,17 @@ module WorkflowExecutions
 
     def fetch_metadata
       node = Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(@field))
-      query = Sample.where(id: @sample_ids).pluck(:id, node).map do |results|
+      Sample.where(id: @sample_ids).pluck(:id, node).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
       end
-      # query is an array of hashes, and we'll merge them into an empty has to create a nested hash that can be merged
-      # in samplesheet_controller.js
-      {}.merge(*query)
     end
 
-    # TODO: potential logic for when this controller can receive multiple headers in PR1338
     def retrieve_metadata(pluck_results)
       metadata_values = {}
-      @metadata_fields.each.with_index(1) do |(header, _metadata_field), index|
+      @metadata_fields.each_key.with_index(1) do |header, index|
         metadata_values[header] = pluck_results[index]
       end
+      metadata_values
     end
   end
 end
