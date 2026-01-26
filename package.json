@@ -16,9 +16,14 @@
     "format:check": "prettier --check '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
     "format:changed": "prettier --write",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "dev:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch"
   },
   "dependencies": {
-    "flowbite": "^3.1.2"
+    "@tailwindcss/cli": "^4.1.18",
+    "add": "^2.0.6",
+    "flowbite": "^3.1.2",
+    "tailwindcss": "^4.1.18"
   }
 }
