@@ -1,5 +1,11 @@
 <%= form_with(url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
-data: { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }) do |form| %>
+data:
+if Flipper.enabled?(:flowbite_replacement)
+  { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+else
+  { turbo_confirm: "", controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+end
+) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
   <div class="form-field">
     <% form_id = "transfer_namespace_id_input" %>
@@ -54,10 +60,19 @@ data: { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
                 class: "button button-destructive inline-block",
                 disabled: true,
-                data: {
-                  "viral--select2-target": "submitButton",
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: confirm_value,
-                } %>
+                data:
+                  if Flipper.enabled?(:flowbite_replacement)
+                    {
+                      "viral--select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: confirm_value,
+                    }
+                  else
+                    {
+                      "viral--flowbite-select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: confirm_value,
+                    }
+                  end %>
   </div>
 <% end %>

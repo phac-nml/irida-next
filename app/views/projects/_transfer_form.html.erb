@@ -1,5 +1,11 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
-              data: { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }) do |form| %>
+data:
+if Flipper.enabled?(:flowbite_replacement)
+  { turbo_confirm: "", controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+else
+  { turbo_confirm: "", controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+end
+) do |form| %>
   <div class="mb-2">
     <%= render partial: "shared/form/required_field_legend" %>
   </div>
@@ -56,12 +62,21 @@
   <div>
     <%= form.submit t(:"projects.edit.advanced.transfer.submit"),
                 class: "button button-destructive",
-                data: {
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: @project.name,
-                },
-                "data-viral--select2-target": "submitButton",
-                disabled: "disabled" %>
+                disabled: "disabled",
+                data:
+                  if Flipper.enabled?(:flowbite_replacement)
+                    {
+                      "viral--select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: @project.name,
+                    }
+                  else
+                    {
+                      "viral--flowbite-select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: @project.name,
+                    }
+                  end %>
   </div>
 
 <% end %>
