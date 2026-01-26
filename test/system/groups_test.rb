@@ -16,6 +16,7 @@ class GroupsTest < ApplicationSystemTestCase
     @project30 = projects(:project30)
     @sample34 = samples(:sample34)
     login_as @user
+    Flipper.enable(:flowbite_replacement)
   end
 
   test 'can create a group' do

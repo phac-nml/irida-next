@@ -3,8 +3,13 @@
   <%= turbo_stream_from @broadcast_target %>
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
+      <% if Flipper.enabled?(:flowbite_replacement) %>
       data-controller="infinite-scroll viral--select2"
       data-viral--select2-trigger-type-value="click"
+      <% else %>
+      data-controller="infinite-scroll viral--flowbite-select2"
+      data-viral--flowbite-select2-trigger-type-value="click"
+      <% end %>
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t("samples.transfers.dialog.description.singular") %>"
@@ -106,11 +111,16 @@
               <%= form.submit t("samples.transfers.dialog.submit_button"),
                           class: "button button-primary",
                           disabled: true,
-                          data: {
-                            action: "viral--dialog#setClosable",
+                          data:
+                            if Flipper.enabled?(:flowbite_replacement)
+                            { action: "viral--dialog#setClosable",
                             "viral--dialog-closable-param": "false",
-                            "viral--select2-target": "submitButton",
-                          } %>
+                            "viral--select2-target": "submitButton" }
+                            else
+                            { action: "viral--dialog#setClosable",
+                            "viral--dialog-closable-param": "false",
+                            "viral--flowbite-select2-target": "submitButton" }
+                            end %>
             </div>
           </div>
         <% end %>

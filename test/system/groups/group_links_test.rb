@@ -13,6 +13,7 @@ module Groups
       @group_links_count = namespace_group_links.select { |group_link| group_link.namespace == @namespace }.count
       @group_link5 = namespace_group_links(:namespace_group_link5)
       @group_link14 = namespace_group_links(:namespace_group_link14)
+      Flipper.enable(:flowbite_replacement)
     end
 
     test 'can create a group to group link' do
