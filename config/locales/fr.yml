@@ -10,6 +10,14 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Groupe
+      workflow_execution/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:

@@ -23,12 +23,10 @@
     <%= render AdvancedSearchComponent.new(
       form: f,
       search: @query,
-      sample_fields: @workflow_execution_fields,
+      entity_fields: @workflow_execution_fields,
+      field_label_namespace: "workflow_executions.table_component",
       open: @query.errors.any?,
       status: @query.advanced_query?,
-      i18n_prefix: "workflow_executions.table_component",
-      search_group_class: WorkflowExecution::SearchGroup,
-      search_condition_class: WorkflowExecution::SearchCondition,
       enum_fields: @workflow_execution_enum_fields,
     ) %>
 

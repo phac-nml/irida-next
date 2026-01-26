@@ -10,6 +10,14 @@ en:
         value: Value
       sample/search_group:
         condition: Condition
+      workflow_execution/query:
+        group: Group
+      workflow_execution/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      workflow_execution/search_group:
+        condition: Condition
     errors:
       models:
         sample/search_condition:

@@ -1,11 +1,17 @@
 <fieldset
   data-advanced-search-target="groupsContainer"
   class="
-    px-4 space-y-4 rounded-lg border border-slate-300 dark:border-slate-600 text-sm
-    text-slate-500 dark:text-slate-400
+    relative p-4 rounded-lg border-2 border-slate-300 dark:border-slate-600
+    hover:border-slate-400 dark:hover:border-slate-500 transition-colors space-y-3
   "
 >
-  <legend><%= t("components.advanced_search_component.group", index: @group_number) %></legend>
+  <legend
+    class="mb-2 block text-base font-semibold text-slate-900 dark:text-white"
+    data-label-template="<%= t('components.advanced_search_component.group', index: '%{index}') %>"
+  >
+    <%= t("components.advanced_search_component.group", index: @group_number) %>
+  </legend>
+
   <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::Condition.new(
@@ -14,17 +20,20 @@
         condition: condition,
         condition_index: condition_index,
         condition_number: condition_index + 1,
-        sample_fields: @sample_fields,
-        metadata_fields: @metadata_fields,
-        operations: @operations,
+        entity_fields: @entity_fields,
+        jsonb_fields: @jsonb_fields,
         enum_fields: @enum_fields,
+        operations: @operations,
+        enum_operations: @enum_operations,
       ) %>
     <% end %>
   <% end %>
+
   <div class="flex justify-end my-4">
     <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
       <%= t("components.advanced_search_component.add_condition_button") %>
     <% end %>
+
     <%= viral_button(classes: class_names("ml-2", "hidden": !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
       <%= t("components.advanced_search_component.remove_group_button") %>
     <% end %>
