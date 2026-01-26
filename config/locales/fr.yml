@@ -2078,7 +2078,7 @@ fr:
         submit: Envoyer
         title: Paramètres %{workflow}
       pipeline_selection:
-        loading_message_html: "La préparation des arguments d'exécution du flux de travail pour %{count_placeholder} échantillons peut prendre un certain temps."
+        loading_message_html: La préparation des arguments d'exécution du flux de travail pour %{count_placeholder} échantillons peut prendre un certain temps.
         title: Sélection du flux de travail
     summary:
       created_at: Créé
@@ -2105,9 +2105,6 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
-      metadata:
-        pipeline_id: Nom du flux de travail
-        workflow_version: Version du flux de travail
       name: Nom
       run_id: Exécuter l'identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles

@@ -109,6 +109,12 @@ fr:
     advanced_search_component:
       add_condition_button: Ajouter une condition
       add_group_button: Ajouter un groupe
+      announcements:
+        condition_added: Condition ajoutée
+        condition_removed: Condition supprimée
+        form_cleared: Formulaire de recherche effacé
+        group_added: Groupe de recherche ajouté
+        group_removed: Groupe de recherche supprimé
       apply_filter_button: Appliquer un filtre
       clear_aria_label: Terminer la recherche avancée
       clear_filter_button: Effacer le filtre
@@ -132,12 +138,6 @@ fr:
       remove_group_button: Supprimer le groupe
       rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d'un groupe plus d'une fois, à l'exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
       title: Recherche avancée
-      announcements:
-        group_added: Groupe de recherche ajouté
-        group_removed: Groupe de recherche supprimé
-        condition_added: Condition ajoutée
-        condition_removed: Condition supprimée
-        form_cleared: Formulaire de recherche effacé
     attachments:
       dialogs:
         delete_attachment_component:

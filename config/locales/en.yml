@@ -2074,7 +2074,7 @@ en:
         submit: Submit
         title: "%{workflow} parameters"
       pipeline_selection:
-        loading_message_html: "Preparing workflow execution arguments for %{count_placeholder} samples, this may take a bit of time."
+        loading_message_html: Preparing workflow execution arguments for %{count_placeholder} samples, this may take a bit of time.
         title: Workflow Selection
     summary:
       created_at: Created
@@ -2101,9 +2101,6 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
-      metadata:
-        pipeline_id: Workflow Name
-        workflow_version: Workflow Version
       name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions
