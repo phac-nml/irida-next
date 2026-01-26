@@ -1,0 +1,11 @@
+<%= turbo_stream.update "table-filter", partial: table_filter_partial %>
+
+<% if @query.valid? %>
+  <%= turbo_stream.append "workflow-executions-table" do %>
+    <%= render SpinnerComponent.new(
+      message: t("shared.workflow_executions.index.search.loading"),
+    ) %>
+  <% end %>
+
+  <turbo-stream action="refresh"></turbo-stream>
+<% end %>

@@ -1,0 +1,35 @@
+<%= form_with model: @query, html: { role: "search" }, scope: :q, url: search_url, method: :post, data: {
+  turbo_action: 'replace',
+  controller: "filters",
+  "filters-selection-outlet": "#workflow-executions-table",
+}, class: "filters contents" do |f| %>
+  <div class="max-sm:grow">
+    <%= render SearchFieldComponent.new(
+      label: t("common.controls.search"),
+      placeholder: t("shared.workflow_executions.index.search.placeholder"),
+      form: f,
+      field_name: :name_or_id_cont,
+      value: @search_params[:name_or_id_cont],
+      data: {
+        "search-field-selection-outlet": "#workflow-executions-table",
+      },
+    ) %>
+
+    <input type="hidden" name="format" value="turbo_stream"/>
+    <input type="hidden" name="limit" value="<%= @pagy&.limit %>"/>
+  </div>
+
+  <div class="max-sm:grow">
+    <%= render AdvancedSearchComponent.new(
+      form: f,
+      search: @query,
+      entity_fields: @workflow_execution_fields,
+      field_label_namespace: "workflow_executions.table_component",
+      open: @query.errors.any?,
+      status: @query.advanced_query?,
+      enum_fields: @workflow_execution_enum_fields,
+    ) %>
+
+    <%= f.submit hidden: true %>
+  </div>
+<% end %>

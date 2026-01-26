@@ -384,13 +384,23 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
-    updated_params.slice!('name_or_id_cont', 'name_or_id_in', 'groups_attributes', 'sort')
-
+    permitted = permit_search_params
+    updated_params = update_store(search_key, permitted)
     updated_params['sort'] = 'updated_at desc' unless updated_params.key?('sort')
     update_store(search_key, updated_params)
 
     updated_params
+  end
+
+  def permit_search_params
+    return {} if params[:q].blank?
+
+    params.expect(
+      q: [:name_or_id_cont,
+          :sort,
+          { name_or_id_in: [],
+            groups_attributes: [conditions_attributes: [:field, :operator, :value, { value: [] }]] }]
+    ).to_h.with_indifferent_access
   end
 
   def search_key
@@ -398,51 +408,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     :"#{controller_name}_#{namespace_id}_search_params"
   end
 
-  def workflow_execution_fields # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    pipelines = Irida::Pipelines.instance.pipelines('available').values
-
-    # Build labels hash for pipeline_id (workflow name)
-    pipeline_id_labels = pipelines.each_with_object({}) do |pipeline, hash|
-      next if pipeline.pipeline_id.blank?
-
-      hash[pipeline.pipeline_id] = pipeline.name.presence || pipeline.pipeline_id
-    end
-
-    # Build labels hash for workflow_version
-    version_labels = pipelines.each_with_object({}) do |pipeline, hash|
-      next if pipeline.version.blank?
-
-      hash[pipeline.version] = pipeline.version
-    end
-
-    @workflow_execution_fields = %w[
-      id
-      name
-      run_id
-      state
-      created_at
-      updated_at
-      metadata.pipeline_id
-      metadata.workflow_version
-    ]
-
-    # Enum fields with structured configuration for select dropdowns
-    @workflow_execution_enum_fields = {
-      'state' => {
-        values: WorkflowExecution.states.keys,
-        labels: nil, # Will use translation_key
-        translation_key: 'workflow_executions.state'
-      },
-      'metadata.pipeline_id' => {
-        values: pipeline_id_labels.keys.uniq,
-        labels: pipeline_id_labels,
-        translation_key: nil
-      },
-      'metadata.workflow_version' => {
-        values: version_labels.keys.uniq,
-        labels: version_labels,
-        translation_key: nil
-      }
-    }
+  def workflow_execution_fields
+    field_config = WorkflowExecution::FieldConfiguration.new
+    @workflow_execution_fields = field_config.fields
+    @workflow_execution_enum_fields = field_config.enum_fields
   end
 end
