@@ -422,6 +422,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       state
       created_at
       updated_at
+      metadata.pipeline_id
+      metadata.workflow_version
     ]
 
     # Enum fields with structured configuration for select dropdowns

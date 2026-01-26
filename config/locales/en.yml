@@ -2101,6 +2101,9 @@ en:
         workflow_executions: Workflow Executions
       created_at: Created
       id: ID
+      metadata:
+        pipeline_id: Workflow Name
+        workflow_version: Workflow Version
       name: Name
       run_id: Run ID
       select_page: Select / Deselect visible workflow executions

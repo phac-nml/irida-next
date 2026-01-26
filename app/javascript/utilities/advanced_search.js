@@ -204,7 +204,17 @@ export function createEnumSelect({
     select.appendChild(blankOption);
   }
 
-  values.forEach((value) => {
+  const normalizedValues = Array.isArray(values)
+    ? values
+    : values && typeof values === "object"
+      ? Object.keys(values)
+      : [];
+
+  const optionValues = normalizedValues.length
+    ? normalizedValues
+    : Object.keys(labels || {});
+
+  optionValues.forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
     option.text =

@@ -898,4 +898,119 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
   end
+
+  test 'can filter workflow executions by workflow name using advanced search' do
+    # Use a workflow execution belonging to the logged-in user
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    pipeline_id = workflow_execution.metadata['pipeline_id']
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+
+    # Verify the workflow is visible before filtering
+    within '#workflow-executions-table table tbody' do
+      assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+    within '#advanced-search-dialog' do
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+          find("select[name$='[field]']").find("option[value='metadata.pipeline_id']").select_option
+          find("select[name$='[operator]']").find("option[value='=']").select_option
+          find("select[name$='[value]']").find("option[value='#{pipeline_id}']").select_option
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+    # Verify the workflow is still visible after filtering for its pipeline_id
+    within '#workflow-executions-table table tbody' do
+      assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+
+    # Clear filter and verify all results return
+    click_button I18n.t(:'components.advanced_search_component.title')
+    within '#advanced-search-dialog' do
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+    end
+
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+  end
+
+  test 'can filter workflow executions by workflow name with not equals operator' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    pipeline_id = workflow_execution.metadata['pipeline_id']
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+
+    # Verify the workflow is visible before filtering
+    within '#workflow-executions-table table tbody' do
+      assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+    within '#advanced-search-dialog' do
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+          find("select[name$='[field]']").find("option[value='metadata.pipeline_id']").select_option
+          find("select[name$='[operator]']").find("option[value='!=']").select_option
+          find("select[name$='[value]']").find("option[value='#{pipeline_id}']").select_option
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+    # Verify the workflow is NOT visible after filtering with != operator
+    within '#workflow-executions-table table tbody' do
+      assert_no_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+  end
+
+  test 'can filter workflow executions by workflow version using advanced search' do
+    # Use a workflow execution belonging to the logged-in user
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    workflow_version = workflow_execution.metadata['workflow_version']
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+
+    # Verify the workflow is visible before filtering
+    within '#workflow-executions-table table tbody' do
+      assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+    within '#advanced-search-dialog' do
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+          find("select[name$='[field]']").find("option[value='metadata.workflow_version']").select_option
+          find("select[name$='[operator]']").find("option[value='=']").select_option
+          find("select[name$='[value]']").find("option[value='#{workflow_version}']").select_option
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+
+    # Verify the workflow is still visible after filtering for its version
+    within '#workflow-executions-table table tbody' do
+      assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    end
+  end
 end

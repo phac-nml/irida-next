@@ -2105,6 +2105,9 @@ fr:
         workflow_executions: Exécutions de flux de travail
       created_at: Créé
       id: ID
+      metadata:
+        pipeline_id: Nom du flux de travail
+        workflow_version: Version du flux de travail
       name: Nom
       run_id: Exécuter l'identifiant
       select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles

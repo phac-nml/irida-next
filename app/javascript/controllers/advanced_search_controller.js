@@ -38,7 +38,7 @@ export default class extends Controller {
   // ====================================================================
   static SELECTORS = {
     operatorSelect: "select[name$='[operator]']",
-    fieldSelect: "select[name$='[field]']",
+    fieldSelect: "select[name$='[field]'], input[name$='[field]']",
     valueInput: "[name$='[value]']",
     groupInputs: "[id^='q_groups_attributes_']",
     removeGroupButton:
@@ -76,6 +76,19 @@ export default class extends Controller {
     if (this.openValue) {
       this.renderSearch();
     }
+
+    this.boundAutoCompleteChange = this.#handleAutoCompleteChange.bind(this);
+    this.element.addEventListener(
+      "select-with-auto-complete:change",
+      this.boundAutoCompleteChange,
+    );
+  }
+
+  disconnect() {
+    this.element.removeEventListener(
+      "select-with-auto-complete:change",
+      this.boundAutoCompleteChange,
+    );
   }
 
   /**
@@ -229,18 +242,49 @@ export default class extends Controller {
    * Handle field selection changes.
    * Updates the operator dropdown based on field type (enum vs standard).
    * If an operator is already selected, updates the value input accordingly.
+   * Only processes changes when the field value actually changes.
    *
    * @param {Event} event - Change event from the field select element
    */
   handleFieldChange(event) {
-    const condition = findCondition(event.currentTarget);
+    const fieldElement =
+      event.target?.closest?.(this.constructor.SELECTORS.fieldSelect) ||
+      event.target;
+
+    const condition = findCondition(fieldElement);
     if (!condition) return;
 
-    const selectedField = event.currentTarget.value;
+    const selectedField =
+      event.detail?.value ??
+      (fieldElement instanceof HTMLInputElement ||
+      fieldElement instanceof HTMLSelectElement
+        ? fieldElement.value
+        : "");
+
+    // Get the hidden field for auto-complete, or the select for regular dropdown
+    const hiddenField = condition.querySelector("input[name$='[field]']");
+    const previousField = hiddenField?.dataset?.previousValue;
+
+    // Skip if the field value hasn't actually changed
+    if (previousField === selectedField) {
+      return;
+    }
+
+    // Check if this is an initial field commit (from empty/undefined to a value)
+    // vs an actual field change (from one value to another)
+    const isInitialCommit = previousField === undefined && selectedField !== "";
+
+    // Store the new value for change detection
+    if (hiddenField) {
+      hiddenField.dataset.previousValue = selectedField;
+    }
+
     this.#updateOperatorDropdown(condition, selectedField);
 
+    // Only clear value container if this is an actual field change,
+    // not an initial commit of the first field selection
     const valueContainer = condition.querySelector(".value");
-    if (valueContainer) {
+    if (valueContainer && !isInitialCommit) {
       this.#clearValueInputs(valueContainer);
       valueContainer.classList.add(...this.#hiddenClasses);
     }
@@ -394,9 +438,11 @@ export default class extends Controller {
     );
     if (!operatorSelect) return;
 
-    const operations = isEnumField(enumFields, selectedField)
-      ? enumOperations
-      : standardOperations;
+    // Only use enum operations if the field is an enum AND has selectable values
+    const enumConfig = enumFields[selectedField];
+    const isEnumWithValues =
+      isEnumField(enumFields, selectedField) && this.#enumHasValues(enumConfig);
+    const operations = isEnumWithValues ? enumOperations : standardOperations;
 
     operatorSelect.innerHTML = "";
 
@@ -417,6 +463,7 @@ export default class extends Controller {
    * Convert a value input to an enum select element when the field is an enum type.
    * Preserves accessibility attributes, classes, and form field identifiers.
    * Supports both single-select and multi-select based on the operator.
+   * If the enum has no values, leaves the text input in place for freeform entry.
    *
    * @param {HTMLElement} valueContainer - Container element holding the value input
    * @param {HTMLElement} condition - The condition fieldset element
@@ -430,6 +477,12 @@ export default class extends Controller {
 
     const enumConfig = this.#enumConfig(condition, selectedField);
     if (!enumConfig) {
+      return;
+    }
+
+    // If the enum has no values, leave the text input for freeform entry
+    const hasValues = this.#enumHasValues(enumConfig);
+    if (!hasValues) {
       return;
     }
 
@@ -487,6 +540,30 @@ export default class extends Controller {
       console.error("Failed to parse enum configuration:", error);
       return null;
     }
+  }
+
+  /**
+   * Check if an enum configuration has any selectable values.
+   * Returns true if either values array or labels object contains entries.
+   *
+   * @param {Object} enumConfig - Enum configuration object with values and labels
+   * @returns {boolean} True if the enum has at least one selectable value
+   */
+  #enumHasValues(enumConfig) {
+    const values = enumConfig?.values || [];
+    const labels = enumConfig?.labels || {};
+
+    const normalizedValues = Array.isArray(values)
+      ? values
+      : values && typeof values === "object"
+        ? Object.keys(values)
+        : [];
+
+    if (normalizedValues.length > 0) {
+      return true;
+    }
+
+    return Object.keys(labels).length > 0;
   }
 
   /**
@@ -709,6 +786,10 @@ export default class extends Controller {
       this.constructor.SELECTORS.fieldSelect,
     );
     return fieldSelect?.value || "";
+  }
+
+  #handleAutoCompleteChange(event) {
+    this.handleFieldChange(event);
   }
 
   /**
