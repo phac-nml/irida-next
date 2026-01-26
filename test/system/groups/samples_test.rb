@@ -334,7 +334,7 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-within('table tbody') do
+      within('table tbody') do
         assert_selector 'tr', count: 1
         assert_text @sample1.name
         assert_no_text @sample2.name
@@ -507,7 +507,7 @@ within('table tbody') do
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-assert_selector 'table thead tr th', count: 10
+      assert_selector 'table thead tr th', count: 10
 
       within('table tbody tr:first-child') do
         assert_text @sample30.name
@@ -714,7 +714,7 @@ assert_selector 'table thead tr th', count: 10
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-within 'tbody' do
+      within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
@@ -1257,7 +1257,7 @@ within 'tbody' do
       ### SETUP END ###
 
       ### ACTIONS START ###
-within('table tbody tr:first-child') do
+      within('table tbody tr:first-child') do
         assert_selector 'td:nth-child(7)[data-editable="true"]'
         find('td:nth-child(7)').click
         find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
@@ -2502,7 +2502,7 @@ within('table tbody tr:first-child') do
       check "checkbox_sample_#{@sample1.id}"
 
       # verify 1 sample selected in originating project
-within 'tfoot' do
+      within 'tfoot' do
         assert_text "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 26"
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
@@ -2534,7 +2534,7 @@ within 'tfoot' do
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify no samples selected anymore
-within 'tfoot' do
+      within 'tfoot' do
         assert_text "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 27"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
