@@ -20,15 +20,17 @@
   </div>
 
   <div class="max-sm:grow">
-    <%= render AdvancedSearchComponent.new(
-      form: f,
-      search: @query,
-      entity_fields: @workflow_execution_fields,
-      field_label_namespace: "workflow_executions.table_component",
-      open: @query.errors.any?,
-      status: @query.advanced_query?,
-      enum_fields: @workflow_execution_enum_fields,
-    ) %>
+    <% if Flipper.enabled?(:workflow_execution_advanced_search) %>
+      <%= render AdvancedSearchComponent.new(
+        form: f,
+        search: @query,
+        entity_fields: @workflow_execution_fields,
+        field_label_namespace: "workflow_executions.table_component",
+        open: @query.errors.any?,
+        status: @query.advanced_query?,
+        enum_fields: @workflow_execution_enum_fields,
+      ) %>
+    <% end %>
 
     <%= f.submit hidden: true %>
   </div>

@@ -25,6 +25,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @created_at_col = '7'
 
     Flipper.enable(:cancel_multiple_workflows)
+    Flipper.enable(:workflow_execution_advanced_search)
+  end
+
+  teardown do
+    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'should display a list of workflow executions' do
@@ -1012,5 +1017,18 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within '#workflow-executions-table table tbody' do
       assert_selector "tr[id='#{dom_id(workflow_execution)}']"
     end
+  end
+
+  test 'advanced search button is hidden when feature flag disabled' do
+    Flipper.disable(:workflow_execution_advanced_search)
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+
+    # Advanced search button should not be visible
+    assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']"
+
+    # Basic search should still work
+    assert_selector 'input[name="q[name_or_id_cont]"]'
   end
 end
