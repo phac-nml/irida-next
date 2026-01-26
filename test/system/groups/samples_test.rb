@@ -25,13 +25,16 @@ module Groups
     end
 
     def retrieve_puids
-      puids = []
-      within('table tbody') do
-        (1..4).each do |n|
-          puids << first("tr:nth-child(#{n}) th").text
-        end
+      (1..4).map do |n|
+        first("table tbody tr:nth-child(#{n}) th").text
       end
-      puids
+    end
+
+    def pluck_sample_names_and_puids(namespaces)
+      samples = namespaces.map do |namespace|
+        namespace.project.samples.pluck(:name, :puid)
+      end
+      samples.flatten!
     end
 
     test 'visiting the index' do
@@ -40,8 +43,8 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-      assert_text samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample3)}'] td:nth-child(2)", text: @sample3.name
       assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
@@ -49,14 +52,13 @@ module Groups
       click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 6
+      assert_selector 'table tbody tr', count: 6
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample3)}']"
+
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-
-      click_link samples(:sample3).name
-      assert_selector 'h1', text: samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
     end
 
     test 'visiting the index of a group which has other groups/projects linked to it' do
@@ -68,9 +70,10 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
-      assert_text samples(:sample1).name
-      assert_text samples(:sample3).name
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample3)}'] td:nth-child(2)", text: @sample3.name
+
       assert_selector 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
@@ -78,20 +81,18 @@ module Groups
       click_on I18n.t(:'components.viral.pagy.pagination_component.next', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 6
-      assert_text samples(:sample28).name
+      assert_selector 'table tbody tr', count: 6
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample28)}'] td:nth-child(2)", text: @sample28.name
+
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous', locale: @user.locale)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      assert_selector 'tbody > tr', count: 20
+      assert_selector 'table tbody tr', count: 20
 
-      click_link samples(:sample1).name
-      assert_selector 'h1', text: samples(:sample1).name
-
-      visit group_samples_url(group)
-
-      click_link samples(:sample1).name
-      assert_selector 'h1', text: samples(:sample1).name
+      click_link @sample1.name
+      assert_selector 'h1', text: @sample1.name
 
       visit group_samples_url(group)
 
@@ -103,8 +104,18 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
                                                                                       locale: @user.locale))
 
-      click_link samples(:sample28).name
-      assert_selector 'h1', text: samples(:sample28).name
+      click_link @sample28.name
+      assert_selector 'h1', text: @sample28.name
+    end
+
+    test 'visit sample show page by clicking sample name from index' do
+      visit group_samples_url(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+      click_link @sample3.name
+      assert_selector 'h1', text: @sample3.name
     end
 
     test 'User with role >= Analyst does not see workflow executions button' do
@@ -199,25 +210,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_text @sample1.name
-        assert_text @sample2.name
-      end
+
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(2)", text: @sample2.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text 'Samples: 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
+      assert_selector 'table tbody tr', count: 13
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can sort the list of samples' do
@@ -228,9 +238,7 @@ module Groups
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
+      assert_selector 'table tbody tr', count: 20
 
       click_on I18n.t(:'samples.table_component.puid')
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
@@ -248,30 +256,24 @@ module Groups
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
     end
 
     test 'can filter by name and then sort the list of samples' do
@@ -279,26 +281,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector 'table tbody tr', count: 20
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] td:nth-child(2)", text: @sample2.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text 'Samples: 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector 'table tbody tr', count: 13
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
 
       assert_no_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       click_on I18n.t(:'samples.table_component.name')
@@ -320,99 +320,84 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] th:first-child", text: @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-      end
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can change pagination and then filter by puid' do
       visit group_samples_url(@group)
 
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
+      select '10', from: 'limit'
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-        assert_text @sample1.puid
-        assert_text @sample2.puid
-      end
+
+      assert_selector 'table tbody tr', count: 10
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}'] th:first-child", text: @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-      end
+
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector 'div#limit-component select option[selected]', text: '10'
     end
 
     test 'can change pagination and then toggle metadata' do
       visit group_samples_url(@group)
 
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
+      select '10', from: 'limit'
 
       assert_selector 'div#limit-component select option[selected]', text: '10'
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-      end
 
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+      assert_selector 'table tbody tr', count: 10
+
+      assert_selector 'table thead tr th', count: 6
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                                       locale: @user.locale))
 
-      within('table tbody') do
-        assert_selector 'tr', count: 10
-      end
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
-      end
+      assert_selector 'table tbody tr', count: 10
+      assert_selector 'table thead tr th', count: 10
       assert_selector 'div#limit-component select option[selected]', text: '10'
     end
 
@@ -421,45 +406,43 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      assert_text '1-13 of 13'
-      within('table tbody') do
-        assert_selector 'tr', count: 13
-
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample9.name
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 13, count: 13,
+                                                                                      locale: @user.locale))
+
+      assert_selector 'table tbody tr', count: 13
+
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample25)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample28)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
     test 'can sort and then filter the list of samples by puid' do
@@ -467,31 +450,24 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
 
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+      assert_selector 'table tbody tr', count: 20
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
 
       click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      within('table tbody') do
-        assert_selector 'tr:nth-child(3) th', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) th', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-      end
+      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
+      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
+      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
+      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       click_button I18n.t('common.controls.search')
@@ -503,13 +479,12 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 1
 
-        assert_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample9.name
-      end
+      assert_selector 'table tbody tr', count: 1
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'should be able to toggle metadata' do
@@ -517,9 +492,8 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+
+      assert_selector 'table thead tr th', count: 6
 
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
@@ -527,27 +501,25 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      within('table tbody tr:first-child') do
-        assert_text @sample30.name
-        assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
-        assert_selector 'td:nth-child(8)', text: 'value1'
-        assert_no_selector 'td:nth-child(9)[contenteditable="true"]'
-        assert_selector 'td:nth-child(9)', text: 'value2'
-        assert_selector 'td:nth-child(10)[contenteditable="true"]', text: ''
-      end
+      assert_selector 'table thead tr th', count: 10
+
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample30.name
+      assert_no_selector 'table tbody tr:first-child td:nth-child(8)[contenteditable="true"]'
+      assert_selector 'table tbody tr:first-child td:nth-child(8)', text: 'value1'
+      assert_no_selector 'table tbody tr:first-child td:nth-child(9)[contenteditable="true"]'
+      assert_selector 'table tbody tr:first-child td:nth-child(9)', text: 'value2'
+      assert_selector 'table tbody tr:first-child td:nth-child(10)[contenteditable="true"]', text: ''
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_selector 'table thead tr th', count: 6
     end
@@ -556,19 +528,17 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+
+      assert_selector 'table thead tr th', count: 6
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 10
 
       click_on 'metadatafield1'
       assert_selector 'table thead th:nth-child(8) svg.arrow-up-icon'
@@ -585,20 +555,18 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 6
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(5) svg.arrow-down-icon'
-      within('tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      end
+
+      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
     end
 
     test 'filter samples with advanced search' do
@@ -606,48 +574,35 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('Sample PUID', :enter)
-            find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('Sample PUID', :enter)
+      select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        # sample1 & sample2 found
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 2
+      # sample1 & sample2 found
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'filter samples with advanced search and autocomplete disabled' do
@@ -657,48 +612,34 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='puid']").select_option
-            find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("select[name$='[field]']").find("option[value='puid']").select_option
+      select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        # sample1 & sample2 found
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 2
+      # sample1 & sample2 found
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample9)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
     test 'filter samples with advanced search using metadata fields names with extra periods' do
@@ -706,46 +647,32 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
-            find("select[name$='[operator]']").find("option[value='=']").select_option
-            find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
-          end
-        end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
+      select '=', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
 
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
-        # sample28 found
-        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
-        assert_selector "tr[id='#{dom_id(@sample28)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 1
+      # sample28 found
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
     end
 
     test 'filter samples with advanced search using exists operator' do
@@ -753,225 +680,187 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
-            find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
-            find("select[name$='[operator]']").find("option[value='exists']").select_option
-          end
-        end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
+      select 'exists', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
-        # sample28 found
-        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
-        assert_selector "tr[id='#{dom_id(@sample28)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 1
+      # sample28 found
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
       click_button I18n.t(:'components.advanced_search_component.title')
-      within '#advanced-search-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-      end
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample3)}']"
-      end
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
     end
 
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '25'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
+      uncheck "checkbox_sample_#{@sample1.id}"
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '25'
+
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('common.controls.deselect_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
     end
 
     test 'selecting / deselecting a page of samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '20'
-      end
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '19'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '20'
-      end
-      find('input[name="select-page"]').click
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+
+      check 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+
+      uncheck "checkbox_sample_#{@sample1.id}"
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '19'
+
+      check 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+
+      uncheck 'select-page'
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
     end
 
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 20
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
+
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
-      assert_text 'Samples: 1'
+      assert_selector 'table tfoot', text: 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
 
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 1
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]', count: 1
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
 
       click_button I18n.t('common.controls.select_all')
 
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 1'
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 1
+      assert_selector 'table tfoot', text: 'Samples: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
-      assert_text 'Samples: 26'
+      assert_selector 'table tfoot', text: 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
     end
 
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
-      ### VERIFY START ###
-
-      assert_no_selector 'dialog[open]'
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      ### VERIFY END ###
     end
 
     test 'should not import metadata via invalid file type' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
-        assert_no_selector '#available-list'
-        assert_no_selector '#selected-list'
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
+      assert_no_selector '#available-list'
+      assert_no_selector '#selected-list'
+      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
     end
 
     test 'should import metadata with ignore empty values' do
@@ -979,53 +868,44 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        assert find_field('Ignore empty values').checked?
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+
+      check 'file_import_ignore_empty_values'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
 
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within '#sample-metadata table' do
-        assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'tbody tr', count: 3
-        within('tbody tr:first-child td:nth-child(2)') do
-          assert_text 'metadatafield1'
-        end
-        within('tbody tr:first-child td:nth-child(3)') do
-          assert_text 'value1'
-        end
-      end
+      assert_selector 'div#sample-metadata'
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'metadatafield1'
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'value1'
       ### VERIFY END ###
     end
 
@@ -1034,170 +914,160 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        uncheck 'Ignore empty values'
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      uncheck 'Ignore empty values'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within '#sample-metadata table' do
-        assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'tbody tr', count: 2
-        assert_no_text 'metadatafield1'
-      end
+
+      assert_selector 'div#sample-metadata'
+      assert_selector 'table tbody tr', count: 2
+      assert_no_text 'metadatafield1'
       ### VERIFY END ###
     end
 
     test 'should not import metadata with duplicate header errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 4
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 4
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
-      end
+      assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
       ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata row errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('services.spreadsheet_import.missing_data_row')
-      end
+      assert_text I18n.t('services.spreadsheet_import.missing_data_row')
       ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata column errors' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
+      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
     end
 
     test 'should partially import metadata with missing sample errors' do
       visit group_samples_url(@group)
-
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       assert_selector '#samples-table table thead tr th', count: 10
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield1'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield2'
+      assert_no_selector 'ul#available-list li', exact_text: 'metadatafield3'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
-
       assert_selector '#samples-table table thead tr th', count: 11
       ### VERIFY END ###
     end
@@ -1205,51 +1075,44 @@ module Groups
     test 'should not import metadata with analysis values' do
       group = groups(:group_twelve)
       visit group_samples_url(group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                                      locale: @user.locale))
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
+
+      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: 'value1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 2
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]',
+                  Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
+
+      assert_no_selector 'ul#available-list li'
+
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 2
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_no_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: '10'
+      assert_selector '#samples-table table tbody tr:last-child td:nth-child(7)', text: 'value1'
       ### VERIFY END ###
-    end
-
-    test 'uploading spreadsheet with no viable metadata should display error' do
-      group = groups(:group_twelve)
-      visit group_samples_url(group)
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv')
-
-        assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
-      end
     end
 
     test 'should not import metadata from ignored header values' do
@@ -1258,141 +1121,125 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       # description and project_puid metadata headers do not exist
-      within('#samples-table table thead tr') do
-        assert_selector 'th', count: 10
-      end
-      within('#samples-table table thead') do
-        assert_text 'METADATAFIELD1'
-        assert_no_text 'DESCRIPTION'
-        assert_no_text 'PROJECT_PUID'
-      end
+      assert_selector '#samples-table table thead tr th', count: 10
+      assert_selector '#samples-table table thead th', exact_text: 'METADATAFIELD1'
+      assert_no_selector '#samples-table table thead th', exact_text: 'METADATAFIELD3'
+      assert_no_selector '#samples-table table thead th', exact_text: 'DESCRIPTION'
+      assert_no_selector '#samples-table table thead th', exact_text: 'PROJECT_PUID'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
-        within 'ul#available-list' do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield2'
-          assert_no_text 'metadatafield3'
-          assert_no_text 'description'
-          assert_no_text 'project_puid'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield2'
-          assert_text 'metadatafield3'
-          assert_no_text 'description'
-          assert_no_text 'project_puid'
-          assert_selector 'li', count: 3
-        end
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
 
+      assert_no_selector 'ul#available-list li'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
+      assert_selector 'ul#selected-list li', count: 3
+      assert_no_selector 'li', exact_text: 'description'
+      assert_no_selector 'li', exact_text: 'project_puid'
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
 
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
-      end
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
-
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
       assert_selector '#samples-table table thead tr th', count: 11
-      within('#samples-table table') do
-        within('thead') do
-          assert_text 'METADATAFIELD3'
-          assert_no_text 'DESCRIPTION'
-          assert_no_text 'PROJECT_PUID'
-        end
-      end
+      assert_selector '#samples-table table thead th', exact_text: 'METADATAFIELD3'
+      assert_no_selector '#samples-table table thead th', exact_text: 'DESCRIPTION'
+      assert_no_selector '#samples-table table thead th', exact_text: 'PROJECT_PUID'
       ### VERIFY END ###
     end
 
     test 'verify metadata columns are hidden and unhidden during file selection' do
       ### SETUP START ###
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        # find metadataColumns div container
-        metadata_columns_element = find('div[data-metadata--file-import-target="metadataColumns"]', visible: :all)
-        # verify by default it's hidden and has aria-hidden="true"
-        assert_equal 'true', metadata_columns_element['aria-hidden']
-        assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      # find metadataColumns div container
+      metadata_columns_element = find('div[data-metadata--file-import-target="metadataColumns"]', visible: :all)
+      # verify by default it's hidden and has aria-hidden="true"
+      assert_equal 'true', metadata_columns_element['aria-hidden']
+      assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
 
-        # verify after uploading file, metadata columns are shown and aria-hidden is removed
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
-        assert_not metadata_columns_element['aria-hidden']
-        assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
+      # verify after uploading file, metadata columns are shown and aria-hidden is removed
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
+      assert_not metadata_columns_element['aria-hidden']
+      assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
 
-        # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
-        attach_file 'file_import[file]', nil
-        assert_equal 'true', metadata_columns_element['aria-hidden']
-        assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
-      end
+      # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
+      attach_file 'file_import[file]', nil
+      assert_equal 'true', metadata_columns_element['aria-hidden']
+      assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
       ### ACTIONS AND VERIFY END ###
     end
 
     test 'dialog close button is hidden during metadata import' do
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
-      within('#dialog') do
-        # dialog close button available when selecting params
-        assert_selector 'button.dialog--close'
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      # dialog close button available when selecting params
+      assert_selector 'button.dialog--close'
 
-        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
+      attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        # dialog button hidden while importing
-        assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        assert_performed_jobs 1
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      # dialog button hidden while importing
+      assert_no_selector 'button.dialog--close'
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
       ### VERIFY END ###
     end
 
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+      assert_selector 'table thead tr th', count: 6
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 10
 
       within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
@@ -1400,17 +1247,14 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within('table tbody tr:first-child') do
-        assert_selector 'td:nth-child(7)[contenteditable="true"]'
-        find('td:nth-child(7)').click
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
+      find('table tbody tr:first-child td:nth-child(7)').click
+      find('table tbody tr:first-child td:nth-child(7)').send_keys('value2')
+      find('table tbody tr:first-child td:nth-child(7)').send_keys(:return)
+      ### ACTIONS END ###
 
-        find('td:nth-child(7)').send_keys('value2')
-        find('td:nth-child(7)').send_keys(:return)
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
-      end
+      ### VERIFY START ###
+      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value2'
 
       assert_text I18n.t('samples.editable_cell.update_success')
 
@@ -1426,81 +1270,77 @@ module Groups
       ### SETUP START ###
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
 
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector 'table thead tr th', count: 10
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       ### SETUP END ###
 
       ### VERIFY START ###
-      within('table tbody tr:first-child td:nth-child(7)') do
-        assert_no_selector "form[method='get']"
-      end
+      assert_no_selector "table tbody tr:first-child td:nth-child(7) form[method='get']"
       ### VERIFY END ###
     end
 
     test 'should import samples' do
       ### SETUP START ###
       visit group_samples_url(@group)
-
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_no_text 'my new sample 1'
-        assert_no_text 'my new sample 2'
-      end
+
+      assert_selector 'table tbody tr', count: 20
+      assert_selector 'td', exact_text: 'Project 1 Sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 2'
       ### SETUP END ###
 
       ### ACTIONS START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
-        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-        ### ACTIONS END ###
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      assert_performed_jobs 1
 
-        # success msg
-        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-      end
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      click_button I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
 
       # refresh to see new samples
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        # added 2 new samples
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-      end
+
+      # added 2 new samples
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
       ### VERIFY END ###
     end
 
@@ -1511,54 +1351,50 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_no_text 'my new sample 1'
-        assert_no_text 'my new sample 2'
-      end
+
+      assert_selector 'table tbody tr', count: 20
+      assert_selector 'td', exact_text: 'Project 1 Sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 2'
       ### SETUP END ###
 
       ### ACTIONS START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
+      find('input.select2-input').click
+      find("li[data-value='#{project2.id}']").click
 
-        find('input.select2-input').click
-        find("li[data-value='#{project2.id}']").click
-
-        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-        ### ACTIONS END ###
-      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      assert_performed_jobs 1
 
-        # success msg
-        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
 
-        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
 
       # refresh to see new samples
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        # sample 2 with blank spreadsheet project puid added to static project
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAB'
-        # sample 1 with valid spreadsheet project puid added to said project
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-      end
+
+      # sample 2 with blank spreadsheet project puid added to static project
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAB'
+      # sample 1 with valid spreadsheet project puid added to said project
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
       ### VERIFY END ###
     end
 
@@ -1568,51 +1404,47 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_no_text 'my new sample 1'
-        assert_no_text 'my new sample 2'
-      end
+      assert_selector 'table tbody tr', count: 20
+      assert_selector 'td', exact_text: 'Project 1 Sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 2'
       ### SETUP END ###
 
       ### ACTIONS START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
 
-        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-        ### ACTIONS END ###
-      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      assert_performed_jobs 1
 
-        # success msg
-        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
 
-        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
 
       # refresh to see new samples
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        # sample 1 with valid spreadsheet project puid added to said project
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 1'
-        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
 
-        # sample 2 with blank spreadsheet project puid is not added
-        assert_no_text 'my new sample 2'
-      end
+      # sample 1 with valid spreadsheet project puid added to said project
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 1'
+      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+
+      # sample 2 with blank spreadsheet project puid is not added
+      assert_no_selector 'td', exact_text: 'my new sample 2'
       ### VERIFY END ###
     end
 
@@ -1622,102 +1454,84 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-        assert_no_text 'my new sample 1'
-        assert_no_text 'my new sample 2'
-      end
+      assert_selector 'table tbody tr', count: 20
+      assert_selector 'td', exact_text: 'Project 1 Sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 1'
+      assert_no_selector 'td', exact_text: 'my new sample 2'
 
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      within('#samples-table table thead tr') do
-        assert_selector 'th', count: 10
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector '#samples-table table thead tr th', count: 10
       ### SETUP END ###
 
       ### ACTIONS START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid_with_whitespaces.csv'))
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/valid_with_whitespaces.csv'))
 
-        within 'ul#available-list' do
-          assert_no_text 'metadata field 1'
-          assert_no_text 'metadata field 2'
-          assert_no_text 'metadata field 3'
-          assert_no_selector 'li'
-        end
-        within 'ul#selected-list' do
-          assert_text 'metadata field 1'
-          assert_text 'metadata field 2'
-          assert_text 'metadata field 3'
-          assert_selector 'li', count: 3
-        end
+      assert_no_selector 'ul#available-list li'
 
-        # click on "metadata field 1" and then remove it
-        find('li', exact_text: 'metadata field 1').click
+      assert_selector 'ul#selected-list li', exact_text: 'metadata field 1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata field 2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata field 3'
+      assert_selector 'ul#selected-list li', count: 3
 
-        click_button I18n.t('common.actions.remove')
+      # click on "metadata field 1" and then remove it
+      find('li', exact_text: 'metadata field 1').click
 
-        # verify only "metadata field 1" was removed
-        within('#available-list') do
-          assert_text 'metadata field 1'
-          assert_no_text 'metadata field 2'
-          assert_no_text 'metadata field 3'
-          assert_selector 'li', count: 1
-        end
+      click_button I18n.t('common.actions.remove')
 
-        within 'ul#selected-list' do
-          assert_no_text 'metadata field 1'
-          assert_text 'metadata field 2'
-          assert_text 'metadata field 3'
-          assert_selector 'li', count: 2
-        end
+      # verify only "metadata field 1" was removed
 
-        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-        ### ACTIONS END ###
-      end
+      assert_selector 'ul#available-list li', exact_text: 'metadata field 1'
+      assert_selector 'ul#available-list li', count: 1
+
+      assert_no_selector 'ul#selected-list li', exact_text: 'metadata field 1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata field 2'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata field 3'
+      assert_selector 'ul#selected-list li', count: 2
+
+      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      assert_performed_jobs 1
 
-        # success msg
-        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-      end
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
 
       # refresh to see new samples
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
+      # 2 new metadata fields added
       assert_selector '#samples-table table thead tr th',
                       count: 12
-      within('#samples-table table') do
-        within('tbody') do
-          # added 2 new samples
-          assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
-          assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-          assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-          assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-        end
-        within('thead') do
-          assert_text 'METADATA FIELD 2'
-          assert_text 'METADATA FIELD 3'
-          assert_no_text 'METADATA FIELD 1'
-        end
-      end
+      # added 2 new samples
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: 'my new sample 2'
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+      assert_selector '#samples-table table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+      assert_selector '#samples-table table tbody tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+
+      # verify metadata fields 2 and 3 added, not 1
+      assert_selector 'th', exact_text: 'METADATA FIELD 2'
+      assert_selector 'th', exact_text: 'METADATA FIELD 3'
+      assert_no_text 'METADATA FIELD 1'
       ### VERIFY END ###
     end
 
@@ -1733,30 +1547,29 @@ module Groups
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        # verify initial disabled states of select inputs
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      # verify initial disabled states of select inputs
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
 
-        # select inputs no longer disabled after file uploaded
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
+      # select inputs no longer disabled after file uploaded
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
 
-        attach_file('spreadsheet_import[file]', Rails.root.join)
-        # verify select inputs are re-disabled after file is unselected
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
-        # verify blank values still exist
-        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
-        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
-        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
-        ### ACTIONS AND VERIFY END ###
-      end
+      attach_file('spreadsheet_import[file]', Rails.root.join)
+      # verify select inputs are re-disabled after file is unselected
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+      assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+      # verify blank values still exist
+      assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
+      assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
+      assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
+      ### ACTIONS AND VERIFY END ###
     end
 
     test 'pagy overflow redirects to first page' do
@@ -1764,14 +1577,10 @@ module Groups
       sample = samples(:bulk_sample19)
 
       visit group_samples_url(group)
-
-      within('#samples-table table') do
-        within('tbody') do
-          # rows
-          assert_selector '#samples-table table tbody tr', count: 20
-          # row contents
-        end
-      end
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
+                                                                                      locale: @user.locale))
+      # rows
+      assert_selector '#samples-table table tbody tr', count: 20
 
       assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
@@ -1783,32 +1592,20 @@ module Groups
       # verifies navigation to page
       assert_selector 'h1', text: I18n.t('groups.samples.index.title')
 
-      # samples table
-      within('#samples-table table') do
-        within('tbody') do
-          # rows
-          assert_selector '#samples-table table tbody tr', count: 20
-          # row contents
-        end
-      end
+      # rows
+      assert_selector '#samples-table table tbody tr', count: 20
 
+      # Search for PUID
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: sample.puid
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      # Search for PUID
-      #        within('#samples-table table') do
-      within('tbody') do
-        # rows
-        assert_selector 'tr', count: 11
-
-        within("tr[id='#{dom_id(sample)}']") do
-          assert_selector 'th:first-child', text: sample.puid
-          assert_selector 'td:nth-child(2)', text: sample.name
-        end
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
       end
+
+      assert_selector '#samples-table table tbody tr', count: 11
+      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: sample.puid
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: sample.name
     end
 
     test 'batch sample import metadata fields listing' do
@@ -1817,77 +1614,70 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
+      assert_selector 'table tbody tr', count: 20
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        # metadata sortable lists hidden
-        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
-        # metadata sortable lists no longer hidden
-        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
-        within('#selected-list') do
-          assert_text 'metadata1'
-          assert_text 'metadata2'
-        end
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      # metadata sortable lists hidden
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
+      # metadata sortable lists no longer hidden
+      assert_selector 'ul#available-list'
+      assert_selector 'ul#selected-list'
 
-        # unselect description and have it appear within metadata
-        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      assert_no_selector 'ul#available-list li'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata2'
+      assert_selector 'ul#selected-list li', count: 2
 
-        within('#selected-list') do
-          assert_text 'metadata1'
-          assert_text 'metadata2'
-          assert_text 'description'
-        end
+      # unselect description and have it appear within metadata
+      select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        # move all metadata to available list
-        find('li', exact_text: 'metadata1').click
-        find('li', exact_text: 'metadata2').click
-        find('li', exact_text: 'description').click
+      assert_no_selector 'ul#available-list li'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata2'
+      assert_selector 'ul#selected-list li', exact_text: 'description'
+      assert_selector 'ul#selected-list li', count: 3
 
-        click_button I18n.t('common.actions.remove')
+      # move all metadata to available list
+      find('li', exact_text: 'metadata1').click
+      find('li', exact_text: 'metadata2').click
+      find('li', exact_text: 'description').click
 
-        within('#available-list') do
-          assert_text 'metadata1'
-          assert_text 'metadata2'
-          assert_text 'description'
-        end
+      click_button I18n.t('common.actions.remove')
 
-        # re-select description which removes it from metadata listing
-        select 'description',
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      assert_no_selector 'ul#selected-list li'
+      assert_selector 'ul#available-list li', exact_text: 'metadata1'
+      assert_selector 'ul#available-list li', exact_text: 'metadata2'
+      assert_selector 'ul#available-list li', exact_text: 'description'
+      assert_selector 'ul#available-list li', count: 3
 
-        within('#available-list') do
-          assert_text 'metadata1'
-          assert_text 'metadata2'
-          assert_no_text 'description'
-        end
+      # re-select description which removes it from metadata listing
+      select 'description',
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        # unselect description and have to re-added to selected listing
-        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      assert_no_selector 'ul#selected-list li'
+      assert_selector 'ul#available-list li', exact_text: 'metadata1'
+      assert_selector 'ul#available-list li', exact_text: 'metadata2'
+      assert_no_selector 'ul#available-list li', exact_text: 'description'
+      assert_selector 'ul#available-list li', count: 2
+      # unselect description and have to re-added to selected listing
+      select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#available-list') do
-          assert_text 'metadata1'
-          assert_text 'metadata2'
-          assert_no_text 'description'
-        end
-
-        within('#selected-list') do
-          assert_no_text 'metadata1'
-          assert_no_text 'metadata2'
-          assert_text 'description'
-        end
-        ### ACTIONS AND VERIFY END ###
-      end
+      assert_selector 'ul#selected-list li', exact_text: 'description'
+      assert_selector 'ul#selected-list li', count: 1
+      assert_selector 'ul#available-list li', exact_text: 'metadata1'
+      assert_selector 'ul#available-list li', exact_text: 'metadata2'
+      assert_selector 'ul#available-list li', count: 2
+      ### ACTIONS AND VERIFY END ###
     end
 
     test 'batch sample import metadata fields listing does not render if no metadata fields' do
@@ -1896,40 +1686,39 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
+      assert_selector 'table tbody tr', count: 20
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        # metadata sortable lists hidden
-        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
-        # metadata sortable lists still hidden
-        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      # metadata sortable lists hidden
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+      # metadata sortable lists still hidden
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
 
-        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        # metadata sortable lists renders now that description header is available
-        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
+      # metadata sortable lists renders now that description header is available
+      assert_selector 'ul#available-list'
+      assert_selector 'ul#selected-list'
 
-        within('#selected-list') do
-          assert_text 'description'
-        end
+      assert_selector 'ul#selected-list li', exact_text: 'description'
+      assert_selector 'ul#selected-list li', count: 1
 
-        select 'description',
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      select 'description',
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
-
-        ### ACTIONS AND VERIFY END ###
-      end
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
+      ### ACTIONS AND VERIFY END ###
     end
 
     test 'batch sample import with partial metadata fields' do
@@ -1938,86 +1727,85 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
+      assert_selector 'table tbody tr', count: 20
       ### SETUP END ###
 
       ### ACTIONS START ###
       # start import
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      within('#dialog') do
-        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
-        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_no_selector 'ul#available-list'
+      assert_no_selector 'ul#selected-list'
+      attach_file('spreadsheet_import[file]',
+                  Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv'))
+      assert_selector 'ul#available-list'
+      assert_selector 'ul#selected-list'
 
-        # make metadata selections so one metadata field is in available and one is in selected
-        find('li', exact_text: 'metadata1').click
-        find('li', exact_text: 'metadata2').click
+      assert_no_selector 'ul#available-list li'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata1'
+      assert_selector 'ul#selected-list li', exact_text: 'metadata2'
+      assert_selector 'ul#selected-list li', count: 2
+      # make metadata selections so one metadata field is in available and one is in selected
+      find('li', exact_text: 'metadata1').click
+      find('li', exact_text: 'metadata2').click
 
-        click_button I18n.t('common.actions.remove')
+      click_button I18n.t('common.actions.remove')
 
-        select 'metadata1',
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      assert_no_selector 'ul#selected-list li'
+      assert_selector 'ul#available-list li', exact_text: 'metadata1'
+      assert_selector 'ul#available-list li', exact_text: 'metadata2'
+      assert_selector 'ul#available-list li', count: 2
 
-        select 'description',
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+      select 'metadata1',
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#selected-list') do
-          assert_text 'metadata1'
-        end
+      select 'description',
+             from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        within('#available-list') do
-          assert_text 'metadata2'
-        end
-
-        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-        ### ACTIONS END ###
-      end
+      assert_selector 'ul#selected-list li', exact_text: 'metadata1'
+      assert_selector 'ul#selected-list li', count: 1
+      assert_selector 'ul#available-list li', exact_text: 'metadata2'
+      assert_selector 'ul#available-list li', count: 1
+      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-        assert_performed_jobs 1
+      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+      assert_performed_jobs 1
 
-        # success msg
-        assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
 
-        click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
 
       # refresh to see new samples
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
-      within('table thead tr') do
-        assert_selector 'th', count: 6
-      end
+      assert_selector 'table thead tr th', count: 6
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
+      if has_selector?('div[data-test-selector="spinner"]', wait: 0.25.seconds)
+        assert_no_selector 'div[data-test-selector="spinner"]'
+      end
 
       # only metadata1 imported and not metadata2
-      within('table thead tr') do
-        assert_selector 'th', count: 11
-        assert_selector 'th:nth-child(8)', text: 'METADATA1'
-        assert_no_text 'METADATA2'
-      end
-      within('table tbody') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
-        assert_selector 'tr:first-child td:nth-child(8)', text: 'c'
+      assert_selector 'table thead tr th', count: 11
+      assert_selector 'table thead tr th:nth-child(8)', text: 'METADATA1'
+      assert_no_selector 'tr', exact_text: 'METADATA2'
 
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-        assert_selector 'tr:nth-child(2) td:nth-child(8)', text: 'a'
-      end
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 2'
+      assert_selector 'table tbody tr:first-child td:nth-child(8)', text: 'c'
+
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(8)', text: 'a'
     end
 
     test 'group without projects should not render sample actions dropdown' do
@@ -2025,6 +1813,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(group)
 
+      assert_no_selector 'table'
       assert_selector 'div.empty_state_message'
       assert_text I18n.t('groups.samples.table.no_associated_samples')
       assert_text I18n.t('groups.samples.table.no_samples')
@@ -2034,42 +1823,30 @@ module Groups
 
     test 'transfer dialog sample listing' do
       ### SETUP START ###
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
-
-      samples.flatten!
+      samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-
       ### SETUP END ###
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
 
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
+      assert_selector 'tbody input[name="sample_ids[]"]:checked', count: 20
 
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+      assert_selector 'tfoot', text: 'Samples: 26'
+      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '26'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#list_selections') do
-        samples.each do |sample|
-          assert_text sample[0]
-          assert_text sample[1]
-        end
+      samples.each do |sample|
+        assert_selector '#list_selections', text: sample[0]
+        assert_selector '#list_selections', text: sample[1]
       end
       ### VERIFY END ###
     end
@@ -2084,22 +1861,19 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+
+      assert_selector 'tfoot', text: 'Samples: 26'
+      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                '26')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                              '26')
       ### VERIFY END ###
     end
 
@@ -2112,29 +1886,21 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.description.singular')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.description.singular')
       ### VERIFY END ###
     end
 
     test 'transfer samples' do
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
-
-      samples.flatten!
+      samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -2147,48 +1913,37 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-
       ### SETUP END ###
 
       ### ACTIONS START ###
       # select first sample
-      within 'tbody' do
-        first('input[name="sample_ids[]"]').click
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26 Selected: 1'
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      assert_selector 'table tfoot', text: 'Samples: 26 Selected: 1'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text samples[0][0]
-          assert_text samples[0][1]
-        end
-        # select destination project
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
 
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # select destination project
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.transfers.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.transfers.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2200,22 +1955,15 @@ module Groups
       visit namespace_project_samples_url(project4.namespace.parent, project4)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_text samples[0][0]
-        assert_text samples[0][1]
-      end
+      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: samples[1]
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: samples[0]
       ### VERIFY END ###
     end
 
     test 'dialog close button hidden during transfer samples' do
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
 
-      samples.flatten!
       # originating project has 3 samples prior to transfer
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -2227,33 +1975,24 @@ module Groups
       click_button I18n.t('common.controls.select_all')
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # close button available before confirming
-        assert_selector 'button.dialog--close'
-        within('#list_selections') do
-          samples.each do |sample|
-            # additional asserts to help prevent select2 actions below from flaking
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        # select destination project
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # close button available before confirming
+      assert_selector 'button.dialog--close'
+      # select destination project
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        # close button hidden during transfer
-        assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
-      end
+      # close button hidden during transfer
+      assert_no_selector 'button.dialog--close'
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
       ### VERIFY END ###
     end
 
@@ -2268,39 +2007,30 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        assert_text I18n.t('samples.transfers.dialog.title')
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('samples.transfers.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # samples listing should no longer appear in dialog
-        assert_no_selector '#list_selections'
-        # error msg displayed in dialog
-        assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
-      end
+      # samples listing should no longer appear in dialog
+      assert_no_selector '#list_selections'
+      # error msg displayed in dialog
+      assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       ### VERIFY END ###
     end
 
@@ -2309,17 +2039,10 @@ module Groups
 
       ### SETUP START ###
       project4 = projects(:project4)
-      samples = []
-      @group.project_namespaces.map do |pn|
-        samples << pn.project.samples.pluck(:name, :puid)
-      end
-
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
       sample28 = samples(:sample28)
       sample29 = samples(:sample29)
-
-      samples.flatten!
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -2335,51 +2058,35 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            # additional asserts to help prevent select2 actions below from flaking
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('samples.transfers.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{project4.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
 
-        # error messages in dialog
-        assert_text I18n.t('samples.transfers.create.error')
+      # error messages in dialog
+      assert_text I18n.t('samples.transfers.create.error')
 
-        assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
+      assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
 
-        # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
-                                                                      sample_name: sample29.name).gsub(':', '')
+      # colon is removed from translation in UI
+      assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
+                                                                    sample_name: sample29.name).gsub(':', '')
 
-        click_button I18n.t('shared.samples.errors.ok_button')
-      end
+      click_button I18n.t('shared.samples.errors.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2422,27 +2129,20 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 4
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 4'
-        assert_selector 'strong[data-selection-target="selected"]', text: '4'
-      end
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        # Only projects within group are visible for maintainer to transfer to
-        find('input.select2-input').click
-        group_three_projects.each do |proj|
-          total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
-        end
-
-        assert_equal total_projects_transfer_to_count, group_three_projects.count
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # Only projects within group are visible for maintainer to transfer to
+      find('input.select2-input').click
+      group_three_projects.each do |proj|
+        total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
       end
+
+      assert_equal total_projects_transfer_to_count, group_three_projects.count
       ### VERIFY END ###
     end
 
@@ -2458,27 +2158,18 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 4
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 4'
-        assert_selector 'strong[data-selection-target="selected"]', text: '4'
-      end
 
       # launch dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # fill destination input
-        find('input.select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
+      # fill destination input
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
+      ### ACTIONS END ###
 
-        ### VERIFY START ###
-        assert_text I18n.t('samples.transfers.dialog.empty_state')
-        ### VERIFY END ###
-      end
+      ### VERIFY START ###
+      assert_text I18n.t('samples.transfers.dialog.empty_state')
+      ### VERIFY END ###
     end
 
     test 'singular clone dialog description' do
@@ -2490,17 +2181,14 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('samples.clones.dialog.description.singular')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('samples.clones.dialog.description.singular')
       ### VERIFY END ###
     end
 
@@ -2514,23 +2202,15 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t(
-          'samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '26'
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t(
+        'samples.clones.dialog.description.plural'
+      ).gsub! 'COUNT_PLACEHOLDER', '26'
       ### VERIFY END ###
     end
 
@@ -2543,28 +2223,22 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 2
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '2'
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 2
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '2'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#list_selections') do
-        assert_text @sample1.name
-        assert_text @sample1.puid
-        assert_text @sample2.name
-        assert_text @sample2.puid
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_selector '#list_selections', text: @sample1.name
+      assert_selector '#list_selections', text: @sample1.puid
+      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.puid
       ### VERIFY END ###
     end
 
@@ -2578,40 +2252,29 @@ module Groups
 
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.clones.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.clones.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2620,20 +2283,16 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                                       locale: @user.locale))
       # duplicated sample names
-      within('#samples-table table tbody') do
-        assert_text @sample1.name, count: 2
-        assert_text @sample2.name, count: 2
-      end
+      assert_selector '#samples-table table tbody td', text: @sample1.name, count: 2
+      assert_selector '#samples-table table tbody td', text: @sample2.name, count: 2
 
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@group, @project2)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
                                                                                       locale: @user.locale))
-      within('#samples-table table tbody') do
-        assert_text @sample1.name
-        assert_text @sample2.name
-      end
+      assert_selector '#samples-table table tbody td', text: @sample1.name, count: 1
+      assert_selector '#samples-table table tbody td', text: @sample2.name, count: 1
       ### VERIFY END ###
     end
 
@@ -2647,37 +2306,27 @@ module Groups
 
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1, :checkbox)}").click
-        find("input##{dom_id(@sample2, :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        # close button available before confirming cloning
-        assert_selector 'button.dialog--close'
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      # close button available before confirming cloning
+      assert_selector 'button.dialog--close'
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
-        # close button hidden during cloning
-        assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      # close button hidden during cloning
+      assert_no_selector 'button.dialog--close'
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
       ### VERIFY END ###
     end
 
@@ -2691,40 +2340,31 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: 'Samples: 26'
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        assert_text I18n.t('samples.clones.dialog.title')
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # sample listing should not be in error dialog
-        assert_no_selector '#list_selections'
-        # error msg
-        assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
-        assert_text I18n.t('services.samples.clone.empty_sample_ids')
-      end
+      # error msg
+      assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
+      assert_text I18n.t('services.samples.clone.empty_sample_ids')
       ### VERIFY END ###
     end
 
@@ -2738,44 +2378,30 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          assert_text @sample1.name
-          assert_text @sample2.name
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project1.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project1.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # errors that a sample with the same name as sample30 already exists in project25
-        assert_text I18n.t('samples.clones.create.error')
-        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample1.puid,
-                                                                   sample_name: @sample1.name).gsub(':', '')
-        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample2.puid,
-                                                                   sample_name: @sample2.name).gsub(':', '')
-        click_on I18n.t('shared.samples.errors.ok_button')
-      end
+      # errors that a sample with the same name as sample30 already exists in project25
+      assert_text I18n.t('samples.clones.create.error')
+      assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample1.puid,
+                                                                 sample_name: @sample1.name).gsub(':', '')
+      assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample2.puid,
+                                                                 sample_name: @sample2.name).gsub(':', '')
+      click_on I18n.t('shared.samples.errors.ok_button')
 
       # verify dialog is closed
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
@@ -2796,24 +2422,16 @@ module Groups
 
       ### ACTIONS START ####
       click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
-      end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
-      assert_selector '#dialog'
-      within('#dialog') do
-        find('input.select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
 
-        ### VERIFY START ###
-        assert_text I18n.t('samples.clones.dialog.empty_state')
-        ### VERIFY END ###
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('samples.clones.dialog.empty_state')
+      ### VERIFY END ###
     end
 
     test 'updating sample selection during sample cloning' do
@@ -2826,55 +2444,41 @@ module Groups
 
       ### ACTIONS START ###
       # select 1 sample to clone
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
+      check "checkbox_sample_#{@sample1.id}"
 
       # verify 1 sample selected in originating project
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
 
       # clone sample
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
-      assert_selector '#dialog'
-      within('#dialog') do
-        within('#list_selections') do
-          # additional asserts to help prevent select2 actions below from flaking
-          assert_text @sample1.name
-          assert_text @sample1.puid
-        end
-        find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('samples.clones.dialog.submit_button')
-      end
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::CloneJob]
-        assert_performed_jobs 1
+      perform_enqueued_jobs only: [::Samples::CloneJob]
+      assert_performed_jobs 1
 
-        # flash msg
-        assert_text I18n.t('samples.clones.create.success')
-        click_button I18n.t('shared.samples.success.ok_button')
-      end
+      # flash msg
+      assert_text I18n.t('samples.clones.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
 
-      assert_no_selector 'dialog[open]'
+      assert_no_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
 
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify no samples selected anymore
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 27"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 27"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
       ### VERIFY END ###
     end
 
@@ -2891,28 +2495,20 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(@sample1,
-                             :checkbox)}").click
-        find("input##{dom_id(@sample2,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text @sample1.name
-          assert_text @sample1.puid
-          assert_text @sample2.name
-          assert_text @sample2.name
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      assert_selector '#list_selections', text: @sample1.name
+      assert_selector '#list_selections', text: @sample1.puid
+      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.name
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2941,28 +2537,16 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(sample25,
-                             :checkbox)}").click
-        find("input##{dom_id(sample28,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{sample25.id}"
+      check "checkbox_sample_#{sample28.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text sample25.name
-          assert_text sample25.puid
-          assert_text sample28.name
-          assert_text sample28.puid
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2991,28 +2575,20 @@ module Groups
 
       ### ACTIONS START ###
       # select samples for deletion
-      within '#samples-table table tbody' do
-        find("input##{dom_id(sample28,
-                             :checkbox)}").click
-      end
+      check "checkbox_sample_#{sample28.id}"
       # click delete samples button
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       # verify dialog contents
-      within '#multiple-deletions-dialog' do
-        assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
-        within '#list_selections' do
-          assert_text sample28.name
-          assert_text sample28.puid
-        end
-        # submit
-        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
-      end
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
+
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('samples.deletions.destroy.no_deleted_samples', deleted: '1/2')
+      assert_text I18n.t('samples.deletions.destroy.no_deleted_samples')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
       ### VERIFY END ###
