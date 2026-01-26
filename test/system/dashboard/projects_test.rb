@@ -13,6 +13,7 @@ module Dashboard
       @project2 = projects(:project2)
       @group1 = groups(:group_one)
       @sample1 = samples(:sample1)
+      Flipper.enable(:flowbite_replacement)
     end
 
     test 'can see the list of projects' do

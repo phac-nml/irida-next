@@ -11,10 +11,10 @@ module Viral
         aria-selected="false"
         id="select2-option-<%= @value %>"
         role="option"
-        data-viral--select2-target="item"
+        data-<%= controller_name %>-target="item"
         data-label="<%= @label %>"
         data-value="<%= @value %>"
-        data-action="click->viral--select2#select keydown->viral--select2#keydown"
+        data-action="click-><%= controller_name %>#select keydown-><%= controller_name %>#keydown"
       >
         <%= content %>
       </li>
@@ -23,6 +23,14 @@ module Viral
     def initialize(value:, label:)
       @value = value
       @label = label
+    end
+
+    def controller_name
+      if Flipper.enabled?(:flowbite_replacement)
+        'viral--select2'
+      else
+        'viral--flowbite-select2'
+      end
     end
   end
 end
