@@ -415,8 +415,8 @@ module Projects
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 3
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector 'table tbody tr', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
 
       # nav to sample show
       visit namespace_project_sample_url(@namespace, @project, @sample1)
@@ -449,8 +449,8 @@ module Projects
       assert_selector 'table tbody tr', count: 2
       # deleted sample row no longer exists
       assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
-      assert_selector 'table tfoot tr', text: 'Samples: 2'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 2'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '2'
       ### VERIFY END ###
     end
 
@@ -466,8 +466,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
@@ -495,8 +495,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
@@ -549,8 +549,8 @@ module Projects
       # select all 3 samples
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
@@ -652,8 +652,8 @@ module Projects
       # select samples
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
@@ -701,8 +701,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
@@ -767,8 +767,8 @@ module Projects
       ## ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
-      assert_selector 'table tfoot tr', text: 'Samples: 1'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 1'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       ### ACTIONS END ### ##
 
@@ -791,8 +791,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
-      assert_selector 'table tfoot tr', text: 'Samples: 1'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 1'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
@@ -809,9 +809,9 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project2)
 
       # verify no samples currently selected in destination project
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -824,9 +824,9 @@ module Projects
       find('table tbody tr:first-child th input[type="checkbox"]').click
 
       # verify 1 sample selected in originating project
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
 
       # transfer sample
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -855,9 +855,9 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       # verify no samples selected anymore
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 2"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "2 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
@@ -865,9 +865,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 21"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "21 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       ### VERIFY END ###
     end
 
@@ -883,8 +883,8 @@ module Projects
       # select samples
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
 
       # launch dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -2517,8 +2517,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
@@ -2543,8 +2543,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
@@ -2674,8 +2674,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -2726,8 +2726,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
@@ -2780,8 +2780,8 @@ module Projects
       ### ACTIONS START ####
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
@@ -2807,8 +2807,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
-      assert_selector 'table tfoot tr', text: 'Samples: 1'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 1'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
@@ -2826,9 +2826,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                                       locale: @user.locale))
       # verify no samples currently selected in destination project
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -2840,9 +2840,9 @@ module Projects
       find('table tbody tr:first-child th input[type="checkbox"]').click
 
       # verify 1 sample selected in originating project
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
 
       # clone sample
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -2872,18 +2872,18 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       # verify no samples selected anymore
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
 
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 21"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "21 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
       ### VERIFY END
@@ -2897,34 +2897,34 @@ module Projects
       # no samples selected/checked
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       # samples selected
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       # unselect single sample
       find('table tbody tr:first-child th input[name="sample_ids[]"]').click
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '2'
       # select all again
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       # deselect all
       click_button I18n.t('common.controls.deselect_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
     end
 
     test 'selecting / deselecting a page of samples' do
@@ -2938,34 +2938,34 @@ module Projects
       end
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       # click select page
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 10
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '10'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '10'
       # unselect 1 sample
       find('table tbody tr:first-child th input[name="sample_ids[]"]').click
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '9'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '9'
       # select whole page again
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 10
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '10'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '10'
       # unselect whole page
       find('input[name="select-page"]').click
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 10
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 20"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "20 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
     end
 
     test 'selecting samples while filtering' do
@@ -2975,9 +2975,9 @@ module Projects
                                                                                       locale: @user.locale))
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: samples(:sample1).name
@@ -2992,8 +2992,8 @@ module Projects
       click_button I18n.t('common.controls.select_all')
 
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 1
-      assert_selector 'table tfoot tr', text: 'Samples: 1'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '1 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
 
       # remove filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: ' '
@@ -3002,9 +3002,9 @@ module Projects
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_selector 'table tfoot tr',
-                      text: "#{I18n.t('components.samples.virtualized_table_component.counts.samples')}: 3"
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]',
+                      text: "3 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
     end
 
     test 'action links are disabled when a project does not contain any samples' do
@@ -3054,8 +3054,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       ### ACTIONS END ###
@@ -3080,8 +3080,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       ### ACTIONS END ###
@@ -3111,8 +3111,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
@@ -3899,8 +3899,8 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 3'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
