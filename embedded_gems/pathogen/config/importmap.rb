@@ -5,7 +5,11 @@
 pin 'pathogen-controllers/pathogen/tabs_controller', to: 'pathogen/tabs_controller.js'
 pin 'pathogen-controllers/pathogen/tooltip_controller', to: 'pathogen/tooltip_controller.js'
 pin 'pathogen-controllers/pathogen/datepicker/input_controller', to: 'pathogen/datepicker/input_controller.js'
+pin 'pathogen-controllers/pathogen/datepicker/flowbite_input_controller',
+    to: 'pathogen/datepicker/flowbite_input_controller.js'
 pin 'pathogen-controllers/pathogen/datepicker/calendar_controller', to: 'pathogen/datepicker/calendar_controller.js'
+pin 'pathogen-controllers/pathogen/datepicker/flowbite_calendar_controller',
+    to: 'pathogen/datepicker/flowbite_calendar_controller.js'
 pin 'pathogen-controllers/pathogen/datepicker/utils', to: 'pathogen/datepicker/utils.js'
 pin 'pathogen-controllers/pathogen/datepicker/constants', to: 'pathogen/datepicker/constants.js'
 
