@@ -21,9 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :label, :icon_name, :caret, :trigger, :tooltip, :styles, :prefix
-
-    attr_reader :distance, :skidding unless Flipper.enabled?(:flowbite_replacement)
+    attr_reader :label, :icon_name, :caret, :trigger, :tooltip, :styles, :prefix, :distance, :skidding
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
