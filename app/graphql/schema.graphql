@@ -1338,6 +1338,48 @@ Represents untyped JSON
 """
 scalar JSON
 
+type Metric {
+  """
+  Creation date of the namespace.
+  """
+  createdDate: ISO8601DateTime!
+
+  """
+  Disk usage of the namespace in bytes.
+  """
+  diskUsage: Int!
+
+  """
+  Members of the namespace.
+  """
+  members: [[String!]!]!
+
+  """
+  Total number of members in the namespace.
+  """
+  membersCount: Int!
+
+  """
+  Last modified date of the namespace.
+  """
+  modifiedDate: ISO8601DateTime!
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Total number of projects under the group and it's subgroups. Returns 0 if called on project
+  """
+  projectCount: Int
+
+  """
+  Total number of samples in the namespace.
+  """
+  samplesCount: Int!
+}
+
 """
 The mutation root of this schema
 """
@@ -1665,6 +1707,11 @@ type Project implements Node {
   Description of the project.
   """
   description: String
+
+  """
+  Disk usage of the project in bytes.
+  """
+  diskUsage: Int!
 
   """
   Full name of the project.
@@ -2128,6 +2175,36 @@ type Query {
     """
     id: ID!
   ): Boolean!
+
+  """
+  Returns a list of metrics
+  """
+  metrics(
+    """
+    Full path of the group. For example, `pathogen/surveillance`.
+    """
+    groupFullPath: ID
+
+    """
+    Persistent Unique Identifier of the group. For example, `INXT_GRP_AAAAAAAAAA`.
+    """
+    groupPuid: ID
+
+    """
+    Include samples from shared groups (only applicable when querying group metrics).
+    """
+    includeSharedGroupSamples: Boolean = false
+
+    """
+    Full path of the project. For example, `pathogen/surveillance/2023`.
+    """
+    projectFullPath: ID
+
+    """
+    Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.
+    """
+    projectPuid: ID
+  ): Metric!
 
   """
   Find a namespace.
