@@ -37,7 +37,7 @@
                                  "aria-invalid": invalid_field,
                                  "aria-describedby":
                                    conditions_form.field_id(:field, "error"),
-                                 autofocus: invalid_field,
+                                 autofocus: should_autofocus?(invalid_field),
                                } %>
       <% else %>
         <%= render SelectWithAutoCompleteComponent.new(
@@ -49,7 +49,7 @@
             invalid: invalid_field,
             describedby: conditions_form.field_id(:field, "error"),
           },
-          autofocus: invalid_field,
+          autofocus: should_autofocus?(invalid_field),
         ) %>
       <% end %>
       <%= render "shared/form/field_errors",
@@ -75,7 +75,7 @@
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
                                  conditions_form.field_id(:operator, "error"),
-                               autofocus: invalid_operator,
+                               autofocus: should_autofocus?(invalid_operator),
                              } %>
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:operator),

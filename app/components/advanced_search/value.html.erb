@@ -22,7 +22,7 @@
                               "aria-invalid": invalid_value,
                               "aria-describedby":
                                 @conditions_form.field_id(:value, "error"),
-                              autofocus: invalid_value,
+                              autofocus: should_autofocus?(invalid_value),
                             } %>
   <% elsif render_enum_multiselect? %>
     <%= @conditions_form.select :value,
@@ -37,7 +37,7 @@
                               "aria-invalid": invalid_value,
                               "aria-describedby":
                                 @conditions_form.field_id(:value, "error"),
-                              autofocus: invalid_value,
+                              autofocus: should_autofocus?(invalid_value),
                             } %>
   <% elsif %w[in not_in].include?(@condition.operator) %>
     <div
@@ -58,7 +58,7 @@
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:value, "error"),
-                                autofocus: invalid_value %>
+                                autofocus: should_autofocus?(invalid_value) %>
   <% end %>
   <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:value),
