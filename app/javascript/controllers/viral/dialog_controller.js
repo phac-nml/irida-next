@@ -8,7 +8,7 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
   #trigger = null;
-  #closable = false;
+  #closable = true;
 
   triggerTargetConnected() {
     this.#trigger = this.triggerTarget;
@@ -88,11 +88,9 @@ export default class extends Controller {
   setClosable({ params: { closable } }) {
     if (closable) {
       this.#closable = true;
-      this.dialogTarget.removeAttribute("data-closable");
       this.closeButtonTarget.removeAttribute("hidden");
     } else {
       this.#closable = false;
-      this.dialogTarget.setAttribute("data-closable", "false");
       this.closeButtonTarget.setAttribute("hidden", "true");
     }
   }
