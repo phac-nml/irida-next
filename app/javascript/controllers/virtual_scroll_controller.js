@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+import debounce from "debounce";
 import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
 import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
 import { StickyColumnManager } from "utilities/sticky_column_manager";
@@ -154,7 +154,7 @@ class VirtualScrollController extends Controller {
     };
 
     // Keep debounce for resize (less critical)
-    this.debouncedResizeHandler = _.debounce(this.boundHandleResize, 100);
+    this.debouncedResizeHandler = debounce(this.boundHandleResize, 100);
 
     this.lifecycle.trackDebounce(this.debouncedResizeHandler);
 
