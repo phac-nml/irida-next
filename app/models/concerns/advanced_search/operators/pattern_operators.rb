@@ -44,8 +44,7 @@ module AdvancedSearch
       # @param value [String] the value to escape
       # @return [String] the escaped value
       def escape_like_wildcards(value)
-        # Escape backslash first, then wildcards, to avoid double-escaping
-        value.gsub('\\', '\\\\\\\\').gsub('%', '\\%').gsub('_', '\\_')
+        value.to_s.gsub(/[\\%_]/) { |char| "\\#{char}" }
       end
     end
   end
