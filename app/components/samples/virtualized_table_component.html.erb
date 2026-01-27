@@ -280,48 +280,21 @@
     <% if @abilities[:select_samples] && @has_samples %>
       <div
         class="
-          flex flex-wrap items-center justify-between gap-4 px-6 py-3 text-sm
-          text-slate-700 bg-white/80 dark:bg-slate-900/70 dark:text-slate-300 border
-          border-slate-200/70 dark:border-slate-800/70 rounded-b-lg
+          flex items-center gap-6 px-3 py-2.5 text-sm text-slate-500 dark:text-slate-400
+          bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700
         "
       >
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="flex items-center gap-2">
-            <span
-              class="
-                text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400
-              "
-            >
-              <%= t("components.samples.virtualized_table_component.counts.samples") %>
-            </span>
-            <span
-              class="
-                inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-sm
-                font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-100
-              "
-            >
-              <%= @pagy.count %>
-            </span>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <span
-              class="
-                text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400
-              "
-            >
-              <%= t("components.samples.virtualized_table_component.counts.selected") %>
-            </span>
-            <span
-              class="
-                inline-flex items-center rounded-full bg-primary-100 px-2.5 py-1 text-sm
-                font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200
-              "
-            >
-              <strong data-selection-target="selected">0</strong>
-            </span>
-          </div>
-        </div>
+        <span class="tabular-nums">
+          <span class="font-medium text-slate-700 dark:text-slate-200"><%= @pagy.count %></span>
+          <%= t("components.samples.virtualized_table_component.counts.samples").downcase %>
+        </span>
+        <span class="tabular-nums">
+          <span
+            class="font-medium text-slate-700 dark:text-slate-200"
+            data-selection-target="selected"
+          >0</span>
+          <%= t("components.samples.virtualized_table_component.counts.selected").downcase %>
+        </span>
       </div>
     <% end %>
 
