@@ -11,11 +11,15 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
   <%= javascript_importmap_tags %>
 
   <%= render "shared/dark_mode_check" %>
-  <meta name="local-time-i18n" content="<%= local_time_i18n_config %>" data-locale="<%= I18n.locale %>" />
+  <meta
+    name="local-time-i18n"
+    content="<%= local_time_i18n_config %>"
+    data-locale="<%= I18n.locale %>"
+  />
   <%= yield :head %>
 </head>

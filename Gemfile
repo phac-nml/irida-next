@@ -26,6 +26,9 @@ gem 'stimulus-rails'
 # Rails Request.JS adds headers that are required by Rails applications
 gem 'requestjs-rails'
 
+# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
+gem 'cssbundling-rails'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 
@@ -60,13 +63,8 @@ gem 'faraday-multipart'
 gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'openssl', '~> 4.0'
 
-# Use Sass to process CSS
-# gem "sassc-rails"
-
-# Tailwind CSS [https://tailwindcss.com]
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
-gem 'tailwindcss-rails', '~> 4.4'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
 # ActiveRecord Cursor Paginate

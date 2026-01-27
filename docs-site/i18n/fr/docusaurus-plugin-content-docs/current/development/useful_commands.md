@@ -6,28 +6,28 @@ title: Commandes utiles pour le développement
 
 ### Supprimer, reconstruire et peupler la bd
 
-``` bash
+```bash
 bin/rails db:drop db:create db:migrate db:seed
 ```
 
 ### Créer de nouvelles informations d'identification
 
-``` bash
+```bash
 rm config/credentials.yml.enc
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
 ### Processus additionnel pour que les changements d'interface utilisateur soient mis à jour au fur et à mesure qu'ils sont modifiés
 
-Lors de l'exécution du serveur avec `bin/rails s` au lieu de `bin/dev`, comme lors de l'attachement du débogueur dans VSCode, le processus tailwind peut être exécuté séparément.
+Lorsque vous exécutez le serveur avec `bin/rails s` au lieu de `bin/dev`, par exemple lors de l’attachement du débogueur dans VSCode, le processus de compilation CSS peut être lancé séparément.
 
-``` bash
-bin/rails tailwindcss:watch
+```bash
+pnpm run dev:css
 ```
 
 ### Construire le schéma graphql
 
-``` bash
+```bash
 bin/rails graphql:dump_schema
 ```
 
