@@ -69,7 +69,6 @@ module Samples
       base_args[:data] ||= {}
 
       apply_virtual_scroll_data!(base_args)
-      apply_selection_data!(base_args) if @abilities[:select_samples]
       base_args
     end
 
@@ -109,12 +108,17 @@ module Samples
     end
 
     def wrapper_arguments
-      {
+      base_args = {
         tag: 'div',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
-        'data-controller' => 'editable-cell',
-        'data-editable-cell-refresh-outlet' => "[data-controller='refresh']"
+        data: {
+          controller: 'editable-cell',
+          'editable-cell-refresh-outlet': "[data-controller='refresh']"
+        }
       }
+
+      apply_selection_data!(base_args) if @abilities[:select_samples]
+      base_args
     end
 
     def row_arguments(sample, row_index)

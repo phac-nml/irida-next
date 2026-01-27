@@ -20,7 +20,7 @@
         role="grid"
         aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
         aria-colcount="<%= @columns.length + @metadata_fields.length %>"
-        aria-rowcount="<%= @pagy.count + (@abilities[:select_samples] && @has_samples ? 2 : 1) %>"
+        aria-rowcount="<%= @pagy.count + 1 %>"
         <% if @abilities[:select_samples] %>
         aria-multiselectable="true"
         <% end %>
@@ -203,42 +203,6 @@
           <% end %>
         </tbody>
 
-        <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot
-            role="rowgroup"
-            class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900"
-          >
-            <tr role="row" aria-rowindex="<%= @pagy.count + 2 %>">
-              <td
-                class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
-                "
-                colspan="2"
-                role="gridcell"
-                aria-colindex="1"
-                aria-colspan="2"
-              >
-                <span>
-                  <%= t("components.samples.virtualized_table_component.counts.samples") %>:
-                  <strong><%= @pagy.count %></strong>
-                </span>
-
-                <span>
-                  <%= t("components.samples.virtualized_table_component.counts.selected") %>:
-                  <strong data-selection-target="selected">0</strong>
-                </span>
-              </td>
-
-              <td
-                colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
-                class="p-3 bg-slate-100 dark:bg-slate-900"
-                role="gridcell"
-                aria-colindex="3"
-                aria-colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
-              ></td>
-            </tr>
-          </tfoot>
-        <% end %>
       </table>
 
       <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
@@ -308,6 +272,54 @@
           <div class="flex flex-col items-center justify-center">
             <%= pathogen_icon :faded_spinner, library: "animated", color: :primary, size: :xl %>
             <span class="sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @abilities[:select_samples] && @has_samples %>
+      <div
+        class="
+          flex flex-wrap items-center justify-between gap-4 px-6 py-3 text-sm
+          text-slate-700 bg-white/80 dark:bg-slate-900/70 dark:text-slate-300 border
+          border-slate-200/70 dark:border-slate-800/70 rounded-b-lg
+        "
+      >
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+            <span
+              class="
+                text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400
+              "
+            >
+              <%= t("components.samples.virtualized_table_component.counts.samples") %>
+            </span>
+            <span
+              class="
+                inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-sm
+                font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-100
+              "
+            >
+              <%= @pagy.count %>
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span
+              class="
+                text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400
+              "
+            >
+              <%= t("components.samples.virtualized_table_component.counts.selected") %>
+            </span>
+            <span
+              class="
+                inline-flex items-center rounded-full bg-primary-100 px-2.5 py-1 text-sm
+                font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200
+              "
+            >
+              <strong data-selection-target="selected">0</strong>
+            </span>
           </div>
         </div>
       </div>
