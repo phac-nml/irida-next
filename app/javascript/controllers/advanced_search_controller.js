@@ -282,7 +282,9 @@ export default class extends Controller {
 
     // Get the hidden field for auto-complete, or the select for regular dropdown
     const hiddenField = condition.querySelector("input[name$='[field]']");
-    const previousField = hiddenField?.dataset?.previousValue;
+    const previousField =
+      hiddenField?.dataset?.previousValue ||
+      fieldElement?.dataset?.previousValue;
 
     // Skip if the field value hasn't actually changed
     if (previousField === selectedField) {
@@ -296,6 +298,8 @@ export default class extends Controller {
     // Store the new value for change detection
     if (hiddenField) {
       hiddenField.dataset.previousValue = selectedField;
+    } else if (fieldElement instanceof HTMLSelectElement) {
+      fieldElement.dataset.previousValue = selectedField;
     }
 
     this.#updateOperatorDropdown(condition, selectedField);
@@ -476,6 +480,8 @@ export default class extends Controller {
       option.text = label;
       operatorSelect.appendChild(option);
     });
+
+    operatorSelect.value = "";
   }
 
   /**

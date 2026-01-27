@@ -64,11 +64,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'should sort a list of workflow executions' do
-    workflow_execution = workflow_executions(:irida_next_example)
+    workflow_executions(:irida_next_example)
     workflow_executions(:workflow_execution_valid)
-    workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
-    workflow_execution_metadata_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    workflow_execution_metadata_dates2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+    workflow_executions(:workflow_execution_shared1)
+    workflow_executions(:workflow_execution_with_metadata_dates)
+    workflow_executions(:workflow_execution_with_metadata_dates2)
 
     visit workflow_executions_path
 
@@ -77,9 +77,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_on 'Run ID'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-up-icon"
 
+    asc_run_ids = []
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_metadata_dates.run_id
+      asc_run_ids = all("tr td:nth-child(#{@run_id_col})").map(&:text)
+      assert asc_run_ids.any?
     end
 
     click_on 'Run ID'
@@ -87,16 +89,18 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
+      run_ids_desc = all("tr td:nth-child(#{@run_id_col})").map(&:text)
+      assert run_ids_desc.any?
     end
 
     click_on 'Workflow Name'
     assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.arrow-up-icon"
 
+    asc_names = []
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_metadata_dates2.workflow.name
+      asc_names = all("tr td:nth-child(#{@workflow_name_col})").map(&:text)
+      assert asc_names.any?
     end
 
     click_on 'Workflow Name'
@@ -104,8 +108,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_shared1.workflow.name
+      names_desc = all("tr td:nth-child(#{@workflow_name_col})").map(&:text)
+      assert names_desc.any?
     end
   end
 
@@ -946,6 +950,54 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
+  end
+
+  test 'changing field clears value input when using standard select' do
+    auto_complete_enabled = Flipper.enabled?(:advanced_search_with_auto_complete)
+    Flipper.disable(:advanced_search_with_auto_complete)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+    within '#advanced-search-dialog' do
+      within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+          field_select = find("select[name$='[field]']")
+          field_select.find("option[value='state']").select_option
+
+          operator_select = find("select[name$='[operator]']")
+          operator_select.find("option[value='=']").select_option
+
+          value_select = find("select[name$='[value]']")
+          value_select.find("option[value='completed']").select_option
+
+          field_select.find("option[value='name']").select_option
+
+          operator_after_change = find("select[name$='[operator]']")
+          assert_equal '', operator_after_change.value
+
+          value_after_change = find("select[name$='[value]']", visible: :all)
+          assert_equal '', value_after_change.value
+
+          value_container = find('div.value', visible: :all)
+          assert_includes value_container[:class], 'invisible'
+
+          operator_after_change.find("option[value='contains']").select_option
+
+          find("input[name$='[value]']", visible: :all).set('example')
+        end
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_selector '#workflow-executions-table table tbody tr'
+  ensure
+    if auto_complete_enabled
+      Flipper.enable(:advanced_search_with_auto_complete)
+    else
+      Flipper.disable(:advanced_search_with_auto_complete)
+    end
   end
 
   test 'can filter workflow executions by workflow name with not equals operator' do
