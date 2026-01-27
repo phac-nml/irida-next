@@ -224,7 +224,10 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_text 'Samples: 13'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '13 samples'
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
       assert_selector 'table tbody tr', count: 13
 
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
@@ -294,7 +297,10 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_text 'Samples: 13'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '13 samples'
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
 
       assert_selector 'table tbody tr', count: 13
 
@@ -1945,8 +1951,10 @@ module Groups
       ### ACTIONS START ###
       # select first sample
       check "checkbox_sample_#{@sample1.id}"
-      assert_selector '[data-testid="samples-selection-summary"]', text: ' 26 Selected: 1'
-      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '26 samples'
+        assert_selector '[data-selection-target="selected"]', text: '1'
+      end
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -2273,8 +2281,10 @@ module Groups
       check "checkbox_sample_#{@sample1.id}"
       check "checkbox_sample_#{@sample2.id}"
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 2
-      assert_selector '[data-testid="samples-selection-summary"]', text: ' 26'
-      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '2'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '26 samples'
+        assert_selector '[data-selection-target="selected"]', text: '2'
+      end
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
