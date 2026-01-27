@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams, normalizeParams } from "utilities/form";
+import { announce } from "utilities/live_region";
 
 /**
  * WorkflowSelectionController
@@ -283,7 +284,7 @@ export default class extends Controller {
 
   /**
    * Announce the submission to screen readers.
-   * Creates or updates an aria-live region with the status message.
+   * Uses the shared live region utility for consistent announcement behavior.
    *
    * @param {Object} params - Workflow parameters
    * @private
@@ -294,28 +295,10 @@ export default class extends Controller {
       : this.selectionOutlet.getOrCreateStoredItems().length;
     const message = `${this.submittingMessageValue}: ${params.workflowname} version ${params.workflowversion} for ${count} samples`;
 
-    if (this.hasStatusAnnouncementTarget) {
-      this.statusAnnouncementTarget.textContent = message;
-    } else {
-      const liveRegion =
-        document.querySelector("#sr-status") || this.#createLiveRegion();
-      liveRegion.textContent = message;
-    }
-  }
-
-  /**
-   * Create a screen reader live region if one doesn't exist.
-   *
-   * @returns {HTMLElement} The created live region element
-   * @private
-   */
-  #createLiveRegion() {
-    const region = document.createElement("div");
-    region.id = "sr-status";
-    region.setAttribute("aria-live", "polite");
-    region.setAttribute("aria-atomic", "true");
-    region.className = "sr-only";
-    document.body.appendChild(region);
-    return region;
+    announce(message, {
+      element: this.hasStatusAnnouncementTarget
+        ? this.statusAnnouncementTarget
+        : null,
+    });
   }
 }

@@ -167,6 +167,25 @@ export function isEnumField(enumFields, field) {
 }
 
 /**
+ * Convert a snake_case or kebab-case string to Title Case.
+ * Replaces underscores and hyphens with spaces and capitalizes the first letter of each word.
+ *
+ * @param {string} value - The string to transform
+ * @returns {string} The title-cased string
+ *
+ * @example
+ * toTitleCase("hello_world") // "Hello World"
+ * toTitleCase("some-value") // "Some Value"
+ */
+export function toTitleCase(value) {
+  if (!value || typeof value !== "string") return "";
+
+  return value
+    .replace(/[_-]/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+/**
  * Create a select element populated with enum options.
  * @param {Object} options
  * @param {string} options.name - Name attribute for the select element.
@@ -217,9 +236,7 @@ export function createEnumSelect({
   optionValues.forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
-    option.text =
-      labels[value] ||
-      value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    option.text = labels[value] || toTitleCase(value);
     select.appendChild(option);
   });
 

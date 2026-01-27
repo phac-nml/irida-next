@@ -12,6 +12,7 @@ import {
   isEnumField,
   createEnumSelect,
 } from "utilities/advanced_search";
+import { announce } from "utilities/live_region";
 
 /**
  * Advanced Search Controller
@@ -266,9 +267,13 @@ export default class extends Controller {
    * @param {Event} event - Change event from the field select element
    */
   handleFieldChange(event) {
+    if (!event?.target) return;
+
     const fieldElement =
-      event.target?.closest?.(this.constructor.SELECTORS.fieldSelect) ||
+      event.target.closest?.(this.constructor.SELECTORS.fieldSelect) ||
       event.target;
+
+    if (!fieldElement) return;
 
     const condition = findCondition(fieldElement);
     if (!condition) return;
@@ -575,20 +580,27 @@ export default class extends Controller {
    * @returns {boolean} True if the enum has at least one selectable value
    */
   #enumHasValues(enumConfig) {
-    const values = enumConfig?.values || [];
-    const labels = enumConfig?.labels || {};
+    try {
+      if (!enumConfig) return false;
 
-    const normalizedValues = Array.isArray(values)
-      ? values
-      : values && typeof values === "object"
-        ? Object.keys(values)
-        : [];
+      const values = enumConfig.values || [];
+      const labels = enumConfig.labels || {};
 
-    if (normalizedValues.length > 0) {
-      return true;
+      const normalizedValues = Array.isArray(values)
+        ? values
+        : values && typeof values === "object"
+          ? Object.keys(values)
+          : [];
+
+      if (normalizedValues.length > 0) {
+        return true;
+      }
+
+      return Object.keys(labels).length > 0;
+    } catch (error) {
+      console.error("Failed to check enum values:", error);
+      return false;
     }
-
-    return Object.keys(labels).length > 0;
   }
 
   /**
@@ -871,31 +883,16 @@ export default class extends Controller {
   /**
    * Announce a message to screen readers via an aria-live region.
    * Uses the statusAnnouncement target if available, otherwise falls back
-   * to a global #sr-status element or creates one.
+   * to a global live region.
    *
    * @param {string} message - The message to announce
    * @private
    */
   #announce(message) {
-    if (!message) return;
-
-    if (this.hasStatusAnnouncementTarget) {
-      this.statusAnnouncementTarget.textContent = message;
-      return;
-    }
-
-    const globalStatus = document.querySelector("#sr-status");
-    if (globalStatus) {
-      globalStatus.textContent = message;
-      return;
-    }
-
-    const region = document.createElement("div");
-    region.id = "sr-status";
-    region.setAttribute("aria-live", "polite");
-    region.setAttribute("aria-atomic", "true");
-    region.className = "sr-only";
-    region.textContent = message;
-    document.body.appendChild(region);
+    announce(message, {
+      element: this.hasStatusAnnouncementTarget
+        ? this.statusAnnouncementTarget
+        : null,
+    });
   }
 }

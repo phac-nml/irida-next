@@ -53,12 +53,12 @@
         <%# PLACEHOLDER FOR SEARCH GROUPS %>
       </div>
 
-      <div
-        data-advanced-search-target="statusAnnouncement"
-        class="sr-only"
-        aria-live="polite"
-        aria-atomic="true"
-      ></div>
+      <%= render LiveRegionComponent.new(
+        controller: "advanced-search",
+        target: "statusAnnouncement",
+        atomic: true,
+        id: "sr-status",
+      ) %>
 
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>

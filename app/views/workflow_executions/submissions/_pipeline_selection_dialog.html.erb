@@ -99,12 +99,11 @@
           </div>
         </div>
       </div>
-      <div
-        data-workflow-selection-target="statusAnnouncement"
-        class="sr-only"
-        aria-live="polite"
-        aria-atomic="true"
-      ></div>
+      <%= render LiveRegionComponent.new(
+        controller: "workflow-selection",
+        target: "statusAnnouncement",
+        atomic: true,
+      ) %>
     <% end %>
   <% end %>
 <% end %>
