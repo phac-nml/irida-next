@@ -78,13 +78,13 @@ export default class extends Controller {
 
   /**
    * Initialize the controller on connection.
-   * Renders the search form from the template to ensure the container
-   * reflects the current state after turbo_stream updates.
+   * Renders the search form from the template if the dialog is open.
    */
   connect() {
-    // Always render search groups from template on connect to ensure
-    // the container is synchronized with the template after turbo_stream updates
-    this.renderSearch();
+    // Render the search if openValue is true on connect
+    if (this.openValue) {
+      this.renderSearch();
+    }
 
     this.boundAutoCompleteChange = this.#handleAutoCompleteChange.bind(this);
     this.element.addEventListener(
