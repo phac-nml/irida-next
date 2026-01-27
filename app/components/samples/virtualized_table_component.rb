@@ -64,7 +64,6 @@ module Samples
     # @return [Hash] system arguments for the table container
     def system_arguments
       base_args = { tag: 'div' }.deep_merge(@system_arguments)
-      base_args[:id] = 'samples-table'
       base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
       base_args[:data] ||= {}
 
@@ -110,6 +109,7 @@ module Samples
     def wrapper_arguments
       base_args = {
         tag: 'div',
+        id: 'samples-table',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
         data: {
           controller: 'editable-cell',
