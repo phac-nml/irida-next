@@ -37,8 +37,6 @@ module Viral
         'dialog--contents'
       )
 
-      return if closable
-
       @system_arguments[:data] ||= {}
       @system_arguments[:data].merge!({ action: 'keydown.esc->viral--dialog#handleEsc' })
     end
