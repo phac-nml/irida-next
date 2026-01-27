@@ -42,6 +42,13 @@ export default class extends Controller {
   /**
    * Minimum time to display spinner for accessibility (milliseconds).
    * Ensures screen readers have time to announce the loading state.
+   *
+   * This value (3500ms) is based on WCAG 2.1 Success Criterion 4.1.3 (Status Messages)
+   * which requires that status messages be programmatically determinable and announced
+   * by assistive technologies. Screen readers typically need 2-4 seconds to process
+   * and vocalize dynamic content changes, especially when multiple elements update.
+   *
+   * @see https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html
    */
   static A11Y_SPINNER_DURATION = 3500;
 

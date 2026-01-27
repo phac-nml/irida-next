@@ -39,11 +39,13 @@ module AdvancedSearch
         column&.type == :uuid
       end
 
-      # Escapes SQL LIKE wildcard characters (%, _) to treat them as literal characters
+      # Escapes SQL LIKE wildcard characters (%, _) to treat them as literal characters.
+      # Backslashes must be escaped first to avoid double-escaping.
       # @param value [String] the value to escape
       # @return [String] the escaped value
       def escape_like_wildcards(value)
-        value.gsub(/[%_\\]/) { |char| "\\#{char}" }
+        # Escape backslash first, then wildcards, to avoid double-escaping
+        value.gsub('\\', '\\\\\\\\').gsub('%', '\\%').gsub('_', '\\_')
       end
     end
   end

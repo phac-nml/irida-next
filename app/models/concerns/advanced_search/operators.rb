@@ -5,6 +5,10 @@ module AdvancedSearch
   module Operators
     extend ActiveSupport::Concern
 
+    # Metadata fields that should use exact matching instead of pattern/case-insensitive matching.
+    # These fields have enumerated values (e.g., from dropdowns) and require precise comparisons.
+    ENUM_METADATA_FIELDS = %w[metadata.pipeline_id metadata.workflow_version].freeze
+
     include AdvancedSearch::Operators::EqualityOperators
     include AdvancedSearch::Operators::SetOperators
     include AdvancedSearch::Operators::ComparisonOperators

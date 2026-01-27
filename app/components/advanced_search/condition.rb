@@ -61,14 +61,14 @@ module AdvancedSearch
     def deprecate_legacy_params(sample_fields, metadata_fields)
       if sample_fields.present?
         Rails.logger.warn(
-          '[DEPRECATION] AdvancedSearch::Condition: sample_fields is deprecated, use entity_fields instead'
+          'DEPRECATION WARNING: AdvancedSearch::Condition: sample_fields is deprecated, use entity_fields instead'
         )
       end
 
       return if metadata_fields.blank?
 
       Rails.logger.warn(
-        '[DEPRECATION] AdvancedSearch::Condition: metadata_fields is deprecated, use jsonb_fields instead'
+        'DEPRECATION WARNING: AdvancedSearch::Condition: metadata_fields is deprecated, use jsonb_fields instead'
       )
     end
 

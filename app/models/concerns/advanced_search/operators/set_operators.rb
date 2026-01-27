@@ -10,8 +10,7 @@ module AdvancedSearch
 
       def condition_in(scope, node, value, metadata_field:, field_name:)
         # Enum metadata fields need exact matching, not case-insensitive matching
-        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
-        is_enum_metadata = enum_metadata_fields.include?(field_name)
+        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
 
         # Use case-insensitive matching only for non-enum metadata fields
         if metadata_field && !is_enum_metadata
@@ -26,8 +25,7 @@ module AdvancedSearch
 
       def condition_not_in(scope, node, value, metadata_field:, field_name:)
         # Enum metadata fields need exact matching, not case-insensitive matching
-        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
-        is_enum_metadata = enum_metadata_fields.include?(field_name)
+        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
 
         # Use case-insensitive matching only for non-enum metadata fields
         if metadata_field && !is_enum_metadata

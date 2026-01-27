@@ -10,8 +10,7 @@ module AdvancedSearch
 
       def condition_equals(scope, node, value, metadata_field:, field_name:)
         # Enum metadata fields need exact matching, not pattern matching
-        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
-        is_enum_metadata = enum_metadata_fields.include?(field_name)
+        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
 
         # Use pattern matching only for non-enum metadata fields and name field
         use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata
@@ -25,8 +24,7 @@ module AdvancedSearch
 
       def condition_not_equals(scope, node, value, metadata_field:, field_name:)
         # Enum metadata fields need exact matching, not pattern matching
-        enum_metadata_fields = %w[metadata.pipeline_id metadata.workflow_version]
-        is_enum_metadata = enum_metadata_fields.include?(field_name)
+        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
 
         # Use pattern matching only for non-enum metadata fields and name field
         use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata

@@ -404,13 +404,15 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def permit_search_params
     return {} if params[:q].blank?
 
-    # Use to_unsafe_h to handle form submissions more robustly
-    # This matches the pattern used in samples controllers
+    # Use to_unsafe_h to handle complex nested form submissions
+    # This matches the pattern used in samples controllers (see projects/samples_controller.rb:254)
+    # Security is ensured by the .slice! call in search_params which allowlists keys
     params[:q].to_unsafe_h.with_indifferent_access
   end
 
   def search_key
-    namespace_id = @namespace&.id || 'user'
+    # Use 'global' prefix for user-level searches to avoid collision with namespace IDs
+    namespace_id = @namespace&.id || "global_#{current_user.id}"
     :"#{controller_name}_#{namespace_id}_search_params"
   end
 

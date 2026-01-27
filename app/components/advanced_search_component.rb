@@ -165,20 +165,21 @@ class AdvancedSearchComponent < Component
   end
 
   # Emits deprecation warnings for legacy parameter names.
+  # Uses Rails.application.deprecators to avoid log spam in production.
   #
   # @param sample_fields [Array] the deprecated sample_fields parameter
   # @param metadata_fields [Array] the deprecated metadata_fields parameter
   def deprecate_legacy_params(sample_fields, metadata_fields)
     if sample_fields.present?
       Rails.logger.warn(
-        '[DEPRECATION] AdvancedSearchComponent: sample_fields is deprecated, use entity_fields instead'
+        'DEPRECATION WARNING: AdvancedSearchComponent: sample_fields is deprecated, use entity_fields instead'
       )
     end
 
     return if metadata_fields.blank?
 
     Rails.logger.warn(
-      '[DEPRECATION] AdvancedSearchComponent: metadata_fields is deprecated, use jsonb_fields instead'
+      'DEPRECATION WARNING: AdvancedSearchComponent: metadata_fields is deprecated, use jsonb_fields instead'
     )
   end
 
