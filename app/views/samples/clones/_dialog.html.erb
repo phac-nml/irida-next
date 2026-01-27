@@ -56,10 +56,14 @@
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "clone-project-select" %>
-              <%= form.label :new_project_id, t("samples.clones.dialog.new_project_id"),
-                             for: form_id,
-                             class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                             data: { required: true } %>
+              <%= form.label :new_project_id,
+                         t("samples.clones.dialog.new_project_id"),
+                         for: form_id,
+                         class:
+                           "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+                         data: {
+                           required: true,
+                         } %>
               <% if @projects.empty? %>
                 <input
                   disabled
@@ -101,6 +105,8 @@
                           class: "button button-primary",
                           disabled: true,
                           data: {
+                            action: "viral--dialog#setClosable",
+                            "viral--dialog-closable-param": "false",
                             "viral--select2-target": "submitButton",
                           } %>
             </div>

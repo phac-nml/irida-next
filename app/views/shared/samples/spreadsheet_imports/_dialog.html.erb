@@ -35,7 +35,9 @@
             <% if @namespace.group_namespace? %>
               <%= t("shared.samples.spreadsheet_imports.dialog.namespace.group.description_html") %>
             <% else %>
-              <%= t("shared.samples.spreadsheet_imports.dialog.namespace.project.description_html") %>
+              <%= t(
+                "shared.samples.spreadsheet_imports.dialog.namespace.project.description_html",
+              ) %>
             <% end %>
           </p>
 
@@ -76,7 +78,12 @@
                        } %>
             <%= form.select :sample_name_column,
                         {},
-                        { prompt: t("shared.samples.spreadsheet_imports.dialog.select_sample_name_column") },
+                        {
+                          prompt:
+                            t(
+                              "shared.samples.spreadsheet_imports.dialog.select_sample_name_column",
+                            ),
+                        },
                         required: true,
                         data: {
                           "spreadsheet-import-target": "sampleNameColumn",
@@ -91,12 +98,19 @@
           </div>
           <div class="form-field">
             <%= form.label :sample_description_column,
-                       t("shared.samples.spreadsheet_imports.dialog.sample_description_column"),
+                       t(
+                         "shared.samples.spreadsheet_imports.dialog.sample_description_column",
+                       ),
                        class:
                          "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
             <%= form.select :sample_description_column,
                         {},
-                        { prompt: t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") },
+                        {
+                          prompt:
+                            t(
+                              "shared.samples.spreadsheet_imports.dialog.select_sample_description_column",
+                            ),
+                        },
                         required: false,
                         data: {
                           "spreadsheet-import-target": "sampleDescriptionColumn",
@@ -123,7 +137,12 @@
                 <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t("shared.samples.spreadsheet_imports.dialog.project_puid_column_description") %></p>
                 <%= form.select :project_puid_column,
                             {},
-                            { prompt: t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") },
+                            {
+                              prompt:
+                                t(
+                                  "shared.samples.spreadsheet_imports.dialog.select_project_puid_column",
+                                ),
+                            },
                             required: false,
                             data: {
                               "spreadsheet-import-target": "projectPUIDColumn",
@@ -199,7 +218,8 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "click->viral--sortable-lists--two-lists-selection#constructParams click->spreadsheet-import#handleSubmit",
+                            "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->spreadsheet-import#handleSubmit",
+                          "viral--dialog-closable-param": "false",
                           "spreadsheet-import-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },

@@ -1,11 +1,3 @@
-<%= turbo_stream.update "samples_dialog",
-                    partial: "samples/clones/dialog",
-                    locals: {
-                      open: true,
-                      closable: false,
-                      broadcast_target: @broadcast_target,
-                    } %>
-
 <%= turbo_stream.update "clone_samples_dialog_content" do %>
   <%= render partial: "shared/progress_bar",
   locals: {
