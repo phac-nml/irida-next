@@ -12,10 +12,13 @@ module WorkflowExecutions
     end
 
     def execute # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
+      Rails.logger.warn("WorkflowExecution #{@workflow_execution.id} - Checking WES run status") # TODO: remove
       return false if @workflow_execution.run_id.nil?
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
       state = run_status[:state]
+
+      Rails.logger.warn("WorkflowExecution #{@workflow_execution.id} - WES run status: #{state}") # TODO: remove
 
       if state == 'RUNNING'
         # Send cancellation request to WES if pipeline has exceeded maximum runtime, if set
