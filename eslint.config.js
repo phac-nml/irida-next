@@ -27,7 +27,10 @@ export default defineConfig([
   // Application JavaScript files (Stimulus controllers, utilities)
   {
     name: "app-javascript",
-    files: ["app/javascript/**/*.js"],
+    files: [
+      "app/javascript/**/*.js",
+      "embedded_gems/**/app/javascript/**/*.js",
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
