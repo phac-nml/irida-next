@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
+import { announce } from "utilities/live_region";
 
 export default class extends Controller {
   static targets = [
@@ -918,8 +919,9 @@ export default class extends Controller {
   // }
 
   #updateAriaLive(updateString) {
-    this.ariaLiveUpdateTarget.innerText = "";
-    this.ariaLiveUpdateTarget.innerText = updateString;
+    if (this.hasAriaLiveUpdateTarget) {
+      announce(updateString, { element: this.ariaLiveUpdateTarget });
+    }
   }
 
   #initializeLists() {

@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { announce } from "utilities/live_region";
 
 export default class extends Controller {
   static targets = ["rowSelection", "selectPage", "selected", "status"];
@@ -168,10 +169,9 @@ export default class extends Controller {
 
     // 📣 Update local status region or fallback global live region
     if (this.hasStatusTarget) {
-      this.statusTarget.textContent = message;
+      announce(message, { element: this.statusTarget });
     } else {
-      const globalStatus = document.querySelector("#sr-status");
-      if (globalStatus) globalStatus.textContent = message;
+      announce(message);
     }
   }
 

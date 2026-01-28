@@ -166,7 +166,8 @@ module Viral
         'data-viral--alert-alert-id-value': alert_id,
         'data-viral--alert-dismiss-button-id-value': dismiss_button_id,
         'data-viral--alert-auto-dismiss-duration-value': auto_dismiss_duration,
-        'data-viral--alert-announce-alert-value': announce_alert
+        'data-viral--alert-announce-alert-value': announce_alert,
+        'data-viral--alert-dismissed-text-value': I18n.t('general.screen_reader.alert_dismissed')
       }
     end
   end

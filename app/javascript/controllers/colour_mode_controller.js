@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { announce } from "utilities/live_region";
 
 /**
  * Colour Mode Controller
@@ -86,15 +87,18 @@ export default class extends Controller {
    */
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
-    this.announcementElement.textContent =
-      this.element.dataset.changedText.replace("%{theme}", themeText);
+    announce(this.element.dataset.changedText.replace("%{theme}", themeText), {
+      element: this.announcementElement,
+    });
   }
 
   /**
    * Announce errors to screen readers
    */
   announceError() {
-    this.announcementElement.textContent = this.element.dataset.errorText;
+    announce(this.element.dataset.errorText, {
+      element: this.announcementElement,
+    });
   }
 
   /**
