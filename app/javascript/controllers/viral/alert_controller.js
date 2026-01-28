@@ -359,13 +359,14 @@ export default class extends Controller {
       announce(this.dismissedTextValue, { element: announcement });
 
       // 🧹 Clean it up after screen readers have announced it
+      // Using 3000ms to ensure all screen readers have time to detect and announce
       setTimeout(() => {
         try {
-          document.body.removeChild(announcement);
+          announcement.remove();
         } catch (error) {
           console.warn("⚠️  Failed to remove announcement element:", error);
         }
-      }, 1000);
+      }, 3000);
     } catch (error) {
       console.error("❌ Failed to announce dismissal:", error);
     }
