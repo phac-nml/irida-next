@@ -72,6 +72,90 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert_no_enqueued_emails
   end
 
+  test 'job execution still queued after status check' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+    end
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert @workflow_execution.reload.submitted?
+
+    assert_no_enqueued_emails
+  end
+
+  test 'job execution from queued to complete' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 4)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+
+    assert_performed_jobs(4, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert @workflow_execution.reload.completing?
+
+    assert_no_enqueued_emails
+  end
+
   test 'repeated connection errors' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 6)
 
