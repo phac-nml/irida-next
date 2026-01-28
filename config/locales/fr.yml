@@ -689,6 +689,7 @@ fr:
       toggle_sidebar: Basculer le menu latéral
     opens_in_new_tab: S’ouvre dans un nouvel onglet
     screen_reader:
+      alert_dismissed: Alerte fermée.
       close: Fermer
   graphql:
     value_scalar:

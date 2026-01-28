@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import debounce from "debounce";
+import { announce } from "utilities/live_region";
 import {
   isPrintableCharacter,
   getLowercaseContent,
@@ -129,13 +130,19 @@ export default class SelectWithAutoCompleteController extends Controller {
   #announceNumberOfResults() {
     if (this.hasAriaLiveUpdateTarget) {
       const numItems = this.#filteredOptions.length;
+      let message = "";
       if (numItems === 0) {
-        this.ariaLiveUpdateTarget.textContent = this.noResultsTextValue;
+        message = this.noResultsTextValue;
       } else if (numItems === 1) {
-        this.ariaLiveUpdateTarget.textContent = this.singleResultTextValue;
+        message = this.singleResultTextValue;
       } else {
-        this.ariaLiveUpdateTarget.textContent =
-          this.multipleResultsTextValue.replace("%{num}", String(numItems));
+        message = this.multipleResultsTextValue.replace(
+          "%{num}",
+          String(numItems),
+        );
+      }
+      if (message) {
+        announce(message, { element: this.ariaLiveUpdateTarget });
       }
     }
   }
