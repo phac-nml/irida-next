@@ -139,7 +139,7 @@ GEM
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
-    bcrypt (3.1.20)
+    bcrypt (3.1.21)
     bigdecimal (4.0.1)
     bindex (0.8.1)
     bootsnap (1.21.1)
@@ -190,10 +190,10 @@ GEM
     dentaku (3.5.7)
       bigdecimal
       concurrent-ruby
-    devise (4.9.4)
+    devise (5.0.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
+      railties (>= 7.0)
       responders
       warden (~> 1.2.3)
     digest-crc (0.7.0)
@@ -591,9 +591,9 @@ GEM
       uber (< 0.2.0)
     requestjs-rails (0.0.14)
       railties (>= 7.1.0)
-    responders (3.1.1)
-      actionpack (>= 5.2)
-      railties (>= 5.2)
+    responders (3.2.0)
+      actionpack (>= 7.0)
+      railties (>= 7.0)
     retriable (3.1.2)
     rexml (3.4.4)
     roo (3.0.0)
@@ -754,7 +754,7 @@ DEPENDENCIES
   cuprite
   debug
   dentaku
-  devise (~> 4.9.4)
+  devise (~> 5.0.0)
   erb-formatter (~> 0.7.2)
   faker
   faraday (~> 2.5)
