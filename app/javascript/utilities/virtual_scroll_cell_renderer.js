@@ -305,7 +305,7 @@ export class VirtualScrollCellRenderer {
     const spacer = document.createElement("td");
     spacer.colSpan = colspan;
     spacer.dataset.virtualizedCell = "true";
-    spacer.setAttribute("role", "gridcell");
+    spacer.setAttribute("role", "presentation");
     spacer.setAttribute("aria-hidden", "true");
     spacer.tabIndex = -1;
 

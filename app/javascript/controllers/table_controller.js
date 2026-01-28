@@ -31,6 +31,9 @@ export default class TableController extends Controller {
   #prefersReducedMotion = false;
   #debouncedHandleFocus = null;
   #isResettingFocus = false;
+  #isNavigating = false;
+  #boundHandleNavigationStart = null;
+  #boundHandleNavigationEnd = null;
 
   connect() {
     this.#prefersReducedMotion =
@@ -40,6 +43,22 @@ export default class TableController extends Controller {
       this.#handleCellFocusInternal.bind(this),
       TableController.#DEBOUNCE_DELAY,
     );
+
+    // Listen for navigation events from GridKeyboardNavigator
+    // Events are dispatched on the table element, so listen there
+    this.#boundHandleNavigationStart = this.#handleNavigationStart.bind(this);
+    this.#boundHandleNavigationEnd = this.#handleNavigationEnd.bind(this);
+    const table = this.element.closest("table");
+    if (table) {
+      table.addEventListener(
+        "table:navigation-start",
+        this.#boundHandleNavigationStart,
+      );
+      table.addEventListener(
+        "table:navigation-end",
+        this.#boundHandleNavigationEnd,
+      );
+    }
   }
 
   disconnect() {
@@ -47,6 +66,40 @@ export default class TableController extends Controller {
     this.#stickyCache = new WeakMap();
     this.#lastFocusedCell = null;
     this.#debouncedHandleFocus?.clear();
+    this.#isNavigating = false;
+
+    // Remove navigation event listeners from table element
+    const table = this.element.closest("table");
+    if (table) {
+      if (this.#boundHandleNavigationStart) {
+        table.removeEventListener(
+          "table:navigation-start",
+          this.#boundHandleNavigationStart,
+        );
+      }
+      if (this.#boundHandleNavigationEnd) {
+        table.removeEventListener(
+          "table:navigation-end",
+          this.#boundHandleNavigationEnd,
+        );
+      }
+    }
+  }
+
+  /**
+   * Handle navigation start event - prevents blur reset during async navigation
+   * @private
+   */
+  #handleNavigationStart() {
+    this.#isNavigating = true;
+  }
+
+  /**
+   * Handle navigation end event - allows blur reset again
+   * @private
+   */
+  #handleNavigationEnd() {
+    this.#isNavigating = false;
   }
 
   /**
@@ -83,6 +136,9 @@ export default class TableController extends Controller {
 
     const table = event.target.closest("table");
     if (!table) return;
+
+    // Don't reset during keyboard navigation (async cell focus in progress)
+    if (this.#isNavigating) return;
 
     // Check if focus is leaving the table entirely
     const relatedTarget = event.relatedTarget;
