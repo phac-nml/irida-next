@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { announce, createLiveRegion } from "utilities/live_region";
 
 /**
  * 🚨 Alert Controller - The Brain Behind Alert Messages! 🧠
@@ -49,6 +50,7 @@ export default class extends Controller {
     alertId: String,
     dismissButtonId: String,
     autoDismissDuration: Number,
+    dismissedText: String,
   };
 
   // 🔒 Private Properties - Internal state (only accessible within this class)
@@ -349,14 +351,12 @@ export default class extends Controller {
   #announceDismissal() {
     try {
       // 📝 Create the announcement element
-      const announcement = document.createElement("div");
-      announcement.setAttribute("aria-live", "polite");
-      announcement.setAttribute("aria-atomic", "true");
-      announcement.className = "sr-only";
-      announcement.textContent = "Alert dismissed";
+      const announcement = createLiveRegion({
+        politeness: "polite",
+        atomic: true,
+      });
 
-      // 📢 Add it to the page for screen readers
-      document.body.appendChild(announcement);
+      announce(this.dismissedTextValue, { element: announcement });
 
       // 🧹 Clean it up after screen readers have announced it
       setTimeout(() => {

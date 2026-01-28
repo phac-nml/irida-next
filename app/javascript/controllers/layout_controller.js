@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { announce } from "utilities/live_region";
 import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
@@ -96,10 +97,7 @@ export default class extends Controller {
 
   #announce(message) {
     if (!message || !this.announcementsEnabled) return;
-    this.announcementTarget.textContent = "";
-    window.requestAnimationFrame(() => {
-      this.announcementTarget.textContent = message;
-    });
+    announce(message, { element: this.announcementTarget });
   }
 
   #setExpandedState(isExpanded) {
