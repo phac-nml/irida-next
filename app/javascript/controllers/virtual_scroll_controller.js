@@ -1,0 +1,1064 @@
+import { Controller } from "@hotwired/stimulus";
+import debounce from "debounce";
+import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
+import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
+import { StickyColumnManager } from "utilities/sticky_column_manager";
+import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
+
+import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
+import { focusMixin } from "controllers/virtual_scroll/focus";
+import { deferredTemplateFieldsMixin } from "controllers/virtual_scroll/deferred_template_fields";
+
+/**
+ * VirtualScrollController
+ *
+ * Implements virtualized horizontal scrolling for tables with large numbers of metadata columns.
+ * Only renders visible body cells plus a buffer. Headers are rendered server-side (no virtualization).
+ *
+ * Features:
+ * - Variable-width column support (measures actual DOM widths)
+ * - Headers rendered server-side for simplicity and performance
+ * - Body cells virtualized (only visible + buffer rendered)
+ * - Sticky column preservation (never virtualized)
+ * - Auto-scroll to sorted column on page load
+ * - ResizeObserver for responsive behavior
+ * - Protection for cells currently being edited
+ * - Integration with table_controller.js and editable_cell_controller.js
+ *
+ * @example
+ *   <div data-controller="virtual-scroll"
+ *        data-virtual-scroll-metadata-fields-value='["field1", "field2"]'
+ *        data-virtual-scroll-fixed-columns-value='["puid", "name"]'
+ *        data-virtual-scroll-sticky-column-count-value="2"
+ *        data-virtual-scroll-sort-key-value="metadata_field1">
+ */
+class VirtualScrollController extends Controller {
+  static values = {
+    metadataFields: Array,
+    fixedColumns: Array,
+    stickyColumnCount: Number,
+    sortKey: String,
+  };
+
+  static targets = [
+    "container",
+    "header",
+    "body",
+    "row",
+    "templateContainer",
+    "loading",
+    "deferredFrame",
+  ];
+
+  // Track a pending focus target for post-render reapplication
+  pendingFocusRow = null;
+  pendingFocusCol = null;
+
+  sortFocusToRestore = null;
+
+  static constants = Object.freeze({
+    BUFFER_COLUMNS: 3, // Number of columns to render outside viewport on each side
+    MAX_MEASURE_RETRIES: 5,
+    MAX_CELL_READY_RETRIES: 5,
+    PAGE_JUMP_SIZE: 5, // Rows to jump on PageUp/PageDown
+    STICKY_HEADER_Z_INDEX: 20,
+    STICKY_BODY_Z_INDEX: 10,
+  });
+
+  /**
+   * Read configuration values from CSS custom properties
+   * @returns {{columnWidth: number, breakpoint2xl: number}}
+   * @private
+   */
+  static getCSSConfig() {
+    const style = getComputedStyle(document.documentElement);
+    const columnWidthRaw = style
+      .getPropertyValue("--metadata-column-width")
+      .trim();
+    const breakpoint2xlRaw = style.getPropertyValue("--breakpoint-2xl").trim();
+
+    return {
+      columnWidth: parseInt(columnWidthRaw || "300", 10),
+      breakpoint2xl: parseInt(breakpoint2xlRaw || "1536", 10),
+    };
+  }
+
+  measureRetryCount = 0;
+  isRetrying = false; // Guard for race condition in retry logic
+
+  /**
+   * Stimulus lifecycle: Connect controller and initialize
+   */
+  connect() {
+    this.lifecycle = createVirtualScrollLifecycle();
+
+    this.restorePendingFocusFromSessionStorage();
+
+    this.setupSortFocusRestoration();
+
+    // Get CSS configuration values
+    this.cssConfig = this.constructor.getCSSConfig();
+
+    this.boundHandleSort = this.handleSort.bind(this);
+    this.lifecycle.listen(this.element, "click", this.boundHandleSort, {
+      capture: true,
+    });
+
+    this.boundHandleKeydown = this.handleKeydown.bind(this);
+    this.lifecycle.listen(this.element, "keydown", this.boundHandleKeydown, {
+      capture: true,
+    });
+
+    this.boundHandleDblClick = this.handleDblClick.bind(this);
+    this.lifecycle.listen(this.element, "dblclick", this.boundHandleDblClick, {
+      capture: true,
+    });
+
+    this.boundHideLoading = this.hideLoading.bind(this);
+    this.lifecycle.listen(
+      document,
+      "turbo:before-cache",
+      this.boundHideLoading,
+    );
+
+    // Listen for deferred template arrival - use MutationObserver for reliable detection
+    this.setupDeferredTemplateObserver();
+
+    this.boundRender = this.render.bind(this);
+    this.boundHandleResize = this.handleResize.bind(this);
+    this.hasAutoScrolled = false;
+    this.isInitialized = false;
+    this.isInitializing = true;
+
+    // Reset any cached visible range from previous connections (important for Turbo navigation)
+    this.lastFirstVisible = undefined;
+    this.lastLastVisible = undefined;
+
+    // Initialize metadata column widths array
+    this.metadataColumnWidths = [];
+    this.geometry = null; // Will be initialized after measuring column widths
+
+    // Track per-row visible ranges to avoid unnecessary updates
+    this.rowVisibleRanges = new Map();
+
+    // RAF-based scroll handling (no debounce for instant response)
+    this.rafPending = false;
+    this.handleScroll = () => {
+      if (!this.rafPending) {
+        this.rafPending = true;
+        requestAnimationFrame(() => {
+          this.rafPending = false;
+          this.boundRender();
+        });
+      }
+    };
+
+    // Keep debounce for resize (less critical)
+    this.debouncedResizeHandler = debounce(this.boundHandleResize, 100);
+
+    this.lifecycle.trackDebounce(this.debouncedResizeHandler);
+
+    this.lifecycle.listen(this.containerTarget, "scroll", this.handleScroll, {
+      passive: true,
+    });
+
+    // Initialize ResizeObserver for responsive behavior
+    this.resizeObserver = new ResizeObserver(this.debouncedResizeHandler);
+    this.resizeObserver.observe(this.containerTarget);
+    this.lifecycle.trackObserver(this.resizeObserver);
+
+    // Handle Turbo cache restoration - need to re-render when page is restored from cache
+    this.boundHandleTurboRender = this.handleTurboRender.bind(this);
+    this.lifecycle.listen(
+      document,
+      "turbo:render",
+      this.boundHandleTurboRender,
+    );
+
+    // Sync template content when cells are replaced via Turbo Stream (e.g., after metadata edit)
+    this.boundSyncTemplateOnStreamReplace =
+      this.syncTemplateOnStreamReplace.bind(this);
+    this.lifecycle.listen(
+      document,
+      "turbo:before-stream-render",
+      this.boundSyncTemplateOnStreamReplace,
+    );
+
+    requestAnimationFrame(() => {
+      const initialized = this.initializeDimensions();
+      this.isInitialized = initialized;
+
+      if (initialized) {
+        const tableElement = this.element.querySelector("table");
+
+        // Initialize keyboard navigator after dimensions are set
+        this.keyboardNavigator = new GridKeyboardNavigator({
+          gridElement: this.element,
+          bodyElement: this.bodyTarget,
+          rootElement: tableElement || this.bodyTarget,
+          numBaseColumns: this.numBaseColumns,
+          totalColumns: this.totalColumnCount(),
+          pageJumpSize: this.constructor.constants.PAGE_JUMP_SIZE,
+          onNavigate: (rowIndex, colIndex) =>
+            this.ensureCellReady(rowIndex, colIndex),
+        });
+
+        // Render once to clone templates into visible cells
+        this.render();
+
+        // Auto-scroll to sorted column if applicable
+        requestAnimationFrame(() => {
+          this.scrollToSortedColumn();
+          this.isInitializing = false;
+        });
+      } else {
+        this.isInitializing = false;
+      }
+    });
+  }
+
+  /**
+   * Handle Turbo render events - force re-render when page content changes
+   */
+  handleTurboRender() {
+    // Only handle if we're initialized and the controller element is still in the DOM
+    if (!this.isInitialized || !this.element.isConnected) return;
+
+    // If a sort was triggered and the response renders in-place (e.g., within a Turbo Frame),
+    // the controller may stay connected. Re-check sessionStorage so we can restore focus.
+    this.restorePendingFocusFromSessionStorage();
+
+    // Reset state and re-render
+    this.lastFirstVisible = undefined;
+    this.lastLastVisible = undefined;
+
+    // Re-initialize dimensions in case the DOM structure changed
+    requestAnimationFrame(() => {
+      this.initializeDimensions();
+      this.render();
+
+      if (this.sortFocusToRestore) {
+        this.focusCellIfNeeded(
+          this.sortFocusToRestore.row,
+          this.sortFocusToRestore.col,
+        );
+        this.sortFocusToRestore = null;
+      }
+    });
+  }
+
+  /**
+   * Sync template content when a cell is replaced via Turbo Stream.
+   * This ensures virtualized cells show updated values after edits when scrolling.
+   * @param {CustomEvent} event - Turbo before-stream-render event
+   */
+  syncTemplateOnStreamReplace(event) {
+    const streamElement = event.target;
+    if (streamElement.action !== "replace") return;
+
+    const targetId = streamElement.target;
+    if (!targetId) return;
+
+    // Check if this replacement is for a cell within our virtualized table
+    const existingCell = document.getElementById(targetId);
+    if (!existingCell) return;
+
+    // Verify the cell belongs to this controller's table
+    if (!this.element.contains(existingCell)) return;
+
+    const fieldId = existingCell.dataset.fieldId;
+    if (!fieldId) return;
+
+    // Find the sample ID from the row
+    const row = existingCell.closest("tr[data-sample-id]");
+    const sampleId = row?.dataset?.sampleId;
+    if (!sampleId) return;
+
+    // Get the new content from the stream's template
+    const newContent = streamElement.templateContent?.firstElementChild;
+    if (!newContent) return;
+
+    // Find and update the corresponding template in templateContainer
+    const templateSelector = `[data-sample-id="${sampleId}"] template[data-field="${CSS.escape(fieldId)}"]`;
+    const template =
+      this.templateContainerTarget?.querySelector(templateSelector);
+    if (!template) return;
+
+    // Clone the new content and update the template
+    const clonedContent = newContent.cloneNode(true);
+    template.innerHTML = "";
+    template.content.appendChild(clonedContent);
+  }
+
+  /**
+   * Value change callback - re-render when metadata fields change dynamically
+   */
+  metadataFieldsValueChanged() {
+    if (this.isInitialized) {
+      this.rowVisibleRanges?.clear();
+      this.initializeDimensions();
+      this.render();
+    }
+  }
+
+  /**
+   * Initialize dimensions by measuring actual column widths from DOM
+   * Supports variable-width columns instead of fixed COLUMN_WIDTH
+   */
+  initializeDimensions() {
+    if (!this.headerTarget || !this.bodyTarget) return false;
+    if (
+      !Array.isArray(this.metadataFieldsValue) ||
+      !Array.isArray(this.fixedColumnsValue)
+    )
+      return false;
+
+    this.headerRow = this.headerTarget.querySelector("tr");
+    if (!this.headerRow) return false;
+    this.numBaseColumns = this.fixedColumnsValue.length;
+    this.numMetadataColumns = this.metadataFieldsValue.length;
+    this.metadataFieldIndex = new Map();
+    this.metadataFieldsValue.forEach((field, index) => {
+      this.metadataFieldIndex.set(field, index);
+    });
+    const maxStickyColumns = Math.min(
+      this.stickyColumnCountValue ?? this.numBaseColumns,
+      this.numBaseColumns,
+    );
+    this.numStickyColumns = this.detectStickyColumnCount(maxStickyColumns);
+
+    const table = this.element.querySelector("table");
+    if (!table) return false;
+
+    const headerCells = Array.from(this.headerRow.querySelectorAll("th"));
+    this.baseHeaderElements = headerCells.slice(0, this.numBaseColumns);
+
+    // Measure base column widths
+    this.baseColumnWidths = this.baseHeaderElements.map((th, idx) => {
+      const width = th.getBoundingClientRect().width;
+
+      // Explicitly set width and box-sizing for base columns
+      Object.assign(th.style, {
+        width: width > 0 ? `${width}px` : "",
+        boxSizing: "border-box",
+      });
+
+      if (idx < this.numStickyColumns) {
+        // Ensure the sticky header cell keeps its stacking context
+        Object.assign(th.style, {
+          position: "sticky",
+          top: "0px",
+          zIndex: String(this.constructor.constants.STICKY_HEADER_Z_INDEX),
+        });
+        th.dataset.fixed = "true";
+      } else {
+        Object.assign(th.style, {
+          position: "",
+          left: "",
+          zIndex: "",
+        });
+        th.dataset.fixed = "false";
+      }
+
+      return width;
+    });
+    this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
+
+    // Compute explicit left offsets only for sticky columns so sticky positions
+    // will align correctly even after we manipulate the DOM.
+    this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
+      if (idx >= this.numStickyColumns) return null;
+      return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
+    });
+
+    // Measure actual metadata column widths from DOM
+    const metadataHeaders = headerCells.slice(this.numBaseColumns);
+    this.metadataColumnWidths = metadataHeaders.map((th) => {
+      const width =
+        th.getBoundingClientRect().width || this.cssConfig.columnWidth;
+
+      // Explicitly set width for metadata headers to prevent them from resizing
+      // and prevent text overflow
+      Object.assign(th.style, {
+        width: `${width}px`,
+        minWidth: `${width}px`,
+        maxWidth: `${width}px`,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      });
+
+      return width;
+    });
+
+    // If no metadata columns measured yet, use columnWidth from CSS as fallback
+    if (this.metadataColumnWidths.length === 0) {
+      this.metadataColumnWidths = Array(this.numMetadataColumns).fill(
+        this.cssConfig.columnWidth,
+      );
+    }
+
+    // Initialize geometry calculator with measured column widths
+    this.geometry = new VirtualScrollGeometry(this.metadataColumnWidths);
+
+    // Initialize sticky column manager
+    this.stickyManager = new StickyColumnManager({
+      columnWidths: this.baseColumnWidths,
+      stickyCount: this.numStickyColumns,
+      headerZIndex: this.constructor.constants.STICKY_HEADER_Z_INDEX,
+      bodyZIndex: this.constructor.constants.STICKY_BODY_Z_INDEX,
+    });
+
+    // Initialize cell renderer
+    this.cellRenderer = new VirtualScrollCellRenderer({
+      metadataFields: this.metadataFieldsValue,
+      numBaseColumns: this.numBaseColumns,
+      metadataColumnWidths: this.metadataColumnWidths,
+      columnWidthFallback: this.cssConfig.columnWidth,
+    });
+
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.updateTotalColumns(this.totalColumnCount());
+    }
+
+    // Keep all metadata headers in DOM (rendered server-side)
+    // No need to virtualize headers - performance impact is minimal for 1000 headers
+    this.metadataHeaders = metadataHeaders;
+
+    // Keep references to base header elements for sticky positioning updates
+    this.baseHeaderElements = headerCells.slice(0, this.numBaseColumns);
+
+    // Calculate total metadata width using measured widths
+    const totalMetadataWidth = this.metadataColumnWidths.reduce(
+      (a, b) => a + b,
+      0,
+    );
+    const totalWidth = this.baseColumnsWidth + totalMetadataWidth;
+
+    // Set table and header row dimensions
+    Object.assign(this.headerRow.style, {
+      width: `${totalWidth}px`,
+    });
+
+    Object.assign(table.style, {
+      width: `${totalWidth}px`,
+      tableLayout: "fixed",
+    });
+
+    // Apply sticky positioning to base header cells
+    this.baseHeaderElements.forEach((th, index) => {
+      this.stickyManager.applyToHeaderCell(th, index);
+    });
+
+    if (this.baseColumnsWidth > 0) {
+      this.measureRetryCount = 0;
+    }
+
+    // If measurements failed because the table is hidden, retry a few times
+    if (
+      this.baseColumnsWidth === 0 &&
+      this.measureRetryCount < this.constructor.constants.MAX_MEASURE_RETRIES &&
+      !this.isRetrying
+    ) {
+      this.isRetrying = true;
+      this.measureRetryCount += 1;
+      requestAnimationFrame(() => {
+        this.isRetrying = false;
+        // Ensure controller is still connected before retrying
+        if (!this.element.isConnected) return;
+        this.initializeDimensions();
+        this.render();
+      });
+    }
+
+    return true;
+  }
+
+  /**
+   * Stimulus lifecycle: Disconnect and cleanup
+   */
+  disconnect() {
+    this.lifecycle?.stop?.();
+    this.lifecycle = null;
+
+    // Cancel RAF if pending
+    this.rafPending = false;
+
+    // Clear observer references (disconnected via lifecycle)
+    this.deferredObserver = null;
+    this.resizeObserver = null;
+
+    // Clear caches and utilities
+    this.rowVisibleRanges = null;
+    this.geometry = null;
+    this.keyboardNavigator = null;
+    this.stickyManager = null;
+    this.cellRenderer = null;
+  }
+
+  /**
+   * Handle sort clicks to show loading overlay
+   * @param {Event} event - Click event
+   */
+  handleSort(event) {
+    const link = event.target.closest("a[href]");
+    if (link && this.headerTarget.contains(link)) {
+      if (link.dataset.turboAction === "replace") {
+        this.rememberPendingFocusFromSortLink(link);
+        this.showLoading();
+      }
+    }
+  }
+
+  /**
+   * Show loading overlay
+   */
+  showLoading() {
+    if (this.hasLoadingTarget) {
+      this.loadingTarget.classList.remove("hidden");
+    }
+  }
+
+  /**
+   * Hide loading overlay
+   */
+  hideLoading() {
+    if (this.hasLoadingTarget) {
+      this.loadingTarget.classList.add("hidden");
+    }
+  }
+
+  /**
+   * Handle resize events - re-measure and re-render
+   */
+  handleResize() {
+    // Don't handle resize during initialization
+    if (this.isInitializing || !this.isInitialized) {
+      return;
+    }
+
+    if (!this.baseHeaderElements || this.baseHeaderElements.length === 0)
+      return;
+
+    // Detect if sticky column count should change based on breakpoint
+    const maxStickyColumns = Math.min(
+      this.stickyColumnCountValue ?? this.numBaseColumns,
+      this.numBaseColumns,
+    );
+    const newStickyColumnCount = this.detectStickyColumnCount(maxStickyColumns);
+    if (newStickyColumnCount !== this.numStickyColumns) {
+      this.numStickyColumns = newStickyColumnCount;
+    }
+
+    // Re-measure base column widths in case they changed
+    this.baseColumnWidths = this.baseHeaderElements.map((th) => {
+      const width = th.offsetWidth;
+      if (width > 0) {
+        th.style.width = `${width}px`;
+      }
+      return width;
+    });
+    this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
+
+    // Recalculate sticky column left positions
+    this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
+      if (idx >= this.numStickyColumns) return null;
+      return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
+    });
+
+    // Update utilities with new measurements
+    if (this.geometry) {
+      this.geometry.updateColumnWidths(this.metadataColumnWidths);
+    }
+    if (this.stickyManager) {
+      this.stickyManager.updateColumnWidths(this.baseColumnWidths);
+      this.stickyManager.updateStickyCount(this.numStickyColumns);
+    }
+    if (this.cellRenderer) {
+      this.cellRenderer.updateColumnWidths(this.metadataColumnWidths);
+    }
+
+    // Clear row visible ranges to force full re-render
+    this.rowVisibleRanges.clear();
+
+    // Trigger re-render with new measurements
+    this.render();
+  }
+
+  /**
+   * Detect sticky column count based on window width
+   * @returns {number} Number of sticky columns (2 at @2xl+, 1 below)
+   */
+  detectStickyColumnCount(maxStickyColumns = this.numBaseColumns) {
+    const cappedMax = Math.min(maxStickyColumns, this.numBaseColumns);
+
+    // Use breakpoint from CSS custom property
+    if (window.innerWidth >= this.cssConfig.breakpoint2xl) {
+      return Math.min(2, cappedMax);
+    }
+
+    return Math.min(1, cappedMax);
+  }
+
+  /**
+   * Auto-scroll to sorted metadata column on page load
+   * Only runs once on initial page load
+   */
+  scrollToSortedColumn() {
+    // Only auto-scroll once
+    if (this.hasAutoScrolled) return;
+    this.hasAutoScrolled = true;
+
+    // Check if sortKey exists and is a metadata field
+    const sortKey = this.sortKeyValue;
+    if (!sortKey || sortKey === "") return;
+
+    // Extract field name from sort key (e.g., "metadata_field_name" -> "field_name")
+    const metadataPrefix = "metadata_";
+    if (!sortKey.startsWith(metadataPrefix)) return; // Base column sort, no auto-scroll
+
+    const fieldName = sortKey.substring(metadataPrefix.length);
+
+    // Find the sorted header directly from the DOM (much simpler now that all headers are rendered)
+    const sortedHeader = this.headerRow.querySelector(
+      `th[data-field-id="${CSS.escape(fieldName)}"]`,
+    );
+    if (!sortedHeader) return; // Header not found
+
+    // Get the header's position and width from the DOM
+    const headerLeft = sortedHeader.offsetLeft;
+    const headerWidth = sortedHeader.offsetWidth;
+
+    // Position column at right edge of viewport with small padding
+    const padding = 16; // pixels
+    const targetScrollLeft =
+      headerLeft + headerWidth - this.containerTarget.clientWidth + padding;
+
+    // Clamp to valid range
+    const maxScroll = Math.max(
+      0,
+      this.containerTarget.scrollWidth - this.containerTarget.clientWidth,
+    );
+    const clampedScroll = Math.max(0, Math.min(maxScroll, targetScrollLeft));
+
+    // Apply scroll - this will trigger scroll events, but we'll render immediately after
+    this.containerTarget.scrollLeft = clampedScroll;
+
+    // Force re-render at new scroll position by clearing cached visible range
+    // Use requestAnimationFrame to ensure the scroll position has been applied
+    requestAnimationFrame(() => {
+      this.lastFirstVisible = undefined;
+      this.lastLastVisible = undefined;
+      this.render();
+    });
+  }
+
+  /**
+   * Main render method - updates visible columns based on scroll position
+   */
+  render() {
+    if (!this.isInitialized) return;
+
+    // Re-measure if needed (e.g. if initialized while hidden)
+    if (this.baseColumnsWidth === 0 || this.baseColumnsWidth === undefined) {
+      this.handleResize();
+    }
+    if (this.baseColumnsWidth === 0) return;
+
+    // Capture current focus if it's in the grid and we don't have a pending focus
+    if (this.pendingFocusRow === null || this.pendingFocusCol === null) {
+      const activeElement = document.activeElement;
+      const tableElement = this.element.querySelector("table");
+      if (activeElement && tableElement?.contains?.(activeElement)) {
+        const row = activeElement.closest("[aria-rowindex]");
+        const cell = activeElement.closest("[aria-colindex]");
+        if (row && cell) {
+          this.pendingFocusRow = parseInt(row.getAttribute("aria-rowindex"));
+          this.pendingFocusCol = parseInt(cell.getAttribute("aria-colindex"));
+        }
+      }
+    }
+
+    const stickyColumnsWidth = this.baseColumnWidths
+      .slice(0, this.numStickyColumns)
+      .reduce((a, b) => a + b, 0);
+
+    const scrollLeft = this.containerTarget.scrollLeft;
+    const metadataAreaScrollLeft = Math.max(
+      0,
+      scrollLeft + stickyColumnsWidth - this.baseColumnsWidth,
+    );
+
+    // Use cumulative width calculation instead of fixed width division
+    let firstVisibleMetadataColumn = Math.max(
+      0,
+      this.geometry.findColumnAtPosition(metadataAreaScrollLeft) -
+        this.constructor.constants.BUFFER_COLUMNS,
+    );
+
+    // Calculate how many columns fit in viewport using variable widths
+    // Always use the full container width because the container is scrollable
+    // and metadata columns can be horizontally scrolled into view
+    let visibleWidth = 0;
+    let visibleColumnCount = 0;
+
+    for (
+      let i = firstVisibleMetadataColumn;
+      i < this.metadataColumnWidths.length;
+      i++
+    ) {
+      visibleWidth += this.metadataColumnWidths[i];
+      visibleColumnCount++;
+      if (visibleWidth >= this.containerTarget.clientWidth) break;
+    }
+
+    visibleColumnCount += 2 * this.constructor.constants.BUFFER_COLUMNS; // Add buffer on both sides
+
+    let lastVisibleMetadataColumn = Math.min(
+      this.numMetadataColumns,
+      firstVisibleMetadataColumn + visibleColumnCount,
+    );
+
+    const activeEditingColumnIndex = this.getActiveEditingColumnIndex();
+    if (activeEditingColumnIndex !== null && activeEditingColumnIndex >= 0) {
+      if (activeEditingColumnIndex < firstVisibleMetadataColumn) {
+        firstVisibleMetadataColumn = activeEditingColumnIndex;
+      }
+      if (activeEditingColumnIndex >= lastVisibleMetadataColumn) {
+        lastVisibleMetadataColumn = Math.min(
+          this.numMetadataColumns,
+          activeEditingColumnIndex + 1,
+        );
+      }
+    }
+
+    // Store the global visible range for quick early exit
+    const globalRangeChanged =
+      this.lastFirstVisible !== firstVisibleMetadataColumn ||
+      this.lastLastVisible !== lastVisibleMetadataColumn;
+
+    this.lastFirstVisible = firstVisibleMetadataColumn;
+    this.lastLastVisible = lastVisibleMetadataColumn;
+
+    // --- Update Header Sticky Positioning ---
+    // Headers are rendered server-side, just update sticky positioning for base columns
+    this.baseHeaderElements.forEach((th, idx) => {
+      this.stickyManager.applyToHeaderCell(th, idx);
+    });
+
+    // --- Render Body Rows ---
+    // Check if templateContainer is available
+    if (!this.hasTemplateContainerTarget) {
+      // Dispatch error event for monitoring
+      this.element.dispatchEvent(
+        new CustomEvent("virtual-scroll:error", {
+          detail: { message: "Template container not found" },
+        }),
+      );
+    }
+
+    this.rowTargets.forEach((row, rowIndex) => {
+      const rowId = row.dataset.sampleId;
+
+      // Check if this row's visible range changed
+      const cachedRange = this.rowVisibleRanges.get(rowId);
+      const rangeChanged =
+        !cachedRange ||
+        cachedRange.first !== firstVisibleMetadataColumn ||
+        cachedRange.last !== lastVisibleMetadataColumn;
+
+      // Skip this row if visible range unchanged
+      if (!rangeChanged && !globalRangeChanged) {
+        return;
+      }
+
+      // Update cached range
+      this.rowVisibleRanges.set(rowId, {
+        first: firstVisibleMetadataColumn,
+        last: lastVisibleMetadataColumn,
+      });
+
+      // Render cells using VirtualScrollCellRenderer utility
+      this.cellRenderer.renderRowCells(row, {
+        firstVisible: firstVisibleMetadataColumn,
+        lastVisible: lastVisibleMetadataColumn,
+        templateContainer: this.templateContainerTarget,
+      });
+
+      // Apply sticky styles to base columns
+      this.applyStickyStylesToRow(row);
+    });
+
+    // Ensure a single focus target is available after render
+    this.applyRovingTabindex(this.pendingFocusRow, this.pendingFocusCol);
+
+    // If a pending focus target exists, set focus explicitly after tabindex reset
+    if (
+      Number.isInteger(this.pendingFocusRow) &&
+      Number.isInteger(this.pendingFocusCol)
+    ) {
+      const tableElement = this.element.querySelector("table");
+      const focusRoot = tableElement || this.bodyTarget;
+      const row = focusRoot?.querySelector?.(
+        `[aria-rowindex="${this.pendingFocusRow}"]`,
+      );
+      const cell = row?.querySelector?.(
+        `[aria-colindex="${this.pendingFocusCol}"]`,
+      );
+      if (cell) {
+        cell.tabIndex = 0;
+        cell.focus();
+        if (this.keyboardNavigator) {
+          this.keyboardNavigator.focusedRowIndex = this.pendingFocusRow;
+          this.keyboardNavigator.focusedColIndex = this.pendingFocusCol;
+        }
+        // Only clear pending focus when cell is successfully found and focused
+        this.pendingFocusRow = null;
+        this.pendingFocusCol = null;
+      }
+      // If cell not found, keep pending focus for next render/retry
+    }
+  }
+
+  getActiveEditingColumnIndex() {
+    // Find cell currently being edited in the body
+    const markedEditingCell = this.bodyTarget.querySelector?.(
+      '[data-editing="true"]',
+    );
+    const editingCell =
+      markedEditingCell || document.activeElement?.closest?.("[data-field-id]");
+
+    if (!editingCell || !this.bodyTarget.contains(editingCell)) return null;
+
+    const fieldId = editingCell.dataset.fieldId;
+    if (!fieldId) return null;
+
+    const columnIndex = this.metadataFieldIndex?.get(fieldId);
+    return columnIndex ?? null;
+  }
+
+  /**
+   * Apply sticky positioning styles to base columns in a row
+   * Delegates to StickyColumnManager utility
+   * @param {HTMLElement} row - The row element
+   */
+  applyStickyStylesToRow(row) {
+    const children = Array.from(row.children).filter(
+      (c) => c.tagName.toLowerCase() !== "template",
+    );
+
+    // Apply sticky styles to all base columns (sticky and non-sticky)
+    for (let i = 0; i < this.numBaseColumns; i++) {
+      const child = children[i];
+      if (!child) continue;
+      this.stickyManager.applyToBodyCell(child, i);
+    }
+  }
+
+  /**
+   * Sum width of sticky columns for scroll calculations
+   * Delegates to StickyColumnManager utility
+   */
+  stickyColumnsWidth() {
+    return this.stickyManager?.getTotalWidth() ?? 0;
+  }
+
+  /**
+   * Convert 1-based aria-colindex to 0-based metadata column index
+   * @param {number} colIndex - 1-based aria-colindex
+   * @returns {number} 0-based metadata column index
+   */
+  getMetadataIndexFromColIndex(colIndex) {
+    return colIndex - this.numBaseColumns - 1;
+  }
+
+  /**
+   * Check if an aria-colindex column is within the current render range
+   * @param {number} colIndex - 1-based aria-colindex
+   * @returns {boolean} True if column is rendered
+   */
+  isColumnInRenderRange(colIndex) {
+    if (colIndex <= this.numBaseColumns) {
+      return true; // Base columns are always rendered
+    }
+    const metadataIndex = this.getMetadataIndexFromColIndex(colIndex);
+    return (
+      this.lastFirstVisible !== undefined &&
+      this.lastLastVisible !== undefined &&
+      metadataIndex >= this.lastFirstVisible &&
+      metadataIndex < this.lastLastVisible
+    );
+  }
+
+  /**
+   * Ensure a metadata column is rendered and scrolled into view for focus
+   * @param {number} colIndex 1-based column index across all columns
+   * @returns {boolean|undefined} true if scroll/render was triggered, false if no scroll needed, undefined for early exits
+   */
+  ensureMetadataColumnVisible(colIndex) {
+    if (colIndex <= this.numBaseColumns) return;
+    const metadataIndex = colIndex - this.numBaseColumns - 1;
+    if (metadataIndex < 0 || metadataIndex >= this.numMetadataColumns) return;
+
+    // Check if column is in current render range (not just scroll visible)
+    const isInRenderRange = this.isColumnInRenderRange(colIndex);
+
+    const stickyWidth = this.stickyColumnsWidth();
+    const colLeft = this.geometry.cumulativeWidthTo(metadataIndex);
+    const colWidth = this.metadataColumnWidths[metadataIndex];
+
+    const containerWidth = this.containerTarget.clientWidth;
+    const currentScrollLeft = this.containerTarget.scrollLeft;
+
+    // Calculate absolute positions in the scrollable container
+    const absoluteColLeft = this.baseColumnsWidth + colLeft;
+    const absoluteColRight = absoluteColLeft + colWidth;
+
+    // Calculate currently visible area (accounting for sticky columns)
+    const visibleStart = currentScrollLeft + stickyWidth;
+    const visibleEnd = currentScrollLeft + containerWidth;
+
+    const isScrollVisible =
+      absoluteColLeft >= visibleStart && absoluteColRight <= visibleEnd;
+
+    // Only return early if BOTH in render range AND scroll visible
+    if (isInRenderRange && isScrollVisible) {
+      // Return false: column is already visible; no scroll or re-render is performed.
+      return false;
+    }
+
+    // If in render range but not scroll visible, we still need to scroll
+    // If scroll visible but not in render range, we need to re-render
+
+    // Calculate target scroll to make it visible
+    let targetScrollLeft = currentScrollLeft;
+
+    if (absoluteColLeft < visibleStart) {
+      // Scroll left to show left edge
+      targetScrollLeft = absoluteColLeft - stickyWidth;
+    } else if (absoluteColRight > visibleEnd) {
+      // Scroll right to show right edge
+      targetScrollLeft = absoluteColRight - containerWidth;
+    }
+
+    const maxScroll = Math.max(
+      0,
+      this.containerTarget.scrollWidth - this.containerTarget.clientWidth,
+    );
+    const clamped = Math.max(0, Math.min(maxScroll, targetScrollLeft));
+
+    if (Math.abs(clamped - currentScrollLeft) > 1) {
+      this.containerTarget.scrollLeft = clamped;
+
+      // Force re-render so the column is materialized
+      this.lastFirstVisible = undefined;
+      this.lastLastVisible = undefined;
+      this.render();
+      return true;
+    }
+    return false;
+  }
+
+  async ensureCellReady(rowIndex, colIndex) {
+    // Try a few frames to allow rendering/placeholders to appear
+    const maxTries = this.constructor.constants.MAX_CELL_READY_RETRIES;
+
+    for (let i = 0; i < maxTries; i += 1) {
+      // Remember intended focus so post-render roving tabindex can honor it
+      // Reset on each iteration because render() clears it
+      this.pendingFocusRow = rowIndex;
+      this.pendingFocusCol = colIndex;
+
+      // Force scroll to the far left when moving to the first column (Home/Ctrl+Home)
+      if (colIndex === 1 && this.containerTarget.scrollLeft !== 0) {
+        this.containerTarget.scrollLeft = 0;
+        this.lastFirstVisible = undefined;
+        this.lastLastVisible = undefined;
+      }
+
+      if (colIndex > this.numBaseColumns) {
+        const rendered = this.ensureMetadataColumnVisible(colIndex);
+        if (!rendered) {
+          this.render();
+        }
+      } else {
+        this.render();
+      }
+
+      // Check immediately if the cell exists after render
+      // This avoids an unnecessary frame delay which can cause focus loss
+      let row = this.bodyTarget?.querySelector?.(
+        `[aria-rowindex="${rowIndex}"]`,
+      );
+      let cell = row?.querySelector?.(`[aria-colindex="${colIndex}"]`);
+
+      if (cell) {
+        // Ensure it's focused (render might have done it, but to be safe)
+        cell.focus();
+        return true;
+      }
+
+      // Give the DOM a frame to materialize
+      // Intentional sequential await - we need to wait for each frame before retrying
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      row = this.bodyTarget?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
+      if (!row) continue;
+      cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
+      if (cell) {
+        cell.focus();
+        return true;
+      }
+    }
+
+    // If we exhausted retries, keep pending focus so fallback logic can still try
+    return false;
+  }
+
+  /**
+   * Reset all visible gridcells to tabindex=-1 and set a single active cell to tabindex=0
+   * Delegates to GridKeyboardNavigator utility
+   */
+  applyRovingTabindex(fallbackRowIndex, fallbackColIndex) {
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.applyRovingTabindex(
+        fallbackRowIndex,
+        fallbackColIndex,
+      );
+    }
+  }
+
+  /**
+   * Handle keyboard navigation per APG grid pattern (arrow keys, Home/End, PageUp/PageDown)
+   * Delegates to GridKeyboardNavigator utility
+   */
+  handleKeydown(event) {
+    this.rememberPendingFocusFromSortKeydown(event);
+
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.handleKeydown(event);
+    }
+  }
+
+  // rememberPendingFocusFromSortKeydown moved to focusMixin
+
+  handleDblClick(event) {
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.handleDblClick(event);
+    }
+  }
+
+  totalColumnCount() {
+    return (this.numBaseColumns || 0) + (this.numMetadataColumns || 0);
+  }
+}
+
+Object.assign(
+  VirtualScrollController.prototype,
+  focusMixin,
+  deferredTemplateFieldsMixin,
+);
+
+export default VirtualScrollController;

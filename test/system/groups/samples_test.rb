@@ -8,6 +8,7 @@ module Groups
 
     def setup
       Flipper.enable(:advanced_search_with_auto_complete)
+      Flipper.enable(:virtualized_samples_table)
 
       @user = users(:john_doe)
       login_as @user
@@ -223,7 +224,10 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_text 'Samples: 13'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '13 samples'
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
       assert_selector 'table tbody tr', count: 13
 
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
@@ -240,21 +244,21 @@ module Groups
       # they are ordered as expected against one another.
       assert_selector 'table tbody tr', count: 20
 
-      click_on I18n.t(:'samples.table_component.puid')
+      click_on I18n.t(:'components.samples.virtualized_table_component.puid')
       assert_selector 'table thead th:first-child svg.arrow-up-icon'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] < puids[n + 1]
       end
 
-      click_on I18n.t(:'samples.table_component.puid')
+      click_on I18n.t(:'components.samples.virtualized_table_component.puid')
       assert_selector 'table thead th:first-child svg.arrow-down-icon'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
-      click_on I18n.t(:'samples.table_component.name')
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
@@ -293,7 +297,10 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_text 'Samples: 13'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '13 samples'
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
 
       assert_selector 'table tbody tr', count: 13
 
@@ -301,13 +308,13 @@ module Groups
       assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
 
       assert_no_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      click_on I18n.t(:'samples.table_component.name')
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       assert_selector 'tbody tr:first-child th', text: @sample1.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
-      click_on I18n.t(:'samples.table_component.name')
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
 
       assert_selector 'tbody tr:last-child th', text: @sample1.puid
@@ -333,11 +340,12 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                                       locale: @user.locale))
-      assert_selector 'table tbody tr', count: 1
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
-      assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
-
-      click_on I18n.t(:'samples.table_component.name')
+      within('table tbody') do
+        assert_selector 'tr', count: 1
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
@@ -412,7 +420,7 @@ module Groups
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
       assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
 
-      click_on I18n.t(:'samples.table_component.name')
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
 
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
@@ -455,7 +463,7 @@ module Groups
 
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
 
-      click_on I18n.t(:'samples.table_component.name')
+      click_on I18n.t(:'components.samples.virtualized_table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
@@ -507,12 +515,14 @@ module Groups
 
       assert_selector 'table thead tr th', count: 10
 
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_no_selector 'table tbody tr:first-child td:nth-child(8)[contenteditable="true"]'
-      assert_selector 'table tbody tr:first-child td:nth-child(8)', text: 'value1'
-      assert_no_selector 'table tbody tr:first-child td:nth-child(9)[contenteditable="true"]'
-      assert_selector 'table tbody tr:first-child td:nth-child(9)', text: 'value2'
-      assert_selector 'table tbody tr:first-child td:nth-child(10)[contenteditable="true"]', text: ''
+      within('table tbody tr:first-child') do
+        assert_text @sample30.name
+        assert_no_selector 'td:nth-child(8)[data-editable="true"]'
+        assert_selector 'td:nth-child(8)', text: 'value1'
+        assert_no_selector 'td:nth-child(9)[data-editable="true"]'
+        assert_selector 'td:nth-child(9)', text: 'value2'
+        assert_selector 'td:nth-child(10)[data-editable="true"]', text: ''
+      end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.none')
@@ -710,32 +720,38 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
-
-      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
-      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
-
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
-
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "26 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
       click_button I18n.t('common.controls.select_all')
-
-      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
-
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
-
-      uncheck "checkbox_sample_#{@sample1.id}"
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '25'
-
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "26 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '26'
+      end
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "26 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '25'
+      end
       click_button I18n.t('common.controls.select_all')
-
-      assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
-      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
-
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
-      assert_selector 'strong[data-selection-target="selected"]', text: '26'
-
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "26 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '26'
+      end
       click_button I18n.t('common.controls.deselect_all')
 
       assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
@@ -750,28 +766,28 @@ module Groups
       assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       check 'select-page'
 
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '20'
 
       uncheck "checkbox_sample_#{@sample1.id}"
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '19'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '19'
 
       check 'select-page'
 
       assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '20'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '20'
 
       uncheck 'select-page'
 
@@ -787,8 +803,8 @@ module Groups
       assert_selector 'table tbody input[name="sample_ids[]"]', count: 20
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 0
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
@@ -797,7 +813,7 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_selector 'table tfoot', text: 'Samples: 1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '1 samples'
       assert_selector 'table tbody tr', count: 1
 
       assert_selector 'table tbody input[name="sample_ids[]"]', count: 1
@@ -806,8 +822,8 @@ module Groups
       click_button I18n.t('common.controls.select_all')
 
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 1
-      assert_selector 'table tfoot', text: 'Samples: 1'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '1 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '1'
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
       find('input[data-test-selector="search-field-input"]').send_keys(:return)
@@ -816,8 +832,8 @@ module Groups
         assert_no_selector 'div[data-test-selector="spinner"]'
       end
 
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
+      assert_selector '[data-testid="samples-selection-summary"]', text: '26 samples'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
     end
 
@@ -1247,14 +1263,18 @@ module Groups
       ### SETUP END ###
 
       ### ACTIONS START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      find('table tbody tr:first-child td:nth-child(7)').click
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('value2')
-      find('table tbody tr:first-child td:nth-child(7)').send_keys(:return)
-      ### ACTIONS END ###
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[data-editable="true"]'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return) # Activate edit mode with Enter
 
-      ### VERIFY START ###
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value2'
+        find('td:nth-child(7)').send_keys('value2')
+        find('td:nth-child(7)').send_keys(:return)
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_selector 'td:nth-child(7)', text: 'value2'
+      end
 
       assert_text I18n.t('samples.editable_cell.update_success')
 
@@ -1263,6 +1283,19 @@ module Groups
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
       assert_no_selector 'dialog button',
                          text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+
+      # Regression: ensure the same cell remains editable after the Turbo Stream update
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[aria-colindex="7"]'
+        assert_selector 'td:nth-child(7)[data-editable="true"]', text: 'value2'
+        find('td:nth-child(7)').click
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        find('td:nth-child(7)').send_keys('value3')
+        find('td:nth-child(7)').native.send_keys(:return)
+
+        assert_selector 'td:nth-child(7)', text: 'value3'
+      end
       ### VERIFY END ###
     end
 
@@ -1836,8 +1869,8 @@ module Groups
 
       assert_selector 'tbody input[name="sample_ids[]"]:checked', count: 20
 
-      assert_selector 'tfoot', text: 'Samples: 26'
-      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '26'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 26'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '26'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -1863,8 +1896,8 @@ module Groups
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
 
-      assert_selector 'tfoot', text: 'Samples: 26'
-      assert_selector 'tfoot strong[data-selection-target="selected"]', text: '26'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 26'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '26'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -1918,8 +1951,10 @@ module Groups
       ### ACTIONS START ###
       # select first sample
       check "checkbox_sample_#{@sample1.id}"
-      assert_selector 'table tfoot', text: 'Samples: 26 Selected: 1'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '26 samples'
+        assert_selector '[data-selection-target="selected"]', text: '1'
+      end
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -2104,7 +2139,7 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
-      click_on I18n.t(:'samples.table_component.puid')
+      click_on I18n.t(:'components.samples.virtualized_table_component.puid')
 
       assert_selector "tr[id='#{dom_id(sample1)}']"
       assert_selector "tr[id='#{dom_id(sample2)}']"
@@ -2226,8 +2261,10 @@ module Groups
       check "checkbox_sample_#{@sample1.id}"
       check "checkbox_sample_#{@sample2.id}"
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 2
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '2'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text '26 samples'
+        assert_selector '[data-selection-target="selected"]', text: '2'
+      end
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
@@ -2341,8 +2378,8 @@ module Groups
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
-      assert_selector 'table tfoot', text: 'Samples: 26'
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+      assert_selector '[data-testid="samples-selection-summary"]', text: ' 26'
+      assert_selector '[data-testid="samples-selection-summary"] [data-selection-target="selected"]', text: '26'
 
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
@@ -2447,8 +2484,10 @@ module Groups
       check "checkbox_sample_#{@sample1.id}"
 
       # verify 1 sample selected in originating project
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "26 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '1'
+      end
 
       # clone sample
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -2477,8 +2516,10 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify no samples selected anymore
-      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 27"
-      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '0'
+      within '[data-testid="samples-selection-summary"]' do
+        assert_text "27 #{I18n.t('components.samples.virtualized_table_component.counts.samples').downcase}"
+        assert_selector '[data-selection-target="selected"]', text: '0'
+      end
       ### VERIFY END ###
     end
 
