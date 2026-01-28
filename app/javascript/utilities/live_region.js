@@ -43,7 +43,10 @@ export function announce(
   if (!message) return;
 
   const region = element || findOrCreateGlobalRegion(politeness);
-  region.textContent = message;
+  clearLiveRegion(region);
+  requestAnimationFrame(() => {
+    region.textContent = message;
+  });
 }
 
 /**
@@ -54,7 +57,11 @@ export function announce(
  */
 export function findOrCreateGlobalRegion(politeness = "polite") {
   const existing = document.querySelector(`#${GLOBAL_LIVE_REGION_ID}`);
-  if (existing) return existing;
+  if (existing) {
+    existing.setAttribute("role", "status");
+    existing.setAttribute("aria-live", politeness);
+    return existing;
+  }
 
   return createLiveRegion({ id: GLOBAL_LIVE_REGION_ID, politeness });
 }
@@ -71,7 +78,7 @@ export function findOrCreateGlobalRegion(politeness = "polite") {
 export function createLiveRegion({
   id = GLOBAL_LIVE_REGION_ID,
   politeness = "polite",
-  atomic = true,
+  atomic = false,
 } = {}) {
   const region = document.createElement("div");
   region.id = id;
