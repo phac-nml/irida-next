@@ -8,6 +8,17 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["status"];
 
+  connect() {
+    if (!this.hasStatusTarget) {
+      const fallback = document.createElement("span");
+      fallback.setAttribute("role", "status");
+      fallback.setAttribute("aria-live", "polite");
+      fallback.classList.add("sr-only");
+      fallback.dataset.announcementTarget = "status";
+      this.element.appendChild(fallback);
+    }
+  }
+
   announce(message) {
     if (!message || !this.hasStatusTarget) return;
 

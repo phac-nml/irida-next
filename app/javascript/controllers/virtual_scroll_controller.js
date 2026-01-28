@@ -8,6 +8,7 @@ import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_rendere
 import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
 import { focusMixin } from "controllers/virtual_scroll/focus";
 import { deferredTemplateFieldsMixin } from "controllers/virtual_scroll/deferred_template_fields";
+import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range";
 
 /**
  * VirtualScrollController
@@ -698,48 +699,20 @@ class VirtualScrollController extends Controller {
       scrollLeft + stickyColumnsWidth - this.baseColumnsWidth,
     );
 
-    // Use cumulative width calculation instead of fixed width division
-    let firstVisibleMetadataColumn = Math.max(
-      0,
-      this.geometry.findColumnAtPosition(metadataAreaScrollLeft) -
-        this.constructor.constants.BUFFER_COLUMNS,
-    );
-
-    // Calculate how many columns fit in viewport using variable widths
-    // Always use the full container width because the container is scrollable
-    // and metadata columns can be horizontally scrolled into view
-    let visibleWidth = 0;
-    let visibleColumnCount = 0;
-
-    for (
-      let i = firstVisibleMetadataColumn;
-      i < this.metadataColumnWidths.length;
-      i++
-    ) {
-      visibleWidth += this.metadataColumnWidths[i];
-      visibleColumnCount++;
-      if (visibleWidth >= this.containerTarget.clientWidth) break;
-    }
-
-    visibleColumnCount += 2 * this.constructor.constants.BUFFER_COLUMNS; // Add buffer on both sides
-
-    let lastVisibleMetadataColumn = Math.min(
-      this.numMetadataColumns,
-      firstVisibleMetadataColumn + visibleColumnCount,
-    );
-
     const activeEditingColumnIndex = this.getActiveEditingColumnIndex();
-    if (activeEditingColumnIndex !== null && activeEditingColumnIndex >= 0) {
-      if (activeEditingColumnIndex < firstVisibleMetadataColumn) {
-        firstVisibleMetadataColumn = activeEditingColumnIndex;
-      }
-      if (activeEditingColumnIndex >= lastVisibleMetadataColumn) {
-        lastVisibleMetadataColumn = Math.min(
-          this.numMetadataColumns,
-          activeEditingColumnIndex + 1,
-        );
-      }
-    }
+
+    const {
+      firstVisible: firstVisibleMetadataColumn,
+      lastVisible: lastVisibleMetadataColumn,
+    } = calculateVisibleRange({
+      geometry: this.geometry,
+      metadataColumnWidths: this.metadataColumnWidths,
+      metadataAreaScrollLeft,
+      containerWidth: this.containerTarget.clientWidth,
+      bufferColumns: this.constructor.constants.BUFFER_COLUMNS,
+      numMetadataColumns: this.numMetadataColumns,
+      activeEditingColumnIndex,
+    });
 
     // Store the global visible range for quick early exit
     const globalRangeChanged =
