@@ -52,8 +52,8 @@ module Viral
         within 'dialog' do
           assert_selector '.dialog--header'
 
-          # verify the dialog does not have a close button
-          assert_no_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+          # verify the dialog does not have a visible close button
+          assert_button I18n.t('components.dialog.close'), visible: :hidden
         end
       end
     end

@@ -4,13 +4,19 @@ import { createFocusTrap } from "focus-trap";
 // persistent dialog state between connect/disconnects
 const savedDialogStates = new Map();
 export default class extends Controller {
-  static targets = ["dialog", "trigger"];
+  static targets = ["dialog", "trigger", "closeButton"];
   static values = { open: Boolean };
   #focusTrap = null;
   #trigger = null;
+  #closable = true;
 
   triggerTargetConnected() {
     this.#trigger = this.triggerTarget;
+  }
+
+  closeButtonTargetConnected() {
+    // set initial closable state based on presence of close button
+    this.#closable = !this.closeButtonTarget.hasAttribute("hidden");
   }
 
   connect() {
@@ -64,7 +70,7 @@ export default class extends Controller {
   }
 
   handleEsc(event) {
-    event.preventDefault();
+    if (!this.#closable) event.preventDefault();
   }
 
   restoreFocusState() {
@@ -77,5 +83,15 @@ export default class extends Controller {
 
   updateTrigger(button) {
     this.#trigger = button;
+  }
+
+  setClosable({ params: { closable } }) {
+    if (closable) {
+      this.#closable = true;
+      this.closeButtonTarget.removeAttribute("hidden");
+    } else {
+      this.#closable = false;
+      this.closeButtonTarget.setAttribute("hidden", "true");
+    }
   }
 }

@@ -2,17 +2,16 @@
   <h1 class="dialog--title">
     <%= title %>
   </h1>
-  <% if closable %>
-    <button
-      type="button"
-      class="dialog--close cursor-pointer"
-      data-action="
-        <%= system_arguments[:close_action]%>
-        click->viral--dialog#close
-      "
-      aria-label="<%= t(:"components.dialog.close") %>"
-    >
-      <%= pathogen_icon(:x, size: :sm) %>
-    </button>
+  <%= tag.button(
+    class: "dialog--close cursor-pointer",
+    type: "button",
+    hidden: !@closable,
+    data: {
+      action: [system_arguments[:close_action], "click->viral--dialog#close"].compact.join(" "),
+      "viral--dialog-target": "closeButton"
+    },
+    aria: { label: t(:"components.dialog.close") }
+  ) do %>
+    <%= pathogen_icon(:x, size: :sm) %>
   <% end %>
 <% end %>
