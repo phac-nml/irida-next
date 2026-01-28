@@ -4,6 +4,7 @@
   </h1>
   <%= tag.button(
     class: "dialog--close cursor-pointer",
+    type: "button",
     hidden: !@closable,
     data: {
       action: [system_arguments[:close_action], "click->viral--dialog#close"].compact.join(" "),
