@@ -52,14 +52,23 @@ export function announce(
 /**
  * Finds an existing global live region or creates one if it doesn't exist.
  *
+ * Note: When reusing an existing element, we preserve its existing ARIA attributes
+ * to avoid unintentionally downgrading assertive regions to polite.
+ *
  * @param {string} politeness - ARIA live politeness level for newly created regions
  * @returns {HTMLElement} The live region element
  */
 export function findOrCreateGlobalRegion(politeness = "polite") {
-  const existing = document.querySelector(`#${GLOBAL_LIVE_REGION_ID}`);
+  const existing = document.getElementById(GLOBAL_LIVE_REGION_ID);
   if (existing) {
-    existing.setAttribute("role", "status");
-    existing.setAttribute("aria-live", politeness);
+    // Only set role if not already present to preserve existing configuration
+    if (!existing.getAttribute("role")) {
+      existing.setAttribute("role", "status");
+    }
+    // Only set aria-live if not already present to avoid downgrading assertive to polite
+    if (!existing.getAttribute("aria-live")) {
+      existing.setAttribute("aria-live", politeness);
+    }
     return existing;
   }
 
@@ -69,18 +78,28 @@ export function findOrCreateGlobalRegion(politeness = "polite") {
 /**
  * Creates a new ARIA live region element and appends it to the document body.
  *
+ * If an element with the specified ID already exists, returns that element
+ * instead of creating a duplicate (invalid HTML).
+ *
  * @param {Object} options - Configuration options
  * @param {string} options.id - The ID for the live region element
  * @param {string} options.politeness - ARIA live politeness level: "polite" or "assertive"
  * @param {boolean} options.atomic - Whether the region should be announced as a whole
- * @returns {HTMLElement} The created live region element
+ * @returns {HTMLElement} The created or existing live region element
  */
 export function createLiveRegion({
   id = GLOBAL_LIVE_REGION_ID,
   politeness = "polite",
   atomic = false,
 } = {}) {
-  const region = document.createElement("div");
+  // Prevent duplicate IDs (invalid HTML) by returning existing element
+  const existing = document.getElementById(id);
+  if (existing) {
+    return existing;
+  }
+
+  // Use span for consistency with LiveRegionComponent (both are inline, sr-only content)
+  const region = document.createElement("span");
   region.id = id;
   region.setAttribute("role", "status");
   region.setAttribute("aria-live", politeness);
@@ -100,7 +119,7 @@ export function createLiveRegion({
  * @returns {void}
  */
 export function clearLiveRegion(element = null) {
-  const region = element || document.querySelector(`#${GLOBAL_LIVE_REGION_ID}`);
+  const region = element || document.getElementById(GLOBAL_LIVE_REGION_ID);
   if (region) {
     region.textContent = "";
   }
