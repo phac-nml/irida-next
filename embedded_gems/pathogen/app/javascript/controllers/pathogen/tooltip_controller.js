@@ -1,6 +1,76 @@
 import { Controller } from "@hotwired/stimulus";
 
 /**
+ * Module-level shared event handlers for performance.
+ * Only one set of global listeners for all tooltip instances.
+ * Uses a class to support private methods (ES2022).
+ */
+class TooltipRegistry {
+  controllers = new Set();
+  initialized = false;
+  resizeRAF = null;
+
+  register(controller) {
+    this.controllers.add(controller);
+    if (!this.initialized) {
+      this.#setupGlobalListeners();
+      this.initialized = true;
+    }
+  }
+
+  unregister(controller) {
+    this.controllers.delete(controller);
+    if (this.controllers.size === 0 && this.initialized) {
+      this.#teardownGlobalListeners();
+      this.initialized = false;
+    }
+  }
+
+  #setupGlobalListeners() {
+    this.handleKeydown = (event) => {
+      if (event.key === "Escape") {
+        this.controllers.forEach((controller) =>
+          controller.handleEscape(event),
+        );
+      }
+    };
+
+    this.handleTouchOutside = (event) => {
+      this.controllers.forEach((controller) =>
+        controller.handleTouchOutside(event),
+      );
+    };
+
+    this.handleResize = () => {
+      // Debounce resize with RAF
+      if (this.resizeRAF) {
+        cancelAnimationFrame(this.resizeRAF);
+      }
+      this.resizeRAF = requestAnimationFrame(() => {
+        this.controllers.forEach((controller) => controller.handleResize());
+        this.resizeRAF = null;
+      });
+    };
+
+    document.addEventListener("keydown", this.handleKeydown);
+    document.addEventListener("touchstart", this.handleTouchOutside);
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  #teardownGlobalListeners() {
+    document.removeEventListener("keydown", this.handleKeydown);
+    document.removeEventListener("touchstart", this.handleTouchOutside);
+    window.removeEventListener("resize", this.handleResize);
+    if (this.resizeRAF) {
+      cancelAnimationFrame(this.resizeRAF);
+      this.resizeRAF = null;
+    }
+  }
+}
+
+const tooltipRegistry = new TooltipRegistry();
+
+/**
  * Pathogen::Tooltip Stimulus Controller
  *
  * Implements tooltip positioning using JavaScript for broad browser compatibility.
@@ -32,13 +102,13 @@ import { Controller } from "@hotwired/stimulus";
  *      aria-describedby="tooltip-id">
  *     Hover or focus me
  *   </a>
- *   <div id="tooltip-id" data-pathogen--tooltip-target="target" role="tooltip">
+ *   <div id="tooltip-id" data-pathogen--tooltip-target="tooltip" role="tooltip">
  *     Tooltip content
  *   </div>
  * </div>
  */
 export default class extends Controller {
-  static targets = ["trigger", "target"];
+  static targets = ["trigger", "tooltip"];
   static values = {
     spacing: { type: Number, default: 8 },
     viewportPadding: { type: Number, default: 8 },
@@ -51,40 +121,24 @@ export default class extends Controller {
     // Store touch dismiss timeout for cleanup
     this.touchDismissTimeout = null;
     this.touchPrimed = false;
+    this.touchStarted = false;
+    this.escapeDismissed = false;
 
     // Check for reduced motion preference
     this.prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    // Cache viewport dimensions and update on resize for performance
+    // Cache viewport dimensions for performance
     this.viewportCache = this.#getViewportDimensions();
-    this.boundHandleResize = this.#handleResize.bind(this);
-    window.addEventListener("resize", this.boundHandleResize);
-    this.resizeRAF = null;
 
-    // Add Escape key handler for keyboard dismissal
-    this.boundHandleEscape = this.handleEscape.bind(this);
-    document.addEventListener("keydown", this.boundHandleEscape);
-
-    // Add touch outside handler for mobile dismissal
-    this.boundHandleTouchOutside = this.handleTouchOutside.bind(this);
-    document.addEventListener("touchstart", this.boundHandleTouchOutside);
+    // Register with shared event handler registry (single set of global listeners)
+    tooltipRegistry.register(this);
   }
 
   disconnect() {
-    // Clean up Escape key listener
-    document.removeEventListener("keydown", this.boundHandleEscape);
-
-    // Clean up touch outside listener
-    document.removeEventListener("touchstart", this.boundHandleTouchOutside);
-
-    // Clean up resize listener
-    window.removeEventListener("resize", this.boundHandleResize);
-    if (this.resizeRAF) {
-      cancelAnimationFrame(this.resizeRAF);
-      this.resizeRAF = null;
-    }
+    // Unregister from shared event handler registry
+    tooltipRegistry.unregister(this);
 
     // Clean up any pending touch dismiss timeout
     if (this.touchDismissTimeout) {
@@ -108,12 +162,13 @@ export default class extends Controller {
       "focusin->pathogen--tooltip#show",
       "focusout->pathogen--tooltip#hide",
       "touchstart->pathogen--tooltip#handleTouch",
+      "click->pathogen--tooltip#handleClick",
     ];
 
     this.#addEventActions(element, actions);
   }
 
-  targetTargetConnected(element) {
+  tooltipTargetConnected(element) {
     // Add mouse event handlers to tooltip itself to keep it open when cursor
     // moves from trigger to tooltip (W3C ARIA APG compliance)
     const actions = [
@@ -137,24 +192,30 @@ export default class extends Controller {
    * Respects prefers-reduced-motion and hides other visible tooltips.
    */
   show() {
-    if (!this.hasTargetTarget) return;
+    if (!this.hasTooltipTarget) return;
+
+    // Don't show if just dismissed by Escape (prevents re-show when focus returns)
+    if (this.escapeDismissed) return;
 
     // Hide any other visible tooltips to prevent multiple simultaneous tooltips
     this.#hideOtherTooltips();
 
+    // Update aria-hidden for screen readers
+    this.tooltipTarget.setAttribute("aria-hidden", "false");
+
     if (this.prefersReducedMotion) {
       // Skip scale animation for users who prefer reduced motion
-      this.targetTarget.classList.remove("invisible", "opacity-0");
-      this.targetTarget.classList.add("visible", "opacity-100");
+      this.tooltipTarget.classList.remove("invisible", "opacity-0");
+      this.tooltipTarget.classList.add("visible", "opacity-100");
     } else {
       // Temporarily make tooltip visible but transparent for accurate measurement
       // This ensures the browser calculates proper dimensions for inline-block elements
-      this.targetTarget.classList.remove("scale-90", "invisible");
-      this.targetTarget.classList.add("scale-100", "visible");
+      this.tooltipTarget.classList.remove("scale-90", "invisible");
+      this.tooltipTarget.classList.add("scale-100", "visible");
 
       // Now reveal tooltip with fade-in animation (remove opacity-0)
-      this.targetTarget.classList.remove("opacity-0");
-      this.targetTarget.classList.add("opacity-100");
+      this.tooltipTarget.classList.remove("opacity-0");
+      this.tooltipTarget.classList.add("opacity-100");
     }
 
     // Position tooltip using JavaScript (tooltip is visible but transparent/animating)
@@ -174,7 +235,7 @@ export default class extends Controller {
    * Respects prefers-reduced-motion.
    */
   hide() {
-    if (!this.hasTargetTarget) return;
+    if (!this.hasTooltipTarget) return;
 
     // Clear any pending touch dismiss timeout
     if (this.touchDismissTimeout) {
@@ -183,44 +244,73 @@ export default class extends Controller {
     }
     this.touchPrimed = false;
 
+    // Update aria-hidden for screen readers
+    this.tooltipTarget.setAttribute("aria-hidden", "true");
+
     if (this.prefersReducedMotion) {
       // Skip scale animation for users who prefer reduced motion
-      this.targetTarget.classList.remove("visible", "opacity-100");
-      this.targetTarget.classList.add("invisible", "opacity-0");
+      this.tooltipTarget.classList.remove("visible", "opacity-100");
+      this.tooltipTarget.classList.add("invisible", "opacity-0");
     } else {
       // Remove visible state classes and add hidden state classes with animation
-      this.targetTarget.classList.remove("opacity-100", "scale-100", "visible");
-      this.targetTarget.classList.add("opacity-0", "scale-90", "invisible");
+      this.tooltipTarget.classList.remove(
+        "opacity-100",
+        "scale-100",
+        "visible",
+      );
+      this.tooltipTarget.classList.add("opacity-0", "scale-90", "invisible");
     }
   }
 
   /**
    * Handles Escape key press to dismiss tooltip.
+   * Called by the shared tooltipRegistry handler (key already filtered).
    * @param {KeyboardEvent} event - The keyboard event
    */
   handleEscape(event) {
-    if (event.key === "Escape" && this.hasTargetTarget) {
-      // Check if tooltip is currently visible
-      if (
-        this.targetTarget.classList.contains("opacity-100") &&
-        this.targetTarget.classList.contains("visible")
-      ) {
-        this.hide();
-        // Return focus to trigger element if it exists
-        if (this.hasTriggerTarget) {
-          this.triggerTarget.focus();
-        }
+    if (!this.hasTooltipTarget) return;
+
+    // Check if tooltip is currently visible
+    if (this.#isTooltipVisible()) {
+      // Set flag to prevent immediate re-show when focus returns to trigger
+      this.escapeDismissed = true;
+      this.hide();
+      // Return focus to trigger element if it exists
+      if (this.hasTriggerTarget) {
+        this.triggerTarget.focus();
       }
+      // Clear the flag after a brief delay to allow the focusin event to be ignored
+      setTimeout(() => {
+        this.escapeDismissed = false;
+      }, 100);
     }
   }
 
   /**
    * Handles touch events on trigger element for mobile support.
-   * Shows tooltip and sets auto-dismiss timer.
+   * Shows tooltip on first tap, allows navigation on second tap.
+   * Does not prevent default to allow scrolling - uses click handler for navigation prevention.
    * @param {TouchEvent} event - The touch event
    */
   handleTouch(event) {
-    if (!this.hasTargetTarget || !this.hasTriggerTarget) return;
+    if (!this.hasTooltipTarget || !this.hasTriggerTarget) return;
+
+    // Mark that a touch interaction started (used by click handler)
+    this.touchStarted = true;
+  }
+
+  /**
+   * Handles click events on trigger element for touch-based navigation control.
+   * On touch devices, first tap shows tooltip and prevents navigation.
+   * Second tap allows navigation.
+   * @param {MouseEvent} event - The click event
+   */
+  handleClick(event) {
+    if (!this.hasTooltipTarget || !this.hasTriggerTarget) return;
+
+    // Only handle clicks that originated from touch (not mouse clicks)
+    if (!this.touchStarted) return;
+    this.touchStarted = false;
 
     const tooltipVisible = this.#isTooltipVisible();
 
@@ -243,7 +333,7 @@ export default class extends Controller {
    * @param {TouchEvent} event - The touch event
    */
   handleTouchOutside(event) {
-    if (!this.hasTargetTarget || !this.hasTriggerTarget) return;
+    if (!this.hasTooltipTarget || !this.hasTriggerTarget) return;
 
     // Check if tooltip is currently visible
     const isVisible = this.#isTooltipVisible();
@@ -253,7 +343,7 @@ export default class extends Controller {
     // Check if touch is outside both tooltip and trigger
     const touchedElement = event.target;
     const isTouchOutside =
-      !this.targetTarget.contains(touchedElement) &&
+      !this.tooltipTarget.contains(touchedElement) &&
       !this.triggerTarget.contains(touchedElement) &&
       !this.element.contains(touchedElement);
 
@@ -275,14 +365,14 @@ export default class extends Controller {
    * Uses cached viewport dimensions for performance (updated on resize).
    */
   positionTooltip() {
-    if (!this.hasTriggerTarget || !this.hasTargetTarget) return;
+    if (!this.hasTriggerTarget || !this.hasTooltipTarget) return;
 
     try {
-      const preferredPlacement = this.targetTarget.dataset.placement || "top";
+      const preferredPlacement = this.tooltipTarget.dataset.placement || "top";
       const spacing = this.spacingValue;
       const viewportPadding = this.viewportPaddingValue;
       const triggerRect = this.triggerTarget.getBoundingClientRect();
-      const tooltipRect = this.targetTarget.getBoundingClientRect();
+      const tooltipRect = this.tooltipTarget.getBoundingClientRect();
 
       // Validate dimensions to prevent invalid calculations
       if (!this.#isValidRect(triggerRect) || !this.#isValidRect(tooltipRect)) {
@@ -334,9 +424,9 @@ export default class extends Controller {
       this.#applyPosition(clampedTop, clampedLeft);
     } catch (error) {
       // Fallback to default top positioning with viewport boundary clamping
-      if (this.hasTargetTarget && this.hasTriggerTarget) {
+      if (this.hasTooltipTarget && this.hasTriggerTarget) {
         const triggerRect = this.triggerTarget.getBoundingClientRect();
-        const tooltipRect = this.targetTarget.getBoundingClientRect();
+        const tooltipRect = this.tooltipTarget.getBoundingClientRect();
         if (this.#isValidRect(triggerRect) && this.#isValidRect(tooltipRect)) {
           this.#fallbackPosition(triggerRect, tooltipRect);
         }
@@ -368,9 +458,9 @@ export default class extends Controller {
    * @private
    */
   #validateAriaDescribedBy(triggerElement) {
-    if (!this.hasTargetTarget) return;
+    if (!this.hasTooltipTarget) return;
 
-    const tooltipId = this.targetTarget.id;
+    const tooltipId = this.tooltipTarget.id;
     if (!tooltipId) {
       console.error(
         "[Pathogen::Tooltip] CRITICAL: Tooltip element must have an id attribute. " +
@@ -430,10 +520,10 @@ export default class extends Controller {
   #hideOtherTooltips() {
     // Find all visible tooltips except this one
     document
-      .querySelectorAll('[data-pathogen--tooltip-target="target"].visible')
+      .querySelectorAll('[data-pathogen--tooltip-target="tooltip"].visible')
       .forEach((tooltip) => {
         if (
-          tooltip !== this.targetTarget &&
+          tooltip !== this.tooltipTarget &&
           tooltip.classList.contains("visible")
         ) {
           // Get the controller for this tooltip and hide it
@@ -451,9 +541,9 @@ export default class extends Controller {
 
   #isTooltipVisible() {
     return (
-      this.hasTargetTarget &&
-      this.targetTarget.classList.contains("opacity-100") &&
-      this.targetTarget.classList.contains("visible")
+      this.hasTooltipTarget &&
+      this.tooltipTarget.classList.contains("opacity-100") &&
+      this.tooltipTarget.classList.contains("visible")
     );
   }
 
@@ -600,8 +690,8 @@ export default class extends Controller {
    * @private
    */
   #applyPosition(top, left) {
-    this.targetTarget.style.top = `${top}px`;
-    this.targetTarget.style.left = `${left}px`;
+    this.tooltipTarget.style.top = `${top}px`;
+    this.tooltipTarget.style.left = `${left}px`;
   }
 
   /**
@@ -634,28 +724,19 @@ export default class extends Controller {
 
   /**
    * Handles window resize events and updates viewport cache.
-   * Uses requestAnimationFrame for throttling to avoid layout thrashing.
+   * Called by the shared tooltipRegistry handler.
    * Repositions visible tooltips automatically.
-   * @private
    */
-  #handleResize() {
-    if (this.resizeRAF) {
-      cancelAnimationFrame(this.resizeRAF);
+  handleResize() {
+    this.viewportCache = this.#getViewportDimensions();
+
+    // Reposition tooltip if currently visible
+    if (
+      this.hasTooltipTarget &&
+      this.tooltipTarget.classList.contains("visible")
+    ) {
+      this.positionTooltip();
     }
-
-    this.resizeRAF = requestAnimationFrame(() => {
-      this.viewportCache = this.#getViewportDimensions();
-
-      // Reposition tooltip if currently visible
-      if (
-        this.hasTargetTarget &&
-        this.targetTarget.classList.contains("visible")
-      ) {
-        this.positionTooltip();
-      }
-
-      this.resizeRAF = null;
-    });
   }
 
   /**

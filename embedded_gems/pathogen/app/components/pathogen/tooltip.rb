@@ -67,7 +67,7 @@ module Pathogen
   #   - Wrap trigger and tooltip in a container with `data-controller="pathogen--tooltip"`
   #   - Add `aria-describedby="<tooltip-id>"` to the trigger element (W3C ARIA APG requirement)
   #   - Add `data-pathogen--tooltip-target="trigger"` to the trigger element
-  #   - Add `data-pathogen--tooltip-target="target"` to the tooltip element (automatic)
+  #   - Add `data-pathogen--tooltip-target="tooltip"` to the tooltip element (automatic)
   #   The Stimulus controller will validate these requirements at runtime and log errors if missing.
   #
   # ## Browser Compatibility
@@ -150,15 +150,25 @@ module Pathogen
     def setup_system_arguments
       @system_arguments[:tag] = :div
       @system_arguments[:id] = @id
-      @system_arguments[:role] ||= 'tooltip'
+      # W3C ARIA APG requires role="tooltip" - this is non-overridable
+      @system_arguments[:role] = 'tooltip'
+      @system_arguments[:aria] = merge_aria_attributes
       @system_arguments[:data] = merge_data_attributes
       @system_arguments[:class] = merge_class_names
+    end
+
+    # Merges ARIA attributes with required defaults
+    # Tooltips start hidden, so aria-hidden="true" is set initially
+    def merge_aria_attributes
+      (@system_arguments[:aria] || {}).reverse_merge(
+        hidden: true
+      )
     end
 
     # Merges data attributes with required defaults
     def merge_data_attributes
       (@system_arguments[:data] || {}).reverse_merge(
-        'pathogen--tooltip-target': 'target',
+        'pathogen--tooltip-target': 'tooltip',
         placement: @placement.to_s
       )
     end
