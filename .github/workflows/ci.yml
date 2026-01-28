@@ -83,11 +83,21 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+      - name: Get changed ERB files
+        id: changed-erb-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **/*.erb
+            **/*.html.erb
+
       - name: Lint ERB templates (Herb)
-        run: pnpm run herb:lint
+        if: steps.changed-erb-files.outputs.any_changed == 'true'
+        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files }}
 
       - name: Check ERB formatting (Herb)
-        run: pnpm run herb:format:check
+        if: steps.changed-erb-files.outputs.any_changed == 'true'
+        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_changed_files }}
 
   test:
     timeout-minutes: 15
