@@ -166,6 +166,7 @@ ignore_unused:
   - "components.workflow_executions.table_component.counts*"
   - "samples.table_component.namespaces.puid"
   - "local_time.*"
+  - "workflow_executions.table_component.metadata.*"
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

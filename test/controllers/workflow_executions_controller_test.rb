@@ -324,4 +324,81 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
   end
+
+  # Search action tests
+  test 'should search workflow executions with valid params' do
+    post search_workflow_executions_path(format: :turbo_stream),
+         params: { q: { name_or_id_cont: 'example' } }
+
+    assert_response :success
+  end
+
+  test 'should search workflow executions with advanced search groups' do
+    post search_workflow_executions_path(format: :turbo_stream),
+         params: {
+           q: {
+             groups_attributes: {
+               '0' => {
+                 conditions_attributes: {
+                   '0' => { field: 'state', operator: '=', value: 'completed' }
+                 }
+               }
+             }
+           }
+         }
+
+    assert_response :success
+  end
+
+  test 'should search workflow executions with multiple conditions' do
+    post search_workflow_executions_path(format: :turbo_stream),
+         params: {
+           q: {
+             groups_attributes: {
+               '0' => {
+                 conditions_attributes: {
+                   '0' => { field: 'state', operator: '=', value: 'completed' },
+                   '1' => { field: 'name', operator: 'contains', value: 'test' }
+                 }
+               }
+             }
+           }
+         }
+
+    assert_response :success
+  end
+
+  test 'should return unprocessable_content for invalid search params' do
+    post search_workflow_executions_path(format: :turbo_stream),
+         params: {
+           q: {
+             groups_attributes: {
+               '0' => {
+                 conditions_attributes: {
+                   '0' => { field: 'state', operator: '=', value: '' }
+                 }
+               }
+             }
+           }
+         }
+
+    assert_response :unprocessable_content
+  end
+
+  test 'should search workflow executions with in operator for state' do
+    post search_workflow_executions_path(format: :turbo_stream),
+         params: {
+           q: {
+             groups_attributes: {
+               '0' => {
+                 conditions_attributes: {
+                   '0' => { field: 'state', operator: 'in', value: %w[completed error] }
+                 }
+               }
+             }
+           }
+         }
+
+    assert_response :success
+  end
 end

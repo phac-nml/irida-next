@@ -289,17 +289,18 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert results.include?(we_gasclustering)
   end
 
-  test 'in operator with metadata field case insensitive' do
+  test 'in operator with enum metadata field uses exact matching' do
     we_valid = workflow_executions(:workflow_execution_valid)
     we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
 
+    # Enum metadata fields (pipeline_id, workflow_version) use exact matching
     query = WorkflowExecution::Query.new(
       namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
       groups: [WorkflowExecution::SearchGroup.new(
         conditions: [WorkflowExecution::SearchCondition.new(
           field: 'metadata.pipeline_id',
           operator: 'in',
-          value: ['PHAC-NML/IRIDANEXTEXAMPLE', 'PHAC-NML/GASCLUSTERING']
+          value: ['phac-nml/iridanextexample', 'phac-nml/gasclustering']
         )]
       )]
     )
