@@ -114,6 +114,14 @@ class VirtualScrollController extends Controller {
       capture: true,
     });
 
+    // Listen for focus reset events from table controller
+    this.boundHandleFocusReset = this.handleFocusReset.bind(this);
+    this.lifecycle.listen(
+      this.element,
+      "table:focus-reset",
+      this.boundHandleFocusReset,
+    );
+
     this.boundHideLoading = this.hideLoading.bind(this);
     this.lifecycle.listen(
       document,
@@ -1048,6 +1056,42 @@ class VirtualScrollController extends Controller {
     if (this.keyboardNavigator) {
       this.keyboardNavigator.handleDblClick(event);
     }
+  }
+
+  /**
+   * Handle focus reset event from table controller.
+   * Resets the roving tabindex state to the specified cell coordinates.
+   * @param {CustomEvent} event - Event with detail.rowIndex and detail.colIndex
+   */
+  handleFocusReset(event) {
+    const { rowIndex, colIndex } = event.detail || {};
+
+    if (!Number.isInteger(rowIndex) || !Number.isInteger(colIndex)) return;
+
+    // Set pending focus to the target cell so that if render() runs,
+    // it will use these coordinates instead of trying to capture from activeElement
+    this.pendingFocusRow = rowIndex;
+    this.pendingFocusCol = colIndex;
+
+    // Reset keyboard navigator state and apply roving tabindex
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.focusedRowIndex = rowIndex;
+      this.keyboardNavigator.focusedColIndex = colIndex;
+      this.keyboardNavigator.applyRovingTabindex(rowIndex, colIndex);
+    }
+
+    // Clear pending focus after a short delay to prevent render() from
+    // re-focusing the cell. The delay ensures applyRovingTabindex has completed.
+    setTimeout(() => {
+      // Only clear if still pointing to our target (not changed by user interaction)
+      if (
+        this.pendingFocusRow === rowIndex &&
+        this.pendingFocusCol === colIndex
+      ) {
+        this.pendingFocusRow = null;
+        this.pendingFocusCol = null;
+      }
+    }, 100);
   }
 
   totalColumnCount() {
