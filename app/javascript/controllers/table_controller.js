@@ -58,8 +58,12 @@ export default class TableController extends Controller {
     if (this.#isResettingFocus) {
       this.#isResettingFocus = false;
     } else if (this.#shouldResetFocusOnEntry(event)) {
-      if (this.#focusFirstCellInTable(event.target.closest("table"), event)) {
-        return;
+      // Don't redirect focus when clicking on interactive elements
+      // This prevents interfering with button clicks, form submissions, etc.
+      if (!event.target.matches(TableController.#FOCUSABLE_SELECTOR)) {
+        if (this.#focusFirstCellInTable(event.target.closest("table"), event)) {
+          return;
+        }
       }
     }
 
