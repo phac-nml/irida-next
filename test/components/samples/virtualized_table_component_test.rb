@@ -15,11 +15,12 @@ module Samples
     test 'renders virtualized table with virtual-scroll controller' do
       render_virtualized_table_component
 
-      # Should have virtual-scroll controller
-      assert_selector '#samples-table[data-controller~="virtual-scroll"]'
-      assert_selector '#samples-table[data-virtual-scroll-metadata-fields-value]'
-      assert_selector '#samples-table[data-virtual-scroll-fixed-columns-value]'
-      assert_selector '#samples-table[data-virtual-scroll-sticky-column-count-value="2"]'
+      # Should have samples-table wrapper and virtual-scroll controller on inner container
+      assert_selector '#samples-table'
+      assert_selector '[data-controller~="virtual-scroll"]'
+      assert_selector '[data-virtual-scroll-metadata-fields-value]'
+      assert_selector '[data-virtual-scroll-fixed-columns-value]'
+      assert_selector '[data-virtual-scroll-sticky-column-count-value="2"]'
     end
 
     test 'renders ARIA grid semantics' do
