@@ -93,6 +93,7 @@ export default class extends Controller {
     }
 
     if (element.hasAttribute("data-refocus")) {
+      element.removeAttribute("data-refocus");
       element.focus();
     }
   }
@@ -170,6 +171,9 @@ export default class extends Controller {
     if (!elementId) return;
     element.innerText = this.#originalCellContent[elementId];
     this.#clearEditingState(element);
+    element.setAttribute("contenteditable", "false");
+    // Maintain focus on the cell after reset
+    element.focus();
   }
 
   async blur(event) {
@@ -321,10 +325,7 @@ export default class extends Controller {
   }
 
   #exitEditMode(element) {
-    this.reset(element); // Restore original content
-    this.#clearEditingState(element);
-    element.setAttribute("contenteditable", "false");
-    element.blur(); // Return to navigation mode
+    this.reset(element); // Restore original content, exit edit mode, and maintain focus
 
     // Dispatch custom event for screen reader announcement
     element.dispatchEvent(
