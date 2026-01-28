@@ -14,7 +14,7 @@ module Pathogen
 
       assert_selector 'div#tooltip-123[role="tooltip"]'
       assert_text 'Sample tooltip'
-      assert_selector 'div[data-pathogen--tooltip-target="target"]'
+      assert_selector 'div[data-pathogen--tooltip-target="tooltip"]'
     end
 
     test 'renders with default placement top' do
@@ -83,7 +83,6 @@ module Pathogen
           text: 'Sample tooltip',
           id: 'tooltip-123',
           class: 'custom-tooltip-class',
-          role: 'status',
           data: { controller: 'custom-controller', action: 'click->custom#action' },
           aria: { label: 'Additional info', live: 'polite' }
         )
@@ -91,15 +90,15 @@ module Pathogen
 
       # Custom attributes are applied
       assert_selector 'div#tooltip-123.custom-tooltip-class'
-      assert_selector 'div[role="status"]'
       assert_selector 'div[data-controller="custom-controller"]'
       assert_selector 'div[data-action="click->custom#action"]'
       assert_selector 'div[aria-label="Additional info"]'
       assert_selector 'div[aria-live="polite"]'
 
-      # Required defaults are preserved
+      # Required defaults are preserved (role="tooltip" is non-overridable per W3C APG)
+      assert_selector 'div[role="tooltip"]'
       assert_selector 'div.bg-slate-900'
-      assert_selector 'div[data-pathogen--tooltip-target="target"]'
+      assert_selector 'div[data-pathogen--tooltip-target="tooltip"]'
       assert_selector 'div[data-placement="top"]'
     end
   end

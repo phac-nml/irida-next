@@ -110,24 +110,23 @@ class TooltipTest < ApplicationSystemTestCase
     assert_selector "div##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
   end
 
-  test 'touch interaction allows navigation on second tap' do
+  test 'touch interaction shows tooltip on first tap' do
     visit '/-/groups/group-1'
 
-    assert_selector 'a[aria-describedby]', match: :first
+    trigger = page.find('a[aria-describedby]', match: :first)
 
-    touch_results = page.evaluate_script(<<~JS)
-      (function () {
-        var trigger = document.querySelector('a[aria-describedby]');
-        var dispatchTouch = function () {
-          var event = new Event('touchstart', { bubbles: true, cancelable: true });
-          return trigger.dispatchEvent(event);
-        };
-
-        return [dispatchTouch(), dispatchTouch()];
-      })();
+    # Simulate touch interaction - first tap should show tooltip
+    page.execute_script(<<~JS, trigger)
+      var trigger = arguments[0];
+      // Dispatch touchstart to mark as touch interaction
+      var touchEvent = new Event('touchstart', { bubbles: true, cancelable: true });
+      trigger.dispatchEvent(touchEvent);
+      // Dispatch click event (follows touchstart on mobile)
+      var clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+      trigger.dispatchEvent(clickEvent);
     JS
 
-    # dispatchEvent returns false when preventDefault was called
-    assert_equal [false, true], touch_results
+    # Tooltip should be visible after first tap
+    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
   end
 end

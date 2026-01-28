@@ -16,23 +16,21 @@
       support
     </p>
   </div>
-
   <!-- Hover & Focus Triggers -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
-        items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= pathogen_icon(:cursor, color: :primary, class: "mr-3") %> Dual
-      Trigger Mechanism
+      <%= pathogen_icon(:cursor, color: :primary, class: "mr-3") %>
+      Dual Trigger Mechanism
     </h2>
 
     <div
       class="
-        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
-        border-slate-200 dark:border-slate-700 p-8
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
       "
     >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -40,8 +38,7 @@
         <div>
           <h3
             class="
-              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4
-              flex items-center
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
             "
           >
             <%= pathogen_icon(:hand_pointing, color: :primary, class: "mr-2") %>
@@ -62,13 +59,11 @@
             <% end %>
           </div>
         </div>
-
         <!-- Focus Trigger -->
         <div>
           <h3
             class="
-              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4
-              flex items-center
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
             "
           >
             <%= pathogen_icon(:keyboard, color: :primary, class: "mr-2") %>
@@ -115,23 +110,21 @@
       </div>
     </div>
   </div>
-
   <!-- ARIA Attributes -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
-        items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %> ARIA
-      Compliance
+      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+      ARIA Compliance
     </h2>
 
     <div
       class="
-        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
-        border-slate-200 dark:border-slate-700 p-8
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
       "
     >
       <p class="text-slate-600 dark:text-slate-400 mb-6">
@@ -144,8 +137,8 @@
         <div class="flex items-start gap-4">
           <div
             class="
-              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30
-              rounded-lg flex items-center justify-center
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
             "
           >
             <%= pathogen_icon(:check_circle, color: :success) %>
@@ -159,18 +152,18 @@
             </h3>
 
             <p class="text-slate-600 dark:text-slate-400">
-              The tooltip element has <code>role="tooltip"</code> to inform
-              screen readers that this is supplementary information.
+              The tooltip element has
+              <code>role="tooltip"</code>
+              to inform screen readers that this is supplementary information.
             </p>
           </div>
         </div>
-
         <!-- aria-describedby -->
         <div class="flex items-start gap-4">
           <div
             class="
-              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30
-              rounded-lg flex items-center justify-center
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
             "
           >
             <%= pathogen_icon(:check_circle, color: :success) %>
@@ -185,19 +178,18 @@
 
             <p class="text-slate-600 dark:text-slate-400">
               The trigger element references the tooltip via
-              <code>aria-describedby</code>, creating an accessible
-              relationship between them. Screen readers announce the tooltip
-              content when the trigger receives focus.
+              <code>aria-describedby</code>, creating an accessible relationship between them. Screen
+              readers announce the tooltip content when the trigger receives
+              focus.
             </p>
           </div>
         </div>
-
         <!-- Unique IDs -->
         <div class="flex items-start gap-4">
           <div
             class="
-              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30
-              rounded-lg flex items-center justify-center
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
             "
           >
             <%= pathogen_icon(:check_circle, color: :success) %>
@@ -218,35 +210,38 @@
 
       <div
         class="
-          mt-8 bg-slate-50 dark:bg-slate-900 border border-slate-200
-          dark:border-slate-700 rounded-lg p-4
+          mt-8 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700
+          rounded-lg p-4
         "
       >
         <p class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
           Example HTML Structure:
         </p>
 
-        <pre class="text-xs overflow-x-auto"><code class="text-slate-800 dark:text-slate-200">&lt;a href="/samples" aria-describedby="tooltip-abc123" data-pathogen--tooltip-target="trigger"&gt; Samples &lt;/a&gt; &lt;div id="tooltip-abc123" role="tooltip" data-pathogen--tooltip-target="target"&gt; View all samples &lt;/div&gt;        </code></pre>
+        <pre class="text-xs overflow-x-auto"><code class="text-slate-800 dark:text-slate-200">&lt;a href="/samples" aria-describedby="tooltip-abc123"
+            data-pathogen--tooltip-target="trigger"&gt; Samples &lt;/a&gt;
+            &lt;div id="tooltip-abc123" role="tooltip"
+            data-pathogen--tooltip-target="tooltip"&gt; View all samples
+            &lt;/div&gt;
+          </code></pre>
       </div>
     </div>
   </div>
-
   <!-- Keyboard Navigation Demo -->
   <div class="mb-12">
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
-        items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
-      <%= pathogen_icon(:keyboard, color: :primary, class: "mr-3") %> Keyboard
-      Navigation Demo
+      <%= pathogen_icon(:keyboard, color: :primary, class: "mr-3") %>
+      Keyboard Navigation Demo
     </h2>
 
     <div
       class="
-        bg-white dark:bg-slate-800 rounded-xl shadow-lg border
-        border-slate-200 dark:border-slate-700 p-8
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
       "
     >
       <p class="text-slate-600 dark:text-slate-400 mb-6">
@@ -288,8 +283,7 @@
           <div class="flex items-center gap-2 mb-2">
             <kbd
               class="
-                px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-sm
-                font-mono
+                px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-sm font-mono
               "
             >
               Tab
@@ -307,17 +301,12 @@
 
         <div
           class="
-            p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200
-            dark:border-blue-800 rounded-lg
+            p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800
+            rounded-lg
           "
         >
           <div class="flex items-center gap-2 mb-2">
-            <kbd
-              class="
-                px-2 py-1 bg-blue-200 dark:bg-blue-800 rounded text-sm
-                font-mono
-              "
-            >
+            <kbd class=" px-2 py-1 bg-blue-200 dark:bg-blue-800 rounded text-sm font-mono ">
               Shift+Tab
             </kbd>
 
@@ -333,13 +322,11 @@
       </div>
     </div>
   </div>
-
   <!-- Best Practices -->
   <div>
     <h2
       class="
-        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex
-        items-center
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
       "
     >
       <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
@@ -349,8 +336,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div
         class="
-          bg-green-50 dark:bg-green-900/20 border border-green-200
-          dark:border-green-800 rounded-lg p-4
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
         "
       >
         <div class="flex items-start gap-3">
@@ -371,8 +358,8 @@
 
       <div
         class="
-          bg-green-50 dark:bg-green-900/20 border border-green-200
-          dark:border-green-800 rounded-lg p-4
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
         "
       >
         <div class="flex items-start gap-3">
@@ -393,8 +380,8 @@
 
       <div
         class="
-          bg-green-50 dark:bg-green-900/20 border border-green-200
-          dark:border-green-800 rounded-lg p-4
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
         "
       >
         <div class="flex items-start gap-3">
@@ -415,8 +402,8 @@
 
       <div
         class="
-          bg-green-50 dark:bg-green-900/20 border border-green-200
-          dark:border-green-800 rounded-lg p-4
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
         "
       >
         <div class="flex items-start gap-3">

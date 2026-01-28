@@ -13,7 +13,7 @@ module Pathogen
                     ))
 
       # Verify controller target is present
-      assert_selector 'div[data-pathogen--tooltip-target="target"]'
+      assert_selector 'div[data-pathogen--tooltip-target="tooltip"]'
       assert_selector 'div#test-tooltip[role="tooltip"]'
     end
 
@@ -94,7 +94,7 @@ module Pathogen
 
       # Verify tooltip target exists (mouse handlers are added at runtime via
       # targetTargetConnected callback for W3C ARIA APG compliance)
-      assert_selector 'div[data-pathogen--tooltip-target="target"][role="tooltip"]',
+      assert_selector 'div[data-pathogen--tooltip-target="tooltip"][role="tooltip"]',
                       text: 'Helpful tooltip'
     end
 
@@ -112,6 +112,16 @@ module Pathogen
       # This is a W3C ARIA APG requirement enforced at runtime by the Stimulus controller
       assert_selector "a[aria-describedby='#{tooltip_id}']",
                       text: 'Link text'
+    end
+
+    test 'tooltip has aria-hidden true by default for screen reader accessibility' do
+      render_inline(Pathogen::Tooltip.new(
+                      text: 'Helpful tooltip text',
+                      id: 'test-tooltip'
+                    ))
+
+      # Verify aria-hidden is set to true initially (tooltip is hidden)
+      assert_selector 'div[aria-hidden="true"]'
     end
   end
 end
