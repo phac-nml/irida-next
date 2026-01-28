@@ -52,9 +52,6 @@ module Types
     field :pipelines, [Types::PipelineType], null: true, resolver: Resolvers::PipelinesResolver,
                                              description: 'Find Pipelines'
 
-    field :metrics, Types::MetricType, null: false, resolver: Resolvers::MetricsResolver,
-                                       description: 'Returns a list of metrics'
-
     def current_user
       context[:current_user]
     end

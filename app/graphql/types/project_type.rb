@@ -34,9 +34,10 @@ module Types
 
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
 
-    field :disk_usage, Integer, null: false,
-                                description: 'Disk usage of the project in bytes.',
-                                resolver: Resolvers::DiskUsageResolver
+    field :metrics, Types::MetricType,
+          null: true,
+          description: 'Metrics for this namespace',
+          resolver: Resolvers::MetricsResolver
 
     def self.authorized?(object, context)
       super && (context[:projects_preauthorized] ||

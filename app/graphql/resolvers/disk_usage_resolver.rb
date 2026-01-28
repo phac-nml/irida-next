@@ -4,9 +4,10 @@ module Resolvers
   # Disk Usage Resolver
   class DiskUsageResolver < BaseResolver
     type Integer, null: false
-    alias namespace object
 
     def resolve # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      namespace = object.is_a?(Project) ? object.namespace : object
+
       Attachment.with(
         namespace_attachments: Attachment.where(attachable_type: 'Namespace', attachable_id: namespace.id).select(:id),
         sample_attachments: Attachment.where(
