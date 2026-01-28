@@ -6,6 +6,7 @@ class ProjectsTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
     login_as @user
+    Flipper.enable(:flowbite_replacement)
   end
 
   test 'can create a project' do
@@ -34,7 +35,7 @@ class ProjectsTest < ApplicationSystemTestCase
     click_link I18n.t('general.navbar.new_dropdown.project')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      assert_selector %(input[data-viral--select2-target="input"]) do |input|
+      assert_selector %(input[data-viral--select2-target="trigger"]) do |input|
         assert_equal @user.namespace.full_path, input['value']
       end
     end
@@ -46,7 +47,7 @@ class ProjectsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.show.create_project_button')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      assert_selector %(input[data-viral--select2-target="input"]) do |input|
+      assert_selector %(input[data-viral--select2-target="trigger"]) do |input|
         assert_equal group1.path, input['value']
       end
     end
