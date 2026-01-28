@@ -62,6 +62,8 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     return if @invalid_initial_state
     return if @state.nil?
 
+    return if @workflow_execution.state.to_sym == @state
+
     @workflow_execution.state = @state
     @workflow_execution.save
   end
