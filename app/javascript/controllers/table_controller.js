@@ -21,8 +21,9 @@ export default class TableController extends Controller {
   static #STICKY_PADDING = 8;
   static #DEBOUNCE_DELAY = 100;
   static #VERTICAL_PADDING = 16;
-  static #FOCUSABLE_SELECTOR =
-    "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
+  // Selector for truly interactive elements (excludes grid cells that only have tabindex for navigation)
+  static #INTERACTIVE_ELEMENT_SELECTOR =
+    "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])";
 
   #lastFocusedCell = null;
   #scrollerCache = new WeakMap();
@@ -58,9 +59,12 @@ export default class TableController extends Controller {
     if (this.#isResettingFocus) {
       this.#isResettingFocus = false;
     } else if (this.#shouldResetFocusOnEntry(event)) {
-      // Don't redirect focus when clicking on interactive elements
+      // Don't redirect focus when clicking on truly interactive elements (links, buttons, inputs)
       // This prevents interfering with button clicks, form submissions, etc.
-      if (!event.target.matches(TableController.#FOCUSABLE_SELECTOR)) {
+      // Note: We intentionally exclude grid cells that only have tabindex for roving tabindex navigation
+      if (
+        !event.target.matches(TableController.#INTERACTIVE_ELEMENT_SELECTOR)
+      ) {
         if (this.#focusFirstCellInTable(event.target.closest("table"), event)) {
           return;
         }
@@ -68,6 +72,62 @@ export default class TableController extends Controller {
     }
 
     this.#debouncedHandleFocus(event);
+  }
+
+  /**
+   * Public handler for focusout events - resets tabindex when leaving table
+   * @param {FocusEvent} event - The focusout event
+   */
+  handleCellBlur(event) {
+    if (!event?.target?.closest) return;
+
+    const table = event.target.closest("table");
+    if (!table) return;
+
+    // Check if focus is leaving the table entirely
+    const relatedTarget = event.relatedTarget;
+    if (relatedTarget && table.contains(relatedTarget)) {
+      // Focus is moving within the table, don't reset
+      return;
+    }
+
+    // Focus is leaving the table - reset roving tabindex to first cell
+    this.#resetTabindexToFirstCell(table);
+  }
+
+  /**
+   * Reset the roving tabindex to the first cell in the table
+   * @param {HTMLTableElement} table
+   */
+  #resetTabindexToFirstCell(table) {
+    const firstCell = table.querySelector(
+      "thead th[aria-colindex], thead td[aria-colindex]",
+    );
+    if (!firstCell) return;
+
+    // Directly reset all cells to tabindex=-1
+    table.querySelectorAll("[aria-colindex]").forEach((cell) => {
+      cell.tabIndex = -1;
+    });
+
+    // Set the first cell to tabindex=0
+    firstCell.tabIndex = 0;
+
+    const rowIndex = parseInt(
+      firstCell.closest("[aria-rowindex]")?.getAttribute("aria-rowindex"),
+      10,
+    );
+    const colIndex = parseInt(firstCell.getAttribute("aria-colindex"), 10);
+
+    if (Number.isInteger(rowIndex) && Number.isInteger(colIndex)) {
+      // Dispatch event to notify virtual-scroll controller to reset its focus state
+      table.dispatchEvent(
+        new CustomEvent("table:focus-reset", {
+          bubbles: true,
+          detail: { rowIndex, colIndex },
+        }),
+      );
+    }
   }
 
   /**
@@ -180,16 +240,40 @@ export default class TableController extends Controller {
     if (!table) return false;
 
     const firstCell = table.querySelector(
-      "thead th, thead td, tbody th, tbody td",
+      "thead th[aria-colindex], thead td[aria-colindex], tbody th[aria-colindex], tbody td[aria-colindex]",
     );
     if (!firstCell) return false;
 
     const focusTarget =
-      firstCell.querySelector(TableController.#FOCUSABLE_SELECTOR) || firstCell;
+      firstCell.querySelector(TableController.#INTERACTIVE_ELEMENT_SELECTOR) ||
+      firstCell;
     if (focusTarget === event.target) return false;
 
     this.#lastFocusedCell = null;
     this.#isResettingFocus = true;
+
+    // Directly reset all cells to tabindex=-1 and set first cell to tabindex=0
+    table.querySelectorAll("[aria-colindex]").forEach((cell) => {
+      cell.tabIndex = -1;
+    });
+    firstCell.tabIndex = 0;
+
+    // Also notify virtual-scroll controller to update its internal state
+    const rowIndex = parseInt(
+      firstCell.closest("[aria-rowindex]")?.getAttribute("aria-rowindex"),
+      10,
+    );
+    const colIndex = parseInt(firstCell.getAttribute("aria-colindex"), 10);
+
+    if (Number.isInteger(rowIndex) && Number.isInteger(colIndex)) {
+      table.dispatchEvent(
+        new CustomEvent("table:focus-reset", {
+          bubbles: true,
+          detail: { rowIndex, colIndex },
+        }),
+      );
+    }
+
     focusTarget.focus();
     return true;
   }

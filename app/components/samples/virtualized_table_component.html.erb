@@ -16,7 +16,10 @@
         "
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
-        data-action="focusin->table#handleCellFocus"
+        data-action="
+          focusin->table#handleCellFocus
+          focusout->table#handleCellBlur
+        "
         role="grid"
         aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
         aria-colcount="<%= @columns.length + @metadata_fields.length %>"
