@@ -57,6 +57,9 @@ export class GridKeyboardNavigator {
 
     this.focusedRowIndex = null;
     this.focusedColIndex = null;
+
+    // Track when navigation is in progress to prevent focus reset during async operations
+    this.isNavigating = false;
   }
 
   /**
@@ -329,7 +332,26 @@ export class GridKeyboardNavigator {
     this.focusedRowIndex = rowIndex;
     this.focusedColIndex = colIndex;
 
-    return this.#attemptFocus(rowIndex, colIndex, 0);
+    // Signal that navigation is in progress (prevents blur reset in table controller)
+    this.isNavigating = true;
+    this.#dispatchNavigationEvent("table:navigation-start");
+
+    try {
+      return await this.#attemptFocus(rowIndex, colIndex, 0);
+    } finally {
+      this.isNavigating = false;
+      this.#dispatchNavigationEvent("table:navigation-end");
+    }
+  }
+
+  /**
+   * Dispatch a navigation event on the grid element
+   * @param {string} eventName - Name of the event to dispatch
+   * @private
+   */
+  #dispatchNavigationEvent(eventName) {
+    const table = this.rootElement?.closest?.("table") || this.grid;
+    table?.dispatchEvent?.(new CustomEvent(eventName, { bubbles: true }));
   }
 
   async #attemptFocus(rowIndex, colIndex, attempt) {
@@ -619,8 +641,19 @@ export class GridKeyboardNavigator {
    * @private
    */
   #isEditActivationKey(event) {
-    // Only Enter activates edit mode
-    return event.key === "Enter";
+    if (!event) return false;
+
+    if (event.key === "Enter" || event.key === "F2") return true;
+
+    // Printable characters (except Space) should also activate edit mode
+    return (
+      typeof event.key === "string" &&
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    );
   }
 
   /**
@@ -688,6 +721,11 @@ export class GridKeyboardNavigator {
     cell.dataset.editing = "true";
     cell.setAttribute("contenteditable", "true");
 
+    const seedText = this.#seedTextFromEvent(event);
+    if (seedText) {
+      cell.textContent = seedText;
+    }
+
     // Focus the cell
     cell.focus();
 
@@ -696,6 +734,11 @@ export class GridKeyboardNavigator {
     const selection = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(cell);
+
+    if (seedText) {
+      range.collapse(false);
+    }
+
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -703,5 +746,21 @@ export class GridKeyboardNavigator {
     cell.dispatchEvent(
       new CustomEvent("edit-mode-activated", { bubbles: true }),
     );
+  }
+
+  #seedTextFromEvent(event) {
+    if (!event || typeof event.key !== "string") return "";
+
+    if (
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      return event.key;
+    }
+
+    return "";
   }
 }
