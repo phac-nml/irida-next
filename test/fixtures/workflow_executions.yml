@@ -4,7 +4,7 @@ DEFAULTS: &DEFAULTS
   workflow_type: "NFL"
   workflow_type_version: "DSL2"
   workflow_engine: "nextflow"
-  workflow_engine_version: "23.10.0"
+  workflow_engine_version: "24.10.3"
   metadata:
     { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
 

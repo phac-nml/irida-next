@@ -76,6 +76,274 @@ La section Remplacements peut être utilisée pour modifier n'importe quoi dans 
 
 Dans l'exemple ci-dessous, nous remplacerons les options de connexion à la base de données afin de pouvoir connecter le pipeline à notre chemin de base de données personnalisé. Notez que seuls les champs remplacés doivent être fournis, car tout le reste fourni par le schéma reste le même.
 
+#### Exemple de pipeline Nextflow basé sur json-schema http://json-schema.org/draft-07/schema
+
+Lors du remplacement d’un pipeline Nextflow basé sur json-schema http://json-schema.org/draft-07/schema, il faut utiliser `definitions` comme première clé imbriquée sous `overrides`.
+
+##### Schéma
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample/main/nextflow_schema.jsonn",
+  "title": "phac-nml/iridanextexample pipeline parameters",
+  "description": "IRIDA Next Example Pipeline",
+  "type": "object",
+  "definitions": {
+    "input_output_options": {
+      "title": "Input/Output Options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": ["input", "outdir"],
+      "properties": {
+        "input": {
+          ...
+        },
+        "outdir": {
+          ...
+        },
+        "database": {
+          "type": "string",
+          "description": "Kraken DB",
+          "enum": [
+            [
+              "default_db",
+              "PATH_TO_DB"
+            ],
+            [
+              "organization db",
+              "PATH_TO_ORG_DB"
+            ]
+          ]
+        }
+      }
+    },
+    ...
+  },
+  ...
+}
+```
+
+##### Remplacement
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "overrides": {
+      "definitions": {
+        "input_output_options": {
+          "properties": {
+            "database": {
+              "enum": [
+                [
+                  "custom_db",
+                  "PATH_TO_CUSTOM_DB"
+                ],
+                [
+                  "custom_db_2",
+                  "PATH_TO_CUSTOM_DB_2"
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "versions": [...]
+  },
+  {
+    ...
+  }
+}
+```
+
+##### Résultat effectif
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample/main/nextflow_schema.json",
+  "title": "phac-nml/iridanextexample pipeline parameters",
+  "description": "IRIDA Next Example Pipeline",
+  "type": "object",
+  "definitions": {
+    "input_output_options": {
+      "title": "Input/Output Options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": ["input", "outdir"],
+      "properties": {
+        "input": {
+          ...
+        },
+        "outdir": {
+          ...
+        },
+        "database": {
+          "type": "string",
+          "description": "Kraken DB",
+          "enum": [
+            [
+              "custom_db",
+              "PATH_TO_CUSTOM_DB"
+            ],
+            [
+              "custom_db_2",
+              "PATH_TO_CUSTOM_DB_2"
+            ]
+          ]
+        }
+      }
+    },
+    "more options": {
+      ...
+    }
+  },
+  "more options": {
+    ...
+  }
+}
+```
+
+#### Exemple de pipeline Nextflow basé sur json-schema https://json-schema.org/draft/2020-12/schema
+
+Lors du remplacement d’un pipeline Nextflow basé sur json-schema https://json-schema.org/draft/2020-12/schema, il faut utiliser `$defs` comme première clé imbriquée sous `overrides`.
+
+##### Schéma
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample2/main/nextflow_schema.json",
+  "title": "phac-nml/iridanextexample2 pipeline parameters",
+  "description": "An example pipeline for running on IRIDA-Next with nf-schema",
+  "type": "object",
+  "$defs": {
+    "input_output_options": {
+      "title": "Input/output options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": ["input", "outdir"],
+      "properties": {
+        "input": {
+          ...
+        },
+        "outdir": {
+          ...
+        },
+        "database": {
+          "type": "string",
+          "description": "Kraken DB",
+          "enum": [
+            [
+              "default_db",
+              "PATH_TO_DB"
+            ],
+            [
+              "organization db",
+              "PATH_TO_ORG_DB"
+            ]
+          ]
+        }
+      }
+    },
+    ...
+  },
+  ...
+}
+```
+
+#### Remplacement
+
+```json
+{
+  "phac-nml/iridanextexample": {
+    "url": "https://github.com/phac-nml/iridanextexample2",
+    "name": "phac-nml/iridanextexample2",
+    "description": "IRIDA Next Example 2 Pipeline",
+    "overrides": {
+      "$def": {
+        "input_output_options": {
+          "properties": {
+            "database": {
+              "enum": [
+                [
+                  "custom_db",
+                  "PATH_TO_CUSTOM_DB"
+                ],
+                [
+                  "custom_db_2",
+                  "PATH_TO_CUSTOM_DB_2"
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "versions": [...]
+  },
+  {
+    ...
+  }
+}
+```
+
+#### Résultat effectif
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/phac-nml/iridanextexample2/main/nextflow_schema.json",
+  "title": "phac-nml/iridanextexample2 pipeline parameters",
+  "description": "An example pipeline for running on IRIDA-Next with nf-schema",
+  "type": "object",
+  "$defs": {
+    "input_output_options": {
+      "title": "Input/output options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": ["input", "outdir"],
+      "properties": {
+        "input": {
+          ...
+        },
+        "outdir": {
+          ...
+        },
+        "database": {
+          "type": "string",
+          "description": "Kraken DB",
+          "enum": [
+            [
+              "custom_db",
+              "PATH_TO_CUSTOM_DB"
+            ],
+            [
+              "custom_db_2",
+              "PATH_TO_CUSTOM_DB_2"
+            ]
+          ]
+        }
+      }
+    },
+    "more options": {
+      ...
+    }
+  },
+  "more options": {
+    ...
+  }
+}
+```
+
 #### Exemple de schéma
 
 ```json
