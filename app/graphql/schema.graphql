@@ -964,6 +964,11 @@ type Group implements Node {
   id: ID!
 
   """
+  Metrics for this namespace
+  """
+  metrics: Metric
+
+  """
   Name of the namespace.
   """
   name: String!
@@ -1339,6 +1344,41 @@ Represents untyped JSON
 scalar JSON
 
 """
+Metrics for a group or project
+"""
+type Metric {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Disk usage of the group projects or project.
+  """
+  diskUsage: String!
+
+  """
+  Total number of members in the group or project.
+  """
+  membersCount: Int!
+
+  """
+  Total number of projects under the group and it's subgroups.
+  """
+  projectCount: Int
+
+  """
+  Total number of samples in group projects or project.
+  """
+  samplesCount: Int!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
 The mutation root of this schema
 """
 type Mutation {
@@ -1690,6 +1730,11 @@ type Project implements Node {
     """
     keys: [String!] = null
   ): JSON!
+
+  """
+  Metrics for this namespace
+  """
+  metrics: Metric
 
   """
   Name of the project.
