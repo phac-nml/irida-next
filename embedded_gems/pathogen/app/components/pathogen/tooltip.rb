@@ -17,7 +17,7 @@ module Pathogen
   #   to prevent overflow
   # - **Multiple Placements**: Supports `:top`, `:bottom`, `:left`, and `:right` positioning
   # - **Smooth Animations**: Fade-in and scale transition (200ms ease-out timing)
-  # - **Accessibility**: Maintains `role="tooltip"` and `aria-describedby` connection
+  # - **Accessibility**: Maintains `role="tooltip"`, `aria-describedby`, and `aria-hidden` state
   # - **Content-Adaptive Sizing**: Auto-sizes to content with max-width constraint
   # - **Keyboard Accessible**: Shows on both hover and focus for keyboard navigation
   #
@@ -61,6 +61,7 @@ module Pathogen
   #       id: "tooltip-123",
   #       placement: :bottom
   #     ) %>
+  #     <!-- Renders: <span id="tooltip-123" role="tooltip" aria-hidden="true" ...> -->
   #   </div>
   #
   # @note When using directly, you MUST:
@@ -95,7 +96,7 @@ module Pathogen
   # (`pathogen--tooltip_controller.js`) that:
   # - Listens for `mouseenter`/`mouseleave` events for hover trigger
   # - Listens for `focusin`/`focusout` events for keyboard accessibility
-  # - Toggles visibility classes for smooth animation
+  # - Toggles visibility classes and `aria-hidden` attribute for smooth animation
   # - Calculates optimal position using `getBoundingClientRect()`
   # - Detects viewport boundaries and flips placement when needed (top ↔ bottom, left ↔ right)
   # - Clamps position to viewport bounds to prevent overflow
@@ -164,15 +165,18 @@ module Pathogen
       @system_arguments[:class] = merge_class_names
     end
 
-    # Merges ARIA attributes with required defaults
-    # Tooltips start hidden, so aria-hidden="true" is set initially
+    # Merges ARIA attributes with required defaults.
+    # Tooltips start hidden per W3C ARIA APG, so aria-hidden="true" is set initially.
+    # The Stimulus controller toggles aria-hidden to "false" on show and "true" on hide.
     def merge_aria_attributes
       (@system_arguments[:aria] || {}).reverse_merge(
         hidden: true
       )
     end
 
-    # Merges data attributes with required defaults
+    # Merges data attributes with required defaults.
+    # The placement value is passed to Floating UI which also supports extended
+    # placements like 'top-start', 'bottom-end', etc. via the flip middleware.
     def merge_data_attributes
       (@system_arguments[:data] || {}).reverse_merge(
         'pathogen--tooltip-target': 'tooltip',
