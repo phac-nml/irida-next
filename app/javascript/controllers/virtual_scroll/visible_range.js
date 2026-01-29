@@ -8,6 +8,7 @@ export function calculateVisibleRange({
   bufferColumns = 3,
   numMetadataColumns,
   activeEditingColumnIndex,
+  pendingFocusColumnIndex,
 }) {
   if (!geometry || !Array.isArray(metadataColumnWidths)) {
     return { firstVisible: 0, lastVisible: 0 };
@@ -40,6 +41,17 @@ export function calculateVisibleRange({
     }
     if (activeEditingColumnIndex >= lastVisible) {
       lastVisible = Math.min(numMetadataColumns, activeEditingColumnIndex + 1);
+    }
+  }
+
+  // Ensure the pending focus column (navigation target) stays within the rendered window
+  // This prevents focus from escaping when navigating to columns at the edge of the range
+  if (Number.isInteger(pendingFocusColumnIndex)) {
+    if (pendingFocusColumnIndex < firstVisible) {
+      firstVisible = pendingFocusColumnIndex;
+    }
+    if (pendingFocusColumnIndex >= lastVisible) {
+      lastVisible = Math.min(numMetadataColumns, pendingFocusColumnIndex + 1);
     }
   }
 

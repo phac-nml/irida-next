@@ -32,6 +32,7 @@ export default class TableController extends Controller {
   #debouncedHandleFocus = null;
   #isResettingFocus = false;
   #isNavigating = false;
+  #navigationGraceTimeout = null;
   #boundHandleNavigationStart = null;
   #boundHandleNavigationEnd = null;
 
@@ -67,6 +68,10 @@ export default class TableController extends Controller {
     this.#lastFocusedCell = null;
     this.#debouncedHandleFocus?.clear();
     this.#isNavigating = false;
+    if (this.#navigationGraceTimeout) {
+      clearTimeout(this.#navigationGraceTimeout);
+      this.#navigationGraceTimeout = null;
+    }
 
     // Remove navigation event listeners from table element
     const table = this.element.closest("table");
@@ -91,15 +96,27 @@ export default class TableController extends Controller {
    * @private
    */
   #handleNavigationStart() {
+    // Clear any pending grace timeout
+    if (this.#navigationGraceTimeout) {
+      clearTimeout(this.#navigationGraceTimeout);
+      this.#navigationGraceTimeout = null;
+    }
     this.#isNavigating = true;
   }
 
   /**
-   * Handle navigation end event - allows blur reset again
+   * Handle navigation end event - allows blur reset again after grace period
+   * The grace period ensures RAF-triggered renders don't interfere with focus
    * @private
    */
   #handleNavigationEnd() {
-    this.#isNavigating = false;
+    // Keep navigation protection active for a short grace period
+    // This prevents RAF-triggered renders from interfering with focus
+    // after navigation completes but before the scroll handler settles
+    this.#navigationGraceTimeout = setTimeout(() => {
+      this.#isNavigating = false;
+      this.#navigationGraceTimeout = null;
+    }, 150);
   }
 
   /**
@@ -108,6 +125,14 @@ export default class TableController extends Controller {
    */
   handleCellFocus(event) {
     if (!event?.target?.closest) return;
+
+    // Don't interfere with focus during keyboard navigation (async cell focus in progress)
+    // When navigating to virtualized cells, the old cell is removed from DOM before the new
+    // one is focused, causing relatedTarget to be null and triggering false "entry" detection
+    if (this.#isNavigating) {
+      this.#debouncedHandleFocus(event);
+      return;
+    }
 
     if (this.#isResettingFocus) {
       this.#isResettingFocus = false;
@@ -144,6 +169,12 @@ export default class TableController extends Controller {
     const relatedTarget = event.relatedTarget;
     if (relatedTarget && table.contains(relatedTarget)) {
       // Focus is moving within the table, don't reset
+      return;
+    }
+
+    // Don't reset if the element losing focus was destroyed (virtualization re-render)
+    // This prevents resetting focus when cells are removed and recreated during scrolling
+    if (!document.body.contains(event.target)) {
       return;
     }
 
@@ -287,7 +318,8 @@ export default class TableController extends Controller {
   }
 
   /**
-   * Move focus to the first focusable element in the table
+   * Move focus to the first cell in the table (header row, column 1)
+   * Per APG grid pattern: the grid cell itself receives focus, not nested elements
    * @param {HTMLTableElement|null} table
    * @param {FocusEvent} event
    * @returns {boolean} True if focus was moved
@@ -295,15 +327,22 @@ export default class TableController extends Controller {
   #focusFirstCellInTable(table, event) {
     if (!table) return false;
 
+    // If focus is already on a valid grid cell in the table body, don't redirect
+    // This prevents interference with virtualized table navigation where cells
+    // are dynamically created and the relatedTarget may be null/detached
+    const targetCell = event.target.closest("[aria-colindex]");
+    if (targetCell && table.querySelector("tbody")?.contains(targetCell)) {
+      return false;
+    }
+
+    // Per APG pattern, focus first cell in header row (row 1, col 1)
     const firstCell = table.querySelector(
-      "thead th[aria-colindex], thead td[aria-colindex], tbody th[aria-colindex], tbody td[aria-colindex]",
+      "thead th[aria-colindex], thead td[aria-colindex]",
     );
     if (!firstCell) return false;
 
-    const focusTarget =
-      firstCell.querySelector(TableController.#INTERACTIVE_ELEMENT_SELECTOR) ||
-      firstCell;
-    if (focusTarget === event.target) return false;
+    // Per APG grid pattern, the cell itself receives focus, not nested interactive elements
+    if (firstCell === event.target) return false;
 
     this.#lastFocusedCell = null;
     this.#isResettingFocus = true;
@@ -330,7 +369,7 @@ export default class TableController extends Controller {
       );
     }
 
-    focusTarget.focus();
+    firstCell.focus();
     return true;
   }
 
