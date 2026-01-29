@@ -15,9 +15,9 @@ module Pathogen
         within('.Viral-Preview > [data-controller-connected="true"]', wait: 2) do
           # Invoke tooltip on hover
           find('a', text: @link_text).hover
-          # Wait for tooltip to appear with visible classes
-          assert_selector '[data-pathogen--tooltip-target="tooltip"].opacity-100.visible', text: @tooltip_text, wait: 2
         end
+        # Tooltip is portaled to body, so assert outside the within block
+        assert_selector '[data-pathogen--tooltip-target="tooltip"].opacity-100.visible', text: @tooltip_text, wait: 2
         # Dismiss tooltip on escape (send to body since handler is on document)
         page.find('body').send_keys(:escape)
         # Wait for tooltip to hide
@@ -31,9 +31,9 @@ module Pathogen
           # Invoke tooltip on focus using JavaScript
           link_element = find('a', text: @link_text)
           page.execute_script('arguments[0].focus()', link_element.native)
-          # Wait for tooltip to appear with visible classes
-          assert_selector '[data-pathogen--tooltip-target="tooltip"].opacity-100.visible', text: @tooltip_text, wait: 2
         end
+        # Tooltip is portaled to body, so assert outside the within block
+        assert_selector '[data-pathogen--tooltip-target="tooltip"].opacity-100.visible', text: @tooltip_text, wait: 2
         # Dismiss tooltip on blur by calling blur directly on the link
         page.execute_script('arguments[0].blur()', link_element.native)
         # Wait for tooltip to hide
