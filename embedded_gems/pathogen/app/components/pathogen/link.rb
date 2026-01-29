@@ -26,7 +26,10 @@ module Pathogen
     renders_one :tooltip, lambda { |placement: :top, **system_arguments|
       @tooltip_id = Pathogen::Tooltip.generate_id
       @link_system_arguments[:aria] ||= {}
-      @link_system_arguments[:aria][:describedby] = @tooltip_id
+      @link_system_arguments[:aria][:describedby] = [
+        @link_system_arguments[:aria][:describedby],
+        @tooltip_id
+      ].compact.join(' ')
       @link_system_arguments[:data] ||= {}
       @link_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
 

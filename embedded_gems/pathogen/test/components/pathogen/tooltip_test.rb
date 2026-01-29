@@ -12,9 +12,9 @@ module Pathogen
                       id: 'tooltip-123'
                     ))
 
-      assert_selector 'div#tooltip-123[role="tooltip"]'
+      assert_selector 'span#tooltip-123[role="tooltip"]'
       assert_text 'Sample tooltip'
-      assert_selector 'div[data-pathogen--tooltip-target="tooltip"]'
+      assert_selector 'span[data-pathogen--tooltip-target="tooltip"]'
     end
 
     test 'renders with default placement top' do
@@ -23,7 +23,7 @@ module Pathogen
                       id: 'tooltip-123'
                     ))
 
-      assert_selector 'div[data-placement="top"]'
+      assert_selector 'span[data-placement="top"]'
     end
 
     %i[bottom left right].each do |placement|
@@ -34,7 +34,7 @@ module Pathogen
                         placement: placement
                       ))
 
-        assert_selector "div[data-placement=\"#{placement}\"]"
+        assert_selector "span[data-placement=\"#{placement}\"]"
       end
     end
 
@@ -55,11 +55,11 @@ module Pathogen
                       id: 'tooltip-123'
                     ))
 
-      assert_selector 'div.bg-slate-900.dark\:bg-slate-700.text-white'
-      assert_selector 'div.px-3.py-2.text-sm.font-medium.rounded-lg.shadow-sm'
-      assert_selector 'div.max-w-xs.inline-block'
-      assert_selector 'div.opacity-0.scale-90.invisible'
-      assert_selector 'div.transition-all.duration-200.ease-out'
+      assert_selector 'span.bg-slate-900.dark\:bg-slate-700.text-white'
+      assert_selector 'span.px-3.py-2.text-sm.font-medium.rounded-lg.shadow-sm'
+      assert_selector 'span.max-w-xs.inline-block'
+      assert_selector 'span.opacity-0.scale-90.invisible'
+      assert_selector 'span.transition-all.duration-200.ease-out'
     end
 
     {
@@ -73,7 +73,7 @@ module Pathogen
                         placement: placement
                       ))
 
-        assert_selector "div.#{origin}"
+        assert_selector "span.#{origin}"
       end
     end
 
@@ -89,17 +89,17 @@ module Pathogen
       )
 
       # Custom attributes are applied
-      assert_selector 'div#tooltip-123.custom-tooltip-class'
-      assert_selector 'div[data-controller="custom-controller"]'
-      assert_selector 'div[data-action="click->custom#action"]'
-      assert_selector 'div[aria-label="Additional info"]'
-      assert_selector 'div[aria-live="polite"]'
+      assert_selector 'span#tooltip-123.custom-tooltip-class'
+      assert_selector 'span[data-controller="custom-controller"]'
+      assert_selector 'span[data-action="click->custom#action"]'
+      assert_selector 'span[aria-label="Additional info"]'
+      assert_selector 'span[aria-live="polite"]'
 
       # Required defaults are preserved (role="tooltip" is non-overridable per W3C APG)
-      assert_selector 'div[role="tooltip"]'
-      assert_selector 'div.bg-slate-900'
-      assert_selector 'div[data-pathogen--tooltip-target="tooltip"]'
-      assert_selector 'div[data-placement="top"]'
+      assert_selector 'span[role="tooltip"]'
+      assert_selector 'span.bg-slate-900'
+      assert_selector 'span[data-pathogen--tooltip-target="tooltip"]'
+      assert_selector 'span[data-placement="top"]'
     end
   end
 end

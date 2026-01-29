@@ -18,13 +18,13 @@ class TooltipTest < ApplicationSystemTestCase
     tooltip_trigger.hover
 
     # Wait for tooltip to appear
-    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
+    assert_selector 'span[role="tooltip"].opacity-100.visible', wait: 2
 
     # Move mouse away by hovering over a different element (body)
     page.find('body').hover
 
     # Wait for tooltip to hide (don't use visible: filter since element is invisible)
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
+    assert_selector 'span[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip appears on focus and hides on blur' do
@@ -37,13 +37,13 @@ class TooltipTest < ApplicationSystemTestCase
     page.execute_script('arguments[0].focus()', tooltip_trigger)
 
     # Wait for tooltip to appear
-    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
+    assert_selector 'span[role="tooltip"].opacity-100.visible', wait: 2
 
     # Blur trigger by focusing on body
     page.execute_script('document.body.focus()')
 
     # Wait for tooltip to hide (don't use visible: filter since element is invisible)
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
+    assert_selector 'span[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip dismisses with Escape key' do
@@ -56,13 +56,13 @@ class TooltipTest < ApplicationSystemTestCase
     page.execute_script('arguments[0].focus()', tooltip_trigger)
 
     # Wait for tooltip to appear
-    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
+    assert_selector 'span[role="tooltip"].opacity-100.visible', wait: 2
 
     # Press Escape key (send to body since the handler is on document)
     page.find('body').send_keys(:escape)
 
     # Wait for tooltip to hide (don't use visible: filter since element is invisible)
-    assert_selector 'div[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
+    assert_selector 'span[role="tooltip"].opacity-0.invisible', visible: :all, wait: 2
   end
 
   test 'tooltip respects viewport boundaries and flips when needed' do
@@ -78,10 +78,10 @@ class TooltipTest < ApplicationSystemTestCase
     tooltip_trigger.hover
 
     # Wait for tooltip to appear
-    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
+    assert_selector 'span[role="tooltip"].opacity-100.visible', wait: 2
 
     # Get tooltip position
-    tooltip = page.find('div[role="tooltip"].opacity-100.visible', match: :first)
+    tooltip = page.find('span[role="tooltip"].opacity-100.visible', match: :first)
     tooltip_rect = page.evaluate_script('arguments[0].getBoundingClientRect().toJSON()', tooltip)
 
     # Verify tooltip is within viewport bounds (with padding)
@@ -101,13 +101,13 @@ class TooltipTest < ApplicationSystemTestCase
     tooltip_id = tooltip_trigger['aria-describedby']
 
     # Verify tooltip exists with that ID (check all elements, not just visible)
-    assert_selector "div##{tooltip_id}[role='tooltip']", visible: :all
+    assert_selector "span##{tooltip_id}[role='tooltip']", visible: :all
 
     # Hover to show tooltip (use hover instead of focus since it's more reliable)
     tooltip_trigger.hover
 
     # Verify tooltip is visible
-    assert_selector "div##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
+    assert_selector "span##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
   end
 
   test 'touch interaction shows tooltip on first tap' do
@@ -127,6 +127,6 @@ class TooltipTest < ApplicationSystemTestCase
     JS
 
     # Tooltip should be visible after first tap
-    assert_selector 'div[role="tooltip"].opacity-100.visible', wait: 2
+    assert_selector 'span[role="tooltip"].opacity-100.visible', wait: 2
   end
 end

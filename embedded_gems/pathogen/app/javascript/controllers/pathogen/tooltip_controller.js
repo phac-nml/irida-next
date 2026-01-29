@@ -30,6 +30,14 @@ class TooltipRegistry {
     }
   }
 
+  hideAllExcept(activeController) {
+    this.#controllers.forEach((c) => {
+      if (c !== activeController) {
+        c.hide();
+      }
+    });
+  }
+
   #setupGlobalListeners() {
     this.#abortController = new AbortController();
     const { signal } = this.#abortController;
@@ -113,6 +121,7 @@ export default class extends Controller {
     spacing: { type: Number, default: 8 },
     viewportPadding: { type: Number, default: 8 },
     touchDismissDelay: { type: Number, default: 3000 },
+    hideDelay: { type: Number, default: 300 },
     // autoUpdate options
     ancestorScroll: { type: Boolean, default: true },
     ancestorResize: { type: Boolean, default: true },
@@ -124,6 +133,7 @@ export default class extends Controller {
   // Private fields - store direct references since tooltip is portaled to body
   #cleanupAutoUpdate = null;
   #touchDismissTimeout = null;
+  #hideTimeout = null;
   #touchPrimed = false;
   #touchStarted = false;
   #escapeDismissed = false;
@@ -147,6 +157,7 @@ export default class extends Controller {
   disconnect() {
     // Ensure portaled tooltip is fully hidden before teardown to avoid lingering visibility
     this.hide();
+    this.#clearHideTimeout();
     this.#stopAutoUpdate();
     this.#clearTouchTimeout();
     this.#abortController?.abort();
@@ -168,8 +179,23 @@ export default class extends Controller {
 
     const { signal } = this.#abortController;
 
-    element.addEventListener("mouseenter", () => this.show(), { signal });
-    element.addEventListener("mouseleave", () => this.hide(), { signal });
+    element.addEventListener(
+      "mouseenter",
+      () => {
+        this.#clearHideTimeout();
+        this.show();
+      },
+      { signal },
+    );
+
+    element.addEventListener(
+      "mouseleave",
+      () => {
+        this.#scheduleHide();
+      },
+      { signal },
+    );
+
     element.addEventListener("focusin", () => this.show(), { signal });
     element.addEventListener("focusout", () => this.hide(), { signal });
     element.addEventListener("touchstart", (e) => this.#handleTouchStart(e), {
@@ -190,8 +216,20 @@ export default class extends Controller {
 
     const { signal } = this.#abortController;
 
-    element.addEventListener("mouseenter", () => this.show(), { signal });
-    element.addEventListener("mouseleave", () => this.hide(), { signal });
+    element.addEventListener(
+      "mouseenter",
+      () => {
+        this.#clearHideTimeout();
+      },
+      { signal },
+    );
+    element.addEventListener(
+      "mouseleave",
+      () => {
+        this.#scheduleHide();
+      },
+      { signal },
+    );
 
     // Portal tooltip to body to escape CSS containment contexts
     // (container queries, transforms, filters create containing blocks
@@ -230,6 +268,7 @@ export default class extends Controller {
     if (!this.#tooltipElement) return;
 
     this.#clearTouchTimeout();
+    this.#clearHideTimeout();
     this.#touchPrimed = false;
 
     this.#tooltipElement.setAttribute("aria-hidden", "true");
@@ -407,6 +446,20 @@ export default class extends Controller {
     }
   }
 
+  #scheduleHide() {
+    this.#clearHideTimeout();
+    this.#hideTimeout = setTimeout(() => {
+      this.hide();
+    }, this.hideDelayValue);
+  }
+
+  #clearHideTimeout() {
+    if (this.#hideTimeout) {
+      clearTimeout(this.#hideTimeout);
+      this.#hideTimeout = null;
+    }
+  }
+
   #portalToBody(tooltipElement) {
     // Store original parent for cleanup
     this.#originalParent = tooltipElement.parentElement;
@@ -426,21 +479,7 @@ export default class extends Controller {
   }
 
   #hideOtherTooltips() {
-    document
-      .querySelectorAll('[data-pathogen--tooltip-target="tooltip"].visible')
-      .forEach((tooltip) => {
-        if (tooltip !== this.#tooltipElement) {
-          const wrapper = tooltip.closest(
-            "[data-controller*='pathogen--tooltip']",
-          );
-          const controller =
-            this.application.getControllerForElementAndIdentifier(
-              wrapper,
-              "pathogen--tooltip",
-            );
-          controller?.hide();
-        }
-      });
+    tooltipRegistry.hideAllExcept(this);
   }
 
   #validateAriaDescribedBy(triggerElement) {

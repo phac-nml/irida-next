@@ -145,7 +145,7 @@ module Pathogen
       render(Pathogen::BaseComponent.new(**@system_arguments)) do
         safe_join([
                     @text,
-                    tag.div(class: ARROW_CLASSES, data: { 'pathogen--tooltip-target': 'arrow' })
+                    tag.span(class: ARROW_CLASSES, data: { 'pathogen--tooltip-target': 'arrow' })
                   ])
       end
     end
@@ -155,7 +155,7 @@ module Pathogen
     # Sets up HTML attributes for the tooltip, merging provided system_arguments
     # with required defaults for accessibility and JavaScript behavior
     def setup_system_arguments
-      @system_arguments[:tag] = :div
+      @system_arguments[:tag] = :span
       @system_arguments[:id] = @id
       # W3C ARIA APG requires role="tooltip" - this is non-overridable
       @system_arguments[:role] = 'tooltip'
