@@ -6,15 +6,23 @@
     <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <div
-      data-controller="attachment-upload metadata--file-import viral--sortable-lists--two-lists-selection"
+      data-controller="attachment-upload <% if Flipper.enabled?(:metadata_file_import_worker) %> metadata--file-import-worker <% else %> metadata--file-import <% end %> viral--sortable-lists--two-lists-selection"
       data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
+      <% if Flipper.enabled?(:metadata_file_import_worker) %>
+      data-metadata--file-import-worker-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
+      data-action="
+        metadata--file-import-worker:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+      "
+      data-metadata--file-import-worker-refresh-outlet="[data-controller='refresh']"
+      <% else %>
       data-metadata--file-import-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       data-action="
         metadata--file-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
       "
       data-metadata--file-import-refresh-outlet="[data-controller='refresh']"
+      <% end %>
       data-attachment-upload-uploading-text-value='<%=t(".uploading") %>'
       id="import-metadata-dialog-content"
     >
@@ -39,7 +47,11 @@
               bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
             "
             aria-hidden="true"
+            <% if Flipper.enabled?(:metadata_file_import_worker) %>
+            data-metadata--file-import-worker-target="error"
+            <% else %>
             data-metadata--file-import-target="error"
+            <% end %>
           >
             <span class="inline shrink-0">
               <%= pathogen_icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %>
@@ -65,10 +77,18 @@
                             accept:
                               # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                               "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            data: {
-                              action: "change->metadata--file-import#readFile",
-                              "attachment-upload-target": "attachmentsInput",
-                            },
+                            data:
+                              if Flipper.enabled?(:metadata_file_import_worker)
+                                {
+                                  action: "change->metadata--file-import-worker#readFile",
+                                  "attachment-upload-target": "attachmentsInput",
+                                }
+                              else
+                                {
+                                  action: "change->metadata--file-import#readFile",
+                                  "attachment-upload-target": "attachmentsInput",
+                                }
+                              end,
                             aria: {
                               required: true,
                             },
@@ -88,10 +108,19 @@
                         {},
                         { prompt: t(".select_sample_id_column") },
                         required: true,
-                        data: {
-                          "metadata--file-import-target": "sampleIdColumn",
-                          action: "change->metadata--file-import#changeSampleIDInput",
-                        },
+                        data:
+                          if Flipper.enabled?(:metadata_file_import_worker)
+                            {
+                              "metadata--file-import-worker-target": "sampleIdColumn",
+                              action:
+                                "change->metadata--file-import-worker#changeSampleIDInput",
+                            }
+                          else
+                            {
+                              "metadata--file-import-target": "sampleIdColumn",
+                              action: "change->metadata--file-import#changeSampleIDInput",
+                            }
+                          end,
                         class:
                           "disabled:bg-slate-50 disabled:text-slate-900 disabled:dark:bg-slate-700 disabled:dark:placeholder-slate-400 disabled:dark:text-white",
                         disabled: true,
@@ -104,7 +133,11 @@
             <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
           <div
+            <% if Flipper.enabled?(:metadata_file_import_worker) %>
+            data-metadata--file-import-worker-target="metadataColumns"
+            <% else %>
             data-metadata--file-import-target="metadataColumns"
+            <% end %>
             aria-hidden="true"
             class="grid gap-4 hidden"
           >
@@ -152,15 +185,30 @@
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button-primary",
-                        data: {
-                          turbo_frame: "_top",
-                          action:
-                            "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
-                          "viral--dialog-closable-param": "false",
-                          "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-                          "metadata--file-import-target": "submitButton",
-                          "attachment-upload-target": "submitButton",
-                        },
+                        data:
+                          if Flipper.enabled?(:metadata_file_import_worker)
+                            {
+                              turbo_frame: "_top",
+                              action:
+                                "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->metadata--file-import-worker#handleSubmit",
+                              "viral--dialog-closable-param": "false",
+                              "viral--sortable-lists--two-lists-selection-target":
+                                "submitBtn",
+                              "metadata--file-import-worker-target": "submitButton",
+                              "attachment-upload-target": "submitButton",
+                            }
+                          else
+                            {
+                              turbo_frame: "_top",
+                              action:
+                                "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
+                              "viral--dialog-closable-param": "false",
+                              "viral--sortable-lists--two-lists-selection-target":
+                                "submitBtn",
+                              "metadata--file-import-target": "submitButton",
+                              "attachment-upload-target": "submitButton",
+                            }
+                          end,
                         disabled: true,
                         aria: {
                           disabled: true,
