@@ -107,7 +107,7 @@ const tooltipRegistry = new TooltipRegistry();
  * </div>
  */
 export default class extends Controller {
-  static targets = ["trigger", "tooltip", "arrow"];
+  static targets = ["trigger", "tooltip"];
 
   static values = {
     spacing: { type: Number, default: 8 },
@@ -181,6 +181,11 @@ export default class extends Controller {
     // Store direct reference before portaling (Stimulus targets won't work after)
     this.#tooltipElement = element;
 
+    // Find and store arrow element (nested inside tooltip, won't work as Stimulus target after portal)
+    this.#arrowElement = element.querySelector(
+      '[data-pathogen--tooltip-target="arrow"]',
+    );
+
     const { signal } = this.#abortController;
 
     element.addEventListener("mouseenter", () => this.show(), { signal });
@@ -190,10 +195,6 @@ export default class extends Controller {
     // (container queries, transforms, filters create containing blocks
     // that break position: fixed)
     this.#portalToBody(element);
-  }
-
-  arrowTargetConnected(element) {
-    this.#arrowElement = element;
   }
 
   /**

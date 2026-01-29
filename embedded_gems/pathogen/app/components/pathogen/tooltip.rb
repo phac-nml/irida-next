@@ -114,7 +114,9 @@ module Pathogen
                            'font-medium rounded-lg shadow-sm max-w-xs inline-block opacity-0 scale-90 ' \
                            'invisible transition-all duration-200 ease-out'
 
-    attr_reader :text
+    ARROW_CLASSES = 'absolute w-2 h-2 bg-slate-900 dark:bg-slate-700 rotate-45'
+
+    attr_reader :text, :placement
 
     def initialize(text:, id:, placement: :top, **system_arguments)
       @text = text
@@ -140,7 +142,12 @@ module Pathogen
     # Renders the tooltip using BaseComponent to handle all HTML attributes
     # @return [Pathogen::BaseComponent] The rendered tooltip component
     def call
-      render(Pathogen::BaseComponent.new(**@system_arguments)) { @text }
+      render(Pathogen::BaseComponent.new(**@system_arguments)) do
+        safe_join([
+                    @text,
+                    tag.div(class: ARROW_CLASSES, data: { 'pathogen--tooltip-target': 'arrow' })
+                  ])
+      end
     end
 
     private
