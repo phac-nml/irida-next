@@ -11,6 +11,10 @@ pin '@hotwired/stimulus', to: 'stimulus.min.js', preload: true
 pin '@hotwired/stimulus-loading', to: 'stimulus-loading.js', preload: true
 pin 'flowbite', to: 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.turbo.min.js'
 pin '@popperjs/core', to: 'https://ga.jspm.io/npm:@popperjs/core@2.11.7/dist/esm/index.js'
+pin '@floating-ui/dom', to: 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.5/+esm'
+pin '@floating-ui/core', to: 'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.4/+esm'
+pin '@floating-ui/utils', to: 'https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.2.10/+esm'
+pin '@floating-ui/utils/dom', to: 'https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.2.10/dom/+esm'
 pin '@sindresorhus/slugify', to: '@sindresorhus--slugify.js' # @2.2.1
 pin '@sindresorhus/transliterate', to: '@sindresorhus--transliterate.js' # @1.6.0
 pin 'escape-string-regexp' # @5.0.0
