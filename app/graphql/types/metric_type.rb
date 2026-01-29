@@ -12,15 +12,9 @@ module Types
 
     field :samples_count, Integer, null: false, description: 'Total number of samples in group projects or project.'
 
-    field :name, String, null: false, description: 'Name of the  group or project.'
-
-    field :disk_usage, Integer, null: false,
-                                description: 'Disk usage of the group projects or project in bytes.',
-                                resolver: Resolvers::DiskUsageResolver
-
-    field :members, [[String]], null: false,
-                                description: 'Members of the group or project.',
-                                resolver: Resolvers::MembersResolver
+    field :disk_usage, String, null: false,
+                               description: 'Disk usage of the group projects or project.',
+                               resolver: Resolvers::DiskUsageResolver
 
     field :members_count, Integer, null: false,
                                    description: 'Total number of members in the group or project.'
@@ -31,15 +25,17 @@ module Types
       object.self_and_descendants_of_type([Project]).count
     end
 
-    def name
-      "#{object.name} (#{object.puid})"
-    end
-
-    def members_count
+    def members_count # rubocop:disable GraphQL/ResolverMethodLength,Metrics/AbcSize
       if object.is_a?(Project)
-        object.namespace.project_members.count
+        if object.namespace.parent.group_namespace?
+          Member.where(
+            namespace_id: [object.namespace.id, object.namespace.self_and_ancestors_of_type([Group]).select(:id)]
+          ).count
+        else
+          object.namespace.project_members.count
+        end
       elsif object.group_namespace?
-        object.group_members.count
+        Member.where(namespace_id: object.self_and_ancestors_of_type([Group]).select(:id)).count
       end
     end
 

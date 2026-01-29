@@ -1353,24 +1353,14 @@ type Metric {
   createdAt: ISO8601DateTime!
 
   """
-  Disk usage of the group projects or project in bytes.
+  Disk usage of the group projects or project.
   """
-  diskUsage: Int!
-
-  """
-  Members of the group or project.
-  """
-  members: [[String!]!]!
+  diskUsage: String!
 
   """
   Total number of members in the group or project.
   """
   membersCount: Int!
-
-  """
-  Name of the  group or project.
-  """
-  name: String!
 
   """
   Total number of projects under the group and it's subgroups.
