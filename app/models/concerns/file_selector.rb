@@ -33,7 +33,7 @@ module FileSelector
       { 'fastq_1' => samplesheet_file_attributes(forward_file),
         'fastq_2' => samplesheet_file_attributes(forward_file.associated_attachment) }
     else
-      single_file = query_single_fastq_files.first
+      single_file = query_single_fastq_files.order(created_at: :desc, id: :desc).first
       if single_file
         { 'fastq_1' => samplesheet_file_attributes(single_file), 'fastq_2' => {} }
       else
@@ -97,7 +97,6 @@ module FileSelector
     return paired_files.order(created_at: :desc, id: :desc) unless include_singles
 
     single_files = query_single_fastq_files
-
     paired_files.or(single_files).order(created_at: :desc, id: :desc)
   end
 
