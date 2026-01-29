@@ -66,7 +66,6 @@ export default class extends Controller {
 
   update(ids, announce = true) {
     if (!Array.isArray(ids)) {
-      console.warn("SelectionController: ids must be an array");
       return;
     }
 
@@ -83,7 +82,7 @@ export default class extends Controller {
         return storedItems;
       }
     } catch (error) {
-      console.warn("Failed to parse stored selection items:", error);
+      // Ignore storage parse errors and fall back to defaults
     }
 
     // create default empty array
@@ -119,7 +118,7 @@ export default class extends Controller {
       this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue();
     } catch (error) {
-      console.error("selectionController: Failed to update UI", error);
+      // Ignore UI update errors to avoid breaking interaction
     }
   }
 
