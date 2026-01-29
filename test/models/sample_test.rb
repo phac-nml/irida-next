@@ -11,6 +11,7 @@ class SampleTest < ActiveSupport::TestCase
     # project1 is under group_one
     # project4 is under subgroup_one_group_three -> group_three (deeply nested)
     Flipper.enable(:samples_refresh_notice)
+    Flipper.enable(:deferred_samplesheet)
   end
 
   def teardown
@@ -154,32 +155,225 @@ class SampleTest < ActiveSupport::TestCase
     assert @sample.has_attribute?(:attachments_updated_at)
   end
 
-  test 'sort_files for pe' do
+  test 'file_selector_fastq_files for forward' do
+    # includes both forward PE and single fastq files
     sample_b = samples(:sampleB)
 
-    files = sample_b.sort_files
+    attachment1 = attachments(:attachmentF)
+    attachment2 = attachments(:attachmentPEFWD3)
+    attachment3 = attachments(:attachmentE)
+    attachment4 = attachments(:attachmentPEFWD2)
+    attachment5 = attachments(:attachmentD)
+    attachment6 = attachments(:attachmentPEFWD1)
 
-    assert_equal 3, files[:singles].count
-    assert_equal 3, files[:pe_forward].count
-    assert_equal 3, files[:pe_reverse].count
+    expected_attributes = [{
+      filename: attachment1.file.filename.to_s,
+      global_id: attachment1.to_global_id,
+      id: attachment1.id,
+      byte_size: attachment1.byte_size,
+      created_at: attachment1.created_at,
+      metadata: attachment1.metadata
+    }, {
+      filename: attachment2.file.filename.to_s,
+      global_id: attachment2.to_global_id,
+      id: attachment2.id,
+      byte_size: attachment2.byte_size,
+      created_at: attachment2.created_at,
+      metadata: attachment2.metadata
+    }, {
+      filename: attachment3.file.filename.to_s,
+      global_id: attachment3.to_global_id,
+      id: attachment3.id,
+      byte_size: attachment3.byte_size,
+      created_at: attachment3.created_at,
+      metadata: attachment3.metadata
+    }, {
+      filename: attachment4.file.filename.to_s,
+      global_id: attachment4.to_global_id,
+      id: attachment4.id,
+      byte_size: attachment4.byte_size,
+      created_at: attachment4.created_at,
+      metadata: attachment4.metadata
+    }, {
+      filename: attachment5.file.filename.to_s,
+      global_id: attachment5.to_global_id,
+      id: attachment5.id,
+      byte_size: attachment5.byte_size,
+      created_at: attachment5.created_at,
+      metadata: attachment5.metadata
+    }, {
+      filename: attachment6.file.filename.to_s,
+      global_id: attachment6.to_global_id,
+      id: attachment6.id,
+      byte_size: attachment6.byte_size,
+      created_at: attachment6.created_at,
+      metadata: attachment6.metadata
+    }]
+
+    assert_equal expected_attributes, sample_b.file_selector_fastq_files('fastq_1')
   end
 
-  test 'sorted_files with files including pe' do
+  test 'file_selector_fastq_files for reverse' do
+    # only includes reverse PE files
     sample_b = samples(:sampleB)
+    attachment1 = attachments(:attachmentPEREV3)
+    attachment2 = attachments(:attachmentPEREV2)
+    attachment3 = attachments(:attachmentPEREV1)
+    expected_attributes = [{
+      filename: attachment1.file.filename.to_s,
+      global_id: attachment1.to_global_id,
+      id: attachment1.id,
+      byte_size: attachment1.byte_size,
+      created_at: attachment1.created_at,
+      metadata: attachment1.metadata
+    }, {
+      filename: attachment2.file.filename.to_s,
+      global_id: attachment2.to_global_id,
+      id: attachment2.id,
+      byte_size: attachment2.byte_size,
+      created_at: attachment2.created_at,
+      metadata: attachment2.metadata
+    }, {
+      filename: attachment3.file.filename.to_s,
+      global_id: attachment3.to_global_id,
+      id: attachment3.id,
+      byte_size: attachment3.byte_size,
+      created_at: attachment3.created_at,
+      metadata: attachment3.metadata
+    }]
 
-    files = sample_b.sorted_files
-
-    assert_equal 3, files[:singles].count
-    assert_equal 3, files[:pe_forward].count
-    assert_equal 3, files[:pe_reverse].count
+    assert_equal expected_attributes, sample_b.file_selector_fastq_files('fastq_2')
   end
 
-  test 'sorted_files with no attachments' do
+  test 'file_selector_fastq_files with no attachments' do
     sample2 = samples(:sample2)
 
-    files = sample2.sorted_files
+    files = sample2.file_selector_fastq_files('fastq_1')
 
     assert files.empty?
+  end
+
+  test 'file_selector_other_files with pattern' do
+    pattern = '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$'
+    expected_attachment = attachments(:gasclusteringAttachment)
+    sample32 = samples(:sample32)
+    expected_attributes = [{
+      filename: expected_attachment.file.filename.to_s,
+      global_id: expected_attachment.to_global_id,
+      id: expected_attachment.id,
+      byte_size: expected_attachment.byte_size,
+      created_at: expected_attachment.created_at,
+      metadata: expected_attachment.metadata
+    }]
+
+    assert_equal expected_attributes, sample32.file_selector_other_files(pattern)
+  end
+
+  test 'file_selector_other_files with no pattern' do
+    sample32 = samples(:sample32)
+    attachment1 = attachments(:sample32JsonAttachment)
+    attachment2 = attachments(:gasclusteringAttachment)
+
+    expected_attributes = [{
+      filename: attachment1.file.filename.to_s,
+      global_id: attachment1.to_global_id,
+      id: attachment1.id,
+      byte_size: attachment1.byte_size,
+      created_at: attachment1.created_at,
+      metadata: attachment1.metadata
+    }, {
+      filename: attachment2.file.filename.to_s,
+      global_id: attachment2.to_global_id,
+      id: attachment2.id,
+      byte_size: attachment2.byte_size,
+      created_at: attachment2.created_at,
+      metadata: attachment2.metadata
+    }]
+    assert_equal expected_attributes, sample32.file_selector_other_files(nil)
+  end
+
+  test 'most_recent_fastq_files with both PE and non-PE attached' do
+    # PE attachments prioritized over non-PE fastq files
+    sample_b = samples(:sampleB)
+    actual_most_recent_attachment = attachments(:attachmentF)
+    most_recent_pe_fwd = attachments(:attachmentPEFWD3)
+    most_recent_pe_rev = attachments(:attachmentPEREV3)
+
+    expected_attributes = {
+      'fastq_1' => {
+        filename: most_recent_pe_fwd.file.filename,
+        global_id: most_recent_pe_fwd.to_global_id,
+        id: most_recent_pe_fwd.id
+      },
+      'fastq_2' => {
+        filename: most_recent_pe_rev.file.filename,
+        global_id: most_recent_pe_rev.to_global_id,
+        id: most_recent_pe_rev.id
+      }
+    }
+
+    # check most recent file attached is not PE
+    assert_equal actual_most_recent_attachment.file.filename, sample_b.attachments.last.file.filename
+    assert_equal expected_attributes, sample_b.most_recent_fastq_files
+  end
+
+  test 'most_recent_fastq_files with no PE' do
+    sample = samples(:sample1)
+    expected_attachment = attachments(:attachment2)
+    expected_attributes = {
+      'fastq_1' => {
+        filename: expected_attachment.file.filename,
+        global_id: expected_attachment.to_global_id,
+        id: expected_attachment.id
+      },
+      'fastq_2' => {}
+    }
+
+    assert_equal expected_attributes, sample.most_recent_fastq_files
+  end
+
+  test 'most_recent_fastq_files with attachments but no fastq' do
+    sample = samples(:sample3)
+    assert_equal 1, sample.attachments.count
+    assert_equal 'fasta', sample.attachments.first.metadata['format']
+    expected_attributes = {
+      'fastq_1' => {},
+      'fastq_2' => {}
+    }
+    assert_equal expected_attributes, sample.most_recent_fastq_files
+  end
+
+  test 'most_recent_fastq_files with no attachments' do
+    sample = samples(:sample2)
+    assert_equal 0, sample.attachments.count
+    expected_attributes = {
+      'fastq_1' => {},
+      'fastq_2' => {}
+    }
+    assert_equal expected_attributes, sample.most_recent_fastq_files
+  end
+
+  test 'most_recent_other_file with pattern' do
+    pattern = '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$'
+    expected_attachment = attachments(:gasclusteringAttachment)
+    sample32 = samples(:sample32)
+    expected_attributes = {
+      filename: expected_attachment.file.filename,
+      global_id: expected_attachment.to_global_id,
+      id: expected_attachment.id
+    }
+
+    assert_equal expected_attributes, sample32.most_recent_other_file(true, pattern)
+  end
+
+  test 'most_recent_other_file with no attachments' do
+    sample = samples(:sample2)
+    assert sample.most_recent_other_file(true, nil).empty?
+  end
+
+  test 'most_recent_other_file with false autopopulate' do
+    sample = samples(:sample32)
+    assert sample.most_recent_other_file(false, nil).empty?
   end
 
   test 'field? returns true when metadata has field' do
