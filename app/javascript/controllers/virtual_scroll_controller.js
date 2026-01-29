@@ -701,6 +701,14 @@ class VirtualScrollController extends Controller {
 
     const activeEditingColumnIndex = this.getActiveEditingColumnIndex();
 
+    // Convert pending focus column to metadata index for range calculation
+    // pendingFocusCol is 1-based overall column index, we need 0-based metadata index
+    const pendingFocusColumnIndex =
+      Number.isInteger(this.pendingFocusCol) &&
+      this.pendingFocusCol > this.numBaseColumns
+        ? this.pendingFocusCol - this.numBaseColumns - 1
+        : null;
+
     const {
       firstVisible: firstVisibleMetadataColumn,
       lastVisible: lastVisibleMetadataColumn,
@@ -712,6 +720,7 @@ class VirtualScrollController extends Controller {
       bufferColumns: this.constructor.constants.BUFFER_COLUMNS,
       numMetadataColumns: this.numMetadataColumns,
       activeEditingColumnIndex,
+      pendingFocusColumnIndex,
     });
 
     // Store the global visible range for quick early exit
@@ -779,6 +788,7 @@ class VirtualScrollController extends Controller {
       Number.isInteger(this.pendingFocusRow) &&
       Number.isInteger(this.pendingFocusCol)
     ) {
+      // Per APG pattern, header cells are navigable - search entire table
       const tableElement = this.element.querySelector("table");
       const focusRoot = tableElement || this.bodyTarget;
       const row = focusRoot?.querySelector?.(
@@ -945,6 +955,10 @@ class VirtualScrollController extends Controller {
     // Try a few frames to allow rendering/placeholders to appear
     const maxTries = this.constructor.constants.MAX_CELL_READY_RETRIES;
 
+    // Determine the search root: header row is in thead, body rows in tbody
+    const tableElement = this.element.querySelector("table");
+    const searchRoot = tableElement || this.bodyTarget;
+
     for (let i = 0; i < maxTries; i += 1) {
       // Remember intended focus so post-render roving tabindex can honor it
       // Reset on each iteration because render() clears it
@@ -969,9 +983,8 @@ class VirtualScrollController extends Controller {
 
       // Check immediately if the cell exists after render
       // This avoids an unnecessary frame delay which can cause focus loss
-      let row = this.bodyTarget?.querySelector?.(
-        `[aria-rowindex="${rowIndex}"]`,
-      );
+      // Search in the entire table to find header and body rows
+      let row = searchRoot?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
       let cell = row?.querySelector?.(`[aria-colindex="${colIndex}"]`);
 
       if (cell) {
@@ -985,7 +998,7 @@ class VirtualScrollController extends Controller {
 
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
-      row = this.bodyTarget?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
+      row = searchRoot?.querySelector?.(`[aria-rowindex="${rowIndex}"]`);
       if (!row) continue;
       cell = row.querySelector(`[aria-colindex="${colIndex}"]`);
       if (cell) {
@@ -1040,6 +1053,22 @@ class VirtualScrollController extends Controller {
     const { rowIndex, colIndex } = event.detail || {};
 
     if (!Number.isInteger(rowIndex) || !Number.isInteger(colIndex)) return;
+
+    // Don't reset during active navigation - this can corrupt navigation state
+    // when blur events fire due to cell destruction during re-rendering
+    if (this.keyboardNavigator?.isNavigating) {
+      return;
+    }
+
+    // Don't reset if there's already a pending focus to a different cell
+    // This can happen when RAF-triggered renders destroy cells between navigations
+    if (
+      Number.isInteger(this.pendingFocusRow) &&
+      Number.isInteger(this.pendingFocusCol) &&
+      (this.pendingFocusRow !== rowIndex || this.pendingFocusCol !== colIndex)
+    ) {
+      return;
+    }
 
     // Set pending focus to the target cell so that if render() runs,
     // it will use these coordinates instead of trying to capture from activeElement

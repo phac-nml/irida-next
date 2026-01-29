@@ -386,15 +386,26 @@ export class GridKeyboardNavigator {
   /**
    * Apply roving tabindex pattern to the grid
    * Sets one cell to tabIndex=0, all others to tabIndex=-1
+   * Also restores focus if the currently focused element is no longer in the DOM
+   * (can happen when cells are destroyed and recreated during re-render)
+   * Per APG pattern: only one focusable element in the grid is in the tab sequence
    * @param {number} [fallbackRowIndex] - Row to focus if no active cell
    * @param {number} [fallbackColIndex] - Column to focus if no active cell
    */
   applyRovingTabindex(fallbackRowIndex, fallbackColIndex) {
+    // Check if the currently focused element is detached (e.g., destroyed during re-render)
+    const activeElement = document.activeElement;
+    const focusWasInGrid =
+      activeElement && activeElement.closest?.("[aria-colindex]");
+    const focusIsDetached =
+      focusWasInGrid && !document.body.contains(activeElement);
+
+    // Track if explicit coordinates were provided (vs. derived from active cell)
+    const hasExplicitCoordinates =
+      Number.isInteger(fallbackRowIndex) && Number.isInteger(fallbackColIndex);
+
     // If explicit fallback provided, prefer it; otherwise derive from active cell
-    if (
-      Number.isInteger(fallbackRowIndex) &&
-      Number.isInteger(fallbackColIndex)
-    ) {
+    if (hasExplicitCoordinates) {
       this.focusedRowIndex = fallbackRowIndex;
       this.focusedColIndex = fallbackColIndex;
     } else {
@@ -405,6 +416,7 @@ export class GridKeyboardNavigator {
       }
     }
 
+    // Default to first header cell (row 1, col 1) per APG single tab stop pattern
     const firstRowIndex = this.getFirstRowIndex();
     if (!this.focusedRowIndex)
       this.focusedRowIndex = fallbackRowIndex ?? firstRowIndex;
@@ -415,14 +427,38 @@ export class GridKeyboardNavigator {
     let targetCell = this.findCell(this.focusedRowIndex, this.focusedColIndex);
 
     if (!targetCell) {
-      // Fallback to first visible cell
-      targetCell = this.bodyElement.querySelector("[aria-colindex]");
+      // If explicit coordinates were provided but cell doesn't exist, preserve the
+      // navigation target without falling back to first cell. This handles:
+      // 1. Active navigation where cell isn't rendered yet (virtualization)
+      // 2. RAF-triggered renders between navigations where cell was destroyed
+      // Still set tabIndex=0 on first cell for a11y (roving tabindex requires one tabbable cell)
+      if (hasExplicitCoordinates || this.isNavigating) {
+        const a11yCell =
+          this.rootElement.querySelector("thead [aria-colindex]") ||
+          this.bodyElement.querySelector("[aria-colindex]");
+        if (a11yCell) {
+          a11yCell.tabIndex = 0;
+        }
+        // Don't update focusedRowIndex/focusedColIndex or focus - preserve target for retry
+        return;
+      }
+
+      // Fallback to first cell in grid (header row first, then body)
+      targetCell =
+        this.rootElement.querySelector("thead [aria-colindex]") ||
+        this.bodyElement.querySelector("[aria-colindex]");
     }
 
     if (targetCell) {
       targetCell.tabIndex = 0;
       this.focusedRowIndex = this.getRowIndex(targetCell);
       this.focusedColIndex = this.getColIndex(targetCell);
+
+      // Restore focus if the previously focused element was destroyed during re-render
+      // This prevents focus from escaping the grid when cells are recreated
+      if (focusIsDetached) {
+        targetCell.focus();
+      }
     }
   }
 
@@ -549,6 +585,7 @@ export class GridKeyboardNavigator {
 
   /**
    * Get all rows that participate in grid navigation.
+   * Includes header (thead) rows per APG data grid pattern, excludes footer (tfoot) rows.
    * @returns {HTMLElement[]} row elements in DOM order
    * @private
    */
@@ -557,6 +594,7 @@ export class GridKeyboardNavigator {
       this.rootElement?.querySelectorAll?.("[aria-rowindex]") || [],
     );
 
+    // Include thead rows for navigation per APG pattern, exclude tfoot
     return allRows.filter((row) => !row.closest("tfoot"));
   }
 

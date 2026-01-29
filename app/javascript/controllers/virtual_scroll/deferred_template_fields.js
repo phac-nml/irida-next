@@ -91,6 +91,9 @@ export const deferredTemplateFieldsMixin = {
       '[data-virtual-scroll-target="row"]',
     );
 
+    // Track if focus was on a placeholder that gets replaced
+    let focusNeedsRestoration = null;
+
     rows.forEach((row) => {
       const placeholders = row.querySelectorAll('[data-placeholder="true"]');
 
@@ -109,6 +112,11 @@ export const deferredTemplateFieldsMixin = {
         const template = templates?.querySelector(selector);
 
         if (!template) return; // Still not available
+
+        // Check if this placeholder is currently focused
+        const placeholderHadFocus =
+          document.activeElement === placeholder ||
+          placeholder.contains(document.activeElement);
 
         // Clone real cell from template
         const clonedContent = template.content.cloneNode(true);
@@ -131,9 +139,24 @@ export const deferredTemplateFieldsMixin = {
           );
         }
 
+        // Preserve tabIndex if placeholder was focusable
+        if (placeholder.tabIndex === 0) {
+          realCell.tabIndex = 0;
+        }
+
         // Replace placeholder with real cell
         placeholder.replaceWith(realCell);
+
+        // Track that we need to restore focus to this cell
+        if (placeholderHadFocus) {
+          focusNeedsRestoration = realCell;
+        }
       });
     });
+
+    // Restore focus after all replacements are complete
+    if (focusNeedsRestoration) {
+      focusNeedsRestoration.focus();
+    }
   },
 };
