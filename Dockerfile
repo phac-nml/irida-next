@@ -72,7 +72,6 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends dialog \
     && apt-get install -y --no-install-recommends openssh-server \
     && echo "root:Docker!" | chpasswd
-    # && chmod u+x /rails/bin/docker-entrypoint-azure
 COPY sshd_config /etc/ssh/
 
 EXPOSE 8000 2222
