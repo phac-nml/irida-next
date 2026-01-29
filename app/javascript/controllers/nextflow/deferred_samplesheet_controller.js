@@ -140,7 +140,6 @@ export default class extends Controller {
     );
     this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
 
-    console.log(this.fileAttributesTarget);
     this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
     this.fileAttributesTarget.remove();
 
@@ -385,11 +384,7 @@ export default class extends Controller {
   }
 
   #updateMetadata(metadata, headers) {
-    console.log("merge");
-    console.log(this.#samplesheetAttributes);
-    console.log(metadata);
     this.#samplesheetAttributes = merge(this.#samplesheetAttributes, metadata);
-    console.log(this.#samplesheetAttributes);
     for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
       headers.forEach((header) => {
         this.#updateCell(header, this.#allSampleIds[i], "metadata_cell", false);
@@ -508,10 +503,6 @@ export default class extends Controller {
   }
 
   #insertFileContent(cell, columnName, sampleId) {
-    console.log(cell);
-    console.log(columnName);
-    console.log(sampleId);
-    console.log(this.#fileAttributes);
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
 

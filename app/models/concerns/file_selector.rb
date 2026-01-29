@@ -71,9 +71,9 @@ module FileSelector
     return attributes unless format == 'file_selector'
 
     attributes.merge({
-                       byte_size: attachment.byte_size,
-                       created_at: attachment.created_at,
-                       metadata: attachment.metadata
+                       byte_size: file.byte_size,
+                       created_at: file.created_at,
+                       metadata: file.metadata
                      })
   end
 
