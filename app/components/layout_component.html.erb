@@ -41,17 +41,28 @@
         class="inline-flex items-center max-xl:visible xl:hidden"
         data-layout-target="expandButtonContainer"
       >
-        <button
-          data-action="click->layout#expand:capture"
-          data-layout-target="expandButton"
-          class="text-slate-500 navbar-button cursor-pointer"
-          title="<%= t(:'general.navbar.toggle_sidebar') %>"
-          aria-label="<%= t(:'general.navbar.toggle_sidebar') %>"
-          aria-controls="sidebar"
-          aria-expanded="true"
-        >
-          <%= pathogen_icon :sidebar %>
-        </button>
+        <% expand_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "layout-expand") %>
+
+        <div data-controller="pathogen--tooltip">
+          <button
+            data-action="click->layout#expand:capture"
+            data-layout-target="expandButton"
+            data-pathogen--tooltip-target="trigger"
+            aria-describedby="<%= expand_tooltip_id %>"
+            class="text-slate-500 navbar-button cursor-pointer"
+            aria-label="<%= t(:'general.navbar.toggle_sidebar') %>"
+            aria-controls="sidebar"
+            aria-expanded="true"
+          >
+            <%= pathogen_icon :sidebar %>
+          </button>
+
+          <%= render Pathogen::Tooltip.new(
+            text: t(:"general.navbar.toggle_sidebar"),
+            id: expand_tooltip_id,
+            placement: :bottom,
+          ) %>
+        </div>
       </div>
       <div class="flex-1 flex items-center h-full min-w-0 max-w-full ">
         <turbo-frame id="breadcrumb" class="contents">
@@ -71,10 +82,7 @@
       <div class="<%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
-    <div
-      id="flashes"
-      class="fixed flex flex-col top-5 right-6 z-50"
-    >
+    <div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
       <% flash.each do |key, value| %>
         <%= viral_flash(type: key, data: value) %>
       <% end %>
