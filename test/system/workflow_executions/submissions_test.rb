@@ -894,9 +894,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
 
-      assert_selector 'th[id="0_sample"]', text: @sample43.puid
-      assert_selector 'th[id="1_sample"]', text: @sample44.puid
-      assert_selector 'th[id="2_sample"]', text: @sample46.puid
+      assert_selector "th[id='#{@sample43.id}_sample']", text: @sample43.puid
+      assert_selector "th[id='#{@sample44.id}_sample']", text: @sample44.puid
+      assert_selector "th[id='#{@sample46.id}_sample']", text: @sample46.puid
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1216,6 +1216,7 @@ module WorkflowExecutions
       sample32 = samples(:sample32)
       sample33 = samples(:sample33)
       sample34 = samples(:sample34)
+      sample35 = samples(:sample35)
       login_as user
 
       visit group_samples_url(namespace)
@@ -1240,36 +1241,19 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       assert_selector 'h1', text: 'phac-nml/gasclustering'
-      # assert indexes of samples
-      within('th[id="0_sample"]') do
-        assert_text sample32.puid
-      end
-
-      within('th[id="1_sample"]') do
-        assert_text sample33.puid
-      end
-
-      within('th[id="2_sample"]') do
-        assert_text sample34.puid
-      end
 
       # check default metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadata_1'
-      end
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+      assert_selector '#field-metadata_2', text: 'metadata_2'
 
-      within('#field-metadata_2') do
-        assert_text 'metadata_2'
-      end
-
-      assert_selector 'td[id="0_metadata_1"] input[type="text"]', text: ''
-      assert_selector 'td[id="1_metadata_1"] input[type="text"]', text: ''
-      assert_selector 'td[id="2_metadata_1"] input[type="text"]', text: ''
-      assert_selector 'td[id="3_metadata_1"] input[type="text"]', text: ''
-      assert_selector 'td[id="0_metadata_2"] input[type="text"]', text: ''
-      assert_selector 'td[id="1_metadata_2"] input[type="text"]', text: ''
-      assert_selector 'td[id="2_metadata_2"] input[type="text"]', text: ''
-      assert_selector 'td[id="3_metadata_2"] input[type="text"]', text: ''
+      assert_selector "td[id='#{sample32.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample33.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample34.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample35.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample32.id}_metadata_2'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample33.id}_metadata_2'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample34.id}_metadata_2'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample35.id}_metadata_2'] input[type='text']", text: ''
 
       # change metadata_1 and metadata_2 option selection
       select 'metadatafield1', from: 'metadata_1'
@@ -1278,42 +1262,21 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # check new metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadatafield1'
-      end
-
-      within('#field-metadata_2') do
-        assert_text 'metadatafield2'
-      end
+      assert_selector '#field-metadata_1', text: 'metadatafield1'
+      assert_selector '#field-metadata_2', text: 'metadatafield2'
 
       # check metadata values of samples
-      within('td[id="0_metadata_1"]') do
-        assert_selector 'span', text: sample32.metadata['metadatafield1']
-      end
-      within('td[id="1_metadata_1"]') do
-        assert_selector 'span', text: sample33.metadata['metadatafield1']
-      end
-      within('td[id="2_metadata_1"]') do
-        assert_selector 'span', text: sample34.metadata['metadatafield1']
-      end
-      within('td[id="3_metadata_1"]') do
-        # sample contains no metadata value for this field, stays as text input
-        assert_selector 'input[type="text"]'
-      end
+      assert_selector "td[id='#{sample32.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
+      assert_selector "td[id='#{sample33.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
+      assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
+      # sample contains no metadata value for this field, stays as text input
+      assert_selector "td[id='#{sample35.id}_metadata_1'] input[type='text']", text: ''
 
-      within('td[id="0_metadata_2"]') do
-        assert_selector 'span', text: sample32.metadata['metadatafield2']
-      end
-      within('td[id="1_metadata_2"]') do
-        assert_selector 'span', text: sample33.metadata['metadatafield2']
-      end
-      within('td[id="2_metadata_2"]') do
-        assert_selector 'span', text: sample34.metadata['metadatafield2']
-      end
-      within('td[id="3_metadata_2"]') do
-        # sample contains no metadata value for this field, stays as text input
-        assert_selector 'input[type="text"]'
-      end
+      assert_selector "td[id='#{sample32.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
+      assert_selector "td[id='#{sample33.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
+      assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
+      # sample contains no metadata value for this field, stays as text input
+      assert_selector "td[id='#{sample35.id}_metadata_2'] input[type='text']", text: ''
       ### VERIFY END ###
     end
 
@@ -1346,26 +1309,16 @@ module WorkflowExecutions
       find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
 
       # check default metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadata_1'
-      end
-
-      within('#field-metadata_8') do
-        assert_text 'metadata_8'
-      end
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+      assert_selector '#field-metadata_8', text: 'metadata_8'
 
       # change metadata_1 and metadata_8 option selection
       select 'metadatafield1', from: 'metadata_1'
       select 'metadatafield2', from: 'metadata_8'
 
       # check new metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadatafield1'
-      end
-
-      within('#field-metadata_8') do
-        assert_text 'metadatafield2'
-      end
+      assert_selector '#field-metadata_1', text: 'metadatafield1'
+      assert_selector '#field-metadata_8', text: 'metadatafield2'
 
       # submit pipeline
       click_button I18n.t(:'workflow_executions.submissions.create.submit')
@@ -1386,15 +1339,11 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify new parameter values
-      within('.metadata_1_header-param') do
-        assert_selector 'input[disabled][value="metadatafield1"]'
-        assert_no_selector 'input[disabled][value="metadata_1"]'
-      end
+      assert_selector '.metadata_1_header-param input[disabled][value="metadatafield1"]'
+      assert_no_selector '.metadata_1_header-param input[disabled][value="metadata_1"]'
 
-      within('.metadata_8_header-param') do
-        assert_selector 'input[disabled][value="metadatafield2"]'
-        assert_no_selector 'input[disabled][value="metadata_8"]'
-      end
+      assert_selector '.metadata_8_header-param input[disabled][value="metadatafield2"]'
+      assert_no_selector '.metadata_8_header-param input[disabled][value="metadata_8"]'
       ### VERIFY END ###
     end
 
