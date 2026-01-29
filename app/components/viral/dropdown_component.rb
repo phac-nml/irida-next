@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles, :prefix
+    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -52,18 +52,36 @@ module Viral
 
     # 🏷️ Set basic attributes from params
     def set_basic_attributes
+      assign_display_attributes
+      assign_tooltip_inputs
+      assign_action_attributes
+      assign_identity_attributes
+    end
+
+    def assign_display_attributes
       @distance = @params[:distance] || 10
       @styles = (@params[:styles] || {}).with_indifferent_access
       @label = @params[:label]
       @icon_name = @params[:icon]
       @caret = @params[:caret]
       @skidding = @params[:skidding] || 0
+    end
+
+    def assign_tooltip_inputs
+      @tooltip_text = @params[:tooltip]
+      @tooltip_placement = (@params[:tooltip_placement] || :top).to_sym if @params[:tooltip_placement]
+    end
+
+    def assign_action_attributes
       @action_link = @params[:action_link]
       @action_link_value = @params[:action_link_value]
       @trigger = TRIGGER_MAPPINGS.fetch(
         @params[:trigger] || TRIGGER_DEFAULT,
         TRIGGER_MAPPINGS[TRIGGER_DEFAULT]
       )
+    end
+
+    def assign_identity_attributes
       @dd_id = "dd-#{SecureRandom.hex(10)}"
       @prefix = @params[:prefix]
     end
@@ -71,18 +89,27 @@ module Viral
     # 🛠️ Build and enhance system arguments for the dropdown trigger
     def set_system_arguments
       @system_arguments = build_system_arguments
-      add_tooltip
+      apply_tooltip_attributes
       add_button_styles
       add_icon_styles
       add_aria_label
       add_title_attribute
     end
 
-    # 💬 Add tooltip as title attribute if present
-    def add_tooltip
-      return if @params[:tooltip].blank?
+    # 💬 Apply accessible tooltip wiring using Pathogen::Tooltip when tooltip text is present
+    def apply_tooltip_attributes
+      return unless tooltip?
 
-      @system_arguments[:title] = @params[:tooltip]
+      @tooltip_id ||= Pathogen::Tooltip.generate_id(base_name: 'viral-dropdown-tooltip')
+      @tooltip_placement ||= :top
+
+      @system_arguments[:data] ||= {}
+      @system_arguments[:aria] ||= {}
+
+      @system_arguments[:data]['pathogen--tooltip-target'] ||= 'trigger'
+
+      describedby = @system_arguments[:aria][:describedby]
+      @system_arguments[:aria][:describedby] = append_id(describedby, @tooltip_id)
     end
 
     # 📝 Add title attribute from system arguments if present
@@ -137,6 +164,20 @@ module Viral
     # 🔍 Extract aria-label from params
     def aria_label_from_params
       @params.dig(:aria, :label)
+    end
+
+    def tooltip?
+      tooltip_text.present?
+    end
+
+    def tooltip_component
+      return unless tooltip?
+
+      Pathogen::Tooltip.new(
+        text: tooltip_text,
+        id: @tooltip_id,
+        placement: @tooltip_placement
+      )
     end
 
     # 🔍 Extract tooltip for aria-label
@@ -218,6 +259,15 @@ module Viral
       {
         classes: class_names('viral-dropdown--icon', @system_arguments[:classes])
       }
+    end
+
+    def append_id(existing, id)
+      return id if existing.blank?
+
+      ids = existing.to_s.split(/\s+/)
+      return existing if ids.include?(id)
+
+      "#{existing} #{id}"
     end
   end
   # rubocop:enable Metrics/ClassLength

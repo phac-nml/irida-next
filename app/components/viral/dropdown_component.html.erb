@@ -1,6 +1,6 @@
 <div
   class="flex max-sm:grow"
-  data-controller="viral--dropdown"
+  data-controller="viral--dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
@@ -22,6 +22,8 @@
       <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
     <% end %>
   <% end %>
+
+  <%= render tooltip_component if tooltip? %>
   <!-- Dropdown menu -->
   <ul
     id="<%= @dd_id %>"
@@ -35,7 +37,7 @@
     aria-labelledby="<%= system_arguments[:id] %>"
     aria-hidden="true"
     tabindex="-1"
-    hidden="hidden"
+    hidden
   >
     <% items.each do |item| %>
       <%= item %>

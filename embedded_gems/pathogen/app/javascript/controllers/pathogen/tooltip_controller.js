@@ -145,6 +145,8 @@ export default class extends Controller {
   }
 
   disconnect() {
+    // Ensure portaled tooltip is fully hidden before teardown to avoid lingering visibility
+    this.hide();
     this.#stopAutoUpdate();
     this.#clearTouchTimeout();
     this.#abortController?.abort();
