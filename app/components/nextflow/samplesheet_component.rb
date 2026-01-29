@@ -72,15 +72,19 @@ module Nextflow
 
     def file_samplesheet_values(file, sample_id, column_name)
       @file_attributes[sample_id] = {} unless @file_attributes.key?(sample_id)
-      @file_attributes[sample_id][column_name] = {
-        filename: if file.empty?
-                    I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-                  else
-                    file[:filename]
-                  end,
-        attachment_id: file.empty? ? '' : file[:id]
-      }
-      file.empty? ? '' : file[:global_id]
+      if file.empty?
+        @file_attributes[sample_id][column_name] = {
+          filename: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file'),
+          attachment_id: ''
+        }
+        ''
+      else
+        @file_attributes[sample_id][column_name] = {
+          filename: file[:filename],
+          attachment_id: file[:id]
+        }
+        file[:global_id]
+      end
     end
 
     def fastq_file_samplesheet_values(files, sample_id)
