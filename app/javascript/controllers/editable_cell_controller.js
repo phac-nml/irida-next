@@ -134,10 +134,10 @@ export default class extends Controller {
 
       if (!field) return;
 
-      // Get the parent DOM ID to extract the item ID
-      // Use a regular expression to match the part after the last underscore
-      const parent_dom_id = element.parentNode.id;
-      const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
+      // Get the parent row to extract the item ID
+      // Use data-sample-id attribute which is more robust than parsing DOM ID
+      const row = element.closest("tr");
+      const item_id = row?.dataset?.sampleId;
 
       if (!item_id) {
         return;
