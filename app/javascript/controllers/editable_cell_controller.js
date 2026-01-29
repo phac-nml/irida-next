@@ -140,7 +140,6 @@ export default class extends Controller {
       const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
 
       if (!item_id) {
-        console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
         return;
       }
 
