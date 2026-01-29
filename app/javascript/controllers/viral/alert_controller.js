@@ -352,6 +352,7 @@ export default class extends Controller {
     try {
       // 📝 Create the announcement element
       const announcement = createLiveRegion({
+        id: `alert-announcement-${this.alertIdValue}`,
         politeness: "polite",
         atomic: true,
       });
