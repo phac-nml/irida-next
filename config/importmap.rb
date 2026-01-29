@@ -30,3 +30,4 @@ pin 'tabbable' # @6.2.0
 pin 'uuid' # @13.0.0
 pin 'debounce' # @3.0.0
 pin 'deepmerge' # @4.3.1
+pin_all_from 'app/javascript/workers', under: 'workers'
