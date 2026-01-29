@@ -139,6 +139,7 @@ export default class extends Controller {
     );
     this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
 
+    console.log(this.fileAttributesTarget);
     this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
     this.fileAttributesTarget.remove();
 
@@ -504,6 +505,10 @@ export default class extends Controller {
   }
 
   #insertFileContent(cell, columnName, sampleId) {
+    console.log(cell);
+    console.log(columnName);
+    console.log(sampleId);
+    console.log(this.#fileAttributes);
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
 
