@@ -28,9 +28,7 @@ module Nextflow
           'samplesheet_params' => sample_samplesheet_params(sample)
         }
 
-        unless @properties.key?('fastq_1') && @properties.key?('fastq_2') && !sample.attachments.empty?
-          return sample_attributes
-        end
+        return sample_attributes unless @properties.key?('fastq_1') && @properties.key?('fastq_2')
 
         fastq_file_attributes = sample.most_recent_fastq_files
         sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,

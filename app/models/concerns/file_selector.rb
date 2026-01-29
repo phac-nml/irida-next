@@ -9,7 +9,7 @@ module FileSelector
     return unless fastq_files
 
     fastq_files.map do |file|
-      file_selector_attributes(file)
+      file_attributes(file, 'file_selector')
     end
   end
 
@@ -21,7 +21,7 @@ module FileSelector
                     query_non_fastq_files
                   end
     other_files.map do |file|
-      file_selector_attributes(file)
+      file_attributes(file, 'file_selector')
     end
   end
 
@@ -30,12 +30,12 @@ module FileSelector
     forward_file = query_fastq_files('forward', false).first
 
     if forward_file
-      { 'fastq_1' => samplesheet_file_attributes(forward_file),
-        'fastq_2' => samplesheet_file_attributes(forward_file.associated_attachment) }
+      { 'fastq_1' => file_attributes(forward_file, 'samplesheet'),
+        'fastq_2' => file_attributes(forward_file.associated_attachment, 'samplesheet') }
     else
       single_file = query_single_fastq_files.order(created_at: :desc, id: :desc).first
       if single_file
-        { 'fastq_1' => samplesheet_file_attributes(single_file), 'fastq_2' => {} }
+        { 'fastq_1' => file_attributes(single_file, 'samplesheet'), 'fastq_2' => {} }
       else
         { 'fastq_1' => {}, 'fastq_2' => {} }
       end
@@ -55,28 +55,26 @@ module FileSelector
 
     return {} unless most_recent_file
 
-    samplesheet_file_attributes(most_recent_file)
+    file_attributes(most_recent_file, 'samplesheet')
   end
 
   private
 
-  def samplesheet_file_attributes(file)
-    {
+  # return the necessary file attributes, format currently == 'samplesheet' or 'file_selector'
+  def file_attributes(file, format)
+    attributes = {
       filename: file.file.filename.to_s,
       global_id: file.to_global_id,
       id: file.id
     }
-  end
 
-  def file_selector_attributes(attachment)
-    {
-      filename: attachment.file.filename.to_s,
-      global_id: attachment.to_global_id,
-      id: attachment.id,
-      byte_size: attachment.byte_size,
-      created_at: attachment.created_at,
-      metadata: attachment.metadata
-    }
+    return attributes unless format == 'file_selector'
+
+    attributes.merge({
+                       byte_size: attachment.byte_size,
+                       created_at: attachment.created_at,
+                       metadata: attachment.metadata
+                     })
   end
 
   def create_query_node(key)
@@ -84,7 +82,13 @@ module FileSelector
                                     Arel::Nodes::Quoted.new(key))
   end
 
-  # paired fastq files of single direction
+  # queries fastq files for what's displayed in the samplesheet and file_selector of the samplesheet
+  # param direction (string): query specific direction
+  # param include_singles (boolean):
+  #   - false when querying for what's displayed in samplesheet (if no PE attachment found, samplesheet will perform
+  #   a separate query to find first non-PE single)
+  #   - true when querying file_selector fastq files, specifically for forward direction. This query will include both
+  #   all PE forward files and any non-pe fastq files.
   def query_fastq_files(direction, include_singles)
     direction_node = create_query_node('direction')
     associated_attachment_node = create_query_node('associated_attachment_id')
@@ -116,6 +120,7 @@ module FileSelector
       .order(created_at: :desc, id: :desc)
   end
 
+  # query all non-fastq files when no pattern is specified.
   def query_non_fastq_files
     node = create_query_node('format')
     attachments.where(node.not_eq('fastq')).order(created_at: :desc, id: :desc)
