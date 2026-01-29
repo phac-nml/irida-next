@@ -620,9 +620,9 @@ export default class extends Controller {
         for (let i = 0; i < this.#totalSamples; i++) {
           for (let j = 0; j < this.#filterableColumns.length; j++) {
             if (
-              this.#samplesheetAttributes[i]["samplesheet_params"][
-                this.#filterableColumns[j]
-              ]["form_value"]
+              this.#samplesheetAttributes[this.#allSampleIds[i]][
+                "samplesheet_params"
+              ][this.#filterableColumns[j]]
                 .toLowerCase()
                 .includes(this.filterTarget.value.toLowerCase())
             ) {
