@@ -8,6 +8,7 @@ import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_rendere
 import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
 import { focusMixin } from "controllers/virtual_scroll/focus";
 import { deferredTemplateFieldsMixin } from "controllers/virtual_scroll/deferred_template_fields";
+import { navigationEventsMixin } from "controllers/virtual_scroll/navigation_events";
 import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range";
 
 /**
@@ -96,6 +97,9 @@ class VirtualScrollController extends Controller {
     this.restorePendingFocusFromSessionStorage();
 
     this.setupSortFocusRestoration();
+
+    // Set up navigation event listeners for virtualized blur handling
+    this.setupNavigationEventListeners();
 
     // Get CSS configuration values
     this.cssConfig = this.constructor.getCSSConfig();
@@ -488,6 +492,9 @@ class VirtualScrollController extends Controller {
    * Stimulus lifecycle: Disconnect and cleanup
    */
   disconnect() {
+    // Clean up navigation event state
+    this.cleanupNavigationEventListeners();
+
     this.lifecycle?.stop?.();
     this.lifecycle = null;
 
@@ -1105,6 +1112,7 @@ Object.assign(
   VirtualScrollController.prototype,
   focusMixin,
   deferredTemplateFieldsMixin,
+  navigationEventsMixin,
 );
 
 export default VirtualScrollController;

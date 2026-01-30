@@ -9,8 +9,8 @@ module Samples
       @autofocus = autofocus
       @system_arguments = system_arguments
       @system_arguments[:data] ||= {}
-      @system_arguments[:data][:'editable-cell-target'] = 'editableCell'
-      @system_arguments[:data][:'field-id'] = field # Add field-id for editable_cell_controller
+      @system_arguments[:data][:'virtualized-editable-cell-target'] = 'editableCell'
+      @system_arguments[:data][:'field-id'] = field # Add field-id for virtualized_editable_cell_controller
       @system_arguments[:role] ||= 'gridcell'
     end
   end
