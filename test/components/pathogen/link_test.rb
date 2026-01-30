@@ -30,11 +30,11 @@ module Pathogen
       end
 
       # Verify link is wrapped in tooltip controller
-      assert_selector 'span[data-controller="pathogen--tooltip"]'
+      assert_selector 'div[data-controller="pathogen--tooltip"]'
       # Verify link has trigger target
       assert_selector 'a[data-pathogen--tooltip-target="trigger"]'
       # Verify tooltip exists with default top placement
-      assert_selector 'span[role="tooltip"][data-placement="top"]', text: 'Helpful tooltip'
+      assert_selector 'div[role="tooltip"][data-placement="top"]', text: 'Helpful tooltip'
       # Verify aria-describedby connection
       assert_selector 'a[aria-describedby]'
     end
@@ -46,7 +46,7 @@ module Pathogen
       end
 
       # Verify tooltip has bottom placement
-      assert_selector 'span[role="tooltip"][data-placement="bottom"]', text: 'Helpful tooltip'
+      assert_selector 'div[role="tooltip"][data-placement="bottom"]', text: 'Helpful tooltip'
       # Verify origin-top for bottom placement animation
       assert_selector 'span.origin-top'
     end
@@ -58,7 +58,7 @@ module Pathogen
       end
 
       # Verify tooltip has left placement
-      assert_selector 'span[role="tooltip"][data-placement="left"]', text: 'Helpful tooltip'
+      assert_selector 'div[role="tooltip"][data-placement="left"]', text: 'Helpful tooltip'
       # Verify origin-right for left placement animation
       assert_selector 'span.origin-right'
     end
@@ -70,7 +70,7 @@ module Pathogen
       end
 
       # Verify tooltip has right placement
-      assert_selector 'span[role="tooltip"][data-placement="right"]', text: 'Helpful tooltip'
+      assert_selector 'div[role="tooltip"][data-placement="right"]', text: 'Helpful tooltip'
       # Verify origin-left for right placement animation
       assert_selector 'span.origin-left'
     end
@@ -82,7 +82,7 @@ module Pathogen
       end
 
       # Get the tooltip ID
-      tooltip_element = page.find('span[role="tooltip"]')
+      tooltip_element = page.find('div[role="tooltip"]')
       tooltip_id = tooltip_element[:id]
 
       # Verify link has aria-describedby pointing to tooltip
@@ -96,18 +96,18 @@ module Pathogen
       end
 
       # Verify tooltip starts hidden
-      assert_selector 'span.opacity-0.scale-90.invisible'
+      assert_selector 'div.opacity-0.scale-90.invisible'
     end
 
     test 'link without tooltip does not wrap in tooltip controller' do
       render_inline(Pathogen::Link.new(href: '/samples')) { 'Link text' }
 
       # Verify no tooltip controller
-      assert_no_selector 'span[data-controller="pathogen--tooltip"]'
+      assert_no_selector 'div[data-controller="pathogen--tooltip"]'
       # Verify no tooltip target
       assert_no_selector 'a[data-pathogen--tooltip-target="trigger"]'
       # Verify no tooltip element
-      assert_no_selector 'span[role="tooltip"]'
+      assert_no_selector 'div[role="tooltip"]'
     end
 
     test 'link with very long tooltip text respects max-width constraint' do
@@ -120,7 +120,7 @@ module Pathogen
       end
 
       # Verify tooltip has max-w-xs class for width constraint
-      assert_selector 'span.max-w-xs', text: long_text
+      assert_selector 'div.max-w-xs', text: long_text
     end
 
     test 'link with tooltip maintains link styling and behavior' do

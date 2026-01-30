@@ -116,7 +116,8 @@ module Viral
     def add_title_attribute
       return if @system_arguments[:title].present?
 
-      @system_arguments[:title] = @params[:title] if @params[:title].present?
+      # Prefer explicit title, otherwise fall back to tooltip text for system preview expectations
+      @system_arguments[:title] = @params[:title].presence || tooltip_text
     end
 
     # 🎨 Add button styles, using custom or default
