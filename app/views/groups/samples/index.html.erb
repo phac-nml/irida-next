@@ -5,6 +5,8 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
+<%= viral_progress_bar(text: t("shared.samples.importing_metadata")) %>
+
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
     <% component.with_buttons do %>
