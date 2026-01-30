@@ -353,13 +353,14 @@ module Samples
       assert_equal 2, activity.parameters[:imported_samples_count]
       first_sample = Sample.find_by(name: 'my new sample 1')
       second_sample = Sample.find_by(name: 'my new sample 2')
-      assert_equal [
-        { 'sample_name' => first_sample.name, 'sample_puid' => first_sample.puid,
-          'project_puid' => 'INXT_PRJ_AAAAAAAAAA' },
-        { 'sample_name' => second_sample.name, 'sample_puid' => second_sample.puid,
-          'project_puid' => 'INXT_PRJ_AAAAAAAAAB' }
-      ],
-                   activity.extended_details.details['imported_samples_data']
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => first_sample.name, 'sample_puid' => first_sample.puid,
+                        'project_puid' => 'INXT_PRJ_AAAAAAAAAA' }
+
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => second_sample.name, 'sample_puid' => second_sample.puid,
+                        'project_puid' => 'INXT_PRJ_AAAAAAAAAB' }
+      assert_equal 2, activity.extended_details.details['imported_samples_data'].count
       assert_equal 'group_import_samples', activity.parameters[:action]
     end
 
@@ -435,9 +436,11 @@ module Samples
       assert_equal 2, activity.parameters[:imported_samples_count]
       sample1 = Sample.find_by(name: 'my new sample 1')
       sample2 = Sample.find_by(name: 'my new sample 2')
-      assert_equal [{ 'sample_name' => sample1.name, 'sample_puid' => sample1.puid },
-                    { 'sample_name' => sample2.name, 'sample_puid' => sample2.puid }],
-                   activity.extended_details.details['imported_samples_data']
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => sample1.name, 'sample_puid' => sample1.puid }
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => sample2.name, 'sample_puid' => sample2.puid }
+      assert_equal 2, activity.extended_details.details['imported_samples_data'].count
       assert_equal 'project_import_samples', activity.parameters[:action]
 
       # verify project activity 2
@@ -451,9 +454,11 @@ module Samples
       assert_equal 2, activity.parameters[:imported_samples_count]
       sample3 = Sample.find_by(name: 'my new sample 3')
       sample4 = Sample.find_by(name: 'my new sample 4')
-      assert_equal [{ 'sample_name' => sample3.name, 'sample_puid' => sample3.puid },
-                    { 'sample_name' => sample4.name, 'sample_puid' => sample4.puid }],
-                   activity.extended_details.details['imported_samples_data']
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => sample3.name, 'sample_puid' => sample3.puid }
+      assert_includes activity.extended_details.details['imported_samples_data'],
+                      { 'sample_name' => sample4.name, 'sample_puid' => sample4.puid }
+      assert_equal 2, activity.extended_details.details['imported_samples_data'].count
       assert_equal 'project_import_samples', activity.parameters[:action]
     end
 

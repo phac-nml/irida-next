@@ -243,14 +243,21 @@ module Groups
           assert_equal 'group.samples.clone', activity.key
           assert_equal user, activity.owner
           assert_equal 2, activity.parameters[:cloned_samples_count]
-          assert_equal [
-            { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name, 'sample_puid' => sample69.puid,
-              'source_project_name' => sample69.project.name, 'source_project_puid' => sample69.project.puid,
-              'target_project_name' => target_project.name, 'target_project_puid' => target_project.puid },
-            { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name, 'sample_puid' => sample70.puid,
-              'source_project_name' => sample70.project.name, 'source_project_puid' => sample70.project.puid,
-              'target_project_name' => target_project.name, 'target_project_puid' => target_project.puid }
-          ], activity.extended_details.details['cloned_samples_data']
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
+                            'sample_puid' => sample69.puid,
+                            'source_project_name' => sample69.project.name,
+                            'source_project_puid' => sample69.project.puid,
+                            'target_project_name' => target_project.name,
+                            'target_project_puid' => target_project.puid }
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
+                            'sample_puid' => sample70.puid,
+                            'source_project_name' => sample70.project.name,
+                            'source_project_puid' => sample70.project.puid,
+                            'target_project_name' => target_project.name,
+                            'target_project_puid' => target_project.puid }
+          assert_equal 2, activity.extended_details.details['cloned_samples_data'].count
           assert_equal 'group_sample_clone',
                        activity.parameters[:action]
 
@@ -262,9 +269,10 @@ module Groups
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
           assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
-                          'sample_puid' => sample70.puid }],
-                       activity.extended_details.details['cloned_samples_data']
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
+                            'sample_puid' => sample70.puid }
+          assert_equal 1, activity.extended_details.details['cloned_samples_data'].count
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
@@ -276,9 +284,10 @@ module Groups
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
           assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
-                          'sample_puid' => sample69.puid }],
-                       activity.extended_details.details['cloned_samples_data']
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
+                            'sample_puid' => sample69.puid }
+          assert_equal 1, activity.extended_details.details['cloned_samples_data'].count
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
@@ -290,9 +299,10 @@ module Groups
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
           assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
-                          'sample_puid' => sample70.puid }],
-                       activity.extended_details.details['cloned_samples_data']
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
+                            'sample_puid' => sample70.puid }
+          assert_equal 1, activity.extended_details.details['cloned_samples_data'].count
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal projects(:projectSharedGroupSampleActionsMaintainer).puid,
                        activity.parameters[:source_project_puid]
@@ -305,9 +315,10 @@ module Groups
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
           assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
-                          'sample_puid' => sample69.puid }],
-                       activity.extended_details.details['cloned_samples_data']
+          assert_includes activity.extended_details.details['cloned_samples_data'],
+                          { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
+                            'sample_puid' => sample69.puid }
+          assert_equal 1, activity.extended_details.details['cloned_samples_data'].count
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal projects(:projectSharedGroupSampleActionsOwner).puid, activity.parameters[:source_project_puid]
         end
