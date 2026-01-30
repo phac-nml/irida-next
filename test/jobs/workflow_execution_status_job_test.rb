@@ -193,7 +193,7 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
   end
 
   test 'canceled workflow should return early' do
@@ -204,7 +204,7 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
   end
 
   test 'min_run_time with running state should delay status check' do

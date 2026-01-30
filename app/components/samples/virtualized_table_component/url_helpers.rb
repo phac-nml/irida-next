@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Samples
-  class TableComponent < Component
-    # URL generation helpers for the samples table component
+  class VirtualizedTableComponent < Component
+    # URL generation helpers for the virtualized samples table component
     module UrlHelpers
       # Generates the URL for selecting samples based on namespace type.
       #
