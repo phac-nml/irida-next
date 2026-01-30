@@ -87,18 +87,29 @@ export default class extends Controller {
    */
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
-    announce(this.element.dataset.changedText.replace("%{theme}", themeText), {
-      element: this.announcementElement,
-    });
+    announce(
+      this.formatMessage(this.element.dataset.changedText, {
+        theme: themeText,
+        fallback: `Theme changed to ${themeText}`,
+      }),
+      {
+        element: this.announcementElement,
+      },
+    );
   }
 
   /**
    * Announce errors to screen readers
    */
   announceError() {
-    announce(this.element.dataset.errorText, {
-      element: this.announcementElement,
-    });
+    announce(
+      this.formatMessage(this.element.dataset.errorText, {
+        fallback: "Unable to change theme. Please try again.",
+      }),
+      {
+        element: this.announcementElement,
+      },
+    );
   }
 
   /**
@@ -125,5 +136,21 @@ export default class extends Controller {
       dark: this.element.dataset.darkText,
     };
     return themeMap[theme] || theme;
+  }
+
+  formatMessage(template, { theme, fallback }) {
+    if (typeof template !== "string" || template.length === 0) {
+      return fallback;
+    }
+
+    if (theme && template.includes("%{theme}")) {
+      return template.replace("%{theme}", theme);
+    }
+
+    if (theme) {
+      return `${template} ${theme}`;
+    }
+
+    return template;
   }
 }
