@@ -77,9 +77,6 @@ export default class extends Controller {
     "dark:ring-primary-600",
   ];
 
-  // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
-  #formData = new FormData();
-
   #columnNames;
   #requiredColumns = [];
 
@@ -284,8 +281,9 @@ export default class extends Controller {
     this.formFieldErrorMessageTarget.innerHTML = "";
   }
 
-  #setFormData(inputName, inputValue) {
-    this.#formData.set(inputName, inputValue);
+  #setSampleData(sampleId, columnName, value) {
+    this.#samplesheetAttributes[sampleId]["samplesheet_params"][columnName] =
+      value;
   }
 
   #retrieveSampleData(sampleId, columnName) {
@@ -296,7 +294,12 @@ export default class extends Controller {
 
   // handles changes to text and dropdown cells
   updateEditableSamplesheetData(event) {
-    this.#setFormData(event.target.name, event.target.value);
+    // name comes in as sampleId_columnName, however column names sometimes include underscores
+    // so we will parse the name specifically on the first underscore
+    const name = event.target.name;
+    const sampleId = name.substring(0, name.indexOf("_"));
+    const columnName = name.substring(name.indexOf("_") + 1);
+    this.#setSampleData(sampleId, columnName, event.target.value);
   }
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
@@ -493,7 +496,7 @@ export default class extends Controller {
     const textInputContent =
       this.textInputTemplateTarget.content.cloneNode(true);
     const name = `${sampleId}_${columnName}`;
-    const id = `${sampleId}_${columnName}`;
+    const id = `${sampleId}_${columnName}_input`;
     const input = textInputContent.querySelector("input");
     const label = textInputContent.querySelector("label");
 
