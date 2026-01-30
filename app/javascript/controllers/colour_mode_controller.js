@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { announce } from "utilities/live_region";
 
 /**
  * Colour Mode Controller
@@ -86,15 +87,29 @@ export default class extends Controller {
    */
   announceThemeChange(theme) {
     const themeText = this.getThemeText(theme);
-    this.announcementElement.textContent =
-      this.element.dataset.changedText.replace("%{theme}", themeText);
+    announce(
+      this.formatMessage(this.element.dataset.changedText, {
+        theme: themeText,
+        fallback: `Theme changed to ${themeText}`,
+      }),
+      {
+        element: this.announcementElement,
+      },
+    );
   }
 
   /**
    * Announce errors to screen readers
    */
   announceError() {
-    this.announcementElement.textContent = this.element.dataset.errorText;
+    announce(
+      this.formatMessage(this.element.dataset.errorText, {
+        fallback: "Unable to change theme. Please try again.",
+      }),
+      {
+        element: this.announcementElement,
+      },
+    );
   }
 
   /**
@@ -121,5 +136,21 @@ export default class extends Controller {
       dark: this.element.dataset.darkText,
     };
     return themeMap[theme] || theme;
+  }
+
+  formatMessage(template, { theme, fallback }) {
+    if (typeof template !== "string" || template.length === 0) {
+      return fallback;
+    }
+
+    if (theme && template.includes("%{theme}")) {
+      return template.replace("%{theme}", theme);
+    }
+
+    if (theme) {
+      return `${template} ${theme}`;
+    }
+
+    return template;
   }
 }

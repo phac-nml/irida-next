@@ -687,6 +687,7 @@ en:
       toggle_sidebar: Toggle sidebar menu
     opens_in_new_tab: Opens in new tab
     screen_reader:
+      alert_dismissed: Alert dismissed
       close: Close
   graphql:
     value_scalar:
