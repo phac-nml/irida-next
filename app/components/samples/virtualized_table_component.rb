@@ -112,8 +112,8 @@ module Samples
         id: 'samples-table',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
         data: {
-          controller: 'editable-cell',
-          'editable-cell-refresh-outlet': "[data-controller='refresh']"
+          controller: 'virtualized-editable-cell',
+          'virtualized-editable-cell-refresh-outlet': "[data-controller='refresh']"
         }
       }
 
