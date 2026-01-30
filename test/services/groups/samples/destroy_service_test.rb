@@ -47,13 +47,14 @@ module Groups
         assert_equal 'group.samples.destroy', activity.key
         assert_equal @user, activity.owner
         assert_equal 2, activity.parameters[:samples_deleted_count]
-        assert_equal [
-          { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid,
-            'project_name' => @sample32.project.name, 'project_puid' => @sample32.project.puid },
-          { 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid,
-            'project_name' => @sample34.project.name, 'project_puid' => @sample34.project.puid }
-        ],
-                     activity.extended_details.details['deleted_samples_data']
+        assert_includes activity.extended_details.details['deleted_samples_data'],
+                        { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid,
+                          'project_name' => @sample32.project.name, 'project_puid' => @sample32.project.puid }
+
+        assert_includes activity.extended_details.details['deleted_samples_data'],
+                        { 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid,
+                          'project_name' => @sample34.project.name, 'project_puid' => @sample34.project.puid }
+        assert_equal 2, activity.extended_details.details['deleted_samples_data'].count
         assert_equal 'group_samples_destroy', activity.parameters[:action]
 
         # verify project activity 1
@@ -64,8 +65,9 @@ module Groups
         assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity.key
         assert_equal @user, activity.owner
         assert_equal 1, activity.parameters[:samples_deleted_count]
-        assert_equal [{ 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid }],
-                     activity.extended_details.details['deleted_samples_data']
+        assert_includes activity.extended_details.details['deleted_samples_data'],
+                        { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid }
+        assert_equal 1, activity.extended_details.details['deleted_samples_data'].count
         assert_equal 'sample_destroy_multiple', activity.parameters[:action]
 
         # verify project activity 2
@@ -76,8 +78,9 @@ module Groups
         assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity.key
         assert_equal @user, activity.owner
         assert_equal 1, activity.parameters[:samples_deleted_count]
-        assert_equal [{ 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid }],
-                     activity.extended_details.details['deleted_samples_data']
+        assert_includes activity.extended_details.details['deleted_samples_data'],
+                        { 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid }
+        assert_equal 1, activity.extended_details.details['deleted_samples_data'].count
         assert_equal 'sample_destroy_multiple', activity.parameters[:action]
       end
 

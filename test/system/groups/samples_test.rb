@@ -1973,6 +1973,10 @@ module Groups
       ### ACTIONS START ###
       # select all 3 samples
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
@@ -2007,6 +2011,9 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
 
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
@@ -2058,6 +2065,9 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -2129,6 +2139,9 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 4
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 4"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '4'
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -2158,6 +2171,9 @@ module Groups
       ### ACTIONS START ###
       # select samples
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 4
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 4"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '4'
 
       # launch dialog
       click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -2202,6 +2218,10 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
@@ -2378,6 +2398,10 @@ module Groups
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
@@ -2422,6 +2446,10 @@ module Groups
 
       ### ACTIONS START ####
       click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
+      assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
+      assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
