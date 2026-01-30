@@ -170,8 +170,6 @@ module Samples
     end
 
     def render_update_error(cell_id)
-      # render status: :unprocessable_content,
-      #       locals: { type: 'error', message: error_message(@sample) }
       render turbo_stream: [
         turbo_stream.update(
           cell_id, @sample.metadata[@field]
@@ -198,7 +196,14 @@ module Samples
     end
 
     def editable_cell_component(cell_id)
-      Samples::EditableCell.new(
+      component_class =
+        if Flipper.enabled?(:virtualized_samples_table)
+          Samples::VirtualizedEditableCell
+        else
+          Samples::EditableCell
+        end
+
+      component_class.new(
         id: cell_id,
         aria: (@aria_colindex.present? ? { colindex: @aria_colindex } : {}),
         field: @field,
