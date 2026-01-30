@@ -13,13 +13,13 @@ export default class extends Controller {
   ];
 
   #defaultSampleColumnHeaders = [
-    "sample_name",
-    "sample name",
     "sample",
     "sample_id",
     "sample id",
     "sample_puid",
     "sample puid",
+    "sample_name",
+    "sample name",
   ];
 
   #ignoreList = [
@@ -40,21 +40,24 @@ export default class extends Controller {
     "description",
   ];
 
+  #columns = [];
   #headers = [];
+  #worksheet = null;
+  #worker = null;
 
   connect() {
     console.log("connecting worker");
     if (typeof Worker !== "undefined") {
-      this.worker = new Worker(
+      this.#worker = new Worker(
         import.meta.resolve("workers/file_import_worker"),
       );
 
-      this.worker.onerror = function (error) {
+      this.#worker.onerror = function (error) {
         console.error("Worker failed to load:", error.message);
       };
 
       // Listen for messages from the worker
-      this.worker.onmessage = function (e) {
+      this.#worker.onmessage = function (e) {
         console.log("Main thread received:", e.data);
       };
     } else {
@@ -86,10 +89,13 @@ export default class extends Controller {
     reader.readAsArrayBuffer(files[0]);
 
     reader.onload = () => {
-      const workbook = XLSX.read(reader.result, { sheetRows: 1 });
+      const workbook = XLSX.read(reader.result);
       const worksheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[worksheetName];
-      this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+      this.#worksheet = workbook.Sheets[worksheetName];
+      this.#headers = XLSX.utils.sheet_to_json(this.#worksheet, {
+        header: 1,
+      })[0];
+      //   this.#rows = XLSX.utils.sheet_to_json(this.#worksheet);
       this.#addSampleIDInputOptions();
     };
   }
@@ -123,20 +129,20 @@ export default class extends Controller {
   }
 
   #addMetadataColumns() {
-    const columns = this.#headers.filter(
+    this.#columns = this.#headers.filter(
       (header) =>
         !this.#ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
 
-    if (columns.length > 0) {
+    if (this.#columns.length > 0) {
       this.#unhideElement(this.metadataColumnsTarget);
 
       this.dispatch("sendMetadata", {
-        detail: { content: { metadata: columns } },
+        detail: { content: { metadata: this.#columns } },
       });
 
-      this.submitButtonTarget.disabled = !columns.length;
+      this.submitButtonTarget.disabled = !this.#columns.length;
     } else {
       this.#hideElement(this.metadataColumnsTarget);
       this.#enableErrorState();
@@ -199,21 +205,36 @@ export default class extends Controller {
     }
   }
 
-  process(num) {
-    console.log("process worker = ", num);
-    // Send data to worker
-    this.worker.postMessage(num);
+  #processRows() {
+    // filter rows to only include sample id and selected metadata columns
+    const rows = XLSX.utils.sheet_to_json(this.#worksheet, {
+      header: [this.sampleIdColumnTarget.value, ...this.#columns],
+      range: 1,
+    });
+
+    rows.forEach((row) => {
+      const id = Object.values(row)[0];
+      const metadata = Object.entries(row).slice(1);
+
+      console.log("row = ", row);
+      console.log("id = ", id);
+      console.log("metadata = ", metadata);
+
+      // Send data to worker
+      this.#worker.postMessage({
+        samplePuid: id,
+        metadata: Object.fromEntries(metadata),
+      });
+    });
   }
 
-  handleSubmit() {
-    console.log("handling submit via worker");
-    this.process(5);
+  handleSubmit(event) {
+    event.preventDefault();
+    this.#processRows();
     notifyRefreshControllers(this);
   }
 
   disconnect() {
-    console.log("disconnecting worker");
-    // Clean up worker here?
-    this.worker.terminate();
+    this.#worker.terminate();
   }
 }
