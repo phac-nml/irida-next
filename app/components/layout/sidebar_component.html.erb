@@ -35,7 +35,8 @@
         </a>
 
         <div class="flex flex-row items-center gap-x-1">
-          <% collapse_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-collapse") %>
+          <% collapse_tooltip_id =
+            Pathogen::Tooltip.generate_id(base_name: "sidebar-collapse") %>
 
           <div data-controller="pathogen--tooltip">
             <button
@@ -57,14 +58,14 @@
             </button>
 
             <%= render Pathogen::Tooltip.new(
-              text: t(:'general.navbar.toggle_sidebar'),
+              text: t(:"general.navbar.toggle_sidebar"),
               id: collapse_tooltip_id,
-              placement: :bottom
+              placement: :bottom,
             ) %>
           </div>
-
           <!-- Add new items -->
-          <% new_dropdown_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-new-dropdown") %>
+          <% new_dropdown_tooltip_id =
+            Pathogen::Tooltip.generate_id(base_name: "sidebar-new-dropdown") %>
 
           <div data-controller="pathogen--tooltip">
             <%= viral_dropdown(
@@ -94,14 +95,14 @@
             <% end %>
 
             <%= render Pathogen::Tooltip.new(
-              text: t('general.navbar.new_dropdown.label'),
+              text: t("general.navbar.new_dropdown.label"),
               id: new_dropdown_tooltip_id,
-              placement: :bottom
+              placement: :bottom,
             ) %>
           </div>
-
           <!-- Profile menu -->
-          <% profile_dropdown_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "sidebar-profile-dropdown") %>
+          <% profile_dropdown_tooltip_id =
+            Pathogen::Tooltip.generate_id(base_name: "sidebar-profile-dropdown") %>
 
           <div data-controller="pathogen--tooltip">
             <%= viral_dropdown(
@@ -134,9 +135,9 @@
             <% end %>
 
             <%= render Pathogen::Tooltip.new(
-              text: t(:'general.navbar.account_dropdown.label'),
+              text: t(:"general.navbar.account_dropdown.label"),
               id: profile_dropdown_tooltip_id,
-              placement: :bottom
+              placement: :bottom,
             ) %>
           </div>
         </div>
@@ -176,7 +177,7 @@
             dark:bg-slate-700
           "
           tabindex="-1"
-          hidden="hidden"
+          hidden
           role="menu"
         >
           <li role="none">
