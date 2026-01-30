@@ -101,13 +101,13 @@ class TooltipTest < ApplicationSystemTestCase
     tooltip_id = tooltip_trigger['aria-describedby']
 
     # Verify tooltip exists with that ID (check all elements, not just visible)
-    assert_selector "span##{tooltip_id}[role='tooltip']", visible: :all
+    assert_selector "div##{tooltip_id}[role='tooltip']", visible: :all
 
     # Hover to show tooltip (use hover instead of focus since it's more reliable)
     tooltip_trigger.hover
 
     # Verify tooltip is visible
-    assert_selector "span##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
+    assert_selector "div##{tooltip_id}[role='tooltip'].opacity-100.visible", wait: 2
   end
 
   test 'touch interaction shows tooltip on first tap' do
