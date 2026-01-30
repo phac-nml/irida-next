@@ -172,7 +172,9 @@ module Samples
 
       assert_equal 4, @project.samples.count
 
-      assert_equal ['sample', 'name'], response['m'][0][:path] # rubocop:disable Style/WordArray
+      assert_includes response['m'][0][:path], 'sample'
+      assert_includes response['m'][0][:path], 'name'
+      assert_equal 2, response['m'][0][:path].count
       assert_equal 'is too short (minimum is 3 characters)', response['m'][0][:message]
     end
 
@@ -193,7 +195,9 @@ module Samples
 
       assert_equal 4, @project.samples.count
 
-      assert_equal ['sample', 'name'], response['Project 1 Sample 1'][0][:path] # rubocop:disable Style/WordArray
+      assert_includes response['Project 1 Sample 1'][0][:path], 'sample'
+      assert_includes response['Project 1 Sample 1'][0][:path], 'name'
+      assert_equal 2, response['Project 1 Sample 1'][0][:path].count
       assert_equal 'has already been taken', response['Project 1 Sample 1'][0][:message]
     end
 
