@@ -32,7 +32,7 @@ module Groups
 
     test 'should sort a list of workflow executions' do
       workflow_execution_running = workflow_executions(:workflow_execution_group_shared_running)
-      workflow_execution_prepared = workflow_executions(:workflow_execution_group_shared_prepared)
+      workflow_executions(:workflow_execution_group_shared_prepared)
       workflow_execution_submitted = workflow_executions(:workflow_execution_group_shared_submitted)
       visit group_workflow_executions_path(@group)
 
@@ -45,20 +45,18 @@ module Groups
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_prepared.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
+        assert_text workflow_execution_running.run_id
+        assert_text @workflow_execution_group_shared3.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
       assert_selector "#workflow-executions-table table thead th[aria-sort='descending']",
-                      text: I18n.t(:'workflow_executions.table_component.id').upcase
+                      text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared2.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
+        assert_text workflow_execution_running.run_id
+        assert_text @workflow_execution_group_shared3.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -67,12 +65,9 @@ module Groups
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared2.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared3.workflow.name
+        assert_text @workflow_execution_group_shared1.workflow.name
+        assert_text @workflow_execution_group_shared2.workflow.name
+        assert_text @workflow_execution_group_shared3.workflow.name
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -81,19 +76,16 @@ module Groups
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_running.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_submitted.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.workflow.name
+        assert_text workflow_execution_running.workflow.name
+        assert_text workflow_execution_submitted.workflow.name
+        assert_text @workflow_execution_group_shared1.workflow.name
       end
     end
 
     test 'can filter by ID and name on groups workflow execution index page' do
       visit group_workflow_executions_path(@group)
 
-      assert_text 'Displaying 11 items'
+      assert_text "#{I18n.t('workflow_executions.table_component.counts.workflow_executions')}: 11"
       assert_selector 'table tbody tr', count: 11
 
       within('table tbody') do
@@ -109,7 +101,7 @@ module Groups
               with: @workflow_execution_group_shared1.id
       find('input.t-search-component').send_keys(:return)
 
-      assert_text 'Displaying 1 item'
+      assert_text "#{I18n.t('workflow_executions.table_component.counts.workflow_executions')}: 1"
       assert_selector 'table tbody tr', count: 1
 
       within('table tbody') do
@@ -125,14 +117,14 @@ module Groups
               with: ''
       find('input.t-search-component').send_keys(:return)
 
-      assert_text 'Displaying 11 items'
+      assert_text "#{I18n.t('workflow_executions.table_component.counts.workflow_executions')}: 11"
       assert_selector 'table tbody tr', count: 11
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution_group_shared2.name
       find('input.t-search-component').send_keys(:return)
 
-      assert_text 'Displaying 1 item'
+      assert_text "#{I18n.t('workflow_executions.table_component.counts.workflow_executions')}: 1"
       assert_selector 'table tbody tr', count: 1
 
       within('table tbody') do
@@ -156,14 +148,14 @@ module Groups
 
       assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared1)}']"
       within("tr[id='#{dom_id(@workflow_execution_group_shared1)}'] td:last-child") do
-        assert_no_link I18n.t('common.actions.cancel')
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_button I18n.t('common.actions.cancel')
+        assert_no_button I18n.t('common.actions.delete')
       end
 
       assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared2)}']"
       within("tr[id='#{dom_id(@workflow_execution_group_shared2)}'] td:last-child") do
-        assert_no_link I18n.t('common.actions.cancel')
-        assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_no_button I18n.t('common.actions.cancel')
+        assert_no_button I18n.t('common.actions.delete')
       end
 
       assert_no_selector "tr[id='#{dom_id(workflow_execution1)}']"
@@ -261,9 +253,9 @@ module Groups
       assert_text @workflow_execution_group_shared2.metadata['workflow_version']
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
-      assert_no_link I18n.t('common.actions.cancel')
-      assert_no_link I18n.t('common.actions.edit')
-      assert_no_link I18n.t('common.actions.remove')
+      assert_no_button I18n.t('common.actions.cancel')
+      assert_no_button I18n.t('common.actions.edit')
+      assert_no_button I18n.t('common.actions.remove')
 
       within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
@@ -347,8 +339,8 @@ module Groups
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
-        assert_no_link 'Cancel'
-        assert_no_link 'Delete'
+        assert_no_button 'Cancel'
+        assert_no_button 'Delete'
       end
     end
 

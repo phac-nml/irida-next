@@ -103,6 +103,15 @@ export default class SelectWithAutoCompleteController extends Controller {
   #setValue(option) {
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
     this.#filter = option ? option.textContent : "";
+
+    this.hiddenTarget.dispatchEvent(new Event("change", { bubbles: true }));
+    this.element.dispatchEvent(
+      new CustomEvent("select-with-auto-complete:change", {
+        detail: { value: this.hiddenTarget.value },
+        bubbles: true,
+      }),
+    );
+
     this.comboboxTarget.value = this.#filter;
     this.comboboxTarget.setSelectionRange(
       this.#filter.length,

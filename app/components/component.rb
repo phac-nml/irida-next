@@ -10,6 +10,20 @@ class Component < ViewComponent::Base
   include Pathogen::FormHelper
   include Pathogen::FormTagHelper
 
+  # Checks if autofocus should be applied to an element based on validity and whether
+  # autofocus has already been used on the page. Only the first invalid element
+  # should receive autofocus to comply with HTML spec (single autofocus per document).
+  #
+  # @param invalid [Boolean] whether this element has validation errors
+  # @return [Boolean] true if this element should receive autofocus
+  def should_autofocus?(invalid)
+    return false unless invalid
+    return false if helpers.instance_variable_get(:@autofocus_set)
+
+    helpers.instance_variable_set(:@autofocus_set, true)
+    true
+  end
+
   # Icon color variations 🎨.
   # Keys: color scheme symbols. Values: Tailwind CSS classes.
   ICON_COLOR_MAP = {

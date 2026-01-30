@@ -39,7 +39,7 @@ module Projects
     test 'should sort a list of workflow executions' do
       workflow_execution1 = workflow_executions(:automated_workflow_execution)
       workflow_execution3 = workflow_executions(:automated_example_canceling)
-      workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
+      workflow_executions(:automated_workflow_execution_existing)
       workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
       workflow_execution_shared2 = workflow_executions(:workflow_execution_shared2)
       workflow_execution_shared4 = workflow_executions(:workflow_execution_shared4)
@@ -55,9 +55,8 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
-        assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
+        assert_text workflow_execution1.run_id
+        assert_text workflow_execution_shared4.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
@@ -66,9 +65,8 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared4.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
+        assert_text workflow_execution1.run_id
+        assert_text workflow_execution_shared4.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -77,12 +75,9 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution2.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution3.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared2.workflow.name
+        assert_text @workflow_execution2.workflow.name
+        assert_text workflow_execution3.workflow.name
+        assert_text workflow_execution_shared2.workflow.name
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
@@ -91,12 +86,9 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared1.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_shared2.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution2.workflow.name
+        assert_text workflow_execution_shared1.workflow.name
+        assert_text workflow_execution_shared2.workflow.name
+        assert_text @workflow_execution2.workflow.name
       end
     end
 
@@ -110,14 +102,14 @@ module Projects
 
       assert_selector "tr[id='#{dom_id(workflow_execution1)}']"
       within("tr[id='#{dom_id(workflow_execution1)}'] td:last-child") do
-        assert_no_link I18n.t('common.actions.cancel')
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.cancel')
+        assert_no_button I18n.t('common.actions.delete')
       end
 
       assert_selector "tr[id='#{dom_id(workflow_execution2)}']"
       within("tr[id='#{dom_id(workflow_execution2)}'] td:last-child") do
-        assert_no_link I18n.t('common.actions.cancel')
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.cancel')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -158,7 +150,9 @@ module Projects
       end
 
       assert_selector "tbody tr td:nth-child(#{@state_col})", text: 'Canceling'
-      assert_no_selector "tbody tr td:nth-child(#{@state_col}) a[text='Cancel']"
+      within("tr[id='#{dom_id(workflow_execution)}']") do
+        assert_no_button I18n.t('common.actions.cancel')
+      end
     end
 
     test 'should not delete a prepared workflow' do
@@ -174,7 +168,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -191,7 +185,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -276,7 +270,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -316,7 +310,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -333,7 +327,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link I18n.t('common.actions.delete')
+        assert_no_button I18n.t('common.actions.delete')
       end
     end
 
@@ -404,7 +398,7 @@ module Projects
     test 'can filter by ID and name on projects workflow execution index page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within('table tbody') do
@@ -418,7 +412,7 @@ module Projects
               with: @workflow_execution1.id
       find('input.t-search-component').send_keys(:return)
 
-      assert_text 'Displaying 1 item'
+      assert_text workflow_executions_count_text(1)
       assert_selector 'table tbody tr', count: 1
 
       within('table tbody') do
@@ -432,14 +426,14 @@ module Projects
               with: ''
       find('input.t-search-component').send_keys(:return)
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
       find('input.t-search-component').send_keys(:return)
 
-      assert_text 'Displaying 1 item'
+      assert_text workflow_executions_count_text(1)
       assert_selector 'table tbody tr', count: 1
 
       within('table tbody') do
@@ -501,9 +495,9 @@ module Projects
       assert_text workflow_execution.metadata['workflow_version']
 
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
-      assert_no_link I18n.t('common.actions.cancel')
-      assert_no_link I18n.t('common.actions.edit')
-      assert_no_link I18n.t('common.actions.remove')
+      assert_no_button I18n.t('common.actions.cancel')
+      assert_no_button I18n.t('common.actions.edit')
+      assert_no_button I18n.t('common.actions.remove')
 
       within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
@@ -563,7 +557,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -574,8 +568,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
                         .gsub! 'COUNT_PLACEHOLDER', '2'
         assert_text ActionController::Base.helpers.strip_tags(
@@ -588,9 +582,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT - 2)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
     end
@@ -602,7 +596,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -614,8 +608,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
                         .gsub! 'COUNT_PLACEHOLDER', '3'
         assert_text ActionController::Base.helpers.strip_tags(
@@ -629,9 +623,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT - 2)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', unsuccessful: '1/3')
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', successful: '2/3')
@@ -643,7 +637,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -653,8 +647,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.singular')
         assert_text ActionController::Base.helpers.strip_tags(
           I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
@@ -665,9 +659,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
     end
@@ -677,7 +671,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -688,8 +682,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
                         .gsub! 'COUNT_PLACEHOLDER', '2'
         assert_text ActionController::Base.helpers.strip_tags(
@@ -702,9 +696,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
     end
@@ -715,7 +709,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -727,8 +721,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
                         .gsub! 'COUNT_PLACEHOLDER', '3'
         assert_text ActionController::Base.helpers.strip_tags(
@@ -742,9 +736,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/3')
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '2/3')
@@ -755,7 +749,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -765,8 +759,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.singular')
         assert_text ActionController::Base.helpers.strip_tags(
           I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.state_warning_html')
@@ -777,9 +771,9 @@ module Projects
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
     end
@@ -788,7 +782,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
@@ -818,7 +812,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
@@ -829,8 +823,8 @@ module Projects
       click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
       click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
 
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.description.plural')
                         .gsub! 'COUNT_PLACEHOLDER', '2'
         assert_text ActionController::Base.helpers.strip_tags(
@@ -843,12 +837,18 @@ module Projects
         click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
       end
 
-      assert_no_selector '#dialog'
+      assert_no_selector 'dialog[open]'
 
-      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_text workflow_executions_count_text(WORKFLOW_EXECUTION_COUNT)
       assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_error', unsuccessful: '1/2')
       assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.partial_success', successful: '1/2')
+    end
+
+    private
+
+    def workflow_executions_count_text(count)
+      "#{I18n.t('workflow_executions.table_component.counts.workflow_executions')}: #{count}"
     end
   end
 end

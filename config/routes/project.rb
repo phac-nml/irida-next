@@ -47,6 +47,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             post :list
             get :cancel_multiple_confirmation
             post :cancel_multiple
+            post :search
           end
         end
       end
