@@ -30,7 +30,7 @@ module Nextflow
 
         return sample_attributes unless @properties.key?('fastq_1') && @properties.key?('fastq_2')
 
-        fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1']['pe_only'])
+        fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
         sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,
                                                                                     sample.id))
         sample_attributes
