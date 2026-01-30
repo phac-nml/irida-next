@@ -111,7 +111,7 @@ gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'copy-blob', require: f
 gem 'google-cloud-storage', '~> 1.58', require: false
 
 # job queueing
-gem 'good_job', '~> 4.13.1'
+gem 'good_job', '~> 4.13.2'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 3.0.0'
