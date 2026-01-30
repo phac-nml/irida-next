@@ -102,3 +102,15 @@ window.addEventListener("message", (event) => {
 ### Exemple complet
 
 Une démo entièrement fonctionnelle préconfigurée pour fonctionner avec la configuration `development:` par défaut dans la base de code peut être trouvée à : `demos/access-token-integration-demo/index.html`
+
+1. Lancez IRIDA Next
+2. Dans un autre terminal, `cd` dans `demos/access-token-integration-demo/` et lancez `python -m http.server 8081` pour démarrer la page démo
+3. Dans un navigateur, ouvrez `http://localhost:8081/`
+4. Appuyez sur `F12` pour ouvrir la console et voir les messages que le code de la démo reçoit d'IRIDA Next
+5. Cliquer sur le bouton devrait ouvrir une fenêtre contextuelle pour l'authentification. Si vous n'êtes pas connecté, vous serez invité à le faire d'abord
+6. Vous devriez aussi voir un message "button clicked" dans la fenêtre du serveur 8081
+7. Cliquer sur "Create Access Token" dans la fenêtre contextuelle devrait entraîner :
+
+- une alerte dans la fenêtre contextuelle indiquant qu'un jeton a été généré
+- des logs dans la page 8081 indiquant l'origine du message et le jeton généré par IRIDA Next
+- la fenêtre contextuelle se ferme après quelques secondes
