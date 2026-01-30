@@ -1836,6 +1836,7 @@ fr:
         transfer: Transférer des échantillons
       errors:
         ok_button: OK
+      importing_metadata: Importing metadata
       metadata:
         editing_field_cell:
           dialog:
