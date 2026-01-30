@@ -295,7 +295,8 @@ module WorkflowExecutions
       assert_equal @user, activity.owner
       assert_equal 2, activity.parameters[:workflow_executions_deleted_count]
       assert_includes activity.extended_details.details['deleted_workflow_executions_data'],
-                      { 'workflow_id' => error_workflow.id, 'workflow_name' => error_workflow.name },
+                      { 'workflow_id' => error_workflow.id, 'workflow_name' => error_workflow.name }
+      assert_includes activity.extended_details.details['deleted_workflow_executions_data'],
                       { 'workflow_id' => canceled_workflow.id,
                         'workflow_name' => canceled_workflow.name }
       assert_equal 2, activity.extended_details.details['deleted_workflow_executions_data'].count
