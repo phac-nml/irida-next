@@ -69,7 +69,7 @@ module Viral
 
     def assign_tooltip_inputs
       @tooltip_text = @params[:tooltip]
-      @tooltip_placement = (@params[:tooltip_placement] || :top).to_sym if @params[:tooltip_placement]
+      @tooltip_placement = @params.fetch(:tooltip_placement, :top).to_sym
     end
 
     def assign_action_attributes

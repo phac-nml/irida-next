@@ -85,7 +85,7 @@ module Pathogen
   #
   # Inspired by GitHub's Primer design system, this tooltip features:
   # - Dark background with white text for high contrast
-  # - No arrow/pointer indicator (simplified design)
+  # - Arrow/pointer indicator for visual connection to trigger element
   # - Subtle shadow for depth
   # - Content-adaptive width with max-w-xs (320px) constraint
   # - Smooth fade-in/scale animation for polished feel
@@ -117,7 +117,7 @@ module Pathogen
 
     ARROW_CLASSES = 'absolute w-2 h-2 bg-slate-900 dark:bg-slate-700 rotate-45'
 
-    attr_reader :text, :placement
+    attr_reader :text, :placement, :id
 
     def initialize(text:, id:, placement: :top, **system_arguments)
       @text = text
