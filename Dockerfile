@@ -74,7 +74,7 @@ RUN apt-get update \
     && echo "root:Docker!" | chpasswd
 COPY sshd_config /etc/ssh/
 
-EXPOSE 8000 2222
+EXPOSE 2222
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
