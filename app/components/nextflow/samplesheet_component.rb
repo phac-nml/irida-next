@@ -33,7 +33,7 @@ module Nextflow
 
       return sample_attributes unless @properties.key?('fastq_1') && @properties.key?('fastq_2')
 
-      fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1']['pe_only'])
+      fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
       sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,
                                                                                   sample.id))
       sample_attributes
@@ -108,9 +108,9 @@ module Nextflow
         @properties[property]['pattern'] = expected_pattern(entry)
       end
 
-      @properties['fastq_1']['pe_only'] =
-        @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
-
+      if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
+        @properties['fastq_1']['pe_only'] = true
+      end
       identify_autopopulated_file_properties
     end
 
