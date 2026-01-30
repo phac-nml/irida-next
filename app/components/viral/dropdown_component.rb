@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles, :prefix
+    attr_reader :label, :icon_name, :caret, :trigger, :tooltip, :styles, :prefix, :distance, :skidding
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -51,13 +51,15 @@ module Viral
     private
 
     # 🏷️ Set basic attributes from params
-    def set_basic_attributes
-      @distance = @params[:distance] || 10
+    def set_basic_attributes # rubocop:disable Metrics/MethodLength
+      unless Flipper.enabled?(:flowbite_replacement)
+        @distance = @params[:distance] || 10
+        @skidding = @params[:skidding] || 0
+      end
       @styles = (@params[:styles] || {}).with_indifferent_access
       @label = @params[:label]
       @icon_name = @params[:icon]
       @caret = @params[:caret]
-      @skidding = @params[:skidding] || 0
       @action_link = @params[:action_link]
       @action_link_value = @params[:action_link_value]
       @trigger = TRIGGER_MAPPINGS.fetch(
@@ -175,7 +177,12 @@ module Viral
 
     # 🏗️ Build data attributes for the dropdown trigger
     def build_data_attributes
-      data = { 'viral--dropdown-target': 'trigger' }
+      data = if Flipper.enabled?(:flowbite_replacement)
+               { 'viral--dropdown-target': 'trigger' }
+
+             else
+               { 'viral--flowbite-dropdown-target': 'trigger' }
+             end
       return data unless @action_link
 
       data.merge(

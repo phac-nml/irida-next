@@ -1,9 +1,17 @@
-<template data-pathogen--datepicker--input-target="calendarTemplate">
+<template
+  <% if Flipper.enabled?(:flowbite_replacement) %>
+  data-pathogen--datepicker--input-target="calendarTemplate"
+  <% else %>
+  data-pathogen--datepicker--flowbite-input-target="calendarTemplate"
+  <% end %>
+>
   <%= render Pathogen::BaseComponent.new(**calendar_arguments) do %>
     <div
       class="
         inline-block rounded-lg bg-white dark:bg-slate-700 shadow-sm max-[384px]:p-1 p-4
+        overflow-y-auto
       "
+      style="max-height: inherit;"
     >
       <%= render partial: "pathogen/datepicker/calendar/header",
       locals: {

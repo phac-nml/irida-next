@@ -26,7 +26,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         # verify the field list & option group elements are localized
-        within first("div[data-controller='select-with-auto-complete']") do
+        within first("div[data-controller='combobox']") do
           combobox = find("input[role='combobox']")
           combobox.fill_in with: ''
           combobox.click

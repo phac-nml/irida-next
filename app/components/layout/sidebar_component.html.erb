@@ -12,13 +12,13 @@
     <header class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
-          flex flex-wrap content-stretch items-center @min-[279px]/sidebar:justify-between
-          justify-center min-h-16 px-2
+          whitespace-nowrap flex flex-wrap content-stretch items-center
+          @min-[279px]/sidebar:justify-between justify-center min-h-16 px-2
         "
       >
         <a
           href="<%= root_path %>"
-          class="whitespace-nowrap py-2.5 inline-flex items-center"
+          class="py-2.5 inline-flex items-center"
           data-layout-target="logo"
         >
           <%= pathogen_icon(
@@ -86,10 +86,14 @@
       </div>
       <div
         class="p-2 pt shrink-0"
+        <% if Flipper.enabled?(:flowbite_replacement) %>
         data-controller="viral--dropdown"
-        data-viral--dropdown-skidding-value="0"
-        data-viral--dropdown-distance-value="5"
-        data-viral--dropdown-position-value="bottom-start"
+        <% else %>
+        data-controller="viral--flowbite-dropdown"
+        data-viral--flowbite-dropdown-skidding-value="0"
+        data-viral--flowbite-dropdown-distance-value="5"
+        data-viral--flowbite-dropdown-position-value="bottom-start"
+        <% end%>
       >
         <button
           class="
@@ -102,21 +106,29 @@
             dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
             disabled:dark:text-slate-400 w-full
           "
+          <% if Flipper.enabled?(:flowbite_replacement) %>
           data-viral--dropdown-target='trigger'
+          <% else %>
+          data-viral--flowbite-dropdown-target='trigger'
+          <% end %>
           aria-haspopup="true"
           aria-controls="sidebar-dd-menu"
           aria-expanded="false"
         ><%= t(:"general.default_sidebar.goto") %></button>
         <ul
           id="sidebar-dd-menu"
+          <% if Flipper.enabled?(:flowbite_replacement) %>
           data-viral--dropdown-target="menu"
+          <% else %>
+          data-viral--flowbite-dropdown-target="menu"
+          <% end %>
           class="
-            hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
+            z-20 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
             dark:bg-slate-700
           "
           tabindex="-1"
-          hidden="hidden"
           role="menu"
+          hidden=""
         >
           <li role="none">
             <div
@@ -164,9 +176,7 @@
       </turbo-frame>
 
       <%# Main navigation area %>
-      <div
-        class="pt-1 space-y-1 sm:overflow-y-auto flex-1"
-      >
+      <div class="pt-1 space-y-1 sm:overflow-y-auto flex-1">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
