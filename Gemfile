@@ -173,7 +173,7 @@ group :development, :test do
   gem 'bundler-audit', require: false
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem 'brakeman', require: false
+  gem 'brakeman', '~> 8.0.1', require: false
 end
 
 group :development do
