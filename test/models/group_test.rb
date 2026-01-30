@@ -203,7 +203,7 @@ class GroupTest < ActiveSupport::TestCase
     assert_includes @group.metadata_fields, 'metadatafield1'
     assert_includes @group.metadata_fields, 'metadatafield2'
     assert_includes @group.metadata_fields, 'unique.metadata.field'
-    assert_equal 2, @group.metadata_fields.count
+    assert_equal 4, @group.metadata_fields.count
   end
 
   test '#metadata_summary incorporates fields from shared groups' do
