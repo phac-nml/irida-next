@@ -54,6 +54,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
     render(Viral::DropdownComponent.new(
              label: 'Tooltip Button',
              tooltip: 'This is a tooltip!',
+             tooltip_placement: :bottom,
              caret: true
            )) do |dropdown|
       dropdown.with_item(label: 'Action 1', url: '#')
@@ -64,6 +65,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
     render Viral::DropdownComponent.new(
       icon: :list,
       tooltip: 'This is a tooltip!',
+      tooltip_placement: :bottom,
       aria: { label: 'Organism dropdown list' }
     ) do |dropdown|
       dropdown.with_item(label: 'Action 1', url: '#')

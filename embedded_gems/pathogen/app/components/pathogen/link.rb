@@ -21,18 +21,26 @@ module Pathogen
 
     # The tooltip that appears on mouse hover or keyboard focus over the link. (optional)
     #
+    # @param placement [Symbol] Position of tooltip (:top, :bottom, :left, :right)
     # @param system_arguments [Hash] HTML attributes to be included in the tooltip root element
-    renders_one :tooltip, lambda { |**system_arguments|
+    renders_one :tooltip, lambda { |placement: :top, **system_arguments|
       @tooltip_id = Pathogen::Tooltip.generate_id
       @link_system_arguments[:aria] ||= {}
-      @link_system_arguments[:aria][:describedby] = @tooltip_id
+      @link_system_arguments[:aria][:describedby] = [
+        @link_system_arguments[:aria][:describedby],
+        @tooltip_id
+      ].compact.join(' ')
       @link_system_arguments[:data] ||= {}
       @link_system_arguments[:data]['pathogen--tooltip-target'] = 'trigger'
 
-      Pathogen::Tooltip.new(id: @tooltip_id, **system_arguments)
+      Pathogen::Tooltip.new(id: @tooltip_id, placement: placement, **system_arguments)
     }
 
     def before_render
+      # Ensure tooltip slot is instantiated before rendering so that it can
+      # modify @link_system_arguments with aria-describedby and data attributes
+      tooltip if tooltip?
+
       raise ArgumentError, 'href is required' if @link_system_arguments[:href].blank?
       raise ArgumentError, "invalid href format: #{@link_system_arguments[:href]}" unless validate_href_format!
 
