@@ -48,7 +48,7 @@ module Pathogen
       # Verify tooltip has bottom placement
       assert_selector 'div[role="tooltip"][data-placement="bottom"]', text: 'Helpful tooltip'
       # Verify origin-top for bottom placement animation
-      assert_selector 'span.origin-top'
+      assert_selector 'div.origin-top'
     end
 
     test 'renders link with tooltip using left placement' do
@@ -60,7 +60,7 @@ module Pathogen
       # Verify tooltip has left placement
       assert_selector 'div[role="tooltip"][data-placement="left"]', text: 'Helpful tooltip'
       # Verify origin-right for left placement animation
-      assert_selector 'span.origin-right'
+      assert_selector 'div.origin-right'
     end
 
     test 'renders link with tooltip using right placement' do
@@ -72,7 +72,7 @@ module Pathogen
       # Verify tooltip has right placement
       assert_selector 'div[role="tooltip"][data-placement="right"]', text: 'Helpful tooltip'
       # Verify origin-left for right placement animation
-      assert_selector 'span.origin-left'
+      assert_selector 'div.origin-left'
     end
 
     test 'link with tooltip has proper aria-describedby connection' do
