@@ -3,8 +3,13 @@ updates:
   - package-ecosystem: bundler
     directory: "/"
     schedule:
-      interval: weekly
+      interval: daily
     open-pull-requests-limit: 10
+    groups:
+      security-scanners:
+        patterns:
+          - brakeman
+          - bundler-audit
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
