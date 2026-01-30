@@ -379,9 +379,6 @@ export default class extends Controller {
       this.#samplesheetAttributes[sample_id]["samplesheet_params"][
         file["property"]
       ] = file.global_id;
-      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
-      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
-      // via formData (files are stored by globalID in formData)
       this.#updateCell(file["property"], sample_id, "file_cell", true);
     });
   }

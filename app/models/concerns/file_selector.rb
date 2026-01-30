@@ -4,8 +4,8 @@
 module FileSelector
   extend ActiveSupport::Concern
 
-  def file_selector_fastq_files(property)
-    fastq_files = query_fastq_files(property == 'fastq_1' ? 'forward' : 'reverse', property == 'fastq_1')
+  def file_selector_fastq_files(property, pe_only)
+    fastq_files = query_fastq_files(property == 'fastq_1' ? 'forward' : 'reverse', property == 'fastq_1' && !pe_only)
     return unless fastq_files
 
     fastq_files.map do |file|
@@ -25,21 +25,19 @@ module FileSelector
     end
   end
 
-  def most_recent_fastq_files
+  def most_recent_fastq_files(pe_only)
+    attributes = { 'fastq_1' => {}, 'fastq_2' => {} }
     # prioritize paired attachment before returning single attachment
     forward_file = query_fastq_files('forward', false).first
 
     if forward_file
-      { 'fastq_1' => file_attributes(forward_file, 'samplesheet'),
-        'fastq_2' => file_attributes(forward_file.associated_attachment, 'samplesheet') }
-    else
+      attributes['fastq_1'] = file_attributes(forward_file, 'samplesheet')
+      attributes['fastq_2'] = file_attributes(forward_file.associated_attachment, 'samplesheet')
+    elsif !forward_file && !pe_only
       single_file = query_single_fastq_files.order(created_at: :desc, id: :desc).first
-      if single_file
-        { 'fastq_1' => file_attributes(single_file, 'samplesheet'), 'fastq_2' => {} }
-      else
-        { 'fastq_1' => {}, 'fastq_2' => {} }
-      end
+      attributes['fastq_1'] = file_attributes(single_file, 'samplesheet') if single_file
     end
+    attributes
   end
 
   def most_recent_other_file(autopopulate, pattern)
