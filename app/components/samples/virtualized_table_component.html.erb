@@ -16,10 +16,7 @@
         "
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
-        data-action="
-          focusin->table#handleCellFocus
-          focusout->table#handleCellBlur
-        "
+        data-action="focusin->table#handleCellFocus"
         role="grid"
         aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
         aria-colcount="<%= @columns.length + @metadata_fields.length %>"
@@ -308,7 +305,7 @@
     ) %>
 
     <% if @abilities[:edit_sample_metadata] %>
-      <template data-editable-cell-target="formTemplate">
+      <template data-virtualized-editable-cell-target="formTemplate">
         <%= form_with(
               url: sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
               method: :patch,
@@ -323,9 +320,9 @@
       <div
         id="editable-cell-form-container"
         class="invisible"
-        data-editable-cell-target="formContainer"
+        data-virtualized-editable-cell-target="formContainer"
       ></div>
-      <template data-editable-cell-target="confirmDialogTemplate">
+      <template data-virtualized-editable-cell-target="confirmDialogTemplate">
         <%= viral_dialog(open: false) do |dialog| %>
           <% dialog.with_header(
             title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
@@ -362,7 +359,7 @@
           <% end %>
         <% end %>
       </template>
-      <div data-editable-cell-target="confirmDialogContainer"></div>
+      <div data-virtualized-editable-cell-target="confirmDialogContainer"></div>
     <% end %>
   <% end %>
 <% else %>
