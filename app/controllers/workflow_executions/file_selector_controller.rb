@@ -37,9 +37,11 @@ module WorkflowExecutions
     end
 
     def listing_attachments
+      pe_only = file_selector_params['required_properties'].include?('fastq_1') &&
+                file_selector_params['required_properties'].include?('fastq_2')
       @listing_attachments = case file_selector_params['property']
                              when 'fastq_1', 'fastq_2'
-                               @attachable.file_selector_fastq_files(file_selector_params['property'])
+                               @attachable.file_selector_fastq_files(file_selector_params['property'], pe_only)
                              else
                                @attachable.file_selector_other_files(file_selector_params['pattern'])
                              end

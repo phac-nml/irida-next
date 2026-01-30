@@ -25,9 +25,8 @@ module Nextflow
         @properties[property]['pattern'] = expected_pattern(entry)
       end
 
-      if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
-        @properties['fastq_1']['pe_only'] = true
-      end
+      @properties['fastq_1']['pe_only'] =
+        @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
 
       identify_autopopulated_file_properties
     end

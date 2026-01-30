@@ -42,7 +42,7 @@ module WorkflowExecutions
       fields_to_query = [:id]
 
       @metadata_fields.each_value do |metadata_field|
-        fields_to_query.append(Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field)))
+        fields_to_query.append(create_query_node(metadata_field))
       end
 
       Sample.where(id: @sample_ids).pluck(fields_to_query).map do |results|
@@ -51,7 +51,7 @@ module WorkflowExecutions
     end
 
     def fetch_metadata
-      node = Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(@field))
+      node = create_query_node(@field)
       Sample.where(id: @sample_ids).pluck(:id, node).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
       end
@@ -63,6 +63,10 @@ module WorkflowExecutions
         metadata_values[header] = pluck_results[index]
       end
       metadata_values
+    end
+
+    def create_query_node(metadata_field)
+      Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field))
     end
   end
 end
