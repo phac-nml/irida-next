@@ -413,7 +413,7 @@ export default class extends Controller {
 
   #insertDropdownContent(cell, columnName, sampleId, options) {
     const name = `${sampleId}_${columnName}`;
-    const id = `${sampleId}_${columnName}`;
+    const id = `${sampleId}_${columnName}_dropdown`;
 
     const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
     dropdownContent
