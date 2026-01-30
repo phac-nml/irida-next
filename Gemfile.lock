@@ -685,7 +685,7 @@ GEM
     treetop (1.6.14)
       polyglot (~> 0.3)
     tsort (0.2.0)
-    turbo-rails (2.0.21)
+    turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
