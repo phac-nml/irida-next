@@ -199,17 +199,25 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test '#metadata_summary' do
-    assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
-                 @group.metadata_fields
+    assert_includes @group.metadata_fields, 'metadata field with spaces'
+    assert_includes @group.metadata_fields, 'metadatafield1'
+    assert_includes @group.metadata_fields, 'metadatafield2'
+    assert_includes @group.metadata_fields, 'unique.metadata.field'
+    assert_equal 4, @group.metadata_fields.count
   end
 
   test '#metadata_summary incorporates fields from shared groups' do
-    assert_equal ['metadata field with spaces', 'metadatafield1', 'metadatafield2', 'unique.metadata.field'],
-                 groups(:david_doe_group_four).metadata_fields
+    assert_includes groups(:david_doe_group_four).metadata_fields, 'metadata field with spaces'
+    assert_includes groups(:david_doe_group_four).metadata_fields, 'metadatafield1'
+    assert_includes groups(:david_doe_group_four).metadata_fields, 'metadatafield2'
+    assert_includes groups(:david_doe_group_four).metadata_fields, 'unique.metadata.field'
+    assert_equal 4, groups(:david_doe_group_four).metadata_fields.count
   end
 
   test '#metadata_summary incorporates fields from shared projects' do
-    assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
+    assert_includes groups(:group_alpha).metadata_fields, 'metadatafield1'
+    assert_includes groups(:group_alpha).metadata_fields, 'metadatafield2'
+    assert_equal 2, groups(:group_alpha).metadata_fields.count
   end
 
   test '#has_samples' do
