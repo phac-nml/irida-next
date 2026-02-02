@@ -268,7 +268,7 @@ Lors du remplacement d’un pipeline Nextflow basé sur json-schema https://json
     "name": "phac-nml/iridanextexample2",
     "description": "IRIDA Next Example 2 Pipeline",
     "overrides": {
-      "$def": {
+      "$defs": {
         "input_output_options": {
           "properties": {
             "database": {

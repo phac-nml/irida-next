@@ -268,7 +268,7 @@ When overriding a nextflow pipeline based on json-schema https://json-schema.org
     "name": "phac-nml/iridanextexample2",
     "description": "IRIDA Next Example 2 Pipeline",
     "overrides": {
-      "$def": {
+      "$defs": {
         "input_output_options": {
           "properties": {
             "database": {
