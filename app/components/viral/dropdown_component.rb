@@ -262,13 +262,17 @@ module Viral
       }
     end
 
+    # Append an ID to a space-separated list of IDs (e.g., aria-describedby).
+    # Ensures individual IDs don't contain spaces by replacing them with hyphens.
     def append_id(existing, id)
-      return id if existing.blank?
+      # Sanitize ID to ensure no spaces
+      clean_id = id.to_s.strip.gsub(/\s+/, '-')
+      return clean_id if existing.blank?
 
       ids = existing.to_s.split(/\s+/)
-      return existing if ids.include?(id)
+      return existing if ids.include?(clean_id)
 
-      "#{existing} #{id}"
+      "#{existing} #{clean_id}"
     end
   end
   # rubocop:enable Metrics/ClassLength
