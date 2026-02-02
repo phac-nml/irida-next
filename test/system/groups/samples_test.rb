@@ -38,6 +38,18 @@ module Groups
       samples.flatten!
     end
 
+    def assert_samples_table_summary(from:, to:, count:, locale: @user.locale)
+      assert_no_selector 'html[aria-busy="true"]'
+
+      within '#limit-component' do
+        assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary',
+                                      from: from,
+                                      to: to,
+                                      count: count,
+                                      locale: locale))
+      end
+    end
+
     test 'visiting the index' do
       visit group_samples_url(@group)
 
@@ -1572,8 +1584,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
 
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
@@ -1888,8 +1899,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1914,8 +1924,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1936,16 +1945,13 @@ module Groups
       samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       # target project has 2 samples prior to transfer
       visit namespace_project_samples_url(project4.namespace.parent, project4)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 2, count: 2)
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1983,13 +1989,11 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 25)
 
       # destination project received transferred samples
       visit namespace_project_samples_url(project4.namespace.parent, project4)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 3, count: 3)
       assert_selector '#samples-table table tbody tr:first-child th:first-child', text: samples[1]
       assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: samples[0]
       ### VERIFY END ###
@@ -2001,8 +2005,7 @@ module Groups
 
       # originating project has 3 samples prior to transfer
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2039,8 +2042,7 @@ module Groups
       ### SETUP START ###
       project4 = projects(:project4)
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2059,6 +2061,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       assert_text I18n.t('samples.transfers.dialog.title')
       find('input.select2-input').click
+      assert_selector "li[data-value='#{project4.id}']", wait: 10
       find("li[data-value='#{project4.id}']").click
       click_on I18n.t('samples.transfers.dialog.submit_button')
 
@@ -2087,16 +2090,13 @@ module Groups
       sample29 = samples(:sample29)
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       # target project has 2 samples prior to transfer
       visit namespace_project_samples_url(project4.namespace.parent, project4)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 2, count: 2)
 
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
 
       ### ACTIONS START ###
       click_button I18n.t('common.controls.select_all')
@@ -2137,8 +2137,7 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify sample1 and 2 transferred, sample 28, sample 29 did not
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 2, count: 2)
       assert_no_selector "tr[id='#{dom_id(sample1)}']"
       assert_no_selector "tr[id='#{dom_id(sample2)}']"
       assert_selector "tr[id='#{dom_id(sample28)}']"
@@ -2146,8 +2145,7 @@ module Groups
 
       # destination project
       visit namespace_project_samples_url(project4.namespace.parent, project4)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
 
       click_on I18n.t(:'components.samples.virtualized_table_component.puid')
 
@@ -2168,8 +2166,7 @@ module Groups
 
       visit group_samples_url(group_three)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 4, count: 4)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2199,8 +2196,7 @@ module Groups
       group_three = groups(:group_three)
       visit group_samples_url(group_three)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 4, count: 4)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2227,8 +2223,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2247,8 +2242,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2273,8 +2267,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2303,8 +2296,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2337,8 +2329,7 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # samples table now contains both original and cloned samples
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 28)
       # duplicated sample names
       assert_selector '#samples-table table tbody td', text: @sample1.name, count: 2
       assert_selector '#samples-table table tbody td', text: @sample2.name, count: 2
@@ -2346,8 +2337,7 @@ module Groups
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@group, @project2)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 22)
       assert_selector '#samples-table table tbody td', text: @sample1.name, count: 1
       assert_selector '#samples-table table tbody td', text: @sample2.name, count: 1
       ### VERIFY END ###
@@ -2357,8 +2347,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2391,8 +2380,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -2468,8 +2456,7 @@ module Groups
       assert_no_selector 'html[aria-busy="true"]'
 
       # verify samples table updates with cloned samples
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 47,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 47)
       ### VERIFY END ###
     end
 
@@ -2477,8 +2464,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ####
@@ -2503,8 +2489,7 @@ module Groups
       ### SETUP START ###
       visit group_samples_url(@group)
       # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
+      assert_samples_table_summary(from: 1, to: 20, count: 26)
       ### SETUP END ###
 
       ### ACTIONS START ###
