@@ -485,4 +485,37 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.running?
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
   end
+
+  # Example test case using RSpec/TestUnit
+  test 'status job resumes from the correct step' do
+    include ActiveJob::Continuation::TestHelper
+
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+    end
+
+    WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+
+    # ActiveJob::Continuation::TestHelper.interrupt_job_during_step(WorkflowExecutionStatusJob, :verify_new_state) do
+    interrupt_job_during_step(WorkflowExecutionStatusJob, :verify_new_state) do
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+    end
+
+    assert_equal :submitted, @workflow_execution.reload.state.to_sym
+
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+
+    assert_equal :completing, @workflow_execution.reload.state.to_sym
+  end
 end
