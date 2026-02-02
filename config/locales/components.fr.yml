@@ -305,6 +305,9 @@ fr:
         metadata_fields_size_warning: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules).
         metadata_fields_size_warning_with_link: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules). Si vous avez besoin de champs, %{create_template_link}.
       virtualized_table_component:
+        announcements:
+          edit_mode_activated: Mode édition activé
+          edit_mode_deactivated: Mode édition désactivé, navigation
         attachments_updated_at: Fichiers mis à jour
         counts:
           samples: Échantillons

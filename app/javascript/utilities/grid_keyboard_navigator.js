@@ -69,8 +69,14 @@ export class GridKeyboardNavigator {
   async handleKeydown(event) {
     try {
       await this.#handleKeydownInternal(event);
-    } catch {
-      // Silently handle navigation errors to prevent breaking user interaction
+    } catch (error) {
+      // Log in development for debugging, silent in production
+      if (
+        typeof window !== "undefined" &&
+        window.location?.hostname === "localhost"
+      ) {
+        console.warn("Grid navigation error:", error);
+      }
     }
   }
 

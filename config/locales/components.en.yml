@@ -305,6 +305,9 @@ en:
         metadata_fields_size_warning: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells).
         metadata_fields_size_warning_with_link: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells). If there are fields you need, %{create_template_link}.
       virtualized_table_component:
+        announcements:
+          edit_mode_activated: Edit mode activated
+          edit_mode_deactivated: Edit mode deactivated, navigating
         attachments_updated_at: Files Updated
         counts:
           samples: Samples
