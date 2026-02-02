@@ -830,7 +830,7 @@ module WorkflowExecutions
       # verify attachment to test initially has a selection
       assert_selector "a[id='#{@sample22.id}_fastq_2_file_link']",
                       text: rev_attachment.file.filename.to_s
-      click_link "#{@sample22.id}_fastq_2", text: rev_attachment.file.filename.to_s
+      click_link "#{@sample22.id}_fastq_2_file_link", text: rev_attachment.file.filename.to_s
 
       # select 'No file' option
       # verify file selector rendered
