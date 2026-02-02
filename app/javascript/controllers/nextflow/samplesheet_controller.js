@@ -466,7 +466,7 @@ export default class extends Controller {
 
     // Set link attributes
     const href = `/-/workflow_executions/file_selector/new?${params.toString()}`;
-    const linkId = `${sampleId}_${columnName}_file_input`;
+    const linkId = `${sampleId}_${columnName}_file_link`;
     const filename = this.#fileAttributes[sampleId][columnName].filename;
 
     fileLink.setAttribute("href", href);

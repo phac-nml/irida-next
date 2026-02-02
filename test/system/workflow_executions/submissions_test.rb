@@ -363,11 +363,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2",
+      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
       ### VERIFY END ###
     end
 
@@ -396,9 +396,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
-      click_link "#{@sample_b.id}_fastq_1"
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1_file_link"
 
       # verify file selector rendered
       assert_selector '#file_selector_form_dialog'
@@ -414,8 +414,8 @@ module WorkflowExecutions
       # verify file selector dialog closed
       assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       # both attachment fwd and rev3 were replaced with fwd and rev2
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd2.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev2.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd2.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev2.file.filename.to_s
       assert_no_text @attachment_fwd3.file.filename.to_s
       assert_no_text @attachment_rev3.file.filename.to_s
       ### VERIFY END ###
@@ -447,9 +447,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
-      click_link "#{@sample_b.id}_fastq_1"
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1_file_link"
 
       # verify file selector rendered
       assert_selector '#file_selector_form_dialog'
@@ -466,8 +466,8 @@ module WorkflowExecutions
       assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
 
       # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
-      assert_link "#{@sample_b.id}_fastq_1", text: attachment_d.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2",
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: attachment_d.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       assert_no_text @attachment_fwd3.file.filename.to_s
       assert_no_text @attachment_rev3.file.filename.to_s
@@ -500,11 +500,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2",
+      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       # launch file selector
-      click_link "#{@sample_a.id}_fastq_1"
+      click_link "#{@sample_a.id}_fastq_1_file_link"
 
       # verify file selector rendered
       assert_selector '#file_selector_form_dialog'
@@ -520,8 +520,8 @@ module WorkflowExecutions
       # verify file selector dialog closed
       assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       # only fastq_1 field was changed, fastq_2 remains empty
-      assert_link "#{@sample_a.id}_fastq_1", text: attachment_b.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2",
+      assert_link "#{@sample_a.id}_fastq_1_file_link", text: attachment_b.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       assert_no_text @attachment_c.file.filename.to_s
       ### VERIFY END ###
@@ -553,11 +553,11 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2",
+      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       # launch file selector
-      click_link "#{@sample_a.id}_fastq_1"
+      click_link "#{@sample_a.id}_fastq_1_file_link"
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -594,9 +594,9 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
-      click_link "#{@sample_b.id}_fastq_2"
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_2_file_link"
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -611,8 +611,8 @@ module WorkflowExecutions
       end
 
       # sample_b fastq2 selection is now no file selected
-      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2",
+      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       assert_no_text @attachment_rev3.file.filename.to_s
       ### VERIFY END ###
@@ -642,10 +642,10 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2",
+      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      click_link "#{@sample_a.id}_fastq_2"
+      click_link "#{@sample_a.id}_fastq_2_file_link"
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -694,18 +694,18 @@ module WorkflowExecutions
                                    workflow: 'phac-nml/iridanextexample')
       find('input#workflow_execution_name').fill_in with: 'TestExecution'
       # verify auto selected attachments
-      assert_link "#{@sample43.id}_fastq_1",
+      assert_link "#{@sample43.id}_fastq_1_file_link",
                   text: fwd_attachment.file.filename.to_s
-      assert_link "#{@sample43.id}_fastq_2", text: rev_attachment.file.filename.to_s
+      assert_link "#{@sample43.id}_fastq_2_file_link", text: rev_attachment.file.filename.to_s
 
-      assert_link "#{@sample44.id}_fastq_1",
+      assert_link "#{@sample44.id}_fastq_1_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample44.id}_fastq_2",
+      assert_link "#{@sample44.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
 
-      assert_link "#{@sample46.id}_fastq_1",
+      assert_link "#{@sample46.id}_fastq_1_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample46.id}_fastq_2",
+      assert_link "#{@sample46.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       # verify error msg has not rendered
       assert_no_text I18n.t('components.nextflow.samplesheet_component.data_missing_error')
@@ -822,13 +822,13 @@ module WorkflowExecutions
       assert_selector 'h1.dialog--title',
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
-      assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
+      assert_no_selector "a[id='#{@sample22.id}_fastq_2_file_link']"
       # navigate to page 4
       select '4', from: I18n.t('components.nextflow.samplesheet_component.page_selection.aria_label')
       assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '4'
 
       # verify attachment to test initially has a selection
-      assert_selector "a[id='#{@sample22.id}_fastq_2']",
+      assert_selector "a[id='#{@sample22.id}_fastq_2_file_link']",
                       text: rev_attachment.file.filename.to_s
       click_link "#{@sample22.id}_fastq_2", text: rev_attachment.file.filename.to_s
 
@@ -846,20 +846,20 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # file selection is now no file selected
-      assert_selector "a[id='#{@sample22.id}_fastq_2']",
+      assert_selector "a[id='#{@sample22.id}_fastq_2_file_link']",
                       text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       # previously selected file no longer exists in table
       assert_no_text rev_attachment.file.filename.to_s
       # change page
       click_button I18n.t('components.nextflow.samplesheet_component.previous')
       assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '3'
-      assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
+      assert_no_selector "a[id='#{@sample22.id}_fastq_2_file_link']"
 
       # navigate back to original page
       click_button I18n.t('components.nextflow.samplesheet_component.next')
       assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '4'
       # verify attachment selection is still 'No file' and original attachment does not exist in table
-      assert_selector "a[id='#{@sample22.id}_fastq_2']",
+      assert_selector "a[id='#{@sample22.id}_fastq_2_file_link']",
                       text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       assert_no_text rev_attachment.file.filename.to_s
       ### VERIFY END ###
