@@ -39,6 +39,11 @@
               text-slate-900 bg-slate-100 dark:bg-slate-900
             "
           >
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.puid') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.name') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.created_at') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.updated_at') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.attachments_updated_at') %>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',

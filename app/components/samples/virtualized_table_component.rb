@@ -106,19 +106,20 @@ module Samples
       )
     end
 
+    # i18n-tasks-use t('components.samples.virtualized_table_component.announcements.edit_mode_activated')
+    # i18n-tasks-use t('components.samples.virtualized_table_component.announcements.edit_mode_deactivated')
     def wrapper_arguments
-      base_args = {
-        tag: 'div',
-        id: 'samples-table',
+      i18n_prefix = 'components.samples.virtualized_table_component.announcements'
+      {
+        tag: 'div', id: 'samples-table',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
         data: {
           controller: 'virtualized-editable-cell',
-          'virtualized-editable-cell-refresh-outlet': "[data-controller='refresh']"
+          'virtualized-editable-cell-refresh-outlet': "[data-controller='refresh']",
+          'virtualized-editable-cell-edit-activated-message-value': t("#{i18n_prefix}.edit_mode_activated"),
+          'virtualized-editable-cell-edit-deactivated-message-value': t("#{i18n_prefix}.edit_mode_deactivated")
         }
-      }
-
-      apply_selection_data!(base_args) if @abilities[:select_samples]
-      base_args
+      }.tap { |args| apply_selection_data!(args) if @abilities[:select_samples] }
     end
 
     def row_arguments(sample, row_index)

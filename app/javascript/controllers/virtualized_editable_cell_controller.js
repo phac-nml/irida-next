@@ -33,6 +33,12 @@ export default class extends Controller {
   // when user edits cells (since edits trigger broadcasts).
   static outlets = ["refresh"];
 
+  // Stimulus values for i18n screen reader announcements
+  static values = {
+    editActivatedMessage: String,
+    editDeactivatedMessage: String,
+  };
+
   #originalCellContent;
 
   initialize() {
@@ -344,11 +350,15 @@ export default class extends Controller {
   }
 
   #handleEditActivated() {
-    this.#announce("Edit mode activated");
+    if (this.hasEditActivatedMessageValue) {
+      this.#announce(this.editActivatedMessageValue);
+    }
   }
 
   #handleEditDeactivated() {
-    this.#announce("Edit mode deactivated, navigating");
+    if (this.hasEditDeactivatedMessageValue) {
+      this.#announce(this.editDeactivatedMessageValue);
+    }
   }
 
   #announce(message) {
