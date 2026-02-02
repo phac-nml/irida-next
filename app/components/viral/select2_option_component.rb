@@ -26,10 +26,10 @@ module Viral
     end
 
     def controller_name
-      if Flipper.enabled?(:flowbite_replacement)
-        'viral--select2'
+      if Flipper.enabled?(:beta_dropdown)
+        'viral--beta-select2'
       else
-        'viral--flowbite-select2'
+        'viral--select2'
       end
     end
   end

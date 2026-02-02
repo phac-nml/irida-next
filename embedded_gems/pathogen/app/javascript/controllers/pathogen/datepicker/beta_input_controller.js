@@ -1,8 +1,8 @@
-import { Controller } from "@hotwired/stimulus";
+import MenuController from "controllers/menu_controller";
 import { FOCUSABLE_ELEMENTS } from "pathogen-controllers/pathogen/datepicker/constants";
 
-export default class extends Controller {
-  static outlets = ["pathogen--datepicker--flowbite-calendar"];
+export default class extends MenuController {
+  static outlets = ["pathogen--datepicker--beta-calendar"];
   static targets = ["trigger", "calendarTemplate", "inputError", "minDate"];
 
   static values = {
@@ -29,8 +29,6 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
-  #dropdown;
-
   #minDate;
 
   connect() {
@@ -39,7 +37,6 @@ export default class extends Controller {
     }
 
     this.boundHandleTriggerFocus = this.handleTriggerFocus.bind(this);
-    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
@@ -70,45 +67,20 @@ export default class extends Controller {
   }
 
   #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(this.#calendar, this.triggerTarget, {
-        placement: "top",
-        triggerType: "none", // handle via handleTriggerFocus instead
-        offsetSkidding: 0,
-        offsetDistance: 10,
-        delay: 300,
-        onShow: () => {
-          this.triggerTarget.setAttribute("aria-expanded", "true");
-          this.#calendar.setAttribute("aria-hidden", "false");
-          this.#calendar.removeAttribute("hidden");
-          document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-          this.#calendar.addEventListener(
-            "focusin",
-            this.boundHandleCalendarFocus,
-          );
-        },
-        onHide: () => {
-          this.triggerTarget.setAttribute("aria-expanded", "false");
-          this.#calendar.setAttribute("aria-hidden", "true");
-          this.#calendar.setAttribute("hidden", "hidden");
-          document.removeEventListener(
-            "keydown",
-            this.boundHandleGlobalKeydown,
-          );
-          this.#calendar.removeEventListener(
-            "focusin",
-            this.boundHandleCalendarFocus,
-          );
-        },
-      });
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+    super.share({
+      menu: this.#calendar,
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
+    super.connect();
+  }
+
+  #onShow() {
+    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  #onHide() {
+    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
   }
 
   #setMinDate() {
@@ -152,7 +124,7 @@ export default class extends Controller {
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
-    if (this.hasPathogenDatepickerFlowbiteCalendarOutlet) {
+    if (this.hasPathogenDatepickerBetaCalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
   }
@@ -180,32 +152,20 @@ export default class extends Controller {
   }
 
   // once the calendar controller connects, share values used by both controllers
-  pathogenDatepickerFlowbiteCalendarOutletConnected() {
+  pathogenDatepickerBetaCalendarOutletConnected() {
     this.#shareParamsWithCalendar();
   }
 
   handleTriggerFocus() {
-    if (!this.#dropdown.isVisible()) {
-      this.#dropdown.show();
-    }
-  }
-
-  handleCalendarFocus(event) {
-    const parentElement = this.#calendar.parentElement;
-    if (parentElement.tagName === "DIALOG") {
-      const rect = event.target.getBoundingClientRect();
-
-      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
-        const dialogContents = parentElement.querySelector(".dialog--contents");
-        dialogContents.scrollBy(0, rect.top);
-      }
+    if (!super.isVisible()) {
+      super.show();
     }
   }
 
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      super.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -225,7 +185,7 @@ export default class extends Controller {
     if (
       event.key === "Tab" &&
       event.target ===
-        this.pathogenDatepickerFlowbiteCalendarOutlet.getLastFocusableElement() &&
+        this.pathogenDatepickerBetaCalendarOutlet.getLastFocusableElement() &&
       !event.shiftKey
     ) {
       event.preventDefault();
@@ -234,14 +194,14 @@ export default class extends Controller {
       return;
     }
 
-    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
+    // If we Tab while on the trigger, Shift+Tab should close the datepicker,
     // while Tab focuses on the first focusable element within the calendar
     if (event.key === "Tab" && event.target === this.triggerTarget) {
       if (event.shiftKey) {
         this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
-        this.pathogenDatepickerFlowbiteCalendarOutlet
+        this.pathogenDatepickerBetaCalendarOutlet
           .getFirstFocusableElement()
           .focus();
       }
@@ -345,7 +305,7 @@ export default class extends Controller {
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
     };
-    this.pathogenDatepickerFlowbiteCalendarOutlet.shareParamsWithCalendarByInput(
+    this.pathogenDatepickerBetaCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
     );
   }
@@ -353,7 +313,7 @@ export default class extends Controller {
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
     console.error(
-      `Pathogen--Datepicker--FlowbiteInputController error in ${source}:`,
+      `Pathogen--Datepicker--InputController error in ${source}:`,
       error,
     );
   }

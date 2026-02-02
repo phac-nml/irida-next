@@ -13,7 +13,7 @@ import {
 } from "pathogen-controllers/pathogen/datepicker/utils";
 
 export default class extends Controller {
-  static outlets = ["pathogen--datepicker--flowbite-input"];
+  static outlets = ["pathogen--datepicker--beta-input"];
   static targets = [
     "backButton",
     "monthsArray",
@@ -498,8 +498,8 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerFlowbiteInputOutlet.focusTrigger();
-      this.pathogenDatepickerFlowbiteInputOutlet.hideCalendar();
+      this.pathogenDatepickerBetaInputOutlet.focusTrigger();
+      this.pathogenDatepickerBetaInputOutlet.hideCalendar();
     }
   }
 
@@ -534,29 +534,29 @@ export default class extends Controller {
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.pathogenDatepickerFlowbiteInputOutlet.setInputValue(
+    this.pathogenDatepickerBetaInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
 
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
-      this.pathogenDatepickerFlowbiteInputOutlet.submitDate();
+      this.pathogenDatepickerBetaInputOutlet.submitDate();
     }
 
-    this.pathogenDatepickerFlowbiteInputOutlet.hideCalendar();
-    this.pathogenDatepickerFlowbiteInputOutlet.focusNextFocusableElement();
+    this.pathogenDatepickerBetaInputOutlet.hideCalendar();
+    this.pathogenDatepickerBetaInputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
   clearSelection() {
-    this.pathogenDatepickerFlowbiteInputOutlet.setInputValue("");
+    this.pathogenDatepickerBetaInputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
-      this.pathogenDatepickerFlowbiteInputOutlet.submitDate();
+      this.pathogenDatepickerBetaInputOutlet.submitDate();
     }
 
-    this.pathogenDatepickerFlowbiteInputOutlet.hideCalendar();
-    this.pathogenDatepickerFlowbiteInputOutlet.focusNextFocusableElement();
+    this.pathogenDatepickerBetaInputOutlet.hideCalendar();
+    this.pathogenDatepickerBetaInputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
