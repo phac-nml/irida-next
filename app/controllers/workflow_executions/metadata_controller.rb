@@ -5,12 +5,13 @@ module WorkflowExecutions
   class MetadataController < ApplicationController
     respond_to :turbo_stream
 
-    def fields
-      @sample_ids = params[:sample_ids].split(',')
+    def fields # rubocop:disable Metrics/AbcSize
       if Flipper.enabled?(:deferred_samplesheet)
+        @sample_ids = params[:sample_ids].split(',')
         @metadata_fields = JSON.parse(params[:metadata_fields])
         @headers = @metadata_fields.keys.to_json
       else
+        @samples = Sample.where(id: params[:sample_ids])
         @header = params[:header]
         @field = params[:field]
       end
@@ -23,10 +24,7 @@ module WorkflowExecutions
     # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
     def generate_metadata_for_samplesheet
-      metadata = Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
-      # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
-      # in samplesheet_controller.js
-      {}.merge(*metadata)
+      Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes
@@ -45,16 +43,13 @@ module WorkflowExecutions
         fields_to_query.append(create_query_node(metadata_field))
       end
 
-      Sample.where(id: @sample_ids).pluck(fields_to_query).map do |results|
+      metadata = Sample.where(id: @sample_ids).pluck(fields_to_query).map do |results|
         { "#{results[0]}": { sample_id: results[0], samplesheet_params: retrieve_metadata(results) } }
       end
-    end
 
-    def fetch_metadata
-      node = create_query_node(@field)
-      Sample.where(id: @sample_ids).pluck(:id, node).map do |results|
-        { "#{results[0]}": { sample_id: results[0], samplesheet_params: { "#{@header}": results[1] } } }
-      end
+      # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
+      # in samplesheet_controller.js
+      {}.merge(*metadata)
     end
 
     def retrieve_metadata(pluck_results)
@@ -67,6 +62,14 @@ module WorkflowExecutions
 
     def create_query_node(metadata_field)
       Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field))
+    end
+
+    def fetch_metadata
+      metadata = {}
+      @samples.each_with_index do |sample, index|
+        metadata[index] = sample.metadata.fetch(@field, '')
+      end
+      metadata
     end
   end
 end

@@ -71,7 +71,7 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
   def most_recent_other_file(autopopulate, pattern)
     return {} unless autopopulate
 
-    if Flipper.enabled(:deferred_samplesheet)
+    if Flipper.enabled?(:deferred_samplesheet)
       most_recent_other_file_with_feature_flag(pattern)
     else
       most_recent_other_file_without_feature_flag(pattern)

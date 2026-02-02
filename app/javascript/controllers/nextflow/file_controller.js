@@ -7,7 +7,6 @@ export default class extends Controller {
   };
 
   connect() {
-    console.log("file controller");
     this.sendFileData();
   }
 
