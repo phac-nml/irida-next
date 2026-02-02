@@ -9,22 +9,24 @@
         },
       ) %>
 
-      <table
-        class="
+      <%= tag.table(
+        class: "
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
           whitespace-nowrap
-        "
-        style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
-        data-controller="table"
-        data-action="focusin->table#handleCellFocus"
-        role="grid"
-        aria-label="<%= t('components.samples.virtualized_table_component.table_label') %>"
-        aria-colcount="<%= @columns.length + @metadata_fields.length %>"
-        aria-rowcount="<%= @pagy.count + 1 %>"
-        <% if @abilities[:select_samples] %>
-        aria-multiselectable="true"
-        <% end %>
-      >
+        ",
+        style: "--puid-width: #{helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples])};",
+        data: {
+          controller: "table",
+          action: "focusin->table#handleCellFocus",
+        },
+        role: "grid",
+        aria: {
+          label: t("components.samples.virtualized_table_component.table_label"),
+          colcount: @columns.length + @metadata_fields.length,
+          rowcount: @pagy.count + 1,
+          multiselectable: (@abilities[:select_samples] ? "true" : nil),
+        },
+      ) do %>
         <%# Target for virtual scroll header manipulation %>
         <thead
           role="rowgroup"
@@ -208,7 +210,7 @@
           <% end %>
         </tbody>
 
-      </table>
+      <% end %>
 
       <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
       <div
