@@ -109,7 +109,7 @@ module Viral
       @system_arguments[:data]['pathogen--tooltip-target'] ||= 'trigger'
 
       describedby = @system_arguments[:aria][:describedby]
-      @system_arguments[:aria][:describedby] = append_id(describedby, @tooltip_id)
+      @system_arguments[:aria][:describedby] = append_to_aria_describedby(describedby, @tooltip_id)
     end
 
     # 📝 Add title attribute from system arguments if present
@@ -262,17 +262,20 @@ module Viral
       }
     end
 
-    # Append an ID to a space-separated list of IDs (e.g., aria-describedby).
-    # Ensures individual IDs don't contain spaces by replacing them with hyphens.
-    def append_id(existing, id)
-      # Sanitize ID to ensure no spaces
-      clean_id = id.to_s.strip.gsub(/\s+/, '-')
-      return clean_id if existing.blank?
+    # Append an ID to a space-separated list of IDs for aria-describedby.
+    # The aria-describedby attribute accepts multiple IDs separated by spaces,
+    # so this builds that space-separated list correctly per ARIA spec.
+    #
+    # @param existing [String] Existing space-separated ID list (or nil)
+    # @param id [String] New ID to append to the list
+    # @return [String] Space-separated list of IDs
+    def append_to_aria_describedby(existing, id)
+      return id if existing.blank?
 
       ids = existing.to_s.split(/\s+/)
-      return existing if ids.include?(clean_id)
+      return existing if ids.include?(id)
 
-      "#{existing} #{clean_id}"
+      "#{existing} #{id}"
     end
   end
   # rubocop:enable Metrics/ClassLength
