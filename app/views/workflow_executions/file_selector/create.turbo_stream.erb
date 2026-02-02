@@ -15,9 +15,9 @@
   <% else %>
     <div
       hidden
-      data-files="<%= @attachments_params.to_json %>"
+      data-controller="nextflow--file"
+      data-nextflow--file-files-value="<%= @attachments_params.to_json %>"
       data-nextflow--samplesheet-target="dataPayload"
-      data-payload-type="files"
     />
   <% end %>
 <% end %>

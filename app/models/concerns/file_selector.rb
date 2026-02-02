@@ -1,8 +1,96 @@
 # frozen_string_literal: true
 
 # Concern with for retrieving and organizing files within the nextflow samplesheet file selector
-module FileSelector
+module FileSelector # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
+
+  ### TODO START: Remove functions between this block when feature flag deferred_samplesheet is retired ###
+  def sorted_files
+    return {} if attachments.empty?
+
+    @sorted_files || sort_files
+  end
+
+  def sort_files # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    singles = []
+    pe_forward = []
+    pe_reverse = []
+    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                           Arel::Nodes::Quoted.new('direction'))
+    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse'))).order(:created_at, :id)
+
+    non_reverse_attachments.each do |attachment|
+      case attachment.metadata['direction']
+      when nil
+        singles << retrieve_attachment_attributes(attachment)
+      when 'forward'
+        pe_forward << retrieve_attachment_attributes(attachment)
+        pe_reverse << retrieve_attachment_attributes(attachment.associated_attachment)
+      end
+    end
+
+    @sorted_files = { singles:, pe_forward:, pe_reverse: }
+    @sorted_files
+  end
+
+  def retrieve_attachment_attributes(attachment)
+    {
+      filename: attachment.file.filename.to_s,
+      global_id: attachment.to_global_id,
+      id: attachment.id,
+      byte_size: attachment.byte_size,
+      created_at: attachment.created_at,
+      metadata: attachment.metadata
+    }
+  end
+
+  def samplesheet_fastq_files(property, pattern)
+    direction = fastq_direction(property)
+    singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/)
+    files = sorted_files.fetch(direction, [])
+
+    files.concat(singles) if (direction == :pe_forward && property['pe_only'].blank?) || direction == :none
+    files.sort_by! { |file| file[:created_at] }.reverse
+  end
+
+  # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
+  # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
+  def most_recent_fastq_file(property, pattern)
+    direction = fastq_direction(property)
+
+    if sorted_files[direction].present?
+      sorted_files[direction].last
+    elsif %i[pe_forward none].include?(direction)
+      last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/).last
+      last_single.nil? ? {} : last_single
+    else
+      {}
+    end
+  end
+
+  def most_recent_other_file(autopopulate, pattern)
+    return {} unless autopopulate
+
+    if Flipper.enabled(:deferred_samplesheet)
+      most_recent_other_file_with_feature_flag(pattern)
+    else
+      most_recent_other_file_without_feature_flag(pattern)
+    end
+  end
+
+  def most_recent_other_file_without_feature_flag(pattern)
+    files = if pattern
+              filter_files_by_pattern(sorted_files[:singles] || [], pattern)
+            else
+              sorted_files[:singles] || []
+            end
+    files.present? ? files.last : {}
+  end
+
+  def filter_files_by_pattern(files, pattern)
+    files.select { |file| file[:filename] =~ Regexp.new(pattern) }
+  end
+  ### TODO END ###
 
   def file_selector_fastq_files(property, pe_only)
     fastq_files = query_fastq_files(property == 'fastq_1' ? 'forward' : 'reverse', property == 'fastq_1' && !pe_only)
@@ -26,6 +114,7 @@ module FileSelector
 
   def most_recent_fastq_files(pe_only)
     attributes = { 'fastq_1' => {}, 'fastq_2' => {} }
+
     # prioritize paired attachment before returning single attachment
     forward_file = query_fastq_files('forward', false).first
 
@@ -39,9 +128,8 @@ module FileSelector
     attributes
   end
 
-  def most_recent_other_file(autopopulate, pattern)
-    return {} unless autopopulate
-
+  # TODO: rename to "most_recent_other_file" when deferred_samplesheet is retired
+  def most_recent_other_file_with_feature_flag(pattern)
     most_recent_file = if pattern
                          # find file that fits regex
                          query_files_by_pattern(pattern).first
@@ -56,6 +144,18 @@ module FileSelector
   end
 
   private
+
+  # TODO: Remove fastq_direction when deferred_samplesheet is retired
+  def fastq_direction(property)
+    case property.match(/^fastq_(\d+)$/).to_a[1]
+    when '1'
+      :pe_forward
+    when '2'
+      :pe_reverse
+    else
+      :single
+    end
+  end
 
   # return the necessary file attributes, format currently == 'samplesheet' or 'file_selector'
   def file_attributes(file, format)
