@@ -2,10 +2,10 @@
   <% unless min_date.nil? %>
     <div
       class="text-sm text-center text-slate-900 dark:text-white"
-      <% if Flipper.enabled?(:flowbite_replacement) %>
-      data-pathogen--datepicker--calendar-target="minDateMessage"
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-pathogen--datepicker--beta-calendar-target="minDateMessage"
       <% else %>
-      data-pathogen--datepicker--flowbite-calendar-target="minDateMessage"
+      data-pathogen--datepicker--calendar-target="minDateMessage"
       <% end %>
     >
     </div>
@@ -14,10 +14,10 @@
     <button
       type="button"
       class="button button-default w-1/2"
-      <% if Flipper.enabled?(:flowbite_replacement) %>
-      data-action="click->pathogen--datepicker--calendar#showToday"
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-action="click->pathogen--datepicker--beta-calendar#showToday"
       <% else %>
-      data-action="click->pathogen--datepicker--flowbite-calendar#showToday"
+      data-action="click->pathogen--datepicker--calendar#showToday"
       <% end %>
       aria-label="<%= t('pathogen.datepicker.aria_label.show_today') %>"
     >
@@ -26,14 +26,12 @@
     <button
       type="button"
       class="button button-default w-1/2"
-      <% if Flipper.enabled?(:flowbite_replacement) %>
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-action="click->pathogen--datepicker--beta-calendar#clearSelection"
+      data-pathogen--datepicker--beta-calendar-target="clearButton"
+      <% else %>
       data-action="click->pathogen--datepicker--calendar#clearSelection"
       data-pathogen--datepicker--calendar-target="clearButton"
-      <% else %>
-      data-action="
-        click->pathogen--datepicker--flowbite-calendar#clearSelection
-      "
-      data-pathogen--datepicker--flowbite-calendar-target="clearButton"
       <% end %>
       aria-label="<%= t('pathogen.datepicker.aria_label.clear_selection') %>"
     >

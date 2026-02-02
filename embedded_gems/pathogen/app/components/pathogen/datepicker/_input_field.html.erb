@@ -16,17 +16,17 @@
     placeholder="<%= t("pathogen.datepicker.placeholder") %>"
     autocomplete="off"
     value="<%= selected_date %>"
-    <% if Flipper.enabled?(:flowbite_replacement) %>
+    <% if Flipper.enabled?(:beta_dropdown) %>
+    data-pathogen--datepicker--beta-input-target="trigger"
+    data-action="
+      change->pathogen--datepicker--beta-input#directInput
+      keydown->pathogen--datepicker--beta-input#handleEnterDirectInput
+    "
+    <% else %>
     data-pathogen--datepicker--input-target="trigger"
     data-action="
       change->pathogen--datepicker--input#directInput
       keydown->pathogen--datepicker--input#handleEnterDirectInput
-    "
-    <% else %>
-    data-pathogen--datepicker--flowbite-input-target="trigger"
-    data-action="
-      change->pathogen--datepicker--flowbite-input#directInput
-      keydown->pathogen--datepicker--flowbite-input#handleEnterDirectInput
     "
     <% end %>
     type="text"
@@ -43,10 +43,10 @@
   >
 </div>
 <div
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-pathogen--datepicker--input-target="inputError"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-pathogen--datepicker--beta-input-target="inputError"
   <% else %>
-  data-pathogen--datepicker--flowbite-input-target="inputError"
+  data-pathogen--datepicker--input-target="inputError"
   <% end %>
   class="text-sm hidden text-red-700 dark:text-red-500 mt-1"
   aria-hidden="true"

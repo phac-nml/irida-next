@@ -6,10 +6,10 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      <% if @namespace.group_namespace? && Flipper.enabled?(:flowbite_replacement)%>
-      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--select2"
+      <% if @namespace.group_namespace? && Flipper.enabled?(:beta_dropdown)%>
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--beta-select2"
       <% elsif @namespace.group_namespace? %>
-      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--flowbite-select2"
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--select2"
       <% else %>
       data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload"
       <% end %>
@@ -20,14 +20,14 @@
       data-spreadsheet-import-select-description-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") %>'
       data-attachment-upload-uploading-text-value='<%=t("shared.samples.spreadsheet_imports.dialog.uploading") %>'
-      <% if @namespace.group_namespace? && Flipper.enabled?(:flowbite_replacement) %>
+      <% if @namespace.group_namespace? && Flipper.enabled?(:beta_dropdown) %>
+      data-viral--beta-select2-trigger-type-value="click"
+      data-viral--beta-select2-enable-controller-coordination-value="<%= true %>"
+      data-viral--beta-select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
+      <% elsif @namespace.group_namespace? %>
       data-viral--select2-trigger-type-value="click"
       data-viral--select2-enable-controller-coordination-value="<%= true %>"
       data-viral--select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
-      <% elsif @namespace.group_namespace? %>
-      data-viral--flowbite-select2-trigger-type-value="click"
-      data-viral--flowbite-select2-enable-controller-coordination-value="<%= true %>"
-      data-viral--flowbite-select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
       <% end %>
       data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
       data-action="

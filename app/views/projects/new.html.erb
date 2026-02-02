@@ -6,10 +6,10 @@
 <div class="@xl:container" data-controller="slugify">
   <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post,
   data:
-  if Flipper.enabled?(:flowbite_replacement)
-  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+  if Flipper.enabled?(:beta_dropdown)
+  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
 end, html: { novalidate: true }) do |form| %>
     <%= turbo_frame_tag "project_form" do %>
       <div class="grid gap-4">

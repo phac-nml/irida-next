@@ -9,10 +9,10 @@
 
 <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post,
 data:
-if Flipper.enabled?(:flowbite_replacement)
-  { remote: true,  controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+if Flipper.enabled?(:beta_dropdown)
+  { remote: true,  controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { remote: true,  controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+  { remote: true,  controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
 end, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if new_group_link.errors.any?
@@ -125,10 +125,10 @@ end, html: { novalidate: true }) do |form| %>
                   class: "button button-primary",
                   disabled: true,
                   data:
-                    if Flipper.enabled?(:flowbite_replacement)
-                      { "viral--select2-target": "submitButton" }
+                    if Flipper.enabled?(:beta_dropdown)
+                      { "viral--beta-select2-target": "submitButton" }
                     else
-                      { "viral--flowbite-select2-target": "submitButton" }
+                      { "viral--select2-target": "submitButton" }
                     end %>
       <button
         type="button"

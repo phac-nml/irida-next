@@ -122,14 +122,13 @@
       <div
 
         class="p-2 pt shrink-0"
-
-        <% if Flipper.enabled?(:flowbite_replacement) %>
-        data-controller="viral--dropdown"
+        <% if Flipper.enabled?(:beta_dropdown) %>
+        data-controller="viral--beta-dropdown"
         <% else %>
-        data-controller="viral--flowbite-dropdown"
-        data-viral--flowbite-dropdown-skidding-value="0"
-        data-viral--flowbite-dropdown-distance-value="5"
-        data-viral--flowbite-dropdown-position-value="bottom-start"
+        data-controller="viral--dropdown"
+        data-viral--dropdown-skidding-value="0"
+        data-viral--dropdown-distance-value="5"
+        data-viral--dropdown-position-value="bottom-start"
         <% end%>
       >
         <button
@@ -143,10 +142,10 @@
             dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
             disabled:dark:text-slate-400 w-full
           "
-          <% if Flipper.enabled?(:flowbite_replacement) %>
-          data-viral--dropdown-target='trigger'
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-dropdown-target='trigger'
           <% else %>
-          data-viral--flowbite-dropdown-target='trigger'
+          data-viral--dropdown-target='trigger'
           <% end %>
           aria-haspopup="true"
           aria-controls="sidebar-dd-menu"
@@ -157,10 +156,10 @@
 
         <ul
           id="sidebar-dd-menu"
-          <% if Flipper.enabled?(:flowbite_replacement) %>
-          data-viral--dropdown-target="menu"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-dropdown-target="menu"
           <% else %>
-          data-viral--flowbite-dropdown-target="menu"
+          data-viral--dropdown-target="menu"
           <% end %>
           class="
             z-20 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100

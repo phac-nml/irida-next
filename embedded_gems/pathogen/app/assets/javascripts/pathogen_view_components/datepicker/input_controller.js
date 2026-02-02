@@ -1,7 +1,6 @@
 import { FOCUSABLE_ELEMENTS } from "pathogen_view_components/datepicker/constants";
-import MenuController from "controllers/menu_controller";
-
-export default class extends MenuController {
+import { Controller } from "@hotwired/stimulus";
+export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];
   static targets = ["trigger", "calendarTemplate", "inputError", "minDate"];
 
@@ -29,6 +28,8 @@ export default class extends MenuController {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
+  #dropdown;
+
   #minDate;
 
   connect() {
@@ -37,6 +38,7 @@ export default class extends MenuController {
     }
 
     this.boundHandleTriggerFocus = this.handleTriggerFocus.bind(this);
+    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
@@ -67,20 +69,45 @@ export default class extends MenuController {
   }
 
   #initializeDropdown() {
-    super.share({
-      menu: this.#calendar,
-      onShow: () => this.#onShow(),
-      onHide: () => this.#onHide(),
-    });
-    super.connect();
-  }
-
-  #onShow() {
-    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-  }
-
-  #onHide() {
-    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+    try {
+      if (typeof Dropdown !== "function") {
+        throw new Error(
+          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
+        );
+      }
+      this.#dropdown = new Dropdown(this.#calendar, this.triggerTarget, {
+        placement: "top",
+        triggerType: "none", // handle via handleTriggerFocus instead
+        offsetSkidding: 0,
+        offsetDistance: 10,
+        delay: 300,
+        onShow: () => {
+          this.triggerTarget.setAttribute("aria-expanded", "true");
+          this.#calendar.setAttribute("aria-hidden", "false");
+          this.#calendar.removeAttribute("hidden");
+          document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+          this.#calendar.addEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
+        },
+        onHide: () => {
+          this.triggerTarget.setAttribute("aria-expanded", "false");
+          this.#calendar.setAttribute("aria-hidden", "true");
+          this.#calendar.setAttribute("hidden", "hidden");
+          document.removeEventListener(
+            "keydown",
+            this.boundHandleGlobalKeydown,
+          );
+          this.#calendar.removeEventListener(
+            "focusin",
+            this.boundHandleCalendarFocus,
+          );
+        },
+      });
+    } catch (error) {
+      this.#handleError(error, "initializeDropdown");
+    }
   }
 
   #setMinDate() {
@@ -157,15 +184,27 @@ export default class extends MenuController {
   }
 
   handleTriggerFocus() {
-    if (!super.isVisible()) {
-      super.show();
+    if (!this.#dropdown.isVisible()) {
+      this.#dropdown.show();
+    }
+  }
+
+  handleCalendarFocus(event) {
+    const parentElement = this.#calendar.parentElement;
+    if (parentElement.tagName === "DIALOG") {
+      const rect = event.target.getBoundingClientRect();
+
+      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
+        const dialogContents = parentElement.querySelector(".dialog--contents");
+        dialogContents.scrollBy(0, rect.top);
+      }
     }
   }
 
   // Hide calendar
   hideCalendar() {
     try {
-      super.hide();
+      if (this.#dropdown) this.#dropdown.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -194,7 +233,7 @@ export default class extends MenuController {
       return;
     }
 
-    // If we Tab while on the trigger, Shift+Tab should close the datepicker,
+    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
     // while Tab focuses on the first focusable element within the calendar
     if (event.key === "Tab" && event.target === this.triggerTarget) {
       if (event.shiftKey) {

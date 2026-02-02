@@ -4,10 +4,6 @@ require 'application_system_test_case'
 
 module System
   class DropdownComponentTest < ApplicationSystemTestCase
-    def setup
-      Flipper.enable(:flowbite_replacement)
-    end
-
     test 'dropdown component default rendering' do
       visit('/rails/view_components/viral_dropdown_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
