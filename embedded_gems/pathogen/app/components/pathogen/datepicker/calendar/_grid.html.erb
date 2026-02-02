@@ -17,10 +17,10 @@
       </tr>
     </thead>
     <tbody
-      <% if Flipper.enabled?(:flowbite_replacement) %>
-      data-pathogen--datepicker--calendar-target="calendar"
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-pathogen--datepicker--beta-calendar-target="calendar"
       <% else %>
-      data-pathogen--datepicker--flowbite-calendar-target="calendar"
+      data-pathogen--datepicker--calendar-target="calendar"
       <% end %>
     >
     </tbody>
@@ -28,10 +28,10 @@
 </div>
 
 <template
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-pathogen--datepicker--calendar-target="inMonthDateTemplate"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-pathogen--datepicker--beta-calendar-target="inMonthDateTemplate"
   <% else %>
-  data-pathogen--datepicker--flowbite-calendar-target="inMonthDateTemplate"
+  data-pathogen--datepicker--calendar-target="inMonthDateTemplate"
   <% end %>
 >
   <td
@@ -41,25 +41,25 @@
       w-8
     "
     data-date-within-month-position="inMonth"
-    <% if Flipper.enabled?(:flowbite_replacement) %>
+    <% if Flipper.enabled?(:beta_dropdown) %>
     data-action="
-      keydown->pathogen--datepicker--calendar#navigateCalendar
-      click->pathogen--datepicker--calendar#selectDate
+      keydown->pathogen--datepicker--beta-calendar#navigateCalendar
+      click->pathogen--datepicker--beta-calendar#selectDate
     "
     <% else %>
     data-action="
-      keydown->pathogen--datepicker--flowbite-calendar#navigateCalendar
-      click->pathogen--datepicker--flowbite-calendar#selectDate
+      keydown->pathogen--datepicker--calendar#navigateCalendar
+      click->pathogen--datepicker--calendar#selectDate
     "
     <% end %>
   ></td>
 </template>
 
 <template
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-pathogen--datepicker--calendar-target="outOfMonthDateTemplate"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-pathogen--datepicker--beta-calendar-target="outOfMonthDateTemplate"
   <% else %>
-  data-pathogen--datepicker--flowbite-calendar-target="outOfMonthDateTemplate"
+  data-pathogen--datepicker--calendar-target="outOfMonthDateTemplate"
   <% end %>
 >
   <td
@@ -69,15 +69,15 @@
       text-sm w-8
     "
     data-date-within-month-position="outOfMonth"
-    <% if Flipper.enabled?(:flowbite_replacement) %>
+    <% if Flipper.enabled?(:beta_dropdown) %>
     data-action="
-      keydown->pathogen--datepicker--calendar#navigateCalendar
-      click->pathogen--datepicker--calendar#selectDate
+      keydown->pathogen--datepicker--beta-calendar#navigateCalendar
+      click->pathogen--datepicker--beta-calendar#selectDate
     "
     <% else %>
     data-action="
-      keydown->pathogen--datepicker--flowbite-calendar#navigateCalendar
-      click->pathogen--datepicker--flowbite-calendar#selectDate
+      keydown->pathogen--datepicker--calendar#navigateCalendar
+      click->pathogen--datepicker--calendar#selectDate
     "
     <% end %>
   ></td>

@@ -240,11 +240,11 @@ module Viral
 
     # 🏗️ Build data attributes for the dropdown trigger
     def build_data_attributes
-      data = if Flipper.enabled?(:flowbite_replacement)
-               { 'viral--dropdown-target': 'trigger' }
+      data = if Flipper.enabled?(:beta_dropdown)
+               { 'viral--beta-dropdown-target': 'trigger' }
 
              else
-               { 'viral--flowbite-dropdown-target': 'trigger' }
+               { 'viral--dropdown-target': 'trigger' }
              end
       return data unless @action_link
 

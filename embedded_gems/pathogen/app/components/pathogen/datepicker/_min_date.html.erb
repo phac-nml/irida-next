@@ -2,10 +2,10 @@
 <%# by pathogen--datepicker--input_controller and then removed %>
 <div
   class="hidden"
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-pathogen--datepicker--input-target="minDate"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-pathogen--datepicker--beta-input-target="minDate"
   <% else %>
-  data-pathogen--datepicker--flowbite-input-target="minDate"
+  data-pathogen--datepicker--input-target="minDate"
   <% end %>
 >
   <%= local_date(min_date, "%Y-%m-%d") %>

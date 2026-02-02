@@ -4,10 +4,10 @@
   </p>
 </div>
 <%= form_with(model: @new_member, url: group_members_path(tab: @tab), data:
-if Flipper.enabled?(:flowbite_replacement)
-  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+if Flipper.enabled?(:beta_dropdown)
+  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
 end, method: :post, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if @new_member.errors.any?
@@ -111,10 +111,10 @@ end, method: :post, html: { novalidate: true }) do |form| %>
                   class: "button button-primary mr-1",
                   disabled: true,
                   data:
-                    if Flipper.enabled?(:flowbite_replacement)
-                      { "viral--select2-target": "submitButton" }
+                    if Flipper.enabled?(:beta_dropdown)
+                      { "viral--beta-select2-target": "submitButton" }
                     else
-                      { "viral--flowbite-select2-target": "submitButton" }
+                      { "viral--select2-target": "submitButton" }
                     end %>
       <button
         type="button"

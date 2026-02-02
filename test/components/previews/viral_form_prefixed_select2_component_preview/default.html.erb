@@ -1,8 +1,8 @@
 <%= form_with(url: "#", data:
-                      if Flipper.enabled?(:flowbite_replacement)
-                        { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+                      if Flipper.enabled?(:beta_dropdown)
+                        { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
                       else
-                        { controller: "viral--flowbite-select2", "viral--flowbite-select2-trigger-type-value": "click" }
+                        { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
                       end
 ) do |form| %>
   <label for="unique_id">Select User</label>

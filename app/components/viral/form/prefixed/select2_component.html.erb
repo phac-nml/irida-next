@@ -12,10 +12,10 @@
     </div>
     <div class="grow">
       <div
-        <% if Flipper.enabled?(:flowbite_replacement) %>
-        data-action="keydown->viral--select2#keydown"
+        <% if Flipper.enabled?(:beta_dropdown) %>
+        data-action="keydown->viral--beta-select2#keydown"
         <% else %>
-        data-action="keydown->viral--flowbite-select2#keydown"
+        data-action="keydown->viral--select2#keydown"
         <% end %>
         class="select2"
       >
@@ -23,12 +23,12 @@
           type="text"
           id="<%= id %>"
           name="<%= id %>"
-          <% if Flipper.enabled?(:flowbite_replacement) %>
-          data-viral--select2-target="trigger"
-          data-action="input->viral--select2#input"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-select2-target="trigger"
+          data-action="input->viral--beta-select2#input"
           <% else %>
-          data-viral--flowbite-select2-target="input"
-          data-action="input->viral--flowbite-select2#input"
+          data-viral--select2-target="input"
+          data-action="input->viral--select2#input"
           <% end%>
           placeholder="<%= placeholder %>"
           <%= "required" if required %>
@@ -48,16 +48,16 @@
         >
         <%= form.hidden_field name,
                           data:
-                            if Flipper.enabled?(:flowbite_replacement)
-                              { "viral--select2-target": "hidden" }
+                            if Flipper.enabled?(:beta_dropdown)
+                              { "viral--beta-select2-target": "hidden" }
                             else
-                              { "viral--flowbite-select2-target": "hidden" }
+                              { "viral--select2-target": "hidden" }
                             end %>
         <div
-          <% if Flipper.enabled?(:flowbite_replacement) %>
-          data-viral--select2-target="menu"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-select2-target="menu"
           <% else %>
-          data-viral--flowbite-select2-target="dropdown"
+          data-viral--select2-target="dropdown"
           <% end %>
           class="
             absolute z-10 bg-white border border-slate-300 rounded-lg shadow-lg
@@ -66,10 +66,10 @@
           hidden=""
         >
           <ul
-            <% if Flipper.enabled?(:flowbite_replacement) %>
-            data-viral--select2-target="scroller"
+            <% if Flipper.enabled?(:beta_dropdown) %>
+            data-viral--beta-select2-target="scroller"
             <% else %>
-            data-viral--flowbite-select2-target="scroller"
+            data-viral--select2-target="scroller"
             <% end %>
             role="listbox"
             class="
@@ -90,10 +90,10 @@
                   dark:text-blue-400 dark:border-blue-800 pointer-events-none
                 "
                 hidden=""
-                <% if Flipper.enabled?(:flowbite_replacement) %>
-                data-viral--select2-target="empty"
+                <% if Flipper.enabled?(:beta_dropdown) %>
+                data-viral--beta-select2-target="empty"
                 <% else %>
-                data-viral--flowbite-select2-target="empty"
+                data-viral--select2-target="empty"
                 <% end %>
               >
                 <%= empty_state %>

@@ -3,12 +3,12 @@
   <%= turbo_stream_from @broadcast_target %>
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
-      <% if Flipper.enabled?(:flowbite_replacement) %>
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-controller="infinite-scroll viral--beta-select2"
+      data-viral--beta-select2-trigger-type-value="click"
+      <% else %>
       data-controller="infinite-scroll viral--select2"
       data-viral--select2-trigger-type-value="click"
-      <% else %>
-      data-controller="infinite-scroll viral--flowbite-select2"
-      data-viral--flowbite-select2-trigger-type-value="click"
       <% end %>
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
@@ -112,14 +112,18 @@
                           class: "button button-primary",
                           disabled: true,
                           data:
-                            if Flipper.enabled?(:flowbite_replacement)
-                            { action: "viral--dialog#setClosable",
-                            "viral--dialog-closable-param": "false",
-                            "viral--select2-target": "submitButton" }
+                            if Flipper.enabled?(:beta_dropdown)
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--beta-select2-target": "submitButton",
+                              }
                             else
-                            { action: "viral--dialog#setClosable",
-                            "viral--dialog-closable-param": "false",
-                            "viral--flowbite-select2-target": "submitButton" }
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--select2-target": "submitButton",
+                              }
                             end %>
             </div>
           </div>

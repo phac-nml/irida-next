@@ -111,18 +111,18 @@ module Pathogen
     end
 
     def input_controller_name
-      if Flipper.enabled?(:flowbite_replacement)
-        'pathogen--datepicker--input'
+      if Flipper.enabled?(:beta_dropdown)
+        'pathogen--datepicker--beta-input'
       else
-        'pathogen--datepicker--flowbite-input'
+        'pathogen--datepicker--input'
       end
     end
 
     def calendar_controller_name
-      if Flipper.enabled?(:flowbite_replacement)
-        'pathogen--datepicker--calendar'
+      if Flipper.enabled?(:beta_dropdown)
+        'pathogen--datepicker--beta-calendar'
       else
-        'pathogen--datepicker--flowbite-calendar'
+        'pathogen--datepicker--calendar'
       end
     end
 

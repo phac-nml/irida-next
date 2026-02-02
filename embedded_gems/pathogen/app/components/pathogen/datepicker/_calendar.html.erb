@@ -1,8 +1,8 @@
 <template
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-pathogen--datepicker--input-target="calendarTemplate"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-pathogen--datepicker--beta-input-target="calendarTemplate"
   <% else %>
-  data-pathogen--datepicker--flowbite-input-target="calendarTemplate"
+  data-pathogen--datepicker--input-target="calendarTemplate"
   <% end %>
 >
   <%= render Pathogen::BaseComponent.new(**calendar_arguments) do %>

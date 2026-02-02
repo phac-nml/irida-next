@@ -1,21 +1,21 @@
 <div
   class="inline-flex items-center"
-  <% if Flipper.enabled?(:flowbite_replacement) %>
-  data-controller="viral--dropdown"
+  <% if Flipper.enabled?(:beta_dropdown) %>
+  data-controller="viral--beta-dropdown"
   <% else %>
-  data-controller="viral--flowbite-dropdown"
-  data-viral--flowbite-dropdown-skidding-value="0"
-  data-viral--flowbite-dropdown-distance-value="5"
-  data-viral--flowbite-dropdown-position-value="bottom-start"
+  data-controller="viral--dropdown"
+  data-viral--dropdown-skidding-value="0"
+  data-viral--dropdown-distance-value="5"
+  data-viral--dropdown-position-value="bottom-start"
   <% end %>
   role="region"
   aria-labelledby="language-selection-dd-menu"
 >
   <button
-    <% if Flipper.enabled?(:flowbite_replacement) %>
-    data-viral--dropdown-target="trigger"
+    <% if Flipper.enabled?(:beta_dropdown) %>
+    data-viral--beta-dropdown-target="trigger"
     <% else %>
-    data-viral--flowbite-dropdown-target="trigger"
+    data-viral--dropdown-target="trigger"
     <% end %>
     id="language-selection-dd-trigger"
     class="button button-default px-3"
@@ -39,10 +39,10 @@
   <!-- Dropdown menu -->
   <ul
     id="language-selection-dd-menu"
-    <% if Flipper.enabled?(:flowbite_replacement) %>
-    data-viral--dropdown-target="menu"
+    <% if Flipper.enabled?(:beta_dropdown) %>
+    data-viral--beta-dropdown-target="menu"
     <% else %>
-    data-viral--flowbite-dropdown-target="menu"
+    data-viral--dropdown-target="menu"
     <% end %>
     role="menu"
     class="
