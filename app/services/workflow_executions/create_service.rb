@@ -49,13 +49,11 @@ module WorkflowExecutions
     end
 
     def sanitized_workflow_params
-      workflow_schema = JSON.parse(workflow.schema_loc.read)
-
       # remove any nil values
       sanitized_params = params[:workflow_params].compact
 
-      workflow_schema['definitions'].each_value do |definition|
-        definition['properties'].each do |name, property|
+      workflow.workflow_params.each_value do |definition|
+        definition[:properties].each do |name, property|
           if sanitized_params.key?(name.to_sym)
             sanitized_params[name.to_sym] = sanitize_workflow_param(property, sanitized_params[name.to_sym])
           end
@@ -74,7 +72,7 @@ module WorkflowExecutions
     end
 
     def sanitize_workflow_param(property, value)
-      case property['type']
+      case property[:type]
       when 'integer'
         value.to_i
       when 'number'

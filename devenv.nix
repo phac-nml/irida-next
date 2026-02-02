@@ -4,6 +4,25 @@ lib.mkMerge [
   {
     env.GA4GH_WES_URL = "http://localhost:1122";
 
+    overlays = [
+      (final: super: {
+        # Override the 'nextflow' package to use a newer version
+        nextflow = super.nextflow.overrideAttrs (oldAttrs: {
+          version = "24.10.3";
+          src = super.fetchFromGitHub {
+            owner = "nextflow-io";
+            repo = "nextflow";
+            rev = "6183fdf9dbd9114f5ee86d11bc5e69cbd06501a6";
+            hash = "sha256-/5DhBtsoChHpYFlSo0PsrN5yHPn2LNSqKaczlYLuGa8=";
+          };
+          mitmCache = super.gradle.fetchDeps {
+            pname = "nextflow";
+            data = ./nextflow-deps.json;
+          };
+        });
+      })
+    ];
+
     # https://devenv.sh/packages/
     packages = with pkgs; [
       pkg-config

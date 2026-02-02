@@ -95,7 +95,7 @@ module Integrations
             workflow_type: 'NFL',
             workflow_type_version: 'DSL2',
             workflow_engine: 'nextflow',
-            workflow_engine_version: '23.10.0',
+            workflow_engine_version: '24.10.3',
             workflow_url: 'https://github.com/jb-adams/md5-nf',
             workflow_params: { file_int: 3 }.to_json
           )

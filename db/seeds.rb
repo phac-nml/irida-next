@@ -173,7 +173,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
-    workflow_engine_version: '23.10.0',
+    workflow_engine_version: '24.10.3',
     workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
@@ -205,7 +205,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
-    workflow_engine_version: '23.10.0',
+    workflow_engine_version: '24.10.3',
     workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
@@ -467,7 +467,7 @@ if Rails.env.development?
   #   workflow_type_version: "DSL2"
   #   tags: [String]
   #   workflow_engine: "nextflow"
-  #   workflow_engine_version: "23.10.0"
+  #   workflow_engine_version: "24.10.3"
   #   workflow_engine_parameters: Hash
   #   workflow_url: String
   #   run_id: String
@@ -482,7 +482,7 @@ if Rails.env.development?
   #     workflow_type_version: "DSL2"
   #     tags: %w[my_tag_1 my_tag_2],
   #     workflow_engine: "nextflow"
-  #     workflow_engine_version: "23.10.0"
+  #     workflow_engine_version: "24.10.3"
   #     workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
   #     workflow_url: 'my_workflow_url',
   #     run_id: 'my_run_id',
@@ -495,7 +495,7 @@ if Rails.env.development?
   #     workflow_type_version: "DSL2"
   #     tags: %w[my_tag_3 my_tag_4],
   #     workflow_engine: "nextflow"
-  #     workflow_engine_version: "23.10.0"
+  #     workflow_engine_version: "24.10.3"
   #     workflow_engine_parameters: generic_workflow_execution_params_hashes[3],
   #     workflow_url: 'my_workflow_url_2',
   #     run_id: 'my_run_id_2',
@@ -511,7 +511,7 @@ if Rails.env.development?
   #     workflow_type_version: "DSL2"
   #     tags: workflow_execution_params[:tags],
   #     workflow_engine: "nextflow"
-  #     workflow_engine_version: "23.10.0"
+  #     workflow_engine_version: "24.10.3"
   #     workflow_engine_parameters: workflow_execution_params[:workflow_engine_parameters],
   #     workflow_url: workflow_execution_params[:workflow_url],
   #     run_id: workflow_execution_params[:run_id],
@@ -527,7 +527,7 @@ if Rails.env.development?
   #   workflow_type_version: "DSL2"
   #   tags: %w[my_tag_1 my_tag_2],
   #   workflow_engine: "nextflow"
-  #   workflow_engine_version: "23.10.0"
+  #   workflow_engine_version: "24.10.3"
   #   workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
   #   workflow_url: 'my_workflow_url',
   #   run_id: 'my_run_id',
