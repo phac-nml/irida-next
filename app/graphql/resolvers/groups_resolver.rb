@@ -16,7 +16,8 @@ module Resolvers
              default_value: { field: 'created_at', direction: 'asc' }
 
     def resolve(filter:, order_by:)
-      groups = authorized_scope Group, type: :relation
+      context.scoped_set!(:system_user, true) if context[:current_user]&.system?
+      groups = context[:system_user] ? Group.all : authorized_scope(Group, type: :relation)
       ransack_obj = groups.ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 

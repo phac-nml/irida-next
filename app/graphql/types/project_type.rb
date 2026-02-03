@@ -29,10 +29,15 @@ module Types
     field :samples,
           SampleType.connection_type,
           null: true,
-          description: 'Samples on the project',
+          description: 'Samples on the project.',
           resolver: Resolvers::ProjectSamplesResolver
 
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
+
+    field :metrics, Types::MetricType,
+          null: true,
+          description: 'Metrics for this namespace',
+          resolver: Resolvers::MetricsResolver
 
     def self.authorized?(object, context)
       super && (context[:projects_preauthorized] ||

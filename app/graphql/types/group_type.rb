@@ -20,13 +20,18 @@ module Types
 
     field :parent, GroupType, null: true, description: 'Parent group.'
 
+    field :metrics, Types::MetricType,
+          null: true,
+          description: 'Metrics for this namespace',
+          resolver: Resolvers::MetricsResolver
+
     def self.authorized?(object, context)
-      super &&
+      (super &&
         allowed_to?(
           :read?,
           object,
           context: { user: context[:current_user], token: context[:token] }
-        )
+        )) || context[:system_user]
     end
   end
 end

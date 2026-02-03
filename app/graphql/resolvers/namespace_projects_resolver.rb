@@ -13,6 +13,8 @@ module Resolvers
     alias namespace object
 
     def resolve(args)
+      context.scoped_set!(:projects_preauthorized, true)
+
       scope = namespace
 
       scope = scope.self_and_descendants if args[:include_sub_groups]
