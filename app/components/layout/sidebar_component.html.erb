@@ -64,82 +64,56 @@
             ) %>
           </div>
           <!-- Add new items -->
-          <% new_dropdown_tooltip_id =
-            Pathogen::Tooltip.generate_id(base_name: "sidebar-new-dropdown") %>
-
-          <div data-controller="pathogen--tooltip">
-            <%= viral_dropdown(
-              icon: :plus,
-              styles: {
-                button: "
-                  navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-                  dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-                  dark:hover:text-slate-200
-                "
-              },
-              aria: { label: t(:'general.navbar.new_dropdown.label') },
-              system_arguments: {
-                data: { 'pathogen--tooltip-target': 'trigger' },
-                aria: { describedby: new_dropdown_tooltip_id }
-              }
-            ) do |dropdown| %>
-              <%= dropdown.with_item(
-                label: t(:"general.navbar.new_dropdown.project"),
-                url: new_project_path,
-              ) %>
-
-              <%= dropdown.with_item(
-                label: t(:"general.navbar.new_dropdown.group"),
-                url: new_group_path,
-              ) %>
-            <% end %>
-
-            <%= render Pathogen::Tooltip.new(
-              text: t("general.navbar.new_dropdown.label"),
-              id: new_dropdown_tooltip_id,
-              placement: :bottom,
+          <%= viral_dropdown(
+            icon: :plus,
+            tooltip: t("general.navbar.new_dropdown.label"),
+            tooltip_placement: :bottom,
+            styles: {
+              button: "
+                navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
+                dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
+                dark:hover:text-slate-200
+              "
+            },
+            aria: { label: t(:'general.navbar.new_dropdown.label') }
+          ) do |dropdown| %>
+            <%= dropdown.with_item(
+              label: t(:"general.navbar.new_dropdown.project"),
+              url: new_project_path,
             ) %>
-          </div>
+
+            <%= dropdown.with_item(
+              label: t(:"general.navbar.new_dropdown.group"),
+              url: new_group_path,
+            ) %>
+          <% end %>
           <!-- Profile menu -->
-          <% profile_dropdown_tooltip_id =
-            Pathogen::Tooltip.generate_id(base_name: "sidebar-profile-dropdown") %>
-
-          <div data-controller="pathogen--tooltip">
-            <%= viral_dropdown(
-              icon: User.icon,
-              styles: {
-                button: "
-                  navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-                  dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-                  dark:hover:text-slate-200
-                "
-              },
-              aria: { label: t(:'general.navbar.account_dropdown.label') },
-              system_arguments: {
-                data: { 'pathogen--tooltip-target': 'trigger' },
-                aria: { describedby: profile_dropdown_tooltip_id }
-              }
-            ) do |dropdown| %>
-              <%= dropdown.with_item(
-                label: t(:"general.navbar.account_dropdown.profile"),
-                url: profile_path,
-              ) %>
-
-              <%= dropdown.with_item(
-                label: t(:"general.navbar.account_dropdown.sign_out"),
-                url: destroy_user_session_path,
-                data: {
-                  turbo_method: :delete,
-                },
-              ) %>
-            <% end %>
-
-            <%= render Pathogen::Tooltip.new(
-              text: t(:"general.navbar.account_dropdown.label"),
-              id: profile_dropdown_tooltip_id,
-              placement: :bottom,
+          <%= viral_dropdown(
+            icon: User.icon,
+            tooltip: t(:"general.navbar.account_dropdown.label"),
+            tooltip_placement: :bottom,
+            styles: {
+              button: "
+                navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
+                dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
+                dark:hover:text-slate-200
+              "
+            },
+            aria: { label: t(:'general.navbar.account_dropdown.label') }
+          ) do |dropdown| %>
+            <%= dropdown.with_item(
+              label: t(:"general.navbar.account_dropdown.profile"),
+              url: profile_path,
             ) %>
-          </div>
+
+            <%= dropdown.with_item(
+              label: t(:"general.navbar.account_dropdown.sign_out"),
+              url: destroy_user_session_path,
+              data: {
+                turbo_method: :delete,
+              },
+            ) %>
+          <% end %>
         </div>
       </div>
 
