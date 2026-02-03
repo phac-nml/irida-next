@@ -45,6 +45,7 @@ export default class extends Controller {
     this.boundBlur = this.blur.bind(this);
     this.boundKeydown = this.keydown.bind(this);
     this.boundFocus = this.focus.bind(this);
+    this.boundClick = this.click.bind(this);
     this.boundHandleEditActivated = this.#handleEditActivated.bind(this);
     this.boundHandleEditDeactivated = this.#handleEditDeactivated.bind(this);
     this.#originalCellContent = {};
@@ -96,6 +97,7 @@ export default class extends Controller {
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
     element.addEventListener("focus", this.boundFocus);
+    element.addEventListener("click", this.boundClick);
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
 
@@ -129,6 +131,7 @@ export default class extends Controller {
     element.removeEventListener("blur", this.boundBlur);
     element.removeEventListener("keydown", this.boundKeydown);
     element.removeEventListener("focus", this.boundFocus);
+    element.removeEventListener("click", this.boundClick);
   }
 
   submit(element) {
@@ -327,14 +330,37 @@ export default class extends Controller {
     return string.replace(/\s+/g, " ").trim();
   }
 
-  focus() {
-    // Don't automatically set editing mode on focus
-    // Edit mode is only activated by Enter, F2, or alphanumeric keys
+  focus(event) {
+    // Activate edit mode on focus (matches existing behavior of non-virtualized table)
+    this.#activateEditMode(event.target);
+  }
+
+  click(event) {
+    // Activate edit mode on click (matches existing behavior of non-virtualized table)
+    this.#activateEditMode(event.target);
   }
 
   #clearEditingState(element) {
     if (!element) return;
     delete element.dataset.editing;
+  }
+
+  /**
+   * Activates edit mode on a cell by setting contenteditable and editing state.
+   * Does nothing if the cell is already in edit mode.
+   *
+   * @param {HTMLElement} element - The editable cell element
+   */
+  #activateEditMode(element) {
+    if (!element || element.dataset.editing === "true") return;
+
+    element.dataset.editing = "true";
+    element.setAttribute("contenteditable", "true");
+
+    // Dispatch event for screen reader announcement
+    element.dispatchEvent(
+      new CustomEvent("edit-mode-activated", { bubbles: true }),
+    );
   }
 
   #exitEditMode(element) {
