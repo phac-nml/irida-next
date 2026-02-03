@@ -866,35 +866,21 @@ class VirtualScrollController extends Controller {
       this.applyStickyStylesToRow(row);
     });
 
-    // Ensure a single focus target is available after render
-    this.applyRovingTabindex(this.pendingFocusRow, this.pendingFocusCol);
-
-    // If a pending focus target exists, set focus explicitly after tabindex reset
-    if (
+    const hasPendingFocus =
       Number.isInteger(this.pendingFocusRow) &&
-      Number.isInteger(this.pendingFocusCol)
-    ) {
-      // Per APG pattern, header cells are navigable - search entire table
-      const tableElement = this.element.querySelector("table");
-      const focusRoot = tableElement || this.bodyTarget;
-      const row = focusRoot?.querySelector?.(
-        `[aria-rowindex="${this.pendingFocusRow}"]`,
-      );
-      const cell = row?.querySelector?.(
-        `[aria-colindex="${this.pendingFocusCol}"]`,
-      );
-      if (cell) {
-        cell.tabIndex = 0;
-        cell.focus();
-        if (this.keyboardNavigator) {
-          this.keyboardNavigator.focusedRowIndex = this.pendingFocusRow;
-          this.keyboardNavigator.focusedColIndex = this.pendingFocusCol;
-        }
-        // Only clear pending focus when cell is successfully found and focused
-        this.pendingFocusRow = null;
-        this.pendingFocusCol = null;
-      }
-      // If cell not found, keep pending focus for next render/retry
+      Number.isInteger(this.pendingFocusCol);
+    const focusedPending = hasPendingFocus
+      ? this.focusCellIfNeeded(this.pendingFocusRow, this.pendingFocusCol)
+      : false;
+
+    if (focusedPending) {
+      this.pendingFocusRow = null;
+      this.pendingFocusCol = null;
+    }
+
+    // Ensure a single focus target is available after render
+    if (!focusedPending) {
+      this.applyRovingTabindex(this.pendingFocusRow, this.pendingFocusCol);
     }
   }
 
