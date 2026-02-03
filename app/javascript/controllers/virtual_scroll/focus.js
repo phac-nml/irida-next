@@ -90,16 +90,17 @@ export const focusMixin = {
     if (activeCell === cell) return true;
 
     // Ensure roving tabindex points at the cell
-    focusRoot.querySelectorAll("[aria-colindex]").forEach((node) => {
-      node.tabIndex = -1;
-    });
-    cell.tabIndex = 0;
-    cell.focus();
-
     if (this.keyboardNavigator) {
       this.keyboardNavigator.focusedRowIndex = rowIndex;
       this.keyboardNavigator.focusedColIndex = colIndex;
+      this.keyboardNavigator.applyRovingTabindex(rowIndex, colIndex);
+    } else {
+      focusRoot.querySelectorAll("[aria-colindex]").forEach((node) => {
+        node.tabIndex = -1;
+      });
+      cell.tabIndex = 0;
     }
+    cell.focus();
 
     return true;
   },

@@ -27,6 +27,14 @@ import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range"
  * - Protection for cells currently being edited
  * - Integration with table_controller.js and editable_cell_controller.js
  *
+ * Grid contract (APG data grid):
+ * - Root element uses role="grid" with aria-rowcount/aria-colcount
+ * - Rows have aria-rowindex (1-based)
+ * - Cells have aria-colindex (1-based) and role="columnheader" or role="gridcell"
+ * - Body rows include data-virtual-scroll-target="row" and data-sample-id
+ * - Templates live under data-virtual-scroll-target="templateContainer" with
+ *   <template data-field="..."> nodes per metadata field
+ *
  * @example
  *   <div data-controller="virtual-scroll"
  *        data-virtual-scroll-metadata-fields-value='["field1", "field2"]'
