@@ -1411,6 +1411,7 @@ module Groups
       attach_file('spreadsheet_import[file]',
                   Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{project2.id}']").click
 
       click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
@@ -1968,6 +1969,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       # select destination project
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{project4.id}']").click
 
       click_on I18n.t('samples.transfers.dialog.submit_button')
@@ -2023,6 +2025,7 @@ module Groups
       assert_selector 'button.dialog--close'
       # select destination project
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{project4.id}']").click
       click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
@@ -2061,6 +2064,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       assert_text I18n.t('samples.transfers.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       assert_selector "li[data-value='#{project4.id}']", wait: 10
       find("li[data-value='#{project4.id}']").click
       click_on I18n.t('samples.transfers.dialog.submit_button')
@@ -2109,6 +2113,7 @@ module Groups
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{project4.id}']").click
       click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
@@ -2183,6 +2188,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       # Only projects within group are visible for maintainer to transfer to
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       group_three_projects.each do |proj|
         total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
       end
@@ -2308,6 +2314,7 @@ module Groups
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{@project2.id}']").click
       click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
@@ -2362,6 +2369,7 @@ module Groups
       # close button available before confirming cloning
       assert_selector 'button.dialog--close'
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{@project2.id}']").click
       click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
@@ -2396,6 +2404,7 @@ module Groups
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{@project2.id}']").click
       click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
@@ -2431,6 +2440,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{@project1.id}']").click
       click_on I18n.t('samples.clones.dialog.submit_button')
 
@@ -2508,6 +2518,7 @@ module Groups
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
       find('input.select2-input').click
+      assert_selector 'input.select2-input[aria-expanded="true"]'
       find("li[data-value='#{@project2.id}']").click
       click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
