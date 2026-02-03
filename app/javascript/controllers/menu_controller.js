@@ -17,15 +17,27 @@ export default class MenuController extends Controller {
   #onShow = null;
   #onHide = null;
 
+  initialize() {
+    this.boundOnTriggerClick = this.#onTriggerClick.bind(this);
+    this.boundHandleClickOutside = this.#handleClickOutside.bind(this);
+  }
+
+  disconnect() {
+    if (this.isVisible()) {
+      this.#removeClickOutsideListener();
+      this.#cleanup?.();
+    }
+  }
+
   triggerTargetConnected() {
     if (this.#triggerType === "click") {
-      this.#trigger.addEventListener("click", this.#onTriggerClick);
+      this.#trigger.addEventListener("click", this.boundOnTriggerClick);
     }
   }
 
   triggerTargetDisconnected() {
     if (this.#triggerType === "click") {
-      this.#trigger.removeEventListener("click", this.#onTriggerClick);
+      this.#trigger.removeEventListener("click", this.boundOnTriggerClick);
     }
   }
 
@@ -105,21 +117,13 @@ export default class MenuController extends Controller {
   }
 
   #setupClickOutsideListener() {
-    document.body.addEventListener(
-      "click",
-      (event) => {
-        this.#handleClickOutside(event);
-      },
-      true,
-    );
+    document.body.addEventListener("click", this.boundHandleClickOutside, true);
   }
 
   #removeClickOutsideListener() {
     document.body.removeEventListener(
       "click",
-      (event) => {
-        this.#handleClickOutside(event);
-      },
+      this.boundHandleClickOutside,
       true,
     );
   }
@@ -136,7 +140,7 @@ export default class MenuController extends Controller {
     }
   }
 
-  #onTriggerClick = () => {
+  #onTriggerClick() {
     this.toggle();
-  };
+  }
 }
