@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="light" lang="<%= locale %>">
+<html class="light" lang="<%= locale %>" data-env="<%= Rails.env %>">
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: @fixed) do |layout| %>
@@ -10,7 +10,7 @@
             url: namespace_project_path,
             avatar: true,
             label: @project.name,
-            selected: @current_page == t('common.labels.details'),
+            selected: @current_page == t("common.labels.details"),
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
@@ -63,8 +63,8 @@
             ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
                 url: namespace_project_edit_path,
-                label: t('common.labels.general'),
-                selected: @current_page == t('common.labels.general'),
+                label: t("common.labels.general"),
+                selected: @current_page == t("common.labels.general"),
               ) %>
               <% multi_level_menu.with_menu_item(
                 url: namespace_project_bots_path,

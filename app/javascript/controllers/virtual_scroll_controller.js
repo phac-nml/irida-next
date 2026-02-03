@@ -1168,7 +1168,10 @@ class VirtualScrollController extends Controller {
 
     // Clear pending focus after a short delay to prevent render() from
     // re-focusing the cell. The delay ensures applyRovingTabindex has completed.
-    setTimeout(() => {
+    const schedule =
+      this.lifecycle?.timeout?.bind(this.lifecycle) || setTimeout;
+    schedule(() => {
+      if (!this.element?.isConnected) return;
       // Only clear if still pointing to our target (not changed by user interaction)
       if (
         this.pendingFocusRow === rowIndex &&
