@@ -11,7 +11,7 @@
 if Flipper.enabled?(:beta_dropdown)
   { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+  { controller: "viral--select2" }
 end, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if new_group_link.errors.any?

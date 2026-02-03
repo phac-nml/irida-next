@@ -9,7 +9,7 @@
   if Flipper.enabled?(:beta_dropdown)
   { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { controller: "viral--select2", "viral--select2-trigger-type-value": "click" }
+  { controller: "viral--select2" }
 end, html: { novalidate: true }) do |form| %>
     <%= turbo_frame_tag "project_form" do %>
       <div class="grid gap-4">

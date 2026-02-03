@@ -242,7 +242,6 @@ module Viral
     def build_data_attributes
       data = if Flipper.enabled?(:beta_dropdown)
                { 'viral--beta-dropdown-target': 'trigger' }
-
              else
                { 'viral--dropdown-target': 'trigger' }
              end
