@@ -127,46 +127,39 @@ export const navigationEventsMixin = {
   },
 
   /**
-   * Reset the roving tabindex to the first cell in the table
+   * Reset the roving tabindex when focus leaves the table.
+   * Sets tabIndex=0 on either the tracked cell (if available) or the first cell.
+   * Preserves the tracked position so user can return to it when tabbing back in.
    * @param {HTMLTableElement} table
    */
   _resetTabindexToFirstCell(table) {
-    const firstCell = table.querySelector(
-      "thead th[aria-colindex], thead td[aria-colindex]",
-    );
-    if (!firstCell) return;
-
     // Directly reset all cells to tabindex=-1
     table.querySelectorAll("[aria-colindex]").forEach((cell) => {
       cell.tabIndex = -1;
     });
 
-    // Set the first cell to tabindex=0
-    firstCell.tabIndex = 0;
+    // Try to find the tracked cell first (preserves user's position for tab-back)
+    const trackedRow = this.keyboardNavigator?.focusedRowIndex;
+    const trackedCol = this.keyboardNavigator?.focusedColIndex;
+    let targetCell = null;
 
-    const rowIndex = parseInt(
-      firstCell.closest("[aria-rowindex]")?.getAttribute("aria-rowindex"),
-      10,
-    );
-    const colIndex = parseInt(firstCell.getAttribute("aria-colindex"), 10);
+    if (Number.isInteger(trackedRow) && Number.isInteger(trackedCol)) {
+      const row = table.querySelector(`[aria-rowindex="${trackedRow}"]`);
+      targetCell = row?.querySelector(`[aria-colindex="${trackedCol}"]`);
+    }
 
-    if (Number.isInteger(rowIndex) && Number.isInteger(colIndex)) {
-      // Update internal focus state
-      this.pendingFocusRow = rowIndex;
-      this.pendingFocusCol = colIndex;
-
-      if (this.keyboardNavigator) {
-        this.keyboardNavigator.focusedRowIndex = rowIndex;
-        this.keyboardNavigator.focusedColIndex = colIndex;
-      }
-
-      // Dispatch event for any listeners that need to know about focus reset
-      table.dispatchEvent(
-        new CustomEvent("table:focus-reset", {
-          bubbles: true,
-          detail: { rowIndex, colIndex },
-        }),
+    // Fall back to first header cell if tracked cell isn't rendered
+    if (!targetCell) {
+      targetCell = table.querySelector(
+        "thead th[aria-colindex], thead td[aria-colindex]",
       );
     }
+
+    if (targetCell) {
+      targetCell.tabIndex = 0;
+    }
+
+    // Do NOT reset focusedRowIndex/focusedColIndex - preserve tracked position
+    // so handleFocusin can restore it when user tabs back in
   },
 };

@@ -120,6 +120,9 @@ class VirtualScrollController extends Controller {
       capture: true,
     });
 
+    this.boundHandleFocusin = this.handleFocusin.bind(this);
+    this.lifecycle.listen(this.element, "focusin", this.boundHandleFocusin);
+
     this.boundHandleLayoutToggle = this.handleLayoutToggle.bind(this);
     this.lifecycle.listen(
       window,
@@ -776,10 +779,12 @@ class VirtualScrollController extends Controller {
 
     // Convert pending focus column to metadata index for range calculation
     // pendingFocusCol is 1-based overall column index, we need 0-based metadata index
+    // Also consider the keyboard navigator's tracked position as fallback (for when user tabs out)
+    const trackedFocusCol =
+      this.pendingFocusCol ?? this.keyboardNavigator?.focusedColIndex;
     const pendingFocusColumnIndex =
-      Number.isInteger(this.pendingFocusCol) &&
-      this.pendingFocusCol > this.numBaseColumns
-        ? this.pendingFocusCol - this.numBaseColumns - 1
+      Number.isInteger(trackedFocusCol) && trackedFocusCol > this.numBaseColumns
+        ? trackedFocusCol - this.numBaseColumns - 1
         : null;
 
     const {
@@ -1114,6 +1119,12 @@ class VirtualScrollController extends Controller {
   handleDblClick(event) {
     if (this.keyboardNavigator) {
       this.keyboardNavigator.handleDblClick(event);
+    }
+  }
+
+  handleFocusin(event) {
+    if (this.keyboardNavigator) {
+      this.keyboardNavigator.handleFocusin(event);
     }
   }
 

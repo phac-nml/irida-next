@@ -63,6 +63,49 @@ export class GridKeyboardNavigator {
   }
 
   /**
+   * Handle focusin events to restore tracked position when tabbing back into grid.
+   * When the tracked cell is virtualized, tabIndex=0 is on the first visible cell.
+   * This handler detects that case and navigates to the tracked position.
+   * @param {FocusEvent} event - The focusin event
+   */
+  async handleFocusin(event) {
+    const cell = event.target.closest?.("[aria-colindex]");
+    if (!cell || !this.rootElement?.contains?.(cell)) return;
+
+    // Don't interfere if cell is being edited
+    if (cell.dataset.editing === "true") return;
+
+    // Only restore position if focus came from OUTSIDE the grid (Tab navigation)
+    // If relatedTarget is inside the grid, user is clicking/arrowing within - don't interfere
+    const relatedTarget = event.relatedTarget;
+    if (relatedTarget && this.rootElement?.contains?.(relatedTarget)) {
+      return;
+    }
+
+    // Only act if we have a tracked position different from the focused cell
+    if (
+      !Number.isInteger(this.focusedRowIndex) ||
+      !Number.isInteger(this.focusedColIndex)
+    ) {
+      return;
+    }
+
+    const currentRow = this.getRowIndex(cell);
+    const currentCol = this.getColIndex(cell);
+
+    // If focus landed on our tracked position, nothing to do
+    if (
+      currentRow === this.focusedRowIndex &&
+      currentCol === this.focusedColIndex
+    ) {
+      return;
+    }
+
+    // Navigate to the tracked position (this handles virtualization)
+    await this.navigateToCell(this.focusedRowIndex, this.focusedColIndex);
+  }
+
+  /**
    * Handle keydown events for grid navigation
    * @param {KeyboardEvent} event - The keydown event
    */
@@ -424,12 +467,15 @@ export class GridKeyboardNavigator {
     let targetCell = this.findCell(this.focusedRowIndex, this.focusedColIndex);
 
     if (!targetCell) {
-      // If explicit coordinates were provided but cell doesn't exist, preserve the
-      // navigation target without falling back to first cell. This handles:
-      // 1. Active navigation where cell isn't rendered yet (virtualization)
-      // 2. RAF-triggered renders between navigations where cell was destroyed
-      // Still set tabIndex=0 on first cell for a11y (roving tabindex requires one tabbable cell)
-      if (hasExplicitCoordinates || this.isNavigating) {
+      // Check if we have valid tracked coordinates to preserve
+      const hasTrackedPosition =
+        Number.isInteger(this.focusedRowIndex) &&
+        Number.isInteger(this.focusedColIndex);
+
+      // Preserve tracked position when the cell is temporarily virtualized.
+      // This ensures the user returns to their last position when tabbing back in.
+      // Only truly fall back to first cell on initial load when no position is tracked.
+      if (hasExplicitCoordinates || this.isNavigating || hasTrackedPosition) {
         const a11yCell =
           this.rootElement.querySelector("thead [aria-colindex]") ||
           this.bodyElement.querySelector("[aria-colindex]");
@@ -441,11 +487,12 @@ export class GridKeyboardNavigator {
             a11yCell.focus();
           }
         }
-        // Don't update focusedRowIndex/focusedColIndex or focus - preserve target for retry
+        // Don't update focusedRowIndex/focusedColIndex - preserve target for when user tabs back
         return;
       }
 
       // Fallback to first cell in grid (header row first, then body)
+      // Only reached on initial load when no position has been tracked yet
       targetCell =
         this.rootElement.querySelector("thead [aria-colindex]") ||
         this.bodyElement.querySelector("[aria-colindex]");
