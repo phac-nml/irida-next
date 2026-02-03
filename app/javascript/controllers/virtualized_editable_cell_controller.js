@@ -110,6 +110,7 @@ export default class extends Controller {
     element.addEventListener("click", this.boundClick);
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
+    element.setAttribute("aria-readonly", "false");
 
     // Make sure the cell remains focusable after Turbo Stream replacement.
     // Virtual scroll/grid navigation expects cells to participate in roving tabindex.
