@@ -14,6 +14,14 @@
  * - Roving tabindex management
  * - Callback for ensuring virtualized columns are visible
  *
+ * Keymap summary (APG data grid):
+ * - Arrow keys: move one cell
+ * - Home/End: first/last column; Ctrl+Home/Ctrl+End: first/last row
+ * - PageUp/PageDown: jump rows by pageJumpSize
+ * - Enter/Space: activate cell (headers sort, links/buttons/cbs)
+ * - Enter/F2/printable: enter edit mode on editable cells
+ * - Tab: exits grid (roving tabindex keeps one tab stop)
+ *
  * @example
  *   import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
  *
