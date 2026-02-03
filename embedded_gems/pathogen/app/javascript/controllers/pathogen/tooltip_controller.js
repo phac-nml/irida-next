@@ -233,8 +233,11 @@ export default class extends Controller {
 
     // Portal tooltip to body to escape CSS containment contexts
     // (container queries, transforms, filters create containing blocks
-    // that break position: fixed)
-    this.#portalToBody(element);
+    // that break position: fixed). Skip when inside a dialog so the tooltip
+    // remains in the top layer with the dialog content.
+    if (!element.closest("dialog")) {
+      this.#portalToBody(element);
+    }
   }
 
   /**
