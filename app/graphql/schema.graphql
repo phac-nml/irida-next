@@ -1757,7 +1757,7 @@ type Project implements Node {
   puid: ID!
 
   """
-  Samples on the project
+  Samples on the project.
   """
   samples(
     """

@@ -19,9 +19,16 @@ module Resolvers
 
     def resolve(filter:, order_by:)
       context.scoped_set!(:project, project)
-      context.scoped_set!(:samples_preauthorized, true)
 
-      query = Sample::Query.new(params(context, project.id, nil, filter, order_by))
+      if authorize!(
+        object, to: :read_sample?, context: { user: context[:current_user], token: context[:token] }
+      )
+        context.scoped_set!(:samples_preauthorized, true)
+      end
+
+      query = Sample::Query.new(params(
+                                  context, project.id, nil, filter, order_by
+                                ))
       query.results
     end
 

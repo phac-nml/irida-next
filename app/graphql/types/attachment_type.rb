@@ -27,12 +27,11 @@ module Types
 
     def self.authorized?(object, context)
       attachable = object.attachable.is_a?(Group) ? object.attachable : object.attachable.project
-      super && (context[:attachments_preauthorized] ||
-        allowed_to?(
-          :read?,
-          attachable,
-          context: { user: context[:current_user], token: context[:token] }
-        ))
+      super && (context[:attachments_preauthorized] || allowed_to?(
+        :read?,
+        attachable,
+        context: { user: context[:current_user], token: context[:token] }
+      ))
     end
   end
 end

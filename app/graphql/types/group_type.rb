@@ -26,12 +26,12 @@ module Types
           resolver: Resolvers::MetricsResolver
 
     def self.authorized?(object, context)
-      super &&
+      (super &&
         allowed_to?(
           :read?,
           object,
           context: { user: context[:current_user], token: context[:token] }
-        )
+        )) || context[:system_user]
     end
   end
 end

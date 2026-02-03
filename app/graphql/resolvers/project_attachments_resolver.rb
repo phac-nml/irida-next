@@ -16,7 +16,12 @@ module Resolvers
     alias project object
 
     def resolve(filter:, order_by:)
-      context.scoped_set!(:attachments_preauthorized, true)
+      if authorize!(
+        object, to: :view_attachments?, context: { user: context[:current_user], token: context[:token] }
+      )
+        context.scoped_set!(:attachments_preauthorized, true)
+      end
+
       ransack_obj = project.namespace.attachments.joins(:file_blob).ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
