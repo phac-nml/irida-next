@@ -44,11 +44,9 @@ export default class extends Controller {
   initialize() {
     this.boundBlur = this.blur.bind(this);
     this.boundKeydown = this.keydown.bind(this);
-    this.boundFocus = this.focus.bind(this);
     this.boundClick = this.click.bind(this);
     this.boundHandleEditActivated = this.#handleEditActivated.bind(this);
     this.boundHandleEditDeactivated = this.#handleEditDeactivated.bind(this);
-    this.boundHandleNavigationReset = this.#handleNavigationReset.bind(this);
     this.#originalCellContent = {};
   }
 
@@ -62,16 +60,11 @@ export default class extends Controller {
       "edit-mode-deactivated",
       this.boundHandleEditDeactivated,
     );
-    // Listen for navigation reset (Ctrl+Arrow while editing)
-    this.element.addEventListener(
-      "grid:navigation-reset",
-      this.boundHandleNavigationReset,
-    );
   }
 
   disconnect() {
     // Clean up controller-level event listeners
-    // Note: Target-level listeners (blur, keydown, focus) are automatically
+    // Note: Target-level listeners (blur, keydown, click) are automatically
     // cleaned up in editableCellTargetDisconnected() when targets are removed
     this.element.removeEventListener(
       "edit-mode-activated",
@@ -80,10 +73,6 @@ export default class extends Controller {
     this.element.removeEventListener(
       "edit-mode-deactivated",
       this.boundHandleEditDeactivated,
-    );
-    this.element.removeEventListener(
-      "grid:navigation-reset",
-      this.boundHandleNavigationReset,
     );
   }
 
@@ -106,7 +95,6 @@ export default class extends Controller {
 
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
-    element.addEventListener("focus", this.boundFocus);
     element.addEventListener("click", this.boundClick);
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
@@ -141,7 +129,6 @@ export default class extends Controller {
   editableCellTargetDisconnected(element) {
     element.removeEventListener("blur", this.boundBlur);
     element.removeEventListener("keydown", this.boundKeydown);
-    element.removeEventListener("focus", this.boundFocus);
     element.removeEventListener("click", this.boundClick);
   }
 
@@ -341,11 +328,6 @@ export default class extends Controller {
     return string.replace(/\s+/g, " ").trim();
   }
 
-  focus(event) {
-    // Activate edit mode on focus (matches existing behavior of non-virtualized table)
-    this.#activateEditMode(event.target);
-  }
-
   click(event) {
     // Activate edit mode on click (matches existing behavior of non-virtualized table)
     this.#activateEditMode(event.target);
@@ -415,20 +397,6 @@ export default class extends Controller {
     if (this.hasEditDeactivatedMessageValue) {
       this.#announce(this.editDeactivatedMessageValue);
     }
-  }
-
-  /**
-   * Handle navigation reset event (Ctrl+Arrow while editing).
-   * Restores original content to prevent confirm dialog on blur.
-   * @param {CustomEvent} event
-   */
-  #handleNavigationReset(event) {
-    const element = event.target;
-    const elementId = this.#elementId(element);
-    if (!elementId) return;
-
-    // Restore original content (similar to reset() but without re-focusing)
-    element.innerText = this.#originalCellContent[elementId];
   }
 
   #announce(message) {
