@@ -254,7 +254,8 @@ module Samples
                             []
                           else
                             Sample.where(id: sample_ids, project_id: new_project.id)
-                                  .where.not(id: transferrable_samples.pluck(:id)).pluck(:id)
+                                  .where.not(id:
+                                    transferrable_samples.where(project_id: project_id).pluck(:id)).pluck(:id)
                           end
       end
     end

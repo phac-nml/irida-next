@@ -440,6 +440,32 @@ module Samples
       assert_equal({}, @subgroup12b.reload.metadata_summary)
     end
 
+    test 'metadata summary updates after group sample transfer when group is ancestor of source and dest projects' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
+                   @group12.metadata_summary)
+
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        Samples::TransferService.new(@group12, @john_doe).execute(
+          @sample_transfer_params1[:new_project_id],
+          @sample_transfer_params1[:sample_ids]
+        )
+      end
+
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project30.namespace.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
+    end
+
     test 'samples count updates after group sample transfer' do
       # Reference group/projects descendants tree:
       # group12 < subgroup12b (project30 > sample 33)
@@ -470,6 +496,28 @@ module Samples
 
       assert_equal(0, @subgroup12b.reload.samples_count)
       assert_equal(4, @subgroup12a.reload.samples_count)
+    end
+
+    test 'samples count updates after group sample transfer when group is ancestor of source and dest projects' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        Samples::TransferService.new(@group12, @john_doe).execute(
+          @sample_transfer_params1[:new_project_id],
+          @sample_transfer_params1[:sample_ids]
+        )
+      end
+
+      assert_equal(0, @subgroup12aa.reload.samples_count)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(3, @subgroup12b.reload.samples_count)
     end
 
     test 'samples count updates after a group sample transfer to a user namespace' do
