@@ -329,10 +329,7 @@ export class VirtualScrollCellRenderer {
     cell.dataset.virtualizedCell = "true";
     cell.dataset.fieldId = field;
     cell.dataset.placeholder = "true";
-    cell.setAttribute("role", "gridcell");
-    cell.setAttribute("aria-colindex", this.numBaseColumns + columnIndex + 1);
-    cell.setAttribute("aria-busy", "true");
-    cell.tabIndex = -1;
+    this.applyGridCellAria(cell, columnIndex, { isPlaceholder: true });
 
     const width =
       this.metadataColumnWidths[columnIndex] ?? this.columnWidthFallback;
@@ -364,8 +361,8 @@ export class VirtualScrollCellRenderer {
     const width =
       this.metadataColumnWidths[columnIndex] ?? this.columnWidthFallback;
 
-    cell.setAttribute("role", "gridcell");
-    cell.tabIndex = -1;
+    const isPlaceholder = cell.dataset?.placeholder === "true";
+    this.applyGridCellAria(cell, columnIndex, { isPlaceholder });
 
     Object.assign(cell.style, {
       display: "table-cell",
@@ -377,10 +374,25 @@ export class VirtualScrollCellRenderer {
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
     });
+  }
 
-    // Add ARIA colindex for accessibility (1-based, includes base columns)
-    const ariaColindex = this.numBaseColumns + columnIndex + 1;
-    cell.setAttribute("aria-colindex", ariaColindex);
+  applyGridCellAria(cell, columnIndex, { isPlaceholder = false } = {}) {
+    if (!cell) return;
+
+    cell.setAttribute("role", "gridcell");
+    cell.setAttribute(
+      "aria-colindex",
+      String(this.numBaseColumns + columnIndex + 1),
+    );
+    cell.tabIndex = -1;
+
+    if (isPlaceholder) {
+      cell.setAttribute("aria-busy", "true");
+      return;
+    }
+
+    cell.removeAttribute("aria-busy");
+    cell.removeAttribute("data-placeholder");
   }
 
   /**

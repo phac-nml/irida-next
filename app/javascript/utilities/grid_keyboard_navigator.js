@@ -807,6 +807,7 @@ export class GridKeyboardNavigator {
   #activateEditMode(cell, event) {
     cell.dataset.editing = "true";
     cell.setAttribute("contenteditable", "true");
+    cell.setAttribute("aria-readonly", "false");
 
     const seedText = this.#seedTextFromEvent(event);
     if (seedText) {
@@ -869,6 +870,7 @@ export class GridKeyboardNavigator {
 
     delete cell.dataset.editing;
     cell.setAttribute("contenteditable", "false");
+    cell.setAttribute("aria-readonly", "true");
 
     // Dispatch event for screen reader announcement
     cell.dispatchEvent(

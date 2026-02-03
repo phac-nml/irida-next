@@ -98,7 +98,7 @@ export default class extends Controller {
     element.addEventListener("click", this.boundClick);
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
-    element.setAttribute("aria-readonly", "false");
+    element.setAttribute("aria-readonly", "true");
 
     // Make sure the cell remains focusable after Turbo Stream replacement.
     // Virtual scroll/grid navigation expects cells to participate in roving tabindex.
@@ -349,6 +349,7 @@ export default class extends Controller {
 
     element.dataset.editing = "true";
     element.setAttribute("contenteditable", "true");
+    element.setAttribute("aria-readonly", "false");
 
     // Select all text for visual feedback and immediate typing replacement
     const selection = window.getSelection();
@@ -379,6 +380,7 @@ export default class extends Controller {
     if (!element) return;
     this.#clearEditingState(element);
     element.setAttribute("contenteditable", "false");
+    element.setAttribute("aria-readonly", "true");
 
     if (announce) {
       element.dispatchEvent(
