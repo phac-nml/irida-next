@@ -90,15 +90,31 @@ export class GridKeyboardNavigator {
     if (!cell || !this.rootElement?.contains?.(cell)) return;
 
     const isEditing = cell.dataset.editing === "true";
+    const ctrlOrMeta = event.ctrlKey || event.metaKey;
+    const isArrowKey = [
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowUp",
+      "ArrowDown",
+    ].includes(event.key);
 
-    // If actively editing, ignore all navigation keys (let browser handle them)
-    if (isEditing) {
+    // Allow Ctrl+Arrow navigation even when editing (standard spreadsheet behavior)
+    const isCtrlArrow = ctrlOrMeta && isArrowKey;
+
+    // If actively editing, ignore all keys EXCEPT Ctrl+Arrow (grid navigation escape hatch)
+    if (isEditing && !isCtrlArrow) {
       return;
     }
 
     // If the currently focused cell (or any ancestor) is marked editing, block navigation
+    // (unless it's Ctrl+Arrow which should navigate away from edit mode)
     const editingAncestor = cell.closest('[data-editing="true"]');
-    if (editingAncestor) return;
+    if (editingAncestor && !isCtrlArrow) return;
+
+    // If Ctrl+Arrow while editing, deactivate edit mode first (discard changes)
+    if (isCtrlArrow && isEditing) {
+      this.#deactivateEditModeForNavigation(cell);
+    }
 
     // Check for edit activation keys on editable cells
     if (cell.dataset.editable === "true") {
@@ -127,33 +143,8 @@ export class GridKeyboardNavigator {
       return;
     }
 
-    // Handle tab navigation (row-by-row, column-by-column)
-    if (
-      event.key === "Tab" &&
-      !event.altKey &&
-      !event.metaKey &&
-      !event.ctrlKey
-    ) {
-      const currentRow = this.getRowIndex(cell);
-      const currentCol = this.getColIndex(cell);
-      const currentRowElement = this.getRowElement(cell);
-      if (!Number.isInteger(currentRow) || !Number.isInteger(currentCol))
-        return;
-
-      const target = this.calculateTabTarget(
-        event,
-        currentRow,
-        currentCol,
-        currentRowElement,
-      );
-
-      // Allow default tabbing out of the grid at boundaries
-      if (!target) return;
-
-      event.preventDefault();
-      await this.navigateToCell(target.row, target.col, event);
-      return;
-    }
+    // Let Tab move focus out of the grid (only arrow keys navigate within)
+    if (event.key === "Tab") return;
 
     // Handle navigation keys
     const relevantKeys = [
@@ -444,6 +435,11 @@ export class GridKeyboardNavigator {
           this.bodyElement.querySelector("[aria-colindex]");
         if (a11yCell) {
           a11yCell.tabIndex = 0;
+
+          // If focus was lost due to DOM removal, keep focus inside the grid
+          if (focusIsDetached) {
+            a11yCell.focus();
+          }
         }
         // Don't update focusedRowIndex/focusedColIndex or focus - preserve target for retry
         return;
@@ -806,5 +802,30 @@ export class GridKeyboardNavigator {
     }
 
     return "";
+  }
+
+  /**
+   * Deactivate edit mode on a cell when navigating away via Ctrl+Arrow.
+   * Dispatches a reset event so the editable cell controller can restore
+   * original content before blur fires (avoiding confirm dialog).
+   * @param {HTMLElement} cell - The cell to deactivate edit mode on
+   * @private
+   */
+  #deactivateEditModeForNavigation(cell) {
+    if (!cell) return;
+
+    // Dispatch event to request content reset before deactivating
+    // VirtualizedEditableCellController listens for this to restore original content
+    cell.dispatchEvent(
+      new CustomEvent("grid:navigation-reset", { bubbles: true }),
+    );
+
+    delete cell.dataset.editing;
+    cell.setAttribute("contenteditable", "false");
+
+    // Dispatch event for screen reader announcement
+    cell.dispatchEvent(
+      new CustomEvent("edit-mode-deactivated", { bubbles: true }),
+    );
   }
 }

@@ -48,6 +48,7 @@ export default class extends Controller {
     this.boundClick = this.click.bind(this);
     this.boundHandleEditActivated = this.#handleEditActivated.bind(this);
     this.boundHandleEditDeactivated = this.#handleEditDeactivated.bind(this);
+    this.boundHandleNavigationReset = this.#handleNavigationReset.bind(this);
     this.#originalCellContent = {};
   }
 
@@ -60,6 +61,11 @@ export default class extends Controller {
     this.element.addEventListener(
       "edit-mode-deactivated",
       this.boundHandleEditDeactivated,
+    );
+    // Listen for navigation reset (Ctrl+Arrow while editing)
+    this.element.addEventListener(
+      "grid:navigation-reset",
+      this.boundHandleNavigationReset,
     );
   }
 
@@ -74,6 +80,10 @@ export default class extends Controller {
     this.element.removeEventListener(
       "edit-mode-deactivated",
       this.boundHandleEditDeactivated,
+    );
+    this.element.removeEventListener(
+      "grid:navigation-reset",
+      this.boundHandleNavigationReset,
     );
   }
 
@@ -357,6 +367,13 @@ export default class extends Controller {
     element.dataset.editing = "true";
     element.setAttribute("contenteditable", "true");
 
+    // Select all text for visual feedback and immediate typing replacement
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
     // Dispatch event for screen reader announcement
     element.dispatchEvent(
       new CustomEvent("edit-mode-activated", { bubbles: true }),
@@ -397,6 +414,20 @@ export default class extends Controller {
     if (this.hasEditDeactivatedMessageValue) {
       this.#announce(this.editDeactivatedMessageValue);
     }
+  }
+
+  /**
+   * Handle navigation reset event (Ctrl+Arrow while editing).
+   * Restores original content to prevent confirm dialog on blur.
+   * @param {CustomEvent} event
+   */
+  #handleNavigationReset(event) {
+    const element = event.target;
+    const elementId = this.#elementId(element);
+    if (!elementId) return;
+
+    // Restore original content (similar to reset() but without re-focusing)
+    element.innerText = this.#originalCellContent[elementId];
   }
 
   #announce(message) {
