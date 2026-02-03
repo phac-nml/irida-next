@@ -31,8 +31,8 @@ module Nextflow
         return sample_attributes unless @properties.key?('fastq_1') && @properties.key?('fastq_2')
 
         fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
-        sample_attributes['samplesheet_params'].merge(fastq_file_samplesheet_values(fastq_file_attributes,
-                                                                                    sample.id))
+        sample_attributes.deep_merge!(fastq_file_samplesheet_values(fastq_file_attributes,
+                                                                    sample.id))
         sample_attributes
       end
 
@@ -72,9 +72,9 @@ module Nextflow
       end
 
       def fastq_file_samplesheet_values(files, sample_id)
-        fastq_samplesheet_params = {}
+        fastq_samplesheet_params = { 'samplesheet_params' => {} }
         files.each do |name, file|
-          fastq_samplesheet_params[name] = file_samplesheet_values(file, sample_id, name)
+          fastq_samplesheet_params['samplesheet_params'][name] = file_samplesheet_values(file, sample_id, name)
         end
         fastq_samplesheet_params
       end
