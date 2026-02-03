@@ -346,7 +346,6 @@ export default class Select2Controller extends MenuController {
     super.share({
       onHide: () => this.#onHide(),
     });
-    super.connect();
   }
 
   #onHide() {
