@@ -155,6 +155,32 @@ class SampleTest < ActiveSupport::TestCase
     assert @sample.has_attribute?(:attachments_updated_at)
   end
 
+  ### TODO: Remove this block of tests when feature flag deferred_samplesheet is retired ###
+  test 'sort_files for pe' do
+    sample_b = samples(:sampleB)
+    files = sample_b.sort_files
+    assert_equal 3, files[:singles].count
+    assert_equal 3, files[:pe_forward].count
+    assert_equal 3, files[:pe_reverse].count
+  end
+
+  test 'sorted_files with files including pe' do
+    sample_b = samples(:sampleB)
+    files = sample_b.sorted_files
+    assert_equal 3, files[:singles].count
+    assert_equal 3, files[:pe_forward].count
+    assert_equal 3, files[:pe_reverse].count
+  end
+
+  test 'sorted_files with no attachments' do
+    sample2 = samples(:sample2)
+
+    files = sample2.sorted_files
+    assert files.empty?
+  end
+
+  ### TODO END deferred_samplesheet ###
+
   test 'file_selector_fastq_files for forward' do
     # includes both forward PE and single fastq files
     sample_b = samples(:sampleB)
