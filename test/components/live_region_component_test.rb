@@ -100,4 +100,22 @@ class LiveRegionComponentTest < ViewComponentTestCase
 
     assert_selector "span[data-selection-target='customStatus']"
   end
+
+  test 'renders without id by default' do
+    render_inline(LiveRegionComponent.new)
+
+    assert_no_selector 'span[id]'
+  end
+
+  test 'renders with id when specified' do
+    render_inline(LiveRegionComponent.new(id: 'sr-status'))
+
+    assert_selector "span[id='sr-status']"
+  end
+
+  test 'renders with id and controller target together' do
+    render_inline(LiveRegionComponent.new(id: 'sr-status', controller: 'advanced-search', target: 'statusAnnouncement'))
+
+    assert_selector "span[id='sr-status'][data-advanced-search-target='statusAnnouncement']"
+  end
 end

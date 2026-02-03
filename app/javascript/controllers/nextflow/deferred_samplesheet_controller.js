@@ -6,6 +6,7 @@ import {
 } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
 import { focusWhenVisible } from "utilities/focus";
+import { announce } from "utilities/live_region";
 
 export default class extends Controller {
   static targets = [
@@ -157,7 +158,9 @@ export default class extends Controller {
     this.samplesheetMessagesContainerTarget.appendChild(
       samplesheetReadyMessage,
     );
-    this.ariaLiveTarget.innerHTML = this.loadingCompleteAnnouncementValue;
+    announce(this.loadingCompleteAnnouncementValue, {
+      element: this.ariaLiveTarget,
+    });
   }
 
   #setSamplesheetParametersAndData() {

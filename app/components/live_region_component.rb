@@ -17,6 +17,9 @@
 #
 # @example With custom data attributes
 #   <%= render LiveRegionComponent.new(controller: "selection", data: { custom_attr: "value" }) %>
+#
+# @example With id for JavaScript fallback lookup
+#   <%= render LiveRegionComponent.new(id: "sr-status", controller: "advanced-search") %>
 class LiveRegionComponent < Component
   VALID_POLITENESS_LEVELS = %i[polite assertive off].freeze
   DEFAULT_POLITENESS = :polite
@@ -26,12 +29,17 @@ class LiveRegionComponent < Component
   # @param target [String] Stimulus target name for controller integration
   # @param controller [String, nil] Stimulus controller name to attach to (optional)
   # @param atomic [Boolean] Whether the region should be treated as atomic (announced as a whole)
+  # @param id [String, nil] HTML id attribute for JavaScript fallback lookup (optional)
   # @param data [Hash] Additional data attributes to merge with auto-generated Stimulus attributes
-  def initialize(politeness: DEFAULT_POLITENESS, target: DEFAULT_TARGET, controller: nil, atomic: false, data: {})
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(politeness: DEFAULT_POLITENESS, target: DEFAULT_TARGET, controller: nil, atomic: false, id: nil,
+                 data: {})
+    # rubocop:enable Metrics/ParameterLists
     @politeness = validate_politeness(politeness)
     @target = target
     @controller = controller
     @atomic = atomic
+    @id = id
     @data = data
   end
 
@@ -52,6 +60,10 @@ class LiveRegionComponent < Component
   # Whether the region should be atomic
   # @return [Boolean]
   attr_reader :atomic
+
+  # HTML id attribute for JavaScript fallback lookup
+  # @return [String, nil]
+  attr_reader :id
 
   # Additional data attributes
   # @return [Hash]

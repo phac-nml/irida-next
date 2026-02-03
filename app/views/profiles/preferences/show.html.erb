@@ -1,16 +1,18 @@
 <%= viral_card(title: t(:'.preferences')) do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
-    <div
-      role="radiogroup"
-      aria-labelledby="theme-legend"
-      class="grid grid-cols-1 gap-4"
-      data-controller="colour-mode"
-      data-colour-mode-changed-text="<%= t('theme.announcements.changed') %>"
-      data-colour-mode-error-text="<%= t('theme.announcements.error') %>"
-      data-colour-mode-system-text="<%= t('theme.modes.system') %>"
-      data-colour-mode-light-text="<%= t('theme.modes.light') %>"
-      data-colour-mode-dark-text="<%= t('theme.modes.dark') %>"
-    >
+    <%= tag.div(
+      role: "radiogroup",
+      aria: { labelledby: "theme-legend" },
+      class: "grid grid-cols-1 gap-4",
+      data: {
+        controller: "colour-mode",
+        changed_text: t("theme.announcements.changed"),
+        error_text: t("theme.announcements.error"),
+        system_text: t("theme.modes.system"),
+        light_text: t("theme.modes.light"),
+        dark_text: t("theme.modes.dark")
+      }
+    ) do %>
       <div
         id="theme-legend"
         class="
@@ -59,7 +61,7 @@
           "colour-mode-target": "light",
         },
       ) %>
-    </div>
+    <% end %>
   <% end %>
   <% card.with_section do %>
     <%= render "locale_form", user: @user %>
