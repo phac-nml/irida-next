@@ -1,15 +1,16 @@
 import { Controller } from "@hotwired/stimulus";
 import debounce from "debounce";
-import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
 import { GridKeyboardNavigator } from "utilities/grid_keyboard_navigator";
-import { StickyColumnManager } from "utilities/sticky_column_manager";
-import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
 
 import { createVirtualScrollLifecycle } from "controllers/virtual_scroll/lifecycle";
 import { focusMixin } from "controllers/virtual_scroll/focus";
 import { deferredTemplateFieldsMixin } from "controllers/virtual_scroll/deferred_template_fields";
 import { navigationEventsMixin } from "controllers/virtual_scroll/navigation_events";
-import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range";
+import {
+  initializeDimensions,
+  handleResize,
+} from "controllers/virtual_scroll/layout_pipeline";
+import { renderVirtualScroll } from "controllers/virtual_scroll/render_pipeline";
 
 /**
  * VirtualScrollController
@@ -338,175 +339,7 @@ class VirtualScrollController extends Controller {
    * Supports variable-width columns instead of fixed COLUMN_WIDTH
    */
   initializeDimensions() {
-    if (!this.headerTarget || !this.bodyTarget) return false;
-    if (
-      !Array.isArray(this.metadataFieldsValue) ||
-      !Array.isArray(this.fixedColumnsValue)
-    )
-      return false;
-
-    this.headerRow = this.headerTarget.querySelector("tr");
-    if (!this.headerRow) return false;
-    this.numBaseColumns = this.fixedColumnsValue.length;
-    this.numMetadataColumns = this.metadataFieldsValue.length;
-    this.metadataFieldIndex = new Map();
-    this.metadataFieldsValue.forEach((field, index) => {
-      this.metadataFieldIndex.set(field, index);
-    });
-    const maxStickyColumns = Math.min(
-      this.stickyColumnCountValue ?? this.numBaseColumns,
-      this.numBaseColumns,
-    );
-    this.numStickyColumns = this.detectStickyColumnCount(maxStickyColumns);
-
-    const table = this.element.querySelector("table");
-    if (!table) return false;
-
-    const headerCells = Array.from(this.headerRow.querySelectorAll("th"));
-    this.baseHeaderElements = headerCells.slice(0, this.numBaseColumns);
-
-    // Measure base column widths
-    this.baseColumnWidths = this.baseHeaderElements.map((th, idx) => {
-      const width = th.getBoundingClientRect().width;
-
-      // Explicitly set width and box-sizing for base columns
-      Object.assign(th.style, {
-        width: width > 0 ? `${width}px` : "",
-        boxSizing: "border-box",
-      });
-
-      if (idx < this.numStickyColumns) {
-        // Ensure the sticky header cell keeps its stacking context
-        Object.assign(th.style, {
-          position: "sticky",
-          top: "0px",
-          zIndex: String(this.constructor.constants.STICKY_HEADER_Z_INDEX),
-        });
-        th.dataset.fixed = "true";
-      } else {
-        Object.assign(th.style, {
-          position: "",
-          left: "",
-          zIndex: "",
-        });
-        th.dataset.fixed = "false";
-      }
-
-      return width;
-    });
-    this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
-
-    this.stretchBaseColumnsToContainer();
-
-    // Compute explicit left offsets only for sticky columns so sticky positions
-    // will align correctly even after we manipulate the DOM.
-    this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
-      if (idx >= this.numStickyColumns) return null;
-      return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
-    });
-
-    // Measure actual metadata column widths from DOM
-    const metadataHeaders = headerCells.slice(this.numBaseColumns);
-    this.metadataColumnWidths = metadataHeaders.map((th) => {
-      const width =
-        th.getBoundingClientRect().width || this.cssConfig.columnWidth;
-
-      // Explicitly set width for metadata headers to prevent them from resizing
-      // and prevent text overflow
-      Object.assign(th.style, {
-        width: `${width}px`,
-        minWidth: `${width}px`,
-        maxWidth: `${width}px`,
-        boxSizing: "border-box",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
-      });
-
-      return width;
-    });
-
-    // If no metadata columns measured yet, use columnWidth from CSS as fallback
-    if (this.metadataColumnWidths.length === 0) {
-      this.metadataColumnWidths = Array(this.numMetadataColumns).fill(
-        this.cssConfig.columnWidth,
-      );
-    }
-
-    // Initialize geometry calculator with measured column widths
-    this.geometry = new VirtualScrollGeometry(this.metadataColumnWidths);
-
-    // Initialize sticky column manager
-    this.stickyManager = new StickyColumnManager({
-      columnWidths: this.baseColumnWidths,
-      stickyCount: this.numStickyColumns,
-      headerZIndex: this.constructor.constants.STICKY_HEADER_Z_INDEX,
-      bodyZIndex: this.constructor.constants.STICKY_BODY_Z_INDEX,
-    });
-
-    // Initialize cell renderer
-    this.cellRenderer = new VirtualScrollCellRenderer({
-      metadataFields: this.metadataFieldsValue,
-      numBaseColumns: this.numBaseColumns,
-      metadataColumnWidths: this.metadataColumnWidths,
-      columnWidthFallback: this.cssConfig.columnWidth,
-    });
-
-    if (this.keyboardNavigator) {
-      this.keyboardNavigator.updateTotalColumns(this.totalColumnCount());
-    }
-
-    // Keep all metadata headers in DOM (rendered server-side)
-    // No need to virtualize headers - performance impact is minimal for 1000 headers
-    this.metadataHeaders = metadataHeaders;
-
-    // Keep references to base header elements for sticky positioning updates
-    this.baseHeaderElements = headerCells.slice(0, this.numBaseColumns);
-
-    // Calculate total metadata width using measured widths
-    const totalMetadataWidth = this.metadataColumnWidths.reduce(
-      (a, b) => a + b,
-      0,
-    );
-    const totalWidth = this.calculateTotalTableWidth(totalMetadataWidth);
-
-    // Set table and header row dimensions
-    Object.assign(this.headerRow.style, {
-      width: `${totalWidth}px`,
-    });
-
-    Object.assign(table.style, {
-      width: `${totalWidth}px`,
-      tableLayout: "fixed",
-    });
-
-    // Apply sticky positioning to base header cells
-    this.baseHeaderElements.forEach((th, index) => {
-      this.stickyManager.applyToHeaderCell(th, index);
-    });
-
-    if (this.baseColumnsWidth > 0) {
-      this.measureRetryCount = 0;
-    }
-
-    // If measurements failed because the table is hidden, retry a few times
-    if (
-      this.baseColumnsWidth === 0 &&
-      this.measureRetryCount < this.constructor.constants.MAX_MEASURE_RETRIES &&
-      !this.isRetrying
-    ) {
-      this.isRetrying = true;
-      this.measureRetryCount += 1;
-      requestAnimationFrame(() => {
-        this.isRetrying = false;
-        // Ensure controller is still connected before retrying
-        if (!this.element.isConnected) return;
-        this.initializeDimensions();
-        this.render();
-      });
-    }
-
-    return true;
+    return initializeDimensions(this);
   }
 
   /**
@@ -570,71 +403,7 @@ class VirtualScrollController extends Controller {
    * Handle resize events - re-measure and re-render
    */
   handleResize() {
-    // Don't handle resize during initialization
-    if (this.isInitializing || !this.isInitialized) {
-      return;
-    }
-
-    if (!this.baseHeaderElements || this.baseHeaderElements.length === 0)
-      return;
-
-    // Detect if sticky column count should change based on breakpoint
-    const maxStickyColumns = Math.min(
-      this.stickyColumnCountValue ?? this.numBaseColumns,
-      this.numBaseColumns,
-    );
-    const newStickyColumnCount = this.detectStickyColumnCount(maxStickyColumns);
-    if (newStickyColumnCount !== this.numStickyColumns) {
-      this.numStickyColumns = newStickyColumnCount;
-    }
-
-    // Re-measure base column widths in case they changed
-    this.baseColumnWidths = this.baseHeaderElements.map((th) => {
-      const width = th.offsetWidth;
-      if (width > 0) {
-        th.style.width = `${width}px`;
-      }
-      return width;
-    });
-    this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
-
-    this.stretchBaseColumnsToContainer();
-
-    // Recalculate sticky column left positions
-    this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
-      if (idx >= this.numStickyColumns) return null;
-      return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
-    });
-
-    const totalMetadataWidth = this.metadataColumnWidths.reduce(
-      (a, b) => a + b,
-      0,
-    );
-    const totalWidth = this.calculateTotalTableWidth(totalMetadataWidth);
-    const table = this.element.querySelector("table");
-    if (table && this.headerRow) {
-      this.headerRow.style.width = `${totalWidth}px`;
-      table.style.width = `${totalWidth}px`;
-      table.style.tableLayout = "fixed";
-    }
-
-    // Update utilities with new measurements
-    if (this.geometry) {
-      this.geometry.updateColumnWidths(this.metadataColumnWidths);
-    }
-    if (this.stickyManager) {
-      this.stickyManager.updateColumnWidths(this.baseColumnWidths);
-      this.stickyManager.updateStickyCount(this.numStickyColumns);
-    }
-    if (this.cellRenderer) {
-      this.cellRenderer.updateColumnWidths(this.metadataColumnWidths);
-    }
-
-    // Clear row visible ranges to force full re-render
-    this.rowVisibleRanges.clear();
-
-    // Trigger re-render with new measurements
-    this.render();
+    handleResize(this);
   }
 
   /**
@@ -751,137 +520,7 @@ class VirtualScrollController extends Controller {
    * Main render method - updates visible columns based on scroll position
    */
   render() {
-    if (!this.isInitialized) return;
-
-    // Re-measure if needed (e.g. if initialized while hidden)
-    if (this.baseColumnsWidth === 0 || this.baseColumnsWidth === undefined) {
-      this.handleResize();
-    }
-    if (this.baseColumnsWidth === 0) return;
-
-    // Capture current focus if it's in the grid and we don't have a pending focus
-    if (this.pendingFocusRow === null || this.pendingFocusCol === null) {
-      const activeElement = document.activeElement;
-      const tableElement = this.element.querySelector("table");
-      if (activeElement && tableElement?.contains?.(activeElement)) {
-        const row = activeElement.closest("[aria-rowindex]");
-        const cell = activeElement.closest("[aria-colindex]");
-        if (row && cell) {
-          this.pendingFocusRow = parseInt(row.getAttribute("aria-rowindex"));
-          this.pendingFocusCol = parseInt(cell.getAttribute("aria-colindex"));
-        }
-      }
-    }
-
-    const stickyColumnsWidth = this.baseColumnWidths
-      .slice(0, this.numStickyColumns)
-      .reduce((a, b) => a + b, 0);
-
-    const scrollLeft = this.containerTarget.scrollLeft;
-    const metadataAreaScrollLeft = Math.max(
-      0,
-      scrollLeft + stickyColumnsWidth - this.baseColumnsWidth,
-    );
-
-    const activeEditingColumnIndex = this.getActiveEditingColumnIndex();
-
-    // Convert pending focus column to metadata index for range calculation
-    // pendingFocusCol is 1-based overall column index, we need 0-based metadata index
-    // Also consider the keyboard navigator's tracked position as fallback (for when user tabs out)
-    const trackedFocusCol =
-      this.pendingFocusCol ?? this.keyboardNavigator?.focusedColIndex;
-    const pendingFocusColumnIndex =
-      Number.isInteger(trackedFocusCol) && trackedFocusCol > this.numBaseColumns
-        ? trackedFocusCol - this.numBaseColumns - 1
-        : null;
-
-    const {
-      firstVisible: firstVisibleMetadataColumn,
-      lastVisible: lastVisibleMetadataColumn,
-    } = calculateVisibleRange({
-      geometry: this.geometry,
-      metadataColumnWidths: this.metadataColumnWidths,
-      metadataAreaScrollLeft,
-      containerWidth: this.containerTarget.clientWidth,
-      bufferColumns: this.constructor.constants.BUFFER_COLUMNS,
-      numMetadataColumns: this.numMetadataColumns,
-      activeEditingColumnIndex,
-      pendingFocusColumnIndex,
-    });
-
-    // Store the global visible range for quick early exit
-    const globalRangeChanged =
-      this.lastFirstVisible !== firstVisibleMetadataColumn ||
-      this.lastLastVisible !== lastVisibleMetadataColumn;
-
-    this.lastFirstVisible = firstVisibleMetadataColumn;
-    this.lastLastVisible = lastVisibleMetadataColumn;
-
-    // --- Update Header Sticky Positioning ---
-    // Headers are rendered server-side, just update sticky positioning for base columns
-    this.baseHeaderElements.forEach((th, idx) => {
-      this.stickyManager.applyToHeaderCell(th, idx);
-    });
-
-    // --- Render Body Rows ---
-    // Check if templateContainer is available
-    if (!this.hasTemplateContainerTarget) {
-      // Dispatch error event for monitoring
-      this.element.dispatchEvent(
-        new CustomEvent("virtual-scroll:error", {
-          detail: { message: "Template container not found" },
-        }),
-      );
-    }
-
-    this.rowTargets.forEach((row, rowIndex) => {
-      const rowId = row.dataset.sampleId;
-
-      // Check if this row's visible range changed
-      const cachedRange = this.rowVisibleRanges.get(rowId);
-      const rangeChanged =
-        !cachedRange ||
-        cachedRange.first !== firstVisibleMetadataColumn ||
-        cachedRange.last !== lastVisibleMetadataColumn;
-
-      // Skip this row if visible range unchanged
-      if (!rangeChanged && !globalRangeChanged) {
-        return;
-      }
-
-      // Update cached range
-      this.rowVisibleRanges.set(rowId, {
-        first: firstVisibleMetadataColumn,
-        last: lastVisibleMetadataColumn,
-      });
-
-      // Render cells using VirtualScrollCellRenderer utility
-      this.cellRenderer.renderRowCells(row, {
-        firstVisible: firstVisibleMetadataColumn,
-        lastVisible: lastVisibleMetadataColumn,
-        templateContainer: this.templateContainerTarget,
-      });
-
-      // Apply sticky styles to base columns
-      this.applyStickyStylesToRow(row);
-    });
-
-    const hasPendingFocus =
-      Number.isInteger(this.pendingFocusRow) &&
-      Number.isInteger(this.pendingFocusCol);
-    const focusedPending = hasPendingFocus
-      ? this.focusCellIfNeeded(this.pendingFocusRow, this.pendingFocusCol)
-      : false;
-
-    if (focusedPending) {
-      this.pendingFocusRow = null;
-      this.pendingFocusCol = null;
-    }
-
-    // Ensure a single focus target is available after render
-    if (!focusedPending) {
-      this.applyRovingTabindex(this.pendingFocusRow, this.pendingFocusCol);
-    }
+    renderVirtualScroll(this);
   }
 
   getActiveEditingColumnIndex() {
