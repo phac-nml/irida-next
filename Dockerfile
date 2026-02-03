@@ -79,8 +79,8 @@ EXPOSE 2222
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
-# Allow `rails` to run sudo without password inside the container for sshd
-RUN echo 'rails ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && chmod 0440 /etc/sudoers
+# Allow `rails` to run only the ssh start command via sudo without a password
+RUN echo 'rails ALL=(ALL) NOPASSWD: /usr/sbin/service ssh start' >> /etc/sudoers && chmod 0440 /etc/sudoers
 USER 1000:1000
 
 # Copy built artifacts: gems, application
