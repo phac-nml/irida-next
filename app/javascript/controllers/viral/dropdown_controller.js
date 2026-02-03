@@ -59,6 +59,15 @@ export default class extends Controller {
     });
   }
 
+  triggerTargetDisconnected(element) {
+    element.removeEventListener("keydown", this.boundOnButtonKeyDown);
+    element.removeEventListener("click", this.boundOnButtonClick, {
+      capture: true,
+    });
+    this.dropdown.destroy();
+    this.dropdown = null;
+  }
+
   focusOut(event) {
     if (!this.element.contains(event.relatedTarget)) {
       this.dropdown.hide();
