@@ -43,6 +43,10 @@ export class GridKeyboardNavigator {
   // Maximum number of focus attempts when navigating to virtualized cells
   static MAX_FOCUS_ATTEMPTS = 3;
 
+  #focusedRowIndex;
+  #focusedColIndex;
+  #isNavigating;
+
   /**
    * Create a grid keyboard navigator
    * @param {Object} options - Configuration options
@@ -63,11 +67,35 @@ export class GridKeyboardNavigator {
     this.pageJumpSize = options.pageJumpSize || 5;
     this.onNavigate = options.onNavigate;
 
-    this.focusedRowIndex = null;
-    this.focusedColIndex = null;
+    this.#focusedRowIndex = null;
+    this.#focusedColIndex = null;
 
     // Track when navigation is in progress to prevent focus reset during async operations
-    this.isNavigating = false;
+    this.#isNavigating = false;
+  }
+
+  get focusedRowIndex() {
+    return this.#focusedRowIndex;
+  }
+
+  set focusedRowIndex(value) {
+    this.#focusedRowIndex = value;
+  }
+
+  get focusedColIndex() {
+    return this.#focusedColIndex;
+  }
+
+  set focusedColIndex(value) {
+    this.#focusedColIndex = value;
+  }
+
+  get isNavigating() {
+    return this.#isNavigating;
+  }
+
+  set isNavigating(value) {
+    this.#isNavigating = value;
   }
 
   /**
