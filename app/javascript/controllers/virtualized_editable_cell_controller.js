@@ -134,7 +134,7 @@ export default class extends Controller {
   submit(element) {
     const validEntry = this.#validateEntry(element);
     if (validEntry) {
-      this.#clearEditingState(element);
+      this.#deactivateEditMode(element);
 
       // Clear the stored original content for this cell. After Turbo Stream replaces
       // the cell, the new cell should capture its updated content as the new original.
@@ -146,8 +146,6 @@ export default class extends Controller {
       // Remove event listeners on submission, they will be re-added on successful update
       element.removeEventListener("blur", this.boundBlur);
       element.removeEventListener("keydown", this.boundKeydown);
-      element.setAttribute("contenteditable", "false");
-
       // Use explicit field-id attribute (virtualized cells always have this)
       const field = element.dataset.fieldId;
       if (!field) return;
@@ -186,8 +184,7 @@ export default class extends Controller {
     const elementId = this.#elementId(element);
     if (!elementId) return;
     element.innerText = this.#originalCellContent[elementId];
-    this.#clearEditingState(element);
-    element.setAttribute("contenteditable", "false");
+    this.#deactivateEditMode(element);
     // Maintain focus on the cell after reset
     element.focus();
   }
@@ -215,7 +212,7 @@ export default class extends Controller {
         this.submit(event.target);
       } else {
         // No changes, just clear editing state
-        this.#clearEditingState(event.target);
+        this.#deactivateEditMode(event.target, { announce: true });
       }
       // Let Tab navigate (don't prevent default)
       return;
@@ -342,11 +339,26 @@ export default class extends Controller {
 
   #exitEditMode(element) {
     this.reset(element); // Restore original content, exit edit mode, and maintain focus
+    this.#deactivateEditMode(element, { announce: true });
+  }
 
-    // Dispatch custom event for screen reader announcement
-    element.dispatchEvent(
-      new CustomEvent("edit-mode-deactivated", { bubbles: true }),
-    );
+  /**
+   * Deactivates edit mode on a cell by clearing editing state and disabling contenteditable.
+   *
+   * @param {HTMLElement} element - The editable cell element
+   * @param {Object} options - Configuration options
+   * @param {boolean} [options.announce=false] - Whether to dispatch an event for screen reader announcement
+   */
+  #deactivateEditMode(element, { announce = false } = {}) {
+    if (!element) return;
+    this.#clearEditingState(element);
+    element.setAttribute("contenteditable", "false");
+
+    if (announce) {
+      element.dispatchEvent(
+        new CustomEvent("edit-mode-deactivated", { bubbles: true }),
+      );
+    }
   }
 
   #handleEditActivated() {

@@ -45,9 +45,9 @@ export function createVirtualScrollLifecycle() {
   }
 
   function trackDebounce(debouncedFn) {
-    const cancel = debouncedFn?.cancel;
-    if (typeof cancel !== "function") return;
-    add(() => cancel.call(debouncedFn));
+    const clear = debouncedFn?.clear;
+    if (typeof clear !== "function") return;
+    add(() => clear.call(debouncedFn));
   }
 
   function stop() {
