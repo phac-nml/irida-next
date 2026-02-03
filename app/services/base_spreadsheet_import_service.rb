@@ -4,7 +4,8 @@ require 'roo'
 
 # Service base class for handling spreadsheet file imports
 class BaseSpreadsheetImportService < BaseService
-  FileImportError = Class.new(StandardError)
+  class FileImportError < StandardError
+  end
 
   def initialize(namespace, user = nil, blob_id = nil, required_headers = [], minimum_additional_data_columns = 0, params = {}) # rubocop:disable Metrics/ParameterLists,Layout/LineLength
     super(user, params)

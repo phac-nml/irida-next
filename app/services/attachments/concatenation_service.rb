@@ -3,8 +3,11 @@
 module Attachments
   # Service used to Concatenate Attachments
   class ConcatenationService < BaseService # rubocop:disable Metrics/ClassLength
-    AttachmentConcatenationError = Class.new(StandardError)
-    AttachmentConcatenationFilenameError = Class.new(StandardError)
+    class AttachmentConcatenationError < StandardError
+    end
+
+    class AttachmentConcatenationFilenameError < StandardError
+    end
 
     attr_accessor :attachable, :attachments, :concatenation_params
 

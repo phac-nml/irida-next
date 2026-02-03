@@ -6,9 +6,14 @@ module Samples
       # Service used to validate the update_fields param and construct the metadata update param to be passed
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class UpdateService < BaseService
-        SampleMetadataFieldsUpdateError = Class.new(StandardError)
-        SampleMetadataKeyValidationError = Class.new(StandardError)
-        SampleMetadataValueValidationError = Class.new(StandardError)
+        class SampleMetadataFieldsUpdateError < StandardError
+        end
+
+        class SampleMetadataKeyValidationError < StandardError
+        end
+
+        class SampleMetadataValueValidationError < StandardError
+        end
         attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params
 
         def initialize(project, sample, user = nil, params = {})

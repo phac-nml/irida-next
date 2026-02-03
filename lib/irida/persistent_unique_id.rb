@@ -5,7 +5,8 @@ module Irida
   module PersistentUniqueId
     mattr_accessor :app_prefix
 
-    GenerationError = Class.new(StandardError)
+    class GenerationError < StandardError
+    end
 
     module_function
 

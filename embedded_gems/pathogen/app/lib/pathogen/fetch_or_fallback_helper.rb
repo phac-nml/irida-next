@@ -6,7 +6,8 @@ module Pathogen
   module FetchOrFallbackHelper
     mattr_accessor :fallback_raises, default: true
 
-    InvalidValueError = Class.new(StandardError)
+    class InvalidValueError < StandardError
+    end
 
     def fetch_or_fallback(valid_values, given_value, fallback = nil, deprecated_values: nil)
       return given_value if valid_values.include?(given_value)

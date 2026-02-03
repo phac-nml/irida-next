@@ -2,7 +2,8 @@
 
 # Base sample service root class for sample service related classes, scoped by namespace
 class BaseSampleService < BaseService
-  BaseError = Class.new(StandardError)
+  class BaseError < StandardError
+  end
   attr_accessor :namespace
 
   def initialize(namespace, user = nil, params = {})

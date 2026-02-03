@@ -3,7 +3,9 @@
 module DataExports
   # Service used to Create Data Export
   class CreateService < BaseService
-    DataExportCreateError = Class.new(StandardError)
+    class DataExportCreateError < StandardError
+    end
+
     def initialize(user = nil, params = {})
       super
     end

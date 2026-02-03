@@ -16,7 +16,8 @@ module Samples
   #   service = Samples::TransferService.new(namespace, user)
   #   transferred_ids = service.execute(new_project_id, sample_ids, broadcast_target)
   class TransferService < BaseSampleService # rubocop:disable Metrics/ClassLength
-    TransferError = Class.new(StandardError)
+    class TransferError < StandardError
+    end
 
     # Execute the sample transfer workflow.
     #
@@ -217,10 +218,10 @@ module Samples
                                                            Arel::Nodes::On.new(
                                                              conflicting_samples[:name].eq(Sample.arel_table[:name])
                                                            ), Arel::Nodes::OuterJoin))
-                      .where(conflicting_samples[:project_id].eq(new_project.id).and(
-                               conflicting_samples[:deleted_at].eq(nil)
-                             ))
-                      .where(id: sample_ids).select(:id)
+                .where(conflicting_samples[:project_id].eq(new_project.id).and(
+                         conflicting_samples[:deleted_at].eq(nil)
+                       ))
+                .where(id: sample_ids).select(:id)
           ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
 
           num_transferred_samples_by_project[project_id] = num_transferred

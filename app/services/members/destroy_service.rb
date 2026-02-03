@@ -3,7 +3,8 @@
 module Members
   # Service used to Delete Members
   class DestroyService < BaseService
-    MemberDestroyError = Class.new(StandardError)
+    class MemberDestroyError < StandardError
+    end
     attr_accessor :member, :namespace
 
     def initialize(member, namespace, user = nil, params = {})

@@ -3,8 +3,11 @@
 module Projects
   # Service used to Create Projects
   class CreateService < BaseService
-    ProjectNamespaceCreateError = Class.new(StandardError)
-    ProjectCreateError = Class.new(StandardError)
+    class ProjectNamespaceCreateError < StandardError
+    end
+
+    class ProjectCreateError < StandardError
+    end
     attr_accessor :namespace_params, :project, :namespace
 
     def initialize(user = nil, params = {})

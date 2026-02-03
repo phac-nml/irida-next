@@ -3,7 +3,8 @@
 module Members
   # Service used to Update Members
   class UpdateService < BaseService
-    MemberUpdateError = Class.new(StandardError)
+    class MemberUpdateError < StandardError
+    end
     attr_accessor :member, :namespace
 
     def initialize(member, namespace, user = nil, params = {})
