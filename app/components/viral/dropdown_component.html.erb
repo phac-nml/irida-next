@@ -5,7 +5,6 @@
   <% else %>
   data-controller="viral--dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
   <% end %>
-  data-viral--dropdown-trigger-type-value="none"
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
@@ -36,8 +35,6 @@
     data-viral--beta-dropdown-target="menu"
     <% else %>
     data-viral--dropdown-target="menu"
-    data-viral--dropdown-skidding-value="<%= skidding %>"
-    data-viral--dropdown-distance-value="<%= distance %>"
     <% end %>
     role="menu"
     class="
