@@ -347,7 +347,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -380,7 +380,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -431,7 +431,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -537,7 +537,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -578,7 +578,7 @@ module WorkflowExecutions
       # select samples
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
