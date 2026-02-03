@@ -64,8 +64,6 @@ export default class extends Controller {
     element.removeEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
-    this.dropdown.destroy();
-    this.dropdown = null;
   }
 
   focusOut(event) {
