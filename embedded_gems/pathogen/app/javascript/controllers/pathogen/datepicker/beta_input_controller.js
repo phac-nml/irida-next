@@ -72,7 +72,6 @@ export default class extends MenuController {
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
-    super.connect();
   }
 
   #onShow() {

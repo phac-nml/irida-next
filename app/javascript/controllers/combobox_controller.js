@@ -65,8 +65,6 @@ export default class ComboboxController extends MenuController {
     this.#addTriggerEventListeners(this.triggerTarget);
     this.#addMenuEventListeners(this.menuTarget);
 
-    super.connect();
-
     // Initialize
     this.#setOption(this.#filterOptions());
   }
