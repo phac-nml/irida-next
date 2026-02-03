@@ -3,6 +3,8 @@
 
 import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range";
 
+const isDevEnv = () => document.documentElement?.dataset?.env === "development";
+
 export function renderVirtualScroll(controller) {
   if (!controller.isInitialized) return;
 
@@ -14,6 +16,8 @@ export function renderVirtualScroll(controller) {
     controller.handleResize();
   }
   if (controller.baseColumnsWidth === 0) return;
+
+  const startedAt = isDevEnv() ? performance?.now?.() : null;
 
   // Capture current focus if it's in the grid and we don't have a pending focus
   if (
@@ -152,6 +156,14 @@ export function renderVirtualScroll(controller) {
     controller.applyRovingTabindex(
       controller.pendingFocusRow,
       controller.pendingFocusCol,
+    );
+  }
+
+  if (startedAt !== null) {
+    controller.element.dispatchEvent(
+      new CustomEvent("virtual-scroll:render", {
+        detail: { durationMs: performance.now() - startedAt },
+      }),
     );
   }
 }

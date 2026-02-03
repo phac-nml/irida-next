@@ -5,7 +5,11 @@ import { VirtualScrollGeometry } from "utilities/virtual_scroll_geometry";
 import { StickyColumnManager } from "utilities/sticky_column_manager";
 import { VirtualScrollCellRenderer } from "utilities/virtual_scroll_cell_renderer";
 
+const isDevEnv = () => document.documentElement?.dataset?.env === "development";
+
 export function initializeDimensions(controller) {
+  const startedAt = isDevEnv() ? performance?.now?.() : null;
+
   if (!controller.headerTarget || !controller.bodyTarget) return false;
   if (
     !Array.isArray(controller.metadataFieldsValue) ||
@@ -189,10 +193,24 @@ export function initializeDimensions(controller) {
     });
   }
 
+  if (startedAt !== null) {
+    controller.element.dispatchEvent(
+      new CustomEvent("virtual-scroll:measure", {
+        detail: {
+          durationMs: performance.now() - startedAt,
+          baseColumns: controller.numBaseColumns,
+          metadataColumns: controller.numMetadataColumns,
+        },
+      }),
+    );
+  }
+
   return true;
 }
 
 export function handleResize(controller) {
+  const startedAt = isDevEnv() ? performance?.now?.() : null;
+
   // Don't handle resize during initialization
   if (controller.isInitializing || !controller.isInitialized) {
     return;
@@ -265,4 +283,12 @@ export function handleResize(controller) {
 
   // Trigger re-render with new measurements
   controller.render();
+
+  if (startedAt !== null) {
+    controller.element.dispatchEvent(
+      new CustomEvent("virtual-scroll:resize", {
+        detail: { durationMs: performance.now() - startedAt },
+      }),
+    );
+  }
 }

@@ -35,6 +35,7 @@ import { renderVirtualScroll } from "controllers/virtual_scroll/render_pipeline"
  * - Body rows include data-virtual-scroll-target="row" and data-sample-id
  * - Templates live under data-virtual-scroll-target="templateContainer" with
  *   <template data-field="..."> nodes per metadata field
+ * - Development diagnostics emit virtual-scroll:measure/render/resize events
  *
  * @example
  *   <div data-controller="virtual-scroll"
