@@ -35,9 +35,9 @@ module AdvancedSearch
       when '>='
         apply_greater_than_or_equal(scope, node, value, field: condition.field, metadata_field:)
       when 'contains'
-        condition_contains(scope, node, value)
+        condition_contains(scope, node, value, model_class:, field_name: condition.field)
       when 'not_contains'
-        condition_not_contains(scope, node, value)
+        condition_not_contains(scope, node, value, model_class:, field_name: condition.field)
       when 'exists'
         condition_exists(scope, node)
       when 'not_exists'

@@ -5,6 +5,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
   include NamespacePathHelper
+  include Storable
   include WorkflowExecutionAttachment
 
   included do
@@ -16,6 +17,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action proc { destroy_paths }, only: %i[destroy_confirmation]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
     before_action proc { cancel_multiple_paths }, only: %i[cancel_multiple_confirmation cancel_multiple]
+    before_action proc { workflow_execution_fields }, only: %i[index search]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -129,6 +131,23 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     @query = workflow_execution_query
     @workflow_executions = @query.results.select(:id)
+  end
+
+  def search
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+
+    @query = workflow_execution_query
+    @search_params = search_params
+
+    respond_to do |format|
+      format.turbo_stream do
+        if @query.valid?
+          render status: :ok
+        else
+          render status: :unprocessable_content
+        end
+      end
+    end
   end
 
   def destroy_confirmation
@@ -365,11 +384,41 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    search_params = {}
-    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
-    search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
-    search_params[:sort] = params.dig(:q, :s)
-    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
-    search_params.compact
+    permitted = permit_search_params
+    # If no params provided in request, retrieve stored params from session
+    # Otherwise, use the submitted params (even if empty, to clear the search)
+    if params[:q].blank?
+      stored = get_store(search_key) || {}
+      updated_params = stored.with_indifferent_access
+    else
+      updated_params = update_store(search_key, permitted)
+    end
+    # Filter to only allow expected keys for security
+    updated_params.slice!('name_or_id_cont', 'name_or_id_in', 'groups_attributes', 'sort')
+    updated_params['sort'] = 'updated_at desc' unless updated_params.key?('sort')
+    update_store(search_key, updated_params)
+
+    updated_params
+  end
+
+  def permit_search_params
+    return {} if params[:q].blank?
+
+    # Use to_unsafe_h to handle complex nested form submissions
+    # This matches the pattern used in samples controllers (see projects/samples_controller.rb:254)
+    # Security is ensured by the .slice! call in search_params which allowlists keys
+    params[:q].to_unsafe_h.with_indifferent_access
+  end
+
+  def search_key
+    # Use 'global' prefix for user-level searches to avoid collision with namespace IDs
+    namespace_id = @namespace&.id || "global_#{current_user.id}"
+    :"#{controller_name}_#{namespace_id}_search_params"
+  end
+
+  def workflow_execution_fields
+    field_config = WorkflowExecution::FieldConfiguration.new
+    @workflow_execution_fields = field_config.fields
+    @workflow_execution_enum_fields = field_config.enum_fields
   end
 end
