@@ -118,6 +118,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Run JavaScript unit tests
+        run: pnpm test:js
+
       - name: Run tests
         env:
           RAILS_ENV: test
