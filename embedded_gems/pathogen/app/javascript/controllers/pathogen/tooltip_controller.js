@@ -498,6 +498,7 @@ export default class extends Controller {
 
     const describedBy = triggerElement.getAttribute("aria-describedby");
     if (!describedBy) {
+      triggerElement.setAttribute("aria-describedby", tooltipId);
       console.error(
         `[Pathogen::Tooltip] Trigger missing aria-describedby="${tooltipId}".`,
       );
@@ -506,6 +507,10 @@ export default class extends Controller {
 
     const ids = describedBy.split(/\s+/).filter(Boolean);
     if (!ids.includes(tooltipId)) {
+      triggerElement.setAttribute(
+        "aria-describedby",
+        `${describedBy} ${tooltipId}`.trim(),
+      );
       console.error(
         `[Pathogen::Tooltip] aria-describedby must include "${tooltipId}".`,
       );

@@ -66,6 +66,7 @@
           <!-- Add new items -->
           <%= viral_dropdown(
             icon: :plus,
+            trigger_id: "sidebar-new-dropdown-trigger",
             tooltip: t("general.navbar.new_dropdown.label"),
             tooltip_placement: :bottom,
             styles: {
@@ -90,6 +91,7 @@
           <!-- Profile menu -->
           <%= viral_dropdown(
             icon: User.icon,
+            trigger_id: "sidebar-account-dropdown-trigger",
             tooltip: t(:"general.navbar.account_dropdown.label"),
             tooltip_placement: :bottom,
             styles: {
