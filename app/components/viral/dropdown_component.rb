@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix
+    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix, :trigger_id
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -84,6 +84,7 @@ module Viral
     def assign_identity_attributes
       @dd_id = "dd-#{SecureRandom.hex(10)}"
       @prefix = @params[:prefix]
+      @trigger_id = @params[:trigger_id]
     end
 
     # 🛠️ Build and enhance system arguments for the dropdown trigger
@@ -100,9 +101,17 @@ module Viral
     def apply_tooltip_attributes
       return unless tooltip?
 
-      @tooltip_id ||= Pathogen::Tooltip.generate_id(base_name: 'viral-dropdown-tooltip')
+      @tooltip_id ||= generate_tooltip_id
       @tooltip_placement ||= :top
 
+      wire_tooltip_data_attributes
+    end
+
+    def generate_tooltip_id
+      tooltip_id_from_trigger || Pathogen::Tooltip.generate_id(base_name: 'viral-dropdown-tooltip')
+    end
+
+    def wire_tooltip_data_attributes
       @system_arguments[:data] ||= {}
       @system_arguments[:aria] ||= {}
 
@@ -214,7 +223,7 @@ module Viral
     def build_system_arguments
       data = build_data_attributes
       base_args = {
-        id: "dd-#{SecureRandom.hex(10)}",
+        id: trigger_id || "dd-#{SecureRandom.hex(10)}",
         data: data,
         tag: :button,
         type: :button,
@@ -260,6 +269,12 @@ module Viral
       {
         classes: class_names('viral-dropdown--icon', @system_arguments[:classes])
       }
+    end
+
+    def tooltip_id_from_trigger
+      return if trigger_id.blank?
+
+      "#{trigger_id}-tooltip"
     end
 
     # Append an ID to a space-separated list of IDs for aria-describedby.
