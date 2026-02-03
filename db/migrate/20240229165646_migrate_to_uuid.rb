@@ -41,7 +41,7 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
     add_column :samples, :project_uuid, :uuid
 
     # Populate UUID columns for associations
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       UPDATE samples_workflow_executions SET workflow_execution_uuid = workflow_executions.uuid
       FROM workflow_executions WHERE samples_workflow_executions.workflow_execution_id = workflow_executions.id;
 
@@ -305,7 +305,7 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
     add_index :routes, :created_at
     add_index :samples, :created_at
 
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       UPDATE "attachments" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
       UPDATE "data_exports" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
       UPDATE "users" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');

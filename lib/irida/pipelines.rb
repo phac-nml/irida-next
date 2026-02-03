@@ -9,7 +9,9 @@ require 'irida/pipeline'
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
   class Pipelines # rubocop:disable Metrics/ClassLength
-    PipelinesJsonFormatException = Class.new StandardError
+    class PipelinesJsonFormatException < StandardError
+    end
+
     class PipelinesInvalidUrlException < StandardError # rubocop:disable Style/Documentation
       attr_reader :code, :previously_fetched
 

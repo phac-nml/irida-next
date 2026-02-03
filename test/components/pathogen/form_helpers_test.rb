@@ -3,7 +3,6 @@
 require 'test_helper'
 
 module Pathogen
-  # rubocop:disable Metrics/ClassLength
   # Test suite for FormHelpers module functionality
   class FormHelpersTest < Minitest::Test
     include Pathogen::FormHelper
@@ -166,5 +165,4 @@ module Pathogen
       assert_nil attributes[:controls]
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end

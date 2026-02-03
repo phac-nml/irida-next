@@ -18,7 +18,7 @@ class ChangeWorkflowExecutionStateToEnum < ActiveRecord::Migration[7.1]
       canceled: 8
     }
 
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       UPDATE workflow_executions SET state = #{enum_values[:initial]} WHERE old_state = 'new';
       UPDATE workflow_executions SET state = #{enum_values[:prepared]} WHERE old_state = 'prepared';
       UPDATE workflow_executions SET state = #{enum_values[:submitted]} WHERE old_state = 'submitted';

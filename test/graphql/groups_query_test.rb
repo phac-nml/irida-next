@@ -67,8 +67,8 @@ class GroupsQueryTest < ActiveSupport::TestCase
 
   test 'groups query only returns scoped groups' do
     groups_via_namespace_group_links = Group.where(id: NamespaceGroupLink
-      .where(group: @user.groups.self_and_descendants)
-      .not_expired.select(:namespace_id))
+                                                       .where(group: @user.groups.self_and_descendants)
+                                                       .not_expired.select(:namespace_id))
 
     groups = @user.groups.self_and_descendants.or(groups_via_namespace_group_links)
 

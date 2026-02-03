@@ -6,7 +6,6 @@ module Pathogen
   class Tabs
     # Test suite for Pathogen::Tabs::Tab component
     # Validates ARIA attributes, keyboard accessibility, and styling
-    # rubocop:disable Metrics/ClassLength
     class TabTest < ViewComponent::TestCase
       test 'renders with role tab' do
         render_inline(Pathogen::Tabs::Tab.new(
@@ -202,6 +201,5 @@ module Pathogen
         assert_selector '[tabindex="-1"]'
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end

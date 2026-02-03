@@ -5,7 +5,7 @@ class AddAttachmentsUpdatedAtToSamples < ActiveRecord::Migration[7.1]
   def up
     add_column :samples, :attachments_updated_at, :datetime
 
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       with t AS (
         SELECT attachments.attachable_id, MAX(attachments.created_at) AS max_created_datetime
         FROM attachments

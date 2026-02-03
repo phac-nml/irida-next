@@ -3,7 +3,7 @@
 # updates reverse pe attachment puid to match forward pe attachment puid
 class FixPeAttachmentsPuid < ActiveRecord::Migration[7.1]
   def up
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       WITH forward_attachments AS (
         SELECT id, puid, (metadata->>'associated_attachment_id')::uuid as associated_attachment_id
         FROM attachments
