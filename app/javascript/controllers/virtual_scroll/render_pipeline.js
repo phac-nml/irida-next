@@ -4,6 +4,36 @@
 import { calculateVisibleRange } from "controllers/virtual_scroll/visible_range";
 
 const isDevEnv = () => document.documentElement?.dataset?.env === "development";
+const warnedGrids = new WeakSet();
+
+const warnMissingGridContract = (controller) => {
+  if (!isDevEnv()) return;
+
+  const table = controller.element.querySelector("table");
+  const gridElement =
+    table?.getAttribute("role") === "grid" ? table : controller.element;
+
+  if (warnedGrids.has(gridElement)) return;
+
+  const issues = [];
+  if (gridElement.getAttribute("role") !== "grid") {
+    issues.push("missing role=grid");
+  }
+  if (!gridElement.getAttribute("aria-colcount")) {
+    issues.push("missing aria-colcount");
+  }
+  if (!gridElement.getAttribute("aria-rowcount")) {
+    issues.push("missing aria-rowcount");
+  }
+  if (!gridElement.querySelector("[aria-rowindex]")) {
+    issues.push("missing aria-rowindex rows");
+  }
+
+  if (issues.length > 0) {
+    console.warn("virtual-scroll grid contract issues:", issues);
+    warnedGrids.add(gridElement);
+  }
+};
 
 export function renderVirtualScroll(controller) {
   if (!controller.isInitialized) return;
@@ -17,6 +47,7 @@ export function renderVirtualScroll(controller) {
   }
   if (controller.baseColumnsWidth === 0) return;
 
+  warnMissingGridContract(controller);
   const startedAt = isDevEnv() ? performance?.now?.() : null;
 
   // Capture current focus if it's in the grid and we don't have a pending focus
