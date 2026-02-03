@@ -76,6 +76,20 @@ export default defineConfig([
     },
   },
 
+  // JavaScript tests (Node test runner + jsdom globals)
+  {
+    name: "js-tests",
+    files: ["test/javascript/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+  },
+
   // Disable Prettier-conflicting rules (must be last)
   prettierConfig,
 ]);
