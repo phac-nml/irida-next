@@ -6,9 +6,9 @@
 
 <%= form_with(model: @new_member, url: namespace_project_members_path(tab: @tab), data:
 if Flipper.enabled?(:beta_dropdown)
-  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click"}
+  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
 else
-  { controller: "viral--select2", "viral--select2-trigger-type-value": "click"}
+  { controller: "viral--select2" }
 end, method: :post,  html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if @new_member.errors.any?
