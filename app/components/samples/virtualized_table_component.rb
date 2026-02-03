@@ -72,37 +72,29 @@ module Samples
     end
 
     # 🔄 Applies virtual-scroll controller and data attributes.
-    #
-    # @param args [Hash] arguments to mutate
-    # @return [void]
     def apply_virtual_scroll_data!(args)
-      args[:data][:controller] = 'virtual-scroll'
-      args[:data][:'virtual-scroll-target'] = 'container'
-      args[:data][:'virtual-scroll-metadata-fields-value'] = @metadata_fields.to_json
-      args[:data][:'virtual-scroll-fixed-columns-value'] = @columns.to_json
-      args[:data][:'virtual-scroll-sticky-column-count-value'] = STICKY_COLUMN_COUNT
-      args[:data][:'virtual-scroll-sort-key-value'] = @sort_key || ''
+      args[:data].merge!(
+        controller: 'virtual-scroll',
+        'virtual-scroll-target': 'container',
+        'virtual-scroll-metadata-fields-value': @metadata_fields.to_json,
+        'virtual-scroll-fixed-columns-value': @columns.to_json,
+        'virtual-scroll-sticky-column-count-value': STICKY_COLUMN_COUNT,
+        'virtual-scroll-sort-key-value': @sort_key || '',
+        'virtual-scroll-stretch-base-columns-value': true
+      )
     end
 
     # 🚀 Applies selection-related data attributes for interactive selection.
-    # Adds accessibility and i18n-driven live region messages.
-    #
-    # @param args [Hash] arguments to mutate
-    # @return [void]
+    # i18n-tasks-use t('components.samples.virtualized_table_component.counts.status')
     def apply_selection_data!(args)
+      i18n_key = 'components.samples.virtualized_table_component.counts.status'
       args[:data] ||= {}
-      # Append to existing controller value
-      existing_controller = args[:data][:controller] || ''
-      args[:data][:controller] = [existing_controller, 'selection'].join(' ').strip
-      args[:data][:'selection-total-value'] = @pagy.count
-      args[:data][:'selection-action-button-outlet'] = '.action-button'
-      # i18n-driven live region messages
-      # i18n-tasks-use t('components.samples.virtualized_table_component.counts.status')
-      args[:data][:'selection-count-message-one-value'] = I18n.t(
-        'components.samples.virtualized_table_component.counts.status.one'
-      )
-      args[:data][:'selection-count-message-other-value'] = I18n.t(
-        'components.samples.virtualized_table_component.counts.status.other'
+      args[:data][:controller] = [args[:data][:controller], 'selection'].compact.join(' ')
+      args[:data].merge!(
+        'selection-total-value': @pagy.count,
+        'selection-action-button-outlet': '.action-button',
+        'selection-count-message-one-value': I18n.t("#{i18n_key}.one"),
+        'selection-count-message-other-value': I18n.t("#{i18n_key}.other")
       )
     end
 
@@ -152,12 +144,11 @@ module Samples
       end
     end
 
+    # i18n-tasks-use t('components.samples.virtualized_table_component.namespaces.puid')
     def columns
-      columns = %i[puid name]
-      # i18n-tasks-use t('components.samples.virtualized_table_component.namespaces.puid')
-      columns << 'namespaces.puid' if @namespace.type == 'Group'
-      columns += %i[created_at updated_at attachments_updated_at]
-      columns
+      base = %i[puid name]
+      base << 'namespaces.puid' if @namespace.type == 'Group'
+      base + %i[created_at updated_at attachments_updated_at]
     end
   end
 end

@@ -50,6 +50,8 @@ export default class extends Controller {
 
     this.#setExpandedState(false);
 
+    window.dispatchEvent(new CustomEvent("layout:toggle"));
+
     if (this.announcementsEnabled && this.hasAnnouncementTarget) {
       this.#announce(this.collapsedAnnouncementValue);
     }
@@ -68,6 +70,8 @@ export default class extends Controller {
     localStorage.setItem("layout", "expanded");
 
     this.#setExpandedState(true);
+
+    window.dispatchEvent(new CustomEvent("layout:toggle"));
 
     focusWhenVisible(this.collapseButtonTarget);
 

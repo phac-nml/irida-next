@@ -40,6 +40,7 @@ class VirtualScrollController extends Controller {
     fixedColumns: Array,
     stickyColumnCount: Number,
     sortKey: String,
+    stretchBaseColumns: Boolean,
   };
 
   static targets = [
@@ -118,6 +119,13 @@ class VirtualScrollController extends Controller {
     this.lifecycle.listen(this.element, "dblclick", this.boundHandleDblClick, {
       capture: true,
     });
+
+    this.boundHandleLayoutToggle = this.handleLayoutToggle.bind(this);
+    this.lifecycle.listen(
+      window,
+      "layout:toggle",
+      this.boundHandleLayoutToggle,
+    );
 
     // Listen for focus reset events from table controller
     this.boundHandleFocusReset = this.handleFocusReset.bind(this);
@@ -377,6 +385,8 @@ class VirtualScrollController extends Controller {
     });
     this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
 
+    this.stretchBaseColumnsToContainer();
+
     // Compute explicit left offsets only for sticky columns so sticky positions
     // will align correctly even after we manipulate the DOM.
     this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
@@ -447,7 +457,7 @@ class VirtualScrollController extends Controller {
       (a, b) => a + b,
       0,
     );
-    const totalWidth = this.baseColumnsWidth + totalMetadataWidth;
+    const totalWidth = this.calculateTotalTableWidth(totalMetadataWidth);
 
     // Set table and header row dimensions
     Object.assign(this.headerRow.style, {
@@ -577,11 +587,25 @@ class VirtualScrollController extends Controller {
     });
     this.baseColumnsWidth = this.baseColumnWidths.reduce((a, b) => a + b, 0);
 
+    this.stretchBaseColumnsToContainer();
+
     // Recalculate sticky column left positions
     this.stickyColumnLefts = this.baseColumnWidths.map((_, idx) => {
       if (idx >= this.numStickyColumns) return null;
       return this.baseColumnWidths.slice(0, idx).reduce((a, b) => a + b, 0);
     });
+
+    const totalMetadataWidth = this.metadataColumnWidths.reduce(
+      (a, b) => a + b,
+      0,
+    );
+    const totalWidth = this.calculateTotalTableWidth(totalMetadataWidth);
+    const table = this.element.querySelector("table");
+    if (table && this.headerRow) {
+      this.headerRow.style.width = `${totalWidth}px`;
+      table.style.width = `${totalWidth}px`;
+      table.style.tableLayout = "fixed";
+    }
 
     // Update utilities with new measurements
     if (this.geometry) {
@@ -615,6 +639,48 @@ class VirtualScrollController extends Controller {
     }
 
     return Math.min(1, cappedMax);
+  }
+
+  handleLayoutToggle() {
+    if (this.debouncedResizeHandler) {
+      this.debouncedResizeHandler();
+    }
+  }
+
+  shouldStretchBaseColumns() {
+    return (
+      Boolean(this.stretchBaseColumnsValue) && this.numMetadataColumns === 0
+    );
+  }
+
+  stretchBaseColumnsToContainer() {
+    if (!this.shouldStretchBaseColumns()) return;
+    if (!this.baseColumnsWidth || this.baseColumnsWidth <= 0) return;
+
+    const containerWidth = this.containerTarget?.clientWidth;
+    if (!containerWidth || containerWidth <= this.baseColumnsWidth) return;
+
+    const extraWidth = containerWidth - this.baseColumnsWidth;
+    const updatedWidths = this.baseColumnWidths.map(
+      (width) => width + (width / this.baseColumnsWidth) * extraWidth,
+    );
+
+    this.baseColumnWidths = updatedWidths;
+    this.baseColumnsWidth = updatedWidths.reduce((a, b) => a + b, 0);
+
+    this.baseHeaderElements.forEach((th, index) => {
+      th.style.width = `${updatedWidths[index]}px`;
+    });
+  }
+
+  calculateTotalTableWidth(totalMetadataWidth) {
+    const totalWidth = this.baseColumnsWidth + totalMetadataWidth;
+    if (this.shouldStretchBaseColumns()) {
+      const containerWidth = this.containerTarget?.clientWidth;
+      if (containerWidth && containerWidth > totalWidth) return containerWidth;
+    }
+
+    return totalWidth;
   }
 
   /**
