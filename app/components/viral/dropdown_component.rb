@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles, :prefix
+    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -52,18 +52,36 @@ module Viral
 
     # 🏷️ Set basic attributes from params
     def set_basic_attributes
+      assign_display_attributes
+      assign_tooltip_inputs
+      assign_action_attributes
+      assign_identity_attributes
+    end
+
+    def assign_display_attributes
       @distance = @params[:distance] || 10
       @styles = (@params[:styles] || {}).with_indifferent_access
       @label = @params[:label]
       @icon_name = @params[:icon]
       @caret = @params[:caret]
       @skidding = @params[:skidding] || 0
+    end
+
+    def assign_tooltip_inputs
+      @tooltip_text = @params[:tooltip]
+      @tooltip_placement = @params.fetch(:tooltip_placement, :top).to_sym
+    end
+
+    def assign_action_attributes
       @action_link = @params[:action_link]
       @action_link_value = @params[:action_link_value]
       @trigger = TRIGGER_MAPPINGS.fetch(
         @params[:trigger] || TRIGGER_DEFAULT,
         TRIGGER_MAPPINGS[TRIGGER_DEFAULT]
       )
+    end
+
+    def assign_identity_attributes
       @dd_id = "dd-#{SecureRandom.hex(10)}"
       @prefix = @params[:prefix]
     end
@@ -71,25 +89,35 @@ module Viral
     # 🛠️ Build and enhance system arguments for the dropdown trigger
     def set_system_arguments
       @system_arguments = build_system_arguments
-      add_tooltip
+      apply_tooltip_attributes
       add_button_styles
       add_icon_styles
       add_aria_label
       add_title_attribute
     end
 
-    # 💬 Add tooltip as title attribute if present
-    def add_tooltip
-      return if @params[:tooltip].blank?
+    # 💬 Apply accessible tooltip wiring using Pathogen::Tooltip when tooltip text is present
+    def apply_tooltip_attributes
+      return unless tooltip?
 
-      @system_arguments[:title] = @params[:tooltip]
+      @tooltip_id ||= Pathogen::Tooltip.generate_id(base_name: 'viral-dropdown-tooltip')
+      @tooltip_placement ||= :top
+
+      @system_arguments[:data] ||= {}
+      @system_arguments[:aria] ||= {}
+
+      @system_arguments[:data]['pathogen--tooltip-target'] ||= 'trigger'
+
+      describedby = @system_arguments[:aria][:describedby]
+      @system_arguments[:aria][:describedby] = append_to_aria_describedby(describedby, @tooltip_id)
     end
 
     # 📝 Add title attribute from system arguments if present
     def add_title_attribute
       return if @system_arguments[:title].present?
 
-      @system_arguments[:title] = @params[:title] if @params[:title].present?
+      # Prefer explicit title, otherwise fall back to tooltip text for system preview expectations
+      @system_arguments[:title] = @params[:title].presence || tooltip_text
     end
 
     # 🎨 Add button styles, using custom or default
@@ -139,6 +167,20 @@ module Viral
       @params.dig(:aria, :label)
     end
 
+    def tooltip?
+      tooltip_text.present?
+    end
+
+    def tooltip_component
+      return unless tooltip?
+
+      Pathogen::Tooltip.new(
+        text: tooltip_text,
+        id: @tooltip_id,
+        placement: @tooltip_placement
+      )
+    end
+
     # 🔍 Extract tooltip for aria-label
     def tooltip_aria_label
       @params[:tooltip].presence
@@ -159,9 +201,19 @@ module Viral
     end
 
     # 🏗️ Build system arguments for the dropdown trigger
+    #
+    # Uses deep_merge to combine base dropdown arguments with custom system_arguments.
+    # This allows composing the dropdown with other Stimulus controllers (e.g., tooltips)
+    # while preserving the dropdown's core functionality.
+    #
+    # Example:
+    #   system_arguments: {
+    #     data: { 'pathogen--tooltip-target': 'trigger' },  # Preserves viral--dropdown-target
+    #     aria: { describedby: 'tooltip-id' }               # Preserves aria-expanded, aria-haspopup
+    #   }
     def build_system_arguments
       data = build_data_attributes
-      {
+      base_args = {
         id: "dd-#{SecureRandom.hex(10)}",
         data: data,
         tag: :button,
@@ -170,7 +222,11 @@ module Viral
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id
-      }.merge(@params[:system_arguments] || {})
+      }
+      system_args = @params[:system_arguments] || {}
+
+      # Deep merge to preserve nested hash attributes (data, aria, etc.)
+      base_args.deep_merge(system_args)
     end
 
     # 🏗️ Build data attributes for the dropdown trigger
@@ -204,6 +260,22 @@ module Viral
       {
         classes: class_names('viral-dropdown--icon', @system_arguments[:classes])
       }
+    end
+
+    # Append an ID to a space-separated list of IDs for aria-describedby.
+    # The aria-describedby attribute accepts multiple IDs separated by spaces,
+    # so this builds that space-separated list correctly per ARIA spec.
+    #
+    # @param existing [String] Existing space-separated ID list (or nil)
+    # @param id [String] New ID to append to the list
+    # @return [String] Space-separated list of IDs
+    def append_to_aria_describedby(existing, id)
+      return id if existing.blank?
+
+      ids = existing.to_s.split(/\s+/)
+      return existing if ids.include?(id)
+
+      "#{existing} #{id}"
     end
   end
   # rubocop:enable Metrics/ClassLength

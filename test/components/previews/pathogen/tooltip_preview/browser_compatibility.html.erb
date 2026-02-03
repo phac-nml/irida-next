@@ -1,0 +1,626 @@
+<div
+  class="
+    p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900
+    dark:to-slate-800 min-h-screen
+  "
+>
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:globe, color: :primary, size: :xl, class: "inline mr-3") %>
+      Browser Compatibility
+    </h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      JavaScript positioning with viewport detection for broad browser
+      compatibility
+    </p>
+  </div>
+  <!-- Browser Support Status -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:check_circle, color: :success, class: "mr-3") %>
+      Universal Browser Compatibility
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        This tooltip component uses JavaScript-based positioning for maximum
+        browser compatibility. Works in all modern browsers with ES6+
+        JavaScript support:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          class="
+            flex items-center p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="
+                w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded flex items-center
+                justify-center
+              "
+            >
+              <%= pathogen_icon(:check, color: :success) %>
+            </div>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100">Chrome</div>
+              <div class="text-sm text-green-800 dark:text-green-200">Modern versions</div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            flex items-center p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="
+                w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded flex items-center
+                justify-center
+              "
+            >
+              <%= pathogen_icon(:check, color: :success) %>
+            </div>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100">Firefox</div>
+              <div class="text-sm text-green-800 dark:text-green-200">Modern versions</div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            flex items-center p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="
+                w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded flex items-center
+                justify-center
+              "
+            >
+              <%= pathogen_icon(:check, color: :success) %>
+            </div>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100">Safari</div>
+              <div class="text-sm text-green-800 dark:text-green-200">Modern versions</div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            flex items-center p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="
+                w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded flex items-center
+                justify-center
+              "
+            >
+              <%= pathogen_icon(:check, color: :success) %>
+            </div>
+            <div>
+              <div class="font-semibold text-green-900 dark:text-green-100">Edge</div>
+              <div class="text-sm text-green-800 dark:text-green-200">Modern versions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200
+          dark:border-blue-800 rounded-lg
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+          <div class="text-sm">
+            <p class="font-semibold text-blue-900 dark:text-blue-100 mb-1">JavaScript Positioning</p>
+            <p class="text-blue-800 dark:text-blue-200">
+              The tooltip uses JavaScript-based positioning with
+              `getBoundingClientRect()` for precise placement. This approach
+              provides sophisticated features like viewport boundary detection
+              and automatic placement flipping that work consistently across
+              all modern browsers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Positioning Strategy -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:shield, color: :success, class: "mr-3") %>
+      Positioning Strategy
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        The tooltip component uses JavaScript-based positioning with
+        sophisticated viewport detection:
+      </p>
+
+      <div class="space-y-6">
+        <!-- getBoundingClientRect Calculation -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:code, color: :primary) %>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Precise Position Calculation</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-3">
+              Tooltips calculate their optimal position using
+              `getBoundingClientRect()` to get exact trigger element
+              coordinates, then apply calculated positions via inline styles.
+            </p>
+            <div
+              class="
+                bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700
+                rounded p-3 text-sm
+              "
+            >
+              <code class="text-slate-800 dark:text-slate-200">position: fixed; top: ${top}px; left: ${left}px;</code>
+            </div>
+          </div>
+        </div>
+        <!-- Viewport Boundary Detection -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:arrows_in, color: :success) %>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Automatic Viewport Detection</h3>
+            <p class="text-slate-600 dark:text-slate-400">
+              The Stimulus controller detects when tooltips would overflow
+              viewport edges and automatically flips placement:
+            </p>
+            <ul class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-400">
+              <li class="flex items-center gap-2">
+                <%= pathogen_icon(:check, color: :success, class: "flex-shrink-0") %>
+                Top placement flips to bottom when near top edge
+              </li>
+              <li class="flex items-center gap-2">
+                <%= pathogen_icon(:check, color: :success, class: "flex-shrink-0") %>
+                Bottom placement flips to top when near bottom edge
+              </li>
+              <li class="flex items-center gap-2">
+                <%= pathogen_icon(:check, color: :success, class: "flex-shrink-0") %>
+                Left/right placements flip when near corresponding edges
+              </li>
+              <li class="flex items-center gap-2">
+                <%= pathogen_icon(:check, color: :success, class: "flex-shrink-0") %>
+                Maintains 8px padding from viewport boundaries
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Position Clamping -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:lock, color: :primary) %>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">Position Clamping</h3>
+            <p class="text-slate-600 dark:text-slate-400">
+              If a tooltip can't fit in its preferred placement even after
+              flipping, the positioning algorithm clamps it to viewport bounds
+              to ensure it remains fully visible with proper padding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Why JavaScript Positioning? -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Why JavaScript Positioning?
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        The decision to use custom JavaScript positioning instead of external
+        libraries or cutting-edge CSS features brings several advantages:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          class="
+            p-4 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:globe, color: :success, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">Broad Browser Compatibility</h3>
+              <p class="text-sm text-green-800 dark:text-green-200">
+                Works in all modern browsers (Chrome, Firefox, Safari, Edge)
+                without feature flags or polyfills.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800
+            rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:download, color: :primary, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-1">Smaller Bundle Size</h3>
+              <p class="text-sm text-blue-800 dark:text-blue-200">
+                No need to include Popper.js, Floating UI, or other positioning
+                libraries, reducing JavaScript payload.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200
+            dark:border-purple-800 rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:arrows_in, color: :primary, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-1">Sophisticated Viewport Detection</h3>
+              <p class="text-sm text-purple-800 dark:text-purple-200">
+                Automatic placement flipping and position clamping ensure
+                tooltips always stay within viewport bounds.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200
+            dark:border-amber-800 rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:code, color: :warning, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-amber-900 dark:text-amber-100 mb-1">Full Control</h3>
+              <p class="text-sm text-amber-800 dark:text-amber-200">
+                Custom implementation allows precise control over positioning
+                logic and edge cases.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200
+            dark:border-indigo-800 rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:puzzle_piece, color: :primary, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">Lightweight Dependencies</h3>
+              <p class="text-sm text-indigo-800 dark:text-indigo-200">
+                Uses Floating UI instead of Flowbite, reducing maintenance
+                burden and improving positioning accuracy.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="
+            p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800
+            rounded-lg
+          "
+        >
+          <div class="flex items-start gap-3">
+            <%= pathogen_icon(:shield, color: :primary, class: "flex-shrink-0") %>
+            <div>
+              <h3 class="font-semibold text-teal-900 dark:text-teal-100 mb-1">Reliable & Predictable</h3>
+              <p class="text-sm text-teal-800 dark:text-teal-200">
+                JavaScript positioning provides consistent behavior across all
+                browsers without browser-specific quirks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Migration from Flowbite -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:arrows_clockwise, color: :primary, class: "mr-3") %>
+      Migration from Flowbite
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        This tooltip component was redesigned to remove the Flowbite
+        dependency, which used Popper.js for positioning.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Before: Flowbite -->
+        <div>
+          <h3
+            class="
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
+            "
+          >
+            <%= pathogen_icon(:x, color: :danger, class: "mr-2") %>
+            Before: Flowbite
+          </h3>
+          <div class="space-y-3 text-sm">
+            <div
+              class="
+                p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800
+                rounded
+              "
+            >
+              <div class="font-semibold text-red-900 dark:text-red-100 mb-1">External Dependency</div>
+              <div class="text-red-800 dark:text-red-200">Required Flowbite + Popper.js libraries</div>
+            </div>
+            <div
+              class="
+                p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800
+                rounded
+              "
+            >
+              <div class="font-semibold text-red-900 dark:text-red-100 mb-1">JavaScript Positioning</div>
+              <div class="text-red-800 dark:text-red-200">Complex JS-based positioning logic</div>
+            </div>
+            <div
+              class="
+                p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800
+                rounded
+              "
+            >
+              <div class="font-semibold text-red-900 dark:text-red-100 mb-1">Larger Bundle</div>
+              <div class="text-red-800 dark:text-red-200">Additional JavaScript payload</div>
+            </div>
+          </div>
+        </div>
+        <!-- After: Custom JavaScript -->
+        <div>
+          <h3
+            class="
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
+            "
+          >
+            <%= pathogen_icon(:check_circle, color: :success, class: "mr-2") %>
+            After: Custom JavaScript
+          </h3>
+          <div class="space-y-3 text-sm">
+            <div
+              class="
+                p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+                dark:border-green-800 rounded
+              "
+            >
+              <div class="font-semibold text-green-900 dark:text-green-100 mb-1">Zero External Dependencies</div>
+              <div class="text-green-800 dark:text-green-200">Custom Stimulus controller with no positioning libraries</div>
+            </div>
+            <div
+              class="
+                p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+                dark:border-green-800 rounded
+              "
+            >
+              <div class="font-semibold text-green-900 dark:text-green-100 mb-1">JavaScript Positioning</div>
+              <div class="text-green-800 dark:text-green-200">Sophisticated viewport detection with automatic placement
+                flipping</div>
+            </div>
+            <div
+              class="
+                p-3 bg-green-50 dark:bg-green-900/20 border border-green-200
+                dark:border-green-800 rounded
+              "
+            >
+              <div class="font-semibold text-green-900 dark:text-green-100 mb-1">Smaller Bundle</div>
+              <div class="text-green-800 dark:text-green-200">Reduced JavaScript footprint (no Popper.js)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Resources -->
+  <div>
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:books, color: :primary, class: "mr-3") %>
+      Additional Resources
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200
+          dark:border-slate-700
+        "
+      >
+        <h3
+          class="
+            font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center
+          "
+        >
+          <%= pathogen_icon(:link, color: :primary, class: "mr-2") %>
+          getBoundingClientRect API
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Learn about the DOM API used for precise element positioning
+          calculations.
+        </p>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+        >
+          MDN: getBoundingClientRect() →
+        </a>
+      </div>
+
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200
+          dark:border-slate-700
+        "
+      >
+        <h3
+          class="
+            font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center
+          "
+        >
+          <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-2") %>
+          Primer Design System
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Explore GitHub's Primer design system for tooltip design inspiration
+          and patterns.
+        </p>
+        <a
+          href="https://primer.style/product/components/tooltip/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+        >
+          Primer Tooltip Component →
+        </a>
+      </div>
+
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200
+          dark:border-slate-700
+        "
+      >
+        <h3
+          class="
+            font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center
+          "
+        >
+          <%= pathogen_icon(:code, color: :primary, class: "mr-2") %>
+          Stimulus Framework
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Learn about the Stimulus JavaScript framework used for the tooltip
+          controller.
+        </p>
+        <a
+          href="https://stimulus.hotwired.dev/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+        >
+          Stimulus Documentation →
+        </a>
+      </div>
+
+      <div
+        class="
+          bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200
+          dark:border-slate-700
+        "
+      >
+        <h3
+          class="
+            font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center
+          "
+        >
+          <%= pathogen_icon(:wheelchair, color: :success, class: "mr-2") %>
+          ARIA Tooltip Pattern
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          W3C WAI-ARIA best practices for implementing accessible tooltip
+          components.
+        </p>
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+        >
+          WAI-ARIA: Tooltip Pattern →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

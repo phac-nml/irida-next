@@ -1,0 +1,426 @@
+<div
+  class="
+    p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900
+    dark:to-slate-800 min-h-screen
+  "
+>
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+      <%= pathogen_icon(:wheelchair, color: :success, size: :xl, class: "inline mr-3") %>
+      Tooltip Accessibility & Keyboard Navigation
+    </h1>
+
+    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+      Demonstrating ARIA compliance, keyboard accessibility, and screen reader
+      support
+    </p>
+  </div>
+  <!-- Hover & Focus Triggers -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:cursor, color: :primary, class: "mr-3") %>
+      Dual Trigger Mechanism
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Hover Trigger -->
+        <div>
+          <h3
+            class="
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
+            "
+          >
+            <%= pathogen_icon(:hand_pointing, color: :primary, class: "mr-2") %>
+            Mouse Hover
+          </h3>
+
+          <p class="text-slate-600 dark:text-slate-400 mb-4">
+            Tooltips appear when you hover over the trigger element with your
+            mouse.
+          </p>
+
+          <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "I appear on mouse hover!", placement: :top) %>
+
+              <%= pathogen_icon(:hand_pointing, color: :primary, class: "inline mr-2") %>
+              Hover over me
+            <% end %>
+          </div>
+        </div>
+        <!-- Focus Trigger -->
+        <div>
+          <h3
+            class="
+              text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center
+            "
+          >
+            <%= pathogen_icon(:keyboard, color: :primary, class: "mr-2") %>
+            Keyboard Focus
+          </h3>
+
+          <p class="text-slate-600 dark:text-slate-400 mb-4">
+            Tooltips also appear when you focus the element using Tab key
+            navigation.
+          </p>
+
+          <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-lg text-center">
+            <%= render Pathogen::Link.new(href: "#") do |link| %>
+              <% link.with_tooltip(text: "I appear on keyboard focus!", placement: :top) %>
+
+              <%= pathogen_icon(:keyboard, color: :primary, class: "inline mr-2") %>
+              Tab to focus me
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200
+          dark:border-blue-800 rounded-lg
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:info, color: :primary) %>
+
+          <div class="text-sm">
+            <p class="font-semibold text-blue-900 dark:text-blue-100 mb-1">
+              Why Both Triggers?
+            </p>
+
+            <p class="text-blue-800 dark:text-blue-200">
+              Supporting both hover and focus ensures the tooltip is accessible
+              to all users: mouse users see it on hover, while keyboard and
+              screen reader users see it on focus.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ARIA Attributes -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:code, color: :primary, class: "mr-3") %>
+      ARIA Compliance
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        Tooltips follow W3C ARIA best practices to ensure screen reader
+        compatibility:
+      </p>
+
+      <div class="space-y-6">
+        <!-- role="tooltip" -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:check_circle, color: :success) %>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              <code class="text-sm bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">
+                role="tooltip"
+              </code>
+            </h3>
+
+            <p class="text-slate-600 dark:text-slate-400">
+              The tooltip element has
+              <code>role="tooltip"</code>
+              to inform screen readers that this is supplementary information.
+            </p>
+          </div>
+        </div>
+        <!-- aria-describedby -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:check_circle, color: :success) %>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              <code class="text-sm bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded">
+                aria-describedby
+              </code>
+            </h3>
+
+            <p class="text-slate-600 dark:text-slate-400">
+              The trigger element references the tooltip via
+              <code>aria-describedby</code>, creating an accessible relationship between them. Screen
+              readers announce the tooltip content when the trigger receives
+              focus.
+            </p>
+          </div>
+        </div>
+        <!-- Unique IDs -->
+        <div class="flex items-start gap-4">
+          <div
+            class="
+              flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex
+              items-center justify-center
+            "
+          >
+            <%= pathogen_icon(:check_circle, color: :success) %>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              Unique Tooltip IDs
+            </h3>
+
+            <p class="text-slate-600 dark:text-slate-400">
+              Each tooltip is automatically assigned a unique ID to ensure
+              proper ARIA connections and avoid conflicts.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          mt-8 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700
+          rounded-lg p-4
+        "
+      >
+        <p class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+          Example HTML Structure:
+        </p>
+
+        <pre class="text-xs overflow-x-auto"><code class="text-slate-800 dark:text-slate-200">&lt;a href="/samples" aria-describedby="tooltip-abc123"
+            data-pathogen--tooltip-target="trigger"&gt; Samples &lt;/a&gt;
+            &lt;div id="tooltip-abc123" role="tooltip"
+            data-pathogen--tooltip-target="tooltip"&gt; View all samples
+            &lt;/div&gt;
+          </code></pre>
+      </div>
+    </div>
+  </div>
+  <!-- Keyboard Navigation Demo -->
+  <div class="mb-12">
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:keyboard, color: :primary, class: "mr-3") %>
+      Keyboard Navigation Demo
+    </h2>
+
+    <div
+      class="
+        bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200
+        dark:border-slate-700 p-8
+      "
+    >
+      <p class="text-slate-600 dark:text-slate-400 mb-6">
+        Use the
+        <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-sm font-mono">Tab</kbd>
+        key to navigate through these links. The tooltip will appear when each
+        link receives focus.
+      </p>
+
+      <div class="flex flex-wrap gap-4 p-6 bg-slate-50 dark:bg-slate-900 rounded-lg">
+        <%= render Pathogen::Link.new(href: "#first") do |link| %>
+          <% link.with_tooltip(text: "First link in the sequence", placement: :top) %>
+          First Link
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#second") do |link| %>
+          <% link.with_tooltip(text: "Second link in the sequence", placement: :top) %>
+          Second Link
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#third") do |link| %>
+          <% link.with_tooltip(text: "Third link in the sequence", placement: :top) %>
+          Third Link
+        <% end %>
+
+        <%= render Pathogen::Link.new(href: "#fourth") do |link| %>
+          <% link.with_tooltip(text: "Fourth link in the sequence", placement: :top) %>
+          Fourth Link
+        <% end %>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          class="
+            p-4 bg-green-50 dark:bg-green-900/20 border border-green-200
+            dark:border-green-800 rounded-lg
+          "
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <kbd
+              class="
+                px-2 py-1 bg-green-200 dark:bg-green-800 rounded text-sm font-mono
+              "
+            >
+              Tab
+            </kbd>
+
+            <span class="text-green-900 dark:text-green-100 font-semibold">
+              Move Forward
+            </span>
+          </div>
+
+          <p class="text-sm text-green-800 dark:text-green-200">
+            Press Tab to move to the next focusable element
+          </p>
+        </div>
+
+        <div
+          class="
+            p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800
+            rounded-lg
+          "
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <kbd class=" px-2 py-1 bg-blue-200 dark:bg-blue-800 rounded text-sm font-mono ">
+              Shift+Tab
+            </kbd>
+
+            <span class="text-blue-900 dark:text-blue-100 font-semibold">
+              Move Backward
+            </span>
+          </div>
+
+          <p class="text-sm text-blue-800 dark:text-blue-200">
+            Press Shift+Tab to move to the previous element
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Best Practices -->
+  <div>
+    <h2
+      class="
+        text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center
+      "
+    >
+      <%= pathogen_icon(:lightbulb, color: :warning, class: "mr-3") %>
+      Accessibility Best Practices
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        class="
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">
+              Keep Text Concise
+            </h3>
+
+            <p class="text-sm text-green-800 dark:text-green-200">
+              Tooltips should provide brief, supplementary information. Avoid
+              lengthy descriptions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">
+              Supplement, Don't Replace
+            </h3>
+
+            <p class="text-sm text-green-800 dark:text-green-200">
+              Tooltips should enhance understanding, not be the sole source of
+              critical information.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">
+              Keyboard Accessible
+            </h3>
+
+            <p class="text-sm text-green-800 dark:text-green-200">
+              Always ensure tooltips appear on focus, not just hover, for
+              keyboard users.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800
+          rounded-lg p-4
+        "
+      >
+        <div class="flex items-start gap-3">
+          <%= pathogen_icon(:check_circle, color: :success) %>
+
+          <div>
+            <h3 class="font-semibold text-green-900 dark:text-green-100 mb-1">
+              Screen Reader Friendly
+            </h3>
+
+            <p class="text-sm text-green-800 dark:text-green-200">
+              Proper ARIA attributes ensure screen readers announce tooltip
+              content naturally.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
