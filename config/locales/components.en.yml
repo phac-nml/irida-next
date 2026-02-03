@@ -310,8 +310,8 @@ en:
           edit_mode_deactivated: Edit mode deactivated, navigating
         attachments_updated_at: Files Updated
         counts:
-          samples: Samples
-          selected: Selected
+          samples: samples
+          selected: selected
           status:
             one: 1 sample selected
             other: "%{selected} of %{total} samples selected"

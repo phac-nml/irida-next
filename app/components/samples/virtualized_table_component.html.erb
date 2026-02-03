@@ -294,14 +294,14 @@
       >
         <span class="tabular-nums">
           <span class="font-medium text-slate-700 dark:text-slate-200"><%= @pagy.count %></span>
-          <%= t("components.samples.virtualized_table_component.counts.samples").downcase %>
+          <%= t("components.samples.virtualized_table_component.counts.samples") %>
         </span>
         <span class="tabular-nums">
-          <span
+          <strong
             class="font-medium text-slate-700 dark:text-slate-200"
             data-selection-target="selected"
-          >0</span>
-          <%= t("components.samples.virtualized_table_component.counts.selected").downcase %>
+          >0</strong>
+          <%= t("components.samples.virtualized_table_component.counts.selected") %>
         </span>
       </div>
     <% end %>
