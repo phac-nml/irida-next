@@ -3,6 +3,7 @@
 require 'application_system_test_case'
 
 module WorkflowExecutions
+  ### TODO: Rename this file to submissions_test.rb once feature flag deferred_samplesheet is retired
   class SubmissionsWithFeatureFlagTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
