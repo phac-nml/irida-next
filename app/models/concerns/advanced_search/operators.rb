@@ -7,6 +7,10 @@ module AdvancedSearch
 
     # Metadata fields that should use exact matching instead of pattern/case-insensitive matching.
     # These fields have enumerated values (e.g., from dropdowns) and require precise comparisons.
+    #
+    # NOTE: This is a behaviour change from previous versions where all metadata fields used
+    # case-insensitive pattern matching. Enum fields now require exact value matches since
+    # users select from predefined options rather than entering free-form text.
     ENUM_METADATA_FIELDS = %w[metadata.pipeline_id metadata.workflow_version].freeze
 
     include AdvancedSearch::Operators::EqualityOperators
