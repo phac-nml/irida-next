@@ -1513,5 +1513,145 @@ module WorkflowExecutions
       end
       ### ACTIONS AND VERIFY END ###
     end
+
+    test 'samplesheet fastq file data retained after changing file selection after workflow submission' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      check "checkbox_sample_#{@sample_a.id}"
+      check "checkbox_sample_#{@sample_b.id}"
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      click_button 'phac-nml/iridanextexample', match: :first
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+
+      fill_in 'workflow_execution_name', with: 'a_new_workflow'
+      # verify auto selected attachments
+      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1"
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # select new attachment
+        find("#attachment_id_#{@attachment_fwd2.id}").click
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+      # both attachment fwd and rev3 were replaced with fwd and rev2
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd2.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev2.file.filename.to_s
+      click_button I18n.t('workflow_executions.submissions.create.submit')
+
+      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      current_workflow = WorkflowExecution.last
+      assert_equal 'a_new_workflow', current_workflow.name
+      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
+      click_link current_workflow.id
+
+      assert_selector 'h1#page-title', text: current_workflow.name
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
+      else
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samplesheet fastq file data retained after changing file selection to non-PE after workflow submission' do
+      ### SETUP START ###
+      attachment_d = attachments(:attachmentD)
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      check "checkbox_sample_#{@sample_a.id}"
+      check "checkbox_sample_#{@sample_b.id}"
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      click_button 'phac-nml/iridanextexample', match: :first
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+
+      fill_in 'workflow_execution_name', with: 'a_new_workflow'
+      # verify auto selected attachments
+      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1"
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # select new attachment
+        find("#attachment_id_#{attachment_d.id}").click
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+
+      # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
+      assert_link "#{@sample_b.id}_fastq_1", text: attachment_d.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      click_button I18n.t('workflow_executions.submissions.create.submit')
+
+      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      current_workflow = WorkflowExecution.last
+      assert_equal 'a_new_workflow', current_workflow.name
+      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
+      click_link current_workflow.id
+
+      assert_selector 'h1#page-title', text: current_workflow.name
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: attachment_d.file.filename.to_s
+      else
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: attachment_d.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+      end
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      ### ACTIONS AND VERIFY END ###
+    end
   end
 end
