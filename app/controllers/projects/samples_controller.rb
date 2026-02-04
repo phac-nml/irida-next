@@ -17,8 +17,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
-      @samples = @samples.includes(project: { namespace: :parent })
+      fetch_paginated_samples
       @has_samples = @project.samples.size.positive?
       @results_message = results_message
     end
@@ -36,28 +35,10 @@ module Projects
     end
 
     def deferred_template_fields
-      # Only available when virtualized table is enabled
       not_found unless Flipper.enabled?(:virtualized_samples_table)
 
-      # Re-use existing query to get same samples as index
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
-      @samples = @samples.includes(project: { namespace: :parent })
-
-      # Use the same field list/order as the main index (respects selected template)
-      @metadata_fields = @fields || []
-
-      # Get only deferred metadata fields (after initial batch)
-      @deferred_metadata_fields = @metadata_fields.drop(
-        ::Samples::VirtualizedTableComponent::INITIAL_TEMPLATE_BATCH_SIZE
-      )
-
-      # Set abilities for VirtualizedEditableCell conditional rendering
-      @abilities = {
-        edit_sample_metadata: @allowed_to[:update_sample_metadata]
-      }
-
-      # Set columns for aria-colindex calculation (needed in view)
-      @columns = %i[puid name created_at updated_at attachments_updated_at]
+      fetch_paginated_samples
+      prepare_deferred_template_data
 
       respond_to do |format|
         format.turbo_stream
@@ -307,6 +288,20 @@ module Projects
       else
         @title = [t(:'activerecord.models.sample.other'), @project.full_name].join(' · ')
       end
+    end
+
+    def fetch_paginated_samples
+      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @samples = @samples.includes(project: { namespace: :parent })
+    end
+
+    def prepare_deferred_template_data
+      @metadata_fields = @fields || []
+      @deferred_metadata_fields = @metadata_fields.drop(
+        ::Samples::VirtualizedTableComponent::INITIAL_TEMPLATE_BATCH_SIZE
+      )
+      @abilities = { edit_sample_metadata: @allowed_to[:update_sample_metadata] }
+      @columns = %i[puid name created_at updated_at attachments_updated_at]
     end
   end
 end
