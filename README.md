@@ -79,7 +79,7 @@ This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automat
 - Run all formatters manually:
 
   ```bash
-  bundle exec rubocop -a
+  bin/rubocop -a
   pnpm run format
   bundle exec erb-format --write '**/*.erb'
   ```

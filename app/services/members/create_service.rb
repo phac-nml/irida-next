@@ -3,7 +3,8 @@
 module Members
   # Service used to Create Members
   class CreateService < BaseService
-    MemberCreateError = Class.new(StandardError)
+    class MemberCreateError < StandardError
+    end
     attr_accessor :namespace, :member
 
     def initialize(user = nil, namespace = nil, params = {}, email_notification = false) # rubocop:disable Metrics/ParameterLists, Style/OptionalBooleanParameter

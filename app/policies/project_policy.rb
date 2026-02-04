@@ -290,17 +290,17 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).self_and_descendant_ids).select(:id),
       group_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
         group: user.groups.where(id: user.members.not_expired.joins(:namespace)
-        .where(access_level: Member::AccessLevel.manageable,
-               namespace: { type: Group.sti_name })
-                                                        .select(:namespace_id)).self_and_descendants,
+                                     .where(access_level: Member::AccessLevel.manageable,
+                                            namespace: { type: Group.sti_name })
+                                     .select(:namespace_id)).self_and_descendants,
         group_access_level: Member::AccessLevel.manageable
       ).not_expired.select(:namespace_id)).select(:id),
       direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(
         parent_id: Group.where(id: NamespaceGroupLink.where(
           group: user.groups.where(id: user.members.not_expired.joins(:namespace)
-          .where(access_level: Member::AccessLevel.manageable,
-                 namespace: { type: Group.sti_name })
-                                                          .select(:namespace_id)).self_and_descendants,
+                                       .where(access_level: Member::AccessLevel.manageable,
+                                              namespace: { type: Group.sti_name })
+                                       .select(:namespace_id)).self_and_descendants,
           group_access_level: Member::AccessLevel.manageable,
           namespace_type: Group.sti_name
         ).not_expired.select(:namespace_id)).self_and_descendant_ids
@@ -345,9 +345,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:id),
         linked_group_project_namespaces: Namespace.where(
           id: NamespaceGroupLink
-                  .not_expired
-                  .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
-                  .select(:namespace_id)
+              .not_expired
+              .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
+              .select(:namespace_id)
         ).self_and_descendants.where(type: 'Project').select(:id)
       ).where(
         Arel.sql(

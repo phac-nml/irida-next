@@ -4,9 +4,14 @@ module Samples
   module Metadata
     # Service used to Update Samples::Metadata
     class UpdateService < BaseService # rubocop:disable Metrics/ClassLength
-      SampleMetadataUpdateError = Class.new(StandardError)
-      SampleMetadataUpdateValidationError = Class.new(StandardError)
-      SampleMetadataKeyValidationError = Class.new(StandardError)
+      class SampleMetadataUpdateError < StandardError
+      end
+
+      class SampleMetadataUpdateValidationError < StandardError
+      end
+
+      class SampleMetadataKeyValidationError < StandardError
+      end
       attr_accessor :sample, :metadata, :analysis_id
 
       def initialize(project, sample, user = nil, params = {})

@@ -3,7 +3,8 @@
 module Groups
   # Service used to Transfer Groups
   class TransferService < BaseGroupService
-    TransferError = Class.new(StandardError)
+    class TransferError < StandardError
+    end
 
     def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       validate(new_namespace)

@@ -121,7 +121,7 @@ lib.mkMerge [
         enable = true;
         name = "RuboCop";
         description = "Run RuboCop on changed Ruby files";
-        entry = "bundle exec rubocop -a --force-exclusion";
+        entry = "bin/rubocop -a --force-exclusion";
         files = "\\.rb$";
         excludes = [ "\\.graphql$" ];
         pass_filenames = true;

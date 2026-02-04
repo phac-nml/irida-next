@@ -4,7 +4,8 @@ module Integrations
   # Defines exceptions classes for API integrations
   module ApiExceptions
     # Only occurs if the API is unreachable
-    ConnectionError = Class.new(StandardError)
+    class ConnectionError < StandardError
+    end
 
     # parent class for API exceptions
     class APIExceptionError < StandardError

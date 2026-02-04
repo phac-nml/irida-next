@@ -3,7 +3,8 @@
 module MetadataTemplates
   # Service used to Update Metadata Templates
   class UpdateService < BaseService
-    MetadataTemplateUpdateError = Class.new(StandardError)
+    class MetadataTemplateUpdateError < StandardError
+    end
 
     def initialize(user = nil, metadata_template = nil, params = {})
       super(user, params)

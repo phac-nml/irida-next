@@ -3,7 +3,8 @@
 module AutomatedWorkflowExecutions
   # Service used to Launch an AutomatedWorkflowExecution
   class LaunchService < BaseService
-    LaunchError = Class.new(StandardError)
+    class LaunchError < StandardError
+    end
     attr_accessor :automated_workflow_execution, :sample, :pe_attachment_pair, :workflow
 
     def initialize(automated_workflow_execution, sample, pe_attachment_pair, user = nil, params = {})

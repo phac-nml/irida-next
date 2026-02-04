@@ -10,8 +10,8 @@ class AddPuidToNamespace < ActiveRecord::Migration[7.1]
         Namespace.with_deleted.where.not(type: 'Project').each do |namespace|
           puid = Irida::PersistentUniqueId.generate(namespace, time: namespace.created_at)
 
-          execute <<-SQL.squish
-              UPDATE namespaces SET puid = '#{puid}' WHERE id = '#{namespace.id}'
+          execute <<~SQL.squish
+            UPDATE namespaces SET puid = '#{puid}' WHERE id = '#{namespace.id}'
           SQL
         end
 

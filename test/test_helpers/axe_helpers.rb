@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module AxeHelpers
-  AccessibilityError = Class.new(StandardError)
+  class AccessibilityError < StandardError
+  end
 
   AXE_RULES_TO_SKIP = %i[].freeze
 

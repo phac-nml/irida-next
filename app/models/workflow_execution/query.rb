@@ -4,7 +4,8 @@
 # Provides advanced search capabilities for filtering workflow executions
 # Supports groups, conditions, operators, basic search, and pagination
 class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndModuleChildren
-  ResultTypeError = Class.new(StandardError)
+  class ResultTypeError < StandardError
+  end
 
   allowed_sort_columns :id, :name, :run_id, :state, :created_at, :updated_at
 

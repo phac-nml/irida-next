@@ -4,7 +4,6 @@ require 'test_helper'
 
 module Pathogen
   module Typography
-    # rubocop:disable Metrics/ClassLength
     # Test suite for Section component
     class SectionTest < ViewComponent::TestCase
       test 'renders section with heading and content' do
@@ -153,6 +152,5 @@ module Pathogen
         assert_selector 'h3', text: 'Both normalized'
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end

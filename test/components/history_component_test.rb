@@ -23,7 +23,7 @@ class HistoryComponentTest < ViewComponentTestCase
 
       log_data << { version: change_log['v'], user: responsible,
                     updated_at: DateTime.parse(Time.zone.at(0, change_log['ts'], :millisecond).to_s)
-                                        .strftime('%a %b%e %Y %H:%M') }
+                                .strftime('%a %b%e %Y %H:%M') }
     end
 
     render_inline HistoryComponent.new(data: log_data, type: 'Project',
@@ -71,7 +71,7 @@ class HistoryComponentTest < ViewComponentTestCase
 
       log_data << { version: change_log['v'], user: responsible,
                     updated_at: DateTime.parse(Time.zone.at(0, change_log['ts'], :millisecond).to_s)
-                                        .strftime('%a %b%e %Y %H:%M') }
+                                .strftime('%a %b%e %Y %H:%M') }
 
       render_inline HistoryComponent.new(data: log_data, type: 'Sample',
                                          url: '/user_at_email.com/project-1/-/samples/1421/view_history_version')

@@ -12,9 +12,9 @@ class NamespaceGroupLinkPolicy < ApplicationPolicy
                     end
 
     relation.where(id: NamespaceGroupLink.joins(namespace: [:route])
-                             .where(namespace_id: namespace_ids)
-                             .where.not(group_id: namespace.id)
-                             .order(group_id: :asc, 'routes.path': :desc)
-                             .select('DISTINCT ON (group_id) namespace_group_links.id'))
+                       .where(namespace_id: namespace_ids)
+                       .where.not(group_id: namespace.id)
+                       .order(group_id: :asc, 'routes.path': :desc)
+                       .select('DISTINCT ON (group_id) namespace_group_links.id'))
   end
 end

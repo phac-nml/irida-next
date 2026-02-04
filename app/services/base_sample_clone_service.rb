@@ -2,7 +2,8 @@
 
 # Base sample service root class for sample service related classes, scoped by namespace
 class BaseSampleCloneService < BaseSampleService
-  CloneError = Class.new(StandardError)
+  class CloneError < StandardError
+  end
 
   def execute(new_project_id, sample_ids, broadcast_target = nil)
     authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :clone_sample?

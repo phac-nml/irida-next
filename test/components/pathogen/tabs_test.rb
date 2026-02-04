@@ -5,7 +5,6 @@ require 'test_helper'
 module Pathogen
   # Test suite for Pathogen::Tabs component
   # Validates complete tabs functionality including ARIA compliance and validation
-  # rubocop:disable Metrics/ClassLength
   class TabsTest < ViewComponent::TestCase
     test 'renders with proper ARIA structure' do
       tabs = Pathogen::Tabs.new(id: 'test-tabs', label: 'Test tabs').tap do |t|
@@ -370,5 +369,4 @@ module Pathogen
       assert_selector '[role="tabpanel"]'
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end

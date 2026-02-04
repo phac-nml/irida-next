@@ -2,7 +2,8 @@
 
 # model to represent sample search form
 class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndModuleChildren
-  ResultTypeError = Class.new(StandardError)
+  class ResultTypeError < StandardError
+  end
 
   allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at
 

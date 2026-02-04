@@ -6,7 +6,8 @@ module Samples
       # Service used to validate the create_fields param and construct the metadata update param to be passed
       # to Samples::Metadata::UpdateService
       class CreateService < BaseService
-        SampleMetadataFieldsCreateError = Class.new(StandardError)
+        class SampleMetadataFieldsCreateError < StandardError
+        end
         attr_accessor :project, :sample, :create_fields, :metadata_update_params
 
         def initialize(project, sample, user = nil, create_fields = {})

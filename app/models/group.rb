@@ -82,11 +82,11 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
       Namespace
       .where(
         id: NamespaceGroupLink
-          .not_expired
-          .with_access
-          .where(
-            group_id: self_and_descendant_ids
-          ).select(:namespace_id)
+            .not_expired
+            .with_access
+            .where(
+              group_id: self_and_descendant_ids
+            ).select(:namespace_id)
       ).pluck(:metadata_summary).map(&:keys).reduce(:+) || []
     )
 
@@ -97,10 +97,10 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     active_shared_namespaces = Namespace
                                .where(
                                  id: NamespaceGroupLink
-                                   .not_expired
-                                   .with_access
-                                   .where(group_id: self_and_descendant_ids)
-                                   .select(:namespace_id)
+                                     .not_expired
+                                     .with_access
+                                     .where(group_id: self_and_descendant_ids)
+                                     .select(:namespace_id)
                                ).self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
                                .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
 

@@ -5,7 +5,9 @@ module Attachments
   class DestroyService < BaseService
     attr_accessor :destroyed_attachments
 
-    AttachmentsDestroyError = Class.new(StandardError)
+    class AttachmentsDestroyError < StandardError
+    end
+
     def initialize(attachable, attachment, user = nil)
       super(user)
       @attachable = attachable

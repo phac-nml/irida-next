@@ -4,7 +4,8 @@
 module Base32
   module_function
 
-  EncodingError = Class.new(StandardError)
+  class EncodingError < StandardError
+  end
 
   ALPHABET = [*('A'..'Z'), *('2'..'7')].freeze
 

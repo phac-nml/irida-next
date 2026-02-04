@@ -4,7 +4,7 @@
 class AddNumericCollationForNaturalSorting < ActiveRecord::Migration[8.0]
   def up
     begin
-      execute <<-SQL.squish
+      execute <<~SQL.squish
         CREATE COLLATION IF NOT EXISTS numeric (provider = 'icu', locale = 'en-u-kn-true');
       SQL
     rescue StandardError => e

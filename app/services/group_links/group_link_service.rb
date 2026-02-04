@@ -3,8 +3,11 @@
 module GroupLinks
   # Service used to Create NamespaceGroupLinks
   class GroupLinkService < BaseService
-    NamespaceGroupLinkError = Class.new(StandardError)
-    NamespaceGroupLinkGroupError = Class.new(StandardError)
+    class NamespaceGroupLinkError < StandardError
+    end
+
+    class NamespaceGroupLinkGroupError < StandardError
+    end
     attr_accessor :group_id, :namespace, :namespace_group_link
 
     def initialize(user, namespace, params)

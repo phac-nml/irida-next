@@ -3,7 +3,8 @@
 module Projects
   # Service used to Transfer Projects
   class TransferService < BaseProjectService
-    TransferError = Class.new(StandardError)
+    class TransferError < StandardError
+    end
     attr_reader :new_namespace, :old_namespace
 
     def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
