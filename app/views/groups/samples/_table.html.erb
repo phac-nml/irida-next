@@ -1,5 +1,13 @@
 <%# locals: (allowed_to:, fields:, group:, has_samples:, pagy:, samples:, search_params:) -%>
-<%= render Samples::TableComponent.new(
+<% component_class =
+  (
+    if Flipper.enabled?(:virtualized_samples_table)
+      Samples::VirtualizedTableComponent
+    else
+      Samples::TableComponent
+    end
+  ) %>
+<%= render component_class.new(
   samples,
   group,
   pagy,

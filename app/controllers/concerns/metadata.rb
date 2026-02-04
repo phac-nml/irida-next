@@ -19,14 +19,14 @@ module Metadata
 
   # Returns metadata fields based on namespace or template selection
   def fields_for_namespace_or_template(namespace: nil, template: nil)
-    @fields = if template.blank? || template == 'none' || namespace.nil?
-                []
-              elsif template == 'all'
-                namespace.metadata_fields
-              else
-                template = MetadataTemplate.find_by(id: template)
-                template.present? ? template.fields : []
-              end
+    if template.blank? || template == 'none' || namespace.nil?
+      []
+    elsif template == 'all'
+      namespace.metadata_fields
+    else
+      metadata_template = MetadataTemplate.find_by(id: template)
+      metadata_template.present? ? metadata_template.fields : []
+    end
   end
 
   # Builds list of fields available for advanced search

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="light" lang="<%= locale %>">
+<html class="light" lang="<%= locale %>" data-env="<%= Rails.env %>">
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>

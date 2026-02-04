@@ -9,16 +9,15 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select]
+    before_action :query, only: %i[index search select deferred_template_fields]
     before_action :current_metadata_template, only: %i[index]
-    before_action :index_view_authorizations, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index deferred_template_fields]
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
-      @samples = @samples.includes(project: { namespace: :parent })
+      fetch_paginated_samples
       @has_samples = @project.samples.size.positive?
       @results_message = results_message
     end
@@ -32,6 +31,17 @@ module Projects
             render status: :unprocessable_content
           end
         end
+      end
+    end
+
+    def deferred_template_fields
+      not_found unless Flipper.enabled?(:virtualized_samples_table)
+
+      fetch_paginated_samples
+      prepare_deferred_template_data
+
+      respond_to do |format|
+        format.turbo_stream
       end
     end
 
@@ -186,7 +196,7 @@ module Projects
     end
 
     def metadata_fields(template)
-      fields_for_namespace_or_template(
+      @fields = fields_for_namespace_or_template(
         namespace: @project.namespace,
         template: template
       )
@@ -278,6 +288,20 @@ module Projects
       else
         @title = [t(:'activerecord.models.sample.other'), @project.full_name].join(' · ')
       end
+    end
+
+    def fetch_paginated_samples
+      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @samples = @samples.includes(project: { namespace: :parent })
+    end
+
+    def prepare_deferred_template_data
+      @metadata_fields = @fields || []
+      @deferred_metadata_fields = @metadata_fields.drop(
+        ::Samples::VirtualizedTableComponent::INITIAL_TEMPLATE_BATCH_SIZE
+      )
+      @abilities = { edit_sample_metadata: @allowed_to[:update_sample_metadata] }
+      @columns = %i[puid name created_at updated_at attachments_updated_at]
     end
   end
 end

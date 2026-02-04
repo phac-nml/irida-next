@@ -304,6 +304,30 @@ en:
         create_template_link: create a metadata template with those fields
         metadata_fields_size_warning: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells).
         metadata_fields_size_warning_with_link: The number of metadata fields has been limited to %{calculated_limit} for %{sample_count} samples (maximum %{target_max_cells} cells). If there are fields you need, %{create_template_link}.
+      virtualized_table_component:
+        announcements:
+          edit_mode_activated: Edit mode activated
+          edit_mode_deactivated: Edit mode deactivated, navigating
+        attachments_updated_at: Files Updated
+        counts:
+          samples: samples
+          selected: selected
+          status:
+            one: 1 sample selected
+            other: "%{selected} of %{total} samples selected"
+        created_at: Created
+        limit:
+          item: Sample
+        name: Name
+        namespaces:
+          puid: Project
+        puid: PUID
+        row:
+          aria_label: Select sample %{name}
+        select_all:
+          aria_label: Select all samples on this page
+        table_label: Samples table (virtualized)
+        updated_at: Last Updated
     search:
       advanced:
         results_message:

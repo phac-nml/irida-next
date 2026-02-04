@@ -249,12 +249,12 @@ fr:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
       loading_complete:
         alert_message_html:
-          one: "<div>(Complète) Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>"
-          other: "<div>(Complète) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>"
-        announcement: La feuille d’échantillons est prête.
+          one: "<div>(Complète) Préparation des arguments d'exécution du flux de travail pour 1 échantillon.</div><div>La feuille d'échantillons est prête.</div>"
+          other: "<div>(Complète) La préparation des arguments d'exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d'échantillons est prête.</div>"
+        announcement: La feuille d'échantillons est prête.
       loading_samplesheet:
-        one: "(En cours) Préparation des arguments d’exécution du flux de travail pour 1 échantillon."
-        other: "(En cours) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
+        one: "(En cours) Préparation des arguments d'exécution du flux de travail pour 1 échantillon."
+        other: "(En cours) La préparation des arguments d'exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
         helper: Un nom personnalisé facilitera la recherche à l’avenir.
@@ -304,6 +304,30 @@ fr:
         create_template_link: créez un modèle de métadonnées avec ces champs
         metadata_fields_size_warning: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules).
         metadata_fields_size_warning_with_link: Le nombre de champs de métadonnées a été limité à %{calculated_limit} pour %{sample_count} échantillons (maximum %{target_max_cells} cellules). Si vous avez besoin de champs, %{create_template_link}.
+      virtualized_table_component:
+        announcements:
+          edit_mode_activated: Mode édition activé
+          edit_mode_deactivated: Mode édition désactivé, navigation
+        attachments_updated_at: Fichiers mis à jour
+        counts:
+          samples: Échantillons
+          selected: Sélectionnés
+          status:
+            one: 1 échantillon sélectionné
+            other: "%{selected} sur %{total} échantillons sélectionnés"
+        created_at: Créé
+        limit:
+          item: Échantillon
+        name: Nom
+        namespaces:
+          puid: Projet
+        puid: PUID
+        row:
+          aria_label: Sélectionner l'échantillon %{name}
+        select_all:
+          aria_label: Sélectionner tous les échantillons sur cette page
+        table_label: Tableau des échantillons (virtualisé)
+        updated_at: Dernière mise à jour
     search:
       advanced:
         results_message:

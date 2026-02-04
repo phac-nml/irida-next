@@ -321,7 +321,8 @@ export default class TableController extends Controller {
     };
 
     // In development, we might want to throw, in production log silently
-    if (process.env.NODE_ENV === "development") {
+    const isDev = document.documentElement?.dataset?.env === "development";
+    if (isDev) {
       console.warn(`TableController: ${message}`, errorInfo);
     }
   }

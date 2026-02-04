@@ -1687,6 +1687,7 @@ en:
       select_all:
         aria_label: Select all samples on this page
       select_page: Select / Deselect visible samples
+      table_label: Samples table
       updated_at: Last Updated
     transfers:
       create:

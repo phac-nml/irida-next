@@ -1,0 +1,380 @@
+<% if @has_samples && @pagy.vars[:size].positive? %>
+  <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+    <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <%= render LiveRegionComponent.new(controller: "selection") %>
+      <%= render LiveRegionComponent.new(
+        controller: "announcement",
+        data: {
+          controller: "announcement",
+        },
+      ) %>
+
+      <%= tag.table(
+        class: "
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        ",
+        style: "--puid-width: #{helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples])};",
+        data: {
+          controller: "table",
+          action: "focusin->table#handleCellFocus",
+        },
+        role: "grid",
+        aria: {
+          label: t("components.samples.virtualized_table_component.table_label"),
+          colcount: @columns.length + @metadata_fields.length,
+          rowcount: @pagy.count + 1,
+          multiselectable: (@abilities[:select_samples] ? "true" : nil),
+        },
+      ) do %>
+        <%# Target for virtual scroll header manipulation %>
+        <thead
+          role="rowgroup"
+          class="@2xl:sticky @2xl:top-0 z-20 uppercase"
+          data-virtual-scroll-target="header"
+        >
+          <tr
+            role="row"
+            aria-rowindex="1"
+            class="
+              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
+              text-slate-900 bg-slate-100 dark:bg-slate-900
+            "
+          >
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.puid') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.name') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.created_at') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.updated_at') %>
+            <%# i18n-tasks-use t('components.samples.virtualized_table_component.attachments_updated_at') %>
+            <% @columns.each_with_index do |column, index| %>
+              <%= render_cell(
+              tag: 'th',
+              role: 'columnheader',
+              scope: 'col',
+              **helpers.aria_sort(column, @sort_key, @sort_direction),
+              aria: { colindex: index + 1 },
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
+                ) do %>
+                <div
+                  class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>"
+                >
+                  <% if index.zero? && @abilities[:select_samples] %>
+                    <%= check_box_tag "select-page",
+                    "1",
+                    false,
+                    {
+                      id: "select-page",
+                      tabindex: "-1",
+                      aria: {
+                        label:
+                          t("components.samples.virtualized_table_component.select_all.aria_label"),
+                      },
+                      data: {
+                        table: true,
+                        action: "input->selection#togglePage",
+                        controller: "filters",
+                        selection_target: "selectPage",
+                      },
+                    } %>
+                  <% end %>
+
+                  <%= render SortComponent.new(
+                    sort: @search_params["sort"],
+                    label: t("components.samples.virtualized_table_component.#{column}"),
+                    url: sort_url(column),
+                    field: column,
+                    tabindex: "-1",
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                </div>
+              <% end %>
+            <% end %>
+
+            <% @metadata_fields.each_with_index do |field, field_index| %>
+              <%= render_cell(
+              tag: 'th',
+              role: 'columnheader',
+              **helpers.aria_sort("metadata_#{field}", @sort_key, @sort_direction),
+              data: {
+                "field-id": field
+              },
+              aria: { colindex: @columns.length + field_index + 1 },
+              scope: 'col',
+              classes: class_names('px-3 pl-3 pr-20 text-xs')
+            ) do %>
+                <%= render SortComponent.new(
+                  sort: @search_params["sort"],
+                  label: field,
+                  url: sort_url("metadata_#{field}"),
+                  field: "metadata_#{field}",
+                  tabindex: "-1",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% end %>
+            <% end %>
+          </tr>
+        </thead>
+
+        <%# Target for virtual scroll body manipulation %>
+        <tbody
+          role="rowgroup"
+          id="samples-table-body"
+          class="
+            bg-white border-slate-200 dark:bg-slate-800 dark:border-slate-700
+          "
+          data-virtual-scroll-target="body"
+        >
+          <% @samples.each_with_index do |sample, row_index| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(sample, row_index)) do %>
+              <% @columns.each_with_index do |column, index| %>
+                <%= render_cell(
+                tag: index.zero? ? 'th' : 'td',
+                role: index.zero? ? 'rowheader' : 'gridcell',
+                scope: index.zero? ? 'row' : nil,
+                aria: { colindex: index + 1 },
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 w-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index.zero?, '@4xl:sticky z-5 left-(--puid-width) bg-slate-50 dark:bg-slate-900 font-mono': index == 1)
+              ) do %>
+                  <div class="flex items-center gap-3">
+                    <% if index.zero? && @abilities[:select_samples] %>
+                      <%= check_box_tag "sample_ids[]",
+                      sample.id,
+                      false,
+                      {
+                        id: dom_id(sample, :checkbox),
+                        tabindex: "-1",
+                        aria: {
+                          label:
+                            t(
+                              "components.samples.virtualized_table_component.row.aria_label",
+                              name: sample.name,
+                            ),
+                        },
+                        data: {
+                          table: true,
+                          action: "input->selection#toggle",
+                          selection_target: "rowSelection",
+                        },
+                      } %>
+                    <% end %>
+
+                    <% if column == :puid %>
+                      <span class="font-mono font-semibold">
+                        <%= highlight(
+                          sample[column],
+                          defined?(@search_params[:name_or_puid_cont]) &&
+                            @search_params[:name_or_puid_cont],
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      </span>
+                    <% elsif column == :name %>
+                      <%= link_to(
+                    sample_path(sample),
+                    data: { turbo: false },
+                    tabindex: "-1",
+                    class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
+                  ) do %>
+                        <%= highlight(
+                          sample[column],
+                          defined?(@search_params[:name_or_puid_cont]) &&
+                            @search_params[:name_or_puid_cont],
+                          highlighter:
+                            '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\1</mark>',
+                        ) %>
+                      <% end %>
+                    <% elsif column == "namespaces.puid" %>
+                      <%= link_to sample.project.puid,
+                      namespace_project_samples_path(sample.project.namespace.parent, sample.project),
+                      data: {
+                        turbo: false,
+                      },
+                      tabindex: "-1",
+                      class: "font-semibold underline hover:decoration-2" %>
+                    <% elsif column == :created_at %>
+                      <%= helpers.local_date(sample[column], :long) %>
+                    <% elsif column == :updated_at || column == :attachments_updated_at %>
+                      <% if sample[column].present? %>
+                        <%= helpers.local_time_ago(sample[column]) %>
+                      <% end %>
+                    <% else %>
+                      <%= sample[column.to_sym] %>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+
+            <% end %>
+          <% end %>
+        </tbody>
+
+      <% end %>
+
+      <%# Template container for virtualized metadata cells - stored outside table to avoid HTML5 foster parenting %>
+      <div
+        id="virtual-scroll-templates"
+        class="hidden"
+        aria-hidden="true"
+        data-virtual-scroll-target="templateContainer"
+      >
+        <% @samples.each do |sample| %>
+          <div data-sample-id="<%= sample.id %>">
+            <% @initial_metadata_fields.each_with_index do |field, field_index| %>
+              <template data-field="<%= field %>">
+                <% field_colindex = @columns.length + @metadata_fields.index(field) + 1 %>
+                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
+                  <%= render Samples::VirtualizedEditableCell.new(
+                    field: field,
+                    sample: sample,
+                    aria: {
+                      colindex: field_colindex,
+                    },
+                  ) %>
+                <% else %>
+                  <%= render_cell(tag: 'td', role: 'gridcell', aria: { colindex: field_colindex }, classes: class_names('px-3 py-3'), data: { "field-id": field }) do %>
+                    <%= sample.metadata[field] %>
+                  <% end %>
+                <% end %>
+              </template>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Turbo frame for deferred template loading (projects only) %>
+      <% if @namespace.is_a?(Namespaces::ProjectNamespace) && @deferred_metadata_fields.any? %>
+        <% deferred_params = {
+          q: @search_params,
+          limit: @pagy.vars[:limit],
+          page: @pagy.page,
+          format: :turbo_stream,
+        }.to_query %>
+        <% deferred_url =
+          deferred_template_fields_namespace_project_samples_path(
+            @namespace.parent,
+            @namespace.project,
+          ) + "?#{deferred_params}" %>
+        <%= helpers.turbo_frame_tag "deferred-templates",
+                                src: deferred_url,
+                                loading: "eager",
+                                class: "hidden",
+                                "aria-hidden": "true",
+                                data: {
+                                  "virtual-scroll-target": "deferredFrame",
+                                  turbo_action: "advance",
+                                } %>
+      <% end %>
+
+      <%# Loading overlay %>
+      <div
+        class="
+          hidden absolute inset-0 bg-white/50 dark:bg-slate-900/50 z-50
+          backdrop-blur-[1px]
+        "
+        data-virtual-scroll-target="loading"
+      >
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="flex flex-col items-center justify-center">
+            <%= pathogen_icon :faded_spinner, library: "animated", color: :primary, size: :xl %>
+            <span class="sr-only"><%= t("shared.loading.samples_list_skeleton.loading") %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @abilities[:select_samples] && @has_samples %>
+      <div
+        class="
+          flex items-center gap-6 px-3 py-2.5 text-sm text-slate-500 dark:text-slate-400
+          bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700
+        "
+        data-testid="samples-selection-summary"
+      >
+        <span class="tabular-nums">
+          <span class="font-medium text-slate-700 dark:text-slate-200"><%= @pagy.count %></span>
+          <%= t("components.samples.virtualized_table_component.counts.samples") %>
+        </span>
+        <span class="tabular-nums">
+          <strong
+            class="font-medium text-slate-700 dark:text-slate-200"
+            data-selection-target="selected"
+          >0</strong>
+          <%= t("components.samples.virtualized_table_component.counts.selected") %>
+        </span>
+      </div>
+    <% end %>
+
+    <%= render Viral::Pagy::FullComponent.new(
+      @pagy,
+      item: t("components.samples.virtualized_table_component.limit.item"),
+    ) %>
+
+    <% if @abilities[:edit_sample_metadata] %>
+      <template data-virtualized-editable-cell-target="formTemplate">
+        <%= form_with(
+              url: sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
+              method: :patch,
+              class: "w-full"
+            ) do |form| %>
+          <%= form.hidden_field :format, value: "turbo_stream" %>
+          <%= form.hidden_field :value, value: "FIELD_VALUE_PLACEHOLDER" %>
+          <%= form.hidden_field :cell_id, value: "CELL_ID_PLACEHOLDER" %>
+          <%= form.hidden_field :aria_colindex, value: "ARIA_COLINDEX_PLACEHOLDER" %>
+        <% end %>
+      </template>
+      <div
+        id="editable-cell-form-container"
+        class="invisible"
+        data-virtualized-editable-cell-target="formContainer"
+      ></div>
+      <template data-virtualized-editable-cell-target="confirmDialogTemplate">
+        <%= viral_dialog(open: false) do |dialog| %>
+          <% dialog.with_header(
+            title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
+          ) %>
+
+          <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
+            <span data-message-type="wov" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
+              ) %>
+            </span>
+
+            <span data-message-type="woov" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
+              ) %>
+            </span>
+
+            <span data-message-type="wonv" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+              ) %>
+            </span>
+          </p>
+
+          <% dialog.with_secondary_action do %>
+            <%= viral_button(value: "confirm", state: :primary) do
+              t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
+            end %>
+
+            <%= viral_button(value: "cancel", state: :default) do
+              t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
+            end %>
+          <% end %>
+        <% end %>
+      </template>
+      <div data-virtualized-editable-cell-target="confirmDialogContainer"></div>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: @empty[:title],
+      description: @empty[:description],
+      icon_name: Sample.icon,
+    ) %>
+  </div>
+<% end %>

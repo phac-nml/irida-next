@@ -19,6 +19,10 @@
   --color-primary: #16a34a;
   --layout-body-columns: 280px 1fr;
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
+
+  /* Virtual scroll configuration */
+  --breakpoint-2xl: 1536; /* Tailwind 2xl breakpoint in pixels (used by virtual_scroll_controller.js) */
+  --metadata-column-width: 300; /* Default metadata column width in pixels */
 }
 
 /* Hide search clear button across all browsers */
@@ -46,6 +50,23 @@ input[type="search"] {
   /* Remove default UA focus visuals (e.g., WebKit blue glow, Firefox inner focus ring) */
   box-shadow: none !important;
   outline-style: solid; /* ensure we fully override outline:auto */
+}
+
+/* Navigation mode - table grid cells when focused but not editing
+   Must be outside @layer base to override the universal :focus-visible rule above */
+table[role="grid"] td:focus-visible:not([data-editing="true"]),
+table[role="grid"] th:focus-visible:not([data-editing="true"]) {
+  @apply outline-2 outline-offset-[-3px] outline-slate-900 dark:outline-white;
+}
+
+/* Edit mode - actively editing cell (outside @layer for proper cascade) */
+table[role="grid"] td[data-editing="true"] {
+  @apply bg-yellow-50 outline-2 outline-offset-[-2px] outline-green-600 dark:bg-yellow-900/20 dark:outline-green-500;
+  caret-color: theme(colors.slate.900);
+}
+
+.dark table[role="grid"] td[data-editing="true"] {
+  caret-color: theme(colors.white);
 }
 
 /*
