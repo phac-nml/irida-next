@@ -6,6 +6,9 @@ class WorkflowExecution
   # Encapsulates the logic for determining which fields are searchable,
   # which fields are enum types, and how to label enum values.
   #
+  # TODO: Integrate with WorkflowExecutions::AdvancedSearchComponent to provide
+  # dynamic field configuration and enum labels for advanced search dropdowns.
+  #
   # @example Basic usage
   #   config = WorkflowExecution::FieldConfiguration.new
   #   config.fields        # => ['id', 'name', 'run_id', ...]
