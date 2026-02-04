@@ -97,8 +97,8 @@ export default class extends Controller {
   // allSampleIds array for indexes on the samplesheet table
   #allSampleIds;
 
-  // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames,
-  // which will be contained in fileAttributes
+  // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames for
+  // the file_selector when users want to change the selected file, which will be contained in fileAttributes
   #fileAttributes;
 
   // tracks filter state of search/clear buttons on filter
@@ -109,7 +109,7 @@ export default class extends Controller {
   #samplesheetReady = false;
   #allowedToUpdateSamples;
 
-  // current sample 'indexes' present on table, mainly required for updating metadata upon header selection
+  // current sample 'indexes' present on table, used by metadata and table loading
   #startingIndex;
   #lastIndex;
 
@@ -368,7 +368,7 @@ export default class extends Controller {
   // handles changes to file cells; triggered by nextflow/file_controller.js
   #updateFileData(files) {
     const sample_id = files["attachable_id"];
-    files["files"].forEach((file) => {
+    files["files"].forEach((file, index) => {
       this.#fileAttributes[sample_id][file["property"]].attachment_id = file.id;
       this.#fileAttributes[sample_id][file["property"]].filename = file[
         "filename"
@@ -379,7 +379,7 @@ export default class extends Controller {
       this.#samplesheetAttributes[sample_id]["samplesheet_params"][
         file["property"]
       ] = file.global_id;
-      this.#updateCell(file["property"], sample_id, "file_cell", true);
+      this.#updateCell(file["property"], sample_id, "file_cell", index === 0);
     });
   }
 

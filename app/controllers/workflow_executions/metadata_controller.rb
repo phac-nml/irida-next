@@ -48,7 +48,7 @@ module WorkflowExecutions
       end
 
       # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
-      # in samplesheet_controller.js
+      # in deferred_samplesheet_controller.js
       {}.merge(*metadata)
     end
 
