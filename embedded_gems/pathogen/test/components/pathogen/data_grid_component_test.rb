@@ -7,17 +7,16 @@ module Pathogen
   class DataGridComponentTest < ViewComponentTestCase
     test 'renders grid with caption and sticky columns' do
       render_inline(Pathogen::DataGridComponent.new(
-                      caption: 'Sample grid',
-                      sticky_columns: 1,
-                      columns: [
-                        { key: :id, label: 'ID', width: 120 },
-                        { key: :name, label: 'Name', width: 200 }
-                      ],
-                      rows: [
-                        { id: 'S-001', name: 'Sample one' },
-                        { id: 'S-002', name: 'Sample two' }
-                      ]
-                    ))
+        caption: 'Sample grid',
+        sticky_columns: 1,
+        rows: [
+          { id: 'S-001', name: 'Sample one' },
+          { id: 'S-002', name: 'Sample two' }
+        ]
+      ) do |grid|
+                      grid.with_column('ID', key: :id, width: 120)
+                      grid.with_column('Name', key: :name, width: 200)
+                    end)
 
       assert_selector '.pathogen-data-grid__table[aria-describedby]'
       assert_selector '.pathogen-data-grid__caption', text: 'Sample grid'
@@ -28,18 +27,32 @@ module Pathogen
 
     test 'does not render caption or aria-describedby without caption' do
       render_inline(Pathogen::DataGridComponent.new(
-                      sticky_columns: 0,
-                      columns: [
-                        { key: :id, label: 'ID', width: 120 },
-                        { key: :name, label: 'Name', width: 200 }
-                      ],
-                      rows: [
-                        { id: 'S-001', name: 'Sample one' }
-                      ]
-                    ))
+        sticky_columns: 0,
+        rows: [
+          { id: 'S-001', name: 'Sample one' }
+        ]
+      ) do |grid|
+                      grid.with_column('ID', key: :id, width: 120)
+                      grid.with_column('Name', key: :name, width: 200)
+                    end)
 
       assert_no_selector '.pathogen-data-grid__caption'
       assert_no_selector '.pathogen-data-grid__table[aria-describedby]'
+    end
+
+    test 'renders custom cell blocks and defaults to key lookup' do
+      render_inline(Pathogen::DataGridComponent.new(
+        sticky_columns: 0,
+        rows: [
+          { id: 'S-003', name: 'Sample three' }
+        ]
+      ) do |grid|
+                      grid.with_column('ID', key: :id)
+                      grid.with_column('Name') { |row| tag.strong(row[:name]) }
+                    end)
+
+      assert_selector 'td.pathogen-data-grid__cell--body', text: 'S-003'
+      assert_selector 'strong', text: 'Sample three'
     end
   end
 end
