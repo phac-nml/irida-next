@@ -1,6 +1,6 @@
 <%= tag.div(**@system_arguments) do %>
   <% if caption? %>
-    <%= tag.caption(@caption, id: @caption_id, class: "pathogen-data-grid__caption") %>
+    <%= tag.div(@caption, id: @caption_id, class: "pathogen-data-grid__caption") %>
   <% end %>
   <%= tag.div(class: 'pathogen-data-grid__scroll') do %>
     <%= tag.table(**table_attributes) do %>

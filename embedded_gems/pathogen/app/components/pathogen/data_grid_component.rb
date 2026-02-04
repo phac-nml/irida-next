@@ -26,7 +26,7 @@ module Pathogen
     def table_attributes
       return { class: 'pathogen-data-grid__table' } unless @caption_id
 
-      { class: 'pathogen-data-grid__table', aria: { describedby: @caption_id } }
+      { class: 'pathogen-data-grid__table', aria: { labelledby: @caption_id } }
     end
 
     def before_render

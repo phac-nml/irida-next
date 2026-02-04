@@ -18,14 +18,14 @@ module Pathogen
         grid.with_column('Name', key: :name, width: 200)
       end
 
-      assert_selector '.pathogen-data-grid__table[aria-describedby]'
+      assert_selector '.pathogen-data-grid__table[aria-labelledby]'
       assert_selector '.pathogen-data-grid__caption', text: 'Sample grid'
       assert_selector 'th.pathogen-data-grid__cell--header'
       assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 0px"]'
       assert_selector 'td.pathogen-data-grid__cell--body', text: 'Sample one'
     end
 
-    test 'does not render caption or aria-describedby without caption' do
+    test 'does not render caption or aria-labelledby without caption' do
       render_inline(Pathogen::DataGridComponent.new(
                       sticky_columns: 0,
                       rows: [
@@ -37,7 +37,7 @@ module Pathogen
       end
 
       assert_no_selector '.pathogen-data-grid__caption'
-      assert_no_selector '.pathogen-data-grid__table[aria-describedby]'
+      assert_no_selector '.pathogen-data-grid__table[aria-labelledby]'
     end
 
     test 'renders custom cell blocks and defaults to key lookup' do
