@@ -74,6 +74,9 @@ export default class extends Controller {
       "edit-mode-deactivated",
       this.boundHandleEditDeactivated,
     );
+
+    // Clear stored cell content references to prevent memory retention
+    this.#originalCellContent = {};
   }
 
   editableCellTargetConnected(element) {
