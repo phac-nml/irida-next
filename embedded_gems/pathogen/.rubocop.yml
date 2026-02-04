@@ -23,3 +23,7 @@ Metrics/MethodLength:
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsabcsize
 Metrics/AbcSize:
   Max: 20
+
+Metrics/ClassLength:
+  Exclude:
+    - "**/test/**/*.rb"

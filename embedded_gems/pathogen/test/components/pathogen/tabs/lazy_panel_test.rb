@@ -6,7 +6,6 @@ module Pathogen
   class Tabs
     # Test suite for Pathogen::Tabs::LazyPanel component
     # Validates eager/lazy rendering and W3C/ARIA compliance
-    # rubocop:disable Metrics/ClassLength
     class LazyPanelTest < ViewComponent::TestCase
       test 'renders eager turbo frame when selected' do
         render_inline(Pathogen::Tabs::LazyPanel.new(
@@ -163,6 +162,5 @@ module Pathogen
         assert_empty frame_content
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end
