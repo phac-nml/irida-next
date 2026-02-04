@@ -13,6 +13,7 @@
 
   max-width: 100%;
   isolation: isolate;
+  color: var(--pathogen-data-grid-text-color);
 }
 
 .pathogen-data-grid__scroll {
@@ -34,6 +35,7 @@
   text-align: left;
   font-weight: 600;
   padding: 0.5rem 0;
+  color: var(--pathogen-data-grid-text-color);
 }
 
 .pathogen-data-grid__row {
@@ -113,4 +115,17 @@
   --pathogen-data-grid-body-bg: #0b1120;
   --pathogen-data-grid-sticky-bg: #0f172a;
   --pathogen-data-grid-sticky-shadow: rgba(148, 163, 184, 0.25);
+}
+
+@media (max-width: 640px) {
+  .pathogen-data-grid__cell--sticky {
+    position: static;
+    left: auto;
+    z-index: auto;
+    box-shadow: none;
+  }
+
+  .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
+    z-index: var(--pathogen-data-grid-header-z);
+  }
 }
