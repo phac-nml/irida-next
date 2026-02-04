@@ -90,6 +90,8 @@ class VirtualScrollController extends Controller {
       .trim();
     const breakpoint2xlRaw = style.getPropertyValue("--breakpoint-2xl").trim();
 
+    // Fallback values: 300px metadata column width (matches Tailwind w-[300px]),
+    // 1536px is Tailwind's 2xl breakpoint for responsive sticky column behaviour
     return {
       columnWidth: parseInt(columnWidthRaw || "300", 10),
       breakpoint2xl: parseInt(breakpoint2xlRaw || "1536", 10),
