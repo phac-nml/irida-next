@@ -19,8 +19,8 @@ module Pathogen
                       ]
                     ))
 
-      assert_selector '.pathogen-data-grid__table'
-      assert_selector 'caption.pathogen-data-grid__caption', text: 'Sample grid'
+      assert_selector '.pathogen-data-grid__table[aria-describedby]'
+      assert_selector '.pathogen-data-grid__caption', text: 'Sample grid'
       assert_selector 'th.pathogen-data-grid__cell--header'
       assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 0px"]'
       assert_selector 'td.pathogen-data-grid__cell--body', text: 'Sample one'

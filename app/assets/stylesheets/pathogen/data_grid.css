@@ -12,8 +12,12 @@
   --pathogen-data-grid-header-z: 3;
 
   max-width: 100%;
-  overflow: auto;
   isolation: isolate;
+}
+
+.pathogen-data-grid__scroll {
+  max-width: 100%;
+  overflow: auto;
 }
 
 .pathogen-data-grid__table {
@@ -58,7 +62,8 @@
   background: var(--pathogen-data-grid-header-bg);
   text-align: left;
   font-weight: 600;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: var(--pathogen-data-grid-header-z);
 }
 
@@ -71,7 +76,7 @@
 }
 
 .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
-  z-index: var(--pathogen-data-grid-header-z);
+  z-index: calc(var(--pathogen-data-grid-header-z) + 1);
 }
 
 .pathogen-data-grid__cell--align-center {

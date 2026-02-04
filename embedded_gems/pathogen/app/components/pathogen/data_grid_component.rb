@@ -11,12 +11,19 @@ module Pathogen
       @columns = normalize_columns(columns, sticky_columns)
       @rows = rows
       @caption = caption
+      @caption_id = @caption.present? ? self.class.generate_id(base_name: 'data-grid-caption') : nil
       @system_arguments = system_arguments
       @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid')
     end
 
     def caption?
       @caption.present?
+    end
+
+    def table_attributes
+      return { class: 'pathogen-data-grid__table' } unless @caption_id
+
+      { class: 'pathogen-data-grid__table', aria: { describedby: @caption_id } }
     end
 
     def header_cell_attributes(column)

@@ -1,20 +1,22 @@
 <%= tag.div(**@system_arguments) do %>
-  <%= tag.table(class: 'pathogen-data-grid__table') do %>
-    <% if caption? %>
-      <%= tag.caption(@caption, class: "pathogen-data-grid__caption") %>
-    <% end %>
-    <%= tag.thead(class: 'pathogen-data-grid__header') do %>
-      <%= tag.tr(class: 'pathogen-data-grid__row pathogen-data-grid__row--header') do %>
-        <% @columns.each do |column| %>
-          <%= tag.th(column[:label], **header_cell_attributes(column)) %>
+  <% if caption? %>
+    <%= tag.div(@caption, id: @caption_id, class: "pathogen-data-grid__caption") %>
+  <% end %>
+  <%= tag.div(class: 'pathogen-data-grid__scroll') do %>
+    <%= tag.table(**table_attributes) do %>
+      <%= tag.thead(class: 'pathogen-data-grid__header') do %>
+        <%= tag.tr(class: 'pathogen-data-grid__row pathogen-data-grid__row--header') do %>
+          <% @columns.each do |column| %>
+            <%= tag.th(column[:label], **header_cell_attributes(column)) %>
+          <% end %>
         <% end %>
       <% end %>
-    <% end %>
-    <%= tag.tbody(class: 'pathogen-data-grid__body') do %>
-      <% @rows.each do |row| %>
-        <%= tag.tr(class: 'pathogen-data-grid__row') do %>
-          <% @columns.each_with_index do |column, index| %>
-            <%= tag.td(cell_value_for(row, column, index), **body_cell_attributes(column)) %>
+      <%= tag.tbody(class: 'pathogen-data-grid__body') do %>
+        <% @rows.each do |row| %>
+          <%= tag.tr(class: 'pathogen-data-grid__row') do %>
+            <% @columns.each_with_index do |column, index| %>
+              <%= tag.td(cell_value_for(row, column, index), **body_cell_attributes(column)) %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
