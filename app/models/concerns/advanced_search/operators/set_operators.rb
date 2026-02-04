@@ -9,11 +9,8 @@ module AdvancedSearch
       private
 
       def condition_in(scope, node, value, metadata_field:, field_name:)
-        # Enum metadata fields need exact matching, not case-insensitive matching
-        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
-
         # Use case-insensitive matching only for non-enum metadata fields
-        if metadata_field && !is_enum_metadata
+        if metadata_field && !enum_metadata_field?(field_name)
           scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
         elsif field_name == 'name'
           scope.where(node.lower.in(downcase_values(value)))
@@ -24,11 +21,8 @@ module AdvancedSearch
       end
 
       def condition_not_in(scope, node, value, metadata_field:, field_name:)
-        # Enum metadata fields need exact matching, not case-insensitive matching
-        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
-
         # Use case-insensitive matching only for non-enum metadata fields
-        if metadata_field && !is_enum_metadata
+        if metadata_field && !enum_metadata_field?(field_name)
           condition_not_in_metadata(scope, node, value)
         elsif field_name == 'name'
           scope.where(node.lower.not_in(downcase_values(value)))
