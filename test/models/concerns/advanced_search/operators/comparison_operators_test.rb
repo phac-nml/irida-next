@@ -99,6 +99,11 @@ module AdvancedSearch
         assert_includes sql, 'YYYY-MM-DD'
       end
 
+      test 'condition_date_comparison returns none for invalid date format' do
+        result = @test_instance.condition_date_comparison(@scope, @node, '2024-99-40', :lteq)
+        assert result.none?
+      end
+
       test 'condition_date_comparison works with gteq' do
         result = @test_instance.condition_date_comparison(@scope, @node, '2024-06-15', :gteq)
         sql = result.to_sql
@@ -113,6 +118,11 @@ module AdvancedSearch
         # Regex matches integers and decimals (including negatives)
         assert_includes sql, '~'
         assert_includes sql, 'CAST'
+      end
+
+      test 'condition_numeric_comparison returns none for invalid numeric format' do
+        result = @test_instance.condition_numeric_comparison(@scope, @node, '12a3', :lteq)
+        assert result.none?
       end
 
       test 'condition_numeric_comparison works with gteq' do

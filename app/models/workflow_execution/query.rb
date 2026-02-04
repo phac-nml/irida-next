@@ -9,6 +9,8 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   allowed_sort_columns :id, :name, :run_id, :state, :created_at, :updated_at
 
+  self.enum_metadata_fields = WorkflowExecution::FieldConfiguration::ENUM_METADATA_FIELDS
+
   attribute :name_or_id_cont, :string
   attribute :name_or_id_in, default: -> { [] }
   attribute :namespace_ids, default: -> { [] }
@@ -25,6 +27,13 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
   private
 
   def normalize_condition_value(condition)
+    return normalize_enum_metadata_value(condition.value) if enum_metadata_fields.include?(condition.field)
+    return normalize_state_value(condition) if condition.field == 'state'
+
+    condition.value
+  end
+
+  def normalize_state_value(condition)
     return condition.value unless condition.field == 'state'
 
     if %w[in not_in].include?(condition.operator)
@@ -32,6 +41,18 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
     else
       WorkflowExecution.states[condition.value] || condition.value
     end
+  end
+
+  def normalize_enum_metadata_value(value)
+    return value.map { |v| normalize_enum_metadata_scalar(v) } if value.is_a?(Array)
+
+    normalize_enum_metadata_scalar(value)
+  end
+
+  def normalize_enum_metadata_scalar(value)
+    return value unless value.is_a?(String)
+
+    value.downcase
   end
 
   def ransack_params

@@ -14,6 +14,8 @@ class WorkflowExecution
   #   config.fields        # => ['id', 'name', 'run_id', ...]
   #   config.enum_fields   # => { 'state' => { values: [...], ... }, ... }
   class FieldConfiguration
+    ENUM_METADATA_FIELDS = %w[metadata.pipeline_id metadata.workflow_version].freeze
+
     # List of searchable fields for workflow executions.
     SEARCHABLE_FIELDS = %w[
       id
