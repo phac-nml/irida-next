@@ -27,7 +27,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
   private
 
   def normalize_condition_value(condition)
-    return normalize_enum_metadata_value(condition.value) if enum_metadata_fields.include?(condition.field)
+    return normalize_enum_metadata_value(condition.value) if enum_metadata_field?(condition.field)
     return normalize_state_value(condition) if condition.field == 'state'
 
     condition.value
