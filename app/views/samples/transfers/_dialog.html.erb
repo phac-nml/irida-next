@@ -81,7 +81,7 @@
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.transfers.dialog.select_project")) do |select| %>
+                <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.transfers.dialog.select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,

@@ -5,6 +5,7 @@ module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
     avatar: 'Viral::AvatarComponent',
+    beta_select2: 'Viral::BetaSelect2Component',
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
     dialog: 'Viral::DialogComponent',
@@ -16,6 +17,7 @@ module ViewHelper
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
+    prefixed_beta_select2: 'Viral::Form::Prefixed::BetaSelect2Component',
     prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
     prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
     prefixed_select2: 'Viral::Form::Prefixed::Select2Component',

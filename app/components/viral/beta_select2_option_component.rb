@@ -2,7 +2,7 @@
 
 module Viral
   # Search component for rendering a searchable dropdown
-  class Select2OptionComponent < Viral::Component
+  class BetaSelect2OptionComponent < Viral::Component
     erb_template <<~ERB
       <li
         class="flex flex-col text-left p-2.5 rounded-lg bg-slate-50 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600
@@ -11,10 +11,10 @@ module Viral
         aria-selected="false"
         id="select2-option-<%= @value %>"
         role="option"
-        data-viral--select2-target="item"
+        data-viral--beta-select2-target="item"
         data-label="<%= @label %>"
         data-value="<%= @value %>"
-        data-action="click->viral--select2#select keydown->viral--select2#keydown"
+        data-action="click->viral--beta-select2#select keydown->viral--beta-select2#keydown"
       >
         <%= content %>
       </li>

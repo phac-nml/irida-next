@@ -48,6 +48,14 @@ export default class extends MenuController {
     super.triggerTargetConnected();
   }
 
+  triggerTargetDisconnected(element) {
+    element.removeEventListener("keydown", this.boundOnButtonKeyDown);
+    element.removeEventListener("click", this.boundOnButtonClick, {
+      capture: true,
+    });
+    super.triggerTargetDisconnected();
+  }
+
   #initializeDropdown() {
     super.share({
       onShow: () => this.#onShow(),
