@@ -298,6 +298,7 @@ export default class extends Controller {
       } else {
         this.updateSamplesLabelTarget.innerText =
           this.notAllowedToUpdateSamplesStringValue;
+        this.updateSamplesLabelTarget.classList.add("pointer-events-none");
         this.updateSamplesCheckboxTarget.checked = false;
         this.updateSamplesCheckboxTarget.disabled = true;
         this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "true");
