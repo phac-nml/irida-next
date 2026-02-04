@@ -63,10 +63,9 @@ module Samples
     #
     # @return [Hash] system arguments for the table container
     def system_arguments
-      base_args = { tag: 'div' }.deep_merge(@system_arguments)
+      base_args = { tag: 'div', tabindex: '0' }.deep_merge(@system_arguments)
       base_args[:classes] = class_names(base_args[:classes], 'overflow-auto relative')
       base_args[:data] ||= {}
-
       apply_virtual_scroll_data!(base_args)
       base_args
     end
