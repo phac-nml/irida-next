@@ -105,3 +105,12 @@
     --pathogen-data-grid-sticky-shadow: rgba(148, 163, 184, 0.25);
   }
 }
+
+.dark .pathogen-data-grid {
+  --pathogen-data-grid-border-color: #334155;
+  --pathogen-data-grid-text-color: #e2e8f0;
+  --pathogen-data-grid-header-bg: #0f172a;
+  --pathogen-data-grid-body-bg: #0b1120;
+  --pathogen-data-grid-sticky-bg: #0f172a;
+  --pathogen-data-grid-sticky-shadow: rgba(148, 163, 184, 0.25);
+}
