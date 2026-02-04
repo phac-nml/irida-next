@@ -45,6 +45,14 @@ import { renderVirtualScroll } from "controllers/virtual_scroll/render_pipeline"
  *        data-virtual-scroll-sort-key-value="metadata_field1">
  */
 class VirtualScrollController extends Controller {
+  /**
+   * Stimulus value definitions
+   * @property {string[]} metadataFieldsValue - Array of metadata field names to render as columns
+   * @property {string[]} fixedColumnsValue - Array of fixed column identifiers (non-metadata)
+   * @property {number} stickyColumnCountValue - Maximum number of columns to make sticky
+   * @property {string} sortKeyValue - Current sort key (e.g., "metadata_fieldname" or "updated_at")
+   * @property {boolean} stretchBaseColumnsValue - Whether to stretch base columns when no metadata
+   */
   static values = {
     metadataFields: Array,
     fixedColumns: Array,

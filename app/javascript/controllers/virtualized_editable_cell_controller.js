@@ -33,7 +33,11 @@ export default class extends Controller {
   // when user edits cells (since edits trigger broadcasts).
   static outlets = ["refresh"];
 
-  // Stimulus values for i18n screen reader announcements
+  /**
+   * Stimulus value definitions for i18n screen reader announcements
+   * @property {string} editActivatedMessageValue - Message announced when edit mode is activated
+   * @property {string} editDeactivatedMessageValue - Message announced when edit mode is deactivated
+   */
   static values = {
     editActivatedMessage: String,
     editDeactivatedMessage: String,
