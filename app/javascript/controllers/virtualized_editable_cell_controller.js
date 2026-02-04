@@ -98,7 +98,8 @@ export default class extends Controller {
     element.addEventListener("click", this.boundClick);
     element.setAttribute("data-editable", "true");
     element.setAttribute("contenteditable", "false");
-    element.setAttribute("aria-readonly", "true");
+    // Note: aria-readonly is only set during edit mode (contenteditable="true")
+    // W3C spec only allows aria-readonly="false" on contenteditable elements
 
     // Make sure the cell remains focusable after Turbo Stream replacement.
     // Virtual scroll/grid navigation expects cells to participate in roving tabindex.
@@ -380,7 +381,7 @@ export default class extends Controller {
     if (!element) return;
     this.#clearEditingState(element);
     element.setAttribute("contenteditable", "false");
-    element.setAttribute("aria-readonly", "true");
+    element.removeAttribute("aria-readonly");
 
     if (announce) {
       element.dispatchEvent(

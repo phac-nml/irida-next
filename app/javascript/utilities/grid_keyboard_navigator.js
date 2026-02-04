@@ -906,7 +906,7 @@ export class GridKeyboardNavigator {
 
     delete cell.dataset.editing;
     cell.setAttribute("contenteditable", "false");
-    cell.setAttribute("aria-readonly", "true");
+    cell.removeAttribute("aria-readonly");
 
     // Dispatch event for screen reader announcement
     cell.dispatchEvent(
