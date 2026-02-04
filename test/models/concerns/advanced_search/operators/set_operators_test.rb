@@ -11,6 +11,11 @@ module AdvancedSearch
 
         # Make private methods accessible for testing
         public :condition_in, :condition_not_in, :downcase_values
+
+        # Helper method from parent Operators module
+        def enum_metadata_field?(field_name)
+          AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
+        end
       end
 
       def setup
