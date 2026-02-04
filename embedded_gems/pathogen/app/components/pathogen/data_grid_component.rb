@@ -88,18 +88,18 @@ module Pathogen
 
       { class: class_names(*classes), style: styles.join(' ') }
     end
+
+    def base_column_config(column)
+      column_config = column.symbolize_keys
+      column_config[:key] ||= column_config[:id]
+      column_config[:label] ||= column_config[:key].to_s.humanize
+      column_config
+    end
+
+    def sticky_column?(column_config, index, sticky_columns)
+      return column_config[:sticky] if column_config.key?(:sticky)
+
+      index < sticky_columns
+    end
   end
-end
-
-def base_column_config(column)
-  column_config = column.symbolize_keys
-  column_config[:key] ||= column_config[:id]
-  column_config[:label] ||= column_config[:key].to_s.humanize
-  column_config
-end
-
-def sticky_column?(column_config, index, sticky_columns)
-  return column_config[:sticky] if column_config.key?(:sticky)
-
-  index < sticky_columns
 end
