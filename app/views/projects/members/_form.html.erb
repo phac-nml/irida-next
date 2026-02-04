@@ -33,7 +33,7 @@ end, method: :post,  html: { novalidate: true }) do |form| %>
                  data: {
                    required: true,
                  } %>
-      <%= viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
+      <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
         <% @available_users.each do |user| %>
           <% select.with_option(
                       value: user.id,

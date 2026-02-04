@@ -1,10 +1,10 @@
-<div data-action="keydown->viral--select2#keydown" class="select2">
+<div data-action="keydown->viral--beta-select2#keydown" class="select2">
   <input
     type="text"
     id="<%= id %>"
     name="<%= id %>"
-    data-viral--select2-target="input"
-    data-action="input->viral--select2#input"
+    data-viral--beta-select2-target="trigger"
+    data-action="input->viral--beta-select2#input"
     placeholder="<%= placeholder %>"
     <%= "required" if required %>
     autocomplete="off"
@@ -22,9 +22,9 @@
     aria-invalid="<%= aria_invalid %>"
     aria-required="<%= aria_required %>"
   >
-  <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+  <%= form.hidden_field name, data: { "viral--beta-select2-target": "hidden" } %>
   <div
-    data-viral--select2-target="dropdown"
+    data-viral--beta-select2-target="menu"
     class="
       z-10 w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
       dark:bg-slate-700
@@ -32,11 +32,11 @@
     hidden=""
   >
     <ul
-      data-viral--select2-target="scroller"
+      data-viral--beta-select2-target="scroller"
       class="
-        max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
-        dark:divide-slate-800
+        w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800
       "
+      style="max-height: inherit;"
       role="listbox"
     >
       <% options.each do |option| %>
@@ -52,7 +52,7 @@
             dark:text-blue-400 dark:border-blue-800 pointer-events-none
           "
           hidden=""
-          data-viral--select2-target="empty"
+          data-viral--beta-select2-target="empty"
         >
           <%= empty_state %>
         </li>
