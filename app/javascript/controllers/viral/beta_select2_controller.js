@@ -1,7 +1,7 @@
 import MenuController from "controllers/menu_controller";
 
 /**
- * Select2Controller
+ * BetaSelect2Controller
  *
  * Accessible, searchable dropdown with keyboard navigation.
  * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
@@ -10,7 +10,7 @@ import MenuController from "controllers/menu_controller";
  * - Dropdown positioning and focus management
  * - Submit button enable/disable logic
  */
-export default class Select2Controller extends MenuController {
+export default class BetaSelect2Controller extends MenuController {
   static targets = [
     "trigger",
     "hidden",
@@ -120,7 +120,9 @@ export default class Select2Controller extends MenuController {
       } else {
         // If no valid item was determined (edge case or unexpected state),
         // potentially reset or log, but avoid throwing an error unless critical.
-        console.warn("Select2Controller: Could not determine selected item.");
+        console.warn(
+          "BetaSelect2Controller: Could not determine selected item.",
+        );
         // Optionally, reset the input if no selection is confirmed
         // this.#resetInput();
       }
@@ -135,28 +137,28 @@ export default class Select2Controller extends MenuController {
    */
   keydown(event) {
     try {
-      if (!Object.values(Select2Controller.#KEY_CODES).includes(event.key))
+      if (!Object.values(BetaSelect2Controller.#KEY_CODES).includes(event.key))
         return;
       event.preventDefault();
       event.stopPropagation();
 
       switch (event.key) {
-        case Select2Controller.#KEY_CODES.ARROW_DOWN:
+        case BetaSelect2Controller.#KEY_CODES.ARROW_DOWN:
           this.#navigateItems(1);
           break;
-        case Select2Controller.#KEY_CODES.ARROW_UP:
+        case BetaSelect2Controller.#KEY_CODES.ARROW_UP:
           this.#navigateItems(-1);
           break;
-        case Select2Controller.#KEY_CODES.HOME:
+        case BetaSelect2Controller.#KEY_CODES.HOME:
           this.#navigateToIndex(0);
           break;
-        case Select2Controller.#KEY_CODES.END:
+        case BetaSelect2Controller.#KEY_CODES.END:
           this.#navigateToIndex(this.#visibleItems().length - 1);
           break;
-        case Select2Controller.#KEY_CODES.ESCAPE:
+        case BetaSelect2Controller.#KEY_CODES.ESCAPE:
           this.#resetInput();
           break;
-        case Select2Controller.#KEY_CODES.ENTER:
+        case BetaSelect2Controller.#KEY_CODES.ENTER:
           if (this.#currentItemIndex < 0) {
             super.show();
           } else {
@@ -236,7 +238,7 @@ export default class Select2Controller extends MenuController {
       // It's better to handle this potential issue gracefully or log it,
       // rather than throwing an error that might break user flow.
       console.error(
-        "Select2Controller: Attempted to update selection with invalid data.",
+        "BetaSelect2Controller: Attempted to update selection with invalid data.",
         { value, label },
       );
       return; // Prevent updating with invalid data
@@ -399,7 +401,7 @@ export default class Select2Controller extends MenuController {
 
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
-    console.error(`Select2Controller error in ${source}:`, error);
+    console.error(`BetaSelect2Controller error in ${source}:`, error);
   }
 
   #setInputTargetValueFromCache() {

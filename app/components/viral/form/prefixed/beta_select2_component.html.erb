@@ -11,13 +11,13 @@
       <%= root_url %>
     </div>
     <div class="grow">
-      <div data-action="keydown->viral--select2#keydown" class="select2">
+      <div data-action="keydown->viral--beta-select2#keydown" class="select2">
         <input
           type="text"
           id="<%= id %>"
           name="<%= id %>"
-          data-viral--select2-target="input"
-          data-action="input->viral--select2#input"
+          data-viral--beta-select2-target="trigger"
+          data-action="input->viral--beta-select2#input"
           placeholder="<%= placeholder %>"
           <%= "required" if required %>
           autocomplete="off"
@@ -34,9 +34,9 @@
           <% end %>
           <% end %>
         >
-        <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+        <%= form.hidden_field name, data: { "viral--beta-select2-target": "hidden" } %>
         <div
-          data-viral--select2-target="dropdown"
+          data-viral--beta-select2-target="menu"
           class="
             absolute z-10 bg-white border border-slate-300 rounded-lg shadow-lg
             dark:bg-slate-800 dark:border-slate-700
@@ -44,7 +44,7 @@
           hidden=""
         >
           <ul
-            data-viral--select2-target="scroller"
+            data-viral--beta-select2-target="scroller"
             role="listbox"
             class="
               max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
@@ -64,7 +64,7 @@
                   dark:text-blue-400 dark:border-blue-800 pointer-events-none
                 "
                 hidden=""
-                data-viral--select2-target="empty"
+                data-viral--beta-select2-target="empty"
               >
                 <%= empty_state %>
               </li>
