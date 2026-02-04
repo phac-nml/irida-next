@@ -24,8 +24,10 @@ module AdvancedSearch
         use_pattern_match = (metadata_field || field_name == 'name') && !enum_metadata_field?(field_name)
 
         if use_pattern_match
+          # Include NULL records - user searching for "not X" expects records without this field
           scope.where(node.eq(nil).or(node.does_not_match(value)))
         else
+          # Enum fields: exclude NULL records since NULL means "not set", not "different value"
           scope.where(node.not_eq(value))
         end
       end
