@@ -136,5 +136,18 @@ class WorkflowExecution
       assert_includes version_config[:values], '1.0.0'
       assert_includes version_config[:values], '2.0.0'
     end
+
+    # Empty pipelines edge case
+    test 'handles empty pipelines list gracefully' do
+      config = WorkflowExecution::FieldConfiguration.new(pipelines: [])
+
+      pipeline_config = config.enum_fields['metadata.pipeline_id']
+      assert_equal [], pipeline_config[:values]
+      assert_equal({}, pipeline_config[:labels])
+
+      version_config = config.enum_fields['metadata.workflow_version']
+      assert_equal [], version_config[:values]
+      assert_equal({}, version_config[:labels])
+    end
   end
 end

@@ -6,12 +6,15 @@ module AdvancedSearch
     module ComparisonOperators
       extend ActiveSupport::Concern
 
+      # Suffix convention for date-type metadata fields
+      DATE_FIELD_SUFFIX = '_date'
+
       private
 
       def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.lteq(value)) unless metadata_field
 
-        if metadata_key.end_with?('_date')
+        if date_metadata_field?(metadata_key)
           condition_date_comparison(scope, node, value, :lteq)
         else
           condition_numeric_comparison(scope, node, value, :lteq)
@@ -21,11 +24,15 @@ module AdvancedSearch
       def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.gteq(value)) unless metadata_field
 
-        if metadata_key.end_with?('_date')
+        if date_metadata_field?(metadata_key)
           condition_date_comparison(scope, node, value, :gteq)
         else
           condition_numeric_comparison(scope, node, value, :gteq)
         end
+      end
+
+      def date_metadata_field?(metadata_key)
+        metadata_key.end_with?(DATE_FIELD_SUFFIX)
       end
 
       def condition_date_comparison(scope, node, value, comparison_method)
