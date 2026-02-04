@@ -6,7 +6,7 @@ module Pathogen
   # CSS dependency: app/assets/stylesheets/pathogen/data_grid.css
   class DataGridComponent < Pathogen::Component
     renders_many :columns, lambda { |label, **system_arguments, &block|
-      Pathogen::DataGrid::ColumnComponent.new(label, **system_arguments, &block)
+      Pathogen::DataGrid::ColumnComponent.new(label: label, **system_arguments, &block)
     }
     attr_reader :rows
 
@@ -42,6 +42,11 @@ module Pathogen
         column.normalize_width!
 
         next unless sticky_column?(column, index)
+
+        if column.width_px.nil? && column.sticky_left.nil?
+          column.sticky = false
+          next
+        end
 
         column.sticky = true
         column.sticky_left ||= sticky_offset

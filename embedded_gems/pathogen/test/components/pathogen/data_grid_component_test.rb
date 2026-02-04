@@ -40,6 +40,21 @@ module Pathogen
       assert_no_selector '.pathogen-data-grid__table[aria-labelledby]'
     end
 
+    test 'does not apply sticky when width is missing' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      caption: 'Grid without widths',
+                      sticky_columns: 1,
+                      rows: [
+                        { id: 'S-010', name: 'Sample zero' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id)
+        grid.with_column('Name', key: :name)
+      end
+
+      assert_no_selector 'th.pathogen-data-grid__cell--sticky'
+    end
+
     test 'renders custom cell blocks and defaults to key lookup' do
       render_inline(Pathogen::DataGridComponent.new(
                       sticky_columns: 0,

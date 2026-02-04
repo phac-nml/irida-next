@@ -8,7 +8,8 @@ module Pathogen
       attr_reader :label, :key, :width, :align
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(label, key: nil, width: nil, align: nil, sticky: nil, sticky_left: nil, **system_arguments, &block)
+      def initialize(label:, key: nil, width: nil, align: nil, sticky: nil, sticky_left: nil, **system_arguments,
+                     &block)
         # rubocop:enable Metrics/ParameterLists
         @label = label
         @key = key
