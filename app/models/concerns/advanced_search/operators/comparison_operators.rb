@@ -29,6 +29,8 @@ module AdvancedSearch
       end
 
       def condition_date_comparison(scope, node, value, comparison_method)
+        return scope.none unless valid_date_format?(value)
+
         scope
           .where(node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$'))
           .where(
@@ -39,6 +41,8 @@ module AdvancedSearch
       end
 
       def condition_numeric_comparison(scope, node, value, comparison_method)
+        return scope.none unless valid_numeric_format?(value)
+
         scope
           .where(node.matches_regexp('^-?\\d+(\\.\\d+)?$'))
           .where(
@@ -46,6 +50,17 @@ module AdvancedSearch
               'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
             ).public_send(comparison_method, value)
           )
+      end
+
+      def valid_date_format?(value)
+        Date.iso8601(value.to_s)
+        true
+      rescue ArgumentError
+        false
+      end
+
+      def valid_numeric_format?(value)
+        value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
       end
     end
   end

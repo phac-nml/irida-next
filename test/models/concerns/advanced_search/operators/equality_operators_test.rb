@@ -14,7 +14,7 @@ module AdvancedSearch
 
         # Helper method from parent Operators module
         def enum_metadata_field?(field_name)
-          AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
+          WorkflowExecution::FieldConfiguration::ENUM_METADATA_FIELDS.include?(field_name)
         end
       end
 
