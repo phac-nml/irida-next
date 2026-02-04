@@ -19,8 +19,8 @@ module Pathogen
         sticky_columns: 1,
         columns: [
           { key: :id, label: 'ID', width: 120 },
-          { key: :name, label: 'Name', width: 240 },
-          { key: :status, label: 'Status', width: 160 }
+          { key: :name, label: 'Name' },
+          { key: :status, label: 'Status' }
         ],
         rows: [
           { id: 'S-001', name: 'Sample one', status: 'Active' },
@@ -35,9 +35,9 @@ module Pathogen
         caption: 'Non-sticky grid',
         sticky_columns: 0,
         columns: [
-          { key: :sample_id, label: 'Sample ID', width: 140 },
-          { key: :name, label: 'Name', width: 220 },
-          { key: :organism, label: 'Organism', width: 220 }
+          { key: :sample_id, label: 'Sample ID' },
+          { key: :name, label: 'Name' },
+          { key: :organism, label: 'Organism' }
         ],
         rows: [
           { sample_id: 'SAM-0101', name: 'Forest isolate', organism: 'E. coli' },
@@ -48,10 +48,10 @@ module Pathogen
 
     COLUMNS = [
       { key: :sample_id, label: 'Sample ID', width: 140 },
-      { key: :name, label: 'Name', width: 220 },
-      { key: :organism, label: 'Organism', width: 220 },
-      { key: :collected_at, label: 'Collected', width: 160 },
-      { key: :notes, label: 'Notes', width: 320 }
+      { key: :name, label: 'Name' },
+      { key: :organism, label: 'Organism' },
+      { key: :collected_at, label: 'Collected' },
+      { key: :notes, label: 'Notes' }
     ].freeze
 
     ROWS = [
@@ -60,7 +60,7 @@ module Pathogen
         name: 'Northern lake isolate with extended name',
         organism: 'Listeria monocytogenes',
         collected_at: '2026-01-18',
-        notes: 'Text spacing test: adjust letter and word spacing should wrap within sticky columns.'
+        notes: 'Text spacing test: long content stays on one line to demonstrate auto column sizing.'
       },
       {
         sample_id: 'SAM-0002',
@@ -74,7 +74,7 @@ module Pathogen
         name: 'Prairie field isolate',
         organism: 'Campylobacter jejuni',
         collected_at: '2026-01-30',
-        notes: 'Additional notes to showcase wrapping behavior and sticky boundary.'
+        notes: 'Additional notes to showcase overflow behavior and sticky boundary.'
       }
     ].freeze
   end
