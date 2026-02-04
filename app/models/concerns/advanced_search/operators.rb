@@ -20,6 +20,14 @@ module AdvancedSearch
 
     private
 
+    # Checks if a field is an enum metadata field requiring exact matching.
+    #
+    # @param field_name [String] the field name to check
+    # @return [Boolean] true if the field is an enum metadata field
+    def enum_metadata_field?(field_name)
+      ENUM_METADATA_FIELDS.include?(field_name)
+    end
+
     def build_arel_node(condition, model_class)
       metadata_field = condition.field.starts_with?('metadata.')
 

@@ -9,11 +9,8 @@ module AdvancedSearch
       private
 
       def condition_equals(scope, node, value, metadata_field:, field_name:)
-        # Enum metadata fields need exact matching, not pattern matching
-        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
-
         # Use pattern matching only for non-enum metadata fields and name field
-        use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata
+        use_pattern_match = (metadata_field || field_name == 'name') && !enum_metadata_field?(field_name)
 
         if use_pattern_match
           scope.where(node.matches(value))
@@ -23,11 +20,8 @@ module AdvancedSearch
       end
 
       def condition_not_equals(scope, node, value, metadata_field:, field_name:)
-        # Enum metadata fields need exact matching, not pattern matching
-        is_enum_metadata = AdvancedSearch::Operators::ENUM_METADATA_FIELDS.include?(field_name)
-
         # Use pattern matching only for non-enum metadata fields and name field
-        use_pattern_match = (metadata_field || field_name == 'name') && !is_enum_metadata
+        use_pattern_match = (metadata_field || field_name == 'name') && !enum_metadata_field?(field_name)
 
         if use_pattern_match
           scope.where(node.eq(nil).or(node.does_not_match(value)))
