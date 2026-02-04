@@ -24,7 +24,7 @@ import { renderVirtualScroll } from "controllers/virtual_scroll/render_pipeline"
  * - Body cells virtualized (only visible + buffer rendered)
  * - Sticky column preservation (never virtualized)
  * - Auto-scroll to sorted column on page load
- * - ResizeObserver for responsive behavior
+ * - ResizeObserver for responsive behaviour
  * - Protection for cells currently being edited
  * - Integration with table_controller.js and editable_cell_controller.js
  *
@@ -198,7 +198,7 @@ class VirtualScrollController extends Controller {
       passive: true,
     });
 
-    // Initialize ResizeObserver for responsive behavior
+    // Initialize ResizeObserver for responsive behaviour
     this.resizeObserver = new ResizeObserver(this.debouncedResizeHandler);
     this.resizeObserver.observe(this.containerTarget);
     this.lifecycle.trackObserver(this.resizeObserver);

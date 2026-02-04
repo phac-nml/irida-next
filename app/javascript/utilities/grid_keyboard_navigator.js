@@ -177,7 +177,7 @@ export class GridKeyboardNavigator {
       "ArrowDown",
     ].includes(event.key);
 
-    // Allow Ctrl+Arrow navigation even when editing (standard spreadsheet behavior)
+    // Allow Ctrl+Arrow navigation even when editing (standard spreadsheet behaviour)
     const isCtrlArrow = ctrlOrMeta && isArrowKey;
 
     // If actively editing, ignore all keys EXCEPT Ctrl+Arrow (grid navigation escape hatch)
@@ -356,7 +356,7 @@ export class GridKeyboardNavigator {
 
   /**
    * Calculate target cell for Tab navigation.
-   * Returns null to allow default Tab behavior (leaving the grid).
+   * Returns null to allow default Tab behaviour (leaving the grid).
    * @param {KeyboardEvent} event
    * @param {number} currentRow
    * @param {number} currentCol

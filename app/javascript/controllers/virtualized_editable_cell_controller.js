@@ -333,7 +333,7 @@ export default class extends Controller {
   }
 
   click(event) {
-    // Activate edit mode on click (matches existing behavior of non-virtualized table)
+    // Activate edit mode on click (matches existing behaviour of non-virtualized table)
     this.#activateEditMode(event.target);
   }
 

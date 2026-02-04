@@ -144,7 +144,7 @@ export class StickyColumnManager {
 
   /**
    * Update sticky column count and recalculate offsets
-   * Useful for responsive behavior (e.g., fewer sticky columns on mobile)
+   * Useful for responsive behaviour (e.g., fewer sticky columns on mobile)
    * @param {number} newStickyCount - New number of sticky columns
    */
   updateStickyCount(newStickyCount) {
