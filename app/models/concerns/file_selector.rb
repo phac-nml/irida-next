@@ -128,6 +128,13 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
     attributes
   end
 
+  def most_recent_single_fastq_file(property)
+    file = query_fastq_files('forward', false).first
+
+    file ||= query_single_fastq_files.order(created_at: :desc, id: :desc).first
+    { property => file_attributes(file, 'samplesheet') }
+  end
+
   # TODO: rename to "most_recent_other_file" when deferred_samplesheet is retired
   def most_recent_other_file_with_feature_flag(pattern)
     most_recent_file = if pattern

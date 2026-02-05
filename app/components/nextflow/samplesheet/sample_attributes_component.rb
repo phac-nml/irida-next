@@ -23,21 +23,15 @@ module Nextflow
       private
 
       def samples_workflow_execution_attributes(sample)
-        sample_attributes = {
+        {
           'sample_id' => sample.id,
           'samplesheet_params' => sample_samplesheet_params(sample)
         }
-
-        return sample_attributes unless @properties.key?('fastq_1') && @properties.key?('fastq_2')
-
-        fastq_file_attributes = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
-        sample_attributes.deep_merge!(fastq_file_samplesheet_values(fastq_file_attributes,
-                                                                    sample.id))
-        sample_attributes
       end
 
-      def sample_samplesheet_params(sample) # rubocop:disable Metrics/MethodLength
-        @properties.to_h do |name, property|
+      def sample_samplesheet_params(sample) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+        fastq_2_property = @properties.key?('fastq_2')
+        samplesheet_params = @properties.to_h do |name, property|
           case property['cell_type']
           when 'sample_cell'
             [name, sample.puid]
@@ -48,14 +42,27 @@ module Nextflow
              file_samplesheet_values(
                sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
              )]
+          when 'fastq_cell'
+            if fastq_2_property
+              [name, '']
+            else
+              [name, fastq_file_samplesheet_values(
+                sample.most_recent_single_fastq_file(name), sample.id
+              )]
+            end
           when 'metadata_cell'
             [name, metadata_samplesheet_values(sample, name, property)]
-          when 'dropdown_cell', 'input_cell', 'fastq_cell'
+          when 'dropdown_cell', 'input_cell'
             # fastq is queried above in samples_workflow_execution_attributes and values are merged over
             # this empty value
             [name, '']
           end
         end
+
+        return samplesheet_params unless fastq_2_property
+
+        fastq_file_values = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
+        samplesheet_params.merge!(fastq_file_samplesheet_values(fastq_file_values, sample.id))
       end
 
       def file_samplesheet_values(file, sample_id, column_name)
@@ -72,9 +79,9 @@ module Nextflow
       end
 
       def fastq_file_samplesheet_values(files, sample_id)
-        fastq_samplesheet_params = { 'samplesheet_params' => {} }
+        fastq_samplesheet_params = {}
         files.each do |name, file|
-          fastq_samplesheet_params['samplesheet_params'][name] = file_samplesheet_values(file, sample_id, name)
+          fastq_samplesheet_params[name] = file_samplesheet_values(file, sample_id, name)
         end
         fastq_samplesheet_params
       end
