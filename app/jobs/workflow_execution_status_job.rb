@@ -24,54 +24,49 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
 
   def perform(workflow_execution)
     @workflow_execution = workflow_execution
+    return if user_cancelled_run?
 
-    step :verify_initial_state
-    step :query_state
-    step :verify_new_state
-    step :save_state
+    step :query_and_update_state
     step :queue_next_job
   end
 
   private
 
-  def verify_initial_state
+  def query_and_update_state
+    if validate_initial_state(@workflow_execution, nil, validate_run_id: true)
+      state = WorkflowExecutions::StatusService.new(@workflow_execution).execute
+
+      if state.nil?
+        state = :error
+        Rails.logger.error(
+          I18n.t('activerecord.errors.models.workflow_execution.invalid_job_state', job_name: self.class.name)
+        )
+      end
+
+      update_state(state)
+    else
+      update_state(:error, force: true)
+    end
+  end
+
+  def user_cancelled_run?
     # User signaled to cancel
-    @invalid_initial_state = @workflow_execution.canceling? || @workflow_execution.canceled?
-
-    return if @invalid_initial_state
-
-    @invalid_initial_state = !validate_initial_state(@workflow_execution, nil, validate_run_id: true)
-
-    handle_error_state_and_clean(@workflow_execution) if @invalid_initial_state
+    @workflow_execution.canceling? || @workflow_execution.canceled?
   end
 
-  def query_state
-    return if @invalid_initial_state
+  def update_state(state, force: false)
+    return if @workflow_execution.state.to_sym == state
 
-    @state = WorkflowExecutions::StatusService.new(@workflow_execution).execute
-  end
-
-  def verify_new_state
-    return if @invalid_initial_state
-    return unless @state.nil?
-
-    handle_unable_to_process_job(@workflow_execution, self.class.name)
-  end
-
-  def save_state
-    return if @invalid_initial_state
-    return if @state.nil?
-
-    return if @workflow_execution.state.to_sym == @state
-
-    @workflow_execution.state = @state
-    @workflow_execution.save
+    if force
+      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
+      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
+    else
+      @workflow_execution.state = state
+      @workflow_execution.save
+    end
   end
 
   def queue_next_job
-    return if @invalid_initial_state
-    return if @state.nil?
-
     @workflow_execution.reload
     case @workflow_execution.state.to_sym
     when :canceled, :error
