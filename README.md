@@ -66,7 +66,7 @@ This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automat
 
 - **RuboCop**: Ruby files (`.rb`) are auto-corrected and linted
 - **Prettier**: JavaScript, TypeScript, CSS, Markdown, YAML, and config files are formatted
-- **erb-formatter**: ERB templates (`.erb`) are formatted for consistent style
+- **Herb**: HTML+ERB templates (`.erb`) are formatted and linted
 
 ### How it works
 
@@ -81,8 +81,13 @@ This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automat
   ```bash
   bin/rubocop -a
   pnpm run format
-  bundle exec erb-format --write '**/*.erb'
   ```
+
+### Manual linting (ERB)
+
+```bash
+pnpm run herb:lint
+```
 
 ### Ignore files
 

@@ -147,12 +147,22 @@ lib.mkMerge [
         pass_filenames = true;
       };
 
-      # erb-formatter for ERB templates
-      erb_formatter = {
+      # Herb formatter for HTML+ERB templates
+      herb_format = {
         enable = true;
-        name = "ERB Formatter";
-        description = "Format ERB templates";
-        entry = "bundle exec erb-format --write";
+        name = "Herb Format";
+        description = "Format HTML+ERB templates";
+        entry = "pnpm exec herb-format";
+        files = "\\.erb$";
+        pass_filenames = true;
+      };
+
+      # Herb linter for HTML+ERB templates
+      herb_lint = {
+        enable = true;
+        name = "Herb Lint";
+        description = "Lint HTML+ERB templates";
+        entry = "pnpm exec herb-lint --format=simple";
         files = "\\.erb$";
         pass_filenames = true;
       };
