@@ -11,6 +11,7 @@
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       <% if Flipper.enabled?(:metadata_file_import_worker) %>
+      data-metadata--file-import-worker-viral--progress-bar-outlet="#test-me"
       data-metadata--file-import-worker-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       data-action="
         metadata--file-import-worker:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
@@ -26,7 +27,13 @@
       data-attachment-upload-uploading-text-value='<%=t(".uploading") %>'
       id="import-metadata-dialog-content"
     >
-      <%= form_for(:file_import, url: url, method: :post) do |form| %>
+      <%= form_for(:file_import, url: url, method: :post, data:
+      if Flipper.enabled?(:metadata_file_import_worker)
+        { action: "turbo:submit-start->viral--dialog#close turbo:submit-start->metadata--file-import-worker#show turbo:submit-end->metadata--file-import-worker#hide" }
+      else
+        {}
+      end
+      ) do |form| %>
         <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
         <div class="grid gap-4">
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">

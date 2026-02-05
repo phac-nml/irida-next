@@ -4,7 +4,11 @@ import { Controller } from "@hotwired/stimulus";
 import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
-  static outlets = ["viral--sortable-lists--two-lists-selection", "refresh"];
+  static outlets = [
+    "viral--progress-bar",
+    "viral--sortable-lists--two-lists-selection",
+    "refresh",
+  ];
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
@@ -212,10 +216,14 @@ export default class extends Controller {
       range: 1,
     });
 
+    let count = 0;
+    const total = rows.length;
+
     rows.forEach((row) => {
       const id = Object.values(row)[0];
       const metadata = Object.entries(row).slice(1);
 
+      console.log("count = ", count);
       console.log("row = ", row);
       console.log("id = ", id);
       console.log("metadata = ", metadata);
@@ -225,16 +233,35 @@ export default class extends Controller {
         samplePuid: id,
         metadata: Object.fromEntries(metadata),
       });
+
+      if (this.hasViralProgressBarOutlet) {
+        this.viralProgressBarOutlet.updatePercentageValue(
+          (++count / total) * 100,
+        );
+      }
     });
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    // TODO: fix prevent double submission
+    // event.preventDefault();
     this.#processRows();
     notifyRefreshControllers(this);
   }
 
   disconnect() {
     this.#worker.terminate();
+  }
+
+  show() {
+    if (this.hasViralProgressBarOutlet) {
+      this.viralProgressBarOutlet.show();
+    }
+  }
+
+  hide() {
+    if (this.hasViralProgressBarOutlet) {
+      this.viralProgressBarOutlet.hide();
+    }
   }
 }
