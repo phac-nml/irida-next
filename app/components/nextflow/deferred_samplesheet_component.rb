@@ -24,7 +24,6 @@ module Nextflow
         @properties[property]['cell_type'] = identify_cell_type(property, entry)
         @properties[property]['pattern'] = expected_pattern(entry)
       end
-
       if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
         @properties['fastq_1']['pe_only'] = true
       end

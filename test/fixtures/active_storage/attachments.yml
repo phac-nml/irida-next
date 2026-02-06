@@ -292,3 +292,8 @@ workflow_execution_shared_with_project_output_attachment:
   name: file
   record: workflow_execution_shared_with_project_output_attachment (Attachment)
   blob: workflow_execution_shared_with_project_output_attachment_blob
+
+sample32_json_attachment:
+  name: file
+  record: sample32JsonAttachment (Attachment)
+  blob: attachment_json_blob

@@ -12,6 +12,7 @@ Flipper.enable(:integration_access_token_generation)
 Flipper.enable(:cancel_multiple_workflows)
 Flipper.enable(:advanced_search_with_auto_complete)
 Flipper.enable(:wes_extended_metadata)
+Flipper.enable(:deferred_samplesheet)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
