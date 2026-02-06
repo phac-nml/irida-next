@@ -1,0 +1,25 @@
+<%= tag.div(**@system_arguments) do %>
+  <% if caption? %>
+    <%= tag.div(@caption, id: @caption_id, class: "pathogen-data-grid__caption") %>
+  <% end %>
+  <%= tag.div(class: 'pathogen-data-grid__scroll') do %>
+    <%= tag.table(**table_attributes) do %>
+      <%= tag.thead(class: 'pathogen-data-grid__header') do %>
+        <%= tag.tr(class: 'pathogen-data-grid__row pathogen-data-grid__row--header') do %>
+          <% columns.each do |column| %>
+            <%= tag.th(column.label, scope: "col", **column.header_cell_attributes) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= tag.tbody(class: 'pathogen-data-grid__body') do %>
+        <% @rows.each do |row| %>
+          <%= tag.tr(class: 'pathogen-data-grid__row') do %>
+            <% columns.each_with_index do |column, index| %>
+              <%= tag.td(column.render_value(row, index), **column.body_cell_attributes) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

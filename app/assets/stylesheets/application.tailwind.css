@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "flowbite/plugin";
 @source "../../../node_modules/flowbite/**/*.js";
+@import "./pathogen/data_grid.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
