@@ -86,6 +86,11 @@ module Attachments
         assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last(2).first.file.filename.to_s
         assert_equal 'new-concatenated-file_2.fastq', sample.attachments.last(2).last.file.filename.to_s
 
+        assert_equal attachments(:attachmentPEFWD1).file.download + attachments(:attachmentPEFWD2).file.download,
+                     sample.attachments.last(2).first.file.download
+        assert_equal attachments(:attachmentPEREV1).file.download + attachments(:attachmentPEREV2).file.download,
+                     sample.attachments.last(2).last.file.download
+
         assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
         assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
 
