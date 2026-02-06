@@ -242,9 +242,7 @@ export default class extends Controller {
     });
   }
 
-  handleSubmit(event) {
-    // TODO: fix prevent double submission
-    // event.preventDefault();
+  handleSubmit() {
     this.#processRows();
     notifyRefreshControllers(this);
   }

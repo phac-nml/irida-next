@@ -13,16 +13,18 @@ module MetadataSpreadsheetImportActions
   end
 
   def create
-    @broadcast_target = params[:broadcast_target]
+    unless Flipper.enabled?(:metadata_file_import_worker)
+      @broadcast_target = params[:broadcast_target]
 
-    blob = ActiveStorage::Blob.find_signed!(file_import_params[:file])
+      blob = ActiveStorage::Blob.find_signed!(file_import_params[:file])
 
-    ::Samples::MetadataImportJob.set(
-      wait_until: 1.second.from_now
-    ).perform_later(
-      @namespace, current_user,
-      @broadcast_target, blob.id, file_import_params.except(:file)
-    )
+      ::Samples::MetadataImportJob.set(
+        wait_until: 1.second.from_now
+      ).perform_later(
+        @namespace, current_user,
+        @broadcast_target, blob.id, file_import_params.except(:file)
+      )
+    end
 
     render status: :ok
   end
