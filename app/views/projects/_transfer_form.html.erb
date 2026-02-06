@@ -1,14 +1,24 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
-              data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
+data:
+if Flipper.enabled?(:beta_dropdown)
+  { turbo_confirm: "", controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
+else
+  { turbo_confirm: "", controller: "viral--select2" }
+end
+) do |form| %>
   <div class="mb-2">
     <%= render partial: "shared/form/required_field_legend" %>
   </div>
   <div class="form-field">
     <% form_id = "transfer-form-select2" %>
-    <%= form.label :new_namespace_id, t(:"projects.edit.advanced.transfer.new_namespace_id"),
-                   for: form_id,
-                   class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
-                   data: { required: true } %>
+    <%= form.label :new_namespace_id,
+               t(:"projects.edit.advanced.transfer.new_namespace_id"),
+               for: form_id,
+               class:
+                 "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
+               data: {
+                 required: true,
+               } %>
     <% if @authorized_namespaces.empty? %>
       <input
         disabled
@@ -20,7 +30,7 @@
         "
       >
     <% else %>
-      <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+      <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
@@ -52,12 +62,21 @@
   <div>
     <%= form.submit t(:"projects.edit.advanced.transfer.submit"),
                 class: "button button-destructive",
-                data: {
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: @project.name,
-                },
-                "data-viral--select2-target": "submitButton",
-                disabled: "disabled" %>
+                disabled: "disabled",
+                data:
+                  if Flipper.enabled?(:beta_dropdown)
+                    {
+                      "viral--beta-select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: @project.name,
+                    }
+                  else
+                    {
+                      "viral--select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: @project.name,
+                    }
+                  end %>
   </div>
 
 <% end %>

@@ -17,6 +17,7 @@
           id="<%= id %>"
           name="<%= id %>"
           data-viral--select2-target="input"
+          data-action="input->viral--select2#input"
           placeholder="<%= placeholder %>"
           <%= "required" if required %>
           autocomplete="off"
@@ -27,7 +28,6 @@
             text-ellipsis overflow-hidden
           "
           value="<%= selected_value %>"
-          data-action="input->viral--select2#input"
           <% if aria.present? %>
           <% aria.each do |key, value| %>
           <%= "aria-#{key}=#{value}" %>
@@ -35,13 +35,13 @@
           <% end %>
         >
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
-
         <div
           data-viral--select2-target="dropdown"
           class="
-            absolute z-10 hidden bg-white border border-slate-300 rounded-lg shadow-lg
+            absolute z-10 bg-white border border-slate-300 rounded-lg shadow-lg
             dark:bg-slate-800 dark:border-slate-700
           "
+          hidden=""
         >
           <ul
             data-viral--select2-target="scroller"
@@ -60,9 +60,10 @@
                 aria-disabled="true"
                 aria-selected="false"
                 class="
-                  hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
+                  p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
                   dark:text-blue-400 dark:border-blue-800 pointer-events-none
                 "
+                hidden=""
                 data-viral--select2-target="empty"
               >
                 <%= empty_state %>

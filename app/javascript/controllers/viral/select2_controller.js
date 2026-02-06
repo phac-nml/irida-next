@@ -204,10 +204,10 @@ export default class Select2Controller extends Controller {
       this.itemTargets.forEach((item) => {
         const text = item.textContent.toLowerCase() || "";
         if (text.includes(query)) {
-          item.classList.remove("hidden");
+          item.removeAttribute("hidden");
           visibleItemCount++;
         } else {
-          item.classList.add("hidden");
+          item.setAttribute("hidden", "");
         }
       });
 
@@ -218,10 +218,10 @@ export default class Select2Controller extends Controller {
         if (this.#dropdown && !this.#dropdown.isVisible()) {
           this.#dropdown.show();
         }
-        this.emptyTarget.classList.add("hidden");
+        this.emptyTarget.setAttribute("hidden", "");
         this.scrollerTarget.scrollTop = 0;
       } else {
-        this.emptyTarget.classList.remove("hidden");
+        this.emptyTarget.removeAttribute("hidden");
       }
     } catch (error) {
       this.#handleError(error, "input");
@@ -337,8 +337,7 @@ export default class Select2Controller extends Controller {
       // Check if the item itself or its immediate parent container is hidden
       const parentElement = item.closest("li") || item.parentNode; // Adjust selector if needed
       return (
-        !item.classList.contains("hidden") &&
-        !parentElement.classList.contains("hidden")
+        !item.hasAttribute("hidden") && !parentElement.hasAttribute("hidden")
       );
     });
   }
@@ -371,9 +370,13 @@ export default class Select2Controller extends Controller {
         onShow: () => {
           this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
           this.inputTarget.setAttribute("aria-expanded", "true");
+          this.dropdownTarget.setAttribute("aria-hidden", "false");
+          this.dropdownTarget.removeAttribute("hidden");
         },
         onHide: () => {
           this.inputTarget.setAttribute("aria-expanded", "false");
+          this.dropdownTarget.setAttribute("aria-hidden", "true");
+          this.dropdownTarget.setAttribute("hidden", "hidden");
           if (!this.#itemSelected) this.#setInputTargetValueFromCache();
         },
       });

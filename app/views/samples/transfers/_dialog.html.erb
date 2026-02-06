@@ -3,7 +3,12 @@
   <%= turbo_stream_from @broadcast_target %>
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
+      <% if Flipper.enabled?(:beta_dropdown) %>
+      data-controller="infinite-scroll viral--beta-select2"
+      data-viral--beta-select2-trigger-type-value="click"
+      <% else %>
       data-controller="infinite-scroll viral--select2"
+      <% end %>
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t("samples.transfers.dialog.description.singular") %>"
@@ -76,7 +81,7 @@
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.transfers.dialog.select_project")) do |select| %>
+                <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.transfers.dialog.select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
@@ -105,11 +110,20 @@
               <%= form.submit t("samples.transfers.dialog.submit_button"),
                           class: "button button-primary",
                           disabled: true,
-                          data: {
-                            action: "viral--dialog#setClosable",
-                            "viral--dialog-closable-param": "false",
-                            "viral--select2-target": "submitButton",
-                          } %>
+                          data:
+                            if Flipper.enabled?(:beta_dropdown)
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--beta-select2-target": "submitButton",
+                              }
+                            else
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--select2-target": "submitButton",
+                              }
+                            end %>
             </div>
           </div>
         <% end %>

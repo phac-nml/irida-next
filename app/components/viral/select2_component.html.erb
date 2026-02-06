@@ -23,21 +23,21 @@
     aria-required="<%= aria_required %>"
   >
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
-
   <div
     data-viral--select2-target="dropdown"
     class="
-      z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
+      z-10 w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
       dark:bg-slate-700
     "
+    hidden=""
   >
     <ul
       data-viral--select2-target="scroller"
-      role="listbox"
       class="
         max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
         dark:divide-slate-800
       "
+      role="listbox"
     >
       <% options.each do |option| %>
         <%= option %>
@@ -48,9 +48,10 @@
           aria-disabled="true"
           aria-selected="false"
           class="
-            hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
+            p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
             dark:text-blue-400 dark:border-blue-800 pointer-events-none
           "
+          hidden=""
           data-viral--select2-target="empty"
         >
           <%= empty_state %>

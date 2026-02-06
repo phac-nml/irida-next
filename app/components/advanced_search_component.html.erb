@@ -63,9 +63,9 @@
         <% end %>
       </template>
     </div>
-    <% dialog.with_primary_action("data-action": "filters#submit") do
-      t("components.advanced_search_component.apply_filter_button")
-    end %>
+    <% dialog.with_primary_action("data-action": "filters#submit") do %>
+      <%= t("components.advanced_search_component.apply_filter_button") %>
+    <% end %>
     <% dialog.with_secondary_action do %>
       <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t("components.advanced_search_component.clear_filter_button") %>
