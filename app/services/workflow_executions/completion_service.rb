@@ -16,7 +16,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.completing?
+      # return false unless @workflow_execution.completing?
 
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
 
@@ -34,16 +34,16 @@ module WorkflowExecutions
       # attach blob lists to attachables
       attach_blobs_to_attachables
 
-      # put attachments and metadata onto samples
-      if @workflow_execution.update_samples?
-        merge_metadata_onto_samples
-        put_output_attachments_onto_samples
-        create_activities
-      end
+      # # put attachments and metadata onto samples
+      # if @workflow_execution.update_samples?
+      #   merge_metadata_onto_samples
+      #   put_output_attachments_onto_samples
+      #   create_activities
+      # end
 
-      @workflow_execution.state = :completed
+      # @workflow_execution.state = :completed
 
-      @workflow_execution.save
+      # @workflow_execution.save
     end
 
     private
@@ -110,7 +110,7 @@ module WorkflowExecutions
       return if @attachable_blobs_tuple_list.empty?
 
       @attachable_blobs_tuple_list&.each do |tuple| # :attachable, :blob_id_list
-        Attachments::CreateService.new(
+        Attachments::CreateService.new( # TODO: cursor point
           current_user, tuple[:attachable], { files: tuple[:blob_id_list] }
         ).execute
       end
@@ -123,72 +123,72 @@ module WorkflowExecutions
         # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
         samples_workflow_execution.metadata = flatten(sample_metadata)
-        samples_workflow_execution.save!
+        samples_workflow_execution.save! # TODO: cursor point
       end
     end
 
-    def merge_metadata_onto_samples
-      @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.sample.nil? || swe.metadata.nil?
+    # def merge_metadata_onto_samples
+    #   @workflow_execution.samples_workflow_executions&.each do |swe|
+    #     next if swe.sample.nil? || swe.metadata.nil?
 
-        params = {
-          'metadata' => swe.metadata,
-          'analysis_id' => @workflow_execution.id,
-          include_activity: false,
-          'force_update' => true
-        }
-        Samples::Metadata::UpdateService.new(
-          swe.sample.project, swe.sample, current_user, params
-        ).execute
-      end
-    end
+    #     params = {
+    #       'metadata' => swe.metadata,
+    #       'analysis_id' => @workflow_execution.id,
+    #       include_activity: false,
+    #       'force_update' => true
+    #     }
+    #     Samples::Metadata::UpdateService.new(
+    #       swe.sample.project, swe.sample, current_user, params
+    #     ).execute
+    #   end
+    # end
 
-    def put_output_attachments_onto_samples
-      @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.sample.nil? || swe.outputs.empty?
+    # def put_output_attachments_onto_samples
+    #   @workflow_execution.samples_workflow_executions&.each do |swe|
+    #     next if swe.sample.nil? || swe.outputs.empty?
 
-        files = swe.outputs.map { |output| output.file.signed_id }
-        params = { files:, include_activity: false }
-        Attachments::CreateService.new(
-          current_user, swe.sample, params
-        ).execute
-      end
-    end
+    #     files = swe.outputs.map { |output| output.file.signed_id }
+    #     params = { files:, include_activity: false }
+    #     Attachments::CreateService.new(
+    #       current_user, swe.sample, params
+    #     ).execute
+    #   end
+    # end
 
-    def create_activities # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-      return unless current_user.automation_bot?
+    # def create_activities # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    #   return unless current_user.automation_bot?
 
-      @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.sample.nil? || (swe.metadata.nil? && swe.outputs.empty?)
+    #   @workflow_execution.samples_workflow_executions&.each do |swe|
+    #     next if swe.sample.nil? || (swe.metadata.nil? && swe.outputs.empty?)
 
-        if !swe.metadata.nil? && !swe.outputs.empty?
-          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written', # rubocop:disable Layout/LineLength
-                                                        parameters: {
-                                                          workflow_id: @workflow_execution.id,
-                                                          sample_id: swe.sample.id,
-                                                          sample_puid: swe.sample.puid
-                                                        }
-          next
-        end
+    #     if !swe.metadata.nil? && !swe.outputs.empty?
+    #       @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written', # rubocop:disable Layout/LineLength
+    #                                                     parameters: {
+    #                                                       workflow_id: @workflow_execution.id,
+    #                                                       sample_id: swe.sample.id,
+    #                                                       sample_puid: swe.sample.puid
+    #                                                     }
+    #       next
+    #     end
 
-        unless swe.metadata.nil?
-          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.metadata_written', # rubocop:disable Layout/LineLength
-                                                        parameters: {
-                                                          workflow_id: @workflow_execution.id,
-                                                          sample_id: swe.sample.id,
-                                                          sample_puid: swe.sample.puid
-                                                        }
-        end
+    #     unless swe.metadata.nil?
+    #       @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.metadata_written', # rubocop:disable Layout/LineLength
+    #                                                     parameters: {
+    #                                                       workflow_id: @workflow_execution.id,
+    #                                                       sample_id: swe.sample.id,
+    #                                                       sample_puid: swe.sample.puid
+    #                                                     }
+    #     end
 
-        next if swe.outputs.empty?
+    #     next if swe.outputs.empty?
 
-        @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_written', # rubocop:disable Layout/LineLength
-                                                      parameters: {
-                                                        workflow_id: @workflow_execution.id,
-                                                        sample_id: swe.sample.id,
-                                                        sample_puid: swe.sample.puid
-                                                      }
-      end
-    end
+    #     @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_written', # rubocop:disable Layout/LineLength
+    #                                                   parameters: {
+    #                                                     workflow_id: @workflow_execution.id,
+    #                                                     sample_id: swe.sample.id,
+    #                                                     sample_puid: swe.sample.puid
+    #                                                   }
+    #   end
+    # end
   end
 end
