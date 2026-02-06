@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 require 'webmock/minitest'
 
 class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
+    @workflow_execution.email_notification = true
+    @workflow_execution.save!
     @workflow_execution.create_logidze_snapshot!
     @stubs = faraday_test_adapter_stubs
 
@@ -66,6 +70,92 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_performed_jobs 1
     assert @workflow_execution.reload.completing?
+
+    assert_no_enqueued_emails
+  end
+
+  test 'job execution still queued after status check' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+    end
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
+    assert @workflow_execution.reload.submitted?
+
+    assert_no_enqueued_emails
+  end
+
+  test 'job execution from queued to complete' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 4)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'QUEUED'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'RUNNING'
+          }
+        ]
+      end
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+
+    assert_performed_jobs(4, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert @workflow_execution.reload.completing?
+
+    assert_no_enqueued_emails
   end
 
   test 'repeated connection errors' do
@@ -98,6 +188,8 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert @workflow_execution.reload.completing?
+
+    assert_no_enqueued_emails
   end
 
   test 'repeated api exception errors' do
@@ -126,10 +218,14 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    # 3 failures
     assert_performed_jobs(3, only: WorkflowExecutionStatusJob)
     @workflow_execution.reload
     assert @workflow_execution.error?
     assert @workflow_execution.http_error_code == 400
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with PipelineMailer, :error_user_email, args: [@workflow_execution]
   end
 
   test 'api exception error then a success' do
@@ -158,6 +254,35 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_performed_jobs(2, only: WorkflowExecutionStatusJob)
     assert @workflow_execution.reload.completing?
+
+    assert_no_enqueued_emails
+  end
+
+  test 'system error job execution' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'SYSTEM_ERROR'
+          }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_performed_jobs 1
+    assert @workflow_execution.reload.error?
+
+    assert_enqueued_emails 1
+    assert_enqueued_email_with PipelineMailer, :error_user_email, args: [@workflow_execution]
   end
 
   test 'execution where namespace is removed before status is run' do
@@ -171,6 +296,8 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
     assert workflow_execution.reload.error?
+
+    assert_no_enqueued_emails
   end
 
   test 'execution where run_id is missing' do
@@ -186,25 +313,52 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
     assert workflow_execution.reload.error?
   end
 
-  test 'canceling workflow should return early' do
+  test 'already canceling workflow should return early' do
     workflow_execution = workflow_executions(:irida_next_example_canceling)
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
   end
 
-  test 'canceled workflow should return early' do
+  test 'already canceled workflow should return early' do
     workflow_execution = workflow_executions(:irida_next_example_canceled)
     workflow_execution.create_logidze_snapshot!
 
     WorkflowExecutionStatusJob.perform_later(workflow_execution)
+    assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
 
     assert_performed_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_enqueued_jobs(0)
+    assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+  end
+
+  test 'successful job execution service returned canceled' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'CANCELED'
+          }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob) do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      end
+    end
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert @workflow_execution.reload.canceled?
+
+    assert_no_enqueued_emails
   end
 
   test 'min_run_time with running state should delay status check' do
@@ -332,5 +486,39 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
 
     assert workflow_execution.reload.running?
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+  end
+
+  # Example test case using RSpec/TestUnit
+  test 'status job resumes from the correct step' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.get("/runs/#{@workflow_execution.run_id}/status") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+
+      interrupt_job_after_step(WorkflowExecutionStatusJob, :query_and_update_state) do
+        perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+      end
+
+      assert_equal :completing, @workflow_execution.reload.state.to_sym
+      assert_enqueued_jobs(0, only: WorkflowExecutionCompletionJob)
+      assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+
+      perform_enqueued_jobs(only: WorkflowExecutionStatusJob)
+
+      assert_equal :completing, @workflow_execution.reload.state.to_sym
+      assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+      assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    end
   end
 end
