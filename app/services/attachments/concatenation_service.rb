@@ -38,7 +38,7 @@ module Attachments
         is_paired_end = true
       end
 
-      attachments = attachable.attachments.where(id: attachment_ids, attachable:).order(:id)
+      attachments = attachable.attachments.where(id: attachment_ids, attachable:).order(:puid)
 
       # Checks to make sure the selected attachments to concatenate
       # do in fact belong to the same sample
