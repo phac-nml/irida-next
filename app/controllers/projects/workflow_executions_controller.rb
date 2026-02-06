@@ -106,23 +106,12 @@ module Projects
       namespace_project_workflow_executions_path
     end
 
-    def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def page_title
       case action_name
       when 'index'
-        @title = "#{t(:'general.default_sidebar.workflows')} · #{@project.full_name}"
+        @title = t(:'general.default_sidebar.workflows')
       when 'show'
-        workflow_execution_identifier = @workflow_execution.name.presence || @workflow_execution.id
-        workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
-        @title = case @tab
-                 when 'params'
-                   [workflow_header, t(:'workflow_executions.show.tabs.params'), @project.full_name].join(' · ')
-                 when 'samplesheet'
-                   [workflow_header, t(:'workflow_executions.show.tabs.samplesheet'), @project.full_name].join(' · ')
-                 when 'files'
-                   [workflow_header, t(:'workflow_executions.show.tabs.files'), @project.full_name].join(' · ')
-                 else
-                   [workflow_header, t(:'workflow_executions.show.tabs.summary'), @project.full_name].join(' · ')
-                 end
+        @title = @workflow_execution.name.presence || @workflow_execution.id
       end
     end
   end

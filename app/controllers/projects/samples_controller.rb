@@ -252,31 +252,17 @@ module Projects
       updated_params
     end
 
-    def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def page_title
       case action_name
       when 'new'
-        @title = [t(:'projects.samples.new.title'), @project.full_name].join(' · ')
+        @title = t(:'projects.samples.new.title')
       when 'edit'
-        @title = [t(:'projects.samples.edit.title'),
-                  "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
-                  @project.full_name].join(' · ')
+        @title = t(:'projects.samples.edit.title')
       when 'show'
         @tab = params[:tab]
-        @title = if @tab == 'metadata'
-                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
-                    t(:'projects.samples.show.tabs.metadata'),
-                    @project.full_name].join(' · ')
-                 elsif @tab == 'history'
-                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
-                    t(:'projects.samples.show.tabs.history'),
-                    @project.full_name].join(' · ')
-                 else
-                   ["#{t(:'activerecord.models.sample.one')} #{@sample.name}",
-                    t(:'projects.samples.show.tabs.files'),
-                    @project.full_name].join(' · ')
-                 end
+        @title = @sample.name
       else
-        @title = [t(:'activerecord.models.sample.other'), @project.full_name].join(' · ')
+        @title = t(:'activerecord.models.sample.other')
       end
     end
   end
