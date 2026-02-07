@@ -82,24 +82,13 @@ module Groups
       group_workflow_executions_path
     end
 
-    def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      case action_name
-      when 'index'
-        @title = "#{t(:'general.default_sidebar.workflows')} · #{@group.full_name}"
-      when 'show'
-        workflow_execution_identifier = @workflow_execution.name.presence || @workflow_execution.id
-        workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
-        @title = case @tab
-                 when 'params'
-                   [workflow_header, t(:'workflow_executions.show.tabs.params'), @group.full_name].join(' · ')
-                 when 'samplesheet'
-                   [workflow_header, t(:'workflow_executions.show.tabs.samplesheet'), @group.full_name].join(' · ')
-                 when 'files'
-                   [workflow_header, t(:'workflow_executions.show.tabs.files'), @group.full_name].join(' · ')
-                 else
-                   [workflow_header, t(:'workflow_executions.show.tabs.summary'), @group.full_name].join(' · ')
-                 end
-      end
+    def page_title
+      @title = case action_name
+               when 'index'
+                 t(:'general.default_sidebar.workflows')
+               when 'show'
+                 @workflow_execution.name.presence || @workflow_execution.id
+               end
     end
   end
 end

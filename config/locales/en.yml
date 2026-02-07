@@ -507,7 +507,6 @@ en:
     preview:
       manifest_json: manifest.json
     show:
-      page_title: Data Export
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         preview: Preview
@@ -838,7 +837,6 @@ en:
           description: There are no members that have been delegated access to this group
           title: No members
         invite_group: Invite Group
-        invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
         leave_group: Leave group
         remove_confirmation: Are you sure you want to remove this member from the group?
@@ -1425,7 +1423,6 @@ en:
           description: There are no members that have been delegated access to this project
           title: No members
         invite_group: Invite group
-        invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from the project?
         leave_project: Leave project
         remove_confirmation: Are you sure you want to remove this member from the project?
@@ -1970,7 +1967,6 @@ en:
         name: 'Name:'
         run_id: 'Run ID:'
         workflow: 'Workflow:'
-      workflow_execution: Workflow Execution
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
