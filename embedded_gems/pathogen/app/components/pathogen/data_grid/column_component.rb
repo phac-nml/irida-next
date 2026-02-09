@@ -83,7 +83,10 @@ module Pathogen
 
         styles = []
         styles << "--pathogen-data-grid-col-width: #{@width};" if @width
-        styles << "--pathogen-data-grid-sticky-left: #{@sticky_left}px;" if @sticky
+        if @sticky
+          sticky_left_value = @sticky_left.is_a?(Numeric) ? "#{@sticky_left}px" : @sticky_left
+          styles << "--pathogen-data-grid-sticky-left: #{sticky_left_value};"
+        end
 
         { class: class_names(*classes), style: styles.join(' ') }
       end

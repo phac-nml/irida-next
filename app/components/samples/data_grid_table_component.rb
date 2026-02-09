@@ -65,9 +65,24 @@ module Samples
     end
 
     def data_grid_width(column)
-      return helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) if column == :puid
+      return puid_width if column == :puid
 
       nil
+    end
+
+    def data_grid_sticky?(column)
+      %i[puid name].include?(column)
+    end
+
+    def data_grid_sticky_left(column)
+      return 0 if column == :puid
+      return puid_width if column == :name
+
+      nil
+    end
+
+    def puid_width
+      helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples])
     end
 
     def highlight_term
@@ -87,7 +102,7 @@ module Samples
     def render_column_value(column, sample)
       renderers = column_renderers(sample)
       renderer = renderers.fetch(column.to_s, :render_default_column)
-      public_send(renderer, column, sample)
+      send(renderer, column, sample)
     end
 
     private
