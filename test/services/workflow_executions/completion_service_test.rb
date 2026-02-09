@@ -30,7 +30,6 @@ module WorkflowExecutions
       @workflow_execution_no_files.blob_run_directory = blob_run_directory_b
       @workflow_execution_no_files.save
 
-
       # create file blobs
       @no_files_output_json_file_blob = make_and_upload_blob(
         filepath: 'test/fixtures/files/blob_outputs/no_files/iridanext.output.json',

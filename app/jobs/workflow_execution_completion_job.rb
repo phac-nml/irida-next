@@ -2,6 +2,8 @@
 
 # Queues the workflow execution completion job
 class WorkflowExecutionCompletionJob < WorkflowExecutionJob
+  include ActiveJob::Continuable
+
   queue_as :default
   queue_with_priority 10
 
@@ -13,14 +15,14 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
     end
 
     # Steps
-    run_service
+    step :run_service
 
-    merge_metadata_onto_samples
-    put_output_attachments_onto_samples
-    create_activities
+    step :merge_metadata_onto_samples
+    step :put_output_attachments_onto_samples
+    step :create_activities
 
-    update_state(:completed) unless @workflow_execution.state.to_sym == :error
-    queue_next_job
+    step :update_state_step
+    step :queue_next_job
   end
 
   private
@@ -97,6 +99,12 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
         key: 'workflow_execution.automated_workflow_completion.outputs_written', parameters:
       )
     end
+  end
+
+  def update_state_step
+    return if @workflow_execution.state.to_sym == :error
+
+    update_state(:completed)
   end
 
   def update_state(state, force: false)
