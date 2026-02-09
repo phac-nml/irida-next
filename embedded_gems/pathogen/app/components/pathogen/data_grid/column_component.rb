@@ -3,6 +3,21 @@
 module Pathogen
   module DataGrid
     # Column definition for DataGridComponent
+    #
+    # == Public API
+    #
+    # @param label [String] Column header label.
+    # @param key [Symbol, String, nil] Hash key lookup when no block is provided.
+    # @param width [Numeric, String, nil] Column width (numeric values become "px").
+    # @param align [Symbol, String, nil] Alignment class suffix (e.g. :left, :center, :right).
+    # @param sticky [Boolean, nil] Explicitly enable/disable sticky behavior.
+    # @param sticky_left [Numeric, nil] Left offset in pixels; can enable sticky without width.
+    # @param system_arguments [Hash] Additional HTML attributes for the cell.
+    # @yieldparam row [Hash, Array] Row data for the current cell.
+    # @yieldparam index [Integer] Column index.
+    #
+    # @note Sticky columns require either `width:` or `sticky_left:` to be applied.
+    #   If both are missing, the grid disables sticky for that column.
     class ColumnComponent < Pathogen::Component
       attr_accessor :sticky, :sticky_left
       attr_reader :label, :key, :width, :align
