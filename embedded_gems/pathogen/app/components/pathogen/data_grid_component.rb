@@ -5,7 +5,7 @@ module Pathogen
   #
   # == Public API
   #
-  # @param rows [Array<Hash, Array>] The data rows to render.
+  # @param rows [Array<Hash, Array, Object>] The data rows to render.
   # @param caption [String, nil] Optional visual caption rendered above the table.
   #   When present, the table uses `aria-labelledby` to associate the caption.
   # @param sticky_columns [Integer] Number of leading columns to treat as sticky
@@ -25,6 +25,11 @@ module Pathogen
   #
   # CSS dependency: pathogen/pathogen.css
   class DataGridComponent < Pathogen::Component
+    renders_one :empty_state
+    renders_one :footer
+    renders_one :live_region
+    renders_one :metadata_warning
+
     # Renders an individual column definition for the grid.
     #
     # @param label [String] Column header label.
@@ -33,8 +38,9 @@ module Pathogen
     # @param align [Symbol, String, nil] Alignment class suffix (e.g. :left, :center, :right).
     # @param sticky [Boolean, nil] Explicitly enable/disable sticky behavior for this column.
     # @param sticky_left [Numeric, nil] Left offset in pixels; can enable sticky without width.
+    # @param header_content [String, Proc, nil] Custom header content to replace the label.
     # @param system_arguments [Hash] Additional HTML attributes for the cell.
-    # @yieldparam row [Hash, Array] Row data for the current cell.
+    # @yieldparam row [Hash, Array, Object] Row data for the current cell.
     # @yieldparam index [Integer] Column index.
     # @return [Pathogen::DataGrid::ColumnComponent]
     renders_many :columns, lambda { |label, **system_arguments, &block|

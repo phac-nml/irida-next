@@ -1,0 +1,227 @@
+# frozen_string_literal: true
+
+require 'ransack/helpers/form_helper'
+
+module Samples
+  # Wrapper component for rendering samples in Pathogen::DataGridComponent.
+  class DataGridTableComponent < Component # rubocop:disable Metrics/ClassLength
+    include Ransack::Helpers::FormHelper
+
+    # Maximum number of metadata fields to display regardless of sample count
+    MAX_METADATA_FIELDS_SIZE = 200
+    # Target maximum number of table cells (rows × columns) for optimal performance
+    TARGET_MAX_CELLS = 2000
+
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(
+      samples,
+      namespace,
+      pagy,
+      has_samples: true,
+      abilities: {},
+      metadata_fields: [],
+      search_params: {},
+      empty: {},
+      **system_arguments
+    )
+      @samples = samples
+      @namespace = namespace
+      @pagy = pagy
+      @has_samples = has_samples
+      @abilities = abilities
+
+      @metadata_fields, @show_metadata_fields_size_warning =
+        apply_metadata_field_limit(metadata_fields)
+
+      @search_params = search_params
+      @empty = empty
+      @system_arguments = system_arguments
+
+      # use rpartition to split on the first space encountered from the right side
+      # this allows us to sort by metadata fields which contain spaces
+      @sort_key, _space, @sort_direction = (search_params['sort'] || '').rpartition(' ')
+
+      @columns = columns
+    end
+    # rubocop:enable Metrics/ParameterLists
+
+    def before_render
+      return unless @show_metadata_fields_size_warning
+
+      can_edit = @abilities[:edit_sample_metadata]
+      @metadata_fields_size_warning_message = build_metadata_fields_size_warning_message(can_edit_metadata: can_edit)
+    end
+
+    def data_grid_arguments
+      base_args = @system_arguments.dup
+      base_args[:class] = class_names(base_args[:class], 'samples-data-grid')
+      base_args
+    end
+
+    def data_grid_label(column)
+      return I18n.t('samples.table_component.namespaces.puid') if column.to_s == 'namespaces.puid'
+
+      I18n.t("samples.table_component.#{column}")
+    end
+
+    def data_grid_width(column)
+      return helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) if column == :puid
+
+      nil
+    end
+
+    def highlight_term
+      @search_params[:name_or_puid_cont] || @search_params['name_or_puid_cont']
+    end
+
+    def empty_state?
+      return false if @has_samples && @pagy.vars[:size].positive?
+
+      true
+    end
+
+    def metadata_value(sample, field)
+      sample.metadata[field]
+    end
+
+    def render_column_value(column, sample)
+      renderers = column_renderers(sample)
+      renderer = renderers.fetch(column.to_s, :render_default_column)
+      public_send(renderer, column, sample)
+    end
+
+    private
+
+    def column_renderers(_sample)
+      {
+        'puid' => :render_puid_column,
+        'name' => :render_name_column,
+        'namespaces.puid' => :render_project_puid_column,
+        'created_at' => :render_created_at_column,
+        'updated_at' => :render_updated_at_column,
+        'attachments_updated_at' => :render_attachments_updated_at_column
+      }
+    end
+
+    def render_puid_column(_column, sample)
+      helpers.tag.span(
+        helpers.highlight(
+          sample.puid,
+          highlight_term,
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\\1</mark>'
+        ),
+        class: 'font-mono font-semibold'
+      )
+    end
+
+    def render_name_column(_column, sample)
+      helpers.link_to(
+        helpers.sample_path(sample),
+        data: { turbo: false },
+        class: 'text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2'
+      ) do
+        helpers.highlight(
+          sample.name,
+          highlight_term,
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\\1</mark>'
+        )
+      end
+    end
+
+    def render_project_puid_column(_column, sample)
+      helpers.link_to(
+        sample.project.puid,
+        helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
+        data: { turbo: false },
+        class: 'font-semibold underline hover:decoration-2'
+      )
+    end
+
+    def render_created_at_column(_column, sample)
+      helpers.local_date(sample.created_at, :long)
+    end
+
+    def render_updated_at_column(_column, sample)
+      return if sample.updated_at.blank?
+
+      helpers.local_time_ago(sample.updated_at)
+    end
+
+    def render_attachments_updated_at_column(_column, sample)
+      return if sample.attachments_updated_at.blank?
+
+      helpers.local_time_ago(sample.attachments_updated_at)
+    end
+
+    def render_default_column(column, sample)
+      sample.public_send(column.to_sym)
+    end
+
+    def columns
+      columns = %i[puid name]
+      columns << 'namespaces.puid' if @namespace.type == 'Group'
+      columns += %i[created_at updated_at attachments_updated_at]
+      columns
+    end
+
+    def calculate_max_metadata_fields
+      return MAX_METADATA_FIELDS_SIZE if @samples.empty?
+
+      (TARGET_MAX_CELLS / @samples.size).floor.clamp(1, MAX_METADATA_FIELDS_SIZE)
+    end
+
+    def apply_metadata_field_limit(metadata_fields)
+      max_fields = calculate_max_metadata_fields
+      limited_fields = metadata_fields.take(max_fields)
+      show_warning = metadata_fields.count > max_fields
+      [limited_fields, show_warning]
+    end
+
+    def build_metadata_fields_size_warning_message(can_edit_metadata: false)
+      params = warning_interpolation_params
+
+      if can_edit_metadata
+        warning_message_with_link(params)
+      else
+        I18n.t('components.samples.table_component.metadata_fields_size_warning', **params)
+      end
+    end
+
+    def warning_interpolation_params
+      {
+        calculated_limit: calculate_max_metadata_fields,
+        sample_count: @samples.size,
+        target_max_cells: TARGET_MAX_CELLS
+      }
+    end
+
+    def warning_message_with_link(params)
+      link_markup = create_template_link
+
+      # Using html_safe because we're interpolating a link_to helper result
+      # which is already sanitized by Rails. This is safe as the link_markup
+      # contains no user-provided content - only the translated link text.
+      I18n.t(
+        'components.samples.table_component.metadata_fields_size_warning_with_link',
+        **params, create_template_link: link_markup
+      ).html_safe
+    end
+
+    def create_template_link
+      helpers.link_to(
+        I18n.t('components.samples.table_component.create_template_link'),
+        metadata_template_url,
+        class: 'font-semibold underline hover:no-underline',
+        data: { turbo_frame: 'top' }
+      )
+    end
+
+    def metadata_template_url
+      if @namespace.type == 'Group'
+        helpers.group_metadata_templates_path(@namespace)
+      else
+        helpers.namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
+      end
+    end
+  end
+end
