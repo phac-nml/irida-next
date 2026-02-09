@@ -57,7 +57,7 @@ gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
 # API Integrations
-gem 'faraday', '~> 2.5'
+gem 'faraday', '~> 2.14'
 gem 'faraday-follow_redirects'
 gem 'faraday-multipart'
 gem 'faraday-net_http_persistent', '~> 2.1'
