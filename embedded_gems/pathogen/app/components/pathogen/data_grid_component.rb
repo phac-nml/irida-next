@@ -3,8 +3,40 @@
 module Pathogen
   # DataGrid component for rendering accessible tabular data with sticky columns.
   #
+  # == Public API
+  #
+  # @param rows [Array<Hash, Array>] The data rows to render.
+  # @param caption [String, nil] Optional visual caption rendered above the table.
+  #   When present, the table uses `aria-labelledby` to associate the caption.
+  # @param sticky_columns [Integer] Number of leading columns to treat as sticky
+  #   by default. Individual columns can override with `sticky: true/false`.
+  # @param system_arguments [Hash] Additional HTML attributes for the outer wrapper.
+  #
+  # @example Basic usage
+  #   <%= render Pathogen::DataGridComponent.new(rows: @rows, caption: "Samples") do |grid| %>
+  #     <% grid.with_column("ID", key: :id, width: 120) %>
+  #     <% grid.with_column("Name", key: :name, width: 240) %>
+  #   <% end %>
+  #
+  # @example Custom cell rendering
+  #   <%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  #     <% grid.with_column("Name") { |row| tag.strong(row[:name]) } %>
+  #   <% end %>
+  #
   # CSS dependency: pathogen/pathogen.css
   class DataGridComponent < Pathogen::Component
+    # Renders an individual column definition for the grid.
+    #
+    # @param label [String] Column header label.
+    # @param key [Symbol, String, nil] Hash key lookup when no block is provided.
+    # @param width [Numeric, String, nil] Column width (numeric values become "px").
+    # @param align [Symbol, String, nil] Alignment class suffix (e.g. :left, :center, :right).
+    # @param sticky [Boolean, nil] Explicitly enable/disable sticky behavior for this column.
+    # @param sticky_left [Numeric, nil] Left offset in pixels; can enable sticky without width.
+    # @param system_arguments [Hash] Additional HTML attributes for the cell.
+    # @yieldparam row [Hash, Array] Row data for the current cell.
+    # @yieldparam index [Integer] Column index.
+    # @return [Pathogen::DataGrid::ColumnComponent]
     renders_many :columns, lambda { |label, **system_arguments, &block|
       Pathogen::DataGrid::ColumnComponent.new(label: label, **system_arguments, &block)
     }

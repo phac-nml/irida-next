@@ -63,11 +63,40 @@ module Pathogen
                       ]
                     )) do |grid|
         grid.with_column('ID', key: :id)
-        grid.with_column('Name') { |row| helpers.content_tag(:strong, row[:name]) }
+        grid.with_column('Name') { |row| ActionController::Base.helpers.content_tag(:strong, row[:name]) }
       end
 
       assert_selector 'td.pathogen-data-grid__cell--body', text: 'S-003'
       assert_selector 'strong', text: 'Sample three'
+    end
+
+    test 'applies sticky left offset when provided without width' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: [
+                        { id: 'S-020', name: 'Sample twenty' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, sticky: true, sticky_left: 24)
+        grid.with_column('Name', key: :name)
+      end
+
+      assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 24px"]'
+    end
+
+    test 'normalizes numeric widths to px units' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: [
+                        { id: 'S-021', name: 'Sample twenty-one' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, width: 96)
+        grid.with_column('Name', key: :name, width: '180px')
+      end
+
+      assert_selector 'th[style*="--pathogen-data-grid-col-width: 96px"]'
+      assert_selector 'th[style*="--pathogen-data-grid-col-width: 180px"]'
     end
   end
 end
