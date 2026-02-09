@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/blob_test_helpers'
 require 'test_helpers/faraday_test_helpers'
@@ -7,6 +8,7 @@ require 'test_helpers/faraday_test_helpers'
 class WorkflowExecutionCompletionJobTest < ActiveJob::TestCase
   include BlobTestHelpers
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup
     @workflow_execution_canceling = workflow_executions(:irida_next_example_canceling)
@@ -54,5 +56,28 @@ class WorkflowExecutionCompletionJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionCompletionJob)
     @workflow_execution_canceling.reload.state.to_sym == :error
+  end
+
+  test 'job resumes from correct step' do
+    workflow_execution = @workflow_execution_completing
+
+    WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+    assert_equal 0, workflow_execution.outputs.count
+    interrupt_job_after_step(WorkflowExecutionCompletionJob, :run_service) do
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    end
+
+    assert_performed_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionCleanupJob)
+
+    assert_equal 1, workflow_execution.outputs.count
+
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_performed_jobs(2, only: WorkflowExecutionCompletionJob)
+    workflow_execution.reload.state.to_sym == :completed
   end
 end
