@@ -9,9 +9,6 @@ export default class MenuController extends Controller {
     strategy: { type: String, default: "absolute" },
   };
 
-  #menu = this.menuTarget;
-  #trigger = this.triggerTarget;
-  #triggerType = this.triggerTypeValue;
   #visible = false;
   #cleanup = null;
   #onShow = null;
@@ -30,20 +27,18 @@ export default class MenuController extends Controller {
   }
 
   triggerTargetConnected() {
-    if (this.#triggerType === "click") {
-      this.#trigger.addEventListener("click", this.boundOnTriggerClick);
+    if (this.triggerTypeValue === "click") {
+      this.triggerTarget.addEventListener("click", this.boundOnTriggerClick);
     }
   }
 
   triggerTargetDisconnected() {
-    if (this.#triggerType === "click") {
-      this.#trigger.removeEventListener("click", this.boundOnTriggerClick);
+    if (this.triggerTypeValue === "click") {
+      this.triggerTarget.removeEventListener("click", this.boundOnTriggerClick);
     }
   }
 
-  share({ menu, triggerType, onShow, onHide }) {
-    if (menu) this.#menu = menu;
-    if (triggerType) this.#triggerType = triggerType;
+  share({ onShow, onHide }) {
     if (onShow) this.#onShow = onShow;
     if (onHide) this.#onHide = onHide;
   }
@@ -61,9 +56,9 @@ export default class MenuController extends Controller {
   }
 
   show() {
-    this.#trigger.setAttribute("aria-expanded", "true");
-    this.#menu.setAttribute("aria-hidden", "false");
-    this.#menu.removeAttribute("hidden");
+    this.triggerTarget.setAttribute("aria-expanded", "true");
+    this.menuTarget.setAttribute("aria-hidden", "false");
+    this.menuTarget.removeAttribute("hidden");
     this.#visible = true;
 
     this.#setupClickOutsideListener();
@@ -73,16 +68,16 @@ export default class MenuController extends Controller {
     }
 
     this.#cleanup = autoUpdate(
-      this.#trigger,
-      this.#menu,
+      this.triggerTarget,
+      this.menuTarget,
       this.update.bind(this),
     );
   }
 
   hide() {
-    this.#trigger.setAttribute("aria-expanded", "false");
-    this.#menu.setAttribute("aria-hidden", "true");
-    this.#menu.setAttribute("hidden", "");
+    this.triggerTarget.setAttribute("aria-expanded", "false");
+    this.menuTarget.setAttribute("aria-hidden", "true");
+    this.menuTarget.setAttribute("hidden", "");
     this.#visible = false;
 
     this.#removeClickOutsideListener();
@@ -95,7 +90,7 @@ export default class MenuController extends Controller {
   }
 
   update() {
-    computePosition(this.#trigger, this.#menu, {
+    computePosition(this.triggerTarget, this.menuTarget, {
       placement: "bottom",
       middleware: [
         flip(),
@@ -108,7 +103,7 @@ export default class MenuController extends Controller {
         }),
       ],
     }).then(({ x, y }) => {
-      Object.assign(this.#menu.style, {
+      Object.assign(this.menuTarget.style, {
         position: this.strategyValue,
         left: `${x}px`,
         top: `${y}px`,
