@@ -29,9 +29,9 @@ When used as a Rails Engine (the default for IRIDA Next), the JavaScript integra
 2. **Controller Auto-Registration**: Import the entry point in your `app/javascript/application.js`:
 
 ```javascript
-import "@hotwired/turbo-rails"
-import "controllers"
-import "pathogen_view_components"  // Auto-registers all Pathogen controllers
+import "@hotwired/turbo-rails";
+import "controllers";
+import "pathogen_view_components"; // Auto-registers all Pathogen controllers
 ```
 
 That's it! All Pathogen Stimulus controllers are now registered and ready to use.
@@ -51,11 +51,12 @@ To verify that Pathogen controllers are registered correctly:
 
 1. **Check Importmap Registration**: Visit `/rails/importmap` in your browser and search for "pathogen". You should see:
    - `pathogen_view_components` entry point
-   - `pathogen-controllers/pathogen/*` controller paths
+   - `pathogen_view_components/pathogen/*` controller paths
 
 2. **Enable Stimulus Debug Mode**: Open your browser console and run:
+
    ```javascript
-   window.Stimulus.debug = true
+   window.Stimulus.debug = true;
    ```
 
 3. **Refresh the Page**: You should see registration logs for:
@@ -66,7 +67,7 @@ To verify that Pathogen controllers are registered correctly:
 
 4. **Inspect Registered Controllers**: In the browser console:
    ```javascript
-   application.controllers
+   application.controllers;
    ```
 
 ### JavaScript Dependencies
@@ -91,7 +92,7 @@ gem 'pathogen_view_components'
 
 ```javascript
 // app/javascript/application.js
-import "pathogen_view_components"
+import "pathogen_view_components";
 ```
 
 The engine automatically merges its importmap with your application's importmap. No manual configuration required.
@@ -103,14 +104,17 @@ The engine automatically merges its importmap with your application's importmap.
 **Problem**: Pathogen controllers are not appearing in Stimulus debug output.
 
 **Solutions**:
+
 1. Verify the import in `app/javascript/application.js`:
+
    ```javascript
-   import "pathogen_view_components"
+   import "pathogen_view_components";
    ```
 
 2. Check the importmap at `/rails/importmap` for pathogen entries.
 
 3. Clear Rails caches:
+
    ```bash
    bin/rails tmp:clear
    ```
@@ -122,10 +126,13 @@ The engine automatically merges its importmap with your application's importmap.
 **Problem**: Browser console shows 404 errors for pathogen controller imports.
 
 **Solutions**:
+
 1. Verify the engine's importmap is registered:
+
    ```bash
    bin/rails runner "puts Rails.application.config.importmap.paths.grep(/pathogen/)"
    ```
+
    Should output: `embedded_gems/pathogen/config/importmap.rb`
 
 2. Check cache sweepers are configured in development mode.
@@ -137,6 +144,7 @@ The engine automatically merges its importmap with your application's importmap.
 **Problem**: Components using `data-controller="pathogen--tabs"` are not connecting.
 
 **Solutions**:
+
 1. Enable Stimulus debug mode: `window.Stimulus.debug = true`
 
 2. Check browser console for controller registration logs.
@@ -151,9 +159,11 @@ The engine automatically merges its importmap with your application's importmap.
 **Problem**: Tooltip controller throws "Flowbite not found" errors.
 
 **Solutions**:
+
 1. Ensure Flowbite is imported in your application.js:
+
    ```javascript
-   import "flowbite"
+   import "flowbite";
    ```
 
 2. Note: Flowbite is a temporary dependency and will be removed in a future version.

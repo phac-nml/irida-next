@@ -191,8 +191,8 @@ export default class extends Controller {
           this.#navigateToPrevious(event),
         [isVertical ? "ArrowDown" : "ArrowRight"]: () =>
           this.#navigateToNext(event),
-        Home: () => this.#navigateToFirst(event),
-        End: () => this.#navigateToLast(event),
+        Home: () => this.#navigateToFirst(),
+        End: () => this.#navigateToLast(),
       };
 
       const handler = handlers[event.key];

@@ -294,7 +294,7 @@ export default class extends Controller {
   /**
    * Handles Escape key dismissal (called by registry).
    */
-  handleEscape(_event) {
+  handleEscape() {
     if (!this.#tooltipElement || !this.#isVisible()) return;
 
     this.#escapeDismissed = true;
@@ -329,7 +329,7 @@ export default class extends Controller {
 
   // Private methods
 
-  #handleTouchStart(_event) {
+  #handleTouchStart() {
     if (!this.#tooltipElement || !this.#triggerElement) return;
     this.#touchStarted = true;
   }

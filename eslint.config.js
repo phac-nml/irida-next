@@ -30,6 +30,7 @@ export default defineConfig([
     files: [
       "app/javascript/**/*.js",
       "embedded_gems/**/app/javascript/**/*.js",
+      "embedded_gems/**/app/assets/javascripts/**/*.js",
     ],
     languageOptions: {
       ecmaVersion: 2022,
