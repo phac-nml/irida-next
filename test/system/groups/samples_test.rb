@@ -61,6 +61,21 @@ module Groups
       assert_selector 'table tbody tr', count: 20
     end
 
+    test 'group samples index uses data grid when flag enabled' do
+      Flipper.enable(:data_grid_samples_table)
+
+      visit group_samples_url(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
+      assert_selector '.pathogen-data-grid__table'
+      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(1)',
+                      text: I18n.t('samples.table_component.puid')
+      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(2)',
+                      text: I18n.t('samples.table_component.name')
+    ensure
+      Flipper.disable(:data_grid_samples_table)
+    end
+
     test 'visiting the index of a group which has other groups/projects linked to it' do
       login_as users(:david_doe)
       # group_one shared with group
