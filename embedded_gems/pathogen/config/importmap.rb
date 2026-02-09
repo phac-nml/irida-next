@@ -10,18 +10,6 @@ pin 'pathogen_view_components/datepicker/calendar_controller',
     to: 'pathogen_view_components/datepicker/calendar_controller.js'
 pin 'pathogen_view_components/datepicker/utils', to: 'pathogen_view_components/datepicker/utils.js'
 pin 'pathogen_view_components/datepicker/constants', to: 'pathogen_view_components/datepicker/constants.js'
-pin 'pathogen-controllers/pathogen/tabs_controller', to: 'pathogen_view_components/tabs_controller.js'
-pin 'pathogen-controllers/pathogen/tooltip_controller', to: 'pathogen_view_components/tooltip_controller.js'
-pin 'pathogen_view_components/datepicker/input_controller',
-    to: 'pathogen_view_components/datepicker/input_controller.js'
-pin 'pathogen_view_components/datepicker/beta_input_controller',
-    to: 'pathogen/datepicker/beta_input_controller.js'
-pin 'pathogen_view_components/datepicker/calendar_controller',
-    to: 'pathogen_view_components/datepicker/calendar_controller.js'
-pin 'pathogen_view_components/datepicker/beta_calendar_controller',
-    to: 'pathogen/datepicker/beta_calendar_controller.js'
-pin 'pathogen_view_components/datepicker/utils', to: 'pathogen_view_components/datepicker/utils.js'
-pin 'pathogen_view_components/datepicker/constants', to: 'pathogen_view_components/datepicker/constants.js'
 
 # Pin main entry point
 pin 'pathogen_view_components', to: 'pathogen_view_components.js'

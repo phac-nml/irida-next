@@ -1,16 +1,9 @@
-<template
-  <% if Flipper.enabled?(:beta_dropdown) %>
-  data-pathogen--datepicker--beta-input-target="calendarTemplate"
-  <% else %>
-  data-pathogen--datepicker--input-target="calendarTemplate"
-  <% end %>
->
+<template data-pathogen--datepicker--input-target="calendarTemplate">
   <%= render Pathogen::BaseComponent.new(**calendar_arguments) do %>
     <div
-      class="<%= class_names('inline-block rounded-lg bg-white dark:bg-slate-700 shadow-sm max-[384px]:p-1 p-4', { 'overflow-y-auto': Flipper.enabled?(:beta_dropdown) }) %>"
-      <% if Flipper.enabled?(:beta_dropdown) %>
-      style="max-height: inherit;"
-      <% end %>
+      class="
+        inline-block rounded-lg bg-white dark:bg-slate-700 shadow-sm max-[384px]:p-1 p-4
+      "
     >
       <%= render partial: "pathogen/datepicker/calendar/header",
       locals: {

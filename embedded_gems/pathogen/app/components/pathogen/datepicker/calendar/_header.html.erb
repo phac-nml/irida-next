@@ -15,42 +15,24 @@
         enabled:dark:hover:text-white text-lg p-2.5 prev-btn mr-2 enabled:cursor-pointer
         disabled:cursor-not-allowed
       "
-      <% if Flipper.enabled?(:beta_dropdown) %>
-      data-action="
-        click->pathogen--datepicker--beta-calendar#previousMonth
-        keydown->pathogen--datepicker--beta-calendar#tabBackToInput
-      "
-      data-pathogen--datepicker--beta-calendar-target="backButton"
-      <% else %>
       data-action="
         click->pathogen--datepicker--calendar#previousMonth
         keydown->pathogen--datepicker--calendar#tabBackToInput
       "
       data-pathogen--datepicker--calendar-target="backButton"
-      <% end %>
       aria-label="<%= t("pathogen.datepicker.aria_label.previous_month_button")%>"
     >
       <%= pathogen_icon(:arrow_left, size: :sm) %>
     </button>
     <div
-      <% if Flipper.enabled?(:beta_dropdown) %>
-      data-pathogen--datepicker--beta-calendar-target="monthSelectContainer"
-      data-action="keydown->pathogen--datepicker--beta-calendar#tabBackToInput"
-      <% else %>
       data-pathogen--datepicker--calendar-target="monthSelectContainer"
       data-action="keydown->pathogen--datepicker--calendar#tabBackToInput"
-      <% end %>
     >
     </div>
     <div>
       <input
-        <% if Flipper.enabled?(:beta_dropdown) %>
-        data-pathogen--datepicker--beta-calendar-target="year"
-        data-action="change->pathogen--datepicker--beta-calendar#changeYear"
-        <% else %>
         data-pathogen--datepicker--calendar-target="year"
         data-action="change->pathogen--datepicker--calendar#changeYear"
-        <% end %>
         type="number"
         max="9999"
         min="<%= min_year %>"
@@ -68,11 +50,7 @@
         hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
         dark:hover:text-white text-lg p-2.5 next-btn ml-2 cursor-pointer
       "
-      <% if Flipper.enabled?(:beta_dropdown) %>
-      data-action="click->pathogen--datepicker--beta-calendar#nextMonth"
-      <% else %>
       data-action="click->pathogen--datepicker--calendar#nextMonth"
-      <% end %>
       aria-label="<%= t("pathogen.datepicker.aria_label.next_month_button")%>"
     >
       <%= pathogen_icon(:arrow_right, size: :sm) %>
@@ -80,21 +58,10 @@
   </div>
 </div>
 
-<template
-  <% if Flipper.enabled?(:beta_dropdown) %>
-  data-pathogen--datepicker--beta-calendar-target="monthSelectTemplate"
-  <% else %>
-  data-pathogen--datepicker--calendar-target="monthSelectTemplate"
-  <% end %>
->
+<template data-pathogen--datepicker--calendar-target="monthSelectTemplate">
   <select
-    <% if Flipper.enabled?(:beta_dropdown) %>
-    data-pathogen--datepicker--beta-calendar-target="monthSelect"
-    data-action="change->pathogen--datepicker--beta-calendar#changeMonth"
-    <% else %>
     data-pathogen--datepicker--calendar-target="monthSelect"
     data-action="change->pathogen--datepicker--calendar#changeMonth"
-    <% end %>
     class="
       rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
       dark:bg-slate-800 dark:text-white

@@ -3,7 +3,7 @@
 module Pathogen
   # Datepicker Component
   # Renders the date input along with datepicker calendar
-  class Datepicker < Pathogen::Component # rubocop:disable Metrics/ClassLength
+  class Datepicker < Pathogen::Component
     # Default HTML tag for components main elements.
     TAG_DEFAULT = :div
 
@@ -11,7 +11,7 @@ module Pathogen
     SYSTEM_DEFAULT_CLASSES = 'relative'
 
     # Default CSS classes for the <div> element containing the datepicker.
-    CALENDAR_DEFAULT_CLASSES = 'z-100 active select-none'
+    CALENDAR_DEFAULT_CLASSES = 'hidden z-100 active select-none'
 
     # Initializes a new Datepicker component.
     # @param id [String] A unique identifier that is manipulated to use on multiple component items. This is required.
@@ -97,51 +97,32 @@ module Pathogen
         @system_arguments[:class]
       )
       @system_arguments[:data] ||= {}
-      @system_arguments[:data][:controller] = input_controller_name
-      @system_arguments[:data]["#{input_controller_name}-#{calendar_controller_name}-outlet"] = "##{@calendar_id}"
-      @system_arguments[:data]["#{input_controller_name}-autosubmit-value"] = @autosubmit
-      @system_arguments[:data]["#{input_controller_name}-invalid-date-value"] =
+      @system_arguments[:data][:controller] = 'pathogen--datepicker--input'
+      @system_arguments[:data]['pathogen--datepicker--input-pathogen--datepicker--calendar-outlet'] = "##{@calendar_id}"
+      @system_arguments[:data]['pathogen--datepicker--input-autosubmit-value'] = @autosubmit
+      @system_arguments[:data]['pathogen--datepicker--input-invalid-date-value'] =
         I18n.t('pathogen.datepicker.errors.invalid_date')
-      @system_arguments[:data]["#{input_controller_name}-invalid-min-date-value"] =
+      @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
         I18n.t('pathogen.datepicker.errors.min_date_error')
-      @system_arguments[:data]["#{input_controller_name}-calendar-id-value"] = @calendar_id
-      @system_arguments[:data]["#{input_controller_name}-target"] = 'menu'
-      @system_arguments[:data]["#{input_controller_name}-date-format-regex-value"] =
+      @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
+      @system_arguments[:data]['pathogen--datepicker--input-date-format-regex-value'] =
         I18n.t('pathogen.datepicker.date_format_regex')
-    end
-
-    def input_controller_name
-      if Flipper.enabled?(:beta_dropdown)
-        'pathogen--datepicker--beta-input'
-      else
-        'pathogen--datepicker--input'
-      end
-    end
-
-    def calendar_controller_name
-      if Flipper.enabled?(:beta_dropdown)
-        'pathogen--datepicker--beta-calendar'
-      else
-        'pathogen--datepicker--calendar'
-      end
     end
 
     # Configures HTML attributes for the <div> datepicker calendar.
     def setup_calendar_attributes
       @calendar_arguments[:id] = @calendar_id
       @calendar_arguments[:tag] = TAG_DEFAULT
-      @calendar_arguments[:hidden] = ''
       @calendar_arguments[:class] = class_names(
         CALENDAR_DEFAULT_CLASSES,
         @calendar_arguments[:class]
       )
 
       @calendar_arguments[:data] ||= {}
-      @calendar_arguments[:data][:controller] = calendar_controller_name
-
-      @calendar_arguments[:data]["#{calendar_controller_name}-#{input_controller_name}-outlet"] =
+      @calendar_arguments[:data][:controller] = 'pathogen--datepicker--calendar'
+      @calendar_arguments[:data]['pathogen--datepicker--calendar-pathogen--datepicker--input-outlet'] =
         "##{@container_id}"
-      @calendar_arguments[:data]["#{calendar_controller_name}-months-value"] = @months
+      @calendar_arguments[:data]['pathogen--datepicker--calendar-months-value'] = @months
     end
   end
 end

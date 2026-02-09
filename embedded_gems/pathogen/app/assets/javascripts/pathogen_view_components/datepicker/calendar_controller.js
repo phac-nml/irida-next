@@ -498,7 +498,7 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerInputOutlet.focusTrigger();
+      this.pathogenDatepickerInputOutlet.focusDatepickerInput();
       this.pathogenDatepickerInputOutlet.hideCalendar();
     }
   }

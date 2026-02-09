@@ -16,24 +16,12 @@
         <% end %>
       </tr>
     </thead>
-    <tbody
-      <% if Flipper.enabled?(:beta_dropdown) %>
-      data-pathogen--datepicker--beta-calendar-target="calendar"
-      <% else %>
-      data-pathogen--datepicker--calendar-target="calendar"
-      <% end %>
-    >
+    <tbody data-pathogen--datepicker--calendar-target="calendar">
     </tbody>
   </table>
 </div>
 
-<template
-  <% if Flipper.enabled?(:beta_dropdown) %>
-  data-pathogen--datepicker--beta-calendar-target="inMonthDateTemplate"
-  <% else %>
-  data-pathogen--datepicker--calendar-target="inMonthDateTemplate"
-  <% end %>
->
+<template data-pathogen--datepicker--calendar-target="inMonthDateTemplate">
   <td
     class="
       hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
@@ -41,27 +29,14 @@
       w-8
     "
     data-date-within-month-position="inMonth"
-    <% if Flipper.enabled?(:beta_dropdown) %>
-    data-action="
-      keydown->pathogen--datepicker--beta-calendar#navigateCalendar
-      click->pathogen--datepicker--beta-calendar#selectDate
-    "
-    <% else %>
     data-action="
       keydown->pathogen--datepicker--calendar#navigateCalendar
       click->pathogen--datepicker--calendar#selectDate
     "
-    <% end %>
   ></td>
 </template>
 
-<template
-  <% if Flipper.enabled?(:beta_dropdown) %>
-  data-pathogen--datepicker--beta-calendar-target="outOfMonthDateTemplate"
-  <% else %>
-  data-pathogen--datepicker--calendar-target="outOfMonthDateTemplate"
-  <% end %>
->
+<template data-pathogen--datepicker--calendar-target="outOfMonthDateTemplate">
   <td
     class="
       hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
@@ -69,16 +44,9 @@
       text-sm w-8
     "
     data-date-within-month-position="outOfMonth"
-    <% if Flipper.enabled?(:beta_dropdown) %>
-    data-action="
-      keydown->pathogen--datepicker--beta-calendar#navigateCalendar
-      click->pathogen--datepicker--beta-calendar#selectDate
-    "
-    <% else %>
     data-action="
       keydown->pathogen--datepicker--calendar#navigateCalendar
       click->pathogen--datepicker--calendar#selectDate
     "
-    <% end %>
   ></td>
 </template>
