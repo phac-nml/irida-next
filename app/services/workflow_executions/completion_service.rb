@@ -2,7 +2,7 @@
 
 module WorkflowExecutions
   # Service used to complete a WorkflowExecution
-  class CompletionService < BaseService # rubocop:disable Metrics/ClassLength
+  class CompletionService < BaseService
     include BlobHelper
     include MetadataHelper
 
