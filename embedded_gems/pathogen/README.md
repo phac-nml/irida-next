@@ -22,9 +22,15 @@ Pathogen ViewComponents includes Stimulus controllers that provide interactive b
 
 ### Automatic Setup (Rails Engine)
 
-When used as a Rails Engine (the default for IRIDA Next), the JavaScript integration requires one line of code:
+When used as a Rails Engine (the default for IRIDA Next), the JavaScript integration requires one line of code plus importmap pins:
 
-1. **Importmap Auto-Registration**: The engine automatically registers its importmap configuration with your Rails application. No manual importmap.rb changes are needed.
+1. **Importmap Registration**: Add the Pathogen pins to your application's `config/importmap.rb`:
+
+```ruby
+pin 'pathogen_view_components', to: 'pathogen_view_components.js'
+pin_all_from 'embedded_gems/pathogen/app/assets/javascripts/pathogen_view_components',
+  under: 'pathogen_view_components'
+```
 
 2. **Controller Registration**: Register Pathogen controllers in your `app/javascript/controllers/index.js`:
 
@@ -97,12 +103,22 @@ When extracted as a standalone gem, integration remains simple:
 gem 'pathogen_view_components'
 ```
 
-```javascript
-// app/javascript/application.js
-import "pathogen_view_components";
+```ruby
+# config/importmap.rb
+pin 'pathogen_view_components', to: 'pathogen_view_components.js'
+pin_all_from 'embedded_gems/pathogen/app/assets/javascripts/pathogen_view_components',
+  under: 'pathogen_view_components'
 ```
 
-The engine automatically merges its importmap with your application's importmap. No manual configuration required.
+```javascript
+// app/javascript/controllers/index.js
+import { application } from "controllers/application";
+import { registerPathogenControllers } from "pathogen_view_components";
+
+registerPathogenControllers(application);
+```
+
+Pathogen does not auto-register its importmap pins. Ensure the host application pins the Pathogen entrypoint and controllers.
 
 ## Troubleshooting
 
@@ -112,10 +128,11 @@ The engine automatically merges its importmap with your application's importmap.
 
 **Solutions**:
 
-1. Verify the import in `app/javascript/application.js`:
+1. Verify the registration in `app/javascript/controllers/index.js`:
 
    ```javascript
-   import "pathogen_view_components";
+   import { registerPathogenControllers } from "pathogen_view_components";
+   registerPathogenControllers(application);
    ```
 
 2. Check the importmap at `/rails/importmap` for pathogen entries.
