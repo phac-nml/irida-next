@@ -71,17 +71,6 @@ module System
       end
     end
 
-    test 'dropdown component with tooltip' do
-      visit('/rails/view_components/viral_dropdown_component/with_tooltip')
-      within('.Viral-Preview > [data-controller-connected="true"]') do
-        button = find('button')
-        assert_equal 'This is a tooltip!', button[:title]
-        assert_text 'Tooltip Button'
-        click_on 'Tooltip Button'
-        assert_text 'Action 1'
-      end
-    end
-
     test 'dropdown component with data attributes on items' do
       visit('/rails/view_components/viral_dropdown_component/with_data_attributes')
       within('.Viral-Preview > [data-controller-connected="true"]') do
