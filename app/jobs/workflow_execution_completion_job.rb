@@ -19,7 +19,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
     put_output_attachments_onto_samples
     create_activities
 
-    update_state(:completed)
+    update_state(:completed) unless @workflow_execution.state.to_sym == :error
     queue_next_job
   end
 
@@ -28,7 +28,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
   def run_service
     return if @workflow_execution.state.to_sym == :error
 
-    WorkflowExecutions::CompletionService.new(workflow_execution).execute
+    WorkflowExecutions::CompletionService.new(@workflow_execution).execute
   end
 
   def merge_metadata_onto_samples
@@ -46,12 +46,12 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
         'force_update' => true
       }
       Samples::Metadata::UpdateService.new(
-        swe.sample.project, swe.sample, current_user, params
+        swe.sample.project, swe.sample, @workflow_execution.submitter, params
       ).execute
     end
   end
 
-  def put_output_attachments_onto_samples
+  def put_output_attachments_onto_samples # rubocop:disable Metrics/CyclomaticComplexity
     return if @workflow_execution.state.to_sym == :error
     return unless @workflow_execution.update_samples?
 
@@ -62,7 +62,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
       files = swe.outputs.map { |output| output.file.signed_id }
       params = { files:, include_activity: false }
       Attachments::CreateService.new(
-        current_user, swe.sample, params
+        @workflow_execution.submitter, swe.sample, params
       ).execute
     end
   end
