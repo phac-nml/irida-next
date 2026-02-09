@@ -4,9 +4,12 @@ import TooltipController from "pathogen_view_components/tooltip_controller";
 import DatepickerInputController from "pathogen_view_components/datepicker/input_controller";
 import DatepickerCalendarController from "pathogen_view_components/datepicker/calendar_controller";
 
-// Auto-register all controllers with their identifiers
-
 function registerPathogenControllers(application) {
+  if (!application || typeof application.register !== "function") {
+    console.error("[pathogen] Invalid Stimulus application instance");
+    return;
+  }
+
   application.register("pathogen--tabs", TabsController);
   application.register("pathogen--tooltip", TooltipController);
   application.register(
@@ -17,6 +20,10 @@ function registerPathogenControllers(application) {
     "pathogen--datepicker--calendar",
     DatepickerCalendarController,
   );
+
+  if (import.meta.env?.DEV) {
+    console.debug("[pathogen] Registered 4 Stimulus controllers");
+  }
 }
 
 export {

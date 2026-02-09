@@ -22,17 +22,24 @@ Pathogen ViewComponents includes Stimulus controllers that provide interactive b
 
 ### Automatic Setup (Rails Engine)
 
-When used as a Rails Engine (the default for IRIDA Next), the JavaScript integration is automatic:
+When used as a Rails Engine (the default for IRIDA Next), the JavaScript integration requires one line of code:
 
 1. **Importmap Auto-Registration**: The engine automatically registers its importmap configuration with your Rails application. No manual importmap.rb changes are needed.
 
-2. **Controller Auto-Registration**: Import the entry point in your `app/javascript/application.js`:
+2. **Controller Registration**: Register Pathogen controllers in your `app/javascript/controllers/index.js`:
 
 ```javascript
-import "@hotwired/turbo-rails";
-import "controllers";
-import "pathogen_view_components"; // Auto-registers all Pathogen controllers
+import { application } from "controllers/application";
+import { registerPathogenControllers } from "pathogen_view_components";
+
+// Register Pathogen controllers (required before lazy loading)
+registerPathogenControllers(application);
+
+import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading";
+lazyLoadControllersFrom("controllers", application);
 ```
+
+**Important**: Register Pathogen controllers _before_ calling `lazyLoadControllersFrom()` to prevent auto-load conflicts.
 
 That's it! All Pathogen Stimulus controllers are now registered and ready to use.
 

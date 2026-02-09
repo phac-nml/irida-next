@@ -6,10 +6,12 @@ import { application } from "controllers/application";
 // import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
 
 // eagerLoadControllersFrom("controllers", application);
-// Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
+
+// Register Pathogen controllers before lazy loading (prevents auto-load conflicts)
 import { registerPathogenControllers } from "pathogen_view_components";
 registerPathogenControllers(application);
 
+// Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
 import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading";
 
 lazyLoadControllersFrom("controllers", application);
