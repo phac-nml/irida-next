@@ -36,23 +36,21 @@ module Pathogen
         end
       end
 
-      initializer 'pathogen.assets', before: 'importmap.assets' do |app|
-        # Add engine's JavaScript paths to asset pipeline
-        app.config.assets.paths << root.join('app/javascript/controllers')
-        # Ensure engine assets are discoverable by Propshaft/Sprockets
-        app.config.assets.paths << root.join('app/assets')
+      initializer 'pathogen_view_components.assets' do |app|
+        if app.config.respond_to?(:assets)
+          # Add engine's JavaScript paths to asset pipeline
+          app.config.assets.paths << root.join('app/javascript/controllers')
 
-        # Precompile pathogen controller files for production
-        app.config.assets.precompile += %w[
-          javascripts/pathogen_view_components.js
-          pathogen/tabs_controller.js
-          pathogen/tooltip_controller.js
-          pathogen/datepicker/input_controller.js
-          pathogen/datepicker/calendar_controller.js
-          pathogen/datepicker/utils.js
-          pathogen/datepicker/constants.js
-          pathogen/pathogen.css
-        ]
+          app.config.assets.precompile += %w[
+            pathogen_view_components.js pathogen_view_components.css
+            pathogen/tabs_controller.js
+            pathogen/tooltip_controller.js
+            pathogen/datepicker/input_controller.js
+            pathogen/datepicker/calendar_controller.js
+            pathogen/datepicker/utils.js
+            pathogen/datepicker/constants.js
+          ]
+        end
       end
 
       initializer 'pathogen.importmap', before: 'importmap' do |app|

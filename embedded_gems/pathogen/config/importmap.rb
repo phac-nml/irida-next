@@ -10,4 +10,4 @@ pin 'pathogen-controllers/pathogen/datepicker/utils', to: 'pathogen/datepicker/u
 pin 'pathogen-controllers/pathogen/datepicker/constants', to: 'pathogen/datepicker/constants.js'
 
 # Pin main entry point
-pin 'pathogen_view_components', to: 'javascripts/pathogen_view_components.js'
+pin 'pathogen_view_components', to: 'pathogen_view_components.js'
