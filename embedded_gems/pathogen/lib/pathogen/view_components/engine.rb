@@ -44,6 +44,7 @@ module Pathogen
 
         # Precompile pathogen controller files for production
         app.config.assets.precompile += %w[
+          javascripts/pathogen_view_components.js
           pathogen/tabs_controller.js
           pathogen/tooltip_controller.js
           pathogen/datepicker/input_controller.js
