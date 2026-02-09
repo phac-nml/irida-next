@@ -3,7 +3,7 @@
 module Pathogen
   # DataGrid component for rendering accessible tabular data with sticky columns.
   #
-  # CSS dependency: app/assets/stylesheets/pathogen/data_grid.css
+  # CSS dependency: pathogen/pathogen.css
   class DataGridComponent < Pathogen::Component
     renders_many :columns, lambda { |label, **system_arguments, &block|
       Pathogen::DataGrid::ColumnComponent.new(label: label, **system_arguments, &block)
