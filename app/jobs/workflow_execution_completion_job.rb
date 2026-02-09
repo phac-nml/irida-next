@@ -112,12 +112,6 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
   end
 
   def queue_next_job
-    @workflow_execution.reload
-    case @workflow_execution.state.to_sym
-    when :completed, :error
-      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
-    else
-      # TODO: is there even an alt case possible??
-    end
+    WorkflowExecutionCleanupJob.perform_later(@workflow_execution.reload)
   end
 end
