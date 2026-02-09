@@ -16,6 +16,38 @@ And then execute:
 bundle install
 ```
 
+## DataGrid Component
+
+Pathogen includes a lightweight, accessible DataGrid component for rendering tabular data with optional sticky columns.
+
+### Basic Usage
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, caption: "Samples") do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name, width: 240) %>
+<% end %>
+```
+
+### Custom Cell Rendering
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  <% grid.with_column("Name") { |row| tag.strong(row[:name]) } %>
+<% end %>
+```
+
+### Sticky Columns
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, sticky_columns: 1) do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name, width: 240) %>
+<% end %>
+```
+
+Sticky columns require a width (numeric values become `px`) or an explicit `sticky_left:` offset.
+
 ## JavaScript Integration
 
 Pathogen ViewComponents includes Stimulus controllers that provide interactive behavior for components like tabs, tooltips, and datepickers.
