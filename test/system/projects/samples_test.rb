@@ -51,6 +51,20 @@ module Projects
       # actions tested by role in separate test
     end
 
+    test 'samples index uses data grid when flag enabled' do
+      Flipper.enable(:data_grid_samples_table)
+
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector '.pathogen-data-grid__table'
+      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(1)',
+                      text: I18n.t('samples.table_component.puid')
+      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(2)',
+                      text: I18n.t('samples.table_component.name')
+    ensure
+      Flipper.disable(:data_grid_samples_table)
+    end
+
     test 'User with role >= Analyst sees select and deselect buttons for samples table' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
