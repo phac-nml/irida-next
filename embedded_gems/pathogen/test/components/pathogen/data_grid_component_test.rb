@@ -84,6 +84,20 @@ module Pathogen
       assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 24px"]'
     end
 
+    test 'accepts sticky left offset values with CSS units' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: [
+                        { id: 'S-022', name: 'Sample twenty-two' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, sticky: true, sticky_left: 'calc(10ch + 8px)')
+        grid.with_column('Name', key: :name)
+      end
+
+      assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: calc(10ch + 8px)"]'
+    end
+
     test 'normalizes numeric widths to px units' do
       render_inline(Pathogen::DataGridComponent.new(
                       sticky_columns: 0,
