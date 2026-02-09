@@ -12,8 +12,9 @@ module Pathogen
     # @param align [Symbol, String, nil] Alignment class suffix (e.g. :left, :center, :right).
     # @param sticky [Boolean, nil] Explicitly enable/disable sticky behavior.
     # @param sticky_left [Numeric, nil] Left offset in pixels; can enable sticky without width.
+    # @param header_content [String, Proc, nil] Custom header content to replace the label.
     # @param system_arguments [Hash] Additional HTML attributes for the cell.
-    # @yieldparam row [Hash, Array] Row data for the current cell.
+    # @yieldparam row [Hash, Array, Object] Row data for the current cell.
     # @yieldparam index [Integer] Column index.
     #
     # @note Sticky columns require either `width:` or `sticky_left:` to be applied.
@@ -23,8 +24,8 @@ module Pathogen
       attr_reader :label, :key, :width, :align
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(label:, key: nil, width: nil, align: nil, sticky: nil, sticky_left: nil, **system_arguments,
-                     &block)
+      def initialize(label:, key: nil, width: nil, align: nil, sticky: nil, sticky_left: nil, header_content: nil,
+                     **system_arguments, &block)
         # rubocop:enable Metrics/ParameterLists
         @label = label
         @key = key
@@ -32,6 +33,7 @@ module Pathogen
         @align = align
         @sticky = sticky
         @sticky_left = sticky_left
+        @header_content = header_content
         @system_arguments = system_arguments
         @block = block
       end
@@ -48,6 +50,13 @@ module Pathogen
         return @block.call(row, index) if @block
 
         value_for(row, index)
+      end
+
+      def render_header
+        return @header_content.call if @header_content.respond_to?(:call)
+        return @header_content if @header_content.present?
+
+        @label
       end
 
       def normalize_width!

@@ -98,5 +98,33 @@ module Pathogen
       assert_selector 'th[style*="--pathogen-data-grid-col-width: 96px"]'
       assert_selector 'th[style*="--pathogen-data-grid-col-width: 180px"]'
     end
+
+    test 'renders custom header content when provided' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: [
+                        { id: 'S-030', name: 'Sample thirty' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, header_content: -> { 'Custom ID' })
+        grid.with_column('Name', key: :name)
+      end
+
+      assert_selector 'th', text: 'Custom ID'
+      assert_selector 'th', text: 'Name'
+    end
+
+    test 'renders empty state when rows are blank' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: []
+                    )) do |grid|
+        grid.with_column('ID', key: :id)
+        grid.with_empty_state { 'No rows' }
+      end
+
+      assert_selector '.pathogen-data-grid__scroll', text: 'No rows'
+      assert_no_selector '.pathogen-data-grid__table'
+    end
   end
 end
