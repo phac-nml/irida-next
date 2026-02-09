@@ -9,12 +9,17 @@ export default class extends Controller {
     "viral--sortable-lists--two-lists-selection",
     "refresh",
   ];
+
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
     "submitButton",
     "error",
   ];
+
+  static values = {
+    groupId: String,
+  };
 
   #defaultSampleColumnHeaders = [
     "sample",
@@ -54,6 +59,7 @@ export default class extends Controller {
     if (typeof Worker !== "undefined") {
       this.#worker = new Worker(
         import.meta.resolve("workers/file_import_worker"),
+        { type: "module" },
       );
 
       this.#worker.onerror = function (error) {
@@ -230,7 +236,8 @@ export default class extends Controller {
 
       // Send data to worker
       this.#worker.postMessage({
-        samplePuid: id,
+        groupId: this.groupIdValue,
+        sampleNameOrPuid: id,
         metadata: Object.fromEntries(metadata),
       });
 
@@ -248,7 +255,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.#worker.terminate();
+    this.#worker.terminate(); //TODO: Give the user the ability to navigate to other pages
   }
 
   show() {
@@ -257,9 +264,11 @@ export default class extends Controller {
     }
   }
 
-  hide() {
+  complete() {
     if (this.hasViralProgressBarOutlet) {
       this.viralProgressBarOutlet.hide();
     }
+
+    //TODO: Summarize results
   }
 }

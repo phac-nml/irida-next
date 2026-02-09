@@ -11,6 +11,7 @@
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       <% if Flipper.enabled?(:metadata_file_import_worker) %>
+      data-metadata--file-import-worker-group-id-value="<%=  IridaSchema.id_from_object(@group)%>"
       data-metadata--file-import-worker-viral--progress-bar-outlet="#test-me"
       data-metadata--file-import-worker-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       data-action="
@@ -29,7 +30,7 @@
     >
       <%= form_for(:file_import, url: url, method: :post, data:
       if Flipper.enabled?(:metadata_file_import_worker)
-        { action: "turbo:submit-start->viral--dialog#close turbo:submit-start->metadata--file-import-worker#show turbo:submit-end->metadata--file-import-worker#hide" }
+        { action: "turbo:submit-start->viral--dialog#close turbo:submit-start->metadata--file-import-worker#show turbo:submit-end->metadata--file-import-worker#complete" }
       else
         {}
       end
