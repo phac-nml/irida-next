@@ -126,7 +126,7 @@ module Viral
       return if @system_arguments[:title].present?
 
       # Prefer explicit title, otherwise fall back to tooltip text for system preview expectations
-      @system_arguments[:title] = @params[:title].presence || tooltip_text
+      @system_arguments[:title] = @params[:title].presence
     end
 
     # 🎨 Add button styles, using custom or default
