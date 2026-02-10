@@ -86,7 +86,7 @@ module Samples
     end
 
     def empty_state?
-      return false if @has_samples && @pagy.vars[:size].positive?
+      return false if @has_samples && @pagy&.count.to_i.positive?
 
       true
     end
