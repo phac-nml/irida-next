@@ -108,7 +108,7 @@ module Samples
     end
 
     def pagy_instance(count)
-      Pagy.new(count: count, page: 1, items: 20)
+      Pagy.new(count: count, page: 1, limit: 20)
     end
   end
 end
