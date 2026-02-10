@@ -213,13 +213,10 @@ module Samples
     def warning_message_with_link(params)
       link_markup = create_template_link
 
-      # Using html_safe because we're interpolating a link_to helper result
-      # which is already sanitized by Rails. This is safe as the link_markup
-      # contains no user-provided content - only the translated link text.
       I18n.t(
-        'components.samples.table_component.metadata_fields_size_warning_with_link',
+        'components.samples.table_component.metadata_fields_size_warning_with_link_html',
         **params, create_template_link: link_markup
-      ).html_safe
+      )
     end
 
     def create_template_link
