@@ -10,9 +10,13 @@
   <%= render Pathogen::DataGridComponent.new(rows: @samples, **data_grid_arguments) do |grid| %>
     <% if @show_metadata_fields_size_warning %>
       <% grid.with_metadata_warning do %>
-        <div class="mb-4" role="status" aria-live="polite">
+        <div
+          class="pathogen-data-grid__metadata-warning"
+          role="status"
+          aria-live="polite"
+        >
           <%= viral_alert do %>
-            <span class="inline"><%= @metadata_fields_size_warning_message %></span>
+            <span class="pathogen-data-grid__metadata-warning-text"><%= @metadata_fields_size_warning_message %></span>
           <% end %>
         </div>
       <% end %>

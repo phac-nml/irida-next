@@ -119,9 +119,9 @@ module Samples
         helpers.highlight(
           sample.puid,
           highlight_term,
-          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\\1</mark>'
+          highlighter: '<mark class="pathogen-data-grid__highlight">\\1</mark>'
         ),
-        class: 'font-mono font-semibold'
+        class: 'pathogen-data-grid__value pathogen-data-grid__value--mono'
       )
     end
 
@@ -129,12 +129,12 @@ module Samples
       helpers.link_to(
         helpers.sample_path(sample),
         data: { turbo: false },
-        class: 'text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2'
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--sample'
       ) do
         helpers.highlight(
           sample.name,
           highlight_term,
-          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\\1</mark>'
+          highlighter: '<mark class="pathogen-data-grid__highlight pathogen-data-grid__highlight--strong">\\1</mark>'
         )
       end
     end
@@ -144,7 +144,7 @@ module Samples
         sample.project.puid,
         helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
         data: { turbo: false },
-        class: 'font-semibold underline hover:decoration-2'
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--project'
       )
     end
 
@@ -219,7 +219,7 @@ module Samples
       helpers.link_to(
         I18n.t('components.samples.table_component.create_template_link'),
         metadata_template_url,
-        class: 'font-semibold underline hover:no-underline',
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--template',
         data: { turbo_frame: '_top' }
       )
     end

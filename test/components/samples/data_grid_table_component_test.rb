@@ -115,7 +115,7 @@ module Samples
 
       assert_selector '[role="status"][aria-live="polite"]'
       assert_text 'create a metadata template with those fields'
-      assert_selector 'a.font-semibold.underline'
+      assert_selector 'a.pathogen-data-grid__link--template'
     end
 
     test 'shows warning without link when user cannot edit metadata' do
@@ -170,7 +170,7 @@ module Samples
                       empty: { title: 'No Samples', description: 'Nothing here' }
                     ))
 
-      assert_selector 'mark.bg-primary-300'
+      assert_selector 'mark.pathogen-data-grid__highlight'
     end
 
     test 'renders metadata field values' do
