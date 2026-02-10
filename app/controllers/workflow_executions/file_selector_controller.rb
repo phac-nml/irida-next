@@ -32,7 +32,7 @@ module WorkflowExecutions
         :pattern,
         { required_properties: [] }
       ]
-      expected_params.push(:index) unless Flipper.enabled?(:deferred_samplesheet)
+      expected_params.unshift(:index) unless Flipper.enabled?(:deferred_samplesheet)
 
       params.expect(expected_params)
     end
