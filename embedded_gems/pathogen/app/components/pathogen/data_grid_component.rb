@@ -37,7 +37,9 @@ module Pathogen
     # @param width [Numeric, String, nil] Column width (numeric values become "px").
     # @param align [Symbol, String, nil] Alignment class suffix (e.g. :left, :center, :right).
     # @param sticky [Boolean, nil] Explicitly enable/disable sticky behavior for this column.
-    # @param sticky_left [Numeric, nil] Left offset in pixels; can enable sticky without width.
+    # @param sticky_left [Numeric, String, nil] Left offset
+    #   (numeric values become "px"; strings allow CSS units);
+    #   can enable sticky without width.
     # @param header_content [String, Proc, nil] Custom header content to replace the label.
     # @param system_arguments [Hash] Additional HTML attributes for the cell.
     # @yieldparam row [Hash, Array, Object] Row data for the current cell.
