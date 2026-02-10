@@ -212,10 +212,12 @@ module Samples
     def warning_message_with_link(params)
       link_markup = create_template_link
 
+      # Rails I18n escapes interpolated values even with _html suffix
+      # Need to mark final result as safe since it contains pre-sanitized link_to output
       I18n.t(
         'components.samples.table_component.metadata_fields_size_warning_with_link_html',
         **params, create_template_link: link_markup
-      )
+      ).html_safe
     end
 
     def create_template_link
