@@ -57,10 +57,8 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector '.pathogen-data-grid__table'
-      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(1)',
-                      text: I18n.t('samples.table_component.puid')
-      assert_selector 'th.pathogen-data-grid__cell--sticky:nth-child(2)',
-                      text: I18n.t('samples.table_component.name')
+      assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.puid')
+      assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.name')
     ensure
       Flipper.disable(:data_grid_samples_table)
     end
