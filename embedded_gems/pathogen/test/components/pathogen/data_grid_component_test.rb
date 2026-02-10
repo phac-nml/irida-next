@@ -140,5 +140,33 @@ module Pathogen
       assert_selector '.pathogen-data-grid__scroll', text: 'No rows'
       assert_no_selector '.pathogen-data-grid__table'
     end
+
+    test 'renders live region, metadata warning, and footer slots outside scroll container' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 0,
+                      rows: [
+                        { id: 'S-040', name: 'Sample forty' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id)
+        grid.with_live_region do
+          ActionController::Base.helpers.content_tag(:div, 'Live region', class: 'test-live-region')
+        end
+        grid.with_metadata_warning do
+          ActionController::Base.helpers.content_tag(:div, 'Warning', class: 'test-metadata-warning')
+        end
+        grid.with_footer do
+          ActionController::Base.helpers.content_tag(:div, 'Footer', class: 'test-footer')
+        end
+      end
+
+      assert_selector '.pathogen-data-grid > .test-live-region'
+      assert_selector '.pathogen-data-grid > .test-metadata-warning'
+      assert_selector '.pathogen-data-grid > .pathogen-data-grid__scroll + .test-footer'
+      assert_selector '.pathogen-data-grid > .test-live-region + .test-metadata-warning + .pathogen-data-grid__scroll'
+      assert_no_selector '.pathogen-data-grid__scroll .test-live-region'
+      assert_no_selector '.pathogen-data-grid__scroll .test-metadata-warning'
+      assert_no_selector '.pathogen-data-grid__scroll .test-footer'
+    end
   end
 end
