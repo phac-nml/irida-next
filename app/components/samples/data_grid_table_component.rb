@@ -119,9 +119,9 @@ module Samples
         helpers.highlight(
           sample.puid,
           highlight_term,
-          highlighter: '<mark class="pathogen-data-grid__highlight">\\1</mark>'
+          highlighter: '<mark class="pathogen-data-grid__highlight pathogen-u-highlight">\\1</mark>'
         ),
-        class: 'pathogen-data-grid__value pathogen-data-grid__value--mono'
+        class: 'pathogen-data-grid__value pathogen-data-grid__value--mono pathogen-u-font-mono'
       )
     end
 
@@ -129,12 +129,15 @@ module Samples
       helpers.link_to(
         helpers.sample_path(sample),
         data: { turbo: false },
-        class: 'pathogen-data-grid__link pathogen-data-grid__link--sample'
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--sample pathogen-u-link pathogen-u-link--subtle'
       ) do
         helpers.highlight(
           sample.name,
           highlight_term,
-          highlighter: '<mark class="pathogen-data-grid__highlight pathogen-data-grid__highlight--strong">\\1</mark>'
+          highlighter: [
+            '<mark class="pathogen-data-grid__highlight pathogen-data-grid__highlight--strong ',
+            'pathogen-u-highlight pathogen-u-highlight--strong">\\1</mark>'
+          ].join
         )
       end
     end
@@ -144,7 +147,7 @@ module Samples
         sample.project.puid,
         helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
         data: { turbo: false },
-        class: 'pathogen-data-grid__link pathogen-data-grid__link--project'
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--project pathogen-u-link pathogen-u-link--subtle'
       )
     end
 
@@ -219,7 +222,7 @@ module Samples
       helpers.link_to(
         I18n.t('components.samples.table_component.create_template_link'),
         metadata_template_url,
-        class: 'pathogen-data-grid__link pathogen-data-grid__link--template',
+        class: 'pathogen-data-grid__link pathogen-data-grid__link--template pathogen-u-link',
         data: { turbo_frame: '_top' }
       )
     end
