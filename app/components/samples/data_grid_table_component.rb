@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-require 'ransack/helpers/form_helper'
-
 module Samples
   # Wrapper component for rendering samples in Pathogen::DataGridComponent.
   class DataGridTableComponent < Component # rubocop:disable Metrics/ClassLength
-    include Ransack::Helpers::FormHelper
-
     # Maximum number of metadata fields to display regardless of sample count
     MAX_METADATA_FIELDS_SIZE = 200
     # Target maximum number of table cells (rows × columns) for optimal performance
