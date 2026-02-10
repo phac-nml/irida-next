@@ -23,7 +23,7 @@ module Samples
     end
 
     test 'renders empty state when samples are absent' do
-      pagy = Pagy.new(count: 0, page: 1, items: 20)
+      pagy = Pagy.new(count: 0, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
