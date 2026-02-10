@@ -2,10 +2,10 @@
   <% if caption? %>
     <%= tag.div(@caption, id: @caption_id, class: "pathogen-data-grid__caption") %>
   <% end %>
-  <%= live_region if live_region %>
-  <%= metadata_warning if metadata_warning %>
+  <%= live_region if live_region? %>
+  <%= metadata_warning if metadata_warning? %>
   <%= tag.div(class: 'pathogen-data-grid__scroll') do %>
-    <% if @rows.blank? && empty_state %>
+    <% if @rows.blank? && empty_state? %>
       <%= empty_state %>
     <% else %>
       <%= tag.table(**table_attributes) do %>
@@ -30,5 +30,5 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= footer if footer %>
+  <%= footer if footer? %>
 <% end %>
