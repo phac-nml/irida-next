@@ -6,7 +6,7 @@ module Samples
   class DataGridTableComponentTest < ViewComponentTestCase
     test 'renders data grid with sample rows' do
       samples = [samples(:sample1), samples(:sample2)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
@@ -40,7 +40,7 @@ module Samples
 
     test 'renders project column for group namespace' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = groups(:group_one)
 
       render_inline(Samples::DataGridTableComponent.new(
@@ -57,7 +57,7 @@ module Samples
 
     test 'does not render project column for project namespace' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
@@ -74,10 +74,10 @@ module Samples
 
     test 'limits metadata fields when exceeding calculated maximum' do
       samples = [samples(:sample1), samples(:sample2)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      # Create more metadata fields than the limit (2000 cells / 2 samples = 1000 max fields)
+      # Create more metadata fields than the limit (clamped to MAX_METADATA_FIELDS_SIZE = 200)
       many_fields = (1..1500).map { |i| "field_#{i}" }
 
       render_inline(Samples::DataGridTableComponent.new(
@@ -97,7 +97,7 @@ module Samples
 
     test 'shows warning with link when user can edit metadata' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       # Create enough fields to trigger warning (2000 / 1 = 2000, but max is 200)
@@ -120,7 +120,7 @@ module Samples
 
     test 'shows warning without link when user cannot edit metadata' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       many_fields = (1..250).map { |i| "field_#{i}" }
@@ -141,7 +141,7 @@ module Samples
 
     test 'renders sticky columns for PUID and Name' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
@@ -158,7 +158,7 @@ module Samples
 
     test 'highlights search term in sample names and PUIDs' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, items: 20)
+      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
