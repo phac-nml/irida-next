@@ -178,7 +178,7 @@ module Samples
       sample.metadata = { 'test_field' => 'test_value' }
       sample.save!
 
-      pagy = Pagy.new(count: 1, page: 1, items: 20)
+      pagy = Pagy.new(count: 1, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::DataGridTableComponent.new(
