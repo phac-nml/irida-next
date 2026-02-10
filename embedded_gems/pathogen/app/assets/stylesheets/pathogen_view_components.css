@@ -97,6 +97,56 @@
   background: var(--pathogen-data-grid-sticky-bg);
 }
 
+.pathogen-data-grid__metadata-warning {
+  margin-block-end: 1rem;
+}
+
+.pathogen-data-grid__metadata-warning-text {
+  display: inline;
+}
+
+.pathogen-data-grid__value--mono {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-weight: 600;
+}
+
+.pathogen-data-grid__link {
+  font-weight: 600;
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+  transition: text-decoration-thickness 140ms ease;
+}
+
+.pathogen-data-grid__link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.pathogen-data-grid__link--sample {
+  color: color-mix(
+    in oklab,
+    var(--pathogen-data-grid-text-color) 85%,
+    transparent
+  );
+}
+
+.pathogen-data-grid__link--template:hover {
+  text-decoration-line: none;
+}
+
+.pathogen-data-grid__highlight {
+  background: color-mix(in oklab, #22c55e 42%, transparent);
+  padding-inline: 0.06em;
+  border-radius: 0.125rem;
+}
+
+.pathogen-data-grid__highlight--strong {
+  font-weight: 600;
+}
+
 @media (prefers-color-scheme: dark) {
   .pathogen-data-grid {
     --pathogen-data-grid-border-color: #334155;
@@ -115,6 +165,18 @@
   --pathogen-data-grid-body-bg: #0b1120;
   --pathogen-data-grid-sticky-bg: #0f172a;
   --pathogen-data-grid-sticky-shadow: rgba(148, 163, 184, 0.25);
+}
+
+.dark .pathogen-data-grid__link--sample {
+  color: color-mix(
+    in oklab,
+    var(--pathogen-data-grid-text-color) 80%,
+    transparent
+  );
+}
+
+.dark .pathogen-data-grid__highlight {
+  background: color-mix(in oklab, #16a34a 65%, transparent);
 }
 
 @media (max-width: 640px) {
