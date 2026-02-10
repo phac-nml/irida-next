@@ -358,12 +358,10 @@ export default class extends Controller {
 
   // handles changes to text and dropdown cells
   updateEditableSamplesheetData(event) {
-    // name comes in as sampleId_columnName, however column names sometimes include underscores
-    // so we will parse the name specifically on the first underscore
-    const name = event.target.name;
-    const sampleId = name.substring(0, name.indexOf("_"));
-    const columnName = name.substring(name.indexOf("_") + 1);
-    this.#setSampleData(sampleId, columnName, event.target.value);
+    const sampleId = event.params.sampleId;
+    const columnName = event.params.columnName;
+    const value = event.target.value;
+    this.#setSampleData(sampleId, columnName, value);
   }
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
@@ -482,11 +480,9 @@ export default class extends Controller {
     const id = `${sampleId}_${columnName}_dropdown`;
 
     const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
-    dropdownContent
-      .querySelector("select")
-      .setAttribute("aria-label", columnName);
-    dropdownContent.querySelector("select").setAttribute("name", name);
-    dropdownContent.querySelector("select").setAttribute("id", id);
+    const selectNode = dropdownContent.querySelector("select");
+    selectNode.setAttribute("aria-label", columnName);
+    this.#setDataAttributes(selectNode, name, id, sampleId, columnName);
 
     for (let j = 0; j < options.length; j++) {
       const option = document.createElement("option");
@@ -562,8 +558,7 @@ export default class extends Controller {
     const input = textInputContent.querySelector("input");
     const label = textInputContent.querySelector("label");
 
-    input.setAttribute("name", name);
-    input.setAttribute("id", id);
+    this.#setDataAttributes(input, name, id, sampleId, columnName);
 
     label.setAttribute("for", id);
     label.textContent = name;
@@ -574,6 +569,19 @@ export default class extends Controller {
     }
 
     cell.appendChild(textInputContent);
+  }
+
+  #setDataAttributes(node, name, id, sampleId, columnName) {
+    node.setAttribute("name", name);
+    node.setAttribute("id", id);
+    node.setAttribute(
+      "data-nextflow--deferred-samplesheet-sample-id-param",
+      sampleId,
+    );
+    node.setAttribute(
+      "data-nextflow--deferred-samplesheet-column-name-param",
+      columnName,
+    );
   }
 
   #setPagination() {

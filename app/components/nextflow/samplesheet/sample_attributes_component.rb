@@ -43,6 +43,9 @@ module Nextflow
                sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
              )]
           when 'fastq_cell'
+            # if fastq_2 exists within @properties, we'll query fastq_1 and fastq_2 below and merge those
+            # params in. This allows us to leverage .associated_attachment rather than querying fwd and rev PE
+            # attachments separately.
             if fastq_2_property
               [name, '']
             else
@@ -53,8 +56,6 @@ module Nextflow
           when 'metadata_cell'
             [name, metadata_samplesheet_values(sample, name, property)]
           when 'dropdown_cell', 'input_cell'
-            # fastq is queried above in samples_workflow_execution_attributes and values are merged over
-            # this empty value
             [name, '']
           end
         end
