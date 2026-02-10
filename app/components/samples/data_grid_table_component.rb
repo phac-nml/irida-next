@@ -174,7 +174,7 @@ module Samples
 
     def columns
       columns = %i[puid name]
-      columns << 'namespaces.puid' if @namespace.type == 'Group'
+      columns << 'namespaces.puid' if @namespace.is_a?(Group)
       columns += %i[created_at updated_at attachments_updated_at]
       columns
     end
@@ -232,7 +232,7 @@ module Samples
     end
 
     def metadata_template_url
-      if @namespace.type == 'Group'
+      if @namespace.is_a?(Group)
         helpers.group_metadata_templates_path(@namespace)
       else
         helpers.namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
