@@ -220,7 +220,7 @@ module Samples
         I18n.t('components.samples.table_component.create_template_link'),
         metadata_template_url,
         class: 'font-semibold underline hover:no-underline',
-        data: { turbo_frame: 'top' }
+        data: { turbo_frame: '_top' }
       )
     end
 
