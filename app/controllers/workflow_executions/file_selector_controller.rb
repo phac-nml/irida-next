@@ -23,31 +23,18 @@ module WorkflowExecutions
 
     private
 
-    def file_selector_params # rubocop:disable Metrics/MethodLength
-      if Flipper.enabled?(:deferred_samplesheet)
-        params.expect(
-          file_selector: [
-            :attachable_id,
-            :attachable_type,
-            :property,
-            :selected_id,
-            :pattern,
-            { required_properties: [] }
-          ]
-        )
-      else
-        params.expect(
-          file_selector: [
-            :attachable_id,
-            :attachable_type,
-            :index,
-            :property,
-            :selected_id,
-            :pattern,
-            { required_properties: [] }
-          ]
-        )
-      end
+    def file_selector_params
+      expected_params = [
+        :attachable_id,
+        :attachable_type,
+        :property,
+        :selected_id,
+        :pattern,
+        { required_properties: [] }
+      ]
+      expected_params.push(:index) unless Flipper.enabled?(:deferred_samplesheet)
+
+      params.expect(expected_params)
     end
 
     def listing_attachments
@@ -98,18 +85,14 @@ module WorkflowExecutions
       end
     end
 
-    def attachments # rubocop:disable Metrics/MethodLength
-      @attachments_params = if Flipper.enabled?(:deferred_samplesheet)
-                              {
-                                attachable_id: file_selector_params[:attachable_id],
-                                files: []
-                              }
-                            else
-                              {
-                                index: file_selector_params[:index],
-                                files: []
-                              }
-                            end
+    def attachments # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      @attachments_params = { files: [] }
+      if Flipper.enabled?(:deferred_samplesheet)
+        @attachment_params[:attachable_id] = file_selector_params[:attachable_id]
+      else
+        @attachment_params[:index] = file_selector_params[:index]
+      end
+
       property = file_selector_params['property']
       if params[:attachment_id] == 'no_attachment'
         add_attachment_to_params(nil, property)
