@@ -1,0 +1,286 @@
+import MenuController from "controllers/menu_controller";
+import { FOCUSABLE_ELEMENTS } from "pathogen-controllers/pathogen/datepicker/constants";
+
+export default class extends MenuController {
+  static outlets = ["pathogen--datepicker--beta-calendar"];
+  static targets = ["trigger", "calendarTemplate", "inputError", "minDate"];
+
+  static values = {
+    autosubmit: Boolean,
+    calendarId: String,
+    invalidDate: String,
+    invalidMinDate: String,
+    dateFormatRegex: String,
+  };
+
+  // today's date attributes for quick access
+  #todaysFullDate = new Date();
+  #todaysYear = this.#todaysFullDate.getFullYear();
+  #todaysMonthIndex = this.#todaysFullDate.getMonth();
+  #todaysDate = this.#todaysFullDate.getDate();
+
+  // the currently displayed year/month on datepicker
+  #selectedDate;
+  #selectedYear;
+  #selectedMonthIndex;
+
+  // retrieves next focusable element in DOM after date input
+  #nextFocusableElementAfterInput;
+
+  #minDate;
+
+  connect() {
+    if (this.hasMinDateTarget) {
+      this.#setMinDate();
+    }
+
+    this.boundHandleTriggerFocus = this.handleTriggerFocus.bind(this);
+    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+
+    this.idempotentConnect();
+  }
+
+  idempotentConnect() {
+    // the currently selected date will be displayed on the initial calendar
+    this.#setSelectedDate();
+
+    // Position the calendar
+    this.#initializeDropdown();
+
+    this.triggerTarget.addEventListener("focus", this.boundHandleTriggerFocus);
+
+    this.#findNextFocusableElement();
+  }
+
+  disconnect() {
+    this.triggerTarget.removeEventListener(
+      "focus",
+      this.boundHandleTriggerFocus,
+    );
+  }
+
+  #initializeDropdown() {
+    super.share({
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onShow() {
+    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  #onHide() {
+    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+  }
+
+  #setMinDate() {
+    this.#minDate = this.minDateTarget.firstElementChild.innerText;
+    this.invalidMinDateValue = this.invalidMinDateValue.concat(this.#minDate);
+    this.minDateTarget.remove();
+  }
+
+  #setSelectedDate() {
+    this.#selectedDate = this.triggerTarget.value;
+    if (this.#selectedDate) {
+      const fullSelectedDate = new Date(this.#selectedDate);
+      this.#selectedYear = fullSelectedDate.getUTCFullYear();
+      // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
+      // 'outOfMonth' date (eg: selected Sept 1st, but August is displayed with Sept 1st at the end of calendar)
+      // using UTCMonth alleviates the issue
+      this.#selectedMonthIndex = fullSelectedDate.getUTCMonth();
+    } else {
+      this.#selectedYear = this.#todaysYear;
+      this.#selectedMonthIndex = this.#todaysMonthIndex;
+    }
+    if (this.hasPathogenDatepickerBetaCalendarOutlet) {
+      this.#shareParamsWithCalendar();
+    }
+  }
+
+  // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
+  // tabbing through the calendar, we'd focus on the next element after the date input
+  #findNextFocusableElement() {
+    const focusable = Array.from(
+      document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
+    );
+    const index = focusable.indexOf(this.triggerTarget);
+    this.#nextFocusableElementAfterInput = focusable[index + 1];
+  }
+
+  // once the calendar controller connects, share values used by both controllers
+  pathogenDatepickerBetaCalendarOutletConnected() {
+    this.#shareParamsWithCalendar();
+  }
+
+  handleTriggerFocus() {
+    if (!super.isVisible()) {
+      super.show();
+    }
+  }
+
+  // Hide calendar
+  hideCalendar() {
+    try {
+      super.hide();
+    } catch (error) {
+      this.#handleError(error, "hideDropdown");
+    }
+  }
+
+  // Handle Escape and Tab key actions once calendar is open
+  handleGlobalKeydown(event) {
+    // Escape: close calendar
+    if (event.key === "Escape") {
+      this.hideCalendar();
+      this.setInputValue(this.#selectedDate);
+      return;
+    }
+
+    // If we tab off the last datepicker element, we want to force focus onto the next focusable element after
+    // the datepicker input
+    if (
+      event.key === "Tab" &&
+      event.target ===
+        this.pathogenDatepickerBetaCalendarOutlet.getLastFocusableElement() &&
+      !event.shiftKey
+    ) {
+      event.preventDefault();
+      this.hideCalendar();
+      this.focusNextFocusableElement();
+      return;
+    }
+
+    // If we Tab while on the trigger, Shift+Tab should close the datepicker,
+    // while Tab focuses on the first focusable element within the calendar
+    if (event.key === "Tab" && event.target === this.triggerTarget) {
+      if (event.shiftKey) {
+        this.hideCalendar();
+      } else if (!event.shiftKey) {
+        event.preventDefault();
+        this.pathogenDatepickerBetaCalendarOutlet
+          .getFirstFocusableElement()
+          .focus();
+      }
+    }
+  }
+
+  // handles validating user directly typing in a date
+  directInput(event) {
+    event.preventDefault();
+    const dateInput = event.target.value;
+    if (this.#validateDateInput(dateInput)) {
+      if (this.#minDate && this.#minDate > dateInput) {
+        this.#enableInputErrorState(this.invalidMinDateValue);
+      } else {
+        if (this.autosubmitValue) {
+          this.submitDate();
+        } else {
+          this.#disableInputErrorState();
+        }
+        this.#setSelectedDate();
+        this.focusNextFocusableElement();
+      }
+    } else {
+      this.#enableInputErrorState(this.invalidDateValue);
+    }
+    this.hideCalendar();
+  }
+
+  // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
+  #validateDateInput(dateInput) {
+    let year, month, day;
+    if (dateInput.match(this.dateFormatRegexValue)) {
+      [year, month, day] = dateInput.split("-").map(Number);
+      month--;
+      const date = new Date(year, month, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month &&
+        date.getDate() === day
+      );
+    }
+    return false;
+  }
+
+  // without event.preventDefault() on Enter, form is submitted
+  handleEnterDirectInput(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.directInput(event);
+    }
+  }
+
+  // adds error message if invalid date or a date prior to minDate was entered
+  #enableInputErrorState(message) {
+    this.inputErrorTarget.innerText = message;
+    if (this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.remove("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", false);
+    }
+    this.setInputValue(this.#selectedDate);
+  }
+
+  // disables the error state once a valid date is entered/selected
+  #disableInputErrorState() {
+    this.inputErrorTarget.innerText = "";
+    if (!this.inputErrorTarget.classList.contains("hidden")) {
+      this.inputErrorTarget.classList.add("hidden");
+      this.inputErrorTarget.setAttribute("aria-hidden", true);
+    }
+  }
+
+  // submits the selected date
+  submitDate() {
+    this.#disableInputErrorState();
+    this.element.closest("form").requestSubmit();
+    this.#setSelectedDate();
+  }
+
+  // handles filling in the date input with the date
+  // use cases:
+  // 1. Add the newly selected date from the datepicker
+  // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
+  // 3. If user entered an invalid date, resets to original value
+  setInputValue(date) {
+    this.triggerTarget.value = date;
+    this.#selectedDate = date;
+    this.#setSelectedDate();
+  }
+
+  // passes all shared variables required by the calendar, avoids processing or passing values twice
+  // triggers upon initial connection as well as after submission
+  #shareParamsWithCalendar() {
+    const sharedVariables = {
+      todaysYear: this.#todaysYear,
+      todaysMonthIndex: this.#todaysMonthIndex,
+      todaysDate: this.#todaysDate,
+      selectedDate: this.#selectedDate,
+      selectedYear: this.#selectedYear,
+      selectedMonthIndex: this.#selectedMonthIndex,
+      minDate: this.#minDate,
+      minDateMessage: this.invalidMinDateValue,
+      autosubmit: this.autosubmitValue,
+    };
+    this.pathogenDatepickerBetaCalendarOutlet.shareParamsWithCalendarByInput(
+      sharedVariables,
+    );
+  }
+
+  #handleError(error, source) {
+    // In production, consider reporting errors to a logging service
+    console.error(
+      `Pathogen--Datepicker--InputController error in ${source}:`,
+      error,
+    );
+  }
+
+  // used by pathogen/datepicker/calendar.js
+  focusTrigger() {
+    this.triggerTarget.focus();
+  }
+
+  focusNextFocusableElement() {
+    this.#nextFocusableElementAfterInput.focus();
+  }
+}
