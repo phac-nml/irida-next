@@ -39,7 +39,7 @@ module Projects
     end
 
     def page_title
-      @title = [t(:'projects.sidebar.files'), @project.full_name].join(' · ')
+      @title = t(:'projects.sidebar.files')
     end
   end
 end
