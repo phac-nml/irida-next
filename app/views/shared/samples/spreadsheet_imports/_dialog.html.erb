@@ -170,7 +170,15 @@
                 ><%= t("shared.samples.spreadsheet_imports.dialog.static_project") %></label>
                 <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %></p>
 
-                <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
+                <% select2_component =
+                  (
+                    if Flipper.enabled?(:beta_dropdown)
+                      "viral_beta_select2"
+                    else
+                      "viral_select2"
+                    end
+                  ) %>
+                <%= send(select2_component, form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
                   <% @group_projects.each do |project| %>
                     <% select.with_option(
                         value: project.id,

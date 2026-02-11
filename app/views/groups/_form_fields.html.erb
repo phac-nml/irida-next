@@ -44,7 +44,15 @@
                    class:
                      "mb-1 block text-sm font-medium text-slate-900 dark:text-white" %>
         <div>
-          <%= Flipper.enabled?(:beta_dropdown) ? viral_prefixed_beta_select2 : viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+          <% select2_component =
+            (
+              if Flipper.enabled?(:beta_dropdown)
+                "viral_prefixed_beta_select2"
+              else
+                "viral_prefixed_select2"
+              end
+            ) %>
+          <%= send(select2_component, form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
                       value: namespace.id,

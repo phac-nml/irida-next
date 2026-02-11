@@ -30,7 +30,15 @@ end
         "
       >
     <% else %>
-      <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_beta_select2"
+          else
+            "viral_select2"
+          end
+        ) %>
+      <%= send(select2_component, form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
