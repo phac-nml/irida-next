@@ -8,6 +8,7 @@
     type: "text",
     id: id,
     name: id,
+    role: "combobox",
     data: {
       "viral--select2-target": "input",
       action: "input->viral--select2#input",
@@ -19,6 +20,9 @@
       "select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50",
     value: selected_value.presence,
     aria: {
+      controls: "select2-listbox",
+      autocomplete: "list",
+      expanded: "false",
       describedby: aria_describedby.presence,
       invalid: aria_invalid,
       required: aria_required,
@@ -33,6 +37,7 @@
     hidden: ""
   ) do %>
     <%= tag.ul(
+      id: "select2-listbox",
       data: { "viral--select2-target": "scroller" },
       class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
       role: "listbox",

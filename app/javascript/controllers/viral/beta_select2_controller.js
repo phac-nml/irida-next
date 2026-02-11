@@ -50,22 +50,6 @@ export default class BetaSelect2Controller extends MenuController {
         this.#boundHandlers.dropdownFocusOut,
       );
 
-      // Accessibility: set ARIA attributes
-      this.triggerTarget.setAttribute("role", "combobox");
-      this.triggerTarget.setAttribute("aria-autocomplete", "list");
-      this.triggerTarget.setAttribute("aria-expanded", "false");
-      this.triggerTarget.setAttribute(
-        "aria-controls",
-        this.scrollerTarget.id || "select2-listbox",
-      );
-      this.scrollerTarget.setAttribute("role", "listbox");
-      this.scrollerTarget.id = this.scrollerTarget.id || "select2-listbox";
-      this.itemTargets.forEach((item, idx) => {
-        item.setAttribute("role", "option");
-        item.setAttribute("id", `select2-option-${idx}`);
-        item.setAttribute("aria-selected", "false");
-      });
-
       this.element.setAttribute("data-controller-connected", "true");
     } catch (error) {
       this.#handleError(error, "connect");

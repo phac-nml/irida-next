@@ -16,6 +16,7 @@
           type="text"
           id="<%= id %>"
           name="<%= id %>"
+          role="combobox"
           data-viral--beta-select2-target="trigger"
           data-action="input->viral--beta-select2#input"
           placeholder="<%= placeholder %>"
@@ -28,6 +29,9 @@
             text-ellipsis overflow-hidden
           "
           value="<%= selected_value %>"
+          aria-controls="select2-listbox"
+          aria-autocomplete="list"
+          aria-expanded="false"
           <% if aria.present? %>
           <% aria.each do |key, value| %>
           <%= "aria-#{key}=#{value}" %>
@@ -44,6 +48,7 @@
           hidden=""
         >
           <ul
+            id="select2-listbox"
             data-viral--beta-select2-target="scroller"
             role="listbox"
             class="
