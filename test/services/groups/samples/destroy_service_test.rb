@@ -57,31 +57,33 @@ module Groups
         assert_equal 2, activity.extended_details.details['deleted_samples_data'].count
         assert_equal 'group_samples_destroy', activity.parameters[:action]
 
-        # verify project activity 1
-        activity = PublicActivity::Activity.where(
-          key: 'namespaces_project_namespace.samples.destroy_multiple'
-        ).order(created_at: :desc).second
-
-        assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity.key
-        assert_equal @user, activity.owner
-        assert_equal 1, activity.parameters[:samples_deleted_count]
-        assert_includes activity.extended_details.details['deleted_samples_data'],
-                        { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid }
-        assert_equal 1, activity.extended_details.details['deleted_samples_data'].count
-        assert_equal 'sample_destroy_multiple', activity.parameters[:action]
-
-        # verify project activity 2
-        activity = PublicActivity::Activity.where(
-          key: 'namespaces_project_namespace.samples.destroy_multiple'
+        # verify project activity for sample32
+        activity_sample32 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          trackable: @sample32.project.namespace
         ).order(created_at: :desc).first
 
-        assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity.key
-        assert_equal @user, activity.owner
-        assert_equal 1, activity.parameters[:samples_deleted_count]
-        assert_includes activity.extended_details.details['deleted_samples_data'],
+        assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity_sample32.key
+        assert_equal @user, activity_sample32.owner
+        assert_equal 1, activity_sample32.parameters[:samples_deleted_count]
+        assert_includes activity_sample32.extended_details.details['deleted_samples_data'],
+                        { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid }
+        assert_equal 1, activity_sample32.extended_details.details['deleted_samples_data'].count
+        assert_equal 'sample_destroy_multiple', activity_sample32.parameters[:action]
+
+        # verify project activity for sample34
+        activity_sample34 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          trackable: @sample34.project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal 'namespaces_project_namespace.samples.destroy_multiple', activity_sample34.key
+        assert_equal @user, activity_sample34.owner
+        assert_equal 1, activity_sample34.parameters[:samples_deleted_count]
+        assert_includes activity_sample34.extended_details.details['deleted_samples_data'],
                         { 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid }
-        assert_equal 1, activity.extended_details.details['deleted_samples_data'].count
-        assert_equal 'sample_destroy_multiple', activity.parameters[:action]
+        assert_equal 1, activity_sample34.extended_details.details['deleted_samples_data'].count
+        assert_equal 'sample_destroy_multiple', activity_sample34.parameters[:action]
       end
 
       test 'only delete group samples with proper permission' do
