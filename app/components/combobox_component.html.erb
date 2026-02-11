@@ -1,11 +1,10 @@
-<div
-  data-controller="combobox"
-  data-combobox-trigger-type-value="click"
-  data-combobox-strategy-value="fixed"
-  data-combobox-no-results-text-value="<%= t(".no_results_text") %>"
-  data-combobox-single-result-text-value="<%= t(".single_result_text") %>"
-  data-combobox-multiple-results-text-value="<%= t(".multiple_results_text") %>"
->
+<%= tag.div(data: {
+              controller: "combobox",
+              "combobox-trigger-type-value": "click",
+              "combobox-strategy-value": "fixed",
+              "combobox-no-results-text-value": t(".no_results_text"),
+              "combobox-single-result-text-value": t(".single_result_text"),
+              "combobox-multiple-results-text-value": t(".multiple_results_text") }) do %>
   <%= @form.hidden_field @field,
                      value: @selected_option[:value],
                      id: "#{@trigger_id}_hidden",
@@ -28,4 +27,4 @@
   </div>
   <div class="sr-only" aria-live="polite" data-combobox-target="ariaLiveUpdate">
   </div>
-</div>
+<% end %>
