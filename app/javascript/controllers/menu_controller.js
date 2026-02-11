@@ -102,13 +102,22 @@ export default class MenuController extends Controller {
           },
         }),
       ],
-    }).then(({ x, y }) => {
-      Object.assign(this.menuTarget.style, {
-        position: this.strategyValue,
-        left: `${x}px`,
-        top: `${y}px`,
+    })
+      .then(({ x, y }) => {
+        Object.assign(this.menuTarget.style, {
+          position: this.strategyValue,
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      })
+      .catch(() => {
+        const triggerRect = this.triggerTarget.getBoundingClientRect();
+        Object.assign(this.menuTarget.style, {
+          position: this.strategyValue,
+          left: `${triggerRect.left}px`,
+          top: `${triggerRect.bottom}px`,
+        });
       });
-    });
   }
 
   #setupClickOutsideListener() {
