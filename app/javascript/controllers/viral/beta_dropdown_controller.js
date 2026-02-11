@@ -73,7 +73,7 @@ export default class extends MenuController {
     this.triggerTarget.setAttribute("aria-expanded", "false");
     this.menuTarget.setAttribute("aria-hidden", "true");
     this.menuTarget.setAttribute("hidden", "");
-    this.#menuItems(this.triggerTarget).forEach((menuitem) => {
+    this.#menuItems(this.menuTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
     this.triggerTarget.focus();
