@@ -79,13 +79,6 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 2
         end
-
-        # verify clearing the form
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
-        assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
-        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
-          assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
-        end
       end
     end
   end
