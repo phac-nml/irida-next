@@ -1,7 +1,12 @@
 <div
   data-controller="advanced-search"
+  data-action="
+    input->advanced-search#clearSubmitError
+    change->advanced-search#clearSubmitError
+  "
   data-advanced-search-open-value="<%= @open %>"
-  data-advanced-search-confirm-close-text-value='<%= t("components.advanced_search_component.confirm_close_text") %>'
+  data-advanced-search-confirm-close-text-value="<%= t("components.advanced_search_component.confirm_close_text") %>"
+  data-advanced-search-minimum-condition-error-text-value="<%= t("components.advanced_search_component.minimum_condition_error") %>"
   data-advanced-search-list-filter-outlet=".list-filter"
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
@@ -41,6 +46,12 @@
         <%= render partial: "shared/form/required_field_legend" %>
       </div>
 
+      <p
+        class="hidden text-sm text-red-700 dark:text-red-500"
+        role="alert"
+        data-advanced-search-target="submitError"
+      ></p>
+
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
       <div class="flex justify-end space-x-2">
@@ -63,9 +74,9 @@
         <% end %>
       </template>
     </div>
-    <% dialog.with_primary_action("data-action": "filters#submit") do
-      t("components.advanced_search_component.apply_filter_button")
-    end %>
+    <% dialog.with_primary_action(
+      "data-action": "advanced-search#submit filters#submit",
+    ) { t("components.advanced_search_component.apply_filter_button") } %>
     <% dialog.with_secondary_action do %>
       <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t("components.advanced_search_component.clear_filter_button") %>
