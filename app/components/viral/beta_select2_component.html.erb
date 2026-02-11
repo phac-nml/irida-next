@@ -16,10 +16,10 @@
     "
     <% if selected_value.present? %>
     value="<%= selected_value %>"
+    <% end %>
     aria-controls="select2-listbox"
     aria-autocomplete="list"
     aria-expanded="false"
-    <% end %>
     <% if aria_describedby.present? %>
     aria-describedby="<%= aria_describedby %>"
     <% end %>
