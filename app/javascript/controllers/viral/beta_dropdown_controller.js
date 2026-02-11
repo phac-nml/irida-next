@@ -218,10 +218,10 @@ export default class extends MenuController {
   }
 
   #menuItems(menu) {
-    return Array.prototype.slice.call(
-      menu.querySelectorAll(
+    return [
+      ...menu.querySelectorAll(
         '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
       ),
-    );
+    ];
   }
 }
