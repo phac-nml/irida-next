@@ -92,12 +92,12 @@ jobs:
             **/*.html.erb
 
       - name: Lint ERB templates (Herb)
-        if: steps.changed-erb-files.outputs.any_changed == 'true'
-        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files }}
+        if: steps.changed-erb-files.outputs.all_modified_files != ''
+        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_modified_files }}
 
       - name: Check ERB formatting (Herb)
-        if: steps.changed-erb-files.outputs.any_changed == 'true'
-        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_changed_files }}
+        if: steps.changed-erb-files.outputs.all_modified_files != ''
+        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_modified_files }}
 
   test:
     timeout-minutes: 15
