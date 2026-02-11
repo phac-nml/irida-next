@@ -131,15 +131,15 @@ module Pathogen
         visit URL_SYNC_PREVIEW_PATH
         wait_for_tabs('url-sync-demo')
 
-        within_tabs('url-sync-demo') do
-          assert_equal '#tab-getting-started', page.evaluate_script('window.location.hash')
+        assert_current_path("#{root_url.chop}#{URL_SYNC_PREVIEW_PATH}#tab-getting-started", url: true)
 
-          find('[role="tab"]', text: 'How It Works').click
-          assert_equal '#tab-how-it-works', page.evaluate_script('window.location.hash')
+        click_button 'How It Works'
+        assert_selector 'h3', text: 'How It Works'
+        assert_current_path("#{root_url.chop}#{URL_SYNC_PREVIEW_PATH}#tab-how-it-works", url: true)
 
-          find('[role="tab"]', text: 'Use Cases').click
-          assert_equal '#tab-use-cases', page.evaluate_script('window.location.hash')
-        end
+        click_button 'Use Cases'
+        assert_selector 'h3', text: 'Use Cases'
+        assert_current_path("#{root_url.chop}#{URL_SYNC_PREVIEW_PATH}#tab-use-cases", url: true)
       end
 
       test 'sync_url honours the hash when loading the page' do

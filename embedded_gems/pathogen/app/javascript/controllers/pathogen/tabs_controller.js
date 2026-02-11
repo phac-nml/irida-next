@@ -355,58 +355,60 @@ export default class extends Controller {
    * @returns {void}
    */
   #selectTabByIndex(index, updateUrl = true, updateMethod = history.pushState) {
-    // Defensive checks for morph scenarios
-    if (!this.hasTabTarget || !this.hasPanelTarget) {
-      return;
-    }
+    setTimeout(() => {
+      // Defensive checks for morph scenarios
+      if (!this.hasTabTarget || !this.hasPanelTarget) {
+        return;
+      }
 
-    if (index < 0 || index >= this.tabTargets.length) {
-      return;
-    }
+      if (index < 0 || index >= this.tabTargets.length) {
+        return;
+      }
 
-    // Update all tabs
-    this.tabTargets.forEach((tab, i) => {
-      if (!tab) return; // Skip if tab doesn't exist
+      // Update all tabs
+      this.tabTargets.forEach((tab, i) => {
+        if (!tab) return; // Skip if tab doesn't exist
 
-      const isSelected = i === index;
+        const isSelected = i === index;
 
-      // Update ARIA attributes
-      tab.setAttribute("aria-selected", String(isSelected));
+        // Update ARIA attributes
+        tab.setAttribute("aria-selected", String(isSelected));
 
-      // Update roving tabindex
-      tab.tabIndex = isSelected ? 0 : -1;
-    });
+        // Update roving tabindex
+        tab.tabIndex = isSelected ? 0 : -1;
+      });
 
-    // Update all panels
-    this.panelTargets.forEach((panel, i) => {
-      if (!panel) return; // Skip if panel doesn't exist
+      // Update all panels
+      this.panelTargets.forEach((panel, i) => {
+        if (!panel) return; // Skip if panel doesn't exist
 
-      const isVisible = i === index;
+        const isVisible = i === index;
 
-      // Update visibility
-      // Note: Using classList.toggle with 'hidden' class (not inline styles)
-      // is critical for Turbo Frame lazy loading. When 'hidden' is removed,
-      // Turbo detects the frame is now visible and triggers automatic fetch.
-      // CSS ensures visible panels display as block via [role="tabpanel"]:not(.hidden) rule.
-      panel.classList.toggle("hidden", !isVisible);
+        // Update visibility
+        // Note: Using classList.toggle with 'hidden' class (not inline styles)
+        // is critical for Turbo Frame lazy loading. When 'hidden' is removed,
+        // Turbo detects the frame is now visible and triggers automatic fetch.
+        // CSS ensures visible panels display as block via [role="tabpanel"]:not(.hidden) rule.
+        panel.classList.toggle("hidden", !isVisible);
 
-      // Update ARIA hidden state
-      panel.setAttribute("aria-hidden", String(!isVisible));
+        // Update ARIA hidden state
+        panel.setAttribute("aria-hidden", String(!isVisible));
 
-      // Turbo Frame lazy loading happens automatically when panel becomes visible
-      // No explicit intervention needed - Turbo handles it when 'hidden' class is removed
-    });
+        // Turbo Frame lazy loading happens automatically when panel becomes visible
+        // No explicit intervention needed - Turbo handles it when 'hidden' class is removed
+      });
 
-    // Update URL hash if sync is enabled
-    if (this.syncUrlValue && updateUrl) {
-      this.#updateUrlHash(index, updateMethod);
-    }
+      // Update URL hash if sync is enabled
+      if (this.syncUrlValue && updateUrl) {
+        this.#updateUrlHash(index, updateMethod);
+      }
 
-    // Turbo Frame lazy loading happens automatically here:
-    // If the newly visible panel contains a <turbo-frame loading="lazy" src="...">,
-    // Turbo will fetch the content immediately after the panel becomes visible.
-    // The frame's fallback content (loading spinner) displays during fetch,
-    // then morphs into the loaded content seamlessly.
+      // Turbo Frame lazy loading happens automatically here:
+      // If the newly visible panel contains a <turbo-frame loading="lazy" src="...">,
+      // Turbo will fetch the content immediately after the panel becomes visible.
+      // The frame's fallback content (loading spinner) displays during fetch,
+      // then morphs into the loaded content seamlessly.
+    }, 20);
   }
 
   /**
