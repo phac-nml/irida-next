@@ -386,7 +386,12 @@ export default class extends Controller {
     this.#samplesheetAttributes = merge(this.#samplesheetAttributes, metadata);
     for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
       headers.forEach((header) => {
-        this.#updateCell(header, this.#allSampleIds[i], "metadata_cell", false);
+        this.#updateCell(
+          header,
+          this.#allSampleIds[this.#currentSampleIndexes[i]],
+          "metadata_cell",
+          false,
+        );
       });
     }
   }

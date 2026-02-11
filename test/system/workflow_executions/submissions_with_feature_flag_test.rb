@@ -1268,14 +1268,14 @@ module WorkflowExecutions
 
       # check metadata values of samples
       assert_selector "td[id='#{sample32.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
-      assert_selector "td[id='#{sample33.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
-      assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
+      assert_selector "td[id='#{sample33.id}_metadata_1'] span", text: sample33.metadata['metadatafield1']
+      assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample34.metadata['metadatafield1']
       # sample contains no metadata value for this field, stays as text input
       assert_selector "td[id='#{sample35.id}_metadata_1'] input[type='text']", text: ''
 
       assert_selector "td[id='#{sample32.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
-      assert_selector "td[id='#{sample33.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
-      assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
+      assert_selector "td[id='#{sample33.id}_metadata_2'] span", text: sample33.metadata['metadatafield2']
+      assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample34.metadata['metadatafield2']
       # sample contains no metadata value for this field, stays as text input
       assert_selector "td[id='#{sample35.id}_metadata_2'] input[type='text']", text: ''
       ### VERIFY END ###
@@ -1610,6 +1610,76 @@ module WorkflowExecutions
         assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
       end
       assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samplesheet metadata change while filtering' do
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      project = projects(:projectMetadata)
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      login_as user
+      visit namespace_project_samples_url(project.namespace.parent, project)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      # select samples
+
+      click_button I18n.t('common.controls.select_all')
+
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'strong[data-selection-target="selected"]', text: 3
+
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/gasclustering'
+      click_button 'phac-nml/gasclustering'
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      assert_selector 'h1', text: 'phac-nml/gasclustering'
+
+      # check default metadata dropdown selected values
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+
+      assert_selector "td[id='#{sample61.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample63.id}_metadata_1'] input[type='text']", text: ''
+      # change metadata_1 and metadata_2 option selection
+      select 'example_float', from: 'metadata_1'
+      # check new metadata dropdown selected values
+      assert_selector '#field-metadata_1', text: 'example_float'
+
+      # check metadata values of samples
+      assert_selector "td[id='#{sample61.id}_metadata_1'] span", text: sample61.metadata['example_float']
+      assert_selector "td[id='#{sample62.id}_metadata_1'] span", text: sample62.metadata['example_float']
+      assert_selector "td[id='#{sample63.id}_metadata_1'] span", text: sample63.metadata['example_float']
+
+      # reset metadata to no/default selection
+      select 'metadata_1', from: 'metadata_1'
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+
+      assert_selector "td[id='#{sample61.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='#{sample63.id}_metadata_1'] input[type='text']", text: ''
+
+      # enter filter
+      find('input#samplesheet-filter').fill_in with: sample62.name
+      find('input#samplesheet-filter').send_keys :enter
+
+      # assert table is filtered to display sample62 only
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
+      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
+
+      # select metadata field and verify sample62's metadata value loads as expected
+      select 'example_float', from: 'metadata_1'
+      assert_selector '#field-metadata_1', text: 'example_float'
+      assert_selector "td[id='#{sample62.id}_metadata_1'] span", text: sample62.metadata['example_float']
       ### ACTIONS AND VERIFY END ###
     end
   end
