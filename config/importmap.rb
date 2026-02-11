@@ -28,5 +28,3 @@ pin 'focus-trap' # @7.6.5
 pin 'tabbable' # @6.2.0
 pin 'uuid' # @13.0.0
 pin 'debounce' # @3.0.0
-pin 'pathogen_view_components', to: 'pathogen_view_components.js'
-pin_all_from 'embedded_gems/pathogen/app/assets/javascripts/pathogen_view_components', under: 'pathogen_view_components'

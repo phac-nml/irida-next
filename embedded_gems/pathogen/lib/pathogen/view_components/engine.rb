@@ -45,9 +45,8 @@ module Pathogen
       end
 
       initializer 'pathogen_view_components.importmap', before: 'importmap' do |app|
-        if app.config.respond_to?(:importmap) && app.config.importmap.key?(:cache_sweepers)
-          app.config.importmap.cache_sweepers << Engine.root.join('app/assets/javascripts')
-        end
+        app.config.importmap.paths << root.join('config/importmap.rb')
+        app.config.importmap.cache_sweepers << Engine.root.join('app/assets/javascripts')
       end
     end
   end
