@@ -59,7 +59,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       { samplesheet_params: {} }
     ]
     unless Flipper.enabled?(:deferred_samplesheet)
-      attributes.unshift(:id) # index, increment for each one, not necessary for functionality
+      attributes.push(:id) # index, increment for each one, not necessary for functionality
     end
     attributes
   end
