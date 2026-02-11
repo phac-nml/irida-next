@@ -605,6 +605,29 @@ module Groups
       assert_selector "table tbody tr[id='#{dom_id(@sample9)}']"
     end
 
+    test 'advanced search apply requires at least one complete condition' do
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_selector "p[data-advanced-search-target='submitError']",
+                      text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
+
+      assert_selector '#samples-table table tbody tr', count: 20
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
+    end
+
     test 'filter samples with advanced search and autocomplete disabled' do
       Flipper.disable(:advanced_search_with_auto_complete)
 
