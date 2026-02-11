@@ -210,9 +210,8 @@ export default class extends Controller {
   /**
    * Remove field and associated error elements from DOM
    * @param {Element} fieldContainer - Wrapper container to remove
-   * @param {string} keyId - Key ID (unused, kept for compatibility)
    */
-  #removeFieldFromDOM(fieldContainer, keyId) {
+  #removeFieldFromDOM(fieldContainer) {
     // Remove the wrapper container, which includes both the inputField and error div
     fieldContainer.remove();
   }

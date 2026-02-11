@@ -19,7 +19,7 @@ export default class extends Controller {
 
     if (storageValues) {
       for (const [storageValueIndex, storageValue] of storageValues.entries()) {
-        let value = "";
+        let value;
         try {
           // Parse required for array ie: paired attachments
           value = JSON.parse(storageValue);

@@ -62,12 +62,9 @@ export default class extends Controller {
     const group = condition.closest(
       "fieldset[data-advanced-search-target='groupsContainer']",
     );
-    let conditions = group.querySelectorAll(
-      "fieldset[data-advanced-search-target='conditionsContainer']",
-    );
 
     condition.remove();
-    conditions = group.querySelectorAll(
+    const conditions = group.querySelectorAll(
       "fieldset[data-advanced-search-target='conditionsContainer']",
     );
     //re-index the fieldset legend & all the form fields within the group

@@ -439,20 +439,18 @@ export default class extends Controller {
   /**
    * Navigates to the first tab
    * @private
-   * @param {KeyboardEvent} event - The keyboard event
    * @returns {void}
    */
-  #navigateToFirst(event) {
+  #navigateToFirst() {
     this.#focusAndSelectTab(0);
   }
 
   /**
    * Navigates to the last tab
    * @private
-   * @param {KeyboardEvent} event - The keyboard event
    * @returns {void}
    */
-  #navigateToLast(event) {
+  #navigateToLast() {
     this.#focusAndSelectTab(this.tabTargets.length - 1);
   }
 
@@ -622,10 +620,9 @@ export default class extends Controller {
    * 4. Reloading frames in visible panels to get fresh translated content
    *
    * @private
-   * @param {Event} event - The turbo:render event
    * @returns {void}
    */
-  #handleTurboRender(event) {
+  #handleTurboRender() {
     try {
       // Re-validate targets after morph in case DOM structure changed
       if (!this.#validateTargets()) {

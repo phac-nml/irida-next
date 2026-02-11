@@ -31,7 +31,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["source", "buttonLabel", "successIcon"];
   static values = {
-    feedbackDuration: { type: Number, default: 2000 }
+    feedbackDuration: { type: Number, default: 2000 },
   };
 
   /**
@@ -102,11 +102,6 @@ export default class extends Controller {
    * Validates that all required targets are present when the controller connects.
    */
   connect() {
-    // Log connection for debugging in development
-    if (typeof window !== 'undefined' && window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.debug("📋 Copy controller connected");
-    }
-
     // Validate targets
     if (!this.hasSourceTarget) {
       console.warn("⚠️ Copy controller missing source target");
