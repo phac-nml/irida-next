@@ -3,7 +3,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[erb]": {
-    "editor.defaultFormatter": "marcoroth.herb-lsp"
+    "editor.defaultFormatter": "marcoroth.herb-lsp",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -9,7 +9,7 @@
 # Website: https://herb-tools.dev
 # Configuration: https://herb-tools.dev/configuration
 
-version: 0.8.9
+version: 0.8.10
 
 files:
   exclude:
