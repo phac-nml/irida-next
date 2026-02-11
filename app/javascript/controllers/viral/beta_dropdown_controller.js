@@ -19,6 +19,7 @@ export default class extends MenuController {
 
   disconnect() {
     document.removeEventListener("turbo:morph", this.boundOnMorph);
+    super.disconnect();
   }
 
   onMorph() {

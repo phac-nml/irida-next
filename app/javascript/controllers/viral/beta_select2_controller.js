@@ -65,6 +65,7 @@ export default class BetaSelect2Controller extends MenuController {
         );
       }
       super.hide();
+      super.disconnect();
     } catch (error) {
       this.#handleError(error, "disconnect");
     }

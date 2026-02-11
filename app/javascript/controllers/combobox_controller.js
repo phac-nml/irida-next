@@ -81,6 +81,8 @@ export default class ComboboxController extends MenuController {
 
     this.#removeTriggerEventListeners(this.triggerTarget);
     this.#removeMenuEventListeners(this.menuTarget);
+
+    super.disconnect();
   }
 
   #addMenuEventListeners(container) {
