@@ -3,12 +3,16 @@
     <%= I18n.t("groups.members.new.description", name: @namespace.human_name) %>
   </p>
 </div>
-<%= form_with(model: @new_member, url: group_members_path(tab: @tab), data:
-if Flipper.enabled?(:beta_dropdown)
-  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
-else
-  { controller: "viral--select2" }
-end, method: :post, html: { novalidate: true }) do |form| %>
+<% form_data =
+  if Flipper.enabled?(:beta_dropdown)
+    {
+      controller: "viral--beta-select2",
+      "viral--beta-select2-trigger-type-value": "click",
+    }
+  else
+    { controller: "viral--select2" }
+  end %>
+<%= form_with(model: @new_member, url: group_members_path(tab: @tab), data: form_data, method: :post, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if @new_member.errors.any?
       viral_alert(
@@ -32,7 +36,15 @@ end, method: :post, html: { novalidate: true }) do |form| %>
                  data: {
                    required: true,
                  } %>
-      <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_beta_select2"
+          else
+            "viral_select2"
+          end
+        ) %>
+      <%= send(select2_component, form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
         <% @available_users.each do |user| %>
           <% select.with_option(
                       value: user.id,

@@ -57,7 +57,15 @@ end %>
     <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
-      <%= Flipper.enabled?(:beta_dropdown) ? viral_prefixed_beta_select2 : viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), required: true, aria: { invalid: invalid_namespace,
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_prefixed_beta_select2"
+          else
+            "viral_prefixed_select2"
+          end
+        ) %>
+      <%= send(select2_component, form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), required: true, aria: { invalid: invalid_namespace,
       describedby: [invalid_namespace ? builder.field_id(:namespace, "error") : nil, builder.field_id(:namespace, "hint")].join(" ") } ) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(

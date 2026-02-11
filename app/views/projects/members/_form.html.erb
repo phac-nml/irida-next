@@ -33,7 +33,15 @@ end, method: :post,  html: { novalidate: true }) do |form| %>
                  data: {
                    required: true,
                  } %>
-      <%= Flipper.enabled?(:beta_dropdown) ? viral_beta_select2 : viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_beta_select2"
+          else
+            "viral_select2"
+          end
+        ) %>
+      <%= send(select2_component, form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
         <% @available_users.each do |user| %>
           <% select.with_option(
                       value: user.id,
