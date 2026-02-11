@@ -1,7 +1,7 @@
 <div
   data-controller="projects--samples--metadata--create"
-  data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key")%>"
-  data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value")%>"
+  data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key") %>"
+  data-projects--samples--metadata--create-value-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.value") %>"
   data-projects--samples--metadata--create-form-error-value="<%= t("general.form.error_notification") %>"
 >
   <div
@@ -55,6 +55,9 @@
                   ) %>
                   <%= form.text_field(
                     "key_PLACEHOLDER",
+                    aria: {
+                      required: true,
+                    },
                     class:
                       "keyInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-md border border-slate-300 appearance-none dark:text-white dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600 transition-colors",
                   ) %>
@@ -81,7 +84,9 @@
                     "value_PLACEHOLDER",
                     class:
                       "valueInput block px-3 py-2 w-full text-sm text-slate-900 bg-white rounded-md border border-slate-300 appearance-none dark:text-white dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-600 dark:focus:border-primary-600 transition-colors",
-                    required: true,
+                    aria: {
+                      required: "true",
+                    },
                   ) %>
                   <div
                     id="sample_value_PLACEHOLDER_error"
@@ -103,7 +108,7 @@
                   hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md transition-colors
                   cursor-pointer self-start mt-7
                 "
-                aria-label="<%= t(".remove_field")%>"
+                aria-label="<%= t(".remove_field") %>"
               >
                 <%= pathogen_icon(:x, size: :sm) %>
               </button>
@@ -118,7 +123,7 @@
       <div class="text-center">
         <%= form.button t(".create_field_button"),
                     type: "button",
-                    class: "button button-secondary mr-2",
+                    class: "button button-default mr-2",
                     "data-action": "projects--samples--metadata--create#addField" %>
       </div>
       <div>
