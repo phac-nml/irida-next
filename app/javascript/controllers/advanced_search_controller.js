@@ -17,6 +17,7 @@ export default class extends Controller {
     confirmCloseText: String,
     minimumConditionErrorText: String,
     open: Boolean,
+    status: Boolean,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
 
@@ -51,6 +52,11 @@ export default class extends Controller {
   }
 
   close(event) {
+    if (!this.statusValue) {
+      this.renderSearch();
+      return;
+    }
+
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
