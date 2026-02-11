@@ -106,8 +106,10 @@ Rails.application.configure do
   config.hosts << /.*\.devtunnels\.ms/
   config.action_controller.forgery_protection_origin_check = false
 
-  # Use EventedFileUpdateChecker to watch files for changes
-  # fixes performance issues with propshaft in development
+  # Use EventedFileUpdateChecker for better performance when watching files for changes
+  # This fixes performance issues with propshaft in development
+  # Set RAILS_DISABLE_EVENTED_FILE_WATCHER=1 if experiencing file watching issues
+  # (e.g., on Docker, WSL, or with file sync tools like Dropbox)
   config.file_watcher = if ENV['RAILS_DISABLE_EVENTED_FILE_WATCHER'].present?
                           ActiveSupport::FileUpdateChecker
                         else
