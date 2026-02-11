@@ -484,6 +484,7 @@ export default class extends Controller {
       "file_selector[selected_id]":
         this.#samplesheetAttributes[index].samplesheet_params[columnName]
           .attachment_id,
+      "file_selector[namespace_id]": fileLink.getAttribute("data-namespace-id"),
     });
 
     // Add required properties

@@ -137,6 +137,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:clone_sample?)
   end
 
+  test '#update_samplesheet_data?' do
+    assert @policy.apply(:update_samplesheet_data?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

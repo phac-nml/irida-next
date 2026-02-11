@@ -3,9 +3,11 @@
 module WorkflowExecutions
   # Controller for metadata actions within a workflow execution
   class MetadataController < ApplicationController
+    before_action :namespace
     respond_to :turbo_stream
 
     def fields # rubocop:disable Metrics/AbcSize
+      authorize! @namespace, to: :update_samplesheet_data?
       if Flipper.enabled?(:deferred_samplesheet)
         @sample_ids = params[:sample_ids].split(',')
         @metadata_fields = JSON.parse(params[:metadata_fields])
@@ -20,6 +22,10 @@ module WorkflowExecutions
     end
 
     private
+
+    def namespace
+      @namespace = Namespace.find(params[:namespace_id])
+    end
 
     # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet

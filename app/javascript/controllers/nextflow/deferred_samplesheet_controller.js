@@ -507,7 +507,7 @@ export default class extends Controller {
   #insertFileContent(cell, columnName, sampleId) {
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
-
+    console.log(fileLink.getAttribute("data-namespace-id"));
     // Build URL parameters
     const params = new URLSearchParams({
       "file_selector[attachable_id]": sampleId,
@@ -516,6 +516,7 @@ export default class extends Controller {
       "file_selector[property]": columnName,
       "file_selector[selected_id]":
         this.#fileAttributes[sampleId][columnName].attachment_id,
+      "file_selector[namespace_id]": fileLink.getAttribute("data-namespace-id"),
     });
 
     // Add required properties

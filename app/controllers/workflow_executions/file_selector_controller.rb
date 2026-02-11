@@ -3,6 +3,7 @@
 module WorkflowExecutions
   # Controller actions for FileSelector
   class FileSelectorController < ApplicationController # rubocop:disable Metrics/ClassLength
+    before_action :namespace, only: %i[new create]
     before_action :attachable, only: %i[new create]
     before_action :attachments, only: %i[create]
     before_action :listing_attachments, only: %i[new create]
@@ -30,10 +31,15 @@ module WorkflowExecutions
         :property,
         :selected_id,
         :pattern,
+        :namespace_id,
         { required_properties: [] }
       ]
       expected_params.push(:index) unless Flipper.enabled?(:deferred_samplesheet)
       params.expect(file_selector: expected_params)
+    end
+
+    def namespace
+      @namespace = Namespace.find(file_selector_params[:namespace_id])
     end
 
     def listing_attachments
@@ -75,6 +81,8 @@ module WorkflowExecutions
     end
 
     def attachable
+      authorize! @namespace, to: :update_samplesheet_data?
+
       attachable_id = file_selector_params[:attachable_id]
       case file_selector_params[:attachable_type]
       when Sample.sti_name

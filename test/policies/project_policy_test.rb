@@ -93,6 +93,10 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:destroy_attachment?)
   end
 
+  test '#update_samplesheet_data?' do
+    assert @policy.apply(:update_samplesheet_data?)
+  end
+
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 33 projects. 32 through his namespace
