@@ -1,14 +1,13 @@
-<div
-  data-controller="advanced-search"
-  data-action="
-    input->advanced-search#clearSubmitError
-    change->advanced-search#clearSubmitError
-  "
-  data-advanced-search-open-value="<%= @open %>"
-  data-advanced-search-confirm-close-text-value="<%= t("components.advanced_search_component.confirm_close_text") %>"
-  data-advanced-search-minimum-condition-error-text-value="<%= t("components.advanced_search_component.minimum_condition_error") %>"
-  data-advanced-search-list-filter-outlet=".list-filter"
->
+<%= tag.div(
+  data: {
+    controller: "advanced-search",
+    action: "input->advanced-search#clearSubmitError change->advanced-search#clearSubmitError",
+    advanced_search_open_value: @open,
+    advanced_search_confirm_close_text_value: t("components.advanced_search_component.confirm_close_text"),
+    advanced_search_minimum_condition_error_text_value: t("components.advanced_search_component.minimum_condition_error"),
+    advanced_search_list_filter_outlet: ".list-filter",
+  },
+) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>
       <div class="flex flex-row rounded-lg w-full grow" role="group">
@@ -135,4 +134,4 @@
       operations: @operations,
     ) %>
   </template>
-</div>
+<% end %>
