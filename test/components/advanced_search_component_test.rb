@@ -204,4 +204,28 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'apply filter requires at least one complete condition' do
+    visit('rails/view_components/advanced_search_component/empty')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+        assert_selector "p[data-advanced-search-target='submitError']",
+                        text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
+
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            find("input[id$='field']").fill_in with: 'name'
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: 'Sample 1'
+          end
+        end
+
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+        assert_no_selector "p[data-advanced-search-target='submitError']",
+                           text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
+      end
+    end
+  end
 end
