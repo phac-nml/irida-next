@@ -126,7 +126,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
-        assert_selector "p[data-advanced-search-target='submitError']",
+        assert_selector "div[data-advanced-search-target='submitError']",
                         text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
 
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
@@ -137,7 +137,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           end
         end
 
-        assert_no_selector "p[data-advanced-search-target='submitError']",
+        assert_no_selector "div[data-advanced-search-target='submitError']",
                            text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
       end
     end

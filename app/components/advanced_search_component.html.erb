@@ -5,7 +5,7 @@
     advanced_search_open_value: @open,
     advanced_search_status_value: @status,
     advanced_search_confirm_close_text_value: t("components.advanced_search_component.confirm_close_text"),
-    advanced_search_minimum_condition_error_text_value: t("components.advanced_search_component.minimum_condition_error"),
+
     advanced_search_list_filter_outlet: ".list-filter",
   },
 ) do %>
@@ -46,11 +46,13 @@
         <%= render partial: "shared/form/required_field_legend" %>
       </div>
 
-      <p
-        class="hidden text-sm text-red-700 dark:text-red-500"
-        role="alert"
-        data-advanced-search-target="submitError"
-      ></p>
+      <div class="hidden" data-advanced-search-target="submitError">
+        <%= render Viral::AlertComponent.new(
+          type: :danger,
+          message: t("components.advanced_search_component.minimum_condition_error"),
+          dismissible: false,
+        ) %>
+      </div>
 
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>

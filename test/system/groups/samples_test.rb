@@ -619,7 +619,7 @@ module Groups
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      assert_selector "p[data-advanced-search-target='submitError']",
+      assert_selector "div[data-advanced-search-target='submitError']",
                       text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
 
       assert_selector '#samples-table table tbody tr', count: 20

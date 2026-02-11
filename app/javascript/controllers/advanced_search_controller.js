@@ -15,7 +15,6 @@ export default class extends Controller {
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
-    minimumConditionErrorText: String,
     open: Boolean,
     status: Boolean,
   };
@@ -235,7 +234,6 @@ export default class extends Controller {
     }
 
     this.submitErrorTarget.classList.add("hidden");
-    this.submitErrorTarget.textContent = "";
   }
 
   #addConditionToGroup(group) {
@@ -290,7 +288,6 @@ export default class extends Controller {
       return;
     }
 
-    this.submitErrorTarget.textContent = this.minimumConditionErrorTextValue;
     this.submitErrorTarget.classList.remove("hidden");
   }
 
