@@ -11,9 +11,9 @@ module MarkupValidationHelpers
   end
 
   def assert_valid_markup(markup)
-    # Use HTML5 fragment parsing instead of strict XML
-    # HTML5 fragments handle modern tags like <template> and allow trailing whitespace
-    result = Nokogiri::HTML5.fragment(markup)
+    # Use HTML5 fragment parsing with parse errors enabled.
+    # This keeps support for modern tags while still failing malformed markup.
+    result = Nokogiri::HTML5.fragment(markup, max_errors: 100)
 
     assert result.errors.empty?, format_nokogiri_errors(result.errors)
   end
