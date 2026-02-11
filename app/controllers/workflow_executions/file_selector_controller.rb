@@ -32,9 +32,8 @@ module WorkflowExecutions
         :pattern,
         { required_properties: [] }
       ]
-      expected_params.unshift(:index) unless Flipper.enabled?(:deferred_samplesheet)
-
-      params.expect(expected_params)
+      expected_params.push(:index) unless Flipper.enabled?(:deferred_samplesheet)
+      params.expect(file_selector: expected_params)
     end
 
     def listing_attachments
@@ -88,9 +87,9 @@ module WorkflowExecutions
     def attachments # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       @attachments_params = { files: [] }
       if Flipper.enabled?(:deferred_samplesheet)
-        @attachment_params[:attachable_id] = file_selector_params[:attachable_id]
+        @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
       else
-        @attachment_params[:index] = file_selector_params[:index]
+        @attachments_params[:index] = file_selector_params[:index]
       end
 
       property = file_selector_params['property']
