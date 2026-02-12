@@ -5,6 +5,7 @@ require 'test_helper'
 module Dashboard
   class GroupsControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
+    include DashboardSortingHelper
 
     setup do
       @user = users(:alph_abet)
@@ -84,27 +85,6 @@ module Dashboard
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
-    end
-
-    private
-
-    def first_treegrid_row_text
-      Nokogiri::HTML(response.body).at_css('#groups_tree .treegrid-row')&.text.to_s.squish
-    end
-
-    def assert_active_sort(search_key, expected_sort)
-      doc = Nokogiri::HTML(response.body)
-      links = doc.css('a[aria-current="page"]')
-
-      assert links.any? { |link| sort_param(link['href'], search_key) == expected_sort },
-             "Expected active sort #{expected_sort.inspect} for #{search_key}, but none was found"
-    end
-
-    def sort_param(href, search_key)
-      query = URI.parse(href).query.to_s
-      Rack::Utils.parse_nested_query(query).dig(search_key, 's')
-    rescue URI::InvalidURIError
-      nil
     end
   end
 end
