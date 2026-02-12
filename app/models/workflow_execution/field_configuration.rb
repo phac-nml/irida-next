@@ -103,11 +103,15 @@ class WorkflowExecution
 
     # Builds a hash mapping pipeline IDs to display names.
     #
+    # Note: pipeline.name returns a localized string via the Pipeline#text_for method,
+    # which handles both simple strings and I18n translation hashes based on the current locale.
+    #
     # @return [Hash{String => String}] pipeline_id => display_name
     def build_pipeline_labels
       @pipelines.each_with_object({}) do |pipeline, hash|
         next if pipeline.pipeline_id.blank?
 
+        # Use localized name if available, otherwise fall back to pipeline_id
         hash[pipeline.pipeline_id] = pipeline.name.presence || pipeline.pipeline_id
       end
     end
