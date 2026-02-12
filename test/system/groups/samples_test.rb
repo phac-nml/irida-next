@@ -582,7 +582,7 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
       find("input[role='combobox']").send_keys('Sample PUID', :enter)
       select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
-      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+      find("input[name$='[value][]']").send_keys("#{@sample1.puid}, #{@sample2.puid},")
 
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
@@ -643,7 +643,7 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
       find("select[name$='[field]']").find("option[value='puid']").select_option
       select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
-      find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+      find("input[name$='[value][]']").send_keys("#{@sample1.puid}, #{@sample2.puid},")
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
