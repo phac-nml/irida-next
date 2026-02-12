@@ -64,7 +64,7 @@ class WorkflowExecutionCompletionJobTest < ActiveJob::TestCase
     WorkflowExecutionCompletionJob.perform_later(workflow_execution)
 
     assert_equal 0, workflow_execution.outputs.count
-    interrupt_job_after_step(WorkflowExecutionCompletionJob, :run_service) do
+    interrupt_job_after_step(WorkflowExecutionCompletionJob, :process_global_file_paths) do
       perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
     end
 

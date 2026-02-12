@@ -4,7 +4,7 @@ require 'active_job/continuation/test_helper'
 require 'active_storage_test_case'
 
 module WorkflowExecutions
-  class CompletionServiceTest < ActiveStorageTestCase
+  class CompletionJobTest < ActiveStorageTestCase
     include ActiveJob::Continuation::TestHelper
 
     def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
