@@ -1167,8 +1167,6 @@ en:
       revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
     accounts:
-      show:
-        title: Delete account
       delete:
         button: Delete account
         confirm: Are you sure you want to delete your account?
@@ -1176,6 +1174,8 @@ en:
         effects:
         - All projects and groups you own will be deleted
         - All projects and groups you are a member of will be left intact
+      show:
+        title: Delete account
     passwords:
       update:
         forgot: Forgot your password?
@@ -1217,13 +1217,13 @@ en:
         error: Language could not be updated
         success: Language updated successfully
     show:
-      title: Main Settings
       email:
         submit: Update profile settings
       email_address: Email Address
       first_name: First Name
       last_name: Last Name
       missing: This field has not been provided by the Authentication Provider.
+      title: Main Settings
     sidebar:
       access_tokens: Access Tokens
       account: Account
