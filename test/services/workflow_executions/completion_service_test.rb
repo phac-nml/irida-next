@@ -370,6 +370,43 @@ module WorkflowExecutions
       )
     end
 
+    test 'sample outputs on samples_workflow_executions with interrupt' do
+      workflow_execution = @workflow_execution_with_samples
+
+      assert 'completing', workflow_execution.state
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(WorkflowExecutionCompletionJob, :process_sample_file_paths, cursor: 1) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert 'completing', workflow_execution.state
+
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal 2, swe1.outputs.count
+      assert_equal 0, swe2.outputs.count
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+      swe1.reload
+      swe2.reload
+
+      assert_equal 'completed', workflow_execution.state
+
+      assert_equal 2, swe1.outputs.count
+      assert_equal 1, swe2.outputs.count
+    end
+
     test 'sample metadata on samples_workflow_executions' do
       workflow_execution = @workflow_execution_with_samples
 
