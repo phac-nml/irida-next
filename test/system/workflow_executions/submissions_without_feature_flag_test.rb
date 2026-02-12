@@ -3,7 +3,8 @@
 require 'application_system_test_case'
 
 module WorkflowExecutions
-  class SubmissionsTest < ApplicationSystemTestCase
+  ### TODO: Remove this file once feature flag deferred_samplesheet is retired
+  class SubmissionsWithoutFeatureFlagTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
     setup do
@@ -29,8 +30,6 @@ module WorkflowExecutions
       @attachment_rev3 = attachments(:attachmentPEREV3)
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
-
-      Flipper.enable(:deferred_samplesheet)
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
@@ -129,9 +128,9 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
                       text: @sample44.puid
 
-      assert_text I18n.t(:'components.nextflow.unauthorized_to_update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
       assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
+      assert_no_text I18n.t(:'components.nextflow.update_samples')
     end
 
     test 'should display a pipeline selection modal for project samples as analyst through namespace group link' do
@@ -306,9 +305,9 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:nth-child(2) th:first-child',
                       text: @sample44.puid
 
-      assert_text I18n.t(:'components.nextflow.unauthorized_to_update_samples', locale: user.locale)
       assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
       assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
+      assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
     end
 
     test 'should not display a launch pipeline button for group samples as guest' do
@@ -348,7 +347,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -381,7 +380,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -432,7 +431,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -538,7 +537,7 @@ module WorkflowExecutions
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
 
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -579,7 +578,7 @@ module WorkflowExecutions
       # select samples
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
-      # click workflow exectuions btn
+      # click workflow executions btn
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       # select workflow
@@ -714,7 +713,7 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify error msg rendered
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="error"]'
+      assert_selector 'div[data-nextflow--samplesheet-target="error"]'
       assert_text I18n.t('components.nextflow_component.data_missing_error')
       assert_text "- #{@sample44.puid}: fastq_1"
       assert_text "- #{@sample46.puid}: fastq_1"
@@ -750,10 +749,10 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify pagination buttons as well as disabled previous state
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         # verify only 4 pages exist
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
@@ -761,30 +760,30 @@ module WorkflowExecutions
         assert_selector 'option[value="4"]'
         assert_no_selector 'option[value="5"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
 
       # navigate to page 2 of 4
       click_button I18n.t('components.nextflow.samplesheet_component.next')
 
       # verify previous button no longer disabled
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                          text: I18n.t('components.nextflow.samplesheet_component.previous')
       # page dropdown selection updated
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '2'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '2'
       # navigate to page 3 of 4
       click_button I18n.t('components.nextflow.samplesheet_component.next')
 
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '3'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
 
       # test navigating by page dropdown selection
       select '4', from: I18n.t('components.nextflow.samplesheet_component.page_selection.aria_label')
 
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '4'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
       # verify next button is disabled on last page
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       ### ACTIONS AND VERIFY END ###
     end
@@ -825,7 +824,7 @@ module WorkflowExecutions
       assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
       # navigate to page 4
       select '4', from: I18n.t('components.nextflow.samplesheet_component.page_selection.aria_label')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '4'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
 
       # verify attachment to test initially has a selection
       assert_selector "a[id='#{@sample22.id}_fastq_2']",
@@ -852,12 +851,12 @@ module WorkflowExecutions
       assert_no_text rev_attachment.file.filename.to_s
       # change page
       click_button I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '3'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
       assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
 
       # navigate back to original page
       click_button I18n.t('components.nextflow.samplesheet_component.next')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '4'
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
       # verify attachment selection is still 'No file' and original attachment does not exist in table
       assert_selector "a[id='#{@sample22.id}_fastq_2']",
                       text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
@@ -901,13 +900,13 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify empty pagination container with no pagination buttons rendered
-      # data-nextflow--deferred-samplesheet-target="paginationContainer"
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="paginationContainer"]'
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      # data-nextflow--samplesheet-target="paginationContainer"
+      assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                          text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
+      assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
 
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                          text: I18n.t('components.nextflow.samplesheet_component.next')
 
       ### VERIFY END ###
@@ -941,16 +940,16 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify pagination buttons
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
         assert_selector 'option[value="4"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       # verify current samples listed
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -975,12 +974,12 @@ module WorkflowExecutions
         assert_selector 'tr', count: 1
       end
       # verify pagination is removed because there is only 1 page of samples remaining
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="paginationContainer"]'
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                          text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
+      assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
 
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                          text: I18n.t('components.nextflow.samplesheet_component.next')
       ### VERIFY END ###
     end
@@ -1010,16 +1009,16 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify pagination buttons
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
         assert_selector 'option[value="4"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       # verify current samples listed
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -1039,8 +1038,8 @@ module WorkflowExecutions
         assert_selector 'tr', count: 5
       end
       # verify 4 pages of samples still exist
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
@@ -1074,16 +1073,16 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify pagination buttons
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
         assert_selector 'option[value="4"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       # verify current samples listed
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -1101,17 +1100,17 @@ module WorkflowExecutions
       end
 
       # verify empty state
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="emptyState"]'
+      assert_selector 'div[data-nextflow--samplesheet-target="emptyState"]'
       assert_text I18n.t('components.viral.pagy.empty_state.title')
       assert_text I18n.t('components.viral.pagy.empty_state.description')
 
       # verify pagination is removed
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="paginationContainer"]'
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                          text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
+      assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
 
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                          text: I18n.t('components.nextflow.samplesheet_component.next')
       ### VERIFY END ###
     end
@@ -1141,16 +1140,16 @@ module WorkflowExecutions
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
       # verify pagination buttons
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
         assert_selector 'option[value="4"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       # verify current samples listed
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -1158,11 +1157,11 @@ module WorkflowExecutions
       end
 
       # search button exists and clear button does not
-      assert_selector 'button[data-nextflow--deferred-samplesheet-target="filterSearchButton"]'
-      assert_no_selector 'button[data-nextflow--deferred-samplesheet-target="filterClearButton"]'
+      assert_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+      assert_no_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
       # enter filter and click search button
       find('input#samplesheet-filter').fill_in with: 'INXT_SAM_AAAAAAAAAC'
-      find('button[data-nextflow--deferred-samplesheet-target="filterSearchButton"]').click
+      find('button[data-nextflow--samplesheet-target="filterSearchButton"]').click
 
       # verify only specified sample in samplesheet
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -1171,32 +1170,32 @@ module WorkflowExecutions
       end
 
       # verify pagination is removed
-      assert_selector 'div[data-nextflow--deferred-samplesheet-target="paginationContainer"]'
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                          text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
+      assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
 
-      assert_no_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                          text: I18n.t('components.nextflow.samplesheet_component.next')
 
       # clear button exists and search button does not
-      assert_no_selector 'button[data-nextflow--deferred-samplesheet-target="filterSearchButton"]'
-      assert_selector 'button[data-nextflow--deferred-samplesheet-target="filterClearButton"]'
+      assert_no_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+      assert_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
 
       # click clear button to remove filter
-      find('button[data-nextflow--deferred-samplesheet-target="filterClearButton"]').click
+      find('button[data-nextflow--samplesheet-target="filterClearButton"]').click
 
       # verify pagination buttons
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#previousPage"][disabled]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                       text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--deferred-samplesheet#pageSelected"]') do
+      assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+      within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
         assert_selector 'option[value="1"]'
         assert_selector 'option[value="2"]'
         assert_selector 'option[value="3"]'
         assert_selector 'option[value="4"]'
       end
-      assert_selector 'button[data-action="click->nextflow--deferred-samplesheet#nextPage"]',
+      assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                       text: I18n.t('components.nextflow.samplesheet_component.next')
       # verify current samples listed
       within('table[data-test-selector="samplesheet-table"] tbody') do
@@ -1204,8 +1203,8 @@ module WorkflowExecutions
       end
 
       # search button exists and clear button does not
-      assert_selector 'button[data-nextflow--deferred-samplesheet-target="filterSearchButton"]'
-      assert_no_selector 'button[data-nextflow--deferred-samplesheet-target="filterClearButton"]'
+      assert_selector 'button[data-nextflow--samplesheet-target="filterSearchButton"]'
+      assert_no_selector 'button[data-nextflow--samplesheet-target="filterClearButton"]'
       ### ACTIONS AND VERIFY END ###
     end
 
@@ -1317,7 +1316,7 @@ module WorkflowExecutions
       ### VERIFY END ###
     end
 
-    test 'samplesheet metadata header changes param value after workflow submission' do
+    test 'samplesheet metadata values retained after workflow submission' do
       ### SETUP START ###
       user = users(:john_doe)
       namespace = groups(:group_twelve)
@@ -1343,29 +1342,19 @@ module WorkflowExecutions
       ### ACTIONS START ###
       assert_selector 'h1', text: 'phac-nml/gasclustering'
 
-      find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
+      fill_in 'workflow_execution_name', with: "WE-#{sample32.name}"
 
       # check default metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadata_1'
-      end
-
-      within('#field-metadata_8') do
-        assert_text 'metadata_8'
-      end
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+      assert_selector '#field-metadata_8', text: 'metadata_8'
 
       # change metadata_1 and metadata_8 option selection
       select 'metadatafield1', from: 'metadata_1'
       select 'metadatafield2', from: 'metadata_8'
 
       # check new metadata dropdown selected values
-      within('#field-metadata_1') do
-        assert_text 'metadatafield1'
-      end
-
-      within('#field-metadata_8') do
-        assert_text 'metadatafield2'
-      end
+      assert_selector '#field-metadata_1', text: 'metadatafield1'
+      assert_selector '#field-metadata_8', text: 'metadatafield2'
 
       # submit pipeline
       click_button I18n.t(:'workflow_executions.submissions.create.submit')
@@ -1386,15 +1375,20 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify new parameter values
-      within('.metadata_1_header-param') do
-        assert_selector 'input[disabled][value="metadatafield1"]'
-        assert_no_selector 'input[disabled][value="metadata_1"]'
-      end
+      assert_selector '.metadata_1_header-param input[disabled][value="metadatafield1"]'
+      assert_no_selector '.metadata_1_header-param input[disabled][value="metadata_1"]'
 
-      within('.metadata_8_header-param') do
-        assert_selector 'input[disabled][value="metadatafield2"]'
-        assert_no_selector 'input[disabled][value="metadata_8"]'
+      assert_selector '.metadata_8_header-param input[disabled][value="metadatafield2"]'
+      assert_no_selector '.metadata_8_header-param input[disabled][value="metadata_8"]'
+
+      # verify samplesheet values
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      assert_selector 'table'
+      assert_selector 'table tbody tr:first-child td:nth-child(4)', text: sample32.metadata['metadatafield1']
+      (5..10).each do |i|
+        assert_selector "table tbody tr:first-child td:nth-child(#{i})", text: ''
       end
+      assert_selector 'table tbody tr:first-child td:last-child', text: sample32.metadata['metadatafield2']
       ### VERIFY END ###
     end
 
@@ -1425,7 +1419,9 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
                       text: sample.puid, count: 1
-      assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_no_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
+      assert_no_text I18n.t(:'components.nextflow.update_samples')
     end
 
     test 'cannot update shared samples with analysis results when shared role is analyst' do
@@ -1456,7 +1452,276 @@ module WorkflowExecutions
       assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
                       text: sample.puid, count: 1
 
-      assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
+      assert_text I18n.t(:'components.nextflow.email_notification')
+      assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
+      assert_no_text I18n.t(:'components.nextflow.update_samples')
+    end
+
+    test 'default fastq files retained upon workflow submission' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+
+      check "checkbox_sample_#{@sample_a.id}"
+      check "checkbox_sample_#{@sample_b.id}"
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      click_button 'phac-nml/iridanextexample', match: :first
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+
+      fill_in 'workflow_execution_name', with: 'a_new_workflow'
+      # verify auto selected attachments
+      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+
+      click_button I18n.t('workflow_executions.submissions.create.submit')
+
+      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      current_workflow = WorkflowExecution.last
+      assert_equal 'a_new_workflow', current_workflow.name
+      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
+      click_link current_workflow.id
+
+      assert_selector 'h1#page-title', text: current_workflow.name
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      assert_selector 'table'
+      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_fwd3.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: @attachment_rev3.file.filename.to_s
+      else
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_fwd3.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: @attachment_rev3.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samplesheet fastq file data retained after changing file selection after workflow submission' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      check "checkbox_sample_#{@sample_a.id}"
+      check "checkbox_sample_#{@sample_b.id}"
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      click_button 'phac-nml/iridanextexample', match: :first
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+
+      fill_in 'workflow_execution_name', with: 'a_new_workflow'
+      # verify auto selected attachments
+      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1"
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # select new attachment
+        find("#attachment_id_#{@attachment_fwd2.id}").click
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+      # both attachment fwd and rev3 were replaced with fwd and rev2
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd2.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev2.file.filename.to_s
+      click_button I18n.t('workflow_executions.submissions.create.submit')
+
+      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      current_workflow = WorkflowExecution.last
+      assert_equal 'a_new_workflow', current_workflow.name
+      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
+      click_link current_workflow.id
+
+      assert_selector 'h1#page-title', text: current_workflow.name
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
+      else
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samplesheet fastq file data retained after changing file selection to non-PE after workflow submission' do
+      ### SETUP START ###
+      attachment_d = attachments(:attachmentD)
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      check "checkbox_sample_#{@sample_a.id}"
+      check "checkbox_sample_#{@sample_b.id}"
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/iridanextexample', count: 3
+      click_button 'phac-nml/iridanextexample', match: :first
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # verify samples samplesheet loaded
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+
+      fill_in 'workflow_execution_name', with: 'a_new_workflow'
+      # verify auto selected attachments
+      assert_link "#{@sample_a.id}_fastq_1", text: @attachment_c.file.filename.to_s
+      assert_link "#{@sample_a.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      assert_link "#{@sample_b.id}_fastq_1", text: @attachment_fwd3.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev3.file.filename.to_s
+      click_link "#{@sample_b.id}_fastq_1"
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # select new attachment
+        find("#attachment_id_#{attachment_d.id}").click
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+
+      # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
+      assert_link "#{@sample_b.id}_fastq_1", text: attachment_d.file.filename.to_s
+      assert_link "#{@sample_b.id}_fastq_2",
+                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+      click_button I18n.t('workflow_executions.submissions.create.submit')
+
+      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      current_workflow = WorkflowExecution.last
+      assert_equal 'a_new_workflow', current_workflow.name
+      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
+      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
+      click_link current_workflow.id
+
+      assert_selector 'h1#page-title', text: current_workflow.name
+      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
+      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: attachment_d.file.filename.to_s
+      else
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: attachment_d.file.filename.to_s
+        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
+        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+      end
+      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samplesheet metadata change while filtering' do
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      project = projects(:projectMetadata)
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      login_as user
+      visit namespace_project_samples_url(project.namespace.parent, project)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      # select samples
+
+      click_button I18n.t('common.controls.select_all')
+
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'strong[data-selection-target="selected"]', text: 3
+
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/gasclustering'
+      click_button 'phac-nml/gasclustering'
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      assert_selector 'h1', text: 'phac-nml/gasclustering'
+
+      # check default metadata dropdown selected values
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+
+      assert_selector "td[id='0_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='1_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='2_metadata_1'] input[type='text']", text: ''
+      # change metadata_1 and metadata_2 option selection
+      select 'example_float', from: 'metadata_1'
+      # check new metadata dropdown selected values
+      assert_selector '#field-metadata_1', text: 'example_float'
+
+      # check metadata values of samples
+      assert_selector "td[id='0_metadata_1'] span", text: sample61.metadata['example_float']
+      assert_selector "td[id='1_metadata_1'] span", text: sample62.metadata['example_float']
+      assert_selector "td[id='2_metadata_1'] span", text: sample63.metadata['example_float']
+
+      # reset metadata to no/default selection
+      select 'metadata_1', from: 'metadata_1'
+      assert_selector '#field-metadata_1', text: 'metadata_1'
+
+      assert_selector "td[id='0_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='1_metadata_1'] input[type='text']", text: ''
+      assert_selector "td[id='2_metadata_1'] input[type='text']", text: ''
+
+      # enter filter
+      find('input#samplesheet-filter').fill_in with: sample62.name
+      find('input#samplesheet-filter').send_keys :enter
+
+      # assert table is filtered to display sample62 only
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
+      assert_selector "td[id='1_metadata_1'] input[type='text']", text: ''
+
+      # select metadata field and verify sample62's metadata value loads as expected
+      select 'example_float', from: 'metadata_1'
+      assert_selector '#field-metadata_1', text: 'example_float'
+      assert_selector "td[id='1_metadata_1'] span", text: sample62.metadata['example_float']
+      ### ACTIONS AND VERIFY END ###
     end
   end
 end

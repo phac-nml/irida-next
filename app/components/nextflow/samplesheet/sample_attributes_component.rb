@@ -11,11 +11,12 @@ module Nextflow
         @samples = samples
         @properties = properties
         @allowed_to_update_samples = allowed_to_update_samples
+        @file_attributes = {}
       end
 
       def samples_workflow_executions_attributes
-        samples.each_with_index.to_h do |sample, index|
-          [index, samples_workflow_execution_attributes(sample)]
+        samples.each_with_index.to_h do |sample|
+          [sample.id, samples_workflow_execution_attributes(sample)]
         end
       end
 
@@ -28,43 +29,67 @@ module Nextflow
         }
       end
 
-      def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
-        @properties.to_h do |name, property|
+      def sample_samplesheet_params(sample) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+        fastq_2_property = @properties.key?('fastq_2')
+        samplesheet_params = @properties.to_h do |name, property|
           case property['cell_type']
           when 'sample_cell'
-            [name, { form_value: sample.puid }]
+            [name, sample.puid]
           when 'sample_name_cell'
-            [name, { form_value: sample.name }]
-          when 'fastq_cell'
-            [name,
-             file_samplesheet_values(
-               sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                              property['pattern'])
-             )]
+            [name, sample.name]
           when 'file_cell'
             [name,
-             file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
+             file_samplesheet_values(
+               sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
+             )]
+          when 'fastq_cell'
+            # if fastq_2 exists within @properties, we'll query fastq_1 and fastq_2 below and merge those
+            # params in. This allows us to leverage .associated_attachment rather than querying fwd and rev PE
+            # attachments separately.
+            if fastq_2_property
+              [name, '']
+            else
+              [name, fastq_file_samplesheet_values(
+                sample.most_recent_single_fastq_file(name), sample.id
+              )]
+            end
           when 'metadata_cell'
             [name, metadata_samplesheet_values(sample, name, property)]
           when 'dropdown_cell', 'input_cell'
-            [name, { form_value: '' }]
+            [name, '']
           end
         end
+
+        return samplesheet_params unless fastq_2_property
+
+        fastq_file_values = sample.most_recent_fastq_files(@properties['fastq_1'].key?('pe_only'))
+        samplesheet_params.merge!(fastq_file_samplesheet_values(fastq_file_values, sample.id))
       end
 
-      def file_samplesheet_values(file)
-        { form_value: file.empty? ? '' : file[:global_id],
+      def file_samplesheet_values(file, sample_id, column_name)
+        @file_attributes[sample_id] = {} unless @file_attributes.key?(sample_id)
+        @file_attributes[sample_id][column_name] = {
           filename: if file.empty?
                       I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
                     else
                       file[:filename]
                     end,
-          attachment_id: file.empty? ? '' : file[:id] }
+          attachment_id: file.empty? ? '' : file[:id]
+        }
+        file.empty? ? '' : file[:global_id]
+      end
+
+      def fastq_file_samplesheet_values(files, sample_id)
+        fastq_samplesheet_params = {}
+        files.each do |name, file|
+          fastq_samplesheet_params[name] = file_samplesheet_values(file, sample_id, name)
+        end
+        fastq_samplesheet_params
       end
 
       def metadata_samplesheet_values(sample, name, property)
         metadata = sample.metadata.fetch(property.fetch('x-irida-next-selected', name), '')
-        { form_value: metadata.empty? ? '' : metadata }
+        metadata.empty? ? '' : metadata
       end
     end
   end

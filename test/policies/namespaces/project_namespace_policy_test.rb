@@ -93,5 +93,9 @@ module Namespaces
     test '#cancel_workflow_executions?' do
       assert @policy.apply(:cancel_workflow_executions?)
     end
+
+    test '#update_samplesheet_data?' do
+      assert @policy.apply(:update_samplesheet_data?)
+    end
   end
 end

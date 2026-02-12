@@ -2,7 +2,8 @@
 
 module WorkflowExecutions
   # Controller actions for FileSelector
-  class FileSelectorController < ApplicationController
+  class FileSelectorController < ApplicationController # rubocop:disable Metrics/ClassLength
+    before_action :namespace, only: %i[new create]
     before_action :attachable, only: %i[new create]
     before_action :attachments, only: %i[create]
     before_action :listing_attachments, only: %i[new create]
@@ -24,20 +25,44 @@ module WorkflowExecutions
     private
 
     def file_selector_params
-      params.expect(
-        file_selector: [
-          :attachable_id,
-          :attachable_type,
-          :index,
-          :property,
-          :selected_id,
-          :pattern,
-          { required_properties: [] }
-        ]
-      )
+      expected_params = [
+        :attachable_id,
+        :attachable_type,
+        :property,
+        :selected_id,
+        :pattern,
+        :namespace_id,
+        { required_properties: [] }
+      ]
+      expected_params.push(:index) unless Flipper.enabled?(:deferred_samplesheet)
+      params.expect(file_selector: expected_params)
+    end
+
+    def namespace
+      @namespace = Namespace.find(file_selector_params[:namespace_id])
     end
 
     def listing_attachments
+      if Flipper.enabled?(:deferred_samplesheet)
+        listing_attachments_with_feature_flag
+      else
+        listing_attachments_without_feature_flag
+      end
+    end
+
+    def listing_attachments_with_feature_flag
+      pe_only = file_selector_params.key?('required_properties') &&
+                file_selector_params['required_properties'].include?('fastq_1') &&
+                file_selector_params['required_properties'].include?('fastq_2')
+      @listing_attachments = case file_selector_params['property']
+                             when 'fastq_1', 'fastq_2'
+                               @attachable.file_selector_fastq_files(file_selector_params['property'], pe_only)
+                             else
+                               @attachable.file_selector_other_files(file_selector_params['pattern'])
+                             end
+    end
+
+    def listing_attachments_without_feature_flag
       @listing_attachments = case file_selector_params['property']
                              when 'fastq_1', 'fastq_2'
                                @attachable.samplesheet_fastq_files(
@@ -56,6 +81,8 @@ module WorkflowExecutions
     end
 
     def attachable
+      authorize! @namespace, to: :update_samplesheet_data?
+
       attachable_id = file_selector_params[:attachable_id]
       case file_selector_params[:attachable_type]
       when Sample.sti_name
@@ -65,11 +92,14 @@ module WorkflowExecutions
       end
     end
 
-    def attachments
-      @attachments_params = {
-        index: file_selector_params[:index],
-        files: []
-      }
+    def attachments # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      @attachments_params = { files: [] }
+      if Flipper.enabled?(:deferred_samplesheet)
+        @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
+      else
+        @attachments_params[:index] = file_selector_params[:index]
+      end
+
       property = file_selector_params['property']
       if params[:attachment_id] == 'no_attachment'
         add_attachment_to_params(nil, property)

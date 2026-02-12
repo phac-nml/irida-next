@@ -3,14 +3,17 @@
 module WorkflowExecutions
   # Controller for metadata actions within a workflow execution
   class MetadataController < ApplicationController
+    before_action :namespace
     respond_to :turbo_stream
 
-    def fields
-      @samples = Sample.where(id: params[:sample_ids])
-
+    def fields # rubocop:disable Metrics/AbcSize
+      authorize! @namespace, to: :update_samplesheet_data?
       if Flipper.enabled?(:deferred_samplesheet)
+        @sample_ids = params[:sample_ids].split(',')
         @metadata_fields = JSON.parse(params[:metadata_fields])
+        @headers = @metadata_fields.keys.to_json
       else
+        @samples = Sample.where(id: params[:sample_ids])
         @header = params[:header]
         @field = params[:field]
       end
@@ -19,6 +22,10 @@ module WorkflowExecutions
     end
 
     private
+
+    def namespace
+      @namespace = Namespace.find(params[:namespace_id])
+    end
 
     # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
@@ -36,14 +43,31 @@ module WorkflowExecutions
     #   1: {metadata_header_4: "10", metadata_header_5: "USA"}
     # }
     def fetch_metadata_with_feature_flag
-      metadata = {}
-      @samples.each_with_index do |sample, index|
-        metadata[index] = {}
-        @metadata_fields.each do |key, value|
-          metadata[index][key] = sample.metadata.fetch(value, '')
-        end
+      fields_to_query = [:id]
+
+      @metadata_fields.each_value do |metadata_field|
+        fields_to_query.append(create_query_node(metadata_field))
       end
-      metadata
+
+      metadata = Sample.where(id: @sample_ids).pluck(fields_to_query).map do |results|
+        { "#{results[0]}": { sample_id: results[0], samplesheet_params: retrieve_metadata(results) } }
+      end
+
+      # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
+      # in deferred_samplesheet_controller.js
+      {}.merge(*metadata)
+    end
+
+    def retrieve_metadata(pluck_results)
+      metadata_values = {}
+      @metadata_fields.each_key.with_index(1) do |header, index|
+        metadata_values[header] = pluck_results[index]
+      end
+      metadata_values
+    end
+
+    def create_query_node(metadata_field)
+      Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field))
     end
 
     def fetch_metadata

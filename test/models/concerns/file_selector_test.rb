@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class FileSelectorTest < ActiveSupport::TestCase
+  ### TODO: Delete this file when feature flag deferred_samplesheet is retired
   test 'sorted_files returns files separated by type and sorted by created_at' do
     sample_b = samples(:sampleB)
 

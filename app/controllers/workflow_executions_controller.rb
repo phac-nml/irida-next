@@ -54,11 +54,14 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def samples_workflow_execution_params_attributes
-    [
-      :id, # index, increment for each one, not necessary for functionality
+    attributes = [
       :sample_id,
       { samplesheet_params: {} }
     ]
+
+    # index, increment for each one, not necessary for functionality
+    attributes.push(:id) unless Flipper.enabled?(:deferred_samplesheet)
+    attributes
   end
 
   def current_page

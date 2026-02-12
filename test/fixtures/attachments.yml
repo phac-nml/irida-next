@@ -404,6 +404,12 @@ gasclusteringAttachment:
   puid: INXT_ATT_ABAAAAAAAN
   created_at: <%= 2.hours.ago %>
 
+sample32JsonAttachment:
+  metadata: { "compression": "none", "format": "json" }
+  attachable: sample32 (Sample)
+  puid: INXT_ATT_ABAAAAAAAO
+  created_at: <%= 1.hours.ago %>
+
 attachmentCSV:
   metadata: { "compression": "none", "format": "csv" }
   attachable: project2_namespace (Namespace)
