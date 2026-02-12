@@ -1583,7 +1583,7 @@ module Groups
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
 
-      attach_file('spreadsheet_import[file]', Rails.root.join)
+      attach_file('spreadsheet_import[file]', nil)
       # verify select inputs are re-disabled after file is unselected
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
@@ -2203,6 +2203,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       # fill destination input
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
@@ -2477,6 +2478,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
