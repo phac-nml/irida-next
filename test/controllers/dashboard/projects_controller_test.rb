@@ -121,17 +121,44 @@ module Dashboard
       get dashboard_projects_path
 
       assert_response :success
-      # Default sort should be applied (updated_at desc)
-      # We can verify this by checking the sort dropdown has the default selected
+      assert_active_sort('all_projects_q', 'updated_at desc')
+      assert_includes first_treegrid_row_text, @group_project.human_name
     end
 
     test 'should respect custom sort parameters' do
       sign_in @user
 
       get dashboard_projects_path,
-          params: { all_projects_q: { s: 'namespace_name asc' } }
+          params: { all_projects_q: { s: 'namespace_name desc' } }
 
       assert_response :success
+      assert_active_sort('all_projects_q', 'namespace_name desc')
+      assert_includes first_treegrid_row_text, projects(:projectHotel).human_name
+    end
+
+    test 'should apply sort with filters for all projects query' do
+      sign_in @user
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
+                                      s: 'namespace_name desc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'namespace_name desc')
+      assert_includes first_treegrid_row_text, projects(:project19).human_name
+    end
+
+    test 'should apply sort with filters for personal projects query' do
+      sign_in @user
+
+      get dashboard_projects_path,
+          params: { personal: 'true',
+                    personal_projects_q: { namespace_name_or_namespace_puid_cont: @personal_project.name,
+                                           s: 'namespace_name asc' } }
+
+      assert_response :success
+      assert_active_sort('personal_projects_q', 'namespace_name asc')
+      assert_includes first_treegrid_row_text, @personal_project.human_name
     end
 
     test 'should paginate results' do
@@ -188,6 +215,27 @@ module Dashboard
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    private
+
+    def first_treegrid_row_text
+      Nokogiri::HTML(response.body).at_css('#groups_tree .treegrid-row')&.text.to_s.squish
+    end
+
+    def assert_active_sort(search_key, expected_sort)
+      doc = Nokogiri::HTML(response.body)
+      links = doc.css('a[aria-current="page"]')
+
+      assert links.any? { |link| sort_param(link['href'], search_key) == expected_sort },
+             "Expected active sort #{expected_sort.inspect} for #{search_key}, but none was found"
+    end
+
+    def sort_param(href, search_key)
+      query = URI.parse(href).query.to_s
+      Rack::Utils.parse_nested_query(query).dig(search_key, 's')
+    rescue URI::InvalidURIError
+      nil
     end
   end
 end
