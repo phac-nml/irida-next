@@ -24,6 +24,21 @@ module IridaNext
       @component.define_method(safe_method_name, @component.instance_method(@call_method_name))
     end
   end
+
+  # Installs the ViewComponent coverage patch once template compilation code is loaded.
+  module ViewComponentCoveragePatchInstaller
+    def self.install!
+      require 'view_component/template' if defined?(ViewComponent) && !defined?(ViewComponent::Template)
+      return unless defined?(ViewComponent::Template)
+      return if ViewComponent::Template < IridaNext::ViewComponentCoveragePatch
+
+      ViewComponent::Template.prepend(IridaNext::ViewComponentCoveragePatch)
+    end
+  end
 end
 
-ViewComponent::Template.prepend(IridaNext::ViewComponentCoveragePatch) if defined?(ViewComponent::Template)
+ActiveSupport.on_load(:view_component) do
+  IridaNext::ViewComponentCoveragePatchInstaller.install!
+end
+
+IridaNext::ViewComponentCoveragePatchInstaller.install!

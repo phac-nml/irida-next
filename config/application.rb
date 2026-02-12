@@ -86,5 +86,6 @@ module Irida
   end
 end
 
+require_relative 'view_component_coverage_patch'
 require 'view_component'
 require 'pathogen/view_components'
