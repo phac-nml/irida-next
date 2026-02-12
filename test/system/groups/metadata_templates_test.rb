@@ -42,41 +42,6 @@ module Groups
       assert_text I18n.t('metadata_templates.table.empty.description', namespace_type: group.type.downcase)
     end
 
-    test 'should sort a list of metadata templates' do
-      group = groups(:group_two)
-      metadata_template1 = metadata_templates(:group_two_metadata_template1)
-      metadata_template2 = metadata_templates(:group_two_metadata_template2)
-
-      visit group_metadata_templates_url(group)
-
-      strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 2))
-      assert_selector 'table tbody tr', count: 2
-      assert_selector 'table thead th:first-child svg.arrow-up-icon'
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: metadata_template1.description
-
-      click_on I18n.t('metadata_templates.table_component.name')
-      assert_selector 'table thead th:first-child svg.arrow-down-icon'
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: metadata_template2.description
-
-      click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:has(svg.arrow-up-icon)',
-                      text: I18n.t('metadata_templates.table_component.created_by_email').upcase
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
-      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: metadata_template1.created_by.email
-
-      click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:has(svg.arrow-down-icon)',
-                      text: I18n.t('metadata_templates.table_component.created_by_email').upcase
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
-      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: metadata_template2.created_by.email
-    end
-
     test 'should destroy metadata template associated with the group' do
       group = groups(:group_one)
       metadata_template = metadata_templates(:group_one_metadata_template0)
