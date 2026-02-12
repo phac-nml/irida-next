@@ -1166,6 +1166,8 @@ en:
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
+    show:
+      title: Main Settings
     accounts:
       delete:
         button: Delete account

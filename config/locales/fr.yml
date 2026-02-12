@@ -1170,6 +1170,8 @@ fr:
       revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
   profiles:
+    show:
+      title: Paramètres principaux
     accounts:
       delete:
         button: Supprimer un compte
