@@ -14,14 +14,14 @@
         data-nextflow--samplesheet-target="filter"
         data-action="keydown.enter->nextflow--samplesheet#filter"
         type="search"
-        placeholder="<%= t('components.nextflow.samplesheet_component.filter.placeholder') %>"
+        placeholder="<%= t('components.nextflow.samplesheet_component.filter.placeholder')%>"
         class="
           t-search-component h-full w-full placeholder-shown:field-sizing-content block
           p-2.5 pr-11.5 text-sm text-slate-900 border border-slate-300 rounded-lg
           bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-300
           dark:text-white
         "
-      >
+      />
       <!-- Clear button (shown only when there are existing search results)
       -->
       <button
@@ -34,7 +34,7 @@
           border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
           dark:hover:bg-slate-600 hidden
         "
-        aria-label="<%= t('components.nextflow.samplesheet_component.filter.clear') %>"
+        aria-label="<%= t('components.nextflow.samplesheet_component.filter.clear')%>"
       >
         <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
       </button>
@@ -189,7 +189,7 @@
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
-  >
+  />
 </template>
 
 <template data-nextflow--samplesheet-target="paginationTemplate">
@@ -207,7 +207,7 @@
           "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
-          disabled
+          disabled="disabled"
         ><%= t("components.nextflow.samplesheet_component.previous") %></button>
       </li>
       <li>
@@ -223,7 +223,7 @@
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
           id="pagination-page-selector"
-        ><option value="1" selected>1</option></select>
+        ><option value="1" selected="selected">1</option></select>
       </li>
       <li><button
           class="
