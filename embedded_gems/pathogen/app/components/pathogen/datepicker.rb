@@ -11,7 +11,7 @@ module Pathogen
     SYSTEM_DEFAULT_CLASSES = 'relative'
 
     # Default CSS classes for the <div> element containing the datepicker.
-    CALENDAR_DEFAULT_CLASSES = 'z-100 active select-none'
+    CALENDAR_DEFAULT_CLASSES = 'active select-none'
 
     # Initializes a new Datepicker component.
     # @param id [String] A unique identifier that is manipulated to use on multiple component items. This is required.
@@ -102,6 +102,10 @@ module Pathogen
 
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:controller] = input_controller_name
+      if Flipper.enabled?(:beta_dropdown)
+        @system_arguments[:data]["#{input_controller_name}-strategy-value"] =
+          :fixed
+      end
       @system_arguments[:data]["#{input_controller_name}-#{calendar_controller_name}-outlet"] = "##{@calendar_id}"
       @system_arguments[:data]["#{input_controller_name}-autosubmit-value"] = @autosubmit
       @system_arguments[:data]["#{input_controller_name}-invalid-date-value"] =
@@ -136,7 +140,7 @@ module Pathogen
       @calendar_arguments[:class] = class_names(
         CALENDAR_DEFAULT_CLASSES,
         @calendar_arguments[:class],
-        { hidden: !Flipper.enabled?(:beta_dropdown) }
+        { 'hidden z-100': !Flipper.enabled?(:beta_dropdown) }
       )
 
       @calendar_arguments[:data] ||= {}
@@ -156,6 +160,7 @@ module Pathogen
       if Flipper.enabled?(:beta_dropdown)
         @wrapper_arguments[:data]["#{input_controller_name}-target"] = 'menu'
         @wrapper_arguments[:hidden] = ''
+        @wrapper_arguments[:class] = class_names('z-100 overflow-y-auto absolute top-0 left-0')
       else
         @wrapper_arguments[:data]["#{input_controller_name}-target"] = 'calendarTemplate'
       end

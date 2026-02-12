@@ -3,7 +3,7 @@ import { FOCUSABLE_ELEMENTS } from "pathogen-controllers/pathogen/datepicker/con
 
 export default class extends MenuController {
   static outlets = ["pathogen--datepicker--beta-calendar"];
-  static targets = ["trigger", "calendarTemplate", "inputError", "minDate"];
+  static targets = ["trigger", "inputError", "minDate"];
 
   static values = {
     autosubmit: Boolean,
@@ -50,6 +50,8 @@ export default class extends MenuController {
     this.triggerTarget.addEventListener("focus", this.boundHandleTriggerFocus);
 
     this.#findNextFocusableElement();
+
+    super.disconnect();
   }
 
   disconnect() {
