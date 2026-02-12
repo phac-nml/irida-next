@@ -9,7 +9,7 @@ module Samples
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -26,7 +26,7 @@ module Samples
       pagy = Pagy.new(count: 0, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       [],
                       namespace,
                       pagy,
@@ -43,7 +43,7 @@ module Samples
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = groups(:group_one)
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -60,7 +60,7 @@ module Samples
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -72,15 +72,14 @@ module Samples
       assert_selector '.pathogen-data-grid__table'
     end
 
-    test 'limits metadata fields when exceeding calculated maximum' do
+    test 'does not limit metadata fields for data grid' do
       samples = [samples(:sample1), samples(:sample2)]
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      # Create more metadata fields than the limit (clamped to MAX_METADATA_FIELDS_SIZE = 200)
-      many_fields = (1..1500).map { |i| "field_#{i}" }
+      many_fields = (1..250).map { |i| "field_#{i}" }
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -90,53 +89,8 @@ module Samples
                       empty: { title: 'No Samples', description: 'Nothing here' }
                     ))
 
-      # Should show warning message
-      assert_selector '[role="status"][aria-live="polite"]'
-      assert_text 'The number of metadata fields has been limited'
-    end
-
-    test 'shows warning with link when user can edit metadata' do
-      samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
-      namespace = projects(:project1).namespace
-
-      # Create enough fields to trigger warning (2000 / 1 = 2000, but max is 200)
-      many_fields = (1..250).map { |i| "field_#{i}" }
-
-      render_inline(Samples::DataGridTableComponent.new(
-                      samples,
-                      namespace,
-                      pagy,
-                      has_samples: true,
-                      metadata_fields: many_fields,
-                      abilities: { edit_sample_metadata: true },
-                      empty: { title: 'No Samples', description: 'Nothing here' }
-                    ))
-
-      assert_selector '[role="status"][aria-live="polite"]'
-      assert_text 'create a metadata template with those fields'
-      assert_selector 'a.pathogen-data-grid__link--template'
-    end
-
-    test 'shows warning without link when user cannot edit metadata' do
-      samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
-      namespace = projects(:project1).namespace
-
-      many_fields = (1..250).map { |i| "field_#{i}" }
-
-      render_inline(Samples::DataGridTableComponent.new(
-                      samples,
-                      namespace,
-                      pagy,
-                      has_samples: true,
-                      metadata_fields: many_fields,
-                      abilities: { edit_sample_metadata: false },
-                      empty: { title: 'No Samples', description: 'Nothing here' }
-                    ))
-
-      assert_selector '[role="status"][aria-live="polite"]'
-      assert_no_selector 'a', text: 'create a metadata template with those fields'
+      assert_selector 'th', text: 'field_250'
+      assert_no_selector '[role="status"][aria-live="polite"]'
     end
 
     test 'renders sticky columns for PUID and Name' do
@@ -144,7 +98,7 @@ module Samples
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -161,7 +115,7 @@ module Samples
       pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       samples,
                       namespace,
                       pagy,
@@ -181,7 +135,7 @@ module Samples
       pagy = Pagy.new(count: 1, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
-      render_inline(Samples::DataGridTableComponent.new(
+      render_inline(Samples::Table::V2::Component.new(
                       [sample],
                       namespace,
                       pagy,

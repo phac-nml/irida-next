@@ -12,7 +12,7 @@ module Samples
 
     # @label Project Samples
     def project_samples
-      render Samples::DataGridTableComponent.new(
+      render Samples::Table::V2::Component.new(
         sample_data,
         project_namespace,
         pagy_instance(3),
@@ -26,7 +26,7 @@ module Samples
 
     # @label Group Samples (with Project PUID column)
     def group_samples
-      render Samples::DataGridTableComponent.new(
+      render Samples::Table::V2::Component.new(
         sample_data,
         group_namespace,
         pagy_instance(3),
@@ -40,7 +40,7 @@ module Samples
 
     # @label Empty State
     def empty_state
-      render Samples::DataGridTableComponent.new(
+      render Samples::Table::V2::Component.new(
         [],
         project_namespace,
         pagy_instance(0),
@@ -54,7 +54,7 @@ module Samples
 
     # @label With Search Highlighting
     def with_search_highlighting
-      render Samples::DataGridTableComponent.new(
+      render Samples::Table::V2::Component.new(
         sample_data,
         project_namespace,
         pagy_instance(3),
