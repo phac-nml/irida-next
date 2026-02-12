@@ -405,8 +405,10 @@ export default class ComboboxController extends MenuController {
       !this.menuTarget.contains(event.target)
     ) {
       this.debouncedFilterAndUpdate.flush();
-      this.#setValue(this.#option);
-      super.hide();
+      if (super.isVisible()) {
+        this.#setValue(this.#option);
+        super.hide();
+      }
     }
   }
 
