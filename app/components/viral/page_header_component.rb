@@ -14,5 +14,13 @@ module Viral
       @subtitle = subtitle
       @id_color = id_color
     end
+
+    def title_id
+      "page-title-#{object_id}"
+    end
+
+    def subtitle_id
+      "page-subtitle-#{object_id}"
+    end
   end
 end
