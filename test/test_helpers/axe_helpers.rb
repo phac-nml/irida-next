@@ -6,7 +6,7 @@ module AxeHelpers
     Violation = Data.define(:id, :impact, :tags, :description, :help, :helpUrl) # rubocop:disable Naming/MethodName
 
     AXE_JS = <<~JS.freeze
-      #{Rails.root.join('node_modules/axe-core/axe.min.js').read}
+      #{Rails.root.join('node_modules/axe-core/axe.js').read}
 
       axe.run().then(results => console.log(JSON.stringify(results)));
     JS
