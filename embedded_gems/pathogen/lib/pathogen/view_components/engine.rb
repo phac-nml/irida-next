@@ -28,7 +28,7 @@ module Pathogen
       config.view_component.validate_class_names = !Rails.env.production?
       config.view_component.raise_on_invalid_aria = !Rails.env.production?
 
-      initializer 'pathogen.view_components' do
+      initializer 'pathogen_view_components' do
         ActiveSupport.on_load(:action_view) do
           include Pathogen::ViewHelper
           include Pathogen::FormHelper
@@ -38,28 +38,15 @@ module Pathogen
 
       initializer 'pathogen_view_components.assets' do |app|
         if app.config.respond_to?(:assets)
-          # Add engine's JavaScript paths to asset pipeline
-          app.config.assets.paths << root.join('app/javascript/controllers')
-
           app.config.assets.precompile += %w[
             pathogen_view_components.js pathogen_view_components.css
-            pathogen/tabs_controller.js
-            pathogen/tooltip_controller.js
-            pathogen/datepicker/input_controller.js
-            pathogen/datepicker/calendar_controller.js
-            pathogen/datepicker/utils.js
-            pathogen/datepicker/constants.js
           ]
         end
       end
 
-      initializer 'pathogen.importmap', before: 'importmap' do |app|
-        # Register this engine's importmap configuration
+      initializer 'pathogen_view_components.importmap', before: 'importmap' do |app|
         app.config.importmap.paths << root.join('config/importmap.rb')
-
-        # Register cache sweepers for development mode
-        app.config.importmap.cache_sweepers << root.join('app/assets/javascripts')
-        app.config.importmap.cache_sweepers << root.join('app/javascript/controllers')
+        app.config.importmap.cache_sweepers << Engine.root.join('app/assets/javascripts')
       end
     end
   end

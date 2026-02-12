@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { FOCUSABLE_ELEMENTS } from "pathogen-controllers/pathogen/datepicker/constants";
+import { FOCUSABLE_ELEMENTS } from "pathogen_view_components/datepicker/constants";
 
 export default class extends Controller {
   static outlets = ["pathogen--datepicker--calendar"];

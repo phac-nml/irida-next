@@ -1,14 +1,35 @@
-// Auto-registers all Pathogen Stimulus controllers
-import { application } from "controllers/application"
-
 // Import all Pathogen controllers using importmap-mapped paths
-import TabsController from "pathogen-controllers/pathogen/tabs_controller"
-import TooltipController from "pathogen-controllers/pathogen/tooltip_controller"
-import DatepickerInputController from "pathogen-controllers/pathogen/datepicker/input_controller"
-import DatepickerCalendarController from "pathogen-controllers/pathogen/datepicker/calendar_controller"
+import TabsController from "pathogen_view_components/tabs_controller";
+import TooltipController from "pathogen_view_components/tooltip_controller";
+import DatepickerInputController from "pathogen_view_components/datepicker/input_controller";
+import DatepickerCalendarController from "pathogen_view_components/datepicker/calendar_controller";
 
-// Auto-register all controllers with their identifiers
-application.register("pathogen--tabs", TabsController)
-application.register("pathogen--tooltip", TooltipController)
-application.register("pathogen--datepicker--input", DatepickerInputController)
-application.register("pathogen--datepicker--calendar", DatepickerCalendarController)
+function registerPathogenControllers(application) {
+  if (!application || typeof application.register !== "function") {
+    console.error("[pathogen] Invalid Stimulus application instance");
+    return;
+  }
+
+  application.register("pathogen--tabs", TabsController);
+  application.register("pathogen--tooltip", TooltipController);
+  application.register(
+    "pathogen--datepicker--input",
+    DatepickerInputController,
+  );
+  application.register(
+    "pathogen--datepicker--calendar",
+    DatepickerCalendarController,
+  );
+
+  if (import.meta.env?.DEV) {
+    console.debug("[pathogen] Registered 4 Stimulus controllers");
+  }
+}
+
+export {
+  DatepickerCalendarController,
+  DatepickerInputController,
+  TabsController,
+  TooltipController,
+  registerPathogenControllers,
+};
