@@ -8,6 +8,11 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     @sample1 = samples(:sample1)
     @project1 = projects(:project1)
     @data_export1 = data_exports(:data_export_one)
+    @data_export2 = data_exports(:data_export_two)
+    @data_export7 = data_exports(:data_export_seven)
+    @data_export8 = data_exports(:data_export_eight)
+    @data_export9 = data_exports(:data_export_nine)
+    @data_export10 = data_exports(:data_export_ten)
     @namespace = namespaces_project_namespaces(:project1_namespace)
     @workflow1 = workflow_executions(:automated_workflow_execution)
     @workflow2 = workflow_executions(:automated_example_completed)
@@ -18,6 +23,42 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     w3c_validate 'Data Exports Page'
+  end
+
+  test 'should apply default sort and support sorting data exports' do
+    get data_exports_path
+    assert_response :success
+    assert_sort_state(5, 'descending')
+
+    get data_exports_path, params: { q: { s: 'id asc' } }
+    assert_response :success
+    assert_sort_state(1, 'ascending')
+    assert_first_rows_include(@data_export9.id, @data_export8.id)
+
+    get data_exports_path, params: { q: { s: 'id desc' } }
+    assert_response :success
+    assert_sort_state(1, 'descending')
+    assert_first_rows_include(@data_export7.id, @data_export2.id)
+
+    get data_exports_path, params: { q: { s: 'name asc' } }
+    assert_response :success
+    assert_sort_state(2, 'ascending')
+    assert_first_rows_include(@data_export1.name, @data_export10.name)
+
+    get data_exports_path, params: { q: { s: 'name desc' } }
+    assert_response :success
+    assert_sort_state(2, 'descending')
+    assert_first_rows_include(@data_export2.id, @data_export9.id)
+
+    get data_exports_path, params: { q: { s: 'created_at asc' } }
+    assert_response :success
+    assert_sort_state(5, 'ascending')
+    assert_first_rows_include(@data_export1.id, @data_export2.id)
+
+    get data_exports_path, params: { q: { s: 'expires_at asc' } }
+    assert_response :success
+    assert_sort_state(6, 'ascending')
+    assert_first_rows_include(@data_export1.id, @data_export7.id)
   end
 
   test 'should create new sample export with viable params' do
