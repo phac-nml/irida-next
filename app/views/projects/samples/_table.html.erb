@@ -1,12 +1,5 @@
 <%# locals: (allowed_to:, fields:, has_samples:, pagy:, project:, samples:, search_params:) -%>
-<% table_component =
-  if Flipper.enabled?(:data_grid_samples_table)
-    Samples::DataGridTableComponent
-  else
-    Samples::TableComponent
-  end %>
-
-<%= render table_component.new(
+<%= render Samples::TableComponent.new(
   samples,
   project.namespace,
   pagy,
