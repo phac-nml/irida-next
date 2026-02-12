@@ -791,8 +791,8 @@ fr:
       details:
         submit: Sauvegarder les modifications
         subtitle: Nom et description du groupe
-        title: Général
-      title: Paramètres
+        title: Paramètres généraux
+      title: Paramètres généraux
     group_links:
       index:
         actions:
@@ -1371,8 +1371,8 @@ fr:
       general:
         heading: Nom et description du projet
         submit: Mettre à jour le projet
-        title: Général
-      title: Paramètres
+        title: Paramètres généraux
+      title: Paramètres généraux
     group_links:
       index:
         access_level:
