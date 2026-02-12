@@ -15,7 +15,7 @@ module System
           assert_accessible
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
           fill_in I18n.t(:'components.list_input.description'), with: puid1
-          find_field(I18n.t(:'components.list_input.description')).native.press('Comma')
+          find_field(I18n.t(:'components.list_input.description')).send_keys(',')
           fill_in I18n.t(:'components.list_input.description'), with: puid2
           assert_selector 'span.label', count: 1
           assert_selector 'span.label', text: puid1

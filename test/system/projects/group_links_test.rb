@@ -173,7 +173,7 @@ module Projects
         click_button I18n.t(:'projects.members.index.tabs.groups')
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                                .native.press('Enter')
+                                                                                .send_keys(:enter)
 
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -206,7 +206,7 @@ module Projects
       namespace_group_link.destroy
 
       find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                              .native.press('Enter')
+                                                                              .send_keys(:enter)
 
       assert_text 'Resource not found'
     end
